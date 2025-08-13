@@ -1,0 +1,83 @@
+{
+    "folders": [
+        {
+            "name": "🏗️ Projects",
+            "path": "./Projects"
+        },
+        {
+            "name": "🔧 Shared Components",
+            "path": "./Shared"
+        },
+        {
+            "name": "⚙️ Tools & Automation",
+            "path": "./Tools"
+        },
+        {
+            "name": "📚 Documentation",
+            "path": "./Documentation"
+        }
+    ],
+    "settings": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": true,
+            "source.organizeImports": true
+        },
+        "files.associations": {
+            "*.swift": "swift",
+            "*.sh": "shellscript",
+            "*.py": "python"
+        },
+        "terminal.integrated.defaultProfile.osx": "zsh",
+        "search.exclude": {
+            "**/build": true,
+            "**/DerivedData": true,
+            "**/.git": true,
+            "**/node_modules": true
+        },
+        "files.exclude": {
+            "**/.DS_Store": true,
+            "**/build": true,
+            "**/DerivedData": true
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "sswg.swift-lang",
+            "ms-python.python",
+            "ms-vscode.vscode-json"
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "Run Master Automation",
+                "type": "shell",
+                "command": "./Tools/Automation/master_automation.sh",
+                "args": ["all"],
+                "group": "build",
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "shared"
+                }
+            },
+            {
+                "label": "List Projects",
+                "type": "shell",
+                "command": "./Tools/Automation/master_automation.sh",
+                "args": ["list"],
+                "group": "build"
+            },
+            {
+                "label": "Architecture Status",
+                "type": "shell",
+                "command": "./Tools/Automation/master_automation.sh",
+                "args": ["status"],
+                "group": "build"
+            }
+        ]
+    }
+}
