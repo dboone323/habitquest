@@ -10,6 +10,7 @@ import sys
 
 def check_project(path, warn_only=True):
     issues = []
+    fixes = []
     # Quick helpers
     def is_yaml_multi_doc(fp):
         try:
@@ -59,8 +60,13 @@ def check_project(path, warn_only=True):
                     with open(fp, 'r', encoding='utf-8') as fh:
                         txt = fh.read()
                         # simple heuristic: actions/checkout@v1 or actions/setup-python@v1
-                        if '@v1' in txt or "@v2" in txt and 'actions/checkout' in txt and 'actions/setup-python' in txt:
+                        if '@v1' in txt or ('@v2' in txt and ('actions/checkout' in txt or 'actions/setup-python' in txt)):
                             issues.append(f"Workflow {fp} may reference deprecated action major versions (check version pins)")
+                        # collect candidate files for auto-fix
+                        if '---' in txt:
+                            fixes.append(('multi-doc', fp))
+                        if 'actions/checkout@v1' in txt or 'actions/setup-python@v1' in txt:
+                            fixes.append(('pin-actions', fp))
                 except Exception:
                     pass
     else:
@@ -98,6 +104,63 @@ def check_project(path, warn_only=True):
             issues.append('Xcode project detected but no macOS/iOS CI workflow found in .github/workflows')
 
     return issues
+
+
+def auto_fix_project(path, fixes_requested=None):
+    """Perform safe, low-risk auto-fixes. Returns list of fix messages."""
+    if fixes_requested is None:
+        fixes_requested = []
+    results = []
+
+    def split_multi_doc(fp):
+        try:
+            with open(fp, 'r', encoding='utf-8') as fh:
+                content = fh.read()
+            parts = [p.strip() for p in content.split('\n---') if p.strip()]
+            if len(parts) <= 1:
+                return False, 'no-split-needed'
+            created = []
+            base = fp
+            dirn = os.path.dirname(fp)
+            for i, part in enumerate(parts, start=1):
+                new_name = os.path.join(dirn, f"{os.path.splitext(os.path.basename(base))[0]}-part{i}.yml")
+                with open(new_name, 'w', encoding='utf-8') as out:
+                    out.write(part + '\n')
+                created.append(new_name)
+            # backup and remove original
+            bak = fp + '.bak'
+            os.rename(fp, bak)
+            return True, f"split into {len(created)} files: {', '.join(created)} (backup: {bak})"
+        except Exception as e:
+            return False, f"split-failed:{e}"
+
+    def bump_action_pins(fp):
+        try:
+            with open(fp, 'r', encoding='utf-8') as fh:
+                txt = fh.read()
+            orig = txt
+            # safe heuristics: bump common widely-used actions
+            txt = txt.replace('actions/checkout@v1', 'actions/checkout@v4')
+            txt = txt.replace('actions/setup-python@v1', 'actions/setup-python@v4')
+            if txt != orig:
+                bak = fp + '.bak'
+                os.rename(fp, bak)
+                with open(fp, 'w', encoding='utf-8') as fh:
+                    fh.write(txt)
+                return True, f"bumped pins in {fp} (backup: {bak})"
+            return False, 'no-pin-changes'
+        except Exception as e:
+            return False, f"pin-failed:{e}"
+
+    for kind, fp in fixes_requested:
+        if kind == 'multi-doc':
+            ok, msg = split_multi_doc(fp)
+            results.append((fp, 'multi-doc', ok, msg))
+        elif kind == 'pin-actions':
+            ok, msg = bump_action_pins(fp)
+            results.append((fp, 'pin-actions', ok, msg))
+
+    return results
 
 def main():
     parser = argparse.ArgumentParser()
