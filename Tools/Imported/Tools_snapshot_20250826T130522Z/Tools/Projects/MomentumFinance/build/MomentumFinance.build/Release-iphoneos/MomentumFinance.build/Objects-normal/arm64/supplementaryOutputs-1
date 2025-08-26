@@ -1,0 +1,12 @@
+{
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/MomentumFinance/ContentView.swift" : {
+    "abi-baseline-json" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance.abi.json",
+    "const-values" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master.dia",
+    "objc-header" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-Swift.h",
+    "swiftdoc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance.swiftdoc",
+    "swiftmodule" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance.swiftmodule",
+    "swiftsourceinfo" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance.swiftsourceinfo"
+  }
+}
