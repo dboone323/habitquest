@@ -1,0 +1,16 @@
+[import/Shared/snapshot-20250826T130522Z 42307a3] chore(import): add Shared snapshot (20250826T130522Z)
+ 7 files changed, 631 insertions(+)
+ create mode 100644 Automation/IMPORTS/Shared.import.md
+ create mode 100644 Tools/Imported/Shared_snapshot-20250826T130522Z/SharedArchitecture.swift
+ create mode 100644 Tools/Imported/Shared_snapshot-20250826T130522Z/Testing/TestUtilities.swift
+ create mode 100644 Tools/Imported/Shared_snapshot-20250826T130522Z/Utilities/AppLogger.swift
+ create mode 100644 Tools/Imported/Shared_snapshot-20250826T130522Z/Utilities/QueryFallback.swift
+ create mode 100644 Tools/Imported/Shared_snapshot-20250826T130522Z/Utilities/SwiftDataCompat.swift
+ create mode 100644 Tools/Imported/Shared_snapshot-20250826T130522Z/cspell.json
+remote: 
+remote: Create a pull request for 'import/Shared/snapshot-20250826T130522Z' on GitHub by visiting:        
+remote:      https://github.com/dboone323/Quantum-workspace/pull/new/import/Shared/snapshot-20250826T130522Z        
+remote: 
+To https://github.com/dboone323/Quantum-workspace.git
+ * [new branch]      HEAD -> import/Shared/snapshot-20250826T130522Z
+branch 'import/Shared/snapshot-20250826T130522Z' set up to track 'origin/import/Shared/snapshot-20250826T130522Z'.

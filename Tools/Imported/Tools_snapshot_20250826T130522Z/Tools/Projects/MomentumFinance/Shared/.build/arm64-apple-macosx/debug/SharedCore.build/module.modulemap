@@ -1,0 +1,4 @@
+module SharedCore {
+    header "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/arm64-apple-macosx/debug/SharedCore.build/SharedCore-Swift.h"
+    requires objc
+}
