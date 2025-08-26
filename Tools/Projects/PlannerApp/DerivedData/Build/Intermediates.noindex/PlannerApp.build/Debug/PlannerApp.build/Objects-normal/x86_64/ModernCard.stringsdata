@@ -1,0 +1,32 @@
+{
+  "source": "/Users/danielstevens/Desktop/PlannerApp/Components/ModernCard.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "%lld%%",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 151
+        }
+      },
+      {
+        "comment": "",
+        "key": "Sample Card",
+        "location": {
+          "startingColumn": 1,
+          "startingLine": 209
+        }
+      },
+      {
+        "comment": "",
+        "key": "This is a sample card with modern styling",
+        "location": {
+          "startingColumn": 1,
+          "startingLine": 209
+        }
+      }
+    ]
+  },
+  "version": 1
+}

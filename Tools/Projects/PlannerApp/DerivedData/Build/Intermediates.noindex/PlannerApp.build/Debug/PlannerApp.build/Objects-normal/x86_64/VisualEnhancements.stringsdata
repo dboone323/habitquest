@@ -1,0 +1,88 @@
+{
+  "source": "/Users/danielstevens/Desktop/PlannerApp/Components/VisualEnhancements.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "%lld%%",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 109
+        }
+      },
+      {
+        "comment": "",
+        "key": "Celebrate! 🎉",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 496
+        }
+      },
+      {
+        "comment": "",
+        "key": "Glass Morphism Card",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 418
+        }
+      },
+      {
+        "comment": "",
+        "key": "Modern translucent design",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 420
+        }
+      },
+      {
+        "comment": "",
+        "key": "3D Interactive Card",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 439
+        }
+      },
+      {
+        "comment": "",
+        "key": "Drag to rotate",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 441
+        }
+      },
+      {
+        "comment": "",
+        "key": "Tap to Flip",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 455
+        }
+      },
+      {
+        "comment": "",
+        "key": "Back Side",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 465
+        }
+      },
+      {
+        "comment": "",
+        "key": "Loading Shimmer Effect",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 475
+        }
+      },
+      {
+        "comment": "",
+        "key": "Zen",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 489
+        }
+      }
+    ]
+  },
+  "version": 1
+}
