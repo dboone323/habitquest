@@ -1,0 +1,565 @@
+{
+  "": {
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/master.swiftdeps"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialInsightModels.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialInsightModels.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialInsightModels.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialInsightModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialInsightModels.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialInsightModels.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialMLModels.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialMLModels.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialMLModels.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialMLModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialMLModels.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialMLModels.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/TransactionPatternAnalyzer.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/TransactionPatternAnalyzer.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/TransactionPatternAnalyzer.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/TransactionPatternAnalyzer~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/TransactionPatternAnalyzer.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/TransactionPatternAnalyzer.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Anomaly.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Anomaly.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Anomaly.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Anomaly~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Anomaly.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Anomaly.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Budgets.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Budgets.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Budgets.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Budgets~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Budgets.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Budgets.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Forecasting.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Forecasting.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Forecasting.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Forecasting~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Forecasting.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Forecasting.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Helpers.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Helpers.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Helpers.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Helpers~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Helpers.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Helpers.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Helpers.swift.backup": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Helpers.swift.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Helpers.swift.backup.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Helpers.swift~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Helpers.swift.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Helpers.swift.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Optimizations.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Optimizations.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Optimizations.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Optimizations~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Optimizations.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Optimizations.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Spending.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Spending.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Spending.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Spending~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Spending.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.Spending.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialIntelligenceService.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/AnomalyDetection.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AnomalyDetection.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AnomalyDetection.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AnomalyDetection~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AnomalyDetection.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AnomalyDetection.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/BudgetRecommendations.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/BudgetRecommendations.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/BudgetRecommendations.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/BudgetRecommendations~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/BudgetRecommendations.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/BudgetRecommendations.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/FinancialForecasting.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialForecasting.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialForecasting.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialForecasting~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialForecasting.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialForecasting.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/FormattingUtilities.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FormattingUtilities.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FormattingUtilities.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FormattingUtilities~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FormattingUtilities.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FormattingUtilities.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/OptimizationSuggestions.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/OptimizationSuggestions.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/OptimizationSuggestions.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/OptimizationSuggestions~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/OptimizationSuggestions.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/OptimizationSuggestions.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/TransactionPatternDetection.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/TransactionPatternDetection.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/TransactionPatternDetection.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/TransactionPatternDetection~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/TransactionPatternDetection.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/TransactionPatternDetection.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/InsightsModels.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/InsightsModels.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/InsightsModels.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/InsightsModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/InsightsModels.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/InsightsModels.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/AnimationModels.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AnimationModels.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AnimationModels.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AnimationModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AnimationModels.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AnimationModels.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Budget.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Budget.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Budget.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Budget~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Budget.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Budget.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Category.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Category.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Category.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Category~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Category.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Category.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ComplexDataGenerators.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ComplexDataGenerators.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ComplexDataGenerators.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ComplexDataGenerators~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ComplexDataGenerators.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ComplexDataGenerators.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/DataImportModels.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImportModels.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImportModels.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImportModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImportModels.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImportModels.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ExpenseCategory.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExpenseCategory.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExpenseCategory.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExpenseCategory~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExpenseCategory.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExpenseCategory.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialAccount.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialAccount.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialAccount.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialAccount~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialAccount.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialAccount.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialTransaction.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialTransaction.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialTransaction.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialTransaction~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialTransaction.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialTransaction.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/NavigationModels.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationModels.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationModels.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationModels.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationModels.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/NotificationModels.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationModels.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationModels.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationModels.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationModels.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleData.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleData.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleData.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleData~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleData.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleData.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataGenerators.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleDataGenerators.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleDataGenerators.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleDataGenerators~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleDataGenerators.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleDataGenerators.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataProviders.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleDataProviders.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleDataProviders.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleDataProviders~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleDataProviders.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SampleDataProviders.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SavingsGoal.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SavingsGoal.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SavingsGoal.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SavingsGoal~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SavingsGoal.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SavingsGoal.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Subscription.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Subscription.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Subscription.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Subscription~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Subscription.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Subscription.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Transaction.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Transaction.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Transaction.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Transaction~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Transaction.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Transaction.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationActions.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationActions.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationActions.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationActions~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationActions.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationActions.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationAuthentication.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationAuthentication.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationAuthentication.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationAuthentication~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationAuthentication.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationAuthentication.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationBreadcrumbs.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationBreadcrumbs.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationBreadcrumbs.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationBreadcrumbs~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationBreadcrumbs.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationBreadcrumbs.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationDeepLinking.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationDeepLinking.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationDeepLinking.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationDeepLinking~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationDeepLinking.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationDeepLinking.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationMacOS.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationMacOS.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationMacOS.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationMacOS~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationMacOS.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationMacOS.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationNotifications.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationNotifications.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationNotifications.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationNotifications~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationNotifications.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationNotifications.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationSearch.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationSearch.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationSearch.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationSearch~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationSearch.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationSearch.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationStateRestoration.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationStateRestoration.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationStateRestoration.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationStateRestoration~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationStateRestoration.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationStateRestoration.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationTypes.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationTypes.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationTypes.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationTypes~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationTypes.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationTypes.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/MacOSNavigationTypes.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/MacOSNavigationTypes.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/MacOSNavigationTypes.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/MacOSNavigationTypes~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/MacOSNavigationTypes.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/MacOSNavigationTypes.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Enhanced.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Enhanced.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Enhanced.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Enhanced~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Enhanced.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Enhanced.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Original.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Original.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Original.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Original~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Original.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Original.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Simplified.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Simplified.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Simplified.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Simplified~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Simplified.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationCoordinator_Simplified.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationTypes.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationTypes.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationTypes.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationTypes~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationTypes.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NavigationTypes.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/AppLogger.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AppLogger.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AppLogger.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AppLogger~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AppLogger.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/AppLogger.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/ErrorHandler.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ErrorHandler.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ErrorHandler.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ErrorHandler~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ErrorHandler.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ErrorHandler.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/Logger.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Logger.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Logger.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Logger~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Logger.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/Logger.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/BudgetNotificationScheduler.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/BudgetNotificationScheduler.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/BudgetNotificationScheduler.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/BudgetNotificationScheduler~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/BudgetNotificationScheduler.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/BudgetNotificationScheduler.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/GoalNotificationScheduler.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/GoalNotificationScheduler.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/GoalNotificationScheduler.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/GoalNotificationScheduler~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/GoalNotificationScheduler.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/GoalNotificationScheduler.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationPermissionManager.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationPermissionManager.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationPermissionManager.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationPermissionManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationPermissionManager.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationPermissionManager.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationTypes.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationTypes.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationTypes.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationTypes~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationTypes.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationTypes.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/SubscriptionNotificationScheduler.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SubscriptionNotificationScheduler.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SubscriptionNotificationScheduler.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SubscriptionNotificationScheduler~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SubscriptionNotificationScheduler.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SubscriptionNotificationScheduler.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationManager.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationManager.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationManager.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationManager.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationManager.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationTypes.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationTypes.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationTypes.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationTypes~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationTypes.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/NotificationTypes.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/QueryFallback.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/QueryFallback.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/QueryFallback.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/QueryFallback~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/QueryFallback.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/QueryFallback.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/SwiftDataCompat.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SwiftDataCompat.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SwiftDataCompat.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SwiftDataCompat~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SwiftDataCompat.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SwiftDataCompat.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/CSVExporter.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/CSVExporter.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/CSVExporter.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/CSVExporter~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/CSVExporter.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/CSVExporter.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/DataFetcher.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataFetcher.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataFetcher.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataFetcher~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataFetcher.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataFetcher.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/ExportHelpers.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportHelpers.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportHelpers.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportHelpers~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportHelpers.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportHelpers.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/ExportTypes.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportTypes.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportTypes.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportTypes~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportTypes.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportTypes.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/JSONExporter.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/JSONExporter.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/JSONExporter.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/JSONExporter~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/JSONExporter.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/JSONExporter.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/PDFExporter.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/PDFExporter.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/PDFExporter.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/PDFExporter~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/PDFExporter.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/PDFExporter.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter_Original.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter_Original.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter_Original.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter_Original~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter_Original.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter_Original.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter_Simplified.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter_Simplified.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter_Simplified.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter_Simplified~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter_Simplified.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataExporter_Simplified.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataImportHelpers.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImportHelpers.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImportHelpers.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImportHelpers~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImportHelpers.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImportHelpers.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataImporter.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImporter.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImporter.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImporter~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImporter.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataImporter.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ExportEngineService.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportEngineService.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportEngineService.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportEngineService~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportEngineService.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportEngineService.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ExportTypes.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportTypes.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportTypes.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportTypes~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportTypes.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ExportTypes.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/CSVParser.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/CSVParser.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/CSVParser.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/CSVParser~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/CSVParser.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/CSVParser.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/DataParser.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataParser.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataParser.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataParser~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataParser.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/DataParser.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/EntityManager.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/EntityManager.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/EntityManager.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/EntityManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/EntityManager.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/EntityManager.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/ImportTypes.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ImportTypes.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ImportTypes.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ImportTypes~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ImportTypes.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ImportTypes.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/ImportValidator.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ImportValidator.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ImportValidator.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ImportValidator~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ImportValidator.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ImportValidator.dia"
+  },
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/SearchTypes.swift": {
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SearchTypes.d",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SearchTypes.swift.o",
+    "swiftmodule": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SearchTypes~partial.swiftmodule",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SearchTypes.swiftdeps",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SearchTypes.dia"
+  }
+}

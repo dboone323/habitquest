@@ -1,0 +1,13 @@
+[import/MomentumFinance/add-workflows-20250826T130522Z acb8f09] chore(workflows): add repo-level workflows to MomentumFinance (snapshot 20250826T130522Z)
+ 4 files changed, 130 insertions(+)
+ create mode 100644 Automation/IMPORTS/MomentumFinance.workflows_added.md
+ create mode 100644 Tools/Projects/MomentumFinance/.github/workflows/pr-validation.yml
+ create mode 100644 Tools/Projects/MomentumFinance/.github/workflows/quantum-agent-self-heal.yml
+ create mode 100644 Tools/Projects/MomentumFinance/.github/workflows/validate-and-lint-pr.yml
+To https://github.com/dboone323/Quantum-workspace.git
+ ! [rejected]        HEAD -> import/MomentumFinance/add-workflows-20250826T130522Z (non-fast-forward)
+error: failed to push some refs to 'https://github.com/dboone323/Quantum-workspace.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.

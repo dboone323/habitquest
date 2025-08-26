@@ -1,0 +1,13 @@
+Transfer starting: 9 files
+./
+SharedArchitecture.swift
+cspell.json
+Testing/
+Testing/TestUtilities.swift
+Utilities/
+Utilities/AppLogger.swift
+Utilities/QueryFallback.swift
+Utilities/SwiftDataCompat.swift
+
+sent 19913 bytes  received 170 bytes  4898292 bytes/sec
+total size is 19159  speedup is 0.95

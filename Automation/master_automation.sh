@@ -6,7 +6,9 @@ set -euo pipefail
 
 CODE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 PROJECTS_DIR="${CODE_DIR}/Projects"
-DRY_RUN=0
+# Allow DRY_RUN to be set from environment for safe dry-run executions.
+# Default remains 0 to preserve existing behavior.
+DRY_RUN="${DRY_RUN:-0}"
 
 # Colors
 GREEN='\033[0;32m'
@@ -39,11 +41,15 @@ list_projects() {
 			project_name=$(basename "${project}")
 			local swift_files
 			swift_files=$(find "${project}" -name "*.swift" 2>/dev/null | wc -l | tr -d ' ')
-			local has_automation
-			if [[ -d "${project}/automation" ]]; then
+			local has_automation=" (❌ no automation)"
+			# Consider a project to have "automation" if it contains any of the
+			# common automation entry points we use across the workspace. Projects
+			# may live under ${PROJECTS_DIR} *or* under CODE_DIR/Tools/Projects when
+			# imports are staged in the Tools directory. Check both locations.
+			local alt_project_path="${CODE_DIR}/Tools/Projects/${project_name}"
+			if [[ -d "${project}/automation" ]] || [[ -d "${project}/.github/workflows" ]] || [[ -d "${project}/Tools/Automation" ]] || [[ -d "${project}/Tools" ]] || \
+			   [[ -d "${alt_project_path}/automation" ]] || [[ -d "${alt_project_path}/.github/workflows" ]] || [[ -d "${alt_project_path}/Tools/Automation" ]] || [[ -d "${alt_project_path}/Tools" ]]; then
 				has_automation=" (✅ automation)"
-			else
-				has_automation=" (❌ no automation)"
 			fi
 			echo "  - ${project_name}: ${swift_files} Swift files${has_automation}"
 		fi

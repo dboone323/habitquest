@@ -1,0 +1,13 @@
+[import/CodingReviewer/add-workflows-20250826T130522Z 95d8c6e] chore(workflows): add repo-level workflows to CodingReviewer (snapshot 20250826T130522Z)
+ 4 files changed, 130 insertions(+)
+ create mode 100644 Automation/IMPORTS/CodingReviewer.workflows_added.md
+ create mode 100644 Tools/Projects/CodingReviewer/.github/workflows/pr-validation.yml
+ create mode 100644 Tools/Projects/CodingReviewer/.github/workflows/quantum-agent-self-heal.yml
+ create mode 100644 Tools/Projects/CodingReviewer/.github/workflows/validate-and-lint-pr.yml
+remote: 
+remote: Create a pull request for 'import/CodingReviewer/add-workflows-20250826T130522Z' on GitHub by visiting:        
+remote:      https://github.com/dboone323/Quantum-workspace/pull/new/import/CodingReviewer/add-workflows-20250826T130522Z        
+remote: 
+To https://github.com/dboone323/Quantum-workspace.git
+ * [new branch]      HEAD -> import/CodingReviewer/add-workflows-20250826T130522Z
+branch 'import/CodingReviewer/add-workflows-20250826T130522Z' set up to track 'origin/import/CodingReviewer/add-workflows-20250826T130522Z'.

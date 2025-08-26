@@ -1,0 +1,13 @@
+[import/PlannerApp/add-workflows-20250826T130522Z d0071c6] chore(workflows): add repo-level workflows to PlannerApp (snapshot 20250826T130522Z)
+ 4 files changed, 130 insertions(+)
+ create mode 100644 Automation/IMPORTS/PlannerApp.workflows_added.md
+ create mode 100644 Tools/Projects/PlannerApp/.github/workflows/pr-validation.yml
+ create mode 100644 Tools/Projects/PlannerApp/.github/workflows/quantum-agent-self-heal.yml
+ create mode 100644 Tools/Projects/PlannerApp/.github/workflows/validate-and-lint-pr.yml
+remote: 
+remote: Create a pull request for 'import/PlannerApp/add-workflows-20250826T130522Z' on GitHub by visiting:        
+remote:      https://github.com/dboone323/Quantum-workspace/pull/new/import/PlannerApp/add-workflows-20250826T130522Z        
+remote: 
+To https://github.com/dboone323/Quantum-workspace.git
+ * [new branch]      HEAD -> import/PlannerApp/add-workflows-20250826T130522Z
+branch 'import/PlannerApp/add-workflows-20250826T130522Z' set up to track 'origin/import/PlannerApp/add-workflows-20250826T130522Z'.
