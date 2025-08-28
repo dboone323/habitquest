@@ -9,8 +9,8 @@ ROOT_DIR=$(cd "$(dirname "$0")" && pwd)
 BUILD_PY="$ROOT_DIR/build_assets.py"
 TEST_DIR="$ROOT_DIR/tests"
 
-# Prefer virtualenv python if available at Tools/.venv
-VENV_PY="$(cd "$ROOT_DIR/.." && pwd)/.venv/bin/python"
+# Prefer virtualenv python if available at Automation/.venv (canonical)
+VENV_PY="$ROOT_DIR/.venv/bin/python"
 if [ -x "$VENV_PY" ]; then
   PYTHON="$VENV_PY"
 else
