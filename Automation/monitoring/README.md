@@ -1,3 +1,19 @@
+Install service templates
+-------------------------
+
+Use `install_services.sh` to copy unit files and plists into common system locations.
+
+By default the script runs in dry-run mode and only prints the planned actions. To apply changes:
+
+  ./install_services.sh --apply
+
+If you need to overwrite existing files, add `--force`.
+
+Note: Make the installer executable after checkout:
+
+  chmod +x Automation/monitoring/install_services.sh
+
+The script will use `sudo` when writing to locations that require elevated privileges.
 Monitoring services (MCP & GitHub workflow monitor)
 
 This folder contains helper scripts and service templates to run the MCP coordinator and the GitHub workflow monitor from the project virtualenv at Automation/.venv.

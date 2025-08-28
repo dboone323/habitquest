@@ -25,7 +25,13 @@ jobs:
       - name: Install test deps
         run: |
           python -m pip install --upgrade pip
-          pip install pytest requests
+          if [ -f ${{ github.workspace }}/Tools/Automation/requirements-dev.txt ]; then
+            python -m pip install -r ${{ github.workspace }}/Tools/Automation/requirements-dev.txt
+          elif [ -f ${{ github.workspace }}/Tools/Automation/requirements.txt ]; then
+            python -m pip install -r ${{ github.workspace }}/Tools/Automation/requirements.txt
+          else
+            pip install pytest requests
+          fi
 
       - name: Run pytest (mcp tests)
         working-directory: ${{ github.workspace }}/Tools/Automation
