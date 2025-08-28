@@ -1,0 +1,104 @@
+{
+  "source": "/Users/danielstevens/Desktop/PlannerApp/MainApp/DashboardView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Dashboard",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 255
+        }
+      },
+      {
+        "comment": "",
+        "key": "Today",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 78
+        }
+      },
+      {
+        "comment": "",
+        "key": "Quick Actions",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 118
+        }
+      },
+      {
+        "comment": "",
+        "key": "Recent Activities",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 164
+        }
+      },
+      {
+        "comment": "",
+        "key": "View All",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 171
+        }
+      },
+      {
+        "comment": "",
+        "key": "No recent activities",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 190
+        }
+      },
+      {
+        "comment": "",
+        "key": "Start by creating a task or goal!",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 194
+        }
+      },
+      {
+        "comment": "",
+        "key": "Upcoming",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 207
+        }
+      },
+      {
+        "comment": "",
+        "key": "View Calendar",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 214
+        }
+      },
+      {
+        "comment": "",
+        "key": "Nothing upcoming",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 233
+        }
+      },
+      {
+        "comment": "",
+        "key": "Schedule some events to see them here",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 237
+        }
+      },
+      {
+        "comment": "",
+        "key": "Refreshing...",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 272
+        }
+      }
+    ]
+  },
+  "version": 1
+}

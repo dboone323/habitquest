@@ -1,0 +1,4 @@
+2025-08-27 14:18:59,274 INFO Controller starting (agent=controller-agent, project=CodingReviewer)
+2025-08-27 14:18:59,283 INFO Registered with MCP
+2025-08-27 14:18:59,283 INFO Controller agent registered, polling for tasks...
+2025-08-27 14:45:23,293 INFO Artifacts saved: /Users/danielstevens/mcp_artifacts/workspace_task_6_1756323923

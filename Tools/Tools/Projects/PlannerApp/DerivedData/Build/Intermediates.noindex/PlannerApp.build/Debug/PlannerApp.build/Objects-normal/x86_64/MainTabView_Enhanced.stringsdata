@@ -1,0 +1,40 @@
+{
+  "source": "/Users/danielstevens/Desktop/PlannerApp/MainApp/MainTabView_Enhanced.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Toggle Sidebar",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 81
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add New Item",
+        "location": {
+          "startingColumn": 15,
+          "startingLine": 188
+        }
+      },
+      {
+        "comment": "",
+        "key": "Search",
+        "location": {
+          "startingColumn": 15,
+          "startingLine": 193
+        }
+      },
+      {
+        "comment": "",
+        "key": "Sync",
+        "location": {
+          "startingColumn": 15,
+          "startingLine": 199
+        }
+      }
+    ]
+  },
+  "version": 1
+}

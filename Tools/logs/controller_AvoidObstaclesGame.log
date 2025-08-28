@@ -1,0 +1,6 @@
+2025-08-27 14:18:59,363 INFO Controller starting (agent=controller-agent, project=AvoidObstaclesGame)
+2025-08-27 14:18:59,368 INFO Registered with MCP
+2025-08-27 14:18:59,368 INFO Controller agent registered, polling for tasks...
+2025-08-27 14:34:50,324 INFO Artifacts saved: /Users/danielstevens/mcp_artifacts/workspace_task_3_1756323290
+2025-08-27 14:39:14,768 INFO Artifacts saved: /Users/danielstevens/mcp_artifacts/workspace_task_4_1756323554
+2025-08-27 14:41:54,983 INFO Artifacts saved: /Users/danielstevens/mcp_artifacts/workspace_task_5_1756323714
