@@ -16,6 +16,8 @@ import json
 import os
 import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import hmac
+import hashlib
 from urllib.parse import urlparse
 import subprocess
 
@@ -111,12 +113,37 @@ class MCPHandler(BaseHTTPRequestHandler):
             return
         parsed = urlparse(self.path)
         length = int(self.headers.get('Content-Length', 0))
-        raw = self.rfile.read(length).decode('utf-8') if length else ''
+        raw_bytes = self.rfile.read(length) if length else b''
+        raw = raw_bytes.decode('utf-8') if raw_bytes else ''
         try:
             body = json.loads(raw) if raw else {}
         except Exception:
             self._send_json({'error': 'invalid_json'}, status=400)
             return
+
+        # Helper: verify GitHub webhook signature using GITHUB_WEBHOOK_SECRET
+        def _verify_github_signature():
+            secret = os.environ.get('GITHUB_WEBHOOK_SECRET')
+            if not secret:
+                return False
+            sig_header = self.headers.get('X-Hub-Signature-256') or self.headers.get('X-Hub-Signature')
+            if not sig_header:
+                return False
+            # support both sha256=... and legacy sha1=...
+            try:
+                if sig_header.startswith('sha256='):
+                    expected = sig_header.split('=', 1)[1]
+                    mac = hmac.new(secret.encode('utf-8'), msg=raw_bytes, digestmod=hashlib.sha256)
+                    digest = mac.hexdigest()
+                    return hmac.compare_digest(digest, expected)
+                elif sig_header.startswith('sha1='):
+                    expected = sig_header.split('=', 1)[1]
+                    mac = hmac.new(secret.encode('utf-8'), msg=raw_bytes, digestmod=hashlib.sha1)
+                    digest = mac.hexdigest()
+                    return hmac.compare_digest(digest, expected)
+            except Exception:
+                return False
+            return False
 
         if parsed.path == '/register':
             agent = body.get('agent')
@@ -220,6 +247,81 @@ class MCPHandler(BaseHTTPRequestHandler):
                 pass
 
             self._send_json({'ok': True, 'enqueued': True, 'task_id': task_id})
+            return
+
+        if parsed.path == '/github_webhook':
+            # Verify signature if secret is configured
+            verified = True
+            secret = os.environ.get('GITHUB_WEBHOOK_SECRET')
+            if secret:
+                verified = _verify_github_signature()
+            if not verified:
+                self._send_json({'error': 'signature_verification_failed'}, status=401)
+                return
+
+            # handle repository_dispatch (manual event) or workflow_run events
+            gh_event = self.headers.get('X-GitHub-Event')
+            if gh_event == 'repository_dispatch':
+                # repository_dispatch includes an 'action' and 'client_payload'
+                action_name = body.get('action')
+                client_payload = body.get('client_payload', {})
+                # enqueue task based on payload or action
+                cmd = client_payload.get('command') or client_payload.get('run') or 'ci-check'
+                proj = client_payload.get('head_branch') or client_payload.get('project') or 'workspace'
+                task_id = f"gh_{len(self.server.tasks) + 1}"
+                task = {'id': task_id, 'agent': 'github-webhook', 'command': cmd, 'project': proj, 'status': 'queued', 'meta': {'event': 'repository_dispatch', 'action': action_name, 'payload': client_payload}}
+                self.server.tasks.append(task)
+                # persist
+                try:
+                    tasks_dir = os.path.join(os.path.dirname(__file__), 'tasks')
+                    os.makedirs(tasks_dir, exist_ok=True)
+                    out_path = os.path.join(tasks_dir, f"{task_id}.json")
+                    with open(out_path, 'w', encoding='utf-8') as f:
+                        json.dump(task, f, indent=2)
+                except Exception:
+                    pass
+                # optionally execute immediately if payload requests it
+                if client_payload.get('execute'):
+                    try:
+                        with self.server.task_lock:
+                            task['status'] = 'running'
+                    except Exception:
+                        task['status'] = 'running'
+                    threading.Thread(target=self._execute_task, args=(task, list(ALLOWED_COMMANDS.get(cmd, [cmd]))), daemon=True).start()
+                self._send_json({'ok': True, 'enqueued': True, 'task_id': task_id})
+                return
+
+            if gh_event == 'workflow_run':
+                # A workflow run completed; enqueue a ci-check for the branch if it failed
+                action = body.get('action')
+                workflow_run = body.get('workflow_run', {})
+                conclusion = workflow_run.get('conclusion')
+                head_branch = workflow_run.get('head_branch')
+                html_url = workflow_run.get('html_url')
+                if conclusion and conclusion != 'success':
+                    task_id = f"ghwf_{len(self.server.tasks) + 1}"
+                    task = {'id': task_id, 'agent': 'github-webhook', 'command': 'ci-check', 'project': head_branch or 'workspace', 'status': 'queued', 'meta': {'workflow': workflow_run.get('name'), 'conclusion': conclusion, 'url': html_url}}
+                    self.server.tasks.append(task)
+                    try:
+                        tasks_dir = os.path.join(os.path.dirname(__file__), 'tasks')
+                        os.makedirs(tasks_dir, exist_ok=True)
+                        out_path = os.path.join(tasks_dir, f"{task_id}.json")
+                        with open(out_path, 'w', encoding='utf-8') as f:
+                            json.dump(task, f, indent=2)
+                    except Exception:
+                        pass
+                    # don't auto-execute unless explicitly configured via env
+                    if os.environ.get('GITHUB_WEBHOOK_AUTO_EXEC', '').lower() in ('1', 'true', 'yes'):
+                        try:
+                            with self.server.task_lock:
+                                task['status'] = 'running'
+                        except Exception:
+                            task['status'] = 'running'
+                        threading.Thread(target=self._execute_task, args=(task, list(ALLOWED_COMMANDS.get('ci-check', ['ci-check']))), daemon=True).start()
+                    self._send_json({'ok': True, 'enqueued': True, 'task_id': task_id})
+                    return
+
+            self._send_json({'ok': True, 'ignored_event': gh_event})
             return
 
         if parsed.path == '/execute_task':
