@@ -1,0 +1,38 @@
+Repo: /Users/danielstevens/Desktop/Code/Documentation/CodingReviewer-Modular/CodingReviewer-App
+Git status (porcelain):
+ M Projects/HabitQuest
+ M Projects/MomentumFinance
+ M Tools/.trunk/trunk.yaml
+?? .DS_Store
+?? Projects/AvoidObstaclesGame/.github/workflows/validate-and-lint-pr.yml
+?? Projects/CodingReviewer/.github/workflows/validate-and-lint-pr.yml
+?? Projects/PlannerApp/.github/workflows/validate-and-lint-pr.yml
+?? Tools/.ai_enhancements.log
+?? Tools/.autofix.log
+?? Tools/.github/
+?? Tools/.swiftformat
+?? Tools/.swiftformat.bak
+?? Tools/ARCHITECTURE.md
+?? Tools/Automation/PR_NOTES/
+?? Tools/Automation/check_architecture.py
+?? Tools/Automation/ci/
+?? Tools/Automation/force_snapshot.sh
+?? Tools/Automation/logs/
+?? Tools/Automation/quantum_agent_entrypoint.sh
+?? Tools/Code.code-workspace
+?? Tools/Documentation/
+?? Tools/MIGRATION_SUCCESS_REPORT.md
+?? Tools/Projects/
+?? Tools/README.md
+?? Tools/Shared/
+?? Tools/Tools/
+?? Tools/ai_workflow_recovery.log
+?? Tools/logs/
+?? Tools/quantum_agent__Users_danielstevens_Desktop_Code_Projects_AvoidObstaclesGame.log
+?? Tools/quantum_agent__Users_danielstevens_Desktop_Code_Projects_CodingReviewer.log
+?? Tools/quantum_agent__Users_danielstevens_Desktop_Code_Projects_HabitQuest.log
+?? Tools/quantum_agent__Users_danielstevens_Desktop_Code_Projects_MomentumFinance.log
+?? Tools/quantum_agent__Users_danielstevens_Desktop_Code_Projects_PlannerApp.log
+?? Tools/quantum_agent__Users_danielstevens_Desktop_Code_Projects_Tools.log
+?? Tools/quantum_agent__Users_danielstevens_Desktop_Code_Tools.log
+Adding all changes...
