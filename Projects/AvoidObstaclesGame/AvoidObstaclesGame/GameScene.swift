@@ -13,9 +13,9 @@ import UIKit // For UITouch and UIEvent
 // Defines the categories for physics bodies to handle collisions.
 // Using UInt32 for bitmasks allows up to 32 unique categories.
 struct PhysicsCategory {
-    static let none     : UInt32 = 0        // 0
-    static let player   : UInt32 = 0b1      // Binary 1 (decimal 1)
-    static let obstacle : UInt32 = 0b10     // Binary 2 (decimal 2)
+    static let none: UInt32 = 0        // 0
+    static let player: UInt32 = 0b1      // Binary 1 (decimal 1)
+    static let obstacle: UInt32 = 0b10     // Binary 2 (decimal 2)
     // Add more categories here if needed (e.g., powerUp: 0b100, ground: 0b1000)
 }
 
@@ -65,7 +65,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // Particle effects
     private var explosionParticles: SKEmitterNode?
-
 
     // MARK: - Scene Lifecycle
 
@@ -271,7 +270,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Stops the obstacle spawning action.
         removeAction(forKey: obstacleSpawnActionKey)
     }
-     private func spawnObstacle() {
+    private func spawnObstacle() {
         // Creates a single obstacle with difficulty-based properties and enhanced visuals.
         if isGameOver { return }
 
@@ -415,7 +414,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
 
         // Check if the collision is between the player and an obstacle.
-        if (firstBody.categoryBitMask == PhysicsCategory.player && secondBody.categoryBitMask == PhysicsCategory.obstacle) {
+        if firstBody.categoryBitMask == PhysicsCategory.player && secondBody.categoryBitMask == PhysicsCategory.obstacle {
             // Player contacted an obstacle.
             // Safely cast the nodes to SKSpriteNode before passing them to the handler.
             if let playerNode = firstBody.node as? SKSpriteNode,
@@ -445,7 +444,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // Remove all other on-screen obstacles to clear the play area.
         // This uses enumerateChildNodes to find all nodes named "obstacle".
-        enumerateChildNodes(withName: "obstacle") { (node, stopPointer) in
+        enumerateChildNodes(withName: "obstacle") { (node, _) in
             node.removeFromParent()
         }
 
