@@ -12,11 +12,11 @@ struct EnhancedPlatformNavigation<Content: View>: View {
     let content: Content
     @EnvironmentObject var themeManager: ThemeManager
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
+
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
-    
+
     var body: some View {
         #if os(macOS)
         macOSNavigation
@@ -28,7 +28,7 @@ struct EnhancedPlatformNavigation<Content: View>: View {
         }
         #endif
     }
-    
+
     // MARK: - macOS Navigation
     private var macOSNavigation: some View {
         NavigationSplitView {
@@ -45,7 +45,7 @@ struct EnhancedPlatformNavigation<Content: View>: View {
         }
         .navigationSplitViewStyle(.balanced)
     }
-    
+
     // MARK: - iPad Navigation
     private var iPadNavigation: some View {
         NavigationSplitView(columnVisibility: .constant(.all)) {
@@ -67,7 +67,7 @@ struct EnhancedPlatformNavigation<Content: View>: View {
         }
 
     }
-    
+
     // MARK: - iPhone Navigation
     private var iPhoneNavigation: some View {
         NavigationStack {
@@ -91,7 +91,7 @@ struct EnhancedPlatformNavigation<Content: View>: View {
 struct MacOSSidebarView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State private var selectedTab: Tab = .dashboard
-    
+
     enum Tab: String, CaseIterable {
         case dashboard = "Dashboard"
         case tasks = "Tasks"
@@ -99,7 +99,7 @@ struct MacOSSidebarView: View {
         case calendar = "Calendar"
         case journal = "Journal"
         case settings = "Settings"
-        
+
         var icon: String {
             switch self {
             case .dashboard: return "square.grid.2x2"
@@ -110,7 +110,7 @@ struct MacOSSidebarView: View {
             case .settings: return "gear"
             }
         }
-        
+
         var keyboardShortcut: KeyEquivalent? {
             switch self {
             case .dashboard: return "1"
@@ -122,14 +122,14 @@ struct MacOSSidebarView: View {
             }
         }
     }
-    
+
     var body: some View {
         List(Tab.allCases, id: \.self) { tab in
             NavigationLink(value: tab) {
                 Label(tab.rawValue, systemImage: tab.icon)
                     .foregroundColor(
-                        selectedTab == tab ? 
-                        themeManager.currentTheme.primaryAccentColor : 
+                        selectedTab == tab ?
+                        themeManager.currentTheme.primaryAccentColor :
                         themeManager.currentTheme.primaryTextColor
                     )
             }
@@ -144,7 +144,7 @@ struct MacOSSidebarView: View {
 struct IPadSidebarView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State private var selectedTab: String = "Dashboard"
-    
+
     let tabs = [
         ("Dashboard", "square.grid.2x2"),
         ("Tasks", "checkmark.circle"),
@@ -153,7 +153,7 @@ struct IPadSidebarView: View {
         ("Journal", "book"),
         ("Settings", "gear")
     ]
-    
+
     var body: some View {
         List {
             Section("PlannerApp") {
@@ -162,17 +162,17 @@ struct IPadSidebarView: View {
                         Image(systemName: tab.1)
                             .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                             .frame(width: 24)
-                        
+
                         Text(tab.0)
                             .font(.body)
                             .foregroundColor(themeManager.currentTheme.primaryTextColor)
-                        
+
                         Spacer()
                     }
                     .padding(.vertical, 4)
                     .background(
-                        selectedTab == tab.0 ? 
-                        themeManager.currentTheme.primaryAccentColor.opacity(0.1) : 
+                        selectedTab == tab.0 ?
+                        themeManager.currentTheme.primaryAccentColor.opacity(0.1) :
                         Color.clear
                     )
                     .cornerRadius(8)
@@ -186,18 +186,18 @@ struct IPadSidebarView: View {
                     }
                 }
             }
-            
+
             Spacer(minLength: 100)
-            
+
             Section("Quick Actions") {
                 QuickActionButton(title: "Add Task", icon: "plus.circle", color: .blue) {
                     // Handle add task
                 }
-                
+
                 QuickActionButton(title: "Add Goal", icon: "target", color: .green) {
                     // Handle add goal
                 }
-                
+
                 QuickActionButton(title: "Add Event", icon: "calendar.badge.plus", color: .orange) {
                     // Handle add event
                 }
@@ -211,19 +211,19 @@ struct IPadSidebarView: View {
 // MARK: - Toolbar Buttons
 struct MacOSToolbarButtons: View {
     @EnvironmentObject var themeManager: ThemeManager
-    
+
     var body: some View {
         HStack {
             Button(action: {}) {
                 Label("Search", systemImage: "magnifyingglass")
             }
             .keyboardShortcut("f", modifiers: .command)
-            
+
             Button(action: {}) {
                 Label("Add Item", systemImage: "plus")
             }
             .keyboardShortcut("n", modifiers: .command)
-            
+
             Menu {
                 Button("Export Data", action: {})
                 Button("Import Data", action: {})
@@ -243,11 +243,11 @@ struct IPadToolbarButtons: View {
             Button(action: {}) {
                 Image(systemName: "magnifyingglass")
             }
-            
+
             Button(action: {}) {
                 Image(systemName: "plus")
             }
-            
+
             Menu {
                 Button("Search", action: {})
                 Button("Filter", action: {})
@@ -265,7 +265,7 @@ struct IPhoneToolbarButtons: View {
             Button(action: {}) {
                 Image(systemName: "plus")
             }
-            
+
             Menu {
                 Button("Search", action: {})
                 Button("Filter", action: {})
@@ -283,20 +283,20 @@ struct QuickActionButton: View {
     let icon: String
     let color: Color
     let action: () -> Void
-    
+
     @EnvironmentObject var themeManager: ThemeManager
-    
+
     var body: some View {
         Button(action: action) {
             HStack {
                 Image(systemName: icon)
                     .foregroundColor(color)
                     .frame(width: 20)
-                
+
                 Text(title)
                     .font(.body)
                     .foregroundColor(themeManager.currentTheme.primaryTextColor)
-                
+
                 Spacer()
             }
             .padding(.vertical, 8)
@@ -315,7 +315,7 @@ struct KeyboardShortcutsView: View {
             Text("Keyboard Shortcuts")
                 .font(.title2.bold())
                 .padding()
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 ShortcutRow(key: "⌘1", description: "Dashboard")
                 ShortcutRow(key: "⌘2", description: "Tasks")
@@ -336,17 +336,17 @@ struct KeyboardShortcutsView: View {
 struct ShortcutRow: View {
     let key: String
     let description: String
-    
+
     var body: some View {
         HStack {
             Text(key)
                 .font(.system(.body, design: .monospaced))
                 .foregroundColor(.secondary)
                 .frame(width: 60, alignment: .leading)
-            
+
             Text(description)
                 .font(.body)
-            
+
             Spacer()
         }
     }

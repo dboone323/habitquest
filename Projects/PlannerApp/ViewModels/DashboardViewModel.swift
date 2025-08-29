@@ -37,16 +37,16 @@ class DashboardViewModel: ObservableObject {
     @Published var totalTodaysEventsCount: Int = 0
     @Published var totalIncompleteTasksCount: Int = 0
     @Published var totalUpcomingGoalsCount: Int = 0
-    
+
     // Modern Dashboard Properties
     @Published var recentActivities: [DashboardActivity] = []
     @Published var upcomingItems: [UpcomingItem] = []
-    
+
     // Full data arrays for Add* views to bind to
     @Published var allGoals: [Goal] = []
     @Published var allEvents: [CalendarEvent] = []
     @Published var allJournalEntries: [JournalEntry] = []
-    
+
     // Quick Stats Properties
     @Published var totalTasks: Int = 0
     @Published var completedTasks: Int = 0
@@ -126,39 +126,39 @@ class DashboardViewModel: ObservableObject {
 
         print("Dashboard data fetched. Limit: \(limit). Today: \(totalTodaysEventsCount), Tasks: \(totalIncompleteTasksCount), Goals: \(totalUpcomingGoalsCount)") // Debugging log
     }
-    
+
     // New method for modern dashboard
     @MainActor
     func refreshData() async {
         // Call existing method
         fetchDashboardData()
-        
+
         // Update quick stats
         updateQuickStats()
-        
+
         // Generate recent activities
         generateRecentActivities()
-        
+
         // Generate upcoming items
         generateUpcomingItems()
-        
+
         print("Dashboard refresh completed") // Debugging log
     }
-    
+
     private func updateQuickStats() {
         let allTasks = TaskDataManager.shared.load()
         let allGoals = GoalDataManager.shared.load()
-        
+
         self.totalTasks = allTasks.count
         self.completedTasks = allTasks.filter { $0.isCompleted }.count
         self.totalGoals = allGoals.count
         self.completedGoals = 0 // Goal completion not yet implemented
         self.todayEvents = self.totalTodaysEventsCount
     }
-    
+
     private func generateRecentActivities() {
         var activities: [DashboardActivity] = []
-        
+
         // Add completed tasks from last few days
         let allTasks = TaskDataManager.shared.load()
         let recentCompletedTasks = allTasks.filter { task in
@@ -167,7 +167,7 @@ class DashboardViewModel: ObservableObject {
             (Calendar.current.isDateInYesterday(task.createdAt) ||
              Calendar.current.isDateInToday(task.createdAt))
         }.prefix(3)
-        
+
         for task in recentCompletedTasks {
             activities.append(DashboardActivity(
                 title: "Completed Task",
@@ -177,13 +177,13 @@ class DashboardViewModel: ObservableObject {
                 timestamp: task.createdAt
             ))
         }
-        
+
         // Add recent events
         let allEvents = CalendarDataManager.shared.load()
         let recentEvents = allEvents.filter { event in
             Calendar.current.isDateInYesterday(event.date) || Calendar.current.isDateInToday(event.date)
         }.prefix(2)
-        
+
         for event in recentEvents {
             activities.append(DashboardActivity(
                 title: "Event",
@@ -193,17 +193,17 @@ class DashboardViewModel: ObservableObject {
                 timestamp: event.date
             ))
         }
-        
+
         self.recentActivities = activities.sorted { $0.timestamp > $1.timestamp }
     }
-    
+
     private func generateUpcomingItems() {
         var items: [UpcomingItem] = []
-        
+
         // Add upcoming events
         let allEvents = CalendarDataManager.shared.load()
         let futureEvents = allEvents.filter { $0.date > Date() }.prefix(3)
-        
+
         for event in futureEvents {
             items.append(UpcomingItem(
                 title: event.title,
@@ -213,11 +213,11 @@ class DashboardViewModel: ObservableObject {
                 color: .orange
             ))
         }
-        
+
         // Add upcoming goals
         let allGoals = GoalDataManager.shared.load()
         let futureGoals = allGoals.filter { $0.targetDate > Date() }.prefix(2)
-        
+
         for goal in futureGoals {
             items.append(UpcomingItem(
                 title: goal.title,
@@ -227,7 +227,7 @@ class DashboardViewModel: ObservableObject {
                 color: .green
             ))
         }
-        
+
         self.upcomingItems = items.sorted { $0.date < $1.date }
     }
 
@@ -239,22 +239,22 @@ class DashboardViewModel: ObservableObject {
         self.totalTodaysEventsCount = 0
         self.totalIncompleteTasksCount = 0
         self.totalUpcomingGoalsCount = 0
-        
+
         // Reset modern dashboard data
         self.recentActivities = []
         self.upcomingItems = []
-        
+
         // Reset full data arrays
         self.allGoals = []
         self.allEvents = []
         self.allJournalEntries = []
-        
+
         self.totalTasks = 0
         self.completedTasks = 0
         self.totalGoals = 0
         self.completedGoals = 0
         self.todayEvents = 0
-        
+
         print("Dashboard data reset.") // Debugging log
     }
 }

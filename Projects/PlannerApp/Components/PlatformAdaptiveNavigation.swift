@@ -10,11 +10,11 @@ import SwiftUI
 struct PlatformAdaptiveNavigation<Content: View>: View {
     let content: Content
     @EnvironmentObject var themeManager: ThemeManager
-    
+
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
-    
+
     var body: some View {
         #if os(macOS)
         NavigationSplitView {
@@ -44,7 +44,7 @@ struct PlatformAdaptiveNavigation<Content: View>: View {
 struct SidebarView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State private var selectedTab: Tab = .dashboard
-    
+
     enum Tab: String, CaseIterable {
         case dashboard = "Dashboard"
         case tasks = "Tasks"
@@ -52,7 +52,7 @@ struct SidebarView: View {
         case calendar = "Calendar"
         case journal = "Journal"
         case settings = "Settings"
-        
+
         var icon: String {
             switch self {
             case .dashboard: return "house.fill"
@@ -64,7 +64,7 @@ struct SidebarView: View {
             }
         }
     }
-    
+
     var body: some View {
         #if os(macOS)
         List(Tab.allCases, id: \.self, selection: $selectedTab) { tab in
@@ -95,13 +95,13 @@ struct PlatformToolbar: ViewModifier {
     let title: String
     let primaryActions: [ToolbarAction]
     let secondaryActions: [ToolbarAction]
-    
+
     struct ToolbarAction {
         let title: String
         let icon: String
         let action: () -> Void
         let isDestructive: Bool
-        
+
         init(title: String, icon: String, isDestructive: Bool = false, action: @escaping () -> Void) {
             self.title = title
             self.icon = icon
@@ -109,7 +109,7 @@ struct PlatformToolbar: ViewModifier {
             self.action = action
         }
     }
-    
+
     func body(content: Content) -> some View {
         content
             .navigationTitle(title)
@@ -124,7 +124,7 @@ struct PlatformToolbar: ViewModifier {
                         .help(action.title)
                     }
                 }
-                
+
                 ToolbarItemGroup(placement: .secondaryAction) {
                     Menu("More") {
                         ForEach(secondaryActions.indices, id: \.self) { index in
@@ -141,7 +141,7 @@ struct PlatformToolbar: ViewModifier {
                             Image(systemName: action.icon)
                         }
                     }
-                    
+
                     if !secondaryActions.isEmpty {
                         Menu {
                             ForEach(secondaryActions.indices, id: \.self) { index in
@@ -176,11 +176,11 @@ extension View {
 
 struct PlatformContextMenu<MenuContent: View>: ViewModifier {
     let menuContent: MenuContent
-    
+
     init(@ViewBuilder menuContent: () -> MenuContent) {
         self.menuContent = menuContent()
     }
-    
+
     func body(content: Content) -> some View {
         #if os(macOS)
         content
@@ -209,11 +209,11 @@ extension View {
 struct AdaptiveGrid<Content: View>: View {
     let content: Content
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
+
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
-    
+
     private var columns: [GridItem] {
         #if os(macOS)
         return Array(repeating: .init(.flexible()), count: 3)
@@ -227,7 +227,7 @@ struct AdaptiveGrid<Content: View>: View {
         }
         #endif
     }
-    
+
     var body: some View {
         LazyVGrid(columns: columns, spacing: 16) {
             content
@@ -240,12 +240,12 @@ struct AdaptiveGrid<Content: View>: View {
 struct PlatformSheet<SheetContent: View>: ViewModifier {
     @Binding var isPresented: Bool
     let sheetContent: SheetContent
-    
+
     init(isPresented: Binding<Bool>, @ViewBuilder content: () -> SheetContent) {
         self._isPresented = isPresented
         self.sheetContent = content()
     }
-    
+
     func body(content: Content) -> some View {
         #if os(macOS)
         content
@@ -278,7 +278,7 @@ extension View {
 struct ExamplePlatformView: View {
     @State private var showingAddItem = false
     @EnvironmentObject var themeManager: ThemeManager
-    
+
     var body: some View {
         PlatformAdaptiveNavigation {
             ScrollView {

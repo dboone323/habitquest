@@ -16,7 +16,7 @@ struct MainTabView_Enhanced: View {
     @EnvironmentObject var themeManager: ThemeManager
     @Binding var selectedTabTag: String
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
+
     // Define constants for tab tags
     struct TabTags {
         static let dashboard = "Dashboard"
@@ -26,14 +26,14 @@ struct MainTabView_Enhanced: View {
         static let journal = "Journal"
         static let settings = "Settings"
     }
-    
+
     // Tab configuration
     struct TabConfiguration {
         let tag: String
         let title: String
         let icon: String
         let keyboardShortcut: KeyEquivalent?
-        
+
         static let allTabs = [
             TabConfiguration(tag: TabTags.dashboard, title: "Dashboard", icon: "house", keyboardShortcut: "1"),
             TabConfiguration(tag: TabTags.tasks, title: "Tasks", icon: "checkmark.square", keyboardShortcut: "2"),
@@ -43,7 +43,7 @@ struct MainTabView_Enhanced: View {
             TabConfiguration(tag: TabTags.settings, title: "Settings", icon: "gear", keyboardShortcut: ",")
         ]
     }
-    
+
     var body: some View {
         #if os(macOS)
         macOSLayout
@@ -55,7 +55,7 @@ struct MainTabView_Enhanced: View {
         }
         #endif
     }
-    
+
     // MARK: - macOS Layout
     #if os(macOS)
     private var macOSLayout: some View {
@@ -94,7 +94,7 @@ struct MainTabView_Enhanced: View {
         .background(themeManager.currentTheme.primaryBackgroundColor)
     }
     #endif
-    
+
     // MARK: - iPad Layout
     #if os(iOS)
     private var iPadLayout: some View {
@@ -105,11 +105,11 @@ struct MainTabView_Enhanced: View {
                         Image(systemName: tab.icon)
                             .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                             .frame(width: 24)
-                        
+
                         Text(tab.title)
                             .font(.body)
                             .foregroundColor(themeManager.currentTheme.primaryTextColor)
-                        
+
                         Spacer()
                     }
                     .padding(.vertical, 4)
@@ -134,7 +134,7 @@ struct MainTabView_Enhanced: View {
         }
     }
     #endif
-    
+
     // MARK: - iPhone Layout (Traditional TabView)
     #if os(iOS)
     private var iPhoneLayout: some View {
@@ -151,13 +151,13 @@ struct MainTabView_Enhanced: View {
         .environment(\.colorScheme, themeManager.currentTheme.primaryBackgroundColor.isDark() ? .dark : .light)
     }
     #endif
-    
+
     // MARK: - Content Views
     @ViewBuilder
     private var contentForSelectedTab: some View {
         contentForTab(selectedTabTag)
     }
-    
+
     @ViewBuilder
     private func contentForTab(_ tag: String) -> some View {
         switch tag {
@@ -177,7 +177,7 @@ struct MainTabView_Enhanced: View {
             DashboardView()
         }
     }
-    
+
     // MARK: - Toolbar Buttons
     #if os(macOS)
     @ViewBuilder
@@ -186,13 +186,13 @@ struct MainTabView_Enhanced: View {
             Image(systemName: "plus")
         }
         .help("Add New Item")
-        
+
         Button(action: searchAction) {
             Image(systemName: "magnifyingglass")
         }
         .help("Search")
         .keyboardShortcut("f", modifiers: .command)
-        
+
         Button(action: syncAction) {
             Image(systemName: "arrow.clockwise")
         }
@@ -200,40 +200,40 @@ struct MainTabView_Enhanced: View {
         .keyboardShortcut("r", modifiers: .command)
     }
     #endif
-    
+
     #if os(iOS)
     @ViewBuilder
     private var iPadToolbarButtons: some View {
         Button(action: addNewItem) {
             Image(systemName: "plus")
         }
-        
+
         Button(action: searchAction) {
             Image(systemName: "magnifyingglass")
         }
-        
+
         Button(action: syncAction) {
             Image(systemName: "arrow.clockwise")
         }
     }
     #endif
-    
+
     // MARK: - Actions
     private func addNewItem() {
         // Add new item based on current tab
         print("Add new item for tab: \(selectedTabTag)")
     }
-    
+
     private func searchAction() {
         // Open search
         print("Search action")
     }
-    
+
     private func syncAction() {
         // Sync data
         print("Sync action")
     }
-    
+
     #if os(macOS)
     private func toggleSidebar() {
         NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)

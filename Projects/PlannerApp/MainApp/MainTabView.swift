@@ -79,11 +79,11 @@ extension Color {
         let nsColor = NSColor(self)
         let colorSpace = NSColorSpace.deviceRGB
         guard let convertedColor = nsColor.usingColorSpace(colorSpace) else { return false }
-        
+
         let red = convertedColor.redComponent
         let green = convertedColor.greenComponent
         let blue = convertedColor.blueComponent
-        
+
         // Calculate luminance using standard coefficients.
         let luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
         // Consider the color dark if luminance is below a threshold (e.g., 0.5).
@@ -95,9 +95,9 @@ extension Color {
         var green: CGFloat = 0
         var blue: CGFloat = 0
         var alpha: CGFloat = 0
-        
+
         uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        
+
         // Calculate luminance using standard coefficients.
         let luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
         // Consider the color dark if luminance is below a threshold (e.g., 0.5).

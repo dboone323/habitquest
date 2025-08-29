@@ -33,7 +33,7 @@ struct SettingsView: View {
 
     // Journal Security
     @AppStorage(AppSettingKeys.journalBiometricsEnabled) private var journalBiometricsEnabled: Bool = false
-    
+
     // Additional settings
     @AppStorage(AppSettingKeys.autoSyncEnabled) private var autoSyncEnabled: Bool = true
     @AppStorage(AppSettingKeys.syncFrequency) private var syncFrequency: String = "hourly"
@@ -54,11 +54,11 @@ struct SettingsView: View {
         "15 minutes before": 900, "30 minutes before": 1800, "1 hour before": 3600,
         "1 day before": 86400
     ]
-    
+
     var sortedReminderKeys: [String] {
         reminderTimeOptions.keys.sorted { reminderTimeOptions[$0]! < reminderTimeOptions[$1]! }
     }
-    
+
     let defaultViewOptions = ["Dashboard", "Tasks", "Calendar", "Goals", "Journal"]
 
     // --- Biometric Check ---
@@ -90,7 +90,7 @@ struct SettingsView: View {
                             Text(name).tag(name)
                         }
                     }
-                    
+
                     Button(action: { showingThemePreview = true }) {
                         HStack {
                             Text("Theme Preview")
@@ -150,7 +150,7 @@ struct SettingsView: View {
                     }
 
                     Toggle("Auto-Delete Completed Tasks", isOn: $autoDeleteCompleted)
-                    
+
                     if autoDeleteCompleted {
                         Stepper("Delete after: \\(autoDeleteDays) days", value: $autoDeleteDays, in: 1...90)
                     }
@@ -181,9 +181,9 @@ struct SettingsView: View {
                                 .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                         }
                     }
-                    
+
                     Toggle("Auto Sync", isOn: $autoSyncEnabled)
-                    
+
                     Picker("Sync Frequency", selection: $syncFrequency) {
                         Text("Every 15 minutes").tag("15min")
                         Text("Hourly").tag("hourly")
@@ -198,7 +198,7 @@ struct SettingsView: View {
                 Section("Enhanced Features") {
                     Toggle("Haptic Feedback", isOn: $enableHapticFeedback)
                     Toggle("Enable Analytics", isOn: $enableAnalytics)
-                    
+
                     if enableAnalytics {
                         Text("Help improve PlannerApp by sharing anonymous usage data.")
                             .font(.caption)

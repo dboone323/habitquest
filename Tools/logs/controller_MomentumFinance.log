@@ -1,0 +1,7 @@
+2025-08-27 14:18:59,305 INFO Controller starting (agent=controller-agent, project=MomentumFinance)
+2025-08-27 14:18:59,312 INFO Registered with MCP
+2025-08-27 14:18:59,312 INFO Controller agent registered, polling for tasks...
+2025-08-27 14:50:51,718 INFO Artifacts saved: /Users/danielstevens/mcp_artifacts/workspace_task_8_1756324251
+2025-08-27 14:56:48,195 INFO Artifacts saved: /Users/danielstevens/mcp_artifacts/workspace_task_9_1756324608
+2025-08-27 14:58:52,433 INFO Artifacts saved: /Users/danielstevens/mcp_artifacts/workspace_task_10_1756324732
+2025-08-27 15:02:00,705 INFO Artifacts saved: /Users/danielstevens/mcp_artifacts/workspace_task_11_1756324920

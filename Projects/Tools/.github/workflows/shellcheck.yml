@@ -1,0 +1,25 @@
+name: Shell Script Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup ShellCheck
+      run: |
+        brew install shellcheck
+        shellcheck --version
+
+    - name: Run ShellCheck
+      run: |
+        find . -name "*.sh" -type f -exec shellcheck {} \;

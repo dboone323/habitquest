@@ -12,7 +12,7 @@ import Foundation
 struct SettingsView: View {
     // Import ThemeManager properly
     @EnvironmentObject var themeManager: ThemeManager
-    
+
     // State properties with AppStorage keys
     @AppStorage(AppSettingKeys.userName) private var userName: String = ""
     @AppStorage(AppSettingKeys.dashboardItemLimit) private var dashboardItemLimit: Int = 3
@@ -42,7 +42,7 @@ struct SettingsView: View {
         let context = LAContext()
         return context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
     }
-    
+
     private let reminderTimeOptions: [String: Int] = [
         "5 minutes": 300,
         "15 minutes": 900,
@@ -50,11 +50,11 @@ struct SettingsView: View {
         "1 hour": 3600,
         "1 day": 86400
     ]
-    
+
     private var sortedReminderKeys: [String] {
         reminderTimeOptions.keys.sorted { reminderTimeOptions[$0]! < reminderTimeOptions[$1]! }
     }
-    
+
     private let defaultViewOptions = ["Dashboard", "Tasks", "Calendar", "Goals", "Journal"]
 
     var body: some View {
@@ -79,7 +79,7 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(.menu)
-                    
+
                     Button(action: { showingThemePreview = true }) {
                         HStack {
                             Text("Theme Preview")
@@ -139,7 +139,7 @@ struct SettingsView: View {
                     }
 
                     Toggle("Auto-Delete Completed Tasks", isOn: $autoDeleteCompleted)
-                    
+
                     if autoDeleteCompleted {
                         Stepper("Delete after: \(autoDeleteDays) days", value: $autoDeleteDays, in: 1...90)
                     }
@@ -170,9 +170,9 @@ struct SettingsView: View {
                                 .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                         }
                     }
-                    
+
                     Toggle("Auto Sync", isOn: $autoSyncEnabled)
-                    
+
                     Picker("Sync Frequency", selection: $syncFrequency) {
                         Text("Every 15 minutes").tag("15min")
                         Text("Hourly").tag("hourly")
@@ -187,7 +187,7 @@ struct SettingsView: View {
                 Section("Enhanced Features") {
                     Toggle("Haptic Feedback", isOn: $enableHapticFeedback)
                     Toggle("Enable Analytics", isOn: $enableAnalytics)
-                    
+
                     if enableAnalytics {
                         Text("Help improve PlannerApp by sharing anonymous usage data.")
                             .font(.caption)
@@ -300,7 +300,7 @@ struct SettingsView: View {
 // MARK: - CloudKit Settings View
 struct CloudKitSettingsView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
@@ -323,7 +323,7 @@ struct CloudKitSettingsView: View {
 struct ThemePreviewSheet: View {
     @EnvironmentObject var themeManager: ThemeManager
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -355,7 +355,7 @@ struct ThemeCard: View {
     let theme: Theme
     let isSelected: Bool
     let onTap: () -> Void
-    
+
     var body: some View {
         Button(action: onTap) {
             VStack(spacing: 8) {
@@ -368,12 +368,12 @@ struct ThemeCard: View {
                         .frame(width: 16, height: 16)
                     Spacer()
                 }
-                
+
                 Text(theme.name)
                     .font(.headline)
                     .foregroundColor(theme.primaryTextColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                
+
                 Text("Sample text")
                     .font(.caption)
                     .foregroundColor(theme.secondaryTextColor)

@@ -8,7 +8,7 @@ struct AddGoalView: View {
     @State private var title = ""
     @State private var description = ""
     @State private var targetDate = Date()
-    
+
     var body: some View {
         NavigationView {
             Form {

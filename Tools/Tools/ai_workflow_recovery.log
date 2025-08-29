@@ -1,0 +1,39 @@
+2025-08-25 11:50:24,966 - INFO - 🤖 AI Workflow Recovery initialized for dboone323/HabitQuest
+2025-08-25 11:50:24,966 - INFO - 🔍 Running in dry-run mode (analysis only)
+2025-08-25 11:50:27,327 - INFO - 🤖 AI Workflow Recovery initialized for unknown/unknown
+2025-08-25 11:50:27,327 - INFO - 🔍 Running in dry-run mode (analysis only)
+2025-08-25 11:50:27,360 - INFO - 🧠 Analyzing workflow failure with AI...
+2025-08-25 11:50:27,360 - INFO - 🎯 Match found: missing_file (confidence: 0.95)
+2025-08-25 11:50:27,360 - INFO - 🎯 Would apply fix: create_missing_file for missing_file
+2025-08-25 11:53:07,018 - INFO - 🤖 AI Workflow Recovery initialized for dboone323/Quantum-workspace
+2025-08-25 11:53:07,018 - INFO - 🔍 Running in dry-run mode (analysis only)
+2025-08-25 11:53:07,050 - INFO - 🧠 Analyzing workflow failure with AI...
+2025-08-25 11:53:07,050 - INFO - 🎯 Match found: missing_file (confidence: 0.95)
+2025-08-25 11:53:07,051 - INFO - 🎯 Would apply fix: create_missing_file for missing_file
+2025-08-25 11:54:00,625 - INFO - 🤖 AI Workflow Recovery initialized for dboone323/Quantum-workspace
+2025-08-25 11:54:00,625 - INFO - 🔍 Running in dry-run mode (analysis only)
+2025-08-25 11:54:00,658 - INFO - 🧠 Analyzing workflow failure with AI...
+2025-08-25 11:54:00,659 - INFO - 🎯 Match found: missing_file (confidence: 0.95)
+2025-08-25 11:54:00,659 - INFO - 🎯 Would apply fix: create_missing_file for missing_file
+2025-08-25 11:54:00,925 - INFO - 🤖 AI Workflow Recovery initialized for dboone323/Quantum-workspace
+2025-08-25 11:54:00,925 - INFO - 🔍 Running in dry-run mode (analysis only)
+2025-08-25 11:54:00,955 - INFO - 🧠 Analyzing workflow failure with AI...
+2025-08-25 11:54:00,955 - INFO - 🎯 Match found: missing_file (confidence: 0.95)
+2025-08-25 11:54:00,956 - INFO - 🎯 Would apply fix: create_missing_file for missing_file
+2025-08-25 11:54:02,572 - INFO - 🤖 AI Workflow Recovery initialized for dboone323/HabitQuest
+2025-08-25 11:54:02,572 - INFO - 🔍 Running in dry-run mode (analysis only)
+2025-08-25 11:54:03,440 - INFO - 🤖 AI Workflow Recovery initialized for unknown/unknown
+2025-08-25 11:54:03,440 - INFO - 🔍 Running in dry-run mode (analysis only)
+2025-08-25 11:54:03,472 - INFO - 🧠 Analyzing workflow failure with AI...
+2025-08-25 11:54:03,473 - INFO - 🎯 Match found: missing_file (confidence: 0.95)
+2025-08-25 11:54:03,473 - INFO - 🎯 Would apply fix: create_missing_file for missing_file
+2025-08-25 11:54:03,851 - INFO - 🤖 AI Workflow Recovery initialized for dboone323/Quantum-workspace
+2025-08-25 11:54:03,851 - INFO - 🔍 Running in dry-run mode (analysis only)
+2025-08-25 11:54:03,882 - INFO - 🧠 Analyzing workflow failure with AI...
+2025-08-25 11:54:03,882 - INFO - 🎯 Match found: missing_file (confidence: 0.95)
+2025-08-25 11:54:03,882 - INFO - 🎯 Would apply fix: create_missing_file for missing_file
+2025-08-25 11:54:04,096 - INFO - 🤖 AI Workflow Recovery initialized for dboone323/Quantum-workspace
+2025-08-25 11:54:04,097 - INFO - 🔍 Running in dry-run mode (analysis only)
+2025-08-25 11:54:04,127 - INFO - 🧠 Analyzing workflow failure with AI...
+2025-08-25 11:54:04,128 - INFO - 🎯 Match found: missing_file (confidence: 0.95)
+2025-08-25 11:54:04,128 - INFO - 🎯 Would apply fix: create_missing_file for missing_file

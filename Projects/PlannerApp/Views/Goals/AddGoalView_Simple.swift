@@ -8,7 +8,7 @@ struct AddGoalView: View {
     @State private var title = ""
     @State private var description = ""
     @State private var targetDate = Date()
-    
+
     private var isFormValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
         !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -19,7 +19,7 @@ struct AddGoalView: View {
             Form {
                 Section("Goal Details") {
                     TextField("Goal Title", text: $title)
-                    
+
                     TextField("Description", text: $description, axis: .vertical)
                         .lineLimit(3...6)
 
@@ -34,7 +34,7 @@ struct AddGoalView: View {
                         dismiss()
                     }
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
                         saveGoal()

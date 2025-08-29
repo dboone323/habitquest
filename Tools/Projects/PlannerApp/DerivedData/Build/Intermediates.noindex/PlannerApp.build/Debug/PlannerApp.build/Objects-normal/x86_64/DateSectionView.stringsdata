@@ -1,0 +1,24 @@
+{
+  "source": "/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/DateSectionView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Sample Event",
+        "location": {
+          "startingColumn": 1,
+          "startingLine": 35
+        }
+      },
+      {
+        "comment": "",
+        "key": "Another Event",
+        "location": {
+          "startingColumn": 1,
+          "startingLine": 35
+        }
+      }
+    ]
+  },
+  "version": 1
+}

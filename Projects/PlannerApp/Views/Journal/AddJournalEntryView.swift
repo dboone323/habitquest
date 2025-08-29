@@ -9,7 +9,7 @@ struct AddJournalEntryView: View {
     @State private var entryBody = "" // Renamed for clarity
     @State private var date = Date()
     @State private var mood = "😊" // Default mood
-    
+
     // Focus states for iOS keyboard management
     @FocusState private var isTitleFocused: Bool
     @FocusState private var isEntryBodyFocused: Bool
@@ -35,15 +35,15 @@ struct AddJournalEntryView: View {
                 .buttonStyle(.iOSSecondary)
                 #endif
                 .foregroundColor(.blue)
-                
+
                 Spacer()
-                
+
                 Text("New Journal Entry")
                     .font(.title3)
                     .fontWeight(.semibold)
-                
+
                 Spacer()
-                
+
                 Button("Save") {
                     #if os(iOS)
                     HapticManager.notificationSuccess()
@@ -66,7 +66,7 @@ struct AddJournalEntryView: View {
             #if os(iOS)
             .iOSEnhancedTouchTarget()
             #endif
-            
+
             Form {
                 TextField("Title", text: $title)
                     .focused($isTitleFocused)
@@ -137,7 +137,7 @@ struct AddJournalEntryView: View {
             mood: mood
         )
         journalEntries.append(newEntry)
-        
+
         // Save to persistent storage via data manager
         JournalDataManager.shared.save(entries: journalEntries)
     }

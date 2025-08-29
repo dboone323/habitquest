@@ -63,7 +63,7 @@ struct Theme: Identifiable, Equatable { // Added Equatable for comparison
         primaryFontName: nil, // System default
         secondaryFontName: nil // System default
     )
-    
+
     // Platform-specific default colors
     private static var defaultPrimaryBackgroundColor: Color {
         #if os(macOS)
@@ -72,7 +72,7 @@ struct Theme: Identifiable, Equatable { // Added Equatable for comparison
         return Color(UIColor.systemBackground)
         #endif
     }
-    
+
     private static var defaultSecondaryBackgroundColor: Color {
         #if os(macOS)
         return Color(nsColor: .controlBackgroundColor)
@@ -80,7 +80,7 @@ struct Theme: Identifiable, Equatable { // Added Equatable for comparison
         return Color(UIColor.secondarySystemBackground)
         #endif
     }
-    
+
     private static var defaultPrimaryTextColor: Color {
         #if os(macOS)
         return Color(nsColor: .labelColor)
@@ -88,7 +88,7 @@ struct Theme: Identifiable, Equatable { // Added Equatable for comparison
         return Color(UIColor.label)
         #endif
     }
-    
+
     private static var defaultSecondaryTextColor: Color {
         #if os(macOS)
         return Color(nsColor: .secondaryLabelColor)
@@ -195,7 +195,7 @@ struct Theme: Identifiable, Equatable { // Added Equatable for comparison
         minimalGray,
         rosePink
     ]
-    
+
     // MARK: - Enhanced Modern Themes (defined in ModernThemes.swift)
     // These will be added via extension in ModernThemes.swift
 

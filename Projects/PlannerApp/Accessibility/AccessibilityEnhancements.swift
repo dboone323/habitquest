@@ -21,10 +21,10 @@ class AccessibilityManager: ObservableObject {
     @Published var prefersDynamicType = false
     @Published var prefersReducedMotion = false
     @Published var prefersHighContrast = false
-    
+
     init() {
         updateAccessibilitySettings()
-        
+
         #if os(iOS)
         // Listen for accessibility changes on iOS
         NotificationCenter.default.addObserver(
@@ -33,7 +33,7 @@ class AccessibilityManager: ObservableObject {
             name: UIAccessibility.voiceOverStatusDidChangeNotification,
             object: nil
         )
-        
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(accessibilitySettingsChanged),
@@ -50,13 +50,13 @@ class AccessibilityManager: ObservableObject {
         )
         #endif
     }
-    
+
     @objc private func accessibilitySettingsChanged() {
         DispatchQueue.main.async {
             self.updateAccessibilitySettings()
         }
     }
-    
+
     private func updateAccessibilitySettings() {
         #if os(iOS)
         isVoiceOverEnabled = UIAccessibility.isVoiceOverRunning
@@ -79,11 +79,11 @@ struct AccessibleButton: View {
     let title: String
     let action: () -> Void
     @EnvironmentObject var accessibilityManager: AccessibilityManager
-    
+
     var role: ButtonRole?
     var hint: String?
     var isEnabled: Bool = true
-    
+
     var body: some View {
         Button(action: action) {
             Text(title)
@@ -101,7 +101,7 @@ struct AccessibleButton: View {
         .accessibilityHint(hint ?? "")
         .accessibilityAddTraits(isEnabled ? .isButton : .isButton)
     }
-    
+
     private var dynamicFontSize: CGFloat {
         let baseSize: CGFloat = 16
         if accessibilityManager.prefersDynamicType {
@@ -109,20 +109,20 @@ struct AccessibleButton: View {
         }
         return baseSize
     }
-    
+
     private var minimumTouchTarget: CGFloat {
         return 44 // Apple's recommended minimum touch target
     }
-    
+
     private var backgroundColor: Color {
         let baseColor = role == .destructive ? Color.red : Color.blue
-        
+
         if accessibilityManager.prefersHighContrast {
             return baseColor.opacity(0.9)
         }
         return baseColor
     }
-    
+
     private var textColor: Color {
         if accessibilityManager.prefersHighContrast {
             return Color.white
@@ -136,17 +136,17 @@ struct AccessibleButton: View {
 struct AccessibleListRow<Content: View>: View {
     let content: Content
     @EnvironmentObject var accessibilityManager: AccessibilityManager
-    
+
     var accessibilityLabel: String?
     var accessibilityValue: String?
     var accessibilityHint: String?
     var accessibilityActions: [AccessibilityActionInfo] = []
-    
+
     struct AccessibilityActionInfo {
         let name: String
         let action: () -> Void
     }
-    
+
     init(
         accessibilityLabel: String? = nil,
         accessibilityValue: String? = nil,
@@ -160,7 +160,7 @@ struct AccessibleListRow<Content: View>: View {
         self.accessibilityActions = accessibilityActions
         self.content = content()
     }
-    
+
     var body: some View {
         content
             .frame(minHeight: minimumRowHeight)
@@ -175,7 +175,7 @@ struct AccessibleListRow<Content: View>: View {
                 }
             }
     }
-    
+
     private var minimumRowHeight: CGFloat {
         if accessibilityManager.prefersDynamicType {
             return 60
@@ -188,12 +188,12 @@ struct AccessibleListRow<Content: View>: View {
 
 struct HighContrastModifier: ViewModifier {
     @EnvironmentObject var accessibilityManager: AccessibilityManager
-    
+
     func body(content: Content) -> some View {
         content
             .environment(\.colorScheme, accessibilityManager.prefersHighContrast ? .dark : .light)
             .foregroundColor(
-                accessibilityManager.prefersHighContrast ? 
+                accessibilityManager.prefersHighContrast ?
                 Color.white : Color.primary
             )
     }
@@ -210,7 +210,7 @@ extension View {
 struct ReducedMotionModifier: ViewModifier {
     @EnvironmentObject var accessibilityManager: AccessibilityManager
     let animation: Animation
-    
+
     func body(content: Content) -> some View {
         content
             .animation(
@@ -231,10 +231,10 @@ extension View {
 struct FocusableView<Content: View>: View {
     let content: Content
     @FocusState private var isFocused: Bool
-    
+
     var accessibilityLabel: String
     var onFocusChange: ((Bool) -> Void)?
-    
+
     init(
         accessibilityLabel: String,
         onFocusChange: ((Bool) -> Void)? = nil,
@@ -244,7 +244,7 @@ struct FocusableView<Content: View>: View {
         self.onFocusChange = onFocusChange
         self.content = content()
     }
-    
+
     var body: some View {
         content
             .focused($isFocused)
@@ -269,7 +269,7 @@ struct ScreenReaderAnnouncement {
             #endif
         }
     }
-    
+
     static func announcePageChange(_ pageName: String) {
         DispatchQueue.main.async {
             #if os(iOS)
@@ -280,7 +280,7 @@ struct ScreenReaderAnnouncement {
             #endif
         }
     }
-    
+
     static func announceLayoutChange() {
         DispatchQueue.main.async {
             #if os(iOS)
@@ -299,9 +299,9 @@ struct DynamicTypeText: View {
     let text: String
     let style: Font.TextStyle
     @EnvironmentObject var accessibilityManager: AccessibilityManager
-    
+
     var maxFontSize: CGFloat = 28
-    
+
     var body: some View {
         Text(text)
             .font(.system(style, design: .default))
@@ -316,7 +316,7 @@ struct DynamicTypeText: View {
 struct AccessibleProgressView: View {
     let progress: Double // 0.0 to 1.0
     let label: String
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -324,7 +324,7 @@ struct AccessibleProgressView: View {
                 Spacer()
                 DynamicTypeText(text: "\(Int(progress * 100))%", style: .caption)
             }
-            
+
             ProgressView(value: progress)
                 .progressViewStyle(LinearProgressViewStyle(tint: .blue))
                 .accessibilityLabel("\(label) progress")
@@ -338,21 +338,21 @@ struct AccessibleProgressView: View {
 struct AccessibilityDemoView: View {
     @StateObject private var accessibilityManager = AccessibilityManager()
     @State private var progress: Double = 0.7
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 DynamicTypeText(text: "Accessibility Demo", style: .title)
-                
+
                 AccessibleListRow(
                     accessibilityLabel: "Sample task",
                     accessibilityValue: "Completed",
                     accessibilityHint: "Double tap to edit",
                     accessibilityActions: [
-                        .init(name: "Edit") { 
+                        .init(name: "Edit") {
                             ScreenReaderAnnouncement.announce("Edit mode activated")
                         },
-                        .init(name: "Delete") { 
+                        .init(name: "Delete") {
                             ScreenReaderAnnouncement.announce("Task deleted")
                         }
                     ]
@@ -364,7 +364,7 @@ struct AccessibilityDemoView: View {
                         Spacer()
                     }
                 }
-                
+
                 AccessibleButton(
                     title: "Add New Task",
                     action: {
@@ -372,9 +372,9 @@ struct AccessibilityDemoView: View {
                     },
                     hint: "Opens the add task screen"
                 )
-                
+
                 AccessibleProgressView(progress: progress, label: "Goal Progress")
-                
+
                 Group {
                     HStack {
                         DynamicTypeText(text: "VoiceOver:", style: .caption)
@@ -384,7 +384,7 @@ struct AccessibilityDemoView: View {
                             style: .caption
                         )
                     }
-                    
+
                     HStack {
                         DynamicTypeText(text: "Dynamic Type:", style: .caption)
                         Spacer()
@@ -393,7 +393,7 @@ struct AccessibilityDemoView: View {
                             style: .caption
                         )
                     }
-                    
+
                     HStack {
                         DynamicTypeText(text: "Reduced Motion:", style: .caption)
                         Spacer()

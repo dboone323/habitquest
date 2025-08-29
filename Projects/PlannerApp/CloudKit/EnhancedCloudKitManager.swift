@@ -20,7 +20,7 @@ typealias PlannerTask = Task
 @MainActor
 class EnhancedCloudKitManager: ObservableObject {
     static let shared = EnhancedCloudKitManager()
-    
+
     @Published var isSignedInToiCloud = false
     @Published var syncStatus: SyncStatus = .idle
     @Published var lastSyncDate: Date?
@@ -29,14 +29,14 @@ class EnhancedCloudKitManager: ObservableObject {
     @Published var errorMessage: String?
     @Published var currentError: CloudKitError?
     @Published var showErrorAlert = false
-    
+
     private let container: CKContainer
     internal let database: CKDatabase // Changed to internal so extensions can access
     private var subscriptions = Set<AnyCancellable>()
     #if os(iOS)
     private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     #endif
-    
+
     enum SyncStatus: Equatable {
         case idle
         case syncing
@@ -44,7 +44,7 @@ class EnhancedCloudKitManager: ObservableObject {
         case error(CloudKitError)
         case conflictResolutionNeeded
         case temporarilyUnavailable
-        
+
         static func == (lhs: SyncStatus, rhs: SyncStatus) -> Bool {
             switch (lhs, rhs) {
             case (.idle, .idle), (.syncing, .syncing), (.success, .success),
@@ -57,7 +57,7 @@ class EnhancedCloudKitManager: ObservableObject {
                 return false
             }
         }
-        
+
         var isActive: Bool {
             switch self {
             case .syncing, .conflictResolutionNeeded:
@@ -66,7 +66,7 @@ class EnhancedCloudKitManager: ObservableObject {
                 return false
             }
         }
-        
+
         var description: String {
             switch self {
             case .idle: return "Ready to sync"
@@ -78,21 +78,21 @@ class EnhancedCloudKitManager: ObservableObject {
             }
         }
     }
-    
+
     struct SyncConflict: Identifiable {
         let id = UUID()
         let recordID: CKRecord.ID
         let localRecord: CKRecord
         let serverRecord: CKRecord
         let type: ConflictType
-        
+
         enum ConflictType {
             case modified
             case deleted
             case created
         }
     }
-    
+
     // Enhanced CloudKit error types for better user feedback
     enum CloudKitError: Error, Identifiable {
         case notSignedIn
@@ -105,9 +105,9 @@ class EnhancedCloudKitManager: ObservableObject {
         case containerUnavailable
         case conflictDetected
         case unknownError(Error)
-        
+
         var id: String { localizedDescription }
-        
+
         // Provide a user-friendly message
         var localizedDescription: String {
             switch self {
@@ -133,7 +133,7 @@ class EnhancedCloudKitManager: ObservableObject {
                 return "Unexpected error: \(error.localizedDescription)"
             }
         }
-        
+
         // Provide a detailed explanation
         var explanation: String {
             switch self {
@@ -159,7 +159,7 @@ class EnhancedCloudKitManager: ObservableObject {
                 return "An unexpected error occurred while syncing your data."
             }
         }
-        
+
         // Provide a recovery suggestion
         var recoverySuggestion: String {
             switch self {
@@ -197,7 +197,7 @@ class EnhancedCloudKitManager: ObservableObject {
                 return "Try restarting the app. If the issue continues, please contact support."
             }
         }
-        
+
         // Suggest an action the user can take
         var actionLabel: String {
             switch self {
@@ -219,13 +219,13 @@ class EnhancedCloudKitManager: ObservableObject {
                 return "Restart App"
             }
         }
-        
+
         // Convert from CKError to CloudKitError
         static func fromCKError(_ error: Error) -> CloudKitError {
             guard let ckError = error as? CKError else {
                 return .unknownError(error)
             }
-            
+
             switch ckError.code {
             case .notAuthenticated, .badContainer:
                 return .notSignedIn
@@ -246,16 +246,16 @@ class EnhancedCloudKitManager: ObservableObject {
             }
         }
     }
-    
+
     private init() {
         container = CKContainer.default()
         database = container.privateCloudDatabase
-        
+
         checkiCloudStatus()
         setupSubscriptions()
         monitorAccountStatus()
     }
-    
+
     // MARK: - iCloud Status
     private func checkiCloudStatus() {
         container.accountStatus { [weak self] status, error in
@@ -264,14 +264,14 @@ class EnhancedCloudKitManager: ObservableObject {
             AsyncTask { @MainActor [weak self] in
                 guard let self = self else { return }
                 self.isSignedInToiCloud = status == .available
-                
+
                 if let error = error {
                     self.handleError(CloudKitError.fromCKError(error))
                 }
             }
         }
     }
-    
+
     // MARK: - Subscription Setup
     private func setupSubscriptions() {
         // Setup CloudKit subscriptions for real-time updates
@@ -280,10 +280,10 @@ class EnhancedCloudKitManager: ObservableObject {
         setupEventSubscription()
         setupJournalSubscription()
     }
-    
+
     private func setupTaskSubscription() {
         let predicate = NSPredicate(value: true)
-        
+
         // Using the non-deprecated initializer
         let subscription = CKQuerySubscription(
             recordType: "Task",
@@ -291,11 +291,11 @@ class EnhancedCloudKitManager: ObservableObject {
             subscriptionID: "task-changes",
             options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
         )
-        
+
         let info = CKSubscription.NotificationInfo()
         info.shouldSendContentAvailable = true
         subscription.notificationInfo = info
-        
+
         database.save(subscription) { [weak self] _, error in
             if let error = error {
                 AsyncTask { @MainActor [weak self] in
@@ -304,10 +304,10 @@ class EnhancedCloudKitManager: ObservableObject {
             }
         }
     }
-    
+
     private func setupGoalSubscription() {
         let predicate = NSPredicate(value: true)
-        
+
         // Using the non-deprecated initializer
         let subscription = CKQuerySubscription(
             recordType: "Goal",
@@ -315,11 +315,11 @@ class EnhancedCloudKitManager: ObservableObject {
             subscriptionID: "goal-changes",
             options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
         )
-        
+
         let info = CKSubscription.NotificationInfo()
         info.shouldSendContentAvailable = true
         subscription.notificationInfo = info
-        
+
         database.save(subscription) { [weak self] _, error in
             if let error = error {
                 AsyncTask { @MainActor [weak self] in
@@ -328,10 +328,10 @@ class EnhancedCloudKitManager: ObservableObject {
             }
         }
     }
-    
+
     private func setupEventSubscription() {
         let predicate = NSPredicate(value: true)
-        
+
         // Using the non-deprecated initializer
         let subscription = CKQuerySubscription(
             recordType: "CalendarEvent",
@@ -339,11 +339,11 @@ class EnhancedCloudKitManager: ObservableObject {
             subscriptionID: "event-changes",
             options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
         )
-        
+
         let info = CKSubscription.NotificationInfo()
         info.shouldSendContentAvailable = true
         subscription.notificationInfo = info
-        
+
         database.save(subscription) { [weak self] _, error in
             if let error = error {
                 AsyncTask { @MainActor [weak self] in
@@ -352,10 +352,10 @@ class EnhancedCloudKitManager: ObservableObject {
             }
         }
     }
-    
+
     private func setupJournalSubscription() {
         let predicate = NSPredicate(value: true)
-        
+
         // Using the non-deprecated initializer
         let subscription = CKQuerySubscription(
             recordType: "JournalEntry",
@@ -363,11 +363,11 @@ class EnhancedCloudKitManager: ObservableObject {
             subscriptionID: "journal-changes",
             options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
         )
-        
+
         let info = CKSubscription.NotificationInfo()
         info.shouldSendContentAvailable = true
         subscription.notificationInfo = info
-        
+
         database.save(subscription) { [weak self] _, error in
             if let error = error {
                 AsyncTask { @MainActor [weak self] in
@@ -376,59 +376,59 @@ class EnhancedCloudKitManager: ObservableObject {
             }
         }
     }
-    
+
     // MARK: - Enhanced Sync Operations
     func performFullSync() async {
         guard isSignedInToiCloud else {
             handleError(CloudKitError.notSignedIn)
             return
         }
-        
+
         syncStatus = .syncing
         syncProgress = 0.0
         errorMessage = nil
-        
+
         do {
             // Start background task
             beginBackgroundTask()
-            
+
             // Sync in phases
             try await syncTasks()
             syncProgress = 0.25
-            
+
             try await syncGoals()
             syncProgress = 0.50
-            
+
             try await syncEvents()
             syncProgress = 0.75
-            
+
             try await syncJournalEntries()
             syncProgress = 1.0
-            
+
             lastSyncDate = Date()
             syncStatus = .success
-            
+
             // Save sync timestamp
             UserDefaults.standard.set(lastSyncDate, forKey: "LastCloudKitSync")
-            
+
         } catch {
             handleError(error)
         }
-        
+
         endBackgroundTask()
     }
-    
+
     func performSync() async {
         await performFullSync()
     }
-    
+
     private func syncTasks() async throws {
         // Fetch remote tasks
         let query = CKQuery(recordType: "Task", predicate: NSPredicate(value: true))
         let (records, _) = try await database.records(matching: query)
-        
+
         var conflicts: [SyncConflict] = []
-        
+
         for (_, result) in records {
             switch result {
             case .success(let record):
@@ -443,17 +443,17 @@ class EnhancedCloudKitManager: ObservableObject {
                 handleError(error)
             }
         }
-        
+
         if !conflicts.isEmpty {
             conflictItems.append(contentsOf: conflicts)
             syncStatus = .conflictResolutionNeeded
         }
     }
-    
+
     private func syncGoals() async throws {
         let query = CKQuery(recordType: "Goal", predicate: NSPredicate(value: true))
         let (records, _) = try await database.records(matching: query)
-        
+
         for (_, result) in records {
             switch result {
             case .success(let record):
@@ -467,11 +467,11 @@ class EnhancedCloudKitManager: ObservableObject {
             }
         }
     }
-    
+
     private func syncEvents() async throws {
         let query = CKQuery(recordType: "CalendarEvent", predicate: NSPredicate(value: true))
         let (records, _) = try await database.records(matching: query)
-        
+
         for (_, result) in records {
             switch result {
             case .success(let record):
@@ -485,11 +485,11 @@ class EnhancedCloudKitManager: ObservableObject {
             }
         }
     }
-    
+
     private func syncJournalEntries() async throws {
         let query = CKQuery(recordType: "JournalEntry", predicate: NSPredicate(value: true))
         let (records, _) = try await database.records(matching: query)
-        
+
         for (_, result) in records {
             switch result {
             case .success(let record):
@@ -503,53 +503,53 @@ class EnhancedCloudKitManager: ObservableObject {
             }
         }
     }
-    
+
     // MARK: - Conflict Detection
     private func checkForTaskConflict(_ record: CKRecord) -> SyncConflict? {
         // Implementation would check local records against CloudKit records
         // Return conflict if modification dates don't match
         return nil
     }
-    
+
     private func checkForGoalConflict(_ record: CKRecord) -> SyncConflict? {
         return nil
     }
-    
+
     private func checkForEventConflict(_ record: CKRecord) -> SyncConflict? {
         return nil
     }
-    
+
     private func checkForJournalConflict(_ record: CKRecord) -> SyncConflict? {
         return nil
     }
-    
+
     // MARK: - Record Merging
     private func mergeTaskRecord(_ record: CKRecord) async {
         // Implementation would merge CloudKit record with local data
     }
-    
+
     private func mergeGoalRecord(_ record: CKRecord) async {
         // Implementation would merge CloudKit record with local data
     }
-    
+
     private func mergeEventRecord(_ record: CKRecord) async {
         // Implementation would merge CloudKit record with local data
     }
-    
+
     private func mergeJournalRecord(_ record: CKRecord) async {
         // Implementation would merge CloudKit record with local data
     }
-    
+
     // MARK: - Conflict Resolution
     func resolveConflict(_ conflict: SyncConflict, useLocal: Bool) async {
         let recordToSave = useLocal ? conflict.localRecord : conflict.serverRecord
-        
+
         do {
             _ = try await database.save(recordToSave)
-            
+
             // Remove resolved conflict
             conflictItems.removeAll { $0.id == conflict.id }
-            
+
             // Check if all conflicts resolved
             if conflictItems.isEmpty {
                 syncStatus = .success
@@ -558,13 +558,13 @@ class EnhancedCloudKitManager: ObservableObject {
             handleError(error)
         }
     }
-    
+
     func resolveAllConflicts(useLocal: Bool) async {
         for conflict in conflictItems {
             await resolveConflict(conflict, useLocal: useLocal)
         }
     }
-    
+
     // MARK: - Background Task Management
     private func beginBackgroundTask() {
         #if os(iOS)
@@ -573,7 +573,7 @@ class EnhancedCloudKitManager: ObservableObject {
         }
         #endif
     }
-    
+
     private func endBackgroundTask() {
         #if os(iOS)
         if backgroundTask != .invalid {
@@ -582,41 +582,41 @@ class EnhancedCloudKitManager: ObservableObject {
         }
         #endif
     }
-    
+
     // MARK: - Auto Sync Configuration
     func configureAutoSync(interval: TimeInterval) {
         Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
             guard let self = self else { return }
-            
+
             AsyncTask { @MainActor in
                 await self.performFullSync()
             }
         }
     }
-    
+
     // MARK: - Manual Operations
     func forcePushLocalChanges() async {
         // Implementation to force push all local changes to CloudKit
         syncStatus = .syncing
-        
+
         do {
             // Push tasks, goals, events, journal entries
             try await pushLocalTasks()
             try await pushLocalGoals()
             try await pushLocalEvents()
             try await pushLocalJournalEntries()
-            
+
             syncStatus = .success
             lastSyncDate = Date()
         } catch {
             handleError(error)
         }
     }
-    
+
     func requestiCloudAccess() async {
         // Request iCloud access and update status
         syncStatus = .syncing
-        
+
         do {
             let accountStatus = try await container.accountStatus()
             switch accountStatus {
@@ -635,36 +635,36 @@ class EnhancedCloudKitManager: ObservableObject {
             handleError(error)
         }
     }
-    
+
     func handleNewDeviceLogin() async {
         // Handle setup for new device login
         await performFullSync()
     }
-    
+
     private func pushLocalTasks() async throws {
         // Implementation to push local tasks to CloudKit
     }
-    
+
     private func pushLocalGoals() async throws {
         // Implementation to push local goals to CloudKit
     }
-    
+
     private func pushLocalEvents() async throws {
         // Implementation to push local events to CloudKit
     }
-    
+
     private func pushLocalJournalEntries() async throws {
         // Implementation to push local journal entries to CloudKit
     }
-    
+
     func resetCloudKitData() async {
         // Implementation to clear all CloudKit data
         syncStatus = .syncing
-        
+
         do {
             let query = CKQuery(recordType: "Task", predicate: NSPredicate(value: true))
             let (records, _) = try await database.records(matching: query)
-            
+
             let recordIDs = records.compactMap { _, result in
                 switch result {
                 case .success(let record):
@@ -673,17 +673,17 @@ class EnhancedCloudKitManager: ObservableObject {
                     return nil
                 }
             }
-            
+
             if !recordIDs.isEmpty {
                 _ = try await database.modifyRecords(saving: [], deleting: recordIDs)
             }
-            
+
             syncStatus = .success
         } catch {
             handleError(error)
         }
     }
-    
+
     // Methods to handle CloudKit errors
     func handleError(_ error: Error) {
         let cloudKitError = CloudKitError.fromCKError(error)
@@ -691,10 +691,10 @@ class EnhancedCloudKitManager: ObservableObject {
         currentError = cloudKitError
         syncStatus = .error(cloudKitError)
         showErrorAlert = true
-        
+
         // Log error for diagnostics
         print("CloudKit error: \(cloudKitError.localizedDescription) - \(cloudKitError.recoverySuggestion)")
-        
+
         // Take automatic recovery steps based on error type
         switch cloudKitError {
         case .networkIssue:
@@ -707,7 +707,7 @@ class EnhancedCloudKitManager: ObservableObject {
             break
         }
     }
-    
+
     // Auto-retry logic when network becomes available
     private func scheduleRetryWhenNetworkAvailable() {
         // Ensure NetworkMonitor.shared is accessible
@@ -727,7 +727,7 @@ class EnhancedCloudKitManager: ObservableObject {
             }
         }
     }
-    
+
     private func checkNetworkAndRetry() async {
         // Implementation would check if network is available and retry sync
         // Note: NetworkMonitor.shared.isConnected would be used here if available
@@ -735,11 +735,11 @@ class EnhancedCloudKitManager: ObservableObject {
             try? await self.retryFailedOperations()
         }
     }
-    
+
     private func retryFailedOperations() async throws {
         // Implementation would retry operations that failed due to network issues
     }
-    
+
     // Reset sync state when account changes
     private func resetSyncState() {
         // Reset change tokens and other sync state
@@ -748,17 +748,17 @@ class EnhancedCloudKitManager: ObservableObject {
             await checkAccountStatus()
         }
     }
-    
+
     private func resetSyncTokens() async {
         // Implementation would reset all CloudKit change tokens
     }
-    
+
     // Adjust sync behavior for low storage
     private func adjustSyncForLowStorage() {
         // Prioritize essential data and reduce optional data when storage is low
         // For example, sync text data but skip images/attachments
     }
-    
+
     // Monitor iCloud account changes
     func monitorAccountStatus() {
         NotificationCenter.default.addObserver(forName: .CKAccountChanged, object: nil, queue: .main) { [weak self] _ in
@@ -771,11 +771,11 @@ class EnhancedCloudKitManager: ObservableObject {
             }
         }
     }
-    
+
     @objc private func accountStatusChanged() async {
         await checkAccountStatus()
     }
-    
+
     func checkAccountStatus() async {
         // Implementation checks account status
         do {
@@ -787,27 +787,27 @@ class EnhancedCloudKitManager: ObservableObject {
             }
         }
     }
-    
+
     func uploadTasks(_ tasks: [Task]) async throws {
         // Stub implementation for task uploading
         print("Uploading \(tasks.count) tasks to CloudKit")
     }
-    
+
     func uploadGoals(_ goals: [Goal]) async throws {
         // Stub implementation for goal uploading
         print("Uploading \(goals.count) goals to CloudKit")
     }
-    
+
     func uploadEvents(_ events: [CalendarEvent]) async throws {
         // Stub implementation for event uploading
         print("Uploading \(events.count) events to CloudKit")
     }
-    
+
     func uploadJournalEntries(_ entries: [JournalEntry]) async throws {
         // Stub implementation for journal entry uploading
         print("Uploading \(entries.count) journal entries to CloudKit")
     }
-    
+
     // Placeholder local fetch/save methods - these should call your DataManagers
     // These need to be implemented properly by interacting with your existing DataManagers
     private func fetchLocalTasks() async throws -> [PlannerTask] {
@@ -840,31 +840,31 @@ class EnhancedCloudKitManager: ObservableObject {
 struct EnhancedSyncStatusView: View {
     @ObservedObject var cloudKit = EnhancedCloudKitManager.shared
     @EnvironmentObject var themeManager: ThemeManager
-    
+
     let showLabel: Bool
     let compact: Bool
-    
+
     init(showLabel: Bool = false, compact: Bool = false) {
         self.showLabel = showLabel
         self.compact = compact
     }
-    
+
     var body: some View {
         HStack(spacing: 8) {
             syncIndicator
-            
+
             if showLabel {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(statusText)
                         .font(compact ? .caption : .body)
                         .foregroundColor(statusColor)
-                    
+
                     if let lastSync = cloudKit.lastSyncDate {
                         Text("Last sync: \(lastSync, style: .relative)")
                             .font(.caption2)
                             .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                     }
-                    
+
                     if cloudKit.syncStatus.isActive {
                         ProgressView(value: cloudKit.syncProgress)
                             .progressViewStyle(LinearProgressViewStyle())
@@ -881,7 +881,7 @@ struct EnhancedSyncStatusView: View {
             }
         }
     }
-    
+
     private var syncIndicator: some View {
         Group {
             switch cloudKit.syncStatus {
@@ -907,20 +907,20 @@ struct EnhancedSyncStatusView: View {
         }
         .font(compact ? .caption : .body)
     }
-    
+
     private var statusText: String {
         if !cloudKit.isSignedInToiCloud {
             return "Not signed into iCloud"
         }
-        
+
         return cloudKit.syncStatus.description
     }
-    
+
     private var statusColor: Color {
         if !cloudKit.isSignedInToiCloud {
             return .secondary
         }
-        
+
         switch cloudKit.syncStatus {
         case .idle:
             return .secondary
@@ -957,17 +957,17 @@ extension EnhancedCloudKitManager {
             let endIndex = min(batch + batchSize, tasks.count)
             let batchTasks = Array(tasks[batch..<endIndex])
             let records = batchTasks.map { $0.toCKRecord() }
-            
+
             let (_, _) = try await database.modifyRecords(
                 saving: records,
                 deleting: []
             )
-            
+
             // Process results if needed
             print("Batch uploaded: \(records.count) tasks")
         }
     }
-    
+
     /// Upload multiple goals to CloudKit in efficient batches
     func uploadGoalsInBatches(_ goals: [Goal]) async throws {
         let batchSize = 100
@@ -975,12 +975,12 @@ extension EnhancedCloudKitManager {
             let endIndex = min(batch + batchSize, goals.count)
             let batchGoals = Array(goals[batch..<endIndex])
             let records = batchGoals.map { $0.toCKRecord() }
-            
+
             let (_, _) = try await database.modifyRecords(
                 saving: records,
                 deleting: []
             )
-            
+
             print("Batch uploaded: \(records.count) goals")
         }
     }
@@ -994,13 +994,13 @@ extension EnhancedCloudKitManager {
         try await database.save(customZone)
         print("Custom zone created: PlannerAppData")
     }
-    
+
     /// Fetch record zones
     func fetchZones() async throws -> [CKRecordZone] {
         let zones = try await database.allRecordZones()
         return zones
     }
-    
+
     /// Delete a zone and all its records
     func deleteZone(named zoneName: String) async throws {
         let zoneID = CKRecordZone.ID(zoneName: zoneName)
@@ -1021,13 +1021,13 @@ extension EnhancedCloudKitManager {
                 subscriptionID: "TaskSubscription",
                 options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
             )
-            
+
             let notificationInfo = CKSubscription.NotificationInfo()
             notificationInfo.shouldSendContentAvailable = true // Silent push
             taskSubscription.notificationInfo = notificationInfo
-            
+
             try await database.save(taskSubscription)
-            
+
             // Similar subscriptions for Goals, JournalEntries, and CalendarEvents
             let goalSubscription = CKQuerySubscription(
                 recordType: "Goal",
@@ -1036,15 +1036,15 @@ extension EnhancedCloudKitManager {
                 options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
             )
             goalSubscription.notificationInfo = notificationInfo
-            
+
             try await database.save(goalSubscription)
-            
+
             print("CloudKit subscriptions set up successfully")
         } catch {
             print("Error setting up CloudKit subscriptions: \(error.localizedDescription)")
         }
     }
-    
+
     /// Handle incoming silent push notification
     func handleDatabaseNotification(_ notification: CKDatabaseNotification) async {
         print("Received database change notification, initiating sync")
@@ -1061,13 +1061,13 @@ extension EnhancedCloudKitManager {
         let lastSync: Date?
         let isCurrentDevice: Bool
     }
-    
+
     /// Get a list of all devices syncing with this iCloud account
     func getSyncedDevices() async -> [SyncedDevice] {
         // In a real implementation, you would store device information in CloudKit
         // This is a placeholder implementation
         var devices = [SyncedDevice]()
-        
+
         // Add current device
         let currentDevice = SyncedDevice(
             name: Self.deviceName,
@@ -1075,11 +1075,11 @@ extension EnhancedCloudKitManager {
             isCurrentDevice: true
         )
         devices.append(currentDevice)
-        
+
         // In a real implementation, fetch other devices from CloudKit
         return devices
     }
-    
+
     /// Get the current device name
     static var deviceName: String {
         #if os(iOS)
@@ -1090,7 +1090,7 @@ extension EnhancedCloudKitManager {
         return "Unknown Device"
         #endif
     }
-    
+
     /// Remove a device from the sync list
     func removeDevice(_ deviceID: String) async throws {
         // In a real implementation, you would remove the device record from CloudKit
