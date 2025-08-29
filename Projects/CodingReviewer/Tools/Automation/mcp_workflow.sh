@@ -1,7 +1,17 @@
 #!/bin/bash
 
 # MCP GitHub Workflow Integration - Enhanced CI/CD with local automation
-CODE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+# Determine CODE_DIR more robustly
+if [[ -n "$CODE_DIR" ]]; then
+    # Use provided CODE_DIR if available
+    CODE_DIR="$CODE_DIR"
+elif [[ -d "/Users/danielstevens/Desktop/Code" ]]; then
+    # Fallback to known path
+    CODE_DIR="/Users/danielstevens/Desktop/Code"
+else
+    # Try to find it relative to script location
+    CODE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+fi
 
 # Colors
 GREEN='\033[0;32m'
@@ -63,9 +73,21 @@ check_workflow_status() {
 
 case "${1:-status}" in
     "status")
-        check_workflow_status "CodingReviewer"
+        # Get project name from environment or use default
+        project_name="${PROJECT_NAME:-CodingReviewer}"
+        check_workflow_status "$project_name"
+        ;;
+    "check")
+        if [[ -n "${2:-}" ]]; then
+            check_workflow_status "$2"
+        else
+            print_error "Usage: $0 check <project_name>"
+            exit 1
+        fi
         ;;
     *)
         print_error "Unknown command: $1"
+        echo "Usage: $0 {status|check <project_name>}"
+        exit 1
         ;;
 esac
