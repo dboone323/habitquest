@@ -5,6 +5,7 @@
 //  Created by Daniel Stevens on 4/29/25.
 //
 
+
 // PlannerApp/DataManagers/DataManagerError.swift
 // (Optional but good practice: Define a common error type)
 import Foundation

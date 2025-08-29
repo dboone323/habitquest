@@ -18,3 +18,4 @@ find . -name "*.swift" -type f -exec sed -i.bak '
 ' {} \;
 find . -name "*.swift.bak" -delete
 echo "✅ Array operations optimized"
+

@@ -116,11 +116,11 @@ struct SettingsView: View {
     }
 
     private func openAppSettings() {
-        #if os(macOS)
+#if os(macOS)
         NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Notifications")!)
-        #else
+#else
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-        #endif
+#endif
     }
 }
 
@@ -229,3 +229,4 @@ struct SettingsView_Previews: PreviewProvider {
             .environmentObject(ThemeManager())
     }
 }
+            .environmentObject(ThemeManager())

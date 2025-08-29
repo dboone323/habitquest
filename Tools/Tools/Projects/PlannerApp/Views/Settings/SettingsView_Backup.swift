@@ -143,20 +143,25 @@ struct ThemePreviewSheet: View {
                 .padding()
             }
             .navigationTitle("Choose Theme")
-            #if os(iOS)
+#if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
-            #endif
             .toolbar {
-                #if os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
-                #else
-                ToolbarItem(placement: .primaryAction) {
-                #endif
                     Button("Done") {
                         dismiss()
                     }
                 }
             }
+#else
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+#endif
             .background(themeManager.currentTheme.primaryBackgroundColor)
         }
     }

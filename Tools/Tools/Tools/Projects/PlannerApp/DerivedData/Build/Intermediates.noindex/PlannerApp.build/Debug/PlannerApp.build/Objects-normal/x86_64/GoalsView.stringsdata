@@ -1,0 +1,40 @@
+{
+  "source": "/Users/danielstevens/Desktop/PlannerApp/Views/Goals/GoalsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Goals",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 60
+        }
+      },
+      {
+        "comment": "",
+        "key": "No goals set yet. Tap '+' to add one!",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 27
+        }
+      },
+      {
+        "comment": "",
+        "key": "Target: %@",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 47
+        }
+      },
+      {
+        "comment": "",
+        "key": "Edit",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 68
+        }
+      }
+    ]
+  },
+  "version": 1
+}

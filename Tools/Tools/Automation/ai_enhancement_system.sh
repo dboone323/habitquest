@@ -35,15 +35,30 @@ mkdir -p "$ENHANCEMENT_DIR"
 # Helper function to safely count pattern matches
 count_pattern() {
 	local pattern="$1"
-	local result=$(find . -name "*.swift" -exec grep -l "$pattern" {} \; 2>/dev/null | wc -l | tr -d ' ' || echo "0")
+	local result=$(find . -name "*.swift" -exec grep -l "$pattern" {} \; 2>/dev/null | wc -l || echo "0")
+	# sanitize to a single integer token
+	result=$(echo "$result" | tr -d '[:space:]' || true)
+	result=${result:-0}
 	echo "$result"
 }
 
 # Helper function to count lines matching pattern
 count_lines() {
 	local pattern="$1"
-	local result=$(find . -name "*.swift" -exec grep "$pattern" {} \; 2>/dev/null | wc -l | tr -d ' ' || echo "0")
+	local result=$(find . -name "*.swift" -exec grep "$pattern" {} \; 2>/dev/null | wc -l || echo "0")
+	result=$(echo "$result" | tr -d '[:space:]' || true)
+	result=${result:-0}
 	echo "$result"
+}
+
+# Sanitize a value to an integer (strip non-digits, default 0)
+sanitize_int() {
+	local v="${1:-0}"
+	v=$(echo "$v" | tr -cd '0-9')
+	if [[ -z $v ]]; then
+		v=0
+	fi
+	echo "$v"
 }
 
 # Risk levels for enhancements
@@ -164,7 +179,7 @@ analyze_performance_optimizations() {
 EOF
 
 	# Check for inefficient array operations
-	local inefficient_arrays=$(count_lines "\.append(")
+	local inefficient_arrays=$(sanitize_int "$(count_lines "\.append(")")
 	if [[ $inefficient_arrays -gt 5 ]]; then
 		cat >>"$enhancement_file" <<EOF
 #### ✅ SAFE - Array Performance Optimization
@@ -202,7 +217,7 @@ EOF
 	fi
 
 	# Check for unnecessary string interpolation
-	local string_interpolations=$(count_lines '\\"\\\(')
+	local string_interpolations=$(sanitize_int "$(count_lines '\"\\\(')")
 	if [[ $string_interpolations -gt 0 ]]; then
 		cat >>"$enhancement_file" <<EOF
 #### ✅ SAFE - String Performance Optimization  
@@ -231,8 +246,8 @@ EOF
 EOF
 
 	# Check for potential memory leaks
-	local retain_cycles=$(count_lines "\[weak\|\[unowned")
-	local closures=$(count_lines "{ \[")
+	local retain_cycles=$(sanitize_int "$(count_lines "\[weak\|\[unowned")")
+	local closures=$(sanitize_int "$(count_lines "{ \[")")
 
 	if [[ $closures -gt $retain_cycles ]]; then
 		cat >>"$enhancement_file" <<EOF
@@ -268,7 +283,7 @@ analyze_code_quality() {
 EOF
 
 	# Check for TODO/FIXME comments
-	local todos=$(count_lines "TODO\|FIXME\|HACK")
+	local todos=$(sanitize_int "$(count_lines "TODO\|FIXME\|HACK")")
 	if [[ $todos -gt 0 ]]; then
 		cat >>"$enhancement_file" <<EOF
 #### ✅ SAFE - Code Documentation Enhancement
@@ -294,7 +309,7 @@ EOF
 	fi
 
 	# Check for force unwrapping
-	local force_unwraps=$(count_lines "!" | head -1)
+	local force_unwraps=$(sanitize_int "$(count_lines "!")")
 	if [[ $force_unwraps -gt 0 ]]; then
 		cat >>"$enhancement_file" <<EOF
 #### ⚠️ HIGH - Force Unwrapping Safety Review
@@ -326,7 +341,7 @@ analyze_architecture_patterns() {
 EOF
 
 	# Check for massive view controllers/views
-	local large_files=$(find . -name "*.swift" -type f -exec wc -l {} \; | awk '$1 > 200 {print $2}' | wc -l | xargs || echo "0")
+	local large_files=$(sanitize_int "$(find . -name "*.swift" -type f -exec wc -l {} \; | awk '$1 > 200 {print $2}' | wc -l || echo "0")")
 	if [[ $large_files -gt 0 ]]; then
 		cat >>"$enhancement_file" <<EOF
 #### ⚠️ MEDIUM - Large File Refactoring
@@ -348,7 +363,7 @@ EOF
 	fi
 
 	# Check for dependency injection opportunities
-	local singletons=$(grep -r "shared\|sharedInstance" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+	local singletons=$(sanitize_int "$(grep -r "shared\|sharedInstance" **/*.swift 2>/dev/null | wc -l || echo "0")")
 	if [[ $singletons -gt 2 ]]; then
 		cat >>"$enhancement_file" <<EOF
 #### ⚠️ MEDIUM - Dependency Injection Implementation
@@ -374,7 +389,7 @@ analyze_ui_ux_improvements() {
 EOF
 
 	# Check for hardcoded colors/fonts
-	local hardcoded_ui=$(grep -r "UIColor\|Color\.\|Font\." **/*.swift 2>/dev/null | grep -v "asset\|theme" | wc -l | xargs || echo "0")
+	local hardcoded_ui=$(sanitize_int "$(grep -r "UIColor\|Color\.\|Font\." **/*.swift 2>/dev/null | grep -v "asset\|theme" | wc -l || echo "0")")
 	if [[ $hardcoded_ui -gt 5 ]]; then
 		cat >>"$enhancement_file" <<EOF
 #### ✅ LOW - Theme System Implementation
@@ -396,8 +411,8 @@ EOF
 	fi
 
 	# Check for accessibility improvements
-	local accessibility_labels=$(grep -r "accessibilityLabel\|accessibilityHint" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
-	local ui_elements=$(grep -r "Button\|Text\|Image" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+	local accessibility_labels=$(sanitize_int "$(grep -r "accessibilityLabel\|accessibilityHint" **/*.swift 2>/dev/null | wc -l || echo "0")")
+	local ui_elements=$(sanitize_int "$(grep -r "Button\|Text\|Image" **/*.swift 2>/dev/null | wc -l || echo "0")")
 
 	if [[ $ui_elements -gt $accessibility_labels ]]; then
 		cat >>"$enhancement_file" <<EOF
@@ -424,8 +439,8 @@ analyze_security_enhancements() {
 EOF
 
 	# Check for sensitive data handling
-	local keychain_usage=$(grep -r "Keychain\|keychain" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
-	local user_defaults=$(grep -r "UserDefaults\|@AppStorage" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+	local keychain_usage=$(sanitize_int "$(grep -r "Keychain\|keychain" **/*.swift 2>/dev/null | wc -l || echo "0")")
+	local user_defaults=$(sanitize_int "$(grep -r "UserDefaults\|@AppStorage" **/*.swift 2>/dev/null | wc -l || echo "0")")
 
 	if [[ $user_defaults -gt 0 && $keychain_usage -eq 0 ]]; then
 		cat >>"$enhancement_file" <<EOF
@@ -447,8 +462,8 @@ EOF
 	fi
 
 	# Check for network security
-	local network_calls=$(grep -r "URLSession\|HTTP" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
-	local ssl_pinning=$(grep -r "pinnedCertificates\|SSL" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+	local network_calls=$(sanitize_int "$(grep -r "URLSession\|HTTP" **/*.swift 2>/dev/null | wc -l || echo "0")")
+	local ssl_pinning=$(sanitize_int "$(grep -r "pinnedCertificates\|SSL" **/*.swift 2>/dev/null | wc -l || echo "0")")
 
 	if [[ $network_calls -gt 0 && $ssl_pinning -eq 0 ]]; then
 		cat >>"$enhancement_file" <<EOF
@@ -475,8 +490,8 @@ analyze_testing_improvements() {
 EOF
 
 	# Check test coverage
-	local test_files=$(find . -name "*Test*.swift" -o -name "*Tests.swift" | wc -l | xargs || echo "0")
-	local source_files=$(find . -name "*.swift" -not -path "*/Test*" -not -name "*Test*.swift" | wc -l | xargs || echo "0")
+	local test_files=$(sanitize_int "$(find . -name "*Test*.swift" -o -name "*Tests.swift" | wc -l || echo "0")")
+	local source_files=$(sanitize_int "$(find . -name "*.swift" -not -path "*/Test*" -not -name "*Test*.swift" | wc -l || echo "0")")
 
 	if [[ $source_files -gt 0 ]]; then
 		local test_ratio=$((test_files * 100 / source_files))
@@ -524,8 +539,8 @@ analyze_accessibility_compliance() {
 EOF
 
 	# Check for basic accessibility implementation
-	local accessibility_modifiers=$(grep -r "\.accessibilityLabel\|\.accessibilityHint\|\.accessibilityValue" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
-	local interactive_elements=$(grep -r "Button\|TextField\|Slider\|Stepper" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+	local accessibility_modifiers=$(sanitize_int "$(grep -r "\.accessibilityLabel\|\.accessibilityHint\|\.accessibilityValue" **/*.swift 2>/dev/null | wc -l || echo "0")")
+	local interactive_elements=$(sanitize_int "$(grep -r "Button\|TextField\|Slider\|Stepper" **/*.swift 2>/dev/null | wc -l || echo "0")")
 
 	if [[ $interactive_elements -gt 0 && $accessibility_modifiers -lt $interactive_elements ]]; then
 		cat >>"$enhancement_file" <<EOF
@@ -564,8 +579,8 @@ analyze_documentation_gaps() {
 EOF
 
 	# Check for public API documentation
-	local public_functions=$(grep -r "public func\|open func" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
-	local documented_functions=$(grep -r "/// " **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+	local public_functions=$(sanitize_int "$(grep -r "public func\|open func" **/*.swift 2>/dev/null | wc -l || echo "0")")
+	local documented_functions=$(sanitize_int "$(grep -r "/// " **/*.swift 2>/dev/null | wc -l || echo "0")")
 
 	if [[ $public_functions -gt 0 && $documented_functions -lt $public_functions ]]; then
 		cat >>"$enhancement_file" <<EOF

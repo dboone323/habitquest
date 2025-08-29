@@ -1,11 +1,11 @@
 // Simple test version of SettingsView to verify compilation
 
-import Foundation
 import SwiftUI
+import Foundation
 
 struct SettingsView: View {
     @EnvironmentObject var themeManager: ThemeManager
-
+    
     var body: some View {
         NavigationStack {
             Text("Settings")

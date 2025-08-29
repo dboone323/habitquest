@@ -2,16 +2,16 @@ name: CI - Automation tests
 
 on:
   push:
-    branches: [main, code-local-snapshot]
+    branches: [ main, code-local-snapshot ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   test:
     runs-on: macos-latest
     strategy:
       matrix:
-        python-version: ["3.12"]
+        python-version: [ '3.12' ]
 
     steps:
       - name: Checkout

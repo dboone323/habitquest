@@ -7,6 +7,3 @@ Automation/logs/
 Automation/test_modify_target.txt*
 Automation/tasks/
 .trunk/
-
-# ignore imported snapshots
-Tools/Imported/Tools_snapshot_*/

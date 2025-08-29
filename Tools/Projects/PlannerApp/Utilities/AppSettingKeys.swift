@@ -4,7 +4,7 @@
 import Foundation
 
 // Centralized keys for UserDefaults settings accessed via @AppStorage
-enum AppSettingKeys {
+struct AppSettingKeys {
     // Profile
     static let userName = "userDisplayName"
 
@@ -36,7 +36,7 @@ enum AppSettingKeys {
     // CloudKit & Sync Settings
     static let autoSyncEnabled = "autoSyncEnabled"
     static let syncFrequency = "syncFrequency"
-
+    
     // User Experience Settings
     static let enableHapticFeedback = "enableHapticFeedback"
     static let enableAnalytics = "enableAnalytics"

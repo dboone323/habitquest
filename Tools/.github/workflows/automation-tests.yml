@@ -2,9 +2,9 @@ name: Automation Tests
 
 on:
   push:
-    branches: [main, code-local-snapshot]
+    branches: [ main, code-local-snapshot ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   test:
@@ -29,7 +29,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "${{ matrix.python }}"
+          python-version: '${{ matrix.python }}'
 
       - name: Create project venv and install dependencies
         run: |
@@ -41,4 +41,4 @@ jobs:
         run: |
           Automation/.venv/bin/python -m pytest Automation/tests -q
         env:
-          CI: "1"
+          CI: '1'

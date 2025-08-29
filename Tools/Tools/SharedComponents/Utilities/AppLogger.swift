@@ -40,10 +40,8 @@ final class AppLogger {
         case .error:
             Logger.logError(
                 NSError(
-                    domain: "AppLogger", code: 1, userInfo: [NSLocalizedDescriptionKey: message]
-                ),
-                context: ""
-            )
+                    domain: "AppLogger", code: 1, userInfo: [NSLocalizedDescriptionKey: message]),
+                context: "")
         case .critical:
             Logger.logWarning(message, category: oslog)
         }
