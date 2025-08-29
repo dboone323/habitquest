@@ -9,6 +9,7 @@ DRY_RUN="${2:-true}"
 ENABLE_AUTO_FIX="${3:-false}"
 LOGFILE="quantum_agent_${PROJECT_PATH//\//_}.log"
 AUTO_FIX_MODE="${4:-auto}" # 'auto' or 'prompt' (prompt not implemented here)
+USE_MCP="${USE_MCP:-false}"
 
 if [[ -z "${PROJECT_PATH}" ]]; then
   echo "Usage: $0 <project_path> [dry_run:true|false] [enable_auto_fix:true|false]"
@@ -43,6 +44,15 @@ if command -v python3 >/dev/null 2>&1; then
   fi
 else
   echo "python3 not available; skipping policy check" | tee -a "${LOGFILE}"
+fi
+
+# If configured to use MCP, register and request the MCP to queue a run instead
+if [[ "${USE_MCP}" == "true" ]]; then
+  MCP_URL="${MCP_URL:-http://127.0.0.1:5005}"
+  echo "Registering agent with MCP at ${MCP_URL}" | tee -a "${LOGFILE}"
+  curl -s -X POST "${MCP_URL}/register" -H 'Content-Type: application/json' -d "{\"agent\": \"quantum-agent\", \"capabilities\": [\"policy\"]}" | tee -a "${LOGFILE}"
+  echo "Requesting MCP to queue a dry-run ai_workflow_recovery for ${PROJECT_PATH}" | tee -a "${LOGFILE}"
+  curl -s -X POST "${MCP_URL}/run" -H 'Content-Type: application/json' -d "{\"agent\": \"quantum-agent\", \"command\": \"ci-check\", \"project\": \"$(basename ${PROJECT_PATH})\", \"execute\": false}" | tee -a "${LOGFILE}"
 fi
 
 # 2) Invoke AI recovery script (safe defaults)

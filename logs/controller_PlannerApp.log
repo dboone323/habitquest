@@ -1,0 +1,4 @@
+2025-08-27 14:18:59,316 INFO Controller starting (agent=controller-agent, project=PlannerApp)
+2025-08-27 14:18:59,321 INFO Registered with MCP
+2025-08-27 14:18:59,321 INFO Controller agent registered, polling for tasks...
+2025-08-27 14:48:11,501 INFO Artifacts saved: /Users/danielstevens/mcp_artifacts/workspace_task_7_1756324091

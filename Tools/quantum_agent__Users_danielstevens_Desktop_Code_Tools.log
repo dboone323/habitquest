@@ -1,0 +1,13 @@
+Quantum Agent entrypoint: project=/Users/danielstevens/Desktop/Code/Tools dry_run=true enable_auto_fix=true
+Running checker with auto-fix analysis
+Architecture issues detected:
+ - Project has 35 TODO/FIXME markers; consider cleaning up (threshold=10)
+Warn-only mode: continuing with warnings
+Detected git repository at /Users/danielstevens/Desktop/Code/Tools; attempting to commit fixes
+Invoking ai_workflow_recovery.py (dry-run enforced) for /Users/danielstevens/Desktop/Code/Tools
+2025-08-25 11:56:46,472 - INFO - 🤖 AI Workflow Recovery initialized for dboone323/Quantum-workspace
+2025-08-25 11:56:46,472 - INFO - 🔍 Running in dry-run mode (analysis only)
+2025-08-25 11:56:46,501 - INFO - 🧠 Analyzing workflow failure with AI...
+2025-08-25 11:56:46,502 - INFO - 🎯 Match found: missing_file (confidence: 0.95)
+2025-08-25 11:56:46,502 - INFO - 🎯 Would apply fix: create_missing_file for missing_file
+Entrypoint finished
