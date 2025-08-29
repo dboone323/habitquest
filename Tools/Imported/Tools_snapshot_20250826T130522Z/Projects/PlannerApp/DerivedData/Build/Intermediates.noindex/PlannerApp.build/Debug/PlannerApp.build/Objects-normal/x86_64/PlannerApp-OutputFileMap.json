@@ -1,0 +1,528 @@
+{
+  "" : {
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlannerApp-master.dia",
+    "emit-module-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlannerApp-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlannerApp-master-emit-module.dia",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlannerApp-master.swiftdeps"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Accessibility/AccessibilityEnhancements.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/CloudKit/CloudKitEnhancements.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitEnhancements.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitEnhancements.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitEnhancements.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitEnhancements.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitEnhancements.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitEnhancements.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitEnhancements.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitEnhancements~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/CloudKit/CloudKitManager.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitManager.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitManager.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitManager.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitManager.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitManager.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitManager.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitManager.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitManager~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/CloudKit/CloudKitMigrationHelper.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/CloudKit/CloudKitOnboardingView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitOnboardingView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitOnboardingView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitOnboardingView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitOnboardingView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitOnboardingView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitOnboardingView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitOnboardingView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitOnboardingView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/CloudKit/CloudKitSyncView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitSyncView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitSyncView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitSyncView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitSyncView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitSyncView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitSyncView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitSyncView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitSyncView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/CloudKit/EnhancedCloudKitManager.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Components/EnhancedPlatformNavigation.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Components/ModernCard.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernCard.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernCard.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernCard.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernCard.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernCard.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernCard.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernCard.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernCard~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Components/PlatformAdaptiveNavigation.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformAdaptiveNavigation.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformAdaptiveNavigation.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformAdaptiveNavigation.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformAdaptiveNavigation.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformAdaptiveNavigation.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformAdaptiveNavigation.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformAdaptiveNavigation.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformAdaptiveNavigation~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Components/SyncStatusView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SyncStatusView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SyncStatusView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SyncStatusView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SyncStatusView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SyncStatusView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SyncStatusView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SyncStatusView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SyncStatusView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Components/VisualEnhancements.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/VisualEnhancements.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/VisualEnhancements.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/VisualEnhancements.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/VisualEnhancements.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/VisualEnhancements.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/VisualEnhancements.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/VisualEnhancements.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/VisualEnhancements~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Components/iOSAdaptivePopups.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/iOSAdaptivePopups.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/iOSAdaptivePopups.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/iOSAdaptivePopups.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/iOSAdaptivePopups.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/iOSAdaptivePopups.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/iOSAdaptivePopups.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/iOSAdaptivePopups.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/iOSAdaptivePopups~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/DataManagers/CalendarDataManager.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarDataManager.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarDataManager.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarDataManager.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarDataManager.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarDataManager.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarDataManager.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarDataManager.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarDataManager~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/DataManagers/DataManagerError.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DataManagerError.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DataManagerError.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DataManagerError.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DataManagerError.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DataManagerError.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DataManagerError.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DataManagerError.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DataManagerError~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/DataManagers/GoalDataManager.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalDataManager.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalDataManager.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalDataManager.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalDataManager.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalDataManager.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalDataManager.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalDataManager.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalDataManager~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/DataManagers/JournalDataManager.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/DataManagers/TaskDataManager.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskDataManager.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskDataManager.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskDataManager.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskDataManager.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskDataManager.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskDataManager.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskDataManager.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskDataManager~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/MainApp/DashboardView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/MainApp/MainTabView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/MainApp/MainTabView_Enhanced.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView_Enhanced.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView_Enhanced.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView_Enhanced.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView_Enhanced.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView_Enhanced.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView_Enhanced.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView_Enhanced.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView_Enhanced~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/MainApp/PlannerApp.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlannerApp.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlannerApp.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlannerApp.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlannerApp.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlannerApp.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlannerApp.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlannerApp.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlannerApp~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Models/CalendarEvent.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarEvent.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarEvent.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarEvent.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarEvent.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarEvent.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarEvent.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarEvent.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarEvent~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Models/Goal.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Goal.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Goal.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Goal.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Goal.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Goal.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Goal.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Goal.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Goal~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Models/JournalEntry.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Models/Task.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Task.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Task.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Task.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Task.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Task.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Task.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Task.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Task~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/PlannerApp/ContentView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ContentView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ContentView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ContentView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ContentView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ContentView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ContentView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Platform/PlatformFeatures.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformFeatures.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformFeatures.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformFeatures.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformFeatures.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformFeatures.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformFeatures.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformFeatures.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/PlatformFeatures~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Styling/ModernThemes.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernThemes.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernThemes.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernThemes.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernThemes.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernThemes.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernThemes.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernThemes.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ModernThemes~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Styling/Theme.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Styling/ThemeManager.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemeManager.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemeManager.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemeManager.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemeManager.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemeManager.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemeManager.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemeManager.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemeManager~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Utilities/AppSettingKeys.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Utilities/NetworkMonitor.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NetworkMonitor.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NetworkMonitor.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NetworkMonitor.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NetworkMonitor.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NetworkMonitor.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NetworkMonitor.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NetworkMonitor.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NetworkMonitor~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Utilities/NotificationExtensions.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NotificationExtensions.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NotificationExtensions.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NotificationExtensions.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NotificationExtensions.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NotificationExtensions.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NotificationExtensions.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NotificationExtensions.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/NotificationExtensions~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/ViewModels/DashboardViewModel.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardViewModel.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardViewModel.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardViewModel.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardViewModel.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardViewModel.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardViewModel.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardViewModel.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardViewModel~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/AddCalendarEventView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddCalendarEventView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddCalendarEventView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddCalendarEventView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddCalendarEventView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddCalendarEventView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddCalendarEventView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddCalendarEventView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddCalendarEventView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/CalendarComponents.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarComponents.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarComponents.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarComponents.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarComponents.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarComponents.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarComponents.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarComponents.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarComponents~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/CalendarGrid.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/CalendarView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/DateSectionView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/EventRowView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/GoalRowView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/TaskRowView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Goals/AddGoalView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddGoalView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddGoalView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddGoalView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddGoalView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddGoalView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddGoalView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddGoalView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddGoalView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Goals/GoalsView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalsView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalsView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalsView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalsView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalsView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalsView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalsView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalsView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Journal/AddJournalEntryView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddJournalEntryView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddJournalEntryView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddJournalEntryView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddJournalEntryView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddJournalEntryView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddJournalEntryView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddJournalEntryView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AddJournalEntryView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Journal/JournalDetailView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDetailView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDetailView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDetailView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDetailView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDetailView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDetailView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDetailView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDetailView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Journal/JournalView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Settings/SettingsView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SettingsView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SettingsView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SettingsView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SettingsView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SettingsView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SettingsView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SettingsView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/SettingsView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Settings/ThemePreviewView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemePreviewView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemePreviewView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemePreviewView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemePreviewView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemePreviewView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemePreviewView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemePreviewView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/ThemePreviewView~partial.swiftmodule"
+  },
+  "/Users/danielstevens/Desktop/PlannerApp/Views/Tasks/TaskManagerView.swift" : {
+    "const-values" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView.swiftconstvalues",
+    "dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView.d",
+    "diagnostics" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView.dia",
+    "index-unit-output-path" : "/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView.o",
+    "llvm-bc" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView.bc",
+    "object" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView.o",
+    "swift-dependencies" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView.swiftdeps",
+    "swiftmodule" : "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView~partial.swiftmodule"
+  }
+}
