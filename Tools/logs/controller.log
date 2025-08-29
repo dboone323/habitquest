@@ -105,3 +105,9 @@
 2025-08-29 10:47:06,660 INFO Controller agent registered, polling for tasks...
 2025-08-29 10:47:06,839 INFO Controller received KeyboardInterrupt, exiting
 2025-08-29 10:47:09,370 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-1/test_execute_task_locking0/ProjA_task_1_1756482429
+2025-08-29 10:51:26,148 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-29 10:51:51,007 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-29 10:51:51,013 INFO Registered with MCP
+2025-08-29 10:51:51,013 INFO Controller agent registered, polling for tasks...
+2025-08-29 10:51:51,287 INFO Controller received KeyboardInterrupt, exiting
+2025-08-29 10:51:53,604 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-2/test_execute_task_locking0/ProjA_task_1_1756482713
