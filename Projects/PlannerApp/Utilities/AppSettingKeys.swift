@@ -36,7 +36,7 @@ struct AppSettingKeys {
     // CloudKit & Sync Settings
     static let autoSyncEnabled = "autoSyncEnabled"
     static let syncFrequency = "syncFrequency"
-    
+
     // User Experience Settings
     static let enableHapticFeedback = "enableHapticFeedback"
     static let enableAnalytics = "enableAnalytics"

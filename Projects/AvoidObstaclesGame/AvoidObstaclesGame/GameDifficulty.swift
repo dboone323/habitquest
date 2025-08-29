@@ -11,7 +11,7 @@ struct GameDifficulty {
     let spawnInterval: Double      // Time between obstacle spawns
     let obstacleSpeed: Double      // Speed of falling obstacles
     let scoreMultiplier: Double    // Score multiplier for this difficulty
-    
+
     static func getDifficulty(for score: Int) -> GameDifficulty {
         switch score {
         case 0..<10:
@@ -28,7 +28,7 @@ struct GameDifficulty {
             return GameDifficulty(spawnInterval: 0.4, obstacleSpeed: 1.2, scoreMultiplier: 3.0)
         }
     }
-    
+
     static func getDifficultyLevel(for score: Int) -> Int {
         switch score {
         case 0..<10: return 1

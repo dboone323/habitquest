@@ -11,7 +11,7 @@ struct AddGoalView: View {
     @State private var targetDate = Date()
     @State private var priority: GoalPriority = .medium
     @State private var progress: Double = 0.0
-    
+
     @FocusState private var isDescriptionFocused: Bool
 
     private var isFormValid: Bool {
@@ -31,7 +31,7 @@ struct AddGoalView: View {
                         Text("Description")
                             .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.secondaryFontName, size: 14))
                             .foregroundColor(themeManager.currentTheme.secondaryTextColor)
-                        
+
                         TextEditor(text: $description)
                             .frame(height: 100)
                             .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.primaryFontName, size: 16))
@@ -41,18 +41,18 @@ struct AddGoalView: View {
 
                     DatePicker("Target Date", selection: $targetDate, displayedComponents: .date)
                         .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.primaryFontName, size: 16))
-                    
+
                     Picker("Priority", selection: $priority) {
                         ForEach(GoalPriority.allCases, id: \.self) { priority in
                             Text(priority.displayName).tag(priority)
                         }
                     }
-                    
+
                     VStack(alignment: .leading) {
                         Text("Progress: \(Int(progress * 100))%")
                             .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.secondaryFontName, size: 14))
                             .foregroundColor(themeManager.currentTheme.secondaryTextColor)
-                        
+
                         Slider(value: $progress, in: 0...1)
                             .accentColor(themeManager.currentTheme.primaryAccentColor)
                     }
@@ -71,7 +71,7 @@ struct AddGoalView: View {
                     }
                     .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
                         saveGoal()

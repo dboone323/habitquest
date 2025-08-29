@@ -49,7 +49,7 @@ class ThemeManager: ObservableObject {
     static var availableThemeNames: [String] {
         Theme.availableThemes.map { $0.name }
     }
-    
+
     // Manually set a theme (used by ThemePreviewView)
     func setTheme(_ theme: Theme) {
         currentThemeName = theme.name

@@ -7,7 +7,7 @@ struct AddCalendarEventView: View {
 
     @State private var title = ""
     @State private var date = Date()
-    
+
     // Focus state for iOS keyboard management
     @FocusState private var isTitleFocused: Bool
 
@@ -29,15 +29,15 @@ struct AddCalendarEventView: View {
                 .buttonStyle(.iOSSecondary)
                 #endif
                 .foregroundColor(.blue)
-                
+
                 Spacer()
-                
+
                 Text("New Event")
                     .font(.title3)
                     .fontWeight(.semibold)
-                
+
                 Spacer()
-                
+
                 Button("Save") {
                     #if os(iOS)
                     HapticManager.notificationSuccess()
@@ -60,7 +60,7 @@ struct AddCalendarEventView: View {
             #if os(iOS)
             .iOSEnhancedTouchTarget()
             #endif
-            
+
             Form {
                 TextField("Event Title", text: $title)
                     .focused($isTitleFocused)
@@ -102,7 +102,7 @@ struct AddCalendarEventView: View {
         let newEvent = CalendarEvent(title: title.trimmingCharacters(in: .whitespacesAndNewlines),
                                      date: date)
         events.append(newEvent)
-        
+
         // Save to persistent storage via data manager
         CalendarDataManager.shared.save(events: events)
     }

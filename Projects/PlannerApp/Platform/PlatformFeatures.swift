@@ -19,13 +19,13 @@ import AppKit
 struct PlannerWidget: View {
     let tasks: [TaskModel]
     let goals: [Goal]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Today's Focus")
                 .font(.headline.bold())
                 .foregroundColor(.primary)
-            
+
             if !tasks.isEmpty {
                 ForEach(tasks.prefix(3), id: \.id) { task in
                     HStack {
@@ -38,12 +38,12 @@ struct PlannerWidget: View {
                     }
                 }
             }
-            
+
             if !goals.isEmpty {
                 Text("Active Goals")
                     .font(.caption.bold())
                     .foregroundColor(.secondary)
-                
+
                 ForEach(goals.prefix(2), id: \.id) { goal in
                     HStack {
                         Image(systemName: "target")
@@ -68,11 +68,11 @@ struct ShortcutsIntentHandler {
         // This would typically be implemented in a separate Intents extension
         // For now, we'll outline the structure
     }
-    
+
     static func donateAddTaskIntent(taskTitle: String) {
         // Donate intent for Siri Shortcuts
     }
-    
+
     static func donateAddGoalIntent(goalTitle: String) {
         // Donate intent for Siri Shortcuts
     }
@@ -82,7 +82,7 @@ struct ShortcutsIntentHandler {
 struct TaskProgressActivity: View {
     let taskTitle: String
     let progress: Double
-    
+
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -93,9 +93,9 @@ struct TaskProgressActivity: View {
                     .font(.body.bold())
                     .lineLimit(1)
             }
-            
+
             Spacer()
-            
+
             VStack {
                 Text("\(Int(progress * 100))%")
                     .font(.title2.bold())
@@ -115,7 +115,7 @@ struct FocusModeManager {
         // Configure focus mode filters
         // This would integrate with iOS Focus Modes API
     }
-    
+
     static func requestFocusPermission() {
         // Request permission to access focus status
     }
@@ -129,22 +129,22 @@ struct FocusModeManager {
 struct SplitViewContainer<PrimaryContent: View, SecondaryContent: View>: View {
     let primaryContent: PrimaryContent
     let secondaryContent: SecondaryContent
-    
+
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
+
     init(@ViewBuilder primary: () -> PrimaryContent, @ViewBuilder secondary: () -> SecondaryContent) {
         self.primaryContent = primary()
         self.secondaryContent = secondary()
     }
-    
+
     var body: some View {
         if UIDevice.current.userInterfaceIdiom == .pad && horizontalSizeClass == .regular {
             HStack(spacing: 0) {
                 primaryContent
                     .frame(maxWidth: .infinity)
-                
+
                 Divider()
-                
+
                 secondaryContent
                     .frame(maxWidth: .infinity)
             }
@@ -160,7 +160,7 @@ struct SplitViewContainer<PrimaryContent: View, SecondaryContent: View>: View {
 struct ScribbleTextField: View {
     @Binding var text: String
     let placeholder: String
-    
+
     var body: some View {
         TextField(placeholder, text: $text)
             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -177,7 +177,7 @@ struct ScribbleTextField: View {
 struct DragDropTaskView: View {
     let task: TaskModel
     let onDrop: (TaskModel) -> Void
-    
+
     var body: some View {
         Text(task.title)
             .padding()
@@ -202,17 +202,17 @@ struct DragDropTaskView: View {
 // External keyboard support
 struct KeyboardShortcutHandler: View {
     @State private var isCommandKeyPressed = false
-    
+
     var body: some View {
         Color.clear
             .onReceive(NotificationCenter.default.publisher(for: .init("KeyboardShortcut"))) { notification in
                 handleKeyboardShortcut(notification)
             }
     }
-    
+
     private func handleKeyboardShortcut(_ notification: Notification) {
         guard let shortcut = notification.object as? String else { return }
-        
+
         switch shortcut {
         case "cmd+n":
             // Handle new item
@@ -236,48 +236,48 @@ struct KeyboardShortcutHandler: View {
 // Menu bar integration
 class MenuBarManager: ObservableObject {
     private var statusItem: NSStatusItem?
-    
+
     func setupMenuBar() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        
+
         if let button = statusItem?.button {
             button.image = NSImage(systemSymbolName: "calendar", accessibilityDescription: "PlannerApp")
             button.action = #selector(showQuickMenu)
             button.target = self
         }
-        
+
         setupQuickMenu()
     }
-    
+
     @objc private func showQuickMenu() {
         // Show quick actions menu
     }
-    
+
     private func setupQuickMenu() {
         let menu = NSMenu()
-        
+
         menu.addItem(NSMenuItem(title: "Quick Add Task", action: #selector(quickAddTask), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Quick Add Goal", action: #selector(quickAddGoal), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Show Dashboard", action: #selector(showDashboard), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Quit PlannerApp", action: #selector(quitApp), keyEquivalent: "q"))
-        
+
         statusItem?.menu = menu
     }
-    
+
     @objc private func quickAddTask() {
         // Implement quick add task
     }
-    
+
     @objc private func quickAddGoal() {
         // Implement quick add goal
     }
-    
+
     @objc private func showDashboard() {
         // Bring app to front
         NSApp.activate(ignoringOtherApps: true)
     }
-    
+
     @objc private func quitApp() {
         NSApp.terminate(nil)
     }
@@ -286,7 +286,7 @@ class MenuBarManager: ObservableObject {
 // Touch Bar support (for compatible Macs)
 @available(macOS 10.12.2, *)
 class TouchBarProvider: NSViewController {
-    // Add NSTouchBarDelegate conformance 
+    // Add NSTouchBarDelegate conformance
     override func makeTouchBar() -> NSTouchBar? {
         let touchBar = NSTouchBar()
         touchBar.delegate = self
@@ -297,7 +297,7 @@ class TouchBarProvider: NSViewController {
             .flexibleSpace,
             .calendar
         ]
-        
+
         return touchBar
     }
 }
@@ -310,39 +310,39 @@ extension TouchBarProvider: NSTouchBarDelegate {
             let item = NSCustomTouchBarItem(identifier: identifier)
             item.view = NSButton(title: "Add Task", target: self, action: #selector(addTask))
             return item
-            
+
         case .addGoal:
             let item = NSCustomTouchBarItem(identifier: identifier)
             item.view = NSButton(title: "Add Goal", target: self, action: #selector(addGoal))
             return item
-            
+
         case .search:
             let item = NSCustomTouchBarItem(identifier: identifier)
             item.view = NSButton(image: NSImage(systemSymbolName: "magnifyingglass", accessibilityDescription: "Search")!, target: self, action: #selector(search))
             return item
-            
+
         case .calendar:
             let item = NSCustomTouchBarItem(identifier: identifier)
             item.view = NSButton(image: NSImage(systemSymbolName: "calendar", accessibilityDescription: "Calendar")!, target: self, action: #selector(showCalendar))
             return item
-            
+
         default:
             return nil
         }
     }
-    
+
     @objc private func addTask() {
         // Handle add task
     }
-    
+
     @objc private func addGoal() {
         // Handle add goal
     }
-    
+
     @objc private func search() {
         // Handle search
     }
-    
+
     @objc private func showCalendar() {
         // Handle show calendar
     }
@@ -366,17 +366,17 @@ struct WindowManager {
             backing: .buffered,
             defer: false
         ))
-        
+
         windowController.window?.contentView = NSHostingView(rootView: content)
         windowController.window?.center()
         windowController.window?.makeKeyAndOrderFront(nil)
         windowController.showWindow(nil)
     }
-    
+
     static func openPreferencesWindow() {
         // Implementation for preferences window
     }
-    
+
     static func openQuickAddWindow() {
         // Implementation for quick add window
     }
@@ -388,7 +388,7 @@ struct FileExportManager {
         let panel = NSSavePanel()
         panel.nameFieldStringValue = fileName
         panel.allowedContentTypes = [.json]
-        
+
         panel.begin { response in
             if response == .OK, let url = panel.url {
                 do {
@@ -400,12 +400,12 @@ struct FileExportManager {
             }
         }
     }
-    
+
     static func importFromFile<T: Codable>(_ type: T.Type, completion: @escaping (T?) -> Void) {
         let panel = NSOpenPanel()
         panel.allowedContentTypes = [.json]
         panel.allowsMultipleSelection = false
-        
+
         panel.begin { response in
             if response == .OK, let url = panel.urls.first {
                 do {
@@ -439,18 +439,18 @@ class iOSFeatureProvider: PlatformFeatureProvider {
         FocusModeManager.configureFocusModes()
         #endif
     }
-    
+
     func handleDeepLink(_ url: URL) {
         // Handle iOS deep links
     }
-    
+
     func shareContent(_ content: String) {
         #if os(iOS)
         let activityViewController = UIActivityViewController(activityItems: [content], applicationActivities: nil)
         // Present share sheet
         #endif
     }
-    
+
     func openSystemSettings() {
         #if os(iOS)
         if let url = URL(string: UIApplication.openSettingsURLString) {
@@ -466,18 +466,18 @@ class macOSFeatureProvider: PlatformFeatureProvider {
         // Setup menu bar, touch bar, etc.
         #endif
     }
-    
+
     func handleDeepLink(_ url: URL) {
         // Handle macOS URL schemes
     }
-    
+
     func shareContent(_ content: String) {
         #if os(macOS)
         let sharingService = NSSharingService(named: .sendViaAirDrop)
         sharingService?.perform(withItems: [content])
         #endif
     }
-    
+
     func openSystemSettings() {
         #if os(macOS)
         NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:")!)

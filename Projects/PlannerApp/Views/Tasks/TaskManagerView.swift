@@ -39,16 +39,16 @@ struct TaskManagerView: View {
                 .buttonStyle(.iOSSecondary)
                 #endif
                 .foregroundColor(themeManager.currentTheme.primaryAccentColor)
-                
+
                 Spacer()
-                
+
                 Text("Task Manager")
                     .font(.title3)
                     .fontWeight(.semibold)
                     .foregroundColor(themeManager.currentTheme.primaryTextColor)
-                
+
                 Spacer()
-                
+
                 // Invisible button for balance
                 Button("") { }
                     .disabled(true)
@@ -59,7 +59,7 @@ struct TaskManagerView: View {
             }
             .padding()
             .background(themeManager.currentTheme.secondaryBackgroundColor)
-            
+
             // Main container using VStack with no spacing for tight layout control
             VStack(spacing: 0) {
                 // --- Input Area ---
@@ -337,7 +337,7 @@ struct TaskRow: View {
                 HapticManager.notificationSuccess()
             }
             #endif
-            
+
             // Toggle the boolean state
             tasks[index].isCompleted.toggle()
             // ** IMPORTANT: Update completionDate if Task model supports it **
