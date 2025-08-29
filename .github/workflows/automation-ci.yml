@@ -28,7 +28,7 @@ jobs:
           path: |
             ~/.cache/pip
             ~/.cache/pip/wheels
-          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('Automation/requirements*.txt') }}
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('Automation/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-${{ matrix.python-version }}
             ${{ runner.os }}-pip-
@@ -40,9 +40,7 @@ jobs:
 
       - name: Install requirements
         run: |
-          if [ -f Automation/requirements-dev.txt ]; then
-            Automation/.venv/bin/pip install -r Automation/requirements-dev.txt
-          elif [ -f Automation/requirements.txt ]; then
+          if [ -f Automation/requirements.txt ]; then
             Automation/.venv/bin/pip install -r Automation/requirements.txt
           else
             Automation/.venv/bin/pip install pytest requests flask

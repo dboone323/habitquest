@@ -43,8 +43,6 @@ ALLOWED_COMMANDS = {
     'fix-all': ['./Tools/Automation/intelligent_autofix.sh', 'fix-all'],
     'status': ['./Tools/Automation/master_automation.sh', 'status'],
     'validate': ['./Tools/Automation/intelligent_autofix.sh', 'validate'],
-    # test command used by CI/agents to simulate a failing modification for rollback tests
-    'modify-fail': ['bash', './Tools/Automation/monitoring/modify_then_fail.sh'],
 }
 
 
@@ -414,11 +412,6 @@ class MCPHandler(BaseHTTPRequestHandler):
 
 
 def run_server(host=HOST, port=PORT):
-    # Allow quick socket reuse in tests where servers are started/stopped rapidly
-    try:
-        HTTPServer.allow_reuse_address = True
-    except Exception:
-        pass
     httpd = HTTPServer((host, port), MCPHandler)
     httpd.agents = {}
     httpd.tasks = []
@@ -477,14 +470,4 @@ def run_server(host=HOST, port=PORT):
 
 
 if __name__ == '__main__':
-    import sys
-    h = HOST
-    p = PORT
-    if len(sys.argv) >= 2:
-        h = sys.argv[1]
-    if len(sys.argv) >= 3:
-        try:
-            p = int(sys.argv[2])
-        except Exception:
-            p = PORT
-    run_server(host=h, port=p)
+    run_server()

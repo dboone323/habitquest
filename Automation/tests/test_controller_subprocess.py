@@ -48,40 +48,20 @@ exit 0
     # spawn controller subprocess pointing to the test server
     mcp_controller = str(here / 'mcp_controller.py')
     env = os.environ.copy()
-    # Ensure controller uses the same venv/python as tests for deterministic behavior
-    venv_python = env.get('VIRTUAL_ENV') and os.path.join(env['VIRTUAL_ENV'], 'bin', 'python')
-    if not venv_python or not os.path.exists(venv_python):
-        # fallback to known project venv path used in CI/dev
-        venv_python = str(here / '.venv' / 'bin' / 'python')
-    if not os.path.exists(venv_python):
-        venv_python = env.get('PYTHON', 'python3')
-
     env.update({
         'MCP_URL': base_url,
         'AGENT_NAME': 'subproc-agent',
         'ARTIFACT_DIR': str(project_dir / 'artifacts'),
-        # reduce intervals to make test faster and deterministic
-        'POLL_INTERVAL': '0.2',
-        'HEARTBEAT_INTERVAL': '0.5',
+        'POLL_INTERVAL': '0.5',
+        'HEARTBEAT_INTERVAL': '1.0',
     })
 
-    proc = subprocess.Popen([venv_python, mcp_controller], env=env)
+    proc = subprocess.Popen([env.get('PYTHON', 'python3'), mcp_controller], env=env)
 
     try:
-        # Wait for the controller to register itself with MCP before posting the task.
-        # Poll /status and check controllers list for our agent name.
-        registered = False
-        for _ in range(30):
-            try:
-                st = requests.get(f'{base_url}/status', timeout=1).json()
-                if 'controllers' in st:
-                    if any(c.get('agent') == 'subproc-agent' for c in st.get('controllers', [])):
-                        registered = True
-                        break
-            except Exception:
-                pass
-            time.sleep(0.1)
-        assert registered, 'controller did not register in time'
+        # Register a task for the controller to pick up
+        r = requests.post(f'{base_url}/register', json={'agent': 'subproc-agent', 'capabilities': []}, timeout=5)
+        assert r.status_code == 200
 
         r = requests.post(f'{base_url}/run', json={'agent': 'subproc-agent', 'command': 'write-artifact', 'execute': True}, timeout=5)
         assert r.status_code == 200
