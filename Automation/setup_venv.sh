@@ -2,13 +2,11 @@
 set -euo pipefail
 
 # setup_venv.sh
-# Creates a virtual environment in Automation/.venv (canonical) and installs requirements.
+# Creates a virtual environment in Tools/.venv and installs requirements.
 
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"/..
-# canonicalize to Automation/.venv to avoid Tools/ vs Automation/ confusion
 VENV_DIR="$ROOT_DIR/.venv"
-# requirements file located in the Automation directory
-REQ_FILE="$ROOT_DIR/requirements.txt"
+REQ_FILE="$ROOT_DIR/Tools/Automation/requirements.txt"
 
 echo "Creating virtualenv at $VENV_DIR"
 python3 -m venv "$VENV_DIR"

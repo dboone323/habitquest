@@ -37,8 +37,3 @@
 2025-08-25 11:54:04,127 - INFO - 🧠 Analyzing workflow failure with AI...
 2025-08-25 11:54:04,128 - INFO - 🎯 Match found: missing_file (confidence: 0.95)
 2025-08-25 11:54:04,128 - INFO - 🎯 Would apply fix: create_missing_file for missing_file
-2025-08-25 11:56:46,472 - INFO - 🤖 AI Workflow Recovery initialized for dboone323/Quantum-workspace
-2025-08-25 11:56:46,472 - INFO - 🔍 Running in dry-run mode (analysis only)
-2025-08-25 11:56:46,501 - INFO - 🧠 Analyzing workflow failure with AI...
-2025-08-25 11:56:46,502 - INFO - 🎯 Match found: missing_file (confidence: 0.95)
-2025-08-25 11:56:46,502 - INFO - 🎯 Would apply fix: create_missing_file for missing_file

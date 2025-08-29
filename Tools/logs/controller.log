@@ -1,0 +1,95 @@
+2025-08-27 14:31:10,057 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-27 14:33:33,546 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-27 14:34:46,969 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-27 14:39:09,338 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-27 14:41:49,096 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-27 14:44:34,555 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-27 14:44:34,590 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-7/test_execute_task_locking0/ProjA_task_1_1756323874
+2025-08-27 14:45:19,019 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-27 14:45:19,067 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-8/test_execute_task_locking0/ProjA_task_1_1756323919
+2025-08-27 14:48:06,034 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-27 14:48:06,077 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-9/test_execute_task_locking0/ProjA_task_1_1756324086
+2025-08-27 14:50:47,064 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-27 14:50:47,113 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-10/test_execute_task_locking0/ProjA_task_1_1756324247
+2025-08-27 14:56:42,108 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-27 14:56:42,145 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-11/test_execute_task_locking0/ProjA_task_1_1756324602
+2025-08-27 14:58:46,512 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-27 14:58:46,554 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-12/test_execute_task_locking0/ProjA_task_1_1756324726
+2025-08-27 15:01:56,472 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-27 15:01:56,512 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-13/test_execute_task_locking0/ProjA_task_1_1756324916
+2025-08-28 07:37:57,875 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 07:37:57,902 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-0/test_execute_task_locking0/ProjA_task_1_1756384677
+2025-08-28 07:40:18,208 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 07:40:18,235 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-1/test_execute_task_locking0/ProjA_task_1_1756384818
+2025-08-28 07:57:37,312 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 07:57:38,073 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-3/test_execute_task_locking0/ProjA_task_1_1756385858
+2025-08-28 08:02:59,793 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 08:02:59,800 INFO Registered with MCP
+2025-08-28 08:02:59,800 INFO Controller agent registered, polling for tasks...
+2025-08-28 08:03:27,668 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 08:03:29,135 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 08:03:29,141 INFO Registered with MCP
+2025-08-28 08:03:29,142 INFO Controller agent registered, polling for tasks...
+2025-08-28 08:03:29,276 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-5/test_execute_task_locking0/ProjA_task_1_1756386209
+2025-08-28 12:00:55,697 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 12:01:44,904 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 12:01:44,915 INFO Registered with MCP
+2025-08-28 12:01:44,915 INFO Controller agent registered, polling for tasks...
+2025-08-28 12:02:00,139 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-6/test_execute_task_locking0/ProjA_task_1_1756400520
+2025-08-28 12:03:18,690 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 12:04:07,508 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 12:04:07,514 INFO Registered with MCP
+2025-08-28 12:04:07,514 INFO Controller agent registered, polling for tasks...
+2025-08-28 12:04:20,738 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-7/test_execute_task_locking0/ProjA_task_1_1756400660
+2025-08-28 12:05:09,335 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 12:05:09,343 INFO Registered with MCP
+2025-08-28 12:05:09,343 INFO Controller agent registered, polling for tasks...
+2025-08-28 12:08:29,639 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 12:08:29,645 INFO Registered with MCP
+2025-08-28 12:08:29,645 INFO Controller agent registered, polling for tasks...
+2025-08-28 12:09:38,321 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 12:09:38,328 INFO Registered with MCP
+2025-08-28 12:09:38,331 INFO Controller agent registered, polling for tasks...
+2025-08-28 12:09:38,808 INFO Controller received KeyboardInterrupt, exiting
+2025-08-28 12:20:37,399 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 12:20:39,655 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 12:20:39,663 INFO Registered with MCP
+2025-08-28 12:20:39,663 INFO Controller agent registered, polling for tasks...
+2025-08-28 12:20:40,160 INFO Controller received KeyboardInterrupt, exiting
+2025-08-28 12:20:44,657 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-18/test_execute_task_locking0/ProjA_task_1_1756401644
+2025-08-28 12:23:06,763 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 12:23:08,897 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 12:23:08,905 INFO Registered with MCP
+2025-08-28 12:23:08,905 INFO Controller agent registered, polling for tasks...
+2025-08-28 12:23:09,396 INFO Controller received KeyboardInterrupt, exiting
+2025-08-28 12:23:11,126 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-19/test_execute_task_locking0/ProjA_task_1_1756401791
+2025-08-28 12:25:08,041 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 12:25:10,297 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 12:25:10,303 INFO Registered with MCP
+2025-08-28 12:25:10,304 INFO Controller agent registered, polling for tasks...
+2025-08-28 12:25:11,009 INFO Controller received KeyboardInterrupt, exiting
+2025-08-28 12:25:15,477 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-20/test_execute_task_locking0/ProjA_task_1_1756401915
+2025-08-28 12:26:10,981 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 12:26:13,239 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 12:26:13,244 INFO Registered with MCP
+2025-08-28 12:26:13,245 INFO Controller agent registered, polling for tasks...
+2025-08-28 12:26:13,736 INFO Controller received KeyboardInterrupt, exiting
+2025-08-28 12:26:18,211 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-21/test_execute_task_locking0/ProjA_task_1_1756401978
+2025-08-28 12:30:40,862 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 12:30:43,010 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 12:30:43,017 INFO Registered with MCP
+2025-08-28 12:30:43,017 INFO Controller agent registered, polling for tasks...
+2025-08-28 12:30:43,308 INFO Controller received KeyboardInterrupt, exiting
+2025-08-28 12:30:47,741 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-22/test_execute_task_locking0/ProjA_task_1_1756402247
+2025-08-28 12:33:24,316 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 12:33:26,590 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 12:33:26,597 INFO Registered with MCP
+2025-08-28 12:33:26,597 INFO Controller agent registered, polling for tasks...
+2025-08-28 12:33:27,091 INFO Controller received KeyboardInterrupt, exiting
+2025-08-28 12:33:31,527 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-23/test_execute_task_locking0/ProjA_task_1_1756402411
+2025-08-28 12:40:34,642 INFO Controller starting (agent=controller-agent, project=None)
+2025-08-28 12:40:36,918 INFO Controller starting (agent=subproc-agent, project=None)
+2025-08-28 12:40:37,027 INFO Registered with MCP
+2025-08-28 12:40:37,027 INFO Controller agent registered, polling for tasks...
+2025-08-28 12:40:37,540 INFO Controller received KeyboardInterrupt, exiting
+2025-08-28 12:40:42,381 INFO Artifacts saved: /private/var/folders/5d/2rv91jzx16j4g9knxlbqh9rm0000gn/T/pytest-of-danielstevens/pytest-24/test_execute_task_locking0/ProjA_task_1_1756402842
