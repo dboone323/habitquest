@@ -1,6 +1,7 @@
 # iOS Simulator Launch Error - Troubleshooting Guide
 
 ## Error Summary
+
 - **Error**: "No such process" (NSPOSIXErrorDomain Code 3)
 - **Issue**: App builds successfully but fails to launch in simulator
 - **Device**: iPhone 16 Pro Max (iOS 18.5)
@@ -8,7 +9,9 @@
 ## Quick Fixes (Try in Order)
 
 ### 1. Clean and Rebuild
+
 In Xcode:
+
 1. **Clean Build Folder**: Shift+Cmd+K
 2. **Quit Xcode** completely
 3. **Quit Simulator** app
@@ -16,13 +19,16 @@ In Xcode:
 5. Build and Run (Cmd+R)
 
 ### 2. Reset Simulator
+
 Run the provided script:
+
 ```bash
 chmod +x fix_ios_simulator_launch.sh
 ./fix_ios_simulator_launch.sh
 ```
 
 Or manually:
+
 ```bash
 # Reset specific simulator
 xcrun simctl shutdown "15AB3298-270F-449B-B0BA-DCB97024C8C6"
@@ -34,11 +40,13 @@ xcrun simctl erase all
 ```
 
 ### 3. Try Different Simulator
+
 1. In Xcode, click the device selector (next to the scheme)
 2. Choose a different simulator (e.g., iPhone 15 or iPhone 14)
 3. Build and Run
 
 ### 4. Check Build Settings
+
 1. Select project → MomentumFinance target
 2. Build Settings tab
 3. Verify:
@@ -47,6 +55,7 @@ xcrun simctl erase all
    - **Valid Architectures**: arm64
 
 ### 5. Delete Derived Data
+
 ```bash
 rm -rf ~/Library/Developer/Xcode/DerivedData/MomentumFinance-*
 # Or delete all DerivedData
@@ -54,7 +63,9 @@ rm -rf ~/Library/Developer/Xcode/DerivedData/*
 ```
 
 ### 6. Check Info.plist
+
 Ensure Info.plist has:
+
 ```xml
 <key>CFBundleExecutable</key>
 <string>$(EXECUTABLE_NAME)</string>
@@ -82,9 +93,9 @@ Ensure Info.plist has:
 ## Advanced Troubleshooting
 
 ### A. Simulator Issues
+
 1. **Reset Simulator Content**:
    - Simulator → Device → Erase All Content and Settings
-   
 2. **Re-download Simulator Runtime**:
    - Xcode → Settings → Platforms
    - Delete iOS Simulator
@@ -97,6 +108,7 @@ Ensure Info.plist has:
    ```
 
 ### B. Build Configuration
+
 1. **Edit Scheme**:
    - Product → Scheme → Edit Scheme
    - Run → Info → Build Configuration: Debug
@@ -104,15 +116,17 @@ Ensure Info.plist has:
      - Add: `OS_ACTIVITY_MODE` = `disable` (reduces log noise)
 
 2. **Check Executable**:
+
    ```bash
    # Verify app bundle exists
    find ~/Library/Developer/Xcode/DerivedData -name "MomentumFinance.app" -type d
-   
+
    # Check if executable exists in app bundle
    ls -la ~/Library/Developer/Xcode/DerivedData/*/Build/Products/Debug-iphonesimulator/MomentumFinance.app/
    ```
 
 ### C. Code Signing (Simulator shouldn't need this, but just in case)
+
 1. Select project → MomentumFinance target
 2. Signing & Capabilities tab
 3. Ensure:
@@ -121,7 +135,9 @@ Ensure Info.plist has:
    - Bundle Identifier: com.momentumfinance.MomentumFinance
 
 ### D. SwiftUI App Lifecycle
+
 Verify `MomentumFinanceApp.swift` has proper structure:
+
 ```swift
 import SwiftUI
 
@@ -138,6 +154,7 @@ struct MomentumFinanceApp: App {
 ## Nuclear Options
 
 ### 1. Complete Xcode Reset
+
 ```bash
 # Quit Xcode
 # Delete all Xcode caches
@@ -150,13 +167,16 @@ rm -rf ~/Library/Developer/Xcode/watchOS\ DeviceSupport
 ```
 
 ### 2. Create New Target
+
 1. In Xcode: File → New → Target
 2. Choose iOS App
 3. Configure with same bundle ID
 4. Move all files to new target
 
 ### 3. Test on Physical Device
+
 If simulator continues to fail:
+
 1. Connect iPhone via USB
 2. Select your device as target
 3. Build and Run
@@ -177,6 +197,7 @@ If simulator continues to fail:
 4. **Contact Apple Developer Support**: If you have a paid developer account
 
 ## Success Indicators
+
 - Simulator launches
 - App icon appears on home screen
 - App launches when tapped

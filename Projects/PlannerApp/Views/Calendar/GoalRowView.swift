@@ -8,27 +8,27 @@ struct GoalRowView: View {
     private var priorityColor: Color {
         switch goal.priority {
         case .high:
-            return .red
+            .red
         case .medium:
-            return .orange
+            .orange
         case .low:
-            return .green
+            .green
         }
     }
 
     private var priorityText: String {
         switch goal.priority {
         case .high:
-            return "High"
+            "High"
         case .medium:
-            return "Medium"
+            "Medium"
         case .low:
-            return "Low"
+            "Low"
         }
     }
 
     private var progressPercentage: Double {
-        return goal.progress
+        goal.progress
     }
 
     var body: some View {

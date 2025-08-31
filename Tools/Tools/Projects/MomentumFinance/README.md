@@ -20,12 +20,14 @@ Momentum Finance is a modern personal finance app that helps users track their s
 ## ✨ Key Features
 
 ### 🏦 Account Management
+
 - Multiple financial account support (checking, savings, credit cards, investments)
 - Real-time balance tracking and reconciliation
 - Account categorization and organization with customizable groups
 - Support for multiple currencies and automatic conversion
 
 ### 💳 Transaction Tracking
+
 - Comprehensive transaction history with detailed metadata
 - AI-powered automatic categorization
 - Recurring transaction detection and management
@@ -33,6 +35,7 @@ Momentum Finance is a modern personal finance app that helps users track their s
 - Smart search and advanced filtering options
 
 ### 📊 Budgeting System
+
 - Flexible monthly budget creation by category
 - Visual progress tracking with customizable thresholds
 - Budget rollover options and adjustments
@@ -40,6 +43,7 @@ Momentum Finance is a modern personal finance app that helps users track their s
 - Historical budget analysis and comparisons
 
 ### 📅 Subscription Management
+
 - Comprehensive subscription tracking across services
 - Upcoming payment notifications and reminders
 - Auto-detection of subscription transactions
@@ -47,6 +51,7 @@ Momentum Finance is a modern personal finance app that helps users track their s
 - Subscription optimization recommendations
 
 ### 🎯 Goals & Reports
+
 - Custom savings goal creation with timelines
 - Visual progress tracking for financial goals
 - Detailed spending reports by category, time period, and merchant
@@ -54,6 +59,7 @@ Momentum Finance is a modern personal finance app that helps users track their s
 - Exportable reports in multiple formats
 
 ### 🔄 Cross-Platform Sync
+
 - Seamless data synchronization across all Apple devices
 - iCloud integration for automatic backup
 - Privacy-focused design with end-to-end encryption
@@ -63,17 +69,20 @@ Momentum Finance is a modern personal finance app that helps users track their s
 Momentum Finance is built with a modern, scalable architecture following best practices:
 
 ### MVVM Pattern
+
 - Clean separation of Views and ViewModels
 - Reactive UI updates using SwiftUI and Combine
 - Testable business logic isolated from UI
 
 ### Data Management
+
 - SwiftData for persistent storage
 - Optimized query performance for large financial datasets
 - Proper relationship modeling between financial entities
 - Data migration strategies for app updates
 
 ### Platform Adaptability
+
 - Shared core functionality between iOS and macOS
 - Platform-specific UI optimizations
 - Responsive layouts that adapt to all device sizes
@@ -82,6 +91,7 @@ Momentum Finance is built with a modern, scalable architecture following best pr
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Xcode 15.0 or later
 - Swift 5.9 or later
 - macOS Sonoma 14.0+ (for development)
@@ -90,23 +100,27 @@ Momentum Finance is built with a modern, scalable architecture following best pr
 ### Installation and Setup
 
 1. Clone this repository:
+
 ```bash
 git clone https://github.com/momentumfinance/app.git
 cd MomentumFinanceApp
 ```
 
 2. Open the project:
+
 ```bash
 open MomentumFinance.xcodeproj
 ```
 
 Alternatively, you can build and run using Swift Package Manager:
+
 ```bash
 swift build
 swift run MomentumFinance
 ```
 
 3. For development tools setup:
+
 ```bash
 ./setup-tools.sh
 ```
@@ -227,24 +241,28 @@ Our future development plans include:
 </p>
 
 ### 📊 Budget Management
+
 - Monthly budget creation and tracking
 - Category-based spending limits
 - Progress visualization
 - Budget vs. actual spending analysis
 
 ### 🔄 Subscription Management
+
 - Recurring payment tracking
 - Automatic payment processing
 - Subscription status monitoring
 - Upcoming payment notifications
 
 ### 🎯 Goals & Reports
+
 - Savings goal setting and tracking
 - Financial reporting and insights
 - Spending analysis and trends
 - Progress visualization
 
 ### 📱 Cross-Platform
+
 - Native iOS and macOS applications
 - Shared data and synchronization
 - Platform-optimized user interfaces
@@ -252,12 +270,14 @@ Our future development plans include:
 ## Architecture
 
 ### Technology Stack
+
 - **SwiftUI**: Modern declarative UI framework
 - **SwiftData**: Persistent data storage with relationships
 - **MVVM Pattern**: Clean separation of concerns
 - **Combine**: Reactive programming for data flow
 
 ### Project Structure
+
 ```
 MomentumFinanceApp/
 ├── Shared/
@@ -277,6 +297,7 @@ MomentumFinanceApp/
 ```
 
 ### Core Models
+
 - **FinancialAccount**: Bank accounts, credit cards, cash
 - **Transaction**: Income and expense records
 - **Category**: Transaction categorization system
@@ -287,6 +308,7 @@ MomentumFinanceApp/
 ## Getting Started
 
 ### Prerequisites
+
 - Xcode 15.0 or later
 - iOS 17.0+ / macOS 14.0+
 - Swift 5.9+
@@ -294,17 +316,20 @@ MomentumFinanceApp/
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/yourusername/momentum-finance.git
    cd momentum-finance
    ```
 
 2. **Verify project structure**
+
    ```bash
    ./verify-project.sh
    ```
 
 3. **Open in Xcode**
+
    ```bash
    open MomentumFinance.xcodeproj
    ```
@@ -316,6 +341,7 @@ MomentumFinanceApp/
 ### Development Setup
 
 1. **Install SwiftLint** (optional but recommended)
+
    ```bash
    brew install swiftlint
    ```
@@ -328,6 +354,7 @@ MomentumFinanceApp/
 ## Development
 
 ### Code Style
+
 - Follow Swift API Design Guidelines
 - Use SwiftLint for consistent formatting
 - Maintain clear separation between UI and business logic
@@ -336,6 +363,7 @@ MomentumFinanceApp/
 ### Adding New Features
 
 1. **Create feature module**
+
    ```
    Features/NewFeature/
    ├── NewFeatureView.swift
@@ -355,6 +383,7 @@ MomentumFinanceApp/
 ### Data Management
 
 All data is managed through SwiftData with automatic:
+
 - Data persistence
 - Relationship management
 - Migration handling
@@ -363,11 +392,13 @@ All data is managed through SwiftData with automatic:
 ### Testing
 
 Run the verification script to ensure project integrity:
+
 ```bash
 ./verify-project.sh
 ```
 
 This checks:
+
 - File structure completeness
 - SwiftData model integrity
 - MVVM pattern compliance
@@ -394,6 +425,7 @@ This checks:
 ## Project Status
 
 ### Completed ✅
+
 - [x] SwiftData model implementation
 - [x] Core MVVM architecture
 - [x] Dashboard with account overview
@@ -404,12 +436,14 @@ This checks:
 - [x] Error handling and logging utilities
 
 ### In Progress 🚧
+
 - [ ] Xcode project file creation
 - [ ] iOS/macOS platform-specific optimizations
 - [ ] Settings and preferences
 - [ ] Data export/import features
 
 ### Planned 📋
+
 - [ ] iCloud synchronization
 - [ ] Widget support
 - [ ] Advanced reporting and analytics
@@ -430,6 +464,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 If you encounter any issues or have feature requests:
+
 1. Check the [Issues](https://github.com/yourusername/momentum-finance/issues) page
 2. Create a new issue with detailed information
 3. Follow the issue template for faster resolution
@@ -441,6 +476,7 @@ If you encounter any issues or have feature requests:
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - macOS 14.0+ or iOS 17.0+
 - Xcode 15.0+
 - Swift 5.9+
@@ -448,12 +484,14 @@ If you encounter any issues or have feature requests:
 ### Installation & Running
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/yourusername/MomentumFinanceApp.git
    cd MomentumFinanceApp
    ```
 
 2. **Build and run on macOS:**
+
    ```bash
    swift build
    swift run MomentumFinance
@@ -465,8 +503,10 @@ If you encounter any issues or have feature requests:
    ```
 
 ### Current Status: ✅ FULLY FUNCTIONAL
+
 - **Build Status**: ✅ Compiles successfully
-- **Cross-Platform**: ✅ iOS and macOS compatible  
+- **Cross-Platform**: ✅ iOS and macOS compatible
 - **SwiftData**: ✅ Models and persistence working
 - **SwiftLint**: 🟡 10 warnings (style/length - non-critical)
+
 # Trigger workflows Thu Aug 14 16:13:30 CDT 2025

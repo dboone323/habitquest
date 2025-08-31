@@ -15,193 +15,193 @@ extension ContentView {
 }
 
 #if os(macOS)
-// macOS-specific UI components and helpers
-enum macOSSpecificViews {
-    /// macOS window configuration
-    static func configureWindow() {
-        // Configure macOS-specific window settings
-        NSApp.appearance = NSAppearance(named: .aqua)
-    }
+    // macOS-specific UI components and helpers
+    enum macOSSpecificViews {
+        /// macOS window configuration
+        static func configureWindow() {
+            // Configure macOS-specific window settings
+            NSApp.appearance = NSAppearance(named: .aqua)
+        }
 
-    /// macOS toolbar configuration
-    static func configureToolbar() -> some ToolbarContent {
-        ToolbarItemGroup(placement: .automatic) {
-            Button(action: {}, label: {
-                Image(systemName: "gear")
-            })
-            .help("Settings")
+        /// macOS toolbar configuration
+        static func configureToolbar() -> some ToolbarContent {
+            ToolbarItemGroup(placement: .automatic) {
+                Button(action: {}, label: {
+                    Image(systemName: "gear")
+                })
+                .help("Settings")
 
-            Button(action: {}, label: {
-                Image(systemName: "square.and.arrow.up")
-            })
-            .help("Export Data")
+                Button(action: {}, label: {
+                    Image(systemName: "square.and.arrow.up")
+                })
+                .help("Export Data")
+            }
         }
     }
-}
 
-// macOS-specific view extensions
-extension View {
-    /// Add macOS-specific keyboard shortcuts
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func macOSKeyboardShortcuts() -> some View {
-        self
-            .keyboardShortcut("n", modifiers: .command)
-            .keyboardShortcut("w", modifiers: .command)
+    // macOS-specific view extensions
+    extension View {
+        /// Add macOS-specific keyboard shortcuts
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func macOSKeyboardShortcuts() -> some View {
+            self
+                .keyboardShortcut("n", modifiers: .command)
+                .keyboardShortcut("w", modifiers: .command)
+        }
+
+        /// macOS-specific sheet presentation
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func macOSSheetPresentation() -> some View {
+            self
+                .frame(width: 600, height: 400)
+        }
     }
 
-    /// macOS-specific sheet presentation
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func macOSSheetPresentation() -> some View {
-        self
-            .frame(width: 600, height: 400)
-    }
-}
+    // Settings view for macOS
+    struct SettingsView: View {
+        @AppStorage("defaultCurrency")
+        private var defaultCurrency = "USD"
+        @AppStorage("enableNotifications")
+        private var enableNotifications = true
+        @AppStorage("autoBackup")
+        private var autoBackup = false
 
-// Settings view for macOS
-struct SettingsView: View {
-    @AppStorage("defaultCurrency")
-    private var defaultCurrency = "USD"
-    @AppStorage("enableNotifications")
-    private var enableNotifications = true
-    @AppStorage("autoBackup")
-    private var autoBackup = false
-
-    var body: some View {
-        TabView {
-            GeneralSettingsView(
-                defaultCurrency: $defaultCurrency,
-                enableNotifications: $enableNotifications,
-                autoBackup: $autoBackup,
+        var body: some View {
+            TabView {
+                GeneralSettingsView(
+                    defaultCurrency: $defaultCurrency,
+                    enableNotifications: $enableNotifications,
+                    autoBackup: $autoBackup,
                 )
-            .tabItem {
-                Label("General", systemImage: "gear")
-            }
-
-            DataSettingsView()
                 .tabItem {
-                    Label("Data", systemImage: "externaldrive")
+                    Label("General", systemImage: "gear")
                 }
 
-            AdvancedSettingsView()
-                .tabItem {
-                    Label("Advanced", systemImage: "slider.horizontal.3")
-                }
-        }
-        .frame(width: 500, height: 300)
-    }
-}
-
-struct GeneralSettingsView: View {
-    @Binding var defaultCurrency: String
-    @Binding var enableNotifications: Bool
-    @Binding var autoBackup: Bool
-
-    let currencies = ["USD", "EUR", "GBP", "JPY", "CAD", "AUD"]
-
-    var body: some View {
-        Form {
-            Section("Currency") {
-                Picker("Default Currency", selection: $defaultCurrency) {
-                    ForEach(currencies, id: \.self) { currency in
-                        Text(currency).tag(currency)
+                DataSettingsView()
+                    .tabItem {
+                        Label("Data", systemImage: "externaldrive")
                     }
-                }
-                .pickerStyle(MenuPickerStyle())
-            }
 
-            Section("Notifications") {
-                Toggle("Enable Notifications", isOn: $enableNotifications)
-                    .help("Show notifications for upcoming subscriptions and budget alerts")
+                AdvancedSettingsView()
+                    .tabItem {
+                        Label("Advanced", systemImage: "slider.horizontal.3")
+                    }
             }
-
-            Section("Backup") {
-                Toggle("Automatic Backup", isOn: $autoBackup)
-                    .help("Automatically backup your data to iCloud")
-            }
+            .frame(width: 500, height: 300)
         }
-        .padding()
     }
-}
 
-struct DataSettingsView: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Data Management")
-                .font(.headline)
+    struct GeneralSettingsView: View {
+        @Binding var defaultCurrency: String
+        @Binding var enableNotifications: Bool
+        @Binding var autoBackup: Bool
 
-            GroupBox("Export") {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Export your financial data to CSV or JSON format")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+        let currencies = ["USD", "EUR", "GBP", "JPY", "CAD", "AUD"]
 
-                    HStack {
-                        Button("Export to CSV") {
-                            // Export functionality
-                        }
-
-                        Button("Export to JSON") {
-                            // Export functionality
+        var body: some View {
+            Form {
+                Section("Currency") {
+                    Picker("Default Currency", selection: $defaultCurrency) {
+                        ForEach(currencies, id: \.self) { currency in
+                            Text(currency).tag(currency)
                         }
                     }
+                    .pickerStyle(MenuPickerStyle())
+                }
+
+                Section("Notifications") {
+                    Toggle("Enable Notifications", isOn: $enableNotifications)
+                        .help("Show notifications for upcoming subscriptions and budget alerts")
+                }
+
+                Section("Backup") {
+                    Toggle("Automatic Backup", isOn: $autoBackup)
+                        .help("Automatically backup your data to iCloud")
                 }
             }
+            .padding()
+        }
+    }
 
-            GroupBox("Import") {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Import transactions from bank statements or other apps")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+    struct DataSettingsView: View {
+        var body: some View {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Data Management")
+                    .font(.headline)
 
-                    Button("Import Data") {
-                        // Import functionality
+                GroupBox("Export") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Export your financial data to CSV or JSON format")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        HStack {
+                            Button("Export to CSV") {
+                                // Export functionality
+                            }
+
+                            Button("Export to JSON") {
+                                // Export functionality
+                            }
+                        }
                     }
                 }
-            }
 
-            Spacer()
-        }
-        .padding()
-    }
-}
+                GroupBox("Import") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Import transactions from bank statements or other apps")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
 
-struct AdvancedSettingsView: View {
-    @AppStorage("enableDebugMode")
-    private var enableDebugMode = false
-    @AppStorage("logLevel")
-    private var logLevel = "Info"
-
-    let logLevels = ["Debug", "Info", "Warning", "Error"]
-
-    var body: some View {
-        Form {
-            Section("Developer Options") {
-                Toggle("Enable Debug Mode", isOn: $enableDebugMode)
-                    .help("Enable debug logging and additional developer features")
-
-                Picker("Log Level", selection: $logLevel) {
-                    ForEach(logLevels, id: \.self) { level in
-                        Text(level).tag(level)
+                        Button("Import Data") {
+                            // Import functionality
+                        }
                     }
                 }
-                .pickerStyle(MenuPickerStyle())
-                .disabled(!enableDebugMode)
-            }
 
-            Section("Performance") {
-                Button("Clear Cache") {
-                    // Clear cache functionality
-                }
-
-                Button("Reset All Settings") {
-                    // Reset settings functionality
-                }
-                .foregroundColor(.red)
+                Spacer()
             }
+            .padding()
         }
-        .padding()
     }
-}
+
+    struct AdvancedSettingsView: View {
+        @AppStorage("enableDebugMode")
+        private var enableDebugMode = false
+        @AppStorage("logLevel")
+        private var logLevel = "Info"
+
+        let logLevels = ["Debug", "Info", "Warning", "Error"]
+
+        var body: some View {
+            Form {
+                Section("Developer Options") {
+                    Toggle("Enable Debug Mode", isOn: $enableDebugMode)
+                        .help("Enable debug logging and additional developer features")
+
+                    Picker("Log Level", selection: $logLevel) {
+                        ForEach(logLevels, id: \.self) { level in
+                            Text(level).tag(level)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .disabled(!enableDebugMode)
+                }
+
+                Section("Performance") {
+                    Button("Clear Cache") {
+                        // Clear cache functionality
+                    }
+
+                    Button("Reset All Settings") {
+                        // Reset settings functionality
+                    }
+                    .foregroundColor(.red)
+                }
+            }
+            .padding()
+        }
+    }
 #endif

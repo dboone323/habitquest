@@ -12,14 +12,14 @@ import UserNotifications
 
 /// Schedules subscription-related notifications
 public struct SubscriptionNotificationScheduler {
-    
+
     private let center = UNUserNotificationCenter.current()
     private let logger: OSLog
-    
+
     init(logger: OSLog) {
         self.logger = logger
     }
-    
+
     /// Schedules notifications for multiple subscriptions
     /// - Parameter subscriptions: Array of subscriptions to schedule notifications for
     func scheduleNotifications(for subscriptions: [Subscription]) {
@@ -28,7 +28,7 @@ public struct SubscriptionNotificationScheduler {
             schedulePaymentDueNotification(subscription: subscription)
         }
     }
-    
+
     /// Schedules an upcoming payment notification (1 day before due date)
     /// - Parameter subscription: The subscription to schedule for
     private func scheduleUpcomingPaymentNotification(subscription: Subscription) {
@@ -63,7 +63,7 @@ public struct SubscriptionNotificationScheduler {
             }
         }
     }
-    
+
     /// Schedules a payment due notification (on the due date)
     /// - Parameter subscription: The subscription to schedule for
     private func schedulePaymentDueNotification(subscription: Subscription) {

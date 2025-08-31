@@ -5,6 +5,7 @@
 ### 1. **Clean Separation of Concerns**
 
 **RULE: Data models NEVER import SwiftUI**
+
 - `SharedTypes/` folder contains pure data models
 - UI extensions go in `Extensions/` folder
 - This prevents circular dependencies and concurrency issues
@@ -12,6 +13,7 @@
 ### 2. **Synchronous-First Approach**
 
 **DECISION: Use sync operations with background queues, not async/await everywhere**
+
 - Main processing logic runs synchronously on background queues
 - SwiftUI updates happen on MainActor via Task { @MainActor in ... }
 - Avoids complex concurrency debugging
@@ -34,18 +36,20 @@ CodingReviewer/
 ### 4. **Naming Conventions**
 
 **RULE: Avoid generic names like "Dashboard" or "Manager"**
+
 - Use specific names: `OptimizationDashboard`, `EnterpriseAnalyticsDashboard`
 - This prevents naming conflicts as the app grows
 
 ### 5. **Concurrency Strategy**
 
 **PATTERN: Background processing with MainActor updates**
+
 ```swift
 // ✅ CORRECT
 jobQueue.async { [weak self] in
     // Do background work
     let result = processJob()
-    
+
     Task { @MainActor [weak self] in
         // Update UI on main thread
         self?.updateUI(with: result)
@@ -61,12 +65,13 @@ async func processJob() async throws -> Result {
 ### 6. **Color and UI Handling**
 
 **PATTERN: String identifiers in data models, Color extensions in UI files**
+
 ```swift
 // In SharedTypes (data model)
 var colorIdentifier: String { return "blue" }
 
 // In Extensions (UI layer)
-var color: Color { 
+var color: Color {
     switch colorIdentifier {
     case "blue": return .blue
     // ...
@@ -77,6 +82,7 @@ var color: Color {
 ### 7. **Codable Strategy**
 
 **CRITICAL DECISION: Avoid Codable in complex data models**
+
 - Codable creates circular dependencies and concurrency issues
 - Use simple property access for data persistence instead
 - If serialization is needed, create separate DTO (Data Transfer Object) types
@@ -108,6 +114,7 @@ struct ProcessingJob: Identifiable, Sendable, Codable {
 ## Migration Strategy
 
 When adding new features:
+
 1. Define data models in `SharedTypes/` first (NO Codable, NO SwiftUI imports)
 2. Add UI extensions in `Extensions/` if needed
 3. Build UI components that use the extensions
@@ -117,12 +124,14 @@ When adding new features:
 ## Critical Rules to Prevent Issues
 
 **NEVER ADD THESE TO SharedTypes:**
+
 - ❌ `import SwiftUI`
 - ❌ `: Codable` conformance
 - ❌ `@preconcurrency` (indicates architectural problems)
 - ❌ Generic names like "Dashboard" or "Manager"
 
 **ALWAYS DO:**
+
 - ✅ Use `Sendable` for thread safety
 - ✅ Use `colorIdentifier: String` instead of `Color`
 - ✅ Keep data models pure and simple
@@ -131,6 +140,7 @@ When adding new features:
 ## Automation Strategy
 
 Keep automation scripts **separate** from the main app:
+
 - Background scripts should modify files directly
 - Use file system notifications for real-time updates
 - Avoid complex inter-process communication
@@ -144,6 +154,7 @@ This architecture ensures stability and prevents the fix-rollback cycle we've be
 **CRITICAL INSIGHT: Implement types properly from the start, not bandaid fixes**
 
 #### 1. **Type Implementation Strategy**
+
 ```swift
 // ✅ STRATEGIC APPROACH - Complete type implementation
 struct ProcessingJob: Identifiable, Sendable, Comparable {
@@ -154,7 +165,7 @@ struct ProcessingJob: Identifiable, Sendable, Comparable {
     var errorMessage: String?           // Proper error handling
     var startTime: Date?               // Complete timing info
     var completionTime: Date?          // Complete timing info
-    
+
     // Implement ALL required protocols properly
     static func < (lhs: ProcessingJob, rhs: ProcessingJob) -> Bool {
         lhs.priority.rawValue < rhs.priority.rawValue
@@ -169,12 +180,14 @@ struct ProcessingJob: Identifiable {
 ```
 
 #### 2. **Sendable vs Codable Trade-offs**n**RULE: Choose Sendable for concurrency safety over Codable convenience**
+
 - Use `Sendable` for thread-safe data models
 - Avoid `Codable` in complex nested types (causes circular references)
 - Create separate DTOs for serialization if needed
 - Never mix concurrency and encoding protocols without careful design
 
 #### 3. **Property Mutability Patterns**
+
 ```swift
 // ✅ CORRECT - Clear separation of immutable identity vs mutable state
 struct SystemLoad: Sendable {

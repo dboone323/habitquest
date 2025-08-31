@@ -4,7 +4,7 @@ import SwiftUI
 
 /// Financial data display components with theme-aware styling
 public struct ThemeFinancialComponents: @unchecked Sendable {
-    
+
     /// Styled currency value display
     @MainActor
     func currencyDisplay(
@@ -27,7 +27,7 @@ public struct ThemeFinancialComponents: @unchecked Sendable {
             .font(font)
             .foregroundStyle(color)
     }
-    
+
     /// Format currency with locale settings
     private func formatCurrency(_ amount: Decimal, showSign: Bool = false) -> String {
         let formatter = NumberFormatter()

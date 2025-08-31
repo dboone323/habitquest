@@ -14,15 +14,15 @@ extension NavigationCoordinator {
     func navigateToNotification(_ notification: AppNotification) {
         // Process the notification based on its type
         switch notification.type {
-        case .transaction(let transactionId):
+        case let .transaction(transactionId):
             navigateToTransactionDetail(transactionId: transactionId)
-        case .budget(let budgetId):
+        case let .budget(budgetId):
             navigateToBudgetCategory(categoryId: budgetId)
-        case .subscription(let subscriptionId):
+        case let .subscription(subscriptionId):
             navigateToSubscriptionDetail(subscriptionId: subscriptionId)
-        case .goal(let goalId):
+        case let .goal(goalId):
             navigateToGoalDetail(goalId: goalId)
-        case .account(let accountId):
+        case let .account(accountId):
             navigateToAccountDetail(accountId: accountId)
         }
 

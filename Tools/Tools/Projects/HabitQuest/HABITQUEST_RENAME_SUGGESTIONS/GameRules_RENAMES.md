@@ -18,5 +18,6 @@ Patch guidance
 Priority: Medium
 
 Reviewer instructions
+
 - Confirm `xp` meaning across codebase (search for `xp` occurrences) and standardize accordingly.
 - Run unit tests and check game calculations produce identical outputs.

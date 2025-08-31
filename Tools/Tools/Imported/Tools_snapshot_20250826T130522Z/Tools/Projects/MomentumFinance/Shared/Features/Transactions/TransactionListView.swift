@@ -27,7 +27,7 @@ extension Features.Transactions {
         var body: some View {
             List {
                 ForEach(Array(groupedTransactions.enumerated()), id: \.element.key) {
-                    groupIndex, group in
+                    _, group in
                     Section {
                         ForEach(group.value, id: \.persistentModelID) { transaction in
                             Features.Transactions.SimpleTransactionRow(transaction: transaction) {

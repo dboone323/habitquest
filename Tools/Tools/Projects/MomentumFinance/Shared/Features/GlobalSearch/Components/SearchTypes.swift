@@ -1,9 +1,11 @@
 import SwiftUI
 
 // MARK: - Search Types and Enums
+
 extension Features.GlobalSearchView {
-    
+
     // MARK: - Search Filter Enum
+
     enum SearchFilter: String, CaseIterable {
         case all = "All"
         case accounts = "Accounts"
@@ -26,6 +28,7 @@ extension Features.GlobalSearchView {
 }
 
 // MARK: - Search Result Type Extensions
+
 extension SearchResult.SearchResultType {
     var icon: String {
         switch self {
@@ -39,7 +42,8 @@ extension SearchResult.SearchResultType {
 }
 
 // MARK: - Search Configuration
-struct SearchConfiguration {
+
+enum SearchConfiguration {
     static let transactionResultLimit = 20
     static let searchDebounceDelay: TimeInterval = 0.1
 }

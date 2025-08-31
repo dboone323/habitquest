@@ -86,7 +86,7 @@ final class Habit {
 
         guard !recentLogs.isEmpty else { return 0.0 }
 
-        let completedCount = recentLogs.filter { $0.isCompleted }.count
+        let completedCount = recentLogs.filter(\.isCompleted).count
         return Double(completedCount) / Double(recentLogs.count)
     }
 }
@@ -99,7 +99,7 @@ enum HabitFrequency: String, CaseIterable, Codable {
 
     /// Display name for the frequency
     var displayName: String {
-        return self.rawValue
+        self.rawValue
     }
 }
 
@@ -117,28 +117,28 @@ enum HabitCategory: String, CaseIterable, Codable {
     /// Emoji representation for each category
     var emoji: String {
         switch self {
-        case .health: return "🏥"
-        case .fitness: return "🏋️‍♀️"
-        case .learning: return "📚"
-        case .productivity: return "💼"
-        case .social: return "👥"
-        case .creativity: return "🎨"
-        case .mindfulness: return "🧘‍♀️"
-        case .other: return "📋"
+        case .health: "🏥"
+        case .fitness: "🏋️‍♀️"
+        case .learning: "📚"
+        case .productivity: "💼"
+        case .social: "👥"
+        case .creativity: "🎨"
+        case .mindfulness: "🧘‍♀️"
+        case .other: "📋"
         }
     }
 
     /// Color representation for each category
     var color: String {
         switch self {
-        case .health: return "red"
-        case .fitness: return "orange"
-        case .learning: return "blue"
-        case .productivity: return "green"
-        case .social: return "purple"
-        case .creativity: return "yellow"
-        case .mindfulness: return "indigo"
-        case .other: return "gray"
+        case .health: "red"
+        case .fitness: "orange"
+        case .learning: "blue"
+        case .productivity: "green"
+        case .social: "purple"
+        case .creativity: "yellow"
+        case .mindfulness: "indigo"
+        case .other: "gray"
         }
     }
 }
@@ -152,9 +152,9 @@ enum HabitDifficulty: String, CaseIterable, Codable {
     /// Experience point multiplier based on difficulty
     var xpMultiplier: Int {
         switch self {
-        case .easy: return 1
-        case .medium: return 2
-        case .hard: return 3
+        case .easy: 1
+        case .medium: 2
+        case .hard: 3
         }
     }
 }

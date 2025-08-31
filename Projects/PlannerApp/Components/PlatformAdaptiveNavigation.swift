@@ -17,26 +17,26 @@ struct PlatformAdaptiveNavigation<Content: View>: View {
 
     var body: some View {
         #if os(macOS)
-        NavigationSplitView {
-            SidebarView()
-        } detail: {
-            content
-        }
-        .navigationSplitViewStyle(.balanced)
-        #elseif os(iOS)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            // iPad layout
             NavigationSplitView {
                 SidebarView()
             } detail: {
                 content
             }
-        } else {
-            // iPhone layout
-            NavigationStack {
-                content
+            .navigationSplitViewStyle(.balanced)
+        #elseif os(iOS)
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                // iPad layout
+                NavigationSplitView {
+                    SidebarView()
+                } detail: {
+                    content
+                }
+            } else {
+                // iPhone layout
+                NavigationStack {
+                    content
+                }
             }
-        }
         #endif
     }
 }
@@ -55,36 +55,36 @@ struct SidebarView: View {
 
         var icon: String {
             switch self {
-            case .dashboard: return "house.fill"
-            case .tasks: return "checkmark.circle.fill"
-            case .goals: return "target"
-            case .calendar: return "calendar"
-            case .journal: return "book.fill"
-            case .settings: return "gearshape.fill"
+            case .dashboard: "house.fill"
+            case .tasks: "checkmark.circle.fill"
+            case .goals: "target"
+            case .calendar: "calendar"
+            case .journal: "book.fill"
+            case .settings: "gearshape.fill"
             }
         }
     }
 
     var body: some View {
         #if os(macOS)
-        List(Tab.allCases, id: \.self, selection: $selectedTab) { tab in
-            NavigationLink(value: tab) {
-                Label(tab.rawValue, systemImage: tab.icon)
+            List(Tab.allCases, id: \.self, selection: $selectedTab) { tab in
+                NavigationLink(value: tab) {
+                    Label(tab.rawValue, systemImage: tab.icon)
+                }
             }
-        }
-        .navigationTitle("PlannerApp")
-        .listStyle(SidebarListStyle())
-        .frame(minWidth: 200)
+            .navigationTitle("PlannerApp")
+            .listStyle(SidebarListStyle())
+            .frame(minWidth: 200)
         #else
-        // iOS/iPadOS: Use regular List without selection binding
-        List(Tab.allCases, id: \.self) { tab in
-            NavigationLink(value: tab) {
-                Label(tab.rawValue, systemImage: tab.icon)
+            // iOS/iPadOS: Use regular List without selection binding
+            List(Tab.allCases, id: \.self) { tab in
+                NavigationLink(value: tab) {
+                    Label(tab.rawValue, systemImage: tab.icon)
+                }
             }
-        }
-        .navigationTitle("PlannerApp")
-        .listStyle(SidebarListStyle())
-        .frame(minWidth: 200)
+            .navigationTitle("PlannerApp")
+            .listStyle(SidebarListStyle())
+            .frame(minWidth: 200)
         #endif
     }
 }
@@ -115,44 +115,44 @@ struct PlatformToolbar: ViewModifier {
             .navigationTitle(title)
             .toolbar {
                 #if os(macOS)
-                ToolbarItemGroup(placement: .primaryAction) {
-                    ForEach(primaryActions.indices, id: \.self) { index in
-                        let action = primaryActions[index]
-                        Button(action: action.action) {
-                            Label(action.title, systemImage: action.icon)
-                        }
-                        .help(action.title)
-                    }
-                }
-
-                ToolbarItemGroup(placement: .secondaryAction) {
-                    Menu("More") {
-                        ForEach(secondaryActions.indices, id: \.self) { index in
-                            let action = secondaryActions[index]
-                            Button(action.title, action: action.action)
-                        }
-                    }
-                }
-                #else
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    ForEach(primaryActions.indices, id: \.self) { index in
-                        let action = primaryActions[index]
-                        Button(action: action.action) {
-                            Image(systemName: action.icon)
+                    ToolbarItemGroup(placement: .primaryAction) {
+                        ForEach(primaryActions.indices, id: \.self) { index in
+                            let action = primaryActions[index]
+                            Button(action: action.action) {
+                                Label(action.title, systemImage: action.icon)
+                            }
+                            .help(action.title)
                         }
                     }
 
-                    if !secondaryActions.isEmpty {
-                        Menu {
+                    ToolbarItemGroup(placement: .secondaryAction) {
+                        Menu("More") {
                             ForEach(secondaryActions.indices, id: \.self) { index in
                                 let action = secondaryActions[index]
                                 Button(action.title, action: action.action)
                             }
-                        } label: {
-                            Image(systemName: "ellipsis.circle")
                         }
                     }
-                }
+                #else
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        ForEach(primaryActions.indices, id: \.self) { index in
+                            let action = primaryActions[index]
+                            Button(action: action.action) {
+                                Image(systemName: action.icon)
+                            }
+                        }
+
+                        if !secondaryActions.isEmpty {
+                            Menu {
+                                ForEach(secondaryActions.indices, id: \.self) { index in
+                                    let action = secondaryActions[index]
+                                    Button(action.title, action: action.action)
+                                }
+                            } label: {
+                                Image(systemName: "ellipsis.circle")
+                            }
+                        }
+                    }
                 #endif
             }
     }
@@ -183,22 +183,22 @@ struct PlatformContextMenu<MenuContent: View>: ViewModifier {
 
     func body(content: Content) -> some View {
         #if os(macOS)
-        content
-            .contextMenu {
-                menuContent
-            }
+            content
+                .contextMenu {
+                    menuContent
+                }
         #else
-        content
-            .contextMenu {
-                menuContent
-            }
+            content
+                .contextMenu {
+                    menuContent
+                }
         #endif
     }
 }
 
 extension View {
-    func platformContextMenu<MenuContent: View>(
-        @ViewBuilder menuContent: () -> MenuContent
+    func platformContextMenu(
+        @ViewBuilder menuContent: () -> some View
     ) -> some View {
         modifier(PlatformContextMenu(menuContent: menuContent))
     }
@@ -216,15 +216,15 @@ struct AdaptiveGrid<Content: View>: View {
 
     private var columns: [GridItem] {
         #if os(macOS)
-        return Array(repeating: .init(.flexible()), count: 3)
+            return Array(repeating: .init(.flexible()), count: 3)
         #else
-        if horizontalSizeClass == .regular {
-            // iPad or iPhone landscape
-            return Array(repeating: .init(.flexible()), count: 2)
-        } else {
-            // iPhone portrait
-            return [.init(.flexible())]
-        }
+            if horizontalSizeClass == .regular {
+                // iPad or iPhone landscape
+                return Array(repeating: .init(.flexible()), count: 2)
+            } else {
+                // iPhone portrait
+                return [.init(.flexible())]
+            }
         #endif
     }
 
@@ -248,26 +248,26 @@ struct PlatformSheet<SheetContent: View>: ViewModifier {
 
     func body(content: Content) -> some View {
         #if os(macOS)
-        content
-            .sheet(isPresented: $isPresented) {
-                self.sheetContent
-                    .frame(minWidth: 400, minHeight: 300)
-            }
-        #else
-        content
-            .sheet(isPresented: $isPresented) {
-                NavigationStack {
+            content
+                .sheet(isPresented: $isPresented) {
                     self.sheetContent
+                        .frame(minWidth: 400, minHeight: 300)
                 }
-            }
+        #else
+            content
+                .sheet(isPresented: $isPresented) {
+                    NavigationStack {
+                        self.sheetContent
+                    }
+                }
         #endif
     }
 }
 
 extension View {
-    func platformSheet<SheetContent: View>(
+    func platformSheet(
         isPresented: Binding<Bool>,
-        @ViewBuilder content: () -> SheetContent
+        @ViewBuilder content: () -> some View
     ) -> some View {
         modifier(PlatformSheet(isPresented: isPresented, content: content))
     }
@@ -283,7 +283,7 @@ struct ExamplePlatformView: View {
         PlatformAdaptiveNavigation {
             ScrollView {
                 AdaptiveGrid {
-                    ForEach(0..<6, id: \.self) { index in
+                    ForEach(0 ..< 6, id: \.self) { index in
                         RoundedRectangle(cornerRadius: 12)
                             .fill(themeManager.currentTheme.secondaryBackgroundColor)
                             .frame(height: 120)
@@ -292,8 +292,8 @@ struct ExamplePlatformView: View {
                                     .foregroundColor(themeManager.currentTheme.primaryTextColor)
                             )
                             .platformContextMenu {
-                                Button("Edit") { }
-                                Button("Delete", role: .destructive) { }
+                                Button("Edit") {}
+                                Button("Delete", role: .destructive) {}
                             }
                     }
                 }
@@ -304,11 +304,11 @@ struct ExamplePlatformView: View {
                 primaryActions: [
                     .init(title: "Add Item", icon: "plus") {
                         showingAddItem = true
-                    }
+                    },
                 ],
                 secondaryActions: [
-                    .init(title: "Sort", icon: "arrow.up.arrow.down") { },
-                    .init(title: "Filter", icon: "line.3.horizontal.decrease.circle") { }
+                    .init(title: "Sort", icon: "arrow.up.arrow.down") {},
+                    .init(title: "Filter", icon: "line.3.horizontal.decrease.circle") {},
                 ]
             )
             .platformSheet(isPresented: $showingAddItem) {

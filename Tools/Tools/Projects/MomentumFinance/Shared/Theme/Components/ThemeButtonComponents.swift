@@ -4,7 +4,7 @@ import SwiftUI
 
 /// Button component implementations with theme-aware styling
 public struct ThemeButtonComponents: @unchecked Sendable {
-    
+
     /// Primary action button style
     @MainActor
     func primaryButton(

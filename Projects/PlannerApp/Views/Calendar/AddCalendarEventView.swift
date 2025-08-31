@@ -1,5 +1,5 @@
-import SwiftUI
 import Foundation
+import SwiftUI
 
 struct AddCalendarEventView: View {
     @Environment(\.dismiss) var dismiss // Use dismiss environment
@@ -21,7 +21,7 @@ struct AddCalendarEventView: View {
             HStack {
                 Button("Cancel") {
                     #if os(iOS)
-                    HapticManager.lightImpact()
+                        HapticManager.lightImpact()
                     #endif
                     dismiss()
                 }
@@ -40,7 +40,7 @@ struct AddCalendarEventView: View {
 
                 Button("Save") {
                     #if os(iOS)
-                    HapticManager.notificationSuccess()
+                        HapticManager.notificationSuccess()
                     #endif
                     saveEvent()
                     dismiss()
@@ -53,9 +53,9 @@ struct AddCalendarEventView: View {
             }
             .padding()
             #if os(macOS)
-            .background(Color(NSColor.controlBackgroundColor))
+                .background(Color(NSColor.controlBackgroundColor))
             #else
-            .background(Color(.systemBackground))
+                .background(Color(.systemBackground))
             #endif
             #if os(iOS)
             .iOSEnhancedTouchTarget()
@@ -64,13 +64,13 @@ struct AddCalendarEventView: View {
             Form {
                 TextField("Event Title", text: $title)
                     .focused($isTitleFocused)
-                    #if os(iOS)
+                #if os(iOS)
                     .textInputAutocapitalization(.words)
                     .submitLabel(.done)
                     .onSubmit {
                         isTitleFocused = false
                     }
-                    #endif
+                #endif
                 DatePicker("Event Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
             }
             #if os(iOS)

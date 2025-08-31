@@ -1,7 +1,7 @@
 // PlannerApp/CloudKit/CloudKitOnboardingView.swift
-import SwiftUI
 import CloudKit
 import Foundation
+import SwiftUI
 
 struct CloudKitOnboardingView: View {
     @StateObject private var cloudKit = EnhancedCloudKitManager.shared // Changed to EnhancedCloudKitManager
@@ -27,16 +27,16 @@ struct CloudKitOnboardingView: View {
                 // Benefits explanation
                 VStack(alignment: .leading, spacing: 16) {
                     benefitRow(icon: "iphone.and.arrow.forward", title: "Sync Across Devices",
-                              description: "Access your tasks, goals, and events on all your Apple devices.")
+                               description: "Access your tasks, goals, and events on all your Apple devices.")
 
                     benefitRow(icon: "lock.shield", title: "Private & Secure",
-                              description: "Your data is encrypted and protected by your Apple ID.")
+                               description: "Your data is encrypted and protected by your Apple ID.")
 
                     benefitRow(icon: "arrow.clockwise.icloud", title: "Automatic Backup",
-                              description: "Never lose your important information with automatic backups.")
+                               description: "Never lose your important information with automatic backups.")
 
                     benefitRow(icon: "person.crop.circle", title: "Just for You",
-                              description: "Your data is only visible to you, never shared with others.")
+                               description: "Your data is only visible to you, never shared with others.")
                 }
                 .padding()
                 .background(

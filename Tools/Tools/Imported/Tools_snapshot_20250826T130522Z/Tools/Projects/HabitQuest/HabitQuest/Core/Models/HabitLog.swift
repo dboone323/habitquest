@@ -45,23 +45,23 @@ enum MoodRating: String, CaseIterable, Codable {
 
     var value: Int {
         switch self {
-        case .terrible: return 1
-        case .bad: return 2
-        case .okay: return 3
-        case .neutral: return 3
-        case .good: return 4
-        case .excellent: return 5
+        case .terrible: 1
+        case .bad: 2
+        case .okay: 3
+        case .neutral: 3
+        case .good: 4
+        case .excellent: 5
         }
     }
 
     var description: String {
         switch self {
-        case .terrible: return "Terrible"
-        case .bad: return "Bad"
-        case .okay: return "Okay"
-        case .neutral: return "Neutral"
-        case .good: return "Good"
-        case .excellent: return "Excellent"
+        case .terrible: "Terrible"
+        case .bad: "Bad"
+        case .okay: "Okay"
+        case .neutral: "Neutral"
+        case .good: "Good"
+        case .excellent: "Excellent"
         }
     }
 }

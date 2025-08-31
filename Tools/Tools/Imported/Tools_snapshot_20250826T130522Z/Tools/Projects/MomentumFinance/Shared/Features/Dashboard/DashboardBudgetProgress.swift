@@ -46,7 +46,8 @@ extension Features.Dashboard {
                                 }
 
                                 themeComponents.budgetProgressBar(
-                                    spent: budget.spent, total: budget.limit)
+                                    spent: budget.spent, total: budget.limit
+                                )
                             }
                             .contentShape(Rectangle())
                             .onTapGesture {

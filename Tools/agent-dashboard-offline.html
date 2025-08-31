@@ -1,214 +1,364 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agent Dashboard - Offline Version</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f7; }
-        .header { background: #1d1d1f; color: white; padding: 20px; text-align: center; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .metric { text-align: center; margin: 10px 0; }
-        .metric-value { font-size: 2rem; font-weight: bold; color: #007AFF; }
-        .metric-label { color: #666; font-size: 0.9rem; }
-        .status-good { color: #28a745; }
-        .status-warning { color: #ffc107; }
-        .status-error { color: #dc3545; }
-        .agent-list { list-style: none; margin: 0; padding: 0; }
-        .agent-item { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
-        .agent-name { font-weight: 500; }
-        .agent-status { padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 500; }
-        .agent-status.active { background: #d4edda; color: #155724; }
-        .agent-status.busy { background: #fff3cd; color: #856404; }
-        .agent-status.available { background: #d1ecf1; color: #0c5460; }
-        .agent-status.restarting { background: #f8d7da; color: #721c24; }
-        .task-list { list-style: none; margin: 0; padding: 0; max-height: 200px; overflow-y: auto; }
-        .task-item { padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.85rem; }
-        .task-priority { font-weight: 500; }
-        .task-priority-high { color: #dc3545; }
-        .task-priority-medium { color: #ffc107; }
-        .task-priority-low { color: #28a745; }
-        .connection-status { text-align: center; padding: 10px; background: #fff3cd; color: #856404; border-radius: 8px; margin-bottom: 20px; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #f5f5f7;
+      }
+      .header {
+        background: #1d1d1f;
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+      }
+      .card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .metric {
+        text-align: center;
+        margin: 10px 0;
+      }
+      .metric-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #007aff;
+      }
+      .metric-label {
+        color: #666;
+        font-size: 0.9rem;
+      }
+      .status-good {
+        color: #28a745;
+      }
+      .status-warning {
+        color: #ffc107;
+      }
+      .status-error {
+        color: #dc3545;
+      }
+      .agent-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .agent-item {
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9rem;
+      }
+      .agent-name {
+        font-weight: 500;
+      }
+      .agent-status {
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+      .agent-status.active {
+        background: #d4edda;
+        color: #155724;
+      }
+      .agent-status.busy {
+        background: #fff3cd;
+        color: #856404;
+      }
+      .agent-status.available {
+        background: #d1ecf1;
+        color: #0c5460;
+      }
+      .agent-status.restarting {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      .task-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+      .task-item {
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 0.85rem;
+      }
+      .task-priority {
+        font-weight: 500;
+      }
+      .task-priority-high {
+        color: #dc3545;
+      }
+      .task-priority-medium {
+        color: #ffc107;
+      }
+      .task-priority-low {
+        color: #28a745;
+      }
+      .connection-status {
+        text-align: center;
+        padding: 10px;
+        background: #fff3cd;
+        color: #856404;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        <h1>🤖 Agent Monitoring Dashboard</h1>
-        <p>Real-time agent status and task tracking</p>
+      <h1>🤖 Agent Monitoring Dashboard</h1>
+      <p>Real-time agent status and task tracking</p>
     </div>
 
     <div class="container">
-        <div class="connection-status">
-            <strong>Offline Mode:</strong> This is a static version. For live updates, run:<br>
-            <code>cd /Users/danielstevens/Desktop/Code/Tools && ./start_dashboard.sh</code><br>
-            Then visit: <a href="http://localhost:8000" target="_blank">http://localhost:8000</a>
+      <div class="connection-status">
+        <strong>Offline Mode:</strong> This is a static version. For live
+        updates, run:<br />
+        <code
+          >cd /Users/danielstevens/Desktop/Code/Tools &&
+          ./start_dashboard.sh</code
+        ><br />
+        Then visit:
+        <a href="http://localhost:8000" target="_blank"
+          >http://localhost:8000</a
+        >
+      </div>
+
+      <div class="grid">
+        <!-- Agent Status -->
+        <div class="card">
+          <h2>🤖 Agent Status</h2>
+          <div class="agent-list">
+            <div class="agent-item">
+              <div>
+                <div class="agent-name">Task Orchestrator</div>
+                <small style="color: #666"
+                  >Central task coordination and agent health monitoring</small
+                >
+              </div>
+              <div style="text-align: right">
+                <div class="agent-status active">Active</div>
+                <small style="color: #666">Tasks: 0</small>
+              </div>
+            </div>
+            <div class="agent-item">
+              <div>
+                <div class="agent-name">Debug Agent</div>
+                <small style="color: #666"
+                  >Debugging and troubleshooting across all projects</small
+                >
+              </div>
+              <div style="text-align: right">
+                <div class="agent-status busy">Busy</div>
+                <small style="color: #666">Tasks: 2</small>
+              </div>
+            </div>
+            <div class="agent-item">
+              <div>
+                <div class="agent-name">Build Agent</div>
+                <small style="color: #666"
+                  >Automated build management and CI/CD pipeline</small
+                >
+              </div>
+              <div style="text-align: right">
+                <div class="agent-status restarting">Restarting</div>
+                <small style="color: #666">Tasks: 0</small>
+              </div>
+            </div>
+            <div class="agent-item">
+              <div>
+                <div class="agent-name">Codegen Agent</div>
+                <small style="color: #666"
+                  >Code generation and automated test creation</small
+                >
+              </div>
+              <div style="text-align: right">
+                <div class="agent-status restarting">Restarting</div>
+                <small style="color: #666">Tasks: 0</small>
+              </div>
+            </div>
+            <div class="agent-item">
+              <div>
+                <div class="agent-name">UI/UX Agent</div>
+                <small style="color: #666"
+                  >UI/UX analysis and accessibility improvements</small
+                >
+              </div>
+              <div style="text-align: right">
+                <div class="agent-status restarting">Restarting</div>
+                <small style="color: #666">Tasks: 0</small>
+              </div>
+            </div>
+            <div class="agent-item">
+              <div>
+                <div class="agent-name">Apple Pro Agent</div>
+                <small style="color: #666"
+                  >Apple platform expertise and Swift best practices</small
+                >
+              </div>
+              <div style="text-align: right">
+                <div class="agent-status restarting">Restarting</div>
+                <small style="color: #666">Tasks: 0</small>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="grid">
-            <!-- Agent Status -->
-            <div class="card">
-                <h2>🤖 Agent Status</h2>
-                <div class="agent-list">
-                    <div class="agent-item">
-                        <div>
-                            <div class="agent-name">Task Orchestrator</div>
-                            <small style="color: #666;">Central task coordination and agent health monitoring</small>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="agent-status active">Active</div>
-                            <small style="color: #666;">Tasks: 0</small>
-                        </div>
-                    </div>
-                    <div class="agent-item">
-                        <div>
-                            <div class="agent-name">Debug Agent</div>
-                            <small style="color: #666;">Debugging and troubleshooting across all projects</small>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="agent-status busy">Busy</div>
-                            <small style="color: #666;">Tasks: 2</small>
-                        </div>
-                    </div>
-                    <div class="agent-item">
-                        <div>
-                            <div class="agent-name">Build Agent</div>
-                            <small style="color: #666;">Automated build management and CI/CD pipeline</small>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="agent-status restarting">Restarting</div>
-                            <small style="color: #666;">Tasks: 0</small>
-                        </div>
-                    </div>
-                    <div class="agent-item">
-                        <div>
-                            <div class="agent-name">Codegen Agent</div>
-                            <small style="color: #666;">Code generation and automated test creation</small>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="agent-status restarting">Restarting</div>
-                            <small style="color: #666;">Tasks: 0</small>
-                        </div>
-                    </div>
-                    <div class="agent-item">
-                        <div>
-                            <div class="agent-name">UI/UX Agent</div>
-                            <small style="color: #666;">UI/UX analysis and accessibility improvements</small>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="agent-status restarting">Restarting</div>
-                            <small style="color: #666;">Tasks: 0</small>
-                        </div>
-                    </div>
-                    <div class="agent-item">
-                        <div>
-                            <div class="agent-name">Apple Pro Agent</div>
-                            <small style="color: #666;">Apple platform expertise and Swift best practices</small>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="agent-status restarting">Restarting</div>
-                            <small style="color: #666;">Tasks: 0</small>
-                        </div>
-                    </div>
+        <!-- Task Queue -->
+        <div class="card">
+          <h2>📋 Task Queue</h2>
+          <div class="task-list">
+            <div class="task-item">
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span>✅</span>
+                <div>
+                  <div style="font-weight: 500">
+                    Analyze MomentumFinance project for potential memory leaks
+                    and performance issues
+                  </div>
+                  <small style="color: #666"
+                    >Debug Agent • Priority:
+                    <span class="task-priority-high">8</span></small
+                  >
                 </div>
+              </div>
             </div>
-
-            <!-- Task Queue -->
-            <div class="card">
-                <h2>📋 Task Queue</h2>
-                <div class="task-list">
-                    <div class="task-item">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span>✅</span>
-                            <div>
-                                <div style="font-weight: 500;">Analyze MomentumFinance project for potential memory leaks and performance issues</div>
-                                <small style="color: #666;">Debug Agent • Priority: <span class="task-priority-high">8</span></small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="task-item">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span>✅</span>
-                            <div>
-                                <div style="font-weight: 500;">Investigate AvoidObstaclesGame build failures and identify root causes</div>
-                                <small style="color: #666;">Debug Agent • Priority: <span class="task-priority-high">9</span></small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="task-item">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span>⏳</span>
-                            <div>
-                                <div style="font-weight: 500;">Review CodingReviewer UI components for accessibility and user experience improvements</div>
-                                <small style="color: #666;">UI/UX Agent • Priority: <span class="task-priority-medium">6</span></small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="task-item">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span>⏳</span>
-                            <div>
-                                <div style="font-weight: 500;">Audit PlannerApp for Apple framework best practices and Swift concurrency patterns</div>
-                                <small style="color: #666;">Apple Pro Agent • Priority: <span class="task-priority-medium">7</span></small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="task-item">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span>⏳</span>
-                            <div>
-                                <div style="font-weight: 500;">Generate unit tests for HabitQuest data models and view models</div>
-                                <small style="color: #666;">Codegen Agent • Priority: <span class="task-priority-low">5</span></small>
-                            </div>
-                        </div>
-                    </div>
+            <div class="task-item">
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span>✅</span>
+                <div>
+                  <div style="font-weight: 500">
+                    Investigate AvoidObstaclesGame build failures and identify
+                    root causes
+                  </div>
+                  <small style="color: #666"
+                    >Debug Agent • Priority:
+                    <span class="task-priority-high">9</span></small
+                  >
                 </div>
+              </div>
             </div>
-
-            <!-- System Metrics -->
-            <div class="card">
-                <h2>⚙️ System Status</h2>
-                <div class="metric">
-                    <div class="metric-value">18.62%</div>
-                    <div class="metric-label">CPU Usage</div>
+            <div class="task-item">
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span>⏳</span>
+                <div>
+                  <div style="font-weight: 500">
+                    Review CodingReviewer UI components for accessibility and
+                    user experience improvements
+                  </div>
+                  <small style="color: #666"
+                    >UI/UX Agent • Priority:
+                    <span class="task-priority-medium">6</span></small
+                  >
                 </div>
-                <div class="metric">
-                    <div class="metric-value">15G</div>
-                    <div class="metric-label">Memory Usage</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">86%</div>
-                    <div class="metric-label">Disk Usage</div>
-                </div>
+              </div>
             </div>
-
-            <!-- Task Summary -->
-            <div class="card">
-                <h2>📊 Task Summary</h2>
-                <div class="metric">
-                    <div class="metric-value status-good">2</div>
-                    <div class="metric-label">Completed Tasks</div>
+            <div class="task-item">
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span>⏳</span>
+                <div>
+                  <div style="font-weight: 500">
+                    Audit PlannerApp for Apple framework best practices and
+                    Swift concurrency patterns
+                  </div>
+                  <small style="color: #666"
+                    >Apple Pro Agent • Priority:
+                    <span class="task-priority-medium">7</span></small
+                  >
                 </div>
-                <div class="metric">
-                    <div class="metric-value status-warning">6</div>
-                    <div class="metric-label">Queued Tasks</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">0</div>
-                    <div class="metric-label">Failed Tasks</div>
-                </div>
+              </div>
             </div>
+            <div class="task-item">
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span>⏳</span>
+                <div>
+                  <div style="font-weight: 500">
+                    Generate unit tests for HabitQuest data models and view
+                    models
+                  </div>
+                  <small style="color: #666"
+                    >Codegen Agent • Priority:
+                    <span class="task-priority-low">5</span></small
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- System Metrics -->
+        <div class="card">
+          <h2>⚙️ System Status</h2>
+          <div class="metric">
+            <div class="metric-value">18.62%</div>
+            <div class="metric-label">CPU Usage</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">15G</div>
+            <div class="metric-label">Memory Usage</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">86%</div>
+            <div class="metric-label">Disk Usage</div>
+          </div>
+        </div>
+
+        <!-- Task Summary -->
+        <div class="card">
+          <h2>📊 Task Summary</h2>
+          <div class="metric">
+            <div class="metric-value status-good">2</div>
+            <div class="metric-label">Completed Tasks</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value status-warning">6</div>
+            <div class="metric-label">Queued Tasks</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">0</div>
+            <div class="metric-label">Failed Tasks</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
-        // Auto-refresh reminder
-        setInterval(() => {
-            console.log('Dashboard last updated: ' + new Date().toLocaleTimeString());
-            console.log('For live updates, start the dashboard server with: ./start_dashboard.sh');
-        }, 30000);
+      // Auto-refresh reminder
+      setInterval(() => {
+        console.log(
+          "Dashboard last updated: " + new Date().toLocaleTimeString(),
+        );
+        console.log(
+          "For live updates, start the dashboard server with: ./start_dashboard.sh",
+        );
+      }, 30000);
     </script>
-</body>
+  </body>
 </html>

@@ -24,7 +24,8 @@ struct TransactionPatternAnalyzer {
             // Generate a key that combines a simplified name and amount range
             let simplifiedName = transaction.title.lowercased()
                 .replacingOccurrences(
-                    of: "[^a-z0-9]", with: "", options: String.CompareOptions.regularExpression)
+                    of: "[^a-z0-9]", with: "", options: String.CompareOptions.regularExpression
+                )
 
             // Round amount to nearest dollar for grouping
             let roundedAmount = round(abs(transaction.amount) * 100) / 100
@@ -42,7 +43,8 @@ struct TransactionPatternAnalyzer {
         var recurringTransactions: [FinancialTransaction] = []
 
         for (_, similarTransactions) in transactionsByNameAndAmount
-        where similarTransactions.count >= 3 {
+            where similarTransactions.count >= 3
+        {
             // Sort by date
             let sortedTransactions = similarTransactions.sorted { $0.date < $1.date }
 
@@ -50,7 +52,7 @@ struct TransactionPatternAnalyzer {
             var isRegular = true
             var intervals: [TimeInterval] = []
 
-            for txIndex in 1..<sortedTransactions.count {
+            for txIndex in 1 ..< sortedTransactions.count {
                 let interval = sortedTransactions[txIndex].date.timeIntervalSince(
                     sortedTransactions[txIndex - 1].date)
                 intervals.append(interval)
@@ -62,7 +64,8 @@ struct TransactionPatternAnalyzer {
 
                 // Check if the intervals are within 20% of the average
                 for interval in intervals
-                where abs(interval - averageInterval) > averageInterval * 0.2 {
+                    where abs(interval - averageInterval) > averageInterval * 0.2
+                {
                     isRegular = false
                     break
                 }
@@ -83,7 +86,7 @@ struct TransactionPatternAnalyzer {
 
         return recurringTransactions
     }
-    
+
     /// Finds potential duplicate transactions based on name similarity, amount, and timing
     /// - Parameter transactions: Array of financial transactions to analyze
     /// - Returns: Array of transaction pairs that may be duplicates
@@ -95,7 +98,8 @@ struct TransactionPatternAnalyzer {
             // Generate a key that combines a simplified name and exact amount
             let simplifiedName = transaction.title.lowercased()
                 .replacingOccurrences(
-                    of: "[^a-z0-9]", with: "", options: String.CompareOptions.regularExpression)
+                    of: "[^a-z0-9]", with: "", options: String.CompareOptions.regularExpression
+                )
 
             let exactAmount = abs(transaction.amount)
             let key = "\(simplifiedName)_\(exactAmount)"
@@ -111,12 +115,13 @@ struct TransactionPatternAnalyzer {
         var duplicateSuspects: [[FinancialTransaction]] = []
 
         for (_, similarTransactions) in transactionsByNameAndAmount
-        where similarTransactions.count >= 2 {
+            where similarTransactions.count >= 2
+        {
             // Sort by date
             let sortedTransactions = similarTransactions.sorted { $0.date < $1.date }
 
             // Check for transactions that are less than 48 hours apart
-            for txIndex in 1..<sortedTransactions.count {
+            for txIndex in 1 ..< sortedTransactions.count {
                 let interval = sortedTransactions[txIndex].date.timeIntervalSince(
                     sortedTransactions[txIndex - 1].date)
                 if interval < 48 * 60 * 60 {
@@ -130,7 +135,7 @@ struct TransactionPatternAnalyzer {
 
         return duplicateSuspects
     }
-    
+
     /// Extracts machine learning features from a transaction for categorization
     /// - Parameter transaction: Transaction to extract features from
     /// - Returns: Dictionary of features for ML processing

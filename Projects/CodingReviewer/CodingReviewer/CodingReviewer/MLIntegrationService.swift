@@ -6,23 +6,23 @@
 // Created on July 29, 2025
 //
 
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
 // MARK: - ML Integration Service
 
 @MainActor
 final class MLIntegrationService: ObservableObject {
-    @Published var isAnalyzing = false;
-    @Published var mlInsights: [MLInsight] = [];
+    @Published var isAnalyzing = false
+    @Published var mlInsights: [MLInsight] = []
     @Published var predictiveData: PredictiveAnalysis?
-    @Published var crossProjectLearnings: [CrossProjectLearning] = [];
-    @Published var analysisProgress: Double = 0.0;
+    @Published var crossProjectLearnings: [CrossProjectLearning] = []
+    @Published var analysisProgress: Double = 0.0
     @Published var lastUpdate: Date?
 
     private let logger = AppLogger.shared
-    private var cancellables = Set<AnyCancellable>();
+    private var cancellables = Set<AnyCancellable>()
 
     init() {
         logger.log("🧠 ML Integration Service initialized", level: .info, category: .ai)
@@ -178,7 +178,7 @@ final class MLIntegrationService: ObservableObject {
                     "path": file.path,
                     "language": file.language.rawValue,
                     "size": "\(file.size)",
-                    "content_preview": String(file.content.prefix(1000))
+                    "content_preview": String(file.content.prefix(1000)),
                 ]
             }
 
@@ -250,7 +250,7 @@ final class MLIntegrationService: ObservableObject {
     // MARK: - Parsing Methods
 
     private func parseMLRecommendations(_ content: String) -> [MLInsight] {
-        var insights: [MLInsight] = [];
+        var insights: [MLInsight] = []
 
         // Parse code quality patterns
         if content.contains("High Complexity Files") {
@@ -316,7 +316,7 @@ final class MLIntegrationService: ObservableObject {
     }
 
     private func parseCrossProjectInsights(_ content: String) -> [CrossProjectLearning] {
-        var learnings: [CrossProjectLearning] = [];
+        var learnings: [CrossProjectLearning] = []
 
         // Parse MVVM+SwiftUI patterns
         if content.contains("MVVM + SwiftUI") {
@@ -352,7 +352,8 @@ final class MLIntegrationService: ObservableObject {
         let range = NSRange(text.startIndex..., in: text)
 
         if let match = regex?.firstMatch(in: text, options: [], range: range),
-           let matchRange = Range(match.range(at: 1), in: text) {
+           let matchRange = Range(match.range(at: 1), in: text)
+        {
             return Int(text[matchRange])
         }
         return nil
@@ -406,21 +407,21 @@ struct MLInsight: Identifiable {
 
         var icon: String {
             switch self {
-            case .codeQuality: return "checkmark.seal"
-            case .automation: return "gear.badge.checkmark"
-            case .learning: return "brain.head.profile"
-            case .performance: return "speedometer"
-            case .security: return "lock.shield"
+            case .codeQuality: "checkmark.seal"
+            case .automation: "gear.badge.checkmark"
+            case .learning: "brain.head.profile"
+            case .performance: "speedometer"
+            case .security: "lock.shield"
             }
         }
 
         var color: Color {
             switch self {
-            case .codeQuality: return .blue
-            case .automation: return .green
-            case .learning: return .purple
-            case .performance: return .orange
-            case .security: return .red
+            case .codeQuality: .blue
+            case .automation: .green
+            case .learning: .purple
+            case .performance: .orange
+            case .security: .red
             }
         }
     }
@@ -430,9 +431,9 @@ struct MLInsight: Identifiable {
 
         var description: String {
             switch self {
-            case .low: return "Low Impact"
-            case .medium: return "Medium Impact"
-            case .high: return "High Impact"
+            case .low: "Low Impact"
+            case .medium: "Medium Impact"
+            case .high: "High Impact"
             }
         }
     }

@@ -1,8 +1,8 @@
 // filepath: /Users/danielstevens/Desktop/PlannerApp/Views/Calendar/CalendarView.swift
 // PlannerApp/Views/Calendar/CalendarView.swift
 
-import SwiftUI
 import Foundation
+import SwiftUI
 
 struct CalendarView: View {
     // Access shared ThemeManager and data
@@ -263,7 +263,7 @@ extension Calendar {
         var dates: [Date] = []
         var currentDate = calendarStart
 
-        for _ in 0..<42 {
+        for _ in 0 ..< 42 {
             dates.append(currentDate)
             guard let nextDate = self.date(byAdding: .day, value: 1, to: currentDate) else { break }
             currentDate = nextDate
@@ -274,6 +274,7 @@ extension Calendar {
 }
 
 // MARK: - Preview Provider
+
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView()

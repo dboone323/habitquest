@@ -7,17 +7,17 @@
 //  Created on July 25, 2025
 //
 
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
 // MARK: - Intelligent Fix Generation System
 
 final class IntelligentFixGenerator: ObservableObject {
 
-    @Published var isGeneratingFixes = false;
-    @Published var fixGenerationProgress: Double = 0.0;
-    @Published var generatedFixes: [IntelligentFix] = [];
+    @Published var isGeneratingFixes = false
+    @Published var fixGenerationProgress: Double = 0.0
+    @Published var generatedFixes: [IntelligentFix] = []
 
     private let logger = AppLogger.shared
 
@@ -38,7 +38,7 @@ final class IntelligentFixGenerator: ObservableObject {
 
         logger.log("🔧 Generating intelligent fixes for \(analysis.fileName)", level: .info, category: .ai)
 
-        var fixes: [IntelligentFix] = [];
+        var fixes: [IntelligentFix] = []
 
         // Generate different types of fixes based on analysis
         let securityFixes = generateSecurityFixes(analysis: analysis, context: context)
@@ -78,14 +78,14 @@ final class IntelligentFixGenerator: ObservableObject {
             throw FixApplicationError.invalidLineRange
         }
 
-        var modifiedLines = lines;
+        var modifiedLines = lines
 
         // Handle single-line fixes
         if fix.startLine == fix.endLine {
             modifiedLines[fix.startLine] = fix.fixedCode
         } else {
             // Handle multi-line fixes
-            let lineRange = fix.startLine...min(fix.endLine, lines.count - 1)
+            let lineRange = fix.startLine ... min(fix.endLine, lines.count - 1)
             modifiedLines.removeSubrange(lineRange)
 
             let fixedLines = fix.fixedCode.components(separatedBy: .newlines)
@@ -116,7 +116,7 @@ final class IntelligentFixGenerator: ObservableObject {
         context: CodeContext
     ) -> [IntelligentFix] {
 
-        var fixes: [IntelligentFix] = [];
+        var fixes: [IntelligentFix] = []
         let code = context.originalCode
 
         // Force unwrapping fixes for Swift
@@ -138,14 +138,14 @@ final class IntelligentFixGenerator: ObservableObject {
     }
 
     private func generateForceUnwrappingFixes(code: String, context: CodeContext) -> [IntelligentFix] {
-        var fixes: [IntelligentFix] = [];
+        var fixes: [IntelligentFix] = []
         let lines = code.components(separatedBy: .newlines)
 
         for (index, line) in lines.enumerated() {
             if line.contains("!") && !line.contains("//") {
                 // Find force unwrapping patterns
                 if let range = line.range(of: #"(\w+)!"#, options: .regularExpression) {
-                    let variableName = String(line[range]).dropLast();
+                    let variableName = String(line[range]).dropLast()
                     let safeFix = line.replacingOccurrences(of: "\(variableName)!", with: "\(variableName) ?? defaultValue")
 
                     let fix = IntelligentFix(
@@ -176,7 +176,7 @@ final class IntelligentFixGenerator: ObservableObject {
         context: CodeContext
     ) -> [IntelligentFix] {
 
-        var fixes: [IntelligentFix] = [];
+        var fixes: [IntelligentFix] = []
         let code = context.originalCode
 
         // String concatenation in loops
@@ -189,7 +189,7 @@ final class IntelligentFixGenerator: ObservableObject {
     }
 
     private func generateStringConcatenationFixes(code: String, context: CodeContext) -> [IntelligentFix] {
-        var fixes: [IntelligentFix] = [];
+        var fixes: [IntelligentFix] = []
         let lines = code.components(separatedBy: .newlines)
 
         for (index, line) in lines.enumerated() {
@@ -226,7 +226,7 @@ final class IntelligentFixGenerator: ObservableObject {
         context: CodeContext
     ) -> [IntelligentFix] {
 
-        var fixes: [IntelligentFix] = [];
+        var fixes: [IntelligentFix] = []
         let code = context.originalCode
 
         // Naming convention fixes
@@ -245,7 +245,7 @@ final class IntelligentFixGenerator: ObservableObject {
         context: CodeContext
     ) -> [IntelligentFix] {
 
-        var fixes: [IntelligentFix] = [];
+        var fixes: [IntelligentFix] = []
         let code = context.originalCode
 
         // Null check fixes
@@ -273,7 +273,7 @@ final class IntelligentFixGenerator: ObservableObject {
     }
 
     private func generateStringBuilderFix(forLoop: String, concatenation: String) -> String {
-        return """
+        """
         var components: [String] = [];
         \(forLoop)
             components.append(/* value */)
@@ -284,42 +284,42 @@ final class IntelligentFixGenerator: ObservableObject {
 
     private func generateNamingFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for naming convention fixes
-        return []
+        []
     }
 
     private func generateFormattingFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for formatting fixes
-        return []
+        []
     }
 
     private func generateNullCheckFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for null check fixes
-        return []
+        []
     }
 
     private func generateExceptionHandlingFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for exception handling fixes
-        return []
+        []
     }
 
     private func generateSQLInjectionFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for SQL injection fixes
-        return []
+        []
     }
 
     private func generateCredentialFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for credential fixes
-        return []
+        []
     }
 
     private func generateCollectionOptimizationFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for collection optimization fixes
-        return []
+        []
     }
 
     private func performCompilationCheck(fix: IntelligentFix, context: CodeContext) async -> CompilationCheck {
         // Simulate compilation check
-        return CompilationCheck(
+        CompilationCheck(
             passes: fix.confidence > 0.8,
             errors: [],
             warnings: [],
@@ -386,23 +386,23 @@ enum FixCategory: String, CaseIterable, Codable {
 
     var icon: String {
         switch self {
-        case .security: return "🔒"
-        case .performance: return "⚡"
-        case .style: return "🎨"
-        case .logic: return "🧠"
-        case .naming: return "📝"
-        case .architecture: return "🏗️"
+        case .security: "🔒"
+        case .performance: "⚡"
+        case .style: "🎨"
+        case .logic: "🧠"
+        case .naming: "📝"
+        case .architecture: "🏗️"
         }
     }
 
     var color: Color {
         switch self {
-        case .security: return .red
-        case .performance: return .orange
-        case .style: return .blue
-        case .logic: return .purple
-        case .naming: return .green
-        case .architecture: return .gray
+        case .security: .red
+        case .performance: .orange
+        case .style: .blue
+        case .logic: .purple
+        case .naming: .green
+        case .architecture: .gray
         }
     }
 }
@@ -415,10 +415,10 @@ enum FixImpact: String, CaseIterable, Codable {
 
     var priority: Int {
         switch self {
-        case .low: return 1
-        case .medium: return 2
-        case .high: return 3
-        case .critical: return 4
+        case .low: 1
+        case .medium: 2
+        case .high: 3
+        case .critical: 4
         }
     }
 }
@@ -437,11 +437,11 @@ enum FixApplicationError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidLineRange:
-            return "Fix references invalid line range"
+            "Fix references invalid line range"
         case .compilationFailure:
-            return "Fix would cause compilation errors"
+            "Fix would cause compilation errors"
         case .contextMismatch:
-            return "Fix context doesn't match current code"
+            "Fix context doesn't match current code"
         }
     }
 }

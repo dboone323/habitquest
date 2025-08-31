@@ -12,7 +12,7 @@ import SwiftUI
 extension DataExporter {
 
     /// Export data to PDF format
-    internal func exportToPDF(with settings: ExportSettings) async throws -> URL {
+    func exportToPDF(with settings: ExportSettings) async throws -> URL {
         let pdfData = try await generatePDFData(with: settings)
         return try saveToFile(data: pdfData, filename: "momentum_finance_report.pdf")
     }
@@ -52,7 +52,8 @@ extension DataExporter {
                 if settings.includeTransactions {
                     do {
                         yPosition = try drawTransactionsSummary(
-                            context: context.cgContext, yPosition: yPosition, settings: settings)
+                            context: context.cgContext, yPosition: yPosition, settings: settings
+                        )
                     } catch {
                         pdfError = error
                         return
@@ -62,7 +63,8 @@ extension DataExporter {
                 if settings.includeAccounts {
                     do {
                         yPosition = try drawAccountsSummary(
-                            context: context.cgContext, yPosition: yPosition, settings: settings)
+                            context: context.cgContext, yPosition: yPosition, settings: settings
+                        )
                     } catch {
                         pdfError = error
                         return
@@ -80,7 +82,7 @@ extension DataExporter {
             let pdfData = NSMutableData()
             let pdfInfo = [kCGPDFContextCreator: "Momentum Finance"] as CFDictionary
             guard let dataConsumer = CGDataConsumer(data: pdfData as CFMutableData),
-                let pdfContext = CGContext(consumer: dataConsumer, mediaBox: nil, pdfInfo)
+                  let pdfContext = CGContext(consumer: dataConsumer, mediaBox: nil, pdfInfo)
             else {
                 throw ExportError.pdfGenerationFailed
             }
@@ -111,19 +113,22 @@ extension DataExporter {
                 .foregroundColor: NSColor.gray,
             ]
             dateRange.draw(
-                at: CGPoint(x: 50, y: pageRect.height - 80), withAttributes: dateAttributes)
+                at: CGPoint(x: 50, y: pageRect.height - 80), withAttributes: dateAttributes
+            )
 
             var yPosition = pageRect.height - 120
 
             // Add sections based on settings
             if settings.includeTransactions {
                 yPosition = try drawTransactionsSummary(
-                    context: pdfContext, yPosition: yPosition, settings: settings)
+                    context: pdfContext, yPosition: yPosition, settings: settings
+                )
             }
 
             if settings.includeAccounts {
                 yPosition = try drawAccountsSummary(
-                    context: pdfContext, yPosition: yPosition, settings: settings)
+                    context: pdfContext, yPosition: yPosition, settings: settings
+                )
             }
 
             pdfContext.endPDFPage()

@@ -55,7 +55,7 @@ public struct FinancialInsight: Identifiable, Hashable {
     }
 
     // MARK: - Hashable Conformance
-    
+
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
@@ -103,12 +103,12 @@ public enum InsightPriority: String, CaseIterable, Comparable {
     }
 
     // MARK: - Comparable Implementation
-    
+
     /// Comparable implementation (critical > high > medium > low)
     public static func < (lhs: InsightPriority, rhs: InsightPriority) -> Bool {
         let order: [InsightPriority] = [.low, .medium, .high, .critical]
         guard let lhsIndex = order.firstIndex(of: lhs),
-            let rhsIndex = order.firstIndex(of: rhs)
+              let rhsIndex = order.firstIndex(of: rhs)
         else {
             return false
         }

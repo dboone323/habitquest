@@ -6,9 +6,9 @@
 // Created on July 25, 2025
 //
 
+import Combine
 import Foundation
 import OSLog
-import Combine
 
 // MARK: - Simple Documentation Types
 
@@ -33,7 +33,7 @@ struct DocumentationSection: Codable {
     let title: String
     let content: String
     let type: DocumentationType
-    
+
     init(title: String, content: String, type: DocumentationType) {
         self.id = UUID()
         self.title = title
@@ -52,7 +52,7 @@ struct DocumentationSuggestion: Codable, Identifiable {
     let message: String
     let priority: Priority
     let location: String?
-    
+
     init(type: SuggestionType, message: String, priority: Priority, location: String? = nil) {
         self.id = UUID()
         self.type = type
@@ -73,17 +73,17 @@ struct DocumentationSuggestion: Codable, Identifiable {
 // MARK: - Smart Documentation Generator
 
 final class SmartDocumentationGenerator: ObservableObject {
-    @Published var isGenerating = false;
-    @Published var generationProgress: Double = 0.0;
+    @Published var isGenerating = false
+    @Published var generationProgress: Double = 0.0
     @Published var generatedDocumentation: GeneratedDocumentation?
-    @Published var documentationSuggestions: [DocumentationSuggestion] = [];
+    @Published var documentationSuggestions: [DocumentationSuggestion] = []
 
     init() {
         Logger().info("📚 Smart Documentation Generator initialized")
     }
 
-// / Function description needed
-func generateDocumentation(for content: String, fileName: String) async -> GeneratedDocumentation {
+    // / Function description needed
+    func generateDocumentation(for content: String, fileName: String) async -> GeneratedDocumentation {
         await MainActor.run {
             isGenerating = true
             generationProgress = 0.0
@@ -98,7 +98,7 @@ func generateDocumentation(for content: String, fileName: String) async -> Gener
                 title: "Overview",
                 content: "This file contains Swift code for the CodingReviewer application.",
                 type: .overview
-            )
+            ),
         ]
 
         let documentation = GeneratedDocumentation(

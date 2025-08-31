@@ -40,7 +40,7 @@ class HighScoreManager {
 
     // Get the highest score
     func getHighestScore() -> Int {
-        return getHighScores().first ?? 0
+        getHighScores().first ?? 0
     }
 
     // Check if a score would be a high score without adding it

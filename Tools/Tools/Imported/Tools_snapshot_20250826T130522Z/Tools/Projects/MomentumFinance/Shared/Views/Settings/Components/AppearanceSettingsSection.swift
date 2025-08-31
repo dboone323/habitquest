@@ -11,7 +11,7 @@ import SwiftUI
 /// Appearance and theme settings section
 struct AppearanceSettingsSection: View {
     @Binding var darkModePreference: DarkModePreference
-    
+
     var body: some View {
         Section {
             HStack {

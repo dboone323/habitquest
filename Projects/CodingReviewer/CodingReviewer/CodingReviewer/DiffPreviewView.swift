@@ -6,8 +6,8 @@
 //  Created on July 25, 2025
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 // MARK: - Diff Preview View
 
@@ -15,7 +15,7 @@ struct DiffPreviewView: View {
     let fix: IntelligentFix
     let originalCode: String
     @Environment(\.dismiss) private var dismiss
-    @State private var showingApplyConfirmation = false;
+    @State private var showingApplyConfirmation = false
 
     var body: some View {
         NavigationView {
@@ -30,7 +30,7 @@ struct DiffPreviewView: View {
                     DiffComparisonView(
                         originalCode: getContextualCode(),
                         modifiedCode: getModifiedContextualCode(),
-                        changedLineRange: fix.startLine...fix.endLine
+                        changedLineRange: fix.startLine ... fix.endLine
                     )
                 }
 
@@ -55,7 +55,7 @@ struct DiffPreviewView: View {
         }
         .frame(minWidth: 700, minHeight: 500)
         .alert("Apply Fix", isPresented: $showingApplyConfirmation) {
-            Button("Cancel", role: .cancel) { }
+            Button("Cancel", role: .cancel) {}
             Button("Apply") {
                 // Handle fix application
                 dismiss()
@@ -69,27 +69,27 @@ struct DiffPreviewView: View {
 
     private func getContextualCode() -> String {
         let lines = originalCode.components(separatedBy: .newlines)
-        let contextRange = getContextRange(for: fix.startLine...fix.endLine, in: lines)
+        let contextRange = getContextRange(for: fix.startLine ... fix.endLine, in: lines)
         return lines[contextRange].joined(separator: "\n")
     }
 
     private func getModifiedContextualCode() -> String {
         let lines = originalCode.components(separatedBy: .newlines)
-        var modifiedLines = lines;
+        var modifiedLines = lines
 
         // Apply the fix
         if fix.startLine == fix.endLine {
             modifiedLines[fix.startLine] = fix.fixedCode
         } else {
-            let lineRange = fix.startLine...min(fix.endLine, lines.count - 1)
+            let lineRange = fix.startLine ... min(fix.endLine, lines.count - 1)
             modifiedLines.removeSubrange(lineRange)
 
             let fixedLines = fix.fixedCode.components(separatedBy: .newlines)
             modifiedLines.insert(contentsOf: fixedLines, at: fix.startLine)
         }
 
-        let contextRange = getContextRange(for: fix.startLine...fix.endLine, in: lines)
-        let adjustedRange = contextRange.lowerBound..<min(contextRange.upperBound, modifiedLines.count)
+        let contextRange = getContextRange(for: fix.startLine ... fix.endLine, in: lines)
+        let adjustedRange = contextRange.lowerBound ..< min(contextRange.upperBound, modifiedLines.count)
 
         return modifiedLines[adjustedRange].joined(separator: "\n")
     }
@@ -98,7 +98,7 @@ struct DiffPreviewView: View {
         let contextLines = 3
         let start = max(0, changeRange.lowerBound - contextLines)
         let end = min(lines.count, changeRange.upperBound + contextLines + 1)
-        return start..<end
+        return start ..< end
     }
 }
 
@@ -293,33 +293,33 @@ enum DiffHighlightType {
     var backgroundColor: Color {
         switch self {
         case .addition:
-            return Color.green.opacity(0.1)
+            Color.green.opacity(0.1)
         case .removal:
-            return Color.red.opacity(0.1)
+            Color.red.opacity(0.1)
         case .context:
-            return Color.clear
+            Color.clear
         }
     }
 
     var borderColor: Color {
         switch self {
         case .addition:
-            return Color.green
+            Color.green
         case .removal:
-            return Color.red
+            Color.red
         case .context:
-            return Color.clear
+            Color.clear
         }
     }
 
     var textColor: Color {
         switch self {
         case .addition:
-            return Color.green.opacity(0.8)
+            Color.green.opacity(0.8)
         case .removal:
-            return Color.red.opacity(0.8)
+            Color.red.opacity(0.8)
         case .context:
-            return Color.primary
+            Color.primary
         }
     }
 }
@@ -333,7 +333,7 @@ struct FixHistoryEntry: Identifiable, Codable {
     let originalCode: String
     let modifiedCode: String
     let fileName: String
-    
+
     init(fixId: UUID, appliedAt: Date, originalCode: String, modifiedCode: String, fileName: String) {
         self.id = UUID()
         self.fixId = fixId
@@ -353,7 +353,7 @@ struct FixHistoryEntry: Identifiable, Codable {
 
 @MainActor
 class FixHistoryManager: ObservableObject {
-    @Published var history: [FixHistoryEntry] = [];
+    @Published var history: [FixHistoryEntry] = []
 
     func recordAppliedFix(_ fix: IntelligentFix, originalCode: String, modifiedCode: String, fileName: String) {
         let entry = FixHistoryEntry(
@@ -383,7 +383,8 @@ class FixHistoryManager: ObservableObject {
 
     private func loadHistory() {
         if let data = UserDefaults.standard.data(forKey: "FixHistory"),
-           let decoded = try? JSONDecoder().decode([FixHistoryEntry].self, from: data) {
+           let decoded = try? JSONDecoder().decode([FixHistoryEntry].self, from: data)
+        {
             history = decoded
         }
     }

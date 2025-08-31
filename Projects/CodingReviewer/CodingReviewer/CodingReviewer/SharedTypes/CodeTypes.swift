@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 
 // MARK: - Programming Language Types
+
 // Note: CodeLanguage enum is now defined in Services/LanguageDetectionService.swift
 // This allows the service to manage language-specific functionality independently
 
@@ -23,19 +24,19 @@ enum Severity: String, CaseIterable, Codable {
 
     var color: Color {
         switch self {
-        case .info: return .blue
-        case .warning: return .orange
-        case .error: return .red
-        case .critical: return .purple
+        case .info: .blue
+        case .warning: .orange
+        case .error: .red
+        case .critical: .purple
         }
     }
 
     var systemImage: String {
         switch self {
-        case .info: return "info.circle"
-        case .warning: return "exclamationmark.triangle"
-        case .error: return "xmark.circle"
-        case .critical: return "exclamationmark.octagon"
+        case .info: "info.circle"
+        case .warning: "exclamationmark.triangle"
+        case .error: "xmark.circle"
+        case .critical: "exclamationmark.octagon"
         }
     }
 }
@@ -49,21 +50,21 @@ enum QualityLevel: String, CaseIterable, Codable {
 
     var color: Color {
         switch self {
-        case .excellent: return .green
-        case .good: return .blue
-        case .fair: return .yellow
-        case .poor: return .orange
-        case .critical: return .red
+        case .excellent: .green
+        case .good: .blue
+        case .fair: .yellow
+        case .poor: .orange
+        case .critical: .red
         }
     }
 
     var score: Int {
         switch self {
-        case .excellent: return 90
-        case .good: return 75
-        case .fair: return 60
-        case .poor: return 40
-        case .critical: return 20
+        case .excellent: 90
+        case .good: 75
+        case .fair: 60
+        case .poor: 40
+        case .critical: 20
         }
     }
 }
@@ -77,21 +78,21 @@ enum EffortLevel: String, CaseIterable, Codable {
 
     var color: Color {
         switch self {
-        case .minimal: return .green
-        case .low: return .blue
-        case .medium: return .yellow
-        case .high: return .orange
-        case .extensive: return .red
+        case .minimal: .green
+        case .low: .blue
+        case .medium: .yellow
+        case .high: .orange
+        case .extensive: .red
         }
     }
 
     var estimatedHours: String {
         switch self {
-        case .minimal: return "< 1 hour"
-        case .low: return "1-4 hours"
-        case .medium: return "1-2 days"
-        case .high: return "3-5 days"
-        case .extensive: return "1+ weeks"
+        case .minimal: "< 1 hour"
+        case .low: "1-4 hours"
+        case .medium: "1-2 days"
+        case .high: "3-5 days"
+        case .extensive: "1+ weeks"
         }
     }
 }
@@ -105,21 +106,21 @@ enum ImpactLevel: String, CaseIterable, Codable {
 
     var color: Color {
         switch self {
-        case .negligible: return .gray
-        case .minor: return .blue
-        case .moderate: return .yellow
-        case .major: return .orange
-        case .critical: return .red
+        case .negligible: .gray
+        case .minor: .blue
+        case .moderate: .yellow
+        case .major: .orange
+        case .critical: .red
         }
     }
 
     var priority: Int {
         switch self {
-        case .negligible: return 1
-        case .minor: return 2
-        case .moderate: return 3
-        case .major: return 4
-        case .critical: return 5
+        case .negligible: 1
+        case .minor: 2
+        case .moderate: 3
+        case .major: 4
+        case .critical: 5
         }
     }
 }

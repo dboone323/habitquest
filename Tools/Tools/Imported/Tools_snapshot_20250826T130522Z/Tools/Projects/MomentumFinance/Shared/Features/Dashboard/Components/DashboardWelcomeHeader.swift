@@ -50,9 +50,9 @@ struct DashboardWelcomeHeader: View {
     private var timeOfDayGreeting: String {
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
-        case 0..<12:
+        case 0 ..< 12:
             return "Morning"
-        case 12..<17:
+        case 12 ..< 17:
             return "Afternoon"
         default:
             return "Evening"

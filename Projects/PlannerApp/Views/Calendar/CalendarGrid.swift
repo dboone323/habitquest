@@ -160,23 +160,23 @@ struct CalendarDayView: View {
 
     private var dayTextColor: Color {
         if isSelected {
-            return themeManager.currentTheme.primaryBackgroundColor
+            themeManager.currentTheme.primaryBackgroundColor
         } else if isToday {
-            return themeManager.currentTheme.primaryAccentColor
+            themeManager.currentTheme.primaryAccentColor
         } else if isCurrentMonth {
-            return themeManager.currentTheme.primaryTextColor
+            themeManager.currentTheme.primaryTextColor
         } else {
-            return themeManager.currentTheme.secondaryTextColor.opacity(0.5)
+            themeManager.currentTheme.secondaryTextColor.opacity(0.5)
         }
     }
 
     private var dayBackgroundColor: Color {
         if isSelected {
-            return themeManager.currentTheme.primaryAccentColor
+            themeManager.currentTheme.primaryAccentColor
         } else if isToday {
-            return themeManager.currentTheme.primaryAccentColor.opacity(0.1)
+            themeManager.currentTheme.primaryAccentColor.opacity(0.1)
         } else {
-            return Color.clear
+            Color.clear
         }
     }
 }

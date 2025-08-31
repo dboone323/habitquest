@@ -1,6 +1,7 @@
 import SwiftUI
 
 // MARK: - Search Results Component
+
 struct SearchResultsComponent: View {
     let results: [SearchResult]
     let isLoading: Bool
@@ -24,6 +25,7 @@ struct SearchResultsComponent: View {
 }
 
 // MARK: - Search Loading View
+
 private struct SearchLoadingView: View {
     var body: some View {
         ProgressView("Searching...")
@@ -32,6 +34,7 @@ private struct SearchLoadingView: View {
 }
 
 // MARK: - Search Result Row Component
+
 struct SearchResultRowComponent: View {
     let result: SearchResult
     let onTapped: (SearchResult) -> Void

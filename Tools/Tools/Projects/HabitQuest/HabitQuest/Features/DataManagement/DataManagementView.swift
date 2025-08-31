@@ -75,25 +75,27 @@ struct DataManagementView: View {
                 viewModel.setModelContext(modelContext)
             }
             .alert("Export Successful", isPresented: $viewModel.showingExportSuccess) {
-                Button("OK") { }
+                Button("OK") {}
             } message: {
                 Text("Your data has been exported successfully. Check your Files app for the backup file.")
             }
             .alert("Import Successful", isPresented: $viewModel.showingImportSuccess) {
-                Button("OK") { }
+                Button("OK") {}
             } message: {
                 Text("Your data has been imported successfully. The app will refresh to show your restored progress.")
             }
             .alert("Clear All Data", isPresented: $viewModel.showingClearDataAlert) {
-                Button("Cancel", role: .cancel) { }
+                Button("Cancel", role: .cancel) {}
                 Button("Clear All", role: .destructive) {
                     viewModel.clearAllData()
                 }
             } message: {
-                Text("This will permanently delete all your habits, progress, and achievements. This action cannot be undone.")
+                Text(
+                    "This will permanently delete all your habits, progress, and achievements. This action cannot be undone."
+                )
             }
             .alert("Error", isPresented: $viewModel.showingError) {
-                Button("OK") { }
+                Button("OK") {}
             } message: {
                 Text(viewModel.errorMessage)
             }
@@ -155,7 +157,7 @@ struct HabitQuestBackupDocument: FileDocument {
     /// <#Description#>
     /// - Returns: <#description#>
     nonisolated func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        return FileWrapper(regularFileWithContents: data)
+        FileWrapper(regularFileWithContents: data)
     }
 }
 

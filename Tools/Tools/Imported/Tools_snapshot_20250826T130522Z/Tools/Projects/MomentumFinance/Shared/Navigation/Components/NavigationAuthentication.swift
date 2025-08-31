@@ -44,7 +44,7 @@ extension NavigationCoordinator {
         guard requiresAuthentication else { return true }
 
         if let lastAuth = lastAuthenticationTime,
-            Date().timeIntervalSince(lastAuth) < authenticationTimeoutInterval
+           Date().timeIntervalSince(lastAuth) < authenticationTimeoutInterval
         {
             return true
         }

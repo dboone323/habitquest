@@ -23,13 +23,13 @@ enum NotificationUrgency {
     /// Title text for the notification based on urgency level
     var title: String {
         switch self {
-        case .low: 
+        case .low:
             "Budget Update"
-        case .medium: 
+        case .medium:
             "Budget Warning"
-        case .high: 
+        case .high:
             "Budget Alert"
-        case .critical: 
+        case .critical:
             "Budget Exceeded!"
         }
     }
@@ -37,11 +37,11 @@ enum NotificationUrgency {
     /// Sound for the notification based on urgency level
     var sound: UNNotificationSound {
         switch self {
-        case .low, .medium: 
+        case .low, .medium:
             .default
-        case .high: 
+        case .high:
             UNNotificationSound(named: UNNotificationSoundName("alert.caf"))
-        case .critical: 
+        case .critical:
             .defaultCritical
         }
     }
@@ -56,7 +56,7 @@ public struct ScheduledNotification: Identifiable {
     public let body: String
     public let type: String
     public let scheduledDate: Date?
-    
+
     public init(id: String, title: String, body: String, type: String, scheduledDate: Date?) {
         self.id = id
         self.title = title

@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import SwiftUI
 import OSLog
+import SwiftUI
 import UserNotifications
 
 // MARK: - Navigation Types
@@ -20,14 +20,14 @@ enum TabSection: CaseIterable {
     case budgets
     case subscriptions
     case reports
-    
+
     var title: String {
         switch self {
-        case .dashboard: return "Dashboard"
-        case .transactions: return "Transactions"
-        case .budgets: return "Budgets"
-        case .subscriptions: return "Subscriptions"
-        case .reports: return "Reports"
+        case .dashboard: "Dashboard"
+        case .transactions: "Transactions"
+        case .budgets: "Budgets"
+        case .subscriptions: "Subscriptions"
+        case .reports: "Reports"
         }
     }
 }
@@ -38,7 +38,7 @@ struct DeepLink: Identifiable, Hashable {
     let url: URL
     let targetTab: TabSection
     let parameters: [String: String]
-    
+
     init(url: URL, targetTab: TabSection, parameters: [String: String] = [:]) {
         self.url = url
         self.targetTab = targetTab
@@ -75,7 +75,7 @@ struct ColumnMapping {
     let sourceColumn: String
     let targetField: String
     let dataType: String
-    
+
     init(sourceColumn: String, targetField: String, dataType: String) {
         self.sourceColumn = sourceColumn
         self.targetField = targetField
@@ -85,19 +85,19 @@ struct ColumnMapping {
 
 class EntityManager {
     init() {}
-    
+
     func createEntity<T>(from data: [String: Any], type: T.Type) -> T? {
         // Implementation would go here
-        return nil
+        nil
     }
 }
 
 // MARK: - Animation Types
 
-struct AnimatedCardComponent {
+enum AnimatedCardComponent {
     struct AnimatedCard: View {
         let content: AnyView
-        
+
         var body: some View {
             content
                 .animation(.easeInOut, value: UUID())
@@ -105,11 +105,11 @@ struct AnimatedCardComponent {
     }
 }
 
-struct AnimatedButtonComponent {
+enum AnimatedButtonComponent {
     struct AnimatedButton: View {
         let title: String
         let action: () -> Void
-        
+
         var body: some View {
             Button(title, action: action)
                 .animation(.easeInOut, value: UUID())
@@ -117,10 +117,10 @@ struct AnimatedButtonComponent {
     }
 }
 
-struct AnimatedTransactionComponent {
+enum AnimatedTransactionComponent {
     struct AnimatedTransactionItem: View {
         let title: String
-        
+
         var body: some View {
             Text(title)
                 .animation(.easeInOut, value: UUID())
@@ -128,19 +128,19 @@ struct AnimatedTransactionComponent {
     }
 }
 
-struct AnimatedProgressComponents {
+enum AnimatedProgressComponents {
     struct AnimatedBudgetProgress: View {
         let progress: Double
-        
+
         var body: some View {
             ProgressView(value: progress)
                 .animation(.easeInOut, value: progress)
         }
     }
-    
+
     struct AnimatedCounter: View {
         let count: Int
-        
+
         var body: some View {
             Text("\(count)")
                 .animation(.easeInOut, value: count)
@@ -148,10 +148,10 @@ struct AnimatedProgressComponents {
     }
 }
 
-struct FloatingActionButtonComponent {
+enum FloatingActionButtonComponent {
     struct FloatingActionButton: View {
         let action: () -> Void
-        
+
         var body: some View {
             Button(action: action) {
                 Image(systemName: "plus")
@@ -170,16 +170,16 @@ struct FloatingActionButtonComponent {
 
 class FinancialMLModels {
     init() {}
-    
+
     func analyzeBudgetTrends() -> [String: Any] {
-        return [:]
+        [:]
     }
 }
 
 class TransactionPatternAnalyzer {
     init() {}
-    
+
     func analyzePatterns() -> [String: Any] {
-        return [:]
+        [:]
     }
 }

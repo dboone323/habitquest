@@ -11,17 +11,17 @@ import Foundation
 
 /// Machine learning models for financial analysis and prediction
 public struct FinancialMLModels {
-    
+
     private let transactionCategorizationModel: TransactionCategorizationModel
     private let anomalyDetectionModel: AnomalyDetectionModel
     private let forecastingModel: ForecastingModel
-    
+
     public init() {
         transactionCategorizationModel = TransactionCategorizationModel()
         anomalyDetectionModel = AnomalyDetectionModel()
         forecastingModel = ForecastingModel()
     }
-    
+
     /// Suggests a category for a transaction based on historical patterns
     /// - Parameter transaction: Transaction to categorize
     /// - Returns: Suggested expense category or nil if no prediction available
@@ -29,11 +29,11 @@ public struct FinancialMLModels {
         // Extract features from the transaction
         let patternAnalyzer = TransactionPatternAnalyzer()
         let features = patternAnalyzer.extractTransactionFeatures(transaction)
-        
+
         // Predict the category
         return transactionCategorizationModel.predictCategory(features: features)
     }
-    
+
     /// Access to the forecasting model for time series predictions
     var forecasting: ForecastingModel {
         forecastingModel
@@ -46,7 +46,7 @@ public struct FinancialMLModels {
 class TransactionCategorizationModel {
     // In a real implementation, this would use CoreML or a custom model
     // For this prototype, we'll use a simplified approach
-    
+
     /// Predicts the category for a transaction based on its features
     /// - Parameter features: Feature dictionary extracted from transaction
     /// - Returns: Predicted expense category or nil
@@ -67,9 +67,9 @@ class AnomalyDetectionModel {
 class ForecastingModel {
     // This would implement time series forecasting models
     // For this prototype, we'll use the SimpleRegressionModel for demonstrations
-    
+
     private let regressionModel = SimpleRegressionModel()
-    
+
     /// Access to the underlying regression model for simple forecasting
     var regression: SimpleRegressionModel {
         regressionModel
@@ -78,7 +78,7 @@ class ForecastingModel {
 
 /// Simple linear regression model for basic forecasting functionality
 class SimpleRegressionModel {
-    
+
     /// Performs linear regression forecasting
     /// - Parameters:
     ///   - xValues: Independent variable values (typically time-based indices)
@@ -103,7 +103,7 @@ class SimpleRegressionModel {
         var forecasts: [Double] = []
         let lastX = xValues.last ?? 0
 
-        for step in 1...steps {
+        for step in 1 ... steps {
             let forecastX = lastX + Double(step)
             let forecastY = slope * forecastX + intercept
             forecasts.append(forecastY)

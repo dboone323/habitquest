@@ -1,7 +1,7 @@
+import Combine
 import Foundation
 import OSLog
 import SwiftUI
-import Combine
 
 // MARK: - Analysis Error Types
 
@@ -10,17 +10,17 @@ enum AnalyzerError: LocalizedError {
     case invalidPath(String)
     case analysisTimeout
     case networkError(Error)
-    
+
     var errorDescription: String? {
         switch self {
-        case .fileNotFound(let path):
-            return "File not found: \(path)"
-        case .invalidPath(let path):
-            return "Invalid path: \(path)"
+        case let .fileNotFound(path):
+            "File not found: \(path)"
+        case let .invalidPath(path):
+            "Invalid path: \(path)"
         case .analysisTimeout:
-            return "Analysis timed out"
-        case .networkError(let error):
-            return "Network error: \(error.localizedDescription)"
+            "Analysis timed out"
+        case let .networkError(error):
+            "Network error: \(error.localizedDescription)"
         }
     }
 }
@@ -35,7 +35,7 @@ struct CodeIssue {
     let filePath: String
     let suggestedFix: String?
     let category: Category
-    
+
     enum IssueType {
         case concurrencyIssue
         case missingMainActor
@@ -50,11 +50,11 @@ struct CodeIssue {
         case missingAccessControl
         case longFunction
     }
-    
+
     enum Severity {
         case error, warning, info
     }
-    
+
     enum Category: String, CaseIterable {
         case concurrency = "Concurrency"
         case codeQuality = "Code Quality"
@@ -74,17 +74,17 @@ struct Recommendation {
     let priority: Priority
     let category: String
     let actionable: Bool
-    
+
     enum Priority: Int, CaseIterable {
         case high = 3
         case medium = 2
         case low = 1
-        
+
         var rawValue: Int {
             switch self {
-            case .high: return 3
-            case .medium: return 2
-            case .low: return 1
+            case .high: 3
+            case .medium: 2
+            case .low: 1
             }
         }
     }
@@ -96,46 +96,46 @@ class IntelligentCodeAnalyzer: ObservableObject {
     @Published var isAnalyzing = false
     @Published var analysisProgress: Double = 0.0
     @Published var lastAnalysisResult: ProjectAnalysisResult?
-    
+
     private let logger = OSLog(subsystem: "CodingReviewer", category: "IntelligentCodeAnalyzer")
-    
+
     func analyzeProject(at projectPath: String, completion: @escaping (ProjectAnalysisResult) -> Void) {
         Task {
             isAnalyzing = true
             analysisProgress = 0.0
-            
+
             let startTime = Date()
             let projectStructure = ProjectStructure(name: URL(fileURLWithPath: projectPath).lastPathComponent, rootPath: projectPath, files: [])
-            
+
             let result = ProjectAnalysisResult(
                 project: projectStructure,
                 fileAnalyses: [],
                 insights: [],
                 duration: Date().timeIntervalSince(startTime)
             )
-            
+
             lastAnalysisResult = result
-            
+
             os_log("Project analysis completed with %d total files", log: logger, type: .info, result.project.files.count)
-            
+
             DispatchQueue.main.async {
                 completion(result)
             }
-            
+
             isAnalyzing = false
         }
     }
-    
+
     func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
         guard FileManager.default.fileExists(atPath: filePath) else {
             throw AnalyzerError.fileNotFound(filePath)
         }
-        
+
         let content = try String(contentsOfFile: filePath, encoding: .utf8)
         let lines = content.components(separatedBy: .newlines)
-        
+
         var issues: [CodeIssue] = []
-        
+
         // Run various analysis passes
         issues.append(contentsOf: analyzeSwiftConcurrency(lines: lines, filePath: filePath))
         issues.append(contentsOf: analyzeCodeQuality(lines: lines, filePath: filePath))
@@ -143,19 +143,20 @@ class IntelligentCodeAnalyzer: ObservableObject {
         issues.append(contentsOf: analyzeSecurity(lines: lines, filePath: filePath))
         issues.append(contentsOf: analyzeSwiftBestPractices(lines: lines, filePath: filePath))
         issues.append(contentsOf: analyzeArchitecturalPatterns(lines: lines, filePath: filePath))
-        
+
         return issues
     }
-    
+
     private func analyzeSwiftConcurrency(lines: [String], filePath: String) -> [CodeIssue] {
         var issues: [CodeIssue] = []
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
-            
+
             // Check for main actor isolation issues
-            if line.contains(".shared.") && !line.contains("await") && 
-               (line.contains("AppLogger") || line.contains("PerformanceTracker")) {
+            if line.contains(".shared.") && !line.contains("await") &&
+                (line.contains("AppLogger") || line.contains("PerformanceTracker"))
+            {
                 issues.append(CodeIssue(
                     type: .concurrencyIssue,
                     severity: .warning,
@@ -166,9 +167,9 @@ class IntelligentCodeAnalyzer: ObservableObject {
                     category: .concurrency
                 ))
             }
-            
+
             // Check for missing @MainActor annotations
-            if line.contains("@Published") && !lines[max(0, index-1)].contains("@MainActor") {
+            if line.contains("@Published") && !lines[max(0, index - 1)].contains("@MainActor") {
                 issues.append(CodeIssue(
                     type: .missingMainActor,
                     severity: .warning,
@@ -180,25 +181,25 @@ class IntelligentCodeAnalyzer: ObservableObject {
                 ))
             }
         }
-        
+
         return issues
     }
-    
+
     private func analyzeCodeQuality(lines: [String], filePath: String) -> [CodeIssue] {
         var issues: [CodeIssue] = []
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
-            
+
             // Check for unused variables
             let regex = try? NSRegularExpression(pattern: "\\b(let|var)\\s+(\\w+)\\s*=")
-            if let regex = regex {
-                let range = NSRange(line.startIndex..<line.endIndex, in: line)
+            if let regex {
+                let range = NSRange(line.startIndex ..< line.endIndex, in: line)
                 if let match = regex.firstMatch(in: line, options: [], range: range) {
                     let variableName = String(line[Range(match.range(at: 2), in: line)!])
-                    
+
                     // Simple heuristic: if variable isn't used elsewhere
-                    let usageCount = lines.filter { $0.contains(variableName) }.count
+                    let usageCount = lines.count(where: { $0.contains(variableName) })
                     if usageCount == 1 { // Only the declaration line
                         issues.append(CodeIssue(
                             type: .unusedVariable,
@@ -212,7 +213,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
                     }
                 }
             }
-            
+
             // Check for var that should be let
             if line.contains("var ") && !line.contains(" = ") {
                 issues.append(CodeIssue(
@@ -225,7 +226,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
                     category: .codeQuality
                 ))
             }
-            
+
             // Check for long lines
             if line.count > 120 {
                 issues.append(CodeIssue(
@@ -239,16 +240,16 @@ class IntelligentCodeAnalyzer: ObservableObject {
                 ))
             }
         }
-        
+
         return issues
     }
-    
+
     private func analyzePerformance(lines: [String], filePath: String) -> [CodeIssue] {
         var issues: [CodeIssue] = []
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
-            
+
             // Check for inefficient string concatenation
             if line.contains("+") && line.contains("\"") && !line.contains("\\(") {
                 issues.append(CodeIssue(
@@ -261,7 +262,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
                     category: .performance
                 ))
             }
-            
+
             // Check for force unwrapping
             if line.contains("!") && !line.contains("!=") && !line.contains("//") {
                 let forceUnwrapCount = line.components(separatedBy: "!").count - 1
@@ -278,16 +279,16 @@ class IntelligentCodeAnalyzer: ObservableObject {
                 }
             }
         }
-        
+
         return issues
     }
-    
+
     private func analyzeSecurity(lines: [String], filePath: String) -> [CodeIssue] {
         var issues: [CodeIssue] = []
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
-            
+
             // Check for potential logging of sensitive data
             if line.contains("log") && (line.contains("password") || line.contains("token") || line.contains("key")) {
                 issues.append(CodeIssue(
@@ -300,7 +301,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
                     category: .security
                 ))
             }
-            
+
             // Check for hardcoded secrets
             let secretPatterns = ["password", "token", "apikey", "secret"]
             for pattern in secretPatterns {
@@ -317,20 +318,20 @@ class IntelligentCodeAnalyzer: ObservableObject {
                 }
             }
         }
-        
+
         return issues
     }
-    
+
     private func analyzeSwiftBestPractices(lines: [String], filePath: String) -> [CodeIssue] {
         var issues: [CodeIssue] = []
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
-            
+
             // Check for magic numbers
             let numberRegex = try? NSRegularExpression(pattern: "\\b\\d+\\b")
             if let regex = numberRegex {
-                let range = NSRange(line.startIndex..<line.endIndex, in: line)
+                let range = NSRange(line.startIndex ..< line.endIndex, in: line)
                 let matches = regex.matches(in: line, options: [], range: range)
                 for match in matches {
                     let numberString = String(line[Range(match.range, in: line)!])
@@ -347,10 +348,11 @@ class IntelligentCodeAnalyzer: ObservableObject {
                     }
                 }
             }
-            
+
             // Check for missing access control
-            if (line.contains("class ") || line.contains("struct ") || line.contains("func ")) && 
-               !line.contains("private") && !line.contains("public") && !line.contains("internal") {
+            if (line.contains("class ") || line.contains("struct ") || line.contains("func ")) &&
+                !line.contains("private") && !line.contains("public") && !line.contains("internal")
+            {
                 issues.append(CodeIssue(
                     type: .missingAccessControl,
                     severity: .info,
@@ -362,21 +364,21 @@ class IntelligentCodeAnalyzer: ObservableObject {
                 ))
             }
         }
-        
+
         return issues
     }
-    
+
     private func analyzeArchitecturalPatterns(lines: [String], filePath: String) -> [CodeIssue] {
         var issues: [CodeIssue] = []
-        
+
         // Check for long functions
         var currentFunctionStart: Int?
         var braceCount = 0
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
             let trimmedLine = line.trimmingCharacters(in: .whitespaces)
-            
+
             // Detect function start
             if trimmedLine.contains("func ") && trimmedLine.contains("{") {
                 currentFunctionStart = lineNumber
@@ -385,7 +387,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
                 // Count braces to find function end
                 braceCount += trimmedLine.components(separatedBy: "{").count - 1
                 braceCount -= trimmedLine.components(separatedBy: "}").count - 1
-                
+
                 if braceCount == 0 {
                     let functionLength = lineNumber - functionStart
                     if functionLength > 50 {
@@ -403,20 +405,20 @@ class IntelligentCodeAnalyzer: ObservableObject {
                 }
             }
         }
-        
+
         return issues
     }
-    
+
     private func generateRecommendations(from issues: [CodeIssue]) -> [Recommendation] {
         var recommendations: [Recommendation] = []
-        
+
         // Group issues by category
         let groupedIssues = Dictionary(grouping: issues, by: { $0.category })
-        
+
         for (category, categoryIssues) in groupedIssues {
             let count = categoryIssues.count
-            let highPriorityCount = categoryIssues.filter { $0.severity == .error }.count
-            
+            let highPriorityCount = categoryIssues.count(where: { $0.severity == .error })
+
             recommendations.append(Recommendation(
                 title: "\(category.rawValue) Issues",
                 description: "\(count) \(category.rawValue.lowercased()) issues found (\(highPriorityCount) high-priority)",
@@ -425,7 +427,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
                 actionable: true
             ))
         }
-        
+
         return recommendations.sorted { $0.priority.rawValue > $1.priority.rawValue }
     }
 }

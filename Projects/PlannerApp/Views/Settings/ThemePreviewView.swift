@@ -10,19 +10,19 @@ import SwiftUI
 struct ThemePreviewView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @Environment(\.presentationMode) var presentationMode
-    @State private var selectedTheme: Theme = Theme.defaultTheme
+    @State private var selectedTheme: Theme = .defaultTheme
 
     let sampleTasks = [
         "Complete project proposal",
         "Review quarterly reports",
         "Schedule team meeting",
-        "Update documentation"
+        "Update documentation",
     ]
 
     let sampleGoals = [
         "Read 12 books this year",
         "Exercise 3x per week",
-        "Learn Swift programming"
+        "Learn Swift programming",
     ]
 
     var body: some View {
@@ -39,8 +39,8 @@ struct ThemePreviewView: View {
                                 selectedTheme = theme
                                 // Apply haptic feedback if enabled
                                 #if os(iOS)
-                                let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                                impactFeedback.impactOccurred()
+                                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                                    impactFeedback.impactOccurred()
                                 #endif
                             }
                         }
@@ -130,23 +130,23 @@ struct ThemePreviewView: View {
             .background(selectedTheme.primaryBackgroundColor.ignoresSafeArea())
             .navigationTitle("Theme Preview")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        presentationMode.wrappedValue.dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            presentationMode.wrappedValue.dismiss()
+                        }
                     }
-                }
 
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Apply") {
-                        themeManager.setTheme(selectedTheme)
-                        presentationMode.wrappedValue.dismiss()
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Apply") {
+                            themeManager.setTheme(selectedTheme)
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                        .fontWeight(.semibold)
                     }
-                    .fontWeight(.semibold)
                 }
-            }
         }
         .onAppear {
             selectedTheme = themeManager.currentTheme

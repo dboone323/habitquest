@@ -1,16 +1,16 @@
-import Foundation
 import CloudKit
+import Foundation
 
 enum GoalPriority: String, CaseIterable, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
+    case low
+    case medium
+    case high
 
     var displayName: String {
         switch self {
-        case .low: return "Low"
-        case .medium: return "Medium"
-        case .high: return "High"
+        case .low: "Low"
+        case .medium: "Medium"
+        case .high: "High"
         }
     }
 }
@@ -21,10 +21,10 @@ struct Goal: Identifiable, Codable {
     var description: String
     var targetDate: Date
     var createdAt: Date
-    var modifiedAt: Date?  // Added for CloudKit sync/merge
-    var isCompleted: Bool  // Adding completion status for goals
-    var priority: GoalPriority  // Goal priority
-    var progress: Double  // Goal progress (0.0 to 1.0)
+    var modifiedAt: Date? // Added for CloudKit sync/merge
+    var isCompleted: Bool // Adding completion status for goals
+    var priority: GoalPriority // Goal priority
+    var progress: Double // Goal progress (0.0 to 1.0)
 
     init(id: UUID = UUID(), title: String, description: String, targetDate: Date, createdAt: Date = Date(), modifiedAt: Date? = Date(), isCompleted: Bool = false, priority: GoalPriority = .medium, progress: Double = 0.0) {
         self.id = id

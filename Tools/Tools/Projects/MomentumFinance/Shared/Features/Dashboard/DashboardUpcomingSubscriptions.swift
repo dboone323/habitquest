@@ -34,7 +34,8 @@ extension Features.Dashboard {
                                     RoundedRectangle(cornerRadius: 8)
                                         .fill(
                                             colorTheme.categoryColors[
-                                                index % colorTheme.categoryColors.count]
+                                                index % colorTheme.categoryColors.count
+                                            ]
                                         )
                                         .frame(width: 36, height: 36)
 

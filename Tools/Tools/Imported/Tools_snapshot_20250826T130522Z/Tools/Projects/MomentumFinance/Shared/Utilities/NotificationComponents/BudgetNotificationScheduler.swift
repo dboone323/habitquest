@@ -12,14 +12,14 @@ import UserNotifications
 
 /// Schedules and manages budget-related notifications
 public struct BudgetNotificationScheduler {
-    
+
     private let center = UNUserNotificationCenter.current()
     private let logger: OSLog
-    
+
     init(logger: OSLog) {
         self.logger = logger
     }
-    
+
     /// Schedules budget warning notifications for multiple budgets
     /// - Parameter budgets: Array of budgets to check for warnings
     func scheduleWarningNotifications(for budgets: [Budget]) {
@@ -54,7 +54,7 @@ public struct BudgetNotificationScheduler {
             }
         }
     }
-    
+
     /// Schedules a specific budget warning notification
     /// - Parameters:
     ///   - budget: The budget to warn about
@@ -96,7 +96,7 @@ public struct BudgetNotificationScheduler {
             }
         }
     }
-    
+
     /// Creates a contextual warning message based on budget status
     /// - Parameters:
     ///   - budget: The budget to create a message for

@@ -14,7 +14,7 @@ jobs:
       - name: Set up Python (for any test runners)
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Run basic repository checks
         run: |

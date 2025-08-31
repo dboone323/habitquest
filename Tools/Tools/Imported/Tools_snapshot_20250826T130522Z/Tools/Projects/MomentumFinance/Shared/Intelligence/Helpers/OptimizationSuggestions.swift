@@ -8,7 +8,7 @@ func fi_suggestIdleCashInsights(transactions: [FinancialTransaction], accounts: 
 
     let checkingAccounts = accounts.filter { $0.accountType == .checking }
     for account in checkingAccounts {
-        guard account.balance > 5_000 else { continue }
+        guard account.balance > 5000 else { continue }
 
         let accountTransactions = transactions.filter {
             $0.account?.id == account.id && $0.amount < 0
@@ -20,7 +20,7 @@ func fi_suggestIdleCashInsights(transactions: [FinancialTransaction], accounts: 
         }
 
         let monthlyExpenses = monthlyTransactions.map { $0.value.reduce(0) { $0 + abs($1.amount) } }
-        let averageMonthlyExpense = monthlyExpenses.isEmpty 
+        let averageMonthlyExpense = monthlyExpenses.isEmpty
             ? 0 : monthlyExpenses.reduce(0, +) / Double(monthlyExpenses.count)
 
         let recommendedBuffer = averageMonthlyExpense * 2

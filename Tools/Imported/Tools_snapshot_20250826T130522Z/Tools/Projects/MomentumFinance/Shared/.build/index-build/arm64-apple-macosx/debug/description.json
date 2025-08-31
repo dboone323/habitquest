@@ -1,360 +1,350 @@
 {
-  "builtTestProducts" : [
-
-  ],
-  "copyCommands" : {
-
+  "builtTestProducts": [],
+  "copyCommands": {},
+  "explicitTargetDependencyImportCheckingMode": {
+    "none": {}
   },
-  "explicitTargetDependencyImportCheckingMode" : {
-    "none" : {
-
-    }
-  },
-  "generatedSourceTargetSet" : [
-
-  ],
-  "pluginDescriptions" : [
-
-  ],
-  "swiftCommands" : {
-    "C.SharedCore-arm64-apple-macosx26.0-debug.module" : {
-      "executable" : "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
-      "fileList" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/sources",
-      "importPath" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/Modules",
-      "inputs" : [
+  "generatedSourceTargetSet": [],
+  "pluginDescriptions": [],
+  "swiftCommands": {
+    "C.SharedCore-arm64-apple-macosx26.0-debug.module": {
+      "executable": "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/sources",
+      "importPath": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs": [
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialInsightModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialInsightModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialMLModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialMLModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/TransactionPatternAnalyzer.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/TransactionPatternAnalyzer.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Anomaly.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Anomaly.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Budgets.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Budgets.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Forecasting.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Forecasting.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Helpers.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Helpers.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Helpers.swift.backup"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Helpers.swift.backup"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Optimizations.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Optimizations.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Spending.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Spending.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/AnomalyDetection.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/AnomalyDetection.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/BudgetRecommendations.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/BudgetRecommendations.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/FinancialForecasting.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/FinancialForecasting.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/FormattingUtilities.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/FormattingUtilities.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/OptimizationSuggestions.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/OptimizationSuggestions.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/TransactionPatternDetection.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/TransactionPatternDetection.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/InsightsModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/InsightsModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/AnimationModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/AnimationModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Budget.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Budget.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Category.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Category.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ComplexDataGenerators.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ComplexDataGenerators.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/DataImportModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/DataImportModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ExpenseCategory.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ExpenseCategory.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialAccount.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialAccount.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialTransaction.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialTransaction.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/NavigationModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/NavigationModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/NotificationModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/NotificationModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleData.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleData.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataGenerators.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataGenerators.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataProviders.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataProviders.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SavingsGoal.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SavingsGoal.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Subscription.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Subscription.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Transaction.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Transaction.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationActions.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationActions.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationAuthentication.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationAuthentication.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationBreadcrumbs.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationBreadcrumbs.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationDeepLinking.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationDeepLinking.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationMacOS.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationMacOS.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationNotifications.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationNotifications.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationSearch.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationSearch.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationStateRestoration.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationStateRestoration.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/MacOSNavigationTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/MacOSNavigationTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Enhanced.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Enhanced.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Original.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Original.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Simplified.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Simplified.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/AppLogger.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/AppLogger.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/ErrorHandler.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/ErrorHandler.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/Logger.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/Logger.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/BudgetNotificationScheduler.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/BudgetNotificationScheduler.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/GoalNotificationScheduler.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/GoalNotificationScheduler.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationPermissionManager.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationPermissionManager.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/SubscriptionNotificationScheduler.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/SubscriptionNotificationScheduler.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationManager.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationManager.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/QueryFallback.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/QueryFallback.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/SwiftDataCompat.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/SwiftDataCompat.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/CSVExporter.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/CSVExporter.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/DataFetcher.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/DataFetcher.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/ExportHelpers.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/ExportHelpers.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/ExportTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/ExportTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/JSONExporter.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/JSONExporter.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/PDFExporter.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/PDFExporter.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter_Original.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter_Original.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter_Simplified.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter_Simplified.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataImportHelpers.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataImportHelpers.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataImporter.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataImporter.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ExportEngineService.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ExportEngineService.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ExportTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ExportTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/CSVParser.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/CSVParser.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/DataParser.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/DataParser.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/EntityManager.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/EntityManager.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/ImportTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/ImportTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/ImportValidator.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/ImportValidator.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/SearchTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/SearchTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/sources"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/sources"
         }
       ],
-      "isLibrary" : true,
-      "moduleName" : "SharedCore",
-      "moduleOutputPath" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/Modules/SharedCore.swiftmodule",
-      "objects" : [
+      "isLibrary": true,
+      "moduleName": "SharedCore",
+      "moduleOutputPath": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/Modules/SharedCore.swiftmodule",
+      "objects": [
         "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialInsightModels.swift.o",
         "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/FinancialMLModels.swift.o",
         "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/TransactionPatternAnalyzer.swift.o",
@@ -436,7 +426,7 @@
         "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/ImportValidator.swift.o",
         "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/SearchTypes.swift.o"
       ],
-      "otherArguments" : [
+      "otherArguments": [
         "-target",
         "arm64-apple-macosx14.0",
         "-incremental",
@@ -497,15 +487,15 @@
         "-package-name",
         "shared"
       ],
-      "outputFileMapPath" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/output-file-map.json",
-      "outputs" : [
+      "outputFileMapPath": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/output-file-map.json",
+      "outputs": [
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/Modules/SharedCore.swiftmodule"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/Modules/SharedCore.swiftmodule"
         }
       ],
-      "prepareForIndexing" : true,
-      "sources" : [
+      "prepareForIndexing": true,
+      "sources": [
         "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialInsightModels.swift",
         "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialMLModels.swift",
         "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/TransactionPatternAnalyzer.swift",
@@ -587,15 +577,13 @@
         "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/ImportValidator.swift",
         "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/SearchTypes.swift"
       ],
-      "tempsPath" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build",
-      "wholeModuleOptimization" : false
+      "tempsPath": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build",
+      "wholeModuleOptimization": false
     }
   },
-  "swiftFrontendCommands" : {
-
-  },
-  "swiftTargetScanArgs" : {
-    "SharedCore" : [
+  "swiftFrontendCommands": {},
+  "swiftTargetScanArgs": {
+    "SharedCore": [
       "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
       "-module-name",
       "SharedCore",
@@ -747,366 +735,358 @@
       "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
     ]
   },
-  "targetDependencyMap" : {
-    "SharedCore" : [
-
-    ]
+  "targetDependencyMap": {
+    "SharedCore": []
   },
-  "testDiscoveryCommands" : {
-
+  "testDiscoveryCommands": {},
+  "testEntryPointCommands": {},
+  "traitConfiguration": {
+    "default": {}
   },
-  "testEntryPointCommands" : {
-
-  },
-  "traitConfiguration" : {
-    "default" : {
-
-    }
-  },
-  "writeCommands" : {
-    "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/sources" : {
-      "alwaysOutOfDate" : false,
-      "inputs" : [
+  "writeCommands": {
+    "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/sources": {
+      "alwaysOutOfDate": false,
+      "inputs": [
         {
-          "kind" : "virtual",
-          "name" : "<sources-file-list>"
+          "kind": "virtual",
+          "name": "<sources-file-list>"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialInsightModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialInsightModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialMLModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialMLModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/TransactionPatternAnalyzer.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/TransactionPatternAnalyzer.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Anomaly.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Anomaly.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Budgets.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Budgets.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Forecasting.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Forecasting.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Helpers.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Helpers.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Helpers.swift.backup"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Helpers.swift.backup"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Optimizations.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Optimizations.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Spending.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Spending.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/AnomalyDetection.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/AnomalyDetection.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/BudgetRecommendations.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/BudgetRecommendations.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/FinancialForecasting.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/FinancialForecasting.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/FormattingUtilities.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/FormattingUtilities.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/OptimizationSuggestions.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/OptimizationSuggestions.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/TransactionPatternDetection.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/TransactionPatternDetection.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/InsightsModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/InsightsModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/AnimationModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/AnimationModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Budget.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Budget.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Category.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Category.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ComplexDataGenerators.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ComplexDataGenerators.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/DataImportModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/DataImportModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ExpenseCategory.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ExpenseCategory.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialAccount.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialAccount.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialTransaction.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialTransaction.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/NavigationModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/NavigationModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/NotificationModels.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/NotificationModels.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleData.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleData.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataGenerators.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataGenerators.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataProviders.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataProviders.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SavingsGoal.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SavingsGoal.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Subscription.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Subscription.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Transaction.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Transaction.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationActions.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationActions.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationAuthentication.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationAuthentication.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationBreadcrumbs.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationBreadcrumbs.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationDeepLinking.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationDeepLinking.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationMacOS.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationMacOS.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationNotifications.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationNotifications.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationSearch.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationSearch.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationStateRestoration.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationStateRestoration.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/MacOSNavigationTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/MacOSNavigationTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Enhanced.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Enhanced.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Original.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Original.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Simplified.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Simplified.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/AppLogger.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/AppLogger.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/ErrorHandler.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/ErrorHandler.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/Logger.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/Logger.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/BudgetNotificationScheduler.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/BudgetNotificationScheduler.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/GoalNotificationScheduler.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/GoalNotificationScheduler.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationPermissionManager.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationPermissionManager.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/SubscriptionNotificationScheduler.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/SubscriptionNotificationScheduler.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationManager.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationManager.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/QueryFallback.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/QueryFallback.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/SwiftDataCompat.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/SwiftDataCompat.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/CSVExporter.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/CSVExporter.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/DataFetcher.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/DataFetcher.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/ExportHelpers.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/ExportHelpers.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/ExportTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/ExportTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/JSONExporter.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/JSONExporter.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/PDFExporter.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter/PDFExporter.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter_Original.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter_Original.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter_Simplified.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter_Simplified.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataImportHelpers.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataImportHelpers.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataImporter.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataImporter.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ExportEngineService.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ExportEngineService.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ExportTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ExportTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/CSVParser.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/CSVParser.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/DataParser.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/DataParser.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/EntityManager.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/EntityManager.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/ImportTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/ImportTypes.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/ImportValidator.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ImportComponents/ImportValidator.swift"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/SearchTypes.swift"
+          "kind": "file",
+          "name": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/SearchTypes.swift"
         }
       ],
-      "outputFilePath" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/sources"
+      "outputFilePath": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/SharedCore.build/sources"
     },
-    "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt" : {
-      "alwaysOutOfDate" : true,
-      "inputs" : [
+    "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt": {
+      "alwaysOutOfDate": true,
+      "inputs": [
         {
-          "kind" : "virtual",
-          "name" : "<swift-get-version>"
+          "kind": "virtual",
+          "name": "<swift-get-version>"
         },
         {
-          "kind" : "file",
-          "name" : "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+          "kind": "file",
+          "name": "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
         }
       ],
-      "outputFilePath" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt"
+      "outputFilePath": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/.build/index-build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt"
     }
   }
 }

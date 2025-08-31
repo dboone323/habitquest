@@ -12,14 +12,14 @@ import UserNotifications
 
 /// Schedules goal milestone and reminder notifications
 public struct GoalNotificationScheduler {
-    
+
     private let center = UNUserNotificationCenter.current()
     private let logger: OSLog
-    
+
     init(logger: OSLog) {
         self.logger = logger
     }
-    
+
     /// Checks and schedules milestone notifications for savings goals
     /// - Parameter goals: Array of savings goals to check for milestones
     func checkMilestones(for goals: [SavingsGoal]) {
@@ -41,7 +41,7 @@ public struct GoalNotificationScheduler {
             }
         }
     }
-    
+
     /// Schedules a milestone achievement notification
     /// - Parameters:
     ///   - goal: The savings goal that reached a milestone
@@ -74,7 +74,7 @@ public struct GoalNotificationScheduler {
             }
         }
     }
-    
+
     /// Schedules a goal achievement notification
     /// - Parameter goal: The savings goal that was achieved
     private func scheduleGoalAchievedNotification(goal: SavingsGoal) {

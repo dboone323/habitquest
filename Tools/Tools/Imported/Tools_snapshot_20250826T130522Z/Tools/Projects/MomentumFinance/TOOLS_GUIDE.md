@@ -20,6 +20,7 @@ Run the setup script to install and configure all necessary tools:
 ```
 
 This script will:
+
 - Install Prettier and its Swift plugin
 - Configure VS Code with recommended extensions
 - Create necessary configuration files

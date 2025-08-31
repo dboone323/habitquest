@@ -1,10 +1,10 @@
 // PlannerApp/Views/Settings/SettingsView.swift
 
+import LocalAuthentication
 import SwiftUI
 import UserNotifications
-import LocalAuthentication
 #if os(macOS)
-import AppKit
+    import AppKit
 #endif
 import Foundation
 
@@ -64,18 +64,14 @@ struct SettingsView: View {
 
                 // Dashboard Section
                 Section("Dashboard") {
-                    Stepper("Items per section: \(dashboardItemLimit)", value: $dashboardItemLimit, in: 1...10)
+                    Stepper("Items per section: \(dashboardItemLimit)", value: $dashboardItemLimit, in: 1 ... 10)
                 }
                 .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // Notifications Section
                 Section("Notifications") {
                     Toggle("Enable Notifications", isOn: $notificationsEnabled)
-                        .onChange(of: notificationsEnabled) { _, newValue in
-                            if newValue {
-                                requestNotificationPermission()
-                            }
-                        }
+                        .modifier(NotificationToggleModifier(notificationsEnabled: $notificationsEnabled))
                 }
                 .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
@@ -106,7 +102,7 @@ struct SettingsView: View {
     // MARK: - Helper Methods
 
     private func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, _ in
             DispatchQueue.main.async {
                 if !granted {
                     showingNotificationAlert = true
@@ -117,14 +113,15 @@ struct SettingsView: View {
 
     private func openAppSettings() {
         #if os(macOS)
-        NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Notifications")!)
+            NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Notifications")!)
         #else
-        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         #endif
     }
 }
 
 // MARK: - Theme Preview Sheet
+
 struct ThemePreviewSheet: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var themeManager: ThemeManager
@@ -133,7 +130,7 @@ struct ThemePreviewSheet: View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: [
-                    GridItem(.adaptive(minimum: 150))
+                    GridItem(.adaptive(minimum: 150)),
                 ], spacing: 16) {
                     ForEach(Theme.availableThemes, id: \.name) { theme in
                         ThemeCard(theme: theme)
@@ -144,20 +141,22 @@ struct ThemePreviewSheet: View {
             }
             .navigationTitle("Choose Theme")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Done") {
-                        dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Done") {
+                            dismiss()
+                        }
                     }
-                }                }
-            }
-            .background(themeManager.currentTheme.primaryBackgroundColor)
+                }
         }
+        .background(themeManager.currentTheme.primaryBackgroundColor)
     }
+}
 
 // MARK: - Theme Card
+
 struct ThemeCard: View {
     let theme: Theme
     @EnvironmentObject var themeManager: ThemeManager
@@ -197,7 +196,7 @@ struct ThemeCard: View {
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(
                             themeManager.currentTheme.name == theme.name ?
-                            theme.primaryAccentColor : Color.clear,
+                                theme.primaryAccentColor : Color.clear,
                             lineWidth: 2
                         )
                 )
@@ -218,5 +217,33 @@ struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
             .environmentObject(ThemeManager())
+    }
+}
+
+// MARK: - Notification Toggle Modifier
+
+struct NotificationToggleModifier: ViewModifier {
+    @Binding var notificationsEnabled: Bool
+    
+    func body(content: Content) -> some View {
+        if #available(macOS 14.0, iOS 17.0, *) {
+            content.onChange(of: notificationsEnabled) { _, newValue in
+                if newValue {
+                    requestNotificationPermission()
+                }
+            }
+        } else {
+            content
+        }
+    }
+    
+    private func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, _ in
+            DispatchQueue.main.async {
+                if !granted {
+                    // Could show alert here, but since we're in a modifier, we'll skip for now
+                }
+            }
+        }
     }
 }

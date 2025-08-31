@@ -19,12 +19,12 @@ final class AppLogger {
 
     private func osLog(for category: LogCategory) -> OSLog {
         switch category {
-        case .ui: return Logger.ui
-        case .data: return Logger.data
-        case .business: return Logger.business
-        case .network: return Logger.network
-        case .performance: return Logger.performance
-        default: return Logger.business
+        case .ui: Logger.ui
+        case .data: Logger.data
+        case .business: Logger.business
+        case .network: Logger.network
+        case .performance: Logger.performance
+        default: Logger.business
         }
     }
 
@@ -40,8 +40,10 @@ final class AppLogger {
         case .error:
             Logger.logError(
                 NSError(
-                    domain: "AppLogger", code: 1, userInfo: [NSLocalizedDescriptionKey: message]),
-                context: "")
+                    domain: "AppLogger", code: 1, userInfo: [NSLocalizedDescriptionKey: message]
+                ),
+                context: ""
+            )
         case .critical:
             Logger.logWarning(message, category: oslog)
         }

@@ -1,5 +1,5 @@
-import SwiftUI
 import Foundation
+import SwiftUI
 
 struct AddJournalEntryView: View {
     @Environment(\.dismiss) var dismiss // Use dismiss environment
@@ -18,7 +18,7 @@ struct AddJournalEntryView: View {
 
     private var isFormValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-        !entryBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            !entryBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     var body: some View {
@@ -27,7 +27,7 @@ struct AddJournalEntryView: View {
             HStack {
                 Button("Cancel") {
                     #if os(iOS)
-                    HapticManager.lightImpact()
+                        HapticManager.lightImpact()
                     #endif
                     dismiss()
                 }
@@ -46,7 +46,7 @@ struct AddJournalEntryView: View {
 
                 Button("Save") {
                     #if os(iOS)
-                    HapticManager.notificationSuccess()
+                        HapticManager.notificationSuccess()
                     #endif
                     saveEntry()
                     dismiss()
@@ -59,9 +59,9 @@ struct AddJournalEntryView: View {
             }
             .padding()
             #if os(macOS)
-            .background(Color(NSColor.controlBackgroundColor))
+                .background(Color(NSColor.controlBackgroundColor))
             #else
-            .background(Color(.systemBackground))
+                .background(Color(.systemBackground))
             #endif
             #if os(iOS)
             .iOSEnhancedTouchTarget()
@@ -70,14 +70,14 @@ struct AddJournalEntryView: View {
             Form {
                 TextField("Title", text: $title)
                     .focused($isTitleFocused)
-                    #if os(iOS)
+                #if os(iOS)
                     .textInputAutocapitalization(.words)
                     .submitLabel(.next)
                     .onSubmit {
                         isTitleFocused = false
                         isEntryBodyFocused = true
                     }
-                    #endif
+                #endif
 
                 // Consider a Segmented Picker for fewer options or keep Wheel
                 Picker("Mood", selection: $mood) {
@@ -98,9 +98,9 @@ struct AddJournalEntryView: View {
                     TextEditor(text: $entryBody) // Use entryBody state variable
                         .frame(height: 200) // Increased height
                         .focused($isEntryBodyFocused)
-                        #if os(iOS)
+                    #if os(iOS)
                         .scrollContentBackground(.hidden)
-                        #endif
+                    #endif
                 }
             }
             #if os(iOS)

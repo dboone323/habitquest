@@ -1,11 +1,14 @@
 # MomentumFinance Code Analysis Report
+
 Generated: Wed Aug 13 10:27:56 CDT 2025
 
 ## Metrics
-- Swift files:       91
-- TODO/FIXME comments:        0
+
+- Swift files: 91
+- TODO/FIXME comments: 0
 
 ## Files
+
 ./MomentumFinance/ExpenseCategory.swift
 ./MomentumFinance/Models.swift
 ./MomentumFinance/Budget.swift

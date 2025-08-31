@@ -26,22 +26,22 @@ public enum ThemeMode: String, CaseIterable, Identifiable, Hashable {
     var displayName: String {
         switch self {
         case .light:
-            return "Light"
+            "Light"
         case .dark:
-            return "Dark"
+            "Dark"
         case .system:
-            return "System"
+            "System"
         }
     }
 
     var icon: String {
         switch self {
         case .light:
-            return "sun.max.fill"
+            "sun.max.fill"
         case .dark:
-            return "moon.fill"
+            "moon.fill"
         case .system:
-            return "gearshape.fill"
+            "gearshape.fill"
         }
     }
 }

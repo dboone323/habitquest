@@ -1,6 +1,6 @@
+import AppKit
 import SwiftUI
 import UniformTypeIdentifiers
-import AppKit
 
 /// Enhanced File Upload View that uses the robust FileUploadManager
 /// This replaces the basic FileUploadView with comprehensive error handling and detailed feedback
@@ -14,7 +14,7 @@ struct RobustFileUploadView: View {
     @State private var alertMessage = ""
     @State private var showingAlert = false
     @State private var uploadResult: SimpleUploadResult?
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Header with comprehensive information
@@ -25,9 +25,9 @@ struct RobustFileUploadView: View {
                 onClearAll: clearAll,
                 onSelectAll: selectAllFiles
             )
-            
+
             Divider()
-            
+
             if uploadedFiles.isEmpty {
                 // Enhanced Drop Zone with better guidance
                 RobustDropZoneView(
@@ -48,7 +48,7 @@ struct RobustFileUploadView: View {
                         onToggleSelection: toggleFileSelection
                     )
                     .frame(minWidth: 350)
-                    
+
                     // File Details and Actions (Right Side)
                     FileDetailsView(
                         selectedFiles: selectedFiles,
@@ -58,7 +58,7 @@ struct RobustFileUploadView: View {
                     .frame(minWidth: 400)
                 }
             }
-            
+
             // Progress indicator when uploading
             if fileUploadManager.isUploading {
                 ProgressIndicatorView(progress: fileUploadManager.uploadProgress)
@@ -72,19 +72,19 @@ struct RobustFileUploadView: View {
             handleFileImport(result)
         }
         .alert("File Upload Status", isPresented: $showingAlert) {
-            Button("OK") { }
+            Button("OK") {}
         } message: {
             Text(alertMessage)
         }
         .navigationTitle("Robust File Upload")
     }
-    
+
     // MARK: - File Operations
-    
+
     private func handleFileDrop(_ providers: [NSItemProvider]) {
         Task {
             var urls: [URL] = []
-            
+
             for provider in providers {
                 if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
                     do {
@@ -96,24 +96,24 @@ struct RobustFileUploadView: View {
                     }
                 }
             }
-            
+
             if !urls.isEmpty {
                 await processUploadedFiles(urls)
             }
         }
     }
-    
+
     private func handleFileImport(_ result: Result<[URL], Error>) {
         switch result {
-        case .success(let urls):
+        case let .success(urls):
             Task {
                 await processUploadedFiles(urls)
             }
-        case .failure(let error):
+        case let .failure(error):
             showAlert("Failed to import files: \(error.localizedDescription)")
         }
     }
-    
+
     private func chooseFolderAndUpload() {
         let panel = NSOpenPanel()
         panel.allowsMultipleSelection = false
@@ -125,45 +125,45 @@ struct RobustFileUploadView: View {
         panel.prompt = "Upload Folder"
         panel.message = "Select a folder containing code files to upload"
         panel.allowedContentTypes = [.folder, .directory]
-        
+
         let response = panel.runModal()
-        
+
         if response == .OK, let url = panel.url {
             Task {
                 await processUploadedFiles([url])
             }
         }
     }
-    
+
     @MainActor
     private func processUploadedFiles(_ urls: [URL]) async {
         do {
             let result = try await fileUploadManager.uploadFiles(from: urls)
             self.uploadResult = result
             self.uploadedFiles = result.successfulFiles
-            
+
             // Generate comprehensive feedback message
             let message = generateUploadResultMessage(result)
             showAlert(message)
-            
+
         } catch {
             showAlert("Upload failed: \(error.localizedDescription)")
         }
     }
-    
+
     private func generateUploadResultMessage(_ result: SimpleUploadResult) -> String {
         var message = ""
-        
-        if result.successfulFiles.count > 0 {
+
+        if !result.successfulFiles.isEmpty {
             message += "✅ Successfully uploaded \(result.successfulFiles.count) file\(result.successfulFiles.count == 1 ? "" : "s")"
-            
+
             // Show file type breakdown
             let fileTypes = Dictionary(grouping: result.successfulFiles, by: { $0.fileExtension })
             let typesSummary = fileTypes.map { "\($0.value.count) .\($0.key)" }.joined(separator: ", ")
             message += "\n\n📄 File types: \(typesSummary)"
         }
-        
-        if result.failedFiles.count > 0 {
+
+        if !result.failedFiles.isEmpty {
             message += "\n\n❌ Failed to upload \(result.failedFiles.count) file\(result.failedFiles.count == 1 ? "" : "s"):"
             for (filename, error) in result.failedFiles.prefix(5) {
                 message += "\n  • \(filename): \(error.localizedDescription)"
@@ -172,8 +172,8 @@ struct RobustFileUploadView: View {
                 message += "\n  ... and \(result.failedFiles.count - 5) more"
             }
         }
-        
-        if result.warnings.count > 0 {
+
+        if !result.warnings.isEmpty {
             message += "\n\n⚠️ Warnings:"
             for warning in result.warnings.prefix(3) {
                 message += "\n  • \(warning)"
@@ -182,25 +182,25 @@ struct RobustFileUploadView: View {
                 message += "\n  ... and \(result.warnings.count - 3) more warnings"
             }
         }
-        
+
         return message
     }
-    
+
     private func showAlert(_ message: String) {
         alertMessage = message
         showingAlert = true
     }
-    
+
     private func clearAll() {
         uploadedFiles.removeAll()
         selectedFiles.removeAll()
         uploadResult = nil
     }
-    
+
     private func selectAllFiles() {
-        selectedFiles = Set(uploadedFiles.map { $0.path })
+        selectedFiles = Set(uploadedFiles.map(\.path))
     }
-    
+
     private func toggleFileSelection(_ filePath: String) {
         if selectedFiles.contains(filePath) {
             selectedFiles.remove(filePath)
@@ -218,14 +218,14 @@ struct HeaderView: View {
     let isUploading: Bool
     let onClearAll: () -> Void
     let onSelectAll: () -> Void
-    
+
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Robust File Upload")
                     .font(.title2)
                     .fontWeight(.bold)
-                
+
                 if uploadedFilesCount > 0 {
                     Text("\(uploadedFilesCount) files uploaded • \(selectedFilesCount) selected")
                         .font(.subheadline)
@@ -236,9 +236,9 @@ struct HeaderView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            
+
             Spacer()
-            
+
             if uploadedFilesCount > 0 {
                 HStack(spacing: 12) {
                     if selectedFilesCount < uploadedFilesCount {
@@ -247,7 +247,7 @@ struct HeaderView: View {
                         }
                         .font(.caption)
                     }
-                    
+
                     Button("Clear All") {
                         onClearAll()
                     }
@@ -266,7 +266,7 @@ struct RobustDropZoneView: View {
     let onDrop: ([NSItemProvider]) -> Void
     let onChooseFiles: () -> Void
     let onChooseFolder: () -> Void
-    
+
     var body: some View {
         VStack(spacing: 24) {
             // Main drop icon
@@ -275,7 +275,7 @@ struct RobustDropZoneView: View {
                 .foregroundColor(isDragOver ? .blue : isUploading ? .orange : .gray)
                 .symbolEffect(.pulse, isActive: isUploading)
                 .animation(.easeInOut, value: isDragOver)
-            
+
             // Instructions
             VStack(spacing: 8) {
                 if isUploading {
@@ -289,14 +289,14 @@ struct RobustDropZoneView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(isDragOver ? .blue : .primary)
                 }
-                
+
                 Text("Supports Swift, Python, JavaScript, TypeScript, Java, C/C++, Go, Rust, PHP, Ruby, Kotlin, C#, HTML, CSS, JSON, YAML, Markdown, Xcode projects, and more")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
             }
-            
+
             // Action buttons
             if !isUploading {
                 VStack(spacing: 12) {
@@ -304,11 +304,11 @@ struct RobustDropZoneView: View {
                         onChooseFiles()
                     }
                     .buttonStyle(.borderedProminent)
-                    
+
                     Text("or")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Button("Choose Folder") {
                         onChooseFolder()
                     }
@@ -341,7 +341,7 @@ struct FileListView: View {
     let files: [FileData]
     @Binding var selectedFiles: Set<String>
     let onToggleSelection: (String) -> Void
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // Header
@@ -350,13 +350,13 @@ struct FileListView: View {
                     .font(.headline)
                     .padding(.horizontal)
                     .padding(.vertical, 8)
-                
+
                 Spacer()
             }
             .background(Color(NSColor.controlBackgroundColor))
-            
+
             Divider()
-            
+
             // File list
             ScrollView {
                 LazyVStack(spacing: 1) {
@@ -378,22 +378,22 @@ struct RobustFileRowView: View {
     let file: FileData
     let isSelected: Bool
     let onToggle: () -> Void
-    
+
     private var fileIcon: String {
         switch file.fileExtension.lowercased() {
-        case "swift": return "swift"
-        case "py": return "doc.text"
-        case "js", "ts": return "doc.text"
-        case "json": return "doc.badge.gearshape"
-        case "xml": return "doc.text.below.ecg"
-        case "md": return "doc.richtext"
-        case "plist": return "list.bullet.rectangle"
-        case "pbxproj": return "hammer"
-        case "xcworkspacedata": return "building"
-        default: return "doc.text"
+        case "swift": "swift"
+        case "py": "doc.text"
+        case "js", "ts": "doc.text"
+        case "json": "doc.badge.gearshape"
+        case "xml": "doc.text.below.ecg"
+        case "md": "doc.richtext"
+        case "plist": "list.bullet.rectangle"
+        case "pbxproj": "hammer"
+        case "xcworkspacedata": "building"
+        default: "doc.text"
         }
     }
-    
+
     var body: some View {
         HStack(spacing: 12) {
             // Selection checkbox
@@ -402,35 +402,35 @@ struct RobustFileRowView: View {
                 set: { _ in onToggle() }
             ))
             .toggleStyle(CheckboxToggleStyle())
-            
+
             // File icon
             Image(systemName: fileIcon)
                 .font(.title3)
                 .foregroundColor(.blue)
                 .frame(width: 20)
-            
+
             // File info
             VStack(alignment: .leading, spacing: 2) {
                 Text(file.name)
                     .font(.body)
                     .fontWeight(.medium)
                     .lineLimit(1)
-                
+
                 HStack {
                     Text(file.fileExtension.uppercased())
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Text("•")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Text(file.displaySize)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
-            
+
             Spacer()
         }
         .padding(.horizontal)
@@ -458,11 +458,11 @@ struct FileDetailsView: View {
     let selectedFiles: Set<String>
     let allFiles: [FileData]
     let uploadResult: SimpleUploadResult?
-    
+
     private var selectedFileObjects: [FileData] {
         allFiles.filter { selectedFiles.contains($0.path) }
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // Header
@@ -471,13 +471,13 @@ struct FileDetailsView: View {
                     .font(.headline)
                     .padding(.horizontal)
                     .padding(.vertical, 8)
-                
+
                 Spacer()
             }
             .background(Color(NSColor.controlBackgroundColor))
-            
+
             Divider()
-            
+
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     if selectedFiles.isEmpty {
@@ -486,7 +486,7 @@ struct FileDetailsView: View {
                             Image(systemName: "doc.text.magnifyingglass")
                                 .font(.system(size: 48))
                                 .foregroundColor(.gray)
-                            
+
                             Text("Select files to view details")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
@@ -496,9 +496,9 @@ struct FileDetailsView: View {
                     } else {
                         // Selection details
                         SelectionSummaryView(selectedFiles: selectedFileObjects)
-                        
+
                         Divider()
-                        
+
                         // Individual file details
                         ForEach(selectedFileObjects.prefix(5), id: \.path) { file in
                             VStack(alignment: .leading, spacing: 4) {
@@ -512,7 +512,7 @@ struct FileDetailsView: View {
                             }
                             .padding(.vertical, 4)
                         }
-                        
+
                         if selectedFileObjects.count > 5 {
                             Text("... and \(selectedFileObjects.count - 5) more files")
                                 .font(.caption)
@@ -520,7 +520,7 @@ struct FileDetailsView: View {
                                 .padding(.horizontal)
                         }
                     }
-                    
+
                     // Upload result summary
                     if let result = uploadResult {
                         Divider()
@@ -535,21 +535,21 @@ struct FileDetailsView: View {
 
 struct SelectionSummaryView: View {
     let selectedFiles: [FileData]
-    
+
     private var totalSize: Int {
         selectedFiles.reduce(0) { $0 + $1.size }
     }
-    
+
     private var fileTypeBreakdown: [(String, Int)] {
         let grouped = Dictionary(grouping: selectedFiles, by: { $0.fileExtension })
         return grouped.map { ($0.key, $0.value.count) }.sorted { $0.1 > $1.1 }
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Selection Summary")
                 .font(.headline)
-            
+
             HStack {
                 VStack(alignment: .leading) {
                     Text("\(selectedFiles.count)")
@@ -559,9 +559,9 @@ struct SelectionSummaryView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing) {
                     Text(ByteCountFormatter.string(fromByteCount: Int64(totalSize), countStyle: .file))
                         .font(.title)
@@ -571,13 +571,13 @@ struct SelectionSummaryView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            
+
             if !fileTypeBreakdown.isEmpty {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("File Types:")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 4) {
                         ForEach(fileTypeBreakdown.prefix(6), id: \.0) { type, count in
                             HStack {
@@ -606,26 +606,26 @@ struct SelectionSummaryView: View {
 
 struct UploadResultSummaryView: View {
     let result: SimpleUploadResult
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Upload Summary")
                 .font(.headline)
-            
+
             // Success count
-            if result.successfulFiles.count > 0 {
+            if !result.successfulFiles.isEmpty {
                 Label("\(result.successfulFiles.count) files uploaded successfully", systemImage: "checkmark.circle.fill")
                     .foregroundColor(.green)
             }
-            
+
             // Failure count
-            if result.failedFiles.count > 0 {
+            if !result.failedFiles.isEmpty {
                 Label("\(result.failedFiles.count) files failed to upload", systemImage: "xmark.circle.fill")
                     .foregroundColor(.red)
             }
-            
+
             // Warnings
-            if result.warnings.count > 0 {
+            if !result.warnings.isEmpty {
                 Label("\(result.warnings.count) warnings", systemImage: "exclamationmark.triangle.fill")
                     .foregroundColor(.orange)
             }
@@ -638,12 +638,12 @@ struct UploadResultSummaryView: View {
 
 struct ProgressIndicatorView: View {
     let progress: Double
-    
+
     var body: some View {
         VStack(spacing: 8) {
             ProgressView(value: progress, total: 1.0)
                 .progressViewStyle(LinearProgressViewStyle())
-            
+
             Text("Uploading files... \(Int(progress * 100))%")
                 .font(.caption)
                 .foregroundColor(.secondary)

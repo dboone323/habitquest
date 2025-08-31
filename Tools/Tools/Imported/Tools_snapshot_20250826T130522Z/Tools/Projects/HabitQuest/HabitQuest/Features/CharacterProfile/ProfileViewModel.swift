@@ -13,7 +13,7 @@ class ProfileViewModel: ObservableObject {
     @Published var totalHabits: Int = 0
     @Published var completedToday: Int = 0
     @Published var achievements: [Achievement] = []
-    @Published var analytics: HabitAnalytics = HabitAnalytics.empty
+    @Published var analytics: HabitAnalytics = .empty
 
     private var modelContext: ModelContext?
     private let logger = Logger(category: .uiCategory)
@@ -61,7 +61,7 @@ class ProfileViewModel: ObservableObject {
 
     /// Load player profile data from SwiftData
     private func loadProfile() {
-        guard let modelContext = modelContext else { return }
+        guard let modelContext else { return }
 
         do {
             let fetchDescriptor = FetchDescriptor<PlayerProfile>()
@@ -92,7 +92,7 @@ class ProfileViewModel: ObservableObject {
 
     /// Create a default player profile
     private func createDefaultProfile() {
-        guard let modelContext = modelContext else { return }
+        guard let modelContext else { return }
 
         do {
             let newProfile = PlayerProfile()
@@ -110,7 +110,7 @@ class ProfileViewModel: ObservableObject {
 
     /// Load additional statistics from habits data
     private func loadStatistics() {
-        guard let modelContext = modelContext else { return }
+        guard let modelContext else { return }
 
         do {
             // Load all habits
@@ -140,7 +140,7 @@ class ProfileViewModel: ObservableObject {
 
     /// Load achievements from SwiftData or create default ones
     private func loadAchievements() {
-        guard let modelContext = modelContext else { return }
+        guard let modelContext else { return }
 
         do {
             let fetchDescriptor = FetchDescriptor<Achievement>()
@@ -168,7 +168,7 @@ class ProfileViewModel: ObservableObject {
 
     /// Update achievement progress and check for unlocks
     private func updateAchievements() {
-        guard let modelContext = modelContext else { return }
+        guard let modelContext else { return }
 
         do {
             // Get player profile and all habits/logs

@@ -134,12 +134,12 @@ struct BudgetProgressRow: View {
 
     private func progressColor(for percentage: Double) -> Color {
         switch percentage {
-        case 0..<70:
-            return .green
-        case 70..<90:
-            return .orange
+        case 0 ..< 70:
+            .green
+        case 70 ..< 90:
+            .orange
         default:
-            return .red
+            .red
         }
     }
 }

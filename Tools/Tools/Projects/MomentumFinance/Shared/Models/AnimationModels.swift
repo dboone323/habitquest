@@ -13,7 +13,7 @@ import SwiftUI
 /// Card component with animation support
 public struct AnimatedCardComponent: @unchecked Sendable {
     public init() {}
-    
+
     @MainActor
     public func card(
         @ViewBuilder content: @escaping () -> some View
@@ -29,7 +29,7 @@ public struct AnimatedCardComponent: @unchecked Sendable {
 /// Button component with animation support
 public struct AnimatedButtonComponent: @unchecked Sendable {
     public init() {}
-    
+
     @MainActor
     public func button(
         @ViewBuilder label: @escaping () -> some View,
@@ -48,7 +48,7 @@ public struct AnimatedButtonComponent: @unchecked Sendable {
 /// Transaction component with animation support
 public struct AnimatedTransactionComponent: @unchecked Sendable {
     public init() {}
-    
+
     @MainActor
     public func transactionRow(
         @ViewBuilder content: @escaping () -> some View
@@ -64,7 +64,7 @@ public struct AnimatedTransactionComponent: @unchecked Sendable {
 /// Progress components with animation support
 public struct AnimatedProgressComponents: @unchecked Sendable {
     public init() {}
-    
+
     @MainActor
     public func progressBar(progress: Double) -> some View {
         GeometryReader { geometry in
@@ -73,7 +73,7 @@ public struct AnimatedProgressComponents: @unchecked Sendable {
                     .fill(Color(.systemGray5))
                     .frame(height: 8)
                     .cornerRadius(4)
-                
+
                 Rectangle()
                     .fill(LinearGradient(
                         colors: [.blue, .green],
@@ -87,7 +87,7 @@ public struct AnimatedProgressComponents: @unchecked Sendable {
         }
         .frame(height: 8)
     }
-    
+
     @MainActor
     public func circularProgress(progress: Double) -> some View {
         Circle()
@@ -110,7 +110,7 @@ public struct AnimatedProgressComponents: @unchecked Sendable {
 /// Floating action button with animation support
 public struct FloatingActionButtonComponent: @unchecked Sendable {
     public init() {}
-    
+
     @MainActor
     public func floatingButton(
         icon: String,

@@ -14,22 +14,22 @@ import UserNotifications
 /// Notification urgency levels
 public enum NotificationUrgency {
     case low, medium, high, critical
-    
+
     public var title: String {
         switch self {
-        case .low: return "Budget Update"
-        case .medium: return "Budget Warning" 
-        case .high: return "Budget Alert"
-        case .critical: return "Budget Exceeded!"
+        case .low: "Budget Update"
+        case .medium: "Budget Warning"
+        case .high: "Budget Alert"
+        case .critical: "Budget Exceeded!"
         }
     }
-    
+
     public var sound: UNNotificationSound {
         switch self {
-        case .low: return .default
-        case .medium: return .default
-        case .high: return .defaultCritical
-        case .critical: return .defaultCritical
+        case .low: .default
+        case .medium: .default
+        case .high: .defaultCritical
+        case .critical: .defaultCritical
         }
     }
 }
@@ -41,7 +41,7 @@ public struct ScheduledNotification: Identifiable {
     public let body: String
     public let type: String
     public let scheduledDate: Date?
-    
+
     public init(id: String, title: String, body: String, type: String, scheduledDate: Date?) {
         self.id = id
         self.title = title
@@ -57,23 +57,23 @@ public struct ScheduledNotification: Identifiable {
 public struct NotificationPermissionManager {
     private let center = UNUserNotificationCenter.current()
     private let logger: OSLog
-    
+
     public init(logger: OSLog) {
         self.logger = logger
     }
-    
+
     /// Requests notification permission from the user
     /// - Returns: Boolean indicating if permission was granted
     public func requestNotificationPermission() async -> Bool {
         do {
             let granted = try await center.requestAuthorization(options: [.alert, .badge, .sound])
-            
+
             if granted {
                 os_log("Notification permission granted", log: logger, type: .info)
             } else {
                 os_log("Notification permission denied", log: logger, type: .error)
             }
-            
+
             return granted
         } catch {
             os_log("Error requesting notification permission: %@", log: logger, type: .error, error.localizedDescription)
@@ -86,11 +86,11 @@ public struct NotificationPermissionManager {
 public struct BudgetNotificationScheduler {
     private let center = UNUserNotificationCenter.current()
     private let logger: OSLog
-    
+
     public init(logger: OSLog) {
         self.logger = logger
     }
-    
+
     /// Schedules budget warning notifications for multiple budgets
     /// - Parameter budgets: Array of budgets to check for warnings
     public func scheduleWarningNotifications(for budgets: [Budget]) {
@@ -125,7 +125,7 @@ public struct BudgetNotificationScheduler {
             }
         }
     }
-    
+
     /// Schedules a specific budget warning notification
     private func scheduleBudgetWarning(
         budget: Budget,
@@ -133,10 +133,10 @@ public struct BudgetNotificationScheduler {
         urgency: NotificationUrgency
     ) {
         let identifier = "budget_warning_\(budget.persistentModelID)_\(percentage)"
-        
+
         // Remove existing notification for this budget/percentage
         center.removePendingNotificationRequests(withIdentifiers: [identifier])
-        
+
         let content = UNMutableNotificationContent()
         content.title = urgency.title
         content.body = createBudgetWarningMessage(budget: budget, percentage: percentage)
@@ -147,14 +147,14 @@ public struct BudgetNotificationScheduler {
             "budgetId": "\(budget.persistentModelID)",
             "percentage": percentage,
         ]
-        
+
         // Schedule immediately for current warnings
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-        
+
         // Extract category name before the closure to avoid capturing budget
         let categoryName = budget.category?.name ?? "Unknown"
-        
+
         center.add(request) { error in
             if let error {
                 os_log("Failed to schedule budget notification: %@", log: self.logger, type: .error, error.localizedDescription)
@@ -163,7 +163,7 @@ public struct BudgetNotificationScheduler {
             }
         }
     }
-    
+
     /// Creates a contextual warning message based on budget status
     private func createBudgetWarningMessage(budget: Budget, percentage: Int) -> String {
         let categoryName = budget.category?.name ?? "Unknown Category"
@@ -199,38 +199,38 @@ public struct BudgetNotificationScheduler {
 public struct SubscriptionNotificationScheduler {
     private let center = UNUserNotificationCenter.current()
     private let logger: OSLog
-    
+
     public init(logger: OSLog) {
         self.logger = logger
     }
-    
+
     /// Schedules due date reminders for subscriptions
     public func scheduleDueDateReminders(for subscriptions: [Subscription]) {
         for subscription in subscriptions {
             scheduleDueDateReminder(for: subscription)
         }
     }
-    
+
     private func scheduleDueDateReminder(for subscription: Subscription) {
         let identifier = "subscription_reminder_\(subscription.persistentModelID)"
-        
+
         // Remove existing notifications for this subscription
         center.removePendingNotificationRequests(withIdentifiers: [identifier])
-        
+
         // Calculate next due date
         guard let nextDueDate = subscription.nextBillingDate else {
             os_log("No next billing date for subscription %@", log: logger, type: .info, subscription.name)
             return
         }
-        
+
         // Schedule notification 1 day before due date
         let reminderDate = Calendar.current.date(byAdding: .day, value: -1, to: nextDueDate)
-        
-        guard let reminderDate = reminderDate, reminderDate > Date() else {
+
+        guard let reminderDate, reminderDate > Date() else {
             os_log("Reminder date is in the past for subscription %@", log: logger, type: .info, subscription.name)
             return
         }
-        
+
         let content = UNMutableNotificationContent()
         content.title = "Subscription Due Tomorrow"
         content.body = "\(subscription.name) (\(subscription.amount.formatted(.currency(code: "USD")))) is due tomorrow"
@@ -240,11 +240,11 @@ public struct SubscriptionNotificationScheduler {
             "type": "subscription_reminder",
             "subscriptionId": "\(subscription.persistentModelID)",
         ]
-        
+
         let triggerComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: reminderDate)
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-        
+
         center.add(request) { error in
             if let error {
                 os_log("Failed to schedule subscription reminder: %@", log: self.logger, type: .error, error.localizedDescription)
@@ -259,33 +259,33 @@ public struct SubscriptionNotificationScheduler {
 public struct GoalNotificationScheduler {
     private let center = UNUserNotificationCenter.current()
     private let logger: OSLog
-    
+
     public init(logger: OSLog) {
         self.logger = logger
     }
-    
+
     /// Schedules progress reminders for savings goals
     public func scheduleProgressReminders(for goals: [SavingsGoal]) {
         for goal in goals {
             scheduleProgressReminder(for: goal)
         }
     }
-    
+
     private func scheduleProgressReminder(for goal: SavingsGoal) {
         let identifier = "goal_progress_\(goal.persistentModelID)"
-        
+
         // Remove existing notifications for this goal
         center.removePendingNotificationRequests(withIdentifiers: [identifier])
-        
+
         // Calculate progress percentage
         let progressPercentage = goal.currentAmount / goal.targetAmount
         let progressPercent = Int(progressPercentage * 100)
-        
+
         // Only schedule if goal is active and has meaningful progress
         guard !goal.isCompleted && progressPercentage > 0.1 else {
             return
         }
-        
+
         let content = UNMutableNotificationContent()
         content.title = "Goal Progress Update"
         content.body = "You're \(progressPercent)% of the way to your \(goal.title) goal! Keep going!"
@@ -296,13 +296,13 @@ public struct GoalNotificationScheduler {
             "goalId": "\(goal.persistentModelID)",
             "progress": progressPercentage,
         ]
-        
+
         // Schedule for next week
         let nextWeek = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: Date()) ?? Date()
         let triggerComponents = Calendar.current.dateComponents([.weekday, .hour], from: nextWeek)
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: true)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-        
+
         center.add(request) { error in
             if let error {
                 os_log("Failed to schedule goal progress reminder: %@", log: self.logger, type: .error, error.localizedDescription)

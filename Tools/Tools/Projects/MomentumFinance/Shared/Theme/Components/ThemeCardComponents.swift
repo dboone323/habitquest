@@ -4,7 +4,7 @@ import SwiftUI
 
 /// Card component implementations with theme-aware styling
 public struct ThemeCardComponents: @unchecked Sendable {
-    
+
     /// Creates a themed card view with proper shadows and background
     @MainActor
     func card(
@@ -40,7 +40,7 @@ public struct ThemeCardComponents: @unchecked Sendable {
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
     }
-    
+
     /// Section container with optional header
     @MainActor
     func section(
@@ -61,7 +61,7 @@ public struct ThemeCardComponents: @unchecked Sendable {
         .background(theme.secondaryBackground)
         .cornerRadius(8)
     }
-    
+
     /// List row with leading icon
     @MainActor
     func listRow(

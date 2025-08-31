@@ -1,6 +1,7 @@
 import SwiftUI
 
 // MARK: - Search Empty State Component
+
 struct SearchEmptyStateComponent: View {
     var body: some View {
         VStack(spacing: 16) {

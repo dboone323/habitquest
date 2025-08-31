@@ -20,7 +20,7 @@ public struct ColumnMapping {
     public let sourceColumn: String
     public let targetField: String
     public let dataType: String
-    
+
     public init(sourceColumn: String, targetField: String, dataType: String) {
         self.sourceColumn = sourceColumn
         self.targetField = targetField
@@ -30,10 +30,10 @@ public struct ColumnMapping {
 
 public class EntityManager {
     public init() {}
-    
+
     public func createEntity<T>(from data: [String: Any], type: T.Type) -> T? {
         // Placeholder implementation
-        return nil
+        nil
     }
 }
 
@@ -41,24 +41,24 @@ public class EntityManager {
 
 public class FinancialMLModels {
     public init() {}
-    
+
     public func analyzeBudgetTrends() -> [String: Any] {
-        return [:]
+        [:]
     }
-    
+
     public func predictSpending() -> [String: Any] {
-        return [:]
+        [:]
     }
 }
 
 public class TransactionPatternAnalyzer {
     public init() {}
-    
+
     public func analyzePatterns() -> [String: Any] {
-        return [:]
+        [:]
     }
-    
+
     public func findAnomalies() -> [String: Any] {
-        return [:]
+        [:]
     }
 }

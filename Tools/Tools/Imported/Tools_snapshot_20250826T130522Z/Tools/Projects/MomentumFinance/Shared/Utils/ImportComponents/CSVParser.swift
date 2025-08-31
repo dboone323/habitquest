@@ -9,8 +9,8 @@
 import Foundation
 
 /// Handles CSV parsing and column mapping functionality
-struct CSVParser {
-    
+enum CSVParser {
+
     /// Parses a CSV row handling quoted fields and escaped quotes
     static func parseCSVRow(_ row: String) -> [String] {
         var fields: [String] = []
@@ -47,7 +47,7 @@ struct CSVParser {
         fields.append(currentField)
         return fields
     }
-    
+
     /// Maps CSV headers to column indices for data extraction
     static func mapColumns(headers: [String]) -> ColumnMapping {
         var mapping = ColumnMapping()

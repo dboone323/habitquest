@@ -47,7 +47,7 @@ enum CSVParser {
 
     static func parseCSVRow(_ line: String) -> [String] {
         // naive split on comma; real CSV support should replace this
-        return line.split(separator: ",").map { String($0) }
+        line.split(separator: ",").map { String($0) }
     }
 }
 
@@ -73,7 +73,7 @@ struct ImportValidator {
 
     func isDuplicate(_ transaction: FinancialTransaction) async throws -> Bool {
         // naive: always return false; real implementation should check modelContext
-        return false
+        false
     }
 }
 
@@ -111,12 +111,12 @@ actor EntityManager {
         -> FinancialAccount
     {
         // Create a placeholder account for now
-        return FinancialAccount(name: "Imported Account", balance: 0.0, currencyCode: "USD")
+        FinancialAccount(name: "Imported Account", balance: 0.0, currencyCode: "USD")
     }
 
     func getOrCreateCategory(
         from fields: [String], columnMapping: ColumnMapping, transactionType: TransactionType
     ) async throws -> ExpenseCategory {
-        return ExpenseCategory(name: "Imported", rule: "imported")
+        ExpenseCategory(name: "Imported", rule: "imported")
     }
 }

@@ -50,11 +50,11 @@ struct ComplexityScore {
     let cyclomaticComplexity: Double
 
     enum Rating: String, CaseIterable {
-        case excellent = "excellent"
-        case good = "good"
-        case fair = "fair"
-        case poor = "poor"
-        case critical = "critical"
+        case excellent
+        case good
+        case fair
+        case poor
+        case critical
     }
 }
 
@@ -63,11 +63,11 @@ struct MaintainabilityScore {
     let description: String
 
     enum Rating: String, CaseIterable {
-        case excellent = "excellent"
-        case good = "good"
-        case fair = "fair"
-        case poor = "poor"
-        case critical = "critical"
+        case excellent
+        case good
+        case fair
+        case poor
+        case critical
     }
 }
 
@@ -107,10 +107,10 @@ struct AISuggestion {
 
         var color: String {
             switch self {
-            case .info: return "blue"
-            case .warning: return "orange"
-            case .error: return "red"
-            case .critical: return "purple"
+            case .info: "blue"
+            case .warning: "orange"
+            case .error: "red"
+            case .critical: "purple"
             }
         }
     }
@@ -142,19 +142,19 @@ enum AIServiceError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidAPIKey:
-            return "Invalid API key. Please check your OpenAI API key in settings."
-        case .networkError(let error):
-            return "Network error: \(error.localizedDescription)"
+            "Invalid API key. Please check your OpenAI API key in settings."
+        case let .networkError(error):
+            "Network error: \(error.localizedDescription)"
         case .rateLimitExceeded:
-            return "Rate limit exceeded. Please try again later."
+            "Rate limit exceeded. Please try again later."
         case .tokenLimitExceeded:
-            return "Token limit exceeded. Please try with shorter code."
+            "Token limit exceeded. Please try with shorter code."
         case .invalidResponse:
-            return "Received invalid response from AI service."
+            "Received invalid response from AI service."
         case .serviceUnavailable:
-            return "AI service is currently unavailable. Please try again later."
+            "AI service is currently unavailable. Please try again later."
         case .insufficientCredits:
-            return "Insufficient API credits. Please check your OpenAI account."
+            "Insufficient API credits. Please check your OpenAI account."
         }
     }
 }
@@ -164,26 +164,26 @@ enum AIServiceError: LocalizedError {
 extension CodeLanguage {
     var aiPromptName: String {
         switch self {
-        case .swift: return "Swift"
-        case .python: return "Python"
-        case .javascript: return "JavaScript"
-        case .typescript: return "TypeScript"
-        case .kotlin: return "Kotlin"
-        case .java: return "Java"
-        case .csharp: return "C#"
-        case .cpp: return "C++"
-        case .c: return "C"
-        case .go: return "Go"
-        case .rust: return "Rust"
-        case .php: return "PHP"
-        case .ruby: return "Ruby"
-        case .html: return "HTML"
-        case .css: return "CSS"
-        case .xml: return "XML"
-        case .json: return "JSON"
-        case .yaml: return "YAML"
-        case .markdown: return "Markdown"
-        case .unknown: return "Unknown"
+        case .swift: "Swift"
+        case .python: "Python"
+        case .javascript: "JavaScript"
+        case .typescript: "TypeScript"
+        case .kotlin: "Kotlin"
+        case .java: "Java"
+        case .csharp: "C#"
+        case .cpp: "C++"
+        case .c: "C"
+        case .go: "Go"
+        case .rust: "Rust"
+        case .php: "PHP"
+        case .ruby: "Ruby"
+        case .html: "HTML"
+        case .css: "CSS"
+        case .xml: "XML"
+        case .json: "JSON"
+        case .yaml: "YAML"
+        case .markdown: "Markdown"
+        case .unknown: "Unknown"
         }
     }
 }
@@ -204,7 +204,7 @@ struct APIUsageStats: Codable {
         self.totalCost = 0.0
         self.lastResetDate = Date()
         self.dailyLimit = 10000
-        self.monthlyLimit = 100000
+        self.monthlyLimit = 100_000
     }
 }
 

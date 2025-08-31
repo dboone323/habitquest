@@ -15,7 +15,7 @@ struct HabitQuestApp: App {
             Habit.self,
             HabitLog.self,
             PlayerProfile.self,
-            Achievement.self
+            Achievement.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

@@ -16,7 +16,7 @@ struct SecuritySettingsSection: View {
     @Binding var authenticationTimeout: Double
     @Binding var hapticFeedbackEnabled: Bool
     @State private var biometricStatus: BiometricStatus = .unknown
-    
+
     var body: some View {
         Section {
             HStack {
@@ -57,7 +57,7 @@ struct SecuritySettingsSection: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
 
-                        Slider(value: $authenticationTimeout, in: 60...1800, step: 60) {
+                        Slider(value: $authenticationTimeout, in: 60 ... 1800, step: 60) {
                             Text("Timeout")
                         }
                         .onChange(of: authenticationTimeout) { _, newValue in
@@ -89,7 +89,7 @@ struct SecuritySettingsSection: View {
             checkBiometricStatus()
         }
     }
-    
+
     private var biometricIcon: String {
         switch biometricStatus {
         case .faceID:
@@ -100,7 +100,7 @@ struct SecuritySettingsSection: View {
             "lock.shield"
         }
     }
-    
+
     private func checkBiometricStatus() {
         let context = LAContext()
         var error: NSError?
@@ -127,7 +127,7 @@ struct SecuritySettingsSection: View {
             }
         }
     }
-    
+
     private func enableBiometricAuthentication() async {
         let success = await coordinator.authenticateWithBiometrics()
         if success {

@@ -27,21 +27,21 @@ struct StreakMilestone: Identifiable, @unchecked Sendable {
 
         var animationIntensity: Double {
             switch self {
-            case .basic: return 0.5
-            case .intermediate: return 0.7
-            case .advanced: return 0.9
-            case .epic: return 1.2
-            case .legendary: return 1.5
+            case .basic: 0.5
+            case .intermediate: 0.7
+            case .advanced: 0.9
+            case .epic: 1.2
+            case .legendary: 1.5
             }
         }
 
         var particleCount: Int {
             switch self {
-            case .basic: return 10
-            case .intermediate: return 20
-            case .advanced: return 35
-            case .epic: return 50
-            case .legendary: return 100
+            case .basic: 10
+            case .intermediate: 20
+            case .advanced: 35
+            case .epic: 50
+            case .legendary: 100
             }
         }
     }
@@ -96,19 +96,19 @@ struct StreakMilestone: Identifiable, @unchecked Sendable {
             description: "365 days! You are a legend among legends!",
             emoji: "🔥🔥🔥🔥🔥",
             celebrationLevel: .legendary
-        )
+        ),
     ]
 
     /// Get the milestone for a specific streak count
     static func milestone(for streakCount: Int) -> StreakMilestone? {
-        return predefinedMilestones
+        predefinedMilestones
             .filter { $0.streakCount <= streakCount }
             .max(by: { $0.streakCount < $1.streakCount })
     }
 
     /// Get the next milestone to achieve
     static func nextMilestone(for streakCount: Int) -> StreakMilestone? {
-        return predefinedMilestones
+        predefinedMilestones
             .first { $0.streakCount > streakCount }
     }
 
@@ -123,6 +123,7 @@ struct StreakMilestone: Identifiable, @unchecked Sendable {
 }
 
 // MARK: - Comparable
+
 extension StreakMilestone: Comparable {
     static func < (lhs: StreakMilestone, rhs: StreakMilestone) -> Bool {
         lhs.streakCount < rhs.streakCount

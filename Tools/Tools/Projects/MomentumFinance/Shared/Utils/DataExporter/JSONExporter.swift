@@ -6,7 +6,7 @@ import SwiftData
 extension DataExporter {
 
     /// Export data to JSON format
-    internal func exportToJSON(with settings: ExportSettings) async throws -> URL {
+    func exportToJSON(with settings: ExportSettings) async throws -> URL {
         var exportData: [String: Any] = [:]
 
         exportData["exportInfo"] = [
@@ -38,7 +38,8 @@ extension DataExporter {
         }
 
         let jsonData = try JSONSerialization.data(
-            withJSONObject: exportData, options: .prettyPrinted)
+            withJSONObject: exportData, options: .prettyPrinted
+        )
         return try saveToFile(data: jsonData, filename: "momentum_finance_export.json")
     }
 

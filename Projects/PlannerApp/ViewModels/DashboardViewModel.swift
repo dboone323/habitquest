@@ -1,6 +1,6 @@
 // PlannerApp/ViewModels/DashboardViewModel.swift (Updated)
-import Foundation
 import Combine
+import Foundation
 import SwiftUI // Needed for @AppStorage
 
 // MARK: - Data Structures
@@ -80,7 +80,8 @@ class DashboardViewModel: ObservableObject {
         let startOfToday = calendar.startOfDay(for: today)
         // Use guard to safely unwrap optional dates. If calculation fails, reset data.
         guard let endOfToday = calendar.date(byAdding: .day, value: 1, to: startOfToday),
-              let endOfWeek = calendar.date(byAdding: .day, value: 7, to: startOfToday) else {
+              let endOfWeek = calendar.date(byAdding: .day, value: 7, to: startOfToday)
+        else {
             print("Error calculating date ranges for dashboard.")
             resetData() // Clear displayed data if dates are invalid
             return
@@ -94,7 +95,7 @@ class DashboardViewModel: ObservableObject {
 
         // Filter tasks that are not completed.
         let filteredIncompleteTasks = allTasks.filter { !$0.isCompleted }
-                                             // .sorted(...) // Optional: Add sorting if needed
+        // .sorted(...) // Optional: Add sorting if needed
 
         // Filter goals due between today and the end of the next 7 days.
         let filteredUpcomingGoals = allGoals.filter { goal in
@@ -150,7 +151,7 @@ class DashboardViewModel: ObservableObject {
         let allGoals = GoalDataManager.shared.load()
 
         self.totalTasks = allTasks.count
-        self.completedTasks = allTasks.filter { $0.isCompleted }.count
+        self.completedTasks = allTasks.count(where: { $0.isCompleted })
         self.totalGoals = allGoals.count
         self.completedGoals = 0 // Goal completion not yet implemented
         self.todayEvents = self.totalTodaysEventsCount
@@ -164,8 +165,8 @@ class DashboardViewModel: ObservableObject {
         let recentCompletedTasks = allTasks.filter { task in
             // Only include tasks that are actually completed AND were created or completed recently
             task.isCompleted &&
-            (Calendar.current.isDateInYesterday(task.createdAt) ||
-             Calendar.current.isDateInToday(task.createdAt))
+                (Calendar.current.isDateInYesterday(task.createdAt) ||
+                    Calendar.current.isDateInToday(task.createdAt))
         }.prefix(3)
 
         for task in recentCompletedTasks {

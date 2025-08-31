@@ -55,9 +55,9 @@ struct ThemeBudgetProgress: View {
         let progress = min(1.0, spent / total)
         let color: Color =
             switch progress {
-            case 0..<0.8:
+            case 0 ..< 0.8:
                 theme.budgetUnder
-            case 0.8..<1.0:
+            case 0.8 ..< 1.0:
                 theme.budgetNear
             default:
                 theme.budgetOver

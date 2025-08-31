@@ -45,12 +45,13 @@ final class AnalyticsService {
     /// - Returns: <#description#>
     func getHabitTrends(for habitId: UUID, days: Int = 30) async -> HabitTrendData {
         let habit = await fetchHabit(id: habitId)
-        guard let habit = habit else {
+        guard let habit else {
             return HabitTrendData(habitId: habitId, completionRates: [], streaks: [], xpEarned: [])
         }
 
         let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
-        let recentLogs = habit.logs.filter { $0.completionDate >= cutoffDate }.sorted { $0.completionDate < $1.completionDate }
+        let recentLogs = habit.logs.filter { $0.completionDate >= cutoffDate }
+            .sorted { $0.completionDate < $1.completionDate }
 
         return HabitTrendData(
             habitId: habitId,
@@ -71,8 +72,8 @@ final class AnalyticsService {
         let categories = Dictionary(grouping: habits) { $0.category }
 
         return categories.map { category, categoryHabits in
-            let allLogs = categoryHabits.flatMap { $0.logs }
-            let completedLogs = allLogs.filter { $0.isCompleted }
+            let allLogs = categoryHabits.flatMap(\.logs)
+            let completedLogs = allLogs.filter(\.isCompleted)
 
             return CategoryInsight(
                 category: category,
@@ -93,9 +94,9 @@ final class AnalyticsService {
     func getProductivityMetrics(for period: TimePeriod) async -> ProductivityMetrics {
         let habits = await fetchAllHabits()
         let startDate = period.startDate
-        let logs = habits.flatMap { $0.logs }.filter { $0.completionDate >= startDate }
+        let logs = habits.flatMap(\.logs).filter { $0.completionDate >= startDate }
 
-        let completedLogs = logs.filter { $0.isCompleted }
+        let completedLogs = logs.filter(\.isCompleted)
         let totalPossibleCompletions = habits.count * period.dayCount
 
         return ProductivityMetrics(
@@ -126,13 +127,13 @@ final class AnalyticsService {
     }
 
     private func calculateOverallStats(habits: [Habit], logs: [HabitLog]) -> OverallStats {
-        let completedLogs = logs.filter { $0.isCompleted }
+        let completedLogs = logs.filter(\.isCompleted)
         let totalCompletions = completedLogs.count
         let completionRate = Double(totalCompletions) / Double(max(logs.count, 1))
 
         return OverallStats(
             totalHabits: habits.count,
-            activeHabits: habits.filter { $0.isActive }.count,
+            activeHabits: habits.filter(\.isActive).count,
             totalCompletions: totalCompletions,
             completionRate: completionRate,
             totalXPEarned: completedLogs.reduce(0) { $0 + $1.xpEarned },
@@ -141,7 +142,7 @@ final class AnalyticsService {
     }
 
     private func calculateStreakAnalytics(habits: [Habit]) -> AnalyticsStreakData {
-        let streaks = habits.map { $0.streak }
+        let streaks = habits.map(\.streak)
         return AnalyticsStreakData(
             currentStreaks: streaks,
             longestStreak: streaks.max() ?? 0,
@@ -153,7 +154,7 @@ final class AnalyticsService {
     private func calculateCategoryBreakdown(habits: [Habit]) -> [CategoryStats] {
         let categories = Dictionary(grouping: habits) { $0.category }
         return categories.map { category, categoryHabits in
-            let completedLogs = categoryHabits.flatMap { $0.logs }.filter { $0.isCompleted }
+            let completedLogs = categoryHabits.flatMap(\.logs).filter(\.isCompleted)
             return CategoryStats(
                 category: category,
                 habitCount: categoryHabits.count,
@@ -168,8 +169,11 @@ final class AnalyticsService {
         let moodStats = moodGroups.mapValues { logs in
             MoodStats(
                 mood: logs.first?.mood ?? .okay,
-                completionRate: Double(logs.filter { $0.isCompleted }.count) / Double(max(logs.count, 1)),
-                averageXP: logs.filter { $0.isCompleted }.reduce(0) { $0 + $1.xpEarned } / max(logs.filter { $0.isCompleted }.count, 1)
+                completionRate: Double(logs.filter(\.isCompleted).count) / Double(max(logs.count, 1)),
+                averageXP: logs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned } / max(
+                    logs.filter(\.isCompleted).count,
+                    1
+                )
             )
         }
 
@@ -194,12 +198,12 @@ final class AnalyticsService {
     private func calculateWeeklyProgress(logs: [HabitLog]) -> WeeklyProgress {
         let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let weekLogs = logs.filter { $0.completionDate >= weekAgo }
-        let completedThisWeek = weekLogs.filter { $0.isCompleted }.count
+        let completedThisWeek = weekLogs.filter(\.isCompleted).count
 
         return WeeklyProgress(
             completedHabits: completedThisWeek,
             totalOpportunities: weekLogs.count,
-            xpEarned: weekLogs.filter { $0.isCompleted }.reduce(0) { $0 + $1.xpEarned },
+            xpEarned: weekLogs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned },
             dailyBreakdown: calculateDailyBreakdown(logs: weekLogs)
         )
     }
@@ -212,16 +216,16 @@ final class AnalyticsService {
         return monthGroups.map { month, monthLogs in
             MonthlyTrend(
                 month: month,
-                completions: monthLogs.filter { $0.isCompleted }.count,
-                xpEarned: monthLogs.filter { $0.isCompleted }.reduce(0) { $0 + $1.xpEarned },
+                completions: monthLogs.filter(\.isCompleted).count,
+                xpEarned: monthLogs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned },
                 averageDaily: Double(monthLogs.count) / 30.0
             )
         }.sorted { $0.month < $1.month }
     }
 
     private func calculateHabitPerformance(habits: [Habit]) -> [HabitPerformance] {
-        return habits.map { habit in
-            let completedLogs = habit.logs.filter { $0.isCompleted }
+        habits.map { habit in
+            let completedLogs = habit.logs.filter(\.isCompleted)
             let trends = calculateHabitTrends(logs: habit.logs)
 
             return HabitPerformance(
@@ -241,10 +245,10 @@ final class AnalyticsService {
         var rates: [Double] = []
         let calendar = Calendar.current
 
-        for day in 0..<days {
+        for day in 0 ..< days {
             guard let date = calendar.date(byAdding: .day, value: -day, to: Date()) else { continue }
             let dayLogs = logs.filter { calendar.isDate($0.completionDate, inSameDayAs: date) }
-            let completionRate = Double(dayLogs.filter { $0.isCompleted }.count) / Double(max(dayLogs.count, 1))
+            let completionRate = Double(dayLogs.filter(\.isCompleted).count) / Double(max(dayLogs.count, 1))
             rates.append(completionRate)
         }
 
@@ -276,10 +280,10 @@ final class AnalyticsService {
         var xpData: [Int] = []
         let calendar = Calendar.current
 
-        for day in 0..<days {
+        for day in 0 ..< days {
             guard let date = calendar.date(byAdding: .day, value: -day, to: Date()) else { continue }
             let dayLogs = logs.filter { calendar.isDate($0.completionDate, inSameDayAs: date) }
-            let dailyXP = dayLogs.filter { $0.isCompleted }.reduce(0) { $0 + $1.xpEarned }
+            let dailyXP = dayLogs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned }
             xpData.append(dailyXP)
         }
 
@@ -287,7 +291,7 @@ final class AnalyticsService {
     }
 
     private func calculateActiveStreaks(habits: [Habit]) -> Int {
-        return habits.filter { $0.streak > 0 }.count
+        habits.filter { $0.streak > 0 }.count
     }
 
     private func calculateWeekdayPatterns(logs: [HabitLog]) -> [Int: Int] {
@@ -305,15 +309,15 @@ final class AnalyticsService {
             dateFormatter.string(from: $0.completionDate)
         }
 
-        return dayGroups.mapValues { $0.filter { $0.isCompleted }.count }
+        return dayGroups.mapValues { $0.filter(\.isCompleted).count }
     }
 
     private func calculateHabitTrends(logs: [HabitLog]) -> HabitTrend {
         let recentLogs = logs.suffix(30)
         let olderLogs = logs.dropLast(30).suffix(30)
 
-        let recentRate = Double(recentLogs.filter { $0.isCompleted }.count) / Double(max(recentLogs.count, 1))
-        let olderRate = Double(olderLogs.filter { $0.isCompleted }.count) / Double(max(olderLogs.count, 1))
+        let recentRate = Double(recentLogs.filter(\.isCompleted).count) / Double(max(recentLogs.count, 1))
+        let olderRate = Double(olderLogs.filter(\.isCompleted).count) / Double(max(olderLogs.count, 1))
 
         if recentRate > olderRate + 0.1 {
             return .improving
@@ -346,10 +350,10 @@ enum TimePeriod {
 
     var dayCount: Int {
         switch self {
-        case .week: return 7
-        case .month: return 30
-        case .quarter: return 90
-        case .year: return 365
+        case .week: 7
+        case .month: 30
+        case .quarter: 90
+        case .year: 365
         }
     }
 }

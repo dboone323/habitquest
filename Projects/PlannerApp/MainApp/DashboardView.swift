@@ -1,6 +1,6 @@
-import SwiftUI
-import Foundation
 import _Concurrency // Explicitly import _Concurrency
+import Foundation
+import SwiftUI
 
 struct DashboardView: View {
     @EnvironmentObject var themeManager: ThemeManager
@@ -206,34 +206,34 @@ struct DashboardView: View {
             .background(themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
             .navigationTitle("Dashboard")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
-            .overlay(
-                Group {
-                    if showLoadingOverlay {
-                        ZStack {
-                            Color.black.opacity(0.3)
-                                .ignoresSafeArea()
+                .overlay(
+                    Group {
+                        if showLoadingOverlay {
+                            ZStack {
+                                Color.black.opacity(0.3)
+                                    .ignoresSafeArea()
 
-                            VStack(spacing: 16) {
-                                ProgressView()
-                                    .scaleEffect(1.5)
-                                    .tint(themeManager.currentTheme.primaryAccentColor)
+                                VStack(spacing: 16) {
+                                    ProgressView()
+                                        .scaleEffect(1.5)
+                                        .tint(themeManager.currentTheme.primaryAccentColor)
 
-                                Text("Refreshing...")
-                                    .font(.subheadline)
-                                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                                    Text("Refreshing...")
+                                        .font(.subheadline)
+                                        .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                                }
+                                .padding(32)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .fill(themeManager.currentTheme.secondaryBackgroundColor)
+                                        .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
+                                )
                             }
-                            .padding(32)
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(themeManager.currentTheme.secondaryBackgroundColor)
-                                    .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
-                            )
                         }
                     }
-                }
-            )
+                )
         }
         .onAppear {
             _Concurrency.Task { @MainActor in // Changed to _Concurrency.Task
@@ -267,8 +267,8 @@ struct DashboardView: View {
     private func handleQuickAction(_ action: QuickAction) {
         // Add haptic feedback for better UX
         #if os(iOS)
-        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedback.impactOccurred()
+            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+            impactFeedback.impactOccurred()
         #endif
 
         switch action {
@@ -330,11 +330,11 @@ struct DashboardView: View {
     private var greetingText: String {
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
-        case 5..<12:
+        case 5 ..< 12:
             return "Good Morning"
-        case 12..<17:
+        case 12 ..< 17:
             return "Good Afternoon"
-        case 17..<22:
+        case 17 ..< 22:
             return "Good Evening"
         default:
             return "Good Night"

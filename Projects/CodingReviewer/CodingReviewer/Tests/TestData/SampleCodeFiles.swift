@@ -1,6 +1,7 @@
 import Foundation
 
 // MARK: - Sample Swift Code
+
 let sampleSwiftCode = """
 import Foundation
 import UIKit
@@ -8,7 +9,7 @@ import UIKit
 class UserManager: ObservableObject {
     @Published var users: [User] = [];
     private let networkService = NetworkService()
-    
+
     func fetchUsers() async {
         do {
             let fetchedUsers = try await networkService.getUsers()
@@ -19,11 +20,11 @@ class UserManager: ObservableObject {
             print("Error fetching users: \\(error)")
         }
     }
-    
+
     func addUser(_ user: User) {
         users.append(user)
     }
-    
+
     func removeUser(withId id: String) {
         users.removeAll { $0.id == id }
     }
@@ -34,7 +35,7 @@ struct User: Codable, Identifiable {
     let name: String
     let email: String
     let isActive: Bool
-    
+
     init(id: String = UUID().uuidString, name: String, email: String, isActive: Bool = true) {
         self.id = id
         self.name = name
@@ -45,19 +46,19 @@ struct User: Codable, Identifiable {
 
 class NetworkService {
     private let baseURL = "https://api.example.com"
-    
+
     func getUsers() async throws -> [User] {
         guard let url = URL(string: "\\(baseURL)/users") else {
             throw NetworkError.invalidURL
         }
-        
+
         let (data, response) = try await URLSession.shared.data(from: url)
-        
+
         guard let httpResponse = response as? HTTPURLResponse,
               httpResponse.statusCode == 200 else {
             throw NetworkError.badResponse
         }
-        
+
         return try JSONDecoder().decode([User].self, from: data)
     }
 }
@@ -69,14 +70,15 @@ enum NetworkError: Error {
 }
 """
 
-// MARK: - Sample JavaScript Code  
+// MARK: - Sample JavaScript Code
+
 let sampleJavaScriptCode = """
 class TaskManager {
     constructor() {
         this.tasks = [];
         this.nextId = 1;
     }
-    
+
     addTask(title, description, priority = 'medium') {
         const task = {
             id: this.nextId++,
@@ -86,12 +88,12 @@ class TaskManager {
             completed: false,
             createdAt: new Date().toISOString()
         };
-        
+
         this.tasks.push(task);
         this.notifyObservers('taskAdded', task);
         return task;
     }
-    
+
     completeTask(taskId) {
         const task = this.tasks.find(t => t.id === taskId);
         if (task) {
@@ -100,7 +102,7 @@ class TaskManager {
             this.notifyObservers('taskCompleted', task);
         }
     }
-    
+
     removeTask(taskId) {
         const index = this.tasks.findIndex(t => t.id === taskId);
         if (index !== -1) {
@@ -108,7 +110,7 @@ class TaskManager {
             this.notifyObservers('taskRemoved', removedTask);
         }
     }
-    
+
     getTasks(filter = 'all') {
         switch (filter) {
             case 'completed':
@@ -121,7 +123,7 @@ class TaskManager {
                 return this.tasks;
         }
     }
-    
+
     notifyObservers(event, data) {
         if (this.observers) {
             this.observers.forEach(observer => {
@@ -140,6 +142,7 @@ taskManager.addTask('Write tests', 'Create comprehensive test suite', 'medium');
 """
 
 // MARK: - Sample Python Code
+
 let samplePythonCode = """
 import asyncio
 import aiohttp
@@ -152,24 +155,24 @@ class DataAnalyzer:
         self.api_key = api_key
         self.session: Optional[aiohttp.ClientSession] = None
         self.data_cache: Dict[str, any] = {}
-    
+
     async def __aenter__(self):
         self.session = aiohttp.ClientSession()
         return self
-    
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         if self.session:
             await self.session.close()
-    
+
     async def fetch_data(self, endpoint: str) -> Dict:
         if not self.session:
             raise RuntimeError("Session not initialized. Use async context manager.")
-        
+
         headers = {
             'Authorization': f'Bearer {self.api_key}',
             'Content-Type': 'application/json'
         }
-        
+
         try:
             async with self.session.get(endpoint, headers=headers) as response:
                 response.raise_for_status()
@@ -177,20 +180,20 @@ class DataAnalyzer:
         except aiohttp.ClientError as e:
             print(f"Error fetching data: {e}")
             return {}
-    
+
     def analyze_data(self, data: List[Dict]) -> Dict[str, any]:
         if not data:
             return {"error": "No data to analyze"}
-        
+
         analysis = {
             "total_records": len(data),
             "timestamp": datetime.now().isoformat(),
             "statistics": {}
         }
-        
+
         # Perform statistical analysis
         numeric_fields = self._identify_numeric_fields(data)
-        
+
         for field in numeric_fields:
             values = [record.get(field, 0) for record in data if field in record]
             if values:
@@ -200,25 +203,25 @@ class DataAnalyzer:
                     "max": max(values),
                     "count": len(values)
                 }
-        
+
         return analysis
-    
+
     def _identify_numeric_fields(self, data: List[Dict]) -> List[str]:
         if not data:
             return []
-        
+
         sample = data[0]
         numeric_fields = []
-        
+
         for key, value in sample.items():
             if isinstance(value, (int, float)):
                 numeric_fields.append(key)
-        
+
         return numeric_fields
-    
+
     def cache_result(self, key: str, result: any) -> None:
         self.data_cache[key] = result
-    
+
     def get_cached_result(self, key: str) -> Optional[any]:
         return self.data_cache.get(key)
 
@@ -235,6 +238,7 @@ if __name__ == "__main__":
 """
 
 // MARK: - Sample HTML Code
+
 let sampleHTMLCode = """
 <!DOCTYPE html>
 <html lang="en">
@@ -258,7 +262,7 @@ let sampleHTMLCode = """
             </ul>
         </nav>
     </header>
-    
+
     <main class="main-content">
         <section id="dashboard" class="dashboard">
             <h2>Project Overview</h2>
@@ -281,7 +285,7 @@ let sampleHTMLCode = """
                 </div>
             </div>
         </section>
-        
+
         <section id="file-upload" class="upload-section">
             <h2>Upload Files</h2>
             <div class="upload-area" id="upload-area">
@@ -292,7 +296,7 @@ let sampleHTMLCode = """
                 <div class="progress-bar" id="progress-bar"></div>
             </div>
         </section>
-        
+
         <section id="results" class="results-section">
             <h2>Analysis Results</h2>
             <div class="results-container" id="results-container">
@@ -300,17 +304,18 @@ let sampleHTMLCode = """
             </div>
         </section>
     </main>
-    
+
     <footer class="footer">
         <p>&copy; 2025 CodingReviewer. All rights reserved.</p>
     </footer>
-    
+
     <script src="app.js"></script>
 </body>
 </html>
 """
 
 // MARK: - Sample JSON Configuration
+
 let sampleJSONCode = """
 {
   "application": {
@@ -386,6 +391,7 @@ let sampleJSONCode = """
 """
 
 // MARK: - Complex Swift Code Sample
+
 let complexSwiftCodeSample = """
 import Foundation
 import Combine
@@ -396,7 +402,7 @@ import SwiftUI
 protocol Repository {
     associatedtype Entity: Identifiable & Codable
     associatedtype ID: Hashable
-    
+
     func create(_ entity: Entity) async throws -> Entity
     func read(id: ID) async throws -> Entity?
     func update(_ entity: Entity) async throws -> Entity
@@ -408,7 +414,7 @@ struct FilterCriteria {
     let field: String
     let operator: FilterOperator
     let value: Any
-    
+
     enum FilterOperator {
         case equals, contains, greaterThan, lessThan, between
     }
@@ -417,13 +423,13 @@ struct FilterCriteria {
 class GenericRepository<T: Identifiable & Codable>: Repository {
     typealias Entity = T
     typealias ID = T.ID
-    
+
     private let networkService: NetworkServiceProtocol
     private let cacheService: CacheServiceProtocol
     private let endpoint: String
-    
+
     private var cancellables = Set<AnyCancellable>();
-    
+
     init(networkService: NetworkServiceProtocol, 
          cacheService: CacheServiceProtocol, 
          endpoint: String) {
@@ -431,51 +437,51 @@ class GenericRepository<T: Identifiable & Codable>: Repository {
         self.cacheService = cacheService
         self.endpoint = endpoint
     }
-    
+
     func create(_ entity: Entity) async throws -> Entity {
         let request = CreateRequest(endpoint: endpoint, entity: entity)
         let response: Entity = try await networkService.execute(request)
-        
+
         await cacheService.set(key: "\\(endpoint)_\\(response.id)", value: response)
         return response
     }
-    
+
     func read(id: ID) async throws -> Entity? {
         let cacheKey = "\\(endpoint)_\\(id)"
-        
+
         if let cachedEntity: Entity = await cacheService.get(key: cacheKey) {
             return cachedEntity
         }
-        
+
         let request = ReadRequest<Entity>(endpoint: endpoint, id: id)
         let entity: Entity = try await networkService.execute(request)
-        
+
         await cacheService.set(key: cacheKey, value: entity)
         return entity
     }
-    
+
     func update(_ entity: Entity) async throws -> Entity {
         let request = UpdateRequest(endpoint: endpoint, entity: entity)
         let updatedEntity: Entity = try await networkService.execute(request)
-        
+
         let cacheKey = "\\(endpoint)_\\(updatedEntity.id)"
         await cacheService.set(key: cacheKey, value: updatedEntity)
-        
+
         return updatedEntity
     }
-    
+
     func delete(id: ID) async throws {
         let request = DeleteRequest(endpoint: endpoint, id: id)
         try await networkService.execute(request)
-        
+
         let cacheKey = "\\(endpoint)_\\(id)"
         await cacheService.remove(key: cacheKey)
     }
-    
+
     func list(filter: FilterCriteria? = nil) async throws -> [Entity] {
         let request = ListRequest<Entity>(endpoint: endpoint, filter: filter)
         let entities: [Entity] = try await networkService.execute(request)
-        
+
         // Cache individual entities
         await withTaskGroup(of: Void.self) { group in
             for entity in entities {
@@ -485,7 +491,7 @@ class GenericRepository<T: Identifiable & Codable>: Repository {
                 }
             }
         }
-        
+
         return entities
     }
 }
@@ -497,7 +503,7 @@ enum RepositoryError: Error, LocalizedError {
     case cacheError(CacheError)
     case validationError(ValidationError)
     case unknownError(Error)
-    
+
     var errorDescription: String? {
         switch self {
         case .networkError(let error):
@@ -519,17 +525,17 @@ class ProjectAnalysisEngine: ObservableObject {
     @Published var analysisState: AnalysisState = .idle;
     @Published var currentProgress: Double = 0.0;
     @Published var analysisResults: [AnalysisResult] = [];
-    
+
     private let fileRepository: GenericRepository<CodeFile>
     private let analysisService: AnalysisServiceProtocol
     private let mlService: MLServiceProtocol
-    
+
     private var analysisTask: Task<Void, Error>?
-    
+
     enum AnalysisState {
         case idle, analyzing, completed, failed(Error)
     }
-    
+
     init(fileRepository: GenericRepository<CodeFile>,
          analysisService: AnalysisServiceProtocol,
          mlService: MLServiceProtocol) {
@@ -537,57 +543,57 @@ class ProjectAnalysisEngine: ObservableObject {
         self.analysisService = analysisService
         self.mlService = mlService
     }
-    
+
     func startAnalysis(for projectId: String) async {
         analysisState = .analyzing
         currentProgress = 0.0
         analysisResults.removeAll()
-        
+
         analysisTask = Task {
             do {
                 let files = try await fileRepository.list(filter: nil)
                 let totalFiles = files.count
-                
+
                 await withThrowingTaskGroup(of: AnalysisResult.self) { group in
                     for (index, file) in files.enumerated() {
                         group.addTask {
                             let result = try await self.analyzeFile(file)
-                            
+
                             await MainActor.run {
                                 self.currentProgress = Double(index + 1) / Double(totalFiles)
                             }
-                            
+
                             return result
                         }
                     }
-                    
+
                     for try await result in group {
                         analysisResults.append(result)
                     }
                 }
-                
+
                 // Perform ML analysis on all results
                 let mlInsights = try await mlService.generateInsights(from: analysisResults)
-                
+
                 for insight in mlInsights {
                     if let index = analysisResults.firstIndex(where: { $0.fileId == insight.fileId }) {
                         analysisResults[index].mlInsights = insight.insights
                     }
                 }
-                
+
                 analysisState = .completed
-                
+
             } catch {
                 analysisState = .failed(error)
             }
         }
     }
-    
+
     private func analyzeFile(_ file: CodeFile) async throws -> AnalysisResult {
         let complexity = try await analysisService.calculateComplexity(for: file)
         let issues = try await analysisService.findIssues(in: file)
         let suggestions = try await analysisService.generateSuggestions(for: file)
-        
+
         return AnalysisResult(
             fileId: file.id,
             fileName: file.name,
@@ -597,7 +603,7 @@ class ProjectAnalysisEngine: ObservableObject {
             timestamp: Date()
         )
     }
-    
+
     func cancelAnalysis() {
         analysisTask?.cancel()
         analysisState = .idle

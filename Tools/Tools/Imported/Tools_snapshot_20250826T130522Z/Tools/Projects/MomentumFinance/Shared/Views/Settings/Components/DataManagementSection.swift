@@ -13,7 +13,7 @@ struct DataManagementSection: View {
     @Binding var dataRetentionDays: Double
     @Binding var showingDeleteConfirmation: Bool
     @Binding var hapticFeedbackEnabled: Bool
-    
+
     var body: some View {
         Section {
             HStack {
@@ -49,7 +49,7 @@ struct DataManagementSection: View {
             }
         }
     }
-    
+
     func deleteAllData() async {
         // This would integrate with the data manager to delete all data
         // Implementation would depend on the specific data architecture

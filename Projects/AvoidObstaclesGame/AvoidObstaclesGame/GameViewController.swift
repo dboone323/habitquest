@@ -5,9 +5,9 @@
 // Standard ViewController to load and present the GameScene.
 //
 
-import UIKit
-import SpriteKit
 import GameplayKit
+import SpriteKit
+import UIKit
 
 class GameViewController: UIViewController {
 
@@ -37,13 +37,13 @@ class GameViewController: UIViewController {
     // Standard iOS view controller overrides for orientation and status bar.
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
+            .allButUpsideDown
         } else {
-            return .all
+            .all
         }
     }
 
     override var prefersStatusBarHidden: Bool {
-        return true // Hides the status bar for a more immersive game experience
+        true // Hides the status bar for a more immersive game experience
     }
 }

@@ -9,16 +9,16 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct FileUploadView: View {
-    @StateObject private var fileManager = FileManagerService();
-    @State private var showingFileImporter = false;
-    @State private var showingFolderPicker = false;
-    @State private var isTargeted = false;
+    @StateObject private var fileManager = FileManagerService()
+    @State private var showingFileImporter = false
+    @State private var showingFolderPicker = false
+    @State private var isTargeted = false
     @State private var uploadResult: FileUploadResult?
-    @State private var showingUploadResults = false;
-    @State private var selectedFiles: Set<CodeFile.ID> = [];
-    @State private var showingAnalysisResults = false;
-    @State private var analysisRecords: [FileAnalysisRecord] = [];
-    @State private var sheetAnalysisRecords: [FileAnalysisRecord] = [];
+    @State private var showingUploadResults = false
+    @State private var selectedFiles: Set<CodeFile.ID> = []
+    @State private var showingAnalysisResults = false
+    @State private var analysisRecords: [FileAnalysisRecord] = []
+    @State private var sheetAnalysisRecords: [FileAnalysisRecord] = []
 
     var body: some View {
         VStack(spacing: 0) {
@@ -396,7 +396,7 @@ struct FileUploadView: View {
 
     private func handleFileImport(_ result: Result<[URL], Error>) {
         switch result {
-        case .success(let urls):
+        case let .success(urls):
             Task {
                 do {
                     let result = try await fileManager.uploadFiles(from: urls)
@@ -410,7 +410,7 @@ struct FileUploadView: View {
                     }
                 }
             }
-        case .failure(let error):
+        case let .failure(error):
             fileManager.errorMessage = error.localizedDescription
         }
     }
@@ -440,7 +440,7 @@ struct FileUploadView: View {
     }
 
     private func handleDrop(providers: [NSItemProvider]) -> Bool {
-        var urls: [URL] = [];
+        var urls: [URL] = []
 
         for provider in providers {
             if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
@@ -449,7 +449,7 @@ struct FileUploadView: View {
                         urls.append(url)
 
                         if urls.count == providers.count {
-                            let urlsCopy = urls  // Capture urls to avoid concurrency warning
+                            let urlsCopy = urls // Capture urls to avoid concurrency warning
                             Task {
                                 do {
                                     let result = try await fileManager.uploadFiles(from: urlsCopy)
@@ -578,7 +578,7 @@ struct FileUploadView: View {
     }
 
     private func uploadResultMessage(_ result: FileUploadResult) -> String {
-        var message = "";
+        var message = ""
 
         if !result.successfulFiles.isEmpty {
             message += "Successfully uploaded \(result.successfulFiles.count) files.\n"
@@ -883,19 +883,19 @@ struct AnalysisResultsView: View {
     }
 
     private var criticalIssues: Int {
-        records.flatMap(\.analysisResults).filter { $0.severity == "critical" }.count
+        records.flatMap(\.analysisResults).count(where: { $0.severity == "critical" })
     }
 
     private var highIssues: Int {
-        records.flatMap(\.analysisResults).filter { $0.severity == "high" }.count
+        records.flatMap(\.analysisResults).count(where: { $0.severity == "high" })
     }
 
     private var mediumIssues: Int {
-        records.flatMap(\.analysisResults).filter { $0.severity == "medium" }.count
+        records.flatMap(\.analysisResults).count(where: { $0.severity == "medium" })
     }
 
     private var lowIssues: Int {
-        records.flatMap(\.analysisResults).filter { $0.severity == "low" }.count
+        records.flatMap(\.analysisResults).count(where: { $0.severity == "low" })
     }
 
     var body: some View {

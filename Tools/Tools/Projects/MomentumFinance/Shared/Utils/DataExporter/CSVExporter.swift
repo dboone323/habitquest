@@ -6,7 +6,7 @@ import SwiftData
 extension DataExporter {
 
     /// Export data to CSV format
-    internal func exportToCSV(with settings: ExportSettings) async throws -> URL {
+    func exportToCSV(with settings: ExportSettings) async throws -> URL {
         var csvContent = ""
 
         if settings.includeTransactions {

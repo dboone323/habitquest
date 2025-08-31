@@ -17,28 +17,28 @@ enum AppError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .invalidInput(let message):
-            return "Invalid input: \(message)"
-        case .fileNotFound(let filename):
-            return "File not found: \(filename)"
-        case .networkError(let message):
-            return "Network error: \(message)"
-        case .parsingError(let message):
-            return "Parsing error: \(message)"
-        case .apiError(let message):
-            return "API error: \(message)"
-        case .configurationError(let message):
-            return "Configuration error: \(message)"
+        case let .invalidInput(message):
+            "Invalid input: \(message)"
+        case let .fileNotFound(filename):
+            "File not found: \(filename)"
+        case let .networkError(message):
+            "Network error: \(message)"
+        case let .parsingError(message):
+            "Parsing error: \(message)"
+        case let .apiError(message):
+            "API error: \(message)"
+        case let .configurationError(message):
+            "Configuration error: \(message)"
         case .unauthorized:
-            return "Unauthorized access"
+            "Unauthorized access"
         case .invalidCredentials:
-            return "Invalid credentials"
-        case .operationFailed(let message):
-            return "Operation failed: \(message)"
-        case .invalidConfiguration(let message):
-            return "Invalid configuration: \(message)"
+            "Invalid credentials"
+        case let .operationFailed(message):
+            "Operation failed: \(message)"
+        case let .invalidConfiguration(message):
+            "Invalid configuration: \(message)"
         case .unknown:
-            return "An unknown error occurred"
+            "An unknown error occurred"
         }
     }
 }

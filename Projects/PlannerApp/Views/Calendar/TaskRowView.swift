@@ -8,22 +8,22 @@ struct TaskRowView: View {
     private var priorityColor: Color {
         switch task.priority {
         case .high:
-            return .red
+            .red
         case .medium:
-            return .orange
+            .orange
         case .low:
-            return .green
+            .green
         }
     }
 
     private var priorityText: String {
         switch task.priority {
         case .high:
-            return "High"
+            "High"
         case .medium:
-            return "Medium"
+            "Medium"
         case .low:
-            return "Low"
+            "Low"
         }
     }
 

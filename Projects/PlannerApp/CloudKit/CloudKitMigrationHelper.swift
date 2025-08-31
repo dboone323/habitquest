@@ -1,6 +1,6 @@
 // CloudKitMigrationHelper.swift - Handles migration of local data to CloudKit
-import Foundation
 import CloudKit
+import Foundation
 import SwiftUI
 
 @MainActor

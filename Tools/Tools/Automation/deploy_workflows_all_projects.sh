@@ -40,8 +40,8 @@ print_error() {
 check_pyyaml() {
 	# Determine which python command to use. Prefer PYTHON_CMD env if provided.
 	local py_cmd
-	py_cmd="${PYTHON_CMD:-}"
-	if [[ -z "${py_cmd}" ]]; then
+	py_cmd="${PYTHON_CMD-}"
+	if [[ -z ${py_cmd} ]]; then
 		if command -v python >/dev/null 2>&1; then
 			py_cmd=python
 		elif command -v python3 >/dev/null 2>&1; then
@@ -79,8 +79,8 @@ validate_workflows() {
 
 	# Choose python interpreter (respect PYTHON_CMD if set)
 	local py_cmd
-	py_cmd="${PYTHON_CMD:-}"
-	if [[ -z "${py_cmd}" ]]; then
+	py_cmd="${PYTHON_CMD-}"
+	if [[ -z ${py_cmd} ]]; then
 		if command -v python >/dev/null 2>&1; then
 			py_cmd=python
 		elif command -v python3 >/dev/null 2>&1; then

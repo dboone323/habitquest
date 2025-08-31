@@ -11,10 +11,10 @@ struct StreakVisualizationView: View {
     @State private var flameAnimation: Bool = false
 
     enum DisplayMode {
-        case compact       // Small flame icon with count
-        case detailed      // Full stats with progress
-        case heatMap       // Calendar-style heat map
-        case milestone     // Focus on milestone progress
+        case compact // Small flame icon with count
+        case detailed // Full stats with progress
+        case heatMap // Calendar-style heat map
+        case milestone // Focus on milestone progress
     }
 
     var body: some View {
@@ -136,8 +136,12 @@ struct StreakVisualizationView: View {
 
             // This would be populated with actual streak data
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 2), count: 7), spacing: 2) {
-                ForEach(0..<30, id: \.self) { day in
-                    HeatMapDay(date: Date().addingTimeInterval(-Double(day) * 86400), intensity: Double.random(in: 0...1), isToday: day == 0)
+                ForEach(0 ..< 30, id: \.self) { day in
+                    HeatMapDay(
+                        date: Date().addingTimeInterval(-Double(day) * 86400),
+                        intensity: Double.random(in: 0 ... 1),
+                        isToday: day == 0
+                    )
                 }
             }
         }
@@ -222,28 +226,28 @@ struct StreakVisualizationView: View {
     private var streakColor: Color {
         switch analytics.currentStreak {
         case 0:
-            return .gray
-        case 1...6:
-            return .orange
-        case 7...29:
-            return .red
-        case 30...99:
-            return .purple
+            .gray
+        case 1 ... 6:
+            .orange
+        case 7 ... 29:
+            .red
+        case 30 ... 99:
+            .purple
         default:
-            return .blue
+            .blue
         }
     }
 
     private var flameSize: CGFloat {
         switch displayMode {
         case .compact:
-            return 12
+            12
         case .detailed:
-            return 16
+            16
         case .heatMap:
-            return 14
+            14
         case .milestone:
-            return 20
+            20
         }
     }
 }

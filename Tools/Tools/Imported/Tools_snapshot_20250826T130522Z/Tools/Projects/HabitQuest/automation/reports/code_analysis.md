@@ -1,11 +1,14 @@
 # HabitQuest Code Analysis Report
+
 Generated: Wed Aug 13 10:28:14 CDT 2025
 
 ## Metrics
-- Swift files:       40
-- TODO/FIXME comments:        0
+
+- Swift files: 40
+- TODO/FIXME comments: 0
 
 ## Files
+
 ./HabitQuestUITests/HabitQuestUITestsLaunchTests.swift
 ./HabitQuestUITests/TabNavigationUITests.swift
 ./HabitQuestUITests/HabitQuestUITests.swift

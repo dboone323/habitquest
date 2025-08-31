@@ -6,7 +6,7 @@ import SwiftUI
 struct TestResults {
     private(set) var tests: [TestResult] = []
 
-    var passedCount: Int { tests.filter { $0.passed }.count }
+    var passedCount: Int { tests.filter(\.passed).count }
     var failedCount: Int { tests.filter { !$0.passed }.count }
     var totalCount: Int { tests.count }
     var allPassed: Bool { failedCount == 0 }
@@ -191,7 +191,7 @@ struct AnalyticsTestView: View {
                 xpValue: 10,
                 category: .mindfulness,
                 difficulty: .easy
-            )
+            ),
         ]
 
         // Add habits to context
@@ -203,7 +203,7 @@ struct AnalyticsTestView: View {
         let calendar = Calendar.current
         let today = Date()
 
-        for dayOffset in 0..<7 {
+        for dayOffset in 0 ..< 7 {
             guard let logDate = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
 
             for habit in sampleHabits {

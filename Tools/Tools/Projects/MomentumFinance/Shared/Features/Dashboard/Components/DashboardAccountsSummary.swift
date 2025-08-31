@@ -88,13 +88,17 @@ struct DashboardAccountsSummary: View {
 #Preview {
     let sampleAccounts = [
         FinancialAccount(
-            name: "Checking", accountType: .checking, balance: 2500.00, currencyCode: "USD"),
+            name: "Checking", accountType: .checking, balance: 2500.00, currencyCode: "USD"
+        ),
         FinancialAccount(
-            name: "Savings", accountType: .savings, balance: 15000.00, currencyCode: "USD"),
+            name: "Savings", accountType: .savings, balance: 15000.00, currencyCode: "USD"
+        ),
         FinancialAccount(
-            name: "Credit Card", accountType: .creditCard, balance: -1200.00, currencyCode: "USD"),
+            name: "Credit Card", accountType: .creditCard, balance: -1200.00, currencyCode: "USD"
+        ),
         FinancialAccount(
-            name: "Investment", accountType: .investment, balance: 25000.00, currencyCode: "USD"),
+            name: "Investment", accountType: .investment, balance: 25000.00, currencyCode: "USD"
+        ),
     ]
 
     DashboardAccountsSummary(

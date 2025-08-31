@@ -1,5 +1,5 @@
-import Foundation
 import CloudKit
+import Foundation
 
 struct JournalEntry: Identifiable, Codable {
     let id: UUID
@@ -7,7 +7,7 @@ struct JournalEntry: Identifiable, Codable {
     var body: String
     var date: Date
     var mood: String
-    var modifiedAt: Date?  // Added for CloudKit sync/merge
+    var modifiedAt: Date? // Added for CloudKit sync/merge
 
     init(id: UUID = UUID(), title: String, body: String, date: Date, mood: String, modifiedAt: Date? = Date()) {
         self.id = id

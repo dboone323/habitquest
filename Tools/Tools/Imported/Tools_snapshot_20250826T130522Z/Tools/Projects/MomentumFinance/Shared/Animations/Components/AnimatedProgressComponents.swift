@@ -20,12 +20,12 @@ struct AnimatedBudgetProgress: View {
     }
 
     private var progressColor: Color {
-        if progress < 0.7 { 
-            .green 
-        } else if progress < 0.9 { 
-            .orange 
-        } else { 
-            .red 
+        if progress < 0.7 {
+            .green
+        } else if progress < 0.9 {
+            .orange
+        } else {
+            .red
         }
     }
 

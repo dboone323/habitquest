@@ -12,18 +12,19 @@ import SwiftData
 /// Manages creation and retrieval of financial entities during import
 struct EntityManager {
     let modelContext: ModelContext
-    
+
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
-    
+
     /// Gets existing account or creates a new one from CSV data
     func getOrCreateAccount(
         from fields: [String],
         columnMapping: ColumnMapping
     ) async throws -> FinancialAccount {
-        let accountName: String = if let accountIndex = columnMapping.accountIndex, 
-                                      accountIndex < fields.count {
+        let accountName: String = if let accountIndex = columnMapping.accountIndex,
+                                     accountIndex < fields.count
+        {
             fields[accountIndex].trimmingCharacters(in: .whitespacesAndNewlines)
         } else {
             "Imported Account"
@@ -50,7 +51,7 @@ struct EntityManager {
         modelContext.insert(newAccount)
         return newAccount
     }
-    
+
     /// Gets existing category or creates a new one from CSV data
     func getOrCreateCategory(
         from fields: [String],
@@ -58,7 +59,8 @@ struct EntityManager {
         transactionType: TransactionType
     ) async throws -> ExpenseCategory {
         let categoryName: String = if let categoryIndex = columnMapping.categoryIndex,
-                                       categoryIndex < fields.count {
+                                      categoryIndex < fields.count
+        {
             fields[categoryIndex].trimmingCharacters(in: .whitespacesAndNewlines)
         } else {
             transactionType == .income ? "Other Income" : "Other Expenses"

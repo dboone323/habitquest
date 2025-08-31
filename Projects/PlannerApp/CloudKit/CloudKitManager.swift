@@ -5,8 +5,8 @@
 //  Simplified CloudKit manager for basic functionality
 //
 
-import Foundation
 import CloudKit
+import Foundation
 import SwiftUI
 
 @MainActor
@@ -36,7 +36,7 @@ class CloudKitManager: ObservableObject {
     // MARK: - iCloud Status
 
     func checkiCloudStatus() {
-        container.accountStatus { [weak self] status, error in
+        container.accountStatus { [weak self] status, _ in
             DispatchQueue.main.async {
                 switch status {
                 case .available:
@@ -105,21 +105,21 @@ class CloudKitManager: ObservableObject {
 
     func requestCloudKitPermission() async -> Bool {
         // Stub implementation
-        return true
+        true
     }
 
     // MARK: - Record Management (Stubs)
 
-    func save<T>(_ items: [T]) async throws {
+    func save(_ items: [some Any]) async throws {
         // Stub implementation
     }
 
     func fetch<T>(_ type: T.Type) async throws -> [T] {
         // Stub implementation
-        return []
+        []
     }
 
-    func delete<T>(_ items: [T]) async throws {
+    func delete(_ items: [some Any]) async throws {
         // Stub implementation
     }
 

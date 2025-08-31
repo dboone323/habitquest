@@ -13,6 +13,14 @@ class TaskDataManager {
         tasks.removeAll()
     }
 
+    func load() -> [Task] {
+        return tasks
+    }
+
+    func save(tasks: [Task]) {
+        self.tasks = tasks
+    }
+
     private init() {}
 }
 
@@ -24,6 +32,14 @@ class GoalDataManager {
 
     func clearAllGoals() {
         goals.removeAll()
+    }
+
+    func load() -> [Goal] {
+        return goals
+    }
+
+    func save(goals: [Goal]) {
+        self.goals = goals
     }
 
     private init() {}
@@ -39,6 +55,14 @@ class CalendarDataManager {
         events.removeAll()
     }
 
+    func load() -> [CalendarEvent] {
+        return events
+    }
+
+    func save(events: [CalendarEvent]) {
+        self.events = events
+    }
+
     private init() {}
 }
 
@@ -52,61 +76,13 @@ class JournalDataManager {
         entries.removeAll()
     }
 
+    func load() -> [JournalEntry] {
+        return entries
+    }
+
+    func save(entries: [JournalEntry]) {
+        self.entries = entries
+    }
+
     private init() {}
-}
-
-// Stub Model Classes
-struct Goal: Identifiable, Codable {
-    var id = UUID()
-    var title: String
-    var description: String
-    var targetDate: Date?
-    var isCompleted: Bool
-
-    // Default initializer with default values
-    init(id: UUID = UUID(), title: String = "", description: String = "", targetDate: Date? = nil, isCompleted: Bool = false) {
-        self.id = id
-        self.title = title
-        self.description = description
-        self.targetDate = targetDate
-        self.isCompleted = isCompleted
-    }
-}
-
-struct CalendarEvent: Identifiable, Codable {
-    var id = UUID()
-    var title: String
-    var startTime: Date
-    var endTime: Date
-    var location: String?
-    var notes: String?
-
-    // Default initializer with default values
-    init(id: UUID = UUID(), title: String = "", startTime: Date = Date(), endTime: Date = Date().addingTimeInterval(3600), location: String? = nil, notes: String? = nil) {
-        self.id = id
-        self.title = title
-        self.startTime = startTime
-        self.endTime = endTime
-        self.location = location
-        self.notes = notes
-    }
-}
-
-struct JournalEntry: Identifiable, Codable {
-    var id = UUID()
-    var title: String
-    var content: String
-    var date: Date
-    var mood: Int?
-    var tags: [String]?
-
-    // Default initializer with default values
-    init(id: UUID = UUID(), title: String = "", content: String = "", date: Date = Date(), mood: Int? = nil, tags: [String]? = nil) {
-        self.id = id
-        self.title = title
-        self.content = content
-        self.date = date
-        self.mood = mood
-        self.tags = tags
-    }
 }

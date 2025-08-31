@@ -5,8 +5,8 @@
 //  Created by Daniel Stevens on 7/16/25.
 //
 
-import XCTest
 @testable import CodingReviewer
+import XCTest
 
 final class CodingReviewerTests: XCTestCase {
 
@@ -16,19 +16,19 @@ final class CodingReviewerTests: XCTestCase {
         let app = CodingReviewerApp()
         XCTAssertNotNil(app, "App should initialize successfully")
     }
-    
+
     @MainActor
     func testCodeLanguageDetection() async throws {
         // Test language detection from file extensions
         XCTAssertEqual(CodeLanguage.swift.displayName, "Swift")
         XCTAssertEqual(CodeLanguage.python.displayName, "Python")
         XCTAssertEqual(CodeLanguage.javascript.displayName, "JavaScript")
-        
+
         // Test icon names are valid
         XCTAssertEqual(CodeLanguage.swift.iconName, "swift")
         XCTAssertEqual(CodeLanguage.python.iconName, "snake.circle")
     }
-    
+
     @MainActor
     func testCodeFileInitialization() async throws {
         let testContent = "print('Hello, World!')"
@@ -38,14 +38,14 @@ final class CodingReviewerTests: XCTestCase {
             content: testContent,
             language: .python
         )
-        
+
         XCTAssertEqual(file.name, "test.py")
         XCTAssertEqual(file.content, testContent)
         XCTAssertEqual(file.language, .python)
         XCTAssertEqual(file.size, testContent.utf8.count)
         XCTAssertEqual(file.fileExtension, "py")
     }
-    
+
     @MainActor
     func testEnhancedAnalysisItemCreation() async throws {
         let enhancedItem = EnhancedAnalysisItem(
@@ -54,13 +54,13 @@ final class CodingReviewerTests: XCTestCase {
             lineNumber: 10,
             type: "security"
         )
-        
+
         XCTAssertEqual(enhancedItem.message, "Test security issue")
         XCTAssertEqual(enhancedItem.severity, "high")
         XCTAssertEqual(enhancedItem.lineNumber, 10)
         XCTAssertEqual(enhancedItem.type, "security")
     }
-    
+
     @MainActor
     func testFileManagerServiceInitialization() async throws {
         let fileManager = FileManagerService()

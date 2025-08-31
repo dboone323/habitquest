@@ -1,11 +1,12 @@
 import Foundation
 
 // MARK: - FinancialIntelligenceService Helpers
+
 //
 // All helper functions have been extracted to focused component files for better maintainability:
 //
 // - FormattingUtilities.swift: Currency formatting, date formatting, text cleaning utilities
-// - TransactionPatternDetection.swift: Recurring transaction and pattern detection methods  
+// - TransactionPatternDetection.swift: Recurring transaction and pattern detection methods
 // - AnomalyDetection.swift: Anomalous transaction and outlier detection algorithms
 // - OptimizationSuggestions.swift: Idle cash and credit utilization optimization insights
 // - BudgetRecommendations.swift: Budget recommendation generation based on spending patterns

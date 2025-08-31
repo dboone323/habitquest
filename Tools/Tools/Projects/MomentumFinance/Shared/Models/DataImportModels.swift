@@ -17,7 +17,7 @@ public struct ColumnMapping: Codable {
     public let dataType: DataType
     public let isRequired: Bool
     public let defaultValue: String?
-    
+
     public init(
         csvColumn: String,
         modelProperty: String,
@@ -37,24 +37,24 @@ public struct ColumnMapping: Codable {
 
 /// Supported data types for import mapping
 public enum DataType: String, CaseIterable, Codable {
-    case string = "string"
-    case integer = "integer"
-    case decimal = "decimal"
-    case date = "date"
-    case boolean = "boolean"
-    
+    case string
+    case integer
+    case decimal
+    case date
+    case boolean
+
     public var displayName: String {
         switch self {
         case .string:
-            return "Text"
+            "Text"
         case .integer:
-            return "Whole Number"
+            "Whole Number"
         case .decimal:
-            return "Decimal Number"
+            "Decimal Number"
         case .date:
-            return "Date"
+            "Date"
         case .boolean:
-            return "Yes/No"
+            "Yes/No"
         }
     }
 }
@@ -64,25 +64,25 @@ public enum DataType: String, CaseIterable, Codable {
 /// Manages data entities during import process
 public class EntityManager: @unchecked Sendable {
     public init() {}
-    
+
     public func createEntity(type: EntityType, data: [String: Any]) -> Any? {
         // Implementation would go here
-        return nil
+        nil
     }
-    
+
     public func updateEntity(id: String, type: EntityType, data: [String: Any]) -> Bool {
         // Implementation would go here
-        return false
+        false
     }
-    
+
     public func deleteEntity(id: String, type: EntityType) -> Bool {
         // Implementation would go here
-        return false
+        false
     }
-    
+
     public func validateData(_ data: [String: Any], for type: EntityType) -> [ValidationError] {
         // Implementation would go here
-        return []
+        []
     }
 }
 
@@ -90,24 +90,24 @@ public class EntityManager: @unchecked Sendable {
 
 /// Types of entities that can be imported
 public enum EntityType: String, CaseIterable, Codable {
-    case transaction = "transaction"
-    case account = "account"
-    case category = "category"
-    case budget = "budget"
-    case goal = "goal"
-    
+    case transaction
+    case account
+    case category
+    case budget
+    case goal
+
     public var displayName: String {
         switch self {
         case .transaction:
-            return "Transaction"
+            "Transaction"
         case .account:
-            return "Account"
+            "Account"
         case .category:
-            return "Category"
+            "Category"
         case .budget:
-            return "Budget"
+            "Budget"
         case .goal:
-            return "Goal"
+            "Goal"
         }
     }
 }
@@ -120,7 +120,7 @@ public struct ValidationError: Identifiable, Codable {
     public let field: String
     public let message: String
     public let severity: Severity
-    
+
     public init(
         id: UUID = UUID(),
         field: String,
@@ -132,17 +132,17 @@ public struct ValidationError: Identifiable, Codable {
         self.message = message
         self.severity = severity
     }
-    
+
     public enum Severity: String, Codable {
-        case warning = "warning"
-        case error = "error"
-        
+        case warning
+        case error
+
         public var displayName: String {
             switch self {
             case .warning:
-                return "Warning"
+                "Warning"
             case .error:
-                return "Error"
+                "Error"
             }
         }
     }

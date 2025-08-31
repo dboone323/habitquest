@@ -8,7 +8,7 @@ let package = Package(
         .iOS(.v17),
     ],
     products: [
-        .library(name: "SharedCore", targets: ["SharedCore"])
+        .library(name: "SharedCore", targets: ["SharedCore"]),
     ],
     targets: [
         // The SharedCore target includes only model and utility sources to avoid

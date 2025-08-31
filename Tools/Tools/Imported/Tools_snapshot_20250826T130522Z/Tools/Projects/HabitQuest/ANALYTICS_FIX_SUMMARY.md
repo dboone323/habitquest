@@ -3,13 +3,17 @@
 ## ✅ RESOLVED: Category Insights Test Failure
 
 ### Root Cause
+
 The "Category Insights" test was failing because the analytics service was correctly implemented, but the database was empty - there were no habits to analyze, so `getCategoryInsights()` returned an empty array.
 
 ### Solution Applied
+
 Fixed the `createSampleDataIfNeeded()` method in `AnalyticsTestView.swift` by correcting the initializer calls:
 
 #### 1. Fixed Habit Initializer
+
 **Before:**
+
 ```swift
 Habit(
     name: "Morning Exercise",
@@ -22,6 +26,7 @@ Habit(
 ```
 
 **After:**
+
 ```swift
 Habit(
     name: "Morning Exercise",
@@ -34,7 +39,9 @@ Habit(
 ```
 
 #### 2. Fixed HabitLog Initializer
+
 **Before:**
+
 ```swift
 HabitLog(
     habitId: habit.id,
@@ -47,6 +54,7 @@ HabitLog(
 ```
 
 **After:**
+
 ```swift
 HabitLog(
     habit: habit,
@@ -58,17 +66,20 @@ HabitLog(
 ```
 
 ### Current Status
+
 ✅ **App builds successfully**  
 ✅ **Runs on iPhone 16 simulator**  
 ✅ **Sample data creation works correctly**  
 ✅ **All 5 analytics tests should now pass:**
-   - Basic Analytics
-   - Category Insights ← **FIXED**
-   - Productivity Metrics
-   - Data Consistency
-   - Analytics Structure
+
+- Basic Analytics
+- Category Insights ← **FIXED**
+- Productivity Metrics
+- Data Consistency
+- Analytics Structure
 
 ### Testing Instructions
+
 1. Open the app on the iPhone 16 simulator
 2. Navigate to the "Analytics" tab
 3. Tap "Run Analytics Tests"

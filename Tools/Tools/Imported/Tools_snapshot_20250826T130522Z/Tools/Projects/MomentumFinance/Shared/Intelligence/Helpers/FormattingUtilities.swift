@@ -20,7 +20,7 @@ func fi_formatMonthAbbrev(_ date: Date) -> String {
 
 // Old helper compatibility shim used in forecasting helpers
 func formatCurrency(_ amount: Double, code: String? = nil) -> String {
-    return fi_formatCurrency(amount, code: code)
+    fi_formatCurrency(amount, code: code)
 }
 
 /// Extract features from transaction for analysis

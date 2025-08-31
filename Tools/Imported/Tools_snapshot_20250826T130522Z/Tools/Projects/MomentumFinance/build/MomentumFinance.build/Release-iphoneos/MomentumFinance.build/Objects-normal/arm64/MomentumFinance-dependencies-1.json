@@ -1,599 +1,599 @@
 [
   {
-    "isFramework" : true,
-    "moduleName" : "Accessibility",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Accessibility.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "Accessibility",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Accessibility.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "Charts",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Charts.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "Charts",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Charts.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "Combine",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Combine.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "Combine",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Combine.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "CoreData",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreData.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "CoreData",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreData.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "CoreFoundation",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreFoundation.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "CoreFoundation",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreFoundation.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "CoreGraphics",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreGraphics.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "CoreGraphics",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreGraphics.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "CoreImage",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreImage.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "CoreImage",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreImage.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "CoreText",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreText.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "CoreText",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreText.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "CoreTransferable",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreTransferable.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "CoreTransferable",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreTransferable.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "CoreVideo",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreVideo.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "CoreVideo",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/CoreVideo.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "Darwin",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Darwin.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "Darwin",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Darwin.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "DataDetection",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/DataDetection.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "DataDetection",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/DataDetection.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "DeveloperToolsSupport",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/DeveloperToolsSupport.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "DeveloperToolsSupport",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/DeveloperToolsSupport.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "Dispatch",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Dispatch.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "Dispatch",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Dispatch.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "FileProvider",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/FileProvider.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "FileProvider",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/FileProvider.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "Foundation",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Foundation.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "Foundation",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Foundation.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "LocalAuthentication",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/LocalAuthentication.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "LocalAuthentication",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/LocalAuthentication.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "Metal",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Metal.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "Metal",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Metal.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "OSLog",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/OSLog.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "OSLog",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/OSLog.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "ObjectiveC",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/ObjectiveC.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "ObjectiveC",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/ObjectiveC.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "Observation",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Observation.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "Observation",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Observation.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "QuartzCore",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/QuartzCore.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "QuartzCore",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/QuartzCore.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "Spatial",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Spatial.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "Spatial",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Spatial.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "Swift",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Swift.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "Swift",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Swift.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "SwiftData",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/SwiftData.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "SwiftData",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/SwiftData.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "SwiftUI",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/SwiftUI.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "SwiftUI",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/SwiftUI.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "SwiftUICore",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/SwiftUICore.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "SwiftUICore",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/SwiftUICore.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "Symbols",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Symbols.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "Symbols",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/Symbols.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "System",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/System.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "System",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/System.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "UIKit",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/UIKit.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "UIKit",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/UIKit.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "UniformTypeIdentifiers",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/UniformTypeIdentifiers.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "UniformTypeIdentifiers",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/UniformTypeIdentifiers.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "XPC",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/XPC.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "XPC",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/XPC.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "_Builtin_float",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_Builtin_float.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "_Builtin_float",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_Builtin_float.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "_Concurrency",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_Concurrency.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "_Concurrency",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_Concurrency.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "_DarwinFoundation1",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_DarwinFoundation1.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "_DarwinFoundation1",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_DarwinFoundation1.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "_DarwinFoundation2",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_DarwinFoundation2.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "_DarwinFoundation2",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_DarwinFoundation2.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "_DarwinFoundation3",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_DarwinFoundation3.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "_DarwinFoundation3",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_DarwinFoundation3.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "_StringProcessing",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_StringProcessing.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "_StringProcessing",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_StringProcessing.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : true,
-    "moduleName" : "_SwiftData_SwiftUI",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_SwiftData_SwiftUI.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": true,
+    "moduleName": "_SwiftData_SwiftUI",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/_SwiftData_SwiftUI.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "os",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/os.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "os",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/os.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "isFramework" : false,
-    "moduleName" : "simd",
-    "modulePath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/simd.swiftmodule\/arm64e-apple-ios.swiftmodule"
+    "isFramework": false,
+    "moduleName": "simd",
+    "modulePath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/iphoneos\/prebuilt-modules\/26.0\/simd.swiftmodule\/arm64e-apple-ios.swiftmodule"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/Accessibility.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Accessibility-8UPLDPJ9REZB3G30H8EZ5Y0Z8.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "Accessibility"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/Accessibility.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Accessibility-8UPLDPJ9REZB3G30H8EZ5Y0Z8.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "Accessibility"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CFNetwork.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CFNetwork-84299K96FQXV3983W09MKYXQK.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "CFNetwork"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CFNetwork.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CFNetwork-84299K96FQXV3983W09MKYXQK.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "CFNetwork"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreData.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreData-31AFVB6XBZYR8WPJ10AOHQQR5.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "CoreData"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreData.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreData-31AFVB6XBZYR8WPJ10AOHQQR5.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "CoreData"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreFoundation.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreFoundation-5FY7E68ZQCTGUWI1KQM881REE.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "CoreFoundation"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreFoundation.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreFoundation-5FY7E68ZQCTGUWI1KQM881REE.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "CoreFoundation"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreGraphics.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreGraphics-2JZ7HGMRA17OE4HBEJGJCXFOS.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "CoreGraphics"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreGraphics.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreGraphics-2JZ7HGMRA17OE4HBEJGJCXFOS.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "CoreGraphics"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreImage.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreImage-AOKT14ZAKML0TB6YEKYT8PII5.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "CoreImage"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreImage.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreImage-AOKT14ZAKML0TB6YEKYT8PII5.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "CoreImage"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreText.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreText-5L87L6H7EAYOPY2PTVD52EC1I.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "CoreText"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreText.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreText-5L87L6H7EAYOPY2PTVD52EC1I.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "CoreText"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreTransferable.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreTransferable-32JJHWZDLFO9BMQR5TLO5ONBM.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "CoreTransferable"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreTransferable.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreTransferable-32JJHWZDLFO9BMQR5TLO5ONBM.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "CoreTransferable"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreVideo.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreVideo-VWLPI1NXVIS93QPZ0F1A2DDL.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "CoreVideo"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/CoreVideo.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/CoreVideo-VWLPI1NXVIS93QPZ0F1A2DDL.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "CoreVideo"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/Darwin.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Darwin-5DG8FXIC8DGRS86IPVXRJTOGZ.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "Darwin"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/Darwin.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Darwin-5DG8FXIC8DGRS86IPVXRJTOGZ.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "Darwin"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/DataDetection.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/DataDetection-7DZJDBMRY62BQHFFVNTALN8MK.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "DataDetection"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/DataDetection.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/DataDetection-7DZJDBMRY62BQHFFVNTALN8MK.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "DataDetection"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/DeveloperToolsSupport.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/DeveloperToolsSupport-7T0116L3OEQV4G95T4R4SUYKH.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "DeveloperToolsSupport"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/DeveloperToolsSupport.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/DeveloperToolsSupport-7T0116L3OEQV4G95T4R4SUYKH.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "DeveloperToolsSupport"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/dispatch.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Dispatch-6ELDWCXGRB0RSFYVKGF7TRYRE.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "Dispatch"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/dispatch.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Dispatch-6ELDWCXGRB0RSFYVKGF7TRYRE.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "Dispatch"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/FileProvider.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/FileProvider-3M9JFHB3H2BIWH2J1QIZYW1Z5.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "FileProvider"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/FileProvider.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/FileProvider-3M9JFHB3H2BIWH2J1QIZYW1Z5.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "FileProvider"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/Foundation.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Foundation-AXTRJ5QO3KAOKIPTFRZWTZBL9.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "Foundation"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/Foundation.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Foundation-AXTRJ5QO3KAOKIPTFRZWTZBL9.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "Foundation"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/IOSurface.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/IOSurface-161YW3SCCW5CKQKCSS59H0FJC.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "IOSurface"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/IOSurface.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/IOSurface-161YW3SCCW5CKQKCSS59H0FJC.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "IOSurface"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/ImageIO.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/ImageIO-CRVOJDP5C2TV57PWH08ANVVTE.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "ImageIO"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/ImageIO.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/ImageIO-CRVOJDP5C2TV57PWH08ANVVTE.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "ImageIO"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/LocalAuthentication.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/LocalAuthentication-2D9SLSMYKIM2OJVW6HAQFPV9P.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "LocalAuthentication"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/LocalAuthentication.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/LocalAuthentication-2D9SLSMYKIM2OJVW6HAQFPV9P.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "LocalAuthentication"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/DarwinBasic.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/MachO-SZIQTCT4L23EXHOZR06LPH69.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "MachO"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/DarwinBasic.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/MachO-SZIQTCT4L23EXHOZR06LPH69.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "MachO"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/Metal.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Metal-EURIZES0JOZYZ2FCLVP00KTAS.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "Metal"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/Metal.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Metal-EURIZES0JOZYZ2FCLVP00KTAS.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "Metal"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/OSLog.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/OSLog-C8ASOREWPOOJJB3JNB43MT8ZS.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "OSLog"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/OSLog.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/OSLog-C8ASOREWPOOJJB3JNB43MT8ZS.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "OSLog"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/ObjectiveC.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/ObjectiveC-5D9OUXEARKHBZQXVQH7RCAA3G.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "ObjectiveC"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/ObjectiveC.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/ObjectiveC-5D9OUXEARKHBZQXVQH7RCAA3G.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "ObjectiveC"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/OpenGLES.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/OpenGLES-2FA09RPP4ZXBNSLMPM9WZ3Z31.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "OpenGLES"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/OpenGLES.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/OpenGLES-2FA09RPP4ZXBNSLMPM9WZ3Z31.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "OpenGLES"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/QuartzCore.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/QuartzCore-2FYQ5RBOZ5WTWP0TV8G5FGELB.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "QuartzCore"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/QuartzCore.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/QuartzCore-2FYQ5RBOZ5WTWP0TV8G5FGELB.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "QuartzCore"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/Security.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Security-9XOI02ANEJOIVUEFFS21904B9.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "Security"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/Security.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Security-9XOI02ANEJOIVUEFFS21904B9.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "Security"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/Spatial\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Spatial-4G3ORK6Z5E0KXV2PQJAGB9ZKI.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "Spatial"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/Spatial\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Spatial-4G3ORK6Z5E0KXV2PQJAGB9ZKI.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "Spatial"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/lib\/swift\/shims\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/SwiftShims-2WAMCI6X7LBWE8ETW7XDQ1Y96.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "SwiftShims"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/lib\/swift\/shims\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/SwiftShims-2WAMCI6X7LBWE8ETW7XDQ1Y96.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "SwiftShims"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/SwiftUI.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/SwiftUI-5EYYOG23LILRAX86RZQGKOPZZ.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "SwiftUI"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/SwiftUI.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/SwiftUI-5EYYOG23LILRAX86RZQGKOPZZ.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "SwiftUI"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/SwiftUICore.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/SwiftUICore-CSMPCS273BWJ0HVI4PSZMZ7XQ.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "SwiftUICore"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/SwiftUICore.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/SwiftUICore-CSMPCS273BWJ0HVI4PSZMZ7XQ.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "SwiftUICore"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/Symbols.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Symbols-A519BMTYA09NZK3R62ROXMAGM.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "Symbols"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/Symbols.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/Symbols-A519BMTYA09NZK3R62ROXMAGM.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "Symbols"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/UIKit.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/UIKit-D87VG947H6CQ7RAVR6VJ17FMG.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "UIKit"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/UIKit.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/UIKit-D87VG947H6CQ7RAVR6VJ17FMG.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "UIKit"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/SubFrameworks\/UIUtilities.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/UIUtilities-8QTR4XJWCHV1BGSS2UOBIXQ4C.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "UIUtilities"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/SubFrameworks\/UIUtilities.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/UIUtilities-8QTR4XJWCHV1BGSS2UOBIXQ4C.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "UIUtilities"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/UniformTypeIdentifiers.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/UniformTypeIdentifiers-JEPCRK8UXHAVEX3LYEHDOQJF.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "UniformTypeIdentifiers"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/UniformTypeIdentifiers.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/UniformTypeIdentifiers-JEPCRK8UXHAVEX3LYEHDOQJF.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "UniformTypeIdentifiers"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/UserNotifications.framework\/Modules\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/UserNotifications-4AAR4MAPPPNW4KQSNEUSJV2ER.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "UserNotifications"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/System\/Library\/Frameworks\/UserNotifications.framework\/Modules\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/UserNotifications-4AAR4MAPPPNW4KQSNEUSJV2ER.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "UserNotifications"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/xpc.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/XPC-85CEP3HPBTJF8CVGOISN3K37T.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "XPC"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/xpc.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/XPC-85CEP3HPBTJF8CVGOISN3K37T.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "XPC"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/DarwinFoundation1.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_AvailabilityInternal-4G7PN8UE3N521RUL86JYXTEY1.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_AvailabilityInternal"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/DarwinFoundation1.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_AvailabilityInternal-4G7PN8UE3N521RUL86JYXTEY1.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_AvailabilityInternal"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_float-99NEWGZBBY9TBANGV17Q6241R.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_Builtin_float"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_float-99NEWGZBBY9TBANGV17Q6241R.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_Builtin_float"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_intrinsics-6S5HGDAIXSIXPQXDP0UI62OTS.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_Builtin_intrinsics"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_intrinsics-6S5HGDAIXSIXPQXDP0UI62OTS.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_Builtin_intrinsics"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_inttypes-EKYYWTUNRK0Z9N44KHNUV2942.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_Builtin_inttypes"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_inttypes-EKYYWTUNRK0Z9N44KHNUV2942.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_Builtin_inttypes"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_limits-EPOVIP75UTDCNF5YIDO48M3I.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_Builtin_limits"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_limits-EPOVIP75UTDCNF5YIDO48M3I.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_Builtin_limits"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdarg-E5FROBS2PAHVIJ8LJNZSR5Y18.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_Builtin_stdarg"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdarg-E5FROBS2PAHVIJ8LJNZSR5Y18.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_Builtin_stdarg"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdatomic-9XH1PLMJ1IC61PPHBXCZG0EVM.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_Builtin_stdatomic"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdatomic-9XH1PLMJ1IC61PPHBXCZG0EVM.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_Builtin_stdatomic"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdbool-33MCWV1ZRZMDFLDJPQL1XL95T.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_Builtin_stdbool"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdbool-33MCWV1ZRZMDFLDJPQL1XL95T.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_Builtin_stdbool"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stddef-R5BWKE7IIY3VBRWO4RX8WRCG.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_Builtin_stddef"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stddef-R5BWKE7IIY3VBRWO4RX8WRCG.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_Builtin_stddef"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdint-2DZ8LUKKYKZU52AKVFLHUZLF7.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_Builtin_stdint"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdint-2DZ8LUKKYKZU52AKVFLHUZLF7.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_Builtin_stdint"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_tgmath-7Z1Z9WFLGRA4AH9JJBWVHEJSM.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_Builtin_tgmath"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_Builtin_tgmath-7Z1Z9WFLGRA4AH9JJBWVHEJSM.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_Builtin_tgmath"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/DarwinFoundation1.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_DarwinFoundation1-EJSZTJ0PMSY1F3VEOWL3WMFU5.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_DarwinFoundation1"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/DarwinFoundation1.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_DarwinFoundation1-EJSZTJ0PMSY1F3VEOWL3WMFU5.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_DarwinFoundation1"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/DarwinFoundation2.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_DarwinFoundation2-707Q0DY4471OPG3E646H52PRS.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_DarwinFoundation2"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/DarwinFoundation2.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_DarwinFoundation2-707Q0DY4471OPG3E646H52PRS.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_DarwinFoundation2"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/DarwinFoundation3.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_DarwinFoundation3-4CCOOUXLPAH2POJ5WA3QFXYDV.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_DarwinFoundation3"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/DarwinFoundation3.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_DarwinFoundation3-4CCOOUXLPAH2POJ5WA3QFXYDV.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_DarwinFoundation3"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/lib\/swift\/shims\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_SwiftConcurrencyShims-DCC4JIAPHEG2UU6KV3LETUQRK.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "_SwiftConcurrencyShims"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/lib\/swift\/shims\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/_SwiftConcurrencyShims-DCC4JIAPHEG2UU6KV3LETUQRK.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "_SwiftConcurrencyShims"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/os.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/os-5PQ4BFSLAJ9D94ZBM753S9IUB.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "os"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/os.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/os-5PQ4BFSLAJ9D94ZBM753S9IUB.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "os"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/os.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/os_object-4XUID590MVSHR92GR59RH1W35.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "os_object"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/os.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/os_object-4XUID590MVSHR92GR59RH1W35.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "os_object"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/os.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/os_workgroup-2ND906KCFOEO2G802JBT0ABH5.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "os_workgroup"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/os.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/os_workgroup-2ND906KCFOEO2G802JBT0ABH5.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "os_workgroup"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/ptrauth-3T6ISDYPCYB39F7DOXHYS8SCE.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "ptrauth"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/ptrauth-3T6ISDYPCYB39F7DOXHYS8SCE.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "ptrauth"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/ptrcheck-BC28OD0TUBZJAOHK30E3FY7M1.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "ptrcheck"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/ptrcheck-BC28OD0TUBZJAOHK30E3FY7M1.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "ptrcheck"
   },
   {
-    "clangModuleMapPath" : "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/simd\/module.modulemap",
-    "clangModulePath" : "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/simd-F0JJU43I95HZSK92N1781NPU0.pcm",
-    "isBridgingHeaderDependency" : false,
-    "isFramework" : false,
-    "moduleName" : "simd"
+    "clangModuleMapPath": "\/Applications\/Xcode-beta.app\/Contents\/Developer\/Platforms\/iPhoneOS.platform\/Developer\/SDKs\/iPhoneOS.sdk\/usr\/include\/simd\/module.modulemap",
+    "clangModulePath": "\/Users\/danielstevens\/Desktop\/Code\/Projects\/MomentumFinance\/build\/SwiftExplicitPrecompiledModules\/simd-F0JJU43I95HZSK92N1781NPU0.pcm",
+    "isBridgingHeaderDependency": false,
+    "isFramework": false,
+    "moduleName": "simd"
   }
 ]

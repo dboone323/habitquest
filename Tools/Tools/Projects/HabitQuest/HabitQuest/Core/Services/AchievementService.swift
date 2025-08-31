@@ -3,13 +3,13 @@ import SwiftData
 
 /// Service for managing achievements and badge unlocking logic
 /// Handles progress tracking, achievement unlocking, and reward distribution
-struct AchievementService {
+enum AchievementService {
     private static let logger = Logger(category: .gameLogic)
 
     /// Initialize default achievements for new users
     // swiftlint:disable function_body_length
     static func createDefaultAchievements() -> [Achievement] {
-        return [
+        [
             // Streak Achievements
             Achievement(
                 name: "First Steps",
@@ -140,7 +140,7 @@ struct AchievementService {
                 category: .special,
                 xpReward: 300,
                 requirement: .weekendWarrior
-            )
+            ),
         ]
     }
 
@@ -185,7 +185,7 @@ struct AchievementService {
     ) -> Float {
         switch achievement.requirement {
         case .streakDays(let targetDays):
-            let maxStreak = habits.map { $0.streak }.max() ?? 0
+            let maxStreak = habits.map(\.streak).max() ?? 0
             return min(Float(maxStreak) / Float(targetDays), 1.0)
 
         case .totalCompletions(let targetCount):
@@ -245,7 +245,7 @@ struct AchievementService {
         var consecutivePerfectDays = 0
         var maxConsecutiveDays = 0
 
-        for dayOffset in 0..<7 {
+        for dayOffset in 0 ..< 7 {
             guard let checkDate = calendar.date(byAdding: .day, value: -dayOffset, to: now) else { continue }
 
             let dayLogs = logs.filter { calendar.isDate($0.completionDate, inSameDayAs: checkDate) }
@@ -266,22 +266,27 @@ struct AchievementService {
     }
 
     /// Calculate progress for time-based achievements (early bird, night owl)
-    private static func calculateTimeBasedProgress(logs: [HabitLog], beforeHour: Int? = nil, afterHour: Int? = nil, targetDays: Int) -> Float {
+    private static func calculateTimeBasedProgress(
+        logs: [HabitLog],
+        beforeHour: Int? = nil,
+        afterHour: Int? = nil,
+        targetDays: Int
+    ) -> Float {
         let calendar = Calendar.current
         let now = Date()
 
         var qualifyingDays = 0
 
-        for dayOffset in 0..<targetDays {
+        for dayOffset in 0 ..< targetDays {
             guard let checkDate = calendar.date(byAdding: .day, value: -dayOffset, to: now) else { continue }
 
             let dayLogs = logs.filter { calendar.isDate($0.completionDate, inSameDayAs: checkDate) }
 
             let qualifiesForDay = dayLogs.contains { log in
                 let hour = calendar.component(.hour, from: log.completionDate)
-                if let beforeHour = beforeHour {
+                if let beforeHour {
                     return hour < beforeHour
-                } else if let afterHour = afterHour {
+                } else if let afterHour {
                     return hour >= afterHour
                 }
                 return false
@@ -303,7 +308,7 @@ struct AchievementService {
         var weekendsWithCompletions = 0
 
         // Check last 4 weeks
-        for weekOffset in 0..<4 {
+        for weekOffset in 0 ..< 4 {
             guard let weekStart = calendar.date(byAdding: .weekOfYear, value: -weekOffset, to: now) else { continue }
 
             // Check Saturday and Sunday of that week
@@ -311,7 +316,11 @@ struct AchievementService {
             var hasWeekendCompletion = false
 
             for weekday in weekendDays {
-                if let weekendDate = calendar.nextDate(after: weekStart, matching: DateComponents(weekday: weekday), matchingPolicy: .nextTime) {
+                if let weekendDate = calendar.nextDate(
+                    after: weekStart,
+                    matching: DateComponents(weekday: weekday),
+                    matchingPolicy: .nextTime
+                ) {
                     let hasCompletions = logs.contains { calendar.isDate($0.completionDate, inSameDayAs: weekendDate) }
                     if hasCompletions {
                         hasWeekendCompletion = true
@@ -328,4 +337,5 @@ struct AchievementService {
         return min(Float(weekendsWithCompletions) / 4.0, 1.0)
     }
 }
+
 // swiftlint:enable function_body_length

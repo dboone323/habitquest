@@ -8,6 +8,7 @@
 import SwiftUI
 
 // MARK: - Glass Morphism Card
+
 struct GlassMorphismCard<Content: View>: View {
     let content: Content
     @EnvironmentObject var themeManager: ThemeManager
@@ -35,7 +36,7 @@ struct GlassMorphismCard<Content: View>: View {
                         LinearGradient(
                             gradient: Gradient(colors: [
                                 themeManager.currentTheme.primaryAccentColor.opacity(0.05),
-                                themeManager.currentTheme.secondaryAccentColor.opacity(0.02)
+                                themeManager.currentTheme.secondaryAccentColor.opacity(0.02),
                             ]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -48,7 +49,7 @@ struct GlassMorphismCard<Content: View>: View {
                         LinearGradient(
                             gradient: Gradient(colors: [
                                 Color.white.opacity(0.6),
-                                Color.white.opacity(0.1)
+                                Color.white.opacity(0.1),
                             ]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -66,6 +67,7 @@ struct GlassMorphismCard<Content: View>: View {
 }
 
 // MARK: - Animated Progress Ring
+
 struct AnimatedProgressRing: View {
     let progress: Double
     let title: String
@@ -93,7 +95,7 @@ struct AnimatedProgressRing: View {
                     LinearGradient(
                         gradient: Gradient(colors: [
                             themeManager.currentTheme.primaryAccentColor,
-                            themeManager.currentTheme.secondaryAccentColor
+                            themeManager.currentTheme.secondaryAccentColor,
                         ]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
@@ -122,15 +124,31 @@ struct AnimatedProgressRing: View {
                 animatedProgress = progress
             }
         }
-        .onChange(of: progress) { _, newValue in
-            withAnimation(.easeInOut(duration: 1.0)) {
-                animatedProgress = newValue
+        .modifier(ProgressChangeModifier(progress: progress, animatedProgress: $animatedProgress))
+    }
+}
+
+// MARK: - Progress Change Modifier
+
+struct ProgressChangeModifier: ViewModifier {
+    let progress: Double
+    @Binding var animatedProgress: Double
+    
+    func body(content: Content) -> some View {
+        if #available(macOS 14.0, iOS 17.0, *) {
+            content.onChange(of: progress) { _, newValue in
+                withAnimation(.easeInOut(duration: 1.0)) {
+                    animatedProgress = newValue
+                }
             }
+        } else {
+            content
         }
     }
 }
 
 // MARK: - Floating Action Button
+
 struct FloatingActionButton: View {
     let icon: String
     let action: () -> Void
@@ -142,8 +160,8 @@ struct FloatingActionButton: View {
     var body: some View {
         Button(action: {
             #if os(iOS)
-            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-            impactFeedback.impactOccurred()
+                let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                impactFeedback.impactOccurred()
             #endif
 
             withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
@@ -162,7 +180,7 @@ struct FloatingActionButton: View {
                             LinearGradient(
                                 gradient: Gradient(colors: [
                                     themeManager.currentTheme.primaryAccentColor,
-                                    themeManager.currentTheme.primaryAccentColor.opacity(0.8)
+                                    themeManager.currentTheme.primaryAccentColor.opacity(0.8),
                                 ]),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -188,6 +206,7 @@ struct FloatingActionButton: View {
 }
 
 // MARK: - Animated Card Flip
+
 struct FlipCard<Front: View, Back: View>: View {
     let front: Front
     let back: Back
@@ -220,6 +239,7 @@ struct FlipCard<Front: View, Back: View>: View {
 }
 
 // MARK: - Particle System for Celebrations
+
 struct ParticleSystem: View {
     @State private var particles: [Particle] = []
     @State private var isAnimating = false
@@ -235,7 +255,7 @@ struct ParticleSystem: View {
     }
 
     var body: some View {
-        GeometryReader { geometry in
+        GeometryReader { _ in
             ZStack {
                 ForEach(particles) { particle in
                     Circle()
@@ -256,16 +276,16 @@ struct ParticleSystem: View {
     }
 
     private func createParticles() {
-        particles = (0..<50).map { _ in
+        particles = (0 ..< 50).map { _ in
             Particle(
-                x: CGFloat.random(in: 50...350),
+                x: CGFloat.random(in: 50 ... 350),
                 y: 400,
                 velocity: CGVector(
-                    dx: CGFloat.random(in: -200...200),
-                    dy: CGFloat.random(in: -400...(-200))
+                    dx: CGFloat.random(in: -200 ... 200),
+                    dy: CGFloat.random(in: -400 ... -200)
                 ),
                 color: [Color.blue, Color.green, Color.orange, Color.red, Color.purple].randomElement()!,
-                scale: CGFloat.random(in: 0.5...1.5),
+                scale: CGFloat.random(in: 0.5 ... 1.5),
                 opacity: 1.0
             )
         }
@@ -291,6 +311,7 @@ struct ParticleSystem: View {
 }
 
 // MARK: - Shimmer Loading Effect
+
 struct ShimmerView: View {
     @State private var shimmerOffset: CGFloat = -200
     @EnvironmentObject var themeManager: ThemeManager
@@ -305,7 +326,7 @@ struct ShimmerView: View {
                             gradient: Gradient(colors: [
                                 Color.clear,
                                 Color.white.opacity(0.4),
-                                Color.clear
+                                Color.clear,
                             ]),
                             startPoint: .leading,
                             endPoint: .trailing
@@ -324,6 +345,7 @@ struct ShimmerView: View {
 }
 
 // MARK: - Interactive 3D Card
+
 struct Interactive3DCard<Content: View>: View {
     let content: Content
     @EnvironmentObject var themeManager: ThemeManager
@@ -373,16 +395,17 @@ struct Interactive3DCard<Content: View>: View {
 }
 
 // MARK: - Breathing Animation
+
 struct BreathingView<Content: View>: View {
     let content: Content
     @State private var scale: CGFloat = 1.0
 
     var duration: Double = 2.0
-    var scaleRange: ClosedRange<CGFloat> = 0.95...1.05
+    var scaleRange: ClosedRange<CGFloat> = 0.95 ... 1.05
 
     init(
         duration: Double = 2.0,
-        scaleRange: ClosedRange<CGFloat> = 0.95...1.05,
+        scaleRange: ClosedRange<CGFloat> = 0.95 ... 1.05,
         @ViewBuilder content: () -> Content
     ) {
         self.duration = duration
@@ -396,7 +419,7 @@ struct BreathingView<Content: View>: View {
             .onAppear {
                 withAnimation(
                     .easeInOut(duration: duration)
-                    .repeatForever(autoreverses: true)
+                        .repeatForever(autoreverses: true)
                 ) {
                     scale = scaleRange.upperBound
                 }
@@ -405,6 +428,7 @@ struct BreathingView<Content: View>: View {
 }
 
 // MARK: - Enhanced Visual Components Preview
+
 struct VisualEnhancementsPreview: View {
     @StateObject private var themeManager = ThemeManager()
     @State private var showParticles = false

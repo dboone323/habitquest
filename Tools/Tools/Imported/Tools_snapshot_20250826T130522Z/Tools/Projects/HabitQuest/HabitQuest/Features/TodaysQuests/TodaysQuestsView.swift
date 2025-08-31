@@ -25,17 +25,17 @@ struct TodaysQuestsView: View {
             .navigationTitle("Today's Quests")
             .toolbar {
                 #if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Add Quest") {
-                        viewModel.showingAddQuest = true
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Add Quest") {
+                            viewModel.showingAddQuest = true
+                        }
                     }
-                }
                 #else
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Add Quest") {
-                        viewModel.showingAddQuest = true
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Add Quest") {
+                            viewModel.showingAddQuest = true
+                        }
                     }
-                }
                 #endif
             }
             .sheet(isPresented: $viewModel.showingAddQuest) {
@@ -44,7 +44,7 @@ struct TodaysQuestsView: View {
                 }
             }
             .alert("Quest Completed!", isPresented: $viewModel.showingCompletionAlert) {
-                Button("Awesome!") { }
+                Button("Awesome!") {}
             } message: {
                 Text(viewModel.completionMessage)
             }
@@ -63,7 +63,7 @@ struct TodaysQuestsView: View {
     }
 
     private func loadHabitAnalytics() async {
-        guard let streakService = streakService else { return }
+        guard let streakService else { return }
 
         var analytics: [UUID: StreakAnalytics] = [:]
 
@@ -142,7 +142,7 @@ private struct QuestRowView: View {
                         .cornerRadius(4)
 
                     // Enhanced streak with analytics
-                    if let analytics = analytics {
+                    if let analytics {
                         StreakVisualizationView(
                             habit: habit,
                             analytics: analytics,
@@ -197,7 +197,7 @@ private struct AddQuestView: View {
                 Section("Quest Details") {
                     TextField("Quest Name", text: $name)
                     TextField("Description", text: $description, axis: .vertical)
-                        .lineLimit(3...6)
+                        .lineLimit(3 ... 6)
                 }
 
                 Section("Settings") {
@@ -207,7 +207,7 @@ private struct AddQuestView: View {
                         }
                     }
 
-                    Stepper("XP Value: \(xpValue)", value: $xpValue, in: 5...50, step: 5)
+                    Stepper("XP Value: \(xpValue)", value: $xpValue, in: 5 ... 50, step: 5)
                 }
             }
             .navigationTitle("New Quest")
@@ -221,7 +221,12 @@ private struct AddQuestView: View {
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Add") {
-                        let habit = Habit(name: name, habitDescription: description, frequency: frequency, xpValue: xpValue)
+                        let habit = Habit(
+                            name: name,
+                            habitDescription: description,
+                            frequency: frequency,
+                            xpValue: xpValue
+                        )
                         onAdd(habit)
                         dismiss()
                     }
@@ -237,12 +242,12 @@ private struct AddQuestView: View {
 /// Get color for streak based on count
 private func streakColor(for streak: Int) -> Color {
     switch streak {
-    case 0: return .gray
-    case 1...6: return .orange
-    case 7...29: return .red
-    case 30...99: return .purple
-    case 100...364: return .blue
-    default: return .yellow
+    case 0: .gray
+    case 1 ... 6: .orange
+    case 7 ... 29: .red
+    case 30 ... 99: .purple
+    case 100 ... 364: .blue
+    default: .yellow
     }
 }
 

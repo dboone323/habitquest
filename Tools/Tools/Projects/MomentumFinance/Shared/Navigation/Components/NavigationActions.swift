@@ -61,25 +61,25 @@ extension NavigationCoordinator {
 
     /// Navigate to account detail from any tab
     func navigateToAccountDetail(accountId: String) {
-        selectedTab = 1  // Transactions tab
+        selectedTab = 1 // Transactions tab
         transactionsNavPath.append(TransactionsDestination.accountDetail(accountId))
     }
 
     /// Navigate to subscription detail from any tab
     func navigateToSubscriptionDetail(subscriptionId: String) {
-        selectedTab = 3  // Subscriptions tab
+        selectedTab = 3 // Subscriptions tab
         subscriptionsNavPath.append(SubscriptionsDestination.subscriptionDetail(subscriptionId))
     }
 
     /// Navigate to budget category from any tab
     func navigateToBudgetCategory(categoryId: String) {
-        selectedTab = 2  // Budgets tab
+        selectedTab = 2 // Budgets tab
         budgetsNavPath.append(BudgetsDestination.categoryDetail(categoryId))
     }
 
     /// Navigate to savings goal detail from any tab
     func navigateToGoalDetail(goalId: String) {
-        selectedTab = 4  // Goals tab
+        selectedTab = 4 // Goals tab
         goalsAndReportsNavPath.append(GoalsDestination.goalDetail(goalId))
     }
 
@@ -88,27 +88,27 @@ extension NavigationCoordinator {
     /// Navigate to category transactions from any context
     func navigateToCategoryTransactions(categoryId: String, sourceTab: Int? = nil) {
         addBreadcrumb(title: "Category Transactions", tabIndex: selectedTab)
-        selectedTab = 1  // Transactions tab
+        selectedTab = 1 // Transactions tab
         transactionsNavPath.append(TransactionsDestination.categoryTransactions(categoryId))
     }
 
     /// Navigate to account transactions from subscription or budget
     func navigateToAccountTransactions(accountId: String, context: NavigationContext) {
         addBreadcrumb(title: context.breadcrumbTitle, tabIndex: selectedTab)
-        selectedTab = 1  // Transactions tab
+        selectedTab = 1 // Transactions tab
         transactionsNavPath.append(TransactionsDestination.accountDetail(accountId))
     }
 
     /// Navigate to related transactions for a specific goal
     func navigateToGoalTransactions(goalId: String) {
         addBreadcrumb(title: "Goal Transactions", tabIndex: selectedTab)
-        selectedTab = 4  // Goals tab
+        selectedTab = 4 // Goals tab
         goalsAndReportsNavPath.append(GoalsDestination.relatedTransactions(goalId))
     }
 
     /// Navigate to transaction detail
     func navigateToTransactionDetail(transactionId: String) {
-        selectedTab = 1  // Transactions tab
+        selectedTab = 1 // Transactions tab
         // Create a context for the transaction detail
         let context = NavigationContext(
             breadcrumbTitle: "Transaction Detail",

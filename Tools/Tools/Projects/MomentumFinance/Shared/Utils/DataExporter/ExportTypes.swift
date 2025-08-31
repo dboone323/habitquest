@@ -46,17 +46,17 @@ enum ExportFormat: String, CaseIterable {
 
     var fileExtension: String {
         switch self {
-        case .csv: return "csv"
-        case .pdf: return "pdf"
-        case .json: return "json"
+        case .csv: "csv"
+        case .pdf: "pdf"
+        case .json: "json"
         }
     }
 
     var mimeType: String {
         switch self {
-        case .csv: return "text/csv"
-        case .pdf: return "application/pdf"
-        case .json: return "application/json"
+        case .csv: "text/csv"
+        case .pdf: "application/pdf"
+        case .json: "application/json"
         }
     }
 }
@@ -73,13 +73,13 @@ enum ExportError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidSettings:
-            return "Invalid export settings"
+            "Invalid export settings"
         case .dataFetchFailed:
-            return "Failed to fetch data"
+            "Failed to fetch data"
         case .fileCreationFailed:
-            return "Failed to create export file"
+            "Failed to create export file"
         case .pdfGenerationFailed:
-            return "Failed to generate PDF"
+            "Failed to generate PDF"
         }
     }
 }

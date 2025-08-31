@@ -11,9 +11,9 @@ import SwiftUI
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     #if canImport(SwiftData)
-    @Query private var items: [Item]
+        @Query private var items: [Item]
     #else
-    private var items: [Item] = []
+        private var items: [Item] = []
     #endif
 
     var body: some View {
@@ -27,7 +27,8 @@ struct ContentView: View {
                     } label: {
                         Text(
                             item.timestamp,
-                            format: Date.FormatStyle(date: .numeric, time: .standard))
+                            format: Date.FormatStyle(date: .numeric, time: .standard)
+                        )
                     }
                 }
                 .onDelete(perform: deleteItems)

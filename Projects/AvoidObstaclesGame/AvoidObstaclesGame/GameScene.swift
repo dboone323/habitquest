@@ -5,17 +5,18 @@
 // This file contains all the logic for the "Avoid the Obstacles" game.
 //
 
-import SpriteKit
 import GameplayKit // For GKRandomSource, if needed for more complex randomness
+import SpriteKit
 import UIKit // For UITouch and UIEvent
 
 // MARK: - Physics Categories
+
 // Defines the categories for physics bodies to handle collisions.
 // Using UInt32 for bitmasks allows up to 32 unique categories.
-struct PhysicsCategory {
-    static let none: UInt32 = 0        // 0
-    static let player: UInt32 = 0b1      // Binary 1 (decimal 1)
-    static let obstacle: UInt32 = 0b10     // Binary 2 (decimal 2)
+enum PhysicsCategory {
+    static let none: UInt32 = 0 // 0
+    static let player: UInt32 = 0b1 // Binary 1 (decimal 1)
+    static let obstacle: UInt32 = 0b10 // Binary 2 (decimal 2)
     // Add more categories here if needed (e.g., powerUp: 0b100, ground: 0b1000)
 }
 
@@ -60,7 +61,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let scoreInterval: TimeInterval = 1.0 // Score increases every 1 second the game is active.
 
     // Difficulty management
-    private var currentDifficulty: GameDifficulty = GameDifficulty.getDifficulty(for: 0)
+    private var currentDifficulty: GameDifficulty = .getDifficulty(for: 0)
     private var lastDifficultyLevel: Int = 1
 
     // Particle effects
@@ -96,17 +97,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(backgroundNode)
 
         // Add some subtle animated background elements
-        for _ in 0..<5 {
+        for _ in 0 ..< 5 {
             let cloud = SKSpriteNode(color: .white, size: CGSize(width: 60, height: 30))
             cloud.alpha = 0.3
             cloud.position = CGPoint(
-                x: CGFloat.random(in: 0...size.width),
-                y: CGFloat.random(in: size.height * 0.7...size.height)
+                x: CGFloat.random(in: 0 ... size.width),
+                y: CGFloat.random(in: size.height * 0.7 ... size.height)
             )
             cloud.zPosition = -50
 
             // Animate clouds moving slowly
-            let moveAction = SKAction.moveBy(x: -size.width - 60, y: 0, duration: TimeInterval.random(in: 10...20))
+            let moveAction = SKAction.moveBy(x: -size.width - 60, y: 0, duration: TimeInterval.random(in: 10 ... 20))
             let resetAction = SKAction.moveTo(x: size.width + 60, duration: 0)
             let sequence = SKAction.sequence([moveAction, resetAction])
             cloud.run(SKAction.repeatForever(sequence))
@@ -189,7 +190,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // Create player sprite node with improved visual design
         player = SKSpriteNode(color: .systemBlue, size: CGSize(width: 50, height: 50))
-        guard let player = player else { return } // Safety check for optional player.
+        guard let player else { return } // Safety check for optional player.
 
         player.name = "player" // Assign a name for easier debugging or node searching.
         player.position = CGPoint(x: size.width / 2, y: 100) // Initial position: bottom-center.
@@ -220,7 +221,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // Score Label
         scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
-        guard let scoreLabel = scoreLabel else { return }
+        guard let scoreLabel else { return }
         scoreLabel.text = "Score: 0"
         scoreLabel.fontSize = 24
         scoreLabel.fontColor = SKColor.black
@@ -231,7 +232,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // High Score Label
         highScoreLabel = SKLabelNode(fontNamed: "Chalkduster")
-        guard let highScoreLabel = highScoreLabel else { return }
+        guard let highScoreLabel else { return }
         let highestScore = HighScoreManager.shared.getHighestScore()
         highScoreLabel.text = "Best: \(highestScore)"
         highScoreLabel.fontSize = 20
@@ -243,7 +244,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // Difficulty Label
         difficultyLabel = SKLabelNode(fontNamed: "Chalkduster")
-        guard let difficultyLabel = difficultyLabel else { return }
+        guard let difficultyLabel else { return }
         difficultyLabel.text = "Level: 1"
         difficultyLabel.fontSize = 18
         difficultyLabel.fontColor = SKColor.blue
@@ -270,6 +271,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Stops the obstacle spawning action.
         removeAction(forKey: obstacleSpawnActionKey)
     }
+
     private func spawnObstacle() {
         // Creates a single obstacle with difficulty-based properties and enhanced visuals.
         if isGameOver { return }
@@ -284,22 +286,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // Create border effect
         let topBorder = SKSpriteNode(color: borderColor, size: CGSize(width: obstacleSize.width, height: borderWidth))
-        topBorder.position = CGPoint(x: 0, y: obstacleSize.height/2 - borderWidth/2)
+        topBorder.position = CGPoint(x: 0, y: obstacleSize.height / 2 - borderWidth / 2)
         obstacle.addChild(topBorder)
 
         let bottomBorder = SKSpriteNode(color: borderColor, size: CGSize(width: obstacleSize.width, height: borderWidth))
-        bottomBorder.position = CGPoint(x: 0, y: -obstacleSize.height/2 + borderWidth/2)
+        bottomBorder.position = CGPoint(x: 0, y: -obstacleSize.height / 2 + borderWidth / 2)
         obstacle.addChild(bottomBorder)
 
         let leftBorder = SKSpriteNode(color: borderColor, size: CGSize(width: borderWidth, height: obstacleSize.height))
-        leftBorder.position = CGPoint(x: -obstacleSize.width/2 + borderWidth/2, y: 0)
+        leftBorder.position = CGPoint(x: -obstacleSize.width / 2 + borderWidth / 2, y: 0)
         obstacle.addChild(leftBorder)
 
         let rightBorder = SKSpriteNode(color: borderColor, size: CGSize(width: borderWidth, height: obstacleSize.height))
-        rightBorder.position = CGPoint(x: obstacleSize.width/2 - borderWidth/2, y: 0)
+        rightBorder.position = CGPoint(x: obstacleSize.width / 2 - borderWidth / 2, y: 0)
         obstacle.addChild(rightBorder)
 
-        let randomX = CGFloat.random(in: obstacle.size.width/2 ... size.width - obstacle.size.width/2)
+        let randomX = CGFloat.random(in: obstacle.size.width / 2 ... size.width - obstacle.size.width / 2)
         obstacle.position = CGPoint(x: randomX, y: size.height + obstacle.size.height)
 
         // Setup physics body
@@ -418,7 +420,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // Player contacted an obstacle.
             // Safely cast the nodes to SKSpriteNode before passing them to the handler.
             if let playerNode = firstBody.node as? SKSpriteNode,
-               let obstacleNode = secondBody.node as? SKSpriteNode {
+               let obstacleNode = secondBody.node as? SKSpriteNode
+            {
                 playerHitObstacle(player: playerNode, obstacle: obstacleNode)
             }
         }
@@ -444,7 +447,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // Remove all other on-screen obstacles to clear the play area.
         // This uses enumerateChildNodes to find all nodes named "obstacle".
-        enumerateChildNodes(withName: "obstacle") { (node, _) in
+        enumerateChildNodes(withName: "obstacle") { node, _ in
             node.removeFromParent()
         }
 
@@ -473,7 +476,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOverLabel?.fontColor = SKColor.red
         gameOverLabel?.position = CGPoint(x: size.width / 2, y: size.height / 2 + 100)
         gameOverLabel?.zPosition = 101
-        if let gameOverLabel = gameOverLabel {
+        if let gameOverLabel {
             addChild(gameOverLabel)
         }
 
@@ -484,7 +487,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         finalScoreLabel?.fontColor = SKColor.black
         finalScoreLabel?.position = CGPoint(x: size.width / 2, y: size.height / 2 + 50)
         finalScoreLabel?.zPosition = 101
-        if let finalScoreLabel = finalScoreLabel {
+        if let finalScoreLabel {
             addChild(finalScoreLabel)
         }
 
@@ -496,13 +499,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             highScoreAchievedLabel?.fontColor = SKColor.orange
             highScoreAchievedLabel?.position = CGPoint(x: size.width / 2, y: size.height / 2 + 10)
             highScoreAchievedLabel?.zPosition = 101
-            if let highScoreAchievedLabel = highScoreAchievedLabel {
+            if let highScoreAchievedLabel {
                 addChild(highScoreAchievedLabel)
 
                 // Animate the high score text
                 let pulse = SKAction.sequence([
                     SKAction.scale(to: 1.1, duration: 0.5),
-                    SKAction.scale(to: 1.0, duration: 0.5)
+                    SKAction.scale(to: 1.0, duration: 0.5),
                 ])
                 highScoreAchievedLabel.run(SKAction.repeatForever(pulse))
             }
@@ -515,7 +518,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         restartLabel?.fontColor = SKColor.darkGray
         restartLabel?.position = CGPoint(x: size.width / 2, y: size.height / 2 - 40)
         restartLabel?.zPosition = 101
-        if let restartLabel = restartLabel {
+        if let restartLabel {
             addChild(restartLabel)
         }
 

@@ -40,7 +40,7 @@ extension FinancialIntelligenceService {
                 var forecastLabels = lastMonths
 
                 if let lastDate = sortedMonths.last?.0,
-                    let nextMonth = calendar.date(byAdding: .month, value: 1, to: lastDate)
+                   let nextMonth = calendar.date(byAdding: .month, value: 1, to: lastDate)
                 {
                     forecastLabels.append(fi_formatMonthAbbrev(nextMonth))
                 }
@@ -155,6 +155,6 @@ extension FinancialIntelligenceService {
     func fi_generateForecasts(
         transactions: [FinancialTransaction], accounts: [FinancialAccount]
     ) -> [FinancialInsight] {
-        return generateForecasts(transactions: transactions, accounts: accounts)
+        generateForecasts(transactions: transactions, accounts: accounts)
     }
 }

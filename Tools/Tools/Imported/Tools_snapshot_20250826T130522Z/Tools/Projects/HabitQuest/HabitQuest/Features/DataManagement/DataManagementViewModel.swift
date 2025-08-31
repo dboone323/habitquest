@@ -23,7 +23,7 @@ class DataManagementViewModel: ObservableObject {
 
     var exportDocument: HabitQuestBackupDocument?
     var exportFilename: String {
-        return DataExportService.generateExportFilename()
+        DataExportService.generateExportFilename()
     }
 
     private var modelContext: ModelContext?
@@ -49,7 +49,7 @@ class DataManagementViewModel: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func exportData() {
-        guard let modelContext = modelContext else { return }
+        guard let modelContext else { return }
 
         isExporting = true
 
@@ -166,7 +166,7 @@ class DataManagementViewModel: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func clearAllData() {
-        guard let modelContext = modelContext else { return }
+        guard let modelContext else { return }
 
         Task {
             do {
@@ -190,7 +190,7 @@ class DataManagementViewModel: ObservableObject {
 
     /// Load current data statistics
     private func loadDataStatistics() {
-        guard let modelContext = modelContext else { return }
+        guard let modelContext else { return }
 
         do {
             // Load habits
@@ -206,7 +206,7 @@ class DataManagementViewModel: ObservableObject {
             // Load achievements
             let achievementsDescriptor = FetchDescriptor<Achievement>()
             let achievements = try modelContext.fetch(achievementsDescriptor)
-            unlockedAchievements = achievements.filter { $0.isUnlocked }.count
+            unlockedAchievements = achievements.filter(\.isUnlocked).count
 
             // Load player profile
             let profileDescriptor = FetchDescriptor<PlayerProfile>()

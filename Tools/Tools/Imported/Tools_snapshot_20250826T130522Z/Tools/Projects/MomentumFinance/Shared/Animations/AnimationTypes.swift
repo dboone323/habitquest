@@ -9,14 +9,14 @@ import SwiftUI
 
 // MARK: - Animation Component Types
 
-public struct AnimatedCardComponent {
+public enum AnimatedCardComponent {
     public struct AnimatedCard: View {
         let content: AnyView
-        
+
         public init(content: AnyView) {
             self.content = content
         }
-        
+
         public var body: some View {
             content
                 .transition(.scale.combined(with: .opacity))
@@ -25,16 +25,16 @@ public struct AnimatedCardComponent {
     }
 }
 
-public struct AnimatedButtonComponent {
+public enum AnimatedButtonComponent {
     public struct AnimatedButton: View {
         let title: String
         let action: () -> Void
-        
+
         public init(title: String, action: @escaping () -> Void) {
             self.title = title
             self.action = action
         }
-        
+
         public var body: some View {
             Button(title, action: action)
                 .scaleEffect(1.0)
@@ -43,14 +43,14 @@ public struct AnimatedButtonComponent {
     }
 }
 
-public struct AnimatedTransactionComponent {
+public enum AnimatedTransactionComponent {
     public struct AnimatedTransactionItem: View {
         let title: String
-        
+
         public init(title: String) {
             self.title = title
         }
-        
+
         public var body: some View {
             Text(title)
                 .transition(.slide)
@@ -59,27 +59,27 @@ public struct AnimatedTransactionComponent {
     }
 }
 
-public struct AnimatedProgressComponents {
+public enum AnimatedProgressComponents {
     public struct AnimatedBudgetProgress: View {
         let progress: Double
-        
+
         public init(progress: Double) {
             self.progress = progress
         }
-        
+
         public var body: some View {
             ProgressView(value: progress)
                 .animation(.easeInOut(duration: 0.5), value: progress)
         }
     }
-    
+
     public struct AnimatedCounter: View {
         let count: Int
-        
+
         public init(count: Int) {
             self.count = count
         }
-        
+
         public var body: some View {
             Text("\(count)")
                 .contentTransition(.numericText())
@@ -88,14 +88,14 @@ public struct AnimatedProgressComponents {
     }
 }
 
-public struct FloatingActionButtonComponent {
+public enum FloatingActionButtonComponent {
     public struct FloatingActionButton: View {
         let action: () -> Void
-        
+
         public init(action: @escaping () -> Void) {
             self.action = action
         }
-        
+
         public var body: some View {
             Button(action: action) {
                 Image(systemName: "plus")

@@ -62,25 +62,25 @@ struct ModernButton: View {
 
         var height: CGFloat {
             switch self {
-            case .small: return 32
-            case .medium: return 44
-            case .large: return 56
+            case .small: 32
+            case .medium: 44
+            case .large: 56
             }
         }
 
         var fontSize: CGFloat {
             switch self {
-            case .small: return 14
-            case .medium: return 16
-            case .large: return 18
+            case .small: 14
+            case .medium: 16
+            case .large: 18
             }
         }
 
         var padding: CGFloat {
             switch self {
-            case .small: return 12
-            case .medium: return 16
-            case .large: return 20
+            case .small: 12
+            case .medium: 16
+            case .large: 20
             }
         }
     }
@@ -179,7 +179,7 @@ struct ModernTextField: View {
 
     var isSecure: Bool = false
     #if os(iOS)
-    var keyboardType: UIKeyboardType = .default
+        var keyboardType: UIKeyboardType = .default
     #endif
 
     var body: some View {
@@ -188,9 +188,9 @@ struct ModernTextField: View {
                 SecureField(placeholder, text: $text)
             } else {
                 TextField(placeholder, text: $text)
-                    #if os(iOS)
+                #if os(iOS)
                     .keyboardType(keyboardType)
-                    #endif
+                #endif
             }
         }
         .padding()

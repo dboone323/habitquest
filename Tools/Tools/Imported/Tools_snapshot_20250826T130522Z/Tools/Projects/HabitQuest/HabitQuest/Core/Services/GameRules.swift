@@ -2,7 +2,7 @@ import Foundation
 
 /// Contains all game logic and progression calculations
 /// Pure functions that handle XP calculation, level progression, and habit completion rewards
-struct GameRules {
+enum GameRules {
 
     /// Calculate the total XP required to reach a specific level
     /// Uses an exponential curve: 100 * (1.5 ^ (level - 1))
@@ -17,7 +17,7 @@ struct GameRules {
     /// - Parameter level: Current level
     /// - Returns: XP needed to reach the next level
     static func calculateXPForNextLevel(forLevel level: Int) -> Int {
-        return calculateXPForLevel(
+        calculateXPForLevel(
             level + 1
         )
     }
@@ -72,8 +72,8 @@ struct GameRules {
         var currentStreak = 1 // Start with 1 for today's completion
 
         // Check consecutive days/weeks based on habit frequency
-        for index in 1..<sortedLogs.count {
-            let currentLog = sortedLogs[index-1]
+        for index in 1 ..< sortedLogs.count {
+            let currentLog = sortedLogs[index - 1]
             let previousLog = sortedLogs[index]
 
             let isConsecutive: Bool
@@ -128,7 +128,7 @@ struct GameRules {
         let today = Date()
         let lastCompletion = habit.logs.max { $0.completionDate < $1.completionDate }?.completionDate
 
-        guard let lastCompletion = lastCompletion else {
+        guard let lastCompletion else {
             return true
         }
 

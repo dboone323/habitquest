@@ -23,13 +23,13 @@ enum LogCategory: String, CaseIterable {
 
     var emoji: String {
         switch self {
-        case .general: return "📝"
-        case .analysis: return "🔍"
-        case .performance: return "⚡"
-        case .security: return "🔒"
-        case .ui: return "🖥️"
-        case .ai: return "🤖"
-        case .network: return "🌐"
+        case .general: "📝"
+        case .analysis: "🔍"
+        case .performance: "⚡"
+        case .security: "🔒"
+        case .ui: "🖥️"
+        case .ai: "🤖"
+        case .network: "🌐"
         }
     }
 }
@@ -37,7 +37,7 @@ enum LogCategory: String, CaseIterable {
 // / Enhanced application logger with categorization and performance tracking
 final class AppLogger {
     private let logger = Logger(subsystem: "com.DanielStevens.CodingReviewer", category: "CodeAnalysis")
-    private var performanceMetrics: [String: Date] = [:];
+    private var performanceMetrics: [String: Date] = [:]
 
     static let shared = AppLogger()
     private init() {}
@@ -130,33 +130,33 @@ enum CodeReviewError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .analysisTimeout:
-            return "Analysis timed out. Please try with a smaller code sample."
-        case .invalidInput(let reason):
-            return "Invalid input: \(reason)"
+            "Analysis timed out. Please try with a smaller code sample."
+        case let .invalidInput(reason):
+            "Invalid input: \(reason)"
         case .analysisInterrupted:
-            return "Analysis was interrupted. Please try again."
+            "Analysis was interrupted. Please try again."
         case .systemResourceExhausted:
-            return "System resources exhausted. Please try again later."
+            "System resources exhausted. Please try again later."
         }
     }
 
     var recoverySuggestion: String? {
         switch self {
         case .analysisTimeout:
-            return "Try reducing the code size or simplifying the analysis."
+            "Try reducing the code size or simplifying the analysis."
         case .invalidInput:
-            return "Please check your input and try again."
+            "Please check your input and try again."
         case .analysisInterrupted:
-            return "Restart the analysis process."
+            "Restart the analysis process."
         case .systemResourceExhausted:
-            return "Close other applications and try again."
+            "Close other applications and try again."
         }
     }
 }
 
 // / Performance monitoring for analysis operations
 actor PerformanceMonitor {
-    private var analysisMetrics: [String: TimeInterval] = [:];
+    private var analysisMetrics: [String: TimeInterval] = [:]
 
     func startMeasurement(for operation: String) -> Date {
         Date()

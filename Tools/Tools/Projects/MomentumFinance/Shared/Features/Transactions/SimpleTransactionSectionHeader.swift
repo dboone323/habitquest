@@ -16,7 +16,7 @@ extension Features.Transactions {
             group.value.reduce(0) { result, transaction in
                 let transactionAmount =
                     transaction.transactionType == .income
-                    ? transaction.amount : -transaction.amount
+                        ? transaction.amount : -transaction.amount
                 return result + transactionAmount
             }
         }

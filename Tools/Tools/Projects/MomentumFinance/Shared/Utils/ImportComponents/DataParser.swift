@@ -9,8 +9,8 @@
 import Foundation
 
 /// Handles parsing and validation of financial data from CSV fields
-struct DataParser {
-    
+enum DataParser {
+
     /// Parses date strings using multiple common formats
     static func parseDate(_ dateString: String) throws -> Date {
         let formatters = [
@@ -35,7 +35,7 @@ struct DataParser {
 
         throw ImportError.invalidDateFormat(dateString)
     }
-    
+
     /// Parses amount strings removing currency symbols and formatting
     static func parseAmount(_ amountString: String) throws -> Double {
         // Remove currency symbols and whitespace
@@ -53,7 +53,7 @@ struct DataParser {
 
         return amount
     }
-    
+
     /// Determines transaction type from string indicators or amount
     static func parseTransactionType(_ typeString: String, amount: Double) -> TransactionType {
         let lowerType = typeString.lowercased()

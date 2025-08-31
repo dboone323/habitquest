@@ -82,11 +82,12 @@ extension Theme {
         midnightDark,
         highContrast,
         minimalGray,
-        rosePink
+        rosePink,
     ]
 }
 
 // MARK: - Gradient Support Extensions
+
 extension Color {
     // Create gradient colors for modern effects
     static func gradient(from startColor: Color, to endColor: Color) -> LinearGradient {
@@ -105,6 +106,7 @@ extension Color {
 }
 
 // MARK: - Modern Card with Gradient Support
+
 struct GradientCard<Content: View>: View {
     let content: Content
     @EnvironmentObject var themeManager: ThemeManager

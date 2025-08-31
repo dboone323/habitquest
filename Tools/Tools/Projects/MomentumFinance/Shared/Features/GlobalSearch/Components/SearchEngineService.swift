@@ -2,14 +2,15 @@ import SwiftData
 import SwiftUI
 
 // MARK: - Search Engine Service
+
 @MainActor
 class SearchEngineService: ObservableObject {
     private let modelContext: ModelContext
-    
+
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
-    
+
     func searchAcrossAllModules(
         query: String,
         filter: Features.GlobalSearchView.SearchFilter,
@@ -19,7 +20,7 @@ class SearchEngineService: ObservableObject {
         budgets: [Budget],
         goals: [SavingsGoal]
     ) async -> [SearchResult] {
-        
+
         let lowercasedQuery = query.lowercased()
         var results: [SearchResult] = []
 
@@ -70,14 +71,14 @@ class SearchEngineService: ObservableObject {
 
         return results.sorted { $0.title < $1.title }
     }
-    
+
     // MARK: - Private Search Methods
-    
+
     private func searchAccounts(
         accounts: [FinancialAccount],
         query: String
     ) -> [SearchResult] {
-        return accounts
+        accounts
             .filter { account in
                 account.name.lowercased().contains(query)
             }
@@ -91,15 +92,15 @@ class SearchEngineService: ObservableObject {
                 )
             }
     }
-    
+
     private func searchTransactions(
         transactions: [FinancialTransaction],
         query: String
     ) -> [SearchResult] {
-        return transactions
+        transactions
             .filter { transaction in
                 transaction.title.lowercased().contains(query) ||
-                (transaction.category?.name.lowercased().contains(query) ?? false)
+                    (transaction.category?.name.lowercased().contains(query) ?? false)
             }
             .prefix(SearchConfiguration.transactionResultLimit)
             .map { transaction in
@@ -112,15 +113,15 @@ class SearchEngineService: ObservableObject {
                 )
             }
     }
-    
+
     private func searchSubscriptions(
         subscriptions: [Subscription],
         query: String
     ) -> [SearchResult] {
-        return subscriptions
+        subscriptions
             .filter { subscription in
                 subscription.name.lowercased().contains(query) ||
-                (subscription.category?.name.lowercased().contains(query) ?? false)
+                    (subscription.category?.name.lowercased().contains(query) ?? false)
             }
             .map { subscription in
                 SearchResult(
@@ -132,12 +133,12 @@ class SearchEngineService: ObservableObject {
                 )
             }
     }
-    
+
     private func searchBudgets(
         budgets: [Budget],
         query: String
     ) -> [SearchResult] {
-        return budgets
+        budgets
             .filter { budget in
                 budget.category?.name.lowercased().contains(query) ?? false
             }
@@ -151,12 +152,12 @@ class SearchEngineService: ObservableObject {
                 )
             }
     }
-    
+
     private func searchGoals(
         goals: [SavingsGoal],
         query: String
     ) -> [SearchResult] {
-        return goals
+        goals
             .filter { goal in
                 goal.name.lowercased().contains(query)
             }

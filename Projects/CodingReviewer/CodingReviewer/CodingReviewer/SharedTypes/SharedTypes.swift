@@ -15,6 +15,7 @@ import Foundation
 // Import SharedTypes to get access to all centralized type definitions
 
 // MARK: - Module Organization
+
 /*
  SharedTypes Module contains:
 
@@ -37,6 +38,7 @@ import Foundation
  */
 
 // MARK: - Type Aliases for Backward Compatibility
+
 // Add type aliases here if needed for gradual migration from old enum names
 
 // Example type aliases (uncomment and modify as needed during migration):

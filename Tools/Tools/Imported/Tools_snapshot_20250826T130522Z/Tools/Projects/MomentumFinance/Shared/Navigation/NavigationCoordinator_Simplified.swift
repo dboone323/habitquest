@@ -1,6 +1,6 @@
 import LocalAuthentication
-import OSLog
 import Observation
+import OSLog
 import SwiftUI
 
 //
@@ -18,6 +18,7 @@ final class NavigationCoordinator: ObservableObject {
     static let shared = NavigationCoordinator()
 
     // MARK: - Core Navigation State
+
     var selectedTab: Int = 0
     var dashboardNavPath = NavigationPath()
     var transactionsNavPath = NavigationPath()
@@ -26,27 +27,32 @@ final class NavigationCoordinator: ObservableObject {
     var goalsAndReportsNavPath = NavigationPath()
 
     // MARK: - Enhanced UX Properties
+
     var isSearchActive: Bool = false
     var searchQuery: String = ""
     var breadcrumbHistory: [Features.NavigationTypes.BreadcrumbItem] = []
     var isShowingSearchResults: Bool = false
 
     // MARK: - Authentication State
+
     var isAuthenticated: Bool = false
     var requiresAuthentication: Bool = true
     var lastAuthenticationTime: Date?
-    var authenticationTimeoutInterval: TimeInterval = 300  // 5 minutes
+    var authenticationTimeoutInterval: TimeInterval = 300 // 5 minutes
 
     // MARK: - Deep Linking State
+
     var pendingDeepLink: Features.NavigationTypes.DeepLink?
     var lastHandledDeepLink: Features.NavigationTypes.DeepLink?
     private var lastKnownState: [String: Any] = [:]
 
     // MARK: - Notification Management
+
     var hasUnreadNotifications: Bool = false
     var notificationBadgeCounts: [Features.NavigationTypes.TabSection: Int] = [:]
 
     // MARK: - macOS Support
+
     #if os(macOS)
         var selectedSidebarItem: Features.NavigationTypes.SidebarItem? = .dashboard
         var selectedListItem: Features.NavigationTypes.ListableItem?
@@ -64,6 +70,7 @@ final class NavigationCoordinator: ObservableObject {
 }
 
 // MARK: - Navigation Actions
+
 extension NavigationCoordinator {
     func navigateToTab(_ tabIndex: Int) {
         Features.NavigationActions.navigateToTab(coordinator: self, tabIndex: tabIndex)
@@ -91,12 +98,14 @@ extension NavigationCoordinator {
 
     func navigateToSubscriptionDetail(subscriptionId: String) {
         Features.NavigationActions.navigateToSubscriptionDetail(
-            coordinator: self, subscriptionId: subscriptionId)
+            coordinator: self, subscriptionId: subscriptionId
+        )
     }
 
     func navigateToBudgetCategory(categoryId: String) {
         Features.NavigationActions.navigateToBudgetCategory(
-            coordinator: self, categoryId: categoryId)
+            coordinator: self, categoryId: categoryId
+        )
     }
 
     func navigateToGoalDetail(goalId: String) {
@@ -105,14 +114,16 @@ extension NavigationCoordinator {
 
     func navigateToCategoryTransactions(categoryId: String, sourceTab: Int? = nil) {
         Features.NavigationActions.navigateToCategoryTransactions(
-            coordinator: self, categoryId: categoryId, sourceTab: sourceTab)
+            coordinator: self, categoryId: categoryId, sourceTab: sourceTab
+        )
     }
 
     func navigateToAccountTransactions(
         accountId: String, context: Features.NavigationTypes.NavigationContext
     ) {
         Features.NavigationActions.navigateToAccountTransactions(
-            coordinator: self, accountId: accountId, context: context)
+            coordinator: self, accountId: accountId, context: context
+        )
     }
 
     func navigateToGoalTransactions(goalId: String) {
@@ -129,13 +140,14 @@ extension NavigationCoordinator {
 }
 
 // MARK: - Authentication
+
 extension NavigationCoordinator {
     func authenticateWithBiometrics() async -> Bool {
-        return await Features.NavigationAuthentication.authenticateWithBiometrics(coordinator: self)
+        await Features.NavigationAuthentication.authenticateWithBiometrics(coordinator: self)
     }
 
     func checkAuthenticationStatus() -> Bool {
-        return Features.NavigationAuthentication.checkAuthenticationStatus(coordinator: self)
+        Features.NavigationAuthentication.checkAuthenticationStatus(coordinator: self)
     }
 
     func resetAuthentication() {
@@ -144,21 +156,23 @@ extension NavigationCoordinator {
 }
 
 // MARK: - Deep Linking
+
 extension NavigationCoordinator {
     func handleDeepLink(_ url: URL) -> Bool {
-        return Features.NavigationDeepLinking.handleDeepLink(coordinator: self, url: url)
+        Features.NavigationDeepLinking.handleDeepLink(coordinator: self, url: url)
     }
 
     func processDeepLink(_ deepLink: Features.NavigationTypes.DeepLink) -> Bool {
-        return Features.NavigationDeepLinking.processDeepLink(coordinator: self, deepLink: deepLink)
+        Features.NavigationDeepLinking.processDeepLink(coordinator: self, deepLink: deepLink)
     }
 
     func processPendingDeepLink() -> Bool {
-        return Features.NavigationDeepLinking.processPendingDeepLink(coordinator: self)
+        Features.NavigationDeepLinking.processPendingDeepLink(coordinator: self)
     }
 }
 
 // MARK: - Search & Discovery
+
 extension NavigationCoordinator {
     func activateSearch() {
         Features.NavigationSearch.activateSearch(coordinator: self)
@@ -174,10 +188,12 @@ extension NavigationCoordinator {
 }
 
 // MARK: - Breadcrumbs
+
 extension NavigationCoordinator {
     func addBreadcrumb(title: String, tabIndex: Int) {
         Features.NavigationBreadcrumbs.addBreadcrumb(
-            coordinator: self, title: title, tabIndex: tabIndex)
+            coordinator: self, title: title, tabIndex: tabIndex
+        )
     }
 
     func navigateBack() {
@@ -190,44 +206,50 @@ extension NavigationCoordinator {
 }
 
 // MARK: - State Restoration
+
 extension NavigationCoordinator {
     func saveNavigationState() {
         Features.NavigationStateRestoration.saveNavigationState(coordinator: self)
     }
 
     func restoreNavigationState() -> Bool {
-        return Features.NavigationStateRestoration.restoreNavigationState(coordinator: self)
+        Features.NavigationStateRestoration.restoreNavigationState(coordinator: self)
     }
 }
 
 // MARK: - Notification Integration
+
 extension NavigationCoordinator {
-    func updateNotificationBadgeCount(for section: Features.NavigationTypes.TabSection, count: Int)
-    {
+    func updateNotificationBadgeCount(for section: Features.NavigationTypes.TabSection, count: Int) {
         Features.NavigationNotifications.updateNotificationBadgeCount(
-            coordinator: self, section: section, count: count)
+            coordinator: self, section: section, count: count
+        )
     }
 
     func navigateToNotification(_ notification: Features.NavigationTypes.AppNotification) {
         Features.NavigationNotifications.navigateToNotification(
-            coordinator: self, notification: notification)
+            coordinator: self, notification: notification
+        )
     }
 
     func navigateToAllNotifications(for section: Features.NavigationTypes.TabSection) {
         Features.NavigationNotifications.navigateToAllNotifications(
-            coordinator: self, section: section)
+            coordinator: self, section: section
+        )
     }
 
     func clearNotificationBadges(for section: Features.NavigationTypes.TabSection) {
         Features.NavigationNotifications.clearNotificationBadges(
-            coordinator: self, section: section)
+            coordinator: self, section: section
+        )
     }
 }
 
 // MARK: - Helper Methods
+
 extension NavigationCoordinator {
     func navigateToTransactionDetail(transactionId: String) {
-        selectedTab = 1  // Transactions tab
+        selectedTab = 1 // Transactions tab
         let context = Features.NavigationTypes.NavigationContext(
             breadcrumbTitle: "Transaction Detail",
             sourceModule: "Notifications"
@@ -237,6 +259,7 @@ extension NavigationCoordinator {
 }
 
 // MARK: - macOS Navigation Support
+
 #if os(macOS)
     extension NavigationCoordinator {
         func navigateToAccount(accountId: String) {
@@ -245,23 +268,27 @@ extension NavigationCoordinator {
 
         func navigateToTransaction(transactionId: String, transactionName: String) {
             Features.NavigationMacOS.navigateToTransaction(
-                coordinator: self, transactionId: transactionId, transactionName: transactionName)
+                coordinator: self, transactionId: transactionId, transactionName: transactionName
+            )
         }
 
         func navigateToBudget(budgetId: String, budgetName: String) {
             Features.NavigationMacOS.navigateToBudget(
-                coordinator: self, budgetId: budgetId, budgetName: budgetName)
+                coordinator: self, budgetId: budgetId, budgetName: budgetName
+            )
         }
 
         func navigateToSubscription(subscriptionId: String, subscriptionName: String) {
             Features.NavigationMacOS.navigateToSubscription(
                 coordinator: self, subscriptionId: subscriptionId,
-                subscriptionName: subscriptionName)
+                subscriptionName: subscriptionName
+            )
         }
 
         func navigateToGoal(goalId: String, goalName: String) {
             Features.NavigationMacOS.navigateToGoal(
-                coordinator: self, goalId: goalId, goalName: goalName)
+                coordinator: self, goalId: goalId, goalName: goalName
+            )
         }
 
         func navigateToReport(reportType: String) {

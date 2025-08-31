@@ -1,6 +1,7 @@
 import SwiftUI
 
 #if os(macOS)
+
     // MARK: - macOS Navigation Support
 
     extension NavigationCoordinator {
@@ -27,7 +28,8 @@ import SwiftUI
         func navigateToTransaction(transactionId: String, transactionName: String) {
             selectedSidebarItem = .transactions
             selectedListItem = ListableItem(
-                id: transactionId, name: transactionName, type: .transaction)
+                id: transactionId, name: transactionName, type: .transaction
+            )
         }
 
         /// Navigate to a budget detail
@@ -40,7 +42,8 @@ import SwiftUI
         func navigateToSubscription(subscriptionId: String, subscriptionName: String) {
             selectedSidebarItem = .subscriptions
             selectedListItem = ListableItem(
-                id: subscriptionId, name: subscriptionName, type: .subscription)
+                id: subscriptionId, name: subscriptionName, type: .subscription
+            )
         }
 
         /// Navigate to a savings goal detail

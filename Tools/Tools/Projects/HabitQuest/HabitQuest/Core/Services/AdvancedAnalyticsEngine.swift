@@ -105,8 +105,8 @@ final class AdvancedAnalyticsEngine {
             generateCategoryBasedSuggestions(profile: userProfile),
             generateTimeBasedSuggestions(profile: userProfile),
             generateComplementarySuggestions(existing: existingHabits),
-            generateTrendingSuggestions()
-        ].flatMap { $0 }
+            generateTrendingSuggestions(),
+        ].flatMap(\.self)
     }
 
     // MARK: - Pattern Analysis
@@ -187,13 +187,13 @@ final class AdvancedAnalyticsEngine {
 
     private func determineTrend(patterns: HabitPatterns) -> String {
         if patterns.momentum > 0.7 {
-            return "strongly improving"
+            "strongly improving"
         } else if patterns.momentum > 0.5 {
-            return "improving"
+            "improving"
         } else if patterns.momentum < 0.3 {
-            return "declining"
+            "declining"
         } else {
-            return "stable"
+            "stable"
         }
     }
 
@@ -206,15 +206,15 @@ final class AdvancedAnalyticsEngine {
     ) -> String {
         switch (patterns.momentum, probability) {
         case (let momentumValue, let probabilityValue) where momentumValue > 0.8 && probabilityValue > 80:
-            return "🚀 Exceptional momentum! Consider expanding this habit or adding a complementary one."
+            "🚀 Exceptional momentum! Consider expanding this habit or adding a complementary one."
         case (let momentumValue, let probabilityValue) where momentumValue > 0.6 && probabilityValue > 70:
-            return "💪 Strong pattern! Focus on maintaining consistency during weekends."
+            "💪 Strong pattern! Focus on maintaining consistency during weekends."
         case (let momentumValue, let probabilityValue) where momentumValue < 0.4 && probabilityValue < 50:
-            return "🎯 Try habit stacking: attach this to an established routine."
+            "🎯 Try habit stacking: attach this to an established routine."
         case (_, let probabilityValue) where probabilityValue < 30:
-            return "🔄 Consider reducing frequency or simplifying the habit to rebuild momentum."
+            "🔄 Consider reducing frequency or simplifying the habit to rebuild momentum."
         default:
-            return "📈 Small wins lead to big changes. Focus on consistency over perfection."
+            "📈 Small wins lead to big changes. Focus on consistency over perfection."
         }
     }
 
@@ -291,51 +291,51 @@ final class AdvancedAnalyticsEngine {
     }
 
     private func calculateMoodCorrelation(_ habit: Habit) async -> Double {
-        return 0.75 // Placeholder implementation
+        0.75 // Placeholder implementation
     }
 
     private func analyzeDayOfWeekPattern(_ habit: Habit) -> (strongest: [String], weakest: [String]) {
-        return (strongest: ["Monday", "Tuesday"], weakest: ["Saturday", "Sunday"])
+        (strongest: ["Monday", "Tuesday"], weakest: ["Saturday", "Sunday"])
     }
 
     private func analyzeStreakBreakFactors(_ habit: Habit) -> [String] {
-        return ["Weekend disruption", "Travel", "Stress"]
+        ["Weekend disruption", "Travel", "Stress"]
     }
 
     private func identifyMotivationTriggers(_ habit: Habit) -> [String] {
-        return ["Morning routine", "Workout buddy", "Progress tracking"]
+        ["Morning routine", "Workout buddy", "Progress tracking"]
     }
 
     private func generatePersonalityInsights(_ habit: Habit) -> [String] {
-        return ["Consistent performer", "Responds well to routine"]
+        ["Consistent performer", "Responds well to routine"]
     }
 
     private func analyzeUserProfile(from habits: [Habit]) async -> String {
-        return "Routine-oriented user with consistent habits"
+        "Routine-oriented user with consistent habits"
     }
 
     private func generateCategoryBasedSuggestions(profile: String) -> [HabitSuggestion] {
-        return []
+        []
     }
 
     private func generateTimeBasedSuggestions(profile: String) -> [HabitSuggestion] {
-        return []
+        []
     }
 
     private func generateComplementarySuggestions(existing: [Habit]) -> [HabitSuggestion] {
-        return []
+        []
     }
 
     private func generateTrendingSuggestions() -> [HabitSuggestion] {
-        return []
+        []
     }
 
     private func analyzeWeekdayPreference(_ logs: [HabitLog]) -> Int {
-        return 2 // Tuesday
+        2 // Tuesday
     }
 
     private func analyzeTimePreference(_ logs: [HabitLog]) -> Int {
-        return 9 // 9 AM
+        9 // 9 AM
     }
 
     private func calculateSuccessRateForHour(habit: Habit, hour: Int) -> Double {
@@ -373,7 +373,7 @@ final class AdvancedAnalyticsEngine {
         }
 
         let optimalHour = findOptimalHour(from: completionHours)
-        return (optimalHour - 1)...(optimalHour + 1)
+        return (optimalHour - 1) ... (optimalHour + 1)
     }
 
     private func calculateLongestRecentStreak(_ habit: Habit) -> Int {

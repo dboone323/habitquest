@@ -1,12 +1,12 @@
-import Foundation
 import CloudKit
+import Foundation
 
 struct CalendarEvent: Identifiable, Codable {
     let id: UUID
     var title: String
     var date: Date
     var createdAt: Date
-    var modifiedAt: Date?  // Added for CloudKit sync/merge
+    var modifiedAt: Date? // Added for CloudKit sync/merge
 
     init(id: UUID = UUID(), title: String, date: Date, createdAt: Date = Date(), modifiedAt: Date? = Date()) {
         self.id = id

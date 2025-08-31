@@ -1,8 +1,9 @@
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
 // MARK: - Shared Data Manager
+
 // This class ensures that file data is shared across all views in the app
 
 @MainActor

@@ -5,8 +5,8 @@ import SwiftData
 import SwiftUI
 
 // Test compilation of models
-    /// <#Description#>
-    /// - Returns: <#description#>
+/// <#Description#>
+/// - Returns: <#description#>
 func testModels() {
     let account = FinancialAccount(name: "Test", accountType: .checking, balance: 100.0)
     let transaction = FinancialTransaction(

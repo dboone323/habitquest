@@ -8,6 +8,7 @@
 import SwiftUI
 
 // MARK: - Enhanced Platform Navigation
+
 struct EnhancedPlatformNavigation<Content: View>: View {
     let content: Content
     @EnvironmentObject var themeManager: ThemeManager
@@ -19,17 +20,18 @@ struct EnhancedPlatformNavigation<Content: View>: View {
 
     var body: some View {
         #if os(macOS)
-        macOSNavigation
+            macOSNavigation
         #elseif os(iOS)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            iPadNavigation
-        } else {
-            iPhoneNavigation
-        }
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                iPadNavigation
+            } else {
+                iPhoneNavigation
+            }
         #endif
     }
 
     // MARK: - macOS Navigation
+
     private var macOSNavigation: some View {
         NavigationSplitView {
             MacOSSidebarView()
@@ -47,6 +49,7 @@ struct EnhancedPlatformNavigation<Content: View>: View {
     }
 
     // MARK: - iPad Navigation
+
     private var iPadNavigation: some View {
         NavigationSplitView(columnVisibility: .constant(.all)) {
             IPadSidebarView()
@@ -55,13 +58,13 @@ struct EnhancedPlatformNavigation<Content: View>: View {
             content
                 .toolbar {
                     #if os(iOS)
-                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                        IPadToolbarButtons()
-                    }
+                        ToolbarItemGroup(placement: .navigationBarTrailing) {
+                            IPadToolbarButtons()
+                        }
                     #else
-                    ToolbarItemGroup {
-                        IPadToolbarButtons()
-                    }
+                        ToolbarItemGroup {
+                            IPadToolbarButtons()
+                        }
                     #endif
                 }
         }
@@ -69,18 +72,19 @@ struct EnhancedPlatformNavigation<Content: View>: View {
     }
 
     // MARK: - iPhone Navigation
+
     private var iPhoneNavigation: some View {
         NavigationStack {
             content
                 .toolbar {
                     #if os(iOS)
-                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                        IPhoneToolbarButtons()
-                    }
+                        ToolbarItemGroup(placement: .navigationBarTrailing) {
+                            IPhoneToolbarButtons()
+                        }
                     #else
-                    ToolbarItemGroup {
-                        IPhoneToolbarButtons()
-                    }
+                        ToolbarItemGroup {
+                            IPhoneToolbarButtons()
+                        }
                     #endif
                 }
         }
@@ -88,6 +92,7 @@ struct EnhancedPlatformNavigation<Content: View>: View {
 }
 
 // MARK: - macOS Sidebar
+
 struct MacOSSidebarView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State private var selectedTab: Tab = .dashboard
@@ -102,23 +107,23 @@ struct MacOSSidebarView: View {
 
         var icon: String {
             switch self {
-            case .dashboard: return "square.grid.2x2"
-            case .tasks: return "checkmark.circle"
-            case .goals: return "target"
-            case .calendar: return "calendar"
-            case .journal: return "book"
-            case .settings: return "gear"
+            case .dashboard: "square.grid.2x2"
+            case .tasks: "checkmark.circle"
+            case .goals: "target"
+            case .calendar: "calendar"
+            case .journal: "book"
+            case .settings: "gear"
             }
         }
 
         var keyboardShortcut: KeyEquivalent? {
             switch self {
-            case .dashboard: return "1"
-            case .tasks: return "2"
-            case .goals: return "3"
-            case .calendar: return "4"
-            case .journal: return "5"
-            case .settings: return ","
+            case .dashboard: "1"
+            case .tasks: "2"
+            case .goals: "3"
+            case .calendar: "4"
+            case .journal: "5"
+            case .settings: ","
             }
         }
     }
@@ -129,8 +134,8 @@ struct MacOSSidebarView: View {
                 Label(tab.rawValue, systemImage: tab.icon)
                     .foregroundColor(
                         selectedTab == tab ?
-                        themeManager.currentTheme.primaryAccentColor :
-                        themeManager.currentTheme.primaryTextColor
+                            themeManager.currentTheme.primaryAccentColor :
+                            themeManager.currentTheme.primaryTextColor
                     )
             }
             .keyboardShortcut(tab.keyboardShortcut ?? KeyEquivalent(" "), modifiers: .command)
@@ -141,6 +146,7 @@ struct MacOSSidebarView: View {
 }
 
 // MARK: - iPad Sidebar
+
 struct IPadSidebarView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State private var selectedTab: String = "Dashboard"
@@ -151,7 +157,7 @@ struct IPadSidebarView: View {
         ("Goals", "target"),
         ("Calendar", "calendar"),
         ("Journal", "book"),
-        ("Settings", "gear")
+        ("Settings", "gear"),
     ]
 
     var body: some View {
@@ -172,16 +178,16 @@ struct IPadSidebarView: View {
                     .padding(.vertical, 4)
                     .background(
                         selectedTab == tab.0 ?
-                        themeManager.currentTheme.primaryAccentColor.opacity(0.1) :
-                        Color.clear
+                            themeManager.currentTheme.primaryAccentColor.opacity(0.1) :
+                            Color.clear
                     )
                     .cornerRadius(8)
                     .onTapGesture {
                         selectedTab = tab.0
                         // Add haptic feedback
                         #if os(iOS)
-                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                        impactFeedback.impactOccurred()
+                            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                            impactFeedback.impactOccurred()
                         #endif
                     }
                 }
@@ -209,6 +215,7 @@ struct IPadSidebarView: View {
 }
 
 // MARK: - Toolbar Buttons
+
 struct MacOSToolbarButtons: View {
     @EnvironmentObject var themeManager: ThemeManager
 
@@ -278,6 +285,7 @@ struct IPhoneToolbarButtons: View {
 }
 
 // MARK: - Quick Action Button
+
 struct QuickActionButton: View {
     let title: String
     let icon: String
@@ -309,6 +317,7 @@ struct QuickActionButton: View {
 }
 
 // MARK: - Keyboard Shortcuts Support
+
 struct KeyboardShortcutsView: View {
     var body: some View {
         VStack {

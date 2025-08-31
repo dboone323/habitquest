@@ -1,6 +1,6 @@
 import Foundation
 
-struct SecurityConfig {
+enum SecurityConfig {
     static let minPasswordLength = 12
     static let sessionTimeout: TimeInterval = 3600 // 1 hour
     static let maxFailedAttempts = 3
@@ -11,7 +11,7 @@ struct SecurityConfig {
     static let allowedAPIEndpoints = [
         "https:// api.openai.com",
         "https:// api.anthropic.com",
-        "https:// api.github.com"
+        "https:// api.github.com",
     ]
 
     static func validateEndpoint(_ endpoint: String) -> Bool {

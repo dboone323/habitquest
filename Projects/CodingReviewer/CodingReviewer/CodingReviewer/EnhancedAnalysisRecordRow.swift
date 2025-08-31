@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EnhancedAnalysisRecordRow: View {
     let record: FileAnalysisRecord
-    @State private var isExpanded = true  // Start expanded so users can see results immediately;
+    @State private var isExpanded = true // Start expanded so users can see results immediately;
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -127,23 +127,23 @@ struct EnhancedAnalysisRecordRow: View {
     private func severityColor(for severity: String) -> Color {
         switch severity.lowercased() {
         case "critical":
-            return .red
+            .red
         case "high":
-            return .orange
+            .orange
         case "medium":
-            return .yellow
+            .yellow
         case "low":
-            return .blue
+            .blue
         default:
-            return .gray
+            .gray
         }
     }
 
     private func formatDuration(_ duration: TimeInterval) -> String {
         if duration < 1 {
-            return String(format: "%.0fms", duration * 1000)
+            String(format: "%.0fms", duration * 1000)
         } else {
-            return String(format: "%.1fs", duration)
+            String(format: "%.1fs", duration)
         }
     }
 }
@@ -169,7 +169,7 @@ struct EnhancedAnalysisRecordRow_Previews: PreviewProvider {
                 severity: "high",
                 lineNumber: 23,
                 type: "security"
-            )
+            ),
         ]
 
         // Create FileAnalysisRecord using the correct initializer

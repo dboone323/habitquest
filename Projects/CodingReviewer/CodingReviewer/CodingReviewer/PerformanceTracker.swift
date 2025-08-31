@@ -3,8 +3,8 @@ import Foundation
 class PerformanceTracker {
     static let shared = PerformanceTracker()
 
-    private var startTimes: [String: CFTimeInterval] = [:];
-    private var performanceMetrics: [PerformanceMetric] = [];
+    private var startTimes: [String: CFTimeInterval] = [:]
+    private var performanceMetrics: [PerformanceMetric] = []
 
     private init() {}
 
@@ -43,7 +43,7 @@ class PerformanceTracker {
     }
 
     func getMetrics(for operation: String? = nil) -> [PerformanceMetric] {
-        if let operation = operation {
+        if let operation {
             return performanceMetrics.filter { $0.operation == operation }
         }
         return performanceMetrics
@@ -61,7 +61,7 @@ class PerformanceTracker {
         performanceMetrics
             .sorted { $0.duration > $1.duration }
             .prefix(limit)
-            .map { $0 }
+            .map(\.self)
     }
 
     func clearMetrics() {
@@ -71,8 +71,8 @@ class PerformanceTracker {
     }
 
     private func getCurrentMemoryUsage() -> UInt64 {
-        var info = mach_task_basic_info();
-        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4;
+        var info = mach_task_basic_info()
+        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
 
         let result = withUnsafeMutablePointer(to: &info) {
             $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
@@ -84,7 +84,7 @@ class PerformanceTracker {
     }
 
     func generateReport() -> String {
-        var report = "# Performance Report\n\n";
+        var report = "# Performance Report\n\n"
         report += "Generated: \(Date())\n\n"
 
         // Summary statistics

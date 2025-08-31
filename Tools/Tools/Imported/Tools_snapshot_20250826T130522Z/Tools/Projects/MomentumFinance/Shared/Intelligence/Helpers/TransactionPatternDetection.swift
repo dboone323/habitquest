@@ -22,7 +22,7 @@ func fi_findRecurringTransactions(_ transactions: [FinancialTransaction]) -> [Fi
         let sortedTransactions = similarTransactions.sorted { $0.date < $1.date }
 
         var intervals: [TimeInterval] = []
-        for intervalIndex in 1..<sortedTransactions.count {
+        for intervalIndex in 1 ..< sortedTransactions.count {
             let interval = sortedTransactions[intervalIndex].date.timeIntervalSince(
                 sortedTransactions[intervalIndex - 1].date)
             intervals.append(interval)
@@ -67,7 +67,7 @@ func fi_findPotentialDuplicates(_ transactions: [FinancialTransaction]) -> [[Fin
 
     for (_, similarTransactions) in transactionsByNameAndAmount where similarTransactions.count >= 2 {
         let sortedTransactions = similarTransactions.sorted { $0.date < $1.date }
-        for dupIndex in 1..<sortedTransactions.count {
+        for dupIndex in 1 ..< sortedTransactions.count {
             let interval = sortedTransactions[dupIndex].date.timeIntervalSince(
                 sortedTransactions[dupIndex - 1].date)
             if interval < 48 * 60 * 60 {

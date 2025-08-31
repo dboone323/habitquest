@@ -14,7 +14,7 @@ struct AccessibilitySettingsSection: View {
     @Binding var reducedMotion: Bool
     @Binding var highContrastMode: Bool
     @Binding var animationsEnabled: Bool
-    
+
     var body: some View {
         Section {
             Toggle("Haptic Feedback", isOn: $hapticFeedbackEnabled)

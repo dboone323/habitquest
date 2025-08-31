@@ -25,19 +25,19 @@ extension NavigationCoordinator {
 
         // Process the deep link based on type
         switch deepLink.type {
-        case .account(let id):
+        case let .account(id):
             navigateToAccountDetail(accountId: id)
-        case .transaction(let id):
+        case let .transaction(id):
             navigateToTransactionDetail(transactionId: id)
-        case .budget(let id):
+        case let .budget(id):
             navigateToBudgetCategory(categoryId: id)
-        case .subscription(let id):
+        case let .subscription(id):
             navigateToSubscriptionDetail(subscriptionId: id)
-        case .goal(let id):
+        case let .goal(id):
             navigateToGoalDetail(goalId: id)
-        case .category(let id):
+        case let .category(id):
             navigateToCategoryTransactions(categoryId: id)
-        case .search(let query):
+        case let .search(query):
             searchQuery = query
             activateSearch()
             isShowingSearchResults = true

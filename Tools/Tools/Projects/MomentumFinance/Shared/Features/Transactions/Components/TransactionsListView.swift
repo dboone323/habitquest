@@ -1,8 +1,8 @@
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 extension Features.Transactions {
     struct TransactionsListView: View {
@@ -10,7 +10,7 @@ extension Features.Transactions {
         let isVisible: Bool
         let onTransactionSelected: (FinancialTransaction) -> Void
         let onTransactionDeleted: (FinancialTransaction) -> Void
-        
+
         private var groupedTransactions: [(key: String, value: [FinancialTransaction])] {
             let grouped = Dictionary(grouping: transactions) { transaction in
                 let formatter = DateFormatter()
@@ -19,10 +19,10 @@ extension Features.Transactions {
             }
             return grouped.sorted { $0.key > $1.key }
         }
-        
+
         var body: some View {
             List {
-                ForEach(Array(groupedTransactions.enumerated()), id: \.element.key) { groupIndex, group in
+                ForEach(Array(groupedTransactions.enumerated()), id: \.element.key) { _, group in
                     Section {
                         ForEach(group.value, id: \.persistentModelID) { transaction in
                             TransactionRow(
@@ -50,16 +50,16 @@ extension Features.Transactions {
     struct TransactionRow: View {
         let transaction: FinancialTransaction
         let onTapped: () -> Void
-        
+
         private var categoryColor: Color {
             switch transaction.transactionType {
             case .income:
-                return .green
+                .green
             case .expense:
-                return .red
+                .red
             }
         }
-        
+
         var body: some View {
             Button(action: onTapped) {
                 HStack(spacing: 16) {
@@ -113,7 +113,7 @@ extension Features.Transactions {
 
     struct TransactionSectionHeader: View {
         let group: (key: String, value: [FinancialTransaction])
-        
+
         private var monthTotal: Double {
             group.value.reduce(0) { result, transaction in
                 let transactionAmount = transaction.transactionType == .income
@@ -121,7 +121,7 @@ extension Features.Transactions {
                 return result + transactionAmount
             }
         }
-        
+
         var body: some View {
             HStack {
                 Text(group.key)
@@ -147,7 +147,7 @@ extension Features.Transactions {
         FinancialTransaction(title: "Salary", amount: 3000.00, date: Date(), transactionType: .income),
         FinancialTransaction(title: "Coffee", amount: 4.50, date: Date().addingTimeInterval(-86400), transactionType: .expense),
     ]
-    
+
     Features.Transactions.TransactionsListView(
         transactions: sampleTransactions,
         isVisible: true,

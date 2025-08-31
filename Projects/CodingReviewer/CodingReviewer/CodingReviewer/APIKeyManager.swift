@@ -1,21 +1,22 @@
+import Combine
+import Foundation
+
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 import OSLog
-import Foundation
 import SwiftUI
-import Combine
 
+/// APIKeyManager class
+/// TODO: Add detailed documentation
 @MainActor
 // / APIKeyManager class
 // / TODO: Add detailed documentation
-/// APIKeyManager class
-/// TODO: Add detailed documentation
 public class APIKeyManager: ObservableObject {
     static let shared = APIKeyManager()
 
-    @Published var showingKeySetup = false;
-    @Published var hasValidKey = false;
-    @Published var isConfigured = false;
-    @Published var hasValidGeminiKey = false;
+    @Published var showingKeySetup = false
+    @Published var hasValidKey = false
+    @Published var isConfigured = false
+    @Published var hasValidGeminiKey = false
 
     // Keys
     private let openAIKeyAccount = "openai_api_key"

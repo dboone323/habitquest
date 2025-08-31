@@ -9,10 +9,10 @@
 import SwiftUI
 
 /// Static color definitions for light and dark theme schemes
-struct ColorDefinitions {
-    
+enum ColorDefinitions {
+
     // MARK: - Background Colors
-    
+
     static func background(_ mode: ThemeScheme) -> Color {
         switch mode {
         case .light:
@@ -48,7 +48,7 @@ struct ColorDefinitions {
             Color(hex: "2A2A2A") // Dark card background
         }
     }
-    
+
     // MARK: - Text Colors
 
     static func text(_ level: TextLevel, _ mode: ThemeScheme) -> Color {
@@ -127,9 +127,9 @@ struct ColorDefinitions {
             Color(hex: "EF5350") // Lighter red for dark mode
         }
     }
-    
+
     // MARK: - Category Colors (Chart Colors)
-    
+
     static var categoryColors: [Color] {
         [
             Color(hex: "4285F4"), // Blue

@@ -1,5 +1,5 @@
 //
-//  MomentumFinanceTypes.swift  
+//  MomentumFinanceTypes.swift
 //  MomentumFinance
 //
 //  Comprehensive type definitions for MomentumFinance app
@@ -8,8 +8,8 @@
 //
 
 import Foundation
-import SwiftUI
 import OSLog
+import SwiftUI
 import UserNotifications
 
 // NOTE: Notification types and schedulers were intentionally removed from this aggregated
@@ -25,14 +25,14 @@ import UserNotifications
 /// Navigation tab sections
 public enum TabSection: CaseIterable {
     case dashboard, transactions, budgets, subscriptions, reports
-    
+
     public var title: String {
         switch self {
-        case .dashboard: return "Dashboard"
-        case .transactions: return "Transactions"
-        case .budgets: return "Budgets"
-        case .subscriptions: return "Subscriptions"
-        case .reports: return "Reports"
+        case .dashboard: "Dashboard"
+        case .transactions: "Transactions"
+        case .budgets: "Budgets"
+        case .subscriptions: "Subscriptions"
+        case .reports: "Reports"
         }
     }
 }
@@ -43,7 +43,7 @@ public struct DeepLink: Identifiable, Hashable {
     public let url: URL
     public let targetTab: TabSection
     public let parameters: [String: String]
-    
+
     public init(url: URL, targetTab: TabSection, parameters: [String: String] = [:]) {
         self.url = url
         self.targetTab = targetTab
@@ -57,7 +57,7 @@ public struct BreadcrumbItem: Identifiable {
     public let title: String
     public let tabIndex: Int
     public let timestamp: Date
-    
+
     public init(title: String, tabIndex: Int, timestamp: Date = Date()) {
         self.title = title
         self.tabIndex = tabIndex
@@ -74,7 +74,7 @@ public struct ColumnMapping {
     public let sourceColumn: String
     public let targetField: String
     public let dataType: String
-    
+
     public init(sourceColumn: String, targetField: String, dataType: String) {
         self.sourceColumn = sourceColumn
         self.targetField = targetField
@@ -84,7 +84,7 @@ public struct ColumnMapping {
 
 public class EntityManager {
     public init() {}
-    public func createEntity<T>(from data: [String: Any], type: T.Type) -> T? { return nil }
+    public func createEntity<T>(from data: [String: Any], type: T.Type) -> T? { nil }
 }
 
 // MARK: - Intelligence Types
@@ -97,7 +97,7 @@ public class EntityManager {
 
 // MARK: - Animation Types
 
-public struct AnimatedCardComponent {
+public enum AnimatedCardComponent {
     public struct AnimatedCard: View {
         let content: AnyView
         public init(content: AnyView) { self.content = content }
@@ -107,7 +107,7 @@ public struct AnimatedCardComponent {
     }
 }
 
-public struct AnimatedButtonComponent {
+public enum AnimatedButtonComponent {
     public struct AnimatedButton: View {
         let title: String
         let action: () -> Void
@@ -118,7 +118,7 @@ public struct AnimatedButtonComponent {
     }
 }
 
-public struct AnimatedTransactionComponent {
+public enum AnimatedTransactionComponent {
     public struct AnimatedTransactionItem: View {
         let title: String
         public init(title: String) { self.title = title }
@@ -128,7 +128,7 @@ public struct AnimatedTransactionComponent {
     }
 }
 
-public struct AnimatedProgressComponents {
+public enum AnimatedProgressComponents {
     public struct AnimatedBudgetProgress: View {
         let progress: Double
         public init(progress: Double) { self.progress = progress }
@@ -136,7 +136,7 @@ public struct AnimatedProgressComponents {
             ProgressView(value: progress).animation(.easeInOut(duration: 0.5), value: progress)
         }
     }
-    
+
     public struct AnimatedCounter: View {
         let count: Int
         public init(count: Int) { self.count = count }
@@ -146,7 +146,7 @@ public struct AnimatedProgressComponents {
     }
 }
 
-public struct FloatingActionButtonComponent {
+public enum FloatingActionButtonComponent {
     public struct FloatingActionButton: View {
         let action: () -> Void
         public init(action: @escaping () -> Void) { self.action = action }

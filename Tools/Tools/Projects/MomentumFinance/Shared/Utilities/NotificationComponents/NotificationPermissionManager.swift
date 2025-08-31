@@ -12,33 +12,33 @@ import UserNotifications
 
 /// Manages notification permissions and authorization status
 public struct NotificationPermissionManager {
-    
+
     private let center = UNUserNotificationCenter.current()
     private let logger: OSLog
-    
+
     init(logger: OSLog) {
         self.logger = logger
     }
-    
+
     /// Requests notification permission from the user
     /// - Returns: Boolean indicating if permission was granted
     func requestNotificationPermission() async -> Bool {
         do {
             let granted = try await center.requestAuthorization(options: [.alert, .badge, .sound])
-            
+
             if granted {
                 os_log("Notification permission granted", log: logger, type: .info)
             } else {
                 os_log("Notification permission denied", log: logger, type: .info)
             }
-            
+
             return granted
         } catch {
             os_log("Failed to request notification permission: %@", log: logger, type: .error, error.localizedDescription)
             return false
         }
     }
-    
+
     /// Checks the current notification permission status
     /// - Parameter completion: Callback with the authorization status
     func checkNotificationPermission(completion: @escaping (Bool) -> Void) {
@@ -49,7 +49,7 @@ public struct NotificationPermissionManager {
             }
         }
     }
-    
+
     /// Sets up notification categories with actions
     func setupNotificationCategories() {
         let budgetWarningCategory = UNNotificationCategory(

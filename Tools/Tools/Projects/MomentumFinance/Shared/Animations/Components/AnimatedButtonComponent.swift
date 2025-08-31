@@ -21,26 +21,26 @@ struct AnimatedButton<Content: View>: View {
 
         var backgroundColor: Color {
             switch self {
-            case .primary: 
+            case .primary:
                 .accentColor
-            case .secondary: 
+            case .secondary:
                 .gray.opacity(0.2)
-            case .destructive: 
+            case .destructive:
                 .red
-            case .ghost: 
+            case .ghost:
                 .clear
             }
         }
 
         var foregroundColor: Color {
             switch self {
-            case .primary: 
+            case .primary:
                 .white
-            case .secondary: 
+            case .secondary:
                 .primary
-            case .destructive: 
+            case .destructive:
                 .white
-            case .ghost: 
+            case .ghost:
                 .accentColor
             }
         }

@@ -13,7 +13,7 @@ struct ImportExportSection: View {
     @Binding var showingDataExport: Bool
     @Binding var showingDataImport: Bool
     @Binding var hapticFeedbackEnabled: Bool
-    
+
     var body: some View {
         Section {
             Button(action: {

@@ -4,7 +4,7 @@ import SwiftUI
 
 /// Progress indicator components with theme-aware styling
 public struct ThemeProgressComponents: @unchecked Sendable {
-    
+
     /// Budget progress bar with color indication based on status
     @MainActor
     func budgetProgressBar(spent: Decimal, total: Decimal) -> some View {
@@ -81,7 +81,7 @@ public struct ThemeProgressComponents: @unchecked Sendable {
         }
         .frame(width: diameter, height: diameter)
     }
-    
+
     /// Format currency with locale settings
     private func formatCurrency(_ amount: Decimal, showSign: Bool = false) -> String {
         let formatter = NumberFormatter()

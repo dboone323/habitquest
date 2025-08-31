@@ -73,8 +73,8 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
         let avgExpenses = recentMonthlyExpenses.reduce(0, +) / Double(recentMonthlyExpenses.count)
         let netCashFlow = avgIncome - avgExpenses
 
-    var flowDescription: String
-    var priority: InsightPriority
+        var flowDescription: String
+        var priority: InsightPriority
 
         if netCashFlow > 0 {
             flowDescription = "Your projected monthly cash flow is positive at \(fi_formatCurrency(netCashFlow)). "
@@ -112,7 +112,7 @@ func fi_projectedBalances(
     var projected: [(String, Double)] = []
     var projectedBalance = startingBalance
     let currentMonth = calendar.startOfMonth(for: Date())
-    for monthIndex in 0..<months {
+    for monthIndex in 0 ..< months {
         guard
             let futureMonth = calendar.date(
                 byAdding: .month, value: monthIndex + 1, to: currentMonth

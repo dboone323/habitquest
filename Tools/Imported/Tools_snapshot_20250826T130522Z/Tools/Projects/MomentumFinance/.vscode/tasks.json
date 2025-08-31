@@ -1,12 +1,12 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "run-ios-app",
-            "type": "shell",
-        		"command": "cd /Users/danielstevens/Desktop/MomentumFinaceApp && xcodebuild -project MomentumFinance.xcodeproj -scheme MomentumFinance -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' -derivedDataPath DerivedData && xcrun simctl install booted DerivedData/Build/Products/Debug-iphonesimulator/MomentumFinance.app && xcrun simctl launch booted com.momentum.finance",
-            "group": "build",
-            "isBackground": false
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "run-ios-app",
+      "type": "shell",
+      "command": "cd /Users/danielstevens/Desktop/MomentumFinaceApp && xcodebuild -project MomentumFinance.xcodeproj -scheme MomentumFinance -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' -derivedDataPath DerivedData && xcrun simctl install booted DerivedData/Build/Products/Debug-iphonesimulator/MomentumFinance.app && xcrun simctl launch booted com.momentum.finance",
+      "group": "build",
+      "isBackground": false
+    }
+  ]
 }

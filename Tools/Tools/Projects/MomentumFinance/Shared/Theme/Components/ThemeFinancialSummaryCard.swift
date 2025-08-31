@@ -75,8 +75,7 @@ struct ThemeFinancialSummaryCard: View {
         .cornerRadius(12)
     }
 
-    private func summaryItem(title: String, value: String, icon: String, color: Color) -> some View
-    {
+    private func summaryItem(title: String, value: String, icon: String, color: Color) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 4) {
                 Image(systemName: icon)

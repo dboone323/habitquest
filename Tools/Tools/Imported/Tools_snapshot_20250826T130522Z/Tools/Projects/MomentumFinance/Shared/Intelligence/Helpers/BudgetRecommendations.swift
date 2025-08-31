@@ -11,15 +11,15 @@ func fi_findBudgetRecommendations(transactions: [FinancialTransaction], budgets:
     let categorySpending = Dictionary(grouping: transactions.filter { $0.amount < 0 }) { (tx: FinancialTransaction) -> String in
         return tx.category?.name ?? "Uncategorized"
     }
-    
+
     let calendar = Calendar.current
     let currentMonth = calendar.startOfMonth(for: Date())
     let monthsBack = 3
 
     var monthlyAverages: [String: Double] = [:]
-    
+
     for (category, categoryTransactions) in categorySpending {
-        let monthlySpends = (0..<monthsBack).compactMap { monthOffset -> Double? in
+        let monthlySpends = (0 ..< monthsBack).compactMap { monthOffset -> Double? in
             let targetMonth = calendar.date(byAdding: .month, value: -monthOffset, to: currentMonth)!
             let monthTransactions = categoryTransactions.filter {
                 calendar.startOfMonth(for: $0.date) == calendar.startOfMonth(for: targetMonth)
@@ -27,7 +27,7 @@ func fi_findBudgetRecommendations(transactions: [FinancialTransaction], budgets:
             guard !monthTransactions.isEmpty else { return nil }
             return monthTransactions.reduce(0) { $0 + abs($1.amount) }
         }
-        
+
         if !monthlySpends.isEmpty {
             monthlyAverages[category] = monthlySpends.reduce(0, +) / Double(monthlySpends.count)
         }

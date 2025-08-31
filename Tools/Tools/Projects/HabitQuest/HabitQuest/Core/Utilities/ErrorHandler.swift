@@ -1,7 +1,7 @@
 import Foundation
+import os
 import OSLog
 import SwiftUI
-import os
 
 /// Centralized error handling for the HabitQuest app
 /// Provides consistent error management and user-friendly error messages
@@ -18,30 +18,30 @@ struct ErrorHandler: Sendable {
         nonisolated var errorDescription: String? {
             switch self {
             case .dataModelError(let message):
-                return "Data Error: \(message)"
+                "Data Error: \(message)"
             case .gameLogicError(let message):
-                return "Game Logic Error: \(message)"
+                "Game Logic Error: \(message)"
             case .validationError(let message):
-                return "Validation Error: \(message)"
+                "Validation Error: \(message)"
             case .networkError(let message):
-                return "Network Error: \(message)"
+                "Network Error: \(message)"
             case .unknownError:
-                return "An unexpected error occurred"
+                "An unexpected error occurred"
             }
         }
 
         nonisolated var recoverySuggestion: String? {
             switch self {
             case .dataModelError:
-                return "Please try restarting the app or contact support if the problem persists."
+                "Please try restarting the app or contact support if the problem persists."
             case .gameLogicError:
-                return "Please try the action again or restart the app."
+                "Please try the action again or restart the app."
             case .validationError:
-                return "Please check your input and try again."
+                "Please check your input and try again."
             case .networkError:
-                return "Please check your internet connection and try again."
+                "Please check your internet connection and try again."
             case .unknownError:
-                return "Please try again or restart the app."
+                "Please try again or restart the app."
             }
         }
     }
@@ -53,7 +53,8 @@ struct ErrorHandler: Sendable {
                        showToUser: Bool = true,
                        file: String = #file,
                        function: String = #function,
-                       line: Int = #line) {
+                       line: Int = #line)
+    {
 
         // Log the error
         logger.error("Error occurred: \(error.localizedDescription)", file: file, function: function, line: line)
@@ -73,7 +74,7 @@ struct ErrorHandler: Sendable {
 
     /// Convert a generic error to a HabitQuestError
     static func wrap(_ error: Error, as type: HabitQuestError) -> HabitQuestError {
-        return type
+        type
     }
 
     /// Validate habit input and return validation errors

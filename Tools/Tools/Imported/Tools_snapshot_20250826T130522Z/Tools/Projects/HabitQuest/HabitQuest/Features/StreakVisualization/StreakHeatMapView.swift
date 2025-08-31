@@ -18,19 +18,19 @@ struct StreakHeatMapView: View {
 
         var days: Int {
             switch self {
-            case .week: return 7
-            case .month: return 30
-            case .quarter: return 90
-            case .year: return 365
+            case .week: 7
+            case .month: 30
+            case .quarter: 90
+            case .year: 365
             }
         }
 
         var columns: Int {
             switch self {
-            case .week: return 7
-            case .month: return 10
-            case .quarter: return 13
-            case .year: return 53
+            case .week: 7
+            case .month: 10
+            case .quarter: 13
+            case .year: 53
             }
         }
     }
@@ -96,7 +96,7 @@ struct StreakHeatMapView: View {
                 .foregroundColor(.secondary)
 
             HStack(spacing: 2) {
-                ForEach(0..<5) { intensity in
+                ForEach(0 ..< 5) { intensity in
                     Rectangle()
                         .fill(intensityColor(for: Double(intensity)))
                         .frame(width: 10, height: 10)
@@ -110,7 +110,7 @@ struct StreakHeatMapView: View {
 
             Spacer()
 
-            if let selectedDate = selectedDate {
+            if let selectedDate {
                 Text(selectedDate, style: .date)
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -144,10 +144,10 @@ struct StreakHeatMapView: View {
 
     private var cellSize: CGFloat {
         switch timeRange {
-        case .week: return 32
-        case .month: return 24
-        case .quarter: return 18
-        case .year: return 12
+        case .week: 32
+        case .month: 24
+        case .quarter: 18
+        case .year: 12
         }
     }
 
@@ -232,28 +232,28 @@ struct StreakHeatMapView: View {
     private func intensityColor(for intensity: Double) -> Color {
         switch intensity {
         case 0:
-            return Color(.systemGray5)
-        case 0.01..<0.3:
-            return Color.green.opacity(0.3)
-        case 0.3..<0.6:
-            return Color.green.opacity(0.6)
-        case 0.6..<0.8:
-            return Color.green.opacity(0.8)
+            Color(.systemGray5)
+        case 0.01 ..< 0.3:
+            Color.green.opacity(0.3)
+        case 0.3 ..< 0.6:
+            Color.green.opacity(0.6)
+        case 0.6 ..< 0.8:
+            Color.green.opacity(0.8)
         default:
-            return Color.green
+            Color.green
         }
     }
 
     private func generateRecommendation(trend: String, performance: Double) -> String {
         switch (trend, performance) {
         case ("improving", let performance) where performance > 0.7:
-            return "Great momentum! Keep it up."
+            "Great momentum! Keep it up."
         case ("improving", _):
-            return "Building consistency. Stay focused."
+            "Building consistency. Stay focused."
         case ("declining", let performance) where performance < 0.3:
-            return "Consider adjusting your approach."
+            "Consider adjusting your approach."
         default:
-            return "Small steps lead to big changes."
+            "Small steps lead to big changes."
         }
     }
 

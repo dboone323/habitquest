@@ -1,22 +1,22 @@
 {
-    "configurations": [
-        {
-            "type": "swift",
-            "request": "launch",
-            "args": [],
-            "cwd": "${workspaceFolder:MomentumFinance}",
-            "name": "Debug MomentumFinance",
-            "program": "${workspaceFolder:MomentumFinance}/.build/debug/MomentumFinance",
-            "preLaunchTask": "swift: Build Debug MomentumFinance"
-        },
-        {
-            "type": "swift",
-            "request": "launch",
-            "args": [],
-            "cwd": "${workspaceFolder:MomentumFinance}",
-            "name": "Release MomentumFinance",
-            "program": "${workspaceFolder:MomentumFinance}/.build/release/MomentumFinance",
-            "preLaunchTask": "swift: Build Release MomentumFinance"
-        }
-    ]
+  "configurations": [
+    {
+      "type": "swift",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:MomentumFinance}",
+      "name": "Debug MomentumFinance",
+      "program": "${workspaceFolder:MomentumFinance}/.build/debug/MomentumFinance",
+      "preLaunchTask": "swift: Build Debug MomentumFinance"
+    },
+    {
+      "type": "swift",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:MomentumFinance}",
+      "name": "Release MomentumFinance",
+      "program": "${workspaceFolder:MomentumFinance}/.build/release/MomentumFinance",
+      "preLaunchTask": "swift: Build Release MomentumFinance"
+    }
+  ]
 }

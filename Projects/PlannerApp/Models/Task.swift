@@ -1,17 +1,17 @@
-import Foundation
 import CloudKit
 import CoreTransferable
+import Foundation
 
 enum TaskPriority: String, CaseIterable, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
+    case low
+    case medium
+    case high
 
     var displayName: String {
         switch self {
-        case .low: return "Low"
-        case .medium: return "Medium"
-        case .high: return "High"
+        case .low: "Low"
+        case .medium: "Medium"
+        case .high: "High"
         }
     }
 }
@@ -24,7 +24,7 @@ struct Task: Identifiable, Codable, Transferable {
     var priority: TaskPriority
     var dueDate: Date?
     var createdAt: Date
-    var modifiedAt: Date?  // Added for CloudKit sync/merge
+    var modifiedAt: Date? // Added for CloudKit sync/merge
 
     init(id: UUID = UUID(), title: String, description: String = "", isCompleted: Bool = false, priority: TaskPriority = .medium, dueDate: Date? = nil, createdAt: Date = Date(), modifiedAt: Date? = Date()) {
         self.id = id
@@ -76,6 +76,7 @@ struct Task: Identifiable, Codable, Transferable {
     }
 
     // MARK: - Transferable Implementation
+
     static var transferRepresentation: some TransferRepresentation {
         CodableRepresentation(contentType: .data)
     }

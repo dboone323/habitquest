@@ -1,221 +1,221 @@
 {
-  "" : {
-    "const-values" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master.swiftconstvalues",
-    "dependencies" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master.d",
-    "diagnostics" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master.dia",
-    "emit-module-dependencies" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master-emit-module.d",
-    "emit-module-diagnostics" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master-emit-module.dia",
-    "pch" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master-Bridging-header.pch",
-    "swift-dependencies" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master.swiftdeps"
+  "": {
+    "const-values": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master.swiftconstvalues",
+    "dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master.d",
+    "diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master.dia",
+    "emit-module-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master-emit-module.d",
+    "emit-module-diagnostics": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master-emit-module.dia",
+    "pch": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master-Bridging-header.pch",
+    "swift-dependencies": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinance-master.swiftdeps"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/MomentumFinance/ContentView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ContentView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ContentView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ContentView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/MomentumFinance/ContentView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ContentView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ContentView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/MomentumFinance/MomentumFinanceApp.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinanceApp.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinanceApp.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinanceApp.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/MomentumFinance/MomentumFinanceApp.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinanceApp.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinanceApp.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/MomentumFinanceApp.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/DataExportView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DataExportView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DataExportView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DataExportView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/DataExportView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DataExportView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DataExportView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DataExportView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/DataImportView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DataImportView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DataImportView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DataImportView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/DataImportView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DataImportView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DataImportView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DataImportView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Budgets/BudgetsView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/BudgetsView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/BudgetsView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/BudgetsView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Budgets/BudgetsView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/BudgetsView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/BudgetsView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/BudgetsView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Budgets/BudgetsViewModel.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/BudgetsViewModel.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/BudgetsViewModel.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/BudgetsViewModel.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Budgets/BudgetsViewModel.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/BudgetsViewModel.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/BudgetsViewModel.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/BudgetsViewModel.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/DashboardView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DashboardView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DashboardView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DashboardView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/DashboardView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DashboardView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DashboardView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DashboardView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/DashboardViewModel.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DashboardViewModel.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DashboardViewModel.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DashboardViewModel.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/DashboardViewModel.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DashboardViewModel.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DashboardViewModel.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/DashboardViewModel.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Features.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Features.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Features.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Features.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Features.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Features.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Features.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Features.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/EnhancedReportsSectionViews.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/EnhancedReportsSectionViews.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/EnhancedReportsSectionViews.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/EnhancedReportsSectionViews.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/EnhancedReportsSectionViews.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/EnhancedReportsSectionViews.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/EnhancedReportsSectionViews.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/EnhancedReportsSectionViews.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalUtilityViews.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalUtilityViews.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalUtilityViews.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalUtilityViews.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalUtilityViews.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalUtilityViews.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalUtilityViews.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalUtilityViews.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalsAndReportsView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalsAndReportsView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalsAndReportsView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalsAndReportsView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalsAndReportsView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalsAndReportsView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalsAndReportsView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalsAndReportsView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalsAndReportsViewModel.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalsAndReportsViewModel.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalsAndReportsViewModel.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalsAndReportsViewModel.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalsAndReportsViewModel.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalsAndReportsViewModel.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalsAndReportsViewModel.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GoalsAndReportsViewModel.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/ReportsViews.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ReportsViews.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ReportsViews.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ReportsViews.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/ReportsViews.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ReportsViews.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ReportsViews.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ReportsViews.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/SavingsGoalManagementViews.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoalManagementViews.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoalManagementViews.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoalManagementViews.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/SavingsGoalManagementViews.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoalManagementViews.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoalManagementViews.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoalManagementViews.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/SavingsGoalViews.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoalViews.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoalViews.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoalViews.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/SavingsGoalViews.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoalViews.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoalViews.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoalViews.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionDetailView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionDetailView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionDetailView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionDetailView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionDetailView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionDetailView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionDetailView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionDetailView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionsView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionsView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionsView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionsView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionsView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionsView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionsView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionsView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionsViewModel.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionsViewModel.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionsViewModel.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionsViewModel.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionsViewModel.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionsViewModel.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionsViewModel.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SubscriptionsViewModel.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/AccountDetailView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/AccountDetailView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/AccountDetailView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/AccountDetailView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/AccountDetailView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/AccountDetailView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/AccountDetailView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/AccountDetailView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/AccountsListView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/AccountsListView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/AccountsListView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/AccountsListView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/AccountsListView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/AccountsListView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/AccountsListView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/AccountsListView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/CategoryTransactionsView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/CategoryTransactionsView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/CategoryTransactionsView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/CategoryTransactionsView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/CategoryTransactionsView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/CategoryTransactionsView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/CategoryTransactionsView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/CategoryTransactionsView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionsView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/TransactionsView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/TransactionsView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/TransactionsView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionsView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/TransactionsView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/TransactionsView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/TransactionsView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionsViewModel.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/TransactionsViewModel.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/TransactionsViewModel.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/TransactionsViewModel.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionsViewModel.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/TransactionsViewModel.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/TransactionsViewModel.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/TransactionsViewModel.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/HapticManager.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/HapticManager.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/HapticManager.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/HapticManager.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/HapticManager.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/HapticManager.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/HapticManager.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/HapticManager.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Budget.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Budget.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Budget.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Budget.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Budget.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Budget.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Budget.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Budget.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Category.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Category.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Category.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Category.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Category.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Category.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Category.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Category.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ComplexDataGenerators.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ComplexDataGenerators.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ComplexDataGenerators.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ComplexDataGenerators.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ComplexDataGenerators.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ComplexDataGenerators.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ComplexDataGenerators.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ComplexDataGenerators.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ExpenseCategory.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ExpenseCategory.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ExpenseCategory.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ExpenseCategory.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ExpenseCategory.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ExpenseCategory.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ExpenseCategory.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ExpenseCategory.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialAccount.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/FinancialAccount.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/FinancialAccount.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/FinancialAccount.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialAccount.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/FinancialAccount.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/FinancialAccount.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/FinancialAccount.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialTransaction.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/FinancialTransaction.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/FinancialTransaction.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/FinancialTransaction.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialTransaction.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/FinancialTransaction.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/FinancialTransaction.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/FinancialTransaction.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleData.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleData.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleData.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleData.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleData.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleData.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleData.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleData.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataGenerators.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleDataGenerators.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleDataGenerators.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleDataGenerators.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataGenerators.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleDataGenerators.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleDataGenerators.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleDataGenerators.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataProviders.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleDataProviders.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleDataProviders.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleDataProviders.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataProviders.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleDataProviders.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleDataProviders.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SampleDataProviders.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SavingsGoal.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoal.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoal.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoal.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SavingsGoal.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoal.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoal.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SavingsGoal.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Subscription.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Subscription.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Subscription.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Subscription.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Subscription.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Subscription.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Subscription.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Subscription.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Transaction.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Transaction.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Transaction.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Transaction.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Transaction.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Transaction.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Transaction.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Transaction.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/NavigationCoordinator.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/NavigationCoordinator.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/NavigationCoordinator.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/NavigationCoordinator.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/NavigationCoordinator.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/NavigationCoordinator.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/SettingsView.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SettingsView.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SettingsView.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SettingsView.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/SettingsView.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SettingsView.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SettingsView.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/SettingsView.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/ErrorHandler.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ErrorHandler.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ErrorHandler.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ErrorHandler.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/ErrorHandler.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ErrorHandler.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ErrorHandler.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/ErrorHandler.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/Logger.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Logger.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Logger.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Logger.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/Logger.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Logger.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Logger.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/Logger.o"
   },
-  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/DerivedSources/GeneratedAssetSymbols.swift" : {
-    "index-unit-output-path" : "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
-    "llvm-bc" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
-    "object" : "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GeneratedAssetSymbols.o"
+  "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/DerivedSources/GeneratedAssetSymbols.swift": {
+    "index-unit-output-path": "/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object": "/Users/danielstevens/Desktop/Code/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos/MomentumFinance.build/Objects-normal/arm64/GeneratedAssetSymbols.o"
   }
 }

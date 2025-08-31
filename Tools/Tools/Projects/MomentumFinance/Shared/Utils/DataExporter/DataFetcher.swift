@@ -6,7 +6,7 @@ import SwiftData
 extension DataExporter {
 
     /// Fetch transactions within date range
-    internal func fetchTransactions(from startDate: Date, to endDate: Date) throws
+    func fetchTransactions(from startDate: Date, to endDate: Date) throws
         -> [FinancialTransaction]
     {
         let descriptor = FetchDescriptor<FinancialTransaction>(
@@ -19,7 +19,7 @@ extension DataExporter {
     }
 
     /// Fetch all financial accounts
-    internal func fetchAccounts() throws -> [FinancialAccount] {
+    func fetchAccounts() throws -> [FinancialAccount] {
         let descriptor = FetchDescriptor<FinancialAccount>(
             sortBy: [SortDescriptor(\.name)],
         )
@@ -27,7 +27,7 @@ extension DataExporter {
     }
 
     /// Fetch all budgets
-    internal func fetchBudgets() throws -> [Budget] {
+    func fetchBudgets() throws -> [Budget] {
         let descriptor = FetchDescriptor<Budget>(
             sortBy: [SortDescriptor(\.name)],
         )
@@ -35,7 +35,7 @@ extension DataExporter {
     }
 
     /// Fetch all subscriptions
-    internal func fetchSubscriptions() throws -> [Subscription] {
+    func fetchSubscriptions() throws -> [Subscription] {
         let descriptor = FetchDescriptor<Subscription>(
             sortBy: [SortDescriptor(\.name)],
         )
@@ -43,7 +43,7 @@ extension DataExporter {
     }
 
     /// Fetch all savings goals
-    internal func fetchGoals() throws -> [SavingsGoal] {
+    func fetchGoals() throws -> [SavingsGoal] {
         let descriptor = FetchDescriptor<SavingsGoal>(
             sortBy: [SortDescriptor(\.name)],
         )

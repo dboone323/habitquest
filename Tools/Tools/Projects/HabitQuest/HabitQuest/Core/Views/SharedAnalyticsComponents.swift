@@ -19,17 +19,17 @@ struct AnalyticsCard: View {
 
         var icon: String {
             switch self {
-            case .upDirection: return "arrow.up.right"
-            case .down: return "arrow.down.right"
-            case .stable: return "minus"
+            case .upDirection: "arrow.up.right"
+            case .down: "arrow.down.right"
+            case .stable: "minus"
             }
         }
 
         var color: Color {
             switch self {
-            case .upDirection: return .green
-            case .down: return .red
-            case .stable: return .orange
+            case .upDirection: .green
+            case .down: .red
+            case .stable: .orange
             }
         }
     }
@@ -77,7 +77,7 @@ struct AnalyticsCard: View {
 
             Spacer()
 
-            if let trend = trend, showTrend {
+            if let trend, showTrend {
                 HStack(spacing: 4) {
                     Image(systemName: trend.icon)
                         .font(.caption)
@@ -286,7 +286,7 @@ struct StreakDistributionChartView: View {
                         .font(.caption2)
                         .fontWeight(.medium)
                         .foregroundColor(.white)
-                        .opacity(item.count > 0 ? 1 : 0)
+                        .opacity(!item.isEmpty ? 1 : 0)
                 )
                 .animation(.spring(response: 0.8, dampingFraction: 0.8).delay(Double(index) * 0.1), value: animateChart)
         }
@@ -436,7 +436,10 @@ struct WeeklyPatternChartView: View {
             RoundedRectangle(cornerRadius: 4)
                 .fill(barColor(for: pattern.completionRate))
                 .frame(height: barHeight)
-                .animation(.spring(response: 0.7, dampingFraction: 0.8).delay(Double(index) * 0.05), value: animatePattern)
+                .animation(
+                    .spring(response: 0.7, dampingFraction: 0.8).delay(Double(index) * 0.05),
+                    value: animatePattern
+                )
         }
     }
 

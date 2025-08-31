@@ -1,6 +1,7 @@
 import SwiftUI
 
 // MARK: - Search Header Component
+
 struct SearchHeaderComponent: View {
     @Binding var searchText: String
     @Binding var selectedFilter: Features.GlobalSearchView.SearchFilter
@@ -55,6 +56,7 @@ struct SearchHeaderComponent: View {
 }
 
 // MARK: - Search Filter Chip Component
+
 struct SearchFilterChipComponent: View {
     let filter: Features.GlobalSearchView.SearchFilter
     let isSelected: Bool

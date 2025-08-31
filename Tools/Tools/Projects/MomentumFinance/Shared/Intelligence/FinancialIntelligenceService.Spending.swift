@@ -1,7 +1,7 @@
 import Foundation
 
 func fi_computeMonthlySpendingByCategory(transactions: [FinancialTransaction]) -> [String: [Date:
-    Double]]
+        Double]]
 {
     let calendar = Calendar.current
     var monthlySpendingByCategory: [String: [Date: Double]] = [:]
@@ -42,7 +42,7 @@ func fi_generateSpendingInsightsFromMonthlyData(
                 FinancialInsight(
                     title: "Increased Spending in \(category.name)",
                     description:
-                        "Your spending in \(category.name) increased by \(percentIncrease)% last month.",
+                    "Your spending in \(category.name) increased by \(percentIncrease)% last month.",
                     priority: .medium,
                     type: .spendingPattern,
                     relatedCategoryId: categoryId,
@@ -55,7 +55,7 @@ func fi_generateSpendingInsightsFromMonthlyData(
                 FinancialInsight(
                     title: "Reduced Spending in \(category.name)",
                     description:
-                        "Your spending in \(category.name) decreased by \(percentDecrease)% last month.",
+                    "Your spending in \(category.name) decreased by \(percentDecrease)% last month.",
                     priority: .low,
                     type: .positiveSpendingTrend,
                     relatedCategoryId: categoryId,
@@ -86,7 +86,7 @@ func fi_topCategoriesInsight(
     return FinancialInsight(
         title: "Top Spending Categories",
         description:
-            "Your highest spending categories are \(topCategoryData.map(\.0).joined(separator: ", ")).",
+        "Your highest spending categories are \(topCategoryData.map(\.0).joined(separator: ", ")).",
         priority: .medium,
         type: .spendingPattern,
         visualizationType: .pieChart,
@@ -102,11 +102,12 @@ func fi_analyzeSpendingPatterns(
     let monthly = fi_computeMonthlySpendingByCategory(transactions: transactions)
     insights.append(
         contentsOf: fi_generateSpendingInsightsFromMonthlyData(
-            monthlySpendingByCategory: monthly, categories: categories))
+            monthlySpendingByCategory: monthly, categories: categories
+        ))
 
     if let topInsight = fi_topCategoriesInsight(
-        monthlySpendingByCategory: monthly, categories: categories)
-    {
+        monthlySpendingByCategory: monthly, categories: categories
+    ) {
         insights.append(topInsight)
     }
 
@@ -116,7 +117,7 @@ func fi_analyzeSpendingPatterns(
             FinancialInsight(
                 title: "Potential Recurring Expenses",
                 description:
-                    "You may have \(recurring.count) recurring payments that are not tracked as subscriptions.",
+                "You may have \(recurring.count) recurring payments that are not tracked as subscriptions.",
                 priority: .medium,
                 type: .subscriptionDetection,
                 data: recurring.prefix(5).map { ($0.title, abs($0.amount)) }
@@ -261,15 +262,15 @@ func fi_analyzeBudgets(transactions: [FinancialTransaction], budgets: [Budget])
         )
 
         if let exceededInsight = fi_checkBudgetExceeded(
-            budget: budget, totalSpent: totalSpent, categoryId: categoryId)
-        {
+            budget: budget, totalSpent: totalSpent, categoryId: categoryId
+        ) {
             insights.append(exceededInsight)
         } else if let atRiskInsight = fi_checkBudgetAtRisk(context: context) {
             insights.append(atRiskInsight)
         } else if let underutilizedInsight = fi_checkBudgetUnderutilized(
             budget: budget, totalSpent: totalSpent, percentUsed: percentUsed,
-            idealPercentage: idealPercentage, daysRemaining: daysRemaining)
-        {
+            idealPercentage: idealPercentage, daysRemaining: daysRemaining
+        ) {
             insights.append(underutilizedInsight)
         }
     }
@@ -294,7 +295,7 @@ extension FinancialIntelligenceService {
         let insight = FinancialInsight(
             title: "Potential Recurring Expenses",
             description:
-                "You may have \(recurringTransactions.count) recurring payments that are not tracked as subscriptions.",
+            "You may have \(recurringTransactions.count) recurring payments that are not tracked as subscriptions.",
             priority: .medium,
             type: .subscriptionDetection,
             visualizationType: .none,

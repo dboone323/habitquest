@@ -33,9 +33,9 @@ extension Features.Transactions {
                         TextField("Title", text: $title)
 
                         TextField("Amount", text: $amount)
-                            #if canImport(UIKit)
-                                .keyboardType(.decimalPad)
-                            #endif
+                        #if canImport(UIKit)
+                            .keyboardType(.decimalPad)
+                        #endif
 
                         Picker("Type", selection: $selectedTransactionType) {
                             ForEach(TransactionType.allCases, id: \.self) { type in
@@ -65,48 +65,48 @@ extension Features.Transactions {
 
                     Section(header: Text("Notes (Optional)")) {
                         TextField("Add notes...", text: $notes, axis: .vertical)
-                            .lineLimit(3...6)
+                            .lineLimit(3 ... 6)
                     }
                 }
                 .navigationTitle("Add Transaction")
                 #if canImport(UIKit)
                     .navigationBarTitleDisplayMode(.inline)
                 #endif
-                .toolbar {
-                    #if canImport(UIKit)
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button("Cancel") {
-                                dismiss()
+                    .toolbar {
+                        #if canImport(UIKit)
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button("Cancel") {
+                                    dismiss()
+                                }
                             }
-                        }
 
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Save") {
-                                saveTransaction()
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Save") {
+                                    saveTransaction()
+                                }
+                                .disabled(!isFormValid)
                             }
-                            .disabled(!isFormValid)
-                        }
-                    #else
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") {
-                                dismiss()
+                        #else
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Cancel") {
+                                    dismiss()
+                                }
                             }
-                        }
 
-                        ToolbarItem(placement: .primaryAction) {
-                            Button("Save") {
-                                saveTransaction()
+                            ToolbarItem(placement: .primaryAction) {
+                                Button("Save") {
+                                    saveTransaction()
+                                }
+                                .disabled(!isFormValid)
                             }
-                            .disabled(!isFormValid)
-                        }
-                    #endif
-                }
+                        #endif
+                    }
             }
         }
 
         private func saveTransaction() {
             guard let amountValue = Double(amount),
-                let account = selectedAccount
+                  let account = selectedAccount
             else { return }
 
             let transaction = FinancialTransaction(
