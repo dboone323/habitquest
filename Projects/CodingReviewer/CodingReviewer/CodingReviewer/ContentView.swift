@@ -436,7 +436,7 @@ struct QuickStartView: View {
                                 # Usage
                                 items = [{'price': 10}, {'price': 20}]
                                 result = calculate_total(items)
-                                // AppLogger.shared.log(result) // TODO: Replace print with proper logging
+
                                 """
                             }
 
@@ -446,7 +446,7 @@ struct QuickStartView: View {
                                     for user in users {
                                         let query = "SELECT * FROM users WHERE name = '" + user + "'"
                                         // Execute query
-                                        // AppLogger.shared.log(query) // TODO: Replace print with proper logging
+
                                     }
                                 }
                                 """
