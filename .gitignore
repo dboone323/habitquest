@@ -1,2 +1,9 @@
 .autofix_backups/
-.autofix_backups/
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+*.log
+*.tmp

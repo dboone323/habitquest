@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 // MARK: - Programming Language Types
 
@@ -22,21 +21,12 @@ enum Severity: String, CaseIterable, Codable {
     case error = "Error"
     case critical = "Critical"
 
-    var color: Color {
+    var systemImageName: String {
         switch self {
-        case .info: .blue
-        case .warning: .orange
-        case .error: .red
-        case .critical: .purple
-        }
-    }
-
-    var systemImage: String {
-        switch self {
-        case .info: "info.circle"
-        case .warning: "exclamationmark.triangle"
-        case .error: "xmark.circle"
-        case .critical: "exclamationmark.octagon"
+        case .info: return "info.circle"
+        case .warning: return "exclamationmark.triangle"
+        case .error: return "xmark.circle"
+        case .critical: return "exclamationmark.octagon"
         }
     }
 }
@@ -48,23 +38,13 @@ enum QualityLevel: String, CaseIterable, Codable {
     case poor = "Poor"
     case critical = "Critical"
 
-    var color: Color {
-        switch self {
-        case .excellent: .green
-        case .good: .blue
-        case .fair: .yellow
-        case .poor: .orange
-        case .critical: .red
-        }
-    }
-
     var score: Int {
         switch self {
-        case .excellent: 90
-        case .good: 75
-        case .fair: 60
-        case .poor: 40
-        case .critical: 20
+        case .excellent: return 90
+        case .good: return 75
+        case .fair: return 60
+        case .poor: return 40
+        case .critical: return 20
         }
     }
 }
@@ -76,23 +56,13 @@ enum EffortLevel: String, CaseIterable, Codable {
     case high = "High"
     case extensive = "Extensive"
 
-    var color: Color {
-        switch self {
-        case .minimal: .green
-        case .low: .blue
-        case .medium: .yellow
-        case .high: .orange
-        case .extensive: .red
-        }
-    }
-
     var estimatedHours: String {
         switch self {
-        case .minimal: "< 1 hour"
-        case .low: "1-4 hours"
-        case .medium: "1-2 days"
-        case .high: "3-5 days"
-        case .extensive: "1+ weeks"
+        case .minimal: return "< 1 hour"
+        case .low: return "1-4 hours"
+        case .medium: return "1-2 days"
+        case .high: return "3-5 days"
+        case .extensive: return "1+ weeks"
         }
     }
 }
@@ -104,23 +74,13 @@ enum ImpactLevel: String, CaseIterable, Codable {
     case major = "Major"
     case critical = "Critical"
 
-    var color: Color {
-        switch self {
-        case .negligible: .gray
-        case .minor: .blue
-        case .moderate: .yellow
-        case .major: .orange
-        case .critical: .red
-        }
-    }
-
     var priority: Int {
         switch self {
-        case .negligible: 1
-        case .minor: 2
-        case .moderate: 3
-        case .major: 4
-        case .critical: 5
+        case .negligible: return 1
+        case .minor: return 2
+        case .moderate: return 3
+        case .major: return 4
+        case .critical: return 5
         }
     }
 }
