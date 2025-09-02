@@ -1,5 +1,5 @@
 name: Create Review Issues
-on:
+"on":
   push:
     branches: [ main ]
 
