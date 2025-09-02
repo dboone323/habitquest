@@ -22,10 +22,12 @@ code Code.code-workspace
 
 ```
 Code/
-├── Projects/                 # Individual iOS projects
-│   ├── CodingReviewer/      # 277 Swift files - Code review app
-│   ├── MomentumFinance/     # 91 Swift files - Finance app
-│   └── HabitQuest/          # 40 Swift files - Habit tracker
+├── Projects/                 # Individual applications
+│   ├── CodingReviewer/      # 132 Swift files - Code review app (macOS)
+│   ├── PlannerApp/          # 57 Swift files - Planning app (macOS, iOS)
+│   ├── AvoidObstaclesGame/  # 8 Swift files - Game project (iOS)
+│   ├── MomentumFinance/     # Finance app (macOS, iOS)
+│   └── HabitQuest/          # Habit tracking app (iOS)
 ├── Shared/                   # Reusable components across projects
 │   ├── Components/          # UI components, utilities, etc.
 │   ├── Utilities/           # Helper functions and extensions

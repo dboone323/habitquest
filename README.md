@@ -22,10 +22,12 @@ code Code.code-workspace
 
 ```
 Code/
-├── Projects/                 # Individual iOS projects
-│   ├── CodingReviewer/      # 277 Swift files - Code review app
-│   ├── MomentumFinance/     # 91 Swift files - Finance app  
-│   └── HabitQuest/          # 40 Swift files - Habit tracker
+├── Projects/                 # Individual applications
+│   ├── CodingReviewer/      # 132 Swift files - Code review app (macOS)
+│   ├── AvoidObstaclesGame/  # 8 Swift files - Game project (iOS)
+│   ├── PlannerApp/          # 57 Swift files - Planning app (macOS, iOS)
+│   ├── MomentumFinance/     # Finance app (macOS, iOS)
+│   └── HabitQuest/          # Habit tracking app (iOS)
 ├── Shared/                   # Reusable components across projects
 │   ├── Components/          # UI components, utilities, etc.
 │   ├── Utilities/           # Helper functions and extensions
@@ -69,9 +71,11 @@ The unified architecture includes a powerful automation controller:
 ```
 
 ### Current Project Status
-- **CodingReviewer**: 277 Swift files (needs automation setup)
-- **MomentumFinance**: 91 Swift files (✅ automation ready) 
-- **HabitQuest**: 40 Swift files (✅ automation ready)
+- **CodingReviewer**: 132 Swift files - Code review app (macOS)
+- **AvoidObstaclesGame**: 8 Swift files - Game project (iOS) (✅ automation ready)  
+- **PlannerApp**: 57 Swift files - Planning app (macOS, iOS) (✅ automation ready)
+- **MomentumFinance**: Finance app (macOS, iOS) - *Project structure TBD*
+- **HabitQuest**: Habit tracking app (iOS) - *Project structure TBD*
 
 ## 🎯 Next Steps
 

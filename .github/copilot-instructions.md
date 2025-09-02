@@ -2,14 +2,14 @@
 
 ## Repository Overview
 
-This is a **Unified Code Architecture** workspace containing multiple iOS Swift projects consolidated for maximum code reuse and automation efficiency. The repository contains 6 iOS projects with ~400+ Swift files, extensive automation tooling, and AI-powered self-healing workflows.
+This is a **Unified Code Architecture** workspace containing multiple Swift projects consolidated for maximum code reuse and automation efficiency. The repository contains 5 projects with ~400+ Swift files, extensive automation tooling, and AI-powered self-healing workflows.
 
 **Key Projects:**
-- **CodingReviewer**: 132 Swift files - Code review application
-- **PlannerApp**: 57 Swift files - Planning and organization app with CloudKit integration
-- **AvoidObstaclesGame**: 8 Swift files - SpriteKit-based game
-- **MomentumFinance**: Finance tracking app
-- **HabitQuest**: Habit tracking application
+- **CodingReviewer**: 132 Swift files - Code review application (macOS)
+- **PlannerApp**: 57 Swift files - Planning and organization app with CloudKit integration (macOS, iOS)
+- **AvoidObstaclesGame**: 8 Swift files - SpriteKit-based game (iOS)
+- **MomentumFinance**: Finance tracking app (macOS, iOS)
+- **HabitQuest**: Habit tracking application (iOS)
 
 **Languages & Frameworks:** Swift (primary), SwiftUI, UIKit, SpriteKit, CloudKit, Python (automation), Shell scripts, GitHub Actions
 
@@ -49,9 +49,11 @@ The repository uses a centralized automation controller at `Tools/Automation/mas
 
 ### Individual Project Builds
 Each project has its own Xcode project file:
-- `Projects/CodingReviewer/CodingReviewer.xcodeproj`
-- `Projects/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj`  
-- `Projects/PlannerApp/PlannerApp.xcodeproj`
+- `Projects/CodingReviewer/CodingReviewer.xcodeproj` (macOS)
+- `Projects/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj` (iOS)
+- `Projects/PlannerApp/PlannerApp.xcodeproj` (macOS, iOS)
+- `Projects/MomentumFinance/` (macOS, iOS) - *Project structure TBD*
+- `Projects/HabitQuest/` (iOS) - *Project structure TBD*
 
 **Build Process:**
 1. Open individual `.xcodeproj` files in Xcode on macOS
@@ -73,12 +75,12 @@ Each project has its own Xcode project file:
 ### Directory Structure
 ```
 /
-├── Projects/                   # Individual iOS applications
-│   ├── CodingReviewer/        # Main code review app (132 Swift files)
-│   ├── AvoidObstaclesGame/    # Game project (8 Swift files)
-│   ├── PlannerApp/            # Planning app (57 Swift files)
-│   ├── MomentumFinance/       # Finance app
-│   └── HabitQuest/            # Habit tracking app
+├── Projects/                   # Individual applications
+│   ├── CodingReviewer/        # Main code review app (132 Swift files) - macOS
+│   ├── AvoidObstaclesGame/    # Game project (8 Swift files) - iOS
+│   ├── PlannerApp/            # Planning app (57 Swift files) - macOS, iOS
+│   ├── MomentumFinance/       # Finance app - macOS, iOS
+│   └── HabitQuest/            # Habit tracking app - iOS
 ├── Shared/                    # Reusable components across projects
 │   ├── SharedArchitecture.swift  # BaseViewModel protocol & MVVM patterns
 │   ├── Testing/               # Shared testing utilities
