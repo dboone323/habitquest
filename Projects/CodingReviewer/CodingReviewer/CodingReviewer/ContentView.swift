@@ -15,6 +15,7 @@ struct ContentView: View {
         case insights = "AI Insights"
         case patterns = "Patterns"
         case enhancement = "Smart Enhancement"
+        case quantumV2 = "⚡ Quantum V2"
         case settings = "Settings"
 
         var icon: String {
@@ -25,6 +26,7 @@ struct ContentView: View {
             case .insights: "brain.head.profile"
             case .patterns: "chart.line.uptrend.xyaxis"
             case .enhancement: "wand.and.stars"
+            case .quantumV2: "bolt.circle.fill"
             case .settings: "gearshape.fill"
             }
         }
@@ -37,6 +39,7 @@ struct ContentView: View {
             case .insights: .purple
             case .patterns: .orange
             case .enhancement: .pink
+            case .quantumV2: .purple
             case .settings: .gray
             }
         }
@@ -133,6 +136,8 @@ struct ContentView: View {
                         PatternAnalysisView()
                     case .enhancement:
                         SmartEnhancementView()
+                    case .quantumV2:
+                        QuantumAnalysisViewV2()
                     case .settings:
                         SettingsView()
                     }
@@ -184,6 +189,9 @@ struct ContentView: View {
             break
         case .enhancement:
             // Run smart enhancement
+            break
+        case .quantumV2:
+            // Activate quantum analysis
             break
         case .settings:
             // Reset to defaults

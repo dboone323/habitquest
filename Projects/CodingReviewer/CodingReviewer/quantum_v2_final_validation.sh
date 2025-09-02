@@ -19,7 +19,7 @@ WHITE='\033[1;37m'
 MAGENTA='\033[1;35m'
 NC='\033[0m'
 
-PROJECT_PATH="/Users/danielstevens/Desktop/CodingReviewer"
+PROJECT_PATH="/home/runner/work/Quantum-workspace/Quantum-workspace/Projects/CodingReviewer/CodingReviewer"
 ENHANCEMENT_DIR="$PROJECT_PATH/.quantum_enhancement_v2"
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
 
