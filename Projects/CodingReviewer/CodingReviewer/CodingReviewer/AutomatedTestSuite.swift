@@ -277,7 +277,7 @@ class AutomatedTestSuite: ObservableObject {
         if fixes.contains(where: { $0.id == fix.id }) {
             // Here you would implement the actual fix logic
             // For now, just print that it's applied
-            // AppLogger.shared.log("Applied fix: \(fix.title) - \(fix.description)") // TODO: Replace print with proper logging
+
         }
     }
 }
