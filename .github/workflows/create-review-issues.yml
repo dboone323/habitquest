@@ -30,12 +30,12 @@ jobs:
             const files = fs.readdirSync(path).filter(f => f.endsWith('.md')).sort();
             for (const file of files) {
               const content = fs.readFileSync(path + '/' + file, 'utf8');
-              // split first line as title (if the file begins with a title line) or fallback to filename
+              // Extract title from the second line (after the ---)
               const lines = content.split(/\r?\n/).filter(Boolean);
               let title = file.replace(/\.md$/,'');
-              // If the first non-empty line looks like a heading, use it as title
-              if (lines.length && lines[0].length < 200) {
-                title = lines[0].replace(/^#*/,'').trim();
+              // Look for title on the second line (after ---)
+              if (lines.length > 1 && lines[1].length < 200) {
+                title = lines[1].replace(/^#*/,'').trim();
               }
 
               // Check if an open or closed issue with same title already exists
