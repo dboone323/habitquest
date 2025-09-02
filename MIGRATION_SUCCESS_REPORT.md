@@ -10,12 +10,14 @@
 
 ### ✅ Successfully Migrated Projects
 
-| Project | Swift Files | Test Files | Git Status | Automation |
-|---------|-------------|------------|------------|------------|
-| **CodingReviewer** | 277 | 45 | ✅ Active (43 commits) | ✅ Ready |
-| **MomentumFinance** | 91 | 0 | ✅ Active (62 commits) | ✅ Ready |
-| **HabitQuest** | 40 | 9 | ✅ Active (6 commits) | ✅ Ready |
-| **TOTAL** | **408** | **54** | **3 Active Repos** | **100% Success** |
+| Project | Swift Files | Test Files | Git Status | Platform | Automation |
+|---------|-------------|------------|------------|----------|------------|
+| **CodingReviewer** | 132 | 45 | ✅ Active | macOS | ✅ Ready |
+| **PlannerApp** | 57 | - | ✅ Active | macOS, iOS | ✅ Ready |
+| **AvoidObstaclesGame** | 8 | - | ✅ Active | iOS | ✅ Ready |
+| **MomentumFinance** | TBD | TBD | ⚠️ Setup Needed | macOS, iOS | ⚠️ Pending |
+| **HabitQuest** | TBD | TBD | ⚠️ Setup Needed | iOS | ⚠️ Pending |
+| **TOTAL** | **197+** | **45+** | **5 Projects** | **Multi-platform** | **60% Ready** |
 
 ---
 
@@ -24,9 +26,11 @@
 ```
 📁 /Users/danielstevens/Desktop/Code/
 ├── ��️ Projects/                    # All iOS projects
-│   ├── CodingReviewer/             # Main development project
-│   ├── MomentumFinance/            # Finance application
-│   └── HabitQuest/                 # Habit tracking app
+│   ├── CodingReviewer/             # Code review app (macOS)
+│   ├── PlannerApp/                 # Planning app (macOS, iOS)
+│   ├── AvoidObstaclesGame/         # Game project (iOS)
+│   ├── MomentumFinance/            # Finance app (macOS, iOS)
+│   └── HabitQuest/                 # Habit tracking (iOS)
 ├── 🔧 Shared/                      # Reusable components
 │   ├── Components/                 # UI components
 │   ├── Utilities/                  # Helper functions
