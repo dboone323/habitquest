@@ -1,2 +1,4 @@
 .autofix_backups/
 .autofix_backups/
+__pycache__/
+*.pyc
