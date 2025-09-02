@@ -31,13 +31,11 @@ jobs:
         env:
           CODE_DIR: ${{ github.workspace }}
 
-      - name: Install ShellCheck
-        run: sudo apt-get update && sudo apt-get install -y shellcheck
-
-      - name: Run ShellCheck
-        run: |
-          shellcheck Tools/Automation/master_automation.sh || true
-          shellcheck Tools/Automation/deploy_workflows_all_projects.sh || true
+      - name: Trunk Check Automation Scripts
+        uses: trunk-io/trunk-action@v1
+        with:
+          check-mode: all
+          arguments: --filter=Tools/Automation/**
 
       - name: Run master automation list (safe)
         run: bash Tools/Automation/master_automation.sh list || true
