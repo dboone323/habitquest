@@ -14,8 +14,15 @@ ROOTS=(
   "/Users/danielstevens/Desktop/CodingReviewer-Modular"
 )
 
+
 TS=$(date -u +%Y%m%dT%H%M%SZ)
-OUTDIR="$(pwd)/logs/force_snapshot_${TS}"
+# Allow passing an explicit OUTDIR as first argument; otherwise default to Tools/Automation/logs
+DEFAULT_BASE_DIR="/Users/danielstevens/Desktop/Code/Tools/Automation/logs"
+if [[ -n "${1-}" ]]; then
+  OUTDIR="${1%/}"
+else
+  OUTDIR="${DEFAULT_BASE_DIR}/force_snapshot_${TS}"
+fi
 mkdir -p "${OUTDIR}"
 
 echo "Force snapshot: ${TS}" | tee "${OUTDIR}/summary.txt"
@@ -26,7 +33,8 @@ repos_file="${OUTDIR}/repos_found.txt"
 echo "Discovering git repositories..."
 for r in "${ROOTS[@]}"; do
   if [[ -d "${r}" ]]; then
-    find "${r}" -type d -name .git -prune -print | sed 's/\/\.git$//' >> "${repos_file}" || true
+    # find repository roots by locating .git dirs and strip the trailing '/.git'
+    find "${r}" -type d -name .git -prune -print | sed 's#/\.git$##' >> "${repos_file}" || true
   fi
 done
 
@@ -46,7 +54,7 @@ while IFS= read -r repo; do
       echo "Adding all changes..."
       git add -A || true
       if git diff --cached --quiet; then
-        echo "No staged changes after add. Skipping commit." 
+        echo "No staged changes after add. Skipping commit."
       else
         echo "Committing snapshot..."
         git commit -m "snapshot: commit all local changes before automation run (${TS})" --no-verify || echo "Commit failed or nothing to commit"
