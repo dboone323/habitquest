@@ -33,3 +33,7 @@ MomentumFinance layout fix:
 PlannerApp dedupe/sync:
 
 - Consolidated PlannerApp by moving 13 unique Swift files from Tools/Projects/PlannerApp into Projects/PlannerApp and removing remaining duplicates from Tools. Final counts: Projects/PlannerApp: 70 Swift files; Tools/Projects/PlannerApp: 0. Automation status: PlannerApp detected with 70 Swift files.
+
+CodingReviewer-Modular consolidation:
+
+- `Projects/CodingReviewer-Modular` contained 0 Swift sources and only duplicate workflow files. Removed the redundant Modular workflows (names already present at repo root) and left `CodingReviewer` as the single source of truth with 132 Swift files. Automation now lists 5 projects.
