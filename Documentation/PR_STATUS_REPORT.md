@@ -2,11 +2,11 @@
 
 Merged into main:
 
-- #3, #6, #10, #11, #12, #15, #16, #20, #22, #25, #51, #53
+- #3, #6, #10, #11, #12, #15, #16, #20, #22, #25, #31, #32, #51, #53
 
 Pending (remote refs exist):
 
-- #1, #2, #4, #5, #7–#9, #13–#14, #17–#21, #23–#24, #26, #28, #30–#35, #37–#40, #42–#43, #45–#46, #48, #50
+- #1, #2, #4, #5, #7–#9, #13–#14, #17–#21, #23–#24, #26, #28, #30, #33–#35, #37–#40, #42–#43, #45–#46, #48, #50
 
 Conflict policy used so far:
 
@@ -16,6 +16,6 @@ Conflict policy used so far:
 
 Next targets:
 
-- Probe and merge clean PRs one-by-one (e.g., #20, #21), running Automation status after each.
+- Probe and merge clean PRs one-by-one (next: #26, #28), running Automation status after each. For conflicted PRs (#21, #23, #30, #33+), apply conflict policy and prefer main for workflows and automation.
 
 Last updated: automated during merge session.
