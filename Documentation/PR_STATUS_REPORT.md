@@ -25,3 +25,7 @@ Next targets:
 - Probe and merge clean PRs one-by-one (e.g., #26, #28), running Automation status after each. For conflicted PRs (#21, #23, #33+), apply conflict policy and prefer main for workflows and automation.
 
 Last updated: 2025-09-03 (post-merge #26).
+
+MomentumFinance layout fix:
+
+- Moved MomentumFinance from Tools/Projects/MomentumFinance into Projects/MomentumFinance using git mv to preserve history. Reconciled leftover .github workflows by keeping the destination and removing the legacy source. Post-move automation status shows MomentumFinance: 224 Swift files (automation detected).
