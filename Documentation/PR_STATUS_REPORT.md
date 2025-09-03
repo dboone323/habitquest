@@ -29,3 +29,7 @@ Last updated: 2025-09-03 (post-merge #26).
 MomentumFinance layout fix:
 
 - Moved MomentumFinance from Tools/Projects/MomentumFinance into Projects/MomentumFinance using git mv to preserve history. Reconciled leftover .github workflows by keeping the destination and removing the legacy source. Post-move automation status shows MomentumFinance: 224 Swift files (automation detected).
+
+PlannerApp dedupe/sync:
+
+- Consolidated PlannerApp by moving 13 unique Swift files from Tools/Projects/PlannerApp into Projects/PlannerApp and removing remaining duplicates from Tools. Final counts: Projects/PlannerApp: 70 Swift files; Tools/Projects/PlannerApp: 0. Automation status: PlannerApp detected with 70 Swift files.
