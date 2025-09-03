@@ -1,9 +1,49 @@
-.autofix_backups/
-venv/
-.venv/
-__pycache__/
+# Xcode
+DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+# SwiftPM
+.swiftpm/
+.build/
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# Swift build caches and module caches
+**/Build/
+**/BuildData_*/
+**/ModuleCache.noindex/
+**/*.pcm
+**/*.swiftmodule
+**/*.swiftinterface
+**/*.swiftdoc
+**/*.o
+**/*.dSYM
+**/SDKStatCaches.noindex/
+
+# Platform-specific
+*.DS_Store
+
+# Python caches
+**/__pycache__/
 *.pyc
-*.pyo
-.DS_Store
+
+# Logs and temp
 *.log
 *.tmp
+*.swp
+
+# Tools snapshots and imports
+Tools/Imported/
+Tools/Automation/Imported_Tools_snapshot-*/
+Tools/Automation/IMPORTS/
+
+# Project-specific caches and outputs
+Projects/**/build_output*.txt
+Projects/**/lint_results.json
+Projects/**/quality_gates_results.json
