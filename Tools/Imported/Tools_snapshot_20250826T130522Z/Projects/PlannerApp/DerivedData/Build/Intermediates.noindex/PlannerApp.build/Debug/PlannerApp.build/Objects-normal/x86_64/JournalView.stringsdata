@@ -1,0 +1,32 @@
+{
+  "source": "/Users/danielstevens/Desktop/PlannerApp/Views/Journal/JournalView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Journal",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 36
+        }
+      },
+      {
+        "comment": "",
+        "key": "Edit",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 43
+        }
+      },
+      {
+        "comment": "",
+        "key": "Search Entries",
+        "location": {
+          "startingColumn": 52,
+          "startingLine": 91
+        }
+      }
+    ]
+  },
+  "version": 1
+}
