@@ -1,0 +1,30 @@
+"/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/CalendarGrid.swift":
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid.d"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid.swiftdeps"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid.swiftconstvalues"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid.dia"
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CalendarGrid.o"
+"/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/DateSectionView.swift":
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView.o"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView.dia"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView.d"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView.swiftdeps"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DateSectionView.swiftconstvalues"
+"/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/GoalRowView.swift":
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView.o"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView.d"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView.dia"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView.swiftconstvalues"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/GoalRowView.swiftdeps"
+"/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/EventRowView.swift":
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView.o"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView.d"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView.swiftconstvalues"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView.swiftdeps"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EventRowView.dia"
+"/Users/danielstevens/Desktop/PlannerApp/Views/Calendar/TaskRowView.swift":
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView.swiftdeps"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView.swiftconstvalues"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView.d"
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView.o"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskRowView.dia"

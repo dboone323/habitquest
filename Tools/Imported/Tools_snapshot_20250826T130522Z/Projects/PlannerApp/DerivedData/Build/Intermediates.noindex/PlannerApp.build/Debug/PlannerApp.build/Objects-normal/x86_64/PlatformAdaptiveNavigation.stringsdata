@@ -1,0 +1,80 @@
+{
+  "source": "/Users/danielstevens/Desktop/PlannerApp/Components/PlatformAdaptiveNavigation.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "PlannerApp",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 75
+        }
+      },
+      {
+        "comment": "",
+        "key": "More",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 129
+        }
+      },
+      {
+        "comment": "",
+        "key": "Item %lld",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 291
+        }
+      },
+      {
+        "comment": "",
+        "key": "Edit",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 295
+        }
+      },
+      {
+        "comment": "",
+        "key": "Delete",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 296
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add Item Sheet",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 315
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add Item",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 316
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 319
+        }
+      },
+      {
+        "comment": "",
+        "key": "Save",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 324
+        }
+      }
+    ]
+  },
+  "version": 1
+}

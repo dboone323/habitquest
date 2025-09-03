@@ -1,0 +1,30 @@
+"/Users/danielstevens/Desktop/PlannerApp/Accessibility/AccessibilityEnhancements.swift":
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements.o"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements.dia"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements.d"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements.swiftdeps"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AccessibilityEnhancements.swiftconstvalues"
+"/Users/danielstevens/Desktop/PlannerApp/CloudKit/CloudKitMigrationHelper.swift":
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper.swiftconstvalues"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper.swiftdeps"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper.dia"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper.d"
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/CloudKitMigrationHelper.o"
+"/Users/danielstevens/Desktop/PlannerApp/Components/EnhancedPlatformNavigation.swift":
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation.o"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation.d"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation.swiftdeps"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation.dia"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedPlatformNavigation.swiftconstvalues"
+"/Users/danielstevens/Desktop/PlannerApp/CloudKit/EnhancedCloudKitManager.swift":
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager.swiftconstvalues"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager.d"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager.swiftdeps"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager.dia"
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/EnhancedCloudKitManager.o"
+"/Users/danielstevens/Desktop/PlannerApp/MainApp/MainTabView.swift":
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView.o"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView.swiftconstvalues"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView.d"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView.swiftdeps"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/MainTabView.dia"

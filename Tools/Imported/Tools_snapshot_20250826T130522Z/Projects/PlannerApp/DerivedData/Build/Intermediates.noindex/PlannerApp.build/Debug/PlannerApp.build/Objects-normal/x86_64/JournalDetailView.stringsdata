@@ -1,0 +1,16 @@
+{
+  "source": "/Users/danielstevens/Desktop/PlannerApp/Views/Journal/JournalDetailView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Entry Details",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 61
+        }
+      }
+    ]
+  },
+  "version": 1
+}

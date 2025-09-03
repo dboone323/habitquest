@@ -1,0 +1,36 @@
+"/Users/danielstevens/Desktop/PlannerApp/Utilities/AppSettingKeys.swift":
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys.d"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys.swiftdeps"
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys.o"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys.swiftconstvalues"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/AppSettingKeys.dia"
+"/Users/danielstevens/Desktop/PlannerApp/DataManagers/JournalDataManager.swift":
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager.dia"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager.swiftdeps"
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager.o"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager.d"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalDataManager.swiftconstvalues"
+"/Users/danielstevens/Desktop/PlannerApp/Styling/Theme.swift":
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme.o"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme.swiftconstvalues"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme.d"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme.dia"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/Theme.swiftdeps"
+"/Users/danielstevens/Desktop/PlannerApp/Models/JournalEntry.swift":
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry.o"
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry.dia"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry.swiftconstvalues"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry.swiftdeps"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/JournalEntry.d"
+"/Users/danielstevens/Desktop/PlannerApp/MainApp/DashboardView.swift":
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView.dia"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView.d"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView.swiftconstvalues"
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView.o"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/DashboardView.swiftdeps"
+"/Users/danielstevens/Desktop/PlannerApp/Views/Tasks/TaskManagerView.swift":
+  diagnostics: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView.dia"
+  const-values: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView.swiftconstvalues"
+  dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView.d"
+  object: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView.o"
+  swift-dependencies: "/Users/danielstevens/Desktop/PlannerApp/DerivedData/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/Objects-normal/x86_64/TaskManagerView.swiftdeps"
