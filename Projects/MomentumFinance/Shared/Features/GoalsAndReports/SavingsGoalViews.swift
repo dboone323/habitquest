@@ -1,18 +1,14 @@
-<<<<<<< HEAD
-import UIKit
-=======
->>>>>>> 1cf3938 (Create working state for recovery)
 import SwiftData
 import SwiftUI
-import UIKit
 
-<<<<<<< HEAD
-=======
+#if canImport(UIKit)
+    import UIKit
+#endif
+
 #if canImport(AppKit)
     import AppKit
 #endif
 
->>>>>>> 1cf3938 (Create working state for recovery)
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
@@ -31,11 +27,7 @@ struct SavingsGoalsSection: View {
                 "No Savings Goals",
                 systemImage: "target",
                 description: Text("Create your first savings goal to start building your future"),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         } else {
             ScrollView {
                 LazyVStack(spacing: 16) {
@@ -58,19 +50,11 @@ struct SavingsGoalCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-<<<<<<< HEAD
-        return Color(UIColor.systemBackground)
-        #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
-        #else
-        return Color.white
-=======
             return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
             return Color(NSColor.controlBackgroundColor)
         #else
             return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
         #endif
     }
 
@@ -120,12 +104,8 @@ struct SavingsGoalCard: View {
                 }
 
                 ProgressView(value: goal.progressPercentage)
-<<<<<<< HEAD
-                    .progressViewStyle(LinearProgressViewStyle(tint: goal.isCompleted ? .green : .blue))
-=======
                     .progressViewStyle(
                         LinearProgressViewStyle(tint: goal.isCompleted ? .green : .blue))
->>>>>>> 1cf3938 (Create working state for recovery)
             }
 
             // Details Row

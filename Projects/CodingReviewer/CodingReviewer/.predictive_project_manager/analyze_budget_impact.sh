@@ -40,9 +40,9 @@ echo "  📊 Current Pace Projection:"
 echo "    Projected total cost: \$$(printf "%'d" $projected_total_cost)"
 echo "    Budget variance: \$$(printf "%'d" $budget_variance)"
 if [ $budget_variance -lt 0 ]; then
-    echo "    Status: ✅ UNDER BUDGET"
+  echo "    Status: ✅ UNDER BUDGET"
 else
-    echo "    Status: ⚠️ OVER BUDGET"
+  echo "    Status: ⚠️ OVER BUDGET"
 fi
 
 # Optimized scenario (10% efficiency gain)
@@ -67,15 +67,15 @@ echo ""
 echo "  🚀 Accelerated Delivery (20% faster, +10% intensity):"
 echo "    Projected total cost: \$$(printf "%'d" $accelerated_total_cost)"
 echo "    Budget variance: \$$(printf "%'d" $accelerated_variance)"
-echo "    Time savings: $(((remaining_days - accelerated_days))) days"
+echo "    Time savings: $((remaining_days - accelerated_days)) days"
 
 # Risk analysis
 echo ""
 echo "⚠️ Budget Risk Analysis:"
 echo "  Cost overrun probability: 15%"
-echo "  Maximum expected overrun: \$2,500"
+echo '  Maximum expected overrun: $2,500'
 echo "  Primary cost drivers: Additional testing, documentation"
-echo "  Mitigation budget: \$5,000 (10% contingency)"
+echo '  Mitigation budget: $5,000 (10% contingency)'
 
 echo ""
 echo "💡 Budget Optimization Recommendations:"

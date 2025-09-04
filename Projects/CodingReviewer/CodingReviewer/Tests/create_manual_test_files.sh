@@ -24,7 +24,7 @@ mkdir -p "$TEST_FILES_DIR"
 # Create Swift test files
 echo -e "${YELLOW}📝 Creating Swift test files...${NC}"
 for i in {1..20}; do
-    cat > "$TEST_FILES_DIR/TestFile$i.swift" << EOF
+  cat >"$TEST_FILES_DIR/TestFile$i.swift" <<EOF
 //
 //  TestFile$i.swift
 //  Manual Test File $i
@@ -83,7 +83,7 @@ done
 # Create JavaScript test files
 echo -e "${YELLOW}📝 Creating JavaScript test files...${NC}"
 for i in {1..15}; do
-    cat > "$TEST_FILES_DIR/TestScript$i.js" << EOF
+  cat >"$TEST_FILES_DIR/TestScript$i.js" <<EOF
 /**
  * TestScript$i.js
  * Manual Test JavaScript File $i
@@ -146,7 +146,7 @@ done
 # Create Python test files
 echo -e "${YELLOW}📝 Creating Python test files...${NC}"
 for i in {1..10}; do
-    cat > "$TEST_FILES_DIR/test_module_$i.py" << EOF
+  cat >"$TEST_FILES_DIR/test_module_$i.py" <<EOF
 """
 test_module_$i.py
 Manual Test Python Module $i
@@ -247,7 +247,7 @@ done
 
 # Create configuration files
 echo -e "${YELLOW}📝 Creating configuration files...${NC}"
-cat > "$TEST_FILES_DIR/test_config.json" << EOF
+cat >"$TEST_FILES_DIR/test_config.json" <<EOF
 {
   "test_configuration": {
     "name": "Manual Test Configuration",
@@ -277,7 +277,7 @@ cat > "$TEST_FILES_DIR/test_config.json" << EOF
 }
 EOF
 
-cat > "$TEST_FILES_DIR/README.md" << EOF
+cat >"$TEST_FILES_DIR/README.md" <<EOF
 # Manual Test Files for CodingReviewer
 
 This directory contains test files to manually verify the app functionality.
@@ -341,7 +341,7 @@ echo ""
 echo "📁 Location: $TEST_FILES_DIR"
 echo "📊 Files created:"
 echo "   • 20 Swift files"
-echo "   • 15 JavaScript files"  
+echo "   • 15 JavaScript files"
 echo "   • 10 Python files"
 echo "   • 1 JSON config file"
 echo "   • 1 README file"

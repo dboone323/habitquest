@@ -29,5 +29,5 @@ echo "🎯 Integration template:"
 echo "case .quantumV2:"
 echo "    QuantumAnalysisViewV2()"
 echo "      .tabItem {"
-echo "        Label(\"⚡ Quantum V2\", systemImage: \"bolt.circle.fill\")"
+echo '        Label("⚡ Quantum V2", systemImage: "bolt.circle.fill")'
 echo "      }"

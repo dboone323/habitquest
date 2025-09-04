@@ -32,7 +32,7 @@ class QuestLogViewModel: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func loadAllHabits() {
-        guard let modelContext = modelContext else { return }
+        guard let modelContext else { return }
 
         do {
             let fetchDescriptor = FetchDescriptor<Habit>()
@@ -55,7 +55,7 @@ class QuestLogViewModel: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func addHabit(_ habit: Habit) {
-        guard let modelContext = modelContext else { return }
+        guard let modelContext else { return }
 
         do {
             // Validate habit input
@@ -84,7 +84,7 @@ class QuestLogViewModel: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func updateHabit(_ habit: Habit) {
-        guard let modelContext = modelContext else { return }
+        guard let modelContext else { return }
 
         do {
             // Validate habit input
@@ -112,7 +112,7 @@ class QuestLogViewModel: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func deleteHabit(_ habit: Habit) {
-        guard let modelContext = modelContext else { return }
+        guard let modelContext else { return }
 
         do {
             modelContext.delete(habit)

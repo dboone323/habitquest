@@ -257,7 +257,7 @@ struct FocusableView<Content: View>: View {
 
 struct FocusChangeModifier: ViewModifier {
     let onFocusChange: ((Bool) -> Void)?
-    
+
     func body(content: Content) -> some View {
         if #available(macOS 14.0, iOS 17.0, *) {
             content

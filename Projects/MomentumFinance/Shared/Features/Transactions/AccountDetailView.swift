@@ -2,10 +2,6 @@
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
 import Charts
-<<<<<<< HEAD
-import SwiftData
-=======
->>>>>>> 1cf3938 (Create working state for recovery)
 import SwiftUI
 
 struct AccountDetailView: View {
@@ -16,12 +12,8 @@ struct AccountDetailView: View {
 
     let account: FinancialAccount
 
-<<<<<<< HEAD
-    @Query private var transactions: [FinancialTransaction]
-=======
     // Use a stored-array of transactions (populate from the account relationship)
     private var transactions: [FinancialTransaction] = []
->>>>>>> 1cf3938 (Create working state for recovery)
     @State private var showingAddTransaction = false
     @State private var timeRange: TimeRange = .month
 
@@ -51,19 +43,10 @@ struct AccountDetailView: View {
     init(account: FinancialAccount) {
         self.account = account
 
-<<<<<<< HEAD
-        let accountID = account.persistentModelID
-        let predicate = #Predicate<FinancialTransaction> { transaction in
-            transaction.account?.persistentModelID == accountID
-        }
-
-        self._transactions = Query(filter: predicate, sort: \FinancialTransaction.date, order: .reverse)
-=======
         // Populate transactions from the provided account relationship if available.
         // This avoids using the SwiftData @Query attribute which may not be available
         // on all toolchains in this workspace.
         self.transactions = account.transactions
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 
     var filteredTransactions: [FinancialTransaction] {
@@ -89,11 +72,7 @@ struct AccountDetailView: View {
                             .background(
                                 Circle()
                                     .fill(Color.blue.opacity(0.2)),
-<<<<<<< HEAD
-                                )
-=======
                             )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                         Text(account.name)
                             .font(.title)
@@ -115,11 +94,7 @@ struct AccountDetailView: View {
                             title: "Income",
                             value: formattedCurrency(incomeSummary),
                             color: .green,
-<<<<<<< HEAD
-                            )
-=======
                         )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                         Divider()
 
@@ -127,11 +102,7 @@ struct AccountDetailView: View {
                             title: "Expenses",
                             value: formattedCurrency(expenseSummary),
                             color: .red,
-<<<<<<< HEAD
-                            )
-=======
                         )
->>>>>>> 1cf3938 (Create working state for recovery)
                     }
                     .padding(.horizontal)
                 }
@@ -140,11 +111,7 @@ struct AccountDetailView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(backgroundColorForPlatform())
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-<<<<<<< HEAD
-                    )
-=======
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                 // Time Filter
                 Picker("Time Range", selection: $timeRange) {
@@ -166,14 +133,9 @@ struct AccountDetailView: View {
                         ContentUnavailableView(
                             "No Transactions",
                             systemImage: "chart.line.downtrend.xyaxis",
-<<<<<<< HEAD
-                            description: Text("No transaction data available for the selected time period."),
-                            )
-=======
                             description: Text(
                                 "No transaction data available for the selected time period."),
                         )
->>>>>>> 1cf3938 (Create working state for recovery)
                         .frame(height: 200)
                     } else {
                         ActivityChartView(transactions: filteredTransactions)
@@ -185,11 +147,7 @@ struct AccountDetailView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(backgroundColorForPlatform())
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-<<<<<<< HEAD
-                    )
-=======
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                 // Transactions List
                 VStack(alignment: .leading, spacing: 12) {
@@ -199,13 +157,6 @@ struct AccountDetailView: View {
 
                         Spacer()
 
-<<<<<<< HEAD
-                        Button(action: {
-                            showingAddTransaction = true
-                        }, label: {
-                            Image(systemName: "plus.circle")
-                        })
-=======
                         Button(
                             action: {
                                 showingAddTransaction = true
@@ -213,7 +164,6 @@ struct AccountDetailView: View {
                             label: {
                                 Image(systemName: "plus.circle")
                             })
->>>>>>> 1cf3938 (Create working state for recovery)
                     }
                     .padding(.horizontal)
 
@@ -221,18 +171,13 @@ struct AccountDetailView: View {
                         ContentUnavailableView(
                             "No Transactions",
                             systemImage: "list.bullet",
-<<<<<<< HEAD
-                            description: Text("No transactions in this account for the selected time period."),
-                            )
-=======
                             description: Text(
                                 "No transactions in this account for the selected time period."),
                         )
->>>>>>> 1cf3938 (Create working state for recovery)
                         .frame(height: 100)
                     } else {
                         ForEach(filteredTransactions.prefix(5)) { transaction in
-                            Features.Transactions.TransactionRowView(transaction: transaction)
+                            Features.Transactions.TransactionRowView(transaction: transaction, onTapped: {})
                                 .padding(.horizontal)
                         }
 
@@ -251,11 +196,7 @@ struct AccountDetailView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(backgroundColorForPlatform())
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-<<<<<<< HEAD
-                    )
-=======
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
             }
             .padding()
         }
@@ -263,19 +204,6 @@ struct AccountDetailView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu {
-<<<<<<< HEAD
-                    Button(action: {
-                        showingAddTransaction = true
-                    }, label: {
-                        Label("Add Transaction", systemImage: "plus")
-                    })
-
-                    Button(action: {
-                        // Future implementation: Edit account details
-                    }, label: {
-                        Label("Edit Account", systemImage: "pencil")
-                    })
-=======
                     Button(
                         action: {
                             showingAddTransaction = true
@@ -291,7 +219,6 @@ struct AccountDetailView: View {
                         label: {
                             Label("Edit Account", systemImage: "pencil")
                         })
->>>>>>> 1cf3938 (Create working state for recovery)
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
@@ -323,15 +250,9 @@ struct AccountDetailView: View {
 
     private func backgroundColorForPlatform() -> Color {
         #if os(iOS)
-<<<<<<< HEAD
-        return Color(UIColor.systemBackground)
-        #else
-        return Color(NSColor.controlBackgroundColor)
-=======
             return Color(UIColor.systemBackground)
         #else
             return Color(NSColor.controlBackgroundColor)
->>>>>>> 1cf3938 (Create working state for recovery)
         #endif
     }
 }
@@ -375,19 +296,11 @@ struct ActivityChartView: View {
     var chartData: [DailyTransactionData] {
         let calendar = Calendar.current
         let today = Date()
-<<<<<<< HEAD
-        let numberOfDays = 14 // Show last 2 weeks
-
-        // Create data for each day
-        var result: [DailyTransactionData] = []
-        for dayOffset in (0 ..< numberOfDays).reversed() {
-=======
         let numberOfDays = 14  // Show last 2 weeks
 
         // Create data for each day
         var result: [DailyTransactionData] = []
         for dayOffset in (0..<numberOfDays).reversed() {
->>>>>>> 1cf3938 (Create working state for recovery)
             if let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) {
                 // Get start and end of day
                 let startOfDay = calendar.startOfDay(for: date)
@@ -401,13 +314,6 @@ struct ActivityChartView: View {
                 }
 
                 // Calculate income and expense totals
-<<<<<<< HEAD
-                let income = dayTransactions
-                    .filter { $0.transactionType == .income }
-                    .reduce(0) { $0 + $1.amount }
-
-                let expense = dayTransactions
-=======
                 let income =
                     dayTransactions
                     .filter { $0.transactionType == .income }
@@ -415,7 +321,6 @@ struct ActivityChartView: View {
 
                 let expense =
                     dayTransactions
->>>>>>> 1cf3938 (Create working state for recovery)
                     .filter { $0.transactionType == .expense }
                     .reduce(0) { $0 + $1.amount }
 
@@ -433,11 +338,7 @@ struct ActivityChartView: View {
                     x: .value("Day", data.day),
                     y: .value("Income", data.income),
                     series: .value("Type", "Income"),
-<<<<<<< HEAD
-                    )
-=======
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
                 .foregroundStyle(.green)
                 .symbol(Circle().strokeBorder(lineWidth: 2))
                 .symbolSize(30)
@@ -446,11 +347,7 @@ struct ActivityChartView: View {
                     x: .value("Day", data.day),
                     y: .value("Expense", data.expense),
                     series: .value("Type", "Expense"),
-<<<<<<< HEAD
-                    )
-=======
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
                 .foregroundStyle(.red)
                 .symbol(Circle().strokeBorder(lineWidth: 2))
                 .symbolSize(30)

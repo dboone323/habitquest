@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
   workflow_dispatch:
 
 jobs:
@@ -13,87 +13,87 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup ShellCheck
-      run: |
-        brew install shellcheck
-        shellcheck --version
+      - name: Setup ShellCheck
+        run: |
+          brew install shellcheck
+          shellcheck --version
 
-    - name: Validate Shell Scripts
-      run: |
-        find . -name "*.sh" -type f -exec shellcheck {} \;
+      - name: Validate Shell Scripts
+        run: |
+          find . -name "*.sh" -type f -exec shellcheck {} \;
 
-    - name: Check Script Permissions
-      run: |
-        find . -name "*.sh" -type f -exec test -x {} \; -print
+      - name: Check Script Permissions
+        run: |
+          find . -name "*.sh" -type f -exec test -x {} \; -print
 
-    - name: Test Automation Scripts
-      run: |
-        # Test master automation script
-        if [ -f "Automation/master_automation.sh" ]; then
-          bash Automation/master_automation.sh status
-        fi
+      - name: Test Automation Scripts
+        run: |
+          # Test master automation script
+          if [ -f "Automation/master_automation.sh" ]; then
+            bash Automation/master_automation.sh status
+          fi
 
   lint:
     name: Code Quality
     runs-on: macos-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup SwiftLint
-      run: |
-        brew install swiftlint
-        swiftlint version
+      - name: Setup SwiftLint
+        run: |
+          brew install swiftlint
+          swiftlint version
 
-    - name: Run SwiftLint
-      run: |
-        if find . -name "*.swift" -type f | grep -q .; then
-          swiftlint --strict --reporter github-actions-logging
-        else
-          echo "No Swift files found, skipping SwiftLint"
-        fi
+      - name: Run SwiftLint
+        run: |
+          if find . -name "*.swift" -type f | grep -q .; then
+            swiftlint --strict --reporter github-actions-logging
+          else
+            echo "No Swift files found, skipping SwiftLint"
+          fi
 
   security:
     name: Security Scan
     runs-on: macos-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Run CodeQL Analysis
-      uses: github/codeql-action/init@v3
-      with:
-        languages: javascript, python, shell
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, python, shell
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
 
-    - name: Check for Secrets
-      run: |
-        # Check for potential secrets in scripts
-        grep -r "password\|secret\|token\|key" . --exclude-dir=.git --exclude-dir=node_modules || true
+      - name: Check for Secrets
+        run: |
+          # Check for potential secrets in scripts
+          grep -r "password\|secret\|token\|key" . --exclude-dir=.git --exclude-dir=node_modules || true
 
   test-config:
     name: Test Configuration
     runs-on: macos-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Validate Configuration Files
-      run: |
-        # Check YAML files
-        if command -v yamllint >/dev/null 2>&1; then
-          find . -name "*.yaml" -o -name "*.yml" | xargs yamllint || true
-        fi
+      - name: Validate Configuration Files
+        run: |
+          # Check YAML files
+          if command -v yamllint >/dev/null 2>&1; then
+            find . -name "*.yaml" -o -name "*.yml" | xargs yamllint || true
+          fi
 
-        # Validate automation config
-        if [ -f "Automation/config/automation_config.yaml" ]; then
-          echo "✅ Automation config found"
-        fi
+          # Validate automation config
+          if [ -f "Automation/config/automation_config.yaml" ]; then
+            echo "✅ Automation config found"
+          fi

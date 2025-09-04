@@ -22,19 +22,6 @@ struct ThemeSettingsView: View {
             .navigationTitle("Appearance")
             .toolbar {
                 #if os(iOS)
-<<<<<<< HEAD
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-                #else
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-=======
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button("Done") {
                             dismiss()
@@ -46,7 +33,6 @@ struct ThemeSettingsView: View {
                             dismiss()
                         }
                     }
->>>>>>> 1cf3938 (Create working state for recovery)
                 #endif
             }
             .onAppear {
@@ -58,11 +44,7 @@ struct ThemeSettingsView: View {
     // Section for selecting theme mode
     private var themeModeSection: some View {
         Section {
-<<<<<<< HEAD
-            ForEach(ThemeMode.allCases) { mode in
-=======
             ForEach(Array(ThemeMode.allCases), id: \.self) { mode in
->>>>>>> 1cf3938 (Create working state for recovery)
                 Button {
                     selectedMode = mode
                     theme.setThemeMode(mode)
@@ -141,11 +123,7 @@ struct ThemeSettingsView: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
                         .strokeBorder(Color.gray.opacity(0.2), lineWidth: 1),
-<<<<<<< HEAD
-                    )
-=======
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
 
             Text(name)
                 .font(.caption)

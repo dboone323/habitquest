@@ -2,9 +2,9 @@ name: SwiftFormat
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   swiftformat:
@@ -12,18 +12,18 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup SwiftFormat
-      run: |
-        brew install swiftformat
-        swiftformat --version
+      - name: Setup SwiftFormat
+        run: |
+          brew install swiftformat
+          swiftformat --version
 
-    - name: Check Code Formatting
-      run: |
-        swiftformat --lint --reporter github-actions-logging .
-        if [ $? -ne 0 ]; then
-          echo "Code formatting issues found. Run 'swiftformat .' to fix."
-          exit 1
-        fi
+      - name: Check Code Formatting
+        run: |
+          swiftformat --lint --reporter github-actions-logging .
+          if [ $? -ne 0 ]; then
+            echo "Code formatting issues found. Run 'swiftformat .' to fix."
+            exit 1
+          fi

@@ -4,7 +4,7 @@ import SwiftData
 
 /// Service for managing push notifications and habit reminders
 /// Handles notification scheduling, permission requests, and reminder management
-struct NotificationService {
+enum NotificationService {
     private static let logger = Logger(category: .general)
 
     /// Notification categories for different types of reminders
@@ -18,10 +18,10 @@ struct NotificationService {
 
         var title: String {
             switch self {
-            case .habitReminder: return "Habit Reminder"
-            case .streakMotivation: return "Keep Your Streak!"
-            case .levelUp: return "Level Up!"
-            case .achievementUnlocked: return "Achievement Unlocked!"
+            case .habitReminder: "Habit Reminder"
+            case .streakMotivation: "Keep Your Streak!"
+            case .levelUp: "Level Up!"
+            case .achievementUnlocked: "Achievement Unlocked!"
             }
         }
     }
@@ -61,7 +61,7 @@ struct NotificationService {
         // Remove existing habit reminders
         let existingIdentifiers = await center.pendingNotificationRequests()
             .filter { $0.content.categoryIdentifier == NotificationCategory.habitReminder.identifier }
-            .map { $0.identifier }
+            .map(\.identifier)
 
         center.removePendingNotificationRequests(withIdentifiers: existingIdentifiers)
 
@@ -87,7 +87,7 @@ struct NotificationService {
         content.categoryIdentifier = NotificationCategory.habitReminder.identifier
         content.userInfo = [
             "habitId": habit.id.uuidString,
-            "habitName": habit.name
+            "habitName": habit.name,
         ]
 
         // Schedule based on habit frequency
@@ -199,7 +199,7 @@ struct NotificationService {
         content.categoryIdentifier = NotificationCategory.streakMotivation.identifier
         content.userInfo = [
             "habitId": habit.id.uuidString,
-            "streak": habit.streak
+            "streak": habit.streak,
         ]
 
         // Schedule for evening if not completed today
@@ -238,7 +238,7 @@ struct NotificationService {
                 }
                 return false
             }
-            .map { $0.identifier }
+            .map(\.identifier)
 
         center.removePendingNotificationRequests(withIdentifiers: identifiersToRemove)
         logger.info("Cancelled notifications for habit: \(habit.name)")
@@ -294,7 +294,7 @@ struct NotificationService {
             habitReminderCategory,
             streakCategory,
             levelUpCategory,
-            achievementCategory
+            achievementCategory,
         ])
 
         logger.info("Setup notification categories")

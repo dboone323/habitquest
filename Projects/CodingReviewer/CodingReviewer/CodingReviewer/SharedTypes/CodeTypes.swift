@@ -23,10 +23,10 @@ enum Severity: String, CaseIterable, Codable {
 
     var systemImageName: String {
         switch self {
-        case .info: return "info.circle"
-        case .warning: return "exclamationmark.triangle"
-        case .error: return "xmark.circle"
-        case .critical: return "exclamationmark.octagon"
+        case .info: "info.circle"
+        case .warning: "exclamationmark.triangle"
+        case .error: "xmark.circle"
+        case .critical: "exclamationmark.octagon"
         }
     }
 }
@@ -40,11 +40,11 @@ enum QualityLevel: String, CaseIterable, Codable {
 
     var score: Int {
         switch self {
-        case .excellent: return 90
-        case .good: return 75
-        case .fair: return 60
-        case .poor: return 40
-        case .critical: return 20
+        case .excellent: 90
+        case .good: 75
+        case .fair: 60
+        case .poor: 40
+        case .critical: 20
         }
     }
 }
@@ -58,11 +58,11 @@ enum EffortLevel: String, CaseIterable, Codable {
 
     var estimatedHours: String {
         switch self {
-        case .minimal: return "< 1 hour"
-        case .low: return "1-4 hours"
-        case .medium: return "1-2 days"
-        case .high: return "3-5 days"
-        case .extensive: return "1+ weeks"
+        case .minimal: "< 1 hour"
+        case .low: "1-4 hours"
+        case .medium: "1-2 days"
+        case .high: "3-5 days"
+        case .extensive: "1+ weeks"
         }
     }
 }
@@ -76,11 +76,11 @@ enum ImpactLevel: String, CaseIterable, Codable {
 
     var priority: Int {
         switch self {
-        case .negligible: return 1
-        case .minor: return 2
-        case .moderate: return 3
-        case .major: return 4
-        case .critical: return 5
+        case .negligible: 1
+        case .minor: 2
+        case .moderate: 3
+        case .major: 4
+        case .critical: 5
         }
     }
 }

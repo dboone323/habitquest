@@ -14,14 +14,14 @@ mkdir -p build/macos
 # Build and archive
 echo "📦 Creating macOS archive..."
 xcodebuild archive \
-    -scheme "$SCHEME" \
-    -configuration "$CONFIGURATION" \
-    -archivePath "$ARCHIVE_PATH" \
-    -destination "generic/platform=macOS"
+  -scheme "$SCHEME" \
+  -configuration "$CONFIGURATION" \
+  -archivePath "$ARCHIVE_PATH" \
+  -destination "generic/platform=macOS"
 
 if [ $? -ne 0 ]; then
-    echo "❌ macOS build failed"
-    exit 1
+  echo "❌ macOS build failed"
+  exit 1
 fi
 
 echo "✅ macOS build completed successfully"

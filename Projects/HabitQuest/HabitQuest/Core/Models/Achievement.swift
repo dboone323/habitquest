@@ -66,7 +66,8 @@ final class Achievement {
          category: AchievementCategory,
          xpReward: Int = 50,
          isHidden: Bool = false,
-         requirement: AchievementRequirement) {
+         requirement: AchievementRequirement)
+    {
         self.id = UUID()
         self.name = name
         self.achievementDescription = description
@@ -87,12 +88,12 @@ final class Achievement {
 
     /// Check if this achievement is unlocked
     var isUnlocked: Bool {
-        return unlockedDate != nil
+        unlockedDate != nil
     }
 
     /// Get progress as a percentage string
     var progressPercentage: String {
-        return String(format: "%.0f%%", progress * 100)
+        String(format: "%.0f%%", progress * 100)
     }
 }
 
@@ -106,54 +107,54 @@ enum AchievementCategory: String, CaseIterable, Codable {
 
     var displayName: String {
         switch self {
-        case .streak: return "Streak Master"
-        case .completion: return "Quest Completion"
-        case .level: return "Level Progression"
-        case .consistency: return "Consistency"
-        case .special: return "Special Events"
+        case .streak: "Streak Master"
+        case .completion: "Quest Completion"
+        case .level: "Level Progression"
+        case .consistency: "Consistency"
+        case .special: "Special Events"
         }
     }
 
     var color: String {
         switch self {
-        case .streak: return "orange"
-        case .completion: return "green"
-        case .level: return "blue"
-        case .consistency: return "purple"
-        case .special: return "yellow"
+        case .streak: "orange"
+        case .completion: "green"
+        case .level: "blue"
+        case .consistency: "purple"
+        case .special: "yellow"
         }
     }
 }
 
 /// Types of achievement requirements
 enum AchievementRequirement: @preconcurrency Codable, @unchecked Sendable {
-    case streakDays(Int)           // Achieve X consecutive days
-    case totalCompletions(Int)     // Complete habits X times total
-    case reachLevel(Int)           // Reach level X
-    case perfectWeek               // Complete all habits for 7 days
-    case habitVariety(Int)         // Have X different active habits
-    case earlyBird                 // Complete habits before 9 AM for 7 days
-    case nightOwl                  // Complete habits after 9 PM for 7 days
-    case weekendWarrior            // Complete habits on weekends for 4 weeks
+    case streakDays(Int) // Achieve X consecutive days
+    case totalCompletions(Int) // Complete habits X times total
+    case reachLevel(Int) // Reach level X
+    case perfectWeek // Complete all habits for 7 days
+    case habitVariety(Int) // Have X different active habits
+    case earlyBird // Complete habits before 9 AM for 7 days
+    case nightOwl // Complete habits after 9 PM for 7 days
+    case weekendWarrior // Complete habits on weekends for 4 weeks
 
     var description: String {
         switch self {
         case .streakDays(let days):
-            return "Maintain a \(days)-day streak"
+            "Maintain a \(days)-day streak"
         case .totalCompletions(let count):
-            return "Complete \(count) habits total"
+            "Complete \(count) habits total"
         case .reachLevel(let level):
-            return "Reach level \(level)"
+            "Reach level \(level)"
         case .perfectWeek:
-            return "Complete all habits for 7 consecutive days"
+            "Complete all habits for 7 consecutive days"
         case .habitVariety(let count):
-            return "Have \(count) different active habits"
+            "Have \(count) different active habits"
         case .earlyBird:
-            return "Complete habits before 9 AM for 7 days"
+            "Complete habits before 9 AM for 7 days"
         case .nightOwl:
-            return "Complete habits after 9 PM for 7 days"
+            "Complete habits after 9 PM for 7 days"
         case .weekendWarrior:
-            return "Complete habits on weekends for 4 weeks"
+            "Complete habits on weekends for 4 weeks"
         }
     }
 }

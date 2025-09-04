@@ -35,11 +35,7 @@ extension Features.GoalsAndReports {
                                 .font(.title2)
                                 .foregroundColor(.blue)
                         },
-<<<<<<< HEAD
-                        )
-=======
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
             }
         }
@@ -80,11 +76,7 @@ extension Features.GoalsAndReports {
                             .background(Color.blue)
                             .cornerRadius(12)
                     },
-<<<<<<< HEAD
-                    )
-=======
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                 Spacer()
             }
@@ -158,39 +150,23 @@ extension Features.GoalsAndReports {
                                                 gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
                                                 startPoint: .leading,
                                                 endPoint: .trailing,
-<<<<<<< HEAD
-                                                ) :
-=======
                                             ) :
->>>>>>> 1cf3938 (Create working state for recovery)
                                             LinearGradient(
                                                 gradient: Gradient(colors: [Color.clear]),
                                                 startPoint: .leading,
                                                 endPoint: .trailing,
-<<<<<<< HEAD
-                                                ),
-                                        ),
-                                )
-                        },
-                        )
-=======
                                             ),
                                     ),
                             )
                         },
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
             }
             .padding(6)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color(.systemFill)),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
         }

@@ -38,25 +38,27 @@ enum BillingCycle: String, CaseIterable, Codable {
 }
 
 @Model
-final class Subscription {
+public final class Subscription {
     var name: String
     var amount: Double
     var billingCycle: BillingCycle
     var nextDueDate: Date
     var isActive: Bool
     var notes: String?
+    var icon: String
 
     // Relationships
     var category: ExpenseCategory?
     var account: FinancialAccount?
 
-    init(name: String, amount: Double, billingCycle: BillingCycle, nextDueDate: Date, notes: String? = nil) {
+    init(name: String, amount: Double, billingCycle: BillingCycle, nextDueDate: Date, notes: String? = nil, icon: String = "creditcard") {
         self.name = name
         self.amount = amount
         self.billingCycle = billingCycle
         self.nextDueDate = nextDueDate
         self.isActive = true
         self.notes = notes
+        self.icon = icon
     }
 
     /// Formatted amount string
@@ -74,8 +76,6 @@ final class Subscription {
         return max(0, components.day ?? 0)
     }
 
-<<<<<<< HEAD
-=======
     /// Compatibility accessor: some code expects `nextBillingDate` (optional).
     /// Keep this as a computed property mapping to the canonical `nextDueDate`.
     /// Return an Optional so callers can use `guard let` / conditional binding.
@@ -90,7 +90,6 @@ final class Subscription {
         }
     }
 
->>>>>>> 1cf3938 (Create working state for recovery)
     /// Monthly equivalent amount for budgeting calculations
     var monthlyEquivalent: Double {
         switch billingCycle {
@@ -115,11 +114,7 @@ final class Subscription {
             date: nextDueDate,
             transactionType: .expense,
             notes: "Auto-generated from subscription",
-<<<<<<< HEAD
-            )
-=======
         )
->>>>>>> 1cf3938 (Create working state for recovery)
         transaction.category = category
         transaction.account = account
 

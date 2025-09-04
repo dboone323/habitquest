@@ -100,7 +100,7 @@ final class SmartNotificationService {
             "habitId": habit.id.uuidString,
             "optimalTime": scheduling.optimalTime,
             "successProbability": prediction.probability,
-            "schedulingVersion": "smart_v2"
+            "schedulingVersion": "smart_v2",
         ]
 
         return content
@@ -136,31 +136,31 @@ final class SmartNotificationService {
 
     private func generateTimeContext(hour: Int) -> String {
         switch hour {
-        case 6...9:
-            return "Perfect morning energy!"
-        case 10...12:
-            return "Mid-morning focus time."
-        case 13...17:
-            return "Afternoon momentum boost."
-        case 18...21:
-            return "Evening wind-down ritual."
+        case 6 ... 9:
+            "Perfect morning energy!"
+        case 10 ... 12:
+            "Mid-morning focus time."
+        case 13 ... 17:
+            "Afternoon momentum boost."
+        case 18 ... 21:
+            "Evening wind-down ritual."
         default:
-            return "Your optimal time."
+            "Your optimal time."
         }
     }
 
     private func selectMotivationalMessage(prediction: StreakPrediction) -> String {
         switch prediction.probability {
-        case 80...100:
-            return "You're crushing it!"
-        case 60...79:
-            return "Great momentum building."
-        case 40...59:
-            return "Consistency is key."
-        case 20...39:
-            return "Every small step counts."
+        case 80 ... 100:
+            "You're crushing it!"
+        case 60 ... 79:
+            "Great momentum building."
+        case 40 ... 59:
+            "Consistency is key."
+        case 20 ... 39:
+            "Every small step counts."
         default:
-            return "Fresh start, new opportunity."
+            "Fresh start, new opportunity."
         }
     }
 
@@ -196,24 +196,24 @@ final class SmartNotificationService {
     private func determineInterruptionLevel(habit: Habit, successRate: Double) -> UNNotificationInterruptionLevel {
         // High-priority for struggling streaks, low for established ones
         if habit.streak > 7 && successRate > 0.7 {
-            return .passive
+            .passive
         } else if successRate < 0.3 {
-            return .timeSensitive
+            .timeSensitive
         } else {
-            return .active
+            .active
         }
     }
 
     private func selectOptimalSound(for category: HabitCategory) -> UNNotificationSound {
         switch category {
         case .health, .fitness:
-            return UNNotificationSound(named: UNNotificationSoundName("energetic_chime.wav"))
+            UNNotificationSound(named: UNNotificationSoundName("energetic_chime.wav"))
         case .learning, .productivity:
-            return UNNotificationSound(named: UNNotificationSoundName("focused_bell.wav"))
+            UNNotificationSound(named: UNNotificationSoundName("focused_bell.wav"))
         case .mindfulness, .social:
-            return UNNotificationSound(named: UNNotificationSoundName("gentle_tone.wav"))
+            UNNotificationSound(named: UNNotificationSoundName("gentle_tone.wav"))
         default:
-            return .default
+            .default
         }
     }
 
@@ -228,7 +228,7 @@ final class SmartNotificationService {
     /// - Returns: <#description#>
     func adaptToUserBehavior(habitId: UUID, interactionType: NotificationInteraction) async {
         let habit = await fetchHabit(id: habitId)
-        guard let habit = habit else { return }
+        guard let habit else { return }
 
         // Log interaction for machine learning
         await logNotificationInteraction(
@@ -327,7 +327,7 @@ final class SmartNotificationService {
     private func fetchActiveHabits() async -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
         let allHabits = (try? modelContext.fetch(descriptor)) ?? []
-        return allHabits.filter { $0.isActive }
+        return allHabits.filter(\.isActive)
     }
 
     private func fetchHabit(id: UUID) async -> Habit? {
@@ -338,7 +338,7 @@ final class SmartNotificationService {
 
     private func findOptimalWeekday(for habit: Habit) -> Int {
         // Analyze completion patterns to find best weekday
-        let weekdayCompletions = Dictionary(grouping: habit.logs.filter { $0.isCompleted }) { log in
+        let weekdayCompletions = Dictionary(grouping: habit.logs.filter(\.isCompleted)) { log in
             Calendar.current.component(.weekday, from: log.completionDate)
         }
 
@@ -350,7 +350,7 @@ final class SmartNotificationService {
         let recentLogs = habit.logs.suffix(7)
         guard !recentLogs.isEmpty else { return 0.5 }
 
-        let successCount = recentLogs.filter { $0.isCompleted }.count
+        let successCount = recentLogs.filter(\.isCompleted).count
         return Double(successCount) / Double(recentLogs.count)
     }
 
@@ -393,10 +393,10 @@ enum TimingAdjustment {
 extension UNNotificationInterruptionLevel {
     static func from(priority: Double) -> UNNotificationInterruptionLevel {
         switch priority {
-        case 0.8...1.0: return .critical
-        case 0.6..<0.8: return .timeSensitive
-        case 0.3..<0.6: return .active
-        default: return .passive
+        case 0.8 ... 1.0: .critical
+        case 0.6 ..< 0.8: .timeSensitive
+        case 0.3 ..< 0.6: .active
+        default: .passive
         }
     }
 }

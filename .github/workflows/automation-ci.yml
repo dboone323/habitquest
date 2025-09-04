@@ -3,17 +3,17 @@ name: Automation CI
 on:
   push:
     paths:
-      - 'Automation/**'
+      - "Automation/**"
   pull_request:
     paths:
-      - 'Automation/**'
+      - "Automation/**"
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12']
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
 

@@ -16,11 +16,7 @@ import SwiftUI
 @Observable
 final class ThemeManager {
     @MainActor static let shared = ThemeManager()
-<<<<<<< HEAD
-    // Uses static Logger methods directly
-=======
     private let logger = Logger()
->>>>>>> 1cf3938 (Create working state for recovery)
     private let theme = ColorTheme.shared
 
     // MARK: - Theme Preference Management
@@ -123,15 +119,9 @@ final class ThemeManager {
     /// Scale factor for dynamic type based on system settings
     var fontScaleFactor: CGFloat {
         #if os(iOS)
-<<<<<<< HEAD
-        return UIFontMetrics.default.scaledValue(for: 1.0)
-        #else
-        return 1.0 // Default for macOS
-=======
             return UIFontMetrics.default.scaledValue(for: 1.0)
         #else
             return 1.0 // Default for macOS
->>>>>>> 1cf3938 (Create working state for recovery)
         #endif
     }
 

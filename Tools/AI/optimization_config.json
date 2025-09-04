@@ -1,0 +1,19 @@
+{
+  "ollama": {
+    "cache_enabled": true,
+    "cache_dir": "./cache",
+    "model_preload": ["llama2", "codellama"],
+    "context_window": 4096,
+    "temperature": 0.1
+  },
+  "huggingface": {
+    "cache_enabled": true,
+    "rate_limit_buffer": 100,
+    "fallback_timeout": 30
+  },
+  "caching": {
+    "max_cache_size": "1GB",
+    "cache_ttl": 3600,
+    "compression_enabled": true
+  }
+}

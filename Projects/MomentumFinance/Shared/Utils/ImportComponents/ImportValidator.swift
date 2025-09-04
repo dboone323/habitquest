@@ -37,7 +37,7 @@ struct ImportValidator {
     /// Validates required fields are present and not empty
     static func validateRequiredFields(
         fields: [String],
-        columnMapping: ColumnMapping
+        columnMapping: CSVColumnMapping
     ) throws {
         // Validate date field
         guard let dateIndex = columnMapping.dateIndex,
@@ -78,7 +78,7 @@ struct ImportValidator {
         let headers = CSVParser.parseCSVRow(headerLine).map { $0.lowercased() }
 
         guard !headers.isEmpty else {
-            throw ImportError.invalidFormat
+            throw ImportError.invalidFormat("CSV file has no headers")
         }
 
         return headers

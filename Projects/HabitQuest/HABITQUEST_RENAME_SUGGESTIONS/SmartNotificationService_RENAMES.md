@@ -16,12 +16,15 @@ Patch (manual apply suggestion)
 Search/replace occurrences inside the file where the short local variables are used. Example patch snippet:
 
 - let s = ...
-+ let subscriptionState = ...
+
+* let subscriptionState = ...
 
 - process(s)
-+ process(subscriptionState)
+
+* process(subscriptionState)
 
 Notes
+
 - Verify each renamed variable does not shadow other identifiers.
 - Run unit tests and SwiftUI previews after renames.
 - If any variable is part of a public API, create a separate API-changing PR with deprecation notes.
@@ -29,5 +32,6 @@ Notes
 Priority: High (many linter errors)
 
 Reviewer instructions
+
 - Review usages of `s` and `p` in nearby lines to ensure contextual names match intent.
 - Prefer domain vocabulary used elsewhere in the project (e.g., `subscription`, `notificationStatus`, `performance`).

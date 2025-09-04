@@ -3,6 +3,7 @@ import Foundation
 import OSLog
 
 /// Lightweight wrapper providing a shared instance to delegate to the static `Logger` API.
+@MainActor
 final class AppLogger {
     static let shared = AppLogger()
     private init() {}

@@ -4,33 +4,33 @@
 # Optimizes autocompletion performance
 
 optimize_completion_performance() {
-    local autocompletion_dir="$1"
-    
-    echo "⚡ Optimizing autocompletion performance..."
-    
-    # Create performance monitoring
-    setup_performance_monitoring "$autocompletion_dir"
-    
-    # Optimize database queries
-    optimize_database_access "$autocompletion_dir"
-    
-    # Set up caching
-    setup_intelligent_caching "$autocompletion_dir"
-    
-    # Configure background processing
-    setup_background_processing "$autocompletion_dir"
-    
-    echo "✅ Performance optimization complete"
+  local autocompletion_dir="$1"
+
+  echo "⚡ Optimizing autocompletion performance..."
+
+  # Create performance monitoring
+  setup_performance_monitoring "$autocompletion_dir"
+
+  # Optimize database queries
+  optimize_database_access "$autocompletion_dir"
+
+  # Set up caching
+  setup_intelligent_caching "$autocompletion_dir"
+
+  # Configure background processing
+  setup_background_processing "$autocompletion_dir"
+
+  echo "✅ Performance optimization complete"
 }
 
 setup_performance_monitoring() {
-    local dir="$1"
-    
-    echo "  • Setting up performance monitoring..."
-    
-    local monitor_script="$dir/performance_monitor.sh"
-    
-    cat > "$monitor_script" << 'MONITOR'
+  local dir="$1"
+
+  echo "  • Setting up performance monitoring..."
+
+  local monitor_script="$dir/performance_monitor.sh"
+
+  cat >"$monitor_script" <<'MONITOR'
 #!/bin/bash
 
 # Performance Monitor
@@ -69,19 +69,19 @@ stop_monitoring() {
 }
 
 MONITOR
-    
-    chmod +x "$monitor_script"
+
+  chmod +x "$monitor_script"
 }
 
 optimize_database_access() {
-    local dir="$1"
-    
-    echo "  • Optimizing database access..."
-    
-    # Create indexing for faster lookups
-    local indexer="$dir/database_indexer.sh"
-    
-    cat > "$indexer" << 'INDEXER'
+  local dir="$1"
+
+  echo "  • Optimizing database access..."
+
+  # Create indexing for faster lookups
+  local indexer="$dir/database_indexer.sh"
+
+  cat >"$indexer" <<'INDEXER'
 #!/bin/bash
 
 # Database Indexer
@@ -119,18 +119,18 @@ search_index() {
 }
 
 INDEXER
-    
-    chmod +x "$indexer"
+
+  chmod +x "$indexer"
 }
 
 setup_intelligent_caching() {
-    local dir="$1"
-    
-    echo "  • Setting up intelligent caching..."
-    
-    local cache_manager="$dir/cache_manager.sh"
-    
-    cat > "$cache_manager" << 'CACHE'
+  local dir="$1"
+
+  echo "  • Setting up intelligent caching..."
+
+  local cache_manager="$dir/cache_manager.sh"
+
+  cat >"$cache_manager" <<'CACHE'
 #!/bin/bash
 
 # Cache Manager
@@ -210,18 +210,18 @@ cleanup_cache() {
 }
 
 CACHE
-    
-    chmod +x "$cache_manager"
+
+  chmod +x "$cache_manager"
 }
 
 setup_background_processing() {
-    local dir="$1"
-    
-    echo "  • Setting up background processing..."
-    
-    local background_processor="$dir/background_processor.sh"
-    
-    cat > "$background_processor" << 'BACKGROUND'
+  local dir="$1"
+
+  echo "  • Setting up background processing..."
+
+  local background_processor="$dir/background_processor.sh"
+
+  cat >"$background_processor" <<'BACKGROUND'
 #!/bin/bash
 
 # Background Processor
@@ -263,7 +263,6 @@ stop_background_processing() {
 }
 
 BACKGROUND
-    
-    chmod +x "$background_processor"
-}
 
+  chmod +x "$background_processor"
+}

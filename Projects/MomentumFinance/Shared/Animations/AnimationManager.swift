@@ -165,11 +165,7 @@ extension View {
             .transition(.asymmetric(
                 insertion: .move(edge: edge).combined(with: .opacity),
                 removal: .move(edge: edge.opposite).combined(with: .opacity),
-<<<<<<< HEAD
-                ))
-=======
             ))
->>>>>>> 1cf3938 (Create working state for recovery)
             .animation(AnimationManager.Springs.smooth.delay(delay), value: true)
     }
 
@@ -198,32 +194,18 @@ extension View {
                             gradient: Gradient(colors: [
                                 Color.clear,
                                 Color.white.opacity(0.4),
-<<<<<<< HEAD
-                                Color.clear
-                            ]),
-                            startPoint: .leading,
-                            endPoint: .trailing,
-                            ),
-                        )
-=======
                                 Color.clear,
                             ]),
                             startPoint: .leading,
                             endPoint: .trailing,
                         ),
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
                     .offset(x: -100)
                     .animation(
                         Animation.linear(duration: 1.5).repeatForever(autoreverses: false),
                         value: true,
-<<<<<<< HEAD
-                        ),
-                )
-=======
                     ),
             )
->>>>>>> 1cf3938 (Create working state for recovery)
             .clipped()
     }
 }
@@ -249,11 +231,7 @@ extension AnyTransition {
         .asymmetric(
             insertion: .scale.combined(with: .opacity),
             removal: .scale.combined(with: .opacity),
-<<<<<<< HEAD
-            )
-=======
         )
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 
     /// Slide and fade from bottom
@@ -261,11 +239,7 @@ extension AnyTransition {
         .asymmetric(
             insertion: .move(edge: .bottom).combined(with: .opacity),
             removal: .move(edge: .bottom).combined(with: .opacity),
-<<<<<<< HEAD
-            )
-=======
         )
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 
     /// Card flip transition
@@ -274,21 +248,12 @@ extension AnyTransition {
             insertion: .modifier(
                 active: CardFlipModifier(rotation: 90),
                 identity: CardFlipModifier(rotation: 0),
-<<<<<<< HEAD
-                ),
-            removal: .modifier(
-                active: CardFlipModifier(rotation: -90),
-                identity: CardFlipModifier(rotation: 0),
-                ),
-            )
-=======
             ),
             removal: .modifier(
                 active: CardFlipModifier(rotation: -90),
                 identity: CardFlipModifier(rotation: 0),
             ),
         )
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 
     /// Push transition for navigation
@@ -296,11 +261,7 @@ extension AnyTransition {
         .asymmetric(
             insertion: .move(edge: .trailing),
             removal: .move(edge: .leading),
-<<<<<<< HEAD
-            )
-=======
         )
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 }
 
@@ -316,11 +277,7 @@ struct CardFlipModifier: ViewModifier {
             .rotation3DEffect(
                 .degrees(rotation),
                 axis: (x: 0, y: 1, z: 0),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 }
 
@@ -350,11 +307,7 @@ struct LoadingIndicator: View {
                                     .repeatForever()
                                     .delay(Double(index) * 0.2),
                                 value: isAnimating,
-<<<<<<< HEAD
-                                )
-=======
                             )
->>>>>>> 1cf3938 (Create working state for recovery)
                     }
                 }
 
@@ -367,11 +320,7 @@ struct LoadingIndicator: View {
                     .animation(
                         Animation.linear(duration: 1).repeatForever(autoreverses: false),
                         value: isAnimating,
-<<<<<<< HEAD
-                        )
-=======
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
 
             case .pulse:
                 Circle()
@@ -382,11 +331,7 @@ struct LoadingIndicator: View {
                     .animation(
                         Animation.easeInOut(duration: 1).repeatForever(autoreverses: true),
                         value: isAnimating,
-<<<<<<< HEAD
-                        )
-=======
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
             }
         }
         .onAppear {

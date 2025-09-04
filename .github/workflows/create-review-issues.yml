@@ -1,7 +1,7 @@
 name: Create Review Issues
 "on":
   push:
-    branches: [ main ]
+    branches: [main]
 
 permissions:
   issues: write

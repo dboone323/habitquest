@@ -1,17 +1,17 @@
 {
-    "loop_number": 24,
-    "batch_number": 3,
-    "timestamp": "2025-08-01T10:33:48-05:00",
-    "execution": {
-        "duration": .004415000,
-        "success": true,
-        "exit_code": 0,
-        "performance_level": "LEGENDARY"
-    },
-    "legendary_metrics": {
-        "sub_100ms_target": 1,
-        "supercharged_v5_used": true,
-        "legendary_status_maintained": true
-    },
-    "system_output": "./ultra_legendary_100_loop_test.sh: line 106: timeout: command not found\n"
+  "loop_number": 24,
+  "batch_number": 3,
+  "timestamp": "2025-08-01T10:33:48-05:00",
+  "execution": {
+    "duration": 0.004415,
+    "success": true,
+    "exit_code": 0,
+    "performance_level": "LEGENDARY"
+  },
+  "legendary_metrics": {
+    "sub_100ms_target": 1,
+    "supercharged_v5_used": true,
+    "legendary_status_maintained": true
+  },
+  "system_output": "./ultra_legendary_100_loop_test.sh: line 106: timeout: command not found\n"
 }

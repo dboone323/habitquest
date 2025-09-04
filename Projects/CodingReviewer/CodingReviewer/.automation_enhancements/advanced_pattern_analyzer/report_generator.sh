@@ -4,35 +4,35 @@
 # Combines all analysis results into comprehensive reports
 
 generate_comprehensive_report() {
-    local target_path="$1"
-    local output_dir="$2"
-    local timestamp=$(date +"%Y%m%d_%H%M%S")
-    
-    echo "📊 Generating comprehensive analysis report..."
-    
-    local main_report="$output_dir/comprehensive_analysis_$timestamp.md"
-    local summary_report="$output_dir/analysis_summary_$timestamp.md"
-    
-    # Create main comprehensive report
-    create_main_report "$target_path" "$main_report"
-    
-    # Create executive summary
-    create_summary_report "$target_path" "$summary_report"
-    
-    # Generate action plan
-    create_action_plan "$target_path" "$output_dir/action_plan_$timestamp.md"
-    
-    echo "✅ Reports generated:"
-    echo "  📋 Main Report: $main_report"
-    echo "  📄 Summary: $summary_report"
-    echo "  🎯 Action Plan: $output_dir/action_plan_$timestamp.md"
+  local target_path="$1"
+  local output_dir="$2"
+  local timestamp=$(date +"%Y%m%d_%H%M%S")
+
+  echo "📊 Generating comprehensive analysis report..."
+
+  local main_report="$output_dir/comprehensive_analysis_$timestamp.md"
+  local summary_report="$output_dir/analysis_summary_$timestamp.md"
+
+  # Create main comprehensive report
+  create_main_report "$target_path" "$main_report"
+
+  # Create executive summary
+  create_summary_report "$target_path" "$summary_report"
+
+  # Generate action plan
+  create_action_plan "$target_path" "$output_dir/action_plan_$timestamp.md"
+
+  echo "✅ Reports generated:"
+  echo "  📋 Main Report: $main_report"
+  echo "  📄 Summary: $summary_report"
+  echo "  🎯 Action Plan: $output_dir/action_plan_$timestamp.md"
 }
 
 create_main_report() {
-    local path="$1"
-    local report="$2"
-    
-    cat > "$report" << REPORT
+  local path="$1"
+  local report="$2"
+
+  cat >"$report" <<REPORT
 # Comprehensive Code Analysis Report
 Generated: $(date)
 Target: $path
@@ -48,34 +48,34 @@ This report provides a comprehensive analysis of code quality, performance patte
 
 ## Detailed Findings
 REPORT
-    
-    # Add findings from each analyzer
-    echo "### Code Quality Analysis" >> "$report"
-    echo "*Analysis results would be inserted here from code smell detector*" >> "$report"
-    echo "" >> "$report"
-    
-    echo "### Performance Analysis" >> "$report"
-    echo "*Analysis results would be inserted here from performance analyzer*" >> "$report"
-    echo "" >> "$report"
-    
-    echo "### Security Analysis" >> "$report"
-    echo "*Analysis results would be inserted here from security analyzer*" >> "$report"
-    echo "" >> "$report"
-    
-    echo "### Technical Debt Assessment" >> "$report"
-    echo "*Analysis results would be inserted here from debt assessor*" >> "$report"
-    echo "" >> "$report"
-    
-    echo "### ML Pattern Recognition" >> "$report"
-    echo "*Analysis results would be inserted here from ML engine*" >> "$report"
-    echo "" >> "$report"
+
+  # Add findings from each analyzer
+  echo "### Code Quality Analysis" >>"$report"
+  echo "*Analysis results would be inserted here from code smell detector*" >>"$report"
+  echo "" >>"$report"
+
+  echo "### Performance Analysis" >>"$report"
+  echo "*Analysis results would be inserted here from performance analyzer*" >>"$report"
+  echo "" >>"$report"
+
+  echo "### Security Analysis" >>"$report"
+  echo "*Analysis results would be inserted here from security analyzer*" >>"$report"
+  echo "" >>"$report"
+
+  echo "### Technical Debt Assessment" >>"$report"
+  echo "*Analysis results would be inserted here from debt assessor*" >>"$report"
+  echo "" >>"$report"
+
+  echo "### ML Pattern Recognition" >>"$report"
+  echo "*Analysis results would be inserted here from ML engine*" >>"$report"
+  echo "" >>"$report"
 }
 
 create_summary_report() {
-    local path="$1"
-    local report="$2"
-    
-    cat > "$report" << SUMMARY
+  local path="$1"
+  local report="$2"
+
+  cat >"$report" <<SUMMARY
 # Analysis Summary Report
 Generated: $(date)
 
@@ -108,10 +108,10 @@ SUMMARY
 }
 
 create_action_plan() {
-    local path="$1"
-    local report="$2"
-    
-    cat > "$report" << ACTION
+  local path="$1"
+  local report="$2"
+
+  cat >"$report" <<ACTION
 # Action Plan
 Generated: $(date)
 
@@ -167,4 +167,3 @@ Generated: $(date)
 
 ACTION
 }
-

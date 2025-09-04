@@ -28,7 +28,7 @@ extension Features.Transactions {
                 // Simple Search Bar
                 TextField("Search transactions...", text: $searchText)
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.1))
                     .cornerRadius(8)
 
                 // Filter Picker

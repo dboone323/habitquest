@@ -10,22 +10,16 @@ import SwiftUI
 extension Features.Dashboard {
     struct DashboardWelcomeHeader: View {
         let colorTheme: ColorTheme
-
-        private var timeOfDayGreeting: String {
-            let hour = Calendar.current.component(.hour, from: Date())
-            if hour < 12 {
-                return "Morning"
-            } else if hour < 17 {
-                return "Afternoon"
-            } else {
-                return "Evening"
-            }
-        }
+        let greeting: String
+        let wellnessPercentage: Int
+        let totalBalance: Double
+        let monthlyIncome: Double
+        let monthlyExpenses: Double
 
         var body: some View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Text("Good \(timeOfDayGreeting)")
+                    Text("Good \(greeting)")
                         .font(.title2)
                         .fontWeight(.semibold)
                         .foregroundStyle(.primary)
@@ -64,10 +58,10 @@ extension Features.Dashboard {
 
                         RoundedRectangle(cornerRadius: 10)
                             .fill(colorTheme.savings)
-                            .frame(width: 170 * Double(70) / 100, height: 8)
+                            .frame(width: 170 * Double(wellnessPercentage) / 100, height: 8)
                     }
 
-                    Text("70%")
+                    Text("\(wellnessPercentage)%")
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundStyle(colorTheme.primaryText)

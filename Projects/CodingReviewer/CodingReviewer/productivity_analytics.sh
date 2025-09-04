@@ -27,12 +27,12 @@ mkdir -p "$ANALYTICS_DIR"
 
 # Initialize productivity analytics system
 initialize_analytics_system() {
-    echo -e "${BOLD}${CYAN}🚀 Initializing Developer Productivity Analytics...${NC}"
-    
-    # Create analytics database
-    if [ ! -f "$ANALYTICS_DB" ]; then
-        echo "  📊 Creating productivity analytics database..."
-        cat > "$ANALYTICS_DB" << 'EOF'
+  echo -e "${BOLD}${CYAN}🚀 Initializing Developer Productivity Analytics...${NC}"
+
+  # Create analytics database
+  if [ ! -f "$ANALYTICS_DB" ]; then
+    echo "  📊 Creating productivity analytics database..."
+    cat >"$ANALYTICS_DB" <<'EOF'
 {
   "productivity_analytics": {
     "developer_profile": {
@@ -124,19 +124,19 @@ initialize_analytics_system() {
   }
 }
 EOF
-        echo "    ✅ Productivity analytics database created"
-    fi
-    
-    echo "  🔧 Setting up analytics collection modules..."
-    create_analytics_modules
-    
-    echo "  🎯 System initialization complete"
+    echo "    ✅ Productivity analytics database created"
+  fi
+
+  echo "  🔧 Setting up analytics collection modules..."
+  create_analytics_modules
+
+  echo "  🎯 System initialization complete"
 }
 
 # Create analytics collection modules
 create_analytics_modules() {
-    # Coding velocity analyzer
-    cat > "$ANALYTICS_DIR/analyze_velocity.sh" << 'EOF'
+  # Coding velocity analyzer
+  cat >"$ANALYTICS_DIR/analyze_velocity.sh" <<'EOF'
 #!/bin/bash
 
 echo "⚡ Analyzing Coding Velocity..."
@@ -194,8 +194,8 @@ else
 fi
 EOF
 
-    # Focus time analyzer
-    cat > "$ANALYTICS_DIR/analyze_focus.sh" << 'EOF'
+  # Focus time analyzer
+  cat >"$ANALYTICS_DIR/analyze_focus.sh" <<'EOF'
 #!/bin/bash
 
 echo "🎯 Analyzing Focus Time and Deep Work..."
@@ -246,8 +246,8 @@ echo "  • Peak productivity hours: 9-11 AM, 2-4 PM"
 echo "  • Consider 25-minute Pomodoro sessions"
 EOF
 
-    # Collaboration analyzer
-    cat > "$ANALYTICS_DIR/analyze_collaboration.sh" << 'EOF'
+  # Collaboration analyzer
+  cat >"$ANALYTICS_DIR/analyze_collaboration.sh" <<'EOF'
 #!/bin/bash
 
 echo "🤝 Analyzing Collaboration Patterns..."
@@ -309,8 +309,8 @@ echo "  • Consider more pair programming sessions"
 echo "  • Keep documentation updated regularly"
 EOF
 
-    # Skill gap analyzer
-    cat > "$ANALYTICS_DIR/analyze_skills.sh" << 'EOF'
+  # Skill gap analyzer
+  cat >"$ANALYTICS_DIR/analyze_skills.sh" <<'EOF'
 #!/bin/bash
 
 echo "🎓 Analyzing Skill Development..."
@@ -349,111 +349,111 @@ echo "🧠 Learning Velocity Score: $learning_score/100"
 echo "🚀 You're on track for senior+ level advancement!"
 EOF
 
-    # Make scripts executable
-    chmod +x "$ANALYTICS_DIR"/*.sh
-    echo "    ✅ Analytics collection modules created"
+  # Make scripts executable
+  chmod +x "$ANALYTICS_DIR"/*.sh
+  echo "    ✅ Analytics collection modules created"
 }
 
 # Run coding velocity analysis
 analyze_coding_velocity() {
-    echo -e "${YELLOW}⚡ Analyzing coding velocity patterns...${NC}"
-    
-    # Run velocity analysis
-    bash "$ANALYTICS_DIR/analyze_velocity.sh"
-    
-    # Calculate trends and recommendations
-    echo ""
-    echo "  📈 Velocity Trends:"
-    echo "    • Consistent daily output pattern"
-    echo "    • Peak productivity: Tuesday-Thursday"
-    echo "    • Optimal commit size: 50-100 lines"
-    
-    echo ""
-    echo "  🎯 Velocity Optimization Tips:"
-    echo "    • Break large features into smaller commits"
-    echo "    • Use feature flags for gradual releases"
-    echo "    • Focus on one task at a time"
-    
-    # Log metrics
-    echo "$(date): Velocity analysis completed" >> "$METRICS_LOG"
+  echo -e "${YELLOW}⚡ Analyzing coding velocity patterns...${NC}"
+
+  # Run velocity analysis
+  bash "$ANALYTICS_DIR/analyze_velocity.sh"
+
+  # Calculate trends and recommendations
+  echo ""
+  echo "  📈 Velocity Trends:"
+  echo "    • Consistent daily output pattern"
+  echo "    • Peak productivity: Tuesday-Thursday"
+  echo "    • Optimal commit size: 50-100 lines"
+
+  echo ""
+  echo "  🎯 Velocity Optimization Tips:"
+  echo "    • Break large features into smaller commits"
+  echo "    • Use feature flags for gradual releases"
+  echo "    • Focus on one task at a time"
+
+  # Log metrics
+  echo "$(date): Velocity analysis completed" >>"$METRICS_LOG"
 }
 
 # Analyze focus time and deep work patterns
 analyze_focus_optimization() {
-    echo -e "${PURPLE}🎯 Analyzing focus time and deep work patterns...${NC}"
-    
-    # Run focus analysis
-    bash "$ANALYTICS_DIR/analyze_focus.sh"
-    
-    echo ""
-    echo "  🧠 Focus Patterns Identified:"
-    echo "    • Best focus time: 9-11 AM (95% efficiency)"
-    echo "    • Afternoon dip: 1-2 PM (68% efficiency)"
-    echo "    • Second peak: 2-4 PM (88% efficiency)"
-    
-    echo ""
-    echo "  ⚡ Focus Enhancement Strategies:"
-    echo "    • Schedule complex tasks for 9-11 AM"
-    echo "    • Use 1-2 PM for meetings/admin work"
-    echo "    • Implement notification blocking during focus time"
-    
-    # Log focus metrics
-    echo "$(date): Focus analysis completed" >> "$METRICS_LOG"
+  echo -e "${PURPLE}🎯 Analyzing focus time and deep work patterns...${NC}"
+
+  # Run focus analysis
+  bash "$ANALYTICS_DIR/analyze_focus.sh"
+
+  echo ""
+  echo "  🧠 Focus Patterns Identified:"
+  echo "    • Best focus time: 9-11 AM (95% efficiency)"
+  echo "    • Afternoon dip: 1-2 PM (68% efficiency)"
+  echo "    • Second peak: 2-4 PM (88% efficiency)"
+
+  echo ""
+  echo "  ⚡ Focus Enhancement Strategies:"
+  echo "    • Schedule complex tasks for 9-11 AM"
+  echo "    • Use 1-2 PM for meetings/admin work"
+  echo "    • Implement notification blocking during focus time"
+
+  # Log focus metrics
+  echo "$(date): Focus analysis completed" >>"$METRICS_LOG"
 }
 
 # Analyze collaboration patterns
 analyze_collaboration_patterns() {
-    echo -e "${GREEN}🤝 Analyzing collaboration and teamwork patterns...${NC}"
-    
-    # Run collaboration analysis
-    bash "$ANALYTICS_DIR/analyze_collaboration.sh"
-    
-    echo ""
-    echo "  👥 Collaboration Insights:"
-    echo "    • Strong code review participation"
-    echo "    • Balanced give/take in peer reviews"
-    echo "    • Effective knowledge sharing"
-    
-    echo ""
-    echo "  🚀 Team Contribution Recommendations:"
-    echo "    • Continue mentoring junior developers"
-    echo "    • Lead more architecture discussions"
-    echo "    • Document complex solutions for team"
-    
-    # Log collaboration metrics
-    echo "$(date): Collaboration analysis completed" >> "$METRICS_LOG"
+  echo -e "${GREEN}🤝 Analyzing collaboration and teamwork patterns...${NC}"
+
+  # Run collaboration analysis
+  bash "$ANALYTICS_DIR/analyze_collaboration.sh"
+
+  echo ""
+  echo "  👥 Collaboration Insights:"
+  echo "    • Strong code review participation"
+  echo "    • Balanced give/take in peer reviews"
+  echo "    • Effective knowledge sharing"
+
+  echo ""
+  echo "  🚀 Team Contribution Recommendations:"
+  echo "    • Continue mentoring junior developers"
+  echo "    • Lead more architecture discussions"
+  echo "    • Document complex solutions for team"
+
+  # Log collaboration metrics
+  echo "$(date): Collaboration analysis completed" >>"$METRICS_LOG"
 }
 
 # Identify skill gaps and development opportunities
 identify_skill_gaps() {
-    echo -e "${RED}🎓 Identifying skill gaps and development opportunities...${NC}"
-    
-    # Run skill analysis
-    bash "$ANALYTICS_DIR/analyze_skills.sh"
-    
-    echo ""
-    echo "  🎯 Personalized Development Plan:"
-    echo "    • Q3 2025: iOS Performance Optimization"
-    echo "    • Q4 2025: Machine Learning Integration"
-    echo "    • Q1 2026: Advanced DevOps/Automation"
-    
-    echo ""
-    echo "  📚 Recommended Resources:"
-    echo "    • Apple WWDC Performance Sessions"
-    echo "    • Core ML documentation and tutorials"
-    echo "    • Advanced Git workflows course"
-    
-    # Log skill assessment
-    echo "$(date): Skill gap analysis completed" >> "$METRICS_LOG"
+  echo -e "${RED}🎓 Identifying skill gaps and development opportunities...${NC}"
+
+  # Run skill analysis
+  bash "$ANALYTICS_DIR/analyze_skills.sh"
+
+  echo ""
+  echo "  🎯 Personalized Development Plan:"
+  echo "    • Q3 2025: iOS Performance Optimization"
+  echo "    • Q4 2025: Machine Learning Integration"
+  echo "    • Q1 2026: Advanced DevOps/Automation"
+
+  echo ""
+  echo "  📚 Recommended Resources:"
+  echo "    • Apple WWDC Performance Sessions"
+  echo "    • Core ML documentation and tutorials"
+  echo "    • Advanced Git workflows course"
+
+  # Log skill assessment
+  echo "$(date): Skill gap analysis completed" >>"$METRICS_LOG"
 }
 
 # Generate productivity dashboard
 generate_productivity_dashboard() {
-    echo -e "${BLUE}📊 Generating productivity dashboard...${NC}"
-    
-    local dashboard_file="$ANALYTICS_DIR/productivity_dashboard.html"
-    
-    cat > "$dashboard_file" << 'EOF'
+  echo -e "${BLUE}📊 Generating productivity dashboard...${NC}"
+
+  local dashboard_file="$ANALYTICS_DIR/productivity_dashboard.html"
+
+  cat >"$dashboard_file" <<'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -629,19 +629,19 @@ generate_productivity_dashboard() {
 </body>
 </html>
 EOF
-    
-    echo "  📋 Dashboard saved: $dashboard_file"
-    echo "  🌐 Open in browser to view interactive metrics"
-    echo "$dashboard_file"
+
+  echo "  📋 Dashboard saved: $dashboard_file"
+  echo "  🌐 Open in browser to view interactive metrics"
+  echo "$dashboard_file"
 }
 
 # Generate comprehensive analytics report
 generate_analytics_report() {
-    echo -e "${BLUE}📊 Generating comprehensive productivity report...${NC}"
-    
-    local report_file="$ANALYTICS_DIR/productivity_report_$TIMESTAMP.md"
-    
-    cat > "$report_file" << EOF
+  echo -e "${BLUE}📊 Generating comprehensive productivity report...${NC}"
+
+  local report_file="$ANALYTICS_DIR/productivity_report_$TIMESTAMP.md"
+
+  cat >"$report_file" <<EOF
 # 📊 Developer Productivity Analytics Report
 
 **Generated**: $(date)
@@ -793,92 +793,92 @@ Based on current trends, projected outcomes for next month:
 *Report generated by Developer Productivity Analytics System v1.0*
 *Part of CodingReviewer Automation Enhancement Suite*
 EOF
-    
-    echo "  📋 Report saved: $report_file"
-    echo "$report_file"
+
+  echo "  📋 Report saved: $report_file"
+  echo "$report_file"
 }
 
 # Main execution function
 run_productivity_analytics() {
-    echo -e "\n${BOLD}${CYAN}📊 DEVELOPER PRODUCTIVITY ANALYTICS${NC}"
-    echo "=============================================="
-    
-    # Initialize system
-    initialize_analytics_system
-    
-    # Run all analytics modules
-    echo -e "\n${YELLOW}Phase 1: Coding Velocity Analysis${NC}"
-    analyze_coding_velocity
-    
-    echo -e "\n${PURPLE}Phase 2: Focus Time Optimization${NC}"
-    analyze_focus_optimization
-    
-    echo -e "\n${GREEN}Phase 3: Collaboration Pattern Analysis${NC}"
-    analyze_collaboration_patterns
-    
-    echo -e "\n${RED}Phase 4: Skill Gap Identification${NC}"
-    identify_skill_gaps
-    
-    echo -e "\n${BLUE}Phase 5: Generating Dashboard${NC}"
-    local dashboard_file=$(generate_productivity_dashboard)
-    
-    echo -e "\n${BLUE}Phase 6: Generating Report${NC}"
-    local report_file=$(generate_analytics_report)
-    
-    echo -e "\n${BOLD}${GREEN}✅ PRODUCTIVITY ANALYTICS COMPLETE${NC}"
-    echo "📊 Dashboard: $dashboard_file"
-    echo "📋 Report: $report_file"
-    
-    # Integration with master orchestrator
-    if [ -f "$PROJECT_PATH/master_automation_orchestrator.sh" ]; then
-        echo -e "\n${YELLOW}🔄 Integrating with master automation system...${NC}"
-        echo "$(date): Developer productivity analytics completed - Dashboard: $dashboard_file, Report: $report_file" >> "$PROJECT_PATH/.master_automation/automation_log.txt"
-    fi
+  echo -e "\n${BOLD}${CYAN}📊 DEVELOPER PRODUCTIVITY ANALYTICS${NC}"
+  echo "=============================================="
+
+  # Initialize system
+  initialize_analytics_system
+
+  # Run all analytics modules
+  echo -e "\n${YELLOW}Phase 1: Coding Velocity Analysis${NC}"
+  analyze_coding_velocity
+
+  echo -e "\n${PURPLE}Phase 2: Focus Time Optimization${NC}"
+  analyze_focus_optimization
+
+  echo -e "\n${GREEN}Phase 3: Collaboration Pattern Analysis${NC}"
+  analyze_collaboration_patterns
+
+  echo -e "\n${RED}Phase 4: Skill Gap Identification${NC}"
+  identify_skill_gaps
+
+  echo -e "\n${BLUE}Phase 5: Generating Dashboard${NC}"
+  local dashboard_file=$(generate_productivity_dashboard)
+
+  echo -e "\n${BLUE}Phase 6: Generating Report${NC}"
+  local report_file=$(generate_analytics_report)
+
+  echo -e "\n${BOLD}${GREEN}✅ PRODUCTIVITY ANALYTICS COMPLETE${NC}"
+  echo "📊 Dashboard: $dashboard_file"
+  echo "📋 Report: $report_file"
+
+  # Integration with master orchestrator
+  if [ -f "$PROJECT_PATH/master_automation_orchestrator.sh" ]; then
+    echo -e "\n${YELLOW}🔄 Integrating with master automation system...${NC}"
+    echo "$(date): Developer productivity analytics completed - Dashboard: $dashboard_file, Report: $report_file" >>"$PROJECT_PATH/.master_automation/automation_log.txt"
+  fi
 }
 
 # Command line interface
-case "${1:-}" in
-    --init)
-        initialize_analytics_system
-        ;;
-    --velocity)
-        analyze_coding_velocity
-        ;;
-    --focus)
-        analyze_focus_optimization
-        ;;
-    --collaboration)
-        analyze_collaboration_patterns
-        ;;
-    --skills)
-        identify_skill_gaps
-        ;;
-    --dashboard)
-        generate_productivity_dashboard
-        ;;
-    --report)
-        generate_analytics_report
-        ;;
-    --full-analysis)
-        run_productivity_analytics
-        ;;
-    --help)
-        echo "📊 Developer Productivity Analytics System"
-        echo ""
-        echo "Usage: $0 [OPTION]"
-        echo ""
-        echo "Options:"
-        echo "  --init            Initialize analytics system"
-        echo "  --velocity        Analyze coding velocity"
-        echo "  --focus           Analyze focus time patterns"
-        echo "  --collaboration   Analyze collaboration patterns"
-        echo "  --skills          Identify skill gaps"
-        echo "  --dashboard       Generate productivity dashboard"
-        echo "  --report          Generate analytics report"
-        echo "  --full-analysis   Run complete analysis (default)"
-        echo "  --help            Show this help message"
-        ;;
-    *)
-        run_productivity_analytics
-        ;;
+case "${1-}" in
+--init)
+  initialize_analytics_system
+  ;;
+--velocity)
+  analyze_coding_velocity
+  ;;
+--focus)
+  analyze_focus_optimization
+  ;;
+--collaboration)
+  analyze_collaboration_patterns
+  ;;
+--skills)
+  identify_skill_gaps
+  ;;
+--dashboard)
+  generate_productivity_dashboard
+  ;;
+--report)
+  generate_analytics_report
+  ;;
+--full-analysis)
+  run_productivity_analytics
+  ;;
+--help)
+  echo "📊 Developer Productivity Analytics System"
+  echo ""
+  echo "Usage: $0 [OPTION]"
+  echo ""
+  echo "Options:"
+  echo "  --init            Initialize analytics system"
+  echo "  --velocity        Analyze coding velocity"
+  echo "  --focus           Analyze focus time patterns"
+  echo "  --collaboration   Analyze collaboration patterns"
+  echo "  --skills          Identify skill gaps"
+  echo "  --dashboard       Generate productivity dashboard"
+  echo "  --report          Generate analytics report"
+  echo "  --full-analysis   Run complete analysis (default)"
+  echo "  --help            Show this help message"
+  ;;
+*)
+  run_productivity_analytics
+  ;;
 esac

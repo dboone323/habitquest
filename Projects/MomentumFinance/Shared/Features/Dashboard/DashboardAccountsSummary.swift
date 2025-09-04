@@ -31,7 +31,7 @@ extension Features.Dashboard {
                         Spacer()
 
                         themeComponents.currencyDisplay(
-                            amount: accounts.reduce(Decimal(0)) { $0 + $1.balance },
+                            amount: accounts.reduce(Decimal(0)) { $0 + Decimal($1.balance) },
                             font: .headline.weight(.semibold)
                         )
                     }
@@ -39,9 +39,9 @@ extension Features.Dashboard {
                     Divider()
                         .background(colorTheme.secondaryText.opacity(0.3))
 
-                    ForEach(accounts.prefix(3)) { account in
+                    ForEach(Array(accounts.prefix(3))) { account in
                         HStack {
-                            Image(systemName: account.icon)
+                            Image(systemName: account.iconName)
                                 .font(.subheadline)
                                 .foregroundStyle(colorTheme.accentPrimary)
                                 .frame(width: 24, height: 24)
@@ -54,16 +54,16 @@ extension Features.Dashboard {
                             Spacer()
 
                             themeComponents.currencyDisplay(
-                                amount: account.balance,
+                                amount: Decimal(account.balance),
                                 font: .subheadline.weight(.medium)
                             )
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            onAccountTap(account.id)
+                            onAccountTap(String(describing: account.id))
                         }
 
-                        if account != accounts.prefix(3).last {
+                        if account != Array(accounts.prefix(3)).last {
                             Divider()
                                 .padding(.leading, 32)
                         }

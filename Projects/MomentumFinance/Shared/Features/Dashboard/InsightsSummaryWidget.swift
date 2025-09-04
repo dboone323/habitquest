@@ -7,11 +7,6 @@ import SwiftUI
 /// A summary widget to display financial insights on the dashboard
 struct InsightsSummaryWidget: View {
     @Environment(\.modelContext) private var modelContext
-<<<<<<< HEAD
-    @Query private var transactions: [FinancialTransaction]
-    @Query private var accounts: [FinancialAccount]
-    @Query private var budgets: [Budget]
-=======
     #if canImport(SwiftData)
         #if canImport(SwiftData)
             #if canImport(SwiftData)
@@ -39,7 +34,6 @@ struct InsightsSummaryWidget: View {
         private var accounts: [FinancialAccount] = []
         private var budgets: [Budget] = []
     #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
     @State private var isLoading = true
 
@@ -156,18 +150,12 @@ struct InsightsSummaryWidget: View {
         let currentRatio = calculateMonthComparisonRatio()
 
         return HStack {
-<<<<<<< HEAD
-            Image(systemName: currentRatio <= 1.0 ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
-                .foregroundColor(currentRatio <= 1.0 ? .green : .orange)
-                .imageScale(.small)
-=======
             Image(
                 systemName: currentRatio <= 1.0
                     ? "checkmark.circle.fill" : "exclamationmark.circle.fill"
             )
             .foregroundColor(currentRatio <= 1.0 ? .green : .orange)
             .imageScale(.small)
->>>>>>> 1cf3938 (Create working state for recovery)
 
             Text(currentRatio <= 1.0 ? "On track" : "Above avg")
                 .font(.caption2)
@@ -186,47 +174,26 @@ struct InsightsSummaryWidget: View {
 
     private func calculateMonthlyChange() -> Double {
         // Simplified implementation - would typically use data from multiple months
-<<<<<<< HEAD
         2.5 // Example: 2.5% growth
-=======
-        2.5  // Example: 2.5% growth
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 
     private func calculateRecentSpending() -> Double {
         // Sum of expenses in the last 7 days
         let lastWeek = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
 
-<<<<<<< HEAD
-        return transactions
-=======
         return
             transactions
->>>>>>> 1cf3938 (Create working state for recovery)
-            .filter { $0.date > lastWeek && $0.transactionType == .expense }
-            .reduce(0) { $0 + $1.amount }
+                .filter { $0.date > lastWeek && $0.transactionType == .expense }
+                .reduce(0) { $0 + $1.amount }
     }
 
     private func calculateMonthComparisonRatio() -> Double {
         // Simplified implementation - would typically compare current month vs previous month
-<<<<<<< HEAD
         0.9 // Example: spending is 90% of previous month (good)
-=======
-        0.9  // Example: spending is 90% of previous month (good)
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 
     private func insightBackgroundColor() -> some View {
         #if os(iOS)
-<<<<<<< HEAD
-        #if os(iOS)
-        return Color(UIColor.secondarySystemBackground)
-        #else
-        return Color.secondary.opacity(0.1)
-        #endif
-        #else
-        return Color(NSColor.windowBackgroundColor)
-=======
             #if os(iOS)
                 return Color(UIColor.secondarySystemBackground)
             #else
@@ -234,7 +201,6 @@ struct InsightsSummaryWidget: View {
             #endif
         #else
             return Color(NSColor.windowBackgroundColor)
->>>>>>> 1cf3938 (Create working state for recovery)
         #endif
     }
 }

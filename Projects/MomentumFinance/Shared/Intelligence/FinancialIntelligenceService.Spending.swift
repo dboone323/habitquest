@@ -9,7 +9,7 @@ func fi_computeMonthlySpendingByCategory(transactions: [FinancialTransaction]) -
     for txn in transactions where txn.amount < 0 {
         guard let category = txn.category else { continue }
         let categoryId = category.id.hashValue.description
-        let month = calendar.startOfMonth(for: txn.date)
+        let month = calendar.date(from: calendar.dateComponents([.year, .month], from: txn.date))!
         monthlySpendingByCategory[categoryId, default: [:]][month] =
             (monthlySpendingByCategory[categoryId]?[month] ?? 0) + abs(txn.amount)
     }

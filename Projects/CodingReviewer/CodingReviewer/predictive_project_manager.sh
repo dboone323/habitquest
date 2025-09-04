@@ -27,12 +27,12 @@ mkdir -p "$PREDICTIVE_DIR"
 
 # Initialize predictive project management system
 initialize_predictive_system() {
-    echo -e "${BOLD}${CYAN}🚀 Initializing Predictive Project Management...${NC}"
-    
-    # Create forecast database
-    if [ ! -f "$FORECAST_DB" ]; then
-        echo "  🔮 Creating predictive analytics database..."
-        cat > "$FORECAST_DB" << 'EOF'
+  echo -e "${BOLD}${CYAN}🚀 Initializing Predictive Project Management...${NC}"
+
+  # Create forecast database
+  if [ ! -f "$FORECAST_DB" ]; then
+    echo "  🔮 Creating predictive analytics database..."
+    cat >"$FORECAST_DB" <<'EOF'
 {
   "predictive_analytics": {
     "project_overview": {
@@ -117,19 +117,19 @@ initialize_predictive_system() {
   }
 }
 EOF
-        echo "    ✅ Predictive analytics database created"
-    fi
-    
-    echo "  🔧 Setting up prediction modules..."
-    create_prediction_modules
-    
-    echo "  🎯 System initialization complete"
+    echo "    ✅ Predictive analytics database created"
+  fi
+
+  echo "  🔧 Setting up prediction modules..."
+  create_prediction_modules
+
+  echo "  🎯 System initialization complete"
 }
 
 # Create prediction analysis modules
 create_prediction_modules() {
-    # Completion time forecasting
-    cat > "$PREDICTIVE_DIR/forecast_completion.sh" << 'EOF'
+  # Completion time forecasting
+  cat >"$PREDICTIVE_DIR/forecast_completion.sh" <<'EOF'
 #!/bin/bash
 
 echo "📅 Project Completion Time Forecasting"
@@ -200,8 +200,8 @@ echo "  • Plan buffer time for final integration testing"
 echo "  • Consider parallel development for remaining priorities"
 EOF
 
-    # Resource requirement prediction
-    cat > "$PREDICTIVE_DIR/predict_resources.sh" << 'EOF'
+  # Resource requirement prediction
+  cat >"$PREDICTIVE_DIR/predict_resources.sh" <<'EOF'
 #!/bin/bash
 
 echo "👥 Resource Requirement Prediction"
@@ -285,8 +285,8 @@ echo "  • Cross-train team members (reduces bus factor)"
 echo "  • Consider contractor for documentation (saves 5% time)"
 EOF
 
-    # Scope creep detection
-    cat > "$PREDICTIVE_DIR/detect_scope_creep.sh" << 'EOF'
+  # Scope creep detection
+  cat >"$PREDICTIVE_DIR/detect_scope_creep.sh" <<'EOF'
 #!/bin/bash
 
 echo "📏 Scope Creep Detection & Prediction"
@@ -363,8 +363,8 @@ echo "  • Implement change control process"
 echo "  • Document scope change impact assessment"
 EOF
 
-    # Budget impact analysis
-    cat > "$PREDICTIVE_DIR/analyze_budget_impact.sh" << 'EOF'
+  # Budget impact analysis
+  cat >"$PREDICTIVE_DIR/analyze_budget_impact.sh" <<'EOF'
 #!/bin/bash
 
 echo "💰 Budget Impact Analysis & Forecasting"
@@ -452,90 +452,90 @@ echo "  • Maintain current efficient development pace"
 echo "  • Allocate 5% contingency for final polish phase"
 EOF
 
-    # Make scripts executable
-    chmod +x "$PREDICTIVE_DIR"/*.sh
-    echo "    ✅ Prediction analysis modules created"
+  # Make scripts executable
+  chmod +x "$PREDICTIVE_DIR"/*.sh
+  echo "    ✅ Prediction analysis modules created"
 }
 
 # Forecast project completion time
 forecast_completion_time() {
-    echo -e "${YELLOW}📅 Forecasting project completion time...${NC}"
-    
-    # Run completion forecasting
-    bash "$PREDICTIVE_DIR/forecast_completion.sh"
-    
-    echo ""
-    echo "  🎯 Key Completion Insights:"
-    echo "    • Most likely completion: August 15, 2025"
-    echo "    • 87% confidence for on-time delivery"
-    echo "    • Current velocity trending upward (+12%)"
-    echo "    • Priority 2 on track for August 8 completion"
-    
-    # Log completion forecast
-    echo "$(date): Completion time forecasting completed" >> "$PREDICTIONS_LOG"
+  echo -e "${YELLOW}📅 Forecasting project completion time...${NC}"
+
+  # Run completion forecasting
+  bash "$PREDICTIVE_DIR/forecast_completion.sh"
+
+  echo ""
+  echo "  🎯 Key Completion Insights:"
+  echo "    • Most likely completion: August 15, 2025"
+  echo "    • 87% confidence for on-time delivery"
+  echo "    • Current velocity trending upward (+12%)"
+  echo "    • Priority 2 on track for August 8 completion"
+
+  # Log completion forecast
+  echo "$(date): Completion time forecasting completed" >>"$PREDICTIONS_LOG"
 }
 
 # Predict resource requirements
 predict_resource_requirements() {
-    echo -e "${PURPLE}👥 Predicting resource requirements...${NC}"
-    
-    # Run resource prediction
-    bash "$PREDICTIVE_DIR/predict_resources.sh"
-    
-    echo ""
-    echo "  💡 Resource Optimization Opportunities:"
-    echo "    • Add dedicated reviewer: -15% timeline"
-    echo "    • Parallel testing: -10% timeline"
-    echo "    • 6th team member: -20% timeline"
-    echo "    • Process optimization: -5% timeline"
-    
-    # Log resource prediction
-    echo "$(date): Resource requirement prediction completed" >> "$PREDICTIONS_LOG"
+  echo -e "${PURPLE}👥 Predicting resource requirements...${NC}"
+
+  # Run resource prediction
+  bash "$PREDICTIVE_DIR/predict_resources.sh"
+
+  echo ""
+  echo "  💡 Resource Optimization Opportunities:"
+  echo "    • Add dedicated reviewer: -15% timeline"
+  echo "    • Parallel testing: -10% timeline"
+  echo "    • 6th team member: -20% timeline"
+  echo "    • Process optimization: -5% timeline"
+
+  # Log resource prediction
+  echo "$(date): Resource requirement prediction completed" >>"$PREDICTIONS_LOG"
 }
 
 # Detect and predict scope creep
 detect_scope_creep() {
-    echo -e "${RED}📏 Detecting and predicting scope creep...${NC}"
-    
-    # Run scope creep detection
-    bash "$PREDICTIVE_DIR/detect_scope_creep.sh"
-    
-    echo ""
-    echo "  🎯 Scope Management Status:"
-    echo "    • Current scope: ✅ STABLE (0% change)"
-    echo "    • Risk level: 🟢 LOW (well controlled)"
-    echo "    • Change requests: 2 pending evaluation"
-    echo "    • Scope discipline: Excellent"
-    
-    # Log scope analysis
-    echo "$(date): Scope creep detection completed" >> "$PREDICTIONS_LOG"
+  echo -e "${RED}📏 Detecting and predicting scope creep...${NC}"
+
+  # Run scope creep detection
+  bash "$PREDICTIVE_DIR/detect_scope_creep.sh"
+
+  echo ""
+  echo "  🎯 Scope Management Status:"
+  echo "    • Current scope: ✅ STABLE (0% change)"
+  echo "    • Risk level: 🟢 LOW (well controlled)"
+  echo "    • Change requests: 2 pending evaluation"
+  echo "    • Scope discipline: Excellent"
+
+  # Log scope analysis
+  echo "$(date): Scope creep detection completed" >>"$PREDICTIONS_LOG"
 }
 
 # Analyze budget impact
 analyze_budget_impact() {
-    echo -e "${GREEN}💰 Analyzing budget impact and forecasting...${NC}"
-    
-    # Run budget analysis
-    bash "$PREDICTIVE_DIR/analyze_budget_impact.sh"
-    
-    echo ""
-    echo "  📊 Budget Forecast Summary:"
-    echo "    • Current status: ✅ UNDER BUDGET (-3%)"
-    echo "    • Projected final cost: $48,500"
-    echo "    • Budget variance: -$1,500 (savings)"
-    echo "    • Risk level: 🟢 LOW (15% overrun probability)"
-    
-    # Log budget analysis
-    echo "$(date): Budget impact analysis completed" >> "$PREDICTIONS_LOG"
+  echo -e "${GREEN}💰 Analyzing budget impact and forecasting...${NC}"
+
+  # Run budget analysis
+  bash "$PREDICTIVE_DIR/analyze_budget_impact.sh"
+
+  echo ""
+  echo "  📊 Budget Forecast Summary:"
+  echo "    • Current status: ✅ UNDER BUDGET (-3%)"
+  echo "    • Projected final cost: $48,500"
+  echo "    • Budget variance: -$1,500 (savings)"
+  echo "    • Risk level: 🟢 LOW (15% overrun probability)"
+
+  # Log budget analysis
+  echo "$(date): Budget impact analysis completed" >>"$PREDICTIONS_LOG"
 }
 
 # Generate predictive dashboard
 generate_predictive_dashboard() {
-    echo -e "${BLUE}🔮 Generating predictive project management dashboard...${NC}"
-    
-    local dashboard_file="$PREDICTIVE_DIR/predictive_dashboard.html"
-    
-    cat > "$dashboard_file" << 'EOF'
+  echo -e "${BLUE}🔮 Generating predictive project management dashboard...${NC}"
+
+  local dashboard_file="$PREDICTIVE_DIR/predictive_dashboard.html"
+
+  cat >"$dashboard_file" <<'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -894,19 +894,19 @@ generate_predictive_dashboard() {
 </body>
 </html>
 EOF
-    
-    echo "  📋 Dashboard saved: $dashboard_file"
-    echo "  🌐 Open in browser for interactive forecasting"
-    echo "$dashboard_file"
+
+  echo "  📋 Dashboard saved: $dashboard_file"
+  echo "  🌐 Open in browser for interactive forecasting"
+  echo "$dashboard_file"
 }
 
 # Generate comprehensive prediction report
 generate_prediction_report() {
-    echo -e "${BLUE}📊 Generating comprehensive prediction report...${NC}"
-    
-    local report_file="$PREDICTIVE_DIR/prediction_report_$TIMESTAMP.md"
-    
-    cat > "$report_file" << EOF
+  echo -e "${BLUE}📊 Generating comprehensive prediction report...${NC}"
+
+  local report_file="$PREDICTIVE_DIR/prediction_report_$TIMESTAMP.md"
+
+  cat >"$report_file" <<EOF
 # 🔮 Predictive Project Management Report
 
 **Generated**: $(date)
@@ -1117,93 +1117,93 @@ The CodingReviewer project demonstrates exceptional predictive indicators across
 *Report generated by Predictive Project Management System v1.0*
 *Part of CodingReviewer Automation Enhancement Suite*
 EOF
-    
-    echo "  📋 Report saved: $report_file"
-    echo "$report_file"
+
+  echo "  📋 Report saved: $report_file"
+  echo "$report_file"
 }
 
 # Main execution function
 run_predictive_management() {
-    echo -e "\n${BOLD}${CYAN}🔮 PREDICTIVE PROJECT MANAGEMENT ANALYSIS${NC}"
-    echo "====================================================="
-    
-    # Initialize system
-    initialize_predictive_system
-    
-    # Run all prediction modules
-    echo -e "\n${YELLOW}Phase 1: Completion Time Forecasting${NC}"
-    forecast_completion_time
-    
-    echo -e "\n${PURPLE}Phase 2: Resource Requirement Prediction${NC}"
-    predict_resource_requirements
-    
-    echo -e "\n${RED}Phase 3: Scope Creep Detection${NC}"
-    detect_scope_creep
-    
-    echo -e "\n${GREEN}Phase 4: Budget Impact Analysis${NC}"
-    analyze_budget_impact
-    
-    echo -e "\n${BLUE}Phase 5: Predictive Dashboard${NC}"
-    local dashboard_file=$(generate_predictive_dashboard)
-    
-    echo -e "\n${BLUE}Phase 6: Prediction Report${NC}"
-    local report_file=$(generate_prediction_report)
-    
-    echo -e "\n${BOLD}${GREEN}✅ PREDICTIVE PROJECT MANAGEMENT COMPLETE${NC}"
-    echo "📊 Dashboard: $dashboard_file"
-    echo "📋 Report: $report_file"
-    echo "🎯 Predicted completion: August 15, 2025 (87% confidence)"
-    
-    # Integration with master orchestrator
-    if [ -f "$PROJECT_PATH/master_automation_orchestrator.sh" ]; then
-        echo -e "\n${YELLOW}🔄 Integrating with master automation system...${NC}"
-        echo "$(date): Predictive project management completed - Dashboard: $dashboard_file, Report: $report_file" >> "$PROJECT_PATH/.master_automation/automation_log.txt"
-    fi
+  echo -e "\n${BOLD}${CYAN}🔮 PREDICTIVE PROJECT MANAGEMENT ANALYSIS${NC}"
+  echo "====================================================="
+
+  # Initialize system
+  initialize_predictive_system
+
+  # Run all prediction modules
+  echo -e "\n${YELLOW}Phase 1: Completion Time Forecasting${NC}"
+  forecast_completion_time
+
+  echo -e "\n${PURPLE}Phase 2: Resource Requirement Prediction${NC}"
+  predict_resource_requirements
+
+  echo -e "\n${RED}Phase 3: Scope Creep Detection${NC}"
+  detect_scope_creep
+
+  echo -e "\n${GREEN}Phase 4: Budget Impact Analysis${NC}"
+  analyze_budget_impact
+
+  echo -e "\n${BLUE}Phase 5: Predictive Dashboard${NC}"
+  local dashboard_file=$(generate_predictive_dashboard)
+
+  echo -e "\n${BLUE}Phase 6: Prediction Report${NC}"
+  local report_file=$(generate_prediction_report)
+
+  echo -e "\n${BOLD}${GREEN}✅ PREDICTIVE PROJECT MANAGEMENT COMPLETE${NC}"
+  echo "📊 Dashboard: $dashboard_file"
+  echo "📋 Report: $report_file"
+  echo "🎯 Predicted completion: August 15, 2025 (87% confidence)"
+
+  # Integration with master orchestrator
+  if [ -f "$PROJECT_PATH/master_automation_orchestrator.sh" ]; then
+    echo -e "\n${YELLOW}🔄 Integrating with master automation system...${NC}"
+    echo "$(date): Predictive project management completed - Dashboard: $dashboard_file, Report: $report_file" >>"$PROJECT_PATH/.master_automation/automation_log.txt"
+  fi
 }
 
 # Command line interface
-case "${1:-}" in
-    --init)
-        initialize_predictive_system
-        ;;
-    --forecast)
-        forecast_completion_time
-        ;;
-    --resources)
-        predict_resource_requirements
-        ;;
-    --scope)
-        detect_scope_creep
-        ;;
-    --budget)
-        analyze_budget_impact
-        ;;
-    --dashboard)
-        generate_predictive_dashboard
-        ;;
-    --report)
-        generate_prediction_report
-        ;;
-    --full-analysis)
-        run_predictive_management
-        ;;
-    --help)
-        echo "🔮 Predictive Project Management System"
-        echo ""
-        echo "Usage: $0 [OPTION]"
-        echo ""
-        echo "Options:"
-        echo "  --init            Initialize predictive system"
-        echo "  --forecast        Forecast completion time"
-        echo "  --resources       Predict resource requirements"
-        echo "  --scope           Detect scope creep"
-        echo "  --budget          Analyze budget impact"
-        echo "  --dashboard       Generate predictive dashboard"
-        echo "  --report          Generate prediction report"
-        echo "  --full-analysis   Run complete analysis (default)"
-        echo "  --help            Show this help message"
-        ;;
-    *)
-        run_predictive_management
-        ;;
+case "${1-}" in
+--init)
+  initialize_predictive_system
+  ;;
+--forecast)
+  forecast_completion_time
+  ;;
+--resources)
+  predict_resource_requirements
+  ;;
+--scope)
+  detect_scope_creep
+  ;;
+--budget)
+  analyze_budget_impact
+  ;;
+--dashboard)
+  generate_predictive_dashboard
+  ;;
+--report)
+  generate_prediction_report
+  ;;
+--full-analysis)
+  run_predictive_management
+  ;;
+--help)
+  echo "🔮 Predictive Project Management System"
+  echo ""
+  echo "Usage: $0 [OPTION]"
+  echo ""
+  echo "Options:"
+  echo "  --init            Initialize predictive system"
+  echo "  --forecast        Forecast completion time"
+  echo "  --resources       Predict resource requirements"
+  echo "  --scope           Detect scope creep"
+  echo "  --budget          Analyze budget impact"
+  echo "  --dashboard       Generate predictive dashboard"
+  echo "  --report          Generate prediction report"
+  echo "  --full-analysis   Run complete analysis (default)"
+  echo "  --help            Show this help message"
+  ;;
+*)
+  run_predictive_management
+  ;;
 esac

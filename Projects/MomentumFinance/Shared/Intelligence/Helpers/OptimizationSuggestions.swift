@@ -16,7 +16,7 @@ func fi_suggestIdleCashInsights(transactions: [FinancialTransaction], accounts: 
 
         let calendar = Calendar.current
         let monthlyTransactions = Dictionary(grouping: accountTransactions) { transaction in
-            calendar.startOfMonth(for: transaction.date)
+            calendar.date(from: calendar.dateComponents([.year, .month], from: transaction.date))
         }
 
         let monthlyExpenses = monthlyTransactions.map { $0.value.reduce(0) { $0 + abs($1.amount) } }

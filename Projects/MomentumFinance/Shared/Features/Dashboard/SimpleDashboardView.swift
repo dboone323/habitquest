@@ -7,11 +7,6 @@ import SwiftUI
 struct SimpleDashboardView: View {
     @Environment(\.modelContext)
     private var modelContext
-<<<<<<< HEAD
-    @Query private var accounts: [FinancialAccount]
-    @Query private var subscriptions: [Subscription]
-    @Query private var budgets: [Budget]
-=======
     #if canImport(SwiftData)
         #if canImport(SwiftData)
             #if canImport(SwiftData)
@@ -33,7 +28,6 @@ struct SimpleDashboardView: View {
         private var subscriptions: [Subscription] = []
         private var budgets: [Budget] = []
     #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
     var body: some View {
         NavigationStack {
@@ -111,15 +105,10 @@ struct SimpleDashboardView: View {
                                 HStack {
                                     Text(budget.name)
                                     Spacer()
-<<<<<<< HEAD
-                                    Text("$\(budget.spentAmount, specifier: "%.2f") / $\(budget.limitAmount, specifier: "%.2f")")
-                                        .fontWeight(.semibold)
-=======
                                     Text(
                                         "$\(budget.spentAmount, specifier: "%.2f") / $\(budget.limitAmount, specifier: "%.2f")"
                                     )
                                     .fontWeight(.semibold)
->>>>>>> 1cf3938 (Create working state for recovery)
                                 }
 
                                 ProgressView(value: budget.spentAmount, total: budget.limitAmount)
@@ -146,9 +135,5 @@ struct SimpleDashboardView: View {
 
 // Connect to Features.Dashboard namespace
 extension Features.Dashboard {
-<<<<<<< HEAD
-    typealias DashboardView = SimpleDashboardView
-=======
     // Remove conflicting typealias to prevent DashboardView redeclaration error
->>>>>>> 1cf3938 (Create working state for recovery)
 }

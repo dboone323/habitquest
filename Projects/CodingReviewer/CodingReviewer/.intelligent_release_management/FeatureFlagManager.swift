@@ -9,62 +9,62 @@ import Foundation
 
 class FeatureFlagManager {
     static let shared = FeatureFlagManager()
-    
-    private var flags: [String: Bool] = [:];
-    private var remoteFlags: [String: Any] = [:];
-    
+
+    private var flags: [String: Bool] = [:]
+    private var remoteFlags: [String: Any] = [:]
+
     private init() {
         loadDefaultFlags()
         loadRemoteFlags()
     }
-    
+
     // MARK: - Flag Management
-    
+
     func isEnabled(_ flag: FeatureFlag) -> Bool {
-        return flags[flag.rawValue] ?? flag.defaultValue
+        flags[flag.rawValue] ?? flag.defaultValue
     }
-    
+
     func enable(_ flag: FeatureFlag) {
         flags[flag.rawValue] = true
         logFlagChange(flag.rawValue, enabled: true)
     }
-    
+
     func disable(_ flag: FeatureFlag) {
         flags[flag.rawValue] = false
         logFlagChange(flag.rawValue, enabled: false)
     }
-    
+
     // MARK: - Remote Configuration
-    
+
     private func loadRemoteFlags() {
         // Implementation for remote flag loading
         // Could integrate with Firebase Remote Config, LaunchDarkly, etc.
     }
-    
+
     private func loadDefaultFlags() {
         // Set default values for all feature flags
         for flag in FeatureFlag.allCases {
             flags[flag.rawValue] = flag.defaultValue
         }
     }
-    
+
     // MARK: - Logging & Analytics
-    
+
     private func logFlagChange(_ flagName: String, enabled: Bool) {
         let logEntry = [
             "timestamp": Date().timeIntervalSince1970,
             "flag": flagName,
             "enabled": enabled,
-            "user_id": getCurrentUserId()
+            "user_id": getCurrentUserId(),
         ]
-        
+
         // Log to analytics system
         print("Feature flag changed: \(flagName) = \(enabled)")
     }
-    
+
     private func getCurrentUserId() -> String {
         // Return current user identifier
-        return "anonymous"
+        "anonymous"
     }
 }
 
@@ -76,34 +76,34 @@ enum FeatureFlag: String, CaseIterable {
     case realTimeCollaboration = "real_time_collaboration"
     case aiPoweredSuggestions = "ai_powered_suggestions"
     case betaDashboard = "beta_dashboard"
-    
+
     var defaultValue: Bool {
         switch self {
         case .newCodeAnalysisEngine:
-            return false // New feature, disabled by default
+            false // New feature, disabled by default
         case .advancedPatternRecognition:
-            return true  // Stable feature, enabled
+            true // Stable feature, enabled
         case .realTimeCollaboration:
-            return false // Beta feature
+            false // Beta feature
         case .aiPoweredSuggestions:
-            return true  // Core feature
+            true // Core feature
         case .betaDashboard:
-            return false // Beta feature
+            false // Beta feature
         }
     }
-    
+
     var description: String {
         switch self {
         case .newCodeAnalysisEngine:
-            return "Enhanced code analysis with ML improvements"
+            "Enhanced code analysis with ML improvements"
         case .advancedPatternRecognition:
-            return "Advanced pattern detection and suggestions"
+            "Advanced pattern detection and suggestions"
         case .realTimeCollaboration:
-            return "Real-time collaboration features"
+            "Real-time collaboration features"
         case .aiPoweredSuggestions:
-            return "AI-powered code suggestions and completions"
+            "AI-powered code suggestions and completions"
         case .betaDashboard:
-            return "New dashboard interface (beta)"
+            "New dashboard interface (beta)"
         }
     }
 }

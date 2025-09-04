@@ -1,18 +1,13 @@
-<<<<<<< HEAD
-import UIKit
-import SwiftData
 import SwiftUI
-import UIKit
 
-=======
-import SwiftUI
-import UIKit
+#if canImport(UIKit)
+    import UIKit
+#endif
 
 #if canImport(AppKit)
     import AppKit
 #endif
 
->>>>>>> 1cf3938 (Create working state for recovery)
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
@@ -44,13 +39,8 @@ struct AddSavingsGoalView: View {
 
                     TextField("Target Amount", text: $targetAmountString)
                         #if canImport(UIKit)
-<<<<<<< HEAD
-                        .keyboardType(.decimalPad)
-                    #endif
-=======
                             .keyboardType(.decimalPad)
                         #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
                     Toggle("Set Target Date", isOn: $hasTargetDate)
 
@@ -60,41 +50,19 @@ struct AddSavingsGoalView: View {
                             selection: Binding(
                                 get: { targetDate ?? Date() },
                                 set: { targetDate = $0 },
-<<<<<<< HEAD
-                                ),
-                            displayedComponents: .date,
-                            )
-=======
                             ),
                             displayedComponents: .date,
                         )
->>>>>>> 1cf3938 (Create working state for recovery)
                     }
                 }
 
                 Section(header: Text("Notes (Optional)")) {
                     TextField("Add notes about this goal...", text: $notes, axis: .vertical)
-<<<<<<< HEAD
-                        .lineLimit(3 ... 6)
-=======
                         .lineLimit(3...6)
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
             }
             .navigationTitle("Add Savings Goal")
             #if canImport(UIKit)
-<<<<<<< HEAD
-            .navigationBarTitleDisplayMode(.inline)
-            #endif
-            .toolbar {
-                ToolbarItem(placement: {
-                    #if canImport(UIKit)
-                    return .navigationBarLeading
-                    #else
-                    return .cancellationAction
-                    #endif
-                }()) {
-=======
                 .navigationBarTitleDisplayMode(.inline)
             #endif
             .toolbar {
@@ -107,21 +75,11 @@ struct AddSavingsGoalView: View {
                         #endif
                     }()
                 ) {
->>>>>>> 1cf3938 (Create working state for recovery)
                     Button("Cancel") {
                         dismiss()
                     }
                 }
 
-<<<<<<< HEAD
-                ToolbarItem(placement: {
-                    #if canImport(UIKit)
-                    return .navigationBarTrailing
-                    #else
-                    return .primaryAction
-                    #endif
-                }()) {
-=======
                 ToolbarItem(
                     placement: {
                         #if canImport(UIKit)
@@ -131,7 +89,6 @@ struct AddSavingsGoalView: View {
                         #endif
                     }()
                 ) {
->>>>>>> 1cf3938 (Create working state for recovery)
                     Button("Save") {
                         saveSavingsGoal()
                     }
@@ -149,11 +106,7 @@ struct AddSavingsGoalView: View {
             targetAmount: targetAmount,
             targetDate: hasTargetDate ? targetDate : nil,
             notes: notes.isEmpty ? nil : notes,
-<<<<<<< HEAD
-            )
-=======
         )
->>>>>>> 1cf3938 (Create working state for recovery)
 
         modelContext.insert(goal)
 
@@ -203,11 +156,7 @@ struct SavingsGoalDetailView: View {
                         .stroke(
                             goal.isCompleted ? Color.green : Color.blue,
                             style: StrokeStyle(lineWidth: 12, lineCap: .round),
-<<<<<<< HEAD
-                            )
-=======
                         )
->>>>>>> 1cf3938 (Create working state for recovery)
                         .frame(width: 150, height: 150)
                         .rotationEffect(.degrees(-90))
                         .animation(.easeInOut, value: goal.progressPercentage)
@@ -281,55 +230,6 @@ struct SavingsGoalDetailView: View {
                 // Action Buttons
                 if !goal.isCompleted {
                     VStack(spacing: 12) {
-<<<<<<< HEAD
-                        Button(action: {
-                            showingAddFunds = true
-                        }, label: {
-                            Text("Add Funds")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        })
-
-                        HStack(spacing: 12) {
-                            Button(action: {
-                                goal.addFunds(25)
-                                try? modelContext.save()
-                            }, label: {
-                                Text("+$25")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.green.opacity(0.2))
-                                    .foregroundColor(.green)
-                                    .cornerRadius(8)
-                            })
-
-                            Button(action: {
-                                goal.addFunds(50)
-                                try? modelContext.save()
-                            }, label: {
-                                Text("+$50")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.green.opacity(0.2))
-                                    .foregroundColor(.green)
-                                    .cornerRadius(8)
-                            })
-
-                            Button(action: {
-                                goal.addFunds(100)
-                                try? modelContext.save()
-                            }, label: {
-                                Text("+$100")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.green.opacity(0.2))
-                                    .foregroundColor(.green)
-                                    .cornerRadius(8)
-                            })
-=======
                         Button(
                             action: {
                                 showingAddFunds = true
@@ -385,7 +285,6 @@ struct SavingsGoalDetailView: View {
                                         .foregroundColor(.green)
                                         .cornerRadius(8)
                                 })
->>>>>>> 1cf3938 (Create working state for recovery)
                         }
                     }
                     .padding()
@@ -395,18 +294,6 @@ struct SavingsGoalDetailView: View {
             }
             .navigationTitle("Savings Goal")
             #if canImport(UIKit)
-<<<<<<< HEAD
-            .navigationBarTitleDisplayMode(.inline)
-            #endif
-            .toolbar {
-                ToolbarItem(placement: {
-                    #if canImport(UIKit)
-                    return .navigationBarTrailing
-                    #else
-                    return .primaryAction
-                    #endif
-                }()) {
-=======
                 .navigationBarTitleDisplayMode(.inline)
             #endif
             .toolbar {
@@ -419,7 +306,6 @@ struct SavingsGoalDetailView: View {
                         #endif
                     }()
                 ) {
->>>>>>> 1cf3938 (Create working state for recovery)
                     Button("Done") {
                         dismiss()
                     }
@@ -428,13 +314,8 @@ struct SavingsGoalDetailView: View {
             .alert("Add Funds", isPresented: $showingAddFunds) {
                 TextField("Amount", text: $amountToAdd)
                     #if canImport(UIKit)
-<<<<<<< HEAD
-                    .keyboardType(.decimalPad)
-                #endif
-=======
                         .keyboardType(.decimalPad)
                     #endif
->>>>>>> 1cf3938 (Create working state for recovery)
                 Button("Cancel", role: .cancel) {
                     amountToAdd = ""
                 }

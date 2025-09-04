@@ -27,12 +27,12 @@ mkdir -p "$MULTIPLATFORM_DIR"
 
 # Initialize multi-platform deployment system
 initialize_multiplatform_system() {
-    echo -e "${BOLD}${CYAN}🚀 Initializing Multi-platform Deployment System...${NC}"
-    
-    # Create build configuration
-    if [ ! -f "$BUILD_CONFIG" ]; then
-        echo "  📱 Creating multi-platform build configuration..."
-        cat > "$BUILD_CONFIG" << 'EOF'
+  echo -e "${BOLD}${CYAN}🚀 Initializing Multi-platform Deployment System...${NC}"
+
+  # Create build configuration
+  if [ ! -f "$BUILD_CONFIG" ]; then
+    echo "  📱 Creating multi-platform build configuration..."
+    cat >"$BUILD_CONFIG" <<'EOF'
 {
   "multiplatform_deployment": {
     "platforms": {
@@ -102,19 +102,19 @@ initialize_multiplatform_system() {
   }
 }
 EOF
-        echo "    ✅ Multi-platform build configuration created"
-    fi
-    
-    echo "  🔧 Setting up build automation scripts..."
-    create_platform_scripts
-    
-    echo "  🎯 System initialization complete"
+    echo "    ✅ Multi-platform build configuration created"
+  fi
+
+  echo "  🔧 Setting up build automation scripts..."
+  create_platform_scripts
+
+  echo "  🎯 System initialization complete"
 }
 
 # Create platform-specific build scripts
 create_platform_scripts() {
-    # iOS build script
-    cat > "$MULTIPLATFORM_DIR/build_ios.sh" << 'EOF'
+  # iOS build script
+  cat >"$MULTIPLATFORM_DIR/build_ios.sh" <<'EOF'
 #!/bin/bash
 
 echo "📱 Building iOS Application..."
@@ -158,8 +158,8 @@ echo "✅ iOS build completed successfully"
 echo "📱 IPA location: $IPA_PATH"
 EOF
 
-    # macOS build script  
-    cat > "$MULTIPLATFORM_DIR/build_macos.sh" << 'EOF'
+  # macOS build script
+  cat >"$MULTIPLATFORM_DIR/build_macos.sh" <<'EOF'
 #!/bin/bash
 
 echo "💻 Building macOS Application..."
@@ -190,8 +190,8 @@ echo "✅ macOS build completed successfully"
 echo "💻 Archive location: $ARCHIVE_PATH"
 EOF
 
-    # TestFlight upload script
-    cat > "$MULTIPLATFORM_DIR/upload_testflight.sh" << 'EOF'
+  # TestFlight upload script
+  cat >"$MULTIPLATFORM_DIR/upload_testflight.sh" <<'EOF'
 #!/bin/bash
 
 echo "🚀 Uploading to TestFlight..."
@@ -220,112 +220,112 @@ else
 fi
 EOF
 
-    # Make scripts executable
-    chmod +x "$MULTIPLATFORM_DIR"/*.sh
-    echo "    ✅ Platform build scripts created"
+  # Make scripts executable
+  chmod +x "$MULTIPLATFORM_DIR"/*.sh
+  echo "    ✅ Platform build scripts created"
 }
 
 # Cross-platform build automation
 run_cross_platform_build() {
-    echo -e "${YELLOW}🔨 Starting cross-platform build automation...${NC}"
-    
-    local build_results=()
-    local successful_builds=0
-    local failed_builds=0
-    
-    # Read configuration
-    local ios_enabled=$(jq -r '.multiplatform_deployment.platforms.ios.enabled' "$BUILD_CONFIG")
-    local macos_enabled=$(jq -r '.multiplatform_deployment.platforms.macos.enabled' "$BUILD_CONFIG")
-    local android_enabled=$(jq -r '.multiplatform_deployment.platforms.android.enabled' "$BUILD_CONFIG")
-    
-    echo "  📋 Build configuration:"
-    echo "    iOS: $ios_enabled"
-    echo "    macOS: $macos_enabled"
-    echo "    Android: $android_enabled"
-    
-    # iOS build
-    if [ "$ios_enabled" = "true" ]; then
-        echo "  📱 Building iOS application..."
-        if bash "$MULTIPLATFORM_DIR/build_ios.sh" > "$MULTIPLATFORM_DIR/ios_build.log" 2>&1; then
-            build_results+=("✅ iOS build successful")
-            successful_builds=$((successful_builds + 1))
-        else
-            build_results+=("❌ iOS build failed - check ios_build.log")
-            failed_builds=$((failed_builds + 1))
-        fi
+  echo -e "${YELLOW}🔨 Starting cross-platform build automation...${NC}"
+
+  local build_results=()
+  local successful_builds=0
+  local failed_builds=0
+
+  # Read configuration
+  local ios_enabled=$(jq -r '.multiplatform_deployment.platforms.ios.enabled' "$BUILD_CONFIG")
+  local macos_enabled=$(jq -r '.multiplatform_deployment.platforms.macos.enabled' "$BUILD_CONFIG")
+  local android_enabled=$(jq -r '.multiplatform_deployment.platforms.android.enabled' "$BUILD_CONFIG")
+
+  echo "  📋 Build configuration:"
+  echo "    iOS: $ios_enabled"
+  echo "    macOS: $macos_enabled"
+  echo "    Android: $android_enabled"
+
+  # iOS build
+  if [ "$ios_enabled" = "true" ]; then
+    echo "  📱 Building iOS application..."
+    if bash "$MULTIPLATFORM_DIR/build_ios.sh" >"$MULTIPLATFORM_DIR/ios_build.log" 2>&1; then
+      build_results+=("✅ iOS build successful")
+      successful_builds=$((successful_builds + 1))
+    else
+      build_results+=("❌ iOS build failed - check ios_build.log")
+      failed_builds=$((failed_builds + 1))
     fi
-    
-    # macOS build
-    if [ "$macos_enabled" = "true" ]; then
-        echo "  💻 Building macOS application..."
-        if bash "$MULTIPLATFORM_DIR/build_macos.sh" > "$MULTIPLATFORM_DIR/macos_build.log" 2>&1; then
-            build_results+=("✅ macOS build successful")
-            successful_builds=$((successful_builds + 1))
-        else
-            build_results+=("❌ macOS build failed - check macos_build.log")
-            failed_builds=$((failed_builds + 1))
-        fi
+  fi
+
+  # macOS build
+  if [ "$macos_enabled" = "true" ]; then
+    echo "  💻 Building macOS application..."
+    if bash "$MULTIPLATFORM_DIR/build_macos.sh" >"$MULTIPLATFORM_DIR/macos_build.log" 2>&1; then
+      build_results+=("✅ macOS build successful")
+      successful_builds=$((successful_builds + 1))
+    else
+      build_results+=("❌ macOS build failed - check macos_build.log")
+      failed_builds=$((failed_builds + 1))
     fi
-    
-    # Display results
-    echo "  📊 Build Results:"
-    for result in "${build_results[@]}"; do
-        echo "    $result"
-    done
-    
-    echo "  📈 Summary: $successful_builds successful, $failed_builds failed"
-    
-    # Log results
-    echo "$(date): Cross-platform build - Success: $successful_builds, Failed: $failed_builds" >> "$DEPLOYMENT_LOG"
-    
-    return $failed_builds
+  fi
+
+  # Display results
+  echo "  📊 Build Results:"
+  for result in "${build_results[@]}"; do
+    echo "    $result"
+  done
+
+  echo "  📈 Summary: $successful_builds successful, $failed_builds failed"
+
+  # Log results
+  echo "$(date): Cross-platform build - Success: $successful_builds, Failed: $failed_builds" >>"$DEPLOYMENT_LOG"
+
+  return $failed_builds
 }
 
 # App store submission automation
 automate_app_store_submission() {
-    echo -e "${PURPLE}🏪 Automating app store submission...${NC}"
-    
-    local submission_results=()
-    local testflight_enabled=$(jq -r '.multiplatform_deployment.beta_testing.testflight.enabled' "$BUILD_CONFIG")
-    
-    if [ "$testflight_enabled" = "true" ]; then
-        echo "  🚀 Submitting to TestFlight..."
-        
-        # Check if IPA exists
-        local ipa_path="build/ios/CodingReviewer.ipa"
-        if [ -f "$ipa_path" ]; then
-            echo "  📤 Uploading iOS app to TestFlight..."
-            if bash "$MULTIPLATFORM_DIR/upload_testflight.sh" "$ipa_path" > "$MULTIPLATFORM_DIR/testflight_upload.log" 2>&1; then
-                submission_results+=("✅ TestFlight upload successful")
-                
-                # Notify beta testers
-                echo "  📧 Notifying beta testing groups..."
-                submission_results+=("✅ Beta testers notified")
-            else
-                submission_results+=("❌ TestFlight upload failed - check testflight_upload.log")
-            fi
-        else
-            submission_results+=("❌ iOS IPA not found - build first")
-        fi
+  echo -e "${PURPLE}🏪 Automating app store submission...${NC}"
+
+  local submission_results=()
+  local testflight_enabled=$(jq -r '.multiplatform_deployment.beta_testing.testflight.enabled' "$BUILD_CONFIG")
+
+  if [ "$testflight_enabled" = "true" ]; then
+    echo "  🚀 Submitting to TestFlight..."
+
+    # Check if IPA exists
+    local ipa_path="build/ios/CodingReviewer.ipa"
+    if [ -f "$ipa_path" ]; then
+      echo "  📤 Uploading iOS app to TestFlight..."
+      if bash "$MULTIPLATFORM_DIR/upload_testflight.sh" "$ipa_path" >"$MULTIPLATFORM_DIR/testflight_upload.log" 2>&1; then
+        submission_results+=("✅ TestFlight upload successful")
+
+        # Notify beta testers
+        echo "  📧 Notifying beta testing groups..."
+        submission_results+=("✅ Beta testers notified")
+      else
+        submission_results+=("❌ TestFlight upload failed - check testflight_upload.log")
+      fi
+    else
+      submission_results+=("❌ iOS IPA not found - build first")
     fi
-    
-    # Display submission results
-    echo "  📊 Submission Results:"
-    for result in "${submission_results[@]}"; do
-        echo "    $result"
-    done
+  fi
+
+  # Display submission results
+  echo "  📊 Submission Results:"
+  for result in "${submission_results[@]}"; do
+    echo "    $result"
+  done
 }
 
 # Beta testing management
 manage_beta_testing() {
-    echo -e "${GREEN}🧪 Managing beta testing automation...${NC}"
-    
-    local beta_results=()
-    
-    echo "  👥 Setting up beta testing groups..."
-    
-    # Create beta tester management script
-    cat > "$MULTIPLATFORM_DIR/manage_beta_testers.sh" << 'EOF'
+  echo -e "${GREEN}🧪 Managing beta testing automation...${NC}"
+
+  local beta_results=()
+
+  echo "  👥 Setting up beta testing groups..."
+
+  # Create beta tester management script
+  cat >"$MULTIPLATFORM_DIR/manage_beta_testers.sh" <<'EOF'
 #!/bin/bash
 
 echo "👥 Beta Tester Management v1.0"
@@ -367,12 +367,12 @@ case "$ACTION" in
         ;;
 esac
 EOF
-    
-    chmod +x "$MULTIPLATFORM_DIR/manage_beta_testers.sh"
-    beta_results+=("✅ Beta tester management system created")
-    
-    # Create feedback collection system
-    cat > "$MULTIPLATFORM_DIR/collect_feedback.sh" << 'EOF'
+
+  chmod +x "$MULTIPLATFORM_DIR/manage_beta_testers.sh"
+  beta_results+=("✅ Beta tester management system created")
+
+  # Create feedback collection system
+  cat >"$MULTIPLATFORM_DIR/collect_feedback.sh" <<'EOF'
 #!/bin/bash
 
 echo "📝 Beta Testing Feedback Collection"
@@ -401,32 +401,32 @@ echo "    • Most used feature: Code review (78%)"
 
 echo "✅ Feedback collection complete"
 EOF
-    
-    chmod +x "$MULTIPLATFORM_DIR/collect_feedback.sh"
-    beta_results+=("✅ Feedback collection system created")
-    
-    # Display beta testing results
-    echo "  📊 Beta Testing Setup Results:"
-    for result in "${beta_results[@]}"; do
-        echo "    $result"
-    done
-    
-    # Run initial feedback collection
-    echo "  📝 Running initial feedback collection..."
-    bash "$MULTIPLATFORM_DIR/collect_feedback.sh" > "$MULTIPLATFORM_DIR/feedback_report.log"
-    beta_results+=("✅ Initial feedback report generated")
+
+  chmod +x "$MULTIPLATFORM_DIR/collect_feedback.sh"
+  beta_results+=("✅ Feedback collection system created")
+
+  # Display beta testing results
+  echo "  📊 Beta Testing Setup Results:"
+  for result in "${beta_results[@]}"; do
+    echo "    $result"
+  done
+
+  # Run initial feedback collection
+  echo "  📝 Running initial feedback collection..."
+  bash "$MULTIPLATFORM_DIR/collect_feedback.sh" >"$MULTIPLATFORM_DIR/feedback_report.log"
+  beta_results+=("✅ Initial feedback report generated")
 }
 
 # Crash reporting integration
 integrate_crash_reporting() {
-    echo -e "${RED}🚨 Integrating crash reporting systems...${NC}"
-    
-    local crash_results=()
-    
-    echo "  🔧 Setting up Crashlytics integration..."
-    
-    # Create crash reporting configuration
-    cat > "$MULTIPLATFORM_DIR/crash_reporting_config.plist" << 'EOF'
+  echo -e "${RED}🚨 Integrating crash reporting systems...${NC}"
+
+  local crash_results=()
+
+  echo "  🔧 Setting up Crashlytics integration..."
+
+  # Create crash reporting configuration
+  cat >"$MULTIPLATFORM_DIR/crash_reporting_config.plist" <<'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -444,11 +444,11 @@ integrate_crash_reporting() {
 </dict>
 </plist>
 EOF
-    
-    crash_results+=("✅ Crashlytics configuration created")
-    
-    # Create symbol upload script
-    cat > "$MULTIPLATFORM_DIR/upload_symbols.sh" << 'EOF'
+
+  crash_results+=("✅ Crashlytics configuration created")
+
+  # Create symbol upload script
+  cat >"$MULTIPLATFORM_DIR/upload_symbols.sh" <<'EOF'
 #!/bin/bash
 
 echo "🔍 Uploading debug symbols..."
@@ -472,12 +472,12 @@ done
 
 echo "✅ Symbol upload completed"
 EOF
-    
-    chmod +x "$MULTIPLATFORM_DIR/upload_symbols.sh"
-    crash_results+=("✅ Symbol upload automation created")
-    
-    # Create crash analysis script
-    cat > "$MULTIPLATFORM_DIR/analyze_crashes.sh" << 'EOF'
+
+  chmod +x "$MULTIPLATFORM_DIR/upload_symbols.sh"
+  crash_results+=("✅ Symbol upload automation created")
+
+  # Create crash analysis script
+  cat >"$MULTIPLATFORM_DIR/analyze_crashes.sh" <<'EOF'
 #!/bin/bash
 
 echo "📊 Crash Analysis Report"
@@ -517,29 +517,29 @@ echo "  • Move heavy operations off UI thread (Priority: High)"
 
 echo "✅ Crash analysis complete"
 EOF
-    
-    chmod +x "$MULTIPLATFORM_DIR/analyze_crashes.sh"
-    crash_results+=("✅ Crash analysis automation created")
-    
-    # Display crash reporting results
-    echo "  📊 Crash Reporting Integration Results:"
-    for result in "${crash_results[@]}"; do
-        echo "    $result"
-    done
-    
-    # Run initial crash analysis
-    echo "  📊 Running initial crash analysis..."
-    bash "$MULTIPLATFORM_DIR/analyze_crashes.sh" > "$MULTIPLATFORM_DIR/crash_analysis.log"
-    crash_results+=("✅ Initial crash analysis report generated")
+
+  chmod +x "$MULTIPLATFORM_DIR/analyze_crashes.sh"
+  crash_results+=("✅ Crash analysis automation created")
+
+  # Display crash reporting results
+  echo "  📊 Crash Reporting Integration Results:"
+  for result in "${crash_results[@]}"; do
+    echo "    $result"
+  done
+
+  # Run initial crash analysis
+  echo "  📊 Running initial crash analysis..."
+  bash "$MULTIPLATFORM_DIR/analyze_crashes.sh" >"$MULTIPLATFORM_DIR/crash_analysis.log"
+  crash_results+=("✅ Initial crash analysis report generated")
 }
 
 # Generate comprehensive deployment report
 generate_deployment_report() {
-    echo -e "${BLUE}📊 Generating multi-platform deployment report...${NC}"
-    
-    local report_file="$MULTIPLATFORM_DIR/deployment_report_$TIMESTAMP.md"
-    
-    cat > "$report_file" << EOF
+  echo -e "${BLUE}📊 Generating multi-platform deployment report...${NC}"
+
+  local report_file="$MULTIPLATFORM_DIR/deployment_report_$TIMESTAMP.md"
+
+  cat >"$report_file" <<EOF
 # 🌐 Multi-platform Deployment Report
 
 **Generated**: $(date)
@@ -602,84 +602,84 @@ This report provides comprehensive analysis of the multi-platform deployment sys
 *Report generated by Multi-platform Deployment System v1.0*
 *Part of CodingReviewer Automation Enhancement Suite*
 EOF
-    
-    echo "  📋 Report saved: $report_file"
-    echo "$report_file"
+
+  echo "  📋 Report saved: $report_file"
+  echo "$report_file"
 }
 
 # Main execution function
 run_multiplatform_deployment() {
-    echo -e "\n${BOLD}${CYAN}🌐 MULTI-PLATFORM DEPLOYMENT ANALYSIS${NC}"
-    echo "================================================"
-    
-    # Initialize system
-    initialize_multiplatform_system
-    
-    # Run all deployment modules
-    echo -e "\n${YELLOW}Phase 1: Cross-Platform Build Automation${NC}"
-    run_cross_platform_build
-    
-    echo -e "\n${PURPLE}Phase 2: App Store Submission${NC}"
-    automate_app_store_submission
-    
-    echo -e "\n${GREEN}Phase 3: Beta Testing Management${NC}"
-    manage_beta_testing
-    
-    echo -e "\n${RED}Phase 4: Crash Reporting Integration${NC}"
-    integrate_crash_reporting
-    
-    echo -e "\n${BLUE}Phase 5: Generating Report${NC}"
-    local report_file=$(generate_deployment_report)
-    
-    echo -e "\n${BOLD}${GREEN}✅ MULTI-PLATFORM DEPLOYMENT COMPLETE${NC}"
-    echo "📊 Full report available at: $report_file"
-    
-    # Integration with master orchestrator
-    if [ -f "$PROJECT_PATH/master_automation_orchestrator.sh" ]; then
-        echo -e "\n${YELLOW}🔄 Integrating with master automation system...${NC}"
-        echo "$(date): Multi-platform deployment completed - Report: $report_file" >> "$PROJECT_PATH/.master_automation/automation_log.txt"
-    fi
+  echo -e "\n${BOLD}${CYAN}🌐 MULTI-PLATFORM DEPLOYMENT ANALYSIS${NC}"
+  echo "================================================"
+
+  # Initialize system
+  initialize_multiplatform_system
+
+  # Run all deployment modules
+  echo -e "\n${YELLOW}Phase 1: Cross-Platform Build Automation${NC}"
+  run_cross_platform_build
+
+  echo -e "\n${PURPLE}Phase 2: App Store Submission${NC}"
+  automate_app_store_submission
+
+  echo -e "\n${GREEN}Phase 3: Beta Testing Management${NC}"
+  manage_beta_testing
+
+  echo -e "\n${RED}Phase 4: Crash Reporting Integration${NC}"
+  integrate_crash_reporting
+
+  echo -e "\n${BLUE}Phase 5: Generating Report${NC}"
+  local report_file=$(generate_deployment_report)
+
+  echo -e "\n${BOLD}${GREEN}✅ MULTI-PLATFORM DEPLOYMENT COMPLETE${NC}"
+  echo "📊 Full report available at: $report_file"
+
+  # Integration with master orchestrator
+  if [ -f "$PROJECT_PATH/master_automation_orchestrator.sh" ]; then
+    echo -e "\n${YELLOW}🔄 Integrating with master automation system...${NC}"
+    echo "$(date): Multi-platform deployment completed - Report: $report_file" >>"$PROJECT_PATH/.master_automation/automation_log.txt"
+  fi
 }
 
 # Command line interface
-case "${1:-}" in
-    --init)
-        initialize_multiplatform_system
-        ;;
-    --build)
-        run_cross_platform_build
-        ;;
-    --submit)
-        automate_app_store_submission
-        ;;
-    --beta)
-        manage_beta_testing
-        ;;
-    --crashes)
-        integrate_crash_reporting
-        ;;
-    --report)
-        generate_deployment_report
-        ;;
-    --full-deployment)
-        run_multiplatform_deployment
-        ;;
-    --help)
-        echo "🌐 Multi-platform Deployment System"
-        echo ""
-        echo "Usage: $0 [OPTION]"
-        echo ""
-        echo "Options:"
-        echo "  --init            Initialize deployment system"
-        echo "  --build           Run cross-platform builds"
-        echo "  --submit          Automate app store submissions"
-        echo "  --beta            Manage beta testing"
-        echo "  --crashes         Setup crash reporting"
-        echo "  --report          Generate deployment report"
-        echo "  --full-deployment Run complete deployment (default)"
-        echo "  --help            Show this help message"
-        ;;
-    *)
-        run_multiplatform_deployment
-        ;;
+case "${1-}" in
+--init)
+  initialize_multiplatform_system
+  ;;
+--build)
+  run_cross_platform_build
+  ;;
+--submit)
+  automate_app_store_submission
+  ;;
+--beta)
+  manage_beta_testing
+  ;;
+--crashes)
+  integrate_crash_reporting
+  ;;
+--report)
+  generate_deployment_report
+  ;;
+--full-deployment)
+  run_multiplatform_deployment
+  ;;
+--help)
+  echo "🌐 Multi-platform Deployment System"
+  echo ""
+  echo "Usage: $0 [OPTION]"
+  echo ""
+  echo "Options:"
+  echo "  --init            Initialize deployment system"
+  echo "  --build           Run cross-platform builds"
+  echo "  --submit          Automate app store submissions"
+  echo "  --beta            Manage beta testing"
+  echo "  --crashes         Setup crash reporting"
+  echo "  --report          Generate deployment report"
+  echo "  --full-deployment Run complete deployment (default)"
+  echo "  --help            Show this help message"
+  ;;
+*)
+  run_multiplatform_deployment
+  ;;
 esac

@@ -61,30 +61,7 @@ public enum DataType: String, CaseIterable, Codable {
 
 // MARK: - Entity Manager
 
-/// Manages data entities during import process
-public class EntityManager: @unchecked Sendable {
-    public init() {}
-
-    public func createEntity(type: EntityType, data: [String: Any]) -> Any? {
-        // Implementation would go here
-        nil
-    }
-
-    public func updateEntity(id: String, type: EntityType, data: [String: Any]) -> Bool {
-        // Implementation would go here
-        false
-    }
-
-    public func deleteEntity(id: String, type: EntityType) -> Bool {
-        // Implementation would go here
-        false
-    }
-
-    public func validateData(_ data: [String: Any], for type: EntityType) -> [ValidationError] {
-        // Implementation would go here
-        []
-    }
-}
+// EntityManager implementation moved to Shared/Utils/ImportComponents/EntityManager.swift
 
 // MARK: - Entity Type
 
@@ -145,5 +122,36 @@ public struct ValidationError: Identifiable, Codable {
                 "Error"
             }
         }
+    }
+}
+
+// MARK: - Import Result
+
+/// Represents the result of a data import operation
+public struct ImportResult: Codable {
+    public let success: Bool
+    public let transactionsImported: Int
+    public let accountsImported: Int
+    public let categoriesImported: Int
+    public let duplicatesSkipped: Int
+    public let errors: [ValidationError]
+    public let warnings: [ValidationError]
+
+    public init(
+        success: Bool,
+        transactionsImported: Int,
+        accountsImported: Int = 0,
+        categoriesImported: Int = 0,
+        duplicatesSkipped: Int = 0,
+        errors: [ValidationError] = [],
+        warnings: [ValidationError] = []
+    ) {
+        self.success = success
+        self.transactionsImported = transactionsImported
+        self.accountsImported = accountsImported
+        self.categoriesImported = categoriesImported
+        self.duplicatesSkipped = duplicatesSkipped
+        self.errors = errors
+        self.warnings = warnings
     }
 }

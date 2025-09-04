@@ -19,19 +19,19 @@ struct StreakAnalyticsView: View {
 
         var days: Int {
             switch self {
-            case .week: return 7
-            case .month: return 30
-            case .quarter: return 90
-            case .year: return 365
+            case .week: 7
+            case .month: 30
+            case .quarter: 90
+            case .year: 365
             }
         }
 
         var title: String {
             switch self {
-            case .week: return "This Week"
-            case .month: return "This Month"
-            case .quarter: return "3 Months"
-            case .year: return "This Year"
+            case .week: "This Week"
+            case .month: "This Month"
+            case .quarter: "3 Months"
+            case .year: "This Year"
             }
         }
     }
@@ -40,7 +40,7 @@ struct StreakAnalyticsView: View {
         NavigationView {
             ScrollView {
                 LazyVStack(spacing: 20) {
-                    if let errorMessage = errorMessage {
+                    if let errorMessage {
                         errorView(message: errorMessage)
                     } else if isLoading {
                         loadingView
@@ -324,7 +324,7 @@ struct StreakAnalyticsView: View {
         // Sort top performers by current streak
         topPerformers.sort { $0.currentStreak > $1.currentStreak }
 
-        return StreakAnalyticsData(
+        return await StreakAnalyticsData(
             totalActiveStreaks: streakAnalytics.filter { $0.currentStreak > 0 }.count,
             longestOverallStreak: streakAnalytics.map(\.longestStreak).max() ?? 0,
             averageConsistency: calculateAverageConsistency(streakAnalytics),
@@ -332,7 +332,7 @@ struct StreakAnalyticsView: View {
             streakDistribution: generateStreakDistribution(streakAnalytics),
             topPerformingHabits: topPerformers,
             consistencyInsights: generateConsistencyInsights(streakAnalytics),
-            weeklyPatterns: await generateWeeklyPatterns(habits: habits, service: service)
+            weeklyPatterns: generateWeeklyPatterns(habits: habits, service: service)
         )
     }
 
@@ -343,12 +343,18 @@ struct StreakAnalyticsView: View {
 
     private func countRecentMilestones(_ analytics: [StreakAnalytics]) -> Int {
         // Simplified - count current milestones as "recent achievements"
-        return analytics.compactMap(\.currentMilestone).count
+        analytics.compactMap(\.currentMilestone).count
     }
 
     private func generateStreakDistribution(_ analytics: [StreakAnalytics]) -> [StreakDistributionData] {
         let streaks = analytics.map(\.currentStreak)
-        let ranges = [(0...2, "Getting Started"), (3...6, "Building"), (7...29, "Strong"), (30...99, "Impressive"), (100...Int.max, "Legendary")]
+        let ranges = [
+            (0 ... 2, "Getting Started"),
+            (3 ... 6, "Building"),
+            (7 ... 29, "Strong"),
+            (30 ... 99, "Impressive"),
+            (100 ... Int.max, "Legendary"),
+        ]
 
         return ranges.map { range, label in
             let count = streaks.filter { range.contains($0) }.count
@@ -386,7 +392,7 @@ struct StreakAnalyticsView: View {
         // Simplified weekly pattern generation
         let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         return daysOfWeek.map { day in
-            WeeklyPattern(day: day, completionRate: Double.random(in: 0.3...0.9)) // Placeholder
+            WeeklyPattern(day: day, completionRate: Double.random(in: 0.3 ... 0.9)) // Placeholder
         }
     }
 
@@ -444,17 +450,17 @@ struct ConsistencyInsight {
 
         var color: Color {
             switch self {
-            case .positive: return .green
-            case .improvement: return .orange
-            case .neutral: return .blue
+            case .positive: .green
+            case .improvement: .orange
+            case .neutral: .blue
             }
         }
 
         var icon: String {
             switch self {
-            case .positive: return "checkmark.circle.fill"
-            case .improvement: return "exclamationmark.triangle.fill"
-            case .neutral: return "info.circle.fill"
+            case .positive: "checkmark.circle.fill"
+            case .improvement: "exclamationmark.triangle.fill"
+            case .neutral: "info.circle.fill"
             }
         }
     }

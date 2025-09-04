@@ -12,11 +12,16 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
     // Income forecast
     let incomeTransactions = transactions.filter { $0.amount > 0 }
     let monthlyIncome = Dictionary(grouping: incomeTransactions) { transaction in
-        calendar.startOfMonth(for: transaction.date)
+        calendar.date(from: calendar.dateComponents([.year, .month], from: transaction.date))
     }
 
     let recentMonthlyIncomes = monthlyIncome
-        .filter { calendar.dateInterval(of: .month, for: $0.key)!.end > calendar.date(byAdding: .month, value: -6, to: now)! }
+        .filter { 
+            guard let key = $0.key,
+                  let interval = calendar.dateInterval(of: .month, for: key),
+                  let sixMonthsAgo = calendar.date(byAdding: .month, value: -6, to: now) else { return false }
+            return interval.end > sixMonthsAgo
+        }
         .map { $0.value.reduce(0) { $0 + $1.amount } }
 
     if recentMonthlyIncomes.count >= 3 {
@@ -41,11 +46,16 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
     // Spending forecast
     let expenseTransactions = transactions.filter { $0.amount < 0 }
     let monthlyExpenses = Dictionary(grouping: expenseTransactions) { transaction in
-        calendar.startOfMonth(for: transaction.date)
+        calendar.date(from: calendar.dateComponents([.year, .month], from: transaction.date))
     }
 
     let recentMonthlyExpenses = monthlyExpenses
-        .filter { calendar.dateInterval(of: .month, for: $0.key)!.end > calendar.date(byAdding: .month, value: -6, to: now)! }
+        .filter { 
+            guard let key = $0.key,
+                  let interval = calendar.dateInterval(of: .month, for: key),
+                  let sixMonthsAgo = calendar.date(byAdding: .month, value: -6, to: now) else { return false }
+            return interval.end > sixMonthsAgo
+        }
         .map { $0.value.reduce(0) { $0 + abs($1.amount) } }
 
     if recentMonthlyExpenses.count >= 3 {
@@ -111,7 +121,7 @@ func fi_projectedBalances(
 ) -> [(String, Double)] {
     var projected: [(String, Double)] = []
     var projectedBalance = startingBalance
-    let currentMonth = calendar.startOfMonth(for: Date())
+    guard let currentMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: Date())) else { return [] }
     for monthIndex in 0 ..< months {
         guard
             let futureMonth = calendar.date(
@@ -130,7 +140,7 @@ func fi_monthlyNetCashFlow(_ transactions: [FinancialTransaction], monthsAgo: In
     var monthlyNetCashFlow: [Date: Double] = [:]
 
     for transaction in transactions where transaction.date >= since {
-        let month = calendar.startOfMonth(for: transaction.date)
+        guard let month = calendar.date(from: calendar.dateComponents([.year, .month], from: transaction.date)) else { continue }
         monthlyNetCashFlow[month] = (monthlyNetCashFlow[month] ?? 0) + transaction.amount
     }
 

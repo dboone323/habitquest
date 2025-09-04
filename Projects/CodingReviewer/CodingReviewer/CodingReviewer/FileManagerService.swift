@@ -842,78 +842,60 @@ final class FileManagerService: ObservableObject {
         if provider == "gemini" {
             return await callGeminiAPI(prompt: prompt, apiKey: apiKey)
         } else {
-            return await callOpenAIAPI(prompt: prompt, apiKey: apiKey)
+            return await callOllamaAPI(prompt: prompt)
         }
     }
 
-    private func callOpenAIAPI(prompt: String, apiKey: String) async -> String {
-        guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
-            return "Error: Invalid OpenAI URL"
+    private func callOllamaAPI(prompt: String) async -> String {
+        let ollamaURL = "http://localhost:11434/api/generate"
+
+        guard let url = URL(string: ollamaURL) else {
+            return "Error: Invalid Ollama URL"
         }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let requestBody: [String: Any] = [
-            "model": "gpt-3.5-turbo",
-            "messages": [
-                ["role": "user", "content": prompt],
-            ],
-            "max_tokens": 500,
+            "model": "llama2",
+            "prompt": prompt,
             "temperature": 0.1,
+            "max_tokens": 500,
+            "stream": false,
         ]
 
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
             let (data, response) = try await URLSession.shared.data(for: request)
 
-            // Check HTTP status code for specific errors
+            // Check HTTP status code
             if let httpResponse = response as? HTTPURLResponse {
                 switch httpResponse.statusCode {
-                case 401:
-                    return "Error: Invalid API key. Please check your OpenAI API key in settings."
-                case 429:
-                    return "Error: Rate limit exceeded. Please try again later."
-                case 500 ... 599:
-                    return "Error: OpenAI service is currently unavailable. Please try again later."
-                case 400:
-                    return "Error: Invalid request format or token limit exceeded."
+                case 200:
+                    break // Success
+                case 503:
+                    return "Error: Ollama service unavailable. Start with: ollama serve"
                 default:
-                    break
+                    return "Error: Ollama API error (\(httpResponse.statusCode))"
                 }
             }
 
             if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                // Check for API error response
-                if let error = json["error"] as? [String: Any],
-                   let message = error["message"] as? String
-                {
-                    return "OpenAI API Error: \(message)"
-                }
-
-                // Parse successful response
-                if let choices = json["choices"] as? [[String: Any]],
-                   let firstChoice = choices.first,
-                   let message = firstChoice["message"] as? [String: Any],
-                   let content = message["content"] as? String
-                {
-                    return content.trimmingCharacters(in: .whitespacesAndNewlines)
+                if let responseText = json["response"] as? String {
+                    return responseText.trimmingCharacters(in: .whitespacesAndNewlines)
                 }
             }
         } catch {
             let errorMessage = error.localizedDescription
-            if errorMessage.contains("network") || errorMessage.contains("connection") {
-                return "Error: Network connection failed. Please check your internet connection."
-            } else if errorMessage.contains("timeout") {
-                return "Error: Request timed out. Please try again."
+            if errorMessage.contains("connection") {
+                return "Error: Cannot connect to Ollama. Make sure it's running: ollama serve"
             } else {
-                return "OpenAI API Error: \(errorMessage)"
+                return "Ollama API Error: \(errorMessage)"
             }
         }
 
-        return "No response from OpenAI"
+        return "No response from Ollama"
     }
 
     private func callGeminiAPI(prompt: String, apiKey: String) async -> String {

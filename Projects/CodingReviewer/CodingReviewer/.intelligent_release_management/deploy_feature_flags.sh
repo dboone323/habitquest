@@ -9,25 +9,25 @@ ENVIRONMENT="${1:-staging}"
 CONFIG_FILE="feature_flags_config.json"
 
 if [ ! -f "$CONFIG_FILE" ]; then
-    echo "❌ Configuration file not found: $CONFIG_FILE"
-    exit 1
+  echo "❌ Configuration file not found: $CONFIG_FILE"
+  exit 1
 fi
 
 echo "📋 Deploying flags for environment: $ENVIRONMENT"
 
 # Extract environment-specific configuration
 jq -r ".feature_flags_config.environment_specific.$ENVIRONMENT | to_entries[] | \"\(.key)=\(.value)\"" "$CONFIG_FILE" | while read -r flag_setting; do
-    flag_name=$(echo "$flag_setting" | cut -d= -f1)
-    flag_value=$(echo "$flag_setting" | cut -d= -f2)
-    
-    echo "  🎯 Setting $flag_name = $flag_value"
-    
-    # Here you would integrate with your feature flag service
-    # Examples:
-    # - Firebase Remote Config
-    # - LaunchDarkly API
-    # - Custom feature flag service
-    
+  flag_name=$(echo "$flag_setting" | cut -d= -f1)
+  flag_value=$(echo "$flag_setting" | cut -d= -f2)
+
+  echo "  🎯 Setting $flag_name = $flag_value"
+
+  # Here you would integrate with your feature flag service
+  # Examples:
+  # - Firebase Remote Config
+  # - LaunchDarkly API
+  # - Custom feature flag service
+
 done
 
 echo "✅ Feature flags deployment complete for $ENVIRONMENT"

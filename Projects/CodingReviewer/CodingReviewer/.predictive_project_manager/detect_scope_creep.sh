@@ -44,11 +44,11 @@ echo ""
 echo "🎯 Scope Creep Risk Score: $total_risk_score/100"
 
 if [ $total_risk_score -lt 30 ]; then
-    echo "  Risk Level: 🟢 LOW - Scope well controlled"
+  echo "  Risk Level: 🟢 LOW - Scope well controlled"
 elif [ $total_risk_score -lt 60 ]; then
-    echo "  Risk Level: 🟡 MEDIUM - Monitor closely"
+  echo "  Risk Level: 🟡 MEDIUM - Monitor closely"
 else
-    echo "  Risk Level: 🔴 HIGH - Immediate attention needed"
+  echo "  Risk Level: 🔴 HIGH - Immediate attention needed"
 fi
 
 # Predictive scope analysis

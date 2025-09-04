@@ -4,14 +4,14 @@
 # Integrates smart autocompletion with VSCode
 
 setup_vscode_extension() {
-    local extension_dir="$1"
-    
-    echo "🔌 Setting up VSCode extension integration..."
-    
-    # Create extension manifest
-    local package_json="$extension_dir/package.json"
-    
-    cat > "$package_json" << PACKAGE
+  local extension_dir="$1"
+
+  echo "🔌 Setting up VSCode extension integration..."
+
+  # Create extension manifest
+  local package_json="$extension_dir/package.json"
+
+  cat >"$package_json" <<PACKAGE
 {
   "name": "smart-context-autocompletion",
   "displayName": "Smart Context-Aware Autocompletion",
@@ -62,12 +62,12 @@ setup_vscode_extension() {
   }
 }
 PACKAGE
-    
-    # Create TypeScript extension code
-    local extension_ts="$extension_dir/src/extension.ts"
-    mkdir -p "$(dirname "$extension_ts")"
-    
-    cat > "$extension_ts" << TYPESCRIPT
+
+  # Create TypeScript extension code
+  local extension_ts="$extension_dir/src/extension.ts"
+  mkdir -p "$(dirname "$extension_ts")"
+
+  cat >"$extension_ts" <<TYPESCRIPT
 import * as vscode from 'vscode';
 import { exec } from 'child_process';
 import * as path from 'path';
@@ -184,20 +184,20 @@ function getSmartSuggestions() {
 
 export function deactivate() {}
 TYPESCRIPT
-    
-    echo "✅ VSCode extension integration configured"
+
+  echo "✅ VSCode extension integration configured"
 }
 
 create_vscode_settings() {
-    local project_path="$1"
-    
-    echo "⚙️ Creating VSCode settings..."
-    
-    local vscode_dir="$project_path/.vscode"
-    mkdir -p "$vscode_dir"
-    
-    # Create settings.json
-    cat > "$vscode_dir/settings.json" << SETTINGS
+  local project_path="$1"
+
+  echo "⚙️ Creating VSCode settings..."
+
+  local vscode_dir="$project_path/.vscode"
+  mkdir -p "$vscode_dir"
+
+  # Create settings.json
+  cat >"$vscode_dir/settings.json" <<SETTINGS
 {
     "smartAutocompletion.enabled": true,
     "smartAutocompletion.maxSuggestions": 10,
@@ -211,7 +211,6 @@ create_vscode_settings() {
     "editor.suggest.snippetsPreventQuickSuggestions": false
 }
 SETTINGS
-    
-    echo "✅ VSCode settings configured"
-}
 
+  echo "✅ VSCode settings configured"
+}

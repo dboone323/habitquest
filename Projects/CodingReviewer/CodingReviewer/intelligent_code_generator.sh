@@ -29,35 +29,35 @@ mkdir -p "$CODE_GEN_DIR"
 
 # Initialize code generation database
 initialize_code_generation_system() {
-    echo -e "${BOLD}${GREEN}🚀 INITIALIZING INTELLIGENT CODE GENERATION SYSTEM${NC}"
-    echo "=================================================="
-    
-    # Create pattern database
-    create_pattern_database
-    
-    # Analyze existing codebase for patterns
-    analyze_existing_patterns
-    
-    # Set up auto-completion enhancement
-    setup_autocompletion_enhancement
-    
-    # Initialize function generation system
-    initialize_function_generation
-    
-    # Set up unit test generation
-    setup_test_generation
-    
-    # Initialize documentation generation
-    initialize_documentation_generation
-    
-    echo -e "\n${BOLD}${GREEN}✅ INTELLIGENT CODE GENERATION SYSTEM INITIALIZED${NC}"
+  echo -e "${BOLD}${GREEN}🚀 INITIALIZING INTELLIGENT CODE GENERATION SYSTEM${NC}"
+  echo "=================================================="
+
+  # Create pattern database
+  create_pattern_database
+
+  # Analyze existing codebase for patterns
+  analyze_existing_patterns
+
+  # Set up auto-completion enhancement
+  setup_autocompletion_enhancement
+
+  # Initialize function generation system
+  initialize_function_generation
+
+  # Set up unit test generation
+  setup_test_generation
+
+  # Initialize documentation generation
+  initialize_documentation_generation
+
+  echo -e "\n${BOLD}${GREEN}✅ INTELLIGENT CODE GENERATION SYSTEM INITIALIZED${NC}"
 }
 
 # Create pattern database for learning
 create_pattern_database() {
-    echo -e "${BLUE}🗄️ Creating pattern database...${NC}"
-    
-    cat > "$PATTERNS_DB" << 'EOF'
+  echo -e "${BLUE}🗄️ Creating pattern database...${NC}"
+
+  cat >"$PATTERNS_DB" <<'EOF'
 # Intelligent Code Generator Pattern Database
 # This file stores learned patterns and code generation rules
 
@@ -107,30 +107,30 @@ mock_pattern=protocol,Mock,stub,verify
 async_test_pattern=XCTestExpectation,waitForExpectations
 
 EOF
-    
-    echo "  ✅ Pattern database created"
+
+  echo "  ✅ Pattern database created"
 }
 
 # Analyze existing codebase to learn patterns
 analyze_existing_patterns() {
-    echo -e "${PURPLE}🔍 Analyzing existing codebase patterns...${NC}"
-    
-    local analysis_report="$CODE_GEN_DIR/pattern_analysis_$TIMESTAMP.md"
-    
-    cat > "$analysis_report" << EOF
+  echo -e "${PURPLE}🔍 Analyzing existing codebase patterns...${NC}"
+
+  local analysis_report="$CODE_GEN_DIR/pattern_analysis_$TIMESTAMP.md"
+
+  cat >"$analysis_report" <<EOF
 # Codebase Pattern Analysis Report
 Generated: $(date)
 
 ## Analysis Summary
 EOF
-    
-    # Analyze Swift files
-    local swift_files=$(find "$PROJECT_PATH/CodingReviewer" -name "*.swift" | wc -l | tr -d ' ')
-    local view_controllers=$(grep -r "UIViewController\|NSViewController" "$PROJECT_PATH/CodingReviewer" --include="*.swift" | wc -l | tr -d ' ')
-    local swiftui_views=$(grep -r ": View" "$PROJECT_PATH/CodingReviewer" --include="*.swift" | wc -l | tr -d ' ')
-    local protocols=$(grep -r "protocol " "$PROJECT_PATH/CodingReviewer" --include="*.swift" | wc -l | tr -d ' ')
-    
-    cat >> "$analysis_report" << EOF
+
+  # Analyze Swift files
+  local swift_files=$(find "$PROJECT_PATH/CodingReviewer" -name "*.swift" | wc -l | tr -d ' ')
+  local view_controllers=$(grep -r "UIViewController\|NSViewController" "$PROJECT_PATH/CodingReviewer" --include="*.swift" | wc -l | tr -d ' ')
+  local swiftui_views=$(grep -r ": View" "$PROJECT_PATH/CodingReviewer" --include="*.swift" | wc -l | tr -d ' ')
+  local protocols=$(grep -r "protocol " "$PROJECT_PATH/CodingReviewer" --include="*.swift" | wc -l | tr -d ' ')
+
+  cat >>"$analysis_report" <<EOF
 
 ### Codebase Metrics
 - **Total Swift Files**: $swift_files
@@ -140,80 +140,80 @@ EOF
 
 ### Common Patterns Detected
 EOF
-    
-    # Find common function patterns
-    echo -e "    • Analyzing function patterns..."
-    local common_functions=$(grep -r "func " "$PROJECT_PATH/CodingReviewer" --include="*.swift" | head -10)
-    
-    if [ -n "$common_functions" ]; then
-        echo "#### Common Function Patterns" >> "$analysis_report"
-        echo '```swift' >> "$analysis_report"
-        echo "$common_functions" | while read -r line; do
-            echo "$(echo "$line" | cut -d':' -f2-)" >> "$analysis_report"
-        done
-        echo '```' >> "$analysis_report"
-    fi
-    
-    # Find import patterns
-    echo -e "    • Analyzing import patterns..."
-    local imports=$(grep -r "import " "$PROJECT_PATH/CodingReviewer" --include="*.swift" | sort | uniq -c | sort -nr | head -10)
-    
-    if [ -n "$imports" ]; then
-        echo "" >> "$analysis_report"
-        echo "#### Common Import Patterns" >> "$analysis_report"
-        echo "$imports" | while read -r count import; do
-            echo "- $import (used $count times)" >> "$analysis_report"
-        done
-    fi
-    
-    # Find property patterns
-    echo -e "    • Analyzing property patterns..."
-    local properties=$(grep -r "@State\|@Binding\|@Published\|@ObservedObject" "$PROJECT_PATH/CodingReviewer" --include="*.swift" | wc -l | tr -d ' ')
-    
-    echo "" >> "$analysis_report"
-    echo "#### Property Patterns" >> "$analysis_report"
-    echo "- SwiftUI property wrappers found: $properties" >> "$analysis_report"
-    
-    # Store learned patterns
-    update_learned_patterns "$analysis_report"
-    
-    echo "  ✅ Pattern analysis complete - report saved to $analysis_report"
+
+  # Find common function patterns
+  echo -e "    • Analyzing function patterns..."
+  local common_functions=$(grep -r "func " "$PROJECT_PATH/CodingReviewer" --include="*.swift" | head -10)
+
+  if [ -n "$common_functions" ]; then
+    echo "#### Common Function Patterns" >>"$analysis_report"
+    echo '```swift' >>"$analysis_report"
+    echo "$common_functions" | while read -r line; do
+      echo "$(echo "$line" | cut -d':' -f2-)" >>"$analysis_report"
+    done
+    echo '```' >>"$analysis_report"
+  fi
+
+  # Find import patterns
+  echo -e "    • Analyzing import patterns..."
+  local imports=$(grep -r "import " "$PROJECT_PATH/CodingReviewer" --include="*.swift" | sort | uniq -c | sort -nr | head -10)
+
+  if [ -n "$imports" ]; then
+    echo "" >>"$analysis_report"
+    echo "#### Common Import Patterns" >>"$analysis_report"
+    echo "$imports" | while read -r count import; do
+      echo "- $import (used $count times)" >>"$analysis_report"
+    done
+  fi
+
+  # Find property patterns
+  echo -e "    • Analyzing property patterns..."
+  local properties=$(grep -r "@State\|@Binding\|@Published\|@ObservedObject" "$PROJECT_PATH/CodingReviewer" --include="*.swift" | wc -l | tr -d ' ')
+
+  echo "" >>"$analysis_report"
+  echo "#### Property Patterns" >>"$analysis_report"
+  echo "- SwiftUI property wrappers found: $properties" >>"$analysis_report"
+
+  # Store learned patterns
+  update_learned_patterns "$analysis_report"
+
+  echo "  ✅ Pattern analysis complete - report saved to $analysis_report"
 }
 
 # Update learned patterns based on analysis
 update_learned_patterns() {
-    local analysis_file="$1"
-    local learned_patterns="$CODE_GEN_DIR/learned_patterns.txt"
-    
-    # Extract and store common patterns for code generation
-    echo "# Learned Patterns from Codebase Analysis - $(date)" > "$learned_patterns"
-    echo "" >> "$learned_patterns"
-    
-    # Store common imports
-    echo "[COMMON_IMPORTS]" >> "$learned_patterns"
-    grep -r "import " "$PROJECT_PATH/CodingReviewer" --include="*.swift" | \
-        awk -F: '{print $2}' | sort | uniq -c | sort -nr | head -5 | \
-        while read -r count import; do
-            echo "$(echo "$import" | tr -d ' ')=$count" >> "$learned_patterns"
-        done
-    
-    echo "" >> "$learned_patterns"
-    echo "[COMMON_FUNCTIONS]" >> "$learned_patterns"
-    grep -r "func " "$PROJECT_PATH/CodingReviewer" --include="*.swift" | \
-        awk -F: '{print $2}' | sed 's/func //' | awk '{print $1}' | \
-        sort | uniq -c | sort -nr | head -10 | \
-        while read -r count func; do
-            echo "$func=$count" >> "$learned_patterns"
-        done
+  local analysis_file="$1"
+  local learned_patterns="$CODE_GEN_DIR/learned_patterns.txt"
+
+  # Extract and store common patterns for code generation
+  echo "# Learned Patterns from Codebase Analysis - $(date)" >"$learned_patterns"
+  echo "" >>"$learned_patterns"
+
+  # Store common imports
+  echo "[COMMON_IMPORTS]" >>"$learned_patterns"
+  grep -r "import " "$PROJECT_PATH/CodingReviewer" --include="*.swift" |
+    awk -F: '{print $2}' | sort | uniq -c | sort -nr | head -5 |
+    while read -r count import; do
+      echo "$(echo "$import" | tr -d ' ')=$count" >>"$learned_patterns"
+    done
+
+  echo "" >>"$learned_patterns"
+  echo "[COMMON_FUNCTIONS]" >>"$learned_patterns"
+  grep -r "func " "$PROJECT_PATH/CodingReviewer" --include="*.swift" |
+    awk -F: '{print $2}' | sed 's/func //' | awk '{print $1}' |
+    sort | uniq -c | sort -nr | head -10 |
+    while read -r count func; do
+      echo "$func=$count" >>"$learned_patterns"
+    done
 }
 
 # Set up auto-completion enhancement
 setup_autocompletion_enhancement() {
-    echo -e "${CYAN}✨ Setting up auto-completion enhancement...${NC}"
-    
-    local autocompletion_script="$CODE_GEN_DIR/autocompletion_enhancer.sh"
-    
-    cat > "$autocompletion_script" << 'EOF'
+  echo -e "${CYAN}✨ Setting up auto-completion enhancement...${NC}"
+
+  local autocompletion_script="$CODE_GEN_DIR/autocompletion_enhancer.sh"
+
+  cat >"$autocompletion_script" <<'EOF'
 #!/bin/bash
 
 # Auto-completion Enhancement Module
@@ -287,18 +287,18 @@ suggest_swiftui_view_completion() {
 }
 
 EOF
-    
-    chmod +x "$autocompletion_script"
-    echo "  ✅ Auto-completion enhancement configured"
+
+  chmod +x "$autocompletion_script"
+  echo "  ✅ Auto-completion enhancement configured"
 }
 
 # Initialize function generation system
 initialize_function_generation() {
-    echo -e "${YELLOW}⚙️ Initializing function generation system...${NC}"
-    
-    local function_generator="$CODE_GEN_DIR/function_generator.sh"
-    
-    cat > "$function_generator" << 'EOF'
+  echo -e "${YELLOW}⚙️ Initializing function generation system...${NC}"
+
+  local function_generator="$CODE_GEN_DIR/function_generator.sh"
+
+  cat >"$function_generator" <<'EOF'
 #!/bin/bash
 
 # Intelligent Function Generator
@@ -432,18 +432,18 @@ SWIFT
 }
 
 EOF
-    
-    chmod +x "$function_generator"
-    echo "  ✅ Function generation system initialized"
+
+  chmod +x "$function_generator"
+  echo "  ✅ Function generation system initialized"
 }
 
 # Set up unit test generation
 setup_test_generation() {
-    echo -e "${GREEN}🧪 Setting up unit test generation...${NC}"
-    
-    local test_generator="$CODE_GEN_DIR/test_generator.sh"
-    
-    cat > "$test_generator" << 'EOF'
+  echo -e "${GREEN}🧪 Setting up unit test generation...${NC}"
+
+  local test_generator="$CODE_GEN_DIR/test_generator.sh"
+
+  cat >"$test_generator" <<'EOF'
 #!/bin/bash
 
 # Intelligent Test Generator
@@ -573,18 +573,18 @@ SWIFT
 }
 
 EOF
-    
-    chmod +x "$test_generator"
-    echo "  ✅ Test generation system configured"
+
+  chmod +x "$test_generator"
+  echo "  ✅ Test generation system configured"
 }
 
 # Initialize documentation generation
 initialize_documentation_generation() {
-    echo -e "${PURPLE}📚 Initializing documentation generation...${NC}"
-    
-    local doc_generator="$CODE_GEN_DIR/documentation_generator.sh"
-    
-    cat > "$doc_generator" << 'EOF'
+  echo -e "${PURPLE}📚 Initializing documentation generation...${NC}"
+
+  local doc_generator="$CODE_GEN_DIR/documentation_generator.sh"
+
+  cat >"$doc_generator" <<'EOF'
 #!/bin/bash
 
 # Intelligent Documentation Generator
@@ -702,203 +702,203 @@ generate_markdown_documentation() {
 }
 
 EOF
-    
-    chmod +x "$doc_generator"
-    echo "  ✅ Documentation generation system initialized"
+
+  chmod +x "$doc_generator"
+  echo "  ✅ Documentation generation system initialized"
 }
 
 # Main code generation command interface
 run_code_generation() {
-    local command="$1"
-    local target="$2"
-    local context="$3"
-    
-    case "$command" in
-        "suggest")
-            run_suggestion_engine "$target" "$context"
-            ;;
-        "generate-function")
-            run_function_generation "$target" "$context"
-            ;;
-        "generate-tests")
-            run_test_generation "$target"
-            ;;
-        "generate-docs")
-            run_documentation_generation "$target"
-            ;;
-        "analyze")
-            run_pattern_analysis "$target"
-            ;;
-        "enhance")
-            run_enhancement_suggestions "$target"
-            ;;
-        *)
-            show_code_generation_help
-            ;;
-    esac
+  local command="$1"
+  local target="$2"
+  local context="$3"
+
+  case "$command" in
+  "suggest")
+    run_suggestion_engine "$target" "$context"
+    ;;
+  "generate-function")
+    run_function_generation "$target" "$context"
+    ;;
+  "generate-tests")
+    run_test_generation "$target"
+    ;;
+  "generate-docs")
+    run_documentation_generation "$target"
+    ;;
+  "analyze")
+    run_pattern_analysis "$target"
+    ;;
+  "enhance")
+    run_enhancement_suggestions "$target"
+    ;;
+  *)
+    show_code_generation_help
+    ;;
+  esac
 }
 
 # Run suggestion engine
 run_suggestion_engine() {
-    local file="$1"
-    local context="$2"
-    
-    echo -e "${CYAN}💡 Running intelligent suggestion engine...${NC}"
-    
-    if [ -f "$file" ]; then
-        echo "  📁 Analyzing file: $(basename "$file")"
-        echo "  🔍 Context: $context"
-        
-        # Source the autocompletion enhancer
-        if [ -f "$CODE_GEN_DIR/autocompletion_enhancer.sh" ]; then
-            source "$CODE_GEN_DIR/autocompletion_enhancer.sh"
-            enhance_autocompletion "$file" "" "$context"
-        fi
-    else
-        echo "  ⚠️ File not found: $file"
+  local file="$1"
+  local context="$2"
+
+  echo -e "${CYAN}💡 Running intelligent suggestion engine...${NC}"
+
+  if [ -f "$file" ]; then
+    echo "  📁 Analyzing file: $(basename "$file")"
+    echo "  🔍 Context: $context"
+
+    # Source the autocompletion enhancer
+    if [ -f "$CODE_GEN_DIR/autocompletion_enhancer.sh" ]; then
+      source "$CODE_GEN_DIR/autocompletion_enhancer.sh"
+      enhance_autocompletion "$file" "" "$context"
     fi
+  else
+    echo "  ⚠️ File not found: $file"
+  fi
 }
 
 # Run function generation
 run_function_generation() {
-    local function_name="$1"
-    local context="$2"
-    
-    echo -e "${YELLOW}⚙️ Generating function: $function_name${NC}"
-    
-    if [ -f "$CODE_GEN_DIR/function_generator.sh" ]; then
-        source "$CODE_GEN_DIR/function_generator.sh"
-        generate_function "$function_name" "$context" "swift"
-    fi
+  local function_name="$1"
+  local context="$2"
+
+  echo -e "${YELLOW}⚙️ Generating function: $function_name${NC}"
+
+  if [ -f "$CODE_GEN_DIR/function_generator.sh" ]; then
+    source "$CODE_GEN_DIR/function_generator.sh"
+    generate_function "$function_name" "$context" "swift"
+  fi
 }
 
 # Run test generation
 run_test_generation() {
-    local target_file="$1"
-    
-    echo -e "${GREEN}🧪 Generating tests for: $(basename "$target_file")${NC}"
-    
-    if [ -f "$CODE_GEN_DIR/test_generator.sh" ]; then
-        source "$CODE_GEN_DIR/test_generator.sh"
-        generate_tests_for_file "$target_file"
-    fi
+  local target_file="$1"
+
+  echo -e "${GREEN}🧪 Generating tests for: $(basename "$target_file")${NC}"
+
+  if [ -f "$CODE_GEN_DIR/test_generator.sh" ]; then
+    source "$CODE_GEN_DIR/test_generator.sh"
+    generate_tests_for_file "$target_file"
+  fi
 }
 
 # Run documentation generation
 run_documentation_generation() {
-    local target_file="$1"
-    
-    echo -e "${PURPLE}📚 Generating documentation for: $(basename "$target_file")${NC}"
-    
-    if [ -f "$CODE_GEN_DIR/documentation_generator.sh" ]; then
-        source "$CODE_GEN_DIR/documentation_generator.sh"
-        generate_markdown_documentation "$target_file"
-    fi
+  local target_file="$1"
+
+  echo -e "${PURPLE}📚 Generating documentation for: $(basename "$target_file")${NC}"
+
+  if [ -f "$CODE_GEN_DIR/documentation_generator.sh" ]; then
+    source "$CODE_GEN_DIR/documentation_generator.sh"
+    generate_markdown_documentation "$target_file"
+  fi
 }
 
 # Run pattern analysis
 run_pattern_analysis() {
-    local target="$1"
-    
-    echo -e "${BLUE}🔍 Analyzing patterns in: $target${NC}"
-    analyze_existing_patterns
+  local target="$1"
+
+  echo -e "${BLUE}🔍 Analyzing patterns in: $target${NC}"
+  analyze_existing_patterns
 }
 
 # Run enhancement suggestions
 run_enhancement_suggestions() {
-    local target_file="$1"
-    
-    echo -e "${CYAN}✨ Analyzing enhancement opportunities...${NC}"
-    
-    if [ -f "$target_file" ]; then
-        echo "  📁 File: $(basename "$target_file")"
-        
-        # Check for common improvement opportunities
-        local missing_docs=$(grep -c "func \|class \|struct " "$target_file" | awk '{print $1}')
-        local documented=$(grep -c "///" "$target_file" | awk '{print $1}')
-        
-        echo "  📊 Documentation coverage: $documented/$missing_docs functions/types"
-        
-        if [ "$documented" -lt "$missing_docs" ]; then
-            echo "  💡 Suggestion: Add documentation for undocumented functions"
-        fi
-        
-        # Check for test coverage
-        local test_file="${target_file%.*}Tests.swift"
-        if [ ! -f "$test_file" ]; then
-            echo "  💡 Suggestion: Create unit tests for this file"
-        fi
-        
-        # Check for error handling
-        local error_handling=$(grep -c "throws\|catch\|Result" "$target_file" | awk '{print $1}')
-        local function_count=$(grep -c "func " "$target_file" | awk '{print $1}')
-        
-        if [ "$error_handling" -lt "$((function_count / 2))" ]; then
-            echo "  💡 Suggestion: Consider adding error handling to more functions"
-        fi
+  local target_file="$1"
+
+  echo -e "${CYAN}✨ Analyzing enhancement opportunities...${NC}"
+
+  if [ -f "$target_file" ]; then
+    echo "  📁 File: $(basename "$target_file")"
+
+    # Check for common improvement opportunities
+    local missing_docs=$(grep -c "func \|class \|struct " "$target_file" | awk '{print $1}')
+    local documented=$(grep -c "///" "$target_file" | awk '{print $1}')
+
+    echo "  📊 Documentation coverage: $documented/$missing_docs functions/types"
+
+    if [ "$documented" -lt "$missing_docs" ]; then
+      echo "  💡 Suggestion: Add documentation for undocumented functions"
     fi
+
+    # Check for test coverage
+    local test_file="${target_file%.*}Tests.swift"
+    if [ ! -f "$test_file" ]; then
+      echo "  💡 Suggestion: Create unit tests for this file"
+    fi
+
+    # Check for error handling
+    local error_handling=$(grep -c "throws\|catch\|Result" "$target_file" | awk '{print $1}')
+    local function_count=$(grep -c "func " "$target_file" | awk '{print $1}')
+
+    if [ "$error_handling" -lt "$((function_count / 2))" ]; then
+      echo "  💡 Suggestion: Consider adding error handling to more functions"
+    fi
+  fi
 }
 
 # Show help
 show_code_generation_help() {
-    echo -e "${BOLD}${CYAN}🧠 Intelligent Code Generator - Help${NC}"
-    echo "=================================="
-    echo ""
-    echo "USAGE:"
-    echo "  $0 [COMMAND] [TARGET] [CONTEXT]"
-    echo ""
-    echo "COMMANDS:"
-    echo "  suggest FILE CONTEXT     - Get intelligent code suggestions"
-    echo "  generate-function NAME   - Generate function with context"
-    echo "  generate-tests FILE      - Generate unit tests for file"
-    echo "  generate-docs FILE       - Generate documentation for file"
-    echo "  analyze [TARGET]         - Analyze patterns in codebase"
-    echo "  enhance FILE            - Get enhancement suggestions"
-    echo "  init                    - Initialize code generation system"
-    echo ""
-    echo "CONTEXTS:"
-    echo "  swiftui_view           - SwiftUI view context"
-    echo "  view_controller        - UIViewController context"
-    echo "  data_model            - Data model context"
-    echo "  service               - Service layer context"
-    echo "  test                  - Test context"
-    echo ""
-    echo "EXAMPLES:"
-    echo "  $0 init"
-    echo "  $0 suggest ContentView.swift swiftui_view"
-    echo "  $0 generate-function setupUI view_controller"
-    echo "  $0 generate-tests ContentView.swift"
-    echo "  $0 generate-docs ContentView.swift"
-    echo "  $0 analyze"
-    echo ""
+  echo -e "${BOLD}${CYAN}🧠 Intelligent Code Generator - Help${NC}"
+  echo "=================================="
+  echo ""
+  echo "USAGE:"
+  echo "  $0 [COMMAND] [TARGET] [CONTEXT]"
+  echo ""
+  echo "COMMANDS:"
+  echo "  suggest FILE CONTEXT     - Get intelligent code suggestions"
+  echo "  generate-function NAME   - Generate function with context"
+  echo "  generate-tests FILE      - Generate unit tests for file"
+  echo "  generate-docs FILE       - Generate documentation for file"
+  echo "  analyze [TARGET]         - Analyze patterns in codebase"
+  echo "  enhance FILE            - Get enhancement suggestions"
+  echo "  init                    - Initialize code generation system"
+  echo ""
+  echo "CONTEXTS:"
+  echo "  swiftui_view           - SwiftUI view context"
+  echo "  view_controller        - UIViewController context"
+  echo "  data_model            - Data model context"
+  echo "  service               - Service layer context"
+  echo "  test                  - Test context"
+  echo ""
+  echo "EXAMPLES:"
+  echo "  $0 init"
+  echo "  $0 suggest ContentView.swift swiftui_view"
+  echo "  $0 generate-function setupUI view_controller"
+  echo "  $0 generate-tests ContentView.swift"
+  echo "  $0 generate-docs ContentView.swift"
+  echo "  $0 analyze"
+  echo ""
 }
 
 # Log usage for learning
 log_usage() {
-    local command="$1"
-    local target="$2"
-    local context="$3"
-    
-    echo "$(date): $command $target $context" >> "$USAGE_LOG"
+  local command="$1"
+  local target="$2"
+  local context="$3"
+
+  echo "$(date): $command $target $context" >>"$USAGE_LOG"
 }
 
 # Main execution
 main() {
-    local command="${1:-help}"
-    local target="$2"
-    local context="$3"
-    
-    # Log usage
-    log_usage "$command" "$target" "$context"
-    
-    case "$command" in
-        "init")
-            initialize_code_generation_system
-            ;;
-        *)
-            run_code_generation "$command" "$target" "$context"
-            ;;
-    esac
+  local command="${1:-help}"
+  local target="$2"
+  local context="$3"
+
+  # Log usage
+  log_usage "$command" "$target" "$context"
+
+  case "$command" in
+  "init")
+    initialize_code_generation_system
+    ;;
+  *)
+    run_code_generation "$command" "$target" "$context"
+    ;;
+  esac
 }
 
 # Run main function with all arguments

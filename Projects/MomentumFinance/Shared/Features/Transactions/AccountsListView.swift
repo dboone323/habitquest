@@ -6,9 +6,6 @@ import SwiftUI
 
 extension Features.Transactions {
     struct AccountsListView: View {
-<<<<<<< HEAD
-        @Query private var accounts: [FinancialAccount]
-=======
         #if canImport(SwiftData)
             #if canImport(SwiftData)
                 private var accounts: [FinancialAccount] = []
@@ -18,7 +15,6 @@ extension Features.Transactions {
         #else
             private var accounts: [FinancialAccount] = []
         #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
         var body: some View {
             ScrollView {
@@ -40,11 +36,7 @@ extension Features.Transactions {
                         RoundedRectangle(cornerRadius: 12)
                             .fill(backgroundColorForPlatform())
                             .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-<<<<<<< HEAD
-                        )
-=======
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                     // Account Cards
                     ForEach(accounts) { account in
@@ -91,11 +83,7 @@ extension Features.Transactions {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColorForPlatform())
                     .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
 
         private var totalBalance: Double {
@@ -104,15 +92,9 @@ extension Features.Transactions {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-<<<<<<< HEAD
-            return Color(UIColor.systemBackground)
-            #else
-            return Color(NSColor.controlBackgroundColor)
-=======
                 return Color(UIColor.systemBackground)
             #else
                 return Color(NSColor.controlBackgroundColor)
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
 

@@ -49,7 +49,7 @@ extension Features.Dashboard {
                                         .font(.subheadline)
                                         .foregroundStyle(colorTheme.primaryText)
 
-                                    Text(formattedDateString(subscription.nextBillingDate))
+                                    Text(subscription.nextBillingDate.map(formattedDateString) ?? "No date set")
                                         .font(.caption)
                                         .foregroundStyle(colorTheme.secondaryText)
                                 }
@@ -57,7 +57,7 @@ extension Features.Dashboard {
                                 Spacer()
 
                                 themeComponents.currencyDisplay(
-                                    amount: subscription.amount,
+                                    amount: Decimal(subscription.amount),
                                     showSign: true,
                                     font: .subheadline.weight(.medium)
                                 )

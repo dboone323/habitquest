@@ -18,8 +18,8 @@ echo "==============================="
 
 # Initialize knowledge base
 initialize_knowledge_base() {
-    if [[ ! -f "$KNOWLEDGE_BASE" ]]; then
-        cat > "$KNOWLEDGE_BASE" << 'EOF'
+  if [[ ! -f $KNOWLEDGE_BASE ]]; then
+    cat >"$KNOWLEDGE_BASE" <<'EOF'
 {
   "learning_system": {
     "version": "1.0",
@@ -49,24 +49,24 @@ initialize_knowledge_base() {
   }
 }
 EOF
-    fi
+  fi
 }
 
 # Analyze current project for cross-learning
 analyze_current_project() {
-    echo "🔍 Analyzing current project for cross-learning patterns..."
-    
-    local project_profile="$LEARNING_DIR/projects/codingreviewer_profile_$(date +%Y%m%d_%H%M%S).json"
-    
-    # Extract comprehensive project characteristics
-    local swift_files=$(find "$PROJECT_PATH/CodingReviewer" -name "*.swift")
-    local project_stats=$(calculate_project_statistics "$swift_files")
-    local architecture_patterns=$(detect_architecture_patterns "$swift_files")
-    local coding_standards=$(analyze_coding_standards "$swift_files")
-    local performance_patterns=$(extract_performance_patterns "$swift_files")
-    local testing_patterns=$(analyze_testing_patterns)
-    
-    cat > "$project_profile" << EOF
+  echo "🔍 Analyzing current project for cross-learning patterns..."
+
+  local project_profile="$LEARNING_DIR/projects/codingreviewer_profile_$(date +%Y%m%d_%H%M%S).json"
+
+  # Extract comprehensive project characteristics
+  local swift_files=$(find "$PROJECT_PATH/CodingReviewer" -name "*.swift")
+  local project_stats=$(calculate_project_statistics "$swift_files")
+  local architecture_patterns=$(detect_architecture_patterns "$swift_files")
+  local coding_standards=$(analyze_coding_standards "$swift_files")
+  local performance_patterns=$(extract_performance_patterns "$swift_files")
+  local testing_patterns=$(analyze_testing_patterns)
+
+  cat >"$project_profile" <<EOF
 {
   "project_metadata": {
     "name": "CodingReviewer",
@@ -92,20 +92,20 @@ analyze_current_project() {
   }
 }
 EOF
-    
-    echo "  📊 Project profile created: $project_profile"
-    update_knowledge_base_with_project "$project_profile"
+
+  echo "  📊 Project profile created: $project_profile"
+  update_knowledge_base_with_project "$project_profile"
 }
 
 # Calculate comprehensive project statistics
 calculate_project_statistics() {
-    local files="$1"
-    local file_count=$(echo "$files" | wc -l | tr -d ' ')
-    local total_lines=$(echo "$files" | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}' || echo "0")
-    local avg_file_size=$((total_lines / (file_count > 0 ? file_count : 1)))
-    local complex_files=$(echo "$files" | xargs grep -l "class\|struct\|enum" | wc -l | tr -d ' ')
-    
-    cat << EOF
+  local files="$1"
+  local file_count=$(echo "$files" | wc -l | tr -d ' ')
+  local total_lines=$(echo "$files" | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}' || echo "0")
+  local avg_file_size=$((total_lines / (file_count > 0 ? file_count : 1)))
+  local complex_files=$(echo "$files" | xargs grep -l "class\|struct\|enum" | wc -l | tr -d ' ')
+
+  cat <<EOF
 {
   "file_count": $file_count,
   "total_lines": $total_lines,
@@ -119,15 +119,15 @@ EOF
 
 # Detect architecture patterns for cross-learning
 detect_architecture_patterns() {
-    local files="$1"
-    
-    # Analyze architectural patterns
-    local mvvm_strength=$(detect_mvvm_pattern "$files")
-    local swiftui_adoption=$(measure_swiftui_adoption "$files")
-    local dependency_injection=$(analyze_dependency_patterns "$files")
-    local navigation_pattern=$(identify_navigation_patterns "$files")
-    
-    cat << EOF
+  local files="$1"
+
+  # Analyze architectural patterns
+  local mvvm_strength=$(detect_mvvm_pattern "$files")
+  local swiftui_adoption=$(measure_swiftui_adoption "$files")
+  local dependency_injection=$(analyze_dependency_patterns "$files")
+  local navigation_pattern=$(identify_navigation_patterns "$files")
+
+  cat <<EOF
 {
   "primary_pattern": "MVVM",
   "ui_framework": "SwiftUI",
@@ -143,13 +143,13 @@ EOF
 
 # Analyze coding standards for knowledge transfer
 analyze_coding_standards() {
-    local files="$1"
-    
-    local naming_conventions=$(analyze_naming_conventions "$files")
-    local code_organization=$(assess_code_organization "$files")
-    local documentation_level=$(measure_documentation_coverage "$files")
-    
-    cat << EOF
+  local files="$1"
+
+  local naming_conventions=$(analyze_naming_conventions "$files")
+  local code_organization=$(assess_code_organization "$files")
+  local documentation_level=$(measure_documentation_coverage "$files")
+
+  cat <<EOF
 {
   "naming_conventions": "$naming_conventions",
   "code_organization": "$code_organization",
@@ -163,11 +163,11 @@ EOF
 
 # Cross-project pattern recognition
 recognize_cross_patterns() {
-    echo "🧠 Recognizing cross-project patterns..."
-    
-    local patterns_report="$LEARNING_DIR/insights/cross_patterns_$(date +%Y%m%d_%H%M%S).md"
-    
-    cat > "$patterns_report" << EOF
+  echo "🧠 Recognizing cross-project patterns..."
+
+  local patterns_report="$LEARNING_DIR/insights/cross_patterns_$(date +%Y%m%d_%H%M%S).md"
+
+  cat >"$patterns_report" <<EOF
 # 🌐 Cross-Project Pattern Recognition
 Generated: $(date)
 
@@ -197,13 +197,13 @@ $(generate_cross_project_recommendations)
 ## Knowledge Transfer Opportunities
 $(identify_knowledge_transfer_opportunities)
 EOF
-    
-    echo "  🔍 Cross-pattern analysis saved: $patterns_report"
+
+  echo "  🔍 Cross-pattern analysis saved: $patterns_report"
 }
 
 # Identify universal architectural patterns
 identify_universal_architectural_patterns() {
-    cat << EOF
+  cat <<EOF
 **MVVM + SwiftUI Combination:**
 - ✅ **Prevalence**: 95% of modern Swift apps
 - 🎯 **Transferability**: High - applies to iOS, macOS, watchOS
@@ -226,11 +226,11 @@ EOF
 
 # Generate insights from multiple project analysis
 generate_cross_insights() {
-    echo "💡 Generating cross-project insights..."
-    
-    local insights_report="$LEARNING_DIR/insights/ai_insights_$(date +%Y%m%d_%H%M%S).md"
-    
-    cat > "$insights_report" << EOF
+  echo "💡 Generating cross-project insights..."
+
+  local insights_report="$LEARNING_DIR/insights/ai_insights_$(date +%Y%m%d_%H%M%S).md"
+
+  cat >"$insights_report" <<EOF
 # 💡 Cross-Project AI Insights
 Generated: $(date)
 
@@ -257,13 +257,13 @@ $(generate_strategic_recommendations)
 ## Implementation Roadmap
 $(create_implementation_roadmap)
 EOF
-    
-    echo "  🧠 Cross-project insights saved: $insights_report"
+
+  echo "  🧠 Cross-project insights saved: $insights_report"
 }
 
 # Analyze pattern evolution across projects
 analyze_pattern_evolution() {
-    cat << EOF
+  cat <<EOF
 **SwiftUI Adoption Journey:**
 - 📊 **2019-2020**: 25% adoption rate, mostly simple views
 - 📊 **2021-2022**: 60% adoption, complex navigation challenges
@@ -284,11 +284,11 @@ EOF
 
 # Create knowledge transfer system
 create_knowledge_transfer() {
-    echo "📚 Creating knowledge transfer system..."
-    
-    local transfer_guide="$LEARNING_DIR/recommendations/knowledge_transfer_guide.md"
-    
-    cat > "$transfer_guide" << EOF
+  echo "📚 Creating knowledge transfer system..."
+
+  local transfer_guide="$LEARNING_DIR/recommendations/knowledge_transfer_guide.md"
+
+  cat >"$transfer_guide" <<EOF
 # 📚 Cross-Project Knowledge Transfer Guide
 Generated: $(date)
 
@@ -336,118 +336,118 @@ $(create_best_practices_checklist)
 ## Common Pitfalls and Solutions
 $(document_common_pitfalls)
 EOF
-    
-    echo "  📖 Knowledge transfer guide created: $transfer_guide"
+
+  echo "  📖 Knowledge transfer guide created: $transfer_guide"
 }
 
 # Export learnings for other projects
 export_learnings() {
-    echo "📤 Exporting learnings for reuse..."
-    
-    local export_package="$LEARNING_DIR/exports/codingreviewer_learnings_$(date +%Y%m%d).tar.gz"
-    local export_dir="$LEARNING_DIR/exports/codingreviewer_package"
-    
-    mkdir -p "$export_dir"/{templates,patterns,guides,tools}
-    
-    # Create reusable templates
-    create_project_templates "$export_dir/templates"
-    
-    # Export pattern libraries
-    export_pattern_libraries "$export_dir/patterns"
-    
-    # Create implementation guides
-    create_implementation_guides "$export_dir/guides"
-    
-    # Package development tools
-    package_development_tools "$export_dir/tools"
-    
-    # Create the export package
-    tar -czf "$export_package" -C "$LEARNING_DIR/exports" codingreviewer_package
-    
-    echo "  📦 Export package created: $export_package"
-    echo "  🌐 Ready for deployment to other projects"
+  echo "📤 Exporting learnings for reuse..."
+
+  local export_package="$LEARNING_DIR/exports/codingreviewer_learnings_$(date +%Y%m%d).tar.gz"
+  local export_dir="$LEARNING_DIR/exports/codingreviewer_package"
+
+  mkdir -p "$export_dir"/{templates,patterns,guides,tools}
+
+  # Create reusable templates
+  create_project_templates "$export_dir/templates"
+
+  # Export pattern libraries
+  export_pattern_libraries "$export_dir/patterns"
+
+  # Create implementation guides
+  create_implementation_guides "$export_dir/guides"
+
+  # Package development tools
+  package_development_tools "$export_dir/tools"
+
+  # Create the export package
+  tar -czf "$export_package" -C "$LEARNING_DIR/exports" codingreviewer_package
+
+  echo "  📦 Export package created: $export_package"
+  echo "  🌐 Ready for deployment to other projects"
 }
 
 # Helper functions for cross-learning analysis
 calculate_modularization_score() {
-    local files="$1"
-    local complex="$2"
-    local score=$((complex * 100 / (files > 0 ? files : 1)))
-    echo "$score"
+  local files="$1"
+  local complex="$2"
+  local score=$((complex * 100 / (files > 0 ? files : 1)))
+  echo "$score"
 }
 
 assess_complexity_distribution() {
-    echo "moderate_with_some_high_complexity_files"
+  echo "moderate_with_some_high_complexity_files"
 }
 
 detect_mvvm_pattern() {
-    echo "85"
+  echo "85"
 }
 
 measure_swiftui_adoption() {
-    echo "comprehensive"
+  echo "comprehensive"
 }
 
 analyze_dependency_patterns() {
-    echo "protocol_based_injection"
+  echo "protocol_based_injection"
 }
 
 identify_navigation_patterns() {
-    echo "navigationview_with_programmatic_navigation"
+  echo "navigationview_with_programmatic_navigation"
 }
 
 analyze_data_flow_patterns() {
-    echo "unidirectional_with_combine"
+  echo "unidirectional_with_combine"
 }
 
 analyze_state_management() {
-    echo "observableobject_with_published_properties"
+  echo "observableobject_with_published_properties"
 }
 
 analyze_naming_conventions() {
-    echo "camelCase_with_descriptive_names"
+  echo "camelCase_with_descriptive_names"
 }
 
 assess_code_organization() {
-    echo "feature_based_with_mvvm_structure"
+  echo "feature_based_with_mvvm_structure"
 }
 
 measure_documentation_coverage() {
-    echo "72"
+  echo "72"
 }
 
 assess_swift_style_compliance() {
-    echo "high_compliance"
+  echo "high_compliance"
 }
 
 check_accessibility_patterns() {
-    echo "basic_implementation"
+  echo "basic_implementation"
 }
 
 analyze_error_handling_strategy() {
-    echo "result_types_with_localized_errors"
+  echo "result_types_with_localized_errors"
 }
 
 count_transferable_patterns() {
-    echo "15"
+  echo "15"
 }
 
 identify_unique_solutions() {
-    echo "3"
+  echo "3"
 }
 
 catalog_reusable_components() {
-    echo "8"
+  echo "8"
 }
 
 extract_lessons_learned() {
-    echo "5"
+  echo "5"
 }
 
 # Additional helper functions
 update_knowledge_base_with_project() {
-    local profile_file="$1"
-    echo "  📈 Updated knowledge base with project profile"
+  local profile_file="$1"
+  echo "  📈 Updated knowledge base with project profile"
 }
 
 identify_organization_patterns() { echo "Feature-based organization with clear separation of concerns"; }
@@ -472,50 +472,50 @@ create_best_practices_checklist() { echo "Comprehensive checklist covering archi
 document_common_pitfalls() { echo "Common SwiftUI pitfalls and their solutions based on real project experience"; }
 
 create_project_templates() {
-    local dir="$1"
-    echo "Creating reusable project templates in $dir"
+  local dir="$1"
+  echo "Creating reusable project templates in $dir"
 }
 
 export_pattern_libraries() {
-    local dir="$1"
-    echo "Exporting pattern libraries to $dir"
+  local dir="$1"
+  echo "Exporting pattern libraries to $dir"
 }
 
 create_implementation_guides() {
-    local dir="$1"
-    echo "Creating implementation guides in $dir"
+  local dir="$1"
+  echo "Creating implementation guides in $dir"
 }
 
 package_development_tools() {
-    local dir="$1"
-    echo "Packaging development tools in $dir"
+  local dir="$1"
+  echo "Packaging development tools in $dir"
 }
 
 # Main execution flow
 main() {
-    echo "🚀 Starting Cross-Project Learning System..."
-    
-    initialize_knowledge_base
-    analyze_current_project
-    recognize_cross_patterns
-    generate_cross_insights
-    create_knowledge_transfer
-    export_learnings
-    
-    echo ""
-    echo "🎉 Cross-Project Learning System Complete!"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "🌐 Learning Summary:"
-    echo "  • Current project analyzed for transferable patterns"
-    echo "  • Cross-project patterns recognized and cataloged"
-    echo "  • AI insights generated from meta-learning analysis"
-    echo "  • Knowledge transfer system created with templates"
-    echo "  • Export package prepared for other projects"
-    echo ""
-    echo "🔮 Impact: Your learnings can now benefit future projects!"
+  echo "🚀 Starting Cross-Project Learning System..."
+
+  initialize_knowledge_base
+  analyze_current_project
+  recognize_cross_patterns
+  generate_cross_insights
+  create_knowledge_transfer
+  export_learnings
+
+  echo ""
+  echo "🎉 Cross-Project Learning System Complete!"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "🌐 Learning Summary:"
+  echo "  • Current project analyzed for transferable patterns"
+  echo "  • Cross-project patterns recognized and cataloged"
+  echo "  • AI insights generated from meta-learning analysis"
+  echo "  • Knowledge transfer system created with templates"
+  echo "  • Export package prepared for other projects"
+  echo ""
+  echo "🔮 Impact: Your learnings can now benefit future projects!"
 }
 
 # Execute main function if script is run directly
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    main "$@"
+if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
+  main "$@"
 fi

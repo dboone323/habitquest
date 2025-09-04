@@ -187,10 +187,6 @@ struct CompactInsightRow: View {
         FinancialAccount.self,
         FinancialTransaction.self,
         Budget.self,
-<<<<<<< HEAD
-        ExpenseCategory.self
-=======
         ExpenseCategory.self,
->>>>>>> 1cf3938 (Create working state for recovery)
     ], inMemory: true)
 }

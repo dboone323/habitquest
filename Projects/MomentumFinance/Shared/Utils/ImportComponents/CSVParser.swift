@@ -49,8 +49,8 @@ enum CSVParser {
     }
 
     /// Maps CSV headers to column indices for data extraction
-    static func mapColumns(headers: [String]) -> ColumnMapping {
-        var mapping = ColumnMapping()
+    static func mapColumns(headers: [String]) -> CSVColumnMapping {
+        var mapping = CSVColumnMapping()
 
         for (index, header) in headers.enumerated() {
             let normalizedHeader = header.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
@@ -113,7 +113,7 @@ enum CSVParser {
 }
 
 /// Maps CSV column headers to their respective indices
-struct ColumnMapping {
+struct CSVColumnMapping {
     var dateIndex: Int?
     var titleIndex: Int?
     var amountIndex: Int?

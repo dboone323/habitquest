@@ -27,12 +27,12 @@ mkdir -p "$DASHBOARD_DIR"
 
 # Initialize project health dashboard system
 initialize_health_dashboard() {
-    echo -e "${BOLD}${CYAN}🚀 Initializing Project Health Dashboard...${NC}"
-    
-    # Create health metrics database
-    if [ ! -f "$HEALTH_DB" ]; then
-        echo "  📊 Creating project health metrics database..."
-        cat > "$HEALTH_DB" << 'EOF'
+  echo -e "${BOLD}${CYAN}🚀 Initializing Project Health Dashboard...${NC}"
+
+  # Create health metrics database
+  if [ ! -f "$HEALTH_DB" ]; then
+    echo "  📊 Creating project health metrics database..."
+    cat >"$HEALTH_DB" <<'EOF'
 {
   "project_health": {
     "overview": {
@@ -90,20 +90,20 @@ initialize_health_dashboard() {
   }
 }
 EOF
-        sed -i '' "s/TIMESTAMP_PLACEHOLDER/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/" "$HEALTH_DB"
-        echo "    ✅ Health metrics database created"
-    fi
-    
-    echo "  🔧 Setting up health monitoring modules..."
-    create_monitoring_modules
-    
-    echo "  🎯 System initialization complete"
+    sed -i '' "s/TIMESTAMP_PLACEHOLDER/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/" "$HEALTH_DB"
+    echo "    ✅ Health metrics database created"
+  fi
+
+  echo "  🔧 Setting up health monitoring modules..."
+  create_monitoring_modules
+
+  echo "  🎯 System initialization complete"
 }
 
 # Create health monitoring modules
 create_monitoring_modules() {
-    # Real-time health monitor
-    cat > "$DASHBOARD_DIR/monitor_health.sh" << 'EOF'
+  # Real-time health monitor
+  cat >"$DASHBOARD_DIR/monitor_health.sh" <<'EOF'
 #!/bin/bash
 
 echo "🏥 Real-time Project Health Monitor"
@@ -161,8 +161,8 @@ else
 fi
 EOF
 
-    # Trend analyzer
-    cat > "$DASHBOARD_DIR/analyze_trends.sh" << 'EOF'
+  # Trend analyzer
+  cat >"$DASHBOARD_DIR/analyze_trends.sh" <<'EOF'
 #!/bin/bash
 
 echo "📈 Project Trend Analysis"
@@ -212,8 +212,8 @@ echo "  • Maintain velocity while improving code quality"
 echo "  • Address remaining security vulnerabilities"
 EOF
 
-    # Risk assessment module
-    cat > "$DASHBOARD_DIR/assess_risks.sh" << 'EOF'
+  # Risk assessment module
+  cat >"$DASHBOARD_DIR/assess_risks.sh" <<'EOF'
 #!/bin/bash
 
 echo "⚠️ Project Risk Assessment"
@@ -276,8 +276,8 @@ echo "  3. Reduce code duplication from 12% to <10%"
 echo "  4. Document 2 critical knowledge areas"
 EOF
 
-    # Resource optimization analyzer
-    cat > "$DASHBOARD_DIR/optimize_resources.sh" << 'EOF'
+  # Resource optimization analyzer
+  cat >"$DASHBOARD_DIR/optimize_resources.sh" <<'EOF'
 #!/bin/bash
 
 echo "🎯 Resource Optimization Analysis"
@@ -341,90 +341,90 @@ echo "  • 15% improvement in team satisfaction"
 echo "  • 25% faster issue resolution"
 EOF
 
-    # Make scripts executable
-    chmod +x "$DASHBOARD_DIR"/*.sh
-    echo "    ✅ Health monitoring modules created"
+  # Make scripts executable
+  chmod +x "$DASHBOARD_DIR"/*.sh
+  echo "    ✅ Health monitoring modules created"
 }
 
 # Monitor real-time project health
 monitor_realtime_health() {
-    echo -e "${YELLOW}🏥 Monitoring real-time project health...${NC}"
-    
-    # Run health monitoring
-    bash "$DASHBOARD_DIR/monitor_health.sh"
-    
-    echo ""
-    echo "  🔔 Health Alerts:"
-    echo "    ⚠️  Build time increased by 8% this month"
-    echo "    ⚠️  Code duplication above 10% threshold"
-    echo "    ✅ Test coverage improved to 78%"
-    echo "    ✅ No critical security vulnerabilities"
-    
-    # Log health check
-    echo "$(date): Real-time health monitoring completed" >> "$DASHBOARD_LOG"
+  echo -e "${YELLOW}🏥 Monitoring real-time project health...${NC}"
+
+  # Run health monitoring
+  bash "$DASHBOARD_DIR/monitor_health.sh"
+
+  echo ""
+  echo "  🔔 Health Alerts:"
+  echo "    ⚠️  Build time increased by 8% this month"
+  echo "    ⚠️  Code duplication above 10% threshold"
+  echo "    ✅ Test coverage improved to 78%"
+  echo "    ✅ No critical security vulnerabilities"
+
+  # Log health check
+  echo "$(date): Real-time health monitoring completed" >>"$DASHBOARD_LOG"
 }
 
 # Analyze project trends and visualizations
 analyze_project_trends() {
-    echo -e "${PURPLE}📈 Analyzing project trends and patterns...${NC}"
-    
-    # Run trend analysis
-    bash "$DASHBOARD_DIR/analyze_trends.sh"
-    
-    echo ""
-    echo "  📊 Key Insights:"
-    echo "    • Project health improving consistently"
-    echo "    • Development velocity up 12% this month"
-    echo "    • Technical debt reduced by 20%"
-    echo "    • Team collaboration score: 91/100"
-    
-    # Log trend analysis
-    echo "$(date): Project trend analysis completed" >> "$DASHBOARD_LOG"
+  echo -e "${PURPLE}📈 Analyzing project trends and patterns...${NC}"
+
+  # Run trend analysis
+  bash "$DASHBOARD_DIR/analyze_trends.sh"
+
+  echo ""
+  echo "  📊 Key Insights:"
+  echo "    • Project health improving consistently"
+  echo "    • Development velocity up 12% this month"
+  echo "    • Technical debt reduced by 20%"
+  echo "    • Team collaboration score: 91/100"
+
+  # Log trend analysis
+  echo "$(date): Project trend analysis completed" >>"$DASHBOARD_LOG"
 }
 
 # Perform comprehensive risk assessment
 perform_risk_assessment() {
-    echo -e "${RED}⚠️ Performing comprehensive risk assessment...${NC}"
-    
-    # Run risk assessment
-    bash "$DASHBOARD_DIR/assess_risks.sh"
-    
-    echo ""
-    echo "  🎯 Risk Management Priorities:"
-    echo "    1. Address 2 moderate security vulnerabilities"
-    echo "    2. Update 8 outdated dependencies"
-    echo "    3. Reduce code duplication to <10%"
-    echo "    4. Document critical knowledge areas"
-    
-    # Log risk assessment
-    echo "$(date): Risk assessment completed" >> "$DASHBOARD_LOG"
+  echo -e "${RED}⚠️ Performing comprehensive risk assessment...${NC}"
+
+  # Run risk assessment
+  bash "$DASHBOARD_DIR/assess_risks.sh"
+
+  echo ""
+  echo "  🎯 Risk Management Priorities:"
+  echo "    1. Address 2 moderate security vulnerabilities"
+  echo "    2. Update 8 outdated dependencies"
+  echo "    3. Reduce code duplication to <10%"
+  echo "    4. Document critical knowledge areas"
+
+  # Log risk assessment
+  echo "$(date): Risk assessment completed" >>"$DASHBOARD_LOG"
 }
 
 # Generate resource optimization recommendations
 generate_optimization_recommendations() {
-    echo -e "${GREEN}🎯 Generating resource optimization recommendations...${NC}"
-    
-    # Run optimization analysis
-    bash "$DASHBOARD_DIR/optimize_resources.sh"
-    
-    echo ""
-    echo "  💡 Quick Wins Identified:"
-    echo "    • Parallel test execution (20% faster)"
-    echo "    • Async code review process (15% faster)"
-    echo "    • Meeting time optimization (5% more coding)"
-    echo "    • Automated testing processes (10% efficiency)"
-    
-    # Log optimization recommendations
-    echo "$(date): Resource optimization analysis completed" >> "$DASHBOARD_LOG"
+  echo -e "${GREEN}🎯 Generating resource optimization recommendations...${NC}"
+
+  # Run optimization analysis
+  bash "$DASHBOARD_DIR/optimize_resources.sh"
+
+  echo ""
+  echo "  💡 Quick Wins Identified:"
+  echo "    • Parallel test execution (20% faster)"
+  echo "    • Async code review process (15% faster)"
+  echo "    • Meeting time optimization (5% more coding)"
+  echo "    • Automated testing processes (10% efficiency)"
+
+  # Log optimization recommendations
+  echo "$(date): Resource optimization analysis completed" >>"$DASHBOARD_LOG"
 }
 
 # Generate interactive dashboard
 generate_interactive_dashboard() {
-    echo -e "${BLUE}📊 Generating interactive project health dashboard...${NC}"
-    
-    local dashboard_file="$DASHBOARD_DIR/project_health_dashboard.html"
-    
-    cat > "$dashboard_file" << 'EOF'
+  echo -e "${BLUE}📊 Generating interactive project health dashboard...${NC}"
+
+  local dashboard_file="$DASHBOARD_DIR/project_health_dashboard.html"
+
+  cat >"$dashboard_file" <<'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -722,19 +722,19 @@ generate_interactive_dashboard() {
 </body>
 </html>
 EOF
-    
-    echo "  📋 Dashboard saved: $dashboard_file"
-    echo "  🌐 Open in browser for interactive monitoring"
-    echo "$dashboard_file"
+
+  echo "  📋 Dashboard saved: $dashboard_file"
+  echo "  🌐 Open in browser for interactive monitoring"
+  echo "$dashboard_file"
 }
 
 # Generate comprehensive health report
 generate_health_report() {
-    echo -e "${BLUE}📊 Generating comprehensive project health report...${NC}"
-    
-    local report_file="$DASHBOARD_DIR/health_report_$TIMESTAMP.md"
-    
-    cat > "$report_file" << EOF
+  echo -e "${BLUE}📊 Generating comprehensive project health report...${NC}"
+
+  local report_file="$DASHBOARD_DIR/health_report_$TIMESTAMP.md"
+
+  cat >"$report_file" <<EOF
 # 📊 Project Health Dashboard Report
 
 **Generated**: $(date)
@@ -926,92 +926,92 @@ The CodingReviewer project demonstrates **excellent overall health** with consis
 *Report generated by Project Health Dashboard System v1.0*
 *Part of CodingReviewer Automation Enhancement Suite*
 EOF
-    
-    echo "  📋 Report saved: $report_file"
-    echo "$report_file"
+
+  echo "  📋 Report saved: $report_file"
+  echo "$report_file"
 }
 
 # Main execution function
 run_health_dashboard() {
-    echo -e "\n${BOLD}${CYAN}📊 PROJECT HEALTH DASHBOARD ANALYSIS${NC}"
-    echo "=================================================="
-    
-    # Initialize system
-    initialize_health_dashboard
-    
-    # Run all health monitoring modules
-    echo -e "\n${YELLOW}Phase 1: Real-time Health Monitoring${NC}"
-    monitor_realtime_health
-    
-    echo -e "\n${PURPLE}Phase 2: Trend Analysis${NC}"
-    analyze_project_trends
-    
-    echo -e "\n${RED}Phase 3: Risk Assessment${NC}"
-    perform_risk_assessment
-    
-    echo -e "\n${GREEN}Phase 4: Resource Optimization${NC}"
-    generate_optimization_recommendations
-    
-    echo -e "\n${BLUE}Phase 5: Interactive Dashboard${NC}"
-    local dashboard_file=$(generate_interactive_dashboard)
-    
-    echo -e "\n${BLUE}Phase 6: Health Report${NC}"
-    local report_file=$(generate_health_report)
-    
-    echo -e "\n${BOLD}${GREEN}✅ PROJECT HEALTH DASHBOARD COMPLETE${NC}"
-    echo "📊 Dashboard: $dashboard_file"
-    echo "📋 Report: $report_file"
-    
-    # Integration with master orchestrator
-    if [ -f "$PROJECT_PATH/master_automation_orchestrator.sh" ]; then
-        echo -e "\n${YELLOW}🔄 Integrating with master automation system...${NC}"
-        echo "$(date): Project health dashboard completed - Dashboard: $dashboard_file, Report: $report_file" >> "$PROJECT_PATH/.master_automation/automation_log.txt"
-    fi
+  echo -e "\n${BOLD}${CYAN}📊 PROJECT HEALTH DASHBOARD ANALYSIS${NC}"
+  echo "=================================================="
+
+  # Initialize system
+  initialize_health_dashboard
+
+  # Run all health monitoring modules
+  echo -e "\n${YELLOW}Phase 1: Real-time Health Monitoring${NC}"
+  monitor_realtime_health
+
+  echo -e "\n${PURPLE}Phase 2: Trend Analysis${NC}"
+  analyze_project_trends
+
+  echo -e "\n${RED}Phase 3: Risk Assessment${NC}"
+  perform_risk_assessment
+
+  echo -e "\n${GREEN}Phase 4: Resource Optimization${NC}"
+  generate_optimization_recommendations
+
+  echo -e "\n${BLUE}Phase 5: Interactive Dashboard${NC}"
+  local dashboard_file=$(generate_interactive_dashboard)
+
+  echo -e "\n${BLUE}Phase 6: Health Report${NC}"
+  local report_file=$(generate_health_report)
+
+  echo -e "\n${BOLD}${GREEN}✅ PROJECT HEALTH DASHBOARD COMPLETE${NC}"
+  echo "📊 Dashboard: $dashboard_file"
+  echo "📋 Report: $report_file"
+
+  # Integration with master orchestrator
+  if [ -f "$PROJECT_PATH/master_automation_orchestrator.sh" ]; then
+    echo -e "\n${YELLOW}🔄 Integrating with master automation system...${NC}"
+    echo "$(date): Project health dashboard completed - Dashboard: $dashboard_file, Report: $report_file" >>"$PROJECT_PATH/.master_automation/automation_log.txt"
+  fi
 }
 
 # Command line interface
-case "${1:-}" in
-    --init)
-        initialize_health_dashboard
-        ;;
-    --monitor)
-        monitor_realtime_health
-        ;;
-    --trends)
-        analyze_project_trends
-        ;;
-    --risks)
-        perform_risk_assessment
-        ;;
-    --optimize)
-        generate_optimization_recommendations
-        ;;
-    --dashboard)
-        generate_interactive_dashboard
-        ;;
-    --report)
-        generate_health_report
-        ;;
-    --full-analysis)
-        run_health_dashboard
-        ;;
-    --help)
-        echo "📊 Project Health Dashboard System"
-        echo ""
-        echo "Usage: $0 [OPTION]"
-        echo ""
-        echo "Options:"
-        echo "  --init            Initialize health dashboard"
-        echo "  --monitor         Real-time health monitoring"
-        echo "  --trends          Analyze project trends"
-        echo "  --risks           Perform risk assessment"
-        echo "  --optimize        Generate optimization recommendations"
-        echo "  --dashboard       Generate interactive dashboard"
-        echo "  --report          Generate health report"
-        echo "  --full-analysis   Run complete analysis (default)"
-        echo "  --help            Show this help message"
-        ;;
-    *)
-        run_health_dashboard
-        ;;
+case "${1-}" in
+--init)
+  initialize_health_dashboard
+  ;;
+--monitor)
+  monitor_realtime_health
+  ;;
+--trends)
+  analyze_project_trends
+  ;;
+--risks)
+  perform_risk_assessment
+  ;;
+--optimize)
+  generate_optimization_recommendations
+  ;;
+--dashboard)
+  generate_interactive_dashboard
+  ;;
+--report)
+  generate_health_report
+  ;;
+--full-analysis)
+  run_health_dashboard
+  ;;
+--help)
+  echo "📊 Project Health Dashboard System"
+  echo ""
+  echo "Usage: $0 [OPTION]"
+  echo ""
+  echo "Options:"
+  echo "  --init            Initialize health dashboard"
+  echo "  --monitor         Real-time health monitoring"
+  echo "  --trends          Analyze project trends"
+  echo "  --risks           Perform risk assessment"
+  echo "  --optimize        Generate optimization recommendations"
+  echo "  --dashboard       Generate interactive dashboard"
+  echo "  --report          Generate health report"
+  echo "  --full-analysis   Run complete analysis (default)"
+  echo "  --help            Show this help message"
+  ;;
+*)
+  run_health_dashboard
+  ;;
 esac

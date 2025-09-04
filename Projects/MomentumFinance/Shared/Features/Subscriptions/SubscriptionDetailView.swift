@@ -16,10 +16,6 @@ extension Features.Subscriptions {
         var subscriptionId: PersistentIdentifier?
         var subscription: Subscription?
 
-<<<<<<< HEAD
-        @Query private var subscriptions: [Subscription]
-        @Query private var transactions: [FinancialTransaction]
-=======
         #if canImport(SwiftData)
             #if canImport(SwiftData)
                 private var subscriptions: [Subscription] = []
@@ -32,7 +28,6 @@ extension Features.Subscriptions {
             private var subscriptions: [Subscription] = []
             private var transactions: [FinancialTransaction] = []
         #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
         @State private var showingProcessPaymentConfirmation = false
 
@@ -45,11 +40,7 @@ extension Features.Subscriptions {
         // Initialize with subscription ID (for cross-module navigation)
         init(subscriptionId: PersistentIdentifier) {
             self.subscriptionId = subscriptionId
-<<<<<<< HEAD
-            self.subscription = nil // Will be resolved in the resolvedSubscription property
-=======
             self.subscription = nil  // Will be resolved in the resolvedSubscription property
->>>>>>> 1cf3938 (Create working state for recovery)
         }
 
         // Resolve the subscription from ID if needed
@@ -74,15 +65,6 @@ extension Features.Subscriptions {
                                 .font(.headline)
                                 .foregroundColor(.secondary)
 
-<<<<<<< HEAD
-                            Toggle("Active", isOn: Binding(
-                                get: { subscription.isActive },
-                                set: { newValue in
-                                    subscription.isActive = newValue
-                                    try? modelContext.save()
-                                },
-                                ))
-=======
                             Toggle(
                                 "Active",
                                 isOn: Binding(
@@ -93,7 +75,6 @@ extension Features.Subscriptions {
                                     },
                                 )
                             )
->>>>>>> 1cf3938 (Create working state for recovery)
                             .padding(.top, 8)
                             .toggleStyle(.switch)
                             .tint(.blue)
@@ -122,26 +103,16 @@ extension Features.Subscriptions {
 
                             SubscriptionDetailRow(
                                 title: "Next Payment",
-<<<<<<< HEAD
-                                value: subscription.nextDueDate.formatted(date: .long, time: .omitted),
-                                highlight: isPaymentDueSoon(subscription),
-                                )
-=======
                                 value: subscription.nextDueDate.formatted(
                                     date: .long, time: .omitted),
                                 highlight: isPaymentDueSoon(subscription),
                             )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                             SubscriptionDetailRow(
                                 title: "Payment Status",
                                 value: paymentStatusText(subscription),
                                 highlight: isPaymentOverdue(subscription),
-<<<<<<< HEAD
-                                )
-=======
                             )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                             if let notes = subscription.notes, !notes.isEmpty {
                                 VStack(alignment: .leading, spacing: 8) {
@@ -160,11 +131,7 @@ extension Features.Subscriptions {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(platformBackgroundColor)
                                 .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-<<<<<<< HEAD
-                            )
-=======
                         )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                         // Payment History (Placeholder)
                         VStack(alignment: .leading, spacing: 16) {
@@ -183,16 +150,11 @@ extension Features.Subscriptions {
                                 ForEach(relatedTransactions.prefix(5)) { transaction in
                                     HStack {
                                         VStack(alignment: .leading) {
-<<<<<<< HEAD
-                                            Text(transaction.date.formatted(date: .abbreviated, time: .omitted))
-                                                .font(.subheadline)
-=======
                                             Text(
                                                 transaction.date.formatted(
                                                     date: .abbreviated, time: .omitted)
                                             )
                                             .font(.subheadline)
->>>>>>> 1cf3938 (Create working state for recovery)
 
                                             if let notes = transaction.notes {
                                                 Text(notes)
@@ -210,14 +172,9 @@ extension Features.Subscriptions {
                                     }
                                     .padding(.vertical, 4)
 
-<<<<<<< HEAD
-                                    if relatedTransactions.firstIndex(of: transaction) !=
-                                        relatedTransactions.prefix(5).count - 1 {
-=======
                                     if relatedTransactions.firstIndex(of: transaction)
                                         != relatedTransactions.prefix(5).count - 1
                                     {
->>>>>>> 1cf3938 (Create working state for recovery)
                                         Divider()
                                     }
                                 }
@@ -228,24 +185,6 @@ extension Features.Subscriptions {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(platformBackgroundColor)
                                 .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-<<<<<<< HEAD
-                            )
-
-                        // Action Button
-                        Button(action: {
-                            showingProcessPaymentConfirmation = true
-                        }, label: {
-                            Label("Process Payment Now", systemImage: "creditcard.fill")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.blue),
-                                    )
-                                .foregroundColor(.white)
-                        })
-=======
                         )
 
                         // Action Button
@@ -265,7 +204,6 @@ extension Features.Subscriptions {
                                     .foregroundColor(.white)
                             }
                         )
->>>>>>> 1cf3938 (Create working state for recovery)
                         .disabled(!subscription.isActive)
                     }
                     .padding()
@@ -276,25 +214,16 @@ extension Features.Subscriptions {
                             subscription.processPayment(modelContext: modelContext)
                         }
                     } message: {
-<<<<<<< HEAD
-                        Text("Process a payment of \(subscription.amount.formatted(.currency(code: "USD"))) " +
-                                "for this subscription?")
-=======
                         Text(
                             "Process a payment of \(subscription.amount.formatted(.currency(code: "USD"))) "
                                 + "for this subscription?")
->>>>>>> 1cf3938 (Create working state for recovery)
                     }
                 } else {
                     ContentUnavailableView(
                         "Subscription Not Found",
                         systemImage: "creditcard.slash",
                         description: Text("The requested subscription could not be found"),
-<<<<<<< HEAD
-                        )
-=======
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
             }
         }
@@ -327,13 +256,6 @@ extension Features.Subscriptions {
         private func isPaymentDueSoon(_ subscription: Subscription) -> Bool {
             let oneWeek: TimeInterval = 7 * 24 * 60 * 60
             let now = Date()
-<<<<<<< HEAD
-            return !isPaymentOverdue(subscription) &&
-                subscription.nextDueDate < now.addingTimeInterval(oneWeek)
-        }
-
-        private func getRelatedTransactions(for subscription: Subscription) -> [FinancialTransaction] {
-=======
             return !isPaymentOverdue(subscription)
                 && subscription.nextDueDate < now.addingTimeInterval(oneWeek)
         }
@@ -341,19 +263,12 @@ extension Features.Subscriptions {
         private func getRelatedTransactions(for subscription: Subscription)
             -> [FinancialTransaction]
         {
->>>>>>> 1cf3938 (Create working state for recovery)
             // In a real implementation, we would filter transactions specifically related to this subscription
             // For example, by matching notes field or subscription ID field
             transactions
                 .filter {
-<<<<<<< HEAD
-                    $0.account?.id == subscription.account?.id &&
-                        $0.amount == subscription.amount &&
-                        $0.transactionType == .expense
-=======
                     $0.account?.id == subscription.account?.id && $0.amount == subscription.amount
                         && $0.transactionType == .expense
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
                 .sorted(by: { $0.date > $1.date })
         }
@@ -361,19 +276,11 @@ extension Features.Subscriptions {
         // Cross-platform background color
         private var platformBackgroundColor: Color {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return Color(uiColor: .systemBackground)
-            #elseif canImport(AppKit)
-            return Color(nsColor: .windowBackgroundColor)
-            #else
-            return Color.white
-=======
                 return Color(uiColor: .systemBackground)
             #elseif canImport(AppKit)
                 return Color(nsColor: .windowBackgroundColor)
             #else
                 return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
     }

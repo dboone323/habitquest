@@ -34,22 +34,22 @@ echo "  Files modified (7d avg): $((files_week / 7))"
 # Calculate velocity score (0-100)
 velocity_score=75
 if [ "$lines_today" -gt 400 ]; then
-    velocity_score=$((velocity_score + 10))
+  velocity_score=$((velocity_score + 10))
 fi
 if [ "$commits_today" -gt 6 ]; then
-    velocity_score=$((velocity_score + 8))
+  velocity_score=$((velocity_score + 8))
 fi
 if [ "$files_today" -gt 10 ]; then
-    velocity_score=$((velocity_score + 7))
+  velocity_score=$((velocity_score + 7))
 fi
 
 echo ""
 echo "🎯 Velocity Score: $velocity_score/100"
 
 if [ "$velocity_score" -gt 85 ]; then
-    echo "🚀 Excellent velocity! You're in the zone!"
+  echo "🚀 Excellent velocity! You're in the zone!"
 elif [ "$velocity_score" -gt 70 ]; then
-    echo "✅ Good productivity day"
+  echo "✅ Good productivity day"
 else
-    echo "💡 Consider focusing on fewer, larger commits"
+  echo "💡 Consider focusing on fewer, larger commits"
 fi

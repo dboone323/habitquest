@@ -20,7 +20,7 @@ extension Features.Dashboard {
             themeComponents.section(title: "Budget Progress") {
                 VStack(spacing: 16) {
                     if !budgets.isEmpty {
-                        ForEach(budgets.prefix(3)) { budget in
+                        ForEach(Array(budgets.prefix(3).enumerated()), id: \.offset) { index, budget in
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
                                     Text(budget.name)
@@ -30,7 +30,7 @@ extension Features.Dashboard {
                                     Spacer()
 
                                     themeComponents.currencyDisplay(
-                                        amount: budget.spent,
+                                        amount: Decimal(budget.spentAmount),
                                         isPositive: false,
                                         font: .subheadline.weight(.medium)
                                     )
@@ -40,13 +40,13 @@ extension Features.Dashboard {
                                         .foregroundStyle(colorTheme.secondaryText)
 
                                     themeComponents.currencyDisplay(
-                                        amount: budget.limit,
+                                        amount: Decimal(budget.limitAmount),
                                         font: .subheadline
                                     )
                                 }
 
                                 themeComponents.budgetProgressBar(
-                                    spent: budget.spent, total: budget.limit
+                                    spent: Decimal(budget.spentAmount), total: Decimal(budget.limitAmount)
                                 )
                             }
                             .contentShape(Rectangle())
@@ -54,7 +54,7 @@ extension Features.Dashboard {
                                 onBudgetTap(budget)
                             }
 
-                            if budget != budgets.prefix(3).last {
+                            if index < Array(budgets.prefix(3)).count - 1 {
                                 Divider()
                                     .background(colorTheme.secondaryText.opacity(0.3))
                                     .padding(.vertical, 4)

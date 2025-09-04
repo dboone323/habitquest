@@ -2,9 +2,9 @@ name: Shell Script Validation
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   shellcheck:
@@ -12,14 +12,14 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup ShellCheck
-      run: |
-        brew install shellcheck
-        shellcheck --version
+      - name: Setup ShellCheck
+        run: |
+          brew install shellcheck
+          shellcheck --version
 
-    - name: Run ShellCheck
-      run: |
-        find . -name "*.sh" -type f -exec shellcheck {} \;
+      - name: Run ShellCheck
+        run: |
+          find . -name "*.sh" -type f -exec shellcheck {} \;

@@ -37,42 +37,6 @@ struct NotificationsView: View {
             }
             .navigationTitle("Notifications")
             #if os(iOS)
-<<<<<<< HEAD
-            .navigationBarTitleDisplayMode(.inline)
-            #endif
-            .toolbar {
-                #if os(iOS)
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Clear All") {
-                        clearAllNotifications()
-                    }
-                    .foregroundColor(.red)
-                }
-
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-                #else
-                ToolbarItem {
-                    Button("Clear All") {
-                        clearAllNotifications()
-                    }
-                    .foregroundColor(.red)
-                }
-
-                ToolbarItem {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-                #endif
-            }
-            .task {
-                await loadNotifications()
-            }
-=======
                 .navigationBarTitleDisplayMode(.inline)
             #endif
                 .toolbar {
@@ -107,7 +71,6 @@ struct NotificationsView: View {
                 .task {
                     await loadNotifications()
                 }
->>>>>>> 1cf3938 (Create working state for recovery)
         }
     }
 
@@ -121,11 +84,7 @@ struct NotificationsView: View {
                         filter: filter,
                         isSelected: selectedFilter == filter,
                         count: getNotificationCount(for: filter),
-<<<<<<< HEAD
-                        ) {
-=======
                     ) {
->>>>>>> 1cf3938 (Create working state for recovery)
                         selectedFilter = filter
                     }
                 }
@@ -150,11 +109,7 @@ struct NotificationsView: View {
                         onDismiss: {
                             dismissNotification(notification)
                         },
-<<<<<<< HEAD
-                        )
-=======
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
             }
             .padding(.horizontal, 16)
@@ -280,7 +235,7 @@ struct FilterButton: View {
     let action: () -> Void
 
     private var isEmpty: Bool {
-        isEmpty
+        count == 0
     }
 
     var body: some View {
@@ -304,17 +259,10 @@ struct FilterButton: View {
             .padding(.vertical, 8)
             .background(
                 isSelected ? Color.blue : Color.gray.opacity(0.2),
-<<<<<<< HEAD
-                )
-            .foregroundColor(
-                isSelected ? .white : .primary,
-                )
-=======
             )
             .foregroundColor(
                 isSelected ? .white : .primary,
             )
->>>>>>> 1cf3938 (Create working state for recovery)
             .cornerRadius(20)
         }
         .buttonStyle(PlainButtonStyle())

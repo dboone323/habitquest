@@ -412,10 +412,12 @@ struct InsightsView: View {
                     .fontWeight(.medium)
             }
 
-            Text("Consider adding a morning meditation habit. Your completion rate is 23% higher for morning activities.")
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .padding(.vertical, 4)
+            Text(
+                "Consider adding a morning meditation habit. Your completion rate is 23% higher for morning activities."
+            )
+            .font(.caption)
+            .foregroundColor(.secondary)
+            .padding(.vertical, 4)
 
             HStack {
                 Image(systemName: "target")

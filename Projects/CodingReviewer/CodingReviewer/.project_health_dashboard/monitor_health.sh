@@ -20,7 +20,7 @@ echo "  Technical Debt: 15 hours"
 echo ""
 echo "⚡ Performance Metrics:"
 echo "  Build Time: 125 seconds"
-echo "  Test Execution: 145 seconds" 
+echo "  Test Execution: 145 seconds"
 echo "  App Startup: 2.8 seconds"
 
 # Development velocity
@@ -45,11 +45,11 @@ echo ""
 echo "🎯 Overall Health Score: $health_score/100"
 
 if [ "$health_score" -gt 85 ]; then
-    echo "✅ Project health is EXCELLENT"
+  echo "✅ Project health is EXCELLENT"
 elif [ "$health_score" -gt 70 ]; then
-    echo "✅ Project health is GOOD"
+  echo "✅ Project health is GOOD"
 elif [ "$health_score" -gt 55 ]; then
-    echo "⚠️ Project health needs ATTENTION"
+  echo "⚠️ Project health needs ATTENTION"
 else
-    echo "🚨 Project health is CRITICAL"
+  echo "🚨 Project health is CRITICAL"
 fi

@@ -1,80 +1,132 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CodingReviewer Test Report - 20250729_215617</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 40px; }
-        .header { background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
-        .pass { color: #28a745; }
-        .fail { color: #dc3545; }
-        .warning { color: #ffc107; }
-        .info { color: #17a2b8; }
-        pre { background: #f8f9fa; padding: 15px; border-radius: 5px; overflow-x: auto; }
-        .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .stat-card { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-align: center; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        margin: 40px;
+      }
+      .header {
+        background: #f5f5f5;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .section {
+        margin: 20px 0;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .pass {
+        color: #28a745;
+      }
+      .fail {
+        color: #dc3545;
+      }
+      .warning {
+        color: #ffc107;
+      }
+      .info {
+        color: #17a2b8;
+      }
+      pre {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+      .stat-card {
+        background: #fff;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        <h1>🧪 CodingReviewer Test Report</h1>
-        <p><strong>Generated:</strong> Tue Jul 29 21:56:20 CDT 2025</p>
-        <p><strong>Project:</strong> CodingReviewer</p>
-        <p><strong>Test Suite Version:</strong> 1.0.0</p>
+      <h1>🧪 CodingReviewer Test Report</h1>
+      <p><strong>Generated:</strong> Tue Jul 29 21:56:20 CDT 2025</p>
+      <p><strong>Project:</strong> CodingReviewer</p>
+      <p><strong>Test Suite Version:</strong> 1.0.0</p>
     </div>
-    
+
     <div class="section">
-        <h2>📊 Test Summary</h2>
-        <div class="summary">
-            <div class="stat-card">
-                <h3>Total Tests</h3>
-                <p class="info">50+</p>
-            </div>
-            <div class="stat-card">
-                <h3>Categories</h3>
-                <p class="info">5</p>
-            </div>
-            <div class="stat-card">
-                <h3>Coverage</h3>
-                <p class="pass">Core Features</p>
-            </div>
-            <div class="stat-card">
-                <h3>Status</h3>
-                <p class="pass">Ready for Testing</p>
-            </div>
+      <h2>📊 Test Summary</h2>
+      <div class="summary">
+        <div class="stat-card">
+          <h3>Total Tests</h3>
+          <p class="info">50+</p>
         </div>
+        <div class="stat-card">
+          <h3>Categories</h3>
+          <p class="info">5</p>
+        </div>
+        <div class="stat-card">
+          <h3>Coverage</h3>
+          <p class="pass">Core Features</p>
+        </div>
+        <div class="stat-card">
+          <h3>Status</h3>
+          <p class="pass">Ready for Testing</p>
+        </div>
+      </div>
     </div>
-    
+
     <div class="section">
-        <h2>🔧 Test Categories</h2>
-        <ul>
-            <li><strong>Unit Tests:</strong> SharedDataManager, FileUploadManager, FileManagerService</li>
-            <li><strong>Integration Tests:</strong> Cross-view data sharing, Analytics & AI features</li>
-            <li><strong>Feature Tests:</strong> File limit increase, environment objects, data injection</li>
-            <li><strong>Performance Tests:</strong> Large dataset handling, concurrent access</li>
-            <li><strong>Error Handling Tests:</strong> Invalid files, network errors, edge cases</li>
-        </ul>
+      <h2>🔧 Test Categories</h2>
+      <ul>
+        <li>
+          <strong>Unit Tests:</strong> SharedDataManager, FileUploadManager,
+          FileManagerService
+        </li>
+        <li>
+          <strong>Integration Tests:</strong> Cross-view data sharing, Analytics
+          & AI features
+        </li>
+        <li>
+          <strong>Feature Tests:</strong> File limit increase, environment
+          objects, data injection
+        </li>
+        <li>
+          <strong>Performance Tests:</strong> Large dataset handling, concurrent
+          access
+        </li>
+        <li>
+          <strong>Error Handling Tests:</strong> Invalid files, network errors,
+          edge cases
+        </li>
+      </ul>
     </div>
-    
+
     <div class="section">
-        <h2>✅ Key Features Tested</h2>
-        <ul>
-            <li class="pass">✅ File upload limit increased from 100 to 1000</li>
-            <li class="pass">✅ Shared data manager singleton implementation</li>
-            <li class="pass">✅ Cross-view data sharing via environment objects</li>
-            <li class="pass">✅ Analytics access to uploaded file data</li>
-            <li class="pass">✅ AI features integration with shared data</li>
-            <li class="pass">✅ Real-time updates across all views</li>
-            <li class="pass">✅ Performance with large datasets (1000+ files)</li>
-            <li class="pass">✅ Error handling and edge cases</li>
-        </ul>
+      <h2>✅ Key Features Tested</h2>
+      <ul>
+        <li class="pass">✅ File upload limit increased from 100 to 1000</li>
+        <li class="pass">✅ Shared data manager singleton implementation</li>
+        <li class="pass">✅ Cross-view data sharing via environment objects</li>
+        <li class="pass">✅ Analytics access to uploaded file data</li>
+        <li class="pass">✅ AI features integration with shared data</li>
+        <li class="pass">✅ Real-time updates across all views</li>
+        <li class="pass">✅ Performance with large datasets (1000+ files)</li>
+        <li class="pass">✅ Error handling and edge cases</li>
+      </ul>
     </div>
-    
+
     <div class="section">
-        <h2>📝 Test Execution Log</h2>
-        <pre>CodingReviewer Test Suite Report
+      <h2>📝 Test Execution Log</h2>
+      <pre>
+CodingReviewer Test Suite Report
 Generated: Tue Jul 29 21:56:17 CDT 2025
 ======================================
 Command line invocation:
@@ -157,18 +209,19 @@ RegisterWithLaunchServices /Users/danielstevens/Library/Developer/Xcode/DerivedD
     cd /Users/danielstevens/Desktop/CodingReviewer
     /System/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/LaunchServices.framework/Versions/Current/Support/lsregister -f -R -trusted /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-czlmjmozdmaufahfabephflorutb/Build/Products/Debug/CodingReviewer.app
 
-** BUILD SUCCEEDED **</pre>
+** BUILD SUCCEEDED **</pre
+      >
     </div>
-    
+
     <div class="section">
-        <h2>🎯 Next Steps</h2>
-        <ol>
-            <li>Run the test suite: <code>./run_tests.sh</code></li>
-            <li>Review any failing tests in the log above</li>
-            <li>Test the app manually with large file uploads</li>
-            <li>Verify analytics show data from uploaded files</li>
-            <li>Confirm AI features can access shared file data</li>
-        </ol>
+      <h2>🎯 Next Steps</h2>
+      <ol>
+        <li>Run the test suite: <code>./run_tests.sh</code></li>
+        <li>Review any failing tests in the log above</li>
+        <li>Test the app manually with large file uploads</li>
+        <li>Verify analytics show data from uploaded files</li>
+        <li>Confirm AI features can access shared file data</li>
+      </ol>
     </div>
-</body>
+  </body>
 </html>

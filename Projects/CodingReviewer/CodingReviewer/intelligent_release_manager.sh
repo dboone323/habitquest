@@ -31,12 +31,12 @@ mkdir -p "$RELEASE_DIR"
 
 # Initialize intelligent release management system
 initialize_release_system() {
-    echo -e "${BOLD}${CYAN}🚀 Initializing Intelligent Release Management System...${NC}"
-    
-    # Create version history database
-    if [ ! -f "$VERSION_DB" ]; then
-        echo "  📊 Creating version history database..."
-        cat > "$VERSION_DB" << 'EOF'
+  echo -e "${BOLD}${CYAN}🚀 Initializing Intelligent Release Management System...${NC}"
+
+  # Create version history database
+  if [ ! -f "$VERSION_DB" ]; then
+    echo "  📊 Creating version history database..."
+    cat >"$VERSION_DB" <<'EOF'
 {
   "version_history": {
     "current_version": "1.0.0",
@@ -104,14 +104,14 @@ initialize_release_system() {
   }
 }
 EOF
-        sed -i '' "s/TIMESTAMP_PLACEHOLDER/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/" "$VERSION_DB"
-        echo "    ✅ Version history database created"
-    fi
-    
-    # Create AI-powered release notes database
-    if [ ! -f "$RELEASE_NOTES_DB" ]; then
-        echo "  📝 Creating AI release notes database..."
-        cat > "$RELEASE_NOTES_DB" << 'EOF'
+    sed -i '' "s/TIMESTAMP_PLACEHOLDER/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/" "$VERSION_DB"
+    echo "    ✅ Version history database created"
+  fi
+
+  # Create AI-powered release notes database
+  if [ ! -f "$RELEASE_NOTES_DB" ]; then
+    echo "  📝 Creating AI release notes database..."
+    cat >"$RELEASE_NOTES_DB" <<'EOF'
 {
   "release_notes_ai": {
     "generation_templates": {
@@ -172,14 +172,14 @@ EOF
   }
 }
 EOF
-        sed -i '' "s/TIMESTAMP_PLACEHOLDER/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/" "$RELEASE_NOTES_DB"
-        echo "    ✅ AI release notes database created"
-    fi
-    
-    # Create feature flags database
-    if [ ! -f "$FEATURE_FLAGS_DB" ]; then
-        echo "  🎛️ Creating feature flags database..."
-        cat > "$FEATURE_FLAGS_DB" << 'EOF'
+    sed -i '' "s/TIMESTAMP_PLACEHOLDER/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/" "$RELEASE_NOTES_DB"
+    echo "    ✅ AI release notes database created"
+  fi
+
+  # Create feature flags database
+  if [ ! -f "$FEATURE_FLAGS_DB" ]; then
+    echo "  🎛️ Creating feature flags database..."
+    cat >"$FEATURE_FLAGS_DB" <<'EOF'
 {
   "feature_flags": {
     "active_flags": {},
@@ -224,13 +224,13 @@ EOF
   }
 }
 EOF
-        echo "    ✅ Feature flags database created"
-    fi
-    
-    # Create rollback strategies database
-    if [ ! -f "$ROLLBACK_DB" ]; then
-        echo "  🔄 Creating rollback strategies database..."
-        cat > "$ROLLBACK_DB" << 'EOF'
+    echo "    ✅ Feature flags database created"
+  fi
+
+  # Create rollback strategies database
+  if [ ! -f "$ROLLBACK_DB" ]; then
+    echo "  🔄 Creating rollback strategies database..."
+    cat >"$ROLLBACK_DB" <<'EOF'
 {
   "rollback_strategies": {
     "automated_rollback": {
@@ -302,197 +302,197 @@ EOF
   }
 }
 EOF
-        echo "    ✅ Rollback strategies database created"
-    fi
-    
-    echo "  🎯 System initialization complete"
-    echo ""
+    echo "    ✅ Rollback strategies database created"
+  fi
+
+  echo "  🎯 System initialization complete"
+  echo ""
 }
 
 # Automated semantic versioning
 perform_semantic_versioning() {
-    echo -e "${YELLOW}📊 Performing intelligent semantic versioning analysis...${NC}" >&2
-    
-    local version_change="none"
-    local change_reasons=()
-    local current_version="1.0.0"
-    
-    # Read current version from database
-    if [ -f "$VERSION_DB" ]; then
-        current_version=$(jq -r '.version_history.current_version' "$VERSION_DB" 2>/dev/null || echo "1.0.0")
-    fi
-    
-    echo "  📋 Current version: $current_version" >&2
-    echo "  🔍 Analyzing recent commits for version impact..." >&2
-    
-    # Analyze commits since last release/tag
-    local commits_since_last=""
-    if git tag -l | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | tail -1 > /dev/null; then
-        local last_tag=$(git tag -l | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | tail -1)
-        commits_since_last=$(git log "$last_tag"..HEAD --oneline 2>/dev/null || git log --oneline -10)
-        echo "    📍 Analyzing commits since tag: $last_tag" >&2
-    else
-        commits_since_last=$(git log --oneline -10)
-        echo "    📍 No previous tags found, analyzing last 10 commits" >&2
-    fi
-    
-    # Check for breaking changes
-    echo "  💥 Checking for breaking changes..." >&2
-    local breaking_changes=$(echo "$commits_since_last" | grep -iE "(BREAKING CHANGE|breaking:|!:|removes?|deletes?)" | wc -l)
-    if [ "$breaking_changes" -gt 0 ]; then
-        version_change="major"
-        change_reasons+=("$breaking_changes breaking change(s) detected")
-        echo "    🚨 Breaking changes found: $breaking_changes" >&2
-    fi
-    
-    # Check for new features
-    echo "  ✨ Checking for new features..." >&2
-    local new_features=$(echo "$commits_since_last" | grep -iE "(feat:|feature:|add:|implement:|new:)" | wc -l)
-    if [ "$new_features" -gt 0 ] && [ "$version_change" != "major" ]; then
-        version_change="minor"
-        change_reasons+=("$new_features new feature(s) added")
-        echo "    ✅ New features found: $new_features" >&2
-    fi
-    
-    # Check for bug fixes
-    echo "  🐛 Checking for bug fixes..." >&2
-    local bug_fixes=$(echo "$commits_since_last" | grep -iE "(fix:|bug:|hotfix:|patch:|correct:)" | wc -l)
-    if [ "$bug_fixes" -gt 0 ] && [ "$version_change" != "major" ] && [ "$version_change" != "minor" ]; then
-        version_change="patch"
-        change_reasons+=("$bug_fixes bug fix(es) applied")
-        echo "    🔧 Bug fixes found: $bug_fixes" >&2
-    fi
-    
-    # Check for documentation and minor changes
-    echo "  📚 Checking for documentation and minor changes..." >&2
-    local doc_changes=$(echo "$commits_since_last" | grep -iE "(docs:|documentation:|readme:|comments:)" | wc -l)
-    if [ "$doc_changes" -gt 0 ] && [ "$version_change" == "none" ]; then
-        version_change="build"
-        change_reasons+=("$doc_changes documentation update(s)")
-        echo "    📖 Documentation changes found: $doc_changes" >&2
-    fi
-    
-    # Calculate new version
-    local new_version="$current_version"
-    if [ "$version_change" != "none" ]; then
-        local major=$(echo "$current_version" | cut -d. -f1)
-        local minor=$(echo "$current_version" | cut -d. -f2)
-        local patch=$(echo "$current_version" | cut -d. -f3)
-        
-        case "$version_change" in
-            "major")
-                major=$((major + 1))
-                minor=0
-                patch=0
-                ;;
-            "minor")
-                minor=$((minor + 1))
-                patch=0
-                ;;
-            "patch")
-                patch=$((patch + 1))
-                ;;
-            "build")
-                # For build/doc changes, we might increment patch or add build number
-                # For simplicity, we'll increment patch
-                patch=$((patch + 1))
-                ;;
-        esac
-        
-        new_version="$major.$minor.$patch"
-    fi
-    
-    # Display versioning results
-    echo "  📊 Semantic Versioning Analysis Results:" >&2
-    echo "    Current Version: $current_version" >&2
-    echo "    Recommended Version: $new_version" >&2
-    echo "    Change Type: $version_change" >&2
-    
-    if [ ${#change_reasons[@]} -gt 0 ]; then
-        echo "    Change Reasons:" >&2
-        for reason in "${change_reasons[@]}"; do
-            echo "      - $reason" >&2
-        done
-    fi
-    
-    # Update version in database
-    if [ "$new_version" != "$current_version" ]; then
-        echo "  💾 Updating version database..." >&2
-        local temp_file=$(mktemp)
-        jq --arg new_ver "$new_version" --arg change_type "$version_change" \
-           '.version_history.current_version = $new_ver | 
+  echo -e "${YELLOW}📊 Performing intelligent semantic versioning analysis...${NC}" >&2
+
+  local version_change="none"
+  local change_reasons=()
+  local current_version="1.0.0"
+
+  # Read current version from database
+  if [ -f "$VERSION_DB" ]; then
+    current_version=$(jq -r '.version_history.current_version' "$VERSION_DB" 2>/dev/null || echo "1.0.0")
+  fi
+
+  echo "  📋 Current version: $current_version" >&2
+  echo "  🔍 Analyzing recent commits for version impact..." >&2
+
+  # Analyze commits since last release/tag
+  local commits_since_last=""
+  if git tag -l | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | tail -1 >/dev/null; then
+    local last_tag=$(git tag -l | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | tail -1)
+    commits_since_last=$(git log "$last_tag"..HEAD --oneline 2>/dev/null || git log --oneline -10)
+    echo "    📍 Analyzing commits since tag: $last_tag" >&2
+  else
+    commits_since_last=$(git log --oneline -10)
+    echo "    📍 No previous tags found, analyzing last 10 commits" >&2
+  fi
+
+  # Check for breaking changes
+  echo "  💥 Checking for breaking changes..." >&2
+  local breaking_changes=$(echo "$commits_since_last" | grep -iE "(BREAKING CHANGE|breaking:|!:|removes?|deletes?)" | wc -l)
+  if [ "$breaking_changes" -gt 0 ]; then
+    version_change="major"
+    change_reasons+=("$breaking_changes breaking change(s) detected")
+    echo "    🚨 Breaking changes found: $breaking_changes" >&2
+  fi
+
+  # Check for new features
+  echo "  ✨ Checking for new features..." >&2
+  local new_features=$(echo "$commits_since_last" | grep -iE "(feat:|feature:|add:|implement:|new:)" | wc -l)
+  if [ "$new_features" -gt 0 ] && [ "$version_change" != "major" ]; then
+    version_change="minor"
+    change_reasons+=("$new_features new feature(s) added")
+    echo "    ✅ New features found: $new_features" >&2
+  fi
+
+  # Check for bug fixes
+  echo "  🐛 Checking for bug fixes..." >&2
+  local bug_fixes=$(echo "$commits_since_last" | grep -iE "(fix:|bug:|hotfix:|patch:|correct:)" | wc -l)
+  if [ "$bug_fixes" -gt 0 ] && [ "$version_change" != "major" ] && [ "$version_change" != "minor" ]; then
+    version_change="patch"
+    change_reasons+=("$bug_fixes bug fix(es) applied")
+    echo "    🔧 Bug fixes found: $bug_fixes" >&2
+  fi
+
+  # Check for documentation and minor changes
+  echo "  📚 Checking for documentation and minor changes..." >&2
+  local doc_changes=$(echo "$commits_since_last" | grep -iE "(docs:|documentation:|readme:|comments:)" | wc -l)
+  if [ "$doc_changes" -gt 0 ] && [ "$version_change" == "none" ]; then
+    version_change="build"
+    change_reasons+=("$doc_changes documentation update(s)")
+    echo "    📖 Documentation changes found: $doc_changes" >&2
+  fi
+
+  # Calculate new version
+  local new_version="$current_version"
+  if [ "$version_change" != "none" ]; then
+    local major=$(echo "$current_version" | cut -d. -f1)
+    local minor=$(echo "$current_version" | cut -d. -f2)
+    local patch=$(echo "$current_version" | cut -d. -f3)
+
+    case "$version_change" in
+    "major")
+      major=$((major + 1))
+      minor=0
+      patch=0
+      ;;
+    "minor")
+      minor=$((minor + 1))
+      patch=0
+      ;;
+    "patch")
+      patch=$((patch + 1))
+      ;;
+    "build")
+      # For build/doc changes, we might increment patch or add build number
+      # For simplicity, we'll increment patch
+      patch=$((patch + 1))
+      ;;
+    esac
+
+    new_version="$major.$minor.$patch"
+  fi
+
+  # Display versioning results
+  echo "  📊 Semantic Versioning Analysis Results:" >&2
+  echo "    Current Version: $current_version" >&2
+  echo "    Recommended Version: $new_version" >&2
+  echo "    Change Type: $version_change" >&2
+
+  if [ ${#change_reasons[@]} -gt 0 ]; then
+    echo "    Change Reasons:" >&2
+    for reason in "${change_reasons[@]}"; do
+      echo "      - $reason" >&2
+    done
+  fi
+
+  # Update version in database
+  if [ "$new_version" != "$current_version" ]; then
+    echo "  💾 Updating version database..." >&2
+    local temp_file=$(mktemp)
+    jq --arg new_ver "$new_version" --arg change_type "$version_change" \
+      '.version_history.current_version = $new_ver | 
             .version_history.last_change_type = $change_type |
             .version_history.last_release = now | strftime("%Y-%m-%dT%H:%M:%SZ")' \
-           "$VERSION_DB" > "$temp_file" && mv "$temp_file" "$VERSION_DB"
-        echo "    ✅ Version updated to $new_version" >&2
-    else
-        echo "    ℹ️ No version change required" >&2
-    fi
-    
-    # Log versioning decision
-    echo "$(date): Semantic versioning - $current_version -> $new_version ($version_change)" >> "$RELEASE_LOG"
-    
-    echo "$new_version"
+      "$VERSION_DB" >"$temp_file" && mv "$temp_file" "$VERSION_DB"
+    echo "    ✅ Version updated to $new_version" >&2
+  else
+    echo "    ℹ️ No version change required" >&2
+  fi
+
+  # Log versioning decision
+  echo "$(date): Semantic versioning - $current_version -> $new_version ($version_change)" >>"$RELEASE_LOG"
+
+  echo "$new_version"
 }
 
 # AI-generated release notes
 generate_ai_release_notes() {
-    echo -e "${PURPLE}📝 Generating AI-powered release notes...${NC}"
-    
-    local version="${1:-$(perform_semantic_versioning)}"
-    local release_notes_file="$RELEASE_DIR/release_notes_$version.md"
-    
-    echo "  🤖 Analyzing commits for release notes generation..."
-    
-    # Get commits since last release
-    local commits_data=""
-    if git tag -l | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | tail -1 > /dev/null; then
-        local last_tag=$(git tag -l | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | tail -1)
-        commits_data=$(git log "$last_tag"..HEAD --pretty=format:"%h|%s|%an|%ad" --date=short 2>/dev/null || git log --pretty=format:"%h|%s|%an|%ad" --date=short -10)
+  echo -e "${PURPLE}📝 Generating AI-powered release notes...${NC}"
+
+  local version="${1:-$(perform_semantic_versioning)}"
+  local release_notes_file="$RELEASE_DIR/release_notes_$version.md"
+
+  echo "  🤖 Analyzing commits for release notes generation..."
+
+  # Get commits since last release
+  local commits_data=""
+  if git tag -l | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | tail -1 >/dev/null; then
+    local last_tag=$(git tag -l | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | tail -1)
+    commits_data=$(git log "$last_tag"..HEAD --pretty=format:"%h|%s|%an|%ad" --date=short 2>/dev/null || git log --pretty=format:"%h|%s|%an|%ad" --date=short -10)
+  else
+    commits_data=$(git log --pretty=format:"%h|%s|%an|%ad" --date=short -10)
+  fi
+
+  # Categorize commits
+  local breaking_changes=()
+  local new_features=()
+  local bug_fixes=()
+  local improvements=()
+  local documentation=()
+
+  echo "  📊 Categorizing commits by type..."
+
+  while IFS='|' read -r hash message author date; do
+    # Skip empty lines
+    [ -z "$hash" ] && continue
+
+    local commit_entry="- $message ([$hash](commit_link)) by $author"
+
+    if echo "$message" | grep -iE "(BREAKING CHANGE|breaking:|!:)" >/dev/null; then
+      breaking_changes+=("$commit_entry")
+    elif echo "$message" | grep -iE "(feat:|feature:|add:|implement:|new:)" >/dev/null; then
+      new_features+=("$commit_entry")
+    elif echo "$message" | grep -iE "(fix:|bug:|hotfix:|patch:|correct:)" >/dev/null; then
+      bug_fixes+=("$commit_entry")
+    elif echo "$message" | grep -iE "(docs:|documentation:|readme:|comments:)" >/dev/null; then
+      documentation+=("$commit_entry")
     else
-        commits_data=$(git log --pretty=format:"%h|%s|%an|%ad" --date=short -10)
+      improvements+=("$commit_entry")
     fi
-    
-    # Categorize commits
-    local breaking_changes=()
-    local new_features=()
-    local bug_fixes=()
-    local improvements=()
-    local documentation=()
-    
-    echo "  📊 Categorizing commits by type..."
-    
-    while IFS='|' read -r hash message author date; do
-        # Skip empty lines
-        [ -z "$hash" ] && continue
-        
-        local commit_entry="- $message ([$hash](commit_link)) by $author"
-        
-        if echo "$message" | grep -iE "(BREAKING CHANGE|breaking:|!:)" > /dev/null; then
-            breaking_changes+=("$commit_entry")
-        elif echo "$message" | grep -iE "(feat:|feature:|add:|implement:|new:)" > /dev/null; then
-            new_features+=("$commit_entry")
-        elif echo "$message" | grep -iE "(fix:|bug:|hotfix:|patch:|correct:)" > /dev/null; then
-            bug_fixes+=("$commit_entry")
-        elif echo "$message" | grep -iE "(docs:|documentation:|readme:|comments:)" > /dev/null; then
-            documentation+=("$commit_entry")
-        else
-            improvements+=("$commit_entry")
-        fi
-    done <<< "$commits_data"
-    
-    # Determine release type and template
-    local release_type="patch"
-    if [ ${#breaking_changes[@]} -gt 0 ]; then
-        release_type="major"
-    elif [ ${#new_features[@]} -gt 0 ]; then
-        release_type="minor"
-    fi
-    
-    echo "  📋 Generating $release_type release notes for version $version..."
-    
-    # Generate release notes
-    cat > "$release_notes_file" << EOF
+  done <<<"$commits_data"
+
+  # Determine release type and template
+  local release_type="patch"
+  if [ ${#breaking_changes[@]} -gt 0 ]; then
+    release_type="major"
+  elif [ ${#new_features[@]} -gt 0 ]; then
+    release_type="minor"
+  fi
+
+  echo "  📋 Generating $release_type release notes for version $version..."
+
+  # Generate release notes
+  cat >"$release_notes_file" <<EOF
 # 🚀 Release $version
 
 **Release Date**: $(date +"%B %d, %Y")  
@@ -504,73 +504,73 @@ This release includes $(echo "$commits_data" | wc -l | tr -d ' ') commits from $
 
 EOF
 
-    # Add breaking changes section
-    if [ ${#breaking_changes[@]} -gt 0 ]; then
-        cat >> "$release_notes_file" << EOF
+  # Add breaking changes section
+  if [ ${#breaking_changes[@]} -gt 0 ]; then
+    cat >>"$release_notes_file" <<EOF
 ## 🚨 Breaking Changes
 ${#breaking_changes[@]} breaking change(s) in this release:
 
 EOF
-        for change in "${breaking_changes[@]}"; do
-            echo "$change" >> "$release_notes_file"
-        done
-        echo "" >> "$release_notes_file"
-    fi
-    
-    # Add new features section
-    if [ ${#new_features[@]} -gt 0 ]; then
-        cat >> "$release_notes_file" << EOF
+    for change in "${breaking_changes[@]}"; do
+      echo "$change" >>"$release_notes_file"
+    done
+    echo "" >>"$release_notes_file"
+  fi
+
+  # Add new features section
+  if [ ${#new_features[@]} -gt 0 ]; then
+    cat >>"$release_notes_file" <<EOF
 ## ✨ New Features
 ${#new_features[@]} new feature(s) added:
 
 EOF
-        for feature in "${new_features[@]}"; do
-            echo "$feature" >> "$release_notes_file"
-        done
-        echo "" >> "$release_notes_file"
-    fi
-    
-    # Add bug fixes section
-    if [ ${#bug_fixes[@]} -gt 0 ]; then
-        cat >> "$release_notes_file" << EOF
+    for feature in "${new_features[@]}"; do
+      echo "$feature" >>"$release_notes_file"
+    done
+    echo "" >>"$release_notes_file"
+  fi
+
+  # Add bug fixes section
+  if [ ${#bug_fixes[@]} -gt 0 ]; then
+    cat >>"$release_notes_file" <<EOF
 ## 🐛 Bug Fixes
 ${#bug_fixes[@]} bug fix(es) applied:
 
 EOF
-        for fix in "${bug_fixes[@]}"; do
-            echo "$fix" >> "$release_notes_file"
-        done
-        echo "" >> "$release_notes_file"
-    fi
-    
-    # Add improvements section
-    if [ ${#improvements[@]} -gt 0 ]; then
-        cat >> "$release_notes_file" << EOF
+    for fix in "${bug_fixes[@]}"; do
+      echo "$fix" >>"$release_notes_file"
+    done
+    echo "" >>"$release_notes_file"
+  fi
+
+  # Add improvements section
+  if [ ${#improvements[@]} -gt 0 ]; then
+    cat >>"$release_notes_file" <<EOF
 ## 🔧 Improvements
 ${#improvements[@]} improvement(s) made:
 
 EOF
-        for improvement in "${improvements[@]}"; do
-            echo "$improvement" >> "$release_notes_file"
-        done
-        echo "" >> "$release_notes_file"
-    fi
-    
-    # Add documentation section
-    if [ ${#documentation[@]} -gt 0 ]; then
-        cat >> "$release_notes_file" << EOF
+    for improvement in "${improvements[@]}"; do
+      echo "$improvement" >>"$release_notes_file"
+    done
+    echo "" >>"$release_notes_file"
+  fi
+
+  # Add documentation section
+  if [ ${#documentation[@]} -gt 0 ]; then
+    cat >>"$release_notes_file" <<EOF
 ## 📚 Documentation
 ${#documentation[@]} documentation update(s):
 
 EOF
-        for doc in "${documentation[@]}"; do
-            echo "$doc" >> "$release_notes_file"
-        done
-        echo "" >> "$release_notes_file"
-    fi
-    
-    # Add technical details
-    cat >> "$release_notes_file" << EOF
+    for doc in "${documentation[@]}"; do
+      echo "$doc" >>"$release_notes_file"
+    done
+    echo "" >>"$release_notes_file"
+  fi
+
+  # Add technical details
+  cat >>"$release_notes_file" <<EOF
 ## 📊 Technical Details
 
 ### Changes by Type
@@ -582,13 +582,13 @@ EOF
 
 ### Files Changed
 EOF
-    
-    # Add file change statistics
-    local files_changed=$(git diff --name-only HEAD~10 2>/dev/null | wc -l | tr -d ' ')
-    local lines_added=$(git diff --shortstat HEAD~10 2>/dev/null | grep -o '[0-9]* insertion' | grep -o '[0-9]*' || echo "0")
-    local lines_deleted=$(git diff --shortstat HEAD~10 2>/dev/null | grep -o '[0-9]* deletion' | grep -o '[0-9]*' || echo "0")
-    
-    cat >> "$release_notes_file" << EOF
+
+  # Add file change statistics
+  local files_changed=$(git diff --name-only HEAD~10 2>/dev/null | wc -l | tr -d ' ')
+  local lines_added=$(git diff --shortstat HEAD~10 2>/dev/null | grep -o '[0-9]* insertion' | grep -o '[0-9]*' || echo "0")
+  local lines_deleted=$(git diff --shortstat HEAD~10 2>/dev/null | grep -o '[0-9]* deletion' | grep -o '[0-9]*' || echo "0")
+
+  cat >>"$release_notes_file" <<EOF
 - Files Modified: $files_changed
 - Lines Added: $lines_added
 - Lines Removed: $lines_deleted
@@ -609,46 +609,46 @@ git checkout v$version
 *Release notes generated by Intelligent Release Management System v1.0*
 *Part of CodingReviewer Automation Enhancement Suite*
 EOF
-    
-    echo "  📋 Release notes generated: $release_notes_file"
-    echo "  📊 Statistics:"
-    echo "    - Breaking Changes: ${#breaking_changes[@]}"
-    echo "    - New Features: ${#new_features[@]}"
-    echo "    - Bug Fixes: ${#bug_fixes[@]}"
-    echo "    - Improvements: ${#improvements[@]}"
-    echo "    - Documentation: ${#documentation[@]}"
-    
-    # Log release notes generation
-    echo "$(date): AI release notes generated for version $version" >> "$RELEASE_LOG"
-    
-    echo "$release_notes_file"
+
+  echo "  📋 Release notes generated: $release_notes_file"
+  echo "  📊 Statistics:"
+  echo "    - Breaking Changes: ${#breaking_changes[@]}"
+  echo "    - New Features: ${#new_features[@]}"
+  echo "    - Bug Fixes: ${#bug_fixes[@]}"
+  echo "    - Improvements: ${#improvements[@]}"
+  echo "    - Documentation: ${#documentation[@]}"
+
+  # Log release notes generation
+  echo "$(date): AI release notes generated for version $version" >>"$RELEASE_LOG"
+
+  echo "$release_notes_file"
 }
 
 # Feature flag automation
 manage_feature_flags() {
-    echo -e "${CYAN}🎛️ Managing feature flags automation...${NC}"
-    
-    local flags_configured=0
-    local flags_results=()
-    
-    echo "  🔍 Scanning code for feature flag patterns..."
-    
-    # Look for feature flag patterns in code
-    local feature_flags=$(grep -r "FeatureFlag\|feature_flag\|isEnabled\|toggleFlag" "$PROJECT_PATH/CodingReviewer" --include="*.swift" 2>/dev/null | wc -l)
-    
-    if [ "$feature_flags" -gt 0 ]; then
-        echo "    ✅ Found $feature_flags potential feature flag usage"
-        flags_results+=("✅ $feature_flags feature flag references detected")
-    else
-        echo "    ℹ️ No existing feature flags detected, setting up framework"
-        flags_results+=("ℹ️ Feature flag framework ready for implementation")
-    fi
-    
-    # Create feature flag management configuration
-    echo "  ⚙️ Configuring feature flag management..."
-    
-    # Generate feature flag Swift code template
-    cat > "$RELEASE_DIR/FeatureFlagManager.swift" << 'EOF'
+  echo -e "${CYAN}🎛️ Managing feature flags automation...${NC}"
+
+  local flags_configured=0
+  local flags_results=()
+
+  echo "  🔍 Scanning code for feature flag patterns..."
+
+  # Look for feature flag patterns in code
+  local feature_flags=$(grep -r "FeatureFlag\|feature_flag\|isEnabled\|toggleFlag" "$PROJECT_PATH/CodingReviewer" --include="*.swift" 2>/dev/null | wc -l)
+
+  if [ "$feature_flags" -gt 0 ]; then
+    echo "    ✅ Found $feature_flags potential feature flag usage"
+    flags_results+=("✅ $feature_flags feature flag references detected")
+  else
+    echo "    ℹ️ No existing feature flags detected, setting up framework"
+    flags_results+=("ℹ️ Feature flag framework ready for implementation")
+  fi
+
+  # Create feature flag management configuration
+  echo "  ⚙️ Configuring feature flag management..."
+
+  # Generate feature flag Swift code template
+  cat >"$RELEASE_DIR/FeatureFlagManager.swift" <<'EOF'
 //
 //  FeatureFlagManager.swift
 //  CodingReviewer
@@ -786,12 +786,12 @@ enum BuildEnvironment {
     case production
 }
 EOF
-    
-    flags_configured=$((flags_configured + 1))
-    flags_results+=("✅ FeatureFlagManager.swift template generated")
-    
-    # Generate feature flag configuration file
-    cat > "$RELEASE_DIR/feature_flags_config.json" << EOF
+
+  flags_configured=$((flags_configured + 1))
+  flags_results+=("✅ FeatureFlagManager.swift template generated")
+
+  # Generate feature flag configuration file
+  cat >"$RELEASE_DIR/feature_flags_config.json" <<EOF
 {
   "feature_flags_config": {
     "environment_specific": {
@@ -835,12 +835,12 @@ EOF
   }
 }
 EOF
-    
-    flags_configured=$((flags_configured + 1))
-    flags_results+=("✅ Feature flags configuration created")
-    
-    # Create feature flag deployment script
-    cat > "$RELEASE_DIR/deploy_feature_flags.sh" << 'EOF'
+
+  flags_configured=$((flags_configured + 1))
+  flags_results+=("✅ Feature flags configuration created")
+
+  # Create feature flag deployment script
+  cat >"$RELEASE_DIR/deploy_feature_flags.sh" <<'EOF'
 #!/bin/bash
 
 # Feature Flag Deployment Script
@@ -875,39 +875,39 @@ done
 
 echo "✅ Feature flags deployment complete for $ENVIRONMENT"
 EOF
-    
-    chmod +x "$RELEASE_DIR/deploy_feature_flags.sh"
-    flags_configured=$((flags_configured + 1))
-    flags_results+=("✅ Feature flag deployment script created")
-    
-    # Display feature flag management results
-    echo "  📊 Feature Flag Management Results:"
-    for result in "${flags_results[@]}"; do
-        echo "    $result"
-    done
-    
-    echo "  📁 Generated files:"
-    echo "    • FeatureFlagManager.swift - Feature flag management class"
-    echo "    • feature_flags_config.json - Environment-specific configuration"
-    echo "    • deploy_feature_flags.sh - Deployment automation script"
-    
-    # Log feature flag setup
-    echo "$(date): Feature flag automation configured - $flags_configured components created" >> "$RELEASE_LOG"
-    
-    return 0
+
+  chmod +x "$RELEASE_DIR/deploy_feature_flags.sh"
+  flags_configured=$((flags_configured + 1))
+  flags_results+=("✅ Feature flag deployment script created")
+
+  # Display feature flag management results
+  echo "  📊 Feature Flag Management Results:"
+  for result in "${flags_results[@]}"; do
+    echo "    $result"
+  done
+
+  echo "  📁 Generated files:"
+  echo "    • FeatureFlagManager.swift - Feature flag management class"
+  echo "    • feature_flags_config.json - Environment-specific configuration"
+  echo "    • deploy_feature_flags.sh - Deployment automation script"
+
+  # Log feature flag setup
+  echo "$(date): Feature flag automation configured - $flags_configured components created" >>"$RELEASE_LOG"
+
+  return 0
 }
 
 # Rollback automation
 setup_rollback_automation() {
-    echo -e "${RED}🔄 Setting up rollback automation...${NC}"
-    
-    local rollback_strategies=0
-    local rollback_results=()
-    
-    echo "  🛡️ Configuring automated rollback triggers..."
-    
-    # Create rollback automation script
-    cat > "$RELEASE_DIR/automated_rollback.sh" << 'EOF'
+  echo -e "${RED}🔄 Setting up rollback automation...${NC}"
+
+  local rollback_strategies=0
+  local rollback_results=()
+
+  echo "  🛡️ Configuring automated rollback triggers..."
+
+  # Create rollback automation script
+  cat >"$RELEASE_DIR/automated_rollback.sh" <<'EOF'
 #!/bin/bash
 
 # Automated Rollback System
@@ -1047,13 +1047,13 @@ case "${1:-check}" in
         ;;
 esac
 EOF
-    
-    chmod +x "$RELEASE_DIR/automated_rollback.sh"
-    rollback_strategies=$((rollback_strategies + 1))
-    rollback_results+=("✅ Automated rollback script created")
-    
-    # Create rollback monitoring script
-    cat > "$RELEASE_DIR/rollback_monitoring.sh" << 'EOF'
+
+  chmod +x "$RELEASE_DIR/automated_rollback.sh"
+  rollback_strategies=$((rollback_strategies + 1))
+  rollback_results+=("✅ Automated rollback script created")
+
+  # Create rollback monitoring script
+  cat >"$RELEASE_DIR/rollback_monitoring.sh" <<'EOF'
 #!/bin/bash
 
 # Rollback Monitoring Service
@@ -1081,13 +1081,13 @@ done
 
 echo "⏰ Monitoring service completed 24-hour cycle"
 EOF
-    
-    chmod +x "$RELEASE_DIR/rollback_monitoring.sh"
-    rollback_strategies=$((rollback_strategies + 1))
-    rollback_results+=("✅ Rollback monitoring service created")
-    
-    # Create rollback validation checklist
-    cat > "$RELEASE_DIR/rollback_checklist.md" << EOF
+
+  chmod +x "$RELEASE_DIR/rollback_monitoring.sh"
+  rollback_strategies=$((rollback_strategies + 1))
+  rollback_results+=("✅ Rollback monitoring service created")
+
+  # Create rollback validation checklist
+  cat >"$RELEASE_DIR/rollback_checklist.md" <<EOF
 # 🔄 Rollback Validation Checklist
 
 ## Pre-Rollback Verification
@@ -1126,35 +1126,35 @@ EOF
 ---
 *Generated by Intelligent Release Management System*
 EOF
-    
-    rollback_strategies=$((rollback_strategies + 1))
-    rollback_results+=("✅ Rollback validation checklist created")
-    
-    # Display rollback automation results
-    echo "  📊 Rollback Automation Results:"
-    for result in "${rollback_results[@]}"; do
-        echo "    $result"
-    done
-    
-    echo "  📁 Generated files:"
-    echo "    • automated_rollback.sh - Core rollback automation"
-    echo "    • rollback_monitoring.sh - Continuous monitoring service"
-    echo "    • rollback_checklist.md - Validation procedures"
-    
-    # Log rollback setup
-    echo "$(date): Rollback automation configured - $rollback_strategies strategies implemented" >> "$RELEASE_LOG"
-    
-    return 0
+
+  rollback_strategies=$((rollback_strategies + 1))
+  rollback_results+=("✅ Rollback validation checklist created")
+
+  # Display rollback automation results
+  echo "  📊 Rollback Automation Results:"
+  for result in "${rollback_results[@]}"; do
+    echo "    $result"
+  done
+
+  echo "  📁 Generated files:"
+  echo "    • automated_rollback.sh - Core rollback automation"
+  echo "    • rollback_monitoring.sh - Continuous monitoring service"
+  echo "    • rollback_checklist.md - Validation procedures"
+
+  # Log rollback setup
+  echo "$(date): Rollback automation configured - $rollback_strategies strategies implemented" >>"$RELEASE_LOG"
+
+  return 0
 }
 
 # Generate comprehensive release management report
 generate_release_report() {
-    echo -e "${BLUE}📊 Generating intelligent release management report...${NC}"
-    
-    local report_file="$RELEASE_DIR/release_management_report_$TIMESTAMP.md"
-    local current_version=$(perform_semantic_versioning)
-    
-    cat > "$report_file" << EOF
+  echo -e "${BLUE}📊 Generating intelligent release management report...${NC}"
+
+  local report_file="$RELEASE_DIR/release_management_report_$TIMESTAMP.md"
+  local current_version=$(perform_semantic_versioning)
+
+  cat >"$report_file" <<EOF
 # 🚀 Intelligent Release Management Report
 
 **Generated**: $(date)
@@ -1167,27 +1167,27 @@ This report provides comprehensive analysis of the intelligent release managemen
 
 ## 📊 Semantic Versioning Analysis
 EOF
-    
-    # Add versioning analysis
-    perform_semantic_versioning >/dev/null 2>&1
-    echo "- **Current Version**: $current_version" >> "$report_file"
-    echo "- **Versioning Strategy**: Semantic versioning with automated analysis" >> "$report_file"
-    echo "- **Release Readiness**: AUTOMATED ANALYSIS COMPLETE ✅" >> "$report_file"
-    
-    cat >> "$report_file" << EOF
+
+  # Add versioning analysis
+  perform_semantic_versioning >/dev/null 2>&1
+  echo "- **Current Version**: $current_version" >>"$report_file"
+  echo "- **Versioning Strategy**: Semantic versioning with automated analysis" >>"$report_file"
+  echo "- **Release Readiness**: AUTOMATED ANALYSIS COMPLETE ✅" >>"$report_file"
+
+  cat >>"$report_file" <<EOF
 
 ## 📝 AI Release Notes Generation
 EOF
-    
-    # Add release notes status
-    if [ -f "$RELEASE_DIR/release_notes_$current_version.md" ]; then
-        echo "- **Release Notes**: GENERATED ✅" >> "$report_file"
-        echo "- **Content Analysis**: Multi-category commit classification" >> "$report_file"
-    else
-        echo "- **Release Notes**: READY FOR GENERATION ⚠️" >> "$report_file"
-    fi
-    
-    cat >> "$report_file" << EOF
+
+  # Add release notes status
+  if [ -f "$RELEASE_DIR/release_notes_$current_version.md" ]; then
+    echo "- **Release Notes**: GENERATED ✅" >>"$report_file"
+    echo "- **Content Analysis**: Multi-category commit classification" >>"$report_file"
+  else
+    echo "- **Release Notes**: READY FOR GENERATION ⚠️" >>"$report_file"
+  fi
+
+  cat >>"$report_file" <<EOF
 
 ## 🎛️ Feature Flag Management
 - **Feature Flag Framework**: IMPLEMENTED ✅
@@ -1205,14 +1205,14 @@ EOF
 
 ### Commit Analysis (Last 10 commits)
 EOF
-    
-    # Add commit statistics
-    local total_commits=$(git log --oneline -10 | wc -l | tr -d ' ')
-    local breaking_changes=$(git log --oneline -10 | grep -iE "(BREAKING|breaking:|!:)" | wc -l | tr -d ' ')
-    local features=$(git log --oneline -10 | grep -iE "(feat:|feature:|add:)" | wc -l | tr -d ' ')
-    local fixes=$(git log --oneline -10 | grep -iE "(fix:|bug:|hotfix:)" | wc -l | tr -d ' ')
-    
-    cat >> "$report_file" << EOF
+
+  # Add commit statistics
+  local total_commits=$(git log --oneline -10 | wc -l | tr -d ' ')
+  local breaking_changes=$(git log --oneline -10 | grep -iE "(BREAKING|breaking:|!:)" | wc -l | tr -d ' ')
+  local features=$(git log --oneline -10 | grep -iE "(feat:|feature:|add:)" | wc -l | tr -d ' ')
+  local fixes=$(git log --oneline -10 | grep -iE "(fix:|bug:|hotfix:)" | wc -l | tr -d ' ')
+
+  cat >>"$report_file" <<EOF
 - **Total Commits**: $total_commits
 - **Breaking Changes**: $breaking_changes
 - **New Features**: $features
@@ -1220,27 +1220,27 @@ EOF
 
 ### Release Readiness Assessment
 EOF
-    
-    # Calculate release readiness score
-    local readiness_score=100
-    if [ "$breaking_changes" -gt 2 ]; then
-        readiness_score=$((readiness_score - 20))
-        echo "- ⚠️ High number of breaking changes detected" >> "$report_file"
-    fi
-    
-    if [ "$total_commits" -gt 50 ]; then
-        readiness_score=$((readiness_score - 15))
-        echo "- ⚠️ Large number of changes since last release" >> "$report_file"
-    fi
-    
-    if [ "$fixes" -gt "$features" ]; then
-        readiness_score=$((readiness_score - 10))
-        echo "- ℹ️ More fixes than features (stability-focused release)" >> "$report_file"
-    fi
-    
-    echo "- **Overall Readiness Score**: $readiness_score/100" >> "$report_file"
-    
-    cat >> "$report_file" << EOF
+
+  # Calculate release readiness score
+  local readiness_score=100
+  if [ "$breaking_changes" -gt 2 ]; then
+    readiness_score=$((readiness_score - 20))
+    echo "- ⚠️ High number of breaking changes detected" >>"$report_file"
+  fi
+
+  if [ "$total_commits" -gt 50 ]; then
+    readiness_score=$((readiness_score - 15))
+    echo "- ⚠️ Large number of changes since last release" >>"$report_file"
+  fi
+
+  if [ "$fixes" -gt "$features" ]; then
+    readiness_score=$((readiness_score - 10))
+    echo "- ℹ️ More fixes than features (stability-focused release)" >>"$report_file"
+  fi
+
+  echo "- **Overall Readiness Score**: $readiness_score/100" >>"$report_file"
+
+  cat >>"$report_file" <<EOF
 
 ## 🎯 Release Strategy Recommendations
 
@@ -1258,22 +1258,22 @@ EOF
 
 ### Deployment Strategy
 EOF
-    
-    if [ "$breaking_changes" -gt 0 ]; then
-        cat >> "$report_file" << EOF
+
+  if [ "$breaking_changes" -gt 0 ]; then
+    cat >>"$report_file" <<EOF
 - **Recommended**: Major release with careful rollout
 - **Feature Flags**: Enable gradually with monitoring
 - **Communication**: Advance notice to users about breaking changes
 EOF
-    else
-        cat >> "$report_file" << EOF
+  else
+    cat >>"$report_file" <<EOF
 - **Recommended**: Standard release with automated deployment
 - **Feature Flags**: Normal rollout strategy
 - **Communication**: Standard release announcement
 EOF
-    fi
-    
-    cat >> "$report_file" << EOF
+  fi
+
+  cat >>"$report_file" <<EOF
 
 ## 📊 System Health Metrics
 - **Versioning Accuracy**: Automated semantic analysis
@@ -1299,90 +1299,90 @@ EOF
 *Report generated by Intelligent Release Management System v1.0*
 *Part of CodingReviewer Automation Enhancement Suite*
 EOF
-    
-    echo "  📋 Report saved: $report_file"
-    echo "$report_file"
+
+  echo "  📋 Report saved: $report_file"
+  echo "$report_file"
 }
 
 # Main execution function
 run_intelligent_release_management() {
-    echo -e "\n${BOLD}${CYAN}🚀 INTELLIGENT RELEASE MANAGEMENT ANALYSIS${NC}"
-    echo "=============================================="
-    
-    # Initialize system
-    initialize_release_system
-    
-    # Run all release management modules
-    echo -e "${YELLOW}Phase 1: Semantic Versioning Analysis${NC}"
-    local new_version=$(perform_semantic_versioning)
-    
-    echo -e "\n${PURPLE}Phase 2: AI Release Notes Generation${NC}"
-    generate_ai_release_notes "$new_version"
-    
-    echo -e "\n${CYAN}Phase 3: Feature Flag Automation${NC}"
-    manage_feature_flags
-    
-    echo -e "\n${RED}Phase 4: Rollback Automation Setup${NC}"
-    setup_rollback_automation
-    
-    echo -e "\n${BLUE}Phase 5: Generating Report${NC}"
-    local report_file=$(generate_release_report)
-    
-    echo -e "\n${BOLD}${GREEN}✅ INTELLIGENT RELEASE MANAGEMENT COMPLETE${NC}"
-    echo "📊 Full report available at: $report_file"
-    echo "🏷️ Recommended version: $new_version"
-    
-    # Integration with master orchestrator
-    if [ -f "$PROJECT_PATH/master_automation_orchestrator.sh" ]; then
-        echo -e "\n${YELLOW}🔄 Integrating with master automation system...${NC}"
-        echo "$(date): Intelligent release management completed - Version: $new_version, Report: $report_file" >> "$PROJECT_PATH/.master_automation/automation_log.txt"
-    fi
+  echo -e "\n${BOLD}${CYAN}🚀 INTELLIGENT RELEASE MANAGEMENT ANALYSIS${NC}"
+  echo "=============================================="
+
+  # Initialize system
+  initialize_release_system
+
+  # Run all release management modules
+  echo -e "${YELLOW}Phase 1: Semantic Versioning Analysis${NC}"
+  local new_version=$(perform_semantic_versioning)
+
+  echo -e "\n${PURPLE}Phase 2: AI Release Notes Generation${NC}"
+  generate_ai_release_notes "$new_version"
+
+  echo -e "\n${CYAN}Phase 3: Feature Flag Automation${NC}"
+  manage_feature_flags
+
+  echo -e "\n${RED}Phase 4: Rollback Automation Setup${NC}"
+  setup_rollback_automation
+
+  echo -e "\n${BLUE}Phase 5: Generating Report${NC}"
+  local report_file=$(generate_release_report)
+
+  echo -e "\n${BOLD}${GREEN}✅ INTELLIGENT RELEASE MANAGEMENT COMPLETE${NC}"
+  echo "📊 Full report available at: $report_file"
+  echo "🏷️ Recommended version: $new_version"
+
+  # Integration with master orchestrator
+  if [ -f "$PROJECT_PATH/master_automation_orchestrator.sh" ]; then
+    echo -e "\n${YELLOW}🔄 Integrating with master automation system...${NC}"
+    echo "$(date): Intelligent release management completed - Version: $new_version, Report: $report_file" >>"$PROJECT_PATH/.master_automation/automation_log.txt"
+  fi
 }
 
 # Command line interface
-case "${1:-}" in
-    --init)
-        initialize_release_system
-        ;;
-    --version)
-        perform_semantic_versioning
-        ;;
-    --release-notes)
-        generate_ai_release_notes "${2:-}"
-        ;;
-    --feature-flags)
-        manage_feature_flags
-        ;;
-    --rollback)
-        setup_rollback_automation
-        ;;
-    --report)
-        generate_release_report
-        ;;
-    --full-analysis)
-        run_intelligent_release_management
-        ;;
-    --help)
-        echo "🚀 Intelligent Release Management System"
-        echo ""
-        echo "Usage: $0 [OPTION]"
-        echo ""
-        echo "Options:"
-        echo "  --init           Initialize release management system"
-        echo "  --version        Perform semantic versioning analysis"
-        echo "  --release-notes  Generate AI-powered release notes"
-        echo "  --feature-flags  Configure feature flag automation"
-        echo "  --rollback       Setup rollback automation"
-        echo "  --report         Generate release management report"
-        echo "  --full-analysis  Run complete release management (default)"
-        echo "  --help           Show this help message"
-        echo ""
-        echo "Examples:"
-        echo "  $0                     # Run full release management"
-        echo "  $0 --version           # Get version recommendation only"
-        echo "  $0 --release-notes 1.2.0  # Generate release notes for specific version"
-        ;;
-    *)
-        run_intelligent_release_management
-        ;;
+case "${1-}" in
+--init)
+  initialize_release_system
+  ;;
+--version)
+  perform_semantic_versioning
+  ;;
+--release-notes)
+  generate_ai_release_notes "${2-}"
+  ;;
+--feature-flags)
+  manage_feature_flags
+  ;;
+--rollback)
+  setup_rollback_automation
+  ;;
+--report)
+  generate_release_report
+  ;;
+--full-analysis)
+  run_intelligent_release_management
+  ;;
+--help)
+  echo "🚀 Intelligent Release Management System"
+  echo ""
+  echo "Usage: $0 [OPTION]"
+  echo ""
+  echo "Options:"
+  echo "  --init           Initialize release management system"
+  echo "  --version        Perform semantic versioning analysis"
+  echo "  --release-notes  Generate AI-powered release notes"
+  echo "  --feature-flags  Configure feature flag automation"
+  echo "  --rollback       Setup rollback automation"
+  echo "  --report         Generate release management report"
+  echo "  --full-analysis  Run complete release management (default)"
+  echo "  --help           Show this help message"
+  echo ""
+  echo "Examples:"
+  echo "  $0                     # Run full release management"
+  echo "  $0 --version           # Get version recommendation only"
+  echo "  $0 --release-notes 1.2.0  # Generate release notes for specific version"
+  ;;
+*)
+  run_intelligent_release_management
+  ;;
 esac

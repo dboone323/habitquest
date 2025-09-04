@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-import UIKit
-import SwiftData
-import SwiftUI
-import UIKit
-=======
 import SwiftUI
 
 #if canImport(AppKit)
     import AppKit
 #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
 //
 //  SubscriptionsView.swift
@@ -39,17 +32,10 @@ extension Features.Subscriptions {
         @State private var viewModel = SubscriptionsViewModel()
         @Environment(\.modelContext)
         private var modelContext
-<<<<<<< HEAD
-        @Query(sort: \Subscription.nextDueDate, order: .forward)
-        private var subscriptions: [Subscription]
-        @Query private var categories: [ExpenseCategory]
-        @Query private var accounts: [FinancialAccount]
-=======
         // Use simple stored arrays for now to keep builds stable across toolchains.
         private var subscriptions: [Subscription] = []
         private var categories: [ExpenseCategory] = []
         private var accounts: [FinancialAccount] = []
->>>>>>> 1cf3938 (Create working state for recovery)
 
         @State private var showingAddSubscription = false
         @State private var selectedSubscription: Subscription?
@@ -57,60 +43,34 @@ extension Features.Subscriptions {
 
         // Search functionality
         @State private var showingSearch = false
-<<<<<<< HEAD
-        @State private var navigationCoordinator = NavigationCoordinator.shared
-=======
     @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
->>>>>>> 1cf3938 (Create working state for recovery)
 
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return Color(UIColor.systemBackground)
-            #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
-            #else
-            return Color.white
-=======
                 return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
                 return Color(NSColor.controlBackgroundColor)
             #else
                 return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
 
         private var secondaryBackgroundColor: Color {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return Color(UIColor.systemGroupedBackground)
-            #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
-            #else
-            return Color.gray.opacity(0.1)
-=======
                 return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
                 return Color(NSColor.controlBackgroundColor)
             #else
                 return Color.gray.opacity(0.1)
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
 
         private var toolbarPlacement: ToolbarItemPlacement {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return .navigationBarTrailing
-            #else
-            return .primaryAction
-=======
                 return .navigationBarTrailing
             #else
                 return .primaryAction
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
 
@@ -123,12 +83,8 @@ extension Features.Subscriptions {
             case .inactive:
                 return subscriptions.filter { !$0.isActive }
             case .dueSoon:
-<<<<<<< HEAD
-                let sevenDaysFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
-=======
                 let sevenDaysFromNow =
                     Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
->>>>>>> 1cf3938 (Create working state for recovery)
                 return subscriptions.filter { $0.isActive && $0.nextDueDate <= sevenDaysFromNow }
             }
         }
@@ -141,21 +97,13 @@ extension Features.Subscriptions {
                         subscriptions: subscriptions,
                         selectedFilter: $selectedFilter,
                         showingAddSubscription: $showingAddSubscription,
-<<<<<<< HEAD
-                        )
-=======
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                     // Content Section
                     SubscriptionContentView(
                         filteredSubscriptions: filteredSubscriptions,
                         selectedSubscription: $selectedSubscription,
-<<<<<<< HEAD
-                        )
-=======
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
                 .navigationTitle("Subscriptions")
                 .toolbar {
@@ -164,27 +112,17 @@ extension Features.Subscriptions {
                             // Search Button
                             Button {
                                 showingSearch = true
-<<<<<<< HEAD
-                                navigationCoordinator.activateSearch()
-=======
                                 NavigationCoordinator.shared.activateSearch()
->>>>>>> 1cf3938 (Create working state for recovery)
                             } label: {
                                 Image(systemName: "magnifyingglass")
                             }
 
                             // Add Subscription Button
-<<<<<<< HEAD
-                            Button(action: { showingAddSubscription = true }, label: {
-                                Image(systemName: "plus")
-                            })
-=======
                             Button(
                                 action: { showingAddSubscription = true },
                                 label: {
                                     Image(systemName: "plus")
                                 })
->>>>>>> 1cf3938 (Create working state for recovery)
                         }
                     }
                 }
@@ -206,8 +144,6 @@ extension Features.Subscriptions {
                 .background(backgroundColor)
             }
         }
-<<<<<<< HEAD
-=======
 
         // Provide an explicit initializer so call sites can use `SubscriptionsView()`
         // When SwiftData is available the @Query wrappers manage data; otherwise use provided defaults.
@@ -221,7 +157,6 @@ extension Features.Subscriptions {
                 self.accounts = accounts
             #endif
         }
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 
     // MARK: - Header View
@@ -297,17 +232,11 @@ extension Features.Subscriptions {
                 VStack(alignment: .leading) {
                     Text(subscription.name)
                         .font(.headline)
-<<<<<<< HEAD
-                    Text("$\(subscription.amount, specifier: "%.2f") / \(subscription.billingCycle.rawValue)")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-=======
                     Text(
                         "$\(subscription.amount, specifier: "%.2f") / \(subscription.billingCycle.rawValue)"
                     )
                     .font(.subheadline)
                     .foregroundColor(.secondary)
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
                 Spacer()
                 Text(subscription.nextDueDate, style: .date)

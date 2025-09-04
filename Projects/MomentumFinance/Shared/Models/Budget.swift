@@ -5,7 +5,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class Budget {
+public final class Budget {
     var name: String
     var limitAmount: Double
     var month: Date

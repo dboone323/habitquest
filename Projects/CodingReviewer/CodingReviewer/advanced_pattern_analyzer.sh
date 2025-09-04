@@ -29,37 +29,37 @@ mkdir -p "$PATTERN_DIR"
 
 # Initialize advanced pattern analysis system
 initialize_pattern_analysis_system() {
-    echo -e "${BOLD}${GREEN}🚀 INITIALIZING ADVANCED PATTERN ANALYSIS SYSTEM${NC}"
-    echo "================================================="
-    
-    # Set up code smell detection
-    setup_code_smell_detection
-    
-    # Initialize performance bottleneck prediction
-    setup_performance_analysis
-    
-    # Set up security vulnerability prediction
-    setup_security_analysis
-    
-    # Initialize technical debt assessment
-    setup_technical_debt_assessment
-    
-    # Create ML pattern recognition engine
-    setup_ml_pattern_engine
-    
-    # Initialize reporting system
-    setup_analysis_reporting
-    
-    echo -e "\n${BOLD}${GREEN}✅ ADVANCED PATTERN ANALYSIS SYSTEM INITIALIZED${NC}"
+  echo -e "${BOLD}${GREEN}🚀 INITIALIZING ADVANCED PATTERN ANALYSIS SYSTEM${NC}"
+  echo "================================================="
+
+  # Set up code smell detection
+  setup_code_smell_detection
+
+  # Initialize performance bottleneck prediction
+  setup_performance_analysis
+
+  # Set up security vulnerability prediction
+  setup_security_analysis
+
+  # Initialize technical debt assessment
+  setup_technical_debt_assessment
+
+  # Create ML pattern recognition engine
+  setup_ml_pattern_engine
+
+  # Initialize reporting system
+  setup_analysis_reporting
+
+  echo -e "\n${BOLD}${GREEN}✅ ADVANCED PATTERN ANALYSIS SYSTEM INITIALIZED${NC}"
 }
 
 # Set up code smell detection
 setup_code_smell_detection() {
-    echo -e "${RED}👃 Setting up code smell detection...${NC}"
-    
-    local smell_detector="$PATTERN_DIR/code_smell_detector.sh"
-    
-    cat > "$smell_detector" << 'EOF'
+  echo -e "${RED}👃 Setting up code smell detection...${NC}"
+
+  local smell_detector="$PATTERN_DIR/code_smell_detector.sh"
+
+  cat >"$smell_detector" <<'EOF'
 #!/bin/bash
 
 # Code Smell Detection Module
@@ -315,18 +315,18 @@ SUGGESTIONS
 }
 
 EOF
-    
-    chmod +x "$smell_detector"
-    echo "  ✅ Code smell detection configured"
+
+  chmod +x "$smell_detector"
+  echo "  ✅ Code smell detection configured"
 }
 
 # Set up performance analysis
 setup_performance_analysis() {
-    echo -e "${YELLOW}⚡ Setting up performance bottleneck prediction...${NC}"
-    
-    local perf_analyzer="$PATTERN_DIR/performance_analyzer.sh"
-    
-    cat > "$perf_analyzer" << 'EOF'
+  echo -e "${YELLOW}⚡ Setting up performance bottleneck prediction...${NC}"
+
+  local perf_analyzer="$PATTERN_DIR/performance_analyzer.sh"
+
+  cat >"$perf_analyzer" <<'EOF'
 #!/bin/bash
 
 # Performance Bottleneck Analyzer
@@ -519,18 +519,18 @@ SUGGESTIONS
 }
 
 EOF
-    
-    chmod +x "$perf_analyzer"
-    echo "  ✅ Performance analysis configured"
+
+  chmod +x "$perf_analyzer"
+  echo "  ✅ Performance analysis configured"
 }
 
 # Set up security analysis
 setup_security_analysis() {
-    echo -e "${RED}🔒 Setting up security vulnerability prediction...${NC}"
-    
-    local security_analyzer="$PATTERN_DIR/security_analyzer.sh"
-    
-    cat > "$security_analyzer" << 'EOF'
+  echo -e "${RED}🔒 Setting up security vulnerability prediction...${NC}"
+
+  local security_analyzer="$PATTERN_DIR/security_analyzer.sh"
+
+  cat >"$security_analyzer" <<'EOF'
 #!/bin/bash
 
 # Security Vulnerability Analyzer
@@ -709,18 +709,18 @@ detect_cryptographic_issues() {
 }
 
 EOF
-    
-    chmod +x "$security_analyzer"
-    echo "  ✅ Security analysis configured"
+
+  chmod +x "$security_analyzer"
+  echo "  ✅ Security analysis configured"
 }
 
 # Set up technical debt assessment
 setup_technical_debt_assessment() {
-    echo -e "${PURPLE}📊 Setting up technical debt assessment...${NC}"
-    
-    local debt_assessor="$PATTERN_DIR/technical_debt_assessor.sh"
-    
-    cat > "$debt_assessor" << 'EOF'
+  echo -e "${PURPLE}📊 Setting up technical debt assessment...${NC}"
+
+  local debt_assessor="$PATTERN_DIR/technical_debt_assessor.sh"
+
+  cat >"$debt_assessor" <<'EOF'
 #!/bin/bash
 
 # Technical Debt Assessor
@@ -989,18 +989,18 @@ calculate_debt_score() {
 }
 
 EOF
-    
-    chmod +x "$debt_assessor"
-    echo "  ✅ Technical debt assessment configured"
+
+  chmod +x "$debt_assessor"
+  echo "  ✅ Technical debt assessment configured"
 }
 
 # Set up ML pattern engine
 setup_ml_pattern_engine() {
-    echo -e "${CYAN}🤖 Setting up ML pattern recognition engine...${NC}"
-    
-    local ml_engine="$PATTERN_DIR/ml_pattern_engine.sh"
-    
-    cat > "$ml_engine" << 'EOF'
+  echo -e "${CYAN}🤖 Setting up ML pattern recognition engine...${NC}"
+
+  local ml_engine="$PATTERN_DIR/ml_pattern_engine.sh"
+
+  cat >"$ml_engine" <<'EOF'
 #!/bin/bash
 
 # ML Pattern Recognition Engine
@@ -1200,18 +1200,18 @@ generate_ml_recommendations() {
 }
 
 EOF
-    
-    chmod +x "$ml_engine"
-    echo "  ✅ ML pattern engine configured"
+
+  chmod +x "$ml_engine"
+  echo "  ✅ ML pattern engine configured"
 }
 
 # Set up analysis reporting
 setup_analysis_reporting() {
-    echo -e "${GREEN}📊 Setting up analysis reporting system...${NC}"
-    
-    local report_generator="$PATTERN_DIR/report_generator.sh"
-    
-    cat > "$report_generator" << 'EOF'
+  echo -e "${GREEN}📊 Setting up analysis reporting system...${NC}"
+
+  local report_generator="$PATTERN_DIR/report_generator.sh"
+
+  cat >"$report_generator" <<'EOF'
 #!/bin/bash
 
 # Analysis Report Generator
@@ -1383,180 +1383,180 @@ ACTION
 }
 
 EOF
-    
-    chmod +x "$report_generator"
-    echo "  ✅ Analysis reporting configured"
+
+  chmod +x "$report_generator"
+  echo "  ✅ Analysis reporting configured"
 }
 
 # Main pattern analysis command interface
 run_pattern_analysis() {
-    local command="$1"
-    local target="$2"
-    local output_dir="$3"
-    
-    case "$command" in
-        "smell")
-            run_code_smell_analysis "$target" "$output_dir"
-            ;;
-        "performance")
-            run_performance_analysis "$target" "$output_dir"
-            ;;
-        "security")
-            run_security_analysis "$target" "$output_dir"
-            ;;
-        "debt")
-            run_debt_analysis "$target" "$output_dir"
-            ;;
-        "ml")
-            run_ml_analysis "$target" "$output_dir"
-            ;;
-        "full")
-            run_full_analysis "$target" "$output_dir"
-            ;;
-        "report")
-            generate_analysis_report "$target" "$output_dir"
-            ;;
-        *)
-            show_pattern_analysis_help
-            ;;
-    esac
+  local command="$1"
+  local target="$2"
+  local output_dir="$3"
+
+  case "$command" in
+  "smell")
+    run_code_smell_analysis "$target" "$output_dir"
+    ;;
+  "performance")
+    run_performance_analysis "$target" "$output_dir"
+    ;;
+  "security")
+    run_security_analysis "$target" "$output_dir"
+    ;;
+  "debt")
+    run_debt_analysis "$target" "$output_dir"
+    ;;
+  "ml")
+    run_ml_analysis "$target" "$output_dir"
+    ;;
+  "full")
+    run_full_analysis "$target" "$output_dir"
+    ;;
+  "report")
+    generate_analysis_report "$target" "$output_dir"
+    ;;
+  *)
+    show_pattern_analysis_help
+    ;;
+  esac
 }
 
 # Individual analysis runners
 run_code_smell_analysis() {
-    local target="$1"
-    local output_dir="${2:-$PATTERN_DIR}"
-    
-    echo -e "${RED}👃 Running code smell analysis...${NC}"
-    
-    if [ -f "$PATTERN_DIR/code_smell_detector.sh" ]; then
-        source "$PATTERN_DIR/code_smell_detector.sh"
-        detect_code_smells "$target" "$output_dir/code_smells_$TIMESTAMP.md"
-    fi
+  local target="$1"
+  local output_dir="${2:-$PATTERN_DIR}"
+
+  echo -e "${RED}👃 Running code smell analysis...${NC}"
+
+  if [ -f "$PATTERN_DIR/code_smell_detector.sh" ]; then
+    source "$PATTERN_DIR/code_smell_detector.sh"
+    detect_code_smells "$target" "$output_dir/code_smells_$TIMESTAMP.md"
+  fi
 }
 
 run_performance_analysis() {
-    local target="$1"
-    local output_dir="${2:-$PATTERN_DIR}"
-    
-    echo -e "${YELLOW}⚡ Running performance analysis...${NC}"
-    
-    if [ -f "$PATTERN_DIR/performance_analyzer.sh" ]; then
-        source "$PATTERN_DIR/performance_analyzer.sh"
-        analyze_performance_patterns "$target" "$output_dir/performance_analysis_$TIMESTAMP.md"
-    fi
+  local target="$1"
+  local output_dir="${2:-$PATTERN_DIR}"
+
+  echo -e "${YELLOW}⚡ Running performance analysis...${NC}"
+
+  if [ -f "$PATTERN_DIR/performance_analyzer.sh" ]; then
+    source "$PATTERN_DIR/performance_analyzer.sh"
+    analyze_performance_patterns "$target" "$output_dir/performance_analysis_$TIMESTAMP.md"
+  fi
 }
 
 run_security_analysis() {
-    local target="$1"
-    local output_dir="${2:-$PATTERN_DIR}"
-    
-    echo -e "${RED}🔒 Running security analysis...${NC}"
-    
-    if [ -f "$PATTERN_DIR/security_analyzer.sh" ]; then
-        source "$PATTERN_DIR/security_analyzer.sh"
-        analyze_security_patterns "$target" "$output_dir/security_analysis_$TIMESTAMP.md"
-    fi
+  local target="$1"
+  local output_dir="${2:-$PATTERN_DIR}"
+
+  echo -e "${RED}🔒 Running security analysis...${NC}"
+
+  if [ -f "$PATTERN_DIR/security_analyzer.sh" ]; then
+    source "$PATTERN_DIR/security_analyzer.sh"
+    analyze_security_patterns "$target" "$output_dir/security_analysis_$TIMESTAMP.md"
+  fi
 }
 
 run_debt_analysis() {
-    local target="$1"
-    local output_dir="${2:-$PATTERN_DIR}"
-    
-    echo -e "${PURPLE}📊 Running technical debt analysis...${NC}"
-    
-    if [ -f "$PATTERN_DIR/technical_debt_assessor.sh" ]; then
-        source "$PATTERN_DIR/technical_debt_assessor.sh"
-        assess_technical_debt "$target" "$output_dir/technical_debt_$TIMESTAMP.md"
-    fi
+  local target="$1"
+  local output_dir="${2:-$PATTERN_DIR}"
+
+  echo -e "${PURPLE}📊 Running technical debt analysis...${NC}"
+
+  if [ -f "$PATTERN_DIR/technical_debt_assessor.sh" ]; then
+    source "$PATTERN_DIR/technical_debt_assessor.sh"
+    assess_technical_debt "$target" "$output_dir/technical_debt_$TIMESTAMP.md"
+  fi
 }
 
 run_ml_analysis() {
-    local target="$1"
-    local output_dir="${2:-$PATTERN_DIR}"
-    
-    echo -e "${CYAN}🤖 Running ML pattern analysis...${NC}"
-    
-    if [ -f "$PATTERN_DIR/ml_pattern_engine.sh" ]; then
-        source "$PATTERN_DIR/ml_pattern_engine.sh"
-        run_ml_pattern_analysis "$target" "$output_dir/ml_analysis_$TIMESTAMP.md"
-    fi
+  local target="$1"
+  local output_dir="${2:-$PATTERN_DIR}"
+
+  echo -e "${CYAN}🤖 Running ML pattern analysis...${NC}"
+
+  if [ -f "$PATTERN_DIR/ml_pattern_engine.sh" ]; then
+    source "$PATTERN_DIR/ml_pattern_engine.sh"
+    run_ml_pattern_analysis "$target" "$output_dir/ml_analysis_$TIMESTAMP.md"
+  fi
 }
 
 run_full_analysis() {
-    local target="$1"
-    local output_dir="${2:-$PATTERN_DIR}"
-    
-    echo -e "${BOLD}${GREEN}🔍 Running comprehensive pattern analysis...${NC}"
-    
-    run_code_smell_analysis "$target" "$output_dir"
-    run_performance_analysis "$target" "$output_dir"
-    run_security_analysis "$target" "$output_dir"
-    run_debt_analysis "$target" "$output_dir"
-    run_ml_analysis "$target" "$output_dir"
-    
-    generate_analysis_report "$target" "$output_dir"
+  local target="$1"
+  local output_dir="${2:-$PATTERN_DIR}"
+
+  echo -e "${BOLD}${GREEN}🔍 Running comprehensive pattern analysis...${NC}"
+
+  run_code_smell_analysis "$target" "$output_dir"
+  run_performance_analysis "$target" "$output_dir"
+  run_security_analysis "$target" "$output_dir"
+  run_debt_analysis "$target" "$output_dir"
+  run_ml_analysis "$target" "$output_dir"
+
+  generate_analysis_report "$target" "$output_dir"
 }
 
 generate_analysis_report() {
-    local target="$1"
-    local output_dir="${2:-$PATTERN_DIR}"
-    
-    echo -e "${GREEN}📊 Generating comprehensive report...${NC}"
-    
-    if [ -f "$PATTERN_DIR/report_generator.sh" ]; then
-        source "$PATTERN_DIR/report_generator.sh"
-        generate_comprehensive_report "$target" "$output_dir"
-    fi
+  local target="$1"
+  local output_dir="${2:-$PATTERN_DIR}"
+
+  echo -e "${GREEN}📊 Generating comprehensive report...${NC}"
+
+  if [ -f "$PATTERN_DIR/report_generator.sh" ]; then
+    source "$PATTERN_DIR/report_generator.sh"
+    generate_comprehensive_report "$target" "$output_dir"
+  fi
 }
 
 # Show help
 show_pattern_analysis_help() {
-    echo -e "${BOLD}${CYAN}🔍 Advanced Pattern Analyzer - Help${NC}"
-    echo "===================================="
-    echo ""
-    echo "USAGE:"
-    echo "  $0 [COMMAND] [TARGET] [OUTPUT_DIR]"
-    echo ""
-    echo "COMMANDS:"
-    echo "  smell TARGET        - Detect code smells and anti-patterns"
-    echo "  performance TARGET  - Analyze performance bottlenecks"
-    echo "  security TARGET     - Scan for security vulnerabilities"
-    echo "  debt TARGET         - Assess technical debt"
-    echo "  ml TARGET          - Run ML pattern recognition"
-    echo "  full TARGET        - Run all analyses"
-    echo "  report TARGET      - Generate comprehensive report"
-    echo "  init               - Initialize pattern analysis system"
-    echo ""
-    echo "TARGET:"
-    echo "  File path or directory to analyze"
-    echo ""
-    echo "OUTPUT_DIR:"
-    echo "  Directory for analysis reports (optional)"
-    echo ""
-    echo "EXAMPLES:"
-    echo "  $0 init"
-    echo "  $0 full CodingReviewer/"
-    echo "  $0 security CodingReviewer/ContentView.swift"
-    echo "  $0 performance CodingReviewer/"
-    echo "  $0 report CodingReviewer/ ./reports"
-    echo ""
+  echo -e "${BOLD}${CYAN}🔍 Advanced Pattern Analyzer - Help${NC}"
+  echo "===================================="
+  echo ""
+  echo "USAGE:"
+  echo "  $0 [COMMAND] [TARGET] [OUTPUT_DIR]"
+  echo ""
+  echo "COMMANDS:"
+  echo "  smell TARGET        - Detect code smells and anti-patterns"
+  echo "  performance TARGET  - Analyze performance bottlenecks"
+  echo "  security TARGET     - Scan for security vulnerabilities"
+  echo "  debt TARGET         - Assess technical debt"
+  echo "  ml TARGET          - Run ML pattern recognition"
+  echo "  full TARGET        - Run all analyses"
+  echo "  report TARGET      - Generate comprehensive report"
+  echo "  init               - Initialize pattern analysis system"
+  echo ""
+  echo "TARGET:"
+  echo "  File path or directory to analyze"
+  echo ""
+  echo "OUTPUT_DIR:"
+  echo "  Directory for analysis reports (optional)"
+  echo ""
+  echo "EXAMPLES:"
+  echo "  $0 init"
+  echo "  $0 full CodingReviewer/"
+  echo "  $0 security CodingReviewer/ContentView.swift"
+  echo "  $0 performance CodingReviewer/"
+  echo "  $0 report CodingReviewer/ ./reports"
+  echo ""
 }
 
 # Main execution
 main() {
-    local command="${1:-help}"
-    local target="$2"
-    local output_dir="$3"
-    
-    case "$command" in
-        "init")
-            initialize_pattern_analysis_system
-            ;;
-        *)
-            run_pattern_analysis "$command" "$target" "$output_dir"
-            ;;
-    esac
+  local command="${1:-help}"
+  local target="$2"
+  local output_dir="$3"
+
+  case "$command" in
+  "init")
+    initialize_pattern_analysis_system
+    ;;
+  *)
+    run_pattern_analysis "$command" "$target" "$output_dir"
+    ;;
+  esac
 }
 
 # Run main function with all arguments

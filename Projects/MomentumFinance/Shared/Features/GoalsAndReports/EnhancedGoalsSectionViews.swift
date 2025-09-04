@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-import UIKit
-import SwiftData
-import SwiftUI
-import UIKit
-=======
 import SwiftUI
 
 #if canImport(AppKit)
     import AppKit
 #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
@@ -27,19 +20,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return Color(UIColor.systemBackground)
-            #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
-            #else
-            return Color.white
-=======
                 return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
                 return Color(NSColor.controlBackgroundColor)
             #else
                 return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
 
@@ -102,19 +87,11 @@ extension Features.GoalsAndReports {
                                     gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
                                     startPoint: .leading,
                                     endPoint: .trailing,
-<<<<<<< HEAD
-                                    ),
-                                )
-                            .cornerRadius(12)
-                    },
-                    )
-=======
                                 ),
                             )
                             .cornerRadius(12)
                     },
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                 Spacer()
             }
@@ -203,18 +180,6 @@ extension Features.GoalsAndReports {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(
                         LinearGradient(
-<<<<<<< HEAD
-                            gradient: Gradient(colors: [Color.blue.opacity(0.05), Color.blue.opacity(0.1)]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing,
-                            ),
-                        )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.blue.opacity(0.2), lineWidth: 1),
-                        ),
-                )
-=======
                             gradient: Gradient(colors: [
                                 Color.blue.opacity(0.05), Color.blue.opacity(0.1),
                             ]),
@@ -227,7 +192,6 @@ extension Features.GoalsAndReports {
                             .stroke(Color.blue.opacity(0.2), lineWidth: 1),
                     ),
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
 
         @ViewBuilder private var activeGoalsSection: some View {
@@ -273,19 +237,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return Color(UIColor.systemBackground)
-            #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
-            #else
-            return Color.white
-=======
                 return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
                 return Color(NSColor.controlBackgroundColor)
             #else
                 return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
 
@@ -305,17 +261,11 @@ extension Features.GoalsAndReports {
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
 
-<<<<<<< HEAD
-                                Text("Target: \(targetDate.formatted(date: .abbreviated, time: .omitted))")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-=======
                                 Text(
                                     "Target: \(targetDate.formatted(date: .abbreviated, time: .omitted))"
                                 )
                                 .font(.caption)
                                 .foregroundColor(.secondary)
->>>>>>> 1cf3938 (Create working state for recovery)
                             }
                         }
                     }
@@ -346,13 +296,8 @@ extension Features.GoalsAndReports {
                                     .overlay(
                                         Capsule()
                                             .stroke(Color.blue.opacity(0.3), lineWidth: 1),
-<<<<<<< HEAD
-                                        ),
-                                )
-=======
                                     ),
                             )
->>>>>>> 1cf3938 (Create working state for recovery)
                     }
                 }
 
@@ -407,17 +352,6 @@ extension Features.GoalsAndReports {
                             RoundedRectangle(cornerRadius: 6)
                                 .fill(
                                     LinearGradient(
-<<<<<<< HEAD
-                                        gradient: Gradient(colors: goal.isCompleted ?
-                                                            [.green, .green.opacity(0.8)] :
-                                                            [.blue, .blue.opacity(0.7)]),
-                                        startPoint: .leading,
-                                        endPoint: .trailing,
-                                        ),
-                                    )
-                                .frame(width: geometry.size.width * min(goal.progressPercentage, 1.0), height: 12)
-                                .animation(.easeInOut(duration: 0.5), value: goal.progressPercentage)
-=======
                                         gradient: Gradient(
                                             colors: goal.isCompleted
                                                 ? [.green, .green.opacity(0.8)]
@@ -431,8 +365,8 @@ extension Features.GoalsAndReports {
                                     height: 12
                                 )
                                 .animation(
-                                    .easeInOut(duration: 0.5), value: goal.progressPercentage)
->>>>>>> 1cf3938 (Create working state for recovery)
+                                    .easeInOut(duration: 0.5), value: goal.progressPercentage
+                                )
                         }
                     }
                     .frame(height: 12)
@@ -474,11 +408,7 @@ extension Features.GoalsAndReports {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColor)
                     .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
     }
 }

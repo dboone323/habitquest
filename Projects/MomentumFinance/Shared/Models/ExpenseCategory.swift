@@ -5,7 +5,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class ExpenseCategory {
+final class ExpenseCategory: Hashable {
     var name: String
     var iconName: String
     var createdDate: Date
@@ -41,5 +41,14 @@ final class ExpenseCategory {
             .filter { $0.transactionType == .expense }
             .filter { $0.date >= startOfMonth && $0.date < endOfMonth }
             .reduce(0) { $0 + $1.amount }
+    }
+
+    // MARK: - Hashable Conformance
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    static func == (lhs: ExpenseCategory, rhs: ExpenseCategory) -> Bool {
+        lhs.id == rhs.id
     }
 }

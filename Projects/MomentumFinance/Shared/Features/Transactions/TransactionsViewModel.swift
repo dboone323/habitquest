@@ -11,38 +11,23 @@ extension Features.Transactions {
     final class TransactionsViewModel {
         private var modelContext: ModelContext?
 
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func setModelContext(_ context: ModelContext) {
             self.modelContext = context
         }
 
         /// Filter transactions by type
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func filterTransactions(_ transactions: [FinancialTransaction], by type: TransactionType?) -> [FinancialTransaction] {
             guard let type else { return transactions }
             return transactions.filter { $0.transactionType == type }
         }
 
         /// Search transactions by title or category
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func searchTransactions(_ transactions: [FinancialTransaction], query: String) -> [FinancialTransaction] {
             guard !query.isEmpty else { return transactions }
 
@@ -54,13 +39,8 @@ extension Features.Transactions {
         }
 
         /// Group transactions by month
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func groupTransactionsByMonth(_ transactions: [FinancialTransaction]) -> [String: [FinancialTransaction]] {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM yyyy"
@@ -71,13 +51,8 @@ extension Features.Transactions {
         }
 
         /// Get total income for a period
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func totalIncome(_ transactions: [FinancialTransaction], for period: DateInterval? = nil) -> Double {
             let filteredTransactions: [FinancialTransaction] = if let period {
                 transactions.filter { transaction in
@@ -93,13 +68,8 @@ extension Features.Transactions {
         }
 
         /// Get total expenses for a period
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func totalExpenses(_ transactions: [FinancialTransaction], for period: DateInterval? = nil) -> Double {
             let filteredTransactions: [FinancialTransaction] = if let period {
                 transactions.filter { transaction in
@@ -115,25 +85,15 @@ extension Features.Transactions {
         }
 
         /// Get net income for a period
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func netIncome(_ transactions: [FinancialTransaction], for period: DateInterval? = nil) -> Double {
             totalIncome(transactions, for: period) - totalExpenses(transactions, for: period)
         }
 
         /// Get transactions for current month
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func currentMonthTransactions(_ transactions: [FinancialTransaction]) -> [FinancialTransaction] {
             let calendar = Calendar.current
             let now = Date()
@@ -144,19 +104,6 @@ extension Features.Transactions {
         }
 
         /// Get recent transactions
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-        func recentTransactions(_ transactions: [FinancialTransaction], limit: Int = 10) -> [FinancialTransaction] {
-            Array(transactions
-                    .sorted { $0.date > $1.date }
-                    .prefix(limit))
-        }
-
-        /// Delete transaction and update account balance
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
         func recentTransactions(_ transactions: [FinancialTransaction], limit: Int = 10) -> [FinancialTransaction] {
@@ -168,7 +115,6 @@ extension Features.Transactions {
         /// Delete transaction and update account balance
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func deleteTransaction(_ transaction: FinancialTransaction) {
             guard let modelContext else { return }
 
@@ -200,11 +146,7 @@ extension Features.Transactions {
             account: FinancialAccount,
             date: Date = Date(),
             notes: String? = nil,
-<<<<<<< HEAD
-            ) {
-=======
         ) {
->>>>>>> 1cf3938 (Create working state for recovery)
             guard let modelContext else { return }
 
             let transaction = FinancialTransaction(
@@ -213,11 +155,7 @@ extension Features.Transactions {
                 date: date,
                 transactionType: type,
                 notes: notes,
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
 
             transaction.category = category
             transaction.account = account
@@ -235,13 +173,8 @@ extension Features.Transactions {
         }
 
         /// Get spending by category for a given period
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func spendingByCategory(_ transactions: [FinancialTransaction], for period: DateInterval? = nil) -> [String: Double] {
             let filteredTransactions: [FinancialTransaction] = if let period {
                 transactions.filter { transaction in

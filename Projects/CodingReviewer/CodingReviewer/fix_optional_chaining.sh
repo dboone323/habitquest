@@ -15,9 +15,9 @@ find "$PROJECT_PATH/CodingReviewer" -name "DataFlowDiagnostics.swift" -exec sed 
 
 # Fix any other files with this pattern in initializers
 find "$PROJECT_PATH/CodingReviewer" -name "*.swift" -exec grep -l "self?\." {} \; | while read -r file; do
-    # Only fix in init methods to avoid breaking legitimate optional chaining
-    sed -i '' '/init(/,/^[[:space:]]*}/ s/self?\./self./g' "$file"
-    echo "Fixed optional chaining in $(basename "$file")"
+  # Only fix in init methods to avoid breaking legitimate optional chaining
+  sed -i '' '/init(/,/^[[:space:]]*}/ s/self?\./self./g' "$file"
+  echo "Fixed optional chaining in $(basename "$file")"
 done
 
 echo "✅ Fixed all incorrect optional chaining issues"

@@ -66,11 +66,7 @@ final class GoalsAndReportsViewModel {
         targetAmount: Double,
         targetDate: Date? = nil,
         notes: String? = nil,
-<<<<<<< HEAD
-        ) {
-=======
     ) {
->>>>>>> 1cf3938 (Create working state for recovery)
         guard let modelContext else { return }
 
         let goal = SavingsGoal(
@@ -78,11 +74,7 @@ final class GoalsAndReportsViewModel {
             targetAmount: targetAmount,
             targetDate: targetDate,
             notes: notes,
-<<<<<<< HEAD
-            )
-=======
         )
->>>>>>> 1cf3938 (Create working state for recovery)
 
         modelContext.insert(goal)
 
@@ -138,11 +130,7 @@ final class GoalsAndReportsViewModel {
     func spendingReport(
         _ transactions: [FinancialTransaction],
         for period: DateInterval,
-<<<<<<< HEAD
-        ) -> SpendingReport {
-=======
     ) -> SpendingReport {
->>>>>>> 1cf3938 (Create working state for recovery)
         let periodTransactions = transactions.filter { period.contains($0.date) }
 
         let income = periodTransactions
@@ -155,11 +143,7 @@ final class GoalsAndReportsViewModel {
 
         let categorySpending = Dictionary(
             grouping: periodTransactions.filter { $0.transactionType == .expense },
-<<<<<<< HEAD
-            ) { transaction in
-=======
         ) { transaction in
->>>>>>> 1cf3938 (Create working state for recovery)
             transaction.category?.name ?? "Uncategorized"
         }.mapValues { transactions in
             transactions.reduce(0.0) { $0 + $1.amount }
@@ -172,22 +156,14 @@ final class GoalsAndReportsViewModel {
             netIncome: income - expenses,
             categorySpending: categorySpending,
             transactionCount: periodTransactions.count,
-<<<<<<< HEAD
-            )
-=======
         )
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 
     /// Get monthly spending trend
     func monthlySpendingTrend(
         _ transactions: [FinancialTransaction],
         months: Int = 6,
-<<<<<<< HEAD
-        ) -> [MonthlySpendingData] {
-=======
     ) -> [MonthlySpendingData] {
->>>>>>> 1cf3938 (Create working state for recovery)
         let calendar = Calendar.current
         let now = Date()
         var trend: [MonthlySpendingData] = []
@@ -214,11 +190,7 @@ final class GoalsAndReportsViewModel {
                 income: income,
                 expenses: expenses,
                 netIncome: income - expenses,
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
 
             trend.insert(monthData, at: 0)
         }
@@ -231,11 +203,7 @@ final class GoalsAndReportsViewModel {
         _ transactions: [FinancialTransaction],
         currentPeriod: DateInterval,
         previousPeriod: DateInterval,
-<<<<<<< HEAD
-        ) -> [CategorySpendingComparison] {
-=======
     ) -> [CategorySpendingComparison] {
->>>>>>> 1cf3938 (Create working state for recovery)
         let currentSpending = getCategorySpending(transactions, for: currentPeriod)
         let previousSpending = getCategorySpending(transactions, for: previousPeriod)
 
@@ -253,11 +221,7 @@ final class GoalsAndReportsViewModel {
                 previousAmount: previous,
                 change: change,
                 percentageChange: percentageChange,
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
         .sorted { $0.currentAmount > $1.currentAmount }
     }
@@ -265,11 +229,7 @@ final class GoalsAndReportsViewModel {
     private func getCategorySpending(
         _ transactions: [FinancialTransaction],
         for period: DateInterval,
-<<<<<<< HEAD
-        ) -> [String: Double] {
-=======
     ) -> [String: Double] {
->>>>>>> 1cf3938 (Create working state for recovery)
         let filteredTransactions = transactions.filter {
             $0.transactionType == .expense && period.contains($0.date)
         }
@@ -294,11 +254,7 @@ final class GoalsAndReportsViewModel {
                 actualAmount: budget.spentAmount,
                 difference: budget.remainingAmount,
                 isOverBudget: budget.isOverBudget,
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
         .sorted { $0.actualAmount > $1.actualAmount }
     }

@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 import SwiftData
 
 //
@@ -51,7 +51,7 @@ class TodaysQuestsViewModel: ObservableObject {
     /// Check if a habit is due today based on its frequency and last completion
     private func isDueToday(_ habit: Habit) -> Bool {
         // For now, show all habits as due today
-        return true
+        true
     }
 
     /// Complete a habit and award XP
@@ -68,9 +68,9 @@ class TodaysQuestsViewModel: ObservableObject {
         let newLog = HabitLog(habit: habit, completionDate: Date())
         context.insert(newLog)
 
-    // Award XP to the player
-    let earnedExperiencePoints = calculateXP(for: habit)
-    awardXP(earnedExperiencePoints)
+        // Award XP to the player
+        let earnedExperiencePoints = calculateXP(for: habit)
+        awardXP(earnedExperiencePoints)
 
         // Show completion message
         completionMessage = "Quest completed! +\(earnedXP) XP"
@@ -90,7 +90,7 @@ class TodaysQuestsViewModel: ObservableObject {
     /// Calculate XP for completing a habit
     private func calculateXP(for habit: Habit) -> Int {
         // XP earned factoring in difficulty multiplier
-        return habit.xpValue * habit.difficulty.xpMultiplier
+        habit.xpValue * habit.difficulty.xpMultiplier
     }
 
     /// Award XP to the player profile

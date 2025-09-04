@@ -5,6 +5,7 @@ An advanced Swift-based code analysis and review tool for macOS that provides in
 ## 🚀 Features
 
 ### Core Analysis
+
 - **Real-time Code Analysis**: Instant feedback as you type
 - **Multi-Language Support**: Swift, Python, JavaScript, TypeScript, and more
 - **Security Vulnerability Detection**: Comprehensive security scanning
@@ -12,12 +13,14 @@ An advanced Swift-based code analysis and review tool for macOS that provides in
 - **Code Quality Metrics**: Cyclomatic complexity, maintainability index
 
 ### AI-Powered Insights
+
 - **GPT-4 Integration**: Advanced code understanding and suggestions
 - **Automatic Fix Generation**: AI-suggested code corrections
 - **Context-Aware Analysis**: Understanding of broader code context
 - **Natural Language Explanations**: Plain English issue descriptions
 
 ### Developer Tools Integration
+
 - **Xcode Extension**: Direct IDE integration
 - **CLI Tool**: Terminal-based usage for automation
 - **Git Integration**: Analysis of repository changes
@@ -32,6 +35,7 @@ An advanced Swift-based code analysis and review tool for macOS that provides in
 ## 🛠 Installation
 
 ### From Source
+
 ```bash
 git clone https://github.com/yourusername/CodingReviewer.git
 cd CodingReviewer
@@ -39,6 +43,7 @@ open CodingReviewer.xcodeproj
 ```
 
 ### Using Swift Package Manager
+
 ```swift
 dependencies: [
     .package(url: "https://github.com/yourusername/CodingReviewer.git", from: "1.0.0")
@@ -48,6 +53,7 @@ dependencies: [
 ## 🎯 Quick Start
 
 1. **Launch the App**
+
    ```bash
    open CodingReviewer.app
    ```
@@ -66,6 +72,7 @@ dependencies: [
 ## 📖 Usage Examples
 
 ### Basic Code Analysis
+
 ```swift
 // The app will automatically detect issues like:
 func calculateTotal(items: [Item]) -> Double {
@@ -78,6 +85,7 @@ func calculateTotal(items: [Item]) -> Double {
 ```
 
 ### Security Analysis
+
 ```swift
 // Security issues detected:
 let password = "hardcoded_password"  // ⚠️ Security: Hardcoded credentials
@@ -85,7 +93,9 @@ let url = "http://api.example.com"   // ⚠️ Security: Insecure HTTP
 ```
 
 ### AI-Powered Suggestions
+
 The AI assistant can provide:
+
 - Code refactoring suggestions
 - Architecture improvements
 - Best practice recommendations
@@ -113,6 +123,7 @@ CodingReviewer/
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ### Development Setup
+
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/amazing-feature`
 3. Commit your changes: `git commit -m 'Add amazing feature'`
@@ -120,6 +131,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 5. Open a Pull Request
 
 ### Code Style
+
 - Follow Swift API Design Guidelines
 - Use SwiftLint for code formatting
 - Include unit tests for new features

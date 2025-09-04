@@ -24,11 +24,7 @@ public struct ExportSettings: Sendable {
         includeBudgets: Bool,
         includeSubscriptions: Bool,
         includeGoals: Bool,
-<<<<<<< HEAD
-        ) {
-=======
     ) {
->>>>>>> 1cf3938 (Create working state for recovery)
         self.format = format
         self.startDate = startDate
         self.endDate = endDate
@@ -123,33 +119,20 @@ public enum DateRange: String, CaseIterable, Sendable {
         }
     }
 }
-<<<<<<< HEAD
-=======
 
-// MARK: - Import Result
+// MARK: - Export Constants
 
-public struct ImportResult: Sendable {
-    public let success: Bool
-    public let transactionsImported: Int
-    public let accountsImported: Int
-    public let categoriesImported: Int
-    public let duplicatesSkipped: Int
-    public let errors: [String]
-
-    public init(
-        success: Bool,
-        transactionsImported: Int,
-        accountsImported: Int,
-        categoriesImported: Int,
-        duplicatesSkipped: Int,
-        errors: [String]
-    ) {
-        self.success = success
-        self.transactionsImported = transactionsImported
-        self.accountsImported = accountsImported
-        self.categoriesImported = categoriesImported
-        self.duplicatesSkipped = duplicatesSkipped
-        self.errors = errors
-    }
+public enum ExportConstants {
+    public static let csvFilename = "momentum_finance_export.csv"
+    public static let pdfFilename = "momentum_finance_report.pdf"
+    public static let jsonFilename = "momentum_finance_export.json"
 }
->>>>>>> 1cf3938 (Create working state for recovery)
+
+// MARK: - Export Error
+
+public enum ExportError: Error {
+    case invalidSettings
+    case pdfGenerationFailed
+    case fileWriteFailed
+    case dataFetchFailed
+}

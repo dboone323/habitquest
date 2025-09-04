@@ -36,11 +36,7 @@ struct MomentumFinanceApp: App {
             ModelReferences.subscriptions,
             ModelReferences.budgets,
             ModelReferences.categories,
-<<<<<<< HEAD
-            ModelReferences.goals
-=======
             ModelReferences.goals,
->>>>>>> 1cf3938 (Create working state for recovery)
         ])
 
         print("MomentumFinanceApp: Schema created")
@@ -100,11 +96,7 @@ struct MomentumFinanceApp: App {
                         // iOS doesn't allow programmatic app termination
                         // User must manually close the app
                         #else
-<<<<<<< HEAD
-                        NSApplication.shared.terminate(nil)
-=======
                             NSApplication.shared.terminate(nil)
->>>>>>> 1cf3938 (Create working state for recovery)
                         #endif
                     }
                     .buttonStyle(.borderedProminent)
@@ -112,15 +104,6 @@ struct MomentumFinanceApp: App {
                 .padding()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 #if os(iOS)
-<<<<<<< HEAD
-                .background(Color(uiColor: .systemBackground))
-                #else
-                .background(Color(NSColor.windowBackgroundColor))
-                #endif
-                .onAppear {
-                    print("MomentumFinanceApp: Error view appeared")
-                }
-=======
                     .background(Color(uiColor: .systemBackground))
                 #else
                     .background(Color(NSColor.windowBackgroundColor))
@@ -128,22 +111,10 @@ struct MomentumFinanceApp: App {
                     .onAppear {
                         print("MomentumFinanceApp: Error view appeared")
                     }
->>>>>>> 1cf3938 (Create working state for recovery)
             }
         }
 
         #if os(macOS)
-<<<<<<< HEAD
-        Settings {
-            if let container = sharedModelContainer {
-                SettingsView()
-                    .modelContainer(container)
-            } else {
-                Text("Settings unavailable - Database error")
-                    .padding()
-            }
-        }
-=======
             Settings {
                 if let container = sharedModelContainer {
                     SettingsView()
@@ -153,7 +124,6 @@ struct MomentumFinanceApp: App {
                         .padding()
                 }
             }
->>>>>>> 1cf3938 (Create working state for recovery)
         #endif
     }
 }

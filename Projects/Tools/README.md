@@ -5,6 +5,7 @@ This directory serves as the central hub for development tools, automation scrip
 ## Purpose
 
 The Tools directory is designed to:
+
 - Provide automation scripts for project management
 - Store configuration files and templates
 - Manage CI/CD workflows and deployment processes

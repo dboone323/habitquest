@@ -23,17 +23,17 @@ struct QuestLogView: View {
             .navigationTitle("Quest Log")
             .toolbar {
                 #if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Filter") {
-                        viewModel.showingAddQuest = true
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Filter") {
+                            viewModel.showingAddQuest = true
+                        }
                     }
-                }
                 #else
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Filter") {
-                        viewModel.showingFilterOptions = true
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Filter") {
+                            viewModel.showingFilterOptions = true
+                        }
                     }
-                }
                 #endif
             }
             .sheet(isPresented: $viewModel.showingAddQuest) {
@@ -207,7 +207,7 @@ private struct AddEditQuestView: View {
                 Section("Quest Details") {
                     TextField("Quest Name", text: $name)
                     TextField("Description", text: $description, axis: .vertical)
-                        .lineLimit(3...6)
+                        .lineLimit(3 ... 6)
                 }
 
                 Section("Quest Settings") {
@@ -217,10 +217,10 @@ private struct AddEditQuestView: View {
                         }
                     }
 
-                    Stepper("XP Reward: \(xpValue)", value: $xpValue, in: 5...100, step: 5)
+                    Stepper("XP Reward: \(xpValue)", value: $xpValue, in: 5 ... 100, step: 5)
                 }
 
-                if isEditing, let habit = habit {
+                if isEditing, let habit {
                     Section("Quest Stats") {
                         HStack {
                             Text("Current Streak")

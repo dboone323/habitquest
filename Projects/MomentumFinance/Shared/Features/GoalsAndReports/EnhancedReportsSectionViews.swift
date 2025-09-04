@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-import UIKit
-import SwiftData
-import SwiftUI
-import UIKit
-=======
 import SwiftUI
 
 #if canImport(AppKit)
     import AppKit
 #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
@@ -29,19 +22,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return Color(UIColor.systemBackground)
-            #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
-            #else
-            return Color.white
-=======
                 return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
                 return Color(NSColor.controlBackgroundColor)
             #else
                 return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
 
@@ -119,30 +104,12 @@ extension Features.GoalsAndReports {
                         .padding(.vertical, 8)
                         .background(buttonBackground(isSelected: isSelected))
                 },
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
 
         private func buttonBackground(isSelected: Bool) -> some View {
             RoundedRectangle(cornerRadius: 20)
                 .fill(
-<<<<<<< HEAD
-                    isSelected ?
-                        LinearGradient(
-                            gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
-                            startPoint: .leading,
-                            endPoint: .trailing,
-                            ) :
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color.gray.opacity(0.1)]),
-                            startPoint: .leading,
-                            endPoint: .trailing,
-                            ),
-                    )
-=======
                     isSelected
                         ? LinearGradient(
                             gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
@@ -155,7 +122,6 @@ extension Features.GoalsAndReports {
                             endPoint: .trailing,
                         ),
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
 
         private var contentSection: some View {
@@ -163,11 +129,7 @@ extension Features.GoalsAndReports {
                 EnhancedFinancialSummaryCard(
                     transactions: filteredTransactions,
                     timeframe: selectedTimeframe,
-<<<<<<< HEAD
-                    )
-=======
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
                 .padding(.horizontal)
 
                 Text("Spending by Category - Coming Soon")
@@ -214,11 +176,7 @@ extension Features.GoalsAndReports {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color.gray.opacity(0.1)),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
             .padding(.horizontal)
         }
 
@@ -234,12 +192,6 @@ extension Features.GoalsAndReports {
                 return transactions.filter { weekInterval.contains($0.date) }
 
             case .thisMonth:
-<<<<<<< HEAD
-                return transactions.filter { calendar.isDate($0.date, equalTo: now, toGranularity: .month) }
-
-            case .last3Months:
-                guard let threeMonthsAgo = calendar.date(byAdding: .month, value: -3, to: now) else {
-=======
                 return transactions.filter {
                     calendar.isDate($0.date, equalTo: now, toGranularity: .month)
                 }
@@ -247,19 +199,14 @@ extension Features.GoalsAndReports {
             case .last3Months:
                 guard let threeMonthsAgo = calendar.date(byAdding: .month, value: -3, to: now)
                 else {
->>>>>>> 1cf3938 (Create working state for recovery)
                     return transactions
                 }
                 return transactions.filter { $0.date >= threeMonthsAgo }
 
             case .thisYear:
-<<<<<<< HEAD
-                return transactions.filter { calendar.isDate($0.date, equalTo: now, toGranularity: .year) }
-=======
                 return transactions.filter {
                     calendar.isDate($0.date, equalTo: now, toGranularity: .year)
                 }
->>>>>>> 1cf3938 (Create working state for recovery)
             }
         }
 
@@ -281,19 +228,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return Color(UIColor.systemBackground)
-            #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
-            #else
-            return Color.white
-=======
                 return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
                 return Color(NSColor.controlBackgroundColor)
             #else
                 return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
 
@@ -341,13 +280,8 @@ extension Features.GoalsAndReports {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color.green.opacity(0.3), lineWidth: 1),
-<<<<<<< HEAD
-                                ),
-                        )
-=======
                             ),
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                     // Expenses
                     VStack(spacing: 8) {
@@ -373,13 +307,8 @@ extension Features.GoalsAndReports {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color.red.opacity(0.3), lineWidth: 1),
-<<<<<<< HEAD
-                                ),
-                        )
-=======
                             ),
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
 
                 // Net Income
@@ -400,19 +329,6 @@ extension Features.GoalsAndReports {
                             LinearGradient(
                                 gradient: Gradient(colors: [
                                     (netIncome >= 0 ? Color.green : Color.red).opacity(0.05),
-<<<<<<< HEAD
-                                    (netIncome >= 0 ? Color.green : Color.red).opacity(0.1)
-                                ]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing,
-                                ),
-                            )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke((netIncome >= 0 ? Color.green : Color.red).opacity(0.2), lineWidth: 1),
-                            ),
-                    )
-=======
                                     (netIncome >= 0 ? Color.green : Color.red).opacity(0.1),
                                 ]),
                                 startPoint: .topLeading,
@@ -423,21 +339,17 @@ extension Features.GoalsAndReports {
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(
                                     (netIncome >= 0 ? Color.green : Color.red).opacity(0.2),
-                                    lineWidth: 1),
+                                    lineWidth: 1
+                                ),
                         ),
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
             }
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColor)
                     .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
     }
 }
@@ -447,9 +359,5 @@ extension Features.GoalsAndReports {
         transactions: [],
         budgets: [],
         categories: [],
-<<<<<<< HEAD
-        )
-=======
     )
->>>>>>> 1cf3938 (Create working state for recovery)
 }

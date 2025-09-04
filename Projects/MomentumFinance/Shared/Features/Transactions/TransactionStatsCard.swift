@@ -38,7 +38,7 @@ extension Features.Transactions {
                     .foregroundColor(.red)
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.1))
             .cornerRadius(8)
         }
     }

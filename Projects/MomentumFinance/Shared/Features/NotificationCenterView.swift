@@ -17,11 +17,6 @@ struct NotificationCenterView: View {
     private var dismiss
     @StateObject private var notificationManager = NotificationManager.shared
 
-<<<<<<< HEAD
-    @Query private var budgets: [Budget]
-    @Query private var subscriptions: [Subscription]
-    @Query private var accounts: [FinancialAccount]
-=======
     #if canImport(SwiftData)
         #if canImport(SwiftData)
             private var budgets: [Budget] = []
@@ -37,7 +32,6 @@ struct NotificationCenterView: View {
         private var subscriptions: [Subscription] = []
         private var accounts: [FinancialAccount] = []
     #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
     var body: some View {
         NavigationView {
@@ -71,12 +65,8 @@ struct NotificationCenterView: View {
     }
 
     private func loadNotifications() async {
-<<<<<<< HEAD
-        notificationManager.pendingNotifications = await notificationManager.getPendingNotifications()
-=======
         notificationManager.pendingNotifications =
             await notificationManager.getPendingNotifications()
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 
     @ViewBuilder
@@ -88,11 +78,7 @@ struct NotificationCenterView: View {
                     onDismiss: {
                         dismissNotification(notification)
                     },
-<<<<<<< HEAD
-                    )
-=======
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
             }
         }
         .listStyle(PlainListStyle())
@@ -100,13 +86,9 @@ struct NotificationCenterView: View {
 
     private func dismissNotification(_ notification: ScheduledNotification) {
         notificationManager.pendingNotifications.removeAll { $0.id == notification.id }
-<<<<<<< HEAD
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [notification.id])
-=======
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [
             notification.id
         ])
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 }
 
@@ -149,11 +131,7 @@ struct ScheduledNotificationRow: View {
                 .background(
                     Circle()
                         .fill(colorForType(notification.type).opacity(0.1)),
-<<<<<<< HEAD
-                    )
-=======
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
 
             // Notification Content
             VStack(alignment: .leading, spacing: 4) {
@@ -189,11 +167,7 @@ struct ScheduledNotificationRow: View {
         .background(
             RoundedRectangle(cornerRadius: 8)
                 .fill(isHighPriority ? Color.red.opacity(0.05) : Color.clear),
-<<<<<<< HEAD
-            )
-=======
         )
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 
     private var isHighPriority: Bool {

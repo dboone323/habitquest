@@ -3591,9 +3591,7 @@
     }
   },
   "insights": {
-    "key_patterns": [
-      "High churn files detected: 30 files"
-    ],
+    "key_patterns": ["High churn files detected: 30 files"],
     "success_factors": [],
     "failure_indicators": [],
     "optimization_recommendations": [

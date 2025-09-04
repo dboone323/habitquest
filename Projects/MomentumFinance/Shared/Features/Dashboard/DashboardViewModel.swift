@@ -53,13 +53,8 @@ final class DashboardViewModel {
     /// - Returns: <#description#>
     func recentTransactions(_ transactions: [FinancialTransaction], limit: Int = 5) -> [FinancialTransaction] {
         Array(transactions
-<<<<<<< HEAD
-                .sorted { $0.date > $1.date }
-                .prefix(limit))
-=======
             .sorted { $0.date > $1.date }
             .prefix(limit))
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 
     /// Check for overdue subscriptions and process them

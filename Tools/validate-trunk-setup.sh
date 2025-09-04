@@ -13,45 +13,45 @@ echo "======================================"
 
 # Check if trunk.yaml exists at root
 if [[ -f ".trunk/trunk.yaml" ]]; then
-    echo "✅ Root .trunk/trunk.yaml found"
+	echo "✅ Root .trunk/trunk.yaml found"
 else
-    echo "❌ Root .trunk/trunk.yaml missing"
-    exit 1
+	echo "❌ Root .trunk/trunk.yaml missing"
+	exit 1
 fi
 
 # Check if config files exist
 config_files=(
-    ".trunk/configs/.isort.cfg"
-    ".trunk/configs/.markdownlint.yaml"
-    ".trunk/configs/.shellcheckrc"
-    ".trunk/configs/.yamllint.yaml"
-    ".trunk/configs/ruff.toml"
+	".trunk/configs/.isort.cfg"
+	".trunk/configs/.markdownlint.yaml"
+	".trunk/configs/.shellcheckrc"
+	".trunk/configs/.yamllint.yaml"
+	".trunk/configs/ruff.toml"
 )
 
 for config in "${config_files[@]}"; do
-    if [[ -f "$config" ]]; then
-        echo "✅ $config found"
-    else
-        echo "❌ $config missing"
-        exit 1
-    fi
+	if [[ -f $config ]]; then
+		echo "✅ $config found"
+	else
+		echo "❌ $config missing"
+		exit 1
+	fi
 done
 
 # Validate YAML syntax
 echo "🔍 Validating YAML syntax..."
 if python3 -c "import yaml; yaml.safe_load(open('.trunk/trunk.yaml'))" 2>/dev/null; then
-    echo "✅ trunk.yaml has valid YAML syntax"
+	echo "✅ trunk.yaml has valid YAML syntax"
 else
-    echo "❌ trunk.yaml has invalid YAML syntax"
-    exit 1
+	echo "❌ trunk.yaml has invalid YAML syntax"
+	exit 1
 fi
 
 # Check GitHub workflow
 if [[ -f ".github/workflows/trunk.yml" ]]; then
-    echo "✅ GitHub Actions trunk workflow found"
+	echo "✅ GitHub Actions trunk workflow found"
 else
-    echo "❌ GitHub Actions trunk workflow missing"
-    exit 1
+	echo "❌ GitHub Actions trunk workflow missing"
+	exit 1
 fi
 
 # Count lintable files

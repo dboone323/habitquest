@@ -9,7 +9,7 @@ extension FinancialIntelligenceService {
 
         // Analyze cash flow trend
         let calendar = Calendar.current
-        let sixMonthsAgo = calendar.date(byAdding: .month, value: -6, to: Date()) ?? Date()
+        // Removed unused sixMonthsAgo variable
 
         // Use helpers to compute monthly net cash flow and a simple forecast
         let monthlyPairs = fi_monthlyNetCashFlow(transactions)
@@ -83,19 +83,22 @@ extension FinancialIntelligenceService {
     ) -> FinancialInsight? {
         let accountTransactions = transactions.filter { $0.account?.id == account.id }
         let monthlyTransactions = Dictionary(grouping: accountTransactions) { transaction in
-            calendar.startOfMonth(for: transaction.date)
+            calendar.date(from: calendar.dateComponents([.year, .month], from: transaction.date))
         }
 
         // We need at least 3 months of data for a meaningful forecast
         guard monthlyTransactions.count >= 3 else { return nil }
 
-        let sortedMonths = monthlyTransactions.sorted { $0.key < $1.key }
+        let sortedMonths = monthlyTransactions.sorted { (lhs, rhs) in
+            guard let lhsKey = lhs.key, let rhsKey = rhs.key else { return false }
+            return lhsKey < rhsKey
+        }
         let monthlyNetFlow = sortedMonths.map { month, transactions in
             (month, transactions.reduce(0) { $0 + $1.amount })
         }
 
         // Calculate average monthly change
-        let monthlyChanges = monthlyNetFlow.map(\.1)
+        let monthlyChanges = monthlyNetFlow.map { $0.1 }
         let averageMonthlyChange = monthlyChanges.reduce(0, +) / Double(monthlyChanges.count)
 
         // Forecast next 3 months

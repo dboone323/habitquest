@@ -2,9 +2,9 @@ name: SwiftLint
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   swiftlint:
@@ -12,13 +12,13 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup SwiftLint
-      run: |
-        brew install swiftlint
-        swiftlint version
+      - name: Setup SwiftLint
+        run: |
+          brew install swiftlint
+          swiftlint version
 
-    - name: Run SwiftLint
-      run: swiftlint --strict --reporter github-actions-logging
+      - name: Run SwiftLint
+        run: swiftlint --strict --reporter github-actions-logging

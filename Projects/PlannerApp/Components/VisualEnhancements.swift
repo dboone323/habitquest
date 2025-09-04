@@ -133,7 +133,7 @@ struct AnimatedProgressRing: View {
 struct ProgressChangeModifier: ViewModifier {
     let progress: Double
     @Binding var animatedProgress: Double
-    
+
     func body(content: Content) -> some View {
         if #available(macOS 14.0, iOS 17.0, *) {
             content.onChange(of: progress) { _, newValue in

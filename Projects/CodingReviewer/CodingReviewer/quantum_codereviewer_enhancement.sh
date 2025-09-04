@@ -26,30 +26,30 @@ QUANTUM_DIR="$PROJECT_PATH/.quantum_codereviewer"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
 print_header() {
-    echo -e "${WHITE}╔═══════════════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${WHITE}║          🚀 QUANTUM CODEREVIEWER ENHANCEMENT V1.0                    ║${NC}"
-    echo -e "${WHITE}║    Transform CodeReviewer with Quantum Frontier Technologies         ║${NC}"
-    echo -e "${WHITE}╚═══════════════════════════════════════════════════════════════════════╝${NC}"
-    echo ""
+  echo -e "${WHITE}╔═══════════════════════════════════════════════════════════════════════╗${NC}"
+  echo -e "${WHITE}║          🚀 QUANTUM CODEREVIEWER ENHANCEMENT V1.0                    ║${NC}"
+  echo -e "${WHITE}║    Transform CodeReviewer with Quantum Frontier Technologies         ║${NC}"
+  echo -e "${WHITE}╚═══════════════════════════════════════════════════════════════════════╝${NC}"
+  echo ""
 }
 
 # Apply quantum enhancements to CodeReviewer
 quantum_enhance_codereviewer() {
-    local start_time=$(date +%s.%N)
-    
-    print_header
-    echo -e "${CYAN}🌟 QUANTUM CODEREVIEWER TRANSFORMATION${NC}"
-    echo -e "${CYAN}=====================================${NC}"
-    echo ""
-    
-    # Phase 1: Quantum Performance Integration
-    echo -e "${PURPLE}⚡ Phase 1: Quantum Performance Integration${NC}"
-    echo -e "${PURPLE}===========================================${NC}"
-    
-    mkdir -p "$QUANTUM_DIR"
-    
-    # Create quantum-enhanced analysis engine
-    cat > "$QUANTUM_DIR/QuantumAnalysisEngine.swift" << 'EOF'
+  local start_time=$(date +%s.%N)
+
+  print_header
+  echo -e "${CYAN}🌟 QUANTUM CODEREVIEWER TRANSFORMATION${NC}"
+  echo -e "${CYAN}=====================================${NC}"
+  echo ""
+
+  # Phase 1: Quantum Performance Integration
+  echo -e "${PURPLE}⚡ Phase 1: Quantum Performance Integration${NC}"
+  echo -e "${PURPLE}===========================================${NC}"
+
+  mkdir -p "$QUANTUM_DIR"
+
+  # Create quantum-enhanced analysis engine
+  cat >"$QUANTUM_DIR/QuantumAnalysisEngine.swift" <<'EOF'
 import Foundation
 import SwiftUI
 
@@ -309,14 +309,14 @@ enum ProgrammingLanguage {
 }
 EOF
 
-    echo -e "${GREEN}   ✅ Quantum Analysis Engine created${NC}"
-    
-    # Phase 2: Consciousness-Level UI Enhancement
-    echo -e "${PURPLE}🧠 Phase 2: Consciousness-Level UI Enhancement${NC}"
-    echo -e "${PURPLE}==============================================${NC}"
-    
-    # Create quantum-enhanced UI components
-    cat > "$QUANTUM_DIR/QuantumUI.swift" << 'EOF'
+  echo -e "${GREEN}   ✅ Quantum Analysis Engine created${NC}"
+
+  # Phase 2: Consciousness-Level UI Enhancement
+  echo -e "${PURPLE}🧠 Phase 2: Consciousness-Level UI Enhancement${NC}"
+  echo -e "${PURPLE}==============================================${NC}"
+
+  # Create quantum-enhanced UI components
+  cat >"$QUANTUM_DIR/QuantumUI.swift" <<'EOF'
 import SwiftUI
 
 /// Quantum-Enhanced UI Components for CodeReviewer
@@ -585,69 +585,69 @@ struct MetricCard: View {
 }
 EOF
 
-    echo -e "${GREEN}   ✅ Quantum UI components created${NC}"
-    
-    # Phase 3: Integration script
-    echo -e "${PURPLE}🔗 Phase 3: Integration Enhancement${NC}"
-    echo -e "${PURPLE}==================================${NC}"
-    
-    local end_time=$(date +%s.%N)
-    local duration=$(echo "$end_time - $start_time" | bc -l)
-    
-    echo ""
-    echo -e "${GREEN}╔═══════════════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${GREEN}║               🚀 QUANTUM CODEREVIEWER ENHANCED                       ║${NC}"
-    echo -e "${GREEN}╚═══════════════════════════════════════════════════════════════════════╝${NC}"
-    echo ""
-    
-    echo -e "${CYAN}🌟 Quantum Enhancements Applied:${NC}"
-    echo -e "${CYAN}   ⚡ Quantum Analysis Engine: 64 parallel threads${NC}"
-    echo -e "${CYAN}   🧠 Consciousness-Level Insights: 97.2% intelligence${NC}"
-    echo -e "${CYAN}   🧬 Biological Adaptation Scoring: DNA-inspired${NC}"
-    echo -e "${CYAN}   🚀 Revolutionary UI Components: Quantum interface${NC}"
-    echo ""
-    
-    echo -e "${MAGENTA}📊 Enhancement Results:${NC}"
-    echo -e "${MAGENTA}   • Enhancement Time: ${duration}s${NC}"
-    echo -e "${MAGENTA}   • Quantum Components: 2 created${NC}"
-    echo -e "${MAGENTA}   • Performance Target: Sub-millisecond analysis${NC}"
-    echo -e "${MAGENTA}   • Intelligence Level: Consciousness-enhanced${NC}"
-    echo ""
-    
-    echo -e "${WHITE}🎯 Next Steps:${NC}"
-    echo -e "${WHITE}   1. Copy QuantumAnalysisEngine.swift to your Xcode project${NC}"
-    echo -e "${WHITE}   2. Copy QuantumUI.swift to your project${NC}"
-    echo -e "${WHITE}   3. Integrate QuantumAnalysisView into ContentView${NC}"
-    echo -e "${WHITE}   4. Build and experience quantum-level code review!${NC}"
-    
-    echo ""
-    echo -e "${GREEN}🌟 CodeReviewer is now QUANTUM-ENHANCED! 🚀${NC}"
-    
-    return 0
+  echo -e "${GREEN}   ✅ Quantum UI components created${NC}"
+
+  # Phase 3: Integration script
+  echo -e "${PURPLE}🔗 Phase 3: Integration Enhancement${NC}"
+  echo -e "${PURPLE}==================================${NC}"
+
+  local end_time=$(date +%s.%N)
+  local duration=$(echo "$end_time - $start_time" | bc -l)
+
+  echo ""
+  echo -e "${GREEN}╔═══════════════════════════════════════════════════════════════════════╗${NC}"
+  echo -e "${GREEN}║               🚀 QUANTUM CODEREVIEWER ENHANCED                       ║${NC}"
+  echo -e "${GREEN}╚═══════════════════════════════════════════════════════════════════════╝${NC}"
+  echo ""
+
+  echo -e "${CYAN}🌟 Quantum Enhancements Applied:${NC}"
+  echo -e "${CYAN}   ⚡ Quantum Analysis Engine: 64 parallel threads${NC}"
+  echo -e "${CYAN}   🧠 Consciousness-Level Insights: 97.2% intelligence${NC}"
+  echo -e "${CYAN}   🧬 Biological Adaptation Scoring: DNA-inspired${NC}"
+  echo -e "${CYAN}   🚀 Revolutionary UI Components: Quantum interface${NC}"
+  echo ""
+
+  echo -e "${MAGENTA}📊 Enhancement Results:${NC}"
+  echo -e "${MAGENTA}   • Enhancement Time: ${duration}s${NC}"
+  echo -e "${MAGENTA}   • Quantum Components: 2 created${NC}"
+  echo -e "${MAGENTA}   • Performance Target: Sub-millisecond analysis${NC}"
+  echo -e "${MAGENTA}   • Intelligence Level: Consciousness-enhanced${NC}"
+  echo ""
+
+  echo -e "${WHITE}🎯 Next Steps:${NC}"
+  echo -e "${WHITE}   1. Copy QuantumAnalysisEngine.swift to your Xcode project${NC}"
+  echo -e "${WHITE}   2. Copy QuantumUI.swift to your project${NC}"
+  echo -e "${WHITE}   3. Integrate QuantumAnalysisView into ContentView${NC}"
+  echo -e "${WHITE}   4. Build and experience quantum-level code review!${NC}"
+
+  echo ""
+  echo -e "${GREEN}🌟 CodeReviewer is now QUANTUM-ENHANCED! 🚀${NC}"
+
+  return 0
 }
 
 # Command line interface
 case "$1" in
-    "--quantum-enhance")
-        quantum_enhance_codereviewer
-        ;;
-    "--status")
-        echo "🚀 Quantum CodeReviewer Enhancement V1.0"
-        echo "Status: Ready to transform CodeReviewer app"
-        echo "Enhancement Level: Quantum Frontier Technologies"
-        ;;
-    *)
-        print_header
-        echo "Usage: ./quantum_codereviewer_enhancement.sh [command]"
-        echo ""
-        echo "Commands:"
-        echo "  --quantum-enhance    - Apply quantum enhancements to CodeReviewer"
-        echo "  --status             - Show enhancement status"
-        echo ""
-        echo "🚀 Quantum CodeReviewer Enhancement V1.0"
-        echo "  • Ultra-fast quantum analysis engine"
-        echo "  • Consciousness-level insights"
-        echo "  • Biological adaptation scoring"
-        echo "  • Revolutionary UI components"
-        ;;
+"--quantum-enhance")
+  quantum_enhance_codereviewer
+  ;;
+"--status")
+  echo "🚀 Quantum CodeReviewer Enhancement V1.0"
+  echo "Status: Ready to transform CodeReviewer app"
+  echo "Enhancement Level: Quantum Frontier Technologies"
+  ;;
+*)
+  print_header
+  echo "Usage: ./quantum_codereviewer_enhancement.sh [command]"
+  echo ""
+  echo "Commands:"
+  echo "  --quantum-enhance    - Apply quantum enhancements to CodeReviewer"
+  echo "  --status             - Show enhancement status"
+  echo ""
+  echo "🚀 Quantum CodeReviewer Enhancement V1.0"
+  echo "  • Ultra-fast quantum analysis engine"
+  echo "  • Consciousness-level insights"
+  echo "  • Biological adaptation scoring"
+  echo "  • Revolutionary UI components"
+  ;;
 esac

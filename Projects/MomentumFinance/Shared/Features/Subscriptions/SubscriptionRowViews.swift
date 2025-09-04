@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-import UIKit
-import SwiftData
-import SwiftUI
-import UIKit
-=======
 import SwiftUI
 
 #if canImport(AppKit)
     import AppKit
 #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
 //
 //  SubscriptionRowViews.swift
@@ -32,19 +25,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return Color(UIColor.systemBackground)
-            #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
-            #else
-            return Color.white
-=======
                 return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
                 return Color(NSColor.controlBackgroundColor)
             #else
                 return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
 
@@ -52,12 +37,8 @@ extension Features.Subscriptions {
             if !subscription.isActive {
                 .red
             } else if let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date()),
-<<<<<<< HEAD
-                      subscription.nextDueDate <= weekFromNow {
-=======
                 subscription.nextDueDate <= weekFromNow
             {
->>>>>>> 1cf3938 (Create working state for recovery)
                 .orange
             } else {
                 .green
@@ -68,12 +49,8 @@ extension Features.Subscriptions {
             if !subscription.isActive {
                 "Inactive"
             } else if let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date()),
-<<<<<<< HEAD
-                      subscription.nextDueDate <= weekFromNow {
-=======
                 subscription.nextDueDate <= weekFromNow
             {
->>>>>>> 1cf3938 (Create working state for recovery)
                 "Due Soon"
             } else {
                 "Active"
@@ -81,12 +58,8 @@ extension Features.Subscriptions {
         }
 
         private var daysUntilDue: Int {
-<<<<<<< HEAD
-            Calendar.current.dateComponents([.day], from: Date(), to: subscription.nextDueDate).day ?? 0
-=======
             Calendar.current.dateComponents([.day], from: Date(), to: subscription.nextDueDate).day
                 ?? 0
->>>>>>> 1cf3938 (Create working state for recovery)
         }
 
         var body: some View {
@@ -98,24 +71,15 @@ extension Features.Subscriptions {
                             gradient: Gradient(colors: [.blue, .blue.opacity(0.7)]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing,
-<<<<<<< HEAD
-                            ),
-                        )
-=======
                         ),
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
                     .frame(width: 44, height: 44)
                     .overlay(
                         Text(String(subscription.name.prefix(2).uppercased()))
                             .font(.headline)
                             .fontWeight(.bold)
                             .foregroundColor(.white),
-<<<<<<< HEAD
-                        )
-=======
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                 // Main Content
                 VStack(alignment: .leading, spacing: 4) {
@@ -137,11 +101,7 @@ extension Features.Subscriptions {
                             .background(
                                 Capsule()
                                     .fill(statusColor),
-<<<<<<< HEAD
-                                )
-=======
                             )
->>>>>>> 1cf3938 (Create working state for recovery)
                     }
 
                     HStack {
@@ -224,11 +184,7 @@ extension Features.Subscriptions {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColor)
                     .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 1),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
     }
 
@@ -240,19 +196,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return Color(UIColor.systemGroupedBackground)
-            #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
-            #else
-            return Color.white
-=======
                 return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
                 return Color(NSColor.controlBackgroundColor)
             #else
                 return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
 
@@ -268,17 +216,11 @@ extension Features.Subscriptions {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
 
-<<<<<<< HEAD
-                    Text("Next: \(subscription.nextDueDate.formatted(date: .abbreviated, time: .omitted))")
-                        .font(.caption)
-                        .foregroundColor(.blue)
-=======
                     Text(
                         "Next: \(subscription.nextDueDate.formatted(date: .abbreviated, time: .omitted))"
                     )
                     .font(.caption)
                     .foregroundColor(.blue)
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
 
                 Spacer()
@@ -297,11 +239,7 @@ extension Features.Subscriptions {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColor),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
     }
 }

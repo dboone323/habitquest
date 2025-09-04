@@ -31,46 +31,6 @@ class TransactionsDataGenerator: DataGenerator {
         // Sample transactions
         let transactions = [
             // Income transactions
-<<<<<<< HEAD
-            (title: "Salary", amount: 3_500.0, date: Date().addingTimeInterval(-86_400 * 15),
-             type: TransactionType.income, category: "Income", account: checkingAccount),
-            (title: "Freelance Work", amount: 500.0, date: Date().addingTimeInterval(-86_400 * 8),
-             type: TransactionType.income, category: "Income", account: checkingAccount),
-            (title: "Interest", amount: 25.0, date: Date().addingTimeInterval(-86_400 * 3),
-             type: TransactionType.income, category: "Income", account: savingsAccount),
-
-            // Expense transactions
-            (title: "Rent", amount: 1_200.0, date: Date().addingTimeInterval(-86_400 * 28),
-             type: TransactionType.expense, category: "Housing", account: checkingAccount),
-            (title: "Groceries", amount: 120.50, date: Date().addingTimeInterval(-86_400 * 25),
-             type: TransactionType.expense, category: "Food", account: creditCard),
-            (title: "Electricity Bill", amount: 85.0, date: Date().addingTimeInterval(-86_400 * 20),
-             type: TransactionType.expense, category: "Utilities", account: checkingAccount),
-            (title: "Internet", amount: 60.0, date: Date().addingTimeInterval(-86_400 * 18),
-             type: TransactionType.expense, category: "Utilities", account: creditCard),
-            (title: "Gas", amount: 45.0, date: Date().addingTimeInterval(-86_400 * 15),
-             type: TransactionType.expense, category: "Transportation", account: creditCard),
-            (title: "Dinner", amount: 65.75, date: Date().addingTimeInterval(-86_400 * 12),
-             type: TransactionType.expense, category: "Food", account: creditCard),
-            (title: "Movie Tickets", amount: 30.0, date: Date().addingTimeInterval(-86_400 * 10),
-             type: TransactionType.expense, category: "Entertainment", account: creditCard),
-            (title: "Coffee", amount: 4.50, date: Date().addingTimeInterval(-86_400 * 7),
-             type: TransactionType.expense, category: "Food", account: creditCard),
-            (title: "Gym Membership", amount: 50.0, date: Date().addingTimeInterval(-86_400 * 5),
-             type: TransactionType.expense, category: "Personal Care", account: checkingAccount),
-            (title: "Online Course", amount: 200.0, date: Date().addingTimeInterval(-86_400 * 2),
-             type: TransactionType.expense, category: "Education", account: creditCard),
-
-            // Previous month transactions
-            (title: "Salary", amount: 3_500.0, date: Date().addingTimeInterval(-86_400 * 45),
-             type: TransactionType.income, category: "Income", account: checkingAccount),
-            (title: "Rent", amount: 1_200.0, date: Date().addingTimeInterval(-86_400 * 58),
-             type: TransactionType.expense, category: "Housing", account: checkingAccount),
-            (title: "Groceries", amount: 160.30, date: Date().addingTimeInterval(-86_400 * 50),
-             type: TransactionType.expense, category: "Food", account: creditCard),
-            (title: "Travel", amount: 500.0, date: Date().addingTimeInterval(-86_400 * 40),
-             type: TransactionType.expense, category: "Travel", account: creditCard)
-=======
             (title: "Salary", amount: 3500.0, date: Date().addingTimeInterval(-86400 * 15),
              type: TransactionType.income, category: "Income", account: checkingAccount),
             (title: "Freelance Work", amount: 500.0, date: Date().addingTimeInterval(-86400 * 8),
@@ -109,7 +69,6 @@ class TransactionsDataGenerator: DataGenerator {
              type: TransactionType.expense, category: "Food", account: creditCard),
             (title: "Travel", amount: 500.0, date: Date().addingTimeInterval(-86400 * 40),
              type: TransactionType.expense, category: "Travel", account: creditCard),
->>>>>>> 1cf3938 (Create working state for recovery)
         ]
 
         for transaction in transactions {
@@ -118,11 +77,7 @@ class TransactionsDataGenerator: DataGenerator {
                 amount: transaction.amount,
                 date: transaction.date,
                 transactionType: transaction.type,
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
             newTransaction.category = categoryDict[transaction.category]
             newTransaction.account = transaction.account
 
@@ -180,11 +135,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 amount: subscription.amount,
                 billingCycle: subscription.cycle,
                 nextDueDate: subscription.nextDue,
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
 
             newSubscription.category = categoryDict[subscription.category]
             newSubscription.account = subscription.account
@@ -210,13 +161,8 @@ class SubscriptionsDataGenerator: DataGenerator {
         let calendar = Calendar.current
         let today = Date()
 
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func safeDateByAdding(days: Int, to date: Date) -> Date {
             calendar.date(byAdding: .day, value: days, to: date) ?? date
         }
@@ -230,11 +176,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Entertainment",
                 account: creditCard,
                 isActive: true,
-<<<<<<< HEAD
-                ),
-=======
             ),
->>>>>>> 1cf3938 (Create working state for recovery)
             SubscriptionData(
                 name: "Spotify",
                 amount: 9.99,
@@ -243,11 +185,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Entertainment",
                 account: creditCard,
                 isActive: true,
-<<<<<<< HEAD
-                ),
-=======
             ),
->>>>>>> 1cf3938 (Create working state for recovery)
             SubscriptionData(
                 name: "Video Streaming",
                 amount: 7.99,
@@ -256,11 +194,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Entertainment",
                 account: creditCard,
                 isActive: false,
-<<<<<<< HEAD
-                )
-=======
             ),
->>>>>>> 1cf3938 (Create working state for recovery)
         ]
     }
 
@@ -268,13 +202,8 @@ class SubscriptionsDataGenerator: DataGenerator {
         let calendar = Calendar.current
         let today = Date()
 
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func safeDateByAdding(days: Int, to date: Date) -> Date {
             calendar.date(byAdding: .day, value: days, to: date) ?? date
         }
@@ -288,11 +217,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Utilities",
                 account: creditCard,
                 isActive: true,
-<<<<<<< HEAD
-                ),
-=======
             ),
->>>>>>> 1cf3938 (Create working state for recovery)
             SubscriptionData(
                 name: "Phone Bill",
                 amount: 65.0,
@@ -301,11 +226,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Utilities",
                 account: checkingAccount,
                 isActive: true,
-<<<<<<< HEAD
-                ),
-=======
             ),
->>>>>>> 1cf3938 (Create working state for recovery)
             SubscriptionData(
                 name: "Internet",
                 amount: 60.0,
@@ -314,11 +235,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Utilities",
                 account: checkingAccount,
                 isActive: true,
-<<<<<<< HEAD
-                )
-=======
             ),
->>>>>>> 1cf3938 (Create working state for recovery)
         ]
     }
 
@@ -326,13 +243,8 @@ class SubscriptionsDataGenerator: DataGenerator {
         let calendar = Calendar.current
         let today = Date()
 
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func safeDateByAdding(days: Int, to date: Date) -> Date {
             calendar.date(byAdding: .day, value: days, to: date) ?? date
         }
@@ -346,11 +258,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Personal Care",
                 account: checkingAccount,
                 isActive: true,
-<<<<<<< HEAD
-                )
-=======
             ),
->>>>>>> 1cf3938 (Create working state for recovery)
         ]
     }
 
@@ -358,13 +266,8 @@ class SubscriptionsDataGenerator: DataGenerator {
         let calendar = Calendar.current
         let today = Date()
 
-<<<<<<< HEAD
-        /// <#Description#>
-        /// - Returns: <#description#>
-=======
     /// <#Description#>
     /// - Returns: <#description#>
->>>>>>> 1cf3938 (Create working state for recovery)
         func safeDateByAdding(days: Int, to date: Date) -> Date {
             calendar.date(byAdding: .day, value: days, to: date) ?? date
         }
@@ -378,11 +281,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Transportation",
                 account: checkingAccount,
                 isActive: true,
-<<<<<<< HEAD
-                )
-=======
             ),
->>>>>>> 1cf3938 (Create working state for recovery)
         ]
     }
 }

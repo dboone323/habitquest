@@ -14,7 +14,7 @@ class TaskDataManager {
     }
 
     func load() -> [Task] {
-        return tasks
+        tasks
     }
 
     func save(tasks: [Task]) {
@@ -35,7 +35,7 @@ class GoalDataManager {
     }
 
     func load() -> [Goal] {
-        return goals
+        goals
     }
 
     func save(goals: [Goal]) {
@@ -56,7 +56,7 @@ class CalendarDataManager {
     }
 
     func load() -> [CalendarEvent] {
-        return events
+        events
     }
 
     func save(events: [CalendarEvent]) {
@@ -77,7 +77,7 @@ class JournalDataManager {
     }
 
     func load() -> [JournalEntry] {
-        return entries
+        entries
     }
 
     func save(entries: [JournalEntry]) {

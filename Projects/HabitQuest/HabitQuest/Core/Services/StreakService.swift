@@ -25,7 +25,7 @@ class StreakService {
 
         // Direct relationship navigation - eliminates predicate complexity
         let completedLogs = habit.logs
-            .filter { $0.isCompleted }
+            .filter(\.isCompleted)
             .sorted { $0.completionDate > $1.completionDate }
 
         var streak = 0
@@ -57,7 +57,7 @@ class StreakService {
 
         // Direct relationship navigation - eliminates predicate complexity
         let completedLogs = habit.logs
-            .filter { $0.isCompleted }
+            .filter(\.isCompleted)
             .sorted { $0.completionDate < $1.completionDate }
 
         var longestStreak = 0
@@ -99,7 +99,7 @@ class StreakService {
         let startDate = calendar.date(byAdding: .day, value: -days, to: today) ?? today
 
         // Direct relationship navigation - eliminates predicate complexity
-        let completedLogs = habit.logs.filter { $0.isCompleted }
+        let completedLogs = habit.logs.filter(\.isCompleted)
         let completedDates = Set(completedLogs.map { calendar.startOfDay(for: $0.completionDate) })
 
         var streakData: [StreakDayData] = []
@@ -214,13 +214,13 @@ class StreakService {
     /// Calculate what percentile a streak is in (for motivation)
     private func calculateStreakPercentile(_ streak: Int) -> Double {
         switch streak {
-        case 0...2: return 0.1
-        case 3...6: return 0.25
-        case 7...13: return 0.5
-        case 14...29: return 0.75
-        case 30...99: return 0.9
-        case 100...364: return 0.95
-        default: return 0.99
+        case 0 ... 2: 0.1
+        case 3 ... 6: 0.25
+        case 7 ... 13: 0.5
+        case 14 ... 29: 0.75
+        case 30 ... 99: 0.9
+        case 100 ... 364: 0.95
+        default: 0.99
         }
     }
 }
@@ -247,17 +247,17 @@ struct StreakAnalytics {
     /// Formatted streak description
     var streakDescription: String {
         if currentStreak == 0 {
-            return "Ready to start your streak!"
+            "Ready to start your streak!"
         } else if currentStreak == 1 {
-            return "1 day streak - great start!"
+            "1 day streak - great start!"
         } else {
-            return "\(currentStreak) day streak"
+            "\(currentStreak) day streak"
         }
     }
 
     /// Motivational message based on progress
     var motivationalMessage: String {
-        guard let nextMilestone = nextMilestone else {
+        guard let nextMilestone else {
             return "You've reached legendary status!"
         }
 

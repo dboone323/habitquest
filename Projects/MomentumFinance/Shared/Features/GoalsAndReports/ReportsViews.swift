@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-import UIKit
-import SwiftData
-import SwiftUI
-import UIKit
-=======
 import SwiftUI
 
 #if canImport(AppKit)
     import AppKit
 #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
@@ -48,22 +41,14 @@ struct ReportsSection: View {
                 FinancialSummaryCard(
                     transactions: filteredTransactions,
                     timeframe: selectedTimeframe,
-<<<<<<< HEAD
-                    )
-=======
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
                 .padding(.horizontal)
 
                 // Spending by Category Chart
                 SpendingByCategoryCard(
                     transactions: filteredTransactions,
                     categories: categories,
-<<<<<<< HEAD
-                    )
-=======
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
                 .padding(.horizontal)
 
                 // Budget Performance Card
@@ -92,13 +77,9 @@ struct ReportsSection: View {
             return transactions.filter { weekInterval.contains($0.date) }
 
         case .thisMonth:
-<<<<<<< HEAD
-            return transactions.filter { calendar.isDate($0.date, equalTo: now, toGranularity: .month) }
-=======
             return transactions.filter {
                 calendar.isDate($0.date, equalTo: now, toGranularity: .month)
             }
->>>>>>> 1cf3938 (Create working state for recovery)
 
         case .last3Months:
             guard let threeMonthsAgo = calendar.date(byAdding: .month, value: -3, to: now) else {
@@ -107,13 +88,9 @@ struct ReportsSection: View {
             return transactions.filter { $0.date >= threeMonthsAgo }
 
         case .thisYear:
-<<<<<<< HEAD
-            return transactions.filter { calendar.isDate($0.date, equalTo: now, toGranularity: .year) }
-=======
             return transactions.filter {
                 calendar.isDate($0.date, equalTo: now, toGranularity: .year)
             }
->>>>>>> 1cf3938 (Create working state for recovery)
         }
     }
 
@@ -134,19 +111,11 @@ struct FinancialSummaryCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-<<<<<<< HEAD
-        return Color(UIColor.systemBackground)
-        #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
-        #else
-        return Color.white
-=======
             return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
             return Color(NSColor.controlBackgroundColor)
         #else
             return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
         #endif
     }
 
@@ -218,19 +187,11 @@ struct SpendingByCategoryCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-<<<<<<< HEAD
-        return Color(UIColor.systemBackground)
-        #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
-        #else
-        return Color.white
-=======
             return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
             return Color(NSColor.controlBackgroundColor)
         #else
             return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
         #endif
     }
 
@@ -303,19 +264,11 @@ struct BudgetPerformanceCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-<<<<<<< HEAD
-        return Color(UIColor.systemBackground)
-        #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
-        #else
-        return Color.white
-=======
             return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
             return Color(NSColor.controlBackgroundColor)
         #else
             return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
         #endif
     }
 
@@ -342,29 +295,19 @@ struct BudgetPerformanceCard: View {
             } else {
                 VStack(spacing: 12) {
                     HStack {
-<<<<<<< HEAD
-                        Label("\(onTrackBudgets.count) On Track", systemImage: "checkmark.circle.fill")
-                            .foregroundColor(.green)
-=======
                         Label(
                             "\(onTrackBudgets.count) On Track", systemImage: "checkmark.circle.fill"
                         )
                         .foregroundColor(.green)
->>>>>>> 1cf3938 (Create working state for recovery)
 
                         Spacer()
 
                         if !overBudgets.isEmpty {
-<<<<<<< HEAD
-                            Label("\(overBudgets.count) Over Budget", systemImage: "exclamationmark.triangle.fill")
-                                .foregroundColor(.red)
-=======
                             Label(
                                 "\(overBudgets.count) Over Budget",
                                 systemImage: "exclamationmark.triangle.fill"
                             )
                             .foregroundColor(.red)
->>>>>>> 1cf3938 (Create working state for recovery)
                         }
                     }
 
@@ -404,19 +347,11 @@ struct RecentTransactionsCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-<<<<<<< HEAD
-        return Color(UIColor.systemBackground)
-        #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
-        #else
-        return Color.white
-=======
             return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
             return Color(NSColor.controlBackgroundColor)
         #else
             return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
         #endif
     }
 
@@ -451,12 +386,8 @@ struct RecentTransactionsCard: View {
                             Text(transaction.formattedAmount)
                                 .font(.body)
                                 .fontWeight(.semibold)
-<<<<<<< HEAD
-                                .foregroundColor(transaction.transactionType == .income ? .green : .red)
-=======
                                 .foregroundColor(
                                     transaction.transactionType == .income ? .green : .red)
->>>>>>> 1cf3938 (Create working state for recovery)
                         }
                         .padding(.vertical, 4)
                     }

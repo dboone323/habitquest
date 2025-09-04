@@ -2,11 +2,11 @@ name: Security Scan
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
   schedule:
-    - cron: '0 0 * * 1'  # Weekly on Mondays
+    - cron: "0 0 * * 1" # Weekly on Mondays
 
 jobs:
   codeql:
@@ -14,42 +14,42 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: javascript, python, shell
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, python, shell
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
 
   secrets-check:
     name: Secrets Detection
     runs-on: macos-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Check for Exposed Secrets
-      run: |
-        echo "🔍 Scanning for potential secrets..."
-        # Check for common secret patterns
-        patterns=("password" "secret" "token" "api_key" "private_key" "access_key")
-        found_issues=0
+      - name: Check for Exposed Secrets
+        run: |
+          echo "🔍 Scanning for potential secrets..."
+          # Check for common secret patterns
+          patterns=("password" "secret" "token" "api_key" "private_key" "access_key")
+          found_issues=0
 
-        for pattern in "${patterns[@]}"; do
-          if grep -r "$pattern" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.github | grep -v "example\|placeholder\|test" | grep -v "README"; then
-            echo "⚠️  Found potential $pattern exposure"
-            ((found_issues++))
+          for pattern in "${patterns[@]}"; do
+            if grep -r "$pattern" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.github | grep -v "example\|placeholder\|test" | grep -v "README"; then
+              echo "⚠️  Found potential $pattern exposure"
+              ((found_issues++))
+            fi
+          done
+
+          if [ $found_issues -eq 0 ]; then
+            echo "✅ No obvious secrets found"
+          else
+            echo "❌ Found $found_issues potential security issues"
+            exit 1
           fi
-        done
-
-        if [ $found_issues -eq 0 ]; then
-          echo "✅ No obvious secrets found"
-        else
-          echo "❌ Found $found_issues potential security issues"
-          exit 1
-        fi

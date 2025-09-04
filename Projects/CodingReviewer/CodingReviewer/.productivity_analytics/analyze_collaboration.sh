@@ -39,13 +39,13 @@ echo "  Documentation updates: $doc_updates"
 # Collaboration score
 collab_score=85
 if [ "$reviews_given" -gt 4 ]; then
-    collab_score=$((collab_score + 5))
+  collab_score=$((collab_score + 5))
 fi
 if [ "$approval_rate" -gt 90 ]; then
-    collab_score=$((collab_score + 5))
+  collab_score=$((collab_score + 5))
 fi
 if [ "$pair_sessions" -gt 3 ]; then
-    collab_score=$((collab_score + 5))
+  collab_score=$((collab_score + 5))
 fi
 
 echo ""

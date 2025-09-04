@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-import UIKit
-import SwiftData
-import SwiftUI
-import UIKit
-=======
 import SwiftUI
 
 #if canImport(AppKit)
     import AppKit
 #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
 //
 //  SubscriptionSummaryViews.swift
@@ -32,19 +25,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return Color(UIColor.systemBackground)
-            #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
-            #else
-            return Color.white
-=======
                 return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
                 return Color(NSColor.controlBackgroundColor)
             #else
                 return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
 
@@ -90,17 +75,6 @@ extension Features.Subscriptions {
                                 .overlay(
                                     Capsule()
                                         .stroke(Color.blue.opacity(0.3), lineWidth: 1),
-<<<<<<< HEAD
-                                    ),
-                            )
-                }
-
-                // Cost Summary
-                LazyVGrid(columns: [
-                    GridItem(.flexible()),
-                    GridItem(.flexible())
-                ], spacing: 12) {
-=======
                                 ),
                         )
                 }
@@ -112,7 +86,6 @@ extension Features.Subscriptions {
                         GridItem(.flexible()),
                     ], spacing: 12
                 ) {
->>>>>>> 1cf3938 (Create working state for recovery)
                     // Monthly Total
                     VStack(spacing: 4) {
                         Text("Monthly")
@@ -132,13 +105,8 @@ extension Features.Subscriptions {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.blue.opacity(0.2), lineWidth: 1),
-<<<<<<< HEAD
-                                ),
-                        )
-=======
                             ),
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
 
                     // Yearly Total
                     VStack(spacing: 4) {
@@ -159,13 +127,8 @@ extension Features.Subscriptions {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.green.opacity(0.2), lineWidth: 1),
-<<<<<<< HEAD
-                                ),
-                        )
-=======
                             ),
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
 
                 // Next Payment
@@ -185,12 +148,6 @@ extension Features.Subscriptions {
                         Spacer()
 
                         VStack(alignment: .trailing, spacing: 2) {
-<<<<<<< HEAD
-                            Text(nextPayment.nextDueDate.formatted(date: .abbreviated, time: .omitted))
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                                .foregroundColor(.orange)
-=======
                             Text(
                                 nextPayment.nextDueDate.formatted(
                                     date: .abbreviated, time: .omitted)
@@ -198,7 +155,6 @@ extension Features.Subscriptions {
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.orange)
->>>>>>> 1cf3938 (Create working state for recovery)
 
                             Text(nextPayment.amount.formatted(.currency(code: "USD")))
                                 .font(.caption)
@@ -212,13 +168,8 @@ extension Features.Subscriptions {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.orange.opacity(0.2), lineWidth: 1),
-<<<<<<< HEAD
-                                ),
-                        )
-=======
                             ),
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
             }
             .padding()
@@ -226,11 +177,7 @@ extension Features.Subscriptions {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColor)
                     .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
     }
 
@@ -242,19 +189,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return Color(UIColor.systemGroupedBackground)
-            #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
-            #else
-            return Color.white
-=======
                 return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
                 return Color(NSColor.controlBackgroundColor)
             #else
                 return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
 
@@ -296,11 +235,7 @@ extension Features.Subscriptions {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColor),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
     }
 }

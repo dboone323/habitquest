@@ -13,7 +13,7 @@ func fi_findBudgetRecommendations(transactions: [FinancialTransaction], budgets:
     }
 
     let calendar = Calendar.current
-    let currentMonth = calendar.startOfMonth(for: Date())
+    let currentMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: Date()))!
     let monthsBack = 3
 
     var monthlyAverages: [String: Double] = [:]
@@ -22,7 +22,7 @@ func fi_findBudgetRecommendations(transactions: [FinancialTransaction], budgets:
         let monthlySpends = (0 ..< monthsBack).compactMap { monthOffset -> Double? in
             let targetMonth = calendar.date(byAdding: .month, value: -monthOffset, to: currentMonth)!
             let monthTransactions = categoryTransactions.filter {
-                calendar.startOfMonth(for: $0.date) == calendar.startOfMonth(for: targetMonth)
+                calendar.date(from: calendar.dateComponents([.year, .month], from: $0.date)) == calendar.date(from: calendar.dateComponents([.year, .month], from: targetMonth))
             }
             guard !monthTransactions.isEmpty else { return nil }
             return monthTransactions.reduce(0) { $0 + abs($1.amount) }

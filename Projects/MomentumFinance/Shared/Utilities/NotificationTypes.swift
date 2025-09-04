@@ -80,10 +80,45 @@ public struct NotificationPermissionManager {
             return false
         }
     }
+
+    /// Checks current notification permission status
+    /// - Parameter completion: Callback with permission status
+    public func checkNotificationPermission(completion: @escaping (Bool) -> Void) {
+        center.getNotificationSettings { settings in
+            let granted = settings.authorizationStatus == .authorized
+            completion(granted)
+        }
+    }
+
+    /// Sets up notification categories for the app
+    public func setupNotificationCategories() {
+        let budgetCategory = UNNotificationCategory(
+            identifier: "BUDGET_WARNING",
+            actions: [],
+            intentIdentifiers: [],
+            options: .customDismissAction
+        )
+
+        let subscriptionCategory = UNNotificationCategory(
+            identifier: "SUBSCRIPTION_REMINDER",
+            actions: [],
+            intentIdentifiers: [],
+            options: .customDismissAction
+        )
+
+        let goalCategory = UNNotificationCategory(
+            identifier: "GOAL_PROGRESS",
+            actions: [],
+            intentIdentifiers: [],
+            options: .customDismissAction
+        )
+
+        center.setNotificationCategories([budgetCategory, subscriptionCategory, goalCategory])
+    }
 }
 
 /// Schedules and manages budget-related notifications
-public struct BudgetNotificationScheduler {
+public struct BudgetNotificationScheduler: Sendable {
     private let center = UNUserNotificationCenter.current()
     private let logger: OSLog
 
@@ -155,11 +190,11 @@ public struct BudgetNotificationScheduler {
         // Extract category name before the closure to avoid capturing budget
         let categoryName = budget.category?.name ?? "Unknown"
 
-        center.add(request) { error in
+        center.add(request) { [logger] error in
             if let error {
-                os_log("Failed to schedule budget notification: %@", log: self.logger, type: .error, error.localizedDescription)
+                os_log("Failed to schedule budget notification: %@", log: logger, type: .error, error.localizedDescription)
             } else {
-                os_log("Scheduled budget warning for %@", log: self.logger, type: .info, categoryName)
+                os_log("Scheduled budget warning for %@", log: logger, type: .info, categoryName)
             }
         }
     }
@@ -196,7 +231,7 @@ public struct BudgetNotificationScheduler {
 }
 
 /// Schedules subscription-related notifications
-public struct SubscriptionNotificationScheduler {
+public struct SubscriptionNotificationScheduler: Sendable {
     private let center = UNUserNotificationCenter.current()
     private let logger: OSLog
 
@@ -209,6 +244,11 @@ public struct SubscriptionNotificationScheduler {
         for subscription in subscriptions {
             scheduleDueDateReminder(for: subscription)
         }
+    }
+
+    /// Alias for scheduleDueDateReminders to match NotificationManager interface
+    public func scheduleNotifications(for subscriptions: [Subscription]) {
+        scheduleDueDateReminders(for: subscriptions)
     }
 
     private func scheduleDueDateReminder(for subscription: Subscription) {
@@ -245,18 +285,21 @@ public struct SubscriptionNotificationScheduler {
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 
-        center.add(request) { error in
+        // Extract subscription name before the closure
+        let subscriptionName = subscription.name
+
+        center.add(request) { [logger] error in
             if let error {
-                os_log("Failed to schedule subscription reminder: %@", log: self.logger, type: .error, error.localizedDescription)
+                os_log("Failed to schedule subscription reminder: %@", log: logger, type: .error, error.localizedDescription)
             } else {
-                os_log("Scheduled subscription reminder for %@", log: self.logger, type: .info, subscription.name)
+                os_log("Scheduled subscription reminder for %@", log: logger, type: .info, subscriptionName)
             }
         }
     }
 }
 
 /// Schedules goal milestone and reminder notifications
-public struct GoalNotificationScheduler {
+public struct GoalNotificationScheduler: Sendable {
     private let center = UNUserNotificationCenter.current()
     private let logger: OSLog
 
@@ -269,6 +312,11 @@ public struct GoalNotificationScheduler {
         for goal in goals {
             scheduleProgressReminder(for: goal)
         }
+    }
+
+    /// Alias for scheduleProgressReminders to match NotificationManager interface
+    public func checkMilestones(for goals: [SavingsGoal]) {
+        scheduleProgressReminders(for: goals)
     }
 
     private func scheduleProgressReminder(for goal: SavingsGoal) {
@@ -303,11 +351,14 @@ public struct GoalNotificationScheduler {
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: true)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 
-        center.add(request) { error in
+        // Extract goal title before the closure
+        let goalTitle = goal.title
+
+        center.add(request) { [logger] error in
             if let error {
-                os_log("Failed to schedule goal progress reminder: %@", log: self.logger, type: .error, error.localizedDescription)
+                os_log("Failed to schedule goal progress reminder: %@", log: logger, type: .error, error.localizedDescription)
             } else {
-                os_log("Scheduled goal progress reminder for %@", log: self.logger, type: .info, goal.title)
+                os_log("Scheduled goal progress reminder for %@", log: logger, type: .info, goalTitle)
             }
         }
     }

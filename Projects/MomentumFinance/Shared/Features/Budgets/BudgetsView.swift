@@ -10,11 +10,7 @@ import SwiftData
 import SwiftUI
 
 #if canImport(UIKit)
-<<<<<<< HEAD
-import UIKit
-=======
     import UIKit
->>>>>>> 1cf3938 (Create working state for recovery)
 #endif
 
 extension Features.Budgets {
@@ -22,16 +18,6 @@ extension Features.Budgets {
         @Environment(\.modelContext)
         private var modelContext
         @State private var viewModel = BudgetsViewModel()
-<<<<<<< HEAD
-        @Query private var budgets: [Budget]
-        @Query private var categories: [Category]
-        @State private var showingAddBudget = false
-        @State private var selectedTimeframe: TimeFrame = .thisMonth
-
-        // Search functionality
-        @State private var showingSearch = false
-        @State private var navigationCoordinator = NavigationCoordinator.shared
-=======
         #if canImport(SwiftData)
             #if canImport(SwiftData)
                 private var budgets: [Budget] = []
@@ -47,10 +33,9 @@ extension Features.Budgets {
         @State private var showingAddBudget = false
         @State private var selectedTimeframe: TimeFrame = .thisMonth
 
-    // Search functionality
-    @State private var showingSearch = false
-    @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
->>>>>>> 1cf3938 (Create working state for recovery)
+        // Search functionality
+        @State private var showingSearch = false
+        @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
 
         private enum TimeFrame: String, CaseIterable {
             case thisMonth = "This Month"
@@ -79,27 +64,18 @@ extension Features.Budgets {
                             // Search Button
                             Button {
                                 showingSearch = true
-<<<<<<< HEAD
-                                navigationCoordinator.activateSearch()
-=======
                                 NavigationCoordinator.shared.activateSearch()
->>>>>>> 1cf3938 (Create working state for recovery)
                             } label: {
                                 Image(systemName: "magnifyingglass")
                             }
 
                             // Add Budget Button
-<<<<<<< HEAD
-                            Button(action: { showingAddBudget = true }, label: {
-                                Image(systemName: "plus")
-                            })
-=======
                             Button(
                                 action: { showingAddBudget = true },
                                 label: {
                                     Image(systemName: "plus")
-                                })
->>>>>>> 1cf3938 (Create working state for recovery)
+                                }
+                            )
                         }
                     }
                 }
@@ -133,17 +109,6 @@ extension Features.Budgets {
                         .padding(.horizontal, 32)
                 }
 
-<<<<<<< HEAD
-                Button(action: { showingAddBudget = true }, label: {
-                    Label("Create Your First Budget", systemImage: "plus.circle.fill")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 12)
-                        .background(Color.blue)
-                        .cornerRadius(12)
-                })
-=======
                 Button(
                     action: { showingAddBudget = true },
                     label: {
@@ -156,7 +121,6 @@ extension Features.Budgets {
                             .cornerRadius(12)
                     }
                 )
->>>>>>> 1cf3938 (Create working state for recovery)
                 .padding(.top, 8)
 
                 Spacer()
@@ -218,19 +182,13 @@ extension Features.Budgets {
 
                     Spacer()
 
-<<<<<<< HEAD
-                    Button(action: { showingAddBudget = true }, label: {
-                        Image(systemName: "plus.circle")
-                            .foregroundColor(.blue)
-                    })
-=======
                     Button(
                         action: { showingAddBudget = true },
                         label: {
                             Image(systemName: "plus.circle")
                                 .foregroundColor(.blue)
-                        })
->>>>>>> 1cf3938 (Create working state for recovery)
+                        }
+                    )
                 }
 
                 LazyVStack(spacing: 12) {
@@ -248,15 +206,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-<<<<<<< HEAD
-            return Color(uiColor: .systemGroupedBackground)
-            #else
-            return Color(nsColor: .controlBackgroundColor)
-=======
                 return Color(uiColor: .systemGroupedBackground)
             #else
                 return Color(nsColor: .controlBackgroundColor)
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
     }
@@ -311,11 +263,7 @@ extension Features.Budgets {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColorForPlatform())
                     .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
 
         private var totalBudget: Double {
@@ -337,15 +285,9 @@ extension Features.Budgets {
 
         private var spentColor: Color {
             switch spentPercentage {
-<<<<<<< HEAD
             case 0 ..< 0.5:
                 .green
             case 0.5 ..< 0.8:
-=======
-            case 0..<0.5:
-                .green
-            case 0.5..<0.8:
->>>>>>> 1cf3938 (Create working state for recovery)
                 .orange
             default:
                 .red
@@ -354,15 +296,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-<<<<<<< HEAD
-            return Color(uiColor: .systemGroupedBackground)
-            #else
-            return Color(nsColor: .controlBackgroundColor)
-=======
                 return Color(uiColor: .systemGroupedBackground)
             #else
                 return Color(nsColor: .controlBackgroundColor)
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
     }
@@ -407,11 +343,7 @@ extension Features.Budgets {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColorForPlatform())
                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 1),
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
 
         private var spentPercentage: Double {
@@ -421,15 +353,9 @@ extension Features.Budgets {
 
         private var spentColor: Color {
             switch spentPercentage {
-<<<<<<< HEAD
             case 0 ..< 50:
                 .green
             case 50 ..< 80:
-=======
-            case 0..<50:
-                .green
-            case 50..<80:
->>>>>>> 1cf3938 (Create working state for recovery)
                 .orange
             default:
                 .red
@@ -438,15 +364,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-<<<<<<< HEAD
-            return Color(uiColor: .systemGroupedBackground)
-            #else
-            return Color(nsColor: .controlBackgroundColor)
-=======
                 return Color(uiColor: .systemGroupedBackground)
             #else
                 return Color(nsColor: .controlBackgroundColor)
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
     }
@@ -465,14 +385,9 @@ extension Features.Budgets {
                     Section(header: Text("Budget Details")) {
                         TextField("Budget Name", text: $name)
                         TextField("Budget Amount", text: $limitAmount)
-                            #if os(iOS)
-<<<<<<< HEAD
+                        #if os(iOS)
                             .keyboardType(.decimalPad)
                         #endif
-=======
-                                .keyboardType(.decimalPad)
-                            #endif
->>>>>>> 1cf3938 (Create working state for recovery)
                     }
 
                     if !categories.isEmpty {
@@ -488,27 +403,23 @@ extension Features.Budgets {
                 }
                 .navigationTitle("New Budget")
                 #if os(iOS)
-<<<<<<< HEAD
-                .navigationBarTitleDisplayMode(.inline)
-=======
                     .navigationBarTitleDisplayMode(.inline)
->>>>>>> 1cf3938 (Create working state for recovery)
                 #endif
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
-                            dismiss()
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") {
+                                dismiss()
+                            }
                         }
-                    }
 
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Save") {
-                            // Save budget logic would go here
-                            dismiss()
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Save") {
+                                // Save budget logic would go here
+                                dismiss()
+                            }
+                            .disabled(name.isEmpty || limitAmount.isEmpty)
                         }
-                        .disabled(name.isEmpty || limitAmount.isEmpty)
                     }
-                }
             }
         }
     }

@@ -5,7 +5,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class SavingsGoal {
+public final class SavingsGoal {
     var name: String
     var targetAmount: Double
     var currentAmount: Double
@@ -83,12 +83,9 @@ final class SavingsGoal {
         let components = calendar.dateComponents([.day], from: Date(), to: targetDate)
         return components.day
     }
-<<<<<<< HEAD
-=======
 
     /// Compatibility accessor: code expects `title` on goals; map to `name`.
     var title: String {
         name
     }
->>>>>>> 1cf3938 (Create working state for recovery)
 }

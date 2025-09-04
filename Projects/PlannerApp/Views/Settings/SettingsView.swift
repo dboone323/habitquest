@@ -224,7 +224,7 @@ struct SettingsView_Previews: PreviewProvider {
 
 struct NotificationToggleModifier: ViewModifier {
     @Binding var notificationsEnabled: Bool
-    
+
     func body(content: Content) -> some View {
         if #available(macOS 14.0, iOS 17.0, *) {
             content.onChange(of: notificationsEnabled) { _, newValue in
@@ -236,7 +236,7 @@ struct NotificationToggleModifier: ViewModifier {
             content
         }
     }
-    
+
     private func requestNotificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, _ in
             DispatchQueue.main.async {

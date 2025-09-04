@@ -30,7 +30,7 @@ extension Features.Transactions {
                     _, group in
                     Section {
                         ForEach(group.value, id: \.persistentModelID) { transaction in
-                            Features.Transactions.SimpleTransactionRow(transaction: transaction) {
+                            Features.Transactions.TransactionRowView(transaction: transaction) {
                                 onTransactionTapped(transaction)
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {

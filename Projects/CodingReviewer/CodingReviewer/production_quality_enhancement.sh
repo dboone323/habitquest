@@ -22,23 +22,23 @@ BOLD='\033[1m'
 NC='\033[0m'
 
 print_status() {
-    echo -e "${BLUE}📋 $1${NC}"
+  echo -e "${BLUE}📋 $1${NC}"
 }
 
 print_success() {
-    echo -e "${GREEN}✅ $1${NC}"
+  echo -e "${GREEN}✅ $1${NC}"
 }
 
 print_info() {
-    echo -e "${CYAN}ℹ️  $1${NC}"
+  echo -e "${CYAN}ℹ️  $1${NC}"
 }
 
 # 1. Implement Missing Model Classes and Supporting Types
 implement_core_models() {
-    print_status "Implementing core models and supporting types..."
-    
-    # Create missing types for ML Code Insights
-    cat > "$PROJECT_PATH/Sources/Advanced/MLCodeInsightsModels.swift" << 'EOF'
+  print_status "Implementing core models and supporting types..."
+
+  # Create missing types for ML Code Insights
+  cat >"$PROJECT_PATH/Sources/Advanced/MLCodeInsightsModels.swift" <<'EOF'
 // Missing Models for ML Code Insights
 import Foundation
 
@@ -316,14 +316,14 @@ public struct CodePatterns {
 }
 EOF
 
-    print_success "Created comprehensive ML models and supporting types"
+  print_success "Created comprehensive ML models and supporting types"
 }
 
 # 2. Implement Robust Code Analysis Engine
 implement_code_analysis() {
-    print_status "Implementing robust code analysis engine..."
-    
-    cat > "$PROJECT_PATH/Sources/Features/RobustCodeAnalysisEngine.swift" << 'EOF'
+  print_status "Implementing robust code analysis engine..."
+
+  cat >"$PROJECT_PATH/Sources/Features/RobustCodeAnalysisEngine.swift" <<'EOF'
 // Robust Code Analysis Engine Implementation
 import Foundation
 
@@ -779,14 +779,14 @@ public enum CodeLanguage: String, CaseIterable {
 }
 EOF
 
-    print_success "Created robust code analysis engine with language-specific analyzers"
+  print_success "Created robust code analysis engine with language-specific analyzers"
 }
 
 # 3. Implement Working AI Integration
 implement_ai_integration() {
-    print_status "Implementing functional AI integration..."
-    
-    cat > "$PROJECT_PATH/Sources/AI/FunctionalAIIntegration.swift" << 'EOF'
+  print_status "Implementing functional AI integration..."
+
+  cat >"$PROJECT_PATH/Sources/AI/FunctionalAIIntegration.swift" <<'EOF'
 // Functional AI Integration Implementation
 import Foundation
 
@@ -1209,14 +1209,14 @@ public class APIKeyManager: ObservableObject {
 }
 EOF
 
-    print_success "Created functional AI integration with fallback to local analysis"
+  print_success "Created functional AI integration with fallback to local analysis"
 }
 
 # 4. Fix Missing View Models and Complete Integration
 fix_view_models() {
-    print_status "Implementing missing view models and completing integration..."
-    
-    cat > "$PROJECT_PATH/Sources/ViewModels/CompletedViewModels.swift" << 'EOF'
+  print_status "Implementing missing view models and completing integration..."
+
+  cat >"$PROJECT_PATH/Sources/ViewModels/CompletedViewModels.swift" <<'EOF'
 // Complete View Model Implementations
 import Foundation
 import SwiftUI
@@ -1535,45 +1535,45 @@ public struct MetricCard: View {
 }
 EOF
 
-    print_success "Created complete view models with functional integration"
+  print_success "Created complete view models with functional integration"
 }
 
 # Main execution
 main() {
-    echo -e "${BOLD}${PURPLE}🔧 STARTING CODINGREVIEWER PRODUCTION QUALITY ENHANCEMENT${NC}"
-    echo ""
-    
-    implement_core_models
-    echo ""
-    
-    implement_code_analysis
-    echo ""
-    
-    implement_ai_integration
-    echo ""
-    
-    fix_view_models
-    echo ""
-    
-    echo -e "${BOLD}${GREEN}🎉 PRODUCTION QUALITY ENHANCEMENT COMPLETED!${NC}"
-    echo -e "============================================================"
-    echo -e "${CYAN}📊 IMPROVEMENTS MADE:${NC}"
-    echo -e "  ✅ Complete ML model implementations with real analysis logic"
-    echo -e "  ✅ Robust code analysis engine with language-specific analyzers"
-    echo -e "  ✅ Functional AI integration with fallback to local analysis"
-    echo -e "  ✅ Complete view models with working state management"
-    echo -e "  ✅ Real bug prediction and complexity analysis"
-    echo -e "  ✅ Security pattern detection and quality metrics"
-    echo -e "  ✅ Automatic code fix suggestions and application"
-    echo -e "  ✅ Comprehensive error handling and user feedback"
-    echo ""
-    echo -e "${YELLOW}🚀 NEXT STEPS:${NC}"
-    echo -e "  1. Build and test the enhanced app: ./build_and_run.sh"
-    echo -e "  2. Test AI features with a valid OpenAI API key"
-    echo -e "  3. Verify code analysis accuracy with sample code"
-    echo -e "  4. Test all UI components for responsiveness"
-    echo ""
-    echo -e "${CYAN}Completed: $(date)${NC}"
+  echo -e "${BOLD}${PURPLE}🔧 STARTING CODINGREVIEWER PRODUCTION QUALITY ENHANCEMENT${NC}"
+  echo ""
+
+  implement_core_models
+  echo ""
+
+  implement_code_analysis
+  echo ""
+
+  implement_ai_integration
+  echo ""
+
+  fix_view_models
+  echo ""
+
+  echo -e "${BOLD}${GREEN}🎉 PRODUCTION QUALITY ENHANCEMENT COMPLETED!${NC}"
+  echo -e "============================================================"
+  echo -e "${CYAN}📊 IMPROVEMENTS MADE:${NC}"
+  echo -e "  ✅ Complete ML model implementations with real analysis logic"
+  echo -e "  ✅ Robust code analysis engine with language-specific analyzers"
+  echo -e "  ✅ Functional AI integration with fallback to local analysis"
+  echo -e "  ✅ Complete view models with working state management"
+  echo -e "  ✅ Real bug prediction and complexity analysis"
+  echo -e "  ✅ Security pattern detection and quality metrics"
+  echo -e "  ✅ Automatic code fix suggestions and application"
+  echo -e "  ✅ Comprehensive error handling and user feedback"
+  echo ""
+  echo -e "${YELLOW}🚀 NEXT STEPS:${NC}"
+  echo -e "  1. Build and test the enhanced app: ./build_and_run.sh"
+  echo -e "  2. Test AI features with a valid OpenAI API key"
+  echo -e "  3. Verify code analysis accuracy with sample code"
+  echo -e "  4. Test all UI components for responsiveness"
+  echo ""
+  echo -e "${CYAN}Completed: $(date)${NC}"
 }
 
 main "$@"

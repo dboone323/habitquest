@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Thanks for taking the time to fill out this bug report!
-        
+
   - type: input
     id: version
     attributes:
@@ -16,7 +16,7 @@ body:
       placeholder: ex. v1.0.0
     validations:
       required: true
-      
+
   - type: dropdown
     id: os
     attributes:
@@ -29,7 +29,7 @@ body:
         - Other (please specify in description)
     validations:
       required: true
-      
+
   - type: textarea
     id: what-happened
     attributes:
@@ -38,7 +38,7 @@ body:
       placeholder: Tell us what you see!
     validations:
       required: true
-      
+
   - type: textarea
     id: steps
     attributes:
@@ -51,7 +51,7 @@ body:
         4. See error
     validations:
       required: true
-      
+
   - type: textarea
     id: logs
     attributes:

@@ -15,10 +15,6 @@ extension Features.Transactions {
         let categoryId: PersistentIdentifier
 
         // Query transactions but we'll filter in computed property
-<<<<<<< HEAD
-        @Query private var transactions: [FinancialTransaction]
-        @Query private var categories: [ExpenseCategory]
-=======
         #if canImport(SwiftData)
             #if canImport(SwiftData)
                 private var transactions: [FinancialTransaction] = []
@@ -31,7 +27,6 @@ extension Features.Transactions {
             private var transactions: [FinancialTransaction] = []
             private var categories: [ExpenseCategory] = []
         #endif
->>>>>>> 1cf3938 (Create working state for recovery)
 
         // Get the specific category
         private var category: ExpenseCategory? {
@@ -41,15 +36,10 @@ extension Features.Transactions {
         // Filter transactions by category
         private var filteredTransactions: [FinancialTransaction] {
             guard let category else { return [] }
-<<<<<<< HEAD
-            return transactions.filter { $0.category?.persistentModelID == category.persistentModelID }
-                .sorted { $0.date > $1.date }
-=======
             return transactions.filter {
                 $0.category?.persistentModelID == category.persistentModelID
             }
             .sorted { $0.date > $1.date }
->>>>>>> 1cf3938 (Create working state for recovery)
         }
 
         var body: some View {
@@ -88,18 +78,14 @@ extension Features.Transactions {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(platformBackgroundColor)
                                 .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-<<<<<<< HEAD
-                            )
-=======
                         )
->>>>>>> 1cf3938 (Create working state for recovery)
                         .padding(.horizontal)
                     }
 
                     // Transactions list
                     List {
                         ForEach(filteredTransactions) { transaction in
-                            Features.Transactions.TransactionRowView(transaction: transaction)
+                            Features.Transactions.TransactionRowView(transaction: transaction, onTapped: {})
                                 .swipeActions {
                                     Button(role: .destructive) {
                                         deleteTransaction(transaction)
@@ -115,11 +101,7 @@ extension Features.Transactions {
                         "Category Not Found",
                         systemImage: "tag.slash",
                         description: Text("The selected category could not be found"),
-<<<<<<< HEAD
-                        )
-=======
                     )
->>>>>>> 1cf3938 (Create working state for recovery)
                 }
             }
             .navigationTitle(category?.name ?? "Category Transactions")
@@ -158,19 +140,11 @@ extension Features.Transactions {
         // Cross-platform background color
         private var platformBackgroundColor: Color {
             #if canImport(UIKit)
-<<<<<<< HEAD
-            return Color(uiColor: .systemBackground)
-            #elseif canImport(AppKit)
-            return Color(nsColor: .windowBackgroundColor)
-            #else
-            return Color.white
-=======
                 return Color(uiColor: .systemBackground)
             #elseif canImport(AppKit)
                 return Color(nsColor: .windowBackgroundColor)
             #else
                 return Color.white
->>>>>>> 1cf3938 (Create working state for recovery)
             #endif
         }
     }

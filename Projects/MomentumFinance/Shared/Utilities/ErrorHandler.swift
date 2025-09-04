@@ -25,11 +25,7 @@ final class ErrorHandler {
 
     private init() {
         #if DEBUG
-<<<<<<< HEAD
-        Logger.logDebug("ErrorHandler initialized", category: Logger.ui)
-=======
             Logger.logDebug("ErrorHandler initialized", category: Logger.ui)
->>>>>>> 1cf3938 (Create working state for recovery)
         #endif
     }
 
@@ -47,11 +43,7 @@ final class ErrorHandler {
         Logger.logError(
             appError,
             context: "\(context) [\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)]",
-<<<<<<< HEAD
-            )
-=======
         )
->>>>>>> 1cf3938 (Create working state for recovery)
 
         // Determine if this is a frequent error (same type occurring rapidly)
         let isFrequentError = isErrorOccurringFrequently(appError)
@@ -70,11 +62,7 @@ final class ErrorHandler {
             Logger.logDebug(
                 "Suppressing frequent error: \(appError.errorDescription ?? "Unknown")",
                 category: Logger.ui,
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
         }
     }
 
@@ -147,11 +135,7 @@ final class ErrorHandler {
         // Example: Crashlytics.record(error: error)
 
         #if DEBUG
-<<<<<<< HEAD
-        Logger.logDebug("Error would be reported to analytics: \(error.errorDescription ?? "Unknown")")
-=======
             Logger.logDebug("Error would be reported to analytics: \(error.errorDescription ?? "Unknown")")
->>>>>>> 1cf3938 (Create working state for recovery)
         #endif
     }
 }
@@ -361,11 +345,7 @@ enum AppError: LocalizedError, Identifiable {
             ("Goal", .goalError(description)),
             ("Sync", .syncError(description)),
             ("File", .fileSystemError(description)),
-<<<<<<< HEAD
-            ("Storage", .fileSystemError(description))
-=======
             ("Storage", .fileSystemError(description)),
->>>>>>> 1cf3938 (Create working state for recovery)
         ]
 
         for (keyword, errorType) in errorMappings where errorName.contains(keyword) {
@@ -390,15 +370,9 @@ struct ErrorAlert: ViewModifier {
                 isPresented: Binding(
                     get: { errorHandler.isShowingError },
                     set: { errorHandler.isShowingError = $0 },
-<<<<<<< HEAD
-                    ),
-                presenting: errorHandler.currentError,
-                ) { _ in
-=======
                 ),
                 presenting: errorHandler.currentError,
             ) { _ in
->>>>>>> 1cf3938 (Create working state for recovery)
                 // Display recovery options if available
                 ForEach(errorHandler.recoveryOptions) { option in
                     Button(option.title) {

@@ -142,11 +142,7 @@ final class BudgetsViewModel {
             onTrackCount: onTrackCount,
             overBudgetCount: overBudgetCount,
             totalBudgets: monthBudgets.count,
-<<<<<<< HEAD
-            )
-=======
         )
->>>>>>> 1cf3938 (Create working state for recovery)
     }
 
     /// Get spending trend for categories
@@ -167,11 +163,7 @@ final class BudgetsViewModel {
                 month: monthDate,
                 amount: spent,
                 categoryName: category.name,
-<<<<<<< HEAD
-                )
-=======
             )
->>>>>>> 1cf3938 (Create working state for recovery)
             trend.insert(monthSpending, at: 0)
         }
 

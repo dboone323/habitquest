@@ -20,7 +20,7 @@ struct EntityManager {
     /// Gets existing account or creates a new one from CSV data
     func getOrCreateAccount(
         from fields: [String],
-        columnMapping: ColumnMapping
+        columnMapping: CSVColumnMapping
     ) async throws -> FinancialAccount {
         let accountName: String = if let accountIndex = columnMapping.accountIndex,
                                      accountIndex < fields.count
@@ -55,7 +55,7 @@ struct EntityManager {
     /// Gets existing category or creates a new one from CSV data
     func getOrCreateCategory(
         from fields: [String],
-        columnMapping: ColumnMapping,
+        columnMapping: CSVColumnMapping,
         transactionType: TransactionType
     ) async throws -> ExpenseCategory {
         let categoryName: String = if let categoryIndex = columnMapping.categoryIndex,

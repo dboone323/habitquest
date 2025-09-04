@@ -15,26 +15,26 @@ mkdir -p build/ios
 # Archive the project
 echo "📦 Creating archive..."
 xcodebuild archive \
-    -scheme "$SCHEME" \
-    -configuration "$CONFIGURATION" \
-    -archivePath "$ARCHIVE_PATH" \
-    -allowProvisioningUpdates
+  -scheme "$SCHEME" \
+  -configuration "$CONFIGURATION" \
+  -archivePath "$ARCHIVE_PATH" \
+  -allowProvisioningUpdates
 
 if [ $? -ne 0 ]; then
-    echo "❌ Archive failed"
-    exit 1
+  echo "❌ Archive failed"
+  exit 1
 fi
 
 # Export IPA
 echo "📤 Exporting IPA..."
 xcodebuild -exportArchive \
-    -archivePath "$ARCHIVE_PATH" \
-    -exportPath "build/ios" \
-    -exportOptionsPlist "ExportOptions.plist"
+  -archivePath "$ARCHIVE_PATH" \
+  -exportPath "build/ios" \
+  -exportOptionsPlist "ExportOptions.plist"
 
 if [ $? -ne 0 ]; then
-    echo "❌ Export failed"
-    exit 1
+  echo "❌ Export failed"
+  exit 1
 fi
 
 echo "✅ iOS build completed successfully"

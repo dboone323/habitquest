@@ -34,42 +34,42 @@ MUTATION_RATE="0.05"
 ADAPTATION_SPEED="accelerated"
 
 # Enhanced logging
-log_bio() { 
-    local msg="[$(date '+%H:%M:%S.%3N')] [BIO] $1"
-    echo -e "${PURPLE}$msg${NC}"
-    echo "$msg" >> "$BIO_DIR/biological_fusion.log"
+log_bio() {
+  local msg="[$(date '+%H:%M:%S.%3N')] [BIO] $1"
+  echo -e "${PURPLE}$msg${NC}"
+  echo "$msg" >>"$BIO_DIR/biological_fusion.log"
 }
 
-log_success() { 
-    local msg="[$(date '+%H:%M:%S.%3N')] [BIO-SUCCESS] $1"
-    echo -e "${GREEN}$msg${NC}"
-    echo "$msg" >> "$BIO_DIR/biological_fusion.log"
+log_success() {
+  local msg="[$(date '+%H:%M:%S.%3N')] [BIO-SUCCESS] $1"
+  echo -e "${GREEN}$msg${NC}"
+  echo "$msg" >>"$BIO_DIR/biological_fusion.log"
 }
 
-log_evolution() { 
-    local msg="[$(date '+%H:%M:%S.%3N')] [DNA-EVOLUTION] $1"
-    echo -e "${CYAN}$msg${NC}"
-    echo "$msg" >> "$BIO_DIR/biological_fusion.log"
+log_evolution() {
+  local msg="[$(date '+%H:%M:%S.%3N')] [DNA-EVOLUTION] $1"
+  echo -e "${CYAN}$msg${NC}"
+  echo "$msg" >>"$BIO_DIR/biological_fusion.log"
 }
 
 print_header() {
-    echo -e "${WHITE}╔═══════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${WHITE}║      🧬 BIOLOGICAL INTELLIGENCE FUSION V1.0                  ║${NC}"
-    echo -e "${WHITE}║   DNA-Inspired • Bio-mimetic • Evolutionary Adaptation       ║${NC}"
-    echo -e "${WHITE}╚═══════════════════════════════════════════════════════════════╝${NC}"
-    echo ""
+  echo -e "${WHITE}╔═══════════════════════════════════════════════════════════════╗${NC}"
+  echo -e "${WHITE}║      🧬 BIOLOGICAL INTELLIGENCE FUSION V1.0                  ║${NC}"
+  echo -e "${WHITE}║   DNA-Inspired • Bio-mimetic • Evolutionary Adaptation       ║${NC}"
+  echo -e "${WHITE}╚═══════════════════════════════════════════════════════════════╝${NC}"
+  echo ""
 }
 
 # Initialize biological intelligence environment
 initialize_biological_fusion() {
-    log_bio "🚀 Initializing Biological Intelligence Fusion V1.0..."
-    
-    # Create biological directories
-    mkdir -p "$DNA_DIR"/{sequences,genes,proteins}
-    mkdir -p "$EVOLUTION_DIR"/{natural_selection,mutations,adaptations}
-    
-    # Initialize biological configuration
-    cat > "$BIO_DIR/biological_config.json" << EOF
+  log_bio "🚀 Initializing Biological Intelligence Fusion V1.0..."
+
+  # Create biological directories
+  mkdir -p "$DNA_DIR"/{sequences,genes,proteins}
+  mkdir -p "$EVOLUTION_DIR"/{natural_selection,mutations,adaptations}
+
+  # Initialize biological configuration
+  cat >"$BIO_DIR/biological_config.json" <<EOF
 {
     "biological_version": "1.0",
     "initialized": "$(date -Iseconds)",
@@ -96,17 +96,17 @@ initialize_biological_fusion() {
     }
 }
 EOF
-    
-    log_success "✅ Biological fusion environment initialized"
+
+  log_success "✅ Biological fusion environment initialized"
 }
 
 # Create DNA-inspired intelligence system
 create_dna_intelligence() {
-    log_bio "🧬 Creating DNA-Inspired Intelligence System..."
-    
-    local start_time=$(date +%s.%N)
-    
-    cat > "$BIO_DIR/dna_intelligence.py" << 'EOF'
+  log_bio "🧬 Creating DNA-Inspired Intelligence System..."
+
+  local start_time=$(date +%s.%N)
+
+  cat >"$BIO_DIR/dna_intelligence.py" <<'EOF'
 #!/usr/bin/env python3
 """
 Biological Intelligence Fusion V1.0
@@ -600,143 +600,143 @@ if __name__ == "__main__":
     asyncio.run(main())
 EOF
 
-    chmod +x "$BIO_DIR/dna_intelligence.py"
-    
-    local end_time=$(date +%s.%N)
-    local duration=$(echo "$end_time - $start_time" | bc -l)
-    
-    log_success "✅ DNA intelligence system created (${duration}s)"
-    
-    return 0
+  chmod +x "$BIO_DIR/dna_intelligence.py"
+
+  local end_time=$(date +%s.%N)
+  local duration=$(echo "$end_time - $start_time" | bc -l)
+
+  log_success "✅ DNA intelligence system created (${duration}s)"
+
+  return 0
 }
 
 # Launch biological intelligence fusion
 launch_biological_fusion() {
-    local overall_start=$(date +%s.%N)
-    
-    print_header
-    log_bio "🚀 Launching Biological Intelligence Fusion V1.0..."
-    
-    # Initialize system
-    mkdir -p "$BIO_DIR"
-    initialize_biological_fusion
-    
-    echo ""
-    echo -e "${CYAN}╔══════════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║                 BIOLOGICAL FUSION PHASES                        ║${NC}"
-    echo -e "${CYAN}╚══════════════════════════════════════════════════════════════════╝${NC}"
-    echo ""
-    
-    # Phase 1: DNA Intelligence Creation
-    echo -e "${YELLOW}🧬 Phase 1/3: DNA-Inspired Intelligence Creation${NC}"
-    create_dna_intelligence
-    echo -e "${GREEN}✅ Phase 1 Complete: DNA intelligence system created${NC}"
-    echo ""
-    
-    # Phase 2: Biological Evolution Testing
-    echo -e "${YELLOW}🔬 Phase 2/3: Biological Evolution Testing${NC}"
-    log_bio "🧪 Running biological fusion validation..."
-    
-    cd "$BIO_DIR"
-    python3 dna_intelligence.py > biological_fusion_results.log 2>&1
-    local bio_test_result=$?
-    
-    if [[ $bio_test_result -eq 0 ]]; then
-        echo -e "${GREEN}✅ Phase 2 Complete: Biological evolution successful${NC}"
-    else
-        echo -e "${YELLOW}⚠️ Phase 2 Warning: Biological fusion needs optimization${NC}"
-    fi
-    echo ""
-    
-    # Phase 3: Ecosystem Analysis
-    echo -e "${YELLOW}🌱 Phase 3/3: Ecosystem Health Analysis${NC}"
-    
-    local overall_end=$(date +%s.%N)
-    local total_duration=$(echo "$overall_end - $overall_start" | bc -l)
-    
-    # Extract biological results
-    local final_generation="N/A"
-    local ecosystem_health="N/A"
-    
-    if [[ -f "$BIO_DIR/biological_fusion_results.log" ]]; then
-        final_generation=$(grep "Final Generation:" "$BIO_DIR/biological_fusion_results.log" | sed 's/.*: \([0-9]*\)/\1/' || echo "N/A")
-        ecosystem_health=$(grep "Ecosystem Health:" "$BIO_DIR/biological_fusion_results.log" | sed 's/.*: \([0-9.]*\)%.*/\1/' || echo "N/A")
-    fi
-    
-    echo ""
-    echo -e "${GREEN}╔═══════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${GREEN}║         🧬 BIOLOGICAL INTELLIGENCE FUSION RESULTS             ║${NC}"
-    echo -e "${GREEN}╚═══════════════════════════════════════════════════════════════╝${NC}"
-    echo ""
-    
-    echo -e "${CYAN}  🧬 Biological Configuration:${NC}"
-    echo -e "${CYAN}    • DNA Sequences: $DNA_SEQUENCES${NC}"
-    echo -e "${CYAN}    • Evolution Generations: $EVOLUTION_GENERATIONS${NC}"
-    echo -e "${CYAN}    • Mutation Rate: $MUTATION_RATE${NC}"
-    echo -e "${CYAN}    • Adaptation Speed: $ADAPTATION_SPEED${NC}"
-    echo ""
-    echo -e "${CYAN}  🌱 Evolution Results:${NC}"
-    echo -e "${CYAN}    • Final Generation: ${final_generation}${NC}"
-    echo -e "${CYAN}    • Ecosystem Health: ${ecosystem_health}%${NC}"
-    echo -e "${CYAN}    • Setup Duration: ${total_duration}s${NC}"
-    echo ""
-    
-    # Achievement assessment
-    if [[ $bio_test_result -eq 0 ]]; then
-        echo -e "${GREEN}🧬 ACHIEVEMENT: BIOLOGICAL INTELLIGENCE FUSION OPERATIONAL!${NC}"
-        echo -e "${GREEN}🎉 DNA-inspired architecture functioning${NC}"
-        echo -e "${GREEN}🌱 Bio-mimetic learning systems active${NC}"
-        echo -e "${GREEN}🏆 Revolutionary biological fusion achieved${NC}"
-        
-        log_success "🧬 Biological Intelligence Fusion V1.0 operational in ${total_duration}s!"
-        return 0
-    else
-        echo -e "${YELLOW}⚠️ Biological fusion needs further evolution${NC}"
-        echo -e "${YELLOW}📈 Ecosystem optimization opportunities identified${NC}"
-        
-        log_bio "Biological fusion setup completed with evolution potential"
-        return 1
-    fi
+  local overall_start=$(date +%s.%N)
+
+  print_header
+  log_bio "🚀 Launching Biological Intelligence Fusion V1.0..."
+
+  # Initialize system
+  mkdir -p "$BIO_DIR"
+  initialize_biological_fusion
+
+  echo ""
+  echo -e "${CYAN}╔══════════════════════════════════════════════════════════════════╗${NC}"
+  echo -e "${CYAN}║                 BIOLOGICAL FUSION PHASES                        ║${NC}"
+  echo -e "${CYAN}╚══════════════════════════════════════════════════════════════════╝${NC}"
+  echo ""
+
+  # Phase 1: DNA Intelligence Creation
+  echo -e "${YELLOW}🧬 Phase 1/3: DNA-Inspired Intelligence Creation${NC}"
+  create_dna_intelligence
+  echo -e "${GREEN}✅ Phase 1 Complete: DNA intelligence system created${NC}"
+  echo ""
+
+  # Phase 2: Biological Evolution Testing
+  echo -e "${YELLOW}🔬 Phase 2/3: Biological Evolution Testing${NC}"
+  log_bio "🧪 Running biological fusion validation..."
+
+  cd "$BIO_DIR"
+  python3 dna_intelligence.py >biological_fusion_results.log 2>&1
+  local bio_test_result=$?
+
+  if [[ $bio_test_result -eq 0 ]]; then
+    echo -e "${GREEN}✅ Phase 2 Complete: Biological evolution successful${NC}"
+  else
+    echo -e "${YELLOW}⚠️ Phase 2 Warning: Biological fusion needs optimization${NC}"
+  fi
+  echo ""
+
+  # Phase 3: Ecosystem Analysis
+  echo -e "${YELLOW}🌱 Phase 3/3: Ecosystem Health Analysis${NC}"
+
+  local overall_end=$(date +%s.%N)
+  local total_duration=$(echo "$overall_end - $overall_start" | bc -l)
+
+  # Extract biological results
+  local final_generation="N/A"
+  local ecosystem_health="N/A"
+
+  if [[ -f "$BIO_DIR/biological_fusion_results.log" ]]; then
+    final_generation=$(grep "Final Generation:" "$BIO_DIR/biological_fusion_results.log" | sed 's/.*: \([0-9]*\)/\1/' || echo "N/A")
+    ecosystem_health=$(grep "Ecosystem Health:" "$BIO_DIR/biological_fusion_results.log" | sed 's/.*: \([0-9.]*\)%.*/\1/' || echo "N/A")
+  fi
+
+  echo ""
+  echo -e "${GREEN}╔═══════════════════════════════════════════════════════════════╗${NC}"
+  echo -e "${GREEN}║         🧬 BIOLOGICAL INTELLIGENCE FUSION RESULTS             ║${NC}"
+  echo -e "${GREEN}╚═══════════════════════════════════════════════════════════════╝${NC}"
+  echo ""
+
+  echo -e "${CYAN}  🧬 Biological Configuration:${NC}"
+  echo -e "${CYAN}    • DNA Sequences: $DNA_SEQUENCES${NC}"
+  echo -e "${CYAN}    • Evolution Generations: $EVOLUTION_GENERATIONS${NC}"
+  echo -e "${CYAN}    • Mutation Rate: $MUTATION_RATE${NC}"
+  echo -e "${CYAN}    • Adaptation Speed: $ADAPTATION_SPEED${NC}"
+  echo ""
+  echo -e "${CYAN}  🌱 Evolution Results:${NC}"
+  echo -e "${CYAN}    • Final Generation: ${final_generation}${NC}"
+  echo -e "${CYAN}    • Ecosystem Health: ${ecosystem_health}%${NC}"
+  echo -e "${CYAN}    • Setup Duration: ${total_duration}s${NC}"
+  echo ""
+
+  # Achievement assessment
+  if [[ $bio_test_result -eq 0 ]]; then
+    echo -e "${GREEN}🧬 ACHIEVEMENT: BIOLOGICAL INTELLIGENCE FUSION OPERATIONAL!${NC}"
+    echo -e "${GREEN}🎉 DNA-inspired architecture functioning${NC}"
+    echo -e "${GREEN}🌱 Bio-mimetic learning systems active${NC}"
+    echo -e "${GREEN}🏆 Revolutionary biological fusion achieved${NC}"
+
+    log_success "🧬 Biological Intelligence Fusion V1.0 operational in ${total_duration}s!"
+    return 0
+  else
+    echo -e "${YELLOW}⚠️ Biological fusion needs further evolution${NC}"
+    echo -e "${YELLOW}📈 Ecosystem optimization opportunities identified${NC}"
+
+    log_bio "Biological fusion setup completed with evolution potential"
+    return 1
+  fi
 }
 
 # Command line interface
 case "$1" in
-    "--dna-fusion")
-        launch_biological_fusion
-        ;;
-    "--test-evolution")
-        if [[ -f "$BIO_DIR/dna_intelligence.py" ]]; then
-            cd "$BIO_DIR"
-            python3 dna_intelligence.py
-        else
-            echo "❌ DNA intelligence not found. Run --dna-fusion first."
-        fi
-        ;;
-    "--status")
-        echo "🧬 Biological Intelligence Fusion V1.0"
-        echo "DNA Sequences: $DNA_SEQUENCES"
-        echo "Evolution Generations: $EVOLUTION_GENERATIONS"
-        echo "Mutation Rate: $MUTATION_RATE"
-        echo "Adaptation Speed: $ADAPTATION_SPEED"
-        if [[ -d "$BIO_DIR" ]]; then
-            echo "Status: Biological fusion ready"
-        else
-            echo "Status: Not initialized"
-        fi
-        ;;
-    *)
-        print_header
-        echo "Usage: ./biological_intelligence_fusion.sh [command]"
-        echo ""
-        echo "Commands:"
-        echo "  --dna-fusion         - Launch biological intelligence fusion"
-        echo "  --test-evolution     - Test DNA evolution capabilities"
-        echo "  --status             - Show biological fusion status"
-        echo ""
-        echo "🧬 Biological Intelligence Fusion V1.0"
-        echo "  • DNA-inspired architecture"
-        echo "  • Bio-mimetic learning"
-        echo "  • Evolutionary adaptation"
-        echo "  • Natural selection algorithms"
-        ;;
+"--dna-fusion")
+  launch_biological_fusion
+  ;;
+"--test-evolution")
+  if [[ -f "$BIO_DIR/dna_intelligence.py" ]]; then
+    cd "$BIO_DIR"
+    python3 dna_intelligence.py
+  else
+    echo "❌ DNA intelligence not found. Run --dna-fusion first."
+  fi
+  ;;
+"--status")
+  echo "🧬 Biological Intelligence Fusion V1.0"
+  echo "DNA Sequences: $DNA_SEQUENCES"
+  echo "Evolution Generations: $EVOLUTION_GENERATIONS"
+  echo "Mutation Rate: $MUTATION_RATE"
+  echo "Adaptation Speed: $ADAPTATION_SPEED"
+  if [[ -d $BIO_DIR ]]; then
+    echo "Status: Biological fusion ready"
+  else
+    echo "Status: Not initialized"
+  fi
+  ;;
+*)
+  print_header
+  echo "Usage: ./biological_intelligence_fusion.sh [command]"
+  echo ""
+  echo "Commands:"
+  echo "  --dna-fusion         - Launch biological intelligence fusion"
+  echo "  --test-evolution     - Test DNA evolution capabilities"
+  echo "  --status             - Show biological fusion status"
+  echo ""
+  echo "🧬 Biological Intelligence Fusion V1.0"
+  echo "  • DNA-inspired architecture"
+  echo "  • Bio-mimetic learning"
+  echo "  • Evolutionary adaptation"
+  echo "  • Natural selection algorithms"
+  ;;
 esac

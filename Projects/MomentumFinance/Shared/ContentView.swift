@@ -6,25 +6,11 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-<<<<<<< HEAD
-    @State private var navigationCoordinator = NavigationCoordinator.shared
-    @State private var isGlobalSearchPresented = false
-
-    var body: some View {
-        TabView(selection: Binding(
-            get: { navigationCoordinator.selectedTab },
-            set: { navigationCoordinator.selectedTab = $0 },
-            )) {
-            NavigationStack(path: Binding(
-                get: { navigationCoordinator.dashboardNavPath },
-                set: { navigationCoordinator.dashboardNavPath = $0 },
-                )) {
-=======
     @StateObject private var navigationCoordinator = NavigationCoordinator.shared
     @State private var isGlobalSearchPresented = false
 
     var body: some View {
-    TabView(selection: Binding(
+        TabView(selection: Binding(
             get: { navigationCoordinator.selectedTab },
             set: { navigationCoordinator.selectedTab = $0 },
         )) {
@@ -32,7 +18,6 @@ struct ContentView: View {
                 get: { navigationCoordinator.dashboardNavPath },
                 set: { navigationCoordinator.dashboardNavPath = $0 },
             )) {
->>>>>>> 1cf3938 (Create working state for recovery)
                 Features.Dashboard.DashboardView()
             }
             .tabItem {
@@ -44,11 +29,7 @@ struct ContentView: View {
             NavigationStack(path: Binding(
                 get: { navigationCoordinator.transactionsNavPath },
                 set: { navigationCoordinator.transactionsNavPath = $0 },
-<<<<<<< HEAD
-                )) {
-=======
             )) {
->>>>>>> 1cf3938 (Create working state for recovery)
                 Features.Transactions.TransactionsView()
             }
             .tabItem {
@@ -60,11 +41,7 @@ struct ContentView: View {
             NavigationStack(path: Binding(
                 get: { navigationCoordinator.budgetsNavPath },
                 set: { navigationCoordinator.budgetsNavPath = $0 },
-<<<<<<< HEAD
-                )) {
-=======
             )) {
->>>>>>> 1cf3938 (Create working state for recovery)
                 Features.Budgets.BudgetsView()
             }
             .tabItem {
@@ -76,11 +53,7 @@ struct ContentView: View {
             NavigationStack(path: Binding(
                 get: { navigationCoordinator.subscriptionsNavPath },
                 set: { navigationCoordinator.subscriptionsNavPath = $0 },
-<<<<<<< HEAD
-                )) {
-=======
             )) {
->>>>>>> 1cf3938 (Create working state for recovery)
                 Features.Subscriptions.SubscriptionsView()
             }
             .tabItem {
@@ -92,11 +65,7 @@ struct ContentView: View {
             NavigationStack(path: Binding(
                 get: { navigationCoordinator.goalsAndReportsNavPath },
                 set: { navigationCoordinator.goalsAndReportsNavPath = $0 },
-<<<<<<< HEAD
-                )) {
-=======
             )) {
->>>>>>> 1cf3938 (Create working state for recovery)
                 Features.GoalsAndReports.GoalsAndReportsView()
             }
             .tabItem {
@@ -105,16 +74,10 @@ struct ContentView: View {
             }
             .tag(4)
         }
-<<<<<<< HEAD
         .sheet(isPresented: $isGlobalSearchPresented) {
             Features.GlobalSearchView()
         }
-=======
-    .sheet(isPresented: $isGlobalSearchPresented) {
-            Features.GlobalSearchView()
-        }
-    .environmentObject(navigationCoordinator)
->>>>>>> 1cf3938 (Create working state for recovery)
+        .environmentObject(navigationCoordinator)
         .onChange(of: navigationCoordinator.isSearchActive) { _, newValue in
             isGlobalSearchPresented = newValue
         }
@@ -134,30 +97,9 @@ struct ContentView: View {
 }
 
 #if os(iOS)
-<<<<<<< HEAD
-extension View {
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func iOSOptimizations() -> some View {
-        self
-            .tint(.blue)
-    }
-}
-
-#elseif os(macOS)
-extension View {
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func macOSOptimizations() -> some View {
-        self
-            .preferredColorScheme(.light)
-            .tint(.indigo)
-    }
-}
-=======
     extension View {
-    /// <#Description#>
-    /// - Returns: <#description#>
+        /// <#Description#>
+        /// - Returns: <#description#>
         func iOSOptimizations() -> some View {
             self
                 .tint(.blue)
@@ -166,13 +108,12 @@ extension View {
 
 #elseif os(macOS)
     extension View {
-    /// <#Description#>
-    /// - Returns: <#description#>
+        /// <#Description#>
+        /// - Returns: <#description#>
         func macOSOptimizations() -> some View {
             self
                 .preferredColorScheme(.light)
                 .tint(.indigo)
         }
     }
->>>>>>> 1cf3938 (Create working state for recovery)
 #endif
