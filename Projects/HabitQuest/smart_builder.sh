@@ -13,7 +13,8 @@ NC='\033[0m' # No Color
 
 # Detect project platform support
 detect_platform() {
-	local project_name=$(basename "$(pwd)")
+	local project_name
+	project_name=$(basename "$(pwd)")
 	echo "🔍 Detecting platform support for ${project_name}"
 
 	# Hard-coded platform detection based on known project requirements
@@ -75,18 +76,18 @@ build_macos() {
 	)
 
 	for strategy in "${strategies[@]}"; do
-		echo "🔨 Attempting macOS build with destinatio${: $strat}egy"
+		echo "🔨 Attempting macOS build with destination: ${strategy}"
 		# Try with project file first, then without
 		if ls *.xcodeproj 1>/dev/null 2>&1; then
 			if xcodebuild -scheme "${scheme}" -destination "${strategy}" build 2>/dev/null ||
 				xcodebuild -project *.xcodeproj -scheme "${scheme}" -destination "${strategy}" build; then
-				echo -e "${GREEN}✅ macOS build successful with strategy${ $strate}gy${NC}"
+				printf '%s✅ macOS build successful with strategy: %s%s\n' "${GREEN}" "${strategy}" "${NC}"
 				return 0
 			fi
 		else
-			echo "⚠️  No Xcode project file found, skipping strate${y: $stra}tegy"
+			echo "⚠️  No Xcode project file found, skipping strategy: ${strategy}"
 		fi
-		echo -e "${YELLOW}⚠️ macOS build failed with strate${y: $stra}tegy${NC}"
+		printf '%s⚠️ macOS build failed with strategy: %s%s\n' "${YELLOW}" "${strategy}" "${NC}"
 	done
 
 	echo -e "${RED}❌ All macOS build strategies failed${NC}"
@@ -106,18 +107,18 @@ build_ios() {
 	)
 
 	for strategy in "${strategies[@]}"; do
-		echo "🔨 Attempting iOS build with destinatio${: $strat}egy"
+		echo "🔨 Attempting iOS build with destination: ${strategy}"
 		# Try with project file first, then without
 		if ls *.xcodeproj 1>/dev/null 2>&1; then
 			if xcodebuild -scheme "${scheme}" -destination "${strategy}" build 2>/dev/null ||
 				xcodebuild -project *.xcodeproj -scheme "${scheme}" -destination "${strategy}" build; then
-				echo -e "${GREEN}✅ iOS build successful with strategy${ $strate}gy${NC}"
+				printf '%s✅ iOS build successful with strategy: %s%s\n' "${GREEN}" "${strategy}" "${NC}"
 				return 0
 			fi
 		else
-			echo "⚠️  No Xcode project file found, skipping strate${y: $stra}tegy"
+			echo "⚠️  No Xcode project file found, skipping strategy: ${strategy}"
 		fi
-		echo -e "${YELLOW}⚠️ iOS build failed with strate${y: $stra}tegy${NC}"
+		printf '%s⚠️ iOS build failed with strategy: %s%s\n' "${YELLOW}" "${strategy}" "${NC}"
 	done
 
 	echo -e "${RED}❌ All iOS build strategies failed${NC}"
@@ -174,13 +175,13 @@ main() {
 		SCHEME=$(basename "$(pwd)")
 	fi
 
-	if [[ -z "${SCHEME}" ]]; then
+	if [[ -z ${SCHEME} ]]; then
 		echo -e "${RED}❌ No build scheme found${NC}"
 		exit 1
 	fi
 
-	echo "🎯 Using schem${: $SCH}EME"
-	echo "🏗️ Platform configurat${on: $PLA}TFORM"
+	echo "🎯 Using scheme: $SCHEME"
+	echo "🏗️ Platform configuration: $PLATFORM"
 
 	# Build based on platform
 	BUILD_SUCCESS=false
@@ -189,34 +190,34 @@ main() {
 	"macos")
 		if build_macos "${SCHEME}"; then
 			BUILD_SUCCESS=true
-			[[ -n "${GITHUB_ENV}" ]] && echo "BUILD_SUCCESS=true" >>"$GITHUB_ENV" || true
+			[[ -n ${GITHUB_ENV} ]] && echo "BUILD_SUCCESS=true" >>"$GITHUB_ENV" || true
 		fi
 		;;
 	"ios")
 		if build_ios "${SCHEME}"; then
 			BUILD_SUCCESS=true
-			[[ -n "${GITHUB_ENV}" ]] && echo "BUILD_SUCCESS=true" >>"$GITHUB_ENV" || true
+			[[ -n ${GITHUB_ENV} ]] && echo "BUILD_SUCCESS=true" >>"$GITHUB_ENV" || true
 		fi
 		;;
 	"multi")
 		# Try macOS first, then iOS
 		if build_macos "${SCHEME}"; then
 			BUILD_SUCCESS=true
-			[[ -n "${GITHUB_ENV}" ]] && echo "BUILD_SUCCESS=true" >>"$GITHUB_ENV" || true
+			[[ -n ${GITHUB_ENV} ]] && echo "BUILD_SUCCESS=true" >>"$GITHUB_ENV" || true
 		elif build_ios "${SCHEME}"; then
 			BUILD_SUCCESS=true
-			[[ -n "${GITHUB_ENV}" ]] && echo "BUILD_SUCCESS=true" >>"$GITHUB_ENV" || true
+			[[ -n ${GITHUB_ENV} ]] && echo "BUILD_SUCCESS=true" >>"$GITHUB_ENV" || true
 		fi
 		;;
 	esac
 
-	if [[ "${BUILD_SUCCESS}" = false ]]; then
+	if [[ ${BUILD_SUCCESS} == false ]]; then
 		echo -e "${RED}❌ All build attempts failed${NC}"
 		exit 1
 	fi
 
 	# Run tests if build succeeded and testing is requested
-	if [[ "$1" = "test" ]] && [[ "${BUILD_SUCCESS}" = true ]]; then
+	if [[ $1 == "test" ]] && [[ ${BUILD_SUCCESS} == true ]]; then
 		echo "🧪 Running tests..."
 		case "${PLATFORM}" in
 		"macos")
