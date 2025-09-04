@@ -41,7 +41,7 @@ extension Features.GoalsAndReports {
 
         // Search functionality
         @State private var showingSearch = false
-    @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
+        @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
 
         var body: some View {
             NavigationView {
@@ -69,47 +69,47 @@ extension Features.GoalsAndReports {
                         .tag(1)
                     }
                     #if canImport(UIKit)
-                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                     #endif
                 }
                 .navigationTitle("Goals & Reports")
                 #if canImport(UIKit)
                     .navigationBarHidden(true)
                 #endif
-                .toolbar {
-                    ToolbarItem(placement: .automatic) {
-                        HStack(spacing: 12) {
-                            // Search Button
-                            Button {
-                                showingSearch = true
-                                NavigationCoordinator.shared.activateSearch()
-                            } label: {
-                                Image(systemName: "magnifyingglass")
-                                    .font(.system(size: 18, weight: .semibold))
-                            }
+                    .toolbar {
+                        ToolbarItem(placement: .automatic) {
+                            HStack(spacing: 12) {
+                                // Search Button
+                                Button {
+                                    showingSearch = true
+                                    NavigationCoordinator.shared.activateSearch()
+                                } label: {
+                                    Image(systemName: "magnifyingglass")
+                                        .font(.system(size: 18, weight: .semibold))
+                                }
 
-                            // Add Goal Button
-                            Button {
-                                showingAddGoal = true
-                            } label: {
-                                Image(systemName: "plus")
-                                    .font(.system(size: 18, weight: .semibold))
+                                // Add Goal Button
+                                Button {
+                                    showingAddGoal = true
+                                } label: {
+                                    Image(systemName: "plus")
+                                        .font(.system(size: 18, weight: .semibold))
+                                }
                             }
                         }
                     }
-                }
-                .sheet(isPresented: $showingAddGoal) {
-                    AddSavingsGoalView()
-                }
-                .sheet(isPresented: $showingSearch) {
-                    Features.GlobalSearchView()
-                }
-                .sheet(item: $selectedGoal) { goal in
-                    SavingsGoalDetailView(goal: goal)
-                }
-                .onAppear {
-                    viewModel.setModelContext(modelContext)
-                }
+                    .sheet(isPresented: $showingAddGoal) {
+                        AddSavingsGoalView()
+                    }
+                    .sheet(isPresented: $showingSearch) {
+                        Features.GlobalSearchView()
+                    }
+                    .sheet(item: $selectedGoal) { goal in
+                        SavingsGoalDetailView(goal: goal)
+                    }
+                    .onAppear {
+                        viewModel.setModelContext(modelContext)
+                    }
             }
         }
 
