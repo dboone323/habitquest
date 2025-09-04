@@ -55,3 +55,45 @@ PlannerApp dedupe/sync:
 CodingReviewer-Modular consolidation:
 
 - `Projects/CodingReviewer-Modular` contained 0 Swift sources and only duplicate workflow files. Removed the redundant Modular workflows (names already present at repo root) and left `CodingReviewer` as the single source of truth with 132 Swift files. Automation now lists 5 projects.
+
+## Auto-Fix Branch Analysis (2025-09-03)
+
+**Branch:** `origin/auto-fix/CodingReviewer-workflow`  
+**Purpose:** Low-risk fixes (workflow splits, action pin bumps)  
+**Status:** NOT MERGED - Too aggressive cleanup
+
+### Findings:
+
+- **✅ Beneficial Changes Extracted:**
+  - ShellCheck integration replacing Trunk Check in validate-and-lint-pr.yml
+  - Shell quoting fixes in deploy_workflows_all_projects.sh
+  - Removal of problematic validate-only mode logic
+
+- **❌ Risky Changes Identified:**
+  - Deleted 293 workflow files including essential CI/CD workflows
+  - Removed `.github/workflows/ci.yml` (Python test runner)
+  - Removed `.github/workflows/automation-ci.yml` (multi-version CI)
+  - No replacement workflows provided
+  - Could break CI/CD infrastructure
+
+### Action Taken:
+
+- **Created new branch:** `shellcheck-integration`
+- **Extracted good changes:** ShellCheck integration + script improvements
+- **Preserved essential workflows:** Main CI/CD infrastructure intact
+- **Committed as:** `a3c87cbf` - "feat: Extract ShellCheck integration and script improvements"
+
+### Recommendation:
+
+- **DO NOT MERGE** the auto-fix branch as-is
+- **Future workflow cleanup** should be done incrementally with:
+  - Clear inventory of essential vs redundant workflows
+  - Replacement workflows for critical CI/CD functions
+  - Gradual, tested removal process
+  - Documentation of all changes
+
+**Next Steps:**
+
+- Test the extracted changes in CI environment
+- Consider incremental workflow cleanup approach
+- Document essential workflow dependencies
