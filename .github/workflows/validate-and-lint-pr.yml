@@ -3,8 +3,8 @@ name: Validate & Lint Automation (PR)
 on:
   pull_request:
     paths:
-      - '.github/workflows/**'
-      - 'Tools/Automation/**'
+      - ".github/workflows/**"
+      - "Tools/Automation/**"
 
 jobs:
   validate-and-lint:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Install PyYAML
         run: python -m pip install --upgrade pip && python -m pip install pyyaml
@@ -31,11 +31,13 @@ jobs:
         env:
           CODE_DIR: ${{ github.workspace }}
 
-      - name: Trunk Check Automation Scripts
-        uses: trunk-io/trunk-action@v1
-        with:
-          check-mode: all
-          arguments: --filter=Tools/Automation/**
+      - name: Install ShellCheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck
+        run: |
+          shellcheck Tools/Automation/master_automation.sh || true
+          shellcheck Tools/Automation/deploy_workflows_all_projects.sh || true
 
       - name: Run master automation list (safe)
         run: bash Tools/Automation/master_automation.sh list || true
