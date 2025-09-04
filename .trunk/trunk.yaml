@@ -21,7 +21,7 @@ lint:
     - actionlint@1.7.7
     - bandit@1.8.6
     - black@25.1.0
-    - checkov@3.2.467
+    - checkov@3.2.469
     - git-diff-check
     - isort@6.0.1
     - markdownlint@0.45.0
@@ -33,7 +33,7 @@ lint:
     - shfmt@3.6.0
     - svgo@4.0.0
     - swiftformat@0.55.5
-    - swiftlint@0.57.1
+    - swiftlint@0.58.2
     - taplo@0.10.0
     - trufflehog@3.90.5
     - yamllint@1.37.1
