@@ -1,5 +1,5 @@
 #!/bin/bash
 # Project config for PlannerApp
-PROJECT_NAME="PlannerApp"
-PLATFORM="iOS,macOS"
+export PROJECT_NAME="PlannerApp"
+export PLATFORM="iOS,macOS"
 # Add more config as needed

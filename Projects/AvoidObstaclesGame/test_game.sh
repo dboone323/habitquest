@@ -3,12 +3,10 @@
 echo "Starting AvoidObstaclesGame test..."
 
 # Build and run the project in the simulator
-cd /Users/danielstevens/Desktop/AvoidObstaclesGame
+cd "$(dirname "$0")" || exit
 
 echo "Building project..."
-xcodebuild -project AvoidObstaclesGame.xcodeproj -scheme AvoidObstaclesGame -destination 'platform=iOS Simulator,name=iPhone 16' build
-
-if [ $? -eq 0 ]; then
+if xcodebuild -project AvoidObstaclesGame.xcodeproj -scheme AvoidObstaclesGame -destination 'platform=iOS Simulator,name=iPhone 16' build; then
 	echo "Build successful! Starting simulator..."
 
 	# Boot the simulator if not already running
@@ -20,9 +18,9 @@ if [ $? -eq 0 ]; then
 	# Install and launch the app
 	APP_PATH="/Users/danielstevens/Library/Developer/Xcode/DerivedData/AvoidObstaclesGame-bhbjbhmmtvjkotgsgpqwvuwmtezr/Build/Products/Debug-iphonesimulator/AvoidObstaclesGame.app"
 
-	if [ -d "$APP_PATH" ]; then
+	if [[ -d ${APP_PATH} ]]; then
 		echo "Installing app on simulator..."
-		xcrun simctl install "iPhone 16" "$APP_PATH"
+		xcrun simctl install "iPhone 16" "${APP_PATH}"
 
 		echo "Launching AvoidObstaclesGame..."
 		xcrun simctl launch "iPhone 16" com.DanielStevens.AvoidObstaclesGame
@@ -33,7 +31,7 @@ if [ $? -eq 0 ]; then
 		echo "3. Enhanced UI with level indicators"
 		echo "4. Visual feedback for level ups and high scores"
 	else
-		echo "Error: App bundle not found at $APP_PATH"
+		echo "Error: App bundle not found at ${APP_PATH}"
 	fi
 else
 	echo "Build failed!"

@@ -1,5 +1,5 @@
 #!/bin/bash
 # Project config for AvoidObstaclesGame
-PROJECT_NAME="AvoidObstaclesGame"
-PLATFORM="iOS"
+export PROJECT_NAME="AvoidObstaclesGame"
+export PLATFORM="iOS"
 # Add more config as needed

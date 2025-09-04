@@ -51,7 +51,37 @@ Code/
 - **Simplified Management**: Single workspace for all projects
 - **Cross-Project Learning**: Patterns and solutions shared across apps
 
-## 🔧 Master Automation System
+## 🛠️ Automation Tools
+
+### Workflow Deployment
+
+Deploy GitHub Actions workflows across all projects:
+
+```bash
+# Deploy to all projects
+./Tools/Automation/deploy_workflows_all_projects.sh
+
+# Validate workflows only (fail on errors)
+./Tools/Automation/deploy_workflows_all_projects.sh --validate
+
+# Validate but continue on errors (non-blocking)
+./Tools/Automation/deploy_workflows_all_projects.sh --validate --allow-failures
+
+# Deploy to specific project
+./Tools/Automation/deploy_workflows_all_projects.sh --project CodingReviewer
+```
+
+### Copilot Instructions Sync
+
+Synchronize Copilot instructions across projects:
+
+```bash
+./Tools/Automation/copy_copilot_to_projects.sh
+```
+
+### Master Automation System
+
+The unified architecture includes a powerful automation controller:
 
 The unified architecture includes a powerful automation controller:
 
@@ -114,3 +144,23 @@ The unified architecture includes a powerful automation controller:
 
 **Migration completed successfully!** 🎉  
 _Your projects are now organized for maximum efficiency and code reuse._
+
+## 🛠️ New Automation Features
+
+### Enhanced Workflow Validation
+
+The workflow deployment script now includes improved validation options:
+
+- **Strict Validation**: `--validate` fails on any YAML syntax errors
+- **Non-blocking Validation**: `--validate --allow-failures` continues despite errors
+- **Project-specific Deployment**: `--project <name>` deploys to individual projects
+
+### Copilot Instructions Sync
+
+New script to synchronize Copilot instructions across all projects:
+
+```bash
+./Tools/Automation/copy_copilot_to_projects.sh
+```
+
+This ensures consistent AI assistance across your entire workspace.
