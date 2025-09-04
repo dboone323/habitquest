@@ -11,8 +11,8 @@ import Foundation
 // MARK: - AI Service Types
 
 enum AIProvider: String, CaseIterable, Codable {
-    case openAI = "OpenAI"
-    case gemini = "Google Gemini"
+    case ollama = "Ollama"
+    case huggingFace = "Hugging Face"
 
     var displayName: String {
         rawValue
@@ -20,15 +20,15 @@ enum AIProvider: String, CaseIterable, Codable {
 
     var description: String {
         switch self {
-        case .openAI: "GPT models for code analysis"
-        case .gemini: "Google's Gemini AI for code analysis"
+        case .ollama: "Local Ollama models for code analysis"
+        case .huggingFace: "Hugging Face free tier for code analysis"
         }
     }
 
     var keyPrefix: String {
         switch self {
-        case .openAI: "sk-"
-        case .gemini: "AI"
+        case .ollama: ""
+        case .huggingFace: "hf_"
         }
     }
 }

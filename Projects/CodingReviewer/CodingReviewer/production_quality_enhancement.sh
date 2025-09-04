@@ -41,6 +41,8 @@ implement_core_models() {
   cat >"$PROJECT_PATH/Sources/Advanced/MLCodeInsightsModels.swift" <<'EOF'
 // Missing Models for ML Code Insights
 import Foundation
+import OSLog
+import OllamaClient
 
 // MARK: - Bug Prediction Models
 public class BugPredictor {
@@ -807,7 +809,7 @@ public class FunctionalAIAnalyzer {
         let prompt = buildAnalysisPrompt(code: code, language: language)
         
         do {
-            let response = try await callOpenAI(prompt: prompt)
+            let response = try await callOllama(prompt: prompt)
             return parseAIResponse(response)
         } catch {
             // Fallback to local analysis if AI fails
@@ -823,7 +825,7 @@ public class FunctionalAIAnalyzer {
         let prompt = buildDocumentationPrompt(code: code, language: language)
         
         do {
-            let response = try await callOpenAI(prompt: prompt)
+            let response = try await callOllama(prompt: prompt)
             return extractDocumentation(from: response)
         } catch {
             return generateLocalDocumentation(code: code, language: language)
@@ -846,7 +848,7 @@ public class FunctionalAIAnalyzer {
         """
         
         do {
-            return try await callOpenAI(prompt: prompt)
+            return try await callOllama(prompt: prompt)
         } catch {
             return generateLocalExplanation(code: code, language: language)
         }
@@ -894,41 +896,24 @@ public class FunctionalAIAnalyzer {
         """
     }
     
-    private func callOpenAI(prompt: String) async throws -> String {
-        guard let apiKey = try? apiKeyManager.getOpenAIKey() else {
-            throw AIError.noAPIKey
+    private func callOllama(prompt: String) async throws -> String {
+        // Use Ollama for free AI analysis
+        let ollamaClient = OllamaClient()
+        
+        do {
+            // Try to use Ollama for generation
+            let response = try await ollamaClient.generate(
+                prompt: prompt,
+                model: "llama2",
+                temperature: 0.3,
+                maxTokens: 1500
+            )
+            return response
+        } catch {
+            // Fallback to local analysis if Ollama fails
+            os_log("Ollama generation failed, using local fallback: %@", error.localizedDescription)
+            throw AIError.apiError("Ollama unavailable: \(error.localizedDescription)")
         }
-        
-        let url = URL(string: "https://api.openai.com/v1/chat/completions")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let payload: [String: Any] = [
-            "model": "gpt-3.5-turbo",
-            "messages": [
-                ["role": "user", "content": prompt]
-            ],
-            "max_tokens": 1500,
-            "temperature": 0.3
-        ]
-        
-        request.httpBody = try JSONSerialization.data(withJSONObject: payload)
-        
-        let (data, response) = try await session.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
-            throw AIError.apiError("HTTP \((response as? HTTPURLResponse)?.statusCode ?? 0)")
-        }
-        
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        let choices = json?["choices"] as? [[String: Any]]
-        let message = choices?.first?["message"] as? [String: Any]
-        let content = message?["content"] as? String
-        
-        return content ?? "No response received"
     }
     
     private func parseAIResponse(_ response: String) -> AIAnalysisResponse {
@@ -1156,10 +1141,11 @@ public enum AIError: Error {
     case networkError
 }
 
-// MARK: - API Key Manager
+// MARK: - API Key Manager (Free AI Focus)
 public class APIKeyManager: ObservableObject {
     @Published public var hasValidKey: Bool = false
-    @Published public var hasValidGeminiKey: Bool = false
+    @Published public var hasOllamaAvailable: Bool = false
+    @Published public var hasHuggingFaceAvailable: Bool = false
     @Published public var showingKeySetup: Bool = false
     
     public init() {
@@ -1167,40 +1153,57 @@ public class APIKeyManager: ObservableObject {
     }
     
     public func checkForExistingKeys() {
-        hasValidKey = UserDefaults.standard.string(forKey: "openai_api_key") != nil
-        hasValidGeminiKey = UserDefaults.standard.string(forKey: "gemini_api_key") != nil
-    }
-    
-    public func getOpenAIKey() throws -> String {
-        guard let key = UserDefaults.standard.string(forKey: "openai_api_key") else {
-            throw AIError.noAPIKey
+        // Check Ollama availability
+        Task {
+            let ollamaAvailable = await checkOllamaAvailability()
+            await MainActor.run {
+                hasOllamaAvailable = ollamaAvailable
+                hasValidKey = ollamaAvailable
+            }
         }
-        return key
+        
+        // Check Hugging Face token
+        hasHuggingFaceAvailable = UserDefaults.standard.string(forKey: "huggingface_api_key") != nil
+        if !hasHuggingFaceAvailable {
+            hasValidKey = hasValidKey || hasHuggingFaceAvailable
+        }
     }
     
-    public func setOpenAIKey(_ key: String) throws {
-        UserDefaults.standard.set(key, forKey: "openai_api_key")
-        hasValidKey = true
+    public func checkOllamaAvailability() async -> Bool {
+        let ollamaURL = "http://localhost:11434/api/tags"
+        
+        guard let url = URL(string: ollamaURL) else {
+            return false
+        }
+        
+        do {
+            let (_, response) = try await URLSession.shared.data(from: url)
+            return (response as? HTTPURLResponse)?.statusCode == 200
+        } catch {
+            return false
+        }
     }
     
-    public func removeOpenAIKey() throws {
-        UserDefaults.standard.removeObject(forKey: "openai_api_key")
-        hasValidKey = false
+    public func getHuggingFaceKey() -> String? {
+        // First check environment variable
+        if let envKey = ProcessInfo.processInfo.environment["HF_TOKEN"] {
+            return envKey
+        }
+        
+        // Then check UserDefaults
+        return UserDefaults.standard.string(forKey: "huggingface_api_key")
     }
     
-    public func setGeminiKey(_ key: String) throws {
-        UserDefaults.standard.set(key, forKey: "gemini_api_key")
-        hasValidGeminiKey = true
+    public func setHuggingFaceKey(_ key: String) {
+        UserDefaults.standard.set(key, forKey: "huggingface_api_key")
+        hasHuggingFaceAvailable = true
+        hasValidKey = hasOllamaAvailable || hasHuggingFaceAvailable
     }
     
-    public func removeGeminiKey() throws {
-        UserDefaults.standard.removeObject(forKey: "gemini_api_key")
-        hasValidGeminiKey = false
-    }
-    
-    public func validateGeminiKey(_ key: String) async -> Bool {
-        // Simple validation - check if key starts with expected prefix
-        return key.hasPrefix("AI") && key.count > 20
+    public func removeHuggingFaceKey() {
+        UserDefaults.standard.removeObject(forKey: "huggingface_api_key")
+        hasHuggingFaceAvailable = false
+        hasValidKey = hasOllamaAvailable || hasHuggingFaceAvailable
     }
     
     public func showKeySetup() {
@@ -1569,7 +1572,7 @@ main() {
   echo ""
   echo -e "${YELLOW}🚀 NEXT STEPS:${NC}"
   echo -e "  1. Build and test the enhanced app: ./build_and_run.sh"
-  echo -e "  2. Test AI features with a valid OpenAI API key"
+  echo -e "  2. Test AI features with Ollama running (ollama serve) and models pulled (ollama pull llama2)"
   echo -e "  3. Verify code analysis accuracy with sample code"
   echo -e "  4. Test all UI components for responsiveness"
   echo ""

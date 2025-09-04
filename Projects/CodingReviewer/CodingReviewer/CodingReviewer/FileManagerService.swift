@@ -787,23 +787,28 @@ final class FileManagerService: ObservableObject {
             isAIAnalyzing = false
         }
 
-        // Get AI provider selection from UserDefaults
-        let selectedProvider = UserDefaults.standard.string(forKey: "selectedAIProvider") ?? "openai"
-        let apiKey: String? = if selectedProvider == "gemini" {
-            // Try to get from UserDefaults temporarily, then environment variable as fallback
-            UserDefaults.standard.string(forKey: "gemini_api_key") ??
-                ProcessInfo.processInfo.environment["GEMINI_API_KEY"]
-        } else {
-            // Try to get from UserDefaults temporarily, then environment variable as fallback
-            UserDefaults.standard.string(forKey: "openai_api_key") ??
-                ProcessInfo.processInfo.environment["OPENAI_API_KEY"]
-        }
+        // Get AI provider selection from UserDefaults (focus on free services)
+        let selectedProvider = UserDefaults.standard.string(forKey: "selectedAIProvider") ?? "ollama"
 
-        guard let validApiKey = apiKey, !validApiKey.isEmpty else {
-            let providerName = selectedProvider == "gemini" ? "Google Gemini" : "OpenAI"
-            lastAIAnalysis = "# 🤖 AI Analysis Results\n\nNo API key configured for \(providerName). Please add your API key in settings."
-            aiInsightsAvailable = true
-            return
+        // For Ollama, no API key needed - check availability
+        if selectedProvider == "ollama" {
+            // Check if Ollama is available
+            let ollamaAvailable = await checkOllamaAvailability()
+            if !ollamaAvailable {
+                lastAIAnalysis = "# 🤖 AI Analysis Results\n\nOllama is not available. Please start Ollama with 'ollama serve' and ensure CodeLlama model is installed."
+                aiInsightsAvailable = true
+                return
+            }
+        } else {
+            // For Hugging Face, check token
+            let apiKey = UserDefaults.standard.string(forKey: "huggingface_api_key") ??
+                ProcessInfo.processInfo.environment["HF_TOKEN"]
+
+            guard let validApiKey = apiKey, !validApiKey.isEmpty else {
+                lastAIAnalysis = "# 🤖 AI Analysis Results\n\nNo Hugging Face token configured. Please add your token in settings."
+                aiInsightsAvailable = true
+                return
+            }
         }
 
         // Perform AI analysis
@@ -814,8 +819,7 @@ final class FileManagerService: ObservableObject {
                 code: file.content,
                 language: file.language,
                 fileName: file.name,
-                provider: selectedProvider,
-                apiKey: validApiKey
+                provider: selectedProvider
             )
 
             if !analysis.isEmpty && !analysis.contains("Error:") {
@@ -836,13 +840,13 @@ final class FileManagerService: ObservableObject {
         }
     }
 
-    private func performSimpleAIAnalysis(code: String, language: CodeLanguage, fileName: String, provider: String, apiKey: String) async -> String {
+    private func performSimpleAIAnalysis(code: String, language: CodeLanguage, fileName: String, provider: String) async -> String {
         let prompt = "Analyze this \(language.displayName) code file '\(fileName)' and provide helpful suggestions for improvement:\n\n\(code)"
 
-        if provider == "gemini" {
-            return await callGeminiAPI(prompt: prompt, apiKey: apiKey)
-        } else {
+        if provider == "ollama" {
             return await callOllamaAPI(prompt: prompt)
+        } else {
+            return await callHuggingFaceAPI(prompt: prompt)
         }
     }
 
@@ -898,26 +902,46 @@ final class FileManagerService: ObservableObject {
         return "No response from Ollama"
     }
 
-    private func callGeminiAPI(prompt: String, apiKey: String) async -> String {
-        guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=\(apiKey)") else {
-            return "Error: Invalid Gemini URL"
+    private func checkOllamaAvailability() async -> Bool {
+        let ollamaURL = "http://localhost:11434/api/tags"
+
+        guard let url = URL(string: ollamaURL) else {
+            return false
+        }
+
+        do {
+            let (_, response) = try await URLSession.shared.data(from: url)
+            return (response as? HTTPURLResponse)?.statusCode == 200
+        } catch {
+            return false
+        }
+    }
+
+    private func callHuggingFaceAPI(prompt: String) async -> String {
+        let apiKey = UserDefaults.standard.string(forKey: "huggingface_api_key") ??
+            ProcessInfo.processInfo.environment["HF_TOKEN"] ?? ""
+
+        guard !apiKey.isEmpty else {
+            return "Error: No Hugging Face token configured"
+        }
+
+        // Use a free Hugging Face model for inference
+        let modelURL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium"
+
+        guard let url = URL(string: modelURL) else {
+            return "Error: Invalid Hugging Face URL"
         }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let requestBody: [String: Any] = [
-            "contents": [
-                [
-                    "parts": [
-                        ["text": prompt],
-                    ],
-                ],
-            ],
-            "generationConfig": [
+            "inputs": prompt,
+            "parameters": [
+                "max_length": 500,
                 "temperature": 0.1,
-                "maxOutputTokens": 500,
             ],
         ]
 
@@ -925,51 +949,37 @@ final class FileManagerService: ObservableObject {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
             let (data, response) = try await URLSession.shared.data(for: request)
 
-            // Check HTTP status code for specific errors
             if let httpResponse = response as? HTTPURLResponse {
                 switch httpResponse.statusCode {
-                case 400:
-                    return "Error: Invalid Gemini API key or request format. Please check your settings."
+                case 200:
+                    break // Success
+                case 401:
+                    return "Error: Invalid Hugging Face token"
                 case 429:
-                    return "Error: Gemini API rate limit exceeded. Please try again later."
+                    return "Error: Hugging Face rate limit exceeded"
                 case 500 ... 599:
-                    return "Error: Gemini service is currently unavailable. Please try again later."
+                    return "Error: Hugging Face service unavailable"
                 default:
-                    break
+                    return "Error: Hugging Face API error (\(httpResponse.statusCode))"
                 }
             }
 
-            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                // Check for API error response
-                if let error = json["error"] as? [String: Any],
-                   let message = error["message"] as? String
-                {
-                    return "Gemini API Error: \(message)"
-                }
-
-                // Parse successful response
-                if let candidates = json["candidates"] as? [[String: Any]],
-                   let firstCandidate = candidates.first,
-                   let content = firstCandidate["content"] as? [String: Any],
-                   let parts = content["parts"] as? [[String: Any]],
-                   let firstPart = parts.first,
-                   let text = firstPart["text"] as? String
-                {
-                    return text.trimmingCharacters(in: .whitespacesAndNewlines)
-                }
+            if let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]],
+               let firstResult = json.first,
+               let generatedText = firstResult["generated_text"] as? String
+            {
+                return generatedText.trimmingCharacters(in: .whitespacesAndNewlines)
             }
         } catch {
             let errorMessage = error.localizedDescription
             if errorMessage.contains("network") || errorMessage.contains("connection") {
-                return "Error: Network connection failed. Please check your internet connection."
-            } else if errorMessage.contains("timeout") {
-                return "Error: Request timed out. Please try again."
+                return "Error: Network connection failed"
             } else {
-                return "Gemini API Error: \(errorMessage)"
+                return "Hugging Face API Error: \(errorMessage)"
             }
         }
 
-        return "No response from Gemini"
+        return "No response from Hugging Face"
     }
 
     private func generateIntelligentSuggestions(for file: CodeFile) async -> [String] {

@@ -142,7 +142,7 @@ enum AIServiceError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidAPIKey:
-            "Invalid API key. Please check your OpenAI API key in settings."
+            "Invalid API key. Please check your AI service configuration in settings."
         case let .networkError(error):
             "Network error: \(error.localizedDescription)"
         case .rateLimitExceeded:
@@ -152,9 +152,9 @@ enum AIServiceError: LocalizedError {
         case .invalidResponse:
             "Received invalid response from AI service."
         case .serviceUnavailable:
-            "AI service is currently unavailable. Please try again later."
+            "AI service is currently unavailable. For Ollama, make sure it's running with 'ollama serve'."
         case .insufficientCredits:
-            "Insufficient API credits. Please check your OpenAI account."
+            "Service limit reached. Please check your account or try again later."
         }
     }
 }

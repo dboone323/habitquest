@@ -16,7 +16,7 @@ struct APIKeySetupView: View {
     @State private var tempKey = ""
     @State private var isValidating = false
     @State private var validationResult: String?
-    @State private var selectedProvider = "OpenAI"
+    @State private var selectedProvider = "Ollama"
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -44,27 +44,38 @@ struct APIKeySetupView: View {
                         .font(.headline)
 
                     Picker("Provider", selection: $selectedProvider) {
-                        Text("OpenAI").tag("OpenAI")
-                        Text("Google Gemini").tag("Google Gemini")
+                        Text("Ollama").tag("Ollama")
+                        Text("Hugging Face").tag("Hugging Face")
                     }
                     .pickerStyle(.segmented)
                 }
 
                 // API Key Input
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("\(selectedProvider) API Key")
-                        .font(.headline)
+                    if selectedProvider == "Ollama" {
+                        Text("Ollama Setup")
+                            .font(.headline)
 
-                    SecureField("Enter your API key", text: $tempKey)
-                        .textFieldStyle(.roundedBorder)
-                        .font(.system(.body, design: .monospaced))
+                        Text("Ollama runs locally on your machine. Make sure Ollama is installed and running.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
 
-                    if selectedProvider == "OpenAI" {
-                        Text("Get your API key from https:// platform.openai.com/api-keys")
+                        Text("Install Ollama: https://ollama.ai/download")
+                            .font(.caption)
+                            .foregroundColor(.blue)
+
+                        Text("Start Ollama: Run 'ollama serve' in terminal")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("Get your API key from https:// makersuite.google.com/app/apikey")
+                        Text("Hugging Face Token")
+                            .font(.headline)
+
+                        SecureField("Enter your Hugging Face token", text: $tempKey)
+                            .textFieldStyle(.roundedBorder)
+                            .font(.system(.body, design: .monospaced))
+
+                        Text("Get your token from https://huggingface.co/settings/tokens")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -88,24 +99,39 @@ struct APIKeySetupView: View {
                     }
                     .buttonStyle(.bordered)
 
-                    Button("Test Key") {
-                        Task {
-                            await validateKey()
+                    if selectedProvider == "Ollama" {
+                        Button("Test Connection") {
+                            Task {
+                                await validateKey()
+                            }
                         }
-                    }
-                    .disabled(tempKey.isEmpty || isValidating)
-                    .buttonStyle(.bordered)
+                        .disabled(isValidating)
+                        .buttonStyle(.bordered)
 
-                    Button("Save") {
-                        Task {
-                            await saveKey()
+                        Button("Save Configuration") {
+                            Task {
+                                await saveKey()
+                            }
                         }
-                    }
-                    .disabled(tempKey.isEmpty)
-                    .buttonStyle(.borderedProminent)
-                }
+                        .buttonStyle(.borderedProminent)
+                    } else {
+                        Button("Test Key") {
+                            Task {
+                                await validateKey()
+                            }
+                        }
+                        .disabled(tempKey.isEmpty || isValidating)
+                        .buttonStyle(.bordered)
 
-                Spacer()
+                        Button("Save") {
+                            Task {
+                                await saveKey()
+                            }
+                        }
+                        .disabled(tempKey.isEmpty)
+                        .buttonStyle(.borderedProminent)
+                    }
+                } Spacer()
             }
             .padding()
             .navigationTitle("API Key Setup")
@@ -124,11 +150,12 @@ struct APIKeySetupView: View {
         isValidating = true
         validationResult = "Validating..."
 
-        // Simple validation - check if key has proper format
-        let isValid: Bool = if selectedProvider == "OpenAI" {
-            tempKey.hasPrefix("sk-") && tempKey.count > 10
+        let isValid: Bool = if selectedProvider == "Ollama" {
+            // Check if Ollama is running locally
+            await checkOllamaAvailability()
         } else {
-            tempKey.count > 10 // Basic check for Gemini
+            // Validate Hugging Face token format
+            tempKey.hasPrefix("hf_") && tempKey.count > 10
         }
 
         // Simulate API call delay
@@ -136,7 +163,26 @@ struct APIKeySetupView: View {
 
         await MainActor.run {
             self.isValidating = false
-            self.validationResult = isValid ? "✅ Valid API key format" : "❌ Invalid API key format"
+            if selectedProvider == "Ollama" {
+                self.validationResult = isValid ? "✅ Ollama is running and available" : "❌ Ollama is not available. Please start with 'ollama serve'"
+            } else {
+                self.validationResult = isValid ? "✅ Valid Hugging Face token format" : "❌ Invalid Hugging Face token format"
+            }
+        }
+    }
+
+    private func checkOllamaAvailability() async -> Bool {
+        let ollamaURL = "http://localhost:11434/api/tags"
+
+        guard let url = URL(string: ollamaURL) else {
+            return false
+        }
+
+        do {
+            let (_, response) = try await URLSession.shared.data(from: url)
+            return (response as? HTTPURLResponse)?.statusCode == 200
+        } catch {
+            return false
         }
     }
 
@@ -147,15 +193,16 @@ struct APIKeySetupView: View {
         }
 
         // Save to UserDefaults - will integrate with APIKeyManager later
-        if selectedProvider == "OpenAI" {
-            UserDefaults.standard.set(tempKey, forKey: "openai_api_key")
-        } else {
-            UserDefaults.standard.set(tempKey, forKey: "gemini_api_key")
+        if selectedProvider == "Hugging Face" {
+            UserDefaults.standard.set(tempKey, forKey: "huggingface_api_key")
         }
+        // For Ollama, no key needed - it's local
 
         await MainActor.run {
             self.isValidating = false
-            self.validationResult = "✅ API key saved successfully"
+            self.validationResult = selectedProvider == "Ollama" ?
+                "✅ Ollama configuration saved" :
+                "✅ Hugging Face token saved successfully"
 
             // Auto-dismiss after showing success message
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {

@@ -37,8 +37,8 @@ public class EnhancedAIService: ObservableObject {
             self.analysisResult = localResults
         }
 
-        // Try AI analysis if API key is available
-        if apiKeyManager.hasValidKey {
+        // Try AI analysis if Ollama is available
+        if apiKeyManager.hasOllamaAvailable {
             await performAIAnalysis(code, language: language)
         }
 
@@ -131,7 +131,7 @@ public class EnhancedAIService: ObservableObject {
     private func performAIAnalysis(_ code: String, language: String) async {
         do {
             let prompt = createAnalysisPrompt(code: code, language: language)
-            let response = try await callOpenAI(prompt: prompt)
+            let response = try await callOllama(prompt: prompt)
 
             DispatchQueue.main.async {
                 self.analysisResult += "🤖 AI Enhanced Analysis:\n"
@@ -165,26 +165,19 @@ public class EnhancedAIService: ObservableObject {
         """
     }
 
-    private func callOpenAI(prompt: String) async throws -> String {
-        guard let apiKey = UserDefaults.standard.string(forKey: "openai_api_key") else {
-            throw AIAnalysisError.noAPIKey
-        }
-
-        guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
+    private func callOllama(prompt: String) async throws -> String {
+        guard let url = URL(string: "http://localhost:11434/api/generate") else {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let payload: [String: Any] = [
-            "model": "gpt-3.5-turbo",
-            "messages": [
-                ["role": "user", "content": prompt],
-            ],
-            "max_tokens": 1000,
-            "temperature": 0.3,
+            "model": "codellama", // Using CodeLlama for code analysis
+            "prompt": prompt,
+            "stream": false,
         ]
 
         request.httpBody = try JSONSerialization.data(withJSONObject: payload)
@@ -198,15 +191,11 @@ public class EnhancedAIService: ObservableObject {
         }
 
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        let choices = json?["choices"] as? [[String: Any]]
-        guard let firstChoice = choices?.first,
-              let message = firstChoice["message"] as? [String: Any],
-              let content = message["content"] as? String
-        else {
-            return "No response received from AI service"
+        guard let responseText = json?["response"] as? String else {
+            return "No response received from Ollama"
         }
 
-        return content
+        return responseText
     }
 
     private func calculateComplexity(_ code: String) -> Int {
@@ -229,19 +218,19 @@ public class EnhancedAIService: ObservableObject {
 // MARK: - Supporting Types
 
 public enum AIAnalysisError: Error {
-    case noAPIKey
+    case ollamaUnavailable
     case apiError(String)
     case invalidResponse
     case networkError
 
     public var localizedDescription: String {
         switch self {
-        case .noAPIKey:
-            "No API key found. Please configure your OpenAI API key in settings."
+        case .ollamaUnavailable:
+            "Ollama is not available. Please start Ollama with 'ollama serve'."
         case let .apiError(message):
             "API Error: \(message)"
         case .invalidResponse:
-            "Invalid response from AI service"
+            "Invalid response from Ollama"
         case .networkError:
             "Network error occurred"
         }

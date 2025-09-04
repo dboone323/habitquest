@@ -345,15 +345,15 @@ let sampleJSONCode = """
   },
   "ai": {
     "providers": {
-      "openai": {
+      "ollama": {
         "enabled": true,
-        "model": "gpt-4",
+        "model": "codellama",
         "maxTokens": 4000,
         "temperature": 0.3
       },
-      "gemini": {
+      "huggingface": {
         "enabled": true,
-        "model": "gemini-pro",
+        "model": "microsoft/DialoGPT-medium",
         "maxTokens": 8000,
         "temperature": 0.2
       }
@@ -371,8 +371,7 @@ let sampleJSONCode = """
     "auditLogging": true,
     "allowedDomains": [
       "localhost",
-      "*.openai.com",
-      "*.googleapis.com"
+      "huggingface.co"
     ]
   },
   "performance": {

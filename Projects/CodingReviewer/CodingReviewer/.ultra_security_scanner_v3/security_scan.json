@@ -1,11 +1,11 @@
 {
   "version": "3.0",
   "scan_accuracy": 100,
-  "total_scans": 5,
-  "vulnerabilities_found": 10,
+  "total_scans": 6,
+  "vulnerabilities_found": 12,
   "vulnerabilities_fixed": 0,
   "false_positives": 0,
-  "last_scan": "Thu Jul 31 14:14:47 CDT 2025",
+  "last_scan": "Thu Sep  4 10:09:10 CDT 2025",
   "security_score": 97,
   "vulnerability_categories": {
     "api_key_exposure": {
