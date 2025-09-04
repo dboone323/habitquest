@@ -19,7 +19,7 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
 
             # Read dashboard data
             data_file = Path(
-                "/Users/danielstevens/Desktop/Code/Tools/Automation/agents/dashboard_data.json"
+                "/Users/danielstevens/Desktop/Quantum-workspace/Tools/Automation/agents/dashboard_data.json"
             )
             if data_file.exists():
                 try:
@@ -45,7 +45,7 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
 
 def run_server(port=8000):
     """Run the dashboard server"""
-    os.chdir("/Users/danielstevens/Desktop/Code/Tools")
+    os.chdir("/Users/danielstevens/Desktop/Quantum-workspace/Tools")
 
     with socketserver.TCPServer(("", port), DashboardHandler) as httpd:
         print(f"Dashboard server running at http://localhost:{port}")
