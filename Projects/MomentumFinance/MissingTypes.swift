@@ -347,7 +347,7 @@ public enum BudgetType: Sendable {
 
 // MARK: - ColorTheme Extension for Demo Components
 
-public extension ColorTheme {
+extension ColorTheme {
     var primary: Color { accentPrimary }
     var success: Color { income }
     var error: Color { expense }
@@ -2289,7 +2289,7 @@ public struct AboutSection: View {
 
 // MARK: - Features Namespace Extensions
 
-public extension Features.Transactions {
+extension Features.Transactions {
     struct TransactionRowView: View {
         public let transaction: FinancialTransaction
         public let onTapped: () -> Void
