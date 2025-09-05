@@ -49,22 +49,13 @@ struct ThemeDemoView: View {
                     ThemeFinancialSummaryCard(theme: theme)
 
                     // Account cards
-                    ThemeAccountsList(
-                        accounts: accounts,
-                        theme: theme
-                    )
+                    ThemeAccountsList()
 
                     // Budget progress section
-                    ThemeBudgetProgress(
-                        budgets: budgets,
-                        theme: theme
-                    )
+                    ThemeBudgetProgress()
 
                     // Subscriptions section
-                    ThemeSubscriptionsList(
-                        subscriptions: subscriptions,
-                        theme: theme
-                    )
+                    ThemeSubscriptionsList()
 
                     // Typography showcase
                     ThemeTypographyShowcase(theme: theme)

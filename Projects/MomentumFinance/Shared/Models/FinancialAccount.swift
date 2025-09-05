@@ -16,7 +16,7 @@ enum AccountType: String, CaseIterable, Codable {
 }
 
 @Model
-final class FinancialAccount {
+public final class FinancialAccount {
     var name: String
     var balance: Double
     var iconName: String

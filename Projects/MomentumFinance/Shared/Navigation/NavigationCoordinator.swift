@@ -1,6 +1,6 @@
 import LocalAuthentication
-import OSLog
 import Observation
+import OSLog
 import SwiftUI
 
 //
@@ -11,6 +11,10 @@ import SwiftUI
 //  Copyright © 2025 Daniel Stevens. All rights reserved.
 //
 
+// Import the proper SearchResult types
+// Note: These should be available from the proper architectural location
+// If this causes issues, the SearchTypes.swift file needs to be added to Xcode project
+
 /// Handles cross-module navigation in the app with advanced deep linking and search
 @MainActor
 @Observable
@@ -18,6 +22,7 @@ final class NavigationCoordinator: ObservableObject {
     static let shared = NavigationCoordinator()
 
     // MARK: - Core Navigation State
+
     var selectedTab: Int = 0
     var dashboardNavPath = NavigationPath()
     var transactionsNavPath = NavigationPath()
@@ -26,27 +31,32 @@ final class NavigationCoordinator: ObservableObject {
     var goalsAndReportsNavPath = NavigationPath()
 
     // MARK: - Enhanced UX Properties
+
     var isSearchActive: Bool = false
     var searchQuery: String = ""
     var breadcrumbHistory: [BreadcrumbItem] = []
     var isShowingSearchResults: Bool = false
 
     // MARK: - Authentication State
+
     var isAuthenticated: Bool = false
     var requiresAuthentication: Bool = true
     var lastAuthenticationTime: Date?
-    var authenticationTimeoutInterval: TimeInterval = 300  // 5 minutes
+    var authenticationTimeoutInterval: TimeInterval = 300 // 5 minutes
 
     // MARK: - Deep Linking State
+
     var pendingDeepLink: DeepLink?
     var lastHandledDeepLink: DeepLink?
     private var lastKnownState: [String: Any] = [:]
 
     // MARK: - Notification Management
+
     var hasUnreadNotifications: Bool = false
     var notificationBadgeCounts: [TabSection: Int] = [:]
 
     // MARK: - macOS Support
+
     #if os(macOS)
         var selectedSidebarItem: SidebarItem? = .dashboard
         var selectedListItem: ListableItem?
@@ -65,21 +75,22 @@ final class NavigationCoordinator: ObservableObject {
     // MARK: - Navigation Methods
 
     func navigateToBudgets() {
-        selectedTab = 2  // Assuming budgets is tab index 2
+        selectedTab = 2 // Assuming budgets is tab index 2
         budgetsNavPath = NavigationPath()
     }
 
     func navigateToSubscriptions() {
-        selectedTab = 3  // Assuming subscriptions is tab index 3
+        selectedTab = 3 // Assuming subscriptions is tab index 3
         subscriptionsNavPath = NavigationPath()
     }
 
     func navigateToGoals() {
-        selectedTab = 4  // Assuming goals is tab index 4
+        selectedTab = 4 // Assuming goals is tab index 4
         goalsAndReportsNavPath = NavigationPath()
     }
 
     // MARK: - Search helpers
+
     func activateSearch() {
         // Keep this minimal and self-contained so callers can toggle search
         isSearchActive = true
@@ -97,17 +108,17 @@ final class NavigationCoordinator: ObservableObject {
         // Navigate based on the search result type
         switch result.type {
         case .accounts:
-            selectedTab = 0  // Dashboard tab
+            selectedTab = 0 // Dashboard tab
             dashboardNavPath = NavigationPath()
         case .transactions:
-            selectedTab = 1  // Transactions tab
+            selectedTab = 1 // Transactions tab
             transactionsNavPath = NavigationPath()
-        case .subscriptions:
-            selectedTab = 3  // Subscriptions tab
-            subscriptionsNavPath = NavigationPath()
         case .budgets:
-            selectedTab = 2  // Budgets tab
+            selectedTab = 2 // Budgets tab
             budgetsNavPath = NavigationPath()
+        case .subscriptions:
+            selectedTab = 3 // Subscriptions tab
+            subscriptionsNavPath = NavigationPath()
         case .all:
             // For 'all' type, default to dashboard
             selectedTab = 0

@@ -39,7 +39,8 @@ extension Features {
 
         init() {
             // Initialize search engine with placeholder context
-            self._searchEngine = StateObject(wrappedValue: SearchEngineService(modelContext: ModelContext(try! ModelContainer(for: FinancialAccount.self))))
+            let container = try! ModelContainer(for: FinancialAccount.self, FinancialTransaction.self)
+            self._searchEngine = StateObject(wrappedValue: SearchEngineService(modelContext: ModelContext(container)))
         }
 
         var body: some View {
@@ -83,7 +84,7 @@ extension Features {
                 #endif
             }
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + SearchConfiguration.searchDebounceDelay) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     performSearch()
                 }
             }
@@ -100,11 +101,8 @@ extension Features {
 
             Task {
                 let results = searchEngine.search(query: searchText, filter: selectedFilter)
-
-                await MainActor.run {
-                    searchResults = results
-                    isLoading = false
-                }
+                searchResults = results
+                isLoading = false
             }
         }
     }

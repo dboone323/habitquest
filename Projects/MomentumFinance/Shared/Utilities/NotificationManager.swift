@@ -14,7 +14,7 @@ import SwiftData
 @preconcurrency import UserNotifications
 
 /// Manages smart notifications for budget limits and subscription due dates
-/// 
+///
 /// This main coordinator delegates to focused component implementations:
 /// - NotificationPermissionManager: Permission handling and authorization
 /// - BudgetNotificationScheduler: Budget warning and alert scheduling
@@ -30,7 +30,7 @@ class NotificationManager: ObservableObject {
 
     private let center = UNUserNotificationCenter.current()
     private let logger = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance", category: "Notifications")
-    
+
     // Component delegates
     private let permissionManager: NotificationPermissionManager
     private let budgetScheduler: BudgetNotificationScheduler
@@ -43,7 +43,7 @@ class NotificationManager: ObservableObject {
         budgetScheduler = BudgetNotificationScheduler(logger: logger)
         subscriptionScheduler = SubscriptionNotificationScheduler(logger: logger)
         goalScheduler = GoalNotificationScheduler(logger: logger)
-        
+
         checkNotificationPermission()
         setupNotificationCategories()
     }
@@ -120,6 +120,24 @@ class NotificationManager: ObservableObject {
     // MARK: - Notification Categories Setup (Delegate to PermissionManager)
 
     func setupNotificationCategories() {
-        permissionManager.setupNotificationCategories()
+        // Set up notification categories
+        let budgetCategory = UNNotificationCategory(
+            identifier: "BUDGET_WARNING",
+            actions: [],
+            intentIdentifiers: [],
+            options: .customDismissAction
+        )
+
+        let subscriptionCategory = UNNotificationCategory(
+            identifier: "SUBSCRIPTION_REMINDER",
+            actions: [],
+            intentIdentifiers: [],
+            options: .customDismissAction
+        )
+
+        UNUserNotificationCenter.current().setNotificationCategories([
+            budgetCategory,
+            subscriptionCategory,
+        ])
     }
 }

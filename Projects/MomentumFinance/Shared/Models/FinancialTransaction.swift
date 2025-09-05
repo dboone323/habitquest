@@ -4,13 +4,13 @@
 import Foundation
 import SwiftData
 
-enum TransactionType: String, CaseIterable, Codable {
+public enum TransactionType: String, CaseIterable, Codable {
     case income = "Income"
     case expense = "Expense"
 }
 
 @Model
-final class FinancialTransaction {
+public final class FinancialTransaction: @unchecked Sendable {
     var title: String
     var amount: Double
     var date: Date

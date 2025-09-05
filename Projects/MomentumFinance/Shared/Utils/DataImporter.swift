@@ -1,7 +1,8 @@
-import Foundation
-import SwiftData
+@preconcurrency import Foundation
+@preconcurrency import SwiftData
 
 // MARK: - Data Import Coordinator
+
 // This file coordinates the data import process using focused component modules.
 // Each component is extracted for better maintainability and testing.
 
@@ -57,8 +58,8 @@ actor DataImporter {
         var errors: [String] = []
 
         // Create helper instances
-        let entityManager = EntityManager(modelContext: modelContext)
-        let validator = ImportValidator(modelContext: modelContext)
+        let entityManager = DefaultEntityManager()
+        let validator = ImportValidator()
 
         // Process data rows
         for (index, line) in lines.dropFirst().enumerated() {
@@ -94,7 +95,7 @@ actor DataImporter {
             accountsImported: accountsImported,
             categoriesImported: categoriesImported,
             duplicatesSkipped: duplicatesSkipped,
-            errors: errors
+            errors: errors.map { ValidationError(field: "import", message: $0) }
         )
     }
 
@@ -132,9 +133,11 @@ actor DataImporter {
 
         // Get or create entities using entity manager
         let account = try await entityManager.getOrCreateAccount(
-            from: fields, columnMapping: columnMapping)
+            from: fields, columnMapping: columnMapping
+        )
         let category = try await entityManager.getOrCreateCategory(
-            from: fields, columnMapping: columnMapping, transactionType: transactionType)
+            from: fields, columnMapping: columnMapping, transactionType: transactionType
+        )
 
         // Parse optional notes
         let notes: String?
