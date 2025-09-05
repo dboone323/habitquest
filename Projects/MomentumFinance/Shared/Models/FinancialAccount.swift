@@ -16,7 +16,7 @@ enum AccountType: String, CaseIterable, Codable {
 }
 
 @Model
-public final class FinancialAccount {
+public final class FinancialAccount: Hashable {
     var name: String
     var balance: Double
     var iconName: String
@@ -50,5 +50,19 @@ public final class FinancialAccount {
         case .expense:
             balance -= transaction.amount
         }
+    }
+
+    // MARK: - Hashable Conformance
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(accountType)
+        hasher.combine(createdDate)
+    }
+
+    public static func == (lhs: FinancialAccount, rhs: FinancialAccount) -> Bool {
+        lhs.name == rhs.name &&
+            lhs.accountType == rhs.accountType &&
+            lhs.createdDate == rhs.createdDate
     }
 }
