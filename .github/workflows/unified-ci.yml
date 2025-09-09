@@ -1,0 +1,114 @@
+name: Unified CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    name: Build & Test (${{ matrix.project }})
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [AvoidObstaclesGame, HabitQuest, MomentumFinance, PlannerApp, CodingReviewer]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: pip-
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Node dev deps (root)
+        if: hashFiles('package.json') != ''
+        run: npm ci
+
+      - name: Cache Swift Package Manager
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.swiftpm
+            .build
+          key: spm-${{ runner.os }}-${{ matrix.project }}-${{ hashFiles('Projects/${{ matrix.project }}/Package.resolved') }}
+          restore-keys: spm-${{ runner.os }}-
+
+      - name: Install Swift tools
+        run: |
+          brew install swiftformat swiftlint || true
+          swiftformat --version
+          swiftlint version || true
+
+      - name: Run pre-commit (lint/format)
+        run: pre-commit run --all-files --hook-stage=pre-commit
+
+      - name: Project Swift Format (idempotence check)
+        run: swiftformat Projects/${{ matrix.project }} --config Tools/Config/UNIFIED_SWIFTFORMAT_ROOT --lint
+        continue-on-error: true
+
+      - name: Project SwiftLint
+        run: swiftlint lint --config Tools/Config/UNIFIED_SWIFTLINT_ROOT.yml --path Projects/${{ matrix.project }} || true
+
+      - name: Build / Test (Swift)
+        if: hashFiles('Projects/${{ matrix.project }}/Package.swift') != ''
+        run: |
+          cd Projects/${{ matrix.project }}
+          swift build --build-tests
+          swift test --parallel
+
+      - name: Xcode Build (app project)
+        if: hashFiles('Projects/${{ matrix.project }}/Package.swift') == ''
+        run: |
+          echo "Attempting Xcode build for ${{ matrix.project }} (placeholder)"
+          # Provide a .xcodeproj or .xcworkspace path if available
+          # xcodebuild -project Projects/${{ matrix.project }}/${{ matrix.project }}.xcodeproj -scheme ${{ matrix.project }} -configuration Debug build | xcpretty
+          echo "Skipped (no configured Xcode command)"
+
+      - name: Archive Artifacts
+        if: always()
+        run: |
+          mkdir -p artifacts/${{ matrix.project }}
+          echo "Build logs placeholder" > artifacts/${{ matrix.project }}/build.log
+        shell: bash
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ matrix.project }}-logs
+          path: artifacts/${{ matrix.project }}
+
+  semantic-release:
+    name: Semantic Release
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install deps
+        run: npm ci
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
