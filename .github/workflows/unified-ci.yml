@@ -41,12 +41,13 @@ jobs:
         if: hashFiles('package.json') != ''
         run: npm ci
 
-      - name: Cache Swift Package Manager
+      - name: Cache Swift Package Manager + DerivedData
         uses: actions/cache@v3
         with:
           path: |
             ~/.swiftpm
             .build
+            ~/Library/Developer/Xcode/DerivedData
           key: spm-${{ runner.os }}-${{ matrix.project }}-${{ hashFiles('Projects/${{ matrix.project }}/Package.resolved') }}
           restore-keys: spm-${{ runner.os }}-
 
@@ -59,27 +60,61 @@ jobs:
       - name: Run pre-commit (lint/format)
         run: pre-commit run --all-files --hook-stage=pre-commit
 
-      - name: Project Swift Format (idempotence check)
-        run: swiftformat Projects/${{ matrix.project }} --config Tools/Config/UNIFIED_SWIFTFORMAT_ROOT --lint
-        continue-on-error: true
+      - name: SwiftFormat Idempotence
+        run: |
+          swiftformat Projects/${{ matrix.project }} --config Tools/Config/UNIFIED_SWIFTFORMAT_ROOT --lint || FORMAT_FAIL=$?
+          if [ "+$FORMAT_FAIL" != "+0" ]; then
+            echo "::error title=Formatting drift detected::Run swiftformat locally and commit changes.";
+            exit 1;
+          fi
 
-      - name: Project SwiftLint
+      - name: SwiftLint
         run: swiftlint lint --config Tools/Config/UNIFIED_SWIFTLINT_ROOT.yml --path Projects/${{ matrix.project }} || true
 
-      - name: Build / Test (Swift)
+      - name: SwiftPM Build & Test
         if: hashFiles('Projects/${{ matrix.project }}/Package.swift') != ''
         run: |
           cd Projects/${{ matrix.project }}
           swift build --build-tests
           swift test --parallel
 
-      - name: Xcode Build (app project)
+      - name: Resolve Xcode Scheme
+        id: scheme
         if: hashFiles('Projects/${{ matrix.project }}/Package.swift') == ''
         run: |
-          echo "Attempting Xcode build for ${{ matrix.project }} (placeholder)"
-          # Provide a .xcodeproj or .xcworkspace path if available
-          # xcodebuild -project Projects/${{ matrix.project }}/${{ matrix.project }}.xcodeproj -scheme ${{ matrix.project }} -configuration Debug build | xcpretty
-          echo "Skipped (no configured Xcode command)"
+          set -euo pipefail
+          PROJECT_DIR="Projects/${{ matrix.project }}"
+          PROJECT_FILE="${PROJECT_DIR}/${{ matrix.project }}.xcodeproj"
+          if [ ! -d "$PROJECT_FILE" ]; then
+            echo "::warning title=Missing Xcode project::Expected $PROJECT_FILE";
+            echo "scheme=${{ matrix.project }}" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          SCHEME=$(xcodebuild -list -project "$PROJECT_FILE" 2>/dev/null | awk -v name="${{ matrix.project }}" '/Schemes:/{flag=1;next}/^$/ {flag=0} flag {print}' | grep -m1 "${{ matrix.project }}" || true)
+          if [ -z "$SCHEME" ]; then
+            SCHEME="${{ matrix.project }}"
+          fi
+          echo "Using scheme: $SCHEME"
+          echo "scheme=$SCHEME" >> $GITHUB_OUTPUT
+
+      - name: Xcode Build & Test
+        if: hashFiles('Projects/${{ matrix.project }}/Package.swift') == ''
+        run: |
+          set -euo pipefail
+          PROJECT_DIR="Projects/${{ matrix.project }}"
+          PROJECT_FILE="${PROJECT_DIR}/${{ matrix.project }}.xcodeproj"
+          SCHEME="${{ steps.scheme.outputs.scheme }}"
+          if [ ! -d "$PROJECT_FILE" ]; then
+            echo "::warning title=Skipping Xcode build::Project file $PROJECT_FILE missing";
+            exit 0
+          fi
+          xcodebuild -project "$PROJECT_FILE" -scheme "$SCHEME" -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15' build test | xcpretty || EXIT_CODE=$?
+          mkdir -p artifacts/${{ matrix.project }}
+          echo "$SCHEME" > artifacts/${{ matrix.project }}/scheme.txt
+          if [ -n "${EXIT_CODE:-}" ]; then
+            echo "::error title=Xcode build/test failed::$SCHEME failed";
+            exit $EXIT_CODE
+          fi
 
       - name: Archive Artifacts
         if: always()
