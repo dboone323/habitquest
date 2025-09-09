@@ -1,0 +1,24 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "swiftlang.swift-vscode",
+  "editor.trimAutoWhitespace": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.exclude": {
+    "**/DerivedData": true,
+    "**/.build": true,
+    "**/Pods": true,
+    "**/Carthage": true
+  },
+  "search.exclude": {
+    "**/DerivedData": true,
+    "**/.build": true
+  },
+  "swiftformat.configPath": "Tools/Config/UNIFIED_SWIFTFORMAT_ROOT",
+  "swiftlint.configPath": "Tools/Config/UNIFIED_SWIFTLINT_ROOT.yml",
+  "[swift]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "never"
+    }
+  }
+}
