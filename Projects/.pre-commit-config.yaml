@@ -1,0 +1,61 @@
+# Pre-commit hook configuration for unified tooling (interim location)
+# Install: pip install pre-commit && pre-commit install
+# Update hooks: pre-commit autoupdate
+# Run manually: pre-commit run --all-files
+# When repository root write permitted, move this file to the top-level directory.
+
+default_stages: [pre-commit]
+
+default_language_version:
+  python: python3.11
+
+exclude: >-
+  ^(
+    Tools/Imported/|
+    .*DerivedData/|
+    .*\.build/|
+    .*Pods/|
+    .*Carthage/
+  )
+
+repos:
+  # Prettier – JS/TS/JSON/MD
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.3
+    hooks:
+      - id: prettier
+        additional_dependencies: ["prettier@3.0.3"]
+        files: '\\.(js|ts|tsx|json|md)$'
+
+  # Black – Python formatting
+  - repo: https://github.com/psf/black
+    rev: 24.3.0
+    hooks:
+      - id: black
+        files: '\\.(py)$'
+        language_version: python3.11
+
+  # Flake8 – Python linting
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.0
+    hooks:
+      - id: flake8
+        files: '\\.(py)$'
+        additional_dependencies: ["flake8==7.1.0"]
+
+  # Local hooks for Swift tooling
+  - repo: local
+    hooks:
+      - id: swiftformat
+        name: SwiftFormat (unified config)
+        entry: swiftformat
+        args: ["--config", "Tools/Config/UNIFIED_SWIFTFORMAT_ROOT"]
+        language: system
+        files: '\\.(swift)$'
+      - id: swiftlint
+        name: SwiftLint (unified config)
+        entry: swiftlint
+        args: ["lint", "--config", "Tools/Config/UNIFIED_SWIFTLINT_ROOT.yml"]
+        language: system
+        pass_filenames: true
+        files: '\\.(swift)$'
