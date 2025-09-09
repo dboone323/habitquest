@@ -59,3 +59,13 @@ repos:
         language: system
         pass_filenames: true
         files: '\\.(swift)$'
+
+# Append commitlint hook
+  - repo: local
+    hooks:
+      - id: commitlint
+        name: Commitlint (conventional commits)
+        entry: npx --yes commitlint --edit $1
+        language: system
+        stages: [commit-msg]
+
