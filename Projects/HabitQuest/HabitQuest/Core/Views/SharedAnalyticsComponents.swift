@@ -286,7 +286,7 @@ struct StreakDistributionChartView: View {
                         .font(.caption2)
                         .fontWeight(.medium)
                         .foregroundColor(.white)
-                        .opacity(!item.isEmpty ? 1 : 0)
+                        .opacity(item.count > 0 ? 1 : 0)
                 )
                 .animation(.spring(response: 0.8, dampingFraction: 0.8).delay(Double(index) * 0.1), value: animateChart)
         }

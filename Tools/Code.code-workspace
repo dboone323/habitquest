@@ -86,6 +86,43 @@
                     "status"
                 ],
                 "group": "build"
+            },
+            {
+                "label": "containers: build",
+                "type": "shell",
+                "command": "docker compose -f Tools/docker-compose.yml build",
+                "group": "build"
+            },
+            {
+                "label": "containers: tools",
+                "type": "shell",
+                "command": "docker compose -f Tools/docker-compose.yml run --rm tools",
+                "group": "build"
+            },
+            {
+                "label": "containers: swift tests",
+                "type": "shell",
+                "command": "docker compose -f Tools/docker-compose.yml run --rm swift",
+                "group": "test"
+            },
+            {
+                "label": "containers: cspell",
+                "type": "shell",
+                "command": "docker compose -f Tools/docker-compose.yml run --rm cspell",
+                "group": "test"
+            },
+            {
+                "label": "containers: tools-all",
+                "type": "shell",
+                "command": "docker compose -f Tools/docker-compose.yml run --rm tools-all",
+                "group": "build"
+            },
+            {
+                "label": "containers: build + tools-all",
+                "type": "shell",
+                "command": "docker compose -f Tools/docker-compose.yml build && docker compose -f Tools/docker-compose.yml run --rm tools-all",
+                "group": "build",
+                "problemMatcher": []
             }
         ]
     },

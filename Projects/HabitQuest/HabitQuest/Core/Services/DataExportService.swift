@@ -57,6 +57,7 @@ struct DataExportService: Sendable {
     /// Export all user data to JSON
     /// - Parameter modelContext: SwiftData model context
     /// - Returns: JSON data ready for sharing/backup
+    @MainActor
     static func exportUserData(from modelContext: ModelContext) throws -> Data {
         logger.info("Starting data export...")
 
@@ -110,12 +111,7 @@ struct DataExportService: Sendable {
 
         let exportedAchievements = achievements.map { achievement in
             let requirementData = try? JSONEncoder().encode(achievement.requirement)
-            let requirementData = try? JSONEncoder()
-                .encode(achievement.requirement)
-
-            let requirementString = requirementData
-                ?.base64EncodedString()
-                ?? ""
+            let requirementString = requirementData?.base64EncodedString() ?? ""
 
             return ExportedData.ExportedAchievement(
                 id: achievement.id.uuidString,
@@ -130,6 +126,7 @@ struct DataExportService: Sendable {
                 requirement: requirementString
             )
         }
+
 
         let exportData = ExportedData(
             exportDate: Date(),
@@ -151,6 +148,7 @@ struct DataExportService: Sendable {
     ///   - data: JSON data to import
     ///   - modelContext: SwiftData context to import into
     ///   - replaceExisting: Whether to replace existing data or merge
+    @MainActor
     static func importUserData(from data: Data, into modelContext: ModelContext, replaceExisting: Bool = false) throws {
         logger.info("Starting data import...")
 

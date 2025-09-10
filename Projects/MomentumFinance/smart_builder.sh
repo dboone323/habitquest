@@ -101,9 +101,9 @@ build_ios() {
 
 	# Try different iOS build strategies
 	local strategies=(
-		"platform=iOS Simulator,name=iPhone 15"
+		"platform=iOS Simulator,name=iPhone 16"
 		"generic/platform=iOS Simulator"
-		"platform=iOS Simulator,name=iPhone 14"
+		"platform=iOS Simulator,name=iPhone 16"
 	)
 
 	for strategy in "${strategies[@]}"; do
@@ -144,7 +144,7 @@ test_ios() {
 	local scheme="$1"
 	echo -e "${BLUE}🧪 Testing on iOS Simulator...${NC}"
 
-	if xcodebuild test -scheme "${scheme}" -destination "platform=iOS Simulator,name=iPhone 15"; then
+	if xcodebuild test -scheme "${scheme}" -destination "platform=iOS Simulator,name=iPhone 16"; then
 		echo -e "${GREEN}✅ iOS tests passed${NC}"
 		return 0
 	else

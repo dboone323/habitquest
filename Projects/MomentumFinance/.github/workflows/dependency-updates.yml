@@ -2,34 +2,36 @@
 name: Dependency Updates
 on:
   schedule:
+    - cron: '0 6 * * 1'
   workflow_dispatch:
+
 jobs:
   update-dependencies:
-name: Update Dependencies
-  runs-on: macos-latest
-  steps:
+    name: Update Dependencies
+    runs-on: macos-latest
+    steps:
       - name: Checkout Code
-  uses: actions/checkout@v4
+        uses: actions/checkout@v4
       - name: Check for SwiftLint Updates
-  run: |
+        run: |
           echo "🔍 Checking for SwiftLint updates..."
           current_version=$(swiftlint version 2>/dev/null || echo "not installed")
-  latest_version=$(curl -s https://api.github.com/repos/realm/SwiftLint/releases/latest | grep '"tag_name"' | cut -d'"' -f4)
-  echo "Current SwiftLint version: $current_version"
-  echo "Latest SwiftLint version: $latest_version"
+          latest_version=$(curl -s https://api.github.com/repos/realm/SwiftLint/releases/latest | grep '"tag_name"' | cut -d'"' -f4)
+          echo "Current SwiftLint version: $current_version"
+          echo "Latest SwiftLint version: $latest_version"
           if [[ "$current_version" != "$latest_version" ]]; then
-  echo "SwiftLint update available: $current_version -> $latest_version"
-    brew upgrade swiftlint || brew install swiftlint
+            echo "SwiftLint update available: $current_version -> $latest_version"
+            brew upgrade swiftlint || brew install swiftlint
+          else
+            echo "SwiftLint up-to-date"
           fi
-  run: |
-          echo "📦 Updating project dependencies..."
-          # This would include updating Swift packages, Cocoapods, etc.
-          # For now, we'll just document the current state
-            mkdir -p dependency_reports
+      - name: Document dependency state
+        run: |
+          echo "📦 Updating project dependencies (placeholder)..."
+          mkdir -p dependency_reports
           echo "Dependencies checked on $(date)" > dependency_reports/dependency_check.log
-    if: always()
-      uses: actions/github-script@v7
-      with:
-      script: |
-          // This would create a PR if updates are available
-          console.log('Dependency check completed');
+      - name: Finalize
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log('Dependency check completed');

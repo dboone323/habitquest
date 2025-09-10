@@ -7,3 +7,10 @@ Automation/logs/
 Automation/test_modify_target.txt*
 Automation/tasks/
 .trunk/
+
+# Node.js
+node_modules/
+**/node_modules/
+
+# macOS
+.DS_Store

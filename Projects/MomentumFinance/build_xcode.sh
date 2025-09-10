@@ -27,7 +27,7 @@ xcodebuild build \
     -project MomentumFinance.xcodeproj \
     -scheme MomentumFinance \
     -configuration Debug \
-    -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=latest' \
+    -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
     -derivedDataPath ./DerivedData \
     CODE_SIGN_IDENTITY="" \
     CODE_SIGNING_REQUIRED=NO \

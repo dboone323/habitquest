@@ -8,7 +8,7 @@ on:
 
 env:
   XCODE_VERSION: "15.0"
-  iOS_SIMULATOR: "iPhone 15 Pro"
+  iOS_SIMULATOR: "iPhone 16"
   iOS_VERSION: "17.0"
 
 jobs:
@@ -148,10 +148,10 @@ jobs:
                 .filter(f => f.includes('security_'))
                 .sort()
                 .pop();
-                
+
               if (latestReport) {
                 const reportContent = fs.readFileSync(`security_reports/${latestReport}`, 'utf8');
-                
+
                 // Check for critical issues
                 if (reportContent.includes('CRITICAL') || reportContent.includes('HIGH')) {
                   await github.rest.issues.create({

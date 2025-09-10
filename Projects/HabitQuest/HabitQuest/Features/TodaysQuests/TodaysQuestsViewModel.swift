@@ -72,8 +72,8 @@ class TodaysQuestsViewModel: ObservableObject {
         let earnedExperiencePoints = calculateXP(for: habit)
         awardXP(earnedExperiencePoints)
 
-        // Show completion message
-        completionMessage = "Quest completed! +\(earnedXP) XP"
+    // Show completion message
+    completionMessage = "Quest completed! +\(earnedExperiencePoints) XP"
         showingCompletionAlert = true
 
         // Refresh today's habits

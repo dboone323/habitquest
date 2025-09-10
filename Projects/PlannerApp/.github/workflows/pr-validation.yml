@@ -57,7 +57,7 @@ jobs:
             scheme=$(echo "$schemes" | head -n1 | xargs)
             if [[ -n "$scheme" ]]; then
               echo "Using scheme: $scheme"
-              xcodebuild -project "$proj" -scheme "$scheme" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14' clean build test | tee xcodebuild.log
+              xcodebuild -project "$proj" -scheme "$scheme" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 16' clean build test | tee xcodebuild.log
             else
               echo "No scheme found in $proj; skipping build/test"
             fi

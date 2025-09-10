@@ -6,9 +6,9 @@ on:
   pull_request:
     branches: [ main ]
 env:
-      XCODE_VERSION: "15.0"
-      iOS_SIMULATOR: "iPhone 15 Pro"
-      iOS_VERSION: "17.0"
+  XCODE_VERSION: "15.0"
+  iOS_SIMULATOR: "iPhone 16"
+  iOS_VERSION: "17.0"
 jobs:
   quality-gates:
 name: Quality Gates

@@ -327,7 +327,7 @@ run_proactive_integration_tests() {
 
   # Test 1: Build validation
   echo "  • Testing build integrity..."
-  if xcodebuild -project "$PROJECT_PATH/CodingReviewer.xcodeproj" -scheme CodingReviewer -destination 'platform=iOS Simulator,name=iPhone 14' clean build >/dev/null 2>&1; then
+  if xcodebuild -project "$PROJECT_PATH/CodingReviewer.xcodeproj" -scheme CodingReviewer -destination 'platform=macOS' clean build >/dev/null 2>&1; then
     test_results+=("✅ Build integrity test passed")
   else
     test_results+=("❌ Build integrity test failed")

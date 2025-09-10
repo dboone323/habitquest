@@ -35,7 +35,7 @@ BUILD_SUCCESS=false
 if [ "$SUPPORTS_IOS" = true ]; then
     echo "📱 Attempting iOS Simulator build..."
     set +e
-    xcodebuild -scheme "$1" -destination "platform=iOS Simulator,name=iPhone 15" build
+    xcodebuild -scheme "$1" -destination "platform=iOS Simulator,name=iPhone 16" build
     if [ $? -eq 0 ]; then
         echo "✅ iOS Simulator build successful!"
         BUILD_SUCCESS=true
@@ -61,7 +61,7 @@ if [ "$SUPPORTS_MACOS" = true ]; then
     set -e
 fi
 
-# Strategy 3: Generic iOS Simulator 
+# Strategy 3: Generic iOS Simulator
 if [ "$SUPPORTS_IOS" = true ]; then
     echo "📱 Attempting generic iOS Simulator build..."
     set +e

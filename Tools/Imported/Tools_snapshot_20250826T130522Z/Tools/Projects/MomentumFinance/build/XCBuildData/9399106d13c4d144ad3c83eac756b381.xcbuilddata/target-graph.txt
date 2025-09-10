@@ -1,2 +1,0 @@
-Target dependency graph (1 target)
-Target 'MomentumFinance' in project 'MomentumFinance' (no dependencies)

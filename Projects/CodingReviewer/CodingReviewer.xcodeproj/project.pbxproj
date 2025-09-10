@@ -32,6 +32,13 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		688DD4A92E282B6D0020150F /* CodingReviewer */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D0F0E1A12F9A5C1B00ABC123 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
 			path = CodingReviewer;
 			sourceTree = "<group>";
 		};
@@ -46,6 +53,19 @@
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D0F0E1A12F9A5C1B00ABC123 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ai_config.json,
+				build_learning.json,
+				learning_database.json,
+				patterns.json,
+			);
+			target = 688DD4A62E282B6D0020150F /* CodingReviewer */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		688DD4A42E282B6D0020150F /* Frameworks */ = {
@@ -333,6 +353,58 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CodingReviewer/Info.plist;
 				SWIFT_VERSION = 6.0;
+				/* Exclude duplicate-prone files and automation dirs from implicit packaging */
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					"README.md",
+					"**/README.md",
+					"*.md",
+					"*.MD",
+					/* Prevent duplicate resource copies from hidden automation dirs */
+					"ai_config.json",
+					"build_learning.json",
+					"learning_database.json",
+					"patterns.json",
+				);
+				/* Whitelist typical source/resource types to avoid packaging stray JSON files */
+				INCLUDED_SOURCE_FILE_NAMES = (
+					"*.swift",
+					"*.h",
+					"*.m",
+					"*.mm",
+					"*.hpp",
+					"*.cpp",
+					"*.metal",
+					"*.xcassets",
+					"*.storyboard",
+					"*.xib",
+					"*.strings",
+					"*.plist",
+					"*.entitlements",
+					"*.png",
+					"*.jpg",
+					"*.jpeg",
+					"*.gif",
+					"*.pdf",
+				);
+				EXCLUDED_INSTALLSRC_SUBDIRECTORY_NAMES = (
+					".ai_integration",
+					".ultra_ai_amplifier",
+					".ai_build_system",
+					".build_validator",
+					".automation_learning",
+					".enhanced_automation",
+					".ml_automation",
+					".advanced_debugging_assistant",
+					".proactive_error_prevention",
+					".ai_training",
+					".ai_learning_system",
+					".secure",
+					".protected_backups",
+					".ultra_protected_backups",
+					"TestFiles_Manual",
+					"Tests",
+					"Temp",
+				);
 			};
 			name = Debug;
 		};
@@ -392,6 +464,58 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CodingReviewer/Info.plist;
 				SWIFT_VERSION = 6.0;
+				/* Exclude duplicate-prone files and automation dirs from implicit packaging */
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					"README.md",
+					"**/README.md",
+					"*.md",
+					"*.MD",
+					/* Prevent duplicate resource copies from hidden automation dirs */
+					"ai_config.json",
+					"build_learning.json",
+					"learning_database.json",
+					"patterns.json",
+				);
+				/* Whitelist typical source/resource types to avoid packaging stray JSON files */
+				INCLUDED_SOURCE_FILE_NAMES = (
+					"*.swift",
+					"*.h",
+					"*.m",
+					"*.mm",
+					"*.hpp",
+					"*.cpp",
+					"*.metal",
+					"*.xcassets",
+					"*.storyboard",
+					"*.xib",
+					"*.strings",
+					"*.plist",
+					"*.entitlements",
+					"*.png",
+					"*.jpg",
+					"*.jpeg",
+					"*.gif",
+					"*.pdf",
+				);
+				EXCLUDED_INSTALLSRC_SUBDIRECTORY_NAMES = (
+					".ai_integration",
+					".ultra_ai_amplifier",
+					".ai_build_system",
+					".build_validator",
+					".automation_learning",
+					".enhanced_automation",
+					".ml_automation",
+					".advanced_debugging_assistant",
+					".proactive_error_prevention",
+					".ai_training",
+					".ai_learning_system",
+					".secure",
+					".protected_backups",
+					".ultra_protected_backups",
+					"TestFiles_Manual",
+					"Tests",
+					"Temp",
+				);
 			};
 			name = Release;
 		};
@@ -426,6 +550,74 @@
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
+				/* Exclude automation/config/docs from target to prevent duplicate resource copies */
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					"README.md",
+					"**/README.md",
+					"TestFiles_Manual/README.md",
+					"Tests/README.md",
+					".ai_integration/**",
+					".ultra_ai_amplifier/**",
+					".ai_build_system/**",
+					".build_validator/**",
+					".automation_learning/**",
+					".enhanced_automation/**",
+					".ml_automation/**",
+					".advanced_debugging_assistant/**",
+					".proactive_error_prevention/**",
+					".ai_training/**",
+					".ai_learning_system/**",
+					".secure/**",
+					".protected_backups/**",
+					".ultra_protected_backups/**",
+					"Temp/**",
+					/* Prevent duplicate resource copies from hidden automation dirs */
+					"ai_config.json",
+					"build_learning.json",
+					"learning_database.json",
+					"patterns.json",
+				);
+				/* Whitelist typical source/resource types to avoid packaging stray JSON files */
+				INCLUDED_SOURCE_FILE_NAMES = (
+					"*.swift",
+					"*.h",
+					"*.m",
+					"*.mm",
+					"*.hpp",
+					"*.cpp",
+					"*.metal",
+					"*.xcassets",
+					"*.storyboard",
+					"*.xib",
+					"*.strings",
+					"*.plist",
+					"*.entitlements",
+					"*.png",
+					"*.jpg",
+					"*.jpeg",
+					"*.gif",
+					"*.pdf",
+				);
+				/* Exclude entire hidden automation directories from install packaging */
+				EXCLUDED_INSTALLSRC_SUBDIRECTORY_NAMES = (
+					".ai_integration",
+					".ultra_ai_amplifier",
+					".ai_build_system",
+					".build_validator",
+					".automation_learning",
+					".enhanced_automation",
+					".ml_automation",
+					".advanced_debugging_assistant",
+					".proactive_error_prevention",
+					".ai_training",
+					".ai_learning_system",
+					".secure",
+					".protected_backups",
+					".ultra_protected_backups",
+					"TestFiles_Manual",
+					"Tests",
+					"Temp",
+				);
 			};
 			name = Debug;
 		};
@@ -460,6 +652,74 @@
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				   SWIFT_VERSION = 6.0;
+				   /* Exclude automation/config/docs from target to prevent duplicate resource copies */
+				   EXCLUDED_SOURCE_FILE_NAMES = (
+				   	"README.md",
+				   	"**/README.md",
+				   	"TestFiles_Manual/README.md",
+				   	"Tests/README.md",
+				   	".ai_integration/**",
+				   	".ultra_ai_amplifier/**",
+				   	".ai_build_system/**",
+				   	".build_validator/**",
+				   	".automation_learning/**",
+				   	".enhanced_automation/**",
+				   	".ml_automation/**",
+				   	".advanced_debugging_assistant/**",
+				   	".proactive_error_prevention/**",
+				   	".ai_training/**",
+				   	".ai_learning_system/**",
+				   	".secure/**",
+				   	".protected_backups/**",
+				   	".ultra_protected_backups/**",
+				   	"Temp/**",
+			   	/* Prevent duplicate resource copies from hidden automation dirs */
+			   	"ai_config.json",
+			   	"build_learning.json",
+			   	"learning_database.json",
+			   	"patterns.json",
+				   );
+				   /* Whitelist typical source/resource types to avoid packaging stray JSON files */
+				   INCLUDED_SOURCE_FILE_NAMES = (
+				   	"*.swift",
+				   	"*.h",
+				   	"*.m",
+				   	"*.mm",
+				   	"*.hpp",
+				   	"*.cpp",
+				   	"*.metal",
+				   	"*.xcassets",
+				   	"*.storyboard",
+				   	"*.xib",
+				   	"*.strings",
+				   	"*.plist",
+				   	"*.entitlements",
+				   	"*.png",
+				   	"*.jpg",
+				   	"*.jpeg",
+				   	"*.gif",
+				   	"*.pdf",
+				   );
+			   /* Exclude entire hidden automation directories from install packaging */
+			   EXCLUDED_INSTALLSRC_SUBDIRECTORY_NAMES = (
+			   	".ai_integration",
+			   	".ultra_ai_amplifier",
+			   	".ai_build_system",
+			   	".build_validator",
+			   	".automation_learning",
+			   	".enhanced_automation",
+			   	".ml_automation",
+			   	".advanced_debugging_assistant",
+			   	".proactive_error_prevention",
+			   	".ai_training",
+			   	".ai_learning_system",
+			   	".secure",
+			   	".protected_backups",
+			   	".ultra_protected_backups",
+			   	"TestFiles_Manual",
+			   	"Tests",
+			   	"Temp",
+			   );
 			};
 			name = Release;
 		};

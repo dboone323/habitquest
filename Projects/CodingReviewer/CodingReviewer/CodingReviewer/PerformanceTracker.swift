@@ -72,16 +72,16 @@ class PerformanceTracker {
 
     private func getCurrentMemoryUsage() -> UInt64 {
         var info = mach_task_basic_info()
-        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
+        var count = mach_msg_type_number_t(MemoryLayout.size(ofValue: info) / MemoryLayout<integer_t>.size)
 
-        // Use safer memory management approach
-        let result = info.withUnsafeMutableBytes { (ptr: UnsafeMutableRawBufferPointer) -> kern_return_t in
-            ptr.withMemoryRebound(to: integer_t.self) { (reboundPtr: UnsafeMutablePointer<integer_t>) -> kern_return_t in
-                task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), reboundPtr, &count)
+        // Query task info using proper pointer rebinding
+        let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) { infoPtr in
+            infoPtr.withMemoryRebound(to: integer_t.self, capacity: Int(count)) { intPtr in
+                task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), intPtr, &count)
             }
         }
 
-        return result == KERN_SUCCESS ? info.resident_size : 0
+        return kerr == KERN_SUCCESS ? UInt64(info.resident_size) : 0
     }
 
     func generateReport() -> String {

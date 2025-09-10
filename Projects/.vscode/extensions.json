@@ -2,6 +2,14 @@
   "recommendations": [
     "swiftlang.swift-vscode",
     "github.vscode-github-actions",
-    "streetsidesoftware.code-spell-checker"
+    "streetsidesoftware.code-spell-checker",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-python.python",
+    "ms-python.black-formatter",
+    "swiftformat.swiftformat-vscode",
+    "gitlab.commitizen",
+    "eamodio.gitlens",
+    "ollama.vscode-ollama"
   ]
 }

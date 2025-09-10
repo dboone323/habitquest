@@ -131,7 +131,8 @@ struct APIKeySetupView: View {
                         .disabled(tempKey.isEmpty)
                         .buttonStyle(.borderedProminent)
                     }
-                } Spacer()
+                }
+                Spacer()
             }
             .padding()
             .navigationTitle("API Key Setup")

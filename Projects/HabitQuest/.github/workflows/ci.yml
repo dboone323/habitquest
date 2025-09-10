@@ -96,7 +96,7 @@ jobs:
           until [ $attempt -ge $retries ]; do
             attempt=$((attempt+1))
             echo "Attempt $attempt of $retries: running validation"
-            if swiftlint lint; then
+            if swiftlint lint --config Tools/Config/UNIFIED_SWIFTLINT_ROOT.yml; then
               echo "Validation passed after attempt $attempt"
               break
             else
@@ -155,14 +155,14 @@ jobs:
         run: brew install swiftlint
       - name: Install SwiftFormat
         run: brew install swiftformat
-      - name: Format Swift code
-        run: swiftformat . --config .swiftformat || echo "SwiftFormat config not found, using defaults"
-      - name: Run SwiftLint
+      - name: Format Swift code (unified config)
+        run: swiftformat . --config Tools/Config/UNIFIED_SWIFTFORMAT_ROOT || echo "SwiftFormat run completed with non-fatal issues"
+      - name: Run SwiftLint (unified config)
         run: |
           if [ "${{ env.QUIET_MODE }}" = "true" ]; then
-            swiftlint lint || true
+            swiftlint lint --config Tools/Config/UNIFIED_SWIFTLINT_ROOT.yml || true
           else
-            swiftlint lint --reporter github-actions-logging
+            swiftlint lint --config Tools/Config/UNIFIED_SWIFTLINT_ROOT.yml --reporter github-actions-logging
           fi
 
   security:

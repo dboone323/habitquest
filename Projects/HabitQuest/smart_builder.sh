@@ -103,7 +103,7 @@ build_ios() {
 	local strategies=(
 		"platform=iOS Simulator,name=iPhone 16"
 		"generic/platform=iOS Simulator"
-		"platform=iOS Simulator,name=iPhone 14"
+		"platform=iOS Simulator,name=iPhone 16"
 	)
 
 	for strategy in "${strategies[@]}"; do

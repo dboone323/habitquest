@@ -8,7 +8,7 @@ enum GameRules {
     /// Uses an exponential curve: 100 * (1.5 ^ (level - 1))
     /// - Parameter level: The target level
     /// - Returns: Total XP needed to reach that level
-    static func calculateXPForLevel(_ level: Int) -> Int {
+    nonisolated static func calculateXPForLevel(_ level: Int) -> Int {
         guard level > 0 else { return 0 }
         return Int(100 * pow(1.5, Double(level - 1)))
     }
@@ -16,7 +16,7 @@ enum GameRules {
     /// Calculate XP needed for the next level from current level
     /// - Parameter level: Current level
     /// - Returns: XP needed to reach the next level
-    static func calculateXPForNextLevel(forLevel level: Int) -> Int {
+    nonisolated static func calculateXPForNextLevel(forLevel level: Int) -> Int {
         calculateXPForLevel(
             level + 1
         )

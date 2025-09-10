@@ -150,7 +150,7 @@ enum HabitDifficulty: String, CaseIterable, Codable {
     case hard
 
     /// Experience point multiplier based on difficulty
-    var xpMultiplier: Int {
+    nonisolated var xpMultiplier: Int {
         switch self {
         case .easy: 1
         case .medium: 2

@@ -1,24 +1,58 @@
 {
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "swiftlang.swift-vscode",
-  "editor.trimAutoWhitespace": true,
-  "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
-  "files.exclude": {
-    "**/DerivedData": true,
-    "**/.build": true,
-    "**/Pods": true,
-    "**/Carthage": true
-  },
-  "search.exclude": {
-    "**/DerivedData": true,
-    "**/.build": true
-  },
-  "swiftformat.configPath": "Tools/Config/UNIFIED_SWIFTFORMAT_ROOT",
-  "swiftlint.configPath": "Tools/Config/UNIFIED_SWIFTLINT_ROOT.yml",
-  "[swift]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "swiftlang.swift-vscode",
+    "editor.trimAutoWhitespace": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    // Language specific default formatters
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python"
+    },
+    "[swift]": {
+        "editor.defaultFormatter": "swiftlang.swift-vscode",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "never"
+        }
+    },
+    // Linting / formatting tools
+    "eslint.enable": true,
     "editor.codeActionsOnSave": {
-      "source.organizeImports": "never"
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.codeActionsOnSave.rules": null,
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "black",
+    // Unified Swift tool config paths
+    "swiftformat.configPath": "Tools/Config/UNIFIED_SWIFTFORMAT_ROOT",
+    "swiftlint.configPath": "Tools/Config/UNIFIED_SWIFTLINT_ROOT.yml",
+    // Ollama AI integration
+    "ollama.enable": true,
+    "ollama.model": "codellama-7b",
+    "ollama.promptTemplate": "You are a senior engineer. Help me write/understand the following code:\n\n{{code}}",
+    // Commit assistant (GitLab Commitizen placeholder)
+    "gitlab.commitizen.enable": true,
+    // Terminal / shell preferences
+    "terminal.integrated.shell.osx": "/bin/zsh",
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    // Exclusions
+    "files.exclude": {
+        "**/DerivedData": true,
+        "**/.build": true,
+        "**/Pods": true,
+        "**/Carthage": true
+    },
+    "search.exclude": {
+        "**/DerivedData": true,
+        "**/.build": true
+    },
+    "[ignore]": {
+        "editor.defaultFormatter": "trunk.io"
     }
-  }
 }
