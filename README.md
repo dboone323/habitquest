@@ -1,166 +1,106 @@
-# Unified Code Architecture 🏗️
+# Quantum Workspace
 
-Welcome to your unified development environment! This structure maximizes code reuse, streamlines automation, and accelerates development across all your iOS projects.
+A comprehensive development environment for iOS/macOS applications with advanced automation, AI integration, and cross-platform capabilities.
 
 ## 🚀 Quick Start
 
-```bash
-# Open unified workspace
-code Code.code-workspace
+1. **Clone and Setup**:
+   ```bash
+   git clone <repository-url>
+   cd Quantum-workspace
+   ./Tools/scripts/setup_workspace.sh
+   ```
 
-# Check architecture status
-./Tools/Automation/master_automation.sh status
+2. **Install Dependencies**:
+   ```bash
+   ./Tools/Automation/setup_venv.sh
+   pre-commit install
+   ```
 
-# Run automation for all projects
-./Tools/Automation/master_automation.sh all
+3. **Open in VS Code**:
+   - Use Dev Containers for full environment
+   - Or open directly with local development setup
 
-# List all projects
-./Tools/Automation/master_automation.sh list
+## 📁 Workspace Structure
+
+```
+Quantum-workspace/
+├── 📱 Projects/           # Main application projects
+│   ├── AvoidObstaclesGame/
+│   ├── CodingReviewer/
+│   ├── HabitQuest/
+│   ├── MomentumFinance/
+│   └── PlannerApp/
+├── 🔧 Tools/             # Development tools & automation
+│   ├── Automation/       # CI/CD & deployment scripts
+│   ├── Config/          # Configuration files
+│   ├── Containers/      # Docker setup
+│   ├── Monitoring/      # Performance monitoring
+│   ├── scripts/         # Utility scripts
+│   └── logs/            # Log files
+├── 🔗 Shared/            # Shared components
+│   ├── Intelligence/    # AI/ML components
+│   ├── Sources/         # Shared Swift code
+│   └── Testing/         # Test utilities
+├── 🧪 Testing/           # Test project versions
+├── 📚 docs/              # Documentation
+└── ⚙️ .workspace/        # Consolidated config
+    ├── .vscode/         # VS Code settings
+    ├── .github/         # GitHub workflows
+    └── .trunk/          # Code quality tools
 ```
 
-## 📁 Directory Structure
+## 🎯 Key Features
 
-```
-Code/
-├── Projects/                 # Individual applications
-│   ├── CodingReviewer/      # 132 Swift files - Code review app (macOS)
-│   ├── AvoidObstaclesGame/  # 8 Swift files - Game project (iOS)
-│   ├── PlannerApp/          # 57 Swift files - Planning app (macOS, iOS)
-│   ├── MomentumFinance/     # Finance app (macOS, iOS)
-│   └── HabitQuest/          # Habit tracking app (iOS)
-├── Shared/                   # Reusable components across projects
-│   ├── Components/          # UI components, utilities, etc.
-│   ├── Utilities/           # Helper functions and extensions
-│   ├── Models/              # Data models
-│   └── Protocols/           # Shared interfaces
-├── Tools/                    # Development tools and automation
-│   ├── Automation/          # Cross-project automation scripts
-│   ├── Testing/             # Shared testing utilities
-│   └── Build/               # Build scripts and configurations
-├── Documentation/           # Project documentation
-├── Templates/               # Project templates and boilerplates
-└── Scripts/                 # Utility scripts
-```
+### 🤖 AI-Powered Development
+- Intelligent code review and enhancement
+- Automated testing and validation
+- Smart build and deployment systems
 
-## ✨ Benefits of Unified Architecture
+### 🔄 Advanced Automation
+- Multi-project CI/CD pipelines
+- Automated dependency management
+- Workflow orchestration and monitoring
 
-- **25-35% Faster Development**: Shared components reduce duplication
-- **Unified Testing**: Cross-project test suites and standards
-- **Centralized Automation**: One system manages all projects
-- **Better Code Reuse**: Shared directory encourages modular design
-- **Simplified Management**: Single workspace for all projects
-- **Cross-Project Learning**: Patterns and solutions shared across apps
+### 📊 Comprehensive Monitoring
+- Real-time performance tracking
+- Build status dashboards
+- Quality metrics and reporting
 
-## 🛠️ Automation Tools
+### 🛠️ Development Excellence
+- SwiftFormat & SwiftLint integration
+- Pre-commit hooks for code quality
+- Cross-platform build support
 
-### Workflow Deployment
+## 📚 Documentation
 
-Deploy GitHub Actions workflows across all projects:
+- **[Full Documentation](docs/)** - Complete guides and references
+- **[Architecture](docs/architecture/)** - System design docs
+- **[Enhancements](docs/enhancements/)** - AI features
+- **[Guides](docs/guides/)** - Tutorials and setup
 
-```bash
-# Deploy to all projects
-./Tools/Automation/deploy_workflows_all_projects.sh
+## 🏗️ Projects
 
-# Validate workflows only (fail on errors)
-./Tools/Automation/deploy_workflows_all_projects.sh --validate
+### iOS Applications
+- **AvoidObstaclesGame** - iOS game with obstacle avoidance mechanics
+- **HabitQuest** - Habit tracking and gamification app
+- **MomentumFinance** - Financial management and tracking
+- **PlannerApp** - Task planning and organization tool
 
-# Validate but continue on errors (non-blocking)
-./Tools/Automation/deploy_workflows_all_projects.sh --validate --allow-failures
+### Development Tools
+- **CodingReviewer** - AI-powered code review and analysis tool
 
-# Deploy to specific project
-./Tools/Automation/deploy_workflows_all_projects.sh --project CodingReviewer
-```
+## 🚀 Development Workflow
 
-### Copilot Instructions Sync
+1. **Local Development**: Use VS Code with local Swift toolchain
+2. **Container Development**: Use Dev Containers for consistent environment
+3. **Testing**: Use test versions in `Testing/` folder
+4. **CI/CD**: Automated pipelines handle building and deployment
 
-Synchronize Copilot instructions across projects:
+## 🤝 Contributing
 
-```bash
-./Tools/Automation/copy_copilot_to_projects.sh
-```
+See [Contributing Guide](docs/guides/CONTRIBUTING.md) for development guidelines.
 
-### Master Automation System
+## 📄 License
 
-The unified architecture includes a powerful automation controller:
-
-The unified architecture includes a powerful automation controller:
-
-### Commands
-
-```bash
-# Show architecture overview
-./Tools/Automation/master_automation.sh status
-
-# List all projects with details
-./Tools/Automation/master_automation.sh list
-
-# Run automation for specific project
-./Tools/Automation/master_automation.sh run CodingReviewer
-
-# Run automation for all projects
-./Tools/Automation/master_automation.sh all
-```
-
-### Current Project Status
-
-- **CodingReviewer**: 132 Swift files - Code review app (macOS)
-- **AvoidObstaclesGame**: 8 Swift files - Game project (iOS) (✅ automation ready)
-- **PlannerApp**: 57 Swift files - Planning app (macOS, iOS) (✅ automation ready)
-- **MomentumFinance**: Finance app (macOS, iOS) - _Project structure TBD_
-- **HabitQuest**: Habit tracking app (iOS) - _Project structure TBD_
-
-## 🎯 Next Steps
-
-1. **Open Workspace**: `code Code.code-workspace`
-2. **Run Analysis**: Test automation across all projects
-3. **Identify Shared Code**: Look for common patterns to move to Shared/
-4. **Create Components**: Build reusable UI components
-5. **Optimize Automation**: Customize workflows for your needs
-
-## 🚀 Advanced Features
-
-### Cross-Project Analysis
-
-- Identify duplicate code across projects
-- Find patterns that can be shared
-- Optimize build processes
-- Unify testing strategies
-
-### Shared Component Library
-
-- Move common UI elements to Shared/Components
-- Create utility functions in Shared/Utilities
-- Build shared data models
-- Establish common protocols
-
-### Development Workflow
-
-- Single workspace for all projects
-- Unified automation system
-- Centralized documentation
-- Shared templates and scripts
-
----
-
-**Migration completed successfully!** 🎉  
-_Your projects are now organized for maximum efficiency and code reuse._
-
-## 🛠️ New Automation Features
-
-### Enhanced Workflow Validation
-
-The workflow deployment script now includes improved validation options:
-
-- **Strict Validation**: `--validate` fails on any YAML syntax errors
-- **Non-blocking Validation**: `--validate --allow-failures` continues despite errors
-- **Project-specific Deployment**: `--project <name>` deploys to individual projects
-
-### Copilot Instructions Sync
-
-New script to synchronize Copilot instructions across all projects:
-
-```bash
-./Tools/Automation/copy_copilot_to_projects.sh
-```
-
-This ensures consistent AI assistance across your entire workspace.
+See individual project licenses for details.
