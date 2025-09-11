@@ -1,0 +1,27 @@
+[
+    {
+        "file": "AvoidObstaclesGame/AvoidObstaclesGame/GameScene.swift",
+        "line": 42,
+        "text": "TODO: Refactor collision detection logic for better performance."
+    },
+    {
+        "file": "CodingReviewer/CodingReviewer/ReviewEngine.swift",
+        "line": 15,
+        "text": "TODO: Add support for multi-language code review."
+    },
+    {
+        "file": "HabitQuest/HabitQuest/QuestManager.swift",
+        "line": 88,
+        "text": "TODO: Implement streak freeze feature."
+    },
+    {
+        "file": "MomentumFinance/MomentumFinance/FinanceTracker.swift",
+        "line": 27,
+        "text": "TODO: Integrate with external budgeting APIs."
+    },
+    {
+        "file": "PlannerApp/PlannerApp/PlannerView.swift",
+        "line": 60,
+        "text": "TODO: Add drag-and-drop for tasks."
+    }
+]

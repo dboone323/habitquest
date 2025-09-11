@@ -1,6 +1,10 @@
 {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "swiftlang.swift-vscode",
+    // Language specific formatter for YAML
+    "[yaml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
     "editor.trimAutoWhitespace": true,
     "files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true,
@@ -54,5 +58,15 @@
     },
     "[ignore]": {
         "editor.defaultFormatter": "trunk.io"
-    }
+    },
+    // Gemini Code Assist
+    "gemini.enable": true,
+    "gemini.suggestOnSave": true,
+    // Trunk Code Quality
+    "trunk.enable": true,
+    "trunk.lintOnSave": true,
+    // GitHub Copilot Chat
+    "github.copilot.enable": true,
+    "github.copilot.inlineSuggest.enable": true,
+    "github.copilotChat.enable": true
 }
