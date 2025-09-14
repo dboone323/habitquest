@@ -22,17 +22,17 @@ struct ThemeSettingsView: View {
             .navigationTitle("Appearance")
             .toolbar {
                 #if os(iOS)
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Done") {
-                            dismiss()
-                        }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done").accessibilityLabel("Button") {
+                        dismiss()
                     }
+                }
                 #else
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Done") {
-                            dismiss()
-                        }
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Done").accessibilityLabel("Button") {
+                        dismiss()
                     }
+                }
                 #endif
             }
             .onAppear {
@@ -123,7 +123,7 @@ struct ThemeSettingsView: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
                         .strokeBorder(Color.gray.opacity(0.2), lineWidth: 1),
-                )
+                    )
 
             Text(name)
                 .font(.caption)

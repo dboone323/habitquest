@@ -21,21 +21,23 @@ struct QuestLogView: View {
                 }
             }
             .navigationTitle("Quest Log")
-            .toolbar {
+            .toolbar(content: {
                 #if os(iOS)
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Filter") {
-                            viewModel.showingAddQuest = true
-                        }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Filter") {
+                        viewModel.showingAddQuest = true
                     }
+                    .accessibilityLabel("Filter Button")
+                }
                 #else
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Filter") {
-                            viewModel.showingFilterOptions = true
-                        }
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Filter") {
+                        viewModel.showingFilterOptions = true
                     }
+                    .accessibilityLabel("Filter Button")
+                }
                 #endif
-            }
+            })
             .sheet(isPresented: $viewModel.showingAddQuest) {
                 AddEditQuestView(
                     habit: nil,
@@ -205,9 +207,10 @@ private struct AddEditQuestView: View {
         NavigationView {
             Form {
                 Section("Quest Details") {
-                    TextField("Quest Name", text: $name)
+                    TextField("Quest Name", text: $name).accessibilityLabel("Text Field")
                     TextField("Description", text: $description, axis: .vertical)
-                        .lineLimit(3 ... 6)
+                        .accessibilityLabel("Text Field")
+                        .lineLimit(3...6)
                 }
 
                 Section("Quest Settings") {
@@ -217,7 +220,7 @@ private struct AddEditQuestView: View {
                         }
                     }
 
-                    Stepper("XP Reward: \(xpValue)", value: $xpValue, in: 5 ... 100, step: 5)
+                    Stepper("XP Reward: \(xpValue)", value: $xpValue, in: 5...100, step: 5)
                 }
 
                 if isEditing, let habit {
@@ -252,12 +255,14 @@ private struct AddEditQuestView: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .accessibilityLabel("Cancel")
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(isEditing ? "Save" : "Add") {
                         saveQuest()
                     }
+                    .accessibilityLabel(isEditing ? "Save" : "Add")
                     .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }

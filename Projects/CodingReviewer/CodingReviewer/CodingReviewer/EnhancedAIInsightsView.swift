@@ -156,11 +156,13 @@ struct AIMLHeaderView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(mlService.isAnalyzing)
+                .accessibilityLabel("Button")
 
                 Button("Detailed View") {
                     onShowFullAnalysis()
                 }
                 .buttonStyle(.bordered)
+                .accessibilityLabel("Button")
             }
         }
         .padding()
@@ -209,7 +211,8 @@ struct MLInsightsView: View {
                     EmptyMLStateView(
                         icon: "brain.head.profile",
                         title: "No ML Insights Yet",
-                        description: "Run ML analysis to see intelligent insights about your code patterns and automation.",
+                        description:
+                            "Run ML analysis to see intelligent insights about your code patterns and automation.",
                         action: {
                             Task {
                                 await mlService.analyzeProjectWithML()
@@ -363,7 +366,8 @@ struct PredictiveAnalysisView: View {
                                     .font(.caption)
                                     .fontWeight(.medium)
 
-                                ForEach(prediction.riskAssessment.criticalRisks, id: \.self) { risk in
+                                ForEach(prediction.riskAssessment.criticalRisks, id: \.self) {
+                                    risk in
                                     Text("• \(risk)")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
@@ -388,15 +392,19 @@ struct PredictiveAnalysisView: View {
                             HStack {
                                 Text("Build Time Increase:")
                                 Spacer()
-                                Text("+\(Int(prediction.performanceForecasting.buildTimeIncrease))%")
-                                    .fontWeight(.semibold)
+                                Text(
+                                    "+\(Int(prediction.performanceForecasting.buildTimeIncrease))%"
+                                )
+                                .fontWeight(.semibold)
                             }
 
                             HStack {
                                 Text("Memory Usage Growth:")
                                 Spacer()
-                                Text("+\(Int(prediction.performanceForecasting.memoryUsageGrowth))%")
-                                    .fontWeight(.semibold)
+                                Text(
+                                    "+\(Int(prediction.performanceForecasting.memoryUsageGrowth))%"
+                                )
+                                .fontWeight(.semibold)
                             }
 
                             VStack(alignment: .leading, spacing: 4) {
@@ -404,7 +412,9 @@ struct PredictiveAnalysisView: View {
                                     .font(.caption)
                                     .fontWeight(.medium)
 
-                                ForEach(prediction.performanceForecasting.recommendations, id: \.self) { rec in
+                                ForEach(
+                                    prediction.performanceForecasting.recommendations, id: \.self
+                                ) { rec in
                                     Text("• \(rec)")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
@@ -417,7 +427,8 @@ struct PredictiveAnalysisView: View {
                     EmptyMLStateView(
                         icon: "crystal.ball",
                         title: "No Predictions Available",
-                        description: "Run predictive analytics to see project forecasting and risk assessment.",
+                        description:
+                            "Run predictive analytics to see project forecasting and risk assessment.",
                         action: {
                             Task {
                                 await mlService.analyzeProjectWithML()
@@ -483,7 +494,8 @@ struct CrossProjectLearningView: View {
                     EmptyMLStateView(
                         icon: "graduationcap",
                         title: "No Cross-Project Learnings",
-                        description: "Run cross-project analysis to discover transferable patterns and insights.",
+                        description:
+                            "Run cross-project analysis to discover transferable patterns and insights.",
                         action: {
                             Task {
                                 await mlService.analyzeProjectWithML()
@@ -633,7 +645,9 @@ struct RealtimeMLView: View {
 
                 QuickStatCard(
                     title: "Confidence",
-                    value: mlService.mlInsights.isEmpty ? "N/A" : "\(Int(mlService.mlInsights.map(\.confidence).reduce(0, +) / Double(mlService.mlInsights.count) * 100))%",
+                    value: mlService.mlInsights.isEmpty
+                        ? "N/A"
+                        : "\(Int(mlService.mlInsights.map(\.confidence).reduce(0, +) / Double(mlService.mlInsights.count) * 100))%",
                     icon: "checkmark.seal",
                     color: .orange
                 )
@@ -719,6 +733,7 @@ struct EmptyMLStateView: View {
                 action()
             }
             .buttonStyle(.borderedProminent)
+            .accessibilityLabel("Button")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
@@ -748,6 +763,7 @@ struct FullMLAnalysisView: View {
                     Button("Close") {
                         dismiss()
                     }
+                    .accessibilityLabel("Button")
                 }
             }
         }
@@ -783,7 +799,9 @@ struct UploadedFilesDisplayView: View {
 
             // Language breakdown
             let languageGroups = Dictionary(grouping: files, by: { $0.language })
-            let sortedLanguages = Array(Set(files.map(\.language))).sorted(by: { $0.displayName < $1.displayName })
+            let sortedLanguages = Array(Set(files.map(\.language))).sorted(by: {
+                $0.displayName < $1.displayName
+            })
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
                 ForEach(sortedLanguages, id: \.self) { language in

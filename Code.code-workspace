@@ -43,11 +43,11 @@
         "editor.codeActions.triggerOnFocusChange": true,
         "github.copilot.chat.codesearch.enabled": true,
         "github.copilot.chat.languageContext.fix.typescript.enabled": true,
-        "chat.mcp.autostart": "newAndOutdated"
+        "chat.mcp.autostart": "newAndOutdated",
+        "chat.agent.maxRequests": 1000
     },
     "extensions": {
         "recommendations": [
-            "sswg.swift-lang",
             "ms-python.python",
             "ms-vscode.vscode-json"
         ]

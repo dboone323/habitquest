@@ -66,8 +66,7 @@ final class Achievement {
          category: AchievementCategory,
          xpReward: Int = 50,
          isHidden: Bool = false,
-         requirement: AchievementRequirement)
-    {
+         requirement: AchievementRequirement) {
         self.id = UUID()
         self.name = name
         self.achievementDescription = description

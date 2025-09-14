@@ -1,12 +1,13 @@
 // PlannerApp/Views/Settings/SettingsView.swift
 
+import Foundation
 import LocalAuthentication
 import SwiftUI
 import UserNotifications
+
 #if os(macOS)
     import AppKit
 #endif
-import Foundation
 
 struct SettingsView: View {
     @EnvironmentObject var themeManager: ThemeManager
@@ -31,7 +32,7 @@ struct SettingsView: View {
                     HStack {
                         Text("Name")
                         Spacer()
-                        TextField("Your Name", text: $userName)
+                        TextField("Your Name", text: $userName).accessibilityLabel("Text Field")
                             .multilineTextAlignment(.trailing)
                     }
                 }
@@ -45,6 +46,7 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(.menu)
+                    .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                     Button(action: { showingThemePreview = true }) {
                         HStack {
@@ -59,19 +61,23 @@ struct SettingsView: View {
                         }
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel("Theme Preview Button")
+                    .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
                 }
-                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // Dashboard Section
                 Section("Dashboard") {
-                    Stepper("Items per section: \(dashboardItemLimit)", value: $dashboardItemLimit, in: 1 ... 10)
+                    Stepper(
+                        "Items per section: \(dashboardItemLimit)", value: $dashboardItemLimit,
+                        in: 1...10)
                 }
                 .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // Notifications Section
                 Section("Notifications") {
                     Toggle("Enable Notifications", isOn: $notificationsEnabled)
-                        .modifier(NotificationToggleModifier(notificationsEnabled: $notificationsEnabled))
+                        .modifier(
+                            NotificationToggleModifier(notificationsEnabled: $notificationsEnabled))
                 }
                 .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
@@ -92,7 +98,9 @@ struct SettingsView: View {
             }
             .alert("Notification Permissions", isPresented: $showingNotificationAlert) {
                 Button("Open Settings", action: openAppSettings)
-                Button("Cancel", role: .cancel) {}
+                    .accessibilityLabel("Open Settings Button")
+                Button("Cancel", role: .cancel, action: {})
+                    .accessibilityLabel("Cancel Button")
             } message: {
                 Text("Enable notifications in Settings to receive reminders.")
             }
@@ -102,7 +110,8 @@ struct SettingsView: View {
     // MARK: - Helper Methods
 
     private func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, _ in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) {
+            granted, _ in
             DispatchQueue.main.async {
                 if !granted {
                     showingNotificationAlert = true
@@ -113,7 +122,11 @@ struct SettingsView: View {
 
     private func openAppSettings() {
         #if os(macOS)
-            NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Notifications")!)
+            NSWorkspace.shared.open(
+                URL(
+                    string:
+                        "x-apple.systempreferences:com.apple.preference.security?Privacy_Notifications"
+                )!)
         #else
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         #endif
@@ -129,9 +142,11 @@ struct ThemePreviewSheet: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVGrid(columns: [
-                    GridItem(.adaptive(minimum: 150)),
-                ], spacing: 16) {
+                LazyVGrid(
+                    columns: [
+                        GridItem(.adaptive(minimum: 150))
+                    ], spacing: 16
+                ) {
                     ForEach(Theme.availableThemes, id: \.name) { theme in
                         ThemeCard(theme: theme)
                             .environmentObject(themeManager)
@@ -143,13 +158,12 @@ struct ThemePreviewSheet: View {
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-                .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Done") {
-                            dismiss()
-                        }
-                    }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Done", action: { dismiss() })
+                        .accessibilityLabel("Done Button")
                 }
+            }
         }
         .background(themeManager.currentTheme.primaryBackgroundColor)
     }
@@ -195,8 +209,8 @@ struct ThemeCard: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(
-                            themeManager.currentTheme.name == theme.name ?
-                                theme.primaryAccentColor : Color.clear,
+                            themeManager.currentTheme.name == theme.name
+                                ? theme.primaryAccentColor : Color.clear,
                             lineWidth: 2
                         )
                 )
@@ -238,7 +252,8 @@ struct NotificationToggleModifier: ViewModifier {
     }
 
     private func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, _ in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) {
+            granted, _ in
             DispatchQueue.main.async {
                 if !granted {
                     // Could show alert here, but since we're in a modifier, we'll skip for now

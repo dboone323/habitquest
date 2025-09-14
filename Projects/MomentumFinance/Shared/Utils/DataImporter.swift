@@ -27,7 +27,6 @@ enum ImportError: Error {
 /// Handles importing financial data from CSV files
 @ModelActor
 actor DataImporter {
-
     /// Imports data from a CSV file
     func importFromCSV(fileURL: URL) async throws -> ImportResult {
         guard fileURL.startAccessingSecurityScopedResource() else {
@@ -52,14 +51,13 @@ actor DataImporter {
 
         // Initialize tracking variables
         var transactionsImported = 0
-        let accountsImported = 0
-        let categoriesImported = 0
+        _ = 0
+        _ = 0
         var duplicatesSkipped = 0
         var errors: [String] = []
 
         // Create helper instances
         let entityManager = DefaultEntityManager()
-        let validator = ImportValidator()
 
         // Process data rows
         for (index, line) in lines.dropFirst().enumerated() {
@@ -75,7 +73,9 @@ actor DataImporter {
                     entityManager: entityManager
                 )
 
-                if try await validator.isDuplicate(transaction) {
+                // Check for duplicates within the same actor context
+                let isDuplicate = ImportValidator.isDuplicate(transaction)
+                if isDuplicate {
                     duplicatesSkipped += 1
                 } else {
                     modelContext.insert(transaction)
@@ -92,10 +92,11 @@ actor DataImporter {
         return ImportResult(
             success: errors.isEmpty,
             transactionsImported: transactionsImported,
-            accountsImported: accountsImported,
-            categoriesImported: categoriesImported,
-            duplicatesSkipped: duplicatesSkipped,
-            errors: errors.map { ValidationError(field: "import", message: $0) }
+            accountsImported: 0,
+            categoriesImported: 0,
+            duplicatesSkipped: 0,
+            errors: errors.map { ValidationError(field: "import", message: $0) },
+            warnings: []
         )
     }
 
@@ -105,7 +106,6 @@ actor DataImporter {
         rowIndex: Int,
         entityManager: EntityManager
     ) async throws -> FinancialTransaction {
-
         // Validate required fields
         try ImportValidator.validateRequiredFields(fields: fields, columnMapping: columnMapping)
 

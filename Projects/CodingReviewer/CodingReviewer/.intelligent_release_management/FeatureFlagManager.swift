@@ -8,7 +8,7 @@
 import Foundation
 
 class FeatureFlagManager {
-    static let shared = FeatureFlagManager()
+    @MainActor static let shared = FeatureFlagManager()
 
     private var flags: [String: Bool] = [:]
     private var remoteFlags: [String: Any] = [:]
@@ -51,11 +51,11 @@ class FeatureFlagManager {
     // MARK: - Logging & Analytics
 
     private func logFlagChange(_ flagName: String, enabled: Bool) {
-        let logEntry = [
+        let logEntry: [String: Any] = [
             "timestamp": Date().timeIntervalSince1970,
             "flag": flagName,
             "enabled": enabled,
-            "user_id": getCurrentUserId(),
+            "user_id": getCurrentUserId()
         ]
 
         // Log to analytics system
@@ -80,15 +80,15 @@ enum FeatureFlag: String, CaseIterable {
     var defaultValue: Bool {
         switch self {
         case .newCodeAnalysisEngine:
-            false // New feature, disabled by default
+            false  // New feature, disabled by default
         case .advancedPatternRecognition:
-            true // Stable feature, enabled
+            true  // Stable feature, enabled
         case .realTimeCollaboration:
-            false // Beta feature
+            false  // Beta feature
         case .aiPoweredSuggestions:
-            true // Core feature
+            true  // Core feature
         case .betaDashboard:
-            false // Beta feature
+            false  // Beta feature
         }
     }
 

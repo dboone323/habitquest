@@ -15,7 +15,8 @@ struct CalendarView: View {
     @State private var showingDateDetails = false
 
     // Settings from UserDefaults
-    @AppStorage(AppSettingKeys.firstDayOfWeek) private var firstDayOfWeekSetting: Int = Calendar.current.firstWeekday
+    @AppStorage(AppSettingKeys.firstDayOfWeek) private var firstDayOfWeekSetting: Int = Calendar
+        .current.firstWeekday
     @AppStorage(AppSettingKeys.use24HourTime) private var use24HourTime: Bool = false
 
     // Computed property to group events by the start of their day
@@ -38,10 +39,11 @@ struct CalendarView: View {
     private var taskDates: Set<Date> {
         var calendar = Calendar.current
         calendar.firstWeekday = firstDayOfWeekSetting
-        return Set(tasks.compactMap { task in
-            guard let dueDate = task.dueDate else { return nil }
-            return calendar.startOfDay(for: dueDate)
-        })
+        return Set(
+            tasks.compactMap { task in
+                guard let dueDate = task.dueDate else { return nil }
+                return calendar.startOfDay(for: dueDate)
+            })
     }
 
     // Computed property to get dates with events
@@ -113,11 +115,13 @@ struct CalendarView: View {
                                 Image(systemName: "chevron.left")
                                     .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                             }
+                            .accessibilityLabel("Button")
 
                             Button(action: nextMonth) {
                                 Image(systemName: "chevron.right")
                                     .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                             }
+                            .accessibilityLabel("Button")
                         }
                     }
                     .padding(.horizontal, 20)
@@ -149,6 +153,7 @@ struct CalendarView: View {
                                 .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                                 .font(.title2)
                         }
+                        .accessibilityLabel("Button")
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 16)
@@ -192,15 +197,18 @@ struct CalendarView: View {
                                 VStack(spacing: 12) {
                                     Image(systemName: "calendar")
                                         .font(.system(size: 40))
-                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(
+                                            themeManager.currentTheme.secondaryTextColor)
 
                                     Text("No items for this date")
                                         .font(.subheadline)
-                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(
+                                            themeManager.currentTheme.secondaryTextColor)
 
                                     Text("Tap + to add an event")
                                         .font(.caption)
-                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(
+                                            themeManager.currentTheme.secondaryTextColor)
                                 }
                                 .padding(.vertical, 40)
                             }
@@ -225,11 +233,13 @@ struct CalendarView: View {
     // MARK: - Calendar Navigation
 
     private func previousMonth() {
-        selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: selectedDate) ?? selectedDate
+        selectedDate =
+            Calendar.current.date(byAdding: .month, value: -1, to: selectedDate) ?? selectedDate
     }
 
     private func nextMonth() {
-        selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: selectedDate) ?? selectedDate
+        selectedDate =
+            Calendar.current.date(byAdding: .month, value: 1, to: selectedDate) ?? selectedDate
     }
 
     // MARK: - Data Functions
@@ -238,7 +248,9 @@ struct CalendarView: View {
         events = CalendarDataManager.shared.load()
         goals = GoalDataManager.shared.load()
         tasks = TaskDataManager.shared.load()
-        print("Calendar data loaded. Events: \(events.count), Goals: \(goals.count), Tasks: \(tasks.count)")
+        print(
+            "Calendar data loaded. Events: \(events.count), Goals: \(goals.count), Tasks: \(tasks.count)"
+        )
     }
 
     private func saveEvents() {
@@ -258,12 +270,15 @@ extension Calendar {
         let firstWeekday = self.component(.weekday, from: monthStart)
         let daysFromPreviousMonth = (firstWeekday - firstDayOfWeek + 7) % 7
 
-        guard let calendarStart = self.date(byAdding: .day, value: -daysFromPreviousMonth, to: monthStart) else { return [] }
+        guard
+            let calendarStart = self.date(
+                byAdding: .day, value: -daysFromPreviousMonth, to: monthStart)
+        else { return [] }
 
         var dates: [Date] = []
         var currentDate = calendarStart
 
-        for _ in 0 ..< 42 {
+        for _ in 0..<42 {
             dates.append(currentDate)
             guard let nextDate = self.date(byAdding: .day, value: 1, to: currentDate) else { break }
             currentDate = nextDate

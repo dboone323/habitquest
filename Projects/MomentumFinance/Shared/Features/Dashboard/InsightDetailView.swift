@@ -45,8 +45,7 @@ public struct InsightDetailView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     // Related IDs
                     if insight.relatedAccountId != nil || insight.relatedTransactionId != nil ||
-                        insight.relatedCategoryId != nil || insight.relatedBudgetId != nil
-                    {
+                        insight.relatedCategoryId != nil || insight.relatedBudgetId != nil {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Related Items")
                                 .font(.headline)
@@ -113,7 +112,7 @@ public struct InsightDetailView: View {
         }
         .navigationTitle("Insight Details")
         #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.inline)
         #endif
     }
 }

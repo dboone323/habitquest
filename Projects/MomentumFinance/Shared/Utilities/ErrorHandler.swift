@@ -1,7 +1,7 @@
 import Foundation
 import Observation
-import os
 import SwiftUI
+import os
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
@@ -25,7 +25,7 @@ final class ErrorHandler {
 
     private init() {
         #if DEBUG
-            Logger.logDebug("ErrorHandler initialized", category: Logger.ui)
+        Logger.logDebug("ErrorHandler initialized", category: Logger.ui)
         #endif
     }
 
@@ -33,7 +33,10 @@ final class ErrorHandler {
     @MainActor
     /// <#Description#>
     /// - Returns: <#description#>
-    func handle(_ error: Error, showToUser: Bool = true, context: String = "", file: String = #file, function: String = #function, line: Int = #line) {
+    func handle(
+        _ error: Error, showToUser: Bool = true, context: String = "", file: String = #file,
+        function: String = #function, line: Int = #line
+    ) {
         let appError = AppError.from(error, context: context)
 
         // Track error frequency
@@ -42,8 +45,9 @@ final class ErrorHandler {
         // Log the error with source information
         Logger.logError(
             appError,
-            context: "\(context) [\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)]",
-        )
+            context:
+                "\(context) [\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)]",
+            )
 
         // Determine if this is a frequent error (same type occurring rapidly)
         let isFrequentError = isErrorOccurringFrequently(appError)
@@ -62,7 +66,7 @@ final class ErrorHandler {
             Logger.logDebug(
                 "Suppressing frequent error: \(appError.errorDescription ?? "Unknown")",
                 category: Logger.ui,
-            )
+                )
         }
     }
 
@@ -104,25 +108,34 @@ final class ErrorHandler {
 
         // Add "Try Again" option for network errors
         if case .networkError = error {
-            options.append(ErrorRecoveryOption(title: "Try Again", action: {
-                // User would retry the operation that failed
-                Logger.logUI("User selected 'Try Again' for network error")
-                // Implementation depends on the specific context of the error
-            }))
+            options.append(
+                ErrorRecoveryOption(
+                    title: "Try Again",
+                    action: {
+                        // User would retry the operation that failed
+                        Logger.logUI("User selected 'Try Again' for network error")
+                        // Implementation depends on the specific context of the error
+                    }))
         }
 
         // Add data repair option for data errors
         if case .dataError = error {
-            options.append(ErrorRecoveryOption(title: "Repair Data", action: {
-                Logger.logData("User initiated data repair")
-                // Implementation would attempt to fix corrupted data
-            }))
+            options.append(
+                ErrorRecoveryOption(
+                    title: "Repair Data",
+                    action: {
+                        Logger.logData("User initiated data repair")
+                        // Implementation would attempt to fix corrupted data
+                    }))
         }
 
         // Add common options for all errors
-        options.append(ErrorRecoveryOption(title: "Dismiss", action: {
-            self.clearError()
-        }))
+        options.append(
+            ErrorRecoveryOption(
+                title: "Dismiss",
+                action: {
+                    self.clearError()
+                }))
 
         return options
     }
@@ -135,7 +148,8 @@ final class ErrorHandler {
         // Example: Crashlytics.record(error: error)
 
         #if DEBUG
-            Logger.logDebug("Error would be reported to analytics: \(error.errorDescription ?? "Unknown")")
+        Logger.logDebug(
+            "Error would be reported to analytics: \(error.errorDescription ?? "Unknown")")
         #endif
     }
 }
@@ -164,58 +178,58 @@ enum AppError: LocalizedError, Identifiable {
 
     var id: String {
         switch self {
-        case let .dataError(message):
+        case .dataError(let message):
             "data_\(message)"
-        case let .validationError(message):
+        case .validationError(let message):
             "validation_\(message)"
-        case let .networkError(message):
+        case .networkError(let message):
             "network_\(message)"
-        case let .businessLogicError(message):
+        case .businessLogicError(let message):
             "business_\(message)"
-        case let .subscriptionError(message):
+        case .subscriptionError(let message):
             "subscription_\(message)"
-        case let .budgetError(message):
+        case .budgetError(let message):
             "budget_\(message)"
-        case let .goalError(message):
+        case .goalError(let message):
             "goal_\(message)"
-        case let .permissionError(message):
+        case .permissionError(let message):
             "permission_\(message)"
-        case let .authenticationError(message):
+        case .authenticationError(let message):
             "auth_\(message)"
-        case let .syncError(message):
+        case .syncError(let message):
             "sync_\(message)"
-        case let .fileSystemError(message):
+        case .fileSystemError(let message):
             "file_\(message)"
-        case let .unknown(message):
+        case .unknown(let message):
             "unknown_\(message)"
         }
     }
 
     var errorDescription: String? {
         switch self {
-        case let .dataError(message):
+        case .dataError(let message):
             "Data Error: \(message)"
-        case let .validationError(message):
+        case .validationError(let message):
             "Validation Error: \(message)"
-        case let .networkError(message):
+        case .networkError(let message):
             "Network Error: \(message)"
-        case let .businessLogicError(message):
+        case .businessLogicError(let message):
             "Business Logic Error: \(message)"
-        case let .subscriptionError(message):
+        case .subscriptionError(let message):
             "Subscription Error: \(message)"
-        case let .budgetError(message):
+        case .budgetError(let message):
             "Budget Error: \(message)"
-        case let .goalError(message):
+        case .goalError(let message):
             "Goal Error: \(message)"
-        case let .permissionError(message):
+        case .permissionError(let message):
             "Permission Error: \(message)"
-        case let .authenticationError(message):
+        case .authenticationError(let message):
             "Authentication Error: \(message)"
-        case let .syncError(message):
+        case .syncError(let message):
             "Sync Error: \(message)"
-        case let .fileSystemError(message):
+        case .fileSystemError(let message):
             "File System Error: \(message)"
-        case let .unknown(message):
+        case .unknown(let message):
             "Unknown Error: \(message)"
         }
     }
@@ -320,7 +334,8 @@ enum AppError: LocalizedError, Identifiable {
     private static func handleCocoaError(_ nsError: NSError, context: String) -> AppError {
         if nsError.code == NSValidationErrorMinimum {
             return .validationError("\(context) \(nsError.localizedDescription)")
-        } else if nsError.code == NSFileReadNoSuchFileError || nsError.code == NSFileWriteOutOfSpaceError {
+        } else if nsError.code == NSFileReadNoSuchFileError
+                    || nsError.code == NSFileWriteOutOfSpaceError {
             return .fileSystemError("\(context) \(nsError.localizedDescription)")
         }
         return .dataError("\(context) \(nsError.localizedDescription)")
@@ -345,7 +360,7 @@ enum AppError: LocalizedError, Identifiable {
             ("Goal", .goalError(description)),
             ("Sync", .syncError(description)),
             ("File", .fileSystemError(description)),
-            ("Storage", .fileSystemError(description)),
+            ("Storage", .fileSystemError(description))
         ]
 
         for (keyword, errorType) in errorMappings where errorName.contains(keyword) {
@@ -361,32 +376,54 @@ enum AppError: LocalizedError, Identifiable {
 struct ErrorAlert: ViewModifier {
     @State var errorHandler = ErrorHandler.shared
 
+    private var alertTitle: String {
+        errorHandler.currentError?.errorDescription ?? "Error"
+    }
+
+    private var isShowingErrorBinding: Binding<Bool> {
+        Binding(
+            get: { errorHandler.isShowingError },
+            set: { errorHandler.isShowingError = $0 }
+        )
+    }
+
+    private func alertActions(_ error: Error) -> some View {
+        ForEach(errorHandler.recoveryOptions) { option in
+            Button(action: {
+                option.action()
+            }) {
+                Text(option.title)
+            }
+            .accessibilityLabel("Button")
+        }
+    }
+
+    private func alertMessage(_ error: Error) -> some View {
+        Group {
+            if let localizedError = error as? LocalizedError {
+                if let reason = localizedError.failureReason {
+                    Text(reason)
+                }
+                if let suggestion = localizedError.recoverySuggestion {
+                    Text(suggestion)
+                }
+            } else {
+                Text(error.localizedDescription)
+            }
+        }
+    }
+
     /// <#Description#>
     /// - Returns: <#description#>
     func body(content: Content) -> some View {
         content
             .alert(
-                errorHandler.currentError?.errorDescription ?? "Error",
-                isPresented: Binding(
-                    get: { errorHandler.isShowingError },
-                    set: { errorHandler.isShowingError = $0 },
-                ),
+                alertTitle,
+                isPresented: isShowingErrorBinding,
                 presenting: errorHandler.currentError,
-            ) { _ in
-                // Display recovery options if available
-                ForEach(errorHandler.recoveryOptions) { option in
-                    Button(option.title) {
-                        option.action()
-                    }
-                }
-            } message: { error in
-                if let reason = error.failureReason {
-                    Text(reason)
-                }
-                if let suggestion = error.recoverySuggestion {
-                    Text(suggestion)
-                }
-            }
+                actions: alertActions,
+                message: alertMessage
+            )
     }
 }
 

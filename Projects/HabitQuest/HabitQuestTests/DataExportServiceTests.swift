@@ -1,5 +1,6 @@
-import XCTest
 import SwiftData
+import XCTest
+
 @testable import HabitQuest
 
 final class DataExportServiceTests: XCTestCase {
@@ -8,7 +9,7 @@ final class DataExportServiceTests: XCTestCase {
             Habit.self,
             HabitLog.self,
             PlayerProfile.self,
-            Achievement.self,
+            Achievement.self
         ])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [config])

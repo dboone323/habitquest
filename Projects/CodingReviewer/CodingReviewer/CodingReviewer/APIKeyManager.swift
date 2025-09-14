@@ -1,17 +1,23 @@
-import Combine
 import Foundation
-
-// SECURITY: API key handling - ensure proper encryption and keychain storage
+import Combine
 import OSLog
 import SwiftUI
 
-/// APIKeyManager class
-/// TODO: Add detailed documentation
+// SECURITY: API key handling - ensure proper encryption and keychain storage
+/// APIKeyManager is responsible for securely managing API keys and service availability for AI integrations.
+///
+/// This class provides published properties for UI state, manages the presence and configuration of free AI services
+/// (such as Ollama and Hugging Face), and handles secure storage and retrieval of API keys. It uses UserDefaults for
+/// demonstration purposes, but should be extended to use secure storage (e.g., Keychain) for production use.
 @MainActor
 // / APIKeyManager class
-// / TODO: Add detailed documentation
 public class APIKeyManager: ObservableObject {
     static let shared = APIKeyManager()
+    private let session: URLSession
+
+    public init(session: URLSession = .shared) {
+        self.session = session
+    }
 
     @Published var showingKeySetup = false
     @Published var hasValidKey = false
@@ -64,7 +70,10 @@ public class APIKeyManager: ObservableObject {
             os_log("%@", "Ollama not available - start with: ollama serve")
         }
 
-        os_log("%@", "Free AI services status checked - Ollama: \(hasOllamaAvailable), HuggingFace: \(hasHFKey)")
+        os_log(
+            "%@",
+            "Free AI services status checked - Ollama: \(hasOllamaAvailable), HuggingFace: \(hasHFKey)"
+        )
     }
 
     // MARK: - Ollama Methods (Free Local AI)
@@ -113,7 +122,7 @@ public class APIKeyManager: ObservableObject {
         }
 
         do {
-            let (_, response) = try await URLSession.shared.data(from: url)
+            let (_, response) = try await session.data(from: url)
             let isAvailable = (response as? HTTPURLResponse)?.statusCode == 200
             hasOllamaAvailable = isAvailable
             return isAvailable
@@ -131,10 +140,9 @@ public class APIKeyManager: ObservableObject {
         }
 
         do {
-            let (data, _) = try await URLSession.shared.data(from: url)
+            let (data, _) = try await session.data(from: url)
             if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let models = json["models"] as? [[String: Any]]
-            {
+               let models = json["models"] as? [[String: Any]] {
                 return models.compactMap { $0["name"] as? String }
             }
         } catch {

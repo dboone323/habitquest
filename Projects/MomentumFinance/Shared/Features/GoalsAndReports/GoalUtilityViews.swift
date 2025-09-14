@@ -35,7 +35,7 @@ extension Features.GoalsAndReports {
                                 .font(.title2)
                                 .foregroundColor(.blue)
                         },
-                    )
+                        )
                 }
             }
         }
@@ -76,7 +76,7 @@ extension Features.GoalsAndReports {
                             .background(Color.blue)
                             .cornerRadius(12)
                     },
-                )
+                    )
 
                 Spacer()
             }
@@ -150,23 +150,23 @@ extension Features.GoalsAndReports {
                                                 gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
                                                 startPoint: .leading,
                                                 endPoint: .trailing,
-                                            ) :
+                                                ) :
                                             LinearGradient(
                                                 gradient: Gradient(colors: [Color.clear]),
                                                 startPoint: .leading,
                                                 endPoint: .trailing,
-                                            ),
-                                    ),
-                            )
+                                                ),
+                                        ),
+                                )
                         },
-                    )
+                        )
                 }
             }
             .padding(6)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color(.systemFill)),
-            )
+                )
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
         }

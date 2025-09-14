@@ -1,7 +1,7 @@
+import AppKit
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
 #endif
 
 // Momentum Finance - Personal Finance App
@@ -22,11 +22,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
@@ -79,7 +79,7 @@ extension Features.GoalsAndReports {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(TimeFrame.allCases, id: \.self) { timeframe in
-                        timeframeButton(for: timeframe)
+                        timeframeButton(for: timeframe).accessibilityLabel("Button")
                     }
                 }
                 .padding(.horizontal)
@@ -104,7 +104,7 @@ extension Features.GoalsAndReports {
                         .padding(.vertical, 8)
                         .background(buttonBackground(isSelected: isSelected))
                 },
-            )
+                ).accessibilityLabel("Button")
         }
 
         private func buttonBackground(isSelected: Bool) -> some View {
@@ -115,13 +115,13 @@ extension Features.GoalsAndReports {
                             gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
                             startPoint: .leading,
                             endPoint: .trailing,
-                        )
+                            )
                         : LinearGradient(
                             gradient: Gradient(colors: [Color.gray.opacity(0.1)]),
                             startPoint: .leading,
                             endPoint: .trailing,
-                        ),
-                )
+                            ),
+                    )
         }
 
         private var contentSection: some View {
@@ -129,7 +129,7 @@ extension Features.GoalsAndReports {
                 EnhancedFinancialSummaryCard(
                     transactions: filteredTransactions,
                     timeframe: selectedTimeframe,
-                )
+                    )
                 .padding(.horizontal)
 
                 Text("Spending by Category - Coming Soon")
@@ -176,7 +176,7 @@ extension Features.GoalsAndReports {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color.gray.opacity(0.1)),
-            )
+                )
             .padding(.horizontal)
         }
 
@@ -228,11 +228,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
@@ -280,8 +280,8 @@ extension Features.GoalsAndReports {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color.green.opacity(0.3), lineWidth: 1),
-                            ),
-                    )
+                                ),
+                        )
 
                     // Expenses
                     VStack(spacing: 8) {
@@ -307,8 +307,8 @@ extension Features.GoalsAndReports {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color.red.opacity(0.3), lineWidth: 1),
-                            ),
-                    )
+                                ),
+                        )
                 }
 
                 // Net Income
@@ -329,27 +329,27 @@ extension Features.GoalsAndReports {
                             LinearGradient(
                                 gradient: Gradient(colors: [
                                     (netIncome >= 0 ? Color.green : Color.red).opacity(0.05),
-                                    (netIncome >= 0 ? Color.green : Color.red).opacity(0.1),
+                                    (netIncome >= 0 ? Color.green : Color.red).opacity(0.1)
                                 ]),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing,
-                            ),
-                        )
+                                ),
+                            )
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(
                                     (netIncome >= 0 ? Color.green : Color.red).opacity(0.2),
                                     lineWidth: 1
                                 ),
-                        ),
-                )
+                            ),
+                    )
             }
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColor)
                     .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
-            )
+                )
         }
     }
 }
@@ -359,5 +359,5 @@ extension Features.GoalsAndReports {
         transactions: [],
         budgets: [],
         categories: [],
-    )
+        )
 }

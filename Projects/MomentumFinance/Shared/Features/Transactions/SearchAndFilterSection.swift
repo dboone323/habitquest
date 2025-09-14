@@ -17,7 +17,6 @@ public enum TransactionFilter: String, CaseIterable {
 }
 
 extension Features.Transactions {
-
     struct SearchAndFilterSection: View {
         @Binding var searchText: String
         @Binding var selectedFilter: TransactionFilter
@@ -26,7 +25,7 @@ extension Features.Transactions {
         var body: some View {
             VStack(spacing: 12) {
                 // Simple Search Bar
-                TextField("Search transactions...", text: $searchText)
+                TextField("Search transactions...", text: $searchText).accessibilityLabel("Text Field")
                     .padding()
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(8)

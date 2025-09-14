@@ -1,4 +1,10 @@
+import Combine
+import Foundation
 import OSLog
+
+// Explicitly import AppLogger if needed
+#if canImport(AppLogger)
+#endif
 
 //
 // AICodeReviewService.swift
@@ -8,14 +14,11 @@ import OSLog
 // Created on July 17, 2025, Enhanced July 23, 2025
 //
 
-import Combine
-import Foundation
-
 // MARK: - Phase 3: Enhanced AI Code Review Service
 
 // Consider wrapping force unwraps and try statements in proper error handling
 
-// TODO: Review error handling in this file
+/// Review error handling in this file
 // Consider wrapping force unwraps and try statements in proper error handling
 
 // Consider wrapping force unwraps and try statements in proper error handling
@@ -207,14 +210,15 @@ import Foundation
 // Consider wrapping force unwraps and try statements in proper error handling
 
 final class EnhancedAICodeReviewService: ObservableObject {
-
     @Published var isAnalyzing = false
     @Published var analysisProgress: Double = 0.0
     @Published var aiInsightsAvailable = false
     @Published var lastAnalysisTimestamp: Date?
 
+    private let logger = OSLog(subsystem: "CodingReviewer", category: "AICodeReviewService")
+
     private func log(_ message: String) async {
-        AppLogger.shared.log("🤖 AI Service: \(message)")
+        os_log("🤖 AI Service: %{public}@", log: logger, type: .info, message)
     }
 
     init() {
@@ -241,8 +245,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         await log("🤖 Starting Phase 3 AI analysis for \(totalFiles) files")
 
         for (index, content) in fileContents.enumerated() {
-            // Update progress
-            let progress = Double(index) / Double(totalFiles)
+            let progress = Double(index + 1) / Double(totalFiles)
             await MainActor.run {
                 analysisProgress = progress
                 progressCallback(progress)
@@ -254,7 +257,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
             results.append(result)
 
             // Small delay to show progress
-            try await Task.sleep(nanoseconds: 100_000_000) // 0.1 second
+            try await Task.sleep(nanoseconds: 100_000_000)  // 0.1 second
         }
 
         await MainActor.run {
@@ -270,7 +273,9 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return results
     }
 
-    private func performIntelligentAnalysis(content: String, fileName: String) -> EnhancedAnalysisResult {
+    private func performIntelligentAnalysis(content: String, fileName: String)
+        -> EnhancedAnalysisResult
+    {
         // Phase 3: Enhanced analysis with intelligent suggestions
 
         let language = detectLanguageFromFileName(fileName)
@@ -343,22 +348,28 @@ final class EnhancedAICodeReviewService: ObservableObject {
 
         // Force unwrapping detection
         if content.contains("!") && !content.contains("// Force unwrap necessary") {
-            suggestions.append("🔒 Consider using safe unwrapping patterns (if let, guard let) instead of force unwrapping for better safety")
+            suggestions.append(
+                "🔒 Consider using safe unwrapping patterns (if let, guard let) instead of force unwrapping for better safety"
+            )
         }
 
         // SwiftUI best practices
         if content.contains("@State") || content.contains("@ObservedObject") {
-            suggestions.append("✨ Excellent use of SwiftUI property wrappers - consider @StateObject for object initialization")
+            suggestions.append(
+                "✨ Excellent use of SwiftUI property wrappers - consider @StateObject for object initialization"
+            )
         }
 
         // async/await patterns
         if content.contains("async") && !content.contains("await") {
-            suggestions.append("⚡ Async function detected - ensure proper await usage for async calls")
+            suggestions.append(
+                "⚡ Async function detected - ensure proper await usage for async calls")
         }
 
         // Memory management
         if content.contains("weak") || content.contains("unowned") {
-            suggestions.append("🧠 Good memory management practices detected with weak/unowned references")
+            suggestions.append(
+                "🧠 Good memory management practices detected with weak/unowned references")
         }
 
         return suggestions
@@ -369,17 +380,20 @@ final class EnhancedAICodeReviewService: ObservableObject {
 
         // Type hints
         if !content.contains("->") && content.contains("def ") {
-            suggestions.append("📝 Consider adding type hints to function definitions for better code clarity")
+            suggestions.append(
+                "📝 Consider adding type hints to function definitions for better code clarity")
         }
 
         // f-strings
         if content.contains(".format(") || content.contains("% ") {
-            suggestions.append("🎯 Consider using f-strings for more readable and efficient string formatting")
+            suggestions.append(
+                "🎯 Consider using f-strings for more readable and efficient string formatting")
         }
 
         // List comprehensions
         if content.contains("for ") && content.contains("append(") {
-            suggestions.append("🚀 Consider using list comprehensions for more Pythonic and efficient code")
+            suggestions.append(
+                "🚀 Consider using list comprehensions for more Pythonic and efficient code")
         }
 
         return suggestions
@@ -390,12 +404,15 @@ final class EnhancedAICodeReviewService: ObservableObject {
 
         // Modern JavaScript features
         if content.contains("var ") {
-            suggestions.append("📦 Consider using 'const' or 'let' instead of 'var' for better scoping and immutability")
+            suggestions.append(
+                "📦 Consider using 'const' or 'let' instead of 'var' for better scoping and immutability"
+            )
         }
 
         // Arrow functions
         if content.contains("function(") && !content.contains("=>") {
-            suggestions.append("➡️ Consider using arrow functions for cleaner syntax and lexical this binding")
+            suggestions.append(
+                "➡️ Consider using arrow functions for cleaner syntax and lexical this binding")
         }
 
         // Promise patterns
@@ -411,12 +428,14 @@ final class EnhancedAICodeReviewService: ObservableObject {
 
         // Modern Java features
         if content.contains("new ArrayList<>()") {
-            suggestions.append("📋 Consider using List.of() or Arrays.asList() for immutable collections")
+            suggestions.append(
+                "📋 Consider using List.of() or Arrays.asList() for immutable collections")
         }
 
         // Stream API
         if content.contains("for(") && content.contains("if(") {
-            suggestions.append("🌊 Consider using Java Stream API for more functional programming patterns")
+            suggestions.append(
+                "🌊 Consider using Java Stream API for more functional programming patterns")
         }
 
         return suggestions
@@ -428,17 +447,22 @@ final class EnhancedAICodeReviewService: ObservableObject {
         // General code quality
         let lines = content.components(separatedBy: CharacterSet.newlines)
         if lines.count > 500 {
-            suggestions.append("📏 Large file detected (\(lines.count) lines) - consider breaking into smaller, more maintainable modules")
+            suggestions.append(
+                "📏 Large file detected (\(lines.count) lines) - consider breaking into smaller, more maintainable modules"
+            )
         }
 
         // Documentation
         if !content.lowercased().contains("// ") && !content.lowercased().contains("/*") {
-            suggestions.append("📚 Consider adding comments to explain complex logic and improve code readability")
+            suggestions.append(
+                "📚 Consider adding comments to explain complex logic and improve code readability")
         }
 
         // Naming conventions
         if content.contains("temp") || content.contains("tmp") {
-            suggestions.append("🏷️ Consider using more descriptive variable names instead of temporary placeholders")
+            suggestions.append(
+                "🏷️ Consider using more descriptive variable names instead of temporary placeholders"
+            )
         }
 
         return suggestions
@@ -446,16 +470,19 @@ final class EnhancedAICodeReviewService: ObservableObject {
 
     private func calculateEnhancedComplexity(code: String) -> Double? {
         let lines = code.components(separatedBy: CharacterSet.newlines)
-        let nonEmptyLines = lines.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        let nonEmptyLines = lines.filter {
+            !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
 
         // Enhanced complexity calculation
         var complexity = Double(nonEmptyLines.count) / 50.0
 
         // Count conditional statements
-        let conditionals = (code.components(separatedBy: " if ").count - 1) +
-            (code.components(separatedBy: " while ").count - 1) +
-            (code.components(separatedBy: " for ").count - 1) +
-            (code.components(separatedBy: " switch ").count - 1)
+        let conditionals =
+            (code.components(separatedBy: " if ").count - 1)
+            + (code.components(separatedBy: " while ").count - 1)
+            + (code.components(separatedBy: " for ").count - 1)
+            + (code.components(separatedBy: " switch ").count - 1)
         complexity += Double(conditionals) * 0.5
 
         // Count nested structures
@@ -469,41 +496,49 @@ final class EnhancedAICodeReviewService: ObservableObject {
 
     private func calculateEnhancedMaintainability(code: String) -> Double? {
         let lines = code.components(separatedBy: CharacterSet.newlines)
-        let nonEmptyLines = lines.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        let nonEmptyLines = lines.filter {
+            !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
         let avgLineLength = nonEmptyLines.map(\.count).reduce(0, +) / max(nonEmptyLines.count, 1)
 
         // Enhanced maintainability calculation
         var maintainability = 100.0 - (Double(avgLineLength) / 2.0)
 
         // Boost for good practices
-        if code.contains("// ") || code.contains("/*") { // Has comments
+        if code.contains("// ") || code.contains("/*") {  // Has comments
             maintainability += 10.0
         }
 
-        if code.contains("TODO") || code.contains("FIXME") { // Has improvement notes
+        if code.contains("TODO") || code.contains("FIXME") {  // Has improvement notes
             maintainability -= 5.0
         }
 
         // Function/method count bonus
-        let functionCount = (code.components(separatedBy: "func ").count - 1) +
-            (code.components(separatedBy: "def ").count - 1) +
-            (code.components(separatedBy: "function ").count - 1)
+        let functionCount =
+            (code.components(separatedBy: "func ").count - 1)
+            + (code.components(separatedBy: "def ").count - 1)
+            + (code.components(separatedBy: "function ").count - 1)
         if functionCount > 0 && functionCount < 20 {
-            maintainability += 5.0 // Good modularization
+            maintainability += 5.0  // Good modularization
         }
 
         return min(100.0, max(0.0, maintainability))
     }
 
-    private func generateNaturalLanguageExplanation(content: String, suggestions: [String]) -> String {
+    private func generateNaturalLanguageExplanation(content: String, suggestions: [String])
+        -> String
+    {
         let lines = content.components(separatedBy: CharacterSet.newlines)
-        let wordCount = content.components(separatedBy: CharacterSet.whitespacesAndNewlines).count(where: { !$0.isEmpty })
+        let wordCount = content.components(separatedBy: CharacterSet.whitespacesAndNewlines).count(
+            where: { !$0.isEmpty })
 
         var explanation = "📋 **Code Analysis Summary:**\n\n"
-        explanation += "This code file contains \(lines.count) lines and approximately \(wordCount) words. "
+        explanation +=
+            "This code file contains \(lines.count) lines and approximately \(wordCount) words. "
 
         if suggestions.isEmpty {
-            explanation += "The code appears to follow good practices with no major issues detected. "
+            explanation +=
+                "The code appears to follow good practices with no major issues detected. "
         } else {
             explanation += "I've identified \(suggestions.count) potential improvements:\n\n"
             for (index, suggestion) in suggestions.enumerated() {
@@ -517,7 +552,8 @@ final class EnhancedAICodeReviewService: ObservableObject {
         } else if lines.count < 200 {
             explanation += "\n⚖️ **Code Size:** Medium-sized file, well within manageable limits."
         } else {
-            explanation += "\n⚠️ **Code Size:** Large file - consider breaking into smaller modules for better maintainability."
+            explanation +=
+                "\n⚠️ **Code Size:** Large file - consider breaking into smaller modules for better maintainability."
         }
 
         return explanation
@@ -570,19 +606,21 @@ final class EnhancedAICodeReviewService: ObservableObject {
         for line in lines {
             let trimmedLine = line.trimmingCharacters(in: .whitespaces)
 
-            if trimmedLine.contains("func ") || trimmedLine.contains("function ") ||
-                trimmedLine.contains("def ")
+            if trimmedLine.contains("func ") || trimmedLine.contains("function ")
+                || trimmedLine.contains("def ")
             {
                 inFunction = true
                 currentFunctionLines = 1
             } else if inFunction {
                 currentFunctionLines += 1
 
-                if trimmedLine == "}" || trimmedLine.hasPrefix("def ") ||
-                    trimmedLine.hasPrefix("func ") || trimmedLine.hasPrefix("function ")
+                if trimmedLine == "}" || trimmedLine.hasPrefix("def ")
+                    || trimmedLine.hasPrefix("func ") || trimmedLine.hasPrefix("function ")
                 {
                     if currentFunctionLines > 50 {
-                        suggestions.append("🔧 Consider breaking down long functions (>50 lines) into smaller, focused methods")
+                        suggestions.append(
+                            "🔧 Consider breaking down long functions (>50 lines) into smaller, focused methods"
+                        )
                     }
                     inFunction = false
                     currentFunctionLines = 0
@@ -594,13 +632,13 @@ final class EnhancedAICodeReviewService: ObservableObject {
         let codeBlocks = lines.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
         let duplicateThreshold = 3
 
-        for i in 0 ..< (codeBlocks.count - duplicateThreshold) {
-            let pattern = Array(codeBlocks[i ..< (i + duplicateThreshold)])
+        for i in 0..<(codeBlocks.count - duplicateThreshold) {
+            let pattern = Array(codeBlocks[i..<(i + duplicateThreshold)])
             let patternString = pattern.joined(separator: "\n")
 
             var occurrences = 0
-            for j in (i + duplicateThreshold) ..< (codeBlocks.count - duplicateThreshold) {
-                let checkPattern = Array(codeBlocks[j ..< (j + duplicateThreshold)])
+            for j in (i + duplicateThreshold)..<(codeBlocks.count - duplicateThreshold) {
+                let checkPattern = Array(codeBlocks[j..<(j + duplicateThreshold)])
                 let checkString = checkPattern.joined(separator: "\n")
 
                 if patternString == checkString {
@@ -609,8 +647,10 @@ final class EnhancedAICodeReviewService: ObservableObject {
             }
 
             if occurrences > 0 {
-                suggestions.append("♻️ Potential code duplication detected - consider extracting common patterns into reusable functions")
-                break // Only report once to avoid spam
+                suggestions.append(
+                    "♻️ Potential code duplication detected - consider extracting common patterns into reusable functions"
+                )
+                break  // Only report once to avoid spam
             }
         }
 
@@ -651,7 +691,9 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return issues
     }
 
-    private func createSmartFix(for issue: String, content: String, language: String) -> AIGeneratedFix? {
+    private func createSmartFix(for issue: String, content: String, language: String)
+        -> AIGeneratedFix?
+    {
         // Generate intelligent fixes based on issue content
         if issue.contains("force unwrap") {
             return AIGeneratedFix(
@@ -707,7 +749,9 @@ final class EnhancedAICodeReviewService: ObservableObject {
             "best_practice"
         } else if message.lowercased().contains("long") || message.lowercased().contains("large") {
             "maintainability"
-        } else if message.lowercased().contains("line length") || message.lowercased().contains("readable") {
+        } else if message.lowercased().contains("line length")
+            || message.lowercased().contains("readable")
+        {
             "readability"
         } else {
             "quality"
@@ -722,7 +766,9 @@ final class EnhancedAICodeReviewService: ObservableObject {
 
     func analyzeCodeQuality(_ code: String) async throws -> Double {
         let lines = code.components(separatedBy: CharacterSet.newlines)
-        let nonEmptyLines = lines.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        let nonEmptyLines = lines.filter {
+            !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
         let avgLineLength = nonEmptyLines.map(\.count).reduce(0, +) / max(nonEmptyLines.count, 1)
         return min(100.0, max(0.0, 100.0 - Double(avgLineLength) / 2.0))
     }
@@ -763,7 +809,10 @@ struct AIGeneratedFix {
     let confidence: Double
     let isAutoApplicable: Bool
 
-    init(title: String, description: String, originalIssue: String, fix: String, confidence: Double, isAutoApplicable: Bool = false) {
+    init(
+        title: String, description: String, originalIssue: String, fix: String, confidence: Double,
+        isAutoApplicable: Bool = false
+    ) {
         self.id = UUID()
         self.title = title
         self.description = description

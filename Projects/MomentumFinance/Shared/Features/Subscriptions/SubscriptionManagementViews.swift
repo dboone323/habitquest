@@ -1,7 +1,7 @@
+import AppKit
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
 #endif
 
 //
@@ -42,11 +42,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
@@ -58,14 +58,14 @@ extension Features.Subscriptions {
             NavigationView {
                 Form {
                     Section(header: Text("Subscription Details")) {
-                        TextField("Subscription Name", text: $name)
+                        TextField("Subscription Name", text: $name).accessibilityLabel("Text Field")
 
                         HStack {
                             Text("$")
-                            TextField("Amount", text: $amount)
+                            TextField("Amount", text: $amount).accessibilityLabel("Text Field")
                                 #if canImport(UIKit)
-                                    .keyboardType(.decimalPad)
-                                #endif
+                                .keyboardType(.decimalPad)
+                            #endif
                         }
 
                         Picker("Frequency", selection: $frequency) {
@@ -99,41 +99,46 @@ extension Features.Subscriptions {
                     Section(header: Text("Notes")) {
                         TextField("Notes (optional)", text: $notes, axis: .vertical)
                             .lineLimit(3...6)
+                            .accessibilityLabel("Text Field")
                     }
                 }
                 .navigationTitle("Add Subscription")
                 #if os(iOS)
-                    .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
                 #endif
-                .toolbar {
+                .toolbar(content: {
                     #if os(iOS)
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button("Cancel") {
-                                dismiss()
-                            }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button("Cancel") {
+                            dismiss()
                         }
+                        .accessibilityLabel("Cancel Button")
+                    }
 
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Save") {
-                                saveSubscription()
-                            }
-                            .disabled(!isValidForm)
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Save") {
+                            saveSubscription()
                         }
+                        .disabled(!isValidForm)
+                        .accessibilityLabel("Save Button")
+                    }
                     #else
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") {
-                                dismiss()
-                            }
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            dismiss()
                         }
+                        .accessibilityLabel("Cancel Button")
+                    }
 
-                        ToolbarItem(placement: .primaryAction) {
-                            Button("Save") {
-                                saveSubscription()
-                            }
-                            .disabled(!isValidForm)
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Save") {
+                            saveSubscription()
                         }
+                        .disabled(!isValidForm)
+                        .accessibilityLabel("Save Button")
+                    }
                     #endif
-                }
+                })
                 .background(backgroundColor)
             }
         }
@@ -147,7 +152,7 @@ extension Features.Subscriptions {
                 billingCycle: frequency,
                 nextDueDate: nextDueDate,
                 notes: notes.isEmpty ? nil : notes,
-            )
+                )
 
             subscription.category = selectedCategory
             subscription.account = selectedAccount

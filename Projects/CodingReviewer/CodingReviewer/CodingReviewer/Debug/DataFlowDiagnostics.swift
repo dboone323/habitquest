@@ -12,7 +12,11 @@ import SwiftUI
 // MARK: - Runtime Data Flow Diagnostics
 
 struct DataFlowDiagnosticsView: View {
-    @EnvironmentObject var fileManager: FileManagerService
+    @Environment(\.fileManager) private var environmentFileManager: FileManagerService?
+
+    private var fileManager: FileManagerService {
+        environmentFileManager ?? SharedDataManager.shared.fileManager
+    }
     @State private var diagnosticResults: [DiagnosticResult] = []
     @State private var isRunning = false
 
@@ -34,6 +38,7 @@ struct DataFlowDiagnosticsView: View {
                         Text(isRunning ? "Running..." : "Run Diagnostics")
                     }
                 }
+                .accessibilityLabel("Button")
                 .disabled(isRunning)
             }
 
@@ -114,7 +119,8 @@ struct DataFlowDiagnosticsView: View {
             testName: "SharedDataManager Singleton",
             description: "Verifies SharedDataManager is a proper singleton",
             passed: isEqualReference,
-            details: isEqualReference ? "✅ Same instance reference" : "❌ Different instance references",
+            details: isEqualReference
+                ? "✅ Same instance reference" : "❌ Different instance references",
             severity: isEqualReference ? .success : .critical
         )
     }
@@ -131,7 +137,8 @@ struct DataFlowDiagnosticsView: View {
             testName: "FileManager Consistency",
             description: "Verifies FileManagerService instance consistency",
             passed: isConsistent,
-            details: isConsistent ? "✅ Same FileManagerService instance" : "❌ Different FileManagerService instances",
+            details: isConsistent
+                ? "✅ Same FileManagerService instance" : "❌ Different FileManagerService instances",
             severity: isConsistent ? .success : .critical
         )
     }
@@ -166,7 +173,9 @@ struct DataFlowDiagnosticsView: View {
             testName: "Uploaded Files Access",
             description: "Tests ability to read and modify uploaded files",
             passed: canAccess,
-            details: canAccess ? "✅ Can access and modify uploaded files" : "❌ Cannot access uploaded files properly",
+            details: canAccess
+                ? "✅ Can access and modify uploaded files"
+                : "❌ Cannot access uploaded files properly",
             severity: canAccess ? .success : .critical
         )
     }
@@ -182,7 +191,9 @@ struct DataFlowDiagnosticsView: View {
             testName: "Cross-View Data Sharing",
             description: "Verifies environment object matches shared instance",
             passed: isSameInstance,
-            details: isSameInstance ? "✅ Environment object matches shared instance" : "❌ Environment object is different from shared instance",
+            details: isSameInstance
+                ? "✅ Environment object matches shared instance"
+                : "❌ Environment object is different from shared instance",
             severity: isSameInstance ? .success : .critical
         )
     }
@@ -191,20 +202,22 @@ struct DataFlowDiagnosticsView: View {
         let hasFiles = !fileManager.uploadedFiles.isEmpty
         let hasAnalysis = !fileManager.analysisHistory.isEmpty
 
-        let expectedState = if hasFiles && !hasAnalysis {
-            "Should show uploaded files for analysis"
-        } else if hasAnalysis {
-            "Should show analysis history"
-        } else {
-            "Should show empty state"
-        }
+        let expectedState =
+            if hasFiles && !hasAnalysis {
+                "Should show uploaded files for analysis"
+            } else if hasAnalysis {
+                "Should show analysis history"
+            } else {
+                "Should show empty state"
+            }
 
         return DiagnosticResult(
             id: UUID(),
             testName: "AI Insights View State",
             description: "Analyzes expected AI Insights view state",
-            passed: true, // This is informational
-            details: "📊 Files: \(fileManager.uploadedFiles.count), Analysis: \(fileManager.analysisHistory.count). \(expectedState)",
+            passed: true,  // This is informational
+            details:
+                "📊 Files: \(fileManager.uploadedFiles.count), Analysis: \(fileManager.analysisHistory.count). \(expectedState)",
             severity: .info
         )
     }
@@ -220,8 +233,10 @@ struct DataFlowDiagnosticsView: View {
             id: UUID(),
             testName: "Pattern Analysis View State",
             description: "Tests language grouping for pattern analysis",
-            passed: files.isEmpty || canGroup, // Pass if no files or can group properly
-            details: files.isEmpty ? "📊 No files to analyze" : "📊 \(files.count) files across \(uniqueLanguages) languages",
+            passed: files.isEmpty || canGroup,  // Pass if no files or can group properly
+            details: files.isEmpty
+                ? "📊 No files to analyze"
+                : "📊 \(files.count) files across \(uniqueLanguages) languages",
             severity: .info
         )
     }
@@ -308,7 +323,11 @@ struct DiagnosticResultRow: View {
 // MARK: - Debug Helper Views
 
 struct DebugDataStateView: View {
-    @EnvironmentObject var fileManager: FileManagerService
+    @Environment(\.fileManager) private var environmentFileManager: FileManagerService?
+
+    private var fileManager: FileManagerService {
+        environmentFileManager ?? SharedDataManager.shared.fileManager
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -343,8 +362,13 @@ struct DebugDataStateView: View {
                             .fontWeight(.medium)
                             .padding(.top, 8)
 
-                        let languageGroups = Dictionary(grouping: fileManager.uploadedFiles, by: { $0.language })
-                        ForEach(Array(languageGroups.keys.sorted(by: { $0.displayName < $1.displayName })), id: \.self) { language in
+                        let languageGroups = Dictionary(
+                            grouping: fileManager.uploadedFiles, by: { $0.language })
+                        ForEach(
+                            Array(
+                                languageGroups.keys.sorted(by: { $0.displayName < $1.displayName })),
+                            id: \.self
+                        ) { language in
                             HStack {
                                 Image(systemName: language.iconName)
                                     .foregroundColor(.blue)
@@ -367,19 +391,20 @@ struct DebugDataStateView: View {
 
 // MARK: - Integration with Main Views
 
-extension ContentView {
-    func addDiagnosticsTab() -> some View {
-        // This would be added as a debug tab in development builds
-        TabView {
-            // ... existing tabs
-
-            #if DEBUG
-                DataFlowDiagnosticsView()
-                    .environmentObject(SharedDataManager.shared.fileManager)
-                    .tabItem {
-                        Label("Diagnostics", systemImage: "stethoscope")
-                    }
-            #endif
-        }
-    }
-}
+// Temporarily commented out due to ContentView ambiguity
+// extension ContentView {
+//     func addDiagnosticsTab() -> some View {
+//         // This would be added as a debug tab in development builds
+//         TabView {
+//             // ... existing tabs
+//
+//             #if DEBUG
+//                 DataFlowDiagnosticsView()
+//                     .environmentObject(SharedDataManager.shared.fileManager)
+//                     .tabItem {
+//                         Label("Diagnostics", systemImage: "stethoscope")
+//                     }
+//             #endif
+//         }
+//     }
+// }

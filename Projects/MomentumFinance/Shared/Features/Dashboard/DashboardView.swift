@@ -1,9 +1,24 @@
+import AppKit
 import SwiftData
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
 #endif
+
+// Temporary ColorTheme stub for macOS compatibility
+@Observable
+@MainActor
+final class ColorTheme {
+    static let shared = ColorTheme()
+
+    var background: Color { Color.gray.opacity(0.1) }
+    var secondaryBackground: Color { Color.gray.opacity(0.05) }
+    var primaryText: Color { Color.primary }
+    var secondaryText: Color { Color.secondary }
+    var accentPrimary: Color { Color.blue }
+    var cardBackground: Color { Color.white }
+    var isDarkMode: Bool { false }
+}
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
@@ -20,16 +35,9 @@ extension Features.Dashboard {
     struct DashboardView: View {
         @Environment(\.modelContext) private var modelContext
 
-        #if canImport(SwiftData)
-            @Query private var accounts: [FinancialAccount]
-            @Query private var subscriptions: [Subscription]
-            @Query private var budgets: [Budget]
-        #else
-            // Fallback arrays when SwiftData Query macro is not available in this build
-            private var accounts: [FinancialAccount] = []
-            private var subscriptions: [Subscription] = []
-            private var budgets: [Budget] = []
-        #endif
+        @State private var accounts: [FinancialAccount] = []
+        @State private var subscriptions: [Subscription] = []
+        @State private var budgets: [Budget] = []
 
         @State private var viewModel = DashboardViewModel()
         @State private var navigationPath = NavigationPath()
@@ -43,7 +51,6 @@ extension Features.Dashboard {
                     LazyVStack(spacing: 24) {
                         // Welcome Header
                         DashboardWelcomeHeader(
-                            colorTheme: colorTheme,
                             greeting: timeOfDayGreeting,
                             wellnessPercentage: 70,
                             totalBalance: totalBalanceDouble,
@@ -54,8 +61,6 @@ extension Features.Dashboard {
                         // Account Balances Summary
                         DashboardAccountsSummary(
                             accounts: accounts,
-                            colorTheme: colorTheme,
-                            themeComponents: themeComponents,
                             onAccountTap: { accountId in
                                 navigationPath.append(DashboardDestination.accountDetail(accountId))
                             },
@@ -91,8 +96,6 @@ extension Features.Dashboard {
                         // Budget Progress
                         DashboardBudgetProgress(
                             budgets: budgets,
-                            colorTheme: colorTheme,
-                            themeComponents: themeComponents,
                             onBudgetTap: { _ in
                                 navigationPath.append(DashboardDestination.budgets)
                             },
@@ -136,31 +139,32 @@ extension Features.Dashboard {
                 .background(Color.secondary.opacity(0.05))
                 .navigationTitle("Dashboard")
                 #if os(iOS)
-                    .navigationBarTitleDisplayMode(.large)
+                .navigationBarTitleDisplayMode(.large)
                 #endif
-                    .onAppear {
-                        viewModel.setModelContext(modelContext)
+                .onAppear {
+                    viewModel.setModelContext(modelContext)
+                    loadData()
+                }
+                .task {
+                    // Process overdue subscriptions asynchronously
+                    await viewModel.processOverdueSubscriptions(subscriptions)
+                }
+                .navigationDestination(for: DashboardDestination.self) { destination in
+                    switch destination {
+                    case .transactions:
+                        Features.Transactions.TransactionsView()
+                    case .subscriptions:
+                        #if canImport(SwiftData)
+                        Features.Subscriptions.SubscriptionsView()
+                        #else
+                        Text("Subscriptions View - SwiftData not available")
+                        #endif
+                    case .budgets:
+                        Features.Budgets.BudgetsView()
+                    case .accountDetail(let accountId):
+                        Text("Account Detail: \(accountId)")
                     }
-                    .task {
-                        // Process overdue subscriptions asynchronously
-                        await viewModel.processOverdueSubscriptions(subscriptions)
-                    }
-                    .navigationDestination(for: DashboardDestination.self) { destination in
-                        switch destination {
-                        case .transactions:
-                            Features.Transactions.TransactionsView()
-                        case .subscriptions:
-                            #if canImport(SwiftData)
-                                Features.Subscriptions.SubscriptionsView()
-                            #else
-                                Text("Subscriptions View - SwiftData not available")
-                            #endif
-                        case .budgets:
-                            Features.Budgets.BudgetsView()
-                        case let .accountDetail(accountId):
-                            Text("Account Detail: \(accountId)")
-                        }
-                    }
+                }
             }
         }
 
@@ -169,8 +173,8 @@ extension Features.Dashboard {
         private var timeOfDayGreeting: String {
             let hour = Calendar.current.component(.hour, from: Date())
             switch hour {
-            case 0 ..< 12: return "Morning"
-            case 12 ..< 17: return "Afternoon"
+            case 0..<12: return "Morning"
+            case 12..<17: return "Afternoon"
             default: return "Evening"
             }
         }
@@ -199,12 +203,29 @@ extension Features.Dashboard {
 
         private var monthlyIncomeDouble: Double {
             // Calculate monthly income from transactions
-            2450.0
+            2_450.0
         }
 
         private var monthlyExpensesDouble: Double {
             // Calculate monthly expenses from transactions
-            1890.0
+            1_890.0
+        }
+
+        // MARK: - Data Loading
+
+        private func loadData() {
+            do {
+                let accountDescriptor = FetchDescriptor<FinancialAccount>()
+                accounts = try modelContext.fetch(accountDescriptor)
+
+                let subscriptionDescriptor = FetchDescriptor<Subscription>()
+                subscriptions = try modelContext.fetch(subscriptionDescriptor)
+
+                let budgetDescriptor = FetchDescriptor<Budget>()
+                budgets = try modelContext.fetch(budgetDescriptor)
+            } catch {
+                print("Error loading dashboard data: \(error)")
+            }
         }
     }
 }

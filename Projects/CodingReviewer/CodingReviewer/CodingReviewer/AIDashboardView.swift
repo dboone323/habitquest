@@ -1,6 +1,35 @@
 import Combine
 import SwiftUI
 
+// MARK: - Supporting Types
+
+enum DashboardTab: String, CaseIterable {
+    case overview = "Overview"
+    case learning = "Learning"
+    case generation = "Generation"
+    case analysis = "Analysis"
+    case health = "Health"
+
+    var displayName: String {
+        self.rawValue
+    }
+
+    var iconName: String {
+        switch self {
+        case .overview:
+            "chart.pie"
+        case .learning:
+            "brain"
+        case .generation:
+            "chevron.left.forwardslash.chevron.right"
+        case .analysis:
+            "magnifyingglass"
+        case .health:
+            "heart.text.square"
+        }
+    }
+}
+
 // MARK: - AI Intelligence Dashboard
 
 // Comprehensive view of AI learning progress and system intelligence
@@ -57,7 +86,9 @@ struct AIDashboardView: View {
 
     @ViewBuilder
     private func OverviewSection() -> some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 16) {
+        LazyVGrid(
+            columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 16
+        ) {
             // Learning Progress Card
             DashboardCard(
                 title: "AI Learning",
@@ -188,10 +219,9 @@ struct AIDashboardView: View {
 
             Button(action: onRefresh) {
                 Image(systemName: "arrow.clockwise")
-                    .font(.title2)
-                    .rotationEffect(.degrees(isRefreshing.wrappedValue ? 360 : 0))
-                    .animation(.easeInOut(duration: 1).repeatForever(autoreverses: false), value: isRefreshing.wrappedValue)
+                    .font(.system(size: 14))
             }
+            .buttonStyle(.bordered)
             .disabled(isRefreshing.wrappedValue)
         }
         .padding()
@@ -215,19 +245,21 @@ struct AIDashboardView: View {
         .background(Color(NSColor.windowBackgroundColor))
     }
 
-    @ViewBuilder
-    private func TabButton(tab: DashboardTab, isSelected: Bool, onTap: @escaping () -> Void) -> some View {
+    private func TabButton(tab: DashboardTab, isSelected: Bool, onTap: @escaping () -> Void)
+    -> some View {
         Button(action: onTap) {
-            HStack {
-                Image(systemName: tab.icon)
-                Text(tab.title)
+            VStack(spacing: 4) {
+                Image(systemName: tab.iconName)
+                    .font(.system(size: 20))
+                Text(tab.displayName)
+                    .font(.caption)
+                    .fontWeight(isSelected ? .semibold : .regular)
             }
-            .padding(.horizontal, 16)
+            .foregroundColor(isSelected ? .blue : .secondary)
+            .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
-            .background(isSelected ? Color.accentColor : Color.clear)
-            .foregroundColor(isSelected ? .white : .primary)
-            .cornerRadius(8)
         }
+        .buttonStyle(.plain)
     }
 
     @ViewBuilder
@@ -314,7 +346,8 @@ struct AIDashboardView: View {
     }
 
     @ViewBuilder
-    private func TimelineItem(title: String, subtitle: String, time: String, color: Color) -> some View {
+    private func TimelineItem(title: String, subtitle: String, time: String, color: Color)
+    -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Circle()
                 .fill(color)
@@ -378,21 +411,25 @@ struct AIDashboardView: View {
     }
 
     @ViewBuilder
-    private func QuickActionButton(title: String, icon: String, color: Color, action: @escaping () -> Void) -> some View {
+    private func QuickActionButton(
+        title: String, icon: String, color: Color, action: @escaping () -> Void
+    ) -> some View {
         Button(action: action) {
-            HStack {
+            VStack(spacing: 8) {
                 Image(systemName: icon)
-                    .font(.title3)
-
+                    .font(.system(size: 24))
+                    .foregroundColor(color)
                 Text(title)
                     .font(.caption)
-                    .fontWeight(.medium)
+                    .foregroundColor(.primary)
+                    .multilineTextAlignment(.center)
             }
-            .foregroundColor(color)
+            .frame(maxWidth: .infinity)
             .padding()
             .background(color.opacity(0.1))
-            .cornerRadius(8)
+            .cornerRadius(12)
         }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Detailed Section Views
@@ -446,9 +483,11 @@ struct AIDashboardView: View {
             Text("Pattern Recognition")
                 .font(.headline)
 
-            Text("AI has learned common patterns from your codebase and can predict potential issues before they occur.")
-                .font(.caption)
-                .foregroundColor(.secondary)
+            Text(
+                "AI has learned common patterns from your codebase and can predict potential issues before they occur."
+            )
+            .font(.caption)
+            .foregroundColor(.secondary)
 
             // Pattern categories
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 8) {
@@ -486,7 +525,9 @@ struct AIDashboardView: View {
                 .font(.headline)
 
             HStack {
-                StatisticItem(title: "Successful Fixes", value: "\(learningCoordinator.successfulFixes)", color: .green)
+                StatisticItem(
+                    title: "Successful Fixes", value: "\(learningCoordinator.successfulFixes)",
+                    color: .green)
                 StatisticItem(title: "Issues Prevented", value: "47", color: .blue)
                 StatisticItem(title: "Time Saved", value: "2.3h", color: .purple)
             }
@@ -519,14 +560,18 @@ struct AIDashboardView: View {
                 .font(.headline)
 
             HStack(spacing: 12) {
-                Button("Start Learning Session") {
+                Button {
                     Task { await startLearningSession() }
+                } label: {
+                    Text("Start Learning Session")
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(learningCoordinator.isLearning)
 
-                Button("Reset Learning") {
+                Button {
                     // Reset learning data
+                } label: {
+                    Text("Reset Learning")
                 }
                 .buttonStyle(.bordered)
             }
@@ -596,14 +641,20 @@ struct AIDashboardView: View {
 
             Spacer()
 
-            Text(recommendation.priority.rawValue == 3 ? "HIGH" : recommendation.priority.rawValue == 2 ? "MED" : "LOW")
-                .font(.caption2)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 2)
-                .background(recommendation.priority.rawValue == 3 ? Color.red : recommendation.priority.rawValue == 2 ? Color.orange : Color.blue)
-                .cornerRadius(4)
+            Text(
+                recommendation.priority.rawValue == 3
+                    ? "HIGH" : recommendation.priority.rawValue == 2 ? "MED" : "LOW"
+            )
+            .font(.caption2)
+            .fontWeight(.bold)
+            .foregroundColor(.white)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 2)
+            .background(
+                recommendation.priority.rawValue == 3
+                    ? Color.red : recommendation.priority.rawValue == 2 ? Color.orange : Color.blue
+            )
+            .cornerRadius(4)
         }
         .padding()
         .background(Color.gray.opacity(0.1))
@@ -738,34 +789,5 @@ struct AIDashboardView: View {
 
     private func performHealthCheck() async {
         _ = await projectAnalyzer.performHealthCheck()
-    }
-}
-
-// MARK: - Supporting Types
-
-enum DashboardTab: String, CaseIterable {
-    case overview = "Overview"
-    case learning = "Learning"
-    case generation = "Generation"
-    case analysis = "Analysis"
-    case health = "Health"
-
-    var title: String {
-        self.rawValue
-    }
-
-    var icon: String {
-        switch self {
-        case .overview:
-            "chart.pie"
-        case .learning:
-            "brain"
-        case .generation:
-            "chevron.left.forwardslash.chevron.right"
-        case .analysis:
-            "magnifyingglass"
-        case .health:
-            "heart.text.square"
-        }
     }
 }

@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 class PerformanceTracker {
     static let shared = PerformanceTracker()
 
@@ -32,11 +33,13 @@ class PerformanceTracker {
         performanceMetrics.append(metric)
         startTimes.removeValue(forKey: operation)
 
-        AppLogger.shared.log("Performance tracking completed: \(operation) - \(String(format: "%.3f", duration))s")
+        AppLogger.shared.log(
+            "Performance tracking completed: \(operation) - \(String(format: "%.3f", duration))s")
 
         // Log warning for slow operations
         if duration > 1.0 {
-            AppLogger.shared.logWarning("Slow operation detected: \(operation) took \(String(format: "%.3f", duration))s")
+            AppLogger.shared.logWarning(
+                "Slow operation detected: \(operation) took \(String(format: "%.3f", duration))s")
         }
 
         return duration
@@ -72,7 +75,8 @@ class PerformanceTracker {
 
     private func getCurrentMemoryUsage() -> UInt64 {
         var info = mach_task_basic_info()
-        var count = mach_msg_type_number_t(MemoryLayout.size(ofValue: info) / MemoryLayout<integer_t>.size)
+        var count = mach_msg_type_number_t(
+            MemoryLayout.size(ofValue: info) / MemoryLayout<integer_t>.size)
 
         // Query task info using proper pointer rebinding
         let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) { infoPtr in
@@ -99,7 +103,8 @@ class PerformanceTracker {
 
             let slowestMetric = performanceMetrics.max { $0.duration < $1.duration }
             if let slowest = slowestMetric {
-                report += "Slowest operation: \(slowest.operation) (\(String(format: "%.3f", slowest.duration))s)\n"
+                report +=
+                    "Slowest operation: \(slowest.operation) (\(String(format: "%.3f", slowest.duration))s)\n"
             }
         }
 
@@ -133,13 +138,16 @@ struct PerformanceMetric {
 // MARK: - Performance Measurement Extensions
 
 extension NSObject {
+    @MainActor
     func measurePerformance<T>(of operation: String, block: () throws -> T) rethrows -> T {
         PerformanceTracker.shared.startTracking(operation)
         defer { _ = PerformanceTracker.shared.endTracking(operation) }
         return try block()
     }
 
-    func measureAsyncPerformance<T>(of operation: String, block: () async throws -> T) async rethrows -> T {
+    @MainActor
+    func measureAsyncPerformance<T>(of operation: String, block: () async throws -> T)
+    async rethrows -> T {
         PerformanceTracker.shared.startTracking(operation)
         defer { _ = PerformanceTracker.shared.endTracking(operation) }
         return try await block()

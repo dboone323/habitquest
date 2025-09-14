@@ -72,7 +72,7 @@ func fi_findPotentialDuplicates(_ transactions: [FinancialTransaction]) -> [[Fin
                 sortedTransactions[dupIndex - 1].date)
             if interval < 48 * 60 * 60 {
                 duplicateSuspects.append([
-                    sortedTransactions[dupIndex - 1], sortedTransactions[dupIndex],
+                    sortedTransactions[dupIndex - 1], sortedTransactions[dupIndex]
                 ])
                 break
             }

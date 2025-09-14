@@ -102,7 +102,8 @@ struct PlatformToolbar: ViewModifier {
         let action: () -> Void
         let isDestructive: Bool
 
-        init(title: String, icon: String, isDestructive: Bool = false, action: @escaping () -> Void) {
+        init(title: String, icon: String, isDestructive: Bool = false, action: @escaping () -> Void)
+        {
             self.title = title
             self.icon = icon
             self.isDestructive = isDestructive
@@ -121,6 +122,7 @@ struct PlatformToolbar: ViewModifier {
                             Button(action: action.action) {
                                 Label(action.title, systemImage: action.icon)
                             }
+                            .accessibilityLabel("Button")
                             .help(action.title)
                         }
                     }
@@ -130,6 +132,7 @@ struct PlatformToolbar: ViewModifier {
                             ForEach(secondaryActions.indices, id: \.self) { index in
                                 let action = secondaryActions[index]
                                 Button(action.title, action: action.action)
+                                    .accessibilityLabel("Button")
                             }
                         }
                     }
@@ -140,6 +143,7 @@ struct PlatformToolbar: ViewModifier {
                             Button(action: action.action) {
                                 Image(systemName: action.icon)
                             }
+                            .accessibilityLabel("Button")
                         }
 
                         if !secondaryActions.isEmpty {
@@ -147,6 +151,7 @@ struct PlatformToolbar: ViewModifier {
                                 ForEach(secondaryActions.indices, id: \.self) { index in
                                     let action = secondaryActions[index]
                                     Button(action.title, action: action.action)
+                                        .accessibilityLabel("Button")
                                 }
                             } label: {
                                 Image(systemName: "ellipsis.circle")
@@ -164,11 +169,12 @@ extension View {
         primaryActions: [PlatformToolbar.ToolbarAction] = [],
         secondaryActions: [PlatformToolbar.ToolbarAction] = []
     ) -> some View {
-        modifier(PlatformToolbar(
-            title: title,
-            primaryActions: primaryActions,
-            secondaryActions: secondaryActions
-        ))
+        modifier(
+            PlatformToolbar(
+                title: title,
+                primaryActions: primaryActions,
+                secondaryActions: secondaryActions
+            ))
     }
 }
 
@@ -283,7 +289,7 @@ struct ExamplePlatformView: View {
         PlatformAdaptiveNavigation {
             ScrollView {
                 AdaptiveGrid {
-                    ForEach(0 ..< 6, id: \.self) { index in
+                    ForEach(0..<6, id: \.self) { index in
                         RoundedRectangle(cornerRadius: 12)
                             .fill(themeManager.currentTheme.secondaryBackgroundColor)
                             .frame(height: 120)
@@ -293,7 +299,9 @@ struct ExamplePlatformView: View {
                             )
                             .platformContextMenu {
                                 Button("Edit") {}
+                                    .accessibilityLabel("Button")
                                 Button("Delete", role: .destructive) {}
+                                    .accessibilityLabel("Button")
                             }
                     }
                 }
@@ -304,7 +312,7 @@ struct ExamplePlatformView: View {
                 primaryActions: [
                     .init(title: "Add Item", icon: "plus") {
                         showingAddItem = true
-                    },
+                    }
                 ],
                 secondaryActions: [
                     .init(title: "Sort", icon: "arrow.up.arrow.down") {},
@@ -319,11 +327,13 @@ struct ExamplePlatformView: View {
                             Button("Cancel") {
                                 showingAddItem = false
                             }
+                            .accessibilityLabel("Button")
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Save") {
                                 showingAddItem = false
                             }
+                            .accessibilityLabel("Button")
                         }
                     }
             }

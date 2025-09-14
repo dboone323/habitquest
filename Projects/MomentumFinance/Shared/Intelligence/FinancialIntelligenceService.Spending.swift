@@ -1,8 +1,7 @@
 import Foundation
 
 func fi_computeMonthlySpendingByCategory(transactions: [FinancialTransaction]) -> [String: [Date:
-        Double]]
-{
+    Double]] {
     let calendar = Calendar.current
     var monthlySpendingByCategory: [String: [Date: Double]] = [:]
 
@@ -42,7 +41,7 @@ func fi_generateSpendingInsightsFromMonthlyData(
                 FinancialInsight(
                     title: "Increased Spending in \(category.name)",
                     description:
-                    "Your spending in \(category.name) increased by \(percentIncrease)% last month.",
+                        "Your spending in \(category.name) increased by \(percentIncrease)% last month.",
                     priority: .medium,
                     type: .spendingPattern,
                     relatedCategoryId: categoryId,
@@ -55,7 +54,7 @@ func fi_generateSpendingInsightsFromMonthlyData(
                 FinancialInsight(
                     title: "Reduced Spending in \(category.name)",
                     description:
-                    "Your spending in \(category.name) decreased by \(percentDecrease)% last month.",
+                        "Your spending in \(category.name) decreased by \(percentDecrease)% last month.",
                     priority: .low,
                     type: .positiveSpendingTrend,
                     relatedCategoryId: categoryId,
@@ -86,7 +85,7 @@ func fi_topCategoriesInsight(
     return FinancialInsight(
         title: "Top Spending Categories",
         description:
-        "Your highest spending categories are \(topCategoryData.map(\.0).joined(separator: ", ")).",
+            "Your highest spending categories are \(topCategoryData.map(\.0).joined(separator: ", ")).",
         priority: .medium,
         type: .spendingPattern,
         visualizationType: .pieChart,
@@ -117,7 +116,7 @@ func fi_analyzeSpendingPatterns(
             FinancialInsight(
                 title: "Potential Recurring Expenses",
                 description:
-                "You may have \(recurring.count) recurring payments that are not tracked as subscriptions.",
+                    "You may have \(recurring.count) recurring payments that are not tracked as subscriptions.",
                 priority: .medium,
                 type: .subscriptionDetection,
                 data: recurring.prefix(5).map { ($0.title, abs($0.amount)) }
@@ -145,7 +144,7 @@ func fi_checkBudgetExceeded(
         visualizationType: .progressBar,
         data: [
             ("Budget", budget.limitAmount), ("Spent", totalSpent),
-            ("Overspent", overspent),
+            ("Overspent", overspent)
         ]
     )
 }
@@ -191,7 +190,7 @@ func fi_checkBudgetAtRisk(context: BudgetAnalysisContext) -> FinancialInsight? {
         visualizationType: .progressBar,
         data: [
             ("Budget", context.budget.limitAmount), ("Spent", context.totalSpent),
-            ("Projected", projectedTotal),
+            ("Projected", projectedTotal)
         ]
     )
 }
@@ -216,14 +215,13 @@ func fi_checkBudgetUnderutilized(
         visualizationType: .progressBar,
         data: [
             ("Budget", budget.limitAmount), ("Spent", totalSpent),
-            ("Remaining", budget.limitAmount - totalSpent),
+            ("Remaining", budget.limitAmount - totalSpent)
         ]
     )
 }
 
 func fi_analyzeBudgets(transactions: [FinancialTransaction], budgets: [Budget])
-    -> [FinancialInsight]
-{
+-> [FinancialInsight] {
     var insights: [FinancialInsight] = []
     let calendar = Calendar.current
     let currentMonth = calendar.component(.month, from: Date())
@@ -285,8 +283,7 @@ func fi_analyzeBudgets(transactions: [FinancialTransaction], budgets: [Budget])
 @MainActor
 extension FinancialIntelligenceService {
     private func findRecurringTransactionInsights(from transactions: [FinancialTransaction])
-        -> [FinancialInsight]
-    {
+    -> [FinancialInsight] {
         let recurringTransactions = fi_findRecurringTransactions(transactions)
         guard !recurringTransactions.isEmpty else { return [] }
 
@@ -295,7 +292,7 @@ extension FinancialIntelligenceService {
         let insight = FinancialInsight(
             title: "Potential Recurring Expenses",
             description:
-            "You may have \(recurringTransactions.count) recurring payments that are not tracked as subscriptions.",
+                "You may have \(recurringTransactions.count) recurring payments that are not tracked as subscriptions.",
             priority: .medium,
             type: .subscriptionDetection,
             visualizationType: .none,

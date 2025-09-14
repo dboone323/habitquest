@@ -69,7 +69,7 @@ struct DashboardSubscriptionsSection: View {
 
                     // View all subscriptions button
                     if subscriptions.count > 3 {
-                        Button(action: onViewAllTapped) {
+                        Button(action: onViewAllTapped).accessibilityLabel("Button") {
                             Text("View All \(subscriptions.count) Subscriptions")
                                 .font(.caption)
                                 .fontWeight(.medium)
@@ -87,7 +87,7 @@ struct DashboardSubscriptionsSection: View {
                             .font(.callout)
                             .foregroundStyle(.secondary)
 
-                        Button(action: onAddTapped) {
+                        Button(action: onAddTapped).accessibilityLabel("Button") {
                             Text("Add Subscription")
                                 .padding(.vertical, 4)
                                 .frame(maxWidth: 180)
@@ -142,16 +142,16 @@ struct DashboardSubscriptionsSection: View {
     let sampleSubscriptions = [
         Subscription(
             name: "Netflix", amount: 15.99, billingCycle: .monthly,
-            nextDueDate: Date().addingTimeInterval(86400 * 3)
+            nextDueDate: Date().addingTimeInterval(86_400 * 3)
         ),
         Subscription(
             name: "Spotify", amount: 9.99, billingCycle: .monthly,
-            nextDueDate: Date().addingTimeInterval(86400 * 7)
+            nextDueDate: Date().addingTimeInterval(86_400 * 7)
         ),
         Subscription(
             name: "Apple iCloud", amount: 2.99, billingCycle: .monthly,
-            nextDueDate: Date().addingTimeInterval(86400 * 14)
-        ),
+            nextDueDate: Date().addingTimeInterval(86_400 * 14)
+        )
     ]
 
     DashboardSubscriptionsSection(

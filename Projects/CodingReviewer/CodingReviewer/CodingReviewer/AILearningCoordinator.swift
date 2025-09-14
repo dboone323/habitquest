@@ -1,11 +1,11 @@
+import Foundation
+import Combine
+import SwiftUI
+
 // MARK: - Simplified AI Learning System
 
 // This is a simplified version for initial compilation and testing
 // Full AI learning features will be activated once the build is stable
-
-import Combine
-import Foundation
-import SwiftUI
 
 @MainActor
 class AILearningCoordinator: ObservableObject {

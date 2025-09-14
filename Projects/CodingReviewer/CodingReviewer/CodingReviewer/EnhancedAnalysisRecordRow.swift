@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EnhancedAnalysisRecordRow: View {
     let record: FileAnalysisRecord
-    @State private var isExpanded = true // Start expanded so users can see results immediately;
+    @State private var isExpanded = true  // Start expanded so users can see results immediately;
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -21,9 +21,12 @@ struct EnhancedAnalysisRecordRow: View {
                         .foregroundColor(.primary)
 
                     HStack {
-                        Label("\(record.analysisResults.count) issues", systemImage: "exclamationmark.triangle")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        Label(
+                            "\(record.analysisResults.count) issues",
+                            systemImage: "exclamationmark.triangle"
+                        )
+                        .font(.caption)
+                        .foregroundColor(.secondary)
 
                         Spacer()
 
@@ -39,6 +42,7 @@ struct EnhancedAnalysisRecordRow: View {
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .foregroundColor(.secondary)
                 }
+                .accessibilityLabel("Button")
             }
             .padding(.vertical, 4)
 
@@ -53,7 +57,8 @@ struct EnhancedAnalysisRecordRow: View {
                         .padding(.vertical, 8)
                 } else {
                     LazyVStack(alignment: .leading, spacing: 6) {
-                        ForEach(Array(record.analysisResults.enumerated()), id: \.offset) { index, item in
+                        ForEach(Array(record.analysisResults.enumerated()), id: \.offset) {
+                            index, item in
                             analysisItemView(item: item, index: index)
                         }
                     }
@@ -89,7 +94,7 @@ struct EnhancedAnalysisRecordRow: View {
         HStack(alignment: .top, spacing: 8) {
             // Severity indicator
             Circle()
-                .fill(severityColor(for: item.severity))
+                .fill(severityColor(for: item.severityLevel))
                 .frame(width: 8, height: 8)
                 .offset(y: 4)
 
@@ -124,18 +129,16 @@ struct EnhancedAnalysisRecordRow: View {
         .padding(.vertical, 4)
     }
 
-    private func severityColor(for severity: String) -> Color {
-        switch severity.lowercased() {
-        case "critical":
+    private func severityColor(for severity: SeverityLevel) -> Color {
+        switch severity {
+        case .critical:
             .red
-        case "high":
+        case .high:
             .orange
-        case "medium":
+        case .medium:
             .yellow
-        case "low":
+        case .low:
             .blue
-        default:
-            .gray
         }
     }
 
@@ -160,16 +163,16 @@ struct EnhancedAnalysisRecordRow_Previews: PreviewProvider {
         let sampleAnalysisResults = [
             EnhancedAnalysisItem(
                 message: "Variable 'unused' is declared but never used",
-                severity: "medium",
+                severityLevel: .medium,
                 lineNumber: 15,
                 type: "quality"
             ),
             EnhancedAnalysisItem(
                 message: "Force unwrapping may cause runtime crash",
-                severity: "high",
+                severityLevel: .high,
                 lineNumber: 23,
                 type: "security"
-            ),
+            )
         ]
 
         // Create FileAnalysisRecord using the correct initializer

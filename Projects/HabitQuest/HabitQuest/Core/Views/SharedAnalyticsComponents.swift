@@ -34,7 +34,10 @@ struct AnalyticsCard: View {
         }
     }
 
-    init(title: String, value: String, subtitle: String, color: Color, icon: String, trend: TrendDirection? = nil) {
+    init(
+        title: String, value: String, subtitle: String, color: Color, icon: String,
+        trend: TrendDirection? = nil
+    ) {
         self.title = title
         self.value = value
         self.subtitle = subtitle
@@ -87,10 +90,11 @@ struct AnalyticsCard: View {
                         .fill(trend.color)
                         .frame(width: 6, height: 6)
                 }
-                .transition(.asymmetric(
-                    insertion: .move(edge: .trailing).combined(with: .opacity),
-                    removal: .opacity
-                ))
+                .transition(
+                    .asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .opacity
+                    ))
             }
         }
     }
@@ -288,7 +292,9 @@ struct StreakDistributionChartView: View {
                         .foregroundColor(.white)
                         .opacity(item.count > 0 ? 1 : 0)
                 )
-                .animation(.spring(response: 0.8, dampingFraction: 0.8).delay(Double(index) * 0.1), value: animateChart)
+                .animation(
+                    .spring(response: 0.8, dampingFraction: 0.8).delay(Double(index) * 0.1),
+                    value: animateChart)
         }
     }
 
@@ -344,10 +350,11 @@ struct InsightCard: View {
 
             if isExpanded {
                 expandedContent
-                    .transition(.asymmetric(
-                        insertion: .move(edge: .top).combined(with: .opacity),
-                        removal: .opacity
-                    ))
+                    .transition(
+                        .asymmetric(
+                            insertion: .move(edge: .top).combined(with: .opacity),
+                            removal: .opacity
+                        ))
             }
         }
         .padding(16)
@@ -478,6 +485,7 @@ struct HabitDetailSheet: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") { dismiss() }
+                        .accessibilityLabel("Done")
                 }
             }
         }
@@ -496,10 +504,15 @@ struct AnalyticsExportView: View {
                         .fontWeight(.semibold)
 
                     if let data = analyticsData {
-                        exportDetailView(title: "Total Active Streaks", value: "\(data.totalActiveStreaks)")
-                        exportDetailView(title: "Longest Overall Streak", value: "\(data.longestOverallStreak)")
-                        exportDetailView(title: "Average Consistency", value: "\(Int(data.averageConsistency * 100))%")
-                        exportDetailView(title: "Milestones Achieved", value: "\(data.milestonesAchieved)")
+                        exportDetailView(
+                            title: "Total Active Streaks", value: "\(data.totalActiveStreaks)")
+                        exportDetailView(
+                            title: "Longest Overall Streak", value: "\(data.longestOverallStreak)")
+                        exportDetailView(
+                            title: "Average Consistency",
+                            value: "\(Int(data.averageConsistency * 100))%")
+                        exportDetailView(
+                            title: "Milestones Achieved", value: "\(data.milestonesAchieved)")
 
                         Divider()
 
@@ -516,7 +529,9 @@ struct AnalyticsExportView: View {
                             .font(.headline)
 
                         ForEach(data.topPerformingHabits.prefix(5), id: \.habit.id) { performer in
-                            exportDetailView(title: performer.habit.name, value: "\(performer.currentStreak) days")
+                            exportDetailView(
+                                title: performer.habit.name,
+                                value: "\(performer.currentStreak) days")
                         }
                     } else {
                         Text("No analytics data available for export.")

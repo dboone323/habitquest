@@ -26,7 +26,7 @@ struct MomentumFinanceApp: App {
             ModelReferences.subscriptions,
             ModelReferences.budgets,
             ModelReferences.categories,
-            ModelReferences.goals,
+            ModelReferences.goals
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -40,20 +40,20 @@ struct MomentumFinanceApp: App {
     var body: some Scene {
         WindowGroup {
             #if os(iOS)
-                ContentView()
-                    .environment(NavigationCoordinator.shared)
+            ContentView()
+                .environment(NavigationCoordinator.shared)
             #elseif os(macOS)
-                // Use the enhanced macOS UI that better utilizes screen space
-                IntegratedMacOSContentView()
-                    .environment(NavigationCoordinator.shared)
+            // Use the enhanced macOS UI that better utilizes screen space
+            IntegratedMacOSContentView()
+                .environment(NavigationCoordinator.shared)
             #endif
         }
         .modelContainer(sharedModelContainer)
 
         #if os(macOS)
-            Settings {
-                SettingsView()
-            }
+        Settings {
+            SettingsView()
+        }
         #endif
     }
 }

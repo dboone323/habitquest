@@ -1,14 +1,14 @@
 import Foundation
-import os
 import SwiftData
 import SwiftUI
+import os
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
 // Model references for SwiftData container
-private extension MomentumFinanceApp {
-    enum ModelReferences {
+extension MomentumFinanceApp {
+    fileprivate enum ModelReferences {
         static let accounts = FinancialAccount.self
         static let transactions = FinancialTransaction.self
         static let subscriptions = Subscription.self
@@ -36,7 +36,7 @@ struct MomentumFinanceApp: App {
             ModelReferences.subscriptions,
             ModelReferences.budgets,
             ModelReferences.categories,
-            ModelReferences.goals,
+            ModelReferences.goals
         ])
 
         print("MomentumFinanceApp: Schema created")
@@ -52,7 +52,9 @@ struct MomentumFinanceApp: App {
         } catch {
             // Log the error instead of crashing
             print("MomentumFinanceApp: ERROR creating ModelContainer: \(error)")
-            os_log("Could not create ModelContainer: %@", log: .default, type: .error, error.localizedDescription)
+            os_log(
+                "Could not create ModelContainer: %@", log: .default, type: .error,
+                error.localizedDescription)
 
             // Try with in-memory storage as fallback
             do {
@@ -62,7 +64,9 @@ struct MomentumFinanceApp: App {
                 return container
             } catch {
                 print("MomentumFinanceApp: ERROR creating in-memory ModelContainer: \(error)")
-                os_log("Could not create in-memory ModelContainer: %@", log: .default, type: .error, error.localizedDescription)
+                os_log(
+                    "Could not create in-memory ModelContainer: %@", log: .default, type: .error,
+                    error.localizedDescription)
                 return nil
             }
         }
@@ -87,43 +91,46 @@ struct MomentumFinanceApp: App {
                         .font(.title)
                         .fontWeight(.bold)
 
-                    Text("The app encountered an error while setting up the database. Please try restarting the app.")
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
+                    Text(
+                        "The app encountered an error while setting up the database. Please try restarting the app."
+                    )
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
 
                     Button("Quit App") {
                         #if os(iOS)
                         // iOS doesn't allow programmatic app termination
                         // User must manually close the app
                         #else
-                            NSApplication.shared.terminate(nil)
+                        NSApplication.shared.terminate(nil)
                         #endif
                     }
+                    .accessibilityLabel("Button")
                     .buttonStyle(.borderedProminent)
                 }
                 .padding()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 #if os(iOS)
-                    .background(Color(uiColor: .systemBackground))
+                .background(Color(uiColor: .systemBackground))
                 #else
-                    .background(Color(NSColor.windowBackgroundColor))
+                .background(Color(NSColor.windowBackgroundColor))
                 #endif
-                    .onAppear {
-                        print("MomentumFinanceApp: Error view appeared")
-                    }
+                .onAppear {
+                    print("MomentumFinanceApp: Error view appeared")
+                }
             }
         }
 
         #if os(macOS)
-            Settings {
-                if let container = sharedModelContainer {
-                    SettingsView()
-                        .modelContainer(container)
-                } else {
-                    Text("Settings unavailable - Database error")
-                        .padding()
-                }
+        Settings {
+            if let container = sharedModelContainer {
+                SettingsView()
+                    .modelContainer(container)
+            } else {
+                Text("Settings unavailable - Database error")
+                    .padding()
             }
+        }
         #endif
     }
 }

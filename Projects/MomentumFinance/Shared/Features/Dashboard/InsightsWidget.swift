@@ -12,10 +12,10 @@ struct InsightsWidget: View {
     @State private var showAllInsights = false
 
     private var topInsights: [FinancialInsight] {
-        intelligenceService.insights
-            .sorted { $0.priority > $1.priority }
-            .prefix(3)
-            .compactMap(\.self)
+        Array(
+            intelligenceService.insights
+                .sorted { $0.priority > $1.priority }
+                .prefix(3))
     }
 
     var body: some View {
@@ -32,8 +32,9 @@ struct InsightsWidget: View {
                     ProgressView()
                         .scaleEffect(0.8)
                 } else if !intelligenceService.insights.isEmpty {
-                    Button("View All") {
-                        showAllInsights = true
+                    Button(action: { showAllInsights = true }) {
+                        Text("View All")
+                            .accessibilityLabel("View All Insights")
                     }
                     .font(.caption)
                     .foregroundColor(.blue)
@@ -119,8 +120,9 @@ struct InsightsWidget: View {
 
                     Spacer()
 
-                    Button("View All") {
-                        showAllInsights = true
+                    Button(action: { showAllInsights = true }) {
+                        Text("View All")
+                            .accessibilityLabel("View All Insights")
                     }
                     .font(.caption)
                     .foregroundColor(.blue)
@@ -169,6 +171,7 @@ struct CompactInsightRow: View {
             .padding(.vertical, 4)
         }
         .buttonStyle(PlainButtonStyle())
+        .accessibilityLabel("View insight details for \(insight.title)")
         .sheet(isPresented: $showDetail) {
             InsightDetailView(insight: insight)
         }
@@ -183,10 +186,11 @@ struct CompactInsightRow: View {
         // InsightsSummaryWidget is defined in InsightsSummaryWidget.swift
     }
     .padding()
-    .modelContainer(for: [
-        FinancialAccount.self,
-        FinancialTransaction.self,
-        Budget.self,
-        ExpenseCategory.self,
-    ], inMemory: true)
+    .modelContainer(
+        for: [
+            FinancialAccount.self,
+            FinancialTransaction.self,
+            Budget.self,
+            ExpenseCategory.self
+        ], inMemory: true)
 }

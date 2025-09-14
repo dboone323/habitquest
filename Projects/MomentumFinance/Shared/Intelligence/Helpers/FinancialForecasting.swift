@@ -16,7 +16,7 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
     }
 
     let recentMonthlyIncomes = monthlyIncome
-        .filter { 
+        .filter {
             guard let key = $0.key,
                   let interval = calendar.dateInterval(of: .month, for: key),
                   let sixMonthsAgo = calendar.date(byAdding: .month, value: -6, to: now) else { return false }
@@ -37,7 +37,7 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
             visualizationType: VisualizationType.lineChart,
             data: [
                 ("Estimated Monthly Income", avgMonthlyIncome),
-                ("Data Points", Double(recentMonthlyIncomes.count)),
+                ("Data Points", Double(recentMonthlyIncomes.count))
             ]
         )
         insights.append(insight)
@@ -50,7 +50,7 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
     }
 
     let recentMonthlyExpenses = monthlyExpenses
-        .filter { 
+        .filter {
             guard let key = $0.key,
                   let interval = calendar.dateInterval(of: .month, for: key),
                   let sixMonthsAgo = calendar.date(byAdding: .month, value: -6, to: now) else { return false }
@@ -71,7 +71,7 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
             visualizationType: VisualizationType.lineChart,
             data: [
                 ("Estimated Monthly Expenses", avgMonthlyExpenses),
-                ("Data Points", Double(recentMonthlyExpenses.count)),
+                ("Data Points", Double(recentMonthlyExpenses.count))
             ]
         )
         insights.append(insight)
@@ -105,7 +105,7 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
             data: [
                 ("Projected Income", avgIncome),
                 ("Projected Expenses", avgExpenses),
-                ("Net Cash Flow", netCashFlow),
+                ("Net Cash Flow", netCashFlow)
             ]
         )
         insights.append(insight)

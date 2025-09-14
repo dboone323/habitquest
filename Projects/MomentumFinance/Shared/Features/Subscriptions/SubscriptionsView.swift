@@ -1,7 +1,7 @@
+import AppKit
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
 #endif
 
 //
@@ -43,34 +43,34 @@ extension Features.Subscriptions {
 
         // Search functionality
         @State private var showingSearch = false
-    @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
+        @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
 
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
         private var secondaryBackgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemGroupedBackground)
+            return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.gray.opacity(0.1)
+            return Color.gray.opacity(0.1)
             #endif
         }
 
         private var toolbarPlacement: ToolbarItemPlacement {
             #if canImport(UIKit)
-                return .navigationBarTrailing
+            return .navigationBarTrailing
             #else
-                return .primaryAction
+            return .primaryAction
             #endif
         }
 
@@ -97,13 +97,13 @@ extension Features.Subscriptions {
                         subscriptions: subscriptions,
                         selectedFilter: $selectedFilter,
                         showingAddSubscription: $showingAddSubscription,
-                    )
+                        )
 
                     // Content Section
                     SubscriptionContentView(
                         filteredSubscriptions: filteredSubscriptions,
                         selectedSubscription: $selectedSubscription,
-                    )
+                        )
                 }
                 .navigationTitle("Subscriptions")
                 .toolbar {
@@ -133,7 +133,7 @@ extension Features.Subscriptions {
                         .padding()
                 }
                 .sheet(isPresented: $showingSearch) {
-                    Features.GlobalSearchView()
+                    Features.GlobalSearch.GlobalSearchView()
                 }
                 .sheet(item: $selectedSubscription) { subscription in
                     SubscriptionDetailView(subscription: subscription)
@@ -152,9 +152,9 @@ extension Features.Subscriptions {
             accounts: [FinancialAccount] = []
         ) {
             #if !canImport(SwiftData)
-                self.subscriptions = subscriptions
-                self.categories = categories
-                self.accounts = accounts
+            self.subscriptions = subscriptions
+            self.categories = categories
+            self.accounts = accounts
             #endif
         }
     }

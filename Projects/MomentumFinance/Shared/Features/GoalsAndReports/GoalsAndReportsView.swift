@@ -17,22 +17,22 @@ extension Features.GoalsAndReports {
         @Environment(\.modelContext)
         private var modelContext
         #if canImport(SwiftData)
-            #if canImport(SwiftData)
-                private var savingsGoals: [SavingsGoal] = []
-                private var transactions: [FinancialTransaction] = []
-                private var budgets: [Budget] = []
-                private var categories: [ExpenseCategory] = []
-            #else
-                private var savingsGoals: [SavingsGoal] = []
-                private var transactions: [FinancialTransaction] = []
-                private var budgets: [Budget] = []
-                private var categories: [ExpenseCategory] = []
-            #endif
+        #if canImport(SwiftData)
+        private var savingsGoals: [SavingsGoal] = []
+        private var transactions: [FinancialTransaction] = []
+        private var budgets: [Budget] = []
+        private var categories: [ExpenseCategory] = []
         #else
-            private var savingsGoals: [SavingsGoal] = []
-            private var transactions: [FinancialTransaction] = []
-            private var budgets: [Budget] = []
-            private var categories: [ExpenseCategory] = []
+        private var savingsGoals: [SavingsGoal] = []
+        private var transactions: [FinancialTransaction] = []
+        private var budgets: [Budget] = []
+        private var categories: [ExpenseCategory] = []
+        #endif
+        #else
+        private var savingsGoals: [SavingsGoal] = []
+        private var transactions: [FinancialTransaction] = []
+        private var budgets: [Budget] = []
+        private var categories: [ExpenseCategory] = []
         #endif
 
         @State private var selectedTab = 0
@@ -50,7 +50,7 @@ extension Features.GoalsAndReports {
                     HeaderSection(
                         selectedTab: $selectedTab,
                         showingAddGoal: $showingAddGoal,
-                    )
+                        )
 
                     // Content with Animation
                     TabView(selection: $selectedTab) {
@@ -58,14 +58,14 @@ extension Features.GoalsAndReports {
                             goals: savingsGoals,
                             showingAddGoal: $showingAddGoal,
                             selectedGoal: $selectedGoal,
-                        )
+                            )
                         .tag(0)
 
                         ReportsTab(
                             transactions: transactions,
                             budgets: budgets,
                             categories: categories,
-                        )
+                            )
                         .tag(1)
                     }
                     #if canImport(UIKit)
@@ -74,42 +74,42 @@ extension Features.GoalsAndReports {
                 }
                 .navigationTitle("Goals & Reports")
                 #if canImport(UIKit)
-                    .navigationBarHidden(true)
+                .navigationBarHidden(true)
                 #endif
-                    .toolbar {
-                        ToolbarItem(placement: .automatic) {
-                            HStack(spacing: 12) {
-                                // Search Button
-                                Button {
-                                    showingSearch = true
-                                    NavigationCoordinator.shared.activateSearch()
-                                } label: {
-                                    Image(systemName: "magnifyingglass")
-                                        .font(.system(size: 18, weight: .semibold))
-                                }
+                .toolbar {
+                    ToolbarItem(placement: .automatic) {
+                        HStack(spacing: 12) {
+                            // Search Button
+                            Button {
+                                showingSearch = true
+                                NavigationCoordinator.shared.activateSearch()
+                            } label: {
+                                Image(systemName: "magnifyingglass")
+                                    .font(.system(size: 18, weight: .semibold))
+                            }
 
-                                // Add Goal Button
-                                Button {
-                                    showingAddGoal = true
-                                } label: {
-                                    Image(systemName: "plus")
-                                        .font(.system(size: 18, weight: .semibold))
-                                }
+                            // Add Goal Button
+                            Button {
+                                showingAddGoal = true
+                            } label: {
+                                Image(systemName: "plus")
+                                    .font(.system(size: 18, weight: .semibold))
                             }
                         }
                     }
-                    .sheet(isPresented: $showingAddGoal) {
-                        AddSavingsGoalView()
-                    }
-                    .sheet(isPresented: $showingSearch) {
-                        Features.GlobalSearchView()
-                    }
-                    .sheet(item: $selectedGoal) { goal in
-                        SavingsGoalDetailView(goal: goal)
-                    }
-                    .onAppear {
-                        viewModel.setModelContext(modelContext)
-                    }
+                }
+                .sheet(isPresented: $showingAddGoal) {
+                    AddSavingsGoalView()
+                }
+                .sheet(isPresented: $showingSearch) {
+                    Features.GlobalSearch.GlobalSearchView()
+                }
+                .sheet(item: $selectedGoal) { goal in
+                    SavingsGoalDetailView(goal: goal)
+                }
+                .onAppear {
+                    viewModel.setModelContext(modelContext)
+                }
             }
         }
 
@@ -122,21 +122,21 @@ extension Features.GoalsAndReports {
             // Cross-platform color support
             private var backgroundColor: Color {
                 #if canImport(UIKit)
-                    return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
                 #elseif canImport(AppKit)
-                    return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
                 #else
-                    return Color.white
+                return Color.white
                 #endif
             }
 
             private var secondaryBackgroundColor: Color {
                 #if canImport(UIKit)
-                    return Color(UIColor.systemGroupedBackground)
+                return Color(UIColor.systemGroupedBackground)
                 #elseif canImport(AppKit)
-                    return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
                 #else
-                    return Color.gray.opacity(0.1)
+                return Color.gray.opacity(0.1)
                 #endif
             }
 
@@ -164,7 +164,7 @@ extension Features.GoalsAndReports {
                                         .font(.title2)
                                         .foregroundColor(.blue)
                                 },
-                            )
+                                )
                         }
                     }
 
@@ -206,27 +206,27 @@ extension Features.GoalsAndReports {
                                                 isSelected
                                                     ? LinearGradient(
                                                         gradient: Gradient(colors: [
-                                                            .blue, .blue.opacity(0.8),
+                                                            .blue, .blue.opacity(0.8)
                                                         ]),
                                                         startPoint: .leading,
                                                         endPoint: .trailing,
-                                                    )
+                                                        )
                                                     : LinearGradient(
                                                         gradient: Gradient(colors: [Color.clear]),
                                                         startPoint: .leading,
                                                         endPoint: .trailing,
-                                                    ),
-                                            ),
-                                    )
+                                                        ),
+                                                ),
+                                        )
                                 },
-                            )
+                                )
                         }
                         .padding(4)
                         .background(
                             RoundedRectangle(cornerRadius: 14)
                                 .fill(secondaryBackgroundColor)
                                 .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
-                        )
+                            )
                     }
                 }
                 .padding()
@@ -235,8 +235,8 @@ extension Features.GoalsAndReports {
                         gradient: Gradient(colors: [backgroundColor, secondaryBackgroundColor]),
                         startPoint: .top,
                         endPoint: .bottom,
-                    ),
-                )
+                        ),
+                    )
             }
         }
 
@@ -256,8 +256,9 @@ extension Features.GoalsAndReports {
                     if goals.isEmpty {
                         Text("No savings goals yet")
                             .foregroundColor(.secondary)
-                        Button("Add Goal") {
-                            showingAddGoal = true
+                        Button(action: { showingAddGoal = true }) {
+                            Text("Add Goal")
+                                .accessibilityLabel("Button")
                         }
                         .padding()
                     } else {
@@ -297,7 +298,7 @@ extension Features.GoalsAndReports {
                     transactions: transactions,
                     budgets: budgets,
                     categories: categories,
-                )
+                    )
             }
         }
     }
@@ -308,6 +309,6 @@ extension Features.GoalsAndReports {
 #Preview {
     Features.GoalsAndReports.GoalsAndReportsView()
         .modelContainer(for: [
-            SavingsGoal.self, FinancialTransaction.self, Budget.self, ExpenseCategory.self,
+            SavingsGoal.self, FinancialTransaction.self, Budget.self, ExpenseCategory.self
         ])
 }

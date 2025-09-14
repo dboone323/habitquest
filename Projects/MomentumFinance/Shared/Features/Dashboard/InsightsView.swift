@@ -1,13 +1,12 @@
-// Momentum Finance - Insights View
-// Copyright © 2025 Momentum Finance. All rights reserved.
-
+import Foundation
 import Charts
 import SwiftData
 import SwiftUI
 
-// Use canonical `FinancialInsight`, `InsightPriority`, and `InsightType` from
-// `Shared/Intelligence/Components/FinancialInsightModels.swift`.
+// Momentum Finance - Insights View
+// Copyright © 2025 Momentum Finance. All rights reserved.
 
+// Import the canonical financial insight models
 /// View that displays financial insights and recommendations
 struct InsightsView: View {
     @StateObject private var intelligenceService = FinancialIntelligenceService.shared
@@ -20,55 +19,55 @@ struct InsightsView: View {
     var body: some View {
         Group {
             #if os(macOS)
-                NavigationStack {
-                    VStack(spacing: 0) {
-                        // Filter Bar
-                        InsightsFilterBar(
-                            filterPriority: $filterPriority,
-                            filterType: $filterType
-                        )
+            NavigationStack {
+                VStack(spacing: 0) {
+                    // Filter Bar
+                    InsightsFilterBar(
+                        filterPriority: $filterPriority,
+                        filterType: $filterType
+                    )
 
-                        // Insights Content
-                        insightsContent
-                    }
-                    .navigationTitle("Financial Insights")
-                    .toolbar {
-                        ToolbarItem {
-                            Button("Refresh") {
-                                Task {
-                                    await intelligenceService.analyzeFinancialData(
-                                        modelContext: modelContext)
-                                }
+                    // Insights Content
+                    insightsContent
+                }
+                .navigationTitle("Financial Insights")
+                .toolbar {
+                    ToolbarItem(placement: .navigation) {
+                        Button("Refresh").accessibilityLabel("Button") {
+                            Task {
+                                await intelligenceService.analyzeFinancialData(
+                                    modelContext: modelContext)
                             }
-                            .disabled(intelligenceService.isAnalyzing)
                         }
+                        .disabled(intelligenceService.isAnalyzing)
                     }
                 }
+            }
             #else
-                NavigationView {
-                    VStack(spacing: 0) {
-                        // Filter Bar
-                        InsightsFilterBar(
-                            filterPriority: $filterPriority,
-                            filterType: $filterType
-                        )
+            NavigationView {
+                VStack(spacing: 0) {
+                    // Filter Bar
+                    InsightsFilterBar(
+                        filterPriority: $filterPriority,
+                        filterType: $filterType
+                    )
 
-                        // Insights Content
-                        insightsContent
-                    }
-                    .navigationTitle("Financial Insights")
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Refresh") {
-                                Task {
-                                    await intelligenceService.analyzeFinancialData(
-                                        modelContext: modelContext)
-                                }
-                            }
-                            .disabled(intelligenceService.isAnalyzing)
-                        }
-                    }
+                    // Insights Content
+                    insightsContent
                 }
+                .navigationTitle("Financial Insights")
+                .navigationBarItems(
+                    trailing:
+                        Button("Refresh") {
+                            Task {
+                                await intelligenceService.analyzeFinancialData(
+                                    modelContext: modelContext)
+                            }
+                        }
+                        .disabled(intelligenceService.isAnalyzing)
+                        .accessibilityLabel("Button")
+                )
+            }
             #endif
         }
         .sheet(item: $selectedInsight) { insight in
@@ -116,7 +115,7 @@ struct InsightsView: View {
                 }
                 return true
             }
-            .sorted { $0.priority > $1.priority } // Sort by priority (critical first)
+            .sorted { $0.priority > $1.priority }  // Sort by priority (critical first)
     }
 }
 
@@ -129,7 +128,7 @@ struct InsightsView: View {
                 FinancialAccount.self,
                 FinancialTransaction.self,
                 Budget.self,
-                ExpenseCategory.self,
+                ExpenseCategory.self
             ], inMemory: true
         )
 }

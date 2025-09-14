@@ -11,7 +11,7 @@ enum SecurityConfig {
     static let allowedAPIEndpoints = [
         "http://localhost:11434", // Ollama local server
         "https://huggingface.co", // Hugging Face free tier
-        "https://api.github.com", // GitHub API for repository access
+        "https://api.github.com" // GitHub API for repository access
     ]
 
     static func validateEndpoint(_ endpoint: String) -> Bool {

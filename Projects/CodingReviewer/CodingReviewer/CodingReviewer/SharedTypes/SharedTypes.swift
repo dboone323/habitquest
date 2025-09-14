@@ -20,16 +20,16 @@ import Foundation
  SharedTypes Module contains:
 
  1. CodeTypes.swift - Basic code and quality enums
-    - CodeLanguage, Severity, QualityLevel, EffortLevel, ImpactLevel
+ - CodeLanguage, Severity, QualityLevel, EffortLevel, ImpactLevel
 
  2. ServiceTypes.swift - AI and service-related types
-    - AIProvider, AnalysisType, SuggestionType, ProjectType, FileUploadStatus
-    - APIUsageStatus, RateLimitType
+ - AIProvider, AnalysisType, SuggestionType, ProjectType, FileUploadStatus
+ - APIUsageStatus, RateLimitType
 
  3. AnalysisTypes.swift - Analysis and result-specific types
-    - AnalysisEngine, AnalysisScope, AnalysisMode, PatternType, PatternConfidence
-    - QualityMetric, ComplexityLevel, DocumentationType, DocumentationQuality
-    - FixCategory, FixStatus
+ - AnalysisEngine, AnalysisScope, AnalysisMode, PatternType, PatternConfidence
+ - QualityMetric, ComplexityLevel, DocumentationType, DocumentationQuality
+ - FixCategory, FixStatus
 
  Usage:
  - Import SharedTypes in any file that needs these type definitions

@@ -1,5 +1,5 @@
-import CoreML
 import Foundation
+import CoreML
 import OSLog
 import SwiftData
 import SwiftUI
@@ -86,7 +86,7 @@ class FinancialIntelligenceService: ObservableObject {
 
     /// Categorizes a new transaction based on historical data
     func suggestCategoryForTransaction(_ transaction: FinancialTransaction) -> ExpenseCategory? {
-        return mlModels.suggestCategoryForTransaction(transaction)
+        mlModels.suggestCategoryForTransaction(transaction)
     }
 
     // MARK: - Specific Analysis Methods (Delegate to Helpers)
@@ -94,17 +94,16 @@ class FinancialIntelligenceService: ObservableObject {
     private func analyzeSpendingPatterns(
         transactions: [FinancialTransaction], categories: [ExpenseCategory]
     ) -> [FinancialInsight] {
-        return fi_analyzeSpendingPatterns(transactions: transactions, categories: categories)
+        fi_analyzeSpendingPatterns(transactions: transactions, categories: categories)
     }
 
     private func detectAnomalies(transactions: [FinancialTransaction]) -> [FinancialInsight] {
-        return fi_detectAnomalies(transactions: transactions)
+        fi_detectAnomalies(transactions: transactions)
     }
 
     private func analyzeBudgets(transactions: [FinancialTransaction], budgets: [Budget])
-        -> [FinancialInsight]
-    {
-        return fi_analyzeBudgets(transactions: transactions, budgets: budgets)
+    -> [FinancialInsight] {
+        fi_analyzeBudgets(transactions: transactions, budgets: budgets)
     }
 
     // Forecasting is implemented canonically in

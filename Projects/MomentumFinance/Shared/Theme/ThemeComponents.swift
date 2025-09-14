@@ -9,7 +9,7 @@
 import SwiftUI
 
 /// Common UI components with theme-aware styling
-/// 
+///
 /// This main coordinator delegates to focused component implementations:
 /// - ThemeCardComponents: Card containers and sections
 /// - ThemeButtonComponents: Button styles and implementations
@@ -18,17 +18,8 @@ import SwiftUI
 /// - ThemeViewExtensions: SwiftUI view extensions
 /// - ThemeComponentsPreview: Preview and development tools
 struct ThemeComponents: @unchecked Sendable {
-    
-    // MARK: - Component Delegates
-    
-    // Use the canonical, public implementations from `Shared/Theme/Components`.
-    // We'll implement a thin, inline adapter that mirrors the canonical
-    // component behavior so this aggregator compiles reliably.
-    
-    public init() {}
-    
     // MARK: - Card Components
-    
+
     @MainActor
     func card(@ViewBuilder content: @escaping () -> some View) -> some View {
         let theme = ColorTheme.shared
@@ -38,7 +29,7 @@ struct ThemeComponents: @unchecked Sendable {
             .cornerRadius(12)
             .shadow(color: Color.black.opacity(theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
     }
-    
+
     @MainActor
     func cardWithHeader(title: String, @ViewBuilder content: @escaping () -> some View) -> some View {
         let theme = ColorTheme.shared
@@ -57,7 +48,7 @@ struct ThemeComponents: @unchecked Sendable {
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
     }
-    
+
     @MainActor
     func section(title: String? = nil, @ViewBuilder content: @escaping () -> some View) -> some View {
         let theme = ColorTheme.shared
@@ -74,9 +65,10 @@ struct ThemeComponents: @unchecked Sendable {
         .background(theme.secondaryBackground)
         .cornerRadius(8)
     }
-    
+
     @MainActor
-    func listRow(icon: String, title: String, @ViewBuilder trailing: @escaping () -> some View) -> some View {
+    func listRow(icon: String, title: String, @ViewBuilder trailing: @escaping () -> some View)
+    -> some View {
         let theme = ColorTheme.shared
         return HStack {
             Image(systemName: icon)
@@ -92,39 +84,39 @@ struct ThemeComponents: @unchecked Sendable {
         }
         .padding(.vertical, 8)
     }
-    
+
     // MARK: - Button Components
-    
+
     @MainActor
-    func primaryButton(@ViewBuilder label: @escaping () -> some View) -> some View {
+    func primaryButton(@ViewBuilder label: () -> some View) -> some View {
         let theme = ColorTheme.shared
-        return Button(action: {}, label: label)
+        return Button(action: {}, label: label).accessibilityLabel("Button")
             .buttonStyle(PrimaryButtonStyle(theme: theme))
     }
-    
+
     @MainActor
-    func secondaryButton(@ViewBuilder label: @escaping () -> some View) -> some View {
+    func secondaryButton(@ViewBuilder label: () -> some View) -> some View {
         let theme = ColorTheme.shared
-        return Button(action: {}, label: label)
+        return Button(action: {}, label: label).accessibilityLabel("Button")
             .buttonStyle(SecondaryButtonStyle(theme: theme))
     }
-    
+
     @MainActor
-    func textButton(@ViewBuilder label: @escaping () -> some View) -> some View {
+    func textButton(@ViewBuilder label: () -> some View) -> some View {
         let theme = ColorTheme.shared
-        return Button(action: {}, label: label)
+        return Button(action: {}, label: label).accessibilityLabel("Button")
             .buttonStyle(TextButtonStyle(theme: theme))
     }
-    
+
     @MainActor
-    func destructiveButton(@ViewBuilder label: @escaping () -> some View) -> some View {
+    func destructiveButton(@ViewBuilder label: () -> some View) -> some View {
         let theme = ColorTheme.shared
-        return Button(action: {}, label: label)
+        return Button(action: {}, label: label).accessibilityLabel("Button")
             .buttonStyle(DestructiveButtonStyle(theme: theme))
     }
-    
+
     // MARK: - Financial Components
-    
+
     @MainActor
     func currencyDisplay(
         amount: Decimal,
@@ -135,7 +127,8 @@ struct ThemeComponents: @unchecked Sendable {
         // Inline currency display (mirrors ThemeFinancialComponents.formatCurrency)
         let theme = ColorTheme.shared
         let isValuePositive = isPositive ?? (amount >= 0)
-        let color: Color = (showSign ? (isValuePositive ? theme.income : theme.expense) : theme.primaryText)
+        let color: Color =
+            (showSign ? (isValuePositive ? theme.income : theme.expense) : theme.primaryText)
 
         func formatCurrency(_ amount: Decimal, showSign: Bool = false) -> String {
             let formatter = NumberFormatter()
@@ -155,9 +148,9 @@ struct ThemeComponents: @unchecked Sendable {
             .font(font)
             .foregroundStyle(color)
     }
-    
+
     // MARK: - Progress Components
-    
+
     @MainActor
     func budgetProgressBar(spent: Decimal, total: Decimal) -> some View {
         let theme = ColorTheme.shared
@@ -165,9 +158,9 @@ struct ThemeComponents: @unchecked Sendable {
         let progress = min(1.0, Double(NSDecimalNumber(decimal: ratio).doubleValue))
         let color: Color = {
             switch progress {
-            case 0 ..< 0.8:
+            case 0..<0.8:
                 return theme.budgetUnder
-            case 0.8 ..< 1.0:
+            case 0.8..<1.0:
                 return theme.budgetNear
             default:
                 return theme.budgetOver
@@ -197,13 +190,15 @@ struct ThemeComponents: @unchecked Sendable {
 
                 Spacer()
 
-                Text("\(formatCurrency(Double(truncating: spent as NSNumber))) of \(formatCurrency(Double(truncating: total as NSNumber)))")
-                    .font(.caption)
-                    .foregroundStyle(theme.secondaryText)
+                Text(
+                    "\(formatCurrency(Double(truncating: spent as NSNumber))) of \(formatCurrency(Double(truncating: total as NSNumber)))"
+                )
+                .font(.caption)
+                .foregroundStyle(theme.secondaryText)
             }
         }
     }
-    
+
     @MainActor
     func goalProgressCircle(progress: Double, diameter: CGFloat = 80) -> some View {
         let theme = ColorTheme.shared

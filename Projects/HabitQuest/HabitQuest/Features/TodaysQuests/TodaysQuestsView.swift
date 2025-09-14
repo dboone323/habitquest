@@ -25,17 +25,19 @@ struct TodaysQuestsView: View {
             .navigationTitle("Today's Quests")
             .toolbar {
                 #if os(iOS)
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Add Quest") {
-                            viewModel.showingAddQuest = true
-                        }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Add Quest") {
+                        viewModel.showingAddQuest = true
                     }
+                    .accessibilityLabel("Add Quest")
+                }
                 #else
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Add Quest") {
-                            viewModel.showingAddQuest = true
-                        }
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Add Quest") {
+                        viewModel.showingAddQuest = true
                     }
+                    .accessibilityLabel("Add Quest")
+                }
                 #endif
             }
             .sheet(isPresented: $viewModel.showingAddQuest) {
@@ -45,6 +47,7 @@ struct TodaysQuestsView: View {
             }
             .alert("Quest Completed!", isPresented: $viewModel.showingCompletionAlert) {
                 Button("Awesome!") {}
+                    .accessibilityLabel("Awesome")
             } message: {
                 Text(viewModel.completionMessage)
             }
@@ -195,9 +198,10 @@ private struct AddQuestView: View {
         NavigationView {
             Form {
                 Section("Quest Details") {
-                    TextField("Quest Name", text: $name)
+                    TextField("Quest Name", text: $name).accessibilityLabel("Text Field")
                     TextField("Description", text: $description, axis: .vertical)
-                        .lineLimit(3 ... 6)
+                        .accessibilityLabel("Text Field")
+                        .lineLimit(3...6)
                 }
 
                 Section("Settings") {
@@ -207,7 +211,7 @@ private struct AddQuestView: View {
                         }
                     }
 
-                    Stepper("XP Value: \(xpValue)", value: $xpValue, in: 5 ... 50, step: 5)
+                    Stepper("XP Value: \(xpValue)", value: $xpValue, in: 5...50, step: 5)
                 }
             }
             .navigationTitle("New Quest")
@@ -217,6 +221,7 @@ private struct AddQuestView: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .accessibilityLabel("Cancel")
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -230,6 +235,7 @@ private struct AddQuestView: View {
                         onAdd(habit)
                         dismiss()
                     }
+                    .accessibilityLabel("Add")
                     .disabled(name.isEmpty)
                 }
             }
@@ -243,10 +249,10 @@ private struct AddQuestView: View {
 private func streakColor(for streak: Int) -> Color {
     switch streak {
     case 0: .gray
-    case 1 ... 6: .orange
-    case 7 ... 29: .red
-    case 30 ... 99: .purple
-    case 100 ... 364: .blue
+    case 1...6: .orange
+    case 7...29: .red
+    case 30...99: .purple
+    case 100...364: .blue
     default: .yellow
     }
 }

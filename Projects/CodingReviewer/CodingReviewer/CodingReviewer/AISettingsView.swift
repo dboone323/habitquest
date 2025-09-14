@@ -1,7 +1,5 @@
-import OSLog
-
 import Foundation
-
+import OSLog
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 import SwiftUI
 
@@ -37,9 +35,11 @@ struct AISettingsView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Ollama Setup")
                             .font(.headline)
-                        Text("Ollama runs locally on your machine. Make sure it's installed and running.")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                        Text(
+                            "Ollama runs locally on your machine. Make sure it's installed and running."
+                        )
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                         Text("• Install: https://ollama.ai/download")
                         Text("• Start: Run 'ollama serve' in terminal")
                         Text("• Pull models: 'ollama pull codellama'")
@@ -58,6 +58,7 @@ struct AISettingsView: View {
                     saveConfiguration()
                 }
                 .buttonStyle(.borderedProminent)
+                .accessibilityLabel("Save Configuration Button")
             }
         }
         .navigationTitle("AI Settings")
@@ -65,7 +66,10 @@ struct AISettingsView: View {
             loadAPIKeys()
         }
         .alert("Settings", isPresented: $showAlert) {
-            Button("OK") {}
+            Button("OK") {
+                // Dismiss alert
+            }
+            .accessibilityLabel("OK Button")
         } message: {
             Text(alertMessage)
         }
@@ -87,8 +91,7 @@ struct AISettingsView: View {
         huggingFaceToken = UserDefaults.standard.string(forKey: "huggingface_api_key") ?? ""
 
         if let provider = UserDefaults.standard.string(forKey: "selected_provider"),
-           let aiProvider = AIProvider(rawValue: provider)
-        {
+           let aiProvider = AIProvider(rawValue: provider) {
             selectedProvider = aiProvider
             Logger().info("Loaded provider from UserDefaults: \(provider)")
         } else {

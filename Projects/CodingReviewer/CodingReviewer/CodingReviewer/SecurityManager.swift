@@ -2,7 +2,7 @@ import Foundation
 import Security
 
 class SecurityManager {
-    static let shared = SecurityManager()
+    static nonisolated(unsafe) let shared = SecurityManager()
 
     private init() {}
 
@@ -11,7 +11,7 @@ class SecurityManager {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecValueData as String: key.data(using: .utf8) ?? Data(),
+            kSecValueData as String: key.data(using: .utf8) ?? Data()
         ]
 
         let status = SecItemAdd(query as CFDictionary, nil)
@@ -23,7 +23,7 @@ class SecurityManager {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne,
+            kSecMatchLimit as String: kSecMatchLimitOne
         ]
 
         var result: AnyObject?
@@ -31,8 +31,7 @@ class SecurityManager {
 
         if status == errSecSuccess,
            let data = result as? Data,
-           let key = String(data: data, encoding: .utf8)
-        {
+           let key = String(data: data, encoding: .utf8) {
             return key
         } else {
             return nil
@@ -51,7 +50,8 @@ class SecurityManager {
 
     // Sanitize input strings
     func sanitizeInput(_ input: String) -> String {
-        let allowedCharacters = CharacterSet.alphanumerics.union(.whitespaces).union(.punctuationCharacters)
+        let allowedCharacters = CharacterSet.alphanumerics.union(.whitespaces).union(
+            .punctuationCharacters)
         return String(input.unicodeScalars.filter { allowedCharacters.contains($0) })
     }
 }

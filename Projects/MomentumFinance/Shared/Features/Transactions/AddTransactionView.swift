@@ -30,10 +30,10 @@ extension Features.Transactions {
             NavigationView {
                 Form {
                     Section(header: Text("Transaction Details")) {
-                        TextField("Title", text: $title)
+                        TextField("Title", text: $title).accessibilityLabel("Text Field")
 
-                        TextField("Amount", text: $amount)
-                        #if canImport(UIKit)
+                        TextField("Amount", text: $amount).accessibilityLabel("Text Field")
+                            #if canImport(UIKit)
                             .keyboardType(.decimalPad)
                         #endif
 
@@ -64,43 +64,43 @@ extension Features.Transactions {
                     }
 
                     Section(header: Text("Notes (Optional)")) {
-                        TextField("Add notes...", text: $notes, axis: .vertical)
+                        TextField("Add notes...", text: $notes, axis: .vertical).accessibilityLabel("Text Field")
                             .lineLimit(3 ... 6)
                     }
                 }
                 .navigationTitle("Add Transaction")
                 #if canImport(UIKit)
-                    .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
                 #endif
-                    .toolbar {
-                        #if canImport(UIKit)
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button("Cancel") {
-                                    dismiss()
-                                }
-                            }
-
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                Button("Save") {
-                                    saveTransaction()
-                                }
-                                .disabled(!isFormValid)
-                            }
-                        #else
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Cancel") {
-                                    dismiss()
-                                }
-                            }
-
-                            ToolbarItem(placement: .primaryAction) {
-                                Button("Save") {
-                                    saveTransaction()
-                                }
-                                .disabled(!isFormValid)
-                            }
-                        #endif
+                .toolbar {
+                    #if canImport(UIKit)
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button("Cancel").accessibilityLabel("Button") {
+                            dismiss()
+                        }
                     }
+
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Save").accessibilityLabel("Button") {
+                            saveTransaction()
+                        }
+                        .disabled(!isFormValid)
+                    }
+                    #else
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel").accessibilityLabel("Button") {
+                            dismiss()
+                        }
+                    }
+
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Save").accessibilityLabel("Button") {
+                            saveTransaction()
+                        }
+                        .disabled(!isFormValid)
+                    }
+                    #endif
+                }
             }
         }
 
@@ -115,7 +115,7 @@ extension Features.Transactions {
                 date: date,
                 transactionType: selectedTransactionType,
                 notes: notes.isEmpty ? nil : notes,
-            )
+                )
 
             transaction.category = selectedCategory
             transaction.account = account

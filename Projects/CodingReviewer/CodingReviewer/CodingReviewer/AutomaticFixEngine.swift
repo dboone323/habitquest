@@ -3,11 +3,14 @@ import OSLog
 
 // MARK: - Automatic Fix Engine for Code Issues
 
+@MainActor
 class AutomaticFixEngine {
     static let shared = AutomaticFixEngine()
     private let logger = OSLog(subsystem: "CodingReviewer", category: "AutomaticFixEngine")
-    private let learningCoordinator = AILearningCoordinator.shared
-    private let codeGenerator = EnhancedAICodeGenerator.shared
+
+    // Use lazy initialization to avoid MainActor isolation issues
+    private lazy var learningCoordinator = AILearningCoordinator.shared
+    private lazy var codeGenerator = EnhancedAICodeGenerator.shared
 
     private init() {}
 
@@ -38,10 +41,14 @@ class AutomaticFixEngine {
         }
 
         for failedFix in result.failedFixes {
-            await learningCoordinator.recordFailure(fix: failedFix.fix.description, error: failedFix.error.localizedDescription, context: filePath)
+            await learningCoordinator.recordFailure(
+                fix: failedFix.fix.description, error: failedFix.error.localizedDescription,
+                context: filePath)
         }
 
-        os_log("Applied %d automatic fixes to %@", log: logger, type: .info, result.appliedFixes.count, filePath)
+        os_log(
+            "Applied %d automatic fixes to %@", log: logger, type: .info, result.appliedFixes.count,
+            filePath)
         return result
     }
 
@@ -53,7 +60,8 @@ class AutomaticFixEngine {
             let lineNumber = index + 1
 
             // Detect various types of issues
-            issues.append(contentsOf: detectSwiftConcurrencyIssues(line: line, lineNumber: lineNumber))
+            issues.append(
+                contentsOf: detectSwiftConcurrencyIssues(line: line, lineNumber: lineNumber))
             issues.append(contentsOf: detectPerformanceIssues(line: line, lineNumber: lineNumber))
             issues.append(contentsOf: detectSecurityIssues(line: line, lineNumber: lineNumber))
             issues.append(contentsOf: detectCodeQualityIssues(line: line, lineNumber: lineNumber))
@@ -94,26 +102,27 @@ class AutomaticFixEngine {
     // Will be re-enabled when full AI features are activated
     /*
      private func prioritizeFixes(recommended: [RecommendedFix], traditional: [AutomaticFix]) -> [AutomaticFix] {
-         var prioritizedFixes: [AutomaticFix] = []
+     var prioritizedFixes: [AutomaticFix] = []
 
-         // Add high-confidence AI recommendations first
-         let highConfidenceRecommended = recommended.filter { $0.confidence > 0.8 }
-         prioritizedFixes.append(contentsOf: highConfidenceRecommended.map { $0.suggestedFix })
+     // Add high-confidence AI recommendations first
+     let highConfidenceRecommended = recommended.filter { $0.confidence > 0.8 }
+     prioritizedFixes.append(contentsOf: highConfidenceRecommended.map { $0.suggestedFix })
 
-         // Add traditional fixes not covered by AI recommendations
-         let coveredTypes = Set(highConfidenceRecommended.map { $0.issue.type })
-         let uncoveredTraditionalFixes = traditional.filter { !coveredTypes.contains($0.type) }
-         prioritizedFixes.append(contentsOf: uncoveredTraditionalFixes)
+     // Add traditional fixes not covered by AI recommendations
+     let coveredTypes = Set(highConfidenceRecommended.map { $0.issue.type })
+     let uncoveredTraditionalFixes = traditional.filter { !coveredTypes.contains($0.type) }
+     prioritizedFixes.append(contentsOf: uncoveredTraditionalFixes)
 
-         // Add medium-confidence AI recommendations
-         let mediumConfidenceRecommended = recommended.filter { $0.confidence > 0.5 && $0.confidence <= 0.8 }
-         prioritizedFixes.append(contentsOf: mediumConfidenceRecommended.map { $0.suggestedFix })
+     // Add medium-confidence AI recommendations
+     let mediumConfidenceRecommended = recommended.filter { $0.confidence > 0.5 && $0.confidence <= 0.8 }
+     prioritizedFixes.append(contentsOf: mediumConfidenceRecommended.map { $0.suggestedFix })
 
-         return prioritizedFixes
+     return prioritizedFixes
      }
      */
 
-    private func applyFixes(_ fixes: [AutomaticFix], to content: String, filePath: String) async throws -> FixApplicationResult {
+    private func applyFixes(_ fixes: [AutomaticFix], to content: String, filePath: String)
+    async throws -> FixApplicationResult {
         var modifiedContent = content
         var appliedFixes: [AutomaticFix] = []
         var failedFixes: [FixFailure] = []
@@ -125,18 +134,24 @@ class AutomaticFixEngine {
             do {
                 modifiedContent = try applyFix(fix, to: modifiedContent)
                 appliedFixes.append(fix)
-                os_log("Applied fix: %@ at line %d", log: logger, type: .debug, fix.description, fix.lineNumber)
+                os_log(
+                    "Applied fix: %@ at line %d", log: logger, type: .debug, fix.description,
+                    fix.lineNumber)
             } catch {
                 let failure = FixFailure(fix: fix, error: error)
                 failedFixes.append(failure)
-                os_log("Failed to apply fix: %@ - %@", log: logger, type: .error, fix.description, error.localizedDescription)
+                os_log(
+                    "Failed to apply fix: %@ - %@", log: logger, type: .error, fix.description,
+                    error.localizedDescription)
             }
         }
 
         // Write the modified content back to file
         if !appliedFixes.isEmpty {
             try modifiedContent.write(toFile: filePath, atomically: true, encoding: .utf8)
-            os_log("Successfully wrote %d fixes to %@", log: logger, type: .info, appliedFixes.count, filePath)
+            os_log(
+                "Successfully wrote %d fixes to %@", log: logger, type: .info, appliedFixes.count,
+                filePath)
         }
 
         return FixApplicationResult(
@@ -157,20 +172,20 @@ class AutomaticFixEngine {
         let originalLine = lines[lineIndex]
 
         switch fix.fixType {
-        case let .replace(pattern, replacement):
+        case .replace(let pattern, let replacement):
             let newLine = originalLine.replacingOccurrences(of: pattern, with: replacement)
             lines[lineIndex] = newLine
 
-        case let .insert(newLine):
+        case .insert(let newLine):
             lines.insert(newLine, at: lineIndex)
 
         case .delete:
             lines.remove(at: lineIndex)
 
-        case let .multiLineReplace(startLine, endLine, newLines):
+        case .multiLineReplace(let startLine, let endLine, let newLines):
             let startIndex = startLine - 1
             let endIndex = min(endLine - 1, lines.count - 1)
-            lines.replaceSubrange(startIndex ... endIndex, with: newLines)
+            lines.replaceSubrange(startIndex...endIndex, with: newLines)
         }
 
         return lines.joined(separator: "\n")
@@ -186,13 +201,14 @@ extension AutomaticFixEngine {
 
         // Detect main actor isolation warnings
         if line.contains("call to main actor-isolated") && line.contains("in a synchronous") {
-            issues.append(FixEngineIssue(
-                type: .concurrencyWarning,
-                lineNumber: lineNumber,
-                originalCode: line,
-                description: "Main actor isolation warning - async/await needed",
-                severity: .warning
-            ))
+            issues.append(
+                FixEngineIssue(
+                    type: .concurrencyWarning,
+                    lineNumber: lineNumber,
+                    originalCode: line,
+                    description: "Main actor isolation warning - async/await needed",
+                    severity: .warning
+                ))
         }
 
         return issues
@@ -203,13 +219,14 @@ extension AutomaticFixEngine {
 
         // Detect unused variables
         if line.contains("initialization of immutable value") && line.contains("was never used") {
-            issues.append(FixEngineIssue(
-                type: .unusedVariable,
-                lineNumber: lineNumber,
-                originalCode: line,
-                description: "Unused variable should be replaced with _",
-                severity: .warning
-            ))
+            issues.append(
+                FixEngineIssue(
+                    type: .unusedVariable,
+                    lineNumber: lineNumber,
+                    originalCode: line,
+                    description: "Unused variable should be replaced with _",
+                    severity: .warning
+                ))
         }
 
         return issues
@@ -222,13 +239,14 @@ extension AutomaticFixEngine {
         if line.contains("!") && !line.contains("//") && !line.contains("\"") {
             let pattern = #"[a-zA-Z_][a-zA-Z0-9_]*!"#
             if line.range(of: pattern, options: .regularExpression) != nil {
-                issues.append(FixEngineIssue(
-                    type: .forceUnwrapping,
-                    lineNumber: lineNumber,
-                    originalCode: line,
-                    description: "Force unwrapping should be replaced with safe unwrapping",
-                    severity: .warning
-                ))
+                issues.append(
+                    FixEngineIssue(
+                        type: .forceUnwrapping,
+                        lineNumber: lineNumber,
+                        originalCode: line,
+                        description: "Force unwrapping should be replaced with safe unwrapping",
+                        severity: .warning
+                    ))
             }
         }
 
@@ -239,14 +257,16 @@ extension AutomaticFixEngine {
         var issues: [FixEngineIssue] = []
 
         // Detect mutable variables that should be immutable
-        if line.contains("variable") && line.contains("was never mutated") && line.contains("consider changing to 'let'") {
-            issues.append(FixEngineIssue(
-                type: .immutableVariable,
-                lineNumber: lineNumber,
-                originalCode: line,
-                description: "Variable should be declared as let instead of var",
-                severity: .warning
-            ))
+        if line.contains("variable") && line.contains("was never mutated")
+            && line.contains("consider changing to 'let'") {
+            issues.append(
+                FixEngineIssue(
+                    type: .immutableVariable,
+                    lineNumber: lineNumber,
+                    originalCode: line,
+                    description: "Variable should be declared as let instead of var",
+                    severity: .warning
+                ))
         }
 
         return issues
@@ -257,27 +277,28 @@ extension AutomaticFixEngine {
 
         // Detect redundant returns
         if line.trimmed.hasPrefix("return ") && line.contains("single expression") {
-            issues.append(FixEngineIssue(
-                type: .redundantReturn,
-                lineNumber: lineNumber,
-                originalCode: line,
-                description: "Redundant return in single expression function",
-                severity: .info
-            ))
+            issues.append(
+                FixEngineIssue(
+                    type: .redundantReturn,
+                    lineNumber: lineNumber,
+                    originalCode: line,
+                    description: "Redundant return in single expression function",
+                    severity: .info
+                ))
         }
 
         // Detect magic numbers
         let magicNumberPattern = #"\b([2-9]|[1-9][0-9]+)\b"#
-        if line.range(of: magicNumberPattern, options: .regularExpression) != nil &&
-            !line.contains("//") && !line.contains("case")
-        {
-            issues.append(FixEngineIssue(
-                type: .magicNumber,
-                lineNumber: lineNumber,
-                originalCode: line,
-                description: "Magic number should be replaced with named constant",
-                severity: .info
-            ))
+        if line.range(of: magicNumberPattern, options: .regularExpression) != nil
+            && !line.contains("//") && !line.contains("case") {
+            issues.append(
+                FixEngineIssue(
+                    type: .magicNumber,
+                    lineNumber: lineNumber,
+                    originalCode: line,
+                    description: "Magic number should be replaced with named constant",
+                    severity: .info
+                ))
         }
 
         return issues
@@ -407,7 +428,8 @@ extension AutomaticFixEngine {
     private func createFunctionRefactoringFix(for issue: FixEngineIssue) -> AutomaticFix? {
         AutomaticFix(
             type: .longFunction,
-            fixType: .insert(newLine: "    // TODO: Consider breaking this function into smaller methods"),
+            fixType: .insert(
+                newLine: "    /// Consider breaking this function into smaller methods"),
             lineNumber: issue.lineNumber,
             description: "Add refactoring suggestion for long function",
             confidence: .low
@@ -489,11 +511,11 @@ enum FixEngineError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case let .invalidLineNumber(line):
+        case .invalidLineNumber(let line):
             "Invalid line number: \(line)"
-        case let .patternNotFound(pattern):
+        case .patternNotFound(let pattern):
             "Pattern not found: \(pattern)"
-        case let .fileNotWritable(path):
+        case .fileNotWritable(let path):
             "File not writable: \(path)"
         }
     }

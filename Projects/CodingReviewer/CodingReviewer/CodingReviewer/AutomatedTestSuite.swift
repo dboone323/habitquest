@@ -1,3 +1,7 @@
+import Foundation
+import Combine
+import SwiftUI
+
 //
 //  AutomatedTestSuite.swift
 //  CodingReviewer - Automated Testing & Enhancement
@@ -5,16 +9,42 @@
 //  Created by AI Assistant on August 1, 2025
 //
 
-import Combine
-import Foundation
-import SwiftUI
+// Test types and status enums
+enum TestType: String, CaseIterable {
+    case syntax = "Syntax"
+    case security = "Security"
+    case performance = "Performance"
+    case unitTest = "Unit Test"
+    case integration = "Integration"
+    case accessibility = "Accessibility"
+}
+
+enum TestStatus: String, CaseIterable {
+    case passed = "Passed"
+    case failed = "Failed"
+    case warning = "Warning"
+    case skipped = "Skipped"
+}
+
+// Type alias for compatibility
+typealias TestSuiteTestStatus = TestStatus
+typealias TestSuiteTestType = TestType
+
+enum TestSeverity: String, CaseIterable {
+    case low = "Low"
+    case medium = "Medium"
+    case high = "High"
+    case critical = "Critical"
+}
+
+// MARK: - Supporting Types
 
 // MARK: - Automated Test Suite
 
 @MainActor
 class AutomatedTestSuite: ObservableObject {
     @Published var isRunning = false
-    @Published var results: [TestResult] = []
+    @Published var results: [AutomatedTestResult] = []
     @Published var fixes: [AutoFix] = []
     @Published var progress: Double = 0.0
     @Published var currentTest = "Ready"
@@ -29,7 +59,9 @@ class AutomatedTestSuite: ObservableObject {
     func runAllTests() async {
         // Convert CodeFile to UploadedFile for compatibility
         let files = fileManager.uploadedFiles.map { codeFile in
-            UploadedFile(name: codeFile.name, path: codeFile.path, size: codeFile.size, content: codeFile.content, type: codeFile.language.rawValue)
+            UploadedFile(
+                name: codeFile.name, path: codeFile.path, size: codeFile.size,
+                content: codeFile.content, type: codeFile.language.rawValue)
         }
 
         guard !files.isEmpty else { return }
@@ -39,7 +71,7 @@ class AutomatedTestSuite: ObservableObject {
         fixes.removeAll()
         progress = 0.0
 
-        let totalTests = files.count * 4 // 4 test types per file
+        let totalTests = files.count * 4  // 4 test types per file
         var completedTests = 0
 
         for file in files {
@@ -80,9 +112,9 @@ class AutomatedTestSuite: ObservableObject {
         progress = 1.0
     }
 
-    private func runSecurityTests(on file: UploadedFile) async -> TestResult {
+    private func runSecurityTests(on file: UploadedFile) async -> AutomatedTestResult {
         // Add small delay for realistic timing
-        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 second delay for realism
+        try? await Task.sleep(nanoseconds: 500_000_000)  // 0.5 second delay for realism
 
         var issues: [String] = []
         let content = file.content.lowercased()
@@ -101,7 +133,7 @@ class AutomatedTestSuite: ObservableObject {
         let severity: TestSeverity = issues.isEmpty ? .low : (issues.count > 1 ? .high : .medium)
         let status: TestStatus = issues.isEmpty ? .passed : .failed
 
-        return TestResult(
+        return AutomatedTestResult(
             id: UUID(),
             type: .security,
             file: file.name,
@@ -112,9 +144,9 @@ class AutomatedTestSuite: ObservableObject {
         )
     }
 
-    private func runPerformanceTests(on file: UploadedFile) async -> TestResult {
+    private func runPerformanceTests(on file: UploadedFile) async -> AutomatedTestResult {
         // Add small delay for realistic timing
-        try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 second delay
+        try? await Task.sleep(nanoseconds: 300_000_000)  // 0.3 second delay
 
         var issues: [String] = []
         let content = file.content
@@ -123,7 +155,7 @@ class AutomatedTestSuite: ObservableObject {
         if content.count > 50000 {
             issues.append("Large file size may impact performance")
         }
-        if content.components(separatedBy: .newlines).count > 1000 {
+        if content.components(separatedBy: "\n").count > 1000 {
             issues.append("High line count - consider refactoring")
         }
         if content.lowercased().contains("nested loop") {
@@ -131,9 +163,9 @@ class AutomatedTestSuite: ObservableObject {
         }
 
         let severity: TestSeverity = issues.isEmpty ? .low : .medium
-        let status: TestStatus = issues.isEmpty ? .passed : .warning
+        let status: TestSuiteTestStatus = issues.isEmpty ? .passed : .warning
 
-        return TestResult(
+        return AutomatedTestResult(
             id: UUID(),
             type: .performance,
             file: file.name,
@@ -144,12 +176,12 @@ class AutomatedTestSuite: ObservableObject {
         )
     }
 
-    private func runQualityTests(on file: UploadedFile) async -> TestResult {
+    private func runQualityTests(on file: UploadedFile) async -> AutomatedTestResult {
         // Add small delay for realistic timing
-        try? await Task.sleep(nanoseconds: 400_000_000) // 0.4 second delay
+        try? await Task.sleep(nanoseconds: 400_000_000)  // 0.4 second delay
 
         var issues: [String] = []
-        let lines = file.content.components(separatedBy: .newlines)
+        let lines = file.content.components(separatedBy: "\n")
 
         // Basic quality checks
         let longLines = lines.filter { $0.count > 120 }
@@ -157,7 +189,7 @@ class AutomatedTestSuite: ObservableObject {
             issues.append("\(longLines.count) lines exceed 120 characters")
         }
 
-        let emptyLines = lines.filter { $0.trimmingCharacters(in: .whitespaces).isEmpty }
+        let emptyLines = lines.filter { $0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
         if Double(emptyLines.count) / Double(lines.count) > 0.3 {
             issues.append("High percentage of empty lines")
         }
@@ -169,9 +201,9 @@ class AutomatedTestSuite: ObservableObject {
         let severity: TestSeverity = issues.isEmpty ? .low : .medium
         let status: TestStatus = issues.isEmpty ? .passed : .warning
 
-        return TestResult(
+        return AutomatedTestResult(
             id: UUID(),
-            type: .quality,
+            type: .unitTest,
             file: file.name,
             status: status,
             severity: severity,
@@ -180,9 +212,9 @@ class AutomatedTestSuite: ObservableObject {
         )
     }
 
-    private func runSyntaxTests(on file: UploadedFile) async -> TestResult {
+    private func runSyntaxTests(on file: UploadedFile) async -> AutomatedTestResult {
         // Add small delay for realistic timing
-        try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 second delay
+        try? await Task.sleep(nanoseconds: 200_000_000)  // 0.2 second delay
 
         var issues: [String] = []
         let content = file.content
@@ -207,7 +239,7 @@ class AutomatedTestSuite: ObservableObject {
         let severity: TestSeverity = issues.isEmpty ? .low : .high
         let status: TestStatus = issues.isEmpty ? .passed : .failed
 
-        return TestResult(
+        return AutomatedTestResult(
             id: UUID(),
             type: .syntax,
             file: file.name,
@@ -220,11 +252,11 @@ class AutomatedTestSuite: ObservableObject {
 
     private func generateFixes() async {
         // Add small delay for realistic timing
-        try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 second delay
+        try? await Task.sleep(nanoseconds: 300_000_000)  // 0.3 second delay
 
         fixes.removeAll()
 
-        for result in results where result.status != .passed {
+        for result in results where result.status != TestStatus.passed {
             for issue in result.issues {
                 let fix = generateAutoFix(for: issue, in: result.file)
                 fixes.append(fix)
@@ -241,7 +273,8 @@ class AutomatedTestSuite: ObservableObject {
         case let str where str.contains("hardcoded password"):
             confidence = 0.9
             title = "Remove Hardcoded Password"
-            description = "Replace hardcoded password with environment variable or secure keychain storage"
+            description =
+                "Replace hardcoded password with environment variable or secure keychain storage"
 
         case let str where str.contains("mismatched braces"):
             confidence = 0.95
@@ -266,7 +299,7 @@ class AutomatedTestSuite: ObservableObject {
 
         return AutoFix(
             id: UUID(),
-            issueId: UUID(), // Generate a fake issue ID for now
+            issueId: UUID(),  // Generate a fake issue ID for now
             title: title,
             description: description,
             confidence: confidence
@@ -284,7 +317,7 @@ class AutomatedTestSuite: ObservableObject {
 
 // MARK: - Data Models
 
-struct TestResult: Identifiable {
+struct AutomatedTestResult: Identifiable {
     let id: UUID
     let type: TestType
     let file: String
@@ -292,50 +325,6 @@ struct TestResult: Identifiable {
     let severity: TestSeverity
     let issues: [String]
     let timestamp: Date
-}
-
-enum TestType: String, CaseIterable {
-    case security = "Security"
-    case performance = "Performance"
-    case quality = "Quality"
-    case syntax = "Syntax"
-
-    var icon: String {
-        switch self {
-        case .security: "shield.checkered"
-        case .performance: "speedometer"
-        case .quality: "star.circle"
-        case .syntax: "chevron.left.forwardslash.chevron.right"
-        }
-    }
-}
-
-enum TestStatus: String {
-    case passed = "Passed"
-    case warning = "Warning"
-    case failed = "Failed"
-
-    var color: Color {
-        switch self {
-        case .passed: .green
-        case .warning: .orange
-        case .failed: .red
-        }
-    }
-}
-
-enum TestSeverity: String {
-    case low = "Low"
-    case medium = "Medium"
-    case high = "High"
-
-    var color: Color {
-        switch self {
-        case .low: .green
-        case .medium: .orange
-        case .high: .red
-        }
-    }
 }
 
 // MARK: - AutoFix Model (referenced from IssueDetector)
@@ -350,8 +339,6 @@ extension AutoFix {
     }
 
     var confidenceColor: Color {
-        if confidence >= 0.8 { .green }
-        else if confidence >= 0.6 { .orange }
-        else { .red }
+        if confidence >= 0.8 { .green } else if confidence >= 0.6 { .orange } else { .red }
     }
 }

@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI  // For SeverityLevel enum access
 
 enum CodeAnalyzers {
     // Simple static analyzers that work with our unified data models
@@ -12,33 +13,34 @@ enum CodeAnalyzers {
 
             // Basic Swift code analysis
             if line.contains("TODO") || line.contains("FIXME") {
-                results.append(AnalysisResult(
-                    type: "Documentation",
-                    severity: "warning",
-                    message: "TODO/FIXME comment found",
-                    lineNumber: lineNumber
-                ))
+                results.append(
+                    AnalysisResult(
+                        type: "Documentation",
+                        severityLevel: SeverityLevel.medium,
+                        message: "TODO/FIXME comment found",
+                        lineNumber: lineNumber
+                    ))
             }
 
             if line.contains("print(") && !line.contains("//") {
-                results.append(AnalysisResult(
-                    type: "Debug",
-                    severity: "info",
-                    message: "Debug print statement found",
-                    lineNumber: lineNumber
-                ))
+                results.append(
+                    AnalysisResult(
+                        type: "Debug",
+                        severityLevel: .low,
+                        message: "Debug print statement found",
+                        lineNumber: lineNumber
+                    ))
             }
 
-            if line.trimmingCharacters(in: .whitespaces).isEmpty &&
-                index < lines.count - 1 &&
-                lines[index + 1].trimmingCharacters(in: .whitespaces).isEmpty
-            {
-                results.append(AnalysisResult(
-                    type: "Formatting",
-                    severity: "style",
-                    message: "Multiple consecutive empty lines",
-                    lineNumber: lineNumber
-                ))
+            if line.trimmingCharacters(in: .whitespaces).isEmpty && index < lines.count - 1
+                && lines[index + 1].trimmingCharacters(in: .whitespaces).isEmpty {
+                results.append(
+                    AnalysisResult(
+                        type: "Formatting",
+                        severityLevel: .low,
+                        message: "Multiple consecutive empty lines",
+                        lineNumber: lineNumber
+                    ))
             }
         }
 
@@ -54,21 +56,23 @@ enum CodeAnalyzers {
 
             // Generic code analysis
             if line.count > 120 {
-                results.append(AnalysisResult(
-                    type: "Style",
-                    severity: "warning",
-                    message: "Line too long (\(line.count) characters)",
-                    lineNumber: lineNumber
-                ))
+                results.append(
+                    AnalysisResult(
+                        type: "Style",
+                        severityLevel: .medium,
+                        message: "Line too long (\(line.count) characters)",
+                        lineNumber: lineNumber
+                    ))
             }
 
             if line.contains("TODO") || line.contains("FIXME") || line.contains("HACK") {
-                results.append(AnalysisResult(
-                    type: "Documentation",
-                    severity: "info",
-                    message: "Code comment requiring attention found",
-                    lineNumber: lineNumber
-                ))
+                results.append(
+                    AnalysisResult(
+                        type: "Documentation",
+                        severityLevel: .low,
+                        message: "Code comment requiring attention found",
+                        lineNumber: lineNumber
+                    ))
             }
         }
 
@@ -77,12 +81,14 @@ enum CodeAnalyzers {
 
     static func performQuickAnalysis(for file: UploadedFile) -> [AnalysisResult] {
         guard !file.content.isEmpty else {
-            return [AnalysisResult(
-                type: "File Access",
-                severity: "error",
-                message: "Unable to read file content",
-                lineNumber: 1
-            )]
+            return [
+                AnalysisResult(
+                    type: "File Access",
+                    severityLevel: .high,
+                    message: "Unable to read file content",
+                    lineNumber: 1
+                )
+            ]
         }
 
         let fileExtension = (file.name as NSString).pathExtension.lowercased()

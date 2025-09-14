@@ -1,12 +1,12 @@
+import AppKit
 import SwiftData
 import SwiftUI
+import UIKit
 
 #if canImport(UIKit)
-    import UIKit
 #endif
 
 #if canImport(AppKit)
-    import AppKit
 #endif
 
 // Momentum Finance - Personal Finance App
@@ -28,7 +28,7 @@ extension Features.Transactions {
         @State private var selectedTransaction: FinancialTransaction?
 
         @State private var viewModel = Features.Transactions.TransactionsViewModel()
-    @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
+        @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
 
         var filteredTransactions: [FinancialTransaction] {
             var filtered = transactions
@@ -41,6 +41,12 @@ extension Features.Transactions {
                 filtered = filtered.filter { $0.transactionType == .income }
             case .expense:
                 filtered = filtered.filter { $0.transactionType == .expense }
+            case .transfer:
+                filtered = filtered.filter { $0.transactionType == .transfer }
+            case .thisWeek, .thisMonth, .lastMonth, .thisYear, .custom:
+                // For now, return all transactions for date-based filters
+                // In a real implementation, these would filter by date ranges
+                break
             }
 
             // Apply search filter
@@ -48,7 +54,7 @@ extension Features.Transactions {
                 filtered = filtered.filter { transaction in
                     transaction.title.localizedCaseInsensitiveContains(searchText)
                         || transaction.category?.name.localizedCaseInsensitiveContains(searchText)
-                            == true
+                        == true
                 }
             }
 
@@ -82,7 +88,7 @@ extension Features.Transactions {
                     AddTransactionView(categories: categories, accounts: accounts)
                 }
                 .sheet(isPresented: $showingSearch) {
-                    Features.GlobalSearchView()
+                    Features.GlobalSearch.GlobalSearchView()
                 }
                 .sheet(item: $selectedTransaction) { transaction in
                     TransactionDetailView(transaction: transaction)
@@ -137,6 +143,9 @@ extension Features.Transactions {
                     account.balance -= transaction.amount
                 case .expense:
                     account.balance += transaction.amount
+                case .transfer:
+                    // Transfer transactions don't affect account balance in delete
+                    break
                 }
             }
 

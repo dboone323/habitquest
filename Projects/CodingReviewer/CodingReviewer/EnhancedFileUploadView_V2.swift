@@ -29,7 +29,7 @@ struct EnhancedFileUploadView: View {
                 // Action Buttons
                 HStack(spacing: 12) {
                     if !uploadedFiles.isEmpty {
-                        Button("Analyze Selected") {
+                        Button("Analyze Selected").accessibilityLabel("Button") {
                             analyzeSelectedFiles()
                         }
                         .disabled(selectedFiles.isEmpty || isAnalyzing)
@@ -37,17 +37,17 @@ struct EnhancedFileUploadView: View {
                     }
 
                     Menu {
-                        Button("Choose Files...") {
+                        Button("Choose Files...").accessibilityLabel("Button") {
                             showingFilePicker = true
                         }
 
-                        Button("Choose Folder...") {
+                        Button("Choose Folder...").accessibilityLabel("Button") {
                             chooseFolderAndUpload()
                         }
 
                         Divider()
 
-                        Button("Clear All") {
+                        Button("Clear All").accessibilityLabel("Button") {
                             uploadedFiles.removeAll()
                             selectedFiles.removeAll()
                             analysisResults.removeAll()
@@ -81,7 +81,7 @@ struct EnhancedFileUploadView: View {
                             Spacer()
 
                             if !selectedFiles.isEmpty {
-                                Button("Select All") {
+                                Button("Select All").accessibilityLabel("Button") {
                                     selectedFiles = Set(uploadedFiles.map(\.id))
                                 }
                                 .font(.caption)
@@ -94,7 +94,7 @@ struct EnhancedFileUploadView: View {
                         ScrollView {
                             LazyVStack(spacing: 1) {
                                 ForEach(uploadedFiles) { file in
-                                    FileRowView(
+                                    UploadedFileRowView(
                                         file: file,
                                         isSelected: selectedFiles.contains(file.id)
                                     ) {
@@ -116,7 +116,7 @@ struct EnhancedFileUploadView: View {
 
                                 Spacer()
 
-                                Button("Export Report") {
+                                Button("Export Report").accessibilityLabel("Button") {
                                     exportAnalysisReport()
                                 }
                                 .font(.caption)
@@ -175,7 +175,8 @@ struct EnhancedFileUploadView: View {
     private func handleFileDrop(_ providers: [NSItemProvider]) {
         for provider in providers {
             if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
-                provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
+                provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) {
+                    item, _ in
                     if let url = item as? URL {
                         DispatchQueue.main.async {
                             loadFile(from: url)
@@ -188,11 +189,11 @@ struct EnhancedFileUploadView: View {
 
     private func handleFileImport(_ result: Result<[URL], Error>) {
         switch result {
-        case let .success(urls):
+        case .success(let urls):
             for url in urls {
                 loadFile(from: url)
             }
-        case let .failure(error):
+        case .failure(let error):
             print("File import failed: \(error)")
         }
     }
@@ -241,12 +242,12 @@ struct EnhancedFileUploadView: View {
 
         let fileManager = FileManager.default
 
-        if let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: [.isRegularFileKey, .fileSizeKey]) {
+        if let enumerator = fileManager.enumerator(
+            at: url, includingPropertiesForKeys: [.isRegularFileKey, .fileSizeKey]) {
             for case let fileURL as URL in enumerator {
                 if let resourceValues = try? fileURL.resourceValues(forKeys: [.isRegularFileKey]),
                    resourceValues.isRegularFile == true,
-                   isSourceCodeFile(url: fileURL)
-                {
+                   isSourceCodeFile(url: fileURL) {
                     loadFile(from: fileURL)
                 }
             }
@@ -254,7 +255,10 @@ struct EnhancedFileUploadView: View {
     }
 
     private func isSourceCodeFile(url: URL) -> Bool {
-        let sourceExtensions = ["swift", "py", "js", "ts", "java", "cpp", "c", "h", "go", "rs", "php", "rb", "kt", "cs", "scala", "sh", "json", "xml", "yaml", "yml"]
+        let sourceExtensions = [
+            "swift", "py", "js", "ts", "java", "cpp", "c", "h", "go", "rs", "php", "rb", "kt", "cs",
+            "scala", "sh", "json", "xml", "yaml", "yml"
+        ]
         return sourceExtensions.contains(url.pathExtension.lowercased())
     }
 
@@ -318,45 +322,49 @@ struct EnhancedFileUploadView: View {
         for (lineIndex, line) in lines.enumerated() {
             // Check for common issues
             if line.contains("TODO") || line.contains("FIXME") {
-                issues.append(AnalysisIssue(
-                    type: "Code Quality",
-                    severity: "Low",
-                    message: "TODO/FIXME comment found",
-                    lineNumber: lineIndex + 1,
-                    line: line.trimmingCharacters(in: .whitespaces)
-                ))
+                issues.append(
+                    AnalysisIssue(
+                        type: "Code Quality",
+                        severity: "Low",
+                        message: "TODO/FIXME comment found",
+                        lineNumber: lineIndex + 1,
+                        line: line.trimmingCharacters(in: .whitespaces)
+                    ))
             }
 
             if line.contains("console.log") || line.contains("print(") {
-                issues.append(AnalysisIssue(
-                    type: "Code Quality",
-                    severity: "Low",
-                    message: "Debug statement found",
-                    lineNumber: lineIndex + 1,
-                    line: line.trimmingCharacters(in: .whitespaces)
-                ))
+                issues.append(
+                    AnalysisIssue(
+                        type: "Code Quality",
+                        severity: "Low",
+                        message: "Debug statement found",
+                        lineNumber: lineIndex + 1,
+                        line: line.trimmingCharacters(in: .whitespaces)
+                    ))
             }
 
             if line.contains("password") && !line.contains("//") {
-                issues.append(AnalysisIssue(
-                    type: "Security",
-                    severity: "High",
-                    message: "Potential hardcoded password",
-                    lineNumber: lineIndex + 1,
-                    line: line.trimmingCharacters(in: .whitespaces)
-                ))
+                issues.append(
+                    AnalysisIssue(
+                        type: "Security",
+                        severity: "High",
+                        message: "Potential hardcoded password",
+                        lineNumber: lineIndex + 1,
+                        line: line.trimmingCharacters(in: .whitespaces)
+                    ))
             }
         }
 
         // Add some random issues for demo
         if issues.isEmpty {
-            issues.append(AnalysisIssue(
-                type: "Code Quality",
-                severity: "Low",
-                message: "File looks good! No major issues found",
-                lineNumber: 1,
-                line: ""
-            ))
+            issues.append(
+                AnalysisIssue(
+                    type: "Code Quality",
+                    severity: "Low",
+                    message: "File looks good! No major issues found",
+                    lineNumber: 1,
+                    line: ""
+                ))
         }
 
         return issues
@@ -426,7 +434,7 @@ struct DropZoneView: View {
             }
 
             VStack(spacing: 12) {
-                Button("Choose Files") {
+                Button("Choose Files").accessibilityLabel("Button") {
                     // This will be handled by the parent view
                 }
                 .buttonStyle(.borderedProminent)
@@ -435,7 +443,7 @@ struct DropZoneView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
 
-                Button("Choose Folder") {
+                Button("Choose Folder").accessibilityLabel("Button") {
                     // This will be handled by the parent view
                 }
                 .buttonStyle(.bordered)
@@ -461,7 +469,7 @@ struct DropZoneView: View {
     }
 }
 
-struct FileRowView: View {
+struct UploadedFileRowView: View {
     let file: UploadedFile
     let isSelected: Bool
     let onToggle: () -> Void
@@ -484,7 +492,7 @@ struct FileRowView: View {
     var body: some View {
         HStack(spacing: 12) {
             // Selection checkbox
-            Button(action: onToggle) {
+            Button(action: onToggle).accessibilityLabel("Button") {
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                     .foregroundColor(isSelected ? .blue : .gray)
                     .font(.title3)
@@ -541,8 +549,8 @@ struct FileAnalysisCard: View {
     @State private var isExpanded = false
 
     private var severityColor: Color {
-        let highSeverityCount = result.issues.count(where: { $0.severity == "High" })
-        let mediumSeverityCount = result.issues.count(where: { $0.severity == "Medium" })
+        let highSeverityCount = result.issues.count(where: { $0.severityLevel == .high })
+        let mediumSeverityCount = result.issues.count(where: { $0.severityLevel == .medium })
 
         if highSeverityCount > 0 { return .red }
         if mediumSeverityCount > 0 { return .orange }
@@ -582,7 +590,7 @@ struct FileAnalysisCard: View {
 
             // Issue summary
             if !result.issues.isEmpty {
-                Button(action: { isExpanded.toggle() }) {
+                Button(action: { isExpanded.toggle().accessibilityLabel("Button") }) {
                     HStack {
                         Text(isExpanded ? "Hide Details" : "Show Details")
                             .font(.caption)
@@ -615,11 +623,10 @@ struct IssueRowView: View {
     let issue: AnalysisIssue
 
     private var severityColor: Color {
-        switch issue.severity.lowercased() {
-        case "high": .red
-        case "medium": .orange
-        case "low": .yellow
-        default: .blue
+        switch issue.severityLevel {
+        case .high: .red
+        case .medium: .orange
+        case .low: .yellow
         }
     }
 
@@ -689,7 +696,10 @@ struct AnalysisProgressView: View {
     }
 
     private func startProgressAnimation() {
-        let files = ["Checking syntax...", "Analyzing security...", "Reviewing patterns...", "Generating report..."]
+        let files = [
+            "Checking syntax...", "Analyzing security...", "Reviewing patterns...",
+            "Generating report..."
+        ]
 
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
             if progress < 1.0 {
@@ -705,31 +715,4 @@ struct AnalysisProgressView: View {
 }
 
 // MARK: - Data Models
-
-struct UploadedFile: Identifiable {
-    let id: UUID
-    let name: String
-    let path: String
-    let size: Int
-    let content: String
-    let type: String
-    let uploadDate: Date
-}
-
-struct FileAnalysisResult: Identifiable {
-    let id: UUID
-    let fileName: String
-    let filePath: String
-    let fileType: String
-    let issuesFound: Int
-    let issues: [AnalysisIssue]
-    let analysisDate: Date
-}
-
-struct AnalysisIssue {
-    let type: String
-    let severity: String
-    let message: String
-    let lineNumber: Int
-    let line: String
-}
+// Data models are now defined in UnifiedDataModels.swift

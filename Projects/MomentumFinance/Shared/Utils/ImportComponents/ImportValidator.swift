@@ -13,10 +13,6 @@ import SwiftData
 struct ImportValidator {
     let modelContext: ModelContext
 
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-    }
-
     /// Checks if a transaction already exists in the database
     func isDuplicate(_ transaction: FinancialTransaction) async throws -> Bool {
         let title = transaction.title

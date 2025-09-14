@@ -1,7 +1,7 @@
+import AppKit
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
 #endif
 
 //
@@ -25,11 +25,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
@@ -75,15 +75,15 @@ extension Features.Subscriptions {
                                 .overlay(
                                     Capsule()
                                         .stroke(Color.blue.opacity(0.3), lineWidth: 1),
-                                ),
-                        )
+                                    ),
+                            )
                 }
 
                 // Cost Summary
                 LazyVGrid(
                     columns: [
                         GridItem(.flexible()),
-                        GridItem(.flexible()),
+                        GridItem(.flexible())
                     ], spacing: 12
                 ) {
                     // Monthly Total
@@ -105,8 +105,8 @@ extension Features.Subscriptions {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.blue.opacity(0.2), lineWidth: 1),
-                            ),
-                    )
+                                ),
+                        )
 
                     // Yearly Total
                     VStack(spacing: 4) {
@@ -127,8 +127,8 @@ extension Features.Subscriptions {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.green.opacity(0.2), lineWidth: 1),
-                            ),
-                    )
+                                ),
+                        )
                 }
 
                 // Next Payment
@@ -168,8 +168,8 @@ extension Features.Subscriptions {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.orange.opacity(0.2), lineWidth: 1),
-                            ),
-                    )
+                                ),
+                        )
                 }
             }
             .padding()
@@ -177,7 +177,7 @@ extension Features.Subscriptions {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColor)
                     .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
-            )
+                )
         }
     }
 
@@ -189,11 +189,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemGroupedBackground)
+            return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
@@ -235,7 +235,7 @@ extension Features.Subscriptions {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColor),
-            )
+                )
         }
     }
 }

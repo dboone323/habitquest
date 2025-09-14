@@ -1,11 +1,18 @@
+// MARK: - Data Manager
+
 import CloudKit
 import Foundation
 
+/// Represents the priority of a goal (low, medium, high).
 enum GoalPriority: String, CaseIterable, Codable {
+    /// Low priority goal.
     case low
+    /// Medium priority goal.
     case medium
+    /// High priority goal.
     case high
 
+    /// Human-readable display name for the priority.
     var displayName: String {
         switch self {
         case .low: "Low"
@@ -15,18 +22,43 @@ enum GoalPriority: String, CaseIterable, Codable {
     }
 }
 
+/// Represents a user goal in the PlannerApp (e.g., "Run a marathon").
 struct Goal: Identifiable, Codable {
+    /// Unique identifier for the goal.
     let id: UUID
+    /// The title or summary of the goal.
     var title: String
+    /// Detailed description of the goal.
     var description: String
+    /// The target date to achieve the goal.
     var targetDate: Date
+    /// The date the goal was created.
     var createdAt: Date
-    var modifiedAt: Date? // Added for CloudKit sync/merge
-    var isCompleted: Bool // Adding completion status for goals
-    var priority: GoalPriority // Goal priority
-    var progress: Double // Goal progress (0.0 to 1.0)
+    /// The date the goal was last modified (optional).
+    var modifiedAt: Date?  // Added for CloudKit sync/merge
+    /// Whether the goal is completed.
+    var isCompleted: Bool  // Adding completion status for goals
+    /// The priority of the goal.
+    var priority: GoalPriority  // Goal priority
+    /// The progress toward the goal (0.0 to 1.0).
+    var progress: Double  // Goal progress (0.0 to 1.0)
 
-    init(id: UUID = UUID(), title: String, description: String, targetDate: Date, createdAt: Date = Date(), modifiedAt: Date? = Date(), isCompleted: Bool = false, priority: GoalPriority = .medium, progress: Double = 0.0) {
+    /// Creates a new goal.
+    /// - Parameters:
+    ///   - id: The unique identifier (default: new UUID).
+    ///   - title: The goal title.
+    ///   - description: The goal description.
+    ///   - targetDate: The target date to achieve the goal.
+    ///   - createdAt: The creation date (default: now).
+    ///   - modifiedAt: The last modified date (default: now).
+    ///   - isCompleted: Whether the goal is completed (default: false).
+    ///   - priority: The goal priority (default: .medium).
+    ///   - progress: The progress toward the goal (default: 0.0).
+    init(
+        id: UUID = UUID(), title: String, description: String, targetDate: Date,
+        createdAt: Date = Date(), modifiedAt: Date? = Date(), isCompleted: Bool = false,
+        priority: GoalPriority = .medium, progress: Double = 0.0
+    ) {
         self.id = id
         self.title = title
         self.description = description
@@ -40,7 +72,7 @@ struct Goal: Identifiable, Codable {
 
     // MARK: - CloudKit Conversion
 
-    /// Convert to CloudKit record for syncing
+    /// Converts this goal to a CloudKit record for syncing.
     func toCKRecord() -> CKRecord {
         let record = CKRecord(recordType: "Goal", recordID: CKRecord.ID(recordName: id.uuidString))
         record["title"] = title
@@ -54,13 +86,18 @@ struct Goal: Identifiable, Codable {
         return record
     }
 
-    /// Create a Goal from CloudKit record
+    /// Creates a Goal from a CloudKit record.
+    /// - Parameter ckRecord: The CloudKit record to convert.
+    /// - Throws: An error if conversion fails.
+    /// - Returns: A Goal instance.
     static func from(ckRecord: CKRecord) throws -> Goal {
         guard let title = ckRecord["title"] as? String,
-              let targetDate = ckRecord["targetDate"] as? Date,
-              let id = UUID(uuidString: ckRecord.recordID.recordName)
+            let targetDate = ckRecord["targetDate"] as? Date,
+            let id = UUID(uuidString: ckRecord.recordID.recordName)
         else {
-            throw NSError(domain: "GoalConversionError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to convert CloudKit record to Goal"])
+            throw NSError(
+                domain: "GoalConversionError", code: 1,
+                userInfo: [NSLocalizedDescriptionKey: "Failed to convert CloudKit record to Goal"])
         }
 
         let priorityString = ckRecord["priority"] as? String ?? "medium"

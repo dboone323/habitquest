@@ -1,9 +1,9 @@
 import Foundation
-import Observation
-import os
 import OSLog
+import Observation
 import SwiftData
 import SwiftUI
+import os
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
@@ -53,8 +53,8 @@ final class DashboardViewModel {
     /// - Returns: <#description#>
     func recentTransactions(_ transactions: [FinancialTransaction], limit: Int = 5) -> [FinancialTransaction] {
         Array(transactions
-            .sorted { $0.date > $1.date }
-            .prefix(limit))
+                .sorted { $0.date > $1.date }
+                .prefix(limit))
     }
 
     /// Check for overdue subscriptions and process them

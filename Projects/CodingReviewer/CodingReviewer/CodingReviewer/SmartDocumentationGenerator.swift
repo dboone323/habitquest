@@ -1,3 +1,7 @@
+import Foundation
+import Combine
+import OSLog
+
 //
 // SmartDocumentationGenerator.swift
 // CodingReviewer
@@ -5,10 +9,6 @@
 // Phase 4: Smart Code Documentation Generator
 // Created on July 25, 2025
 //
-
-import Combine
-import Foundation
-import OSLog
 
 // MARK: - Simple Documentation Types
 
@@ -72,6 +72,7 @@ struct DocumentationSuggestion: Codable, Identifiable {
 
 // MARK: - Smart Documentation Generator
 
+@MainActor
 final class SmartDocumentationGenerator: ObservableObject {
     @Published var isGenerating = false
     @Published var generationProgress: Double = 0.0
@@ -83,7 +84,8 @@ final class SmartDocumentationGenerator: ObservableObject {
     }
 
     // / Function description needed
-    func generateDocumentation(for content: String, fileName: String) async -> GeneratedDocumentation {
+    func generateDocumentation(for content: String, fileName: String) async
+    -> GeneratedDocumentation {
         await MainActor.run {
             isGenerating = true
             generationProgress = 0.0
@@ -98,7 +100,7 @@ final class SmartDocumentationGenerator: ObservableObject {
                 title: "Overview",
                 content: "This file contains Swift code for the CodingReviewer application.",
                 type: .overview
-            ),
+            )
         ]
 
         let documentation = GeneratedDocumentation(

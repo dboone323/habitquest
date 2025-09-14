@@ -1,3 +1,7 @@
+import Foundation
+import Combine
+import SwiftUI
+
 //
 //  PatternRecognitionEngine.swift
 //  CodingReviewer
@@ -6,12 +10,9 @@
 //  Created on July 25, 2025
 //
 
-import Combine
-import Foundation
-import SwiftUI
-
 // MARK: - Advanced Pattern Recognition Engine
 
+@MainActor
 final class PatternRecognitionEngine: ObservableObject {
 
     @Published var isAnalyzing = false
@@ -19,7 +20,6 @@ final class PatternRecognitionEngine: ObservableObject {
     @Published var detectedPatterns: [DetectedPattern] = []
     @Published var codeSmells: [CodeSmell] = []
     @Published var architectureInsights: ArchitectureInsights?
-    @Published var performanceIssues: [PerformanceIssue] = []
 
     private let logger = AppLogger.shared
 
@@ -29,7 +29,6 @@ final class PatternRecognitionEngine: ObservableObject {
 
     // MARK: - Main Pattern Detection Interface
 
-    @MainActor
     func detectDesignPatterns(
         in code: String,
         language: CodeLanguage
@@ -38,7 +37,8 @@ final class PatternRecognitionEngine: ObservableObject {
         isAnalyzing = true
         analysisProgress = 0.0
 
-        logger.log("🔍 Detecting design patterns in \(language.rawValue) code", level: .info, category: .ai)
+        logger.log(
+            "🔍 Detecting design patterns in \(language.rawValue) code", level: .info, category: .ai)
 
         var patterns: [DetectedPattern] = []
 
@@ -55,17 +55,19 @@ final class PatternRecognitionEngine: ObservableObject {
         await patterns.append(contentsOf: detectMVVMPattern(in: code, language: language))
         await updateProgress(0.8)
 
-        await patterns.append(contentsOf: detectDependencyInjectionPattern(in: code, language: language))
+        await patterns.append(
+            contentsOf: detectDependencyInjectionPattern(in: code, language: language))
         await updateProgress(1.0)
 
         detectedPatterns = patterns
         isAnalyzing = false
 
-        logger.log("🔍 Pattern detection complete: \(patterns.count) patterns found", level: .info, category: .ai)
+        logger.log(
+            "🔍 Pattern detection complete: \(patterns.count) patterns found", level: .info,
+            category: .ai)
         return patterns
     }
 
-    @MainActor
     func identifyCodeSmells(_ analysis: [AnalysisResult]) async -> [CodeSmell] {
 
         logger.log("🔍 Identifying code smells in analysis results", level: .info, category: .ai)
@@ -81,11 +83,12 @@ final class PatternRecognitionEngine: ObservableObject {
 
         codeSmells = smells
 
-        logger.log("🔍 Code smell detection complete: \(smells.count) smells found", level: .info, category: .ai)
+        logger.log(
+            "🔍 Code smell detection complete: \(smells.count) smells found", level: .info,
+            category: .ai)
         return smells
     }
 
-    @MainActor
     func analyzeArchitecture(files: [CodeFile]) async -> ArchitectureInsights {
 
         logger.log("🔍 Analyzing architecture for \(files.count) files", level: .info, category: .ai)
@@ -96,38 +99,21 @@ final class PatternRecognitionEngine: ObservableObject {
             couplingAnalysis: analyzeCoupling(files),
             cohesionAnalysis: analyzeCohesion(files),
             dependencyGraph: buildDependencyGraph(files),
-            recommendations: generateArchitectureRecommendations(files)
+            recommendations: []
         )
 
         architectureInsights = insights
 
-        logger.log("🔍 Architecture analysis complete with score: \(insights.overallScore)", level: .info, category: .ai)
+        logger.log(
+            "🔍 Architecture analysis complete with score: \(insights.overallScore)", level: .info,
+            category: .ai)
         return insights
-    }
-
-    @MainActor
-    func detectPerformanceBottlenecks(_ code: String) async -> [PerformanceIssue] {
-
-        logger.log("🔍 Detecting performance bottlenecks", level: .info, category: .ai)
-
-        var issues: [PerformanceIssue] = []
-
-        // Detect common performance issues
-        issues.append(contentsOf: detectInefficiientLoops(in: code))
-        issues.append(contentsOf: detectMemoryLeaks(in: code))
-        issues.append(contentsOf: detectUnnecessaryComputations(in: code))
-        issues.append(contentsOf: detectIOBottlenecks(in: code))
-        issues.append(contentsOf: detectAlgorithmicComplexity(in: code))
-
-        performanceIssues = issues
-
-        logger.log("🔍 Performance analysis complete: \(issues.count) issues found", level: .info, category: .ai)
-        return issues
     }
 
     // MARK: - Design Pattern Detection
 
-    private func detectSingletonPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
+    private nonisolated func detectSingletonPattern(in code: String, language: CodeLanguage) async
+    -> [DetectedPattern] {
         var patterns: [DetectedPattern] = []
 
         switch language {
@@ -168,19 +154,20 @@ final class PatternRecognitionEngine: ObservableObject {
         return patterns
     }
 
-    private func detectObserverPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
+    private nonisolated func detectObserverPattern(in code: String, language: CodeLanguage) async
+    -> [DetectedPattern] {
         var patterns: [DetectedPattern] = []
 
-        if code.contains("addObserver") || code.contains("removeObserver") ||
-            code.contains("NotificationCenter") || code.contains("@Published")
-        {
+        if code.contains("addObserver") || code.contains("removeObserver")
+            || code.contains("NotificationCenter") || code.contains("@Published") {
             let location = findCodeLocation(for: "Observer", in: code)
             let pattern = DetectedPattern(
                 name: "Observer Pattern",
                 description: "Notifies multiple objects about state changes",
                 codeLocation: location,
                 confidence: 0.9,
-                suggestion: "Well implemented! Consider using Combine for more reactive programming",
+                suggestion:
+                    "Well implemented! Consider using Combine for more reactive programming",
                 relatedPatterns: ["Publisher-Subscriber", "MVC Pattern"]
             )
             patterns.append(pattern)
@@ -189,7 +176,8 @@ final class PatternRecognitionEngine: ObservableObject {
         return patterns
     }
 
-    private func detectFactoryPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
+    private nonisolated func detectFactoryPattern(in code: String, language: CodeLanguage) async
+    -> [DetectedPattern] {
         var patterns: [DetectedPattern] = []
 
         if code.contains("create") && (code.contains("factory") || code.contains("Factory")) {
@@ -199,7 +187,8 @@ final class PatternRecognitionEngine: ObservableObject {
                 description: "Creates objects without specifying exact classes",
                 codeLocation: location,
                 confidence: 0.75,
-                suggestion: "Good for object creation abstraction. Consider abstract factory for families of objects",
+                suggestion:
+                    "Good for object creation abstraction. Consider abstract factory for families of objects",
                 relatedPatterns: ["Abstract Factory", "Builder Pattern"]
             )
             patterns.append(pattern)
@@ -208,17 +197,20 @@ final class PatternRecognitionEngine: ObservableObject {
         return patterns
     }
 
-    private func detectMVVMPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
+    private nonisolated func detectMVVMPattern(in code: String, language: CodeLanguage) async
+    -> [DetectedPattern] {
         var patterns: [DetectedPattern] = []
 
-        if code.contains("ViewModel") && (code.contains("@Published") || code.contains("ObservableObject")) {
+        if code.contains("ViewModel")
+            && (code.contains("@Published") || code.contains("ObservableObject")) {
             let location = findCodeLocation(for: "ViewModel", in: code)
             let pattern = DetectedPattern(
                 name: "MVVM Pattern",
                 description: "Model-View-ViewModel architecture pattern",
                 codeLocation: location,
                 confidence: 0.95,
-                suggestion: "Excellent architecture choice for SwiftUI! Ensure ViewModels remain UI-independent",
+                suggestion:
+                    "Excellent architecture choice for SwiftUI! Ensure ViewModels remain UI-independent",
                 relatedPatterns: ["Observer Pattern", "Data Binding"]
             )
             patterns.append(pattern)
@@ -227,19 +219,21 @@ final class PatternRecognitionEngine: ObservableObject {
         return patterns
     }
 
-    private func detectDependencyInjectionPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
+    private nonisolated func detectDependencyInjectionPattern(
+        in code: String, language: CodeLanguage
+    ) async -> [DetectedPattern] {
         var patterns: [DetectedPattern] = []
 
-        if code.contains("inject") || code.contains("dependency") ||
-            (code.contains("init(") && code.components(separatedBy: "init(").count > 3)
-        {
+        if code.contains("inject") || code.contains("dependency")
+            || (code.contains("init(") && code.components(separatedBy: "init(").count > 3) {
             let location = findCodeLocation(for: "inject", in: code)
             let pattern = DetectedPattern(
                 name: "Dependency Injection",
                 description: "Provides dependencies from external sources",
                 codeLocation: location,
                 confidence: 0.7,
-                suggestion: "Great for testability and loose coupling. Consider using a DI container for complex apps",
+                suggestion:
+                    "Great for testability and loose coupling. Consider using a DI container for complex apps",
                 relatedPatterns: ["Service Locator", "Inversion of Control"]
             )
             patterns.append(pattern)
@@ -260,7 +254,7 @@ final class PatternRecognitionEngine: ObservableObject {
                 location: CodeLocation(line: 45, column: 1, fileName: "example.swift"),
                 suggestion: "Break this method into smaller, focused methods",
                 impact: .maintainability
-            ),
+            )
         ]
     }
 
@@ -273,7 +267,7 @@ final class PatternRecognitionEngine: ObservableObject {
                 location: CodeLocation(line: 1, column: 1, fileName: "example.swift"),
                 suggestion: "Consider splitting this class into smaller, more focused classes",
                 impact: .maintainability
-            ),
+            )
         ]
     }
 
@@ -286,7 +280,7 @@ final class PatternRecognitionEngine: ObservableObject {
                 location: CodeLocation(line: 78, column: 1, fileName: "example.swift"),
                 suggestion: "Extract common functionality into shared methods or utilities",
                 impact: .maintainability
-            ),
+            )
         ]
     }
 
@@ -299,7 +293,7 @@ final class PatternRecognitionEngine: ObservableObject {
                 location: CodeLocation(line: 1, column: 1, fileName: "example.swift"),
                 suggestion: "Apply Single Responsibility Principle - split into focused classes",
                 impact: .maintainability
-            ),
+            )
         ]
     }
 
@@ -312,7 +306,7 @@ final class PatternRecognitionEngine: ObservableObject {
                 location: CodeLocation(line: 125, column: 1, fileName: "example.swift"),
                 suggestion: "Remove unused code to improve maintainability",
                 impact: .maintainability
-            ),
+            )
         ]
     }
 
@@ -323,15 +317,15 @@ final class PatternRecognitionEngine: ObservableObject {
         let fileCount = files.count
         let averageFileSize = files.map(\.size).reduce(0, +) / max(fileCount, 1)
 
-        var score = 80.0 // Base score;
+        var score = 80.0  // Base score;
 
         // Adjust score based on metrics
         if averageFileSize > 10000 {
-            score -= 20 // Large files penalty
+            score -= 20  // Large files penalty
         }
 
         if fileCount > 50 {
-            score += 10 // Good modularization bonus
+            score += 10  // Good modularization bonus
         }
 
         return max(0, min(100, score))
@@ -352,7 +346,7 @@ final class PatternRecognitionEngine: ObservableObject {
                 files: files.filter { $0.name.contains("Service") },
                 quality: .excellent,
                 suggestions: ["Well separated business logic"]
-            ),
+            )
         ]
     }
 
@@ -383,111 +377,20 @@ final class PatternRecognitionEngine: ObservableObject {
         )
     }
 
-    private func generateArchitectureRecommendations(_ files: [CodeFile]) -> [ArchitectureRecommendation] {
+    private func generateArchitectureRecommendations(_ files: [CodeFile]) -> [String] {
         [
-            ArchitectureRecommendation(
-                type: .modularization,
-                priority: .medium,
-                description: "Consider breaking large files into smaller modules",
-                impact: "Improved maintainability and testability",
-                effort: .medium
-            ),
+            "Consider breaking large files into smaller modules for improved maintainability and testability"
         ]
-    }
-
-    // MARK: - Performance Analysis
-
-    private func detectInefficiientLoops(in code: String) -> [PerformanceIssue] {
-        var issues: [PerformanceIssue] = []
-
-        if code.contains("for") && code.contains("for") {
-            // Nested loops detection
-            issues.append(
-                PerformanceIssue(
-                    type: .inefficientLoop,
-                    description: "Nested loops detected - O(n²) complexity",
-                    severity: .medium,
-                    location: findCodeLocation(for: "for", in: code),
-                    suggestion: "Consider using more efficient algorithms or data structures",
-                    estimatedImpact: .moderate
-                )
-            )
-        }
-
-        return issues
-    }
-
-    private func detectMemoryLeaks(in code: String) -> [PerformanceIssue] {
-        var issues: [PerformanceIssue] = []
-
-        if code.contains("strong") && code.contains("self") {
-            issues.append(
-                PerformanceIssue(
-                    type: .memoryLeak,
-                    description: "Potential retain cycle detected",
-                    severity: .high,
-                    location: findCodeLocation(for: "strong", in: code),
-                    suggestion: "Use weak or unowned references to break retain cycles",
-                    estimatedImpact: .high
-                )
-            )
-        }
-
-        return issues
-    }
-
-    private func detectUnnecessaryComputations(in code: String) -> [PerformanceIssue] {
-        var issues: [PerformanceIssue] = []
-
-        if code.contains("computed") && code.contains("get") {
-            issues.append(
-                PerformanceIssue(
-                    type: .unnecessaryComputation,
-                    description: "Complex computed property detected",
-                    severity: .low,
-                    location: findCodeLocation(for: "computed", in: code),
-                    suggestion: "Consider caching expensive computations",
-                    estimatedImpact: .low
-                )
-            )
-        }
-
-        return issues
-    }
-
-    private func detectIOBottlenecks(in code: String) -> [PerformanceIssue] {
-        var issues: [PerformanceIssue] = []
-
-        if code.contains("URLSession") && !code.contains("async") {
-            issues.append(
-                PerformanceIssue(
-                    type: .ioBottleneck,
-                    description: "Synchronous network operation detected",
-                    severity: .high,
-                    location: findCodeLocation(for: "URLSession", in: code),
-                    suggestion: "Use async/await for network operations",
-                    estimatedImpact: .high
-                )
-            )
-        }
-
-        return issues
-    }
-
-    private func detectAlgorithmicComplexity(in code: String) -> [PerformanceIssue] {
-        [] // Placeholder for complex algorithmic analysis
     }
 
     // MARK: - Helper Methods
 
     private func updateProgress(_ progress: Double) async {
-        await MainActor.run {
-            self.analysisProgress = progress
-        }
-        try? await Task.sleep(nanoseconds: 100_000_000) // Small delay for UI
+        analysisProgress = progress
+        try? await Task.sleep(nanoseconds: 100_000_000)  // Small delay for UI
     }
 
-    private func findCodeLocation(for pattern: String, in code: String) -> CodeLocation {
+    private nonisolated func findCodeLocation(for pattern: String, in code: String) -> CodeLocation {
         let lines = code.components(separatedBy: .newlines)
         for (index, line) in lines.enumerated() {
             if line.contains(pattern) {
@@ -509,7 +412,10 @@ struct DetectedPattern: Identifiable, Codable {
     let suggestion: String?
     let relatedPatterns: [String]
 
-    init(name: String, description: String, codeLocation: CodeLocation, confidence: Double, suggestion: String?, relatedPatterns: [String]) {
+    init(
+        name: String, description: String, codeLocation: CodeLocation, confidence: Double,
+        suggestion: String?, relatedPatterns: [String]
+    ) {
         self.id = UUID()
         self.name = name
         self.description = description
@@ -533,7 +439,10 @@ struct CodeSmell: Identifiable, Codable {
     let suggestion: String
     let impact: CodeSmellImpact
 
-    init(type: CodeSmellType, description: String, severity: CodeSmellSeverity, location: CodeLocation, suggestion: String, impact: CodeSmellImpact) {
+    init(
+        type: CodeSmellType, description: String, severity: CodeSmellSeverity,
+        location: CodeLocation, suggestion: String, impact: CodeSmellImpact
+    ) {
         self.id = UUID()
         self.type = type
         self.description = description
@@ -556,7 +465,7 @@ struct ArchitectureInsights: Codable {
     let couplingAnalysis: CouplingAnalysis
     let cohesionAnalysis: CohesionAnalysis
     let dependencyGraph: DependencyGraph
-    let recommendations: [ArchitectureRecommendation]
+    let recommendations: [String]  // Simplified to just strings
 }
 
 struct LayeringSuggestion: Codable {
@@ -597,34 +506,6 @@ struct DependencyEdge: Codable {
     let from: String
     let to: String
     let type: EdgeType
-}
-
-struct ArchitectureRecommendation: Codable {
-    let type: RecommendationType
-    let priority: Priority
-    let description: String
-    let impact: String
-    let effort: Effort
-}
-
-struct PerformanceIssue: Identifiable, Codable {
-    var id: UUID
-    let type: PerformanceIssueType
-    let description: String
-    let severity: PerformanceIssueSeverity
-    let location: CodeLocation
-    let suggestion: String
-    let estimatedImpact: PerformanceImpact
-
-    init(type: PerformanceIssueType, description: String, severity: PerformanceIssueSeverity, location: CodeLocation, suggestion: String, estimatedImpact: PerformanceImpact) {
-        self.id = UUID()
-        self.type = type
-        self.description = description
-        self.severity = severity
-        self.location = location
-        self.suggestion = suggestion
-        self.estimatedImpact = estimatedImpact
-    }
 }
 
 // MARK: - Enums
@@ -705,56 +586,4 @@ enum EdgeType: String, CaseIterable, Codable {
     case composition = "Composition"
     case dependency = "Dependency"
     case association = "Association"
-}
-
-enum RecommendationType: String, CaseIterable, Codable {
-    case modularization = "Modularization"
-    case refactoring = "Refactoring"
-    case patternApplication = "Pattern Application"
-    case performanceOptimization = "Performance Optimization"
-}
-
-enum Priority: String, CaseIterable, Codable {
-    case low = "Low"
-    case medium = "Medium"
-    case high = "High"
-    case critical = "Critical"
-}
-
-enum Effort: String, CaseIterable, Codable {
-    case low = "Low"
-    case medium = "Medium"
-    case high = "High"
-    case veryHigh = "Very High"
-}
-
-enum PerformanceIssueType: String, CaseIterable, Codable {
-    case inefficientLoop = "Inefficient Loop"
-    case memoryLeak = "Memory Leak"
-    case unnecessaryComputation = "Unnecessary Computation"
-    case ioBottleneck = "I/O Bottleneck"
-    case algorithmicComplexity = "Algorithmic Complexity"
-}
-
-enum PerformanceIssueSeverity: String, CaseIterable, Codable {
-    case low = "Low"
-    case medium = "Medium"
-    case high = "High"
-    case critical = "Critical"
-
-    var color: Color {
-        switch self {
-        case .low: .blue
-        case .medium: .yellow
-        case .high: .orange
-        case .critical: .red
-        }
-    }
-}
-
-enum PerformanceImpact: String, CaseIterable, Codable {
-    case low = "Low"
-    case moderate = "Moderate"
-    case high = "High"
-    case severe = "Severe"
 }

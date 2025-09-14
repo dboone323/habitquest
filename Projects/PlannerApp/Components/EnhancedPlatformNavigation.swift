@@ -133,9 +133,9 @@ struct MacOSSidebarView: View {
             NavigationLink(value: tab) {
                 Label(tab.rawValue, systemImage: tab.icon)
                     .foregroundColor(
-                        selectedTab == tab ?
-                            themeManager.currentTheme.primaryAccentColor :
-                            themeManager.currentTheme.primaryTextColor
+                        selectedTab == tab
+                            ? themeManager.currentTheme.primaryAccentColor
+                            : themeManager.currentTheme.primaryTextColor
                     )
             }
             .keyboardShortcut(tab.keyboardShortcut ?? KeyEquivalent(" "), modifiers: .command)
@@ -177,9 +177,9 @@ struct IPadSidebarView: View {
                     }
                     .padding(.vertical, 4)
                     .background(
-                        selectedTab == tab.0 ?
-                            themeManager.currentTheme.primaryAccentColor.opacity(0.1) :
-                            Color.clear
+                        selectedTab == tab.0
+                            ? themeManager.currentTheme.primaryAccentColor.opacity(0.1)
+                            : Color.clear
                     )
                     .cornerRadius(8)
                     .onTapGesture {
@@ -196,17 +196,29 @@ struct IPadSidebarView: View {
             Spacer(minLength: 100)
 
             Section("Quick Actions") {
-                QuickActionButton(title: "Add Task", icon: "plus.circle", color: .blue) {
-                    // Handle add task
-                }
+                QuickActionButton(
+                    title: "Add Task", icon: "plus.circle", color: .blue,
+                    action: {
+                        // Handle add task
+                    }
+                )
+                .accessibilityLabel("Add Task Button")
 
-                QuickActionButton(title: "Add Goal", icon: "target", color: .green) {
-                    // Handle add goal
-                }
+                QuickActionButton(
+                    title: "Add Goal", icon: "target", color: .green,
+                    action: {
+                        // Handle add goal
+                    }
+                )
+                .accessibilityLabel("Add Goal Button")
 
-                QuickActionButton(title: "Add Event", icon: "calendar.badge.plus", color: .orange) {
-                    // Handle add event
-                }
+                QuickActionButton(
+                    title: "Add Event", icon: "calendar.badge.plus", color: .orange,
+                    action: {
+                        // Handle add event
+                    }
+                )
+                .accessibilityLabel("Add Event Button")
             }
         }
         .listStyle(SidebarListStyle())
@@ -224,18 +236,20 @@ struct MacOSToolbarButtons: View {
             Button(action: {}) {
                 Label("Search", systemImage: "magnifyingglass")
             }
+            .accessibilityLabel("Search Button")
             .keyboardShortcut("f", modifiers: .command)
 
             Button(action: {}) {
                 Label("Add Item", systemImage: "plus")
             }
+            .accessibilityLabel("Add Item Button")
             .keyboardShortcut("n", modifiers: .command)
 
             Menu {
-                Button("Export Data", action: {})
-                Button("Import Data", action: {})
+                Button("Export Data", action: {}).accessibilityLabel("Export Data Button")
+                Button("Import Data", action: {}).accessibilityLabel("Import Data Button")
                 Divider()
-                Button("Preferences", action: {})
+                Button("Preferences", action: {}).accessibilityLabel("Preferences Button")
                     .keyboardShortcut(",", modifiers: .command)
             } label: {
                 Label("More", systemImage: "ellipsis.circle")
@@ -250,15 +264,17 @@ struct IPadToolbarButtons: View {
             Button(action: {}) {
                 Image(systemName: "magnifyingglass")
             }
+            .accessibilityLabel("Search Button")
 
             Button(action: {}) {
                 Image(systemName: "plus")
             }
+            .accessibilityLabel("Add Button")
 
             Menu {
-                Button("Search", action: {})
-                Button("Filter", action: {})
-                Button("Sort", action: {})
+                Button("Search", action: {}).accessibilityLabel("Search Menu Button")
+                Button("Filter", action: {}).accessibilityLabel("Filter Button")
+                Button("Sort", action: {}).accessibilityLabel("Sort Button")
             } label: {
                 Image(systemName: "ellipsis.circle")
             }
@@ -272,11 +288,12 @@ struct IPhoneToolbarButtons: View {
             Button(action: {}) {
                 Image(systemName: "plus")
             }
+            .accessibilityLabel("Add Button")
 
             Menu {
-                Button("Search", action: {})
-                Button("Filter", action: {})
-                Button("Settings", action: {})
+                Button("Search", action: {}).accessibilityLabel("Search Menu Button")
+                Button("Filter", action: {}).accessibilityLabel("Filter Button")
+                Button("Settings", action: {}).accessibilityLabel("Settings Button")
             } label: {
                 Image(systemName: "ellipsis.circle")
             }
@@ -312,6 +329,7 @@ struct QuickActionButton: View {
             .background(color.opacity(0.1))
             .cornerRadius(8)
         }
+        .accessibilityLabel("\(title) Button")
         .buttonStyle(PlainButtonStyle())
     }
 }

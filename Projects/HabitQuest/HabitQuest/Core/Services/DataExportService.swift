@@ -127,7 +127,6 @@ struct DataExportService: Sendable {
             )
         }
 
-
         let exportData = ExportedData(
             exportDate: Date(),
             appVersion: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0",

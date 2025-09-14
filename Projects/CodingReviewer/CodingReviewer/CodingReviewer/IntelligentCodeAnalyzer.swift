@@ -1,5 +1,5 @@
-import Combine
 import Foundation
+import Combine
 import OSLog
 import SwiftUI
 
@@ -155,8 +155,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
 
             // Check for main actor isolation issues
             if line.contains(".shared.") && !line.contains("await") &&
-                (line.contains("AppLogger") || line.contains("PerformanceTracker"))
-            {
+                (line.contains("AppLogger") || line.contains("PerformanceTracker")) {
                 issues.append(CodeIssue(
                     type: .concurrencyIssue,
                     severity: .warning,
@@ -351,8 +350,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
 
             // Check for missing access control
             if (line.contains("class ") || line.contains("struct ") || line.contains("func ")) &&
-                !line.contains("private") && !line.contains("public") && !line.contains("internal")
-            {
+                !line.contains("private") && !line.contains("public") && !line.contains("internal") {
                 issues.append(CodeIssue(
                     type: .missingAccessControl,
                     severity: .info,

@@ -1,14 +1,18 @@
-import Combine
 import Foundation
+import Combine
 import SwiftData
 
 @MainActor
 public final class SearchEngineService: ObservableObject {
-    private let modelContext: ModelContext
+    private var modelContext: ModelContext
     private var cancellables = Set<AnyCancellable>()
 
     public init(modelContext: ModelContext) {
         self.modelContext = modelContext
+    }
+
+    public func setModelContext(_ context: ModelContext) {
+        self.modelContext = context
     }
 
     public func search(query: String, filter: SearchFilter = .all) -> [SearchResult] {
@@ -47,11 +51,12 @@ public final class SearchEngineService: ObservableObject {
             let score = max(titleScore, balanceScore)
             if score > 0 {
                 return SearchResult(
+                    id: String(describing: account.id),
                     title: account.name,
                     subtitle: String(format: "Balance: $%.2f", account.balance),
                     type: .accounts,
-                    relevanceScore: score,
-                    associatedId: String(describing: account.id)
+                    iconName: "creditcard",
+                    relevanceScore: score
                 )
             }
             return nil
@@ -69,11 +74,12 @@ public final class SearchEngineService: ObservableObject {
             let score = max(titleScore, amountScore)
             if score > 0 {
                 return SearchResult(
+                    id: String(describing: transaction.id),
                     title: transaction.title,
                     subtitle: String(format: "$%.2f • %@", transaction.amount, transaction.date.formatted()),
                     type: .transactions,
-                    relevanceScore: score,
-                    associatedId: String(describing: transaction.id)
+                    iconName: "arrow.left.arrow.right",
+                    relevanceScore: score
                 )
             }
             return nil
@@ -91,11 +97,12 @@ public final class SearchEngineService: ObservableObject {
             let score = max(titleScore, amountScore)
             if score > 0 {
                 return SearchResult(
+                    id: String(describing: subscription.id),
                     title: subscription.name,
                     subtitle: String(format: "$%.2f • %@", subscription.amount, subscription.billingCycle.rawValue),
                     type: .subscriptions,
-                    relevanceScore: score,
-                    associatedId: String(describing: subscription.id)
+                    iconName: "calendar",
+                    relevanceScore: score
                 )
             }
             return nil
@@ -113,11 +120,12 @@ public final class SearchEngineService: ObservableObject {
             let score = max(titleScore, amountScore)
             if score > 0 {
                 return SearchResult(
+                    id: String(describing: budget.id),
                     title: budget.name,
                     subtitle: String(format: "$%.2f limit", budget.limitAmount),
                     type: .budgets,
-                    relevanceScore: score,
-                    associatedId: String(describing: budget.id)
+                    iconName: "chart.pie",
+                    relevanceScore: score
                 )
             }
             return nil

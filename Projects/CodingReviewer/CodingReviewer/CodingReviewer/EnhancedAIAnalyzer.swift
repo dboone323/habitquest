@@ -1,14 +1,15 @@
-import Combine
-
-// Enhanced AI Integration with Real Functionality
 import Foundation
+import Combine
 import SwiftUI
 
-/// EnhancedAIService class
-/// TODO: Add detailed documentation
+// Enhanced AI Integration with Real Functionality
+/// EnhancedAIService provides advanced code analysis using both local heuristics and AI-powered services.
+///
+/// This class manages the process of analyzing code snippets, combining fast local analysis with optional
+/// cloud or local AI model integration (such as Ollama). It exposes published properties for UI updates
+/// and handles error reporting for analysis failures.
 @MainActor
 // / EnhancedAIService class
-// / TODO: Add detailed documentation
 public class EnhancedAIService: ObservableObject {
     @Published public var isAnalyzing: Bool = false
     @Published public var analysisResult: String = ""
@@ -17,15 +18,20 @@ public class EnhancedAIService: ObservableObject {
     private let apiKeyManager: APIKeyManager
     private let session: URLSession
 
-    init(apiKeyManager: APIKeyManager) {
+    init(apiKeyManager: APIKeyManager, session: URLSession = .shared) {
         self.apiKeyManager = apiKeyManager
-        self.session = URLSession.shared
+        self.session = session
     }
 
     // / analyzeCodeWithEnhancedAI function
-    // / TODO: Add detailed documentation
-    /// analyzeCodeWithEnhancedAI function
-    /// TODO: Add detailed documentation
+    /// Analyzes the provided code using both local heuristics and, if available, an AI-powered service.
+    ///
+    /// - Parameters:
+    ///   - code: The source code to analyze.
+    ///   - language: The programming language of the code (default: "swift").
+    ///
+    /// This method first performs a local analysis for immediate feedback, then attempts to use an
+    /// AI service (if available) for deeper insights. Results and errors are published for UI consumption.
     public func analyzeCodeWithEnhancedAI(_ code: String, language: String = "swift") async {
         isAnalyzing = true
         errorMessage = nil
@@ -95,7 +101,7 @@ public class EnhancedAIService: ObservableObject {
         }
 
         // Calculate quality score
-        _ = 10 // Total quality checks to perform
+        _ = 10  // Total quality checks to perform
         let issuesFound = issues.count
         let qualityScore = max(0, 100 - (issuesFound * 10))
 
@@ -175,9 +181,9 @@ public class EnhancedAIService: ObservableObject {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let payload: [String: Any] = [
-            "model": "codellama", // Using CodeLlama for code analysis
+            "model": "codellama",  // Using CodeLlama for code analysis
             "prompt": prompt,
-            "stream": false,
+            "stream": false
         ]
 
         request.httpBody = try JSONSerialization.data(withJSONObject: payload)
@@ -187,7 +193,8 @@ public class EnhancedAIService: ObservableObject {
         guard let httpResponse = response as? HTTPURLResponse,
               httpResponse.statusCode == 200
         else {
-            throw AIAnalysisError.apiError("HTTP \((response as? HTTPURLResponse)?.statusCode ?? 0)")
+            throw AIAnalysisError.apiError(
+                "HTTP \((response as? HTTPURLResponse)?.statusCode ?? 0)")
         }
 
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
@@ -207,9 +214,9 @@ public class EnhancedAIService: ObservableObject {
 
     private func complexityLevel(_ complexity: Int) -> String {
         switch complexity {
-        case 1 ... 5: "Low ✅"
-        case 6 ... 10: "Moderate ⚠️"
-        case 11 ... 15: "High ❌"
+        case 1...5: "Low ✅"
+        case 6...10: "Moderate ⚠️"
+        case 11...15: "High ❌"
         default: "Very High 🚨"
         }
     }
@@ -227,7 +234,7 @@ public enum AIAnalysisError: Error {
         switch self {
         case .ollamaUnavailable:
             "Ollama is not available. Please start Ollama with 'ollama serve'."
-        case let .apiError(message):
+        case .apiError(let message):
             "API Error: \(message)"
         case .invalidResponse:
             "Invalid response from Ollama"

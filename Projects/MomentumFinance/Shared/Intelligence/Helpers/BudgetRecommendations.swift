@@ -9,7 +9,7 @@ func fi_findBudgetRecommendations(transactions: [FinancialTransaction], budgets:
     // Group by category
     // Map categories to a non-optional key (use category name or "Uncategorized")
     let categorySpending = Dictionary(grouping: transactions.filter { $0.amount < 0 }) { (tx: FinancialTransaction) -> String in
-        return tx.category?.name ?? "Uncategorized"
+        tx.category?.name ?? "Uncategorized"
     }
 
     let calendar = Calendar.current
@@ -63,7 +63,7 @@ func fi_findBudgetRecommendations(transactions: [FinancialTransaction], budgets:
                 visualizationType: nil,
                 data: [
                     ("Average Spending", averageSpend),
-                    ("Recommended Budget", recommendedBudget),
+                    ("Recommended Budget", recommendedBudget)
                 ]
             )
             insights.append(insight)
@@ -85,7 +85,7 @@ func fi_findBudgetRecommendations(transactions: [FinancialTransaction], budgets:
                 data: [
                     ("Current Budget", currentBudgetAmount),
                     ("Average Spending", averageSpend),
-                    ("Recommended Budget", recommendedBudget),
+                    ("Recommended Budget", recommendedBudget)
                 ]
             )
             insights.append(insight)

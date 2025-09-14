@@ -1,3 +1,7 @@
+import Foundation
+import Combine
+import SwiftUI
+
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 //
 //  IntelligentFixGenerator.swift
@@ -6,10 +10,6 @@
 //  Phase 4: Intelligent Fix Generation System
 //  Created on July 25, 2025
 //
-
-import Combine
-import Foundation
-import SwiftUI
 
 // MARK: - Intelligent Fix Generation System
 

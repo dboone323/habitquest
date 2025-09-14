@@ -1,14 +1,14 @@
+import Foundation
+import AppKit
+import Combine
+import SwiftUI
+
 //
 //  QuantumAIEnhancer.swift
 //  CodingReviewer - Quantum AI Enhancement Engine
 //
 //  Created by Quantum AI Assistant on August 1, 2025
 //
-
-import AppKit
-import Combine
-import Foundation
-import SwiftUI
 
 // MARK: - Quantum AI Enhancement Engine
 
@@ -66,57 +66,61 @@ class QuantumAIEnhancer: ObservableObject {
         progressValue = 0.1
 
         for file in files {
-            let analysis = await neuralEngine.analyzeCodeDeep(content: file.content, language: file.type)
+            let analysis = await neuralEngine.analyzeCodeDeep(
+                content: file.content, language: file.type)
 
             // Security vulnerabilities detection
             let securityIssues = await detectSecurityVulnerabilities(content: file.content)
             for issue in securityIssues {
-                enhancementResults.append(AIEnhancement(
-                    id: UUID(),
-                    type: .security,
-                    severity: .critical,
-                    title: issue.title,
-                    description: issue.description,
-                    fileName: file.name,
-                    lineNumber: issue.lineNumber,
-                    suggestion: issue.fixSuggestion,
-                    automatedFix: issue.automatedFix,
-                    confidence: issue.confidence
-                ))
+                enhancementResults.append(
+                    AIEnhancement(
+                        id: UUID(),
+                        type: .security,
+                        severity: .critical,
+                        title: issue.title,
+                        description: issue.description,
+                        fileName: file.name,
+                        lineNumber: issue.lineNumber,
+                        suggestion: issue.fixSuggestion,
+                        automatedFix: issue.automatedFix,
+                        confidence: issue.confidence
+                    ))
             }
 
             // Performance bottlenecks
             let performanceIssues = await detectPerformanceBottlenecks(content: file.content)
             for issue in performanceIssues {
-                enhancementResults.append(AIEnhancement(
-                    id: UUID(),
-                    type: .performance,
-                    severity: .high,
-                    title: issue.title,
-                    description: issue.description,
-                    fileName: file.name,
-                    lineNumber: issue.lineNumber,
-                    suggestion: issue.optimizationSuggestion,
-                    automatedFix: issue.optimizedCode,
-                    confidence: issue.confidence
-                ))
+                enhancementResults.append(
+                    AIEnhancement(
+                        id: UUID(),
+                        type: .performance,
+                        severity: .high,
+                        title: issue.title,
+                        description: issue.description,
+                        fileName: file.name,
+                        lineNumber: issue.lineNumber,
+                        suggestion: issue.optimizationSuggestion,
+                        automatedFix: issue.optimizedCode,
+                        confidence: issue.confidence
+                    ))
             }
 
             // Code quality improvements
             let qualityIssues = await detectQualityIssues(content: file.content)
             for issue in qualityIssues {
-                enhancementResults.append(AIEnhancement(
-                    id: UUID(),
-                    type: .codeQuality,
-                    severity: .medium,
-                    title: issue.title,
-                    description: issue.description,
-                    fileName: file.name,
-                    lineNumber: issue.lineNumber,
-                    suggestion: issue.improvementSuggestion,
-                    automatedFix: issue.improvedCode,
-                    confidence: issue.confidence
-                ))
+                enhancementResults.append(
+                    AIEnhancement(
+                        id: UUID(),
+                        type: .codeQuality,
+                        severity: .medium,
+                        title: issue.title,
+                        description: issue.description,
+                        fileName: file.name,
+                        lineNumber: issue.lineNumber,
+                        suggestion: issue.improvementSuggestion,
+                        automatedFix: issue.improvedCode,
+                        confidence: issue.confidence
+                    ))
             }
         }
 
@@ -132,16 +136,17 @@ class QuantumAIEnhancer: ObservableObject {
         let patterns = await patternRecognizer.detectAdvancedPatterns(files: files)
 
         for pattern in patterns {
-            quantumInsights.append(QuantumInsight(
-                id: UUID(),
-                type: pattern.type,
-                title: pattern.title,
-                description: pattern.description,
-                affectedFiles: pattern.files,
-                recommendation: pattern.recommendation,
-                potentialImpact: pattern.impact,
-                confidence: pattern.confidence
-            ))
+            quantumInsights.append(
+                QuantumInsight(
+                    id: UUID(),
+                    type: pattern.type,
+                    title: pattern.title,
+                    description: pattern.description,
+                    affectedFiles: pattern.files,
+                    recommendation: pattern.recommendation,
+                    potentialImpact: pattern.impact,
+                    confidence: pattern.confidence
+                ))
         }
 
         progressValue = 0.4
@@ -156,16 +161,16 @@ class QuantumAIEnhancer: ObservableObject {
         let testResults = await automatedTester.runComprehensiveTests(files: files)
 
         for result in testResults {
-            automatedTestResults.append(AutomatedTestResult(
-                id: UUID(),
-                testType: result.type,
-                fileName: result.fileName,
-                status: result.status,
-                duration: result.executionTime,
-                issuesFound: result.issues,
-                recommendations: result.recommendations,
-                automatedFixes: result.fixes
-            ))
+            automatedTestResults.append(
+                AutomatedTestResult(
+                    id: UUID(),
+                    type: TestSuiteTestType(rawValue: result.type.rawValue) ?? .syntax,
+                    file: result.fileName,
+                    status: TestSuiteTestStatus(rawValue: result.status.rawValue) ?? .passed,
+                    severity: .low,  // Default severity for test results
+                    issues: result.issues,
+                    timestamp: Date()
+                ))
         }
 
         progressValue = 0.7
@@ -181,18 +186,19 @@ class QuantumAIEnhancer: ObservableObject {
             let optimizations = await neuralEngine.generateOptimizations(content: file.content)
 
             for optimization in optimizations {
-                enhancementResults.append(AIEnhancement(
-                    id: UUID(),
-                    type: .optimization,
-                    severity: .medium,
-                    title: optimization.title,
-                    description: optimization.description,
-                    fileName: file.name,
-                    lineNumber: optimization.lineNumber,
-                    suggestion: optimization.suggestion,
-                    automatedFix: optimization.optimizedCode,
-                    confidence: optimization.confidence
-                ))
+                enhancementResults.append(
+                    AIEnhancement(
+                        id: UUID(),
+                        type: .optimization,
+                        severity: .medium,
+                        title: optimization.title,
+                        description: optimization.description,
+                        fileName: file.name,
+                        lineNumber: optimization.lineNumber,
+                        suggestion: optimization.suggestion,
+                        automatedFix: optimization.optimizedCode,
+                        confidence: optimization.confidence
+                    ))
             }
         }
 
@@ -210,18 +216,19 @@ class QuantumAIEnhancer: ObservableObject {
             let uiEnhancements = await analyzeUICode(content: file.content)
 
             for enhancement in uiEnhancements {
-                enhancementResults.append(AIEnhancement(
-                    id: UUID(),
-                    type: .userInterface,
-                    severity: .medium,
-                    title: enhancement.title,
-                    description: enhancement.description,
-                    fileName: file.name,
-                    lineNumber: enhancement.lineNumber,
-                    suggestion: enhancement.suggestion,
-                    automatedFix: enhancement.improvedCode,
-                    confidence: enhancement.confidence
-                ))
+                enhancementResults.append(
+                    AIEnhancement(
+                        id: UUID(),
+                        type: .userInterface,
+                        severity: .medium,
+                        title: enhancement.title,
+                        description: enhancement.description,
+                        fileName: file.name,
+                        lineNumber: enhancement.lineNumber,
+                        suggestion: enhancement.suggestion,
+                        automatedFix: enhancement.improvedCode,
+                        confidence: enhancement.confidence
+                    ))
             }
         }
 
@@ -235,7 +242,7 @@ class NeuralProcessingEngine {
 
     func analyzeCodeDeep(content: String, language: String) async -> DeepAnalysisResult {
         // Simulate neural network processing
-        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 second
+        try? await Task.sleep(nanoseconds: 500_000_000)  // 0.5 second
 
         return DeepAnalysisResult(
             complexity: calculateComplexity(content: content),
@@ -250,34 +257,45 @@ class NeuralProcessingEngine {
 
         // Algorithm optimization detection
         if content.contains("for") && content.contains("for") && content.contains("if") {
-            optimizations.append(CodeOptimization(
-                title: "Nested Loop Optimization",
-                description: "Detected nested loops that could be optimized for better performance",
-                lineNumber: findLineNumber(in: content, containing: "for"),
-                suggestion: "Consider using more efficient algorithms like hash maps or single-pass solutions",
-                optimizedCode: generateOptimizedLoop(from: content),
-                confidence: 0.85
-            ))
+            optimizations.append(
+                CodeOptimization(
+                    title: "Nested Loop Optimization",
+                    description:
+                        "Detected nested loops that could be optimized for better performance",
+                    lineNumber: findLineNumber(in: content, containing: "for"),
+                    suggestion:
+                        "Consider using more efficient algorithms like hash maps or single-pass solutions",
+                    optimizedCode: generateOptimizedLoop(from: content),
+                    confidence: 0.85
+                ))
         }
 
         // Memory usage optimization
         if content.contains("var") && content.contains("Array") {
-            optimizations.append(CodeOptimization(
-                title: "Memory Usage Optimization",
-                description: "Arrays could be pre-allocated or replaced with more efficient data structures",
-                lineNumber: findLineNumber(in: content, containing: "Array"),
-                suggestion: "Use lazy evaluation or streaming for large datasets",
-                optimizedCode: generateMemoryOptimizedCode(from: content),
-                confidence: 0.78
-            ))
+            optimizations.append(
+                CodeOptimization(
+                    title: "Memory Usage Optimization",
+                    description:
+                        "Arrays could be pre-allocated or replaced with more efficient data structures",
+                    lineNumber: findLineNumber(in: content, containing: "Array"),
+                    suggestion: "Use lazy evaluation or streaming for large datasets",
+                    optimizedCode: generateMemoryOptimizedCode(from: content),
+                    confidence: 0.78
+                ))
         }
 
         return optimizations
     }
 
     private func calculateComplexity(content: String) -> Int {
-        let cyclomaticComplexity = content.components(separatedBy: ["if", "for", "while", "switch", "case"]).count - 1
-        return max(1, cyclomaticComplexity)
+        let keywords = ["if", "for", "while", "switch", "case"]
+        var complexity = 1  // Base complexity
+
+        for keyword in keywords {
+            complexity += (content.components(separatedBy: keyword).count - 1)
+        }
+
+        return max(1, complexity)
     }
 
     private func calculateMaintainabilityIndex(content: String) -> Double {
@@ -356,15 +374,18 @@ class QuantumPatternRecognizer {
         // Cross-file dependency analysis
         let dependencies = analyzeDependencies(files: files)
         if !dependencies.circularDependencies.isEmpty {
-            patterns.append(QuantumPattern(
-                type: .architecturalProblem,
-                title: "Circular Dependencies Detected",
-                description: "Found \(dependencies.circularDependencies.count) circular dependencies that could impact maintainability",
-                files: dependencies.circularDependencies,
-                recommendation: "Refactor to use dependency injection or protocol-based architecture",
-                impact: .high,
-                confidence: 0.92
-            ))
+            patterns.append(
+                QuantumPattern(
+                    type: .architecturalProblem,
+                    title: "Circular Dependencies Detected",
+                    description:
+                        "Found \(dependencies.circularDependencies.count) circular dependencies that could impact maintainability",
+                    files: dependencies.circularDependencies,
+                    recommendation:
+                        "Refactor to use dependency injection or protocol-based architecture",
+                    impact: .high,
+                    confidence: 0.92
+                ))
         }
 
         // Design pattern opportunities
@@ -374,15 +395,17 @@ class QuantumPatternRecognizer {
         // Code duplication analysis
         let duplications = detectCodeDuplication(files: files)
         if !duplications.isEmpty {
-            patterns.append(QuantumPattern(
-                type: .codeSmell,
-                title: "Code Duplication Detected",
-                description: "Found \(duplications.count) instances of duplicated code that could be refactored",
-                files: duplications.map(\.fileName),
-                recommendation: "Extract common functionality into shared methods or classes",
-                impact: .medium,
-                confidence: 0.88
-            ))
+            patterns.append(
+                QuantumPattern(
+                    type: .codeSmell,
+                    title: "Code Duplication Detected",
+                    description:
+                        "Found \(duplications.count) instances of duplicated code that could be refactored",
+                    files: duplications.map { $0.fileName },
+                    recommendation: "Extract common functionality into shared methods or classes",
+                    impact: .medium,
+                    confidence: 0.88
+                ))
         }
 
         return patterns
@@ -402,8 +425,7 @@ class QuantumPatternRecognizer {
         for (fileName, imports) in dependencies {
             for importedFile in imports {
                 if let importedDependencies = dependencies[importedFile],
-                   importedDependencies.contains(fileName)
-                {
+                   importedDependencies.contains(fileName) {
                     circularDependencies.append(fileName)
                 }
             }
@@ -421,28 +443,33 @@ class QuantumPatternRecognizer {
         for file in files {
             // Singleton pattern opportunity
             if file.content.contains("shared") && file.content.contains("static") {
-                patterns.append(QuantumPattern(
-                    type: .designPattern,
-                    title: "Singleton Pattern Detected",
-                    description: "File uses singleton pattern - consider if this is the best architectural choice",
-                    files: [file.name],
-                    recommendation: "Evaluate if dependency injection would provide better testability",
-                    impact: .medium,
-                    confidence: 0.75
-                ))
+                patterns.append(
+                    QuantumPattern(
+                        type: .designPattern,
+                        title: "Singleton Pattern Detected",
+                        description:
+                            "File uses singleton pattern - consider if this is the best architectural choice",
+                        files: [file.name],
+                        recommendation:
+                            "Evaluate if dependency injection would provide better testability",
+                        impact: .medium,
+                        confidence: 0.75
+                    ))
             }
 
             // Observer pattern opportunity
             if file.content.contains("@Published") || file.content.contains("NotificationCenter") {
-                patterns.append(QuantumPattern(
-                    type: .designPattern,
-                    title: "Observer Pattern Implementation",
-                    description: "Good use of observer pattern for reactive programming",
-                    files: [file.name],
-                    recommendation: "Consider using Combine framework for more advanced reactive patterns",
-                    impact: .low,
-                    confidence: 0.82
-                ))
+                patterns.append(
+                    QuantumPattern(
+                        type: .designPattern,
+                        title: "Observer Pattern Implementation",
+                        description: "Good use of observer pattern for reactive programming",
+                        files: [file.name],
+                        recommendation:
+                            "Consider using Combine framework for more advanced reactive patterns",
+                        impact: .low,
+                        confidence: 0.82
+                    ))
             }
         }
 
@@ -453,15 +480,16 @@ class QuantumPatternRecognizer {
         var duplications: [DuplicationInstance] = []
 
         // Simplified duplication detection
-        for i in 0 ..< files.count {
-            for j in (i + 1) ..< files.count {
+        for i in 0..<files.count {
+            for j in (i + 1)..<files.count {
                 let similarity = calculateSimilarity(files[i].content, files[j].content)
                 if similarity > 0.7 {
-                    duplications.append(DuplicationInstance(
-                        fileName: files[i].name,
-                        duplicateFileName: files[j].name,
-                        similarity: similarity
-                    ))
+                    duplications.append(
+                        DuplicationInstance(
+                            fileName: files[i].name,
+                            duplicateFileName: files[j].name,
+                            similarity: similarity
+                        ))
                 }
             }
         }
@@ -519,7 +547,7 @@ class IntelligentTestSuite {
     }
 
     private func validateSyntax(file: UploadedFile) async -> TestResult {
-        try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 second
+        try? await Task.sleep(nanoseconds: 200_000_000)  // 0.2 second
 
         let syntaxErrors = detectSyntaxErrors(content: file.content, language: file.type)
 
@@ -535,7 +563,7 @@ class IntelligentTestSuite {
     }
 
     private func runSecurityTests(file: UploadedFile) async -> TestResult {
-        try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 second
+        try? await Task.sleep(nanoseconds: 300_000_000)  // 0.3 second
 
         let securityIssues = scanForSecurityVulnerabilities(content: file.content)
 
@@ -551,7 +579,7 @@ class IntelligentTestSuite {
     }
 
     private func runPerformanceTests(file: UploadedFile) async -> TestResult {
-        try? await Task.sleep(nanoseconds: 400_000_000) // 0.4 second
+        try? await Task.sleep(nanoseconds: 400_000_000)  // 0.4 second
 
         let performanceIssues = analyzePerformance(content: file.content)
 
@@ -567,7 +595,7 @@ class IntelligentTestSuite {
     }
 
     private func generateUnitTests(file: UploadedFile) async -> TestResult {
-        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 second
+        try? await Task.sleep(nanoseconds: 500_000_000)  // 0.5 second
 
         let testCases = generateTestCases(for: file.content)
 
@@ -589,12 +617,13 @@ class IntelligentTestSuite {
         for (index, line) in lines.enumerated() {
             // Basic syntax checking
             if line.contains("{") && !content.contains("}") {
-                errors.append(SyntaxError(
-                    description: "Missing closing brace",
-                    lineNumber: index + 1,
-                    fix: "Add closing brace '}' to match opening brace",
-                    automatedFix: line + " }"
-                ))
+                errors.append(
+                    SyntaxError(
+                        description: "Missing closing brace",
+                        lineNumber: index + 1,
+                        fix: "Add closing brace '}' to match opening brace",
+                        automatedFix: line + " }"
+                    ))
             }
         }
 
@@ -606,22 +635,24 @@ class IntelligentTestSuite {
 
         // SQL Injection detection
         if content.contains("SELECT") && content.contains("+") {
-            issues.append(SecurityIssue(
-                description: "Potential SQL injection vulnerability",
-                severity: .critical,
-                mitigation: "Use parameterized queries",
-                secureCode: "Use prepared statements with parameter binding"
-            ))
+            issues.append(
+                SecurityIssue(
+                    description: "Potential SQL injection vulnerability",
+                    severity: .critical,
+                    mitigation: "Use parameterized queries",
+                    secureCode: "Use prepared statements with parameter binding"
+                ))
         }
 
         // Hardcoded secrets
         if content.contains("password") || content.contains("apiKey") || content.contains("secret") {
-            issues.append(SecurityIssue(
-                description: "Potential hardcoded credentials",
-                severity: .high,
-                mitigation: "Store secrets in secure configuration or keychain",
-                secureCode: "Use environment variables or secure storage"
-            ))
+            issues.append(
+                SecurityIssue(
+                    description: "Potential hardcoded credentials",
+                    severity: .high,
+                    mitigation: "Store secrets in secure configuration or keychain",
+                    secureCode: "Use environment variables or secure storage"
+                ))
         }
 
         return issues
@@ -632,20 +663,22 @@ class IntelligentTestSuite {
 
         // Inefficient loops
         if content.contains("for") && content.contains("for") {
-            issues.append(PerformanceIssue(
-                description: "Nested loops detected - O(n²) complexity",
-                optimization: "Consider using hash maps or more efficient algorithms",
-                optimizedCode: "Replace nested loops with single-pass algorithm"
-            ))
+            issues.append(
+                PerformanceIssue(
+                    description: "Nested loops detected - O(n²) complexity",
+                    optimization: "Consider using hash maps or more efficient algorithms",
+                    optimizedCode: "Replace nested loops with single-pass algorithm"
+                ))
         }
 
         // Memory leaks potential
         if content.contains("strong") && content.contains("self") {
-            issues.append(PerformanceIssue(
-                description: "Potential retain cycle",
-                optimization: "Use weak or unowned references",
-                optimizedCode: "Replace with [weak self] or [unowned self]"
-            ))
+            issues.append(
+                PerformanceIssue(
+                    description: "Potential retain cycle",
+                    optimization: "Use weak or unowned references",
+                    optimizedCode: "Replace with [weak self] or [unowned self]"
+                ))
         }
 
         return issues
@@ -674,38 +707,41 @@ func detectSecurityVulnerabilities(content: String) async -> [SecurityVulnerabil
     for (index, line) in lines.enumerated() {
         // SQL Injection
         if line.contains("SELECT") && (line.contains("+") || line.contains("\\(")) {
-            vulnerabilities.append(SecurityVulnerability(
-                title: "SQL Injection Vulnerability",
-                description: "Direct string concatenation in SQL query detected",
-                lineNumber: index + 1,
-                fixSuggestion: "Use parameterized queries or prepared statements",
-                automatedFix: line.replacingOccurrences(of: "+", with: "parameterized query"),
-                confidence: 0.95
-            ))
+            vulnerabilities.append(
+                SecurityVulnerability(
+                    title: "SQL Injection Vulnerability",
+                    description: "Direct string concatenation in SQL query detected",
+                    lineNumber: index + 1,
+                    fixSuggestion: "Use parameterized queries or prepared statements",
+                    automatedFix: line.replacingOccurrences(of: "+", with: "parameterized query"),
+                    confidence: 0.95
+                ))
         }
 
         // XSS Vulnerability
         if line.contains("innerHTML") || line.contains("document.write") {
-            vulnerabilities.append(SecurityVulnerability(
-                title: "Cross-Site Scripting (XSS) Risk",
-                description: "Direct DOM manipulation without sanitization",
-                lineNumber: index + 1,
-                fixSuggestion: "Sanitize user input before rendering",
-                automatedFix: "Use textContent instead of innerHTML",
-                confidence: 0.88
-            ))
+            vulnerabilities.append(
+                SecurityVulnerability(
+                    title: "Cross-Site Scripting (XSS) Risk",
+                    description: "Direct DOM manipulation without sanitization",
+                    lineNumber: index + 1,
+                    fixSuggestion: "Sanitize user input before rendering",
+                    automatedFix: "Use textContent instead of innerHTML",
+                    confidence: 0.88
+                ))
         }
 
         // Hardcoded Credentials
         if line.lowercased().contains("password") && line.contains("=") {
-            vulnerabilities.append(SecurityVulnerability(
-                title: "Hardcoded Credentials",
-                description: "Potential hardcoded password or API key detected",
-                lineNumber: index + 1,
-                fixSuggestion: "Store credentials in secure configuration or keychain",
-                automatedFix: "Use environment variables or secure storage",
-                confidence: 0.92
-            ))
+            vulnerabilities.append(
+                SecurityVulnerability(
+                    title: "Hardcoded Credentials",
+                    description: "Potential hardcoded password or API key detected",
+                    lineNumber: index + 1,
+                    fixSuggestion: "Store credentials in secure configuration or keychain",
+                    automatedFix: "Use environment variables or secure storage",
+                    confidence: 0.92
+                ))
         }
     }
 
@@ -721,39 +757,44 @@ func detectPerformanceBottlenecks(content: String) async -> [PerformanceBottlene
         if line.contains("for") && content.contains("for") {
             let nestedLoopCount = content.components(separatedBy: "for").count - 1
             if nestedLoopCount > 2 {
-                bottlenecks.append(PerformanceBottleneck(
-                    title: "Nested Loop Performance Issue",
-                    description: "Multiple nested loops causing O(n^\\(nestedLoopCount)) complexity",
-                    lineNumber: index + 1,
-                    optimizationSuggestion: "Consider using hash maps, sets, or more efficient algorithms",
-                    optimizedCode: "Replace with single-pass algorithm using HashMap",
-                    confidence: 0.89
-                ))
+                bottlenecks.append(
+                    PerformanceBottleneck(
+                        title: "Nested Loop Performance Issue",
+                        description:
+                            "Multiple nested loops causing O(n^\\(nestedLoopCount)) complexity",
+                        lineNumber: index + 1,
+                        optimizationSuggestion:
+                            "Consider using hash maps, sets, or more efficient algorithms",
+                        optimizedCode: "Replace with single-pass algorithm using HashMap",
+                        confidence: 0.89
+                    ))
             }
         }
 
         // Inefficient string concatenation
         if line.contains("+") && line.contains("String") {
-            bottlenecks.append(PerformanceBottleneck(
-                title: "Inefficient String Concatenation",
-                description: "String concatenation in loop can cause performance issues",
-                lineNumber: index + 1,
-                optimizationSuggestion: "Use StringBuilder or string interpolation",
-                optimizedCode: "Use StringBuilder or Array.joined()",
-                confidence: 0.82
-            ))
+            bottlenecks.append(
+                PerformanceBottleneck(
+                    title: "Inefficient String Concatenation",
+                    description: "String concatenation in loop can cause performance issues",
+                    lineNumber: index + 1,
+                    optimizationSuggestion: "Use StringBuilder or string interpolation",
+                    optimizedCode: "Use StringBuilder or Array.joined()",
+                    confidence: 0.82
+                ))
         }
 
         // Memory leak potential
         if line.contains("strong") && line.contains("self") {
-            bottlenecks.append(PerformanceBottleneck(
-                title: "Potential Retain Cycle",
-                description: "Strong reference cycle may cause memory leaks",
-                lineNumber: index + 1,
-                optimizationSuggestion: "Use weak or unowned references",
-                optimizedCode: "Replace with [weak self] in closures",
-                confidence: 0.75
-            ))
+            bottlenecks.append(
+                PerformanceBottleneck(
+                    title: "Potential Retain Cycle",
+                    description: "Strong reference cycle may cause memory leaks",
+                    lineNumber: index + 1,
+                    optimizationSuggestion: "Use weak or unowned references",
+                    optimizedCode: "Replace with [weak self] in closures",
+                    confidence: 0.75
+                ))
         }
     }
 
@@ -767,38 +808,41 @@ func detectQualityIssues(content: String) async -> [CodeQualityIssue] {
     for (index, line) in lines.enumerated() {
         // Long methods
         if line.contains("func") && lines.count > 50 {
-            issues.append(CodeQualityIssue(
-                title: "Long Method",
-                description: "Method is too long and should be broken down",
-                lineNumber: index + 1,
-                improvementSuggestion: "Break into smaller, single-responsibility methods",
-                improvedCode: "Extract functionality into separate methods",
-                confidence: 0.78
-            ))
+            issues.append(
+                CodeQualityIssue(
+                    title: "Long Method",
+                    description: "Method is too long and should be broken down",
+                    lineNumber: index + 1,
+                    improvementSuggestion: "Break into smaller, single-responsibility methods",
+                    improvedCode: "Extract functionality into separate methods",
+                    confidence: 0.78
+                ))
         }
 
         // Magic numbers
         if line.range(of: "\\d{2,}", options: .regularExpression) != nil && !line.contains("//") {
-            issues.append(CodeQualityIssue(
-                title: "Magic Number",
-                description: "Numeric literal should be replaced with named constant",
-                lineNumber: index + 1,
-                improvementSuggestion: "Replace with named constant",
-                improvedCode: "private let CONSTANT_NAME = value",
-                confidence: 0.85
-            ))
+            issues.append(
+                CodeQualityIssue(
+                    title: "Magic Number",
+                    description: "Numeric literal should be replaced with named constant",
+                    lineNumber: index + 1,
+                    improvementSuggestion: "Replace with named constant",
+                    improvedCode: "private let CONSTANT_NAME = value",
+                    confidence: 0.85
+                ))
         }
 
         // Commented code
         if line.trimmingCharacters(in: .whitespaces).hasPrefix("//") && line.contains("func") {
-            issues.append(CodeQualityIssue(
-                title: "Commented Code",
-                description: "Commented-out code should be removed",
-                lineNumber: index + 1,
-                improvementSuggestion: "Remove commented code - use version control instead",
-                improvedCode: "// Remove this line",
-                confidence: 0.95
-            ))
+            issues.append(
+                CodeQualityIssue(
+                    title: "Commented Code",
+                    description: "Commented-out code should be removed",
+                    lineNumber: index + 1,
+                    improvementSuggestion: "Remove commented code - use version control instead",
+                    improvedCode: "// Remove this line",
+                    confidence: 0.95
+                ))
         }
     }
 
@@ -812,38 +856,41 @@ func analyzeUICode(content: String) async -> [UIEnhancement] {
     for (index, line) in lines.enumerated() {
         // Accessibility improvements
         if line.contains("Button") && !line.contains("accessibilityLabel") {
-            enhancements.append(UIEnhancement(
-                title: "Missing Accessibility Label",
-                description: "Button lacks accessibility support",
-                lineNumber: index + 1,
-                suggestion: "Add accessibility labels for better user experience",
-                improvedCode: ".accessibilityLabel(\"Descriptive label\")",
-                confidence: 0.90
-            ))
+            enhancements.append(
+                UIEnhancement(
+                    title: "Missing Accessibility Label",
+                    description: "Button lacks accessibility support",
+                    lineNumber: index + 1,
+                    suggestion: "Add accessibility labels for better user experience",
+                    improvedCode: ".accessibilityLabel(\"Descriptive label\")",
+                    confidence: 0.90
+                ))
         }
 
         // Dark mode support
         if line.contains("Color") && !line.contains("system") {
-            enhancements.append(UIEnhancement(
-                title: "Dark Mode Compatibility",
-                description: "Use system colors for better dark mode support",
-                lineNumber: index + 1,
-                suggestion: "Use system colors that adapt to appearance",
-                improvedCode: "Color(.systemBackground)",
-                confidence: 0.83
-            ))
+            enhancements.append(
+                UIEnhancement(
+                    title: "Dark Mode Compatibility",
+                    description: "Use system colors for better dark mode support",
+                    lineNumber: index + 1,
+                    suggestion: "Use system colors that adapt to appearance",
+                    improvedCode: "Color(.systemBackground)",
+                    confidence: 0.83
+                ))
         }
 
         // Responsive design
         if line.contains("frame") && line.contains("width") && !line.contains("maxWidth") {
-            enhancements.append(UIEnhancement(
-                title: "Fixed Width Layout",
-                description: "Fixed width may not work well on different screen sizes",
-                lineNumber: index + 1,
-                suggestion: "Use flexible layouts with maxWidth/minWidth",
-                improvedCode: ".frame(maxWidth: .infinity)",
-                confidence: 0.76
-            ))
+            enhancements.append(
+                UIEnhancement(
+                    title: "Fixed Width Layout",
+                    description: "Fixed width may not work well on different screen sizes",
+                    lineNumber: index + 1,
+                    suggestion: "Use flexible layouts with maxWidth/minWidth",
+                    improvedCode: ".frame(maxWidth: .infinity)",
+                    confidence: 0.76
+                ))
         }
     }
 
@@ -880,33 +927,6 @@ enum Severity: String, CaseIterable {
     case medium = "Medium"
     case high = "High"
     case critical = "Critical"
-}
-
-struct AutomatedTestResult: Identifiable {
-    let id: UUID
-    let testType: TestType
-    let fileName: String
-    let status: TestStatus
-    let duration: Double
-    let issuesFound: [String]
-    let recommendations: [String]
-    let automatedFixes: [String]
-}
-
-enum TestType: String, CaseIterable {
-    case syntax = "Syntax"
-    case security = "Security"
-    case performance = "Performance"
-    case unitTest = "Unit Test"
-    case integration = "Integration"
-    case accessibility = "Accessibility"
-}
-
-enum TestStatus: String, CaseIterable {
-    case passed = "Passed"
-    case failed = "Failed"
-    case warning = "Warning"
-    case skipped = "Skipped"
 }
 
 struct QuantumInsight: Identifiable {
@@ -988,9 +1008,9 @@ struct DuplicationInstance {
 }
 
 struct TestResult {
-    let type: TestType
+    let type: TestSuiteTestType
     let fileName: String
-    let status: TestStatus
+    let status: TestSuiteTestStatus
     let executionTime: Double
     let issues: [String]
     let recommendations: [String]

@@ -1,19 +1,36 @@
 import Foundation
 import SwiftData
 
-/// Represents a single completion record for a habit
+/// Represents a single completion record (log) for a habit in HabitQuest.
+/// Stores completion date, status, notes, XP earned, mood, and links to the associated habit.
 @Model
-final class HabitLog {
-    var id: UUID
-    var completionDate: Date
-    var isCompleted: Bool
-    var notes: String?
-    var xpEarned: Int
-    var mood: MoodRating?
-    var completionTime: Date?
+public final class HabitLog {
 
-    @Relationship var habit: Habit?
+    /// Unique identifier for the log entry.
+    public var id: UUID
+    /// The date this habit was completed (or attempted).
+    public var completionDate: Date
+    /// Whether the habit was completed successfully.
+    public var isCompleted: Bool
+    /// Optional notes about this completion.
+    public var notes: String?
+    /// XP earned for this completion (0 if not completed).
+    public var xpEarned: Int
+    /// Optional mood rating for this completion.
+    public var mood: MoodRating?
+    /// The exact time the habit was completed (if completed).
+    public var completionTime: Date?
 
+    /// The associated habit for this log entry.
+    @Relationship public var habit: Habit?
+
+    /// Initializes a new habit log entry.
+    /// - Parameters:
+    ///   - habit: The associated habit.
+    ///   - completionDate: The date of completion (default: now).
+    ///   - isCompleted: Whether the habit was completed (default: true).
+    ///   - notes: Optional notes for this log.
+    ///   - mood: Optional mood rating for this log.
     init(
         habit: Habit,
         completionDate: Date = Date(),
@@ -26,7 +43,8 @@ final class HabitLog {
         self.completionDate = completionDate
         self.isCompleted = isCompleted
         self.notes = notes
-        self.xpEarned = isCompleted
+        self.xpEarned =
+            isCompleted
             ? habit.xpValue * habit.difficulty.xpMultiplier
             : 0
         self.mood = mood
@@ -34,8 +52,8 @@ final class HabitLog {
     }
 }
 
-/// Mood rating for habit completion
-enum MoodRating: String, CaseIterable, Codable {
+/// Mood rating for habit completion, used to track how the user felt after completing a habit.
+public enum MoodRating: String, CaseIterable, Codable {
     case terrible = "😞"
     case bad = "😕"
     case okay = "😐"
@@ -43,6 +61,7 @@ enum MoodRating: String, CaseIterable, Codable {
     case good = "😊"
     case excellent = "😄"
 
+    /// Integer value for the mood rating (1 = worst, 5 = best).
     var value: Int {
         switch self {
         case .terrible: 1
@@ -54,6 +73,7 @@ enum MoodRating: String, CaseIterable, Codable {
         }
     }
 
+    /// Human-readable description for the mood rating.
     var description: String {
         switch self {
         case .terrible: "Terrible"

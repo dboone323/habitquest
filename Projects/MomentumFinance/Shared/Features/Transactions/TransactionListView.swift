@@ -34,7 +34,7 @@ extension Features.Transactions {
                                 onTransactionTapped(transaction)
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button("Delete", role: .destructive) {
+                                Button("Delete", role: .destructive).accessibilityLabel("Button") {
                                     onDeleteTransaction(transaction)
                                 }
                             }

@@ -36,7 +36,7 @@ public enum AnimatedButtonComponent {
         }
 
         public var body: some View {
-            Button(title, action: action)
+            Button(title, action: action).accessibilityLabel("Button")
                 .scaleEffect(1.0)
                 .animation(.easeInOut(duration: 0.2), value: UUID())
         }
@@ -97,7 +97,7 @@ public enum FloatingActionButtonComponent {
         }
 
         public var body: some View {
-            Button(action: action) {
+            Button(action: action).accessibilityLabel("Button") {
                 Image(systemName: "plus")
                     .font(.title2)
                     .foregroundColor(.white)

@@ -10,7 +10,6 @@ import SwiftUI
 
 /// Extensions for Color that provide hex string initialization
 extension Color {
-
     /// Initialize a Color from a hex string
     /// - Parameter hex: Hex color string (with or without # prefix)
     /// - Returns: Color instance from hex value

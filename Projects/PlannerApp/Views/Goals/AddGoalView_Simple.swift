@@ -18,9 +18,9 @@ struct AddGoalView: View {
         NavigationView {
             Form {
                 Section("Goal Details") {
-                    TextField("Goal Title", text: $title)
+                    TextField("Goal Title", text: $title).accessibilityLabel("Text Field")
 
-                    TextField("Description", text: $description, axis: .vertical)
+                    TextField("Description", text: $description, axis: .vertical).accessibilityLabel("Text Field")
                         .lineLimit(3 ... 6)
 
                     DatePicker("Target Date", selection: $targetDate, displayedComponents: .date)
@@ -30,13 +30,13 @@ struct AddGoalView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("Cancel").accessibilityLabel("Button") {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button("Save").accessibilityLabel("Button") {
                         saveGoal()
                         dismiss()
                     }

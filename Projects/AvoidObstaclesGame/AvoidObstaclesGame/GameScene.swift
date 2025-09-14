@@ -5,21 +5,23 @@
 // This file contains all the logic for the "Avoid the Obstacles" game.
 //
 
-import GameplayKit // For GKRandomSource, if needed for more complex randomness
+import GameplayKit  // For GKRandomSource, if needed for more complex randomness
 import SpriteKit
-import UIKit // For UITouch and UIEvent
+import UIKit  // For UITouch and UIEvent
 
 // MARK: - Physics Categories
 
 // Defines the categories for physics bodies to handle collisions.
 // Using UInt32 for bitmasks allows up to 32 unique categories.
 enum PhysicsCategory {
-    static let none: UInt32 = 0 // 0
-    static let player: UInt32 = 0b1 // Binary 1 (decimal 1)
-    static let obstacle: UInt32 = 0b10 // Binary 2 (decimal 2)
+    static let none: UInt32 = 0  // 0
+    static let player: UInt32 = 0b1  // Binary 1 (decimal 1)
+    static let obstacle: UInt32 = 0b10  // Binary 2 (decimal 2)
     // Add more categories here if needed (e.g., powerUp: 0b100, ground: 0b1000)
 }
 
+/// The main SpriteKit scene for AvoidObstaclesGame.
+/// Handles all game logic, rendering, physics, and user interaction.
 class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Properties
@@ -58,7 +60,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Time tracking for score updates
     private var lastUpdateTime: TimeInterval = 0
     private var scoreUpdateTimer: TimeInterval = 0
-    private let scoreInterval: TimeInterval = 1.0 // Score increases every 1 second the game is active.
+    private let scoreInterval: TimeInterval = 1.0  // Score increases every 1 second the game is active.
 
     // Difficulty management
     private var currentDifficulty: GameDifficulty = .getDifficulty(for: 0)
@@ -69,24 +71,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Scene Lifecycle
 
+    /// Called when the scene is first presented by the view.
+    /// Sets up the background, physics, UI, and starts the game.
+    /// - Parameter view: The SKView presenting this scene.
     override func didMove(to view: SKView) {
-        // This method is called once when the scene is presented by the view.
-        // It's the primary place for initial setup of the scene and its contents.
-
-        // Setup enhanced background
         setupBackground()
-
-        // Setup physics world properties.
-        physicsWorld.gravity = CGVector(dx: 0, dy: 0) // No gravity, objects won't fall unless explicitly moved.
-        physicsWorld.contactDelegate = self // Set this scene to handle physics contact events.
-
-        // Setup particle effects
+        physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        physicsWorld.contactDelegate = self
         setupParticleEffects()
-
-        // Initialize and add game elements to the scene.
         setupPlayer()
         setupUI()
-        startGame() // Initial call to start the game logic.
+        startGame()
     }
 
     private func setupBackground() {
@@ -97,17 +92,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(backgroundNode)
 
         // Add some subtle animated background elements
-        for _ in 0 ..< 5 {
+        for _ in 0..<5 {
             let cloud = SKSpriteNode(color: .white, size: CGSize(width: 60, height: 30))
             cloud.alpha = 0.3
             cloud.position = CGPoint(
-                x: CGFloat.random(in: 0 ... size.width),
-                y: CGFloat.random(in: size.height * 0.7 ... size.height)
+                x: CGFloat.random(in: 0...size.width),
+                y: CGFloat.random(in: size.height * 0.7...size.height)
             )
             cloud.zPosition = -50
 
             // Animate clouds moving slowly
-            let moveAction = SKAction.moveBy(x: -size.width - 60, y: 0, duration: TimeInterval.random(in: 10 ... 20))
+            let moveAction = SKAction.moveBy(
+                x: -size.width - 60, y: 0, duration: TimeInterval.random(in: 10...20))
             let resetAction = SKAction.moveTo(x: size.width + 60, duration: 0)
             let sequence = SKAction.sequence([moveAction, resetAction])
             cloud.run(SKAction.repeatForever(sequence))
@@ -157,10 +153,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         explosion.zPosition = 50
     }
 
+    /// Starts or restarts the game, resetting all state and UI.
     func startGame() {
         // Reset game state
         isGameOver = false
-        score = 0 // This will also update the label via didSet
+        score = 0  // This will also update the label via didSet
         currentDifficulty = GameDifficulty.getDifficulty(for: 0)
         lastDifficultyLevel = 1
 
@@ -185,15 +182,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Setup Methods
 
+    /// Creates and configures the player node with enhanced visual design and physics.
     private func setupPlayer() {
         // Creates and configures the player node with enhanced visual design.
 
         // Create player sprite node with improved visual design
         player = SKSpriteNode(color: .systemBlue, size: CGSize(width: 50, height: 50))
-        guard let player else { return } // Safety check for optional player.
+        guard let player else { return }  // Safety check for optional player.
 
-        player.name = "player" // Assign a name for easier debugging or node searching.
-        player.position = CGPoint(x: size.width / 2, y: 100) // Initial position: bottom-center.
+        player.name = "player"  // Assign a name for easier debugging or node searching.
+        player.position = CGPoint(x: size.width / 2, y: 100)  // Initial position: bottom-center.
 
         // Add a subtle glow effect to the player
         let glowEffect = SKEffectNode()
@@ -206,16 +204,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.addChild(glowEffect)
 
         // Setup player's physics body for collision detection.
-        player.physicsBody = SKPhysicsBody(rectangleOf: player.size) // Shape matches the sprite.
-        player.physicsBody?.categoryBitMask = PhysicsCategory.player // Assign to 'player' category.
-        player.physicsBody?.contactTestBitMask = PhysicsCategory.obstacle // Notify on contact with 'obstacle'.
-        player.physicsBody?.collisionBitMask = PhysicsCategory.none // No physical collision response (won't bounce off).
-        player.physicsBody?.affectedByGravity = false // Player shouldn't be pulled down by gravity.
-        player.physicsBody?.isDynamic = false // Player is not moved by physics simulation, only by code (touch input).
+        player.physicsBody = SKPhysicsBody(rectangleOf: player.size)  // Shape matches the sprite.
+        player.physicsBody?.categoryBitMask = PhysicsCategory.player  // Assign to 'player' category.
+        player.physicsBody?.contactTestBitMask = PhysicsCategory.obstacle  // Notify on contact with 'obstacle'.
+        player.physicsBody?.collisionBitMask = PhysicsCategory.none  // No physical collision response (won't bounce off).
+        player.physicsBody?.affectedByGravity = false  // Player shouldn't be pulled down by gravity.
+        player.physicsBody?.isDynamic = false  // Player is not moved by physics simulation, only by code (touch input).
 
-        addChild(player) // Add the player node to the scene.
+        addChild(player)  // Add the player node to the scene.
     }
 
+    /// Creates and configures all UI elements (score, high score, difficulty labels).
     private func setupUI() {
         // Creates and configures all UI elements.
 
@@ -256,6 +255,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Obstacle Spawning
 
+    /// Sets up a repeating action to spawn obstacles at intervals based on difficulty.
     private func startSpawningObstacles() {
         // Sets up a repeating action to spawn obstacles at intervals based on difficulty.
 
@@ -267,11 +267,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(repeatForeverAction, withKey: obstacleSpawnActionKey)
     }
 
+    /// Stops the obstacle spawning action.
     private func stopSpawningObstacles() {
         // Stops the obstacle spawning action.
         removeAction(forKey: obstacleSpawnActionKey)
     }
 
+    /// Creates a single obstacle with difficulty-based properties and enhanced visuals.
     private func spawnObstacle() {
         // Creates a single obstacle with difficulty-based properties and enhanced visuals.
         if isGameOver { return }
@@ -282,26 +284,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // Add visual enhancement to obstacles
         let borderWidth: CGFloat = 2.0
-        let borderColor = SKColor(red: 0.6, green: 0.0, blue: 0.0, alpha: 1.0) // Dark red color
+        let borderColor = SKColor(red: 0.6, green: 0.0, blue: 0.0, alpha: 1.0)  // Dark red color
 
         // Create border effect
-        let topBorder = SKSpriteNode(color: borderColor, size: CGSize(width: obstacleSize.width, height: borderWidth))
+        let topBorder = SKSpriteNode(
+            color: borderColor, size: CGSize(width: obstacleSize.width, height: borderWidth))
         topBorder.position = CGPoint(x: 0, y: obstacleSize.height / 2 - borderWidth / 2)
         obstacle.addChild(topBorder)
 
-        let bottomBorder = SKSpriteNode(color: borderColor, size: CGSize(width: obstacleSize.width, height: borderWidth))
+        let bottomBorder = SKSpriteNode(
+            color: borderColor, size: CGSize(width: obstacleSize.width, height: borderWidth))
         bottomBorder.position = CGPoint(x: 0, y: -obstacleSize.height / 2 + borderWidth / 2)
         obstacle.addChild(bottomBorder)
 
-        let leftBorder = SKSpriteNode(color: borderColor, size: CGSize(width: borderWidth, height: obstacleSize.height))
+        let leftBorder = SKSpriteNode(
+            color: borderColor, size: CGSize(width: borderWidth, height: obstacleSize.height))
         leftBorder.position = CGPoint(x: -obstacleSize.width / 2 + borderWidth / 2, y: 0)
         obstacle.addChild(leftBorder)
 
-        let rightBorder = SKSpriteNode(color: borderColor, size: CGSize(width: borderWidth, height: obstacleSize.height))
+        let rightBorder = SKSpriteNode(
+            color: borderColor, size: CGSize(width: borderWidth, height: obstacleSize.height))
         rightBorder.position = CGPoint(x: obstacleSize.width / 2 - borderWidth / 2, y: 0)
         obstacle.addChild(rightBorder)
 
-        let randomX = CGFloat.random(in: obstacle.size.width / 2 ... size.width - obstacle.size.width / 2)
+        let randomX = CGFloat.random(
+            in: obstacle.size.width / 2...size.width - obstacle.size.width / 2)
         obstacle.position = CGPoint(x: randomX, y: size.height + obstacle.size.height)
 
         // Setup physics body
@@ -315,13 +322,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(obstacle)
 
         // Use difficulty-based speed
-        let moveAction = SKAction.moveTo(y: -obstacle.size.height, duration: currentDifficulty.obstacleSpeed)
+        let moveAction = SKAction.moveTo(
+            y: -obstacle.size.height, duration: currentDifficulty.obstacleSpeed)
         let removeAction = SKAction.removeFromParent()
         obstacle.run(SKAction.sequence([moveAction, removeAction]))
     }
 
     // MARK: - Difficulty Management
 
+    /// Updates the game difficulty based on the current score and restarts obstacle spawning if needed.
     private func updateDifficulty() {
         let newDifficulty = GameDifficulty.getDifficulty(for: score)
         let newLevel = GameDifficulty.getDifficultyLevel(for: score)
@@ -345,6 +354,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
+    /// Displays a visual effect when the player levels up.
     private func showLevelUpEffect() {
         let levelUpLabel = SKLabelNode(fontNamed: "Chalkduster")
         levelUpLabel.text = "LEVEL UP!"
@@ -365,16 +375,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Touch Handling
 
+    /// Handles player movement by dragging on the screen.
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Called when a touch that began on the screen moves.
-        if isGameOver { return } // Disable player movement if game is over.
+        if isGameOver { return }  // Disable player movement if game is over.
 
-        guard let touch = touches.first else { return } // Get the first touch.
-        let touchLocation = touch.location(in: self) // Get touch location within the scene.
+        guard let touch = touches.first else { return }  // Get the first touch.
+        let touchLocation = touch.location(in: self)  // Get touch location within the scene.
 
         // Update player's x-position based on touch, keeping it within screen bounds.
         var newXPosition = touchLocation.x
-        let halfPlayerWidth = (player?.size.width ?? 0) / 2 // Use actual player width if available.
+        let halfPlayerWidth = (player?.size.width ?? 0) / 2  // Use actual player width if available.
 
         // Clamp newXPosition to prevent player from moving off-screen.
         if newXPosition < halfPlayerWidth {
@@ -383,9 +394,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             newXPosition = size.width - halfPlayerWidth
         }
 
-        player?.position.x = newXPosition // Apply the new x-position.
+        player?.position.x = newXPosition  // Apply the new x-position.
     }
 
+    /// Handles tap to restart the game after game over.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Called when a new touch begins on the screen.
         if isGameOver {
@@ -398,9 +410,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Collision Detection (SKPhysicsContactDelegate)
 
+    /// Called when two physics bodies begin contact. Handles player-obstacle collisions.
+    /// - Parameter contact: The contact information between two physics bodies.
     func didBegin(_ contact: SKPhysicsContact) {
         // This delegate method is called when two physics bodies with matching contactTestBitMasks begin contact.
-        if isGameOver { return } // Don't process new collisions if game is already over.
+        if isGameOver { return }  // Don't process new collisions if game is already over.
 
         // Identify the two bodies that collided.
         // It's good practice to order them (e.g., by categoryBitMask) to simplify checks.
@@ -416,11 +430,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
 
         // Check if the collision is between the player and an obstacle.
-        if firstBody.categoryBitMask == PhysicsCategory.player && secondBody.categoryBitMask == PhysicsCategory.obstacle {
+        if firstBody.categoryBitMask == PhysicsCategory.player
+            && secondBody.categoryBitMask == PhysicsCategory.obstacle
+        {
             // Player contacted an obstacle.
             // Safely cast the nodes to SKSpriteNode before passing them to the handler.
             if let playerNode = firstBody.node as? SKSpriteNode,
-               let obstacleNode = secondBody.node as? SKSpriteNode
+                let obstacleNode = secondBody.node as? SKSpriteNode
             {
                 playerHitObstacle(player: playerNode, obstacle: obstacleNode)
             }
@@ -429,11 +445,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Game Logic Methods
 
+    /// Handles the game logic when the player collides with an obstacle.
+    /// - Parameters:
+    ///   - player: The player node involved in the collision.
+    ///   - obstacle: The obstacle node involved in the collision.
     private func playerHitObstacle(player: SKSpriteNode, obstacle: SKSpriteNode) {
         // Handles the game logic when the player collides with an obstacle.
-        if isGameOver { return } // Ensure this logic runs only once per game over.
+        if isGameOver { return }  // Ensure this logic runs only once per game over.
 
-        isGameOver = true // Set the game over state.
+        isGameOver = true  // Set the game over state.
 
         // Stop spawning new obstacles.
         stopSpawningObstacles()
@@ -441,9 +461,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Visual feedback for collision (e.g., player flashes or changes color, then disappears).
         let colorizeAction = SKAction.colorize(with: .yellow, colorBlendFactor: 1.0, duration: 0.1)
         player.run(colorizeAction) {
-            player.isHidden = true // Hide player after the effect.
+            player.isHidden = true  // Hide player after the effect.
         }
-        obstacle.removeFromParent() // Remove the specific obstacle that was hit.
+        obstacle.removeFromParent()  // Remove the specific obstacle that was hit.
 
         // Remove all other on-screen obstacles to clear the play area.
         // This uses enumerateChildNodes to find all nodes named "obstacle".
@@ -465,6 +485,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
+    /// Displays the Game Over screen, final score, and high score notification.
     private func showGameOverScreen() {
         // Check if this is a high score and save it
         let isNewHighScore = HighScoreManager.shared.addScore(score)
@@ -527,6 +548,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         highScoreLabel?.text = "Best: \(newHighest)"
     }
 
+    /// Restarts the game after game over, resetting all state and UI.
     private func restartGame() {
         // Remove all game over UI elements
         gameOverLabel?.removeFromParent()
@@ -536,7 +558,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // Reset game state variables
         isGameOver = false
-        score = 0 // This will update the score label via didSet
+        score = 0  // This will update the score label via didSet
         currentDifficulty = GameDifficulty.getDifficulty(for: 0)
         lastDifficultyLevel = 1
         difficultyLabel?.text = "Level: 1"
@@ -553,6 +575,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Update Loop
 
+    /// Called before each frame is rendered. Updates score and game state.
+    /// - Parameter currentTime: The current system time.
     override func update(_ currentTime: TimeInterval) {
         // This method is called automatically before each frame is rendered.
 

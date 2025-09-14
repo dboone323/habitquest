@@ -4,12 +4,16 @@
 import Foundation
 import SwiftData
 
+/// Represents the billing cycle for a subscription (weekly, monthly, yearly).
 enum BillingCycle: String, CaseIterable, Codable {
+    /// Weekly billing cycle.
     case weekly = "Weekly"
+    /// Monthly billing cycle.
     case monthly = "Monthly"
+    /// Yearly billing cycle.
     case yearly = "Yearly"
 
-    /// Number of days in the billing cycle
+    /// Number of days in the billing cycle.
     var daysInCycle: Int {
         switch self {
         case .weekly:
@@ -21,9 +25,9 @@ enum BillingCycle: String, CaseIterable, Codable {
         }
     }
 
-    /// Calculate next due date from a given date
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Calculates the next due date for this billing cycle from a given date.
+    /// - Parameter date: The starting date.
+    /// - Returns: The next due date as a Date.
     func nextDueDate(from date: Date) -> Date {
         let calendar = Calendar.current
         switch self {
@@ -37,21 +41,42 @@ enum BillingCycle: String, CaseIterable, Codable {
     }
 }
 
+/// Represents a recurring subscription (e.g., Netflix, gym membership) in the app.
 @Model
 public final class Subscription {
+    /// The name of the subscription (e.g., "Netflix").
     var name: String
+    /// The recurring payment amount.
     var amount: Double
+    /// The billing cycle for this subscription.
     var billingCycle: BillingCycle
+    /// The next due date for payment.
     var nextDueDate: Date
+    /// Whether the subscription is currently active.
     var isActive: Bool
+    /// Optional notes or memo for the subscription.
     var notes: String?
+    /// The icon name for this subscription (for UI display).
     var icon: String
 
     // Relationships
+    /// The category associated with this subscription (optional).
     var category: ExpenseCategory?
+    /// The financial account associated with this subscription (optional).
     var account: FinancialAccount?
 
-    init(name: String, amount: Double, billingCycle: BillingCycle, nextDueDate: Date, notes: String? = nil, icon: String = "creditcard") {
+    /// Creates a new subscription.
+    /// - Parameters:
+    ///   - name: The subscription name.
+    ///   - amount: The recurring payment amount.
+    ///   - billingCycle: The billing cycle.
+    ///   - nextDueDate: The next due date for payment.
+    ///   - notes: Optional notes or memo.
+    ///   - icon: The icon name for UI display (default: "creditcard").
+    init(
+        name: String, amount: Double, billingCycle: BillingCycle, nextDueDate: Date,
+        notes: String? = nil, icon: String = "creditcard"
+    ) {
         self.name = name
         self.amount = amount
         self.billingCycle = billingCycle
@@ -61,7 +86,7 @@ public final class Subscription {
         self.icon = icon
     }
 
-    /// Formatted amount string
+    /// Returns the amount as a formatted currency string.
     var formattedAmount: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
@@ -69,7 +94,7 @@ public final class Subscription {
         return formatter.string(from: NSNumber(value: amount)) ?? "$0.00"
     }
 
-    /// Days until next payment
+    /// Returns the number of days until the next payment is due.
     var daysUntilDue: Int {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.day], from: Date(), to: nextDueDate)
@@ -77,8 +102,7 @@ public final class Subscription {
     }
 
     /// Compatibility accessor: some code expects `nextBillingDate` (optional).
-    /// Keep this as a computed property mapping to the canonical `nextDueDate`.
-    /// Return an Optional so callers can use `guard let` / conditional binding.
+    /// Maps to the canonical `nextDueDate` property.
     var nextBillingDate: Date? {
         get { nextDueDate }
         set {
@@ -90,11 +114,11 @@ public final class Subscription {
         }
     }
 
-    /// Monthly equivalent amount for budgeting calculations
+    /// Returns the monthly equivalent amount for budgeting calculations.
     var monthlyEquivalent: Double {
         switch billingCycle {
         case .weekly:
-            amount * 52 / 12 // Weekly * 52 weeks / 12 months
+            amount * 52 / 12  // Weekly * 52 weeks / 12 months
         case .monthly:
             amount
         case .yearly:
@@ -102,10 +126,9 @@ public final class Subscription {
         }
     }
 
-    /// Updates next due date and creates a transaction
+    /// Processes a payment for this subscription: creates a transaction, updates account, and advances due date.
+    /// - Parameter modelContext: The model context for inserting the transaction.
     @MainActor
-    /// <#Description#>
-    /// - Returns: <#description#>
     func processPayment(modelContext: ModelContext) {
         // Create transaction for this subscription payment
         let transaction = FinancialTransaction(
@@ -113,7 +136,7 @@ public final class Subscription {
             amount: amount,
             date: nextDueDate,
             transactionType: .expense,
-            notes: "Auto-generated from subscription",
+            notes: "Auto-generated from subscription"
         )
         transaction.category = category
         transaction.account = account

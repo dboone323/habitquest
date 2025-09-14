@@ -1,7 +1,8 @@
-import Combine
 import Foundation
+import Combine
 import SwiftUI
 
+@MainActor
 class IssueDetector: ObservableObject {
     @Published var detectedIssues: [DetectedIssue] = []
     @Published var isScanning = false
@@ -11,7 +12,7 @@ class IssueDetector: ObservableObject {
     // Shared instance
     static let shared = IssueDetector()
 
-    func scanFiles(_ files: [CodeFile]) async {
+    nonisolated func scanFiles(_ files: [CodeFile]) async {
         await MainActor.run {
             isScanning = true
             scanProgress = 0.0
@@ -39,137 +40,150 @@ class IssueDetector: ObservableObject {
         var issues: [DetectedIssue] = []
 
         for (lineNumber, line) in lines.enumerated() {
-            let lineIndex = lineNumber + 1 // 1-based line numbers
+            let lineIndex = lineNumber + 1  // 1-based line numbers
 
             // Detect various types of issues
-            issues.append(contentsOf: detectSecurityIssues(line: line, lineNumber: lineIndex, file: file))
-            issues.append(contentsOf: detectPerformanceIssues(line: line, lineNumber: lineIndex, file: file))
-            issues.append(contentsOf: detectQualityIssues(line: line, lineNumber: lineIndex, file: file))
+            issues.append(
+                contentsOf: detectSecurityIssues(line: line, lineNumber: lineIndex, file: file))
+            issues.append(
+                contentsOf: detectPerformanceIssues(line: line, lineNumber: lineIndex, file: file))
+            issues.append(
+                contentsOf: detectQualityIssues(line: line, lineNumber: lineIndex, file: file))
         }
 
         return issues
     }
 
-    private func detectSecurityIssues(line: String, lineNumber: Int, file: CodeFile) -> [DetectedIssue] {
+    private func detectSecurityIssues(line: String, lineNumber: Int, file: CodeFile)
+    -> [DetectedIssue] {
         var issues: [DetectedIssue] = []
 
         // SQL Injection patterns
         if line.localizedCaseInsensitiveContains("SELECT * FROM") && !line.contains("prepared") {
-            issues.append(DetectedIssue(
-                id: UUID(),
-                type: .security,
-                severity: .high,
-                title: "Potential SQL Injection",
-                description: "Direct SQL query without prepared statements",
-                line: lineNumber,
-                column: 0,
-                file: file.name,
-                suggestion: "Use prepared statements or parameterized queries"
-            ))
+            issues.append(
+                DetectedIssue(
+                    id: UUID(),
+                    type: .security,
+                    severity: .high,
+                    title: "Potential SQL Injection",
+                    description: "Direct SQL query without prepared statements",
+                    line: lineNumber,
+                    column: 0,
+                    file: file.name,
+                    suggestion: "Use prepared statements or parameterized queries"
+                ))
         }
 
         // Hardcoded credentials
         if line.contains("password =") || line.contains("api_key =") {
-            issues.append(DetectedIssue(
-                id: UUID(),
-                type: .security,
-                severity: .critical,
-                title: "Hardcoded Credentials",
-                description: "Credentials should not be hardcoded",
-                line: lineNumber,
-                column: 0,
-                file: file.name,
-                suggestion: "Use environment variables or secure storage"
-            ))
+            issues.append(
+                DetectedIssue(
+                    id: UUID(),
+                    type: .security,
+                    severity: .critical,
+                    title: "Hardcoded Credentials",
+                    description: "Credentials should not be hardcoded",
+                    line: lineNumber,
+                    column: 0,
+                    file: file.name,
+                    suggestion: "Use environment variables or secure storage"
+                ))
         }
 
         // Insecure HTTP
         if line.contains("https://") && !line.contains("localhost") {
-            issues.append(DetectedIssue(
-                id: UUID(),
-                type: .security,
-                severity: .medium,
-                title: "Insecure HTTP",
-                description: "Use HTTPS for secure communication",
-                line: lineNumber,
-                column: 0,
-                file: file.name,
-                suggestion: "Replace https:// with https://"
-            ))
+            issues.append(
+                DetectedIssue(
+                    id: UUID(),
+                    type: .security,
+                    severity: .medium,
+                    title: "Insecure HTTP",
+                    description: "Use HTTPS for secure communication",
+                    line: lineNumber,
+                    column: 0,
+                    file: file.name,
+                    suggestion: "Replace https:// with https://"
+                ))
         }
 
         return issues
     }
 
-    private func detectPerformanceIssues(line: String, lineNumber: Int, file: CodeFile) -> [DetectedIssue] {
+    private func detectPerformanceIssues(line: String, lineNumber: Int, file: CodeFile)
+    -> [DetectedIssue] {
         var issues: [DetectedIssue] = []
 
         // N+1 query pattern
         if line.contains("for") && line.contains(".query(") {
-            issues.append(DetectedIssue(
-                id: UUID(),
-                type: .performance,
-                severity: .medium,
-                title: "Potential N+1 Query",
-                description: "Database query inside loop may cause performance issues",
-                line: lineNumber,
-                column: 0,
-                file: file.name,
-                suggestion: "Consider using batch queries or eager loading"
-            ))
+            issues.append(
+                DetectedIssue(
+                    id: UUID(),
+                    type: .performance,
+                    severity: .medium,
+                    title: "Potential N+1 Query",
+                    description: "Database query inside loop may cause performance issues",
+                    line: lineNumber,
+                    column: 0,
+                    file: file.name,
+                    suggestion: "Consider using batch queries or eager loading"
+                ))
         }
 
         // Large file operations
         if line.contains("readFile") || line.contains("writeFile") {
             if line.contains("sync") {
-                issues.append(DetectedIssue(
-                    id: UUID(),
-                    type: .performance,
-                    severity: .medium,
-                    title: "Synchronous File Operation",
-                    description: "Synchronous file operations can block the main thread",
-                    line: lineNumber,
-                    column: 0,
-                    file: file.name,
-                    suggestion: "Use asynchronous file operations"
-                ))
+                issues.append(
+                    DetectedIssue(
+                        id: UUID(),
+                        type: .performance,
+                        severity: .medium,
+                        title: "Synchronous File Operation",
+                        description: "Synchronous file operations can block the main thread",
+                        line: lineNumber,
+                        column: 0,
+                        file: file.name,
+                        suggestion: "Use asynchronous file operations"
+                    ))
             }
         }
 
         return issues
     }
 
-    private func detectQualityIssues(line: String, lineNumber: Int, file: CodeFile) -> [DetectedIssue] {
+    private func detectQualityIssues(line: String, lineNumber: Int, file: CodeFile)
+    -> [DetectedIssue] {
         var issues: [DetectedIssue] = []
 
         // Long lines
         if line.count > 120 {
-            issues.append(DetectedIssue(
-                id: UUID(),
-                type: .codeQuality,
-                severity: .low,
-                title: "Long Line",
-                description: "Line exceeds recommended length of 120 characters",
-                line: lineNumber,
-                column: 0,
-                file: file.name,
-                suggestion: "Break long lines into multiple lines"
-            ))
+            issues.append(
+                DetectedIssue(
+                    id: UUID(),
+                    type: .codeQuality,
+                    severity: .low,
+                    title: "Long Line",
+                    description: "Line exceeds recommended length of 120 characters",
+                    line: lineNumber,
+                    column: 0,
+                    file: file.name,
+                    suggestion: "Break long lines into multiple lines"
+                ))
         }
 
-        // TODO: comments
+        /// comments
         if line.localizedCaseInsensitiveContains("TODO") {
-            issues.append(DetectedIssue(
-                id: UUID(),
-                type: .codeQuality,
-                severity: .info,
-                title: "TODO Comment",
-                description: "Unresolved TODO comment",
-                line: lineNumber,
-                column: 0,
-                file: file.name,
-                suggestion: "Address TODO or create a proper issue"
-            ))
+            issues.append(
+                DetectedIssue(
+                    id: UUID(),
+                    type: .codeQuality,
+                    severity: .info,
+                    title: "TODO Comment",
+                    description: "Unresolved TODO comment",
+                    line: lineNumber,
+                    column: 0,
+                    file: file.name,
+                    suggestion: "Address TODO or create a proper issue"
+                ))
         }
 
         return issues
@@ -262,7 +276,7 @@ struct AutoFix: Identifiable, Codable {
     let issueId: UUID
     let title: String
     let description: String
-    let confidence: Double // 0.0 to 1.0
+    let confidence: Double  // 0.0 to 1.0
 }
 
 // MARK: - Views
@@ -296,16 +310,22 @@ struct SmartEnhancementView: View {
                 // Issue type filter
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
-                        Button("All") {
-                            selectedType = nil
-                        }
+                        Button(
+                            "All",
+                            action: {
+                                selectedType = nil
+                            }
+                        )
                         .buttonStyle(.bordered)
                         .background(selectedType == nil ? Color.accentColor : Color.clear)
 
                         ForEach(DetectedIssue.IssueType.allCases, id: \.self) { type in
-                            Button(type.rawValue) {
-                                selectedType = type
-                            }
+                            Button(
+                                type.rawValue,
+                                action: {
+                                    selectedType = type
+                                }
+                            )
                             .buttonStyle(.bordered)
                             .background(selectedType == type ? Color.accentColor : Color.clear)
                         }
@@ -316,27 +336,33 @@ struct SmartEnhancementView: View {
                 // Issues list
                 List {
                     ForEach(filteredIssues) { issue in
-                        IssueRowView(issue: issue)
+                        DetectedIssueRowView(issue: issue)
                     }
                 }
                 .listStyle(PlainListStyle())
 
                 // Action buttons
                 HStack {
-                    Button("Scan Files") {
-                        Task {
-                            await issueDetector.scanFiles(fileManager.uploadedFiles)
+                    Button(
+                        "Scan Files",
+                        action: {
+                            Task {
+                                await issueDetector.scanFiles(fileManager.uploadedFiles)
+                            }
                         }
-                    }
+                    )
                     .buttonStyle(.borderedProminent)
                     .disabled(issueDetector.isScanning || fileManager.uploadedFiles.isEmpty)
 
                     Spacer()
 
                     if !issueDetector.autoFixes.isEmpty {
-                        Button("Apply Auto-Fixes") {
-                            // Implementation for applying fixes
-                        }
+                        Button(
+                            "Apply Auto-Fixes",
+                            action: {
+                                // Implementation for applying fixes
+                            }
+                        )
                         .buttonStyle(.bordered)
                     }
                 }
@@ -347,7 +373,7 @@ struct SmartEnhancementView: View {
     }
 }
 
-struct IssueRowView: View {
+struct DetectedIssueRowView: View {
     let issue: DetectedIssue
 
     var body: some View {
@@ -404,10 +430,12 @@ struct ScanControlsView: View {
                 .font(.title2)
                 .fontWeight(.bold)
 
-            Text("Analyze uploaded files for security vulnerabilities, performance issues, and code quality problems.")
-                .font(.body)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.secondary)
+            Text(
+                "Analyze uploaded files for security vulnerabilities, performance issues, and code quality problems."
+            )
+            .font(.body)
+            .multilineTextAlignment(.center)
+            .foregroundColor(.secondary)
 
             Button(action: {
                 Task {

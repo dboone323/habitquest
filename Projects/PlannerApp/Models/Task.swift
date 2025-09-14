@@ -1,12 +1,48 @@
+// MARK: - Data Manager
+
 import CloudKit
 import CoreTransferable
 import Foundation
 
+/// Manages storage and retrieval of `Task` objects in memory.
+class TaskDataManager {
+    /// Shared singleton instance.
+    static let shared = TaskDataManager()
+
+    /// In-memory storage for tasks.
+    var tasks: [Task] = []
+
+    /// Removes all tasks from memory.
+    func clearAllTasks() {
+        tasks.removeAll()
+    }
+
+    /// Loads all tasks from memory.
+    /// - Returns: Array of `Task` objects.
+    func load() -> [Task] {
+        tasks
+    }
+
+    /// Saves the provided tasks to memory.
+    /// - Parameter tasks: Array of `Task` objects to save.
+    func save(tasks: [Task]) {
+        self.tasks = tasks
+    }
+
+    /// Private initializer to enforce singleton usage.
+    private init() {}
+}
+
+/// Represents the priority of a task (low, medium, high).
 enum TaskPriority: String, CaseIterable, Codable {
+    /// Low priority task.
     case low
+    /// Medium priority task.
     case medium
+    /// High priority task.
     case high
 
+    /// Human-readable display name for the priority.
     var displayName: String {
         switch self {
         case .low: "Low"
@@ -16,17 +52,40 @@ enum TaskPriority: String, CaseIterable, Codable {
     }
 }
 
+/// Represents a user task or to-do item in the PlannerApp.
 struct Task: Identifiable, Codable, Transferable {
+    /// Unique identifier for the task.
     let id: UUID
+    /// The title or summary of the task.
     var title: String
+    /// Detailed description of the task.
     var description: String
+    /// Whether the task is completed.
     var isCompleted: Bool
+    /// The priority of the task.
     var priority: TaskPriority
+    /// The due date for the task (optional).
     var dueDate: Date?
+    /// The date the task was created.
     var createdAt: Date
-    var modifiedAt: Date? // Added for CloudKit sync/merge
+    /// The date the task was last modified (optional).
+    var modifiedAt: Date?  // Added for CloudKit sync/merge
 
-    init(id: UUID = UUID(), title: String, description: String = "", isCompleted: Bool = false, priority: TaskPriority = .medium, dueDate: Date? = nil, createdAt: Date = Date(), modifiedAt: Date? = Date()) {
+    /// Creates a new task.
+    /// - Parameters:
+    ///   - id: The unique identifier (default: new UUID).
+    ///   - title: The task title.
+    ///   - description: The task description (default: empty).
+    ///   - isCompleted: Whether the task is completed (default: false).
+    ///   - priority: The task priority (default: .medium).
+    ///   - dueDate: The due date (optional).
+    ///   - createdAt: The creation date (default: now).
+    ///   - modifiedAt: The last modified date (default: now).
+    init(
+        id: UUID = UUID(), title: String, description: String = "", isCompleted: Bool = false,
+        priority: TaskPriority = .medium, dueDate: Date? = nil, createdAt: Date = Date(),
+        modifiedAt: Date? = Date()
+    ) {
         self.id = id
         self.title = title
         self.description = description
@@ -39,7 +98,7 @@ struct Task: Identifiable, Codable, Transferable {
 
     // MARK: - CloudKit Conversion
 
-    /// Convert to CloudKit record for syncing
+    /// Converts this task to a CloudKit record for syncing.
     func toCKRecord() -> CKRecord {
         let record = CKRecord(recordType: "Task", recordID: CKRecord.ID(recordName: id.uuidString))
         record["title"] = title
@@ -52,7 +111,10 @@ struct Task: Identifiable, Codable, Transferable {
         return record
     }
 
-    /// Create a Task from CloudKit record
+    /// Creates a Task from a CloudKit record.
+    /// - Parameter ckRecord: The CloudKit record to convert.
+    /// - Throws: An error if conversion fails.
+    /// - Returns: A Task instance.
     static func from(ckRecord: CKRecord) throws -> Task {
         guard
             let title = ckRecord["title"] as? String,
@@ -60,7 +122,9 @@ struct Task: Identifiable, Codable, Transferable {
             let idString = ckRecord.recordID.recordName.components(separatedBy: "/").last,
             let id = UUID(uuidString: idString)
         else {
-            throw NSError(domain: "TaskConversionError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to convert CloudKit record to Task"])
+            throw NSError(
+                domain: "TaskConversionError", code: 1,
+                userInfo: [NSLocalizedDescriptionKey: "Failed to convert CloudKit record to Task"])
         }
 
         return Task(
@@ -68,7 +132,8 @@ struct Task: Identifiable, Codable, Transferable {
             title: title,
             description: ckRecord["description"] as? String ?? "",
             isCompleted: ckRecord["isCompleted"] as? Bool ?? false,
-            priority: TaskPriority(rawValue: ckRecord["priority"] as? String ?? "medium") ?? .medium,
+            priority: TaskPriority(rawValue: ckRecord["priority"] as? String ?? "medium")
+                ?? .medium,
             dueDate: ckRecord["dueDate"] as? Date,
             createdAt: createdAt,
             modifiedAt: ckRecord["modifiedAt"] as? Date
@@ -77,6 +142,7 @@ struct Task: Identifiable, Codable, Transferable {
 
     // MARK: - Transferable Implementation
 
+    /// Transferable conformance for drag-and-drop and sharing.
     static var transferRepresentation: some TransferRepresentation {
         CodableRepresentation(contentType: .data)
     }

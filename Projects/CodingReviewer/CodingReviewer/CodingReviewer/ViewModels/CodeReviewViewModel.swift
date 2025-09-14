@@ -1,5 +1,5 @@
-import Combine
 import Foundation
+import Combine
 
 // MARK: - Protocol for code review functionality
 
@@ -31,23 +31,40 @@ struct CodeMetrics {
 
 // MARK: - ViewModel
 
+/// ViewModel for managing code review analysis, AI suggestions, and code fixes in CodingReviewer.
+/// Handles user input, invokes code analysis services, and manages UI state.
 @MainActor
 final class CodeReviewViewModel: ObservableObject {
     // Published properties used in tests
+
+    /// The code input provided by the user for analysis.
     @Published var codeInput: String = ""
+    /// The list of analysis results from the code review.
     @Published var analysisResults: [AnalysisResult] = []
+    /// The AI-generated analysis response, if available.
     @Published var aiAnalysisResult: AIAnalysisResponse?
+    /// The list of AI-generated suggestions for code improvement.
     @Published var aiSuggestions: [AISuggestion] = []
+    /// The list of available code fixes for the current input.
     @Published var availableFixes: [CodeFix] = []
+    /// Indicates if the code is currently being analyzed.
     @Published var isAnalyzing: Bool = false
+    /// Indicates if the AI analysis is in progress.
     @Published var isAIAnalyzing: Bool = false
+    /// Error message to display to the user, if any.
     @Published var errorMessage: String?
+    /// Whether the results are currently being shown in the UI.
     @Published var showingResults: Bool = false
+    /// The selected programming language for analysis.
     @Published var selectedLanguage: CodeLanguage = .swift
+    /// Whether AI features are enabled (based on API key state).
     @Published var aiEnabled: Bool = false
+    /// The most recent code analysis report.
     @Published var analysisReport: CodeAnalysisReport?
 
     // Legacy support string checked only for clearing in tests
+
+    /// Legacy support string for test compatibility (not used in UI).
     @Published var analysisResult: String = ""
 
     private let codeReviewService: CodeReviewService
@@ -55,6 +72,10 @@ final class CodeReviewViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Init
+    /// Initializes the CodeReviewViewModel with a code review service and API key manager.
+    /// - Parameters:
+    ///   - codeReviewService: The service to use for code analysis (default: internal stub).
+    ///   - keyManager: The API key manager for AI feature enablement.
     init(codeReviewService: CodeReviewService? = nil, keyManager: APIKeyManager) {
         self.codeReviewService = codeReviewService ?? DefaultCodeReviewService()
         self.keyManager = keyManager
@@ -66,6 +87,8 @@ final class CodeReviewViewModel: ObservableObject {
     }
 
     // MARK: - Public API
+    /// Analyzes the current code input using the code review service.
+    /// Handles input validation, error scenarios, and updates UI state.
     func analyzeCode() async {
         // Input validation expected by tests
         guard !codeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
@@ -80,6 +103,11 @@ final class CodeReviewViewModel: ObservableObject {
             return
         }
 
+        await analyzeCodeInternal()
+    }
+
+    /// Analyzes the current code input asynchronously.
+    private func analyzeCodeInternal() async {
         isAnalyzing = true
         errorMessage = nil
         showingResults = false
@@ -88,9 +116,11 @@ final class CodeReviewViewModel: ObservableObject {
 
         // Error-handling behavior expected by tests:
         // Treat high/critical Security issues as an error scenario.
-        let hasSevereSecurity = report.results.contains { item in
+        let securityResults = report.results.filter { item in
             item.type.lowercased() == "security"
-                && (item.severityLevel == .high || item.severityLevel == .critical)
+        }
+        let hasSevereSecurity = securityResults.contains { item in
+            item.severityLevel == .high || item.severityLevel == .critical
         }
 
         if hasSevereSecurity {
@@ -109,11 +139,15 @@ final class CodeReviewViewModel: ObservableObject {
         self.showingResults = true
     }
 
+    /// Sets the code input and triggers analysis asynchronously.
+    /// - Parameter code: The code to analyze.
     func analyze(_ code: String) {
         codeInput = code
-        Task { await analyzeCode() }
+        Task { await analyzeCodeInternal() }
     }
 
+    /// Applies a code fix to the current code input, replacing the original code with the fixed code.
+    /// - Parameter fix: The code fix to apply.
     func applyFix(_ fix: CodeFix) {
         if codeInput.contains(fix.originalCode) {
             codeInput = codeInput.replacingOccurrences(of: fix.originalCode, with: fix.fixedCode)
@@ -122,6 +156,7 @@ final class CodeReviewViewModel: ObservableObject {
         }
     }
 
+    /// Clears all analysis results, errors, and suggestions from the ViewModel.
     func clearResults() {
         analysisResults.removeAll()
         analysisResult = ""
@@ -133,6 +168,9 @@ final class CodeReviewViewModel: ObservableObject {
     }
 
     // MARK: - Helpers
+    /// Generates a minimal string summary from a code analysis report.
+    /// - Parameter report: The code analysis report.
+    /// - Returns: A string summary of the report.
     private func generateReportString(from report: CodeAnalysisReport) -> String {
         // Minimal placeholder sufficient for tests that only clear it later.
         "Report: issues=\(report.results.count)"

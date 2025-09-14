@@ -1,3 +1,4 @@
+            import SwiftUI
 import SwiftUI
 
 /// Enhanced Quantum UI V2.0 with Revolutionary Interface
@@ -72,15 +73,25 @@ struct QuantumAnalysisViewV2: View {
             }
 
             HStack(spacing: 20) {
-                MetricBadge(title: "Consciousness", value: String(format: "%.1f%%", quantumEngine.consciousnessLevel), color: .blue)
-                MetricBadge(title: "Bio-Health", value: String(format: "%.1f%%", quantumEngine.biologicalAdaptation), color: .green)
-                MetricBadge(title: "Quantum", value: String(format: "%.1f%%", quantumEngine.quantumPerformance), color: .purple)
+                MetricBadge(
+                    title: "Consciousness",
+                    value: String(format: "%.1f%%", quantumEngine.consciousnessLevel), color: .blue)
+                MetricBadge(
+                    title: "Bio-Health",
+                    value: String(format: "%.1f%%", quantumEngine.biologicalAdaptation),
+                    color: .green)
+                MetricBadge(
+                    title: "Quantum",
+                    value: String(format: "%.1f%%", quantumEngine.quantumPerformance),
+                    color: .purple)
             }
 
-            Text("Revolutionary code analysis with consciousness-level insights and biological evolution")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
+            Text(
+                "Revolutionary code analysis with consciousness-level insights and biological evolution"
+            )
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+            .multilineTextAlignment(.center)
         }
     }
 
@@ -95,16 +106,21 @@ struct QuantumAnalysisViewV2: View {
 
                 HStack {
                     Picker("Language", selection: $selectedLanguage) {
-                        ForEach([ProgrammingLanguage.swift, .python, .javascript, .java], id: \.self) { lang in
+                        ForEach(
+                            [ProgrammingLanguage.swift, .python, .javascript, .java], id: \.self
+                        ) { lang in
                             Text(lang.displayName).tag(lang)
                         }
                     }
                     .pickerStyle(.menu)
 
-                    Button(action: { showAdvancedMetrics.toggle() }) {
+                    Button {
+                        showAdvancedMetrics.toggle()
+                    } label: {
                         Image(systemName: showAdvancedMetrics ? "gauge.high" : "gauge.medium")
                             .foregroundColor(.blue)
                     }
+                    .accessibilityLabel("Toggle advanced metrics button")
                     .help("Toggle advanced metrics")
                 }
             }
@@ -114,7 +130,9 @@ struct QuantumAnalysisViewV2: View {
                 .frame(minHeight: 250)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(quantumEngine.isQuantumActive ? Color.purple : Color.gray.opacity(0.3), lineWidth: quantumEngine.isQuantumActive ? 2 : 1)
+                        .stroke(
+                            quantumEngine.isQuantumActive ? Color.purple : Color.gray.opacity(0.3),
+                            lineWidth: quantumEngine.isQuantumActive ? 2 : 1)
                 )
                 .cornerRadius(8)
         }
@@ -122,24 +140,34 @@ struct QuantumAnalysisViewV2: View {
 
     private var enhancedQuantumControlsView: some View {
         HStack(spacing: 16) {
-            Button("🚀 Quantum Analyze V2") {
+            Button {
                 Task {
                     await performQuantumAnalysisV2()
                 }
+            } label: {
+                Text("🚀 Quantum Analyze V2")
             }
+            .accessibilityLabel("Quantum analyze button")
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
-            .disabled(codeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isAnalyzing)
+            .disabled(
+                codeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isAnalyzing)
 
-            Button("Clear") {
+            Button {
                 codeInput = ""
                 analysisResult = nil
+            } label: {
+                Text("Clear")
             }
+            .accessibilityLabel("Clear button")
             .buttonStyle(.bordered)
 
-            Button("Sample Code") {
+            Button {
                 loadSampleCode()
+            } label: {
+                Text("Sample Code")
             }
+            .accessibilityLabel("Load sample code button")
             .buttonStyle(.bordered)
 
             Spacer()
@@ -216,10 +244,18 @@ struct QuantumAnalysisViewV2: View {
                 .foregroundColor(.primary)
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 12) {
-                MetricCard(title: "Consciousness", value: String(format: "%.1f%%", result.consciousnessScore), color: .blue)
-                MetricCard(title: "Bio-Health", value: String(format: "%.1f%%", result.biologicalScore), color: .green)
-                MetricCard(title: "Quantum Advantage", value: String(format: "%.1fx", result.quantumAdvantage), color: .purple)
-                MetricCard(title: "Execution", value: String(format: "%.4fs", result.executionTime), color: .orange)
+                MetricCard(
+                    title: "Consciousness",
+                    value: String(format: "%.1f%%", result.consciousnessScore), color: .blue)
+                MetricCard(
+                    title: "Bio-Health", value: String(format: "%.1f%%", result.biologicalScore),
+                    color: .green)
+                MetricCard(
+                    title: "Quantum Advantage",
+                    value: String(format: "%.1fx", result.quantumAdvantage), color: .purple)
+                MetricCard(
+                    title: "Execution", value: String(format: "%.4fs", result.executionTime),
+                    color: .orange)
             }
         }
     }
@@ -239,10 +275,14 @@ struct QuantumAnalysisViewV2: View {
                 }
 
                 VStack(alignment: .leading) {
-                    Text("Ecosystem Health: \(String(format: "%.1f%%", evolution.ecosystemHealth * 100))")
-                        .font(.caption)
-                    Text("Evolution Score: \(String(format: "%.1f%%", evolution.evolutionScore * 100))")
-                        .font(.caption)
+                    Text(
+                        "Ecosystem Health: \(String(format: "%.1f%%", evolution.ecosystemHealth * 100))"
+                    )
+                    .font(.caption)
+                    Text(
+                        "Evolution Score: \(String(format: "%.1f%%", evolution.evolutionScore * 100))"
+                    )
+                    .font(.caption)
                 }
             }
 
@@ -263,7 +303,7 @@ struct QuantumAnalysisViewV2: View {
         .cornerRadius(8)
     }
 
-    private func traditionalIssuesView(_ issues: [AnalysisResult]) -> some View {
+    private func traditionalIssuesView(_ issues: [AnalysisIssue]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("🔍 Traditional Analysis Issues")
                 .font(.headline)
@@ -272,7 +312,7 @@ struct QuantumAnalysisViewV2: View {
             ForEach(Array(issues.enumerated()), id: \.offset) { _, issue in
                 HStack {
                     Circle()
-                        .fill(severityColor(issue.severity))
+                        .fill(severityColor(issue.severityLevel.rawValue))
                         .frame(width: 8, height: 8)
 
                     VStack(alignment: .leading, spacing: 2) {
@@ -321,9 +361,11 @@ struct QuantumAnalysisViewV2: View {
                         .foregroundColor(.secondary)
 
                     HStack {
-                        Text("Evolutionary Impact: \(String(format: "%.1f%%", insight.evolutionaryImpact * 100))")
-                            .font(.caption2)
-                            .foregroundColor(.green)
+                        Text(
+                            "Evolutionary Impact: \(String(format: "%.1f%%", insight.evolutionaryImpact * 100))"
+                        )
+                        .font(.caption2)
+                        .foregroundColor(.green)
                     }
                 }
                 .padding(.vertical, 4)
@@ -373,39 +415,37 @@ struct QuantumAnalysisViewV2: View {
 
     private func loadSampleCode() {
         codeInput = """
-        import SwiftUI
+            @MainActor
+            class DataManager: ObservableObject {
+                @Published var items: [Item] = []
 
-        @MainActor
-        class DataManager: ObservableObject {
-            @Published var items: [Item] = []
+                func loadData() async {
+                    // Simulate async data loading
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    items = generateSampleItems()
+                }
 
-            func loadData() async {
-                // Simulate async data loading
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                items = generateSampleItems()
+                private func generateSampleItems() -> [Item] {
+                    return (1...10).map { Item(id: $0, name: "Item \\($0)") }
+                }
             }
 
-            private func generateSampleItems() -> [Item] {
-                return (1...10).map { Item(id: $0, name: "Item \\($0)") }
-            }
-        }
+            struct ContentView: View {
+                @StateObject private var dataManager = DataManager()
 
-        struct ContentView: View {
-            @StateObject private var dataManager = DataManager()
-
-            var body: some View {
-                NavigationView {
-                    List(dataManager.items) { item in
-                        Text(item.name)
-                    }
-                    .navigationTitle("Items")
-                    .task {
-                        await dataManager.loadData()
+                var body: some View {
+                    NavigationView {
+                        List(dataManager.items) { item in
+                            Text(item.name)
+                        }
+                        .navigationTitle("Items")
+                        .task {
+                            await dataManager.loadData()
+                        }
                     }
                 }
             }
-        }
-        """
+            """
     }
 
     private func severityColor(_ severity: String) -> Color {

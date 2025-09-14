@@ -1,23 +1,25 @@
 // Missing Models for ML Code Insights
 import Foundation
+import Security
 
 // MARK: - Bug Prediction Models
 
 // / BugPredictor class
-// / TODO: Add detailed documentation
-/// BugPredictor class
-/// TODO: Add detailed documentation
+/// BugPredictor predicts the likelihood of bugs in code based on extracted features.
+///
+/// This class provides a method to estimate bug probability and risk factors using code metrics such as complexity and function count.
 public class BugPredictor {
     public init() {}
 
     // / predict function
-    // / TODO: Add detailed documentation
-    /// predict function
-    /// TODO: Add detailed documentation
+    /// Predicts the probability of bugs in the provided code features.
+    ///
+    /// - Parameter features: The extracted code features to analyze.
+    /// - Returns: A BugPredictionResult containing probability, confidence, and risk factors.
     public func predict(features: CodeFeatures) async -> BugPredictionResult {
         // Real implementation of bug prediction
         let complexity = features.complexityScore
-        let probability = min(1.0, complexity / 20.0) // Simplified calculation
+        let probability = min(1.0, complexity / 20.0)  // Simplified calculation
 
         var riskFactors: [BugRiskFactor] = []
         if complexity > 10 { riskFactors.append(.highComplexity) }
@@ -32,16 +34,17 @@ public class BugPredictor {
 }
 
 // / MLComplexityAnalyzer class
-// / TODO: Add detailed documentation
-/// MLComplexityAnalyzer class
-/// TODO: Add detailed documentation
+/// MLComplexityAnalyzer analyzes code complexity using various metrics.
+///
+/// This class provides methods to calculate cyclomatic complexity, cognitive complexity, and maintainability for a given code snippet.
 public class MLComplexityAnalyzer {
     public init() {}
 
     // / analyze function
-    // / TODO: Add detailed documentation
-    /// analyze function
-    /// TODO: Add detailed documentation
+    /// Analyzes the provided code and returns complexity metrics.
+    ///
+    /// - Parameter code: The source code to analyze.
+    /// - Returns: A ComplexityAnalysisResult with cyclomatic, cognitive, and maintainability scores.
     public func analyze(_ code: String) async -> ComplexityAnalysisResult {
         let cyclomatic = calculateCyclomaticComplexity(code)
         let cognitive = calculateCognitiveComplexity(code)
@@ -84,9 +87,10 @@ public class MLComplexityAnalyzer {
 
     private func calculateMaintainability(_ code: String, cyclomatic: Double) -> Double {
         let linesOfCode = Double(code.components(separatedBy: .newlines).count)
-        let halsteadVolume = linesOfCode * 2.0 // Simplified Halstead volume
+        let halsteadVolume = linesOfCode * 2.0  // Simplified Halstead volume
 
-        return max(0, 171 - (5.2 * log(halsteadVolume)) - (0.23 * cyclomatic) - (16.2 * log(linesOfCode)))
+        return max(
+            0, 171 - (5.2 * log(halsteadVolume)) - (0.23 * cyclomatic) - (16.2 * log(linesOfCode)))
     }
 }
 
@@ -118,7 +122,10 @@ public struct CodeFeatures {
     public let complexityScore: Double
     public let dependencyCount: Int
 
-    public init(linesOfCode: Int, functionCount: Int, variableCount: Int, complexityScore: Double, dependencyCount: Int) {
+    public init(
+        linesOfCode: Int, functionCount: Int, variableCount: Int, complexityScore: Double,
+        dependencyCount: Int
+    ) {
         self.linesOfCode = linesOfCode
         self.functionCount = functionCount
         self.variableCount = variableCount
@@ -177,7 +184,10 @@ public struct CodeChange {
     public let fileName: String
     public let isPublicAPI: Bool
 
-    public init(type: ChangeType, linesAdded: Int, linesRemoved: Int, functionsModified: Int, complexityDelta: Double, fileName: String, isPublicAPI: Bool) {
+    public init(
+        type: ChangeType, linesAdded: Int, linesRemoved: Int, functionsModified: Int,
+        complexityDelta: Double, fileName: String, isPublicAPI: Bool
+    ) {
         self.type = type
         self.linesAdded = linesAdded
         self.linesRemoved = linesRemoved
@@ -240,16 +250,16 @@ public enum ImplementationEffort {
 // MARK: - Pattern Analysis Models
 
 // / CodePatternAnalyzer class
-// / TODO: Add detailed documentation
-/// CodePatternAnalyzer class
-/// TODO: Add detailed documentation
+/// CodePatternAnalyzer analyzes code for common patterns and software quality metrics.
+///
+/// This class provides methods to analyze code for complexity, coupling, cohesion, and testability, helping to identify maintainability and design issues.
 public class CodePatternAnalyzer {
     public init() {}
 
-    // / analyzePatterns function
-    // / TODO: Add detailed documentation
-    /// analyzePatterns function
-    /// TODO: Add detailed documentation
+    /// Analyzes the provided code and returns a set of code pattern metrics.
+    ///
+    /// - Parameter code: The source code to analyze.
+    /// - Returns: A CodePatterns struct containing complexity, coupling, cohesion, and testability scores.
     public func analyzePatterns(_ code: String) async -> CodePatterns {
         CodePatterns(
             complexity: calculateComplexity(code),
@@ -264,7 +274,7 @@ public class CodePatternAnalyzer {
         return keywords.reduce(1.0) { complexity, keyword in
             let count = code.components(separatedBy: keyword).count - 1
             return complexity + Double(count)
-        } / 20.0 // Normalize to 0-1
+        } / 20.0  // Normalize to 0-1
     }
 
     private func calculateCoupling(_ code: String) -> Double {
@@ -305,16 +315,16 @@ public struct CodePatterns {
 // MARK: - Performance Impact Predictor
 
 // / PerformanceImpactPredictor class
-// / TODO: Add detailed documentation
-/// PerformanceImpactPredictor class
-/// TODO: Add detailed documentation
+/// PerformanceImpactPredictor predicts the impact of code changes on software performance.
+///
+/// This class provides methods to estimate the expected performance impact, confidence, and optimization opportunities based on code changes and their features.
 public class PerformanceImpactPredictor {
     public init() {}
 
-    // / predict function
-    // / TODO: Add detailed documentation
-    /// predict function
-    /// TODO: Add detailed documentation
+    /// Predicts the performance impact of a set of code changes.
+    ///
+    /// - Parameter changes: An array of CodeChange objects representing code modifications.
+    /// - Returns: A PerformanceImpactPrediction containing expected impact, confidence, critical changes, and optimization opportunities.
     public func predict(changes: [CodeChange]) async -> PerformanceImpactPrediction {
         let features = changes.map { extractPerformanceFeatures($0) }
         let aggregatedFeatures = aggregateFeatures(features)
@@ -337,7 +347,8 @@ public class PerformanceImpactPredictor {
         )
     }
 
-    private func aggregateFeatures(_ features: [PerformanceFeatures]) -> AggregatedPerformanceFeatures {
+    private func aggregateFeatures(_ features: [PerformanceFeatures])
+    -> AggregatedPerformanceFeatures {
         AggregatedPerformanceFeatures(
             totalLinesAdded: features.reduce(0) { $0 + $1.linesAdded },
             totalLinesRemoved: features.reduce(0) { $0 + $1.linesRemoved },
@@ -380,7 +391,8 @@ public class PerformanceImpactPredictor {
         }
     }
 
-    private func calculateChangeDistribution(_ features: [PerformanceFeatures]) -> ChangeDistribution {
+    private func calculateChangeDistribution(_ features: [PerformanceFeatures])
+    -> ChangeDistribution {
         let total = features.count
         let additions = features.count(where: { $0.changeType == .addition })
         let modifications = features.count(where: { $0.changeType == .modification })
@@ -408,5 +420,3 @@ public class PerformanceImpactPredictor {
         }
     }
 }
-
-import Security

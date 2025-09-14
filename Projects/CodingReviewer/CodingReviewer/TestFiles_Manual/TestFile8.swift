@@ -10,7 +10,7 @@ class TestClass8: ObservableObject {
     @Published var data: [String] = []
 
     func loadData() {
-        data = Array(1 ... 10).map { "Item $0 from TestFile8" }
+        data = Array(1...10).map { "Item \($0) from TestFile8" }
     }
 
     func processData() {
@@ -40,6 +40,7 @@ struct TestView8: View {
             Button("Load Data") {
                 testClass.loadData()
             }
+            .accessibilityLabel("Button")
 
             List(testClass.data, id: \.self) { item in
                 Text(item)

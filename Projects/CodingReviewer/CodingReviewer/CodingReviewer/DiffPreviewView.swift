@@ -30,7 +30,7 @@ struct DiffPreviewView: View {
                     DiffComparisonView(
                         originalCode: getContextualCode(),
                         modifiedCode: getModifiedContextualCode(),
-                        changedLineRange: fix.startLine ... fix.endLine
+                        changedLineRange: fix.startLine...fix.endLine
                     )
                 }
 
@@ -38,16 +38,22 @@ struct DiffPreviewView: View {
 
                 // Action Bar
                 HStack {
-                    Button("Cancel") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Text("Cancel")
                     }
+                    .accessibilityLabel("Cancel button")
                     .buttonStyle(.bordered)
 
                     Spacer()
 
-                    Button("Apply This Fix") {
+                    Button {
                         showingApplyConfirmation = true
+                    } label: {
+                        Text("Apply This Fix")
                     }
+                    .accessibilityLabel("Apply fix button")
                     .buttonStyle(.borderedProminent)
                 }
                 .padding()
@@ -56,9 +62,11 @@ struct DiffPreviewView: View {
         .frame(minWidth: 700, minHeight: 500)
         .alert("Apply Fix", isPresented: $showingApplyConfirmation) {
             Button("Cancel", role: .cancel) {}
-            Button("Apply") {
+            Button {
                 // Handle fix application
                 dismiss()
+            } label: {
+                Text("Apply")
             }
         } message: {
             Text("Apply this fix? This action cannot be undone.")
@@ -69,7 +77,7 @@ struct DiffPreviewView: View {
 
     private func getContextualCode() -> String {
         let lines = originalCode.components(separatedBy: .newlines)
-        let contextRange = getContextRange(for: fix.startLine ... fix.endLine, in: lines)
+        let contextRange = getContextRange(for: fix.startLine...fix.endLine, in: lines)
         return lines[contextRange].joined(separator: "\n")
     }
 
@@ -81,24 +89,27 @@ struct DiffPreviewView: View {
         if fix.startLine == fix.endLine {
             modifiedLines[fix.startLine] = fix.fixedCode
         } else {
-            let lineRange = fix.startLine ... min(fix.endLine, lines.count - 1)
+            let lineRange = fix.startLine...min(fix.endLine, lines.count - 1)
             modifiedLines.removeSubrange(lineRange)
 
-            let fixedLines = fix.fixedCode.components(separatedBy: .newlines)
+            let fixedLines = fix.fixedCode.components(separatedBy: "\n")
             modifiedLines.insert(contentsOf: fixedLines, at: fix.startLine)
         }
 
-        let contextRange = getContextRange(for: fix.startLine ... fix.endLine, in: lines)
-        let adjustedRange = contextRange.lowerBound ..< min(contextRange.upperBound, modifiedLines.count)
+        let contextRange = getContextRange(for: fix.startLine...fix.endLine, in: lines)
+        let adjustedRange =
+            contextRange.lowerBound..<min(contextRange.upperBound, modifiedLines.count)
 
         return modifiedLines[adjustedRange].joined(separator: "\n")
     }
 
-    private func getContextRange(for changeRange: ClosedRange<Int>, in lines: [String]) -> Range<Int> {
+    private func getContextRange(for changeRange: ClosedRange<Int>, in lines: [String]) -> Range<
+        Int
+    > {
         let contextLines = 3
         let start = max(0, changeRange.lowerBound - contextLines)
         let end = min(lines.count, changeRange.upperBound + contextLines + 1)
-        return start ..< end
+        return start..<end
     }
 }
 
@@ -230,7 +241,8 @@ struct CodeView: View {
     var body: some View {
         ScrollView([.horizontal, .vertical]) {
             VStack(alignment: .leading, spacing: 0) {
-                ForEach(Array(code.components(separatedBy: .newlines).enumerated()), id: \.offset) { index, line in
+                ForEach(Array(code.components(separatedBy: .newlines).enumerated()), id: \.offset) {
+                    index, line in
                     CodeLineView(
                         lineNumber: index + 1,
                         content: line,
@@ -355,7 +367,9 @@ struct FixHistoryEntry: Identifiable, Codable {
 class FixHistoryManager: ObservableObject {
     @Published var history: [FixHistoryEntry] = []
 
-    func recordAppliedFix(_ fix: IntelligentFix, originalCode: String, modifiedCode: String, fileName: String) {
+    func recordAppliedFix(
+        _ fix: IntelligentFix, originalCode: String, modifiedCode: String, fileName: String
+    ) {
         let entry = FixHistoryEntry(
             fixId: fix.id,
             appliedAt: Date(),
@@ -364,7 +378,7 @@ class FixHistoryManager: ObservableObject {
             fileName: fileName
         )
 
-        history.insert(entry, at: 0) // Most recent first
+        history.insert(entry, at: 0)  // Most recent first
 
         // Keep only last 100 entries
         if history.count > 100 {
@@ -383,8 +397,7 @@ class FixHistoryManager: ObservableObject {
 
     private func loadHistory() {
         if let data = UserDefaults.standard.data(forKey: "FixHistory"),
-           let decoded = try? JSONDecoder().decode([FixHistoryEntry].self, from: data)
-        {
+           let decoded = try? JSONDecoder().decode([FixHistoryEntry].self, from: data) {
             history = decoded
         }
     }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 #if os(macOS)
     import AppKit
 #else
@@ -35,12 +36,18 @@ struct MainTabView_Enhanced: View {
         let keyboardShortcut: KeyEquivalent?
 
         static let allTabs = [
-            TabConfiguration(tag: TabTags.dashboard, title: "Dashboard", icon: "house", keyboardShortcut: "1"),
-            TabConfiguration(tag: TabTags.tasks, title: "Tasks", icon: "checkmark.square", keyboardShortcut: "2"),
-            TabConfiguration(tag: TabTags.calendar, title: "Calendar", icon: "calendar", keyboardShortcut: "3"),
-            TabConfiguration(tag: TabTags.goals, title: "Goals", icon: "target", keyboardShortcut: "4"),
-            TabConfiguration(tag: TabTags.journal, title: "Journal", icon: "book", keyboardShortcut: "5"),
-            TabConfiguration(tag: TabTags.settings, title: "Settings", icon: "gear", keyboardShortcut: ","),
+            TabConfiguration(
+                tag: TabTags.dashboard, title: "Dashboard", icon: "house", keyboardShortcut: "1"),
+            TabConfiguration(
+                tag: TabTags.tasks, title: "Tasks", icon: "checkmark.square", keyboardShortcut: "2"),
+            TabConfiguration(
+                tag: TabTags.calendar, title: "Calendar", icon: "calendar", keyboardShortcut: "3"),
+            TabConfiguration(
+                tag: TabTags.goals, title: "Goals", icon: "target", keyboardShortcut: "4"),
+            TabConfiguration(
+                tag: TabTags.journal, title: "Journal", icon: "book", keyboardShortcut: "5"),
+            TabConfiguration(
+                tag: TabTags.settings, title: "Settings", icon: "gear", keyboardShortcut: ","),
         ]
     }
 
@@ -65,31 +72,32 @@ struct MainTabView_Enhanced: View {
                 List(TabConfiguration.allTabs, id: \.tag, selection: $selectedTabTag) { tab in
                     Label(tab.title, systemImage: tab.icon)
                         .foregroundColor(
-                            selectedTabTag == tab.tag ?
-                                themeManager.currentTheme.primaryAccentColor :
-                                themeManager.currentTheme.primaryTextColor
+                            selectedTabTag == tab.tag
+                                ? themeManager.currentTheme.primaryAccentColor
+                                : themeManager.currentTheme.primaryTextColor
                         )
                         .tag(tab.tag)
                 }
                 .listStyle(SidebarListStyle())
                 .frame(minWidth: 200, idealWidth: 250)
                 .background(themeManager.currentTheme.secondaryBackgroundColor)
-                .toolbar {
+                .toolbar(content: {
                     ToolbarItem(placement: .primaryAction) {
                         Button(action: toggleSidebar) {
                             Image(systemName: "sidebar.left")
                         }
+                        .accessibilityLabel("Toggle Sidebar")
                         .help("Toggle Sidebar")
                     }
-                }
+                })
             } detail: {
                 contentForSelectedTab
                     .frame(minWidth: 600)
-                    .toolbar {
+                    .toolbar(content: {
                         ToolbarItemGroup(placement: .primaryAction) {
                             macOSToolbarButtons
                         }
-                    }
+                    })
             }
             .navigationSplitViewStyle(.balanced)
             .background(themeManager.currentTheme.primaryBackgroundColor)
@@ -116,9 +124,9 @@ struct MainTabView_Enhanced: View {
                         }
                         .padding(.vertical, 4)
                         .background(
-                            selectedTabTag == tab.tag ?
-                                themeManager.currentTheme.primaryAccentColor.opacity(0.1) :
-                                Color.clear
+                            selectedTabTag == tab.tag
+                                ? themeManager.currentTheme.primaryAccentColor.opacity(0.1)
+                                : Color.clear
                         )
                         .cornerRadius(8)
                         .onTapGesture {
@@ -151,7 +159,9 @@ struct MainTabView_Enhanced: View {
                 }
             }
             .accentColor(themeManager.currentTheme.primaryAccentColor)
-            .environment(\.colorScheme, themeManager.currentTheme.primaryBackgroundColor.isDark() ? .dark : .light)
+            .environment(
+                \.colorScheme,
+                themeManager.currentTheme.primaryBackgroundColor.isDark() ? .dark : .light)
         }
     #endif
 
@@ -190,17 +200,20 @@ struct MainTabView_Enhanced: View {
             Button(action: addNewItem) {
                 Image(systemName: "plus")
             }
+            .accessibilityLabel("Add New Item")
             .help("Add New Item")
 
             Button(action: searchAction) {
                 Image(systemName: "magnifyingglass")
             }
+            .accessibilityLabel("Search")
             .help("Search")
             .keyboardShortcut("f", modifiers: .command)
 
             Button(action: syncAction) {
                 Image(systemName: "arrow.clockwise")
             }
+            .accessibilityLabel("Sync")
             .help("Sync")
             .keyboardShortcut("r", modifiers: .command)
         }
@@ -212,14 +225,17 @@ struct MainTabView_Enhanced: View {
             Button(action: addNewItem) {
                 Image(systemName: "plus")
             }
+            .accessibilityLabel("Add New Item")
 
             Button(action: searchAction) {
                 Image(systemName: "magnifyingglass")
             }
+            .accessibilityLabel("Search")
 
             Button(action: syncAction) {
                 Image(systemName: "arrow.clockwise")
             }
+            .accessibilityLabel("Sync")
         }
     #endif
 
@@ -242,7 +258,8 @@ struct MainTabView_Enhanced: View {
 
     #if os(macOS)
         private func toggleSidebar() {
-            NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
+            NSApp.keyWindow?.firstResponder?.tryToPerform(
+                #selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
         }
     #endif
 }

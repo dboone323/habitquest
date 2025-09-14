@@ -197,11 +197,13 @@ struct FloatingActionButton: View {
         .buttonStyle(PlainButtonStyle())
         .scaleEffect(isPressed ? 0.9 : 1.0)
         .rotationEffect(.degrees(rotationAngle))
-        .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
-            withAnimation(.easeInOut(duration: 0.15)) {
-                isPressed = pressing
-            }
-        }, perform: {})
+        .onLongPressGesture(
+            minimumDuration: 0, maximumDistance: .infinity,
+            pressing: { pressing in
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    isPressed = pressing
+                }
+            }, perform: {})
     }
 }
 
@@ -276,16 +278,17 @@ struct ParticleSystem: View {
     }
 
     private func createParticles() {
-        particles = (0 ..< 50).map { _ in
+        particles = (0..<50).map { _ in
             Particle(
-                x: CGFloat.random(in: 50 ... 350),
+                x: CGFloat.random(in: 50...350),
                 y: 400,
                 velocity: CGVector(
-                    dx: CGFloat.random(in: -200 ... 200),
+                    dx: CGFloat.random(in: -200...200),
                     dy: CGFloat.random(in: -400 ... -200)
                 ),
-                color: [Color.blue, Color.green, Color.orange, Color.red, Color.purple].randomElement()!,
-                scale: CGFloat.random(in: 0.5 ... 1.5),
+                color: [Color.blue, Color.green, Color.orange, Color.red, Color.purple]
+                    .randomElement()!,
+                scale: CGFloat.random(in: 0.5...1.5),
                 opacity: 1.0
             )
         }
@@ -382,7 +385,8 @@ struct Interactive3DCard<Content: View>: View {
                             width: value.translation.width * 0.1,
                             height: value.translation.height * 0.1
                         )
-                        rotation = sqrt(pow(translation.width, 2) + pow(translation.height, 2)) * 0.5
+                        rotation =
+                            sqrt(pow(translation.width, 2) + pow(translation.height, 2)) * 0.5
                     }
                     .onEnded { _ in
                         withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
@@ -401,11 +405,11 @@ struct BreathingView<Content: View>: View {
     @State private var scale: CGFloat = 1.0
 
     var duration: Double = 2.0
-    var scaleRange: ClosedRange<CGFloat> = 0.95 ... 1.05
+    var scaleRange: ClosedRange<CGFloat> = 0.95...1.05
 
     init(
         duration: Double = 2.0,
-        scaleRange: ClosedRange<CGFloat> = 0.95 ... 1.05,
+        scaleRange: ClosedRange<CGFloat> = 0.95...1.05,
         @ViewBuilder content: () -> Content
     ) {
         self.duration = duration
@@ -517,14 +521,17 @@ struct VisualEnhancementsPreview: View {
                 }
 
                 // Celebration Button
-                Button("Celebrate! 🎉") {
+                Button(action: {
                     showParticles = true
+                }) {
+                    Text("Celebrate! 🎉")
+                        .font(.title2.bold())
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(.orange.gradient)
+                        .cornerRadius(16)
                 }
-                .font(.title2.bold())
-                .foregroundColor(.white)
-                .padding()
-                .background(.orange.gradient)
-                .cornerRadius(16)
+                .accessibilityLabel("Celebrate Button")
             }
             .padding()
         }
@@ -546,9 +553,13 @@ struct VisualEnhancementsPreview: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    FloatingActionButton(icon: "plus") {
-                        // Add action
-                    }
+                    FloatingActionButton(
+                        icon: "plus",
+                        action: {
+                            // Add action
+                        }
+                    )
+                    .accessibilityLabel("Add New Item")
                     .environmentObject(themeManager)
                     .padding()
                 }

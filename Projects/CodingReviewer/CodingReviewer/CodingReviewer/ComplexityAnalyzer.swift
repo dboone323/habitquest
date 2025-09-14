@@ -1,14 +1,14 @@
 import Foundation
 
 class ComplexityAnalyzer {
-    static let shared = ComplexityAnalyzer()
+    @MainActor static let shared = ComplexityAnalyzer()
 
     private init() {}
 
     func analyzeFunction(_ content: String, in file: String) -> FunctionComplexity {
         let lines = content.components(separatedBy: .newlines)
 
-        var cyclomaticComplexity = 1 // Base complexity;
+        var cyclomaticComplexity = 1  // Base complexity;
         var cognitiveComplexity = 0
         var nestingLevel = 0
         var maxNesting = 0
@@ -17,11 +17,10 @@ class ComplexityAnalyzer {
             let trimmedLine = line.trimmingCharacters(in: .whitespaces)
 
             // Count decision points for cyclomatic complexity
-            if trimmedLine.contains("if ") || trimmedLine.contains("else") ||
-                trimmedLine.contains("for ") || trimmedLine.contains("while ") ||
-                trimmedLine.contains("switch ") || trimmedLine.contains("case ") ||
-                trimmedLine.contains("catch ") || trimmedLine.contains("guard ")
-            {
+            if trimmedLine.contains("if ") || trimmedLine.contains("else")
+                || trimmedLine.contains("for ") || trimmedLine.contains("while ")
+                || trimmedLine.contains("switch ") || trimmedLine.contains("case ")
+                || trimmedLine.contains("catch ") || trimmedLine.contains("guard ") {
                 cyclomaticComplexity += 1
             }
 
@@ -52,43 +51,52 @@ class ComplexityAnalyzer {
         )
     }
 
-    func generateRefactoringSuggestions(for complexity: FunctionComplexity) -> [RefactoringSuggestion] {
+    func generateRefactoringSuggestions(for complexity: FunctionComplexity)
+    -> [RefactoringSuggestion] {
         var suggestions: [RefactoringSuggestion] = []
 
         if complexity.cyclomaticComplexity > 10 {
-            suggestions.append(RefactoringSuggestion(
-                type: .extractMethod,
-                description: "High cyclomatic complexity (\(complexity.cyclomaticComplexity)). Consider extracting smaller methods.",
-                impact: .high,
-                effort: .medium
-            ))
+            suggestions.append(
+                RefactoringSuggestion(
+                    type: .extractMethod,
+                    description:
+                        "High cyclomatic complexity (\(complexity.cyclomaticComplexity)). Consider extracting smaller methods.",
+                    impact: .high,
+                    effort: .medium
+                ))
         }
 
         if complexity.maxNestingLevel > 4 {
-            suggestions.append(RefactoringSuggestion(
-                type: .reduceNesting,
-                description: "Deep nesting (\(complexity.maxNestingLevel) levels). Use guard statements and early returns.",
-                impact: .medium,
-                effort: .low
-            ))
+            suggestions.append(
+                RefactoringSuggestion(
+                    type: .reduceNesting,
+                    description:
+                        "Deep nesting (\(complexity.maxNestingLevel) levels). Use guard statements and early returns.",
+                    impact: .medium,
+                    effort: .low
+                ))
         }
 
         if complexity.cognitiveComplexity > 15 {
-            suggestions.append(RefactoringSuggestion(
-                type: .simplifyConditionals,
-                description: "High cognitive complexity (\(complexity.cognitiveComplexity)). Simplify conditional logic.",
-                impact: .high,
-                effort: .medium
-            ))
+            suggestions.append(
+                RefactoringSuggestion(
+                    type: .simplifyConditionals,
+                    description:
+                        "High cognitive complexity (\(complexity.cognitiveComplexity)). Simplify conditional logic.",
+                    impact: .high,
+                    effort: .medium
+                ))
         }
 
         if complexity.linesOfCode > 50 {
-            suggestions.append(RefactoringSuggestion(
-                type: .extractMethod,
-                description: "Long function (\(complexity.linesOfCode) lines). Break into smaller, focused methods.",
-                impact: .medium,
-                effort: .medium
-            ))
+            suggestions.append(
+                RefactoringSuggestion(
+                    type: .extractMethod,
+                    description:
+                        "Long function (\(complexity.linesOfCode) lines). Break into smaller, focused methods.",
+                    impact: .medium,
+                    effort: .medium
+                ))
         }
 
         return suggestions
@@ -105,9 +113,9 @@ struct FunctionComplexity {
         let score = cyclomaticComplexity + cognitiveComplexity + maxNestingLevel
 
         switch score {
-        case 0 ... 10: return .low
-        case 11 ... 20: return .medium
-        case 21 ... 30: return .high
+        case 0...10: return .low
+        case 11...20: return .medium
+        case 21...30: return .high
         default: return .critical
         }
     }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 #if os(iOS)
     import UIKit
 #elseif os(macOS)
@@ -60,7 +61,8 @@ class AccessibilityManager: ObservableObject {
     private func updateAccessibilitySettings() {
         #if os(iOS)
             isVoiceOverEnabled = UIAccessibility.isVoiceOverRunning
-            prefersDynamicType = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+            prefersDynamicType =
+                UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
             prefersReducedMotion = UIAccessibility.isReduceMotionEnabled
             prefersHighContrast = UIAccessibility.isDarkerSystemColorsEnabled
         #elseif os(macOS)
@@ -68,7 +70,8 @@ class AccessibilityManager: ObservableObject {
             isVoiceOverEnabled = NSWorkspace.shared.isVoiceOverEnabled
             prefersReducedMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
             prefersHighContrast = NSWorkspace.shared.accessibilityDisplayShouldIncreaseContrast
-            prefersDynamicType = UserDefaults.standard.bool(forKey: "AppleAccessibilityDynamicTypeEnabled")
+            prefersDynamicType = UserDefaults.standard.bool(
+                forKey: "AppleAccessibilityDynamicTypeEnabled")
         #endif
     }
 }
@@ -93,6 +96,7 @@ struct AccessibleButton: View {
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, 16)
         }
+        .accessibilityLabel("Button")
         .background(backgroundColor)
         .cornerRadius(12)
         .disabled(!isEnabled)
@@ -105,13 +109,13 @@ struct AccessibleButton: View {
     private var dynamicFontSize: CGFloat {
         let baseSize: CGFloat = 16
         if accessibilityManager.prefersDynamicType {
-            return min(baseSize * 1.5, 24) // Cap at reasonable maximum
+            return min(baseSize * 1.5, 24)  // Cap at reasonable maximum
         }
         return baseSize
     }
 
     private var minimumTouchTarget: CGFloat {
-        44 // Apple's recommended minimum touch target
+        44  // Apple's recommended minimum touch target
     }
 
     private var backgroundColor: Color {
@@ -171,7 +175,7 @@ struct AccessibleListRow<Content: View>: View {
             .accessibilityActions {
                 ForEach(accessibilityActions.indices, id: \.self) { index in
                     let actionInfo = accessibilityActions[index]
-                    Button(actionInfo.name, action: actionInfo.action)
+                    Button(actionInfo.name, action: actionInfo.action).accessibilityLabel("Button")
                 }
             }
     }
@@ -193,8 +197,7 @@ struct HighContrastModifier: ViewModifier {
         content
             .environment(\.colorScheme, accessibilityManager.prefersHighContrast ? .dark : .light)
             .foregroundColor(
-                accessibilityManager.prefersHighContrast ?
-                    Color.white : Color.primary
+                accessibilityManager.prefersHighContrast ? Color.white : Color.primary
             )
     }
 }
@@ -276,8 +279,11 @@ enum ScreenReaderAnnouncement {
                 UIAccessibility.post(notification: .announcement, argument: message)
             #elseif os(macOS)
                 // Using the correct method without an argument parameter
-                let userInfo: [NSAccessibility.NotificationUserInfoKey: Any] = [NSAccessibility.NotificationUserInfoKey.announcement: message]
-                NSAccessibility.post(element: NSApp as Any, notification: .announcementRequested, userInfo: userInfo)
+                let userInfo: [NSAccessibility.NotificationUserInfoKey: Any] = [
+                    NSAccessibility.NotificationUserInfoKey.announcement: message
+                ]
+                NSAccessibility.post(
+                    element: NSApp as Any, notification: .announcementRequested, userInfo: userInfo)
             #endif
         }
     }
@@ -299,7 +305,8 @@ enum ScreenReaderAnnouncement {
                 UIAccessibility.post(notification: .layoutChanged, argument: "")
             #elseif os(macOS)
                 // Make sure we're using the correct API without an argument parameter
-                NSAccessibility.post(element: NSApp as Any, notification: .layoutChanged, userInfo: nil)
+                NSAccessibility.post(
+                    element: NSApp as Any, notification: .layoutChanged, userInfo: nil)
             #endif
         }
     }
@@ -326,7 +333,7 @@ struct DynamicTypeText: View {
 // MARK: - Accessible Progress Indicator
 
 struct AccessibleProgressView: View {
-    let progress: Double // 0.0 to 1.0
+    let progress: Double  // 0.0 to 1.0
     let label: String
 
     var body: some View {

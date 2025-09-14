@@ -1,5 +1,5 @@
-import Combine
 import Foundation
+import Combine
 import SwiftUI
 
 /// Enhanced Quantum Analysis Engine V2.0
@@ -13,14 +13,15 @@ class QuantumAnalysisEngineV2: ObservableObject {
     @Published var processingStatus: String = "Ready"
 
     // Enhanced quantum configuration
-    private let quantumThreads: Int = 128 // Doubled for V2.0
-    private let parallelFactor: Int = 32 // Enhanced parallelization
+    private let quantumThreads: Int = 128  // Doubled for V2.0
+    private let parallelFactor: Int = 32  // Enhanced parallelization
     private let quantumCache = QuantumCacheV2()
     private let neuralProcessor = ConsciousnessNeuralProcessor()
     private let biologicalEngine = BiologicalEvolutionEngine()
 
     /// Ultra-enhanced quantum analysis with 300x+ performance target
-    func quantumAnalyzeCodeV2(_ code: String, language: ProgrammingLanguage) async -> QuantumAnalysisResultV2 {
+    func quantumAnalyzeCodeV2(_ code: String, language: ProgrammingLanguage) async
+    -> QuantumAnalysisResultV2 {
         let quantumStart = Date()
         isQuantumActive = true
         processingStatus = "Quantum processing active..."
@@ -35,12 +36,15 @@ class QuantumAnalysisEngineV2: ObservableObject {
 
         // Phase 3: Biological evolution optimization
         processingStatus = "Activating biological evolution..."
-        let biologicalInsights = await biologicalEngine.evolveCodeStructure(code, patterns: consciousPatterns)
+        let biologicalInsights = await biologicalEngine.evolveCodeStructure(
+            code, patterns: consciousPatterns)
 
         // Phase 4: Quantum-parallel chunk processing (enhanced)
         processingStatus = "Quantum-parallel processing..."
         let chunks = splitCodeIntoQuantumChunks(code, threadCount: quantumThreads)
-        let results = await withTaskGroup(of: EnhancedAnalysisChunk.self, returning: [EnhancedAnalysisChunk].self) { group in
+        let results = await withTaskGroup(
+            of: EnhancedAnalysisChunk.self, returning: [EnhancedAnalysisChunk].self
+        ) { group in
             var chunkResults: [EnhancedAnalysisChunk] = []
 
             for (index, chunk) in chunks.enumerated() {
@@ -57,7 +61,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
         }
 
         let quantumTime = Date().timeIntervalSince(quantumStart)
-        quantumPerformance = min(99.9, (1.0 / max(quantumTime, 0.0001)) * 0.0001) // Target <0.0001s
+        quantumPerformance = min(99.9, (1.0 / max(quantumTime, 0.0001)) * 0.0001)  // Target <0.0001s
         isQuantumActive = false
         processingStatus = "Quantum analysis complete"
 
@@ -76,19 +80,19 @@ class QuantumAnalysisEngineV2: ObservableObject {
     // Enhanced quantum superposition
     private func createQuantumSuperposition(_ code: String) async -> [QuantumState] {
         // Simulate quantum superposition of multiple code analysis states
-        let states = (0 ..< 8).map { index in
+        let states = (0..<8).map { index in
             QuantumState(
                 id: index,
                 codeVariant: code,
-                probability: Double.random(in: 0.8 ... 1.0),
+                probability: Double.random(in: 0.8...1.0),
                 analysisDepth: QuantumDepth.allCases.randomElement() ?? .deep
             )
         }
 
         // Quantum entanglement simulation
-        for i in 0 ..< states.count {
-            for j in (i + 1) ..< states.count {
-                if Double.random(in: 0 ... 1) > 0.7 {
+        for i in 0..<states.count {
+            for j in (i + 1)..<states.count {
+                if Double.random(in: 0...1) > 0.7 {
                     // Create quantum entanglement between states
                     await entangleQuantumStates(states[i], states[j])
                 }
@@ -100,7 +104,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
 
     private func entangleQuantumStates(_ state1: QuantumState, _ state2: QuantumState) async {
         // Simulate quantum entanglement for synchronized analysis
-        try? await Task.sleep(nanoseconds: 100_000) // 0.1ms entanglement time
+        try? await Task.sleep(nanoseconds: 100_000)  // 0.1ms entanglement time
     }
 
     private func splitCodeIntoQuantumChunks(_ code: String, threadCount: Int) -> [String] {
@@ -110,14 +114,15 @@ class QuantumAnalysisEngineV2: ObservableObject {
 
         for i in stride(from: 0, to: lines.count, by: chunkSize) {
             let endIndex = min(i + chunkSize, lines.count)
-            let chunk = Array(lines[i ..< endIndex]).joined(separator: "\n")
+            let chunk = Array(lines[i..<endIndex]).joined(separator: "\n")
             chunks.append(chunk)
         }
 
         return chunks
     }
 
-    private func processEnhancedQuantumChunk(_ chunk: String, index: Int) async -> EnhancedAnalysisChunk {
+    private func processEnhancedQuantumChunk(_ chunk: String, index: Int) async
+    -> EnhancedAnalysisChunk {
         // Enhanced quantum processing with optimized algorithms
         let startTime = Date()
 
@@ -127,7 +132,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
         }
 
         // Ultra-fast quantum processing (target: <0.1ms per chunk)
-        try? await Task.sleep(nanoseconds: UInt64.random(in: 50000 ... 100_000)) // 0.05-0.1ms
+        try? await Task.sleep(nanoseconds: UInt64.random(in: 50000...100_000))  // 0.05-0.1ms
 
         let result = EnhancedAnalysisChunk(
             index: index,
@@ -135,7 +140,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
             complexity: calculateAdvancedComplexity(chunk),
             patterns: detectAdvancedPatterns(chunk),
             quality: assessQuantumQuality(chunk),
-            quantumStability: Double.random(in: 0.85 ... 0.99),
+            quantumStability: Double.random(in: 0.85...0.99),
             processingTime: Date().timeIntervalSince(startTime)
         )
 
@@ -147,7 +152,8 @@ class QuantumAnalysisEngineV2: ObservableObject {
 
     private func calculateAdvancedComplexity(_ code: String) -> Int {
         // Advanced complexity calculation with quantum algorithms
-        let baseComplexity = code.components(separatedBy: .whitespacesAndNewlines).count(where: { !$0.isEmpty }) / 8
+        let baseComplexity =
+            code.components(separatedBy: .whitespacesAndNewlines).count(where: { !$0.isEmpty }) / 8
         let quantumBonus = code.contains("async") ? 2 : 0
         let patternBonus = detectAdvancedPatterns(code).count
         return max(1, baseComplexity + quantumBonus + patternBonus)
@@ -167,35 +173,40 @@ class QuantumAnalysisEngineV2: ObservableObject {
 
     private func assessQuantumQuality(_ code: String) -> Double {
         var quality = 75.0
-        if code.contains("//") { quality += 15 } // Comments
-        if code.contains("guard ") { quality += 12 } // Safety
-        if code.contains("@Published") { quality += 8 } // Modern patterns
-        if code.contains("private ") { quality += 10 } // Encapsulation
+        if code.contains("//") { quality += 15 }  // Comments
+        if code.contains("guard ") { quality += 12 }  // Safety
+        if code.contains("@Published") { quality += 8 }  // Modern patterns
+        if code.contains("private ") { quality += 10 }  // Encapsulation
         return min(100.0, quality)
     }
 
-    private func extractEnhancedIssues(_ chunks: [EnhancedAnalysisChunk]) -> [AnalysisResult] {
-        var issues: [AnalysisResult] = []
+    private func extractEnhancedIssues(_ chunks: [EnhancedAnalysisChunk]) -> [AnalysisIssue] {
+        var issues: [AnalysisIssue] = []
 
         for chunk in chunks {
             if chunk.complexity > 25 {
-                issues.append(AnalysisResult(
-                    type: "Complexity",
-                    severity: "Medium",
-                    message: "High complexity detected in code section (Quantum Analysis)",
-                    lineNumber: chunk.index * 16 + 1,
-                    suggestion: "Consider breaking down complex functions into smaller, more manageable pieces"
-                ))
+                issues.append(
+                    AnalysisIssue(
+                        id: UUID(),
+                        type: "Complexity",
+                        severityLevel: .medium,
+                        message: "High complexity detected in code section (Quantum Analysis)",
+                        lineNumber: chunk.index * 16 + 1,
+                        line: chunk.content
+                    ))
             }
 
             if chunk.quantumStability < 0.9 {
-                issues.append(AnalysisResult(
-                    type: "Style",
-                    severity: "Low",
-                    message: "Quantum instability detected - consider refactoring for better structure",
-                    lineNumber: chunk.index * 16 + 5,
-                    suggestion: "Refactor code structure to improve quantum stability and maintainability"
-                ))
+                issues.append(
+                    AnalysisIssue(
+                        id: UUID(),
+                        type: "Style",
+                        severityLevel: .low,
+                        message:
+                            "Quantum instability detected - consider refactoring for better structure",
+                        lineNumber: chunk.index * 16 + 5,
+                        line: chunk.content
+                    ))
             }
         }
 
@@ -210,12 +221,13 @@ class QuantumAnalysisEngineV2: ObservableObject {
                 confidence: pattern.confidence,
                 quantumAdvantage: quantumPerformance,
                 biologicalScore: biologicalAdaptation,
-                evolutionaryImpact: Double.random(in: 0.7 ... 0.95)
+                evolutionaryImpact: Double.random(in: 0.7...0.95)
             )
         }
     }
 
-    private func calculatePerformanceMetrics(_ executionTime: TimeInterval, _ chunkCount: Int) -> QuantumPerformanceMetrics {
+    private func calculatePerformanceMetrics(_ executionTime: TimeInterval, _ chunkCount: Int)
+    -> QuantumPerformanceMetrics {
         let throughput = Double(chunkCount) / executionTime
         let efficiency = min(1.0, throughput / Double(quantumThreads))
         let quantumAdvantage = min(500.0, 1.0 / max(executionTime, 0.001) * 0.001)
@@ -259,7 +271,8 @@ struct ConsciousnessPattern {
     let suggestion: String
 
     enum PatternType {
-        case highComplexity, designPatternRich, evolutionaryPattern, quantumOptimized, consciousnessEnhanced
+        case highComplexity, designPatternRich, evolutionaryPattern, quantumOptimized,
+             consciousnessEnhanced
 
         var description: String {
             switch self {
@@ -291,7 +304,7 @@ struct QuantumInsightV2 {
 }
 
 struct QuantumAnalysisResultV2 {
-    let traditionalIssues: [AnalysisResult]
+    let traditionalIssues: [AnalysisIssue]
     let quantumInsights: [QuantumInsightV2]
     let biologicalEvolution: BiologicalEvolutionResult
     let consciousnessScore: Double
@@ -351,22 +364,25 @@ class ConsciousnessNeuralProcessor {
 
         for state in states {
             // Simulate consciousness-level analysis
-            try? await Task.sleep(nanoseconds: 200_000) // 0.2ms consciousness processing
+            try? await Task.sleep(nanoseconds: 200_000)  // 0.2ms consciousness processing
 
             if state.probability > 0.9 {
-                patterns.append(ConsciousnessPattern(
-                    type: .consciousnessEnhanced,
-                    confidence: state.probability,
-                    suggestion: "Consciousness-level optimization detected: \(state.analysisDepth)"
-                ))
+                patterns.append(
+                    ConsciousnessPattern(
+                        type: .consciousnessEnhanced,
+                        confidence: state.probability,
+                        suggestion:
+                            "Consciousness-level optimization detected: \(state.analysisDepth)"
+                    ))
             }
 
             if state.codeVariant.contains("complex") {
-                patterns.append(ConsciousnessPattern(
-                    type: .quantumOptimized,
-                    confidence: 0.88,
-                    suggestion: "Quantum optimization opportunities identified"
-                ))
+                patterns.append(
+                    ConsciousnessPattern(
+                        type: .quantumOptimized,
+                        confidence: 0.88,
+                        suggestion: "Quantum optimization opportunities identified"
+                    ))
             }
         }
 
@@ -376,14 +392,15 @@ class ConsciousnessNeuralProcessor {
 
 // Enhanced biological evolution engine
 class BiologicalEvolutionEngine {
-    func evolveCodeStructure(_ code: String, patterns: [ConsciousnessPattern]) async -> BiologicalEvolutionResult {
+    func evolveCodeStructure(_ code: String, patterns: [ConsciousnessPattern]) async
+    -> BiologicalEvolutionResult {
         // Simulate biological evolution of code structure
-        try? await Task.sleep(nanoseconds: 300_000) // 0.3ms evolution time
+        try? await Task.sleep(nanoseconds: 300_000)  // 0.3ms evolution time
 
-        let mutations = Int.random(in: 1 ... 5)
-        let adaptations = Int.random(in: 2 ... 7)
-        let health = Double.random(in: 0.88 ... 1.0)
-        let evolution = Double.random(in: 0.75 ... 0.95)
+        let mutations = Int.random(in: 1...5)
+        let adaptations = Int.random(in: 2...7)
+        let health = Double.random(in: 0.88...1.0)
+        let evolution = Double.random(in: 0.75...0.95)
 
         var suggestions: [String] = []
         if mutations > 3 {

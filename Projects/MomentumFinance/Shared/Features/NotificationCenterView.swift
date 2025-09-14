@@ -18,19 +18,19 @@ struct NotificationCenterView: View {
     @StateObject private var notificationManager = NotificationManager.shared
 
     #if canImport(SwiftData)
-        #if canImport(SwiftData)
-            private var budgets: [Budget] = []
-            private var subscriptions: [Subscription] = []
-            private var accounts: [FinancialAccount] = []
-        #else
-            private var budgets: [Budget] = []
-            private var subscriptions: [Subscription] = []
-            private var accounts: [FinancialAccount] = []
-        #endif
+    #if canImport(SwiftData)
+    private var budgets: [Budget] = []
+    private var subscriptions: [Subscription] = []
+    private var accounts: [FinancialAccount] = []
     #else
-        private var budgets: [Budget] = []
-        private var subscriptions: [Subscription] = []
-        private var accounts: [FinancialAccount] = []
+    private var budgets: [Budget] = []
+    private var subscriptions: [Subscription] = []
+    private var accounts: [FinancialAccount] = []
+    #endif
+    #else
+    private var budgets: [Budget] = []
+    private var subscriptions: [Subscription] = []
+    private var accounts: [FinancialAccount] = []
     #endif
 
     var body: some View {
@@ -48,6 +48,7 @@ struct NotificationCenterView: View {
                     Button("Done") {
                         dismiss()
                     }
+                    .accessibilityLabel("Done")
                 }
 
                 if !notificationManager.pendingNotifications.isEmpty {
@@ -55,6 +56,7 @@ struct NotificationCenterView: View {
                         Button("Clear All") {
                             notificationManager.clearAllNotifications()
                         }
+                        .accessibilityLabel("Clear All")
                     }
                 }
             }
@@ -78,7 +80,7 @@ struct NotificationCenterView: View {
                     onDismiss: {
                         dismissNotification(notification)
                     },
-                )
+                    )
             }
         }
         .listStyle(PlainListStyle())
@@ -131,7 +133,7 @@ struct ScheduledNotificationRow: View {
                 .background(
                     Circle()
                         .fill(colorForType(notification.type).opacity(0.1)),
-                )
+                    )
 
             // Notification Content
             VStack(alignment: .leading, spacing: 4) {
@@ -161,13 +163,14 @@ struct ScheduledNotificationRow: View {
                     .font(.title3)
                     .foregroundColor(.secondary)
             }
+            .accessibilityLabel("Dismiss notification")
             .buttonStyle(PlainButtonStyle())
         }
         .padding(.vertical, 8)
         .background(
             RoundedRectangle(cornerRadius: 8)
                 .fill(isHighPriority ? Color.red.opacity(0.05) : Color.clear),
-        )
+            )
     }
 
     private var isHighPriority: Bool {

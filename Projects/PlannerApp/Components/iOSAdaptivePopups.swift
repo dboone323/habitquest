@@ -50,7 +50,8 @@ extension View {
             self
                 .onTapGesture {
                     // Dismiss keyboard when tapping outside
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    UIApplication.shared.sendAction(
+                        #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
         #else
             self

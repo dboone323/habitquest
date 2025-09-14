@@ -51,9 +51,13 @@ struct QuantumEnhancementView: View {
             }
         }
         .alert("Auto-Fix Available", isPresented: $showingAutoFixDialog) {
-            Button("Apply Fix") {
+            Button {
                 applyAutomatedFix()
+            } label: {
+                Text("Apply Fix")
             }
+            .accessibilityLabel("Apply fix button")
+
             Button("Cancel", role: .cancel) {}
         } message: {
             if let fix = autoFixTarget {
@@ -67,7 +71,7 @@ struct QuantumEnhancementView: View {
     private var sidebarView: some View {
         List(selection: $selectedTab) {
             Section("Quantum Analysis") {
-                ForEach(EnhancementTab.allCases, id: \\.self) { tab in
+                ForEach(EnhancementTab.allCases, id: \.self) { tab in
                     NavigationLink(value: tab) {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
@@ -308,10 +312,12 @@ struct QuantumEnhancementView: View {
 
     private func emptyStateView(for type: EnhancementType) -> some View {
         VStack(spacing: 20) {
-            Image(systemName: type == .security ? "shield.checkered" :
-                type == .performance ? "speedometer" : "star.circle")
-                .font(.system(size: 48))
-                .foregroundColor(.gray)
+            Image(
+                systemName: type == .security
+                    ? "shield.checkered" : type == .performance ? "speedometer" : "star.circle"
+            )
+            .font(.system(size: 48))
+            .foregroundColor(.gray)
 
             Text("No \\(type.rawValue) Issues Found")
                 .font(.title2)
@@ -543,38 +549,6 @@ struct SummaryStatCard: View {
     }
 }
 
-struct QuickStatCard: View {
-    let title: String
-    let value: Int
-    let icon: String
-    let color: Color
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: icon)
-                    .foregroundColor(color)
-                    .font(.title2)
-
-                Spacer()
-
-                Text("\\(value)")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(color)
-            }
-
-            Text(title)
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .foregroundColor(.secondary)
-        }
-        .padding()
-        .background(Color(.controlBackgroundColor))
-        .cornerRadius(8)
-    }
-}
-
 struct EnhancementRowView: View {
     let enhancement: AIEnhancement
     let onTap: () -> Void
@@ -589,7 +563,9 @@ struct EnhancementRowView: View {
     }
 
     var body: some View {
-        Button(action: onTap) {
+        Button {
+            onTap()
+        } label: {
             HStack(spacing: 12) {
                 // Severity indicator
                 Circle()
@@ -623,6 +599,7 @@ struct EnhancementRowView: View {
             }
             .padding(.vertical, 4)
         }
+        .accessibilityLabel("Enhancement row button")
         .buttonStyle(PlainButtonStyle())
     }
 }
@@ -701,9 +678,12 @@ struct EnhancementDetailCard: View {
                 Spacer()
 
                 if enhancement.automatedFix != nil {
-                    Button("Auto-Fix Available") {
+                    Button {
                         onAutoFix()
+                    } label: {
+                        Text("Auto-Fix Available")
                     }
+                    .accessibilityLabel("Auto-fix available button")
                     .buttonStyle(.borderedProminent)
                     .controlSize(.small)
                 }
@@ -734,10 +714,14 @@ struct TestResultCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Image(systemName: result.status == .passed ? "checkmark.circle.fill" :
-                    result.status == .failed ? "xmark.circle.fill" : "exclamationmark.triangle.fill")
-                    .foregroundColor(statusColor)
-                    .font(.title3)
+                Image(
+                    systemName: result.status == .passed
+                        ? "checkmark.circle.fill"
+                        : result.status == .failed
+                        ? "xmark.circle.fill" : "exclamationmark.triangle.fill"
+                )
+                .foregroundColor(statusColor)
+                .font(.title3)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("\\(result.testType.rawValue) Test")
@@ -752,7 +736,7 @@ struct TestResultCard: View {
                 Spacer()
 
                 VStack(alignment: .trailing) {
-                    Text("\\(String(format: "%.2f", result.duration))s")
+                    Text(String(format: "%.2f", result.duration) + "s")
                         .font(.caption)
                         .foregroundColor(.secondary)
 
@@ -769,7 +753,7 @@ struct TestResultCard: View {
                         .font(.subheadline)
                         .fontWeight(.semibold)
 
-                    ForEach(Array(result.issuesFound.enumerated()), id: \\.offset) { _, _ in
+                    ForEach(Array(result.issuesFound.enumerated()), id: \.offset) { _, _ in
                         Text("• \\(issue)")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -783,7 +767,8 @@ struct TestResultCard: View {
                         .font(.subheadline)
                         .fontWeight(.semibold)
 
-                    ForEach(Array(result.recommendations.enumerated()), id: \\.offset) { _, _ in
+                    ForEach(Array(result.recommendations.enumerated()), id: \.offset) {
+                        _, _ in
                         Text("• \\(recommendation)")
                             .font(.caption)
                             .foregroundColor(.blue)
@@ -856,7 +841,7 @@ struct QuantumInsightCard: View {
                         .font(.subheadline)
                         .fontWeight(.semibold)
 
-                    ForEach(insight.affectedFiles, id: \\.self) { _ in
+                    ForEach(insight.affectedFiles, id: \.self) { _ in
                         Text("• \\(file)")
                             .font(.caption)
                             .foregroundColor(.secondary)

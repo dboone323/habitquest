@@ -208,7 +208,7 @@ struct ContentView: View {
                 AnalysisResult(
                     id: UUID(),
                     type: "Security",
-                    severity: "High",
+                    severityLevel: .high,
                     message: "Potential SQL injection vulnerability detected",
                     lineNumber: 42,
                     suggestion: "Use parameterized queries instead of string concatenation"
@@ -216,11 +216,11 @@ struct ContentView: View {
                 AnalysisResult(
                     id: UUID(),
                     type: "Performance",
-                    severity: "Medium",
+                    severityLevel: .medium,
                     message: "Inefficient loop detected",
                     lineNumber: 18,
                     suggestion: "Consider using built-in collection methods"
-                ),
+                )
             ]
             isAnalyzing = false
         }
@@ -368,7 +368,9 @@ struct QuickStartView: View {
 
     @State private var selectedLanguage: String = "Auto-detect"
 
-    private let languages = ["Auto-detect", "Swift", "Python", "JavaScript", "Java", "C++", "Go", "Rust"]
+    private let languages = [
+        "Auto-detect", "Swift", "Python", "JavaScript", "Java", "C++", "Go", "Rust"
+    ]
 
     var body: some View {
         VStack(spacing: 20) {
@@ -406,12 +408,15 @@ struct QuickStartView: View {
                     Spacer()
 
                     if !codeInput.isEmpty {
-                        Button("Clear") {
+                        Button(action: {
                             codeInput = ""
                             analysisResults = []
+                        }) {
+                            Text("Clear")
+                                .font(.caption)
+                                .foregroundColor(.blue)
                         }
-                        .font(.caption)
-                        .foregroundColor(.blue)
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
 
@@ -433,32 +438,36 @@ struct QuickStartView: View {
                             .foregroundColor(.secondary)
 
                         HStack(spacing: 16) {
-                            SampleCodeButton(title: "Python Example") {
-                                codeInput = """
-                                def calculate_total(items):
-                                    total = 0
-                                    for item in items:
-                                        total = total + item['price']
-                                    return total
+                            SampleCodeButton(
+                                title: "Python Example",
+                                action: {
+                                    codeInput = """
+                                        def calculate_total(items):
+                                            total = 0
+                                            for item in items:
+                                                total = total + item['price']
+                                            return total
 
-                                # Usage
-                                items = [{'price': 10}, {'price': 20}]
-                                result = calculate_total(items)
+                                        # Usage
+                                        items = [{'price': 10}, {'price': 20}]
+                                        result = calculate_total(items)
 
-                                """
-                            }
+                                        """
+                                })
 
-                            SampleCodeButton(title: "Swift Example") {
-                                codeInput = """
-                                func processUserData(users: [String]) {
-                                    for user in users {
-                                        let query = "SELECT * FROM users WHERE name = '" + user + "'"
-                                        // Execute query
+                            SampleCodeButton(
+                                title: "Swift Example",
+                                action: {
+                                    codeInput = """
+                                        func processUserData(users: [String]) {
+                                            for user in users {
+                                                let query = "SELECT * FROM users WHERE name = '" + user + "'"
+                                                // Execute query
 
-                                    }
-                                }
-                                """
-                            }
+                                            }
+                                        }
+                                        """
+                                })
                         }
                     }
                     .padding(.top, 8)
@@ -510,36 +519,40 @@ struct QuickStartView: View {
             var results: [AnalysisResult] = []
 
             if codeInput.contains("SELECT") && codeInput.contains("+") {
-                results.append(AnalysisResult(
-                    id: UUID(),
-                    type: "Security",
-                    severity: "High",
-                    message: "SQL Injection vulnerability detected",
-                    lineNumber: findLineNumber(for: "SELECT"),
-                    suggestion: "Use parameterized queries to prevent SQL injection"
-                ))
+                results.append(
+                    AnalysisResult(
+                        id: UUID(),
+                        type: "Security",
+                        severityLevel: .high,
+                        message: "SQL Injection vulnerability detected",
+                        lineNumber: findLineNumber(for: "SELECT"),
+                        suggestion: "Use parameterized queries to prevent SQL injection"
+                    ))
             }
 
             if codeInput.contains("for") && codeInput.contains("total") {
-                results.append(AnalysisResult(
-                    id: UUID(),
-                    type: "Performance",
-                    severity: "Medium",
-                    message: "Consider using built-in sum() function",
-                    lineNumber: findLineNumber(for: "for"),
-                    suggestion: "Use sum(item['price'] for item in items) for better performance"
-                ))
+                results.append(
+                    AnalysisResult(
+                        id: UUID(),
+                        type: "Performance",
+                        severityLevel: .medium,
+                        message: "Consider using built-in sum() function",
+                        lineNumber: findLineNumber(for: "for"),
+                        suggestion:
+                            "Use sum(item['price'] for item in items) for better performance"
+                    ))
             }
 
             if results.isEmpty {
-                results.append(AnalysisResult(
-                    id: UUID(),
-                    type: "Quality",
-                    severity: "Low",
-                    message: "Code looks good! No major issues found",
-                    lineNumber: 1,
-                    suggestion: "Consider adding comments for better documentation"
-                ))
+                results.append(
+                    AnalysisResult(
+                        id: UUID(),
+                        type: "Quality",
+                        severityLevel: .low,
+                        message: "Code looks good! No major issues found",
+                        lineNumber: 1,
+                        suggestion: "Consider adding comments for better documentation"
+                    ))
             }
 
             analysisResults = results
@@ -580,20 +593,20 @@ struct AnalysisResultCard: View {
     let result: AnalysisResult
 
     private var severityColor: Color {
-        switch result.severity.lowercased() {
-        case "high": .red
-        case "medium": .orange
-        case "low": .yellow
-        default: .blue
+        switch result.severityLevel {
+        case .critical: .red
+        case .high: .red
+        case .medium: .orange
+        case .low: .yellow
         }
     }
 
     private var severityIcon: String {
-        switch result.severity.lowercased() {
-        case "high": "exclamationmark.triangle.fill"
-        case "medium": "exclamationmark.circle.fill"
-        case "low": "info.circle.fill"
-        default: "checkmark.circle.fill"
+        switch result.severityLevel {
+        case .critical: "exclamationmark.triangle.fill"
+        case .high: "exclamationmark.triangle.fill"
+        case .medium: "exclamationmark.circle.fill"
+        case .low: "info.circle.fill"
         }
     }
 
@@ -659,7 +672,7 @@ struct SettingsView: View {
 
                 VStack(alignment: .leading) {
                     Text("Analysis Depth")
-                    Slider(value: $analysisDepth, in: 1 ... 5, step: 1) {
+                    Slider(value: $analysisDepth, in: 1...5, step: 1) {
                         Text("Depth")
                     } minimumValueLabel: {
                         Text("Fast")

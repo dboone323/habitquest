@@ -4,7 +4,7 @@ import Foundation
 import SwiftUI
 
 struct CloudKitOnboardingView: View {
-    @StateObject private var cloudKit = EnhancedCloudKitManager.shared // Changed to EnhancedCloudKitManager
+    @StateObject private var cloudKit = EnhancedCloudKitManager.shared  // Changed to EnhancedCloudKitManager
     @Environment(\.dismiss) private var dismiss
     @State private var isRequestingPermission = false
     @State private var showingMergeOptions = false
@@ -17,7 +17,11 @@ struct CloudKitOnboardingView: View {
                 // Header image
                 Image(systemName: "icloud")
                     .font(.system(size: 80))
-                    .foregroundStyle(.linearGradient(colors: [.blue.opacity(0.7), .blue], startPoint: .top, endPoint: .bottom))
+                    .foregroundStyle(
+                        .linearGradient(
+                            colors: [.blue.opacity(0.7), .blue], startPoint: .top, endPoint: .bottom
+                        )
+                    )
                     .padding(.top, 30)
 
                 Text("Sync With iCloud")
@@ -26,17 +30,23 @@ struct CloudKitOnboardingView: View {
 
                 // Benefits explanation
                 VStack(alignment: .leading, spacing: 16) {
-                    benefitRow(icon: "iphone.and.arrow.forward", title: "Sync Across Devices",
-                               description: "Access your tasks, goals, and events on all your Apple devices.")
+                    benefitRow(
+                        icon: "iphone.and.arrow.forward", title: "Sync Across Devices",
+                        description:
+                            "Access your tasks, goals, and events on all your Apple devices.")
 
-                    benefitRow(icon: "lock.shield", title: "Private & Secure",
-                               description: "Your data is encrypted and protected by your Apple ID.")
+                    benefitRow(
+                        icon: "lock.shield", title: "Private & Secure",
+                        description: "Your data is encrypted and protected by your Apple ID.")
 
-                    benefitRow(icon: "arrow.clockwise.icloud", title: "Automatic Backup",
-                               description: "Never lose your important information with automatic backups.")
+                    benefitRow(
+                        icon: "arrow.clockwise.icloud", title: "Automatic Backup",
+                        description: "Never lose your important information with automatic backups."
+                    )
 
-                    benefitRow(icon: "person.crop.circle", title: "Just for You",
-                               description: "Your data is only visible to you, never shared with others.")
+                    benefitRow(
+                        icon: "person.crop.circle", title: "Just for You",
+                        description: "Your data is only visible to you, never shared with others.")
                 }
                 .padding()
                 .background(
@@ -80,16 +90,18 @@ struct CloudKitOnboardingView: View {
                 .padding(.bottom, 30)
             }
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
             .alert("This is a New Device", isPresented: $showingMergeOptions) {
                 Button("Merge from iCloud") {
                     mergeFromiCloud()
                 }
+                .accessibilityLabel("Button")
 
                 Button("Start Fresh") {
                     startFresh()
                 }
+                .accessibilityLabel("Button")
             } message: {
                 Text("Do you want to merge existing iCloud data with this device, or start fresh?")
             }

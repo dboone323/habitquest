@@ -67,16 +67,19 @@ struct StreakAnalyticsView: View {
                             Button("Export Data", systemImage: "square.and.arrow.up") {
                                 Task { await exportAnalytics(data) }
                             }
+                            .accessibilityLabel("Export Data")
 
                             Button("Share Report", systemImage: "square.and.arrow.up.fill") {
                                 shareAnalyticsReport(data)
                             }
+                            .accessibilityLabel("Share Report")
 
                             Divider()
 
                             Button("Refresh", systemImage: "arrow.clockwise") {
                                 Task { await refreshAnalytics() }
                             }
+                            .accessibilityLabel("Refresh")
                         } label: {
                             Image(systemName: "ellipsis.circle")
                         }
@@ -85,6 +88,7 @@ struct StreakAnalyticsView: View {
                         Button("Refresh") {
                             Task { await refreshAnalytics() }
                         }
+                        .accessibilityLabel("Refresh")
                         .disabled(isLoading)
                     }
                 }
@@ -163,7 +167,9 @@ struct StreakAnalyticsView: View {
     }
 
     private func overviewCards(data: StreakAnalyticsData) -> some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 2), spacing: 12) {
+        LazyVGrid(
+            columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 2), spacing: 12
+        ) {
             AnalyticsCard(
                 title: "Total Streaks",
                 value: "\(data.totalActiveStreaks)",
@@ -303,7 +309,8 @@ struct StreakAnalyticsView: View {
         }
     }
 
-    private func generateAnalyticsData(habits: [Habit], service: StreakService) async -> StreakAnalyticsData {
+    private func generateAnalyticsData(habits: [Habit], service: StreakService) async
+    -> StreakAnalyticsData {
         var streakAnalytics: [StreakAnalytics] = []
         var topPerformers: [TopPerformer] = []
 
@@ -312,12 +319,13 @@ struct StreakAnalyticsView: View {
             streakAnalytics.append(analytics)
 
             if analytics.currentStreak > 0 {
-                topPerformers.append(TopPerformer(
-                    habit: habit,
-                    currentStreak: analytics.currentStreak,
-                    longestStreak: analytics.longestStreak,
-                    consistency: analytics.streakPercentile
-                ))
+                topPerformers.append(
+                    TopPerformer(
+                        habit: habit,
+                        currentStreak: analytics.currentStreak,
+                        longestStreak: analytics.longestStreak,
+                        consistency: analytics.streakPercentile
+                    ))
             }
         }
 
@@ -346,14 +354,15 @@ struct StreakAnalyticsView: View {
         analytics.compactMap(\.currentMilestone).count
     }
 
-    private func generateStreakDistribution(_ analytics: [StreakAnalytics]) -> [StreakDistributionData] {
+    private func generateStreakDistribution(_ analytics: [StreakAnalytics])
+    -> [StreakDistributionData] {
         let streaks = analytics.map(\.currentStreak)
         let ranges = [
-            (0 ... 2, "Getting Started"),
-            (3 ... 6, "Building"),
-            (7 ... 29, "Strong"),
-            (30 ... 99, "Impressive"),
-            (100 ... Int.max, "Legendary"),
+            (0...2, "Getting Started"),
+            (3...6, "Building"),
+            (7...29, "Strong"),
+            (30...99, "Impressive"),
+            (100...Int.max, "Legendary")
         ]
 
         return ranges.map { range, label in
@@ -369,30 +378,33 @@ struct StreakAnalyticsView: View {
         let strongStreaks = analytics.filter { $0.currentStreak >= 7 }.count
 
         if strongStreaks > 0 {
-            insights.append(ConsistencyInsight(
-                title: "Strong Momentum",
-                description: "You have \(strongStreaks) habits with week+ streaks",
-                type: .positive
-            ))
+            insights.append(
+                ConsistencyInsight(
+                    title: "Strong Momentum",
+                    description: "You have \(strongStreaks) habits with week+ streaks",
+                    type: .positive
+                ))
         }
 
         let strugglingHabits = analytics.filter { $0.currentStreak == 0 }.count
         if strugglingHabits > 0 {
-            insights.append(ConsistencyInsight(
-                title: "Growth Opportunity",
-                description: "\(strugglingHabits) habits could use more attention",
-                type: .improvement
-            ))
+            insights.append(
+                ConsistencyInsight(
+                    title: "Growth Opportunity",
+                    description: "\(strugglingHabits) habits could use more attention",
+                    type: .improvement
+                ))
         }
 
         return insights
     }
 
-    private func generateWeeklyPatterns(habits: [Habit], service: StreakService) async -> [WeeklyPattern] {
+    private func generateWeeklyPatterns(habits: [Habit], service: StreakService) async
+    -> [WeeklyPattern] {
         // Simplified weekly pattern generation
         let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         return daysOfWeek.map { day in
-            WeeklyPattern(day: day, completionRate: Double.random(in: 0.3 ... 0.9)) // Placeholder
+            WeeklyPattern(day: day, completionRate: Double.random(in: 0.3...0.9))  // Placeholder
         }
     }
 

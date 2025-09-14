@@ -1,5 +1,5 @@
-import Combine
 import Foundation
+import Combine
 import OSLog
 
 // MARK: - Advanced AI Project Analyzer
@@ -20,7 +20,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     @Published var isAnalyzing: Bool = false
     @Published var analysisProgress: Double = 0.0
     @Published var projectHealth: ProjectHealth = .init()
-    @Published var riskAssessment: RiskAssessment = .init(overallRisk: 0.0, criticalRisks: [], mitigation: "No assessment available")
+    @Published var riskAssessment: RiskAssessment = .init(
+        overallRisk: 0.0, criticalRisks: [], mitigation: "No assessment available")
     @Published var recommendations: [ProjectRecommendation] = []
 
     // MARK: - Analysis Components
@@ -119,7 +120,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         let analysisIssues = predictedIssues.map { predictedIssue in
             AnalysisIssue(
                 type: mapIssueTypeToString(predictedIssue.type),
-                severity: mapConfidenceToSeverity(predictedIssue.confidence),
+                severityLevel: convertProjectSeverityToSeverityLevel(
+                    mapConfidenceToSeverityEnum(predictedIssue.confidence)),
                 message: predictedIssue.description,
                 lineNumber: predictedIssue.lineNumber,
                 line: ""
@@ -140,7 +142,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         }
 
         // Calculate confidence based on AI predictions
-        let confidence = calculateConfidence(predictedIssues: predictedIssues, improvements: improvements)
+        let confidence = calculateConfidence(
+            predictedIssues: predictedIssues, improvements: improvements)
 
         return FileAnalysisResult(
             fileName: (filePath as NSString).lastPathComponent,
@@ -171,14 +174,15 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                 // Get the predicted issues again for ProjectIssue creation
                 let predictedIssues = await learningCoordinator.predictIssues(in: filePath)
 
-                issues.append(contentsOf: predictedIssues.map { predictedIssue in
-                    ProjectIssue(
-                        type: .codeIssue(predictedIssue),
-                        severity: mapConfidenceToSeverityEnum(predictedIssue.confidence),
-                        filePath: filePath,
-                        description: predictedIssue.description
-                    )
-                })
+                issues.append(
+                    contentsOf: predictedIssues.map { predictedIssue in
+                        ProjectIssue(
+                            type: .codeIssue(predictedIssue),
+                            severity: mapConfidenceToSeverityEnum(predictedIssue.confidence),
+                            filePath: filePath,
+                            description: predictedIssue.description
+                        )
+                    })
             }
         }
 
@@ -217,21 +221,25 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             let predictedIssues = await learningCoordinator.predictIssues(in: filePath)
 
             // Apply preventive fixes for high-severity issues
-            for (index, issue) in fileAnalysis.issues.enumerated() where issue.severity == "High" {
+            for (index, issue) in fileAnalysis.issues.enumerated()
+            where issue.severityLevel == .high {
                 do {
                     let fixResult = try await fixEngine.applyAutomaticFixes(to: filePath)
                     appliedFixes.append(contentsOf: fixResult.appliedFixes)
 
                     // Use the corresponding predicted issue if available
                     if index < predictedIssues.count {
-                        preventedIssues.append(PreventedIssue(
-                            originalIssue: predictedIssues[index],
-                            preventionMethod: .automaticFix,
-                            filePath: filePath
-                        ))
+                        preventedIssues.append(
+                            PreventedIssue(
+                                originalIssue: predictedIssues[index],
+                                preventionMethod: .automaticFix,
+                                filePath: filePath
+                            ))
                     }
                 } catch {
-                    os_log("Failed to apply preventive fix: %@", log: logger, type: .error, error.localizedDescription)
+                    os_log(
+                        "Failed to apply preventive fix: %@", log: logger, type: .error,
+                        error.localizedDescription)
                 }
             }
         }
@@ -255,55 +263,62 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         }
     }
 
-    private func generateRecommendations(from results: ComprehensiveAnalysisResult) async -> [ProjectRecommendation] {
+    private func generateRecommendations(from results: ComprehensiveAnalysisResult) async
+    -> [ProjectRecommendation] {
         var recommendations: [ProjectRecommendation] = []
 
         // Architecture recommendations
         if results.architecture.score < 0.8 {
-            recommendations.append(ProjectRecommendation(
-                type: .architecture,
-                priority: .high,
-                title: "Improve Architecture Compliance",
-                description: "Architecture analysis shows patterns that could be improved for better maintainability",
-                estimatedImpact: .high,
-                estimatedEffort: .medium
-            ))
+            recommendations.append(
+                ProjectRecommendation(
+                    type: .architecture,
+                    priority: .high,
+                    title: "Improve Architecture Compliance",
+                    description:
+                        "Architecture analysis shows patterns that could be improved for better maintainability",
+                    estimatedImpact: .high,
+                    estimatedEffort: .medium
+                ))
         }
 
         // Performance recommendations
         if results.performance.score < 0.7 {
-            recommendations.append(ProjectRecommendation(
-                type: .performance,
-                priority: .medium,
-                title: "Optimize Performance",
-                description: "Performance analysis identified opportunities for optimization",
-                estimatedImpact: .medium,
-                estimatedEffort: .low
-            ))
+            recommendations.append(
+                ProjectRecommendation(
+                    type: .performance,
+                    priority: .medium,
+                    title: "Optimize Performance",
+                    description: "Performance analysis identified opportunities for optimization",
+                    estimatedImpact: .medium,
+                    estimatedEffort: .low
+                ))
         }
 
         // Security recommendations
         if !results.security.vulnerabilities.isEmpty {
-            recommendations.append(ProjectRecommendation(
-                type: .security,
-                priority: .high,
-                title: "Address Security Vulnerabilities",
-                description: "Security analysis found \(results.security.vulnerabilities.count) potential vulnerabilities",
-                estimatedImpact: .high,
-                estimatedEffort: .high
-            ))
+            recommendations.append(
+                ProjectRecommendation(
+                    type: .security,
+                    priority: .high,
+                    title: "Address Security Vulnerabilities",
+                    description:
+                        "Security analysis found \(results.security.vulnerabilities.count) potential vulnerabilities",
+                    estimatedImpact: .high,
+                    estimatedEffort: .high
+                ))
         }
 
         // Quality recommendations based on AI predictions
         if results.predictions.overallRisk > 0.6 {
-            recommendations.append(ProjectRecommendation(
-                type: .quality,
-                priority: .medium,
-                title: "Address Code Quality Issues",
-                description: "Predictive analysis indicates elevated risk of future issues",
-                estimatedImpact: .medium,
-                estimatedEffort: .medium
-            ))
+            recommendations.append(
+                ProjectRecommendation(
+                    type: .quality,
+                    priority: .medium,
+                    title: "Address Code Quality Issues",
+                    description: "Predictive analysis indicates elevated risk of future issues",
+                    estimatedImpact: .medium,
+                    estimatedEffort: .medium
+                ))
         }
 
         return recommendations.sorted { $0.priority.rawValue > $1.priority.rawValue }
@@ -337,22 +352,24 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             if let buildLog = try? String(contentsOfFile: buildLogPath, encoding: .utf8) {
                 if buildLog.contains("error:") {
                     score -= 0.3
-                    issues.append(ProjectIssue(
-                        type: .buildSystem,
-                        severity: .error,
-                        filePath: buildLogPath,
-                        description: "Build errors detected in build log"
-                    ))
+                    issues.append(
+                        ProjectIssue(
+                            type: .buildSystem,
+                            severity: .error,
+                            filePath: buildLogPath,
+                            description: "Build errors detected in build log"
+                        ))
                 }
 
                 if buildLog.contains("warning:") {
                     score -= 0.1
-                    issues.append(ProjectIssue(
-                        type: .buildSystem,
-                        severity: .warning,
-                        filePath: buildLogPath,
-                        description: "Build warnings detected in build log"
-                    ))
+                    issues.append(
+                        ProjectIssue(
+                            type: .buildSystem,
+                            severity: .warning,
+                            filePath: buildLogPath,
+                            description: "Build warnings detected in build log"
+                        ))
                 }
             }
         }
@@ -372,7 +389,9 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     }
 
     private func calculateOverallHealth(metrics: HealthMetrics) -> Double {
-        let issueRatio = metrics.totalFiles > 0 ? Double(metrics.filesWithIssues) / Double(metrics.totalFiles) : 0.0
+        let issueRatio =
+            metrics.totalFiles > 0
+            ? Double(metrics.filesWithIssues) / Double(metrics.totalFiles) : 0.0
         let healthScore = 1.0 - issueRatio
 
         return (healthScore + metrics.buildSystemHealth + metrics.dependencyHealth) / 3.0
@@ -384,17 +403,21 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             results.architecture.score,
             results.performance.score,
             results.security.score,
-            results.quality.score,
+            results.quality.score
         ]
 
         return scores.reduce(0.0, +) / Double(scores.count)
     }
 
-    private func calculateConfidence(predictedIssues: [PredictedIssue], improvements: [CodeImprovement]) -> Double {
+    private func calculateConfidence(
+        predictedIssues: [PredictedIssue], improvements: [CodeImprovement]
+    ) -> Double {
         guard !predictedIssues.isEmpty || !improvements.isEmpty else { return 1.0 }
 
-        let avgPredictionConfidence = predictedIssues.isEmpty ? 1.0 :
-            predictedIssues.reduce(0.0) { $0 + $1.confidence } / Double(predictedIssues.count)
+        let avgPredictionConfidence =
+            predictedIssues.isEmpty
+            ? 1.0
+            : predictedIssues.reduce(0.0) { $0 + $1.confidence } / Double(predictedIssues.count)
 
         // Factor in number of improvements suggested (more suggestions = more room for improvement)
         let improvementFactor = max(0.5, 1.0 - (Double(improvements.count) * 0.1))
@@ -407,7 +430,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         min(1.0, (Double(preventedCount) * 0.1) + (Double(fixesCount) * 0.05))
     }
 
-    private func mapSeverityToPriority(_ severity: CodeImprovement.Severity) -> FileRecommendation.Priority {
+    private func mapSeverityToPriority(_ severity: CodeImprovement.Severity)
+    -> FileRecommendation.Priority {
         switch severity {
         case .error: .high
         case .warning: .medium
@@ -432,6 +456,18 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             .warning
         } else {
             .info
+        }
+    }
+
+    private func convertProjectSeverityToSeverityLevel(_ severity: ProjectIssue.Severity)
+    -> SeverityLevel {
+        switch severity {
+        case .error:
+            return .critical
+        case .warning:
+            return .medium
+        case .info:
+            return .low
         }
     }
 
@@ -557,7 +593,11 @@ struct ProjectHealth {
         self.lastUpdated = Date()
     }
 
-    init(overallScore: Double, dependencyHealth: Double, architectureHealth: Double, performanceHealth: Double, securityHealth: Double, qualityHealth: Double, riskLevel: Double, lastUpdated: Date) {
+    init(
+        overallScore: Double, dependencyHealth: Double, architectureHealth: Double,
+        performanceHealth: Double, securityHealth: Double, qualityHealth: Double, riskLevel: Double,
+        lastUpdated: Date
+    ) {
         self.overallScore = overallScore
         self.dependencyHealth = dependencyHealth
         self.architectureHealth = architectureHealth
@@ -570,12 +610,17 @@ struct ProjectHealth {
 }
 
 struct ComprehensiveAnalysisResult {
-    var dependencies: DependencyAnalysisResult = .init(score: 0.0, outdatedDependencies: [], vulnerableDependencies: [], conflictingDependencies: [])
-    var architecture: ArchitectureAnalysisResult = .init(score: 0.0, patterns: [], violations: [], suggestions: [])
+    var dependencies: DependencyAnalysisResult = .init(
+        score: 0.0, outdatedDependencies: [], vulnerableDependencies: [],
+        conflictingDependencies: [])
+    var architecture: ArchitectureAnalysisResult = .init(
+        score: 0.0, patterns: [], violations: [], suggestions: [])
     var performance: PerformanceAnalysisResult = .init(score: 0.0, issues: [], optimizations: [])
-    var security: SecurityAnalysisResult = .init(score: 0.0, vulnerabilities: [], recommendations: [])
+    var security: SecurityAnalysisResult = .init(
+        score: 0.0, vulnerabilities: [], recommendations: [])
     var quality: QualityAnalysisResult = .init(score: 0.0, metrics: QualityMetrics(), issues: [])
-    var predictions: RiskAssessment = .init(overallRisk: 0.0, criticalRisks: [], mitigation: "No assessment available")
+    var predictions: RiskAssessment = .init(
+        overallRisk: 0.0, criticalRisks: [], mitigation: "No assessment available")
     var recommendations: [ProjectRecommendation] = []
     var error: Error?
 }

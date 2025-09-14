@@ -26,11 +26,7 @@ struct DataImportView: View {
                 if let fileURL = selectedFileURL {
                     selectedFileSection(fileURL)
                 } else {
-                    FileSelectionComponent(showingFilePicker: $showingFilePicker) {
-                        #if os(iOS)
-                            HapticManager.shared.lightImpact()
-                        #endif
-                    }
+                    FileSelectionComponent(showingFilePicker: $showingFilePicker)
                 }
 
                 if isImporting {
@@ -48,22 +44,31 @@ struct DataImportView: View {
             .padding()
             .navigationTitle("Import Data")
             #if os(iOS)
-                .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.large)
             #endif
-            .toolbar {
+            .toolbar(content: {
                 #if os(iOS)
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") { dismiss() }
-                    }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") { dismiss() }
+                        .accessibilityLabel("Cancel")
+                }
                 #else
-                    ToolbarItem { Button("Cancel") { dismiss() } }
+                ToolbarItem {
+                    Button("Cancel") { dismiss() }
+                        .accessibilityLabel("Cancel")
+                }
                 #endif
-            }
-            .fileImporter(isPresented: $showingFilePicker, allowedContentTypes: [.commaSeparatedText, .plainText], allowsMultipleSelection: false) { result in
+            })
+            .fileImporter(
+                isPresented: $showingFilePicker,
+                allowedContentTypes: [.commaSeparatedText, .plainText],
+                allowsMultipleSelection: false
+            ) { result in
                 handleFileSelection(result)
             }
             .alert("Import Error", isPresented: .constant(importError != nil)) {
                 Button("OK") { importError = nil }
+                    .accessibilityLabel("OK")
             } message: {
                 if let error = importError { Text(error) }
             }
@@ -89,18 +94,25 @@ struct DataImportView: View {
                                 .font(.headline)
                                 .lineLimit(1)
 
-                            if let fileSize = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize {
-                                Text("Size: \(ByteCountFormatter.string(fromByteCount: Int64(fileSize), countStyle: .file))")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                            if let fileSize = try? fileURL.resourceValues(forKeys: [.fileSizeKey])
+                                .fileSize {
+                                Text(
+                                    "Size: \(ByteCountFormatter.string(fromByteCount: Int64(fileSize), countStyle: .file))"
+                                )
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                             }
                         }
 
                         Spacer()
 
-                        Button("Change") { selectedFileURL = nil; showingFilePicker = true }
-                            .font(.caption)
-                            .foregroundColor(.blue)
+                        Button("Change") {
+                            selectedFileURL = nil
+                            showingFilePicker = true
+                        }
+                        .accessibilityLabel("Change")
+                        .font(.caption)
+                        .foregroundColor(.blue)
                     }
                     .padding()
                 )
@@ -113,13 +125,13 @@ struct DataImportView: View {
             if let url = urls.first {
                 selectedFileURL = url
                 #if os(iOS)
-                    HapticManager.shared.success()
+                HapticManager.shared.success()
                 #endif
             }
         case .failure(let error):
             importError = "Failed to select file: \(error.localizedDescription)"
             #if os(iOS)
-                HapticManager.shared.error()
+            HapticManager.shared.error()
             #endif
         }
     }
@@ -131,7 +143,7 @@ struct DataImportView: View {
         isImporting = true
         importProgress = 0
         #if os(iOS)
-            HapticManager.shared.mediumImpact()
+        HapticManager.shared.mediumImpact()
         #endif
 
         do {
@@ -142,16 +154,17 @@ struct DataImportView: View {
                 importProgress = Double(i) / 10.0
             }
 
-            let result = try await importer.importFromCSV(fileURL: fileURL)
+            let content = try String(contentsOf: fileURL, encoding: .utf8)
+            let result = try await importer.importFromCSV(content)
             importResult = result
             showingResult = true
             #if os(iOS)
-                HapticManager.shared.success()
+            HapticManager.shared.success()
             #endif
         } catch {
             importError = error.localizedDescription
             #if os(iOS)
-                HapticManager.shared.error()
+            HapticManager.shared.error()
             #endif
         }
 

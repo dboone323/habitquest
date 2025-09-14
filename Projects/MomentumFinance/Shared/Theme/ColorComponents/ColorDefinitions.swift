@@ -10,7 +10,6 @@ import SwiftUI
 
 /// Static color definitions for light and dark theme schemes
 enum ColorDefinitions {
-
     // MARK: - Background Colors
 
     static func background(_ mode: ThemeScheme) -> Color {
@@ -143,7 +142,7 @@ enum ColorDefinitions {
             Color(hex: "D81B60"), // Pink
             Color(hex: "5C6BC0"), // Indigo
             Color(hex: "607D8B"), // Blue Grey
-            Color(hex: "C5E1A5"), // Light Green
+            Color(hex: "C5E1A5") // Light Green
         ]
     }
 }

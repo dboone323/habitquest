@@ -75,7 +75,7 @@ class EnhancedAICodeGenerator: ObservableObject {
                 metadata: GenerationMetadata(
                     patternsUsed: patterns.count,
                     linesGenerated: refinedCode.components(separatedBy: .newlines).count,
-                    generationTime: 0.5 // Would be actual timing
+                    generationTime: 0.5  // Would be actual timing
                 )
             )
 
@@ -86,7 +86,8 @@ class EnhancedAICodeGenerator: ObservableObject {
             return result
 
         } catch {
-            os_log("Code generation failed: %@", log: logger, type: .error, error.localizedDescription)
+            os_log(
+                "Code generation failed: %@", log: logger, type: .error, error.localizedDescription)
             isGenerating = false
 
             return CodeGenerationResult(
@@ -100,7 +101,9 @@ class EnhancedAICodeGenerator: ObservableObject {
         }
     }
 
-    func generateFunction(name: String, parameters: [Parameter], returnType: String?, context: GenerationContext) async -> String {
+    func generateFunction(
+        name: String, parameters: [Parameter], returnType: String?, context: GenerationContext
+    ) async -> String {
         let request = CodeGenerationRequest(
             type: .function(name: name, parameters: parameters, returnType: returnType),
             context: context,
@@ -111,7 +114,9 @@ class EnhancedAICodeGenerator: ObservableObject {
         return result.generatedCode
     }
 
-    func generateClass(name: String, superclass: String?, protocols: [String], context: GenerationContext) async -> String {
+    func generateClass(
+        name: String, superclass: String?, protocols: [String], context: GenerationContext
+    ) async -> String {
         let request = CodeGenerationRequest(
             type: .class(name: name, superclass: superclass, protocols: protocols),
             context: context,
@@ -122,7 +127,9 @@ class EnhancedAICodeGenerator: ObservableObject {
         return result.generatedCode
     }
 
-    func generateSwiftUIView(name: String, properties: [Property], context: GenerationContext) async -> String {
+    func generateSwiftUIView(name: String, properties: [Property], context: GenerationContext) async
+        -> String
+    {
         let request = CodeGenerationRequest(
             type: .swiftUIView(name: name, properties: properties),
             context: context,
@@ -133,7 +140,9 @@ class EnhancedAICodeGenerator: ObservableObject {
         return result.generatedCode
     }
 
-    func generateTests(for targetClass: String, methods: [String], context: GenerationContext) async -> String {
+    func generateTests(for targetClass: String, methods: [String], context: GenerationContext) async
+        -> String
+    {
         let request = CodeGenerationRequest(
             type: .testClass(targetClass: targetClass, methods: methods),
             context: context,
@@ -189,13 +198,13 @@ class EnhancedAICodeGenerator: ObservableObject {
     }
 
     private func assessCodeQuality(_ code: String) -> Double {
-        var score = 0.5 // Base score
+        var score = 0.5  // Base score
 
         // Check for common quality indicators
         if code.contains("// MARK:") { score += 0.1 }
         if code.contains("throws") { score += 0.1 }
-        if code.contains("@") { score += 0.1 } // Property wrappers/attributes
-        if !code.contains("!") { score += 0.1 } // No force unwrapping
+        if code.contains("@") { score += 0.1 }  // Property wrappers/attributes
+        if !code.contains("!") { score += 0.1 }  // No force unwrapping
         if code.contains("async") || code.contains("await") { score += 0.1 }
 
         return min(score, 1.0)
@@ -209,30 +218,33 @@ class EnhancedAICodeGenerator: ObservableObject {
         for (index, line) in lines.enumerated() {
             // Suggest improvements based on patterns
             if line.contains("var ") && !line.contains("@") {
-                suggestions.append(ImprovementSuggestion(
-                    type: .variableImmutability,
-                    lineNumber: index + 1,
-                    description: "Consider using 'let' if this variable is not mutated",
-                    priority: .medium
-                ))
+                suggestions.append(
+                    ImprovementSuggestion(
+                        type: .variableImmutability,
+                        lineNumber: index + 1,
+                        description: "Consider using 'let' if this variable is not mutated",
+                        priority: .medium
+                    ))
             }
 
             if line.contains("print(") {
-                suggestions.append(ImprovementSuggestion(
-                    type: .logging,
-                    lineNumber: index + 1,
-                    description: "Consider using os_log for production logging",
-                    priority: .low
-                ))
+                suggestions.append(
+                    ImprovementSuggestion(
+                        type: .logging,
+                        lineNumber: index + 1,
+                        description: "Consider using os_log for production logging",
+                        priority: .low
+                    ))
             }
 
             if !line.contains("//") && line.count > 120 {
-                suggestions.append(ImprovementSuggestion(
-                    type: .lineLength,
-                    lineNumber: index + 1,
-                    description: "Line exceeds recommended length of 120 characters",
-                    priority: .medium
-                ))
+                suggestions.append(
+                    ImprovementSuggestion(
+                        type: .lineLength,
+                        lineNumber: index + 1,
+                        description: "Line exceeds recommended length of 120 characters",
+                        priority: .medium
+                    ))
             }
         }
 
@@ -283,14 +295,14 @@ class PatternLibrary {
             id: "swiftui_view",
             name: "SwiftUI View",
             template: """
-            struct {name}: View {
-                {properties}
+                struct {name}: View {
+                    {properties}
 
-                var body: some View {
-                    {body_content}
+                    var body: some View {
+                        {body_content}
+                    }
                 }
-            }
-            """,
+                """,
             confidence: 0.95,
             applicableTypes: [.swiftUIView(name: "DefaultView", properties: [])],
             architectures: [.mvvm, .mvc],
@@ -302,12 +314,14 @@ class PatternLibrary {
             id: "async_function",
             name: "Async Function",
             template: """
-            func {name}({parameters}) async throws -> {return_type} {
-                {implementation}
-            }
-            """,
+                func {name}({parameters}) async throws -> {return_type} {
+                    {implementation}
+                }
+                """,
             confidence: 0.9,
-            applicableTypes: [.function(name: "defaultFunction", parameters: [], returnType: "Void")],
+            applicableTypes: [
+                .function(name: "defaultFunction", parameters: [], returnType: "Void")
+            ],
             architectures: [.mvvm, .mvc, .viper],
             requirements: [.async]
         )
@@ -317,25 +331,24 @@ class PatternLibrary {
             id: "test_class",
             name: "XCTest Class",
             template: """
-            import XCTest
-            @testable import {module_name}
+                @testable import {module_name}
 
-            final class {name}Tests: XCTestCase {
-                var sut: {class_under_test}!
+                final class {name}Tests: XCTestCase {
+                    var sut: {class_under_test}!
 
-                override func setUp() {
-                    super.setUp()
-                    sut = {class_under_test}()
+                    override func setUp() {
+                        super.setUp()
+                        sut = {class_under_test}()
+                    }
+
+                    override func tearDown() {
+                        sut = nil
+                        super.tearDown()
+                    }
+
+                    {test_methods}
                 }
-
-                override func tearDown() {
-                    sut = nil
-                    super.tearDown()
-                }
-
-                {test_methods}
-            }
-            """,
+                """,
             confidence: 0.9,
             applicableTypes: [.testClass(targetClass: "DefaultClass", methods: [])],
             architectures: [.mvvm, .mvc, .viper],
@@ -392,7 +405,9 @@ class CodeTemplateEngine {
         // Initialize template engine
     }
 
-    func generateCode(using patterns: [GenerationPattern], context: GenerationContext) async -> String {
+    func generateCode(using patterns: [GenerationPattern], context: GenerationContext) async
+        -> String
+    {
         guard let primaryPattern = patterns.first else {
             return "// No suitable pattern found"
         }
@@ -415,12 +430,15 @@ class CodeTemplateEngine {
 
         // Replace common placeholders
         result = result.replacingOccurrences(of: "{module_name}", with: "CodingReviewer")
-        result = result.replacingOccurrences(of: "{timestamp}", with: ISO8601DateFormatter().string(from: Date()))
+        result = result.replacingOccurrences(
+            of: "{timestamp}", with: ISO8601DateFormatter().string(from: Date()))
 
         return result
     }
 
-    private func enhanceWithPattern(_ code: String, pattern: GenerationPattern, context: GenerationContext) -> String {
+    private func enhanceWithPattern(
+        _ code: String, pattern: GenerationPattern, context: GenerationContext
+    ) -> String {
         // Apply pattern enhancements
         code
     }
@@ -518,24 +536,26 @@ class QualityAssessmentEngine {
 
         // Check for force unwrapping
         if line.contains("!") && !line.contains("//") {
-            improvements.append(CodeImprovement(
-                type: .forceUnwrapping,
-                lineNumber: lineNumber,
-                severity: .warning,
-                description: "Consider using safe unwrapping instead of force unwrapping",
-                suggestion: "Replace ! with ?? or if-let binding"
-            ))
+            improvements.append(
+                CodeImprovement(
+                    type: .forceUnwrapping,
+                    lineNumber: lineNumber,
+                    severity: .warning,
+                    description: "Consider using safe unwrapping instead of force unwrapping",
+                    suggestion: "Replace ! with ?? or if-let binding"
+                ))
         }
 
         // Check for var that could be let
         if line.contains("var ") && !line.contains("@") {
-            improvements.append(CodeImprovement(
-                type: .variableImmutability,
-                lineNumber: lineNumber,
-                severity: .info,
-                description: "Consider using 'let' if this variable is not mutated",
-                suggestion: "Change 'var' to 'let' if the value doesn't change"
-            ))
+            improvements.append(
+                CodeImprovement(
+                    type: .variableImmutability,
+                    lineNumber: lineNumber,
+                    severity: .info,
+                    description: "Consider using 'let' if this variable is not mutated",
+                    suggestion: "Change 'var' to 'let' if the value doesn't change"
+                ))
         }
 
         return improvements
@@ -551,15 +571,15 @@ struct CodeGenerationRequest {
 
     var description: String {
         switch type {
-        case let .function(name, _, _):
+        case .function(let name, _, _):
             "Function: \(name)"
-        case let .class(name, _, _):
+        case .class(let name, _, _):
             "Class: \(name)"
-        case let .swiftUIView(name, _):
+        case .swiftUIView(let name, _):
             "SwiftUI View: \(name)"
-        case let .testClass(targetClass, _):
+        case .testClass(let targetClass, _):
             "Test Class for: \(targetClass)"
-        case let .documentation(_, style):
+        case .documentation(_, let style):
             "Documentation: \(style)"
         }
     }
@@ -639,7 +659,7 @@ extension GenerationType: Equatable {
     static func == (lhs: GenerationType, rhs: GenerationType) -> Bool {
         switch (lhs, rhs) {
         case (.function, .function), (.class, .class), (.swiftUIView, .swiftUIView),
-             (.testClass, .testClass), (.documentation, .documentation):
+            (.testClass, .testClass), (.documentation, .documentation):
             true
         default:
             false
@@ -655,7 +675,10 @@ struct CodeGenerationResult {
     let metadata: GenerationMetadata
     let error: Error?
 
-    init(success: Bool, generatedCode: String, confidence: Double, suggestions: [ImprovementSuggestion], metadata: GenerationMetadata, error: Error? = nil) {
+    init(
+        success: Bool, generatedCode: String, confidence: Double,
+        suggestions: [ImprovementSuggestion], metadata: GenerationMetadata, error: Error? = nil
+    ) {
         self.success = success
         self.generatedCode = generatedCode
         self.confidence = confidence
@@ -707,7 +730,9 @@ struct CodeImprovement {
 extension AILearningCoordinator {
     func recordGenerationSuccess(_ request: CodeGenerationRequest, _ result: String) async {
         // Record successful generation for learning
-        os_log("Recording successful code generation", log: OSLog(subsystem: "CodingReviewer", category: "AILearning"))
+        os_log(
+            "Recording successful code generation",
+            log: OSLog(subsystem: "CodingReviewer", category: "AILearning"))
         // Implementation would store generation patterns for future learning
     }
 }

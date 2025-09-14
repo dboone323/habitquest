@@ -2,8 +2,8 @@ import Foundation
 import SwiftUI
 
 struct AddCalendarEventView: View {
-    @Environment(\.dismiss) var dismiss // Use dismiss environment
-    @Binding var events: [CalendarEvent] // Assumes using model from PlannerApp/Models/
+    @Environment(\.dismiss) var dismiss  // Use dismiss environment
+    @Binding var events: [CalendarEvent]  // Assumes using model from PlannerApp/Models/
 
     @State private var title = ""
     @State private var date = Date()
@@ -25,8 +25,9 @@ struct AddCalendarEventView: View {
                     #endif
                     dismiss()
                 }
+                .accessibilityLabel("Button")
                 #if os(iOS)
-                .buttonStyle(.iOSSecondary)
+                    .buttonStyle(.iOSSecondary)
                 #endif
                 .foregroundColor(.blue)
 
@@ -45,8 +46,9 @@ struct AddCalendarEventView: View {
                     saveEvent()
                     dismiss()
                 }
+                .accessibilityLabel("Button")
                 #if os(iOS)
-                .buttonStyle(.iOSPrimary)
+                    .buttonStyle(.iOSPrimary)
                 #endif
                 .disabled(!isTitleValid)
                 .foregroundColor(isTitleValid ? .blue : .gray)
@@ -58,49 +60,54 @@ struct AddCalendarEventView: View {
                 .background(Color(.systemBackground))
             #endif
             #if os(iOS)
-            .iOSEnhancedTouchTarget()
+                .iOSEnhancedTouchTarget()
             #endif
 
             Form {
-                TextField("Event Title", text: $title)
+                TextField("Event Title", text: $title).accessibilityLabel("Text Field")
                     .focused($isTitleFocused)
-                #if os(iOS)
-                    .textInputAutocapitalization(.words)
-                    .submitLabel(.done)
-                    .onSubmit {
-                        isTitleFocused = false
-                    }
-                #endif
-                DatePicker("Event Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                    #if os(iOS)
+                        .textInputAutocapitalization(.words)
+                        .submitLabel(.done)
+                        .onSubmit {
+                            isTitleFocused = false
+                        }
+                    #endif
+                DatePicker(
+                    "Event Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
             }
             #if os(iOS)
-            .iOSKeyboardDismiss()
-            .toolbar {
-                ToolbarItem(placement: .keyboard) {
-                    HStack {
-                        Spacer()
-                        Button("Done") {
-                            isTitleFocused = false
-                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                .iOSKeyboardDismiss()
+                .toolbar {
+                    ToolbarItem(placement: .keyboard) {
+                        HStack {
+                            Spacer()
+                            Button("Done") {
+                                isTitleFocused = false
+                                UIApplication.shared.sendAction(
+                                    #selector(UIResponder.resignFirstResponder), to: nil, from: nil,
+                                    for: nil)
+                            }
+                            .accessibilityLabel("Button")
+                            .buttonStyle(.iOSPrimary)
+                            .foregroundColor(.blue)
+                            .font(.body.weight(.semibold))
                         }
-                        .buttonStyle(.iOSPrimary)
-                        .foregroundColor(.blue)
-                        .font(.body.weight(.semibold))
                     }
                 }
-            }
             #endif
         }
         #if os(macOS)
-        .frame(minWidth: 500, minHeight: 400)
+            .frame(minWidth: 500, minHeight: 400)
         #else
-        .iOSPopupOptimizations()
+            .iOSPopupOptimizations()
         #endif
     }
 
     private func saveEvent() {
-        let newEvent = CalendarEvent(title: title.trimmingCharacters(in: .whitespacesAndNewlines),
-                                     date: date)
+        let newEvent = CalendarEvent(
+            title: title.trimmingCharacters(in: .whitespacesAndNewlines),
+            date: date)
         events.append(newEvent)
 
         // Save to persistent storage via data manager

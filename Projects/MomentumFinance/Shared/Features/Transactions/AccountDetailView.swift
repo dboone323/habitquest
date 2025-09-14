@@ -72,7 +72,7 @@ struct AccountDetailView: View {
                             .background(
                                 Circle()
                                     .fill(Color.blue.opacity(0.2)),
-                            )
+                                )
 
                         Text(account.name)
                             .font(.title)
@@ -94,7 +94,7 @@ struct AccountDetailView: View {
                             title: "Income",
                             value: formattedCurrency(incomeSummary),
                             color: .green,
-                        )
+                            )
 
                         Divider()
 
@@ -102,7 +102,7 @@ struct AccountDetailView: View {
                             title: "Expenses",
                             value: formattedCurrency(expenseSummary),
                             color: .red,
-                        )
+                            )
                     }
                     .padding(.horizontal)
                 }
@@ -111,7 +111,7 @@ struct AccountDetailView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(backgroundColorForPlatform())
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                )
+                    )
 
                 // Time Filter
                 Picker("Time Range", selection: $timeRange) {
@@ -135,7 +135,7 @@ struct AccountDetailView: View {
                             systemImage: "chart.line.downtrend.xyaxis",
                             description: Text(
                                 "No transaction data available for the selected time period."),
-                        )
+                            )
                         .frame(height: 200)
                     } else {
                         ActivityChartView(transactions: filteredTransactions)
@@ -147,7 +147,7 @@ struct AccountDetailView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(backgroundColorForPlatform())
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                )
+                    )
 
                 // Transactions List
                 VStack(alignment: .leading, spacing: 12) {
@@ -173,12 +173,12 @@ struct AccountDetailView: View {
                             systemImage: "list.bullet",
                             description: Text(
                                 "No transactions in this account for the selected time period."),
-                        )
+                            )
                         .frame(height: 100)
                     } else {
                         ForEach(filteredTransactions.prefix(5)) { transaction in
-                            Features.Transactions.TransactionRowView(transaction: transaction, onTapped: {})
-                                .padding(.horizontal)
+                            TransactionRowView(transaction: transaction, onTap: {})
+                                .padding(.horizontal, 16)
                         }
 
                         if filteredTransactions.count > 5 {
@@ -196,7 +196,7 @@ struct AccountDetailView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(backgroundColorForPlatform())
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                )
+                    )
             }
             .padding()
         }
@@ -225,7 +225,9 @@ struct AccountDetailView: View {
             }
         }
         .sheet(isPresented: $showingAddTransaction) {
-            Features.Transactions.AddTransactionView(categories: [], accounts: [account])
+            // TODO: Implement AddTransactionView
+            Text("Add Transaction View - Coming Soon")
+                .padding()
         }
     }
 
@@ -250,9 +252,9 @@ struct AccountDetailView: View {
 
     private func backgroundColorForPlatform() -> Color {
         #if os(iOS)
-            return Color(UIColor.systemBackground)
+        return Color(UIColor.systemBackground)
         #else
-            return Color(NSColor.controlBackgroundColor)
+        return Color(NSColor.controlBackgroundColor)
         #endif
     }
 }
@@ -338,7 +340,7 @@ struct ActivityChartView: View {
                     x: .value("Day", data.day),
                     y: .value("Income", data.income),
                     series: .value("Type", "Income"),
-                )
+                    )
                 .foregroundStyle(.green)
                 .symbol(Circle().strokeBorder(lineWidth: 2))
                 .symbolSize(30)
@@ -347,7 +349,7 @@ struct ActivityChartView: View {
                     x: .value("Day", data.day),
                     y: .value("Expense", data.expense),
                     series: .value("Type", "Expense"),
-                )
+                    )
                 .foregroundStyle(.red)
                 .symbol(Circle().strokeBorder(lineWidth: 2))
                 .symbolSize(30)

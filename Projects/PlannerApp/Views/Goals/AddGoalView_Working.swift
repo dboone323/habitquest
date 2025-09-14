@@ -23,7 +23,7 @@ struct AddGoalView: View {
         NavigationView {
             Form {
                 Section("Goal Details") {
-                    TextField("Goal Title", text: $title)
+                    TextField("Goal Title", text: $title).accessibilityLabel("Text Field")
                         .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.primaryFontName, size: 16))
                         .foregroundColor(themeManager.currentTheme.primaryTextColor)
 
@@ -66,14 +66,14 @@ struct AddGoalView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("Cancel").accessibilityLabel("Button") {
                         dismiss()
                     }
                     .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button("Save").accessibilityLabel("Button") {
                         saveGoal()
                         dismiss()
                     }

@@ -3,40 +3,40 @@ import SwiftData
 
 /// Represents a single habit or "quest" that the user wants to track
 @Model
-final class Habit {
+public final class Habit {
     /// Unique identifier for the habit
-    var id: UUID
+    public var id: UUID
 
     /// Display name of the habit
-    var name: String
+    public var name: String
 
     /// Detailed description of what the habit involves
-    var habitDescription: String
+    public var habitDescription: String
 
     /// How often this habit should be completed
-    var frequency: HabitFrequency
+    public var frequency: HabitFrequency
 
     /// When this habit was first created
-    var creationDate: Date
+    public var creationDate: Date
 
     /// Experience points awarded when this habit is completed
-    var xpValue: Int
+    public var xpValue: Int
 
     /// Current consecutive completion streak for this habit
-    var streak: Int
+    public var streak: Int
 
     /// Indicates if the habit is currently active
-    var isActive: Bool
+    public var isActive: Bool
 
     /// Category of the habit (e.g., health, fitness, learning)
-    var category: HabitCategory
+    public var category: HabitCategory
 
     /// Difficulty level of the habit
-    var difficulty: HabitDifficulty
+    public var difficulty: HabitDifficulty
 
     /// All completion records for this habit (one-to-many relationship)
     @Relationship(deleteRule: .cascade, inverse: \HabitLog.habit)
-    var logs: [HabitLog] = []
+    public var logs: [HabitLog] = []
 
     /// Initialize a new habit
     /// - Parameters:
@@ -68,7 +68,9 @@ final class Habit {
 
     /// Check if habit was completed today
     var isCompletedToday: Bool {
-        guard let todaysLog = logs.first(where: { Calendar.current.isDateInToday($0.completionDate) }) else {
+        guard
+            let todaysLog = logs.first(where: { Calendar.current.isDateInToday($0.completionDate) })
+        else {
             return false
         }
         return todaysLog.isCompleted
@@ -76,23 +78,24 @@ final class Habit {
 
     /// Get completion rate for the last 30 days
     var completionRate: Double {
-        let thirtyDaysAgo = Calendar.current.date(
-            byAdding: .day,
-            value: -30,
-            to: Date()
-        ) ?? Date()
+        let thirtyDaysAgo =
+            Calendar.current.date(
+                byAdding: .day,
+                value: -30,
+                to: Date()
+            ) ?? Date()
 
         let recentLogs = logs.filter { $0.completionDate >= thirtyDaysAgo }
 
         guard !recentLogs.isEmpty else { return 0.0 }
 
-        let completedCount = recentLogs.filter(\.isCompleted).count
+        let completedCount = recentLogs.filter { $0.isCompleted }.count
         return Double(completedCount) / Double(recentLogs.count)
     }
 }
 
 /// Defines how frequently a habit should be completed
-enum HabitFrequency: String, CaseIterable, Codable {
+public enum HabitFrequency: String, CaseIterable, Codable {
     case daily
     case weekly
     case custom
@@ -104,7 +107,7 @@ enum HabitFrequency: String, CaseIterable, Codable {
 }
 
 /// Defines categories for habits
-enum HabitCategory: String, CaseIterable, Codable {
+public enum HabitCategory: String, CaseIterable, Codable {
     case health
     case fitness
     case learning
@@ -144,7 +147,7 @@ enum HabitCategory: String, CaseIterable, Codable {
 }
 
 /// Defines difficulty levels for habits
-enum HabitDifficulty: String, CaseIterable, Codable {
+public enum HabitDifficulty: String, CaseIterable, Codable {
     case easy
     case medium
     case hard

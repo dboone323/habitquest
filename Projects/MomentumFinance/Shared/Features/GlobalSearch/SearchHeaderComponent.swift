@@ -17,7 +17,7 @@ public struct SearchHeaderComponent: View {
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.secondary)
-                TextField("Search...", text: $searchText)
+                TextField("Search...", text: $searchText).accessibilityLabel("Text Field")
                     .textFieldStyle(.plain)
                     .onChange(of: searchText) { _ in
                         onSearchChanged?()

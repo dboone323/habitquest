@@ -3,8 +3,7 @@ import Foundation
 @MainActor
 extension FinancialIntelligenceService {
     func generateForecasts(transactions: [FinancialTransaction], accounts: [FinancialAccount])
-        -> [FinancialInsight]
-    {
+    -> [FinancialInsight] {
         var insights: [FinancialInsight] = []
 
         // Analyze cash flow trend
@@ -40,8 +39,7 @@ extension FinancialIntelligenceService {
                 var forecastLabels = lastMonths
 
                 if let lastDate = sortedMonths.last?.0,
-                   let nextMonth = calendar.date(byAdding: .month, value: 1, to: lastDate)
-                {
+                   let nextMonth = calendar.date(byAdding: .month, value: 1, to: lastDate) {
                     forecastLabels.append(fi_formatMonthAbbrev(nextMonth))
                 }
 
@@ -89,7 +87,7 @@ extension FinancialIntelligenceService {
         // We need at least 3 months of data for a meaningful forecast
         guard monthlyTransactions.count >= 3 else { return nil }
 
-        let sortedMonths = monthlyTransactions.sorted { (lhs, rhs) in
+        let sortedMonths = monthlyTransactions.sorted { lhs, rhs in
             guard let lhsKey = lhs.key, let rhsKey = rhs.key else { return false }
             return lhsKey < rhsKey
         }

@@ -8,25 +8,25 @@ struct SimpleDashboardView: View {
     @Environment(\.modelContext)
     private var modelContext
     #if canImport(SwiftData)
-        #if canImport(SwiftData)
-            #if canImport(SwiftData)
-                private var accounts: [FinancialAccount] = []
-                private var subscriptions: [Subscription] = []
-                private var budgets: [Budget] = []
-            #else
-                private var accounts: [FinancialAccount] = []
-                private var subscriptions: [Subscription] = []
-                private var budgets: [Budget] = []
-            #endif
-        #else
-            private var accounts: [FinancialAccount] = []
-            private var subscriptions: [Subscription] = []
-            private var budgets: [Budget] = []
-        #endif
+    #if canImport(SwiftData)
+    #if canImport(SwiftData)
+    private var accounts: [FinancialAccount] = []
+    private var subscriptions: [Subscription] = []
+    private var budgets: [Budget] = []
     #else
-        private var accounts: [FinancialAccount] = []
-        private var subscriptions: [Subscription] = []
-        private var budgets: [Budget] = []
+    private var accounts: [FinancialAccount] = []
+    private var subscriptions: [Subscription] = []
+    private var budgets: [Budget] = []
+    #endif
+    #else
+    private var accounts: [FinancialAccount] = []
+    private var subscriptions: [Subscription] = []
+    private var budgets: [Budget] = []
+    #endif
+    #else
+    private var accounts: [FinancialAccount] = []
+    private var subscriptions: [Subscription] = []
+    private var budgets: [Budget] = []
     #endif
 
     var body: some View {

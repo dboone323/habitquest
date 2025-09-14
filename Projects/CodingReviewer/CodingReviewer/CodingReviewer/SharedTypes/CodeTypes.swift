@@ -15,21 +15,7 @@ import Foundation
 
 // MARK: - Quality and Analysis Types
 
-enum Severity: String, CaseIterable, Codable {
-    case info = "Info"
-    case warning = "Warning"
-    case error = "Error"
-    case critical = "Critical"
-
-    var systemImageName: String {
-        switch self {
-        case .info: "info.circle"
-        case .warning: "exclamationmark.triangle"
-        case .error: "xmark.circle"
-        case .critical: "exclamationmark.octagon"
-        }
-    }
-}
+// Severity enum removed - using SeverityLevel from UnifiedDataModels.swift
 
 enum QualityLevel: String, CaseIterable, Codable {
     case excellent = "Excellent"

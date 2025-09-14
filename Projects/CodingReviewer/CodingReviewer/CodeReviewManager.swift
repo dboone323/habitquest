@@ -1,3 +1,6 @@
+import Foundation
+import Combine
+
 //
 //  CodeReviewManager.swift
 //  CodingReviewer
@@ -5,26 +8,37 @@
 //  Created by Quantum Automation on 2025-08-29.
 //
 
-import Combine
-import Foundation
-
 // MARK: - Code Review Manager
 
 /// Manages code review items using SharedArchitecture patterns
 @MainActor
-class CodeReviewManager: BaseListViewModel<CodeReviewItem> {
+class CodeReviewManager: ObservableObject {
 
     // MARK: - Properties
 
+    @Published var items: [CodeReviewItem] = []
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String?
+    @Published var searchText: String = ""
+
     @Published private(set) var currentReviewIndex: Int = 0
-    @Published private(set) var reviewStatistics: ReviewStatistics = .init()
+    @Published private(set) var reviewStatistics: ReviewStatistics = .init(
+        totalItems: 0,
+        completedItems: 0,
+        inProgressItems: 0,
+        pendingItems: 0,
+        blockedItems: 0,
+        highPriorityItems: 0,
+        mediumPriorityItems: 0,
+        lowPriorityItems: 0,
+        completionRate: 0.0
+    )
 
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Initialization
 
-    override init() {
-        super.init()
+    init() {
         setupBindings()
         Task {
             await loadItems()
@@ -89,24 +103,24 @@ class CodeReviewManager: BaseListViewModel<CodeReviewItem> {
 
     // MARK: - BaseListViewModel Overrides
 
-    override var filteredItems: [CodeReviewItem] {
+    var filteredItems: [CodeReviewItem] {
         if searchText.isEmpty {
             items
         } else {
             items.filter { item in
-                item.title.localizedCaseInsensitiveContains(searchText) ||
-                    item.description.localizedCaseInsensitiveContains(searchText)
+                item.title.localizedCaseInsensitiveContains(searchText)
+                    || item.description.localizedCaseInsensitiveContains(searchText)
             }
         }
     }
 
-    override func loadItems() async {
+    func loadItems() async {
         isLoading = true
         errorMessage = nil
 
         do {
             // Simulate async loading (replace with actual data service)
-            try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+            try await Task.sleep(nanoseconds: 500_000_000)  // 0.5 seconds
 
             if items.isEmpty {
                 items = loadSampleData()
@@ -179,7 +193,7 @@ class CodeReviewManager: BaseListViewModel<CodeReviewItem> {
                 status: .inProgress,
                 createdDate: Date().addingTimeInterval(-345_600),
                 updatedDate: Date()
-            ),
+            )
         ]
     }
 

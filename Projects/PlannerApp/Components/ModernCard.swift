@@ -94,6 +94,7 @@ struct ModernButton: View {
                 .frame(height: size.height)
                 .padding(.horizontal, size.padding)
         }
+        .accessibilityLabel("Button")
         .background(backgroundColor)
         .cornerRadius(12)
         .disabled(isDisabled)
@@ -137,7 +138,7 @@ struct ModernButton: View {
 
 // Progress indicator component
 struct ProgressBar: View {
-    let progress: Double // 0.0 to 1.0
+    let progress: Double  // 0.0 to 1.0
     @EnvironmentObject var themeManager: ThemeManager
 
     var height: CGFloat = 8
@@ -187,10 +188,10 @@ struct ModernTextField: View {
             if isSecure {
                 SecureField(placeholder, text: $text)
             } else {
-                TextField(placeholder, text: $text)
-                #if os(iOS)
-                    .keyboardType(keyboardType)
-                #endif
+                TextField(placeholder, text: $text).accessibilityLabel("Text Field")
+                    #if os(iOS)
+                        .keyboardType(keyboardType)
+                    #endif
             }
         }
         .padding()
@@ -199,7 +200,9 @@ struct ModernTextField: View {
                 .fill(themeManager.currentTheme.secondaryBackgroundColor)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(themeManager.currentTheme.secondaryAccentColor.opacity(0.3), lineWidth: 1)
+                        .stroke(
+                            themeManager.currentTheme.secondaryAccentColor.opacity(0.3),
+                            lineWidth: 1)
                 )
         )
         .foregroundColor(themeManager.currentTheme.primaryTextColor)
@@ -217,12 +220,9 @@ struct ModernTextField: View {
             }
         }
 
-        ModernButton(title: "Primary Button") {}
+        ModernButton(title: "Primary Button", action: {})
 
-        ModernButton(title: "Secondary Button") {}
-            .onAppear {
-                // Can't directly modify in preview, but showing usage
-            }
+        ModernButton(title: "Secondary Button", action: {})
 
         ProgressBar(progress: 0.7, showPercentage: true)
 

@@ -11,10 +11,10 @@ struct StreakVisualizationView: View {
     @State private var flameAnimation: Bool = false
 
     enum DisplayMode {
-        case compact // Small flame icon with count
-        case detailed // Full stats with progress
-        case heatMap // Calendar-style heat map
-        case milestone // Focus on milestone progress
+        case compact  // Small flame icon with count
+        case detailed  // Full stats with progress
+        case heatMap  // Calendar-style heat map
+        case milestone  // Focus on milestone progress
     }
 
     var body: some View {
@@ -46,7 +46,9 @@ struct StreakVisualizationView: View {
         .background(streakColor.opacity(0.1))
         .cornerRadius(12)
         .scaleEffect(flameAnimation ? 1.1 : 1.0)
-        .animation(.easeInOut(duration: 0.6).repeatForever(autoreverses: true), value: flameAnimation)
+        .animation(
+            .easeInOut(duration: 0.6).repeatForever(autoreverses: true), value: flameAnimation
+        )
         .onAppear {
             if analytics.currentStreak > 0 {
                 flameAnimation = true
@@ -135,11 +137,13 @@ struct StreakVisualizationView: View {
                 .foregroundColor(.secondary)
 
             // This would be populated with actual streak data
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 2), count: 7), spacing: 2) {
-                ForEach(0 ..< 30, id: \.self) { day in
+            LazyVGrid(
+                columns: Array(repeating: GridItem(.flexible(), spacing: 2), count: 7), spacing: 2
+            ) {
+                ForEach(0..<30, id: \.self) { day in
                     HeatMapDay(
                         date: Date().addingTimeInterval(-Double(day) * 86400),
-                        intensity: Double.random(in: 0 ... 1),
+                        intensity: Double.random(in: 0...1),
                         isToday: day == 0
                     )
                 }
@@ -189,9 +193,11 @@ struct StreakVisualizationView: View {
                     ProgressView(value: analytics.progressToNextMilestone)
                         .progressViewStyle(LinearProgressViewStyle(tint: streakColor))
 
-                    Text("\(nextMilestone.streakCount - analytics.currentStreak) days to \(nextMilestone.title)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    Text(
+                        "\(nextMilestone.streakCount - analytics.currentStreak) days to \(nextMilestone.title)"
+                    )
+                    .font(.caption)
+                    .foregroundColor(.secondary)
                 }
             }
         }
@@ -204,7 +210,9 @@ struct StreakVisualizationView: View {
                         .stroke(streakColor.opacity(0.3), lineWidth: 1)
                 )
         )
-        .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: flameAnimation)
+        .animation(
+            .easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: flameAnimation
+        )
         .onAppear {
             if analytics.currentStreak > 0 {
                 flameAnimation = true
@@ -227,11 +235,11 @@ struct StreakVisualizationView: View {
         switch analytics.currentStreak {
         case 0:
             .gray
-        case 1 ... 6:
+        case 1...6:
             .orange
-        case 7 ... 29:
+        case 7...29:
             .red
-        case 30 ... 99:
+        case 30...99:
             .purple
         default:
             .blue
@@ -302,6 +310,7 @@ struct StreakCelebrationView: View {
                 Button("Continue") {
                     dismissCelebration()
                 }
+                .accessibilityLabel("Button")
                 .padding(.horizontal, 30)
                 .padding(.vertical, 12)
                 .background(Color.white)
@@ -312,11 +321,12 @@ struct StreakCelebrationView: View {
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(LinearGradient(
-                        gradient: Gradient(colors: [.purple, .blue]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ))
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: [.purple, .blue]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ))
             )
             .padding()
         }
@@ -420,9 +430,12 @@ extension DateFormatter {
     )
 
     VStack(spacing: 20) {
-        StreakVisualizationView(habit: sampleHabit, analytics: sampleAnalytics, displayMode: .compact)
-        StreakVisualizationView(habit: sampleHabit, analytics: sampleAnalytics, displayMode: .detailed)
-        StreakVisualizationView(habit: sampleHabit, analytics: sampleAnalytics, displayMode: .milestone)
+        StreakVisualizationView(
+            habit: sampleHabit, analytics: sampleAnalytics, displayMode: .compact)
+        StreakVisualizationView(
+            habit: sampleHabit, analytics: sampleAnalytics, displayMode: .detailed)
+        StreakVisualizationView(
+            habit: sampleHabit, analytics: sampleAnalytics, displayMode: .milestone)
     }
     .padding()
 }

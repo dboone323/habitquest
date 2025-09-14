@@ -1,6 +1,6 @@
 import Foundation
-import os
 import OSLog
+import os
 
 //
 //  ThemePersistence.swift
@@ -27,8 +27,7 @@ enum ThemePersistence {
 
         // If we have a saved value, try to create a ThemeMode from it
         if let savedValue,
-           let mode = ThemeMode(rawValue: savedValue)
-        {
+           let mode = ThemeMode(rawValue: savedValue) {
             os_log("Loaded saved theme preference: %@", log: .default, type: .info, mode.rawValue)
             return mode
         }

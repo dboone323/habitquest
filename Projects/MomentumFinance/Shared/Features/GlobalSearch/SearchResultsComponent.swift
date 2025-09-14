@@ -44,10 +44,10 @@ private struct SearchResultRow: View {
     var onResultTapped: ((SearchResult) -> Void)?
 
     var body: some View {
-        Button(action: { onResultTapped?(result) }) {
+        Button(action: { onResultTapped?(result).accessibilityLabel("Button") }) {
             HStack(spacing: 12) {
                 // Icon based on type
-                Image(systemName: iconForType(result.type))
+                Image(systemName: result.iconName)
                     .foregroundColor(.blue)
                     .frame(width: 24, height: 24)
 
@@ -79,15 +79,5 @@ private struct SearchResultRow: View {
             .padding(.vertical, 8)
         }
         .buttonStyle(.plain)
-    }
-
-    private func iconForType(_ type: SearchFilter) -> String {
-        switch type {
-        case .accounts: "creditcard"
-        case .transactions: "arrow.left.arrow.right"
-        case .subscriptions: "calendar"
-        case .budgets: "chart.pie"
-        case .all: "magnifyingglass"
-        }
     }
 }

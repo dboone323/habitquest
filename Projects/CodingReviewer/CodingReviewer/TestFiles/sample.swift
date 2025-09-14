@@ -1,4 +1,3 @@
-
 // Sample Swift file for testing
 class TestClass {
     var name: String

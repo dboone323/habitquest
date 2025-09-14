@@ -10,121 +10,19 @@ import Combine
 import CryptoKit
 import SwiftUI
 
-// Note: CodeLanguage enum is now defined in Services/LanguageDetectionService.swift
-// Importing it here for compatibility during transition
-
-enum CodeLanguage: String, CaseIterable, Codable {
-    case swift
-    case python
-    case javascript
-    case typescript
-    case java
-    case cpp
-    case go
-    case rust
-    case html
-    case css
-    case xml
-    case json
-    case yaml
-    case markdown
-    case kotlin
-    case csharp
-    case c
-    case php
-    case ruby
-    case unknown
-}
-
-extension CodeLanguage {
-    var displayName: String {
-        switch self {
-        case .swift: "Swift"
-        case .python: "Python"
-        case .javascript: "JavaScript"
-        case .typescript: "TypeScript"
-        case .java: "Java"
-        case .kotlin: "Kotlin"
-        case .csharp: "C#"
-        case .cpp: "C++"
-        case .c: "C"
-        case .go: "Go"
-        case .rust: "Rust"
-        case .php: "PHP"
-        case .ruby: "Ruby"
-        case .html: "HTML"
-        case .css: "CSS"
-        case .xml: "XML"
-        case .json: "JSON"
-        case .yaml: "YAML"
-        case .markdown: "Markdown"
-        case .unknown: "Unknown"
-        }
-    }
-
-    var iconName: String {
-        switch self {
-        case .swift: "swift"
-        case .python: "snake.circle"
-        case .javascript, .typescript: "js.circle"
-        case .java, .kotlin: "cup.and.saucer"
-        case .csharp: "sharp.circle"
-        case .cpp, .c: "c.circle"
-        case .go: "goforward"
-        case .rust: "gear"
-        case .php: "network"
-        case .ruby: "gem"
-        case .html: "globe"
-        case .css: "paintbrush"
-        case .xml: "doc.text"
-        case .json: "curlybraces"
-        case .yaml: "list.bullet"
-        case .markdown: "doc.richtext"
-        case .unknown: "questionmark.circle"
-        }
-    }
-}
-
-struct CodeFile: Identifiable, Hashable, Codable {
-    let id: UUID
-    let name: String
-    let path: String
-    let content: String
-    let language: CodeLanguage
-    let size: Int
-    let lastModified: Date
-    let checksum: String
-
-    init(name: String, path: String, content: String, language: CodeLanguage) {
-        self.id = UUID()
-        self.name = name
-        self.path = path
-        self.content = content
-        self.language = language
-        self.size = content.utf8.count
-        self.lastModified = Date()
-        self.checksum = content.data(using: .utf8)?.sha256 ?? ""
-    }
-
-    var displaySize: String {
-        ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)
-    }
-
-    var fileExtension: String {
-        URL(fileURLWithPath: name).pathExtension
-    }
-}
-
 // Enhanced structure to preserve analysis data while remaining Codable
 struct EnhancedAnalysisItem: Codable {
     let message: String
-    let severity: String
+    let severityLevel: SeverityLevel
     let lineNumber: Int?
     let type: String
 
-    init(message: String, severity: String, lineNumber: Int? = nil, type: String = "quality") {
+    init(
+        message: String, severityLevel: SeverityLevel, lineNumber: Int? = nil,
+        type: String = "quality"
+    ) {
         self.message = message
-        self.severity = severity
+        self.severityLevel = severityLevel
         self.lineNumber = lineNumber
         self.type = type
     }
@@ -133,12 +31,15 @@ struct EnhancedAnalysisItem: Codable {
 struct FileAnalysisRecord: Identifiable, Codable {
     let id: UUID
     let file: CodeFile
-    let analysisResults: [EnhancedAnalysisItem] // Rich analysis data
-    let aiAnalysisResult: String? // AI explanation
+    let analysisResults: [EnhancedAnalysisItem]  // Rich analysis data
+    let aiAnalysisResult: String?  // AI explanation
     let timestamp: Date
     let duration: TimeInterval
 
-    init(file: CodeFile, analysisResults: [EnhancedAnalysisItem], aiAnalysisResult: String? = nil, duration: TimeInterval) {
+    init(
+        file: CodeFile, analysisResults: [EnhancedAnalysisItem], aiAnalysisResult: String? = nil,
+        duration: TimeInterval
+    ) {
         self.id = UUID()
         self.file = file
         self.analysisResults = analysisResults
@@ -181,10 +82,10 @@ extension FileAnalysisRecord {
     var results: [AnalysisResult] {
         analysisResults.map { item in
             AnalysisResult(
-                type: .quality,
+                type: item.type,
+                severityLevel: mapSeverity(item.severityLevel),
                 message: item.message,
-                line: item.lineNumber,
-                severity: mapSeverity(item.severity)
+                lineNumber: item.lineNumber ?? 0
             )
         }
     }
@@ -215,13 +116,8 @@ extension FileAnalysisRecord {
 
     var hasAIAnalysis: Bool { aiAnalysisResult != nil }
 
-    private func mapSeverity(_ severity: String) -> AnalysisResult.Severity {
-        switch severity.lowercased() {
-        case "critical": .critical
-        case "high": .high
-        case "medium": .medium
-        default: .low
-        }
+    private func mapSeverity(_ severity: SeverityLevel) -> SeverityLevel {
+        return severity
     }
 }
 
@@ -245,7 +141,7 @@ struct ProjectStructure: Identifiable {
     let folders: [String]
     let totalSize: Int
     let fileCount: Int
-    let languageDistribution: [String: Int] // Simplified for Codable compliance
+    let languageDistribution: [String: Int]  // Simplified for Codable compliance
     let createdAt: Date
 
     init(name: String, rootPath: String, files: [CodeFile]) {
@@ -253,7 +149,9 @@ struct ProjectStructure: Identifiable {
         self.name = name
         self.rootPath = rootPath
         self.files = files
-        self.folders = Array(Set(files.compactMap { URL(fileURLWithPath: $0.path).deletingLastPathComponent().path }))
+        self.folders = Array(
+            Set(files.compactMap { URL(fileURLWithPath: $0.path).deletingLastPathComponent().path })
+        )
         self.totalSize = files.reduce(0) { $0 + $1.size }
         self.fileCount = files.count
         // Convert CodeLanguage to string for Codable compliance
@@ -366,9 +264,9 @@ final class FileManagerService: ObservableObject {
     // MARK: - Extracted Services
 
     private let fileUploadManager = FileUploadManager()
-    // TODO: Add FileAnalysisService integration in Phase 4 continuation
+    /// Add FileAnalysisService integration in Phase 4 continuation
     // private let fileAnalysisService = FileAnalysisService()
-    // TODO: Add language detection service integration
+    /// Add language detection service integration
     // private let languageDetectionService = LanguageDetectionService()
 
     init() {
@@ -428,7 +326,9 @@ final class FileManagerService: ObservableObject {
             warnings: uploadResult.warnings
         )
 
-        logger.log("📁 Upload completed via FileUploadManager: \(successfulFiles.count) successful, \(uploadResult.failedFiles.count) failed")
+        logger.log(
+            "📁 Upload completed via FileUploadManager: \(successfulFiles.count) successful, \(uploadResult.failedFiles.count) failed"
+        )
 
         return result
     }
@@ -460,16 +360,17 @@ final class FileManagerService: ObservableObject {
         case "php": return .php
         case "rb": return .ruby
         // Map additional types to closest equivalent
-        case "m", "mm": return .c // Objective-C to C
-        case "sh", "bash", "zsh", "fish": return .unknown // Shell scripts
-        case "ps1", "bat": return .unknown // Windows scripts
-        case "scala": return .java // Scala to Java (similar syntax)
+        case "m", "mm": return .c  // Objective-C to C
+        case "sh", "bash", "zsh", "fish": return .unknown  // Shell scripts
+        case "ps1", "bat": return .unknown  // Windows scripts
+        case "scala": return .java  // Scala to Java (similar syntax)
         default:
             break
         }
 
         // Enhanced secondary detection by content analysis
-        return detectLanguageByContentAdvanced(content) ?? detectLanguageBySimplePatterns(content) ?? .unknown
+        return detectLanguageByContentAdvanced(content) ?? detectLanguageBySimplePatterns(content)
+            ?? .unknown
     }
 
     private func detectLanguageByContentAdvanced(_ content: String) -> CodeLanguage? {
@@ -543,7 +444,8 @@ final class FileManagerService: ObservableObject {
             return .go
         } else if contentLower.contains("<!doctype html") || contentLower.contains("<html") {
             return .html
-        } else if contentLower.contains("{") && contentLower.contains("}") && contentLower.contains(":") {
+        } else if contentLower.contains("{") && contentLower.contains("}")
+                    && contentLower.contains(":") {
             return .json
         }
 
@@ -570,7 +472,7 @@ final class FileManagerService: ObservableObject {
         // Run AI analysis if enabled (placeholder for future implementation)
         let aiAnalysisResult: String?
         if withAI {
-            // TODO: Integrate with AI service when available
+            /// Integrate with AI service when available
             logger.log("🤖 AI analysis requested but not yet implemented for \(file.name)")
             aiAnalysisResult = "AI analysis will be implemented in future version"
         } else {
@@ -589,7 +491,9 @@ final class FileManagerService: ObservableObject {
         analysisHistory.append(record)
         await savePersistedData()
 
-        logger.log("✅ Analysis completed for \(file.name) in \(String(format: "%.2f", duration))s with \(record.analysisResults.count) results")
+        logger.log(
+            "✅ Analysis completed for \(file.name) in \(String(format: "%.2f", duration))s with \(record.analysisResults.count) results"
+        )
 
         return record
     }
@@ -617,11 +521,13 @@ final class FileManagerService: ObservableObject {
 
         // Add file size analysis
         if characterCount > 50000 {
-            results.append(EnhancedAnalysisItem(
-                message: "Large file detected (\(characterCount) characters). Consider breaking into smaller modules.",
-                severity: "medium",
-                type: "maintainability"
-            ))
+            results.append(
+                EnhancedAnalysisItem(
+                    message:
+                        "Large file detected (\(characterCount) characters). Consider breaking into smaller modules.",
+                    severityLevel: .medium,
+                    type: "maintainability"
+                ))
         }
 
         return results
@@ -634,37 +540,44 @@ final class FileManagerService: ObservableObject {
         if content.contains("!") {
             let forceUnwrapCount = content.components(separatedBy: "!").count - 1
             if forceUnwrapCount > 5 {
-                results.append(EnhancedAnalysisItem(
-                    message: "High number of force unwraps (\(forceUnwrapCount)) detected. Consider using safe unwrapping.",
-                    severity: "high",
-                    type: "safety"
-                ))
+                results.append(
+                    EnhancedAnalysisItem(
+                        message:
+                            "High number of force unwraps (\(forceUnwrapCount)) detected. Consider using safe unwrapping.",
+                        severityLevel: .high,
+                        type: "safety"
+                    ))
             }
         }
 
         // Check for TODO/FIXME comments
         if content.lowercased().contains("todo") || content.lowercased().contains("fixme") {
-            results.append(EnhancedAnalysisItem(
-                message: "TODO or FIXME comments found. Consider addressing them.",
-                severity: "low",
-                type: "maintenance"
-            ))
+            results.append(
+                EnhancedAnalysisItem(
+                    message: "TODO or FIXME comments found. Consider addressing them.",
+                    severityLevel: .low,
+                    type: "maintenance"
+                ))
         }
 
         // Check for long functions (more than 50 lines)
         let functionPattern = "func .+?\\{[\\s\\S]*?^\\}"
-        if let regex = try? NSRegularExpression(pattern: functionPattern, options: [.anchorsMatchLines]) {
-            let matches = regex.matches(in: content, options: [], range: NSRange(content.startIndex..., in: content))
+        if let regex = try? NSRegularExpression(
+            pattern: functionPattern, options: [.anchorsMatchLines]) {
+            let matches = regex.matches(
+                in: content, options: [], range: NSRange(content.startIndex..., in: content))
             for match in matches {
                 if let range = Range(match.range, in: content) {
                     let functionCode = String(content[range])
                     let functionLineCount = functionCode.components(separatedBy: .newlines).count
                     if functionLineCount > 50 {
-                        results.append(EnhancedAnalysisItem(
-                            message: "Long function detected (\(functionLineCount) lines). Consider breaking into smaller functions.",
-                            severity: "medium",
-                            type: "maintainability"
-                        ))
+                        results.append(
+                            EnhancedAnalysisItem(
+                                message:
+                                    "Long function detected (\(functionLineCount) lines). Consider breaking into smaller functions.",
+                                severityLevel: .medium,
+                                type: "maintainability"
+                            ))
                     }
                 }
             }
@@ -678,21 +591,24 @@ final class FileManagerService: ObservableObject {
 
         // Check for proper imports
         if !content.contains("import ") && lineCount > 10 {
-            results.append(EnhancedAnalysisItem(
-                message: "No import statements found in Python file with \(lineCount) lines.",
-                severity: "low",
-                type: "style"
-            ))
+            results.append(
+                EnhancedAnalysisItem(
+                    message: "No import statements found in Python file with \(lineCount) lines.",
+                    severityLevel: .low,
+                    type: "style"
+                ))
         }
 
         // Check for print statements (potential debugging code)
         let printCount = content.components(separatedBy: "await AppLogger.shared.log(").count - 1
         if printCount > 3 {
-            results.append(EnhancedAnalysisItem(
-                message: "Multiple print statements (\(printCount)) found. Consider using proper logging.",
-                severity: "low",
-                type: "best_practice"
-            ))
+            results.append(
+                EnhancedAnalysisItem(
+                    message:
+                        "Multiple print statements (\(printCount)) found. Consider using proper logging.",
+                    severityLevel: .low,
+                    type: "best_practice"
+                ))
         }
 
         return results
@@ -704,20 +620,24 @@ final class FileManagerService: ObservableObject {
         // Check for console.log statements
         let consoleLogCount = content.components(separatedBy: "console.log").count - 1
         if consoleLogCount > 3 {
-            results.append(EnhancedAnalysisItem(
-                message: "Multiple console.log statements (\(consoleLogCount)) found. Consider removing before production.",
-                severity: "low",
-                type: "debugging"
-            ))
+            results.append(
+                EnhancedAnalysisItem(
+                    message:
+                        "Multiple console.log statements (\(consoleLogCount)) found. Consider removing before production.",
+                    severityLevel: .low,
+                    type: "debugging"
+                ))
         }
 
         // Check for var usage (prefer let/const)
         if content.contains(" var ") {
-            results.append(EnhancedAnalysisItem(
-                message: "Usage of 'var' detected. Consider using 'let' or 'const' for better scoping.",
-                severity: "medium",
-                type: "best_practice"
-            ))
+            results.append(
+                EnhancedAnalysisItem(
+                    message:
+                        "Usage of 'var' detected. Consider using 'let' or 'const' for better scoping.",
+                    severityLevel: .medium,
+                    type: "best_practice"
+                ))
         }
 
         return results
@@ -729,11 +649,13 @@ final class FileManagerService: ObservableObject {
         // Check for System.out.println
         let printCount = content.components(separatedBy: "System.out.println").count - 1
         if printCount > 2 {
-            results.append(EnhancedAnalysisItem(
-                message: "Multiple System.out.println statements (\(printCount)) found. Consider using a logging framework.",
-                severity: "low",
-                type: "best_practice"
-            ))
+            results.append(
+                EnhancedAnalysisItem(
+                    message:
+                        "Multiple System.out.println statements (\(printCount)) found. Consider using a logging framework.",
+                    severityLevel: .low,
+                    type: "best_practice"
+                ))
         }
 
         return results
@@ -745,17 +667,20 @@ final class FileManagerService: ObservableObject {
         // Basic analysis for any code type
         let averageLineLength = content.count / max(lineCount, 1)
         if averageLineLength > 120 {
-            results.append(EnhancedAnalysisItem(
-                message: "Long average line length (\(averageLineLength) chars). Consider breaking lines for readability.",
-                severity: "low",
-                type: "readability"
-            ))
+            results.append(
+                EnhancedAnalysisItem(
+                    message:
+                        "Long average line length (\(averageLineLength) chars). Consider breaking lines for readability.",
+                    severityLevel: .low,
+                    type: "readability"
+                ))
         }
 
         return results
     }
 
-    func analyzeMultipleFiles(_ files: [CodeFile], withAI: Bool = false) async throws -> [FileAnalysisRecord] {
+    func analyzeMultipleFiles(_ files: [CodeFile], withAI: Bool = false) async throws
+    -> [FileAnalysisRecord] {
         logger.log("🔍 Starting batch analysis for \(files.count) files")
 
         var results: [FileAnalysisRecord] = []
@@ -788,24 +713,28 @@ final class FileManagerService: ObservableObject {
         }
 
         // Get AI provider selection from UserDefaults (focus on free services)
-        let selectedProvider = UserDefaults.standard.string(forKey: "selectedAIProvider") ?? "ollama"
+        let selectedProvider =
+            UserDefaults.standard.string(forKey: "selectedAIProvider") ?? "ollama"
 
         // For Ollama, no API key needed - check availability
         if selectedProvider == "ollama" {
             // Check if Ollama is available
             let ollamaAvailable = await checkOllamaAvailability()
             if !ollamaAvailable {
-                lastAIAnalysis = "# 🤖 AI Analysis Results\n\nOllama is not available. Please start Ollama with 'ollama serve' and ensure CodeLlama model is installed."
+                lastAIAnalysis =
+                    "# 🤖 AI Analysis Results\n\nOllama is not available. Please start Ollama with 'ollama serve' and ensure CodeLlama model is installed."
                 aiInsightsAvailable = true
                 return
             }
         } else {
             // For Hugging Face, check token
-            let apiKey = UserDefaults.standard.string(forKey: "huggingface_api_key") ??
-                ProcessInfo.processInfo.environment["HF_TOKEN"]
+            let apiKey =
+                UserDefaults.standard.string(forKey: "huggingface_api_key")
+                ?? ProcessInfo.processInfo.environment["HF_TOKEN"]
 
             guard let validApiKey = apiKey, !validApiKey.isEmpty else {
-                lastAIAnalysis = "# 🤖 AI Analysis Results\n\nNo Hugging Face token configured. Please add your token in settings."
+                lastAIAnalysis =
+                    "# 🤖 AI Analysis Results\n\nNo Hugging Face token configured. Please add your token in settings."
                 aiInsightsAvailable = true
                 return
             }
@@ -830,18 +759,26 @@ final class FileManagerService: ObservableObject {
 
         // Combine all insights
         if !allInsights.isEmpty {
-            lastAIAnalysis = "# 🤖 AI Analysis Results (\(selectedProvider))\n\n" + allInsights.joined(separator: "\n\n")
+            lastAIAnalysis =
+                "# 🤖 AI Analysis Results (\(selectedProvider))\n\n"
+                + allInsights.joined(separator: "\n\n")
             aiInsightsAvailable = true
-            logger.log("✅ Phase 3 AI analysis completed with insights for \(allInsights.count) files using \(selectedProvider)")
+            logger.log(
+                "✅ Phase 3 AI analysis completed with insights for \(allInsights.count) files using \(selectedProvider)"
+            )
         } else {
-            lastAIAnalysis = "# 🤖 AI Analysis Results\n\nNo specific recommendations found. Your code looks good! 👍"
+            lastAIAnalysis =
+                "# 🤖 AI Analysis Results\n\nNo specific recommendations found. Your code looks good! 👍"
             aiInsightsAvailable = true
             logger.log("✅ Phase 3 AI analysis completed - no issues found")
         }
     }
 
-    private func performSimpleAIAnalysis(code: String, language: CodeLanguage, fileName: String, provider: String) async -> String {
-        let prompt = "Analyze this \(language.displayName) code file '\(fileName)' and provide helpful suggestions for improvement:\n\n\(code)"
+    private func performSimpleAIAnalysis(
+        code: String, language: CodeLanguage, fileName: String, provider: String
+    ) async -> String {
+        let prompt =
+            "Analyze this \(language.displayName) code file '\(fileName)' and provide helpful suggestions for improvement:\n\n\(code)"
 
         if provider == "ollama" {
             return await callOllamaAPI(prompt: prompt)
@@ -866,7 +803,7 @@ final class FileManagerService: ObservableObject {
             "prompt": prompt,
             "temperature": 0.1,
             "max_tokens": 500,
-            "stream": false,
+            "stream": false
         ]
 
         do {
@@ -877,7 +814,7 @@ final class FileManagerService: ObservableObject {
             if let httpResponse = response as? HTTPURLResponse {
                 switch httpResponse.statusCode {
                 case 200:
-                    break // Success
+                    break  // Success
                 case 503:
                     return "Error: Ollama service unavailable. Start with: ollama serve"
                 default:
@@ -918,8 +855,9 @@ final class FileManagerService: ObservableObject {
     }
 
     private func callHuggingFaceAPI(prompt: String) async -> String {
-        let apiKey = UserDefaults.standard.string(forKey: "huggingface_api_key") ??
-            ProcessInfo.processInfo.environment["HF_TOKEN"] ?? ""
+        let apiKey =
+            UserDefaults.standard.string(forKey: "huggingface_api_key") ?? ProcessInfo.processInfo
+            .environment["HF_TOKEN"] ?? ""
 
         guard !apiKey.isEmpty else {
             return "Error: No Hugging Face token configured"
@@ -941,8 +879,8 @@ final class FileManagerService: ObservableObject {
             "inputs": prompt,
             "parameters": [
                 "max_length": 500,
-                "temperature": 0.1,
-            ],
+                "temperature": 0.1
+            ]
         ]
 
         do {
@@ -952,12 +890,12 @@ final class FileManagerService: ObservableObject {
             if let httpResponse = response as? HTTPURLResponse {
                 switch httpResponse.statusCode {
                 case 200:
-                    break // Success
+                    break  // Success
                 case 401:
                     return "Error: Invalid Hugging Face token"
                 case 429:
                     return "Error: Hugging Face rate limit exceeded"
-                case 500 ... 599:
+                case 500...599:
                     return "Error: Hugging Face service unavailable"
                 default:
                     return "Error: Hugging Face API error (\(httpResponse.statusCode))"
@@ -966,8 +904,7 @@ final class FileManagerService: ObservableObject {
 
             if let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]],
                let firstResult = json.first,
-               let generatedText = firstResult["generated_text"] as? String
-            {
+               let generatedText = firstResult["generated_text"] as? String {
                 return generatedText.trimmingCharacters(in: .whitespacesAndNewlines)
             }
         } catch {
@@ -1006,11 +943,15 @@ final class FileManagerService: ObservableObject {
         var suggestions: [String] = []
 
         if content.contains("!") && !content.contains("// Force unwrap necessary") {
-            suggestions.append("🔒 Consider using safe unwrapping patterns (if let, guard let) instead of force unwrapping")
+            suggestions.append(
+                "🔒 Consider using safe unwrapping patterns (if let, guard let) instead of force unwrapping"
+            )
         }
 
         if content.contains("@State") || content.contains("@ObservedObject") {
-            suggestions.append("✨ Good use of SwiftUI property wrappers - consider @StateObject for object initialization")
+            suggestions.append(
+                "✨ Good use of SwiftUI property wrappers - consider @StateObject for object initialization"
+            )
         }
 
         if content.contains("async") && !content.contains("await") {
@@ -1038,7 +979,8 @@ final class FileManagerService: ObservableObject {
         var suggestions: [String] = []
 
         if content.contains("var ") {
-            suggestions.append("📦 Consider using 'const' or 'let' instead of 'var' for better scoping")
+            suggestions.append(
+                "📦 Consider using 'const' or 'let' instead of 'var' for better scoping")
         }
 
         if content.contains("function(") && !content.contains("=>") {
@@ -1063,7 +1005,8 @@ final class FileManagerService: ObservableObject {
 
         let lines = content.components(separatedBy: CharacterSet.newlines)
         if lines.count > 500 {
-            suggestions.append("📏 Large file detected (\(lines.count) lines) - consider breaking into modules")
+            suggestions.append(
+                "📏 Large file detected (\(lines.count) lines) - consider breaking into modules")
         }
 
         if !content.lowercased().contains("//") && !content.lowercased().contains("/*") {
@@ -1075,7 +1018,8 @@ final class FileManagerService: ObservableObject {
 
     // MARK: - Enhanced Project Analysis
 
-    func analyzeProject(_ project: ProjectStructure, withAI: Bool = false) async throws -> ProjectAnalysisResult {
+    func analyzeProject(_ project: ProjectStructure, withAI: Bool = false) async throws
+    -> ProjectAnalysisResult {
         logger.log("🏗️ Starting project analysis for \(project.name)")
 
         let startTime = Date()
@@ -1099,12 +1043,16 @@ final class FileManagerService: ObservableObject {
             duration: duration
         )
 
-        logger.log("✅ Project analysis completed for \(project.name) in \(String(format: "%.2f", duration))s")
+        logger.log(
+            "✅ Project analysis completed for \(project.name) in \(String(format: "%.2f", duration))s"
+        )
 
         return result
     }
 
-    private func generateProjectInsights(from analyses: [FileAnalysisRecord], project: ProjectStructure) -> [ProjectInsight] {
+    private func generateProjectInsights(
+        from analyses: [FileAnalysisRecord], project: ProjectStructure
+    ) -> [ProjectInsight] {
         var insights: [ProjectInsight] = []
 
         // Language distribution analysis
@@ -1113,39 +1061,45 @@ final class FileManagerService: ObservableObject {
         }
 
         if languageStats.count > 3 {
-            insights.append(ProjectInsight(
-                type: .architecture,
-                message: "Multi-language project detected (\(languageStats.count) languages). Consider language consistency for maintainability.",
-                severity: .medium,
-                fileCount: languageStats.values.reduce(0, +)
-            ))
+            insights.append(
+                ProjectInsight(
+                    type: .architecture,
+                    message:
+                        "Multi-language project detected (\(languageStats.count) languages). Consider language consistency for maintainability.",
+                    severity: .medium,
+                    fileCount: languageStats.values.reduce(0, +)
+                ))
         }
 
         // File size analysis
-        let largFiles = project.files.filter { $0.size > 10000 } // 10KB+
+        let largFiles = project.files.filter { $0.size > 10000 }  // 10KB+
         if largFiles.count > project.files.count / 3 {
-            insights.append(ProjectInsight(
-                type: .maintainability,
-                message: "Many large files detected (\(largFiles.count)/\(project.files.count)). Consider breaking into smaller modules.",
-                severity: .medium,
-                fileCount: largFiles.count
-            ))
+            insights.append(
+                ProjectInsight(
+                    type: .maintainability,
+                    message:
+                        "Many large files detected (\(largFiles.count)/\(project.files.count)). Consider breaking into smaller modules.",
+                    severity: .medium,
+                    fileCount: largFiles.count
+                ))
         }
 
         // Issue aggregation
         let allIssues = analyses.flatMap(\.analysisResults)
         let totalIssues = allIssues.count
         let highSeverityIssues = allIssues.count(where: { issue in
-            issue.severity == "high" || issue.severity == "critical"
+            issue.severityLevel == .high || issue.severityLevel == .critical
         })
 
         if highSeverityIssues > 0 {
-            insights.append(ProjectInsight(
-                type: .quality,
-                message: "High-priority issues found: \(highSeverityIssues) out of \(totalIssues) total issues.",
-                severity: .high,
-                fileCount: analyses.count
-            ))
+            insights.append(
+                ProjectInsight(
+                    type: .quality,
+                    message:
+                        "High-priority issues found: \(highSeverityIssues) out of \(totalIssues) total issues.",
+                    severity: .high,
+                    fileCount: analyses.count
+                ))
         }
 
         // Test coverage estimation (basic heuristic)
@@ -1153,12 +1107,14 @@ final class FileManagerService: ObservableObject {
         let testCoverage = Double(testFiles.count) / Double(project.files.count) * 100
 
         if testCoverage < 20 {
-            insights.append(ProjectInsight(
-                type: .testing,
-                message: "Low test coverage estimated at \(String(format: "%.1f", testCoverage))%. Consider adding more tests.",
-                severity: .medium,
-                fileCount: testFiles.count
-            ))
+            insights.append(
+                ProjectInsight(
+                    type: .testing,
+                    message:
+                        "Low test coverage estimated at \(String(format: "%.1f", testCoverage))%. Consider adding more tests.",
+                    severity: .medium,
+                    fileCount: testFiles.count
+                ))
         }
 
         return insights
@@ -1169,9 +1125,9 @@ final class FileManagerService: ObservableObject {
     func searchFiles(query: String) -> [CodeFile] {
         let lowercaseQuery = query.lowercased()
         return uploadedFiles.filter { file in
-            file.name.lowercased().contains(lowercaseQuery) ||
-                file.content.lowercased().contains(lowercaseQuery) ||
-                file.language.displayName.lowercased().contains(lowercaseQuery)
+            file.name.lowercased().contains(lowercaseQuery)
+                || file.content.lowercased().contains(lowercaseQuery)
+                || file.language.displayName.lowercased().contains(lowercaseQuery)
         }
     }
 
@@ -1204,7 +1160,7 @@ final class FileManagerService: ObservableObject {
 
         // Issues by severity
         let issuesBySeverity = allIssues.reduce(into: [:]) { counts, item in
-            counts[item.severity, default: 0] += 1
+            counts[item.severityLevel.rawValue, default: 0] += 1
         }
 
         report += "## Issues by Severity\n"
@@ -1224,7 +1180,8 @@ final class FileManagerService: ObservableObject {
             if !analysis.analysisResults.isEmpty {
                 report += "- Issues found:\n"
                 for issue in analysis.analysisResults {
-                    report += "  - [\(issue.severity.uppercased())] \(issue.message)\n"
+                    report +=
+                        "  - [\(issue.severityLevel.rawValue.uppercased())] \(issue.message)\n"
                 }
             }
             report += "\n"
@@ -1312,23 +1269,24 @@ enum FileManagerError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case let .accessDenied(filename):
+        case .accessDenied(let filename):
             return "Access denied to file: \(filename)"
-        case let .fileTooLarge(filename, size, maxSize):
+        case .fileTooLarge(let filename, let size, let maxSize):
             let sizeStr = ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)
-            let maxSizeStr = ByteCountFormatter.string(fromByteCount: Int64(maxSize), countStyle: .file)
+            let maxSizeStr = ByteCountFormatter.string(
+                fromByteCount: Int64(maxSize), countStyle: .file)
             return "File '\(filename)' is too large (\(sizeStr)). Maximum size is \(maxSizeStr)."
-        case let .unsupportedFileType(type):
+        case .unsupportedFileType(let type):
             return "Unsupported file type: .\(type)"
-        case let .fileNotReadable(filename):
+        case .fileNotReadable(let filename):
             return "Cannot read file: \(filename)"
-        case let .notARegularFile(filename):
+        case .notARegularFile(let filename):
             return "Not a regular file: \(filename)"
-        case let .directoryEnumerationFailed(path):
+        case .directoryEnumerationFailed(let path):
             return "Failed to enumerate directory: \(path)"
-        case let .encodingError(filename):
+        case .encodingError(let filename):
             return "Text encoding error in file: \(filename)"
-        case let .networkError(error):
+        case .networkError(let error):
             return "Network error: \(error.localizedDescription)"
         }
     }
@@ -1336,40 +1294,15 @@ enum FileManagerError: LocalizedError {
 
 // MARK: - Extensions
 
-extension Data {
-    var sha256: String {
-        let hash = SHA256.hash(data: self)
-        return hash.compactMap { String(format: "%02x", $0) }.joined()
-    }
-}
+// Removed duplicate sha256 extension - defined in CodeFile.swift
 
 // MARK: - Simple Logger for File Manager
 
-class FileManagerLogger {
-    func log(_ message: String, file: String = #file, line: Int = #line) {
-        let fileName = (file as NSString).lastPathComponent
-        let timestamp = DateFormatter.logFormatter.string(from: Date())
-        AppLogger.shared.debug("[\(timestamp)] [\(fileName):\(line)] \(message)")
-    }
-}
+// Removed duplicate FileManagerLogger - defined in FileManagerLogger.swift
 
 extension DateFormatter {
-    static let logFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss.SSS"
-        return formatter
-    }()
-
-    static let reportFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM dd, yyyy 'at' HH:mm:ss"
-        return formatter
-    }()
+    // Removed duplicate formatters - defined in FileManagerLogger.swift
 }
 
 // Simple logger for FileManagerService
-struct SimpleLogger {
-    func log(_ message: String) {
-        AppLogger.shared.debug("FileManagerService: \(message)")
-    }
-}
+// Removed duplicate SimpleLogger - defined in FileManagerLogger.swift

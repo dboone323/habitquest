@@ -36,8 +36,44 @@ struct FileUploadView: View {
         }
         .navigationTitle("File Management")
         .toolbar {
-            ToolbarItemGroup(placement: .primaryAction) {
-                toolbarButtons
+            ToolbarItem(placement: .primaryAction) {
+                Button("Add Files") {
+                    showingFileImporter = true
+                }
+                .accessibilityLabel("Button")
+            }
+
+            ToolbarItem(placement: .primaryAction) {
+                Button("Add Folder") {
+                    showFolderPicker()
+                }
+                .accessibilityLabel("Button")
+            }
+
+            if !fileManager.uploadedFiles.isEmpty {
+                ToolbarItem(placement: .primaryAction) {
+                    Menu("Actions") {
+                        Button("Analyze All Files") {
+                            analyzeAllFiles()
+                        }
+                        .accessibilityLabel("Button")
+
+                        Button("Clear All Files") {
+                            Task {
+                                await fileManager.clearAllFiles()
+                                selectedFiles.removeAll()
+                            }
+                        }
+                        .accessibilityLabel("Button")
+
+                        Divider()
+
+                        Button("Export File List") {
+                            exportFileList()
+                        }
+                        .accessibilityLabel("Button")
+                    }
+                }
             }
         }
         .fileImporter(
@@ -49,6 +85,7 @@ struct FileUploadView: View {
         }
         .alert("Upload Results", isPresented: $showingUploadResults) {
             Button("OK") { uploadResult = nil }
+                .accessibilityLabel("Button")
         } message: {
             if let result = uploadResult {
                 Text(uploadResultMessage(result))
@@ -61,6 +98,7 @@ struct FileUploadView: View {
             Button("OK") {
                 fileManager.errorMessage = nil
             }
+            .accessibilityLabel("Button")
         } message: {
             if let errorMessage = fileManager.errorMessage {
                 Text(errorMessage)
@@ -132,6 +170,7 @@ struct FileUploadView: View {
                 Button("Analyze All") {
                     analyzeAllFiles()
                 }
+                .accessibilityLabel("Button")
                 .buttonStyle(.borderedProminent)
                 .disabled(fileManager.isUploading)
             }
@@ -167,11 +206,13 @@ struct FileUploadView: View {
                     Button("Choose Files") {
                         showingFileImporter = true
                     }
+                    .accessibilityLabel("Button")
                     .buttonStyle(.borderedProminent)
 
                     Button("Choose Folder") {
                         showFolderPicker()
                     }
+                    .accessibilityLabel("Button")
                     .buttonStyle(.bordered)
                 }
             }
@@ -179,7 +220,10 @@ struct FileUploadView: View {
             .padding(40)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isTargeted ? Color.accentColor.opacity(0.1) : Color(NSColor.controlBackgroundColor))
+                    .fill(
+                        isTargeted
+                            ? Color.accentColor.opacity(0.1) : Color(NSColor.controlBackgroundColor)
+                    )
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
                             .stroke(
@@ -296,12 +340,14 @@ struct FileUploadView: View {
                 Button("Analyze Selected") {
                     analyzeSelectedFiles()
                 }
+                .accessibilityLabel("Button")
                 .buttonStyle(.borderedProminent)
                 .disabled(selectedFiles.isEmpty)
 
                 Button("Clear Selection") {
                     selectedFiles.removeAll()
                 }
+                .accessibilityLabel("Button")
                 .buttonStyle(.bordered)
             }
         }
@@ -324,11 +370,13 @@ struct FileUploadView: View {
                 Button("Add More Files") {
                     showingFileImporter = true
                 }
+                .accessibilityLabel("Button")
                 .buttonStyle(.bordered)
 
                 Button("Add Folder") {
                     showFolderPicker()
                 }
+                .accessibilityLabel("Button")
                 .buttonStyle(.bordered)
             }
         }
@@ -357,46 +405,11 @@ struct FileUploadView: View {
         .background(Color(NSColor.textBackgroundColor))
     }
 
-    // MARK: - Toolbar
-
-    private var toolbarButtons: some View {
-        Group {
-            Button("Add Files") {
-                showingFileImporter = true
-            }
-
-            Button("Add Folder") {
-                showFolderPicker()
-            }
-
-            if !fileManager.uploadedFiles.isEmpty {
-                Menu("Actions") {
-                    Button("Analyze All Files") {
-                        analyzeAllFiles()
-                    }
-
-                    Button("Clear All Files") {
-                        Task {
-                            await fileManager.clearAllFiles()
-                            selectedFiles.removeAll()
-                        }
-                    }
-
-                    Divider()
-
-                    Button("Export File List") {
-                        exportFileList()
-                    }
-                }
-            }
-        }
-    }
-
     // MARK: - Actions
 
     private func handleFileImport(_ result: Result<[URL], Error>) {
         switch result {
-        case let .success(urls):
+        case .success(let urls):
             Task {
                 do {
                     let result = try await fileManager.uploadFiles(from: urls)
@@ -410,7 +423,7 @@ struct FileUploadView: View {
                     }
                 }
             }
-        case let .failure(error):
+        case .failure(let error):
             fileManager.errorMessage = error.localizedDescription
         }
     }
@@ -444,12 +457,14 @@ struct FileUploadView: View {
 
         for provider in providers {
             if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
-                provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
-                    if let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) {
+                provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) {
+                    item, error in
+                    if let data = item as? Data,
+                       let url = URL(dataRepresentation: data, relativeTo: nil) {
                         urls.append(url)
 
                         if urls.count == providers.count {
-                            let urlsCopy = urls // Capture urls to avoid concurrency warning
+                            let urlsCopy = urls  // Capture urls to avoid concurrency warning
                             Task {
                                 do {
                                     let result = try await fileManager.uploadFiles(from: urlsCopy)
@@ -490,9 +505,11 @@ struct FileUploadView: View {
 
         Task {
             do {
-                let records = try await fileManager.analyzeMultipleFiles(filesToAnalyze, withAI: true)
+                let records = try await fileManager.analyzeMultipleFiles(
+                    filesToAnalyze, withAI: true)
                 await MainActor.run {
-                    AppLogger.shared.debug("✅ Selected files analysis completed. Found \(records.count) records")
+                    AppLogger.shared.debug(
+                        "✅ Selected files analysis completed. Found \(records.count) records")
 
                     // Clear any previous state first
                     self.showingAnalysisResults = false
@@ -503,7 +520,8 @@ struct FileUploadView: View {
                     // Force state update and show sheet immediately
                     DispatchQueue.main.async {
                         self.showingAnalysisResults = true
-                        AppLogger.shared.debug("🔍 Sheet should now be presented with \(records.count) records")
+                        AppLogger.shared.debug(
+                            "🔍 Sheet should now be presented with \(records.count) records")
                     }
                 }
             } catch {
@@ -522,7 +540,8 @@ struct FileUploadView: View {
 
         Task {
             do {
-                let records = try await fileManager.analyzeMultipleFiles(fileManager.uploadedFiles, withAI: true)
+                let records = try await fileManager.analyzeMultipleFiles(
+                    fileManager.uploadedFiles, withAI: true)
                 await MainActor.run {
                     // Set both record properties to ensure consistency
                     self.analysisRecords = records
@@ -572,7 +591,8 @@ struct FileUploadView: View {
                 let data = try encoder.encode(exportData)
                 try data.write(to: url)
             } catch {
-                fileManager.errorMessage = "Failed to export file list: \(error.localizedDescription)"
+                fileManager.errorMessage =
+                    "Failed to export file list: \(error.localizedDescription)"
             }
         }
     }
@@ -693,6 +713,7 @@ struct FileRowView: View {
                 }
             }
         }
+        .accessibilityLabel("Button")
         .buttonStyle(.plain)
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
@@ -732,11 +753,13 @@ struct ProjectRowView: View {
 
                 Menu {
                     Button("Select All Files", action: onSelect)
+                        .accessibilityLabel("Button")
                     Button("Remove Project", role: .destructive) {
                         Task {
                             await onDelete()
                         }
                     }
+                    .accessibilityLabel("Button")
                 } label: {
                     Image(systemName: "ellipsis.circle")
                         .foregroundColor(.secondary)
@@ -748,7 +771,8 @@ struct ProjectRowView: View {
             // Language distribution
             if !project.languageDistribution.isEmpty {
                 HStack {
-                    ForEach(Array(project.languageDistribution.keys.prefix(3)), id: \.self) { languageName in
+                    ForEach(Array(project.languageDistribution.keys.prefix(3)), id: \.self) {
+                        languageName in
                         Label(
                             title: { Text("\(project.languageDistribution[languageName] ?? 0)") },
                             icon: { Image(systemName: "doc.text") }
@@ -883,19 +907,19 @@ struct AnalysisResultsView: View {
     }
 
     private var criticalIssues: Int {
-        records.flatMap(\.analysisResults).count(where: { $0.severity == "critical" })
+        records.flatMap(\.analysisResults).count(where: { $0.severityLevel == .critical })
     }
 
     private var highIssues: Int {
-        records.flatMap(\.analysisResults).count(where: { $0.severity == "high" })
+        records.flatMap(\.analysisResults).count(where: { $0.severityLevel == .high })
     }
 
     private var mediumIssues: Int {
-        records.flatMap(\.analysisResults).count(where: { $0.severity == "medium" })
+        records.flatMap(\.analysisResults).count(where: { $0.severityLevel == .medium })
     }
 
     private var lowIssues: Int {
-        records.flatMap(\.analysisResults).count(where: { $0.severity == "low" })
+        records.flatMap(\.analysisResults).count(where: { $0.severityLevel == .low })
     }
 
     var body: some View {
@@ -934,9 +958,11 @@ struct AnalysisResultsView: View {
                                         .font(.headline)
                                         .fontWeight(.semibold)
 
-                                    Text("\(records.count) files analyzed • \(totalIssues) issues found")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
+                                    Text(
+                                        "\(records.count) files analyzed • \(totalIssues) issues found"
+                                    )
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
                                 }
 
                                 Spacer()
@@ -944,17 +970,25 @@ struct AnalysisResultsView: View {
 
                             if totalIssues > 0 {
                                 HStack(spacing: 16) {
-                                    Label("\(criticalIssues) Critical", systemImage: "exclamationmark.octagon")
-                                        .foregroundColor(.red)
-                                        .font(.caption)
+                                    Label(
+                                        "\(criticalIssues) Critical",
+                                        systemImage: "exclamationmark.octagon"
+                                    )
+                                    .foregroundColor(.red)
+                                    .font(.caption)
 
-                                    Label("\(highIssues) High", systemImage: "exclamationmark.circle")
-                                        .foregroundColor(.orange)
-                                        .font(.caption)
+                                    Label(
+                                        "\(highIssues) High", systemImage: "exclamationmark.circle"
+                                    )
+                                    .foregroundColor(.orange)
+                                    .font(.caption)
 
-                                    Label("\(mediumIssues) Medium", systemImage: "exclamationmark.triangle")
-                                        .foregroundColor(.yellow)
-                                        .font(.caption)
+                                    Label(
+                                        "\(mediumIssues) Medium",
+                                        systemImage: "exclamationmark.triangle"
+                                    )
+                                    .foregroundColor(.yellow)
+                                    .font(.caption)
 
                                     Label("\(lowIssues) Low", systemImage: "info.circle")
                                         .foregroundColor(.blue)
@@ -985,6 +1019,7 @@ struct AnalysisResultsView: View {
                     Button("Done") {
                         dismiss()
                     }
+                    .accessibilityLabel("Button")
                 }
             }
         }

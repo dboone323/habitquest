@@ -109,12 +109,12 @@ struct CalendarView: View {
                         Spacer()
 
                         HStack(spacing: 12) {
-                            Button(action: previousMonth) {
+                            Button(action: previousMonth).accessibilityLabel("Button") {
                                 Image(systemName: "chevron.left")
                                     .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                             }
 
-                            Button(action: nextMonth) {
+                            Button(action: nextMonth).accessibilityLabel("Button") {
                                 Image(systemName: "chevron.right")
                                     .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                             }
@@ -144,7 +144,7 @@ struct CalendarView: View {
 
                         Spacer()
 
-                        Button(action: { showAddEvent = true }) {
+                        Button(action: { showAddEvent = true }).accessibilityLabel("Button") {
                             Image(systemName: "plus.circle.fill")
                                 .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                                 .font(.title2)
@@ -263,8 +263,7 @@ extension Calendar {
         var dates: [Date] = []
         var currentDate = calendarStart
 
-        for _ in 0 ..< 42 {
-            dates.append(currentDate)
+        dates += _ in 0 ..< 42.map { currentDate }
             guard let nextDate = self.date(byAdding: .day, value: 1, to: currentDate) else { break }
             currentDate = nextDate
         }

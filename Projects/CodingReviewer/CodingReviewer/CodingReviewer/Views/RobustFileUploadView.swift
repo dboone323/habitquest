@@ -9,74 +9,96 @@ struct RobustFileUploadView: View {
     @EnvironmentObject private var fileUploadManager: FileUploadManager
     @State private var uploadedFiles: [FileData] = []
     @State private var isDragOver = false
-    @State private var selectedFiles: Set<String> = [] // Using file paths as IDs
+    @State private var selectedFiles: Set<String> = []  // Using file paths as IDs
     @State private var showingFilePicker = false
     @State private var alertMessage = ""
     @State private var showingAlert = false
     @State private var uploadResult: SimpleUploadResult?
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Header with comprehensive information
-            HeaderView(
-                uploadedFilesCount: uploadedFiles.count,
-                selectedFilesCount: selectedFiles.count,
-                isUploading: fileUploadManager.isUploading,
-                onClearAll: clearAll,
-                onSelectAll: selectAllFiles
-            )
-
-            Divider()
-
-            if uploadedFiles.isEmpty {
-                // Enhanced Drop Zone with better guidance
-                RobustDropZoneView(
-                    isDragOver: $isDragOver,
-                    isUploading: fileUploadManager.isUploading,
-                    onDrop: handleFileDrop,
-                    onChooseFiles: { showingFilePicker = true },
-                    onChooseFolder: chooseFolderAndUpload
-                )
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                // File management interface
-                HSplitView {
-                    // File List (Left Side)
-                    FileListView(
-                        files: uploadedFiles,
-                        selectedFiles: $selectedFiles,
-                        onToggleSelection: toggleFileSelection
-                    )
-                    .frame(minWidth: 350)
-
-                    // File Details and Actions (Right Side)
-                    FileDetailsView(
-                        selectedFiles: selectedFiles,
-                        allFiles: uploadedFiles,
-                        uploadResult: uploadResult
-                    )
-                    .frame(minWidth: 400)
-                }
+        mainContent
+            .fileImporter(
+                isPresented: $showingFilePicker,
+                allowedContentTypes: [.item],  // Accept all file types for better compatibility
+                allowsMultipleSelection: true
+            ) { result in
+                handleFileImport(result)
             }
+            .alert("File Upload Status", isPresented: $showingAlert) {
+                Button("OK") {
+                    // Dismiss alert
+                }
+                .accessibilityLabel("OK Button")
+            } message: {
+                Text(alertMessage)
+            }
+            .navigationTitle("Robust File Upload")
+    }
 
-            // Progress indicator when uploading
+    private var mainContent: some View {
+        VStack(spacing: 0) {
+            headerView
+            Divider()
+            contentView
+            progressView
+        }
+    }
+
+    private var headerView: some View {
+        HeaderView(
+            uploadedFilesCount: uploadedFiles.count,
+            selectedFilesCount: selectedFiles.count,
+            isUploading: fileUploadManager.isUploading,
+            onClearAll: clearAll,
+            onSelectAll: selectAllFiles
+        )
+    }
+
+    private var contentView: some View {
+        Group {
+            if uploadedFiles.isEmpty {
+                dropZoneView
+            } else {
+                fileManagementView
+            }
+        }
+    }
+
+    private var dropZoneView: some View {
+        RobustDropZoneView(
+            isDragOver: $isDragOver,
+            isUploading: fileUploadManager.isUploading,
+            onDrop: handleFileDrop,
+            onChooseFiles: { showingFilePicker = true },
+            onChooseFolder: chooseFolderAndUpload
+        )
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    private var fileManagementView: some View {
+        HSplitView {
+            FileListView(
+                files: uploadedFiles,
+                selectedFiles: $selectedFiles,
+                onToggleSelection: toggleFileSelection
+            )
+            .frame(minWidth: 350)
+
+            FileDetailsView(
+                selectedFiles: selectedFiles,
+                allFiles: uploadedFiles,
+                uploadResult: uploadResult
+            )
+            .frame(minWidth: 400)
+        }
+    }
+
+    private var progressView: some View {
+        Group {
             if fileUploadManager.isUploading {
                 ProgressIndicatorView(progress: fileUploadManager.uploadProgress)
             }
         }
-        .fileImporter(
-            isPresented: $showingFilePicker,
-            allowedContentTypes: [.item], // Accept all file types for better compatibility
-            allowsMultipleSelection: true
-        ) { result in
-            handleFileImport(result)
-        }
-        .alert("File Upload Status", isPresented: $showingAlert) {
-            Button("OK") {}
-        } message: {
-            Text(alertMessage)
-        }
-        .navigationTitle("Robust File Upload")
     }
 
     // MARK: - File Operations
@@ -88,7 +110,8 @@ struct RobustFileUploadView: View {
             for provider in providers {
                 if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
                     do {
-                        if let item = try await provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier) as? URL {
+                        if let item = try await provider.loadItem(
+                            forTypeIdentifier: UTType.fileURL.identifier) as? URL {
                             urls.append(item)
                         }
                     } catch {
@@ -105,11 +128,11 @@ struct RobustFileUploadView: View {
 
     private func handleFileImport(_ result: Result<[URL], Error>) {
         switch result {
-        case let .success(urls):
+        case .success(let urls):
             Task {
                 await processUploadedFiles(urls)
             }
-        case let .failure(error):
+        case .failure(let error):
             showAlert("Failed to import files: \(error.localizedDescription)")
         }
     }
@@ -155,16 +178,19 @@ struct RobustFileUploadView: View {
         var message = ""
 
         if !result.successfulFiles.isEmpty {
-            message += "✅ Successfully uploaded \(result.successfulFiles.count) file\(result.successfulFiles.count == 1 ? "" : "s")"
+            message +=
+                "✅ Successfully uploaded \(result.successfulFiles.count) file\(result.successfulFiles.count == 1 ? "" : "s")"
 
             // Show file type breakdown
             let fileTypes = Dictionary(grouping: result.successfulFiles, by: { $0.fileExtension })
-            let typesSummary = fileTypes.map { "\($0.value.count) .\($0.key)" }.joined(separator: ", ")
+            let typesSummary = fileTypes.map { "\($0.value.count) .\($0.key)" }.joined(
+                separator: ", ")
             message += "\n\n📄 File types: \(typesSummary)"
         }
 
         if !result.failedFiles.isEmpty {
-            message += "\n\n❌ Failed to upload \(result.failedFiles.count) file\(result.failedFiles.count == 1 ? "" : "s"):"
+            message +=
+                "\n\n❌ Failed to upload \(result.failedFiles.count) file\(result.failedFiles.count == 1 ? "" : "s"):"
             for (filename, error) in result.failedFiles.prefix(5) {
                 message += "\n  • \(filename): \(error.localizedDescription)"
             }
@@ -245,12 +271,14 @@ struct HeaderView: View {
                         Button("Select All") {
                             onSelectAll()
                         }
+                        .accessibilityLabel("Select All Button")
                         .font(.caption)
                     }
 
                     Button("Clear All") {
                         onClearAll()
                     }
+                    .accessibilityLabel("Clear All Button")
                     .font(.caption)
                 }
             }
@@ -267,14 +295,18 @@ struct RobustDropZoneView: View {
     let onChooseFiles: () -> Void
     let onChooseFolder: () -> Void
 
-    var body: some View {
+    private var mainContent: some View {
         VStack(spacing: 24) {
             // Main drop icon
-            Image(systemName: isDragOver ? "folder.fill.badge.plus" : isUploading ? "arrow.clockwise" : "folder.badge.plus")
-                .font(.system(size: 64))
-                .foregroundColor(isDragOver ? .blue : isUploading ? .orange : .gray)
-                .symbolEffect(.pulse, isActive: isUploading)
-                .animation(.easeInOut, value: isDragOver)
+            Image(
+                systemName: isDragOver
+                    ? "folder.fill.badge.plus"
+                    : isUploading ? "arrow.clockwise" : "folder.badge.plus"
+            )
+            .font(.system(size: 64))
+            .foregroundColor(isDragOver ? .blue : isUploading ? .orange : .gray)
+            .symbolEffect(.pulse, isActive: isUploading)
+            .animation(.easeInOut, value: isDragOver)
 
             // Instructions
             VStack(spacing: 8) {
@@ -290,11 +322,13 @@ struct RobustDropZoneView: View {
                         .foregroundColor(isDragOver ? .blue : .primary)
                 }
 
-                Text("Supports Swift, Python, JavaScript, TypeScript, Java, C/C++, Go, Rust, PHP, Ruby, Kotlin, C#, HTML, CSS, JSON, YAML, Markdown, Xcode projects, and more")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
+                Text(
+                    "Supports Swift, Python, JavaScript, TypeScript, Java, C/C++, Go, Rust, PHP, Ruby, Kotlin, C#, HTML, CSS, JSON, YAML, Markdown, Xcode projects, and more"
+                )
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 40)
             }
 
             // Action buttons
@@ -316,24 +350,30 @@ struct RobustDropZoneView: View {
                 }
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(isDragOver ? Color.blue.opacity(0.1) : Color.gray.opacity(0.05))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(
-                            isDragOver ? Color.blue : Color.gray.opacity(0.3),
-                            style: StrokeStyle(lineWidth: 2, dash: [8, 4])
-                        )
-                )
-        )
-        .padding()
-        .onDrop(of: [.fileURL], isTargeted: $isDragOver) { providers in
-            onDrop(providers)
-            return true
-        }
-        .animation(.easeInOut(duration: 0.2), value: isDragOver)
+    }
+
+    private var dropZoneBackground: some View {
+        RoundedRectangle(cornerRadius: 16)
+            .fill(isDragOver ? Color.blue.opacity(0.1) : Color.gray.opacity(0.05))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(
+                        isDragOver ? Color.blue : Color.gray.opacity(0.3),
+                        style: StrokeStyle(lineWidth: 2, dash: [8, 4])
+                    )
+            )
+    }
+
+    var body: some View {
+        mainContent
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(dropZoneBackground)
+            .padding()
+            .onDrop(of: [.fileURL], isTargeted: $isDragOver) { providers in
+                onDrop(providers)
+                return true
+            }
+            .animation(.easeInOut(duration: 0.2), value: isDragOver)
     }
 }
 
@@ -397,10 +437,13 @@ struct RobustFileRowView: View {
     var body: some View {
         HStack(spacing: 12) {
             // Selection checkbox
-            Toggle("", isOn: Binding(
-                get: { isSelected },
-                set: { _ in onToggle() }
-            ))
+            Toggle(
+                "",
+                isOn: Binding(
+                    get: { isSelected },
+                    set: { _ in onToggle() }
+                )
+            )
             .toggleStyle(CheckboxToggleStyle())
 
             // File icon
@@ -450,6 +493,7 @@ struct CheckboxToggleStyle: ToggleStyle {
                 .foregroundColor(configuration.isOn ? .blue : .gray)
                 .font(.title3)
         }
+        .accessibilityLabel("Checkbox Button")
         .buttonStyle(PlainButtonStyle())
     }
 }
@@ -563,9 +607,12 @@ struct SelectionSummaryView: View {
                 Spacer()
 
                 VStack(alignment: .trailing) {
-                    Text(ByteCountFormatter.string(fromByteCount: Int64(totalSize), countStyle: .file))
-                        .font(.title)
-                        .fontWeight(.bold)
+                    Text(
+                        ByteCountFormatter.string(
+                            fromByteCount: Int64(totalSize), countStyle: .file)
+                    )
+                    .font(.title)
+                    .fontWeight(.bold)
                     Text("Total Size")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -578,7 +625,9 @@ struct SelectionSummaryView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
 
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 4) {
+                    LazyVGrid(
+                        columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 4
+                    ) {
                         ForEach(fileTypeBreakdown.prefix(6), id: \.0) { type, count in
                             HStack {
                                 Text(".\(type)")
@@ -614,20 +663,29 @@ struct UploadResultSummaryView: View {
 
             // Success count
             if !result.successfulFiles.isEmpty {
-                Label("\(result.successfulFiles.count) files uploaded successfully", systemImage: "checkmark.circle.fill")
-                    .foregroundColor(.green)
+                Label(
+                    "\(result.successfulFiles.count) files uploaded successfully",
+                    systemImage: "checkmark.circle.fill"
+                )
+                .foregroundColor(.green)
             }
 
             // Failure count
             if !result.failedFiles.isEmpty {
-                Label("\(result.failedFiles.count) files failed to upload", systemImage: "xmark.circle.fill")
-                    .foregroundColor(.red)
+                Label(
+                    "\(result.failedFiles.count) files failed to upload",
+                    systemImage: "xmark.circle.fill"
+                )
+                .foregroundColor(.red)
             }
 
             // Warnings
             if !result.warnings.isEmpty {
-                Label("\(result.warnings.count) warnings", systemImage: "exclamationmark.triangle.fill")
-                    .foregroundColor(.orange)
+                Label(
+                    "\(result.warnings.count) warnings",
+                    systemImage: "exclamationmark.triangle.fill"
+                )
+                .foregroundColor(.orange)
             }
         }
         .padding()

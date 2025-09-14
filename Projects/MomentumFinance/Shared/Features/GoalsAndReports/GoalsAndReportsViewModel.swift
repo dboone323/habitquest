@@ -66,7 +66,7 @@ final class GoalsAndReportsViewModel {
         targetAmount: Double,
         targetDate: Date? = nil,
         notes: String? = nil,
-    ) {
+        ) {
         guard let modelContext else { return }
 
         let goal = SavingsGoal(
@@ -74,7 +74,7 @@ final class GoalsAndReportsViewModel {
             targetAmount: targetAmount,
             targetDate: targetDate,
             notes: notes,
-        )
+            )
 
         modelContext.insert(goal)
 
@@ -130,7 +130,7 @@ final class GoalsAndReportsViewModel {
     func spendingReport(
         _ transactions: [FinancialTransaction],
         for period: DateInterval,
-    ) -> SpendingReport {
+        ) -> SpendingReport {
         let periodTransactions = transactions.filter { period.contains($0.date) }
 
         let income = periodTransactions
@@ -143,7 +143,7 @@ final class GoalsAndReportsViewModel {
 
         let categorySpending = Dictionary(
             grouping: periodTransactions.filter { $0.transactionType == .expense },
-        ) { transaction in
+            ) { transaction in
             transaction.category?.name ?? "Uncategorized"
         }.mapValues { transactions in
             transactions.reduce(0.0) { $0 + $1.amount }
@@ -156,14 +156,14 @@ final class GoalsAndReportsViewModel {
             netIncome: income - expenses,
             categorySpending: categorySpending,
             transactionCount: periodTransactions.count,
-        )
+            )
     }
 
     /// Get monthly spending trend
     func monthlySpendingTrend(
         _ transactions: [FinancialTransaction],
         months: Int = 6,
-    ) -> [MonthlySpendingData] {
+        ) -> [MonthlySpendingData] {
         let calendar = Calendar.current
         let now = Date()
         var trend: [MonthlySpendingData] = []
@@ -190,7 +190,7 @@ final class GoalsAndReportsViewModel {
                 income: income,
                 expenses: expenses,
                 netIncome: income - expenses,
-            )
+                )
 
             trend.insert(monthData, at: 0)
         }
@@ -203,7 +203,7 @@ final class GoalsAndReportsViewModel {
         _ transactions: [FinancialTransaction],
         currentPeriod: DateInterval,
         previousPeriod: DateInterval,
-    ) -> [CategorySpendingComparison] {
+        ) -> [CategorySpendingComparison] {
         let currentSpending = getCategorySpending(transactions, for: currentPeriod)
         let previousSpending = getCategorySpending(transactions, for: previousPeriod)
 
@@ -221,7 +221,7 @@ final class GoalsAndReportsViewModel {
                 previousAmount: previous,
                 change: change,
                 percentageChange: percentageChange,
-            )
+                )
         }
         .sorted { $0.currentAmount > $1.currentAmount }
     }
@@ -229,7 +229,7 @@ final class GoalsAndReportsViewModel {
     private func getCategorySpending(
         _ transactions: [FinancialTransaction],
         for period: DateInterval,
-    ) -> [String: Double] {
+        ) -> [String: Double] {
         let filteredTransactions = transactions.filter {
             $0.transactionType == .expense && period.contains($0.date)
         }
@@ -254,7 +254,7 @@ final class GoalsAndReportsViewModel {
                 actualAmount: budget.spentAmount,
                 difference: budget.remainingAmount,
                 isOverBudget: budget.isOverBudget,
-            )
+                )
         }
         .sorted { $0.actualAmount > $1.actualAmount }
     }

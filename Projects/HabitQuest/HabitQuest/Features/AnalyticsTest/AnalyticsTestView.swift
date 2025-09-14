@@ -96,6 +96,7 @@ struct AnalyticsTestView: View {
                     .foregroundColor(.white)
                     .cornerRadius(12)
                 }
+                .accessibilityLabel("Button")
                 .disabled(isRunning)
                 .padding(.horizontal)
             }
@@ -136,9 +137,9 @@ struct AnalyticsTestView: View {
 
         // Test 3: Productivity Metrics
         let metrics = await analyticsService.getProductivityMetrics(for: .week)
-        let validMetrics = metrics.completionRate >= 0.0 &&
-            metrics.completionRate <= 1.0 &&
-            metrics.streakCount >= 0
+        let validMetrics =
+            metrics.completionRate >= 0.0 && metrics.completionRate <= 1.0
+            && metrics.streakCount >= 0
         results.addResult(name: "Productivity Metrics", passed: validMetrics)
 
         // Test 4: Data Consistency
@@ -147,10 +148,11 @@ struct AnalyticsTestView: View {
         results.addResult(name: "Data Consistency", passed: consistent)
 
         // Test 5: Analytics Data Structure Validation
-        let hasValidStructure = analytics.overallStats.totalCompletions >= 0 &&
-            analytics.overallStats.completionRate >= 0.0 &&
-            analytics.overallStats.completionRate <= 1.0 &&
-            analytics.streakAnalytics.longestStreak >= 0
+        let hasValidStructure =
+            analytics.overallStats.totalCompletions >= 0
+            && analytics.overallStats.completionRate >= 0.0
+            && analytics.overallStats.completionRate <= 1.0
+            && analytics.streakAnalytics.longestStreak >= 0
         results.addResult(name: "Analytics Structure", passed: hasValidStructure)
 
         return results
@@ -163,7 +165,7 @@ struct AnalyticsTestView: View {
         let existingHabits = (try? modelContext.fetch(descriptor)) ?? []
 
         if !existingHabits.isEmpty {
-            return // Data already exists
+            return  // Data already exists
         }
 
         // Create sample habits
@@ -191,7 +193,7 @@ struct AnalyticsTestView: View {
                 xpValue: 10,
                 category: .mindfulness,
                 difficulty: .easy
-            ),
+            )
         ]
 
         // Add habits to context
@@ -203,12 +205,15 @@ struct AnalyticsTestView: View {
         let calendar = Calendar.current
         let today = Date()
 
-        for dayOffset in 0 ..< 7 {
-            guard let logDate = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
+        for dayOffset in 0..<7 {
+            guard let logDate = calendar.date(byAdding: .day, value: -dayOffset, to: today) else {
+                continue
+            }
 
             for habit in sampleHabits {
                 // Create logs with varying completion rates
-                let shouldComplete = (dayOffset % 2 == 0) || (habit.category == .mindfulness && dayOffset < 3)
+                let shouldComplete =
+                    (dayOffset % 2 == 0) || (habit.category == .mindfulness && dayOffset < 3)
 
                 if shouldComplete {
                     let log = HabitLog(
@@ -241,8 +246,11 @@ struct TestResultsView: View {
                         Text("Test Summary")
                             .font(.headline)
                         Spacer()
-                        Image(systemName: results.allPassed ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
-                            .foregroundColor(results.allPassed ? .green : .orange)
+                        Image(
+                            systemName: results.allPassed
+                                ? "checkmark.circle.fill" : "exclamationmark.triangle.fill"
+                        )
+                        .foregroundColor(results.allPassed ? .green : .orange)
                     }
 
                     HStack(spacing: 20) {

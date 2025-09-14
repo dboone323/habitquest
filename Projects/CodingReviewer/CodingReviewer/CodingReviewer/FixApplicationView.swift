@@ -73,9 +73,11 @@ struct FixApplicationView: View {
         }
         .alert("Apply Fixes", isPresented: $showingApplyConfirmation) {
             Button("Cancel", role: .cancel) {}
+                .accessibilityLabel("Cancel")
             Button("Apply") {
                 applyConfirmedFixes()
             }
+            .accessibilityLabel("Apply")
         } message: {
             Text("Apply \(selectedFixes.count) selected fixes? This action cannot be undone.")
         }
@@ -111,7 +113,8 @@ struct FixApplicationView: View {
 
     private func previewSelectedFixes() {
         // Show preview of all selected fixes
-        if let firstFix = fixGenerator.generatedFixes.first(where: { selectedFixes.contains($0.id) }) {
+        if let firstFix = fixGenerator.generatedFixes.first(where: { selectedFixes.contains($0.id) }
+        ) {
             previewFix = firstFix
             showingDiffPreview = true
         }
@@ -121,14 +124,15 @@ struct FixApplicationView: View {
         var modifiedCode = originalCode
         let sortedFixes = fixGenerator.generatedFixes
             .filter { selectedFixes.contains($0.id) }
-            .sorted { $0.startLine > $1.startLine } // Apply from bottom to top
+            .sorted { $0.startLine > $1.startLine }  // Apply from bottom to top
 
         for fix in sortedFixes {
             do {
                 modifiedCode = try fixGenerator.applyFix(fix, to: modifiedCode)
                 appliedFixes.append(fix.id)
             } catch {
-                AppLogger.shared.log("Failed to apply fix \(fix.id): \(error)", level: .error, category: .ai)
+                AppLogger.shared.log(
+                    "Failed to apply fix \(fix.id): \(error)", level: .error, category: .ai)
             }
         }
 
@@ -170,6 +174,7 @@ struct FixApplicationHeader: View {
                             onSelectAll()
                         }
                     }
+                    .accessibilityLabel(selectedCount == totalFixes ? "Deselect All" : "Select All")
                     .buttonStyle(.bordered)
 
                     if selectedCount > 0 {
@@ -289,6 +294,7 @@ struct FixRowView: View {
                     .foregroundColor(isSelected ? .blue : .secondary)
                     .font(.title3)
             }
+            .accessibilityLabel(isSelected ? "Selected" : "Not selected")
             .disabled(isApplied)
 
             // Fix details
@@ -327,14 +333,17 @@ struct FixRowView: View {
                             .font(.caption2)
                             .foregroundColor(.secondary)
 
-                        Text(fix.originalCode.prefix(60) + (fix.originalCode.count > 60 ? "..." : ""))
-                            .font(.system(.caption, design: .monospaced))
-                            .foregroundColor(.secondary)
+                        Text(
+                            fix.originalCode.prefix(60) + (fix.originalCode.count > 60 ? "..." : "")
+                        )
+                        .font(.system(.caption, design: .monospaced))
+                        .foregroundColor(.secondary)
                     }
 
                     Spacer()
 
                     Button("Preview", action: onPreview)
+                        .accessibilityLabel("Preview fix")
                         .buttonStyle(.bordered)
                         .controlSize(.small)
                 }
@@ -396,12 +405,12 @@ struct ImpactIndicator: View {
 
     var body: some View {
         HStack(spacing: 2) {
-            ForEach(0 ..< impact.priority, id: \.self) { _ in
+            ForEach(0..<impact.priority, id: \.self) { _ in
                 Circle()
                     .fill(impactColor)
                     .frame(width: 6, height: 6)
             }
-            ForEach(impact.priority ..< 4, id: \.self) { _ in
+            ForEach(impact.priority..<4, id: \.self) { _ in
                 Circle()
                     .fill(Color.gray.opacity(0.3))
                     .frame(width: 6, height: 6)
@@ -434,9 +443,11 @@ struct FixActionBar: View {
 
             if hasSelectedFixes {
                 Button("Preview Selected", action: onPreviewSelected)
+                    .accessibilityLabel("Preview selected fixes")
                     .buttonStyle(.bordered)
 
                 Button("Apply Selected", action: onApplySelected)
+                    .accessibilityLabel("Apply selected fixes")
                     .buttonStyle(.borderedProminent)
             } else {
                 Text("Select fixes to apply")

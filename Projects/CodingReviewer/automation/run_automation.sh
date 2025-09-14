@@ -1,55 +1,29 @@
 #!/bin/bash
-# CodingReviewer Automation Wrapper
-# Quick access to automation features for CodingReviewer
+# Quantum Automation Runner for CodingReviewer
 
-# Load project configuration
-source "$(dirname "$0")/project_config.sh"
+set -e
 
-echo "🚀 CodingReviewer Automation Suite"
-echo "Project: $PROJECT_NAME ($PROJECT_TYPE)"
-echo ""
+PROJECT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+AUTOMATION_DIR="$PROJECT_PATH/Tools/Automation"
 
-case "${1:-help}" in
-    "build")
-        echo "🏗️  Building CodingReviewer..."
-        ./Tools/Automation/master_automation.sh run CodingReviewer
-        ;;
-    "test")
-        echo "🧪 Running tests..."
-        xcodebuild test -scheme "$BUILD_SCHEME" -destination "platform=iOS Simulator,name=$TARGET_DEVICE"
-        ;;
-    "lint")
-        echo "🔍 Running linting..."
-        ./Tools/Automation/master_automation.sh lint CodingReviewer
-        ;;
-    "format")
-        echo "✨ Formatting code..."
-        ./Tools/Automation/master_automation.sh format CodingReviewer
-        ;;
-    "mcp")
-        echo "🔗 MCP Integration..."
-        ./Tools/Automation/mcp_workflow.sh "${2:-status}" CodingReviewer
-        ;;
-    "ai")
-        echo "🤖 AI Enhancements..."
-        ./Tools/Automation/ai_enhancement_system.sh "${2:-status}"
-        ;;
-    "status")
-        echo "📊 Project Status..."
-        ./Tools/Automation/master_automation.sh status
-        ;;
-    "all")
-        echo "🚀 Running full automation suite..."
-        ./Tools/Automation/master_automation.sh all
-        ;;
-    "help"|*)
-        echo "Available commands:"
-        echo "  build         - Build the project"
-        echo "  test          - Run tests"
-        echo "  lint          - Run linting"
-        echo "  format        - Format code"
-        echo "  mcp           - MCP integration"
-        echo "  ai            - AI enhancements"
-        echo "  status        - Show status"
-        ;;
-esac
+echo "🤖 Running Quantum Automation for CodingReviewer"
+
+# Run AI enhancement analysis
+if [[ -f "$AUTOMATION_DIR/ai_enhancement_system.sh" ]]; then
+    echo "🔍 Running AI enhancement analysis..."
+    bash "$AUTOMATION_DIR/ai_enhancement_system.sh" analyze "CodingReviewer"
+fi
+
+# Run intelligent auto-fix
+if [[ -f "$AUTOMATION_DIR/intelligent_autofix.sh" ]]; then
+    echo "🔧 Running intelligent auto-fix..."
+    bash "$AUTOMATION_DIR/intelligent_autofix.sh" fix "CodingReviewer"
+fi
+
+# Run MCP workflow checks
+if [[ -f "$AUTOMATION_DIR/mcp_workflow.sh" ]]; then
+    echo "🔄 Running MCP workflow checks..."
+    bash "$AUTOMATION_DIR/mcp_workflow.sh" check "CodingReviewer"
+fi
+
+echo "✅ Quantum automation completed for CodingReviewer"

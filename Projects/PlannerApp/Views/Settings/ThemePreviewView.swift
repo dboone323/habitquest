@@ -29,101 +29,9 @@ struct ThemePreviewView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
-                    // Theme Selection Grid
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
-                        ForEach(Theme.availableThemes, id: \.name) { theme in
-                            ThemePreviewCard(
-                                theme: theme,
-                                isSelected: selectedTheme.name == theme.name
-                            ) {
-                                selectedTheme = theme
-                                // Apply haptic feedback if enabled
-                                #if os(iOS)
-                                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                                    impactFeedback.impactOccurred()
-                                #endif
-                            }
-                        }
-                    }
-                    .padding(.horizontal)
-
-                    Divider()
-                        .padding(.horizontal)
-
-                    // Live Preview Section
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Preview")
-                            .font(.title2.bold())
-                            .foregroundColor(selectedTheme.primaryTextColor)
-                            .padding(.horizontal)
-
-                        // Sample Dashboard Card
-                        ModernCard {
-                            VStack(alignment: .leading, spacing: 12) {
-                                HStack {
-                                    Text("Today's Tasks")
-                                        .font(.headline)
-                                        .foregroundColor(selectedTheme.primaryTextColor)
-                                    Spacer()
-                                    Text("4")
-                                        .font(.title2.bold())
-                                        .foregroundColor(selectedTheme.primaryAccentColor)
-                                }
-
-                                ForEach(sampleTasks.prefix(3), id: \.self) { task in
-                                    HStack {
-                                        Image(systemName: "circle")
-                                            .foregroundColor(selectedTheme.secondaryAccentColor)
-                                        Text(task)
-                                            .font(.body)
-                                            .foregroundColor(selectedTheme.primaryTextColor)
-                                        Spacer()
-                                    }
-                                }
-
-                                ProgressBar(progress: 0.6, showPercentage: true)
-                                    .environmentObject(createThemeManager(for: selectedTheme))
-                            }
-                        }
-                        .environmentObject(createThemeManager(for: selectedTheme))
-                        .padding(.horizontal)
-
-                        // Sample Buttons
-                        VStack(spacing: 12) {
-                            ModernButton(title: "Primary Action") {}
-                                .environmentObject(createThemeManager(for: selectedTheme))
-
-                            HStack(spacing: 12) {
-                                ModernButton(title: "Secondary") {}
-                                    .environmentObject(createThemeManager(for: selectedTheme))
-
-                                ModernButton(title: "Destructive") {}
-                                    .environmentObject(createThemeManager(for: selectedTheme))
-                            }
-                        }
-                        .padding(.horizontal)
-
-                        // Sample Goals Section
-                        ModernCard {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Goals Progress")
-                                    .font(.headline)
-                                    .foregroundColor(selectedTheme.primaryTextColor)
-
-                                ForEach(Array(sampleGoals.enumerated()), id: \.offset) { index, goal in
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(goal)
-                                            .font(.body)
-                                            .foregroundColor(selectedTheme.primaryTextColor)
-                                        ProgressBar(progress: Double(index + 1) * 0.3)
-                                            .environmentObject(createThemeManager(for: selectedTheme))
-                                    }
-                                }
-                            }
-                        }
-                        .environmentObject(createThemeManager(for: selectedTheme))
-                        .padding(.horizontal)
-                    }
+                    themeSelectionGrid
+                    Divider().padding(.horizontal)
+                    livePreviewSection
                 }
                 .padding(.vertical)
             }
@@ -132,25 +40,133 @@ struct ThemePreviewView: View {
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
-                            presentationMode.wrappedValue.dismiss()
-                        }
-                    }
-
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Apply") {
-                            themeManager.setTheme(selectedTheme)
-                            presentationMode.wrappedValue.dismiss()
-                        }
-                        .fontWeight(.semibold)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Text("Cancel")
+                            .accessibilityLabel("Button")
                     }
                 }
+
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(action: {
+                        themeManager.setTheme(selectedTheme)
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Text("Apply")
+                            .fontWeight(.semibold)
+                            .accessibilityLabel("Button")
+                    }
+                }
+            }
         }
         .onAppear {
             selectedTheme = themeManager.currentTheme
         }
+    }
+
+    private var themeSelectionGrid: some View {
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
+            ForEach(Theme.availableThemes, id: \.name) { theme in
+                ThemePreviewCard(
+                    theme: theme,
+                    isSelected: selectedTheme.name == theme.name
+                ) {
+                    selectedTheme = theme
+                    // Apply haptic feedback if enabled
+                    #if os(iOS)
+                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                        impactFeedback.impactOccurred()
+                    #endif
+                }
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    private var livePreviewSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Preview")
+                .font(.title2.bold())
+                .foregroundColor(selectedTheme.primaryTextColor)
+                .padding(.horizontal)
+
+            sampleDashboardCard
+            sampleButtonsSection
+            sampleGoalsSection
+        }
+    }
+
+    private var sampleDashboardCard: some View {
+        ModernCard {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Text("Today's Tasks")
+                        .font(.headline)
+                        .foregroundColor(selectedTheme.primaryTextColor)
+                    Spacer()
+                    Text("4")
+                        .font(.title2.bold())
+                        .foregroundColor(selectedTheme.primaryAccentColor)
+                }
+
+                ForEach(sampleTasks.prefix(3), id: \.self) { task in
+                    HStack {
+                        Image(systemName: "circle")
+                            .foregroundColor(selectedTheme.secondaryAccentColor)
+                        Text(task)
+                            .font(.body)
+                            .foregroundColor(selectedTheme.primaryTextColor)
+                        Spacer()
+                    }
+                }
+
+                ProgressBar(progress: 0.6, showPercentage: true)
+                    .environmentObject(createThemeManager(for: selectedTheme))
+            }
+        }
+        .environmentObject(createThemeManager(for: selectedTheme))
+        .padding(.horizontal)
+    }
+
+    private var sampleButtonsSection: some View {
+        VStack(spacing: 12) {
+            ModernButton(title: "Primary Action") {}
+                .environmentObject(createThemeManager(for: selectedTheme))
+
+            HStack(spacing: 12) {
+                ModernButton(title: "Secondary") {}
+                    .environmentObject(createThemeManager(for: selectedTheme))
+
+                ModernButton(title: "Destructive") {}
+                    .environmentObject(createThemeManager(for: selectedTheme))
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    private var sampleGoalsSection: some View {
+        ModernCard {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Goals Progress")
+                    .font(.headline)
+                    .foregroundColor(selectedTheme.primaryTextColor)
+
+                ForEach(Array(sampleGoals.enumerated()), id: \.offset) { index, goal in
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(goal)
+                            .font(.body)
+                            .foregroundColor(selectedTheme.primaryTextColor)
+                        ProgressBar(progress: Double(index + 1) * 0.3)
+                            .environmentObject(createThemeManager(for: selectedTheme))
+                    }
+                }
+            }
+        }
+        .environmentObject(createThemeManager(for: selectedTheme))
+        .padding(.horizontal)
     }
 
     private func createThemeManager(for theme: Theme) -> ThemeManager {
@@ -192,6 +208,7 @@ struct ThemePreviewCard: View {
                         .font(.caption)
                         .foregroundColor(theme.secondaryTextColor)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityLabel("Button")
                 }
 
                 Spacer()

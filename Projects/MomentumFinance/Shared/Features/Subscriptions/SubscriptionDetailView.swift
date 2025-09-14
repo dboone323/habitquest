@@ -17,16 +17,16 @@ extension Features.Subscriptions {
         var subscription: Subscription?
 
         #if canImport(SwiftData)
-            #if canImport(SwiftData)
-                private var subscriptions: [Subscription] = []
-                private var transactions: [FinancialTransaction] = []
-            #else
-                private var subscriptions: [Subscription] = []
-                private var transactions: [FinancialTransaction] = []
-            #endif
+        #if canImport(SwiftData)
+        private var subscriptions: [Subscription] = []
+        private var transactions: [FinancialTransaction] = []
         #else
-            private var subscriptions: [Subscription] = []
-            private var transactions: [FinancialTransaction] = []
+        private var subscriptions: [Subscription] = []
+        private var transactions: [FinancialTransaction] = []
+        #endif
+        #else
+        private var subscriptions: [Subscription] = []
+        private var transactions: [FinancialTransaction] = []
         #endif
 
         @State private var showingProcessPaymentConfirmation = false
@@ -73,7 +73,7 @@ extension Features.Subscriptions {
                                         subscription.isActive = newValue
                                         try? modelContext.save()
                                     },
-                                )
+                                    )
                             )
                             .padding(.top, 8)
                             .toggleStyle(.switch)
@@ -106,13 +106,13 @@ extension Features.Subscriptions {
                                 value: subscription.nextDueDate.formatted(
                                     date: .long, time: .omitted),
                                 highlight: isPaymentDueSoon(subscription),
-                            )
+                                )
 
                             SubscriptionDetailRow(
                                 title: "Payment Status",
                                 value: paymentStatusText(subscription),
                                 highlight: isPaymentOverdue(subscription),
-                            )
+                                )
 
                             if let notes = subscription.notes, !notes.isEmpty {
                                 VStack(alignment: .leading, spacing: 8) {
@@ -131,7 +131,7 @@ extension Features.Subscriptions {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(platformBackgroundColor)
                                 .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                        )
+                            )
 
                         // Payment History (Placeholder)
                         VStack(alignment: .leading, spacing: 16) {
@@ -173,8 +173,7 @@ extension Features.Subscriptions {
                                     .padding(.vertical, 4)
 
                                     if relatedTransactions.firstIndex(of: transaction)
-                                        != relatedTransactions.prefix(5).count - 1
-                                    {
+                                        != relatedTransactions.prefix(5).count - 1 {
                                         Divider()
                                     }
                                 }
@@ -185,7 +184,7 @@ extension Features.Subscriptions {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(platformBackgroundColor)
                                 .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                        )
+                            )
 
                         // Action Button
                         Button(
@@ -200,7 +199,7 @@ extension Features.Subscriptions {
                                     .background(
                                         RoundedRectangle(cornerRadius: 10)
                                             .fill(Color.blue),
-                                    )
+                                        )
                                     .foregroundColor(.white)
                             }
                         )
@@ -210,9 +209,11 @@ extension Features.Subscriptions {
                     .navigationTitle("Subscription Details")
                     .alert("Process Payment", isPresented: $showingProcessPaymentConfirmation) {
                         Button("Cancel", role: .cancel) {}
+                            .accessibilityLabel("Button")
                         Button("Process Payment") {
                             subscription.processPayment(modelContext: modelContext)
                         }
+                        .accessibilityLabel("Button")
                     } message: {
                         Text(
                             "Process a payment of \(subscription.amount.formatted(.currency(code: "USD"))) "
@@ -223,7 +224,7 @@ extension Features.Subscriptions {
                         "Subscription Not Found",
                         systemImage: "creditcard.slash",
                         description: Text("The requested subscription could not be found"),
-                    )
+                        )
                 }
             }
         }
@@ -261,8 +262,7 @@ extension Features.Subscriptions {
         }
 
         private func getRelatedTransactions(for subscription: Subscription)
-            -> [FinancialTransaction]
-        {
+        -> [FinancialTransaction] {
             // In a real implementation, we would filter transactions specifically related to this subscription
             // For example, by matching notes field or subscription ID field
             transactions
@@ -276,11 +276,11 @@ extension Features.Subscriptions {
         // Cross-platform background color
         private var platformBackgroundColor: Color {
             #if canImport(UIKit)
-                return Color(uiColor: .systemBackground)
+            return Color(uiColor: .systemBackground)
             #elseif canImport(AppKit)
-                return Color(nsColor: .windowBackgroundColor)
+            return Color(nsColor: .windowBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
     }

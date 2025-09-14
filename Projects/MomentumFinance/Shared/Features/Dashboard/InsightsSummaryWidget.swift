@@ -8,31 +8,31 @@ import SwiftUI
 struct InsightsSummaryWidget: View {
     @Environment(\.modelContext) private var modelContext
     #if canImport(SwiftData)
-        #if canImport(SwiftData)
-            #if canImport(SwiftData)
-                #if canImport(SwiftData)
-                    private var transactions: [FinancialTransaction] = []
-                    private var accounts: [FinancialAccount] = []
-                    private var budgets: [Budget] = []
-                #else
-                    private var transactions: [FinancialTransaction] = []
-                    private var accounts: [FinancialAccount] = []
-                    private var budgets: [Budget] = []
-                #endif
-            #else
-                private var transactions: [FinancialTransaction] = []
-                private var accounts: [FinancialAccount] = []
-                private var budgets: [Budget] = []
-            #endif
-        #else
-            private var transactions: [FinancialTransaction] = []
-            private var accounts: [FinancialAccount] = []
-            private var budgets: [Budget] = []
-        #endif
+    #if canImport(SwiftData)
+    #if canImport(SwiftData)
+    #if canImport(SwiftData)
+    private var transactions: [FinancialTransaction] = []
+    private var accounts: [FinancialAccount] = []
+    private var budgets: [Budget] = []
     #else
-        private var transactions: [FinancialTransaction] = []
-        private var accounts: [FinancialAccount] = []
-        private var budgets: [Budget] = []
+    private var transactions: [FinancialTransaction] = []
+    private var accounts: [FinancialAccount] = []
+    private var budgets: [Budget] = []
+    #endif
+    #else
+    private var transactions: [FinancialTransaction] = []
+    private var accounts: [FinancialAccount] = []
+    private var budgets: [Budget] = []
+    #endif
+    #else
+    private var transactions: [FinancialTransaction] = []
+    private var accounts: [FinancialAccount] = []
+    private var budgets: [Budget] = []
+    #endif
+    #else
+    private var transactions: [FinancialTransaction] = []
+    private var accounts: [FinancialAccount] = []
+    private var budgets: [Budget] = []
     #endif
 
     @State private var isLoading = true
@@ -183,8 +183,8 @@ struct InsightsSummaryWidget: View {
 
         return
             transactions
-                .filter { $0.date > lastWeek && $0.transactionType == .expense }
-                .reduce(0) { $0 + $1.amount }
+            .filter { $0.date > lastWeek && $0.transactionType == .expense }
+            .reduce(0) { $0 + $1.amount }
     }
 
     private func calculateMonthComparisonRatio() -> Double {
@@ -194,13 +194,13 @@ struct InsightsSummaryWidget: View {
 
     private func insightBackgroundColor() -> some View {
         #if os(iOS)
-            #if os(iOS)
-                return Color(UIColor.secondarySystemBackground)
-            #else
-                return Color.secondary.opacity(0.1)
-            #endif
+        #if os(iOS)
+        return Color(UIColor.secondarySystemBackground)
         #else
-            return Color(NSColor.windowBackgroundColor)
+        return Color.secondary.opacity(0.1)
+        #endif
+        #else
+        return Color(NSColor.windowBackgroundColor)
         #endif
     }
 }

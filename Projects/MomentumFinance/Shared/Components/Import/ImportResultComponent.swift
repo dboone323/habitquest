@@ -19,7 +19,7 @@ struct ImportResultView: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.secondary)
 
-            Button("Done", action: onDismiss)
+            Button("Done", action: onDismiss).accessibilityLabel("Button")
                 .font(.headline)
                 .padding()
                 .frame(maxWidth: .infinity)

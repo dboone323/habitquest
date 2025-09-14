@@ -13,7 +13,7 @@ struct DataManagementSection: View {
                 Text("Forever").tag(0)
             }
 
-            Button(action: { showingDeleteConfirmation = true }) {
+            Button(action: { showingDeleteConfirmation = true }).accessibilityLabel("Button") {
                 HStack {
                     Image(systemName: "trash")
                         .foregroundColor(.red)
@@ -22,8 +22,8 @@ struct DataManagementSection: View {
                 }
             }
             .alert("Delete All Data", isPresented: $showingDeleteConfirmation) {
-                Button("Cancel", role: .cancel) {}
-                Button("Delete", role: .destructive) {
+                Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
+                Button("Delete", role: .destructive).accessibilityLabel("Button") {
                     // Handle data deletion
                 }
             } message: {

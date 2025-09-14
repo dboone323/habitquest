@@ -36,7 +36,7 @@ extension Features.Transactions {
                 }
 
                 if searchText.isEmpty {
-                    Button("Add Transaction") {
+                    Button("Add Transaction").accessibilityLabel("Button") {
                         onAddTransaction()
                     }
                     .buttonStyle(.borderedProminent)

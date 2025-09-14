@@ -22,9 +22,9 @@ struct JournalView: View {
         let sorted = journalEntries.sorted(by: { $0.date > $1.date })
         if searchText.isEmpty { return sorted }
         return sorted.filter {
-            $0.title.localizedCaseInsensitiveContains(searchText) ||
-                $0.body.localizedCaseInsensitiveContains(searchText) ||
-                $0.mood.contains(searchText)
+            $0.title.localizedCaseInsensitiveContains(searchText)
+                || $0.body.localizedCaseInsensitiveContains(searchText)
+                || $0.mood.contains(searchText)
         }
     }
 
@@ -38,17 +38,22 @@ struct JournalView: View {
                 .toolbar {
                     // Always show toolbar items
                     ToolbarItem(placement: .primaryAction) {
-                        Button { showAddEntry.toggle() } label: { Image(systemName: "plus") }
+                        Button {
+                            showAddEntry.toggle()
+                        } label: {
+                            Image(systemName: "plus")
+                        }
                     }
                     ToolbarItem(placement: .navigation) {
                         Button("Edit") {
                             // Custom edit implementation for macOS
                         }
+                        .accessibilityLabel("Button")
                     }
                 }
                 .sheet(isPresented: $showAddEntry) {
                     AddJournalEntryView(journalEntries: $journalEntries)
-                        .environmentObject(themeManager) // Pass ThemeManager
+                        .environmentObject(themeManager)  // Pass ThemeManager
                         .onDisappear(perform: saveEntries)
                 }
                 .onAppear {
@@ -60,7 +65,7 @@ struct JournalView: View {
                 .accentColor(themeManager.currentTheme.primaryAccentColor)
             // Removed alert for authentication errors
 
-        } // End NavigationStack
+        }  // End NavigationStack
         // Removed .onChange(of: biometricsEnabled)
     }
 
@@ -83,7 +88,7 @@ struct JournalView: View {
                                 .environmentObject(themeManager)
                         }
                     }
-                    .onDelete(perform: deleteEntry) // Use the updated deleteEntry function
+                    .onDelete(perform: deleteEntry)  // Use the updated deleteEntry function
                     .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
                 }
             }
@@ -98,7 +103,10 @@ struct JournalView: View {
     private func makeEmptyStateText(_ text: String) -> some View {
         Text(text)
             .foregroundColor(themeManager.currentTheme.secondaryTextColor)
-            .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.secondaryFontName, size: 15))
+            .font(
+                themeManager.currentTheme.font(
+                    forName: themeManager.currentTheme.secondaryFontName, size: 15)
+            )
             .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical)
@@ -149,14 +157,24 @@ struct JournalRow: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(entry.title)
-                    .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.primaryFontName, size: 17, weight: .medium))
+                    .font(
+                        themeManager.currentTheme.font(
+                            forName: themeManager.currentTheme.primaryFontName, size: 17,
+                            weight: .medium)
+                    )
                     .foregroundColor(themeManager.currentTheme.primaryTextColor)
                     .lineLimit(1)
                 Text(entry.date, formatter: rowDateFormatter)
-                    .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.secondaryFontName, size: 14))
+                    .font(
+                        themeManager.currentTheme.font(
+                            forName: themeManager.currentTheme.secondaryFontName, size: 14)
+                    )
                     .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                 Text(entry.body)
-                    .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.secondaryFontName, size: 13))
+                    .font(
+                        themeManager.currentTheme.font(
+                            forName: themeManager.currentTheme.secondaryFontName, size: 13)
+                    )
                     .foregroundColor(themeManager.currentTheme.secondaryTextColor.opacity(0.8))
                     .lineLimit(1)
             }

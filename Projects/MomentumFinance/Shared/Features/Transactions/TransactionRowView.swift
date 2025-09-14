@@ -14,7 +14,7 @@ extension Features.Transactions {
         let onTapped: () -> Void
 
         var body: some View {
-            Button(action: onTapped) {
+            Button(action: onTapped).accessibilityLabel("Button") {
                 HStack {
                     VStack(alignment: .leading) {
                         Text(transaction.title)

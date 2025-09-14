@@ -6,14 +6,11 @@
 // Created on July 17, 2025.
 //
 
+// Import CodeLanguage enum for language support
+// import removed: CodingReviewer.CodingReviewer.CodingReviewer.FileManagerService
 import Foundation
 
-// Import our centralized shared types
-// This provides access to CodeLanguage and other shared enums
-
 // MARK: - AI Analysis Request
-
-// TODO: Review error handling in this file - Consider wrapping force unwraps and try statements in proper error handling
 
 struct AIAnalysisRequest {
     let code: String
@@ -45,7 +42,7 @@ struct AIAnalysisRequest {
 // MARK: - AI Analysis Response
 
 struct ComplexityScore {
-    let score: Double // 0.0 to 1.0
+    let score: Double  // 0.0 to 1.0
     let description: String
     let cyclomaticComplexity: Double
 
@@ -59,7 +56,7 @@ struct ComplexityScore {
 }
 
 struct MaintainabilityScore {
-    let score: Double // 0.0 to 1.0
+    let score: Double  // 0.0 to 1.0
     let description: String
 
     enum Rating: String, CaseIterable {
@@ -88,7 +85,7 @@ struct AISuggestion {
     let severity: Severity
     let lineNumber: Int?
     let columnNumber: Int?
-    let confidence: Double // 0.0 to 1.0
+    let confidence: Double  // 0.0 to 1.0
 
     enum SuggestionType: String, CaseIterable {
         case codeQuality = "Code Quality"
@@ -143,7 +140,7 @@ enum AIServiceError: LocalizedError {
         switch self {
         case .invalidAPIKey:
             "Invalid API key. Please check your AI service configuration in settings."
-        case let .networkError(error):
+        case .networkError(let error):
             "Network error: \(error.localizedDescription)"
         case .rateLimitExceeded:
             "Rate limit exceeded. Please try again later."

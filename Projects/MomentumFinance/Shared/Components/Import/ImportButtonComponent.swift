@@ -5,7 +5,7 @@ struct ImportButtonComponent: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: action) {
+        Button(action: action).accessibilityLabel("Button") {
             HStack {
                 if isImporting {
                     ProgressView()

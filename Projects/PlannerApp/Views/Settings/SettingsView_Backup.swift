@@ -31,7 +31,7 @@ struct SettingsView: View {
                     HStack {
                         Text("Name")
                         Spacer()
-                        TextField("Your Name", text: $userName)
+                        TextField("Your Name", text: $userName).accessibilityLabel("Text Field")
                             .multilineTextAlignment(.trailing)
                     }
                 }
@@ -46,7 +46,7 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.menu)
 
-                    Button(action: { showingThemePreview = true }) {
+                    Button(action: { showingThemePreview = true }).accessibilityLabel("Button") {
                         HStack {
                             Text("Theme Preview")
                                 .foregroundColor(themeManager.currentTheme.primaryTextColor)
@@ -95,8 +95,8 @@ struct SettingsView: View {
                     .environmentObject(themeManager)
             }
             .alert("Notification Permissions", isPresented: $showingNotificationAlert) {
-                Button("Open Settings", action: openAppSettings)
-                Button("Cancel", role: .cancel) {}
+                Button("Open Settings", action: openAppSettings).accessibilityLabel("Button")
+                Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
             } message: {
                 Text("Enable notifications in Settings to receive reminders.")
             }
@@ -147,7 +147,7 @@ struct ThemePreviewSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("Done").accessibilityLabel("Button") {
                         dismiss()
                     }
                 }
@@ -156,7 +156,7 @@ struct ThemePreviewSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button("Done") {
+                    Button("Done").accessibilityLabel("Button") {
                         dismiss()
                     }
                 }

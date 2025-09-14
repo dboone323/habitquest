@@ -3,68 +3,42 @@ import SwiftData
 import SwiftUI
 import UserNotifications
 
-// MARK: - TEMPORARY: Search Types Bridge
+// Import InsightType from FinancialIntelligenceAnalysis
+// NOTE: InsightType is defined in Shared/Intelligence/FinancialIntelligenceAnalysis.swift
 
-// TODO: Remove when proper SearchTypes.swift is included in Xcode project
-// These are bridge definitions to resolve immediate compilation issues
+// Temporary definition of InsightType to resolve compilation issues
+public enum InsightType: Sendable {
+    case spendingPattern, anomaly, budgetAlert, forecast, optimization, budgetRecommendation,
+        positiveSpendingTrend
 
-/// Search filter options for global search (temporary bridge)
-public enum SearchFilter: String, CaseIterable, Hashable {
-    case all = "All"
-    case accounts = "Accounts"
-    case transactions = "Transactions"
-    case subscriptions = "Subscriptions"
-    case budgets = "Budgets"
-}
-
-/// Represents a search result item (temporary bridge)
-public struct SearchResult: Identifiable, Hashable {
-    public let id: String
-    public let title: String
-    public let subtitle: String?
-    public let type: SearchFilter
-    public let iconName: String
-    public let data: Any?
-    public let relevanceScore: Double
-
-    public init(id: String = UUID().uuidString, title: String, subtitle: String? = nil, type: SearchFilter, iconName: String, data: Any? = nil, relevanceScore: Double = 1.0) {
-        self.id = id
-        self.title = title
-        self.subtitle = subtitle
-        self.type = type
-        self.iconName = iconName
-        self.data = data
-        self.relevanceScore = relevanceScore
+    public var displayName: String {
+        switch self {
+        case .spendingPattern: "Spending Pattern"
+        case .anomaly: "Anomaly"
+        case .budgetAlert: "Budget Alert"
+        case .forecast: "Forecast"
+        case .optimization: "Optimization"
+        case .budgetRecommendation: "Budget Recommendation"
+        case .positiveSpendingTrend: "Positive Spending Trend"
+        }
     }
 
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(type)
-    }
-
-    public static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {
-        lhs.id == rhs.id && lhs.type == rhs.type
+    public var icon: String {
+        switch self {
+        case .spendingPattern: "chart.line.uptrend.xyaxis"
+        case .anomaly: "exclamationmark.triangle"
+        case .budgetAlert: "bell"
+        case .forecast: "chart.xyaxis.line"
+        case .optimization: "arrow.up.right.circle"
+        case .budgetRecommendation: "lightbulb"
+        case .positiveSpendingTrend: "arrow.down.circle"
+        }
     }
 }
 
-/// Search engine service for global search (temporary bridge)
-@MainActor
-public final class SearchEngineService: ObservableObject {
+// MARK: - Missing Type Definitions
 
-    public init(modelContext: ModelContext) {
-        // Simplified bridge implementation
-    }
-
-    public func search(query: String, filter: SearchFilter = .all) -> [SearchResult] {
-        // Simplified bridge implementation - returns empty results
-        // TODO: Replace with proper implementation from Shared/Features/GlobalSearch/SearchEngineService.swift
-        []
-    }
-}
-
-// MARK: - TEMPORARY: Import Types Bridge
-
-// TODO: Remove when proper DataImportModels.swift is included in Xcode project
+/// - TODO: Remove when proper DataImportModels.swift is included in Xcode project
 
 /// Represents a data validation error during import (temporary bridge)
 public struct ValidationError: Identifiable, Codable, Sendable {
@@ -126,43 +100,6 @@ public struct ImportResult: Codable, Sendable {
         self.duplicatesSkipped = duplicatesSkipped
         self.errors = errors
         self.warnings = warnings
-    }
-}
-
-/// Import result view component (temporary bridge)
-public struct ImportResultView: View {
-    public let result: ImportResult
-    public let onDismiss: () -> Void
-
-    public init(result: ImportResult, onDismiss: @escaping () -> Void) {
-        self.result = result
-        self.onDismiss = onDismiss
-    }
-
-    public var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: result.success ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
-                .font(.system(size: 48))
-                .foregroundColor(result.success ? .green : .orange)
-
-            Text(result.success ? "Import Successful" : "Import Completed with Issues")
-                .font(.title2)
-                .fontWeight(.bold)
-
-            Text("Imported \\(result.transactionsImported) transactions")
-                .font(.body)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.secondary)
-
-            Button("Done", action: onDismiss)
-                .font(.headline)
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(12)
-        }
-        .padding()
     }
 }
 
@@ -264,14 +201,14 @@ public struct ColorDefinitions: Sendable {
     }
 
     public static let categoryColors: [Color] = [
-        Color.orange, // food
-        Color.blue, // transport
-        Color.purple, // entertainment
-        Color.green, // shopping
-        Color.red, // bills
-        Color.mint, // income
-        Color.teal, // savings
-        Color.gray, // other
+        Color.orange,  // food
+        Color.blue,  // transport
+        Color.purple,  // entertainment
+        Color.green,  // shopping
+        Color.red,  // bills
+        Color.mint,  // income
+        Color.teal,  // savings
+        Color.gray,  // other
     ]
 
     // Additional methods for complex color system
@@ -345,13 +282,13 @@ public enum BudgetType: Sendable {
     case under, near, over
 }
 
-// MARK: - ColorTheme Extension for Demo Components
+// MARK: - ColorTheme Extension for Demo Components (Removed - ColorTheme not available in this context)
 
-extension ColorTheme {
-    var primary: Color { accentPrimary }
-    var success: Color { income }
-    var error: Color { expense }
-}
+// extension ColorTheme {
+//     var primary: Color { accentPrimary }
+//     var success: Color { income }
+//     var error: Color { expense }
+// }
 
 public enum DarkModePreference: String, CaseIterable, Sendable {
     case light
@@ -493,26 +430,6 @@ public struct DeepLink: Sendable {
     }
 }
 
-public enum TabSection: String, CaseIterable, Sendable {
-    case dashboard
-    case transactions
-    case budgets
-    case goals
-    case insights
-    case settings
-
-    public var displayName: String {
-        switch self {
-        case .dashboard: "Dashboard"
-        case .transactions: "Transactions"
-        case .budgets: "Budgets"
-        case .goals: "Goals"
-        case .insights: "Insights"
-        case .settings: "Settings"
-        }
-    }
-}
-
 // MARK: - Search Types
 
 // MARK: - Search Types
@@ -525,6 +442,11 @@ public protocol EntityManager: Sendable {
     func save() async throws
     func delete<T>(_ entity: T) async throws
     func fetch<T>(_ type: T.Type) async throws -> [T]
+    func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping) async throws
+        -> FinancialAccount?
+    func getOrCreateCategory(
+        from fields: [String], columnMapping: CSVColumnMapping, transactionType: TransactionType
+    ) async throws -> ExpenseCategory?
 }
 
 public final class DefaultEntityManager: EntityManager {
@@ -533,9 +455,21 @@ public final class DefaultEntityManager: EntityManager {
     public func save() async throws {}
     public func delete(_ entity: some Any) async throws {}
     public func fetch<T>(_ type: T.Type) async throws -> [T] { [] }
-}
 
-// Note: SearchEngineService removed - using proper implementation from Shared/Features/GlobalSearch/SearchEngineService.swift
+    public func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping)
+        async throws -> FinancialAccount?
+    {
+        // Mock implementation - return a default account
+        return FinancialAccount(name: "Default Account", type: .checking)
+    }
+
+    public func getOrCreateCategory(
+        from fields: [String], columnMapping: CSVColumnMapping, transactionType: TransactionType
+    ) async throws -> ExpenseCategory? {
+        // Mock implementation - return a default category
+        return ExpenseCategory(name: "General")
+    }
+}
 
 public final class ExportEngineService: Sendable {
     public init() {}
@@ -560,60 +494,6 @@ public final class ExportEngineService: Sendable {
 
     private func exportToPDF() async throws -> URL {
         URL(fileURLWithPath: "/tmp/export.pdf")
-    }
-}
-
-// MARK: - Notification Manager Types
-
-public final class NotificationPermissionManager: Sendable {
-    public init(logger: Any) {}
-
-    public func requestPermission() async -> Bool {
-        true
-    }
-
-    public func requestNotificationPermission() async -> Bool {
-        true
-    }
-
-    public func checkNotificationPermission(completion: @escaping (Bool) -> Void) {
-        completion(true)
-    }
-}
-
-public final class BudgetNotificationScheduler: Sendable {
-    public init(logger: Any) {}
-
-    public func scheduleNotifications() async {
-        // Implementation
-    }
-
-    public func scheduleWarningNotifications(for budgets: [Any]) {
-        // Implementation
-    }
-}
-
-public final class SubscriptionNotificationScheduler: Sendable {
-    public init(logger: Any) {}
-
-    public func scheduleNotifications() async {
-        // Implementation
-    }
-
-    public func scheduleNotifications(for subscriptions: [Any]) {
-        // Implementation
-    }
-}
-
-public final class GoalNotificationScheduler: Sendable {
-    public init(logger: Any) {}
-
-    public func scheduleNotifications() async {
-        // Implementation
-    }
-
-    public func scheduleGoalNotifications(for goals: [Any]) {
-        // Implementation
     }
 }
 
@@ -663,6 +543,7 @@ public enum AnimatedButtonComponent {
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }
+            .accessibilityLabel("Button")
         }
 
         public init(label: String, action: @escaping () -> Void) {
@@ -741,6 +622,7 @@ public enum FloatingActionButtonComponent {
                     .clipShape(Circle())
                     .shadow(radius: 4)
             }
+            .accessibilityLabel("Button")
         }
 
         public init(icon: String, action: @escaping () -> Void) {
@@ -848,6 +730,7 @@ public struct ImportButtonComponent: View {
             .cornerRadius(12)
         }
         .disabled(isImporting)
+        .accessibilityLabel("Button")
     }
 
     public init(isImporting: Bool, action: @escaping () -> Void) {
@@ -921,7 +804,9 @@ public struct ThemeSelectorCard: View {
                                 .font(.caption)
                         }
                         .padding()
-                        .background(selectedThemeMode == mode ? Color.blue : Color.gray.opacity(0.2))
+                        .background(
+                            selectedThemeMode == mode ? Color.blue : Color.gray.opacity(0.2)
+                        )
                         .foregroundColor(selectedThemeMode == mode ? .white : .primary)
                         .cornerRadius(8)
                     }
@@ -1238,6 +1123,7 @@ public struct FilterChip: View {
                 .foregroundColor(isSelected ? .white : .primary)
                 .cornerRadius(16)
         }
+        .accessibilityLabel("Button")
     }
 
     public init(title: String, isSelected: Bool, action: @escaping () -> Void) {
@@ -1291,7 +1177,7 @@ public struct InsightDetailView: View {
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
 
-                        Text(insight.type.rawValue.capitalized)
+                        Text(insight.type.displayName)
                             .font(.subheadline)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
@@ -1308,13 +1194,14 @@ public struct InsightDetailView: View {
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-                .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Done") {
-                            dismiss()
-                        }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Done") {
+                        dismiss()
                     }
+                    .accessibilityLabel("Button")
                 }
+            }
         }
     }
 
@@ -1341,97 +1228,10 @@ public struct InsightDetailView: View {
     }
 }
 
-// MARK: - Notification Support
-
-/// Represents a scheduled notification with its metadata
-public struct ScheduledNotification: Identifiable, Sendable {
-    public let id: String
-    public let title: String
-    public let body: String
-    public let type: String
-    public let scheduledDate: Date?
-
-    public init(id: String, title: String, body: String, type: String, scheduledDate: Date?) {
-        self.id = id
-        self.title = title
-        self.body = body
-        self.type = type
-        self.scheduledDate = scheduledDate
-    }
-}
-
-// MARK: - Insight Types Support
-
-public enum InsightType: String, CaseIterable, Sendable {
-    case spendingPattern
-    case positiveSpendingTrend
-    case anomaly
-    case budgetAlert
-    case budgetInsight
-    case budgetRecommendation
-    case subscriptionDetection
-    case forecast
-    case optimization
-
-    /// System icon for the insight type
-    public var icon: String {
-        switch self {
-        case .spendingPattern:
-            "chart.line.uptrend.xyaxis"
-        case .positiveSpendingTrend:
-            "arrow.down.circle"
-        case .anomaly:
-            "exclamationmark.triangle"
-        case .budgetAlert:
-            "chart.pie.fill"
-        case .budgetInsight:
-            "chart.bar.fill"
-        case .budgetRecommendation:
-            "plus.circle"
-        case .subscriptionDetection:
-            "calendar.badge.clock"
-        case .forecast:
-            "chart.xyaxis.line"
-        case .optimization:
-            "bolt.circle"
-        }
-    }
-}
-
-// MARK: - Notification Service Extensions
-
-public extension NotificationPermissionManager {
-    func checkNotificationPermission() async -> Bool {
-        let settings = await UNUserNotificationCenter.current().notificationSettings()
-        return settings.authorizationStatus == .authorized
-    }
-}
-
-public extension BudgetNotificationScheduler {
-    func scheduleWarningNotifications() {
-        // Placeholder for budget warning scheduling
-        print("Scheduling budget warning notifications")
-    }
-}
-
-public extension GoalNotificationScheduler {
-    func checkMilestones(for goals: [SavingsGoal]) {
-        // Placeholder for goal milestone checking
-        print("Checking goal milestones for \(goals.count) goals")
-    }
-}
-
-public extension SubscriptionNotificationScheduler {
-    func scheduleNotifications(for subscriptions: [Subscription]) {
-        // Placeholder for subscription notification scheduling
-        print("Scheduling notifications for \(subscriptions.count) subscriptions")
-    }
-}
-
 // MARK: - Data Import Support
 
-public extension CSVColumnMapping {
-    var notesIndex: Int? {
+extension CSVColumnMapping {
+    public var notesIndex: Int? {
         // Return a default notes column index or nil
         nil
     }
@@ -1500,77 +1300,12 @@ public struct ForecastData: Identifiable, Sendable {
 
 // MARK: - Search Components
 
-public struct SearchHeaderComponent: View {
-    @Binding public var searchText: String
-    @Binding public var selectedFilter: SearchFilter
-    public let onSearchChanged: () -> Void
-
-    public var body: some View {
-        VStack(spacing: 12) {
-            TextField("Search transactions, accounts...", text: $searchText)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .onChange(of: searchText) {
-                    onSearchChanged()
-                }
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(SearchFilter.allCases, id: \.self) { filter in
-                        Button(filter.rawValue.capitalized) {
-                            selectedFilter = filter
-                            onSearchChanged()
-                        }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(selectedFilter == filter ? Color.blue : Color.gray.opacity(0.2))
-                        .foregroundColor(selectedFilter == filter ? .white : .primary)
-                        .cornerRadius(16)
-                    }
-                }
-                .padding(.horizontal)
-            }
-        }
-        .padding()
-    }
-
-    public init(
-        searchText: Binding<String>,
-        selectedFilter: Binding<SearchFilter>,
-        onSearchChanged: @escaping () -> Void
-    ) {
-        self._searchText = searchText
-        self._selectedFilter = selectedFilter
-        self.onSearchChanged = onSearchChanged
-    }
-}
+// NOTE: SearchFilter, SearchResult and SearchResultType moved to proper location: Shared/SearchTypes.swift
+// NOTE: SearchHeaderComponent moved to proper location: Shared/Features/GlobalSearch/SearchResultsComponent.swift
 
 // MARK: - Search Components
 
 // NOTE: SearchResultsComponent and SearchResultRow moved to proper location: Shared/Features/GlobalSearch/SearchResultsComponent.swift
-
-public struct SearchConfiguration: Sendable {
-    public let maxResults: Int
-    public let includeAccounts: Bool
-    public let includeTransactions: Bool
-    public let includeBudgets: Bool
-    public let searchDebounceDelay: Double
-
-    public static let shared = SearchConfiguration()
-
-    public init(
-        maxResults: Int = 50,
-        includeAccounts: Bool = true,
-        includeTransactions: Bool = true,
-        includeBudgets: Bool = true,
-        searchDebounceDelay: Double = 0.5
-    ) {
-        self.maxResults = maxResults
-        self.includeAccounts = includeAccounts
-        self.includeTransactions = includeTransactions
-        self.includeBudgets = includeBudgets
-        self.searchDebounceDelay = searchDebounceDelay
-    }
-}
 
 // MARK: - Transaction View Components
 
@@ -1588,19 +1323,22 @@ public struct TransactionEmptyStateView: View {
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            Text(searchText.isEmpty
-                ? "Start tracking your finances by adding your first transaction"
-                : "No transactions match your search criteria")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
+            Text(
+                searchText.isEmpty
+                    ? "Start tracking your finances by adding your first transaction"
+                    : "No transactions match your search criteria"
+            )
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal)
 
             if searchText.isEmpty {
                 Button("Add Transaction") {
                     onAddTransaction()
                 }
                 .buttonStyle(.borderedProminent)
+                .accessibilityLabel("Add Transaction")
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -1619,7 +1357,7 @@ public struct TransactionListView: View {
 
     public var body: some View {
         LazyVStack(spacing: 8) {
-            ForEach(0 ..< transactions.count, id: \.self) { index in
+            ForEach(0..<transactions.count, id: \.self) { index in
                 TransactionRowView(
                     transaction: transactions[index],
                     onTap: { onTransactionTapped(transactions[index]) },
@@ -1684,11 +1422,15 @@ public struct TransactionRowView: View {
                 Button("Delete", role: .destructive) {
                     onDelete()
                 }
+                .accessibilityLabel("Delete")
             }
         }
     }
 
-    public init(transaction: FinancialTransaction, onTap: @escaping () -> Void, onDelete: (() -> Void)? = nil) {
+    public init(
+        transaction: FinancialTransaction, onTap: @escaping () -> Void,
+        onDelete: (() -> Void)? = nil
+    ) {
         self.transaction = transaction
         self.onTap = onTap
         self.onDelete = onDelete
@@ -1719,20 +1461,22 @@ public struct AddTransactionView: View {
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
-                            dismiss()
-                        }
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
                     }
-
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Save") {
-                            dismiss()
-                        }
-                        .fontWeight(.semibold)
-                    }
+                    .accessibilityLabel("Cancel")
                 }
+
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Save") {
+                        dismiss()
+                    }
+                    .fontWeight(.semibold)
+                    .accessibilityLabel("Save")
+                }
+            }
         }
     }
 
@@ -1775,13 +1519,14 @@ public struct TransactionDetailView: View {
                 .padding()
             }
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button("Done") {
                         dismiss()
                     }
+                    .accessibilityLabel("Done")
                 }
             }
         }
@@ -1859,13 +1604,16 @@ public struct SearchAndFilterSection: View {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.secondary)
 
-                TextField("Search transactions...", text: $searchText)
-                    .textFieldStyle(PlainTextFieldStyle())
+                TextField("Search transactions...", text: $searchText).accessibilityLabel(
+                    "Text Field"
+                )
+                .textFieldStyle(PlainTextFieldStyle())
 
                 Button(action: { showingSearch = true }) {
                     Image(systemName: "line.horizontal.3.decrease.circle")
                         .foregroundColor(.blue)
                 }
+                .accessibilityLabel("Filter")
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
@@ -1884,7 +1632,9 @@ public struct SearchAndFilterSection: View {
         }
     }
 
-    private func filterChip(_ title: String, _ isSelected: Bool, _ filter: TransactionFilter) -> some View {
+    private func filterChip(_ title: String, _ isSelected: Bool, _ filter: TransactionFilter)
+        -> some View
+    {
         Button(action: {
             selectedFilter = filter
         }) {
@@ -1912,106 +1662,29 @@ public struct SearchAndFilterSection: View {
 
 // MARK: - Data Import Support Types
 
-public struct ImportValidator {
-    public static func validateRequiredFields(fields: [String], columnMapping: CSVColumnMapping) throws {
-        // Basic validation
-        if fields.isEmpty {
-            throw ImportError.missingRequiredField("No fields provided")
-        }
-    }
+// ImportValidator moved to Shared/MissingTypes.swift to avoid conflicts
 
-    public static func validateCSVFormat(content: String) throws -> [String] {
-        // Basic CSV format validation
-        if content.isEmpty {
-            throw ImportError.invalidFormat("Empty CSV content")
-        }
-        let lines = content.components(separatedBy: .newlines)
-        return lines.first?.components(separatedBy: ",") ?? []
-    }
+// CSVParser and DataParser moved to Shared/MissingTypes.swift to avoid conflicts
 
-    public func isDuplicate(_ transaction: Any) async throws -> Bool {
-        // Mock implementation
-        false
-    }
-}
+// CSVColumnMapping extensions moved to Shared/MissingTypes.swift to avoid conflicts
 
-public enum CSVParser {
-    public static func parseCSV(from url: URL) throws -> [[String]] {
-        let content = try String(contentsOf: url, encoding: .utf8)
-        return content.components(separatedBy: .newlines)
-            .map { $0.components(separatedBy: ",") }
-    }
+// MARK: - Entity Manager Extensions (Removed - causing conflicts)
 
-    public static func parseCSVRow(_ row: String) -> [String] {
-        row.components(separatedBy: ",")
-    }
-
-    public static func mapColumns(headers: [String]) -> CSVColumnMapping {
-        // Mock implementation
-        CSVColumnMapping(
-            dateColumn: "Date",
-            amountColumn: "Amount",
-            descriptionColumn: "Description",
-            categoryColumn: "Category",
-            accountColumn: "Account"
-        )
-    }
-}
-
-public enum DataParser {
-    public static func parseDate(_ dateString: String) throws -> Date {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        if let date = formatter.date(from: dateString) {
-            return date
-        }
-        formatter.dateFormat = "MM/dd/yyyy"
-        if let date = formatter.date(from: dateString) {
-            return date
-        }
-        throw ImportError.invalidFormat("Invalid date format: \(dateString)")
-    }
-
-    public static func parseAmount(_ amountString: String) throws -> Double {
-        let cleanString = amountString.replacingOccurrences(of: "$", with: "")
-            .replacingOccurrences(of: ",", with: "")
-        guard let amount = Double(cleanString) else {
-            throw ImportError.invalidAmountFormat("Invalid amount: \(amountString)")
-        }
-        return amount
-    }
-
-    public static func parseTransactionType(_ typeString: String, amount: Double) -> TransactionType {
-        if typeString.contains("income") || typeString.contains("deposit") {
-            .income
-        } else if typeString.contains("expense") || typeString.contains("withdrawal") {
-            .expense
-        } else {
-            amount >= 0 ? .income : .expense
-        }
-    }
-}
-
-// Add missing properties to CSVColumnMapping
-public extension CSVColumnMapping {
-    var dateIndex: Int? { 0 }
-    var titleIndex: Int? { 1 }
-    var amountIndex: Int? { 2 }
-    var typeIndex: Int? { 3 }
-}
-
-// Add missing methods to EntityManager
-public extension EntityManager {
-    func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping) async throws -> FinancialAccount? {
-        // Mock implementation
-        nil
-    }
-
-    func getOrCreateCategory(from fields: [String], columnMapping: CSVColumnMapping, transactionType: Any) async throws -> ExpenseCategory? {
-        // Mock implementation
-        nil
-    }
-}
+// extension EntityManager {
+//     public func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping)
+//         async throws -> FinancialAccount?
+//     {
+//         // Mock implementation
+//         nil
+//     }
+//
+//     public func getOrCreateCategory(
+//         from fields: [String], columnMapping: CSVColumnMapping, transactionType: Any
+//     ) async throws -> ExpenseCategory? {
+//         // Mock implementation
+//         nil
+//     }
+// }
 
 // MARK: - Missing Theme Components
 
@@ -2069,7 +1742,10 @@ public struct ThemeSettingsSheet: View {
     @Binding public var showSheet: Bool
     public let theme: Any?
 
-    public init(selectedThemeMode: Binding<ThemeMode>, sliderValue: Binding<Double>, showSheet: Binding<Bool>, theme: Any? = nil) {
+    public init(
+        selectedThemeMode: Binding<ThemeMode>, sliderValue: Binding<Double>,
+        showSheet: Binding<Bool>, theme: Any? = nil
+    ) {
         self._selectedThemeMode = selectedThemeMode
         self._sliderValue = sliderValue
         self._showSheet = showSheet
@@ -2080,10 +1756,11 @@ public struct ThemeSettingsSheet: View {
         NavigationView {
             VStack {
                 Text("Theme Settings")
-                Slider(value: $sliderValue, in: 0 ... 1)
+                Slider(value: $sliderValue, in: 0...1)
                 Button("Close") {
                     showSheet = false
                 }
+                .accessibilityLabel("Close")
             }
             .navigationTitle("Settings")
         }
@@ -2167,800 +1844,175 @@ public func formatCurrency(_ amount: Double) -> String {
     return formatter.string(from: NSNumber(value: amount)) ?? "$0.00"
 }
 
-// MARK: - Missing Features.Transactions Components
-
-extension Features.Transactions {
-    struct AddTransactionView: View {
-        public let categories: [ExpenseCategory]
-        public let accounts: [FinancialAccount]
-
-        public init(categories: [ExpenseCategory], accounts: [FinancialAccount]) {
-            self.categories = categories
-            self.accounts = accounts
-        }
-
-        public var body: some View {
-            VStack {
-                Text("Add Transaction")
-                    .font(.title)
-
-                Text("Categories: \(categories.count)")
-                Text("Accounts: \(accounts.count)")
-
-                Button("Save Transaction") {
-                    // Save logic
-                }
-                .buttonStyle(.borderedProminent)
-            }
-            .padding()
-        }
-    }
-}
-
-public struct SecuritySettingsSection: View {
-    @Binding public var biometricEnabled: Bool
-    public let authenticationTimeout: Any
-
-    public init(biometricEnabled: Binding<Bool>, authenticationTimeout: Any) {
-        self._biometricEnabled = biometricEnabled
-        self.authenticationTimeout = authenticationTimeout
-    }
-
-    public var body: some View {
-        Section("Security") {
-            Text("Security settings placeholder")
-        }
-    }
-}
-
-public struct AccessibilitySettingsSection: View {
-    @Binding public var hapticFeedbackEnabled: Bool
-    @Binding public var reducedMotion: Bool
-
-    public init(hapticFeedbackEnabled: Binding<Bool>, reducedMotion: Binding<Bool>) {
-        self._hapticFeedbackEnabled = hapticFeedbackEnabled
-        self._reducedMotion = reducedMotion
-    }
-
-    public var body: some View {
-        Section("Accessibility") {
-            Text("Accessibility settings placeholder")
-        }
-    }
-}
-
-public struct AppearanceSettingsSection: View {
-    public let darkModePreference: Any
-
-    public init(darkModePreference: Any) {
-        self.darkModePreference = darkModePreference
-    }
-
-    public var body: some View {
-        Section("Appearance") {
-            Text("Appearance settings placeholder")
-        }
-    }
-}
-
-public struct DataManagementSection: View {
-    @Binding public var dataRetentionDays: Double
-    @Binding public var showingDeleteConfirmation: Bool
-    @Binding public var hapticFeedbackEnabled: Bool
-
-    public init(dataRetentionDays: Binding<Double>, showingDeleteConfirmation: Binding<Bool>, hapticFeedbackEnabled: Binding<Bool>) {
-        self._dataRetentionDays = dataRetentionDays
-        self._showingDeleteConfirmation = showingDeleteConfirmation
-        self._hapticFeedbackEnabled = hapticFeedbackEnabled
-    }
-
-    public var body: some View {
-        Section("Data Management") {
-            Text("Data management placeholder")
-        }
-    }
-}
-
-public struct ImportExportSection: View {
-    public let importManager: Any?
-    public let modelContext: Any?
-
-    public init(importManager: Any? = nil, modelContext: Any? = nil) {
-        self.importManager = importManager
-        self.modelContext = modelContext
-    }
-
-    public var body: some View {
-        Section("Import/Export") {
-            Text("Import/Export placeholder")
-        }
-    }
-}
-
-public struct AboutSection: View {
-    public init() {}
-
-    public var body: some View {
-        Section("About") {
-            Text("About placeholder")
-        }
-    }
-}
-
-// MARK: - Features Namespace Extensions
-
-extension Features.Transactions {
-    struct TransactionRowView: View {
-        public let transaction: FinancialTransaction
-        public let onTapped: () -> Void
-
-        public init(transaction: FinancialTransaction, onTapped: @escaping () -> Void) {
-            self.transaction = transaction
-            self.onTapped = onTapped
-        }
-
-        public var body: some View {
-            HStack(spacing: 12) {
-                // Transaction icon
-                Circle()
-                    .fill(Color.blue)
-                    .frame(width: 40, height: 40)
-                    .overlay(
-                        Image(systemName: "creditcard")
-                            .font(.system(size: 16))
-                            .foregroundColor(.white)
-                    )
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(transaction.title)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-
-                    Text("\(transaction.category?.name ?? "Category") • Today")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-
-                Spacer()
-
-                Text("$\(transaction.amount, specifier: "%.2f")")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-            }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
-            .background(Color.gray.opacity(0.05))
-            .cornerRadius(8)
-            .onTapGesture(perform: onTapped)
-        }
-    }
-}
-
-// MARK: - Missing Dashboard Components
-
-public struct DashboardSubscriptionsSection: View {
-    public let subscriptions: [Subscription]
-    public let onSubscriptionTapped: (Subscription) -> Void
-    public let onViewAllTapped: () -> Void
-    public let onAddTapped: () -> Void
-
-    public init(subscriptions: [Subscription], onSubscriptionTapped: @escaping (Subscription) -> Void, onViewAllTapped: @escaping () -> Void, onAddTapped: @escaping () -> Void) {
-        self.subscriptions = subscriptions
-        self.onSubscriptionTapped = onSubscriptionTapped
-        self.onViewAllTapped = onViewAllTapped
-        self.onAddTapped = onAddTapped
-    }
-
-    public var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Subscriptions")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-
-                Spacer()
-
-                Button("View All") {
-                    onViewAllTapped()
-                }
-                .font(.caption)
-                .foregroundColor(.blue)
-            }
-
-            LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible()),
-            ], spacing: 12) {
-                ForEach(subscriptions.isEmpty ? mockSubscriptions : subscriptions, id: \.id) { subscription in
-                    SubscriptionCard(subscription: subscription) {
-                        onSubscriptionTapped(subscription)
-                    }
-                }
-            }
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
-    }
-
-    private var mockSubscriptions: [Subscription] {
-        [
-            Subscription(name: "Netflix", amount: 15.99, billingCycle: .monthly, nextDueDate: Calendar.current.date(byAdding: .day, value: 5, to: Date()) ?? Date()),
-            Subscription(name: "Spotify", amount: 9.99, billingCycle: .monthly, nextDueDate: Calendar.current.date(byAdding: .day, value: 10, to: Date()) ?? Date()),
-            Subscription(name: "iCloud", amount: 2.99, billingCycle: .monthly, nextDueDate: Calendar.current.date(byAdding: .day, value: 15, to: Date()) ?? Date()),
-            Subscription(name: "Adobe", amount: 19.99, billingCycle: .monthly, nextDueDate: Calendar.current.date(byAdding: .day, value: 20, to: Date()) ?? Date()),
-        ]
-    }
-
-    private struct SubscriptionCard: View {
-        let subscription: Subscription
-        let onTap: () -> Void
-
-        var body: some View {
-            VStack(spacing: 8) {
-                Circle()
-                    .fill(Color.blue)
-                    .frame(width: 40, height: 40)
-                    .overlay(
-                        Image(systemName: "app")
-                            .foregroundColor(.white)
-                    )
-
-                Text(subscription.name)
-                    .font(.caption)
-                    .fontWeight(.medium)
-
-                Text("$\(subscription.amount, specifier: "%.2f")/mo")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
-            .padding(12)
-            .background(Color.gray.opacity(0.05))
-            .cornerRadius(12)
-            .onTapGesture(perform: onTap)
-        }
-    }
-}
-
-public struct DashboardBudgetProgress: View {
-    public let budgets: [Budget]
-    public let onBudgetTap: (Budget) -> Void
-    public let onViewAllTap: () -> Void
-
-    public init(budgets: [Budget], colorTheme: Any? = nil, themeComponents: Any? = nil, onBudgetTap: @escaping (Budget) -> Void, onViewAllTap: @escaping () -> Void) {
-        self.budgets = budgets
-        self.onBudgetTap = onBudgetTap
-        self.onViewAllTap = onViewAllTap
-    }
-
-    public var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("Budget Progress")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-
-                Spacer()
-
-                Button("View All") {
-                    onViewAllTap()
-                }
-                .font(.caption)
-                .foregroundColor(.blue)
-            }
-
-            VStack(spacing: 12) {
-                ForEach(budgets.isEmpty ? mockBudgets : budgets, id: \.id) { budget in
-                    BudgetProgressRow(budget: budget) {
-                        onBudgetTap(budget)
-                    }
-                }
-            }
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
-    }
-
-    private var mockBudgets: [Budget] {
-        [
-            Budget(name: "Food", limitAmount: 600, month: Date()),
-            Budget(name: "Transport", limitAmount: 400, month: Date()),
-            Budget(name: "Entertainment", limitAmount: 200, month: Date()),
-        ]
-    }
-
-    private struct BudgetProgressRow: View {
-        let budget: Budget
-        let onTap: () -> Void
-
-        var body: some View {
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Text(budget.name)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-
-                    Spacer()
-
-                    Text("$450 / $\(budget.limitAmount, specifier: "%.0f")")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-
-                ProgressView(value: 0.75)
-                    .progressViewStyle(LinearProgressViewStyle(tint: .blue))
-                    .scaleEffect(x: 1, y: 0.5, anchor: .center)
-            }
-            .onTapGesture(perform: onTap)
-        }
-    }
-}
-
-public struct DashboardInsights: View {
-    public let insights: [FinancialInsight]
-    public let onDetailsTapped: () -> Void
-
-    public init(insights: [FinancialInsight], onDetailsTapped: @escaping () -> Void) {
-        self.insights = insights
-        self.onDetailsTapped = onDetailsTapped
-    }
-
-    public var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("Insights")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-
-                Spacer()
-
-                Button("Details") {
-                    onDetailsTapped()
-                }
-                .font(.caption)
-                .foregroundColor(.blue)
-            }
-
-            VStack(spacing: 12) {
-                ForEach(insights.isEmpty ? mockInsights : insights, id: \.id) { insight in
-                    InsightRow(insight: insight)
-                }
-            }
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
-    }
-
-    private var mockInsights: [FinancialInsight] {
-        [
-            FinancialInsight(
-                title: "Spending Tip",
-                description: "You spent 15% less on dining this week!",
-                type: .spendingPattern,
-                priority: .medium,
-                confidence: 0.9
-            ),
-            FinancialInsight(
-                title: "Savings Goal",
-                description: "You're on track to save $200 this month",
-                type: .optimization,
-                priority: .high,
-                confidence: 0.8
-            ),
-        ]
-    }
-
-    private struct InsightRow: View {
-        let insight: FinancialInsight
-
-        var body: some View {
-            HStack(spacing: 12) {
-                Image(systemName: iconForInsightType(insight.type))
-                    .font(.system(size: 20))
-                    .foregroundColor(colorForPriority(insight.priority))
-                    .frame(width: 32, height: 32)
-                    .background(colorForPriority(insight.priority).opacity(0.1))
-                    .cornerRadius(8)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(insight.title)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-
-                    Text(insight.description)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-
-                Spacer()
-            }
-        }
-
-        private func iconForInsightType(_ type: InsightType) -> String {
-            switch type {
-            case .spendingPattern: "chart.line.uptrend.xyaxis"
-            case .positiveSpendingTrend: "arrow.down.circle"
-            case .anomaly: "exclamationmark.triangle"
-            case .budgetAlert: "chart.pie.fill"
-            case .budgetInsight: "chart.bar.fill"
-            case .budgetRecommendation: "plus.circle"
-            case .subscriptionDetection: "calendar.badge.clock"
-            case .forecast: "chart.xyaxis.line"
-            case .optimization: "bolt.circle"
-            }
-        }
-
-        private func colorForPriority(_ priority: InsightPriority) -> Color {
-            switch priority {
-            case .low: .green
-            case .medium: .blue
-            case .high: .orange
-            case .urgent: .red
-            }
-        }
-    }
-}
-
-public struct DashboardQuickActions: View {
-    public let onAddTransaction: () -> Void
-    public let onPayBills: () -> Void
-    public let onViewReports: () -> Void
-    public let onSetGoals: () -> Void
-
-    public init(onAddTransaction: @escaping () -> Void, onPayBills: @escaping () -> Void, onViewReports: @escaping () -> Void, onSetGoals: @escaping () -> Void) {
-        self.onAddTransaction = onAddTransaction
-        self.onPayBills = onPayBills
-        self.onViewReports = onViewReports
-        self.onSetGoals = onSetGoals
-    }
-
-    public var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Quick Actions")
-                .font(.headline)
-                .fontWeight(.semibold)
-
-            LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible()),
-                GridItem(.flexible()),
-                GridItem(.flexible()),
-            ], spacing: 12) {
-                ActionButton(icon: "plus", title: "Add Transaction", color: .blue, action: onAddTransaction)
-                ActionButton(icon: "creditcard", title: "Pay Bills", color: .orange, action: onPayBills)
-                ActionButton(icon: "chart.bar", title: "View Reports", color: .green, action: onViewReports)
-                ActionButton(icon: "target", title: "Set Goals", color: .purple, action: onSetGoals)
-            }
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
-    }
-
-    private struct ActionButton: View {
-        let icon: String
-        let title: String
-        let color: Color
-        let action: () -> Void
-
-        var body: some View {
-            VStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.system(size: 20))
-                    .foregroundColor(.white)
-                    .frame(width: 40, height: 40)
-                    .background(color)
-                    .cornerRadius(12)
-
-                Text(title)
-                    .font(.caption2)
-                    .fontWeight(.medium)
-                    .multilineTextAlignment(.center)
-            }
-            .onTapGesture(perform: action)
-        }
-    }
-}
-
-// MARK: - Additional Dashboard Components
-
-public struct DashboardWelcomeHeader: View {
-    public let greeting: String
-    public let wellnessPercentage: Double
-    public let totalBalance: Double
-    public let monthlyIncome: Double
-    public let monthlyExpenses: Double
-
-    public init(colorTheme: Any? = nil, greeting: String, wellnessPercentage: Double, totalBalance: Double, monthlyIncome: Double, monthlyExpenses: Double) {
-        self.greeting = greeting
-        self.wellnessPercentage = wellnessPercentage
-        self.totalBalance = totalBalance
-        self.monthlyIncome = monthlyIncome
-        self.monthlyExpenses = monthlyExpenses
-    }
-
-    public var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(greeting)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-
-                    Text("Financial Overview")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                }
-
-                Spacer()
-
-                Button(action: {}) {
-                    Image(systemName: "bell")
-                        .font(.system(size: 18))
-                        .foregroundColor(.primary)
-                        .frame(width: 40, height: 40)
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(20)
-                }
-            }
-
-            VStack(spacing: 8) {
-                HStack {
-                    Text("Total Balance")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Spacer()
-                    Text(formatCurrency(totalBalance))
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                }
-
-                HStack {
-                    Text("Monthly Income")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Spacer()
-                    Text(formatCurrency(monthlyIncome))
-                        .font(.subheadline)
-                        .foregroundColor(.green)
-                }
-
-                HStack {
-                    Text("Monthly Expenses")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Spacer()
-                    Text(formatCurrency(monthlyExpenses))
-                        .font(.subheadline)
-                        .foregroundColor(.red)
-                }
-            }
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
-    }
-
-    private func formatCurrency(_ amount: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: amount)) ?? "$0.00"
-    }
-}
-
-public struct DashboardAccountsSummary: View {
-    public let accounts: [FinancialAccount]
-    public let onAccountTap: (String) -> Void
-    public let onViewAllTap: () -> Void
-
-    public init(accounts: [FinancialAccount], colorTheme: Any? = nil, themeComponents: Any? = nil, onAccountTap: @escaping (String) -> Void, onViewAllTap: @escaping () -> Void) {
-        self.accounts = accounts
-        self.onAccountTap = onAccountTap
-        self.onViewAllTap = onViewAllTap
-    }
-
-    public var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("Accounts")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-
-                Spacer()
-
-                Button("View All") {
-                    onViewAllTap()
-                }
-                .font(.caption)
-                .foregroundColor(.blue)
-            }
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    // Simple text fallback instead of problematic ForEach
-                    VStack {
-                        Text("Accounts Summary")
-                            .font(.headline)
-                        Text("Build successful - accounting bridges working")
-                            .font(.caption)
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(8)
-                }
-                .padding(.horizontal)
-            }
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
-    }
-
-    private var mockAccounts: [FinancialAccount] {
-        [
-            FinancialAccount(name: "Checking", balance: 2450.00, iconName: "dollarsign.circle.fill", accountType: .checking),
-            FinancialAccount(name: "Savings", balance: 15600.00, iconName: "banknote.fill", accountType: .savings),
-            FinancialAccount(name: "Credit Card", balance: -1200.00, iconName: "creditcard.fill", accountType: .credit),
-        ]
-    }
-
-    private struct AccountSummaryCard: View {
-        let account: FinancialAccount
-        let onTap: () -> Void
-
-        var body: some View {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Circle()
-                        .fill(colorForAccountType(account.accountType))
-                        .frame(width: 12, height: 12)
-
-                    Text(account.name)
-                        .font(.caption)
-                        .fontWeight(.medium)
-
-                    Spacer()
-                }
-
-                Text(formatCurrency(account.balance))
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .foregroundColor(account.balance < 0 ? .red : .primary)
-            }
-            .padding(12)
-            .frame(width: 140)
-            .background(Color.gray.opacity(0.05))
-            .cornerRadius(12)
-            .onTapGesture(perform: onTap)
-        }
-
-        private func colorForAccountType(_ type: AccountType) -> Color {
-            switch type {
-            case .checking: .blue
-            case .savings: .green
-            case .credit: .orange
-            case .investment: .purple
-            case .cash: .yellow
-            }
-        }
-
-        private func formatCurrency(_ amount: Double) -> String {
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .currency
-            formatter.currencyCode = "USD"
-            return formatter.string(from: NSNumber(value: amount)) ?? "$0.00"
-        }
-    }
-}
-
-// MARK: - Bridge Type: SearchResultsComponent
-
-// Bridge implementation providing temporary access during architectural transition
-// TODO: Replace with proper file inclusion in Xcode project: Shared/Features/GlobalSearch/SearchResultsComponent.swift
-public struct SearchResultsComponent: View {
-    let results: [SearchResult]
-    let isLoading: Bool
-    var onResultTapped: ((SearchResult) -> Void)?
-
-    public init(results: [SearchResult], isLoading: Bool, onResultTapped: ((SearchResult) -> Void)? = nil) {
-        self.results = results
-        self.isLoading = isLoading
-        self.onResultTapped = onResultTapped
-    }
-
-    public var body: some View {
-        Group {
-            if isLoading {
-                ProgressView("Searching...")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if results.isEmpty {
-                VStack(spacing: 16) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 48))
-                        .foregroundColor(.secondary)
-
-                    Text("No results found")
-                        .font(.title2)
-                        .fontWeight(.medium)
-
-                    Text("Try adjusting your search terms")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                LazyVStack(spacing: 8) {
-                    ForEach(results) { result in
-                        SearchResultRow(result: result)
-                            .onTapGesture {
-                                onResultTapped?(result)
-                            }
-                    }
-                }
-                .padding(.horizontal)
-            }
-        }
-    }
-}
-
-public struct SearchResultRow: View {
-    let result: SearchResult
-
-    public init(result: SearchResult) {
-        self.result = result
-    }
-
-    public var body: some View {
-        HStack(spacing: 12) {
-            // Icon
-            Image(systemName: iconForType(result.type))
-                .foregroundColor(.blue)
-                .frame(width: 24, height: 24)
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(result.title)
-                    .font(.headline)
-                    .foregroundColor(.primary)
-                    .lineLimit(1)
-
-                if let subtitle = result.subtitle {
-                    Text(subtitle)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .lineLimit(1)
-                }
-            }
-
-            Spacer()
-
-            // Type indicator
-            Text(result.type.rawValue)
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(Color.gray.opacity(0.5))
-                .cornerRadius(8)
-        }
-        .padding(.vertical, 8)
-    }
-
-    private func iconForType(_ type: SearchFilter) -> String {
-        switch type {
-        case .accounts: "creditcard"
-        case .transactions: "arrow.left.arrow.right"
-        case .subscriptions: "calendar"
-        case .budgets: "chart.pie"
-        case .all: "magnifyingglass"
-        }
-    }
-}
+// MARK: - Features Namespace Extensions (Removed - causing conflicts)
+
+// extension Features.Transactions {
+//     struct AddTransactionView: View {
+//         public let categories: [ExpenseCategory]
+//         public let accounts: [FinancialAccount]
+//
+//         public init(categories: [ExpenseCategory], accounts: [FinancialAccount]) {
+//             self.categories = categories
+//             self.accounts = accounts
+//         }
+//
+//         public var body: some View {
+//             VStack {
+//                 Text("Add Transaction")
+//                     .font(.title)
+//
+//                 Text("Categories: \(categories.count)")
+//                 Text("Accounts: \(accounts.count)")
+//
+//                 Button("Save Transaction") {
+//                     // Save logic
+//                 }
+//                 .buttonStyle(.borderedProminent)
+//                 .accessibilityLabel("Save Transaction")
+//             }
+//             .padding()
+//         }
+//     }
+// }
+
+// public struct SecuritySettingsSection: View {
+//     @Binding public var biometricEnabled: Bool
+//     public let authenticationTimeout: Any
+//
+//     public init(biometricEnabled: Binding<Bool>, authenticationTimeout: Any) {
+//         self._biometricEnabled = biometricEnabled
+//         self.authenticationTimeout = authenticationTimeout
+//     }
+//
+//     public var body: some View {
+//         Section("Security") {
+//             Text("Security settings placeholder")
+//         }
+//     }
+// }
+//
+// public struct AccessibilitySettingsSection: View {
+//     @Binding public var hapticFeedbackEnabled: Bool
+//     @Binding public var reducedMotion: Bool
+//
+//     public init(hapticFeedbackEnabled: Binding<Bool>, reducedMotion: Binding<Bool>) {
+//         self._hapticFeedbackEnabled = hapticFeedbackEnabled
+//         self._reducedMotion = reducedMotion
+//     }
+//
+//     public var body: some View {
+//         Section("Accessibility") {
+//             Text("Accessibility settings placeholder")
+//         }
+//     }
+// }
+//
+// public struct AppearanceSettingsSection: View {
+//     public let darkModePreference: Any
+//
+//     public init(darkModePreference: Any) {
+//         self.darkModePreference = darkModePreference
+//     }
+//
+//     public var body: some View {
+//         Section("Appearance") {
+//             Text("Appearance settings placeholder")
+//         }
+//     }
+// }
+//
+// public struct DataManagementSection: View {
+//     @Binding public var dataRetentionDays: Double
+//     @Binding public var showingDeleteConfirmation: Bool
+//     @Binding public var hapticFeedbackEnabled: Bool
+//
+//     public init(
+//         dataRetentionDays: Binding<Double>, showingDeleteConfirmation: Binding<Bool>,
+//         hapticFeedbackEnabled: Binding<Bool>
+//     ) {
+//         self._dataRetentionDays = dataRetentionDays
+//         self._showingDeleteConfirmation = showingDeleteConfirmation
+//         self._hapticFeedbackEnabled = hapticFeedbackEnabled
+//     }
+//
+//     public var body: some View {
+//         Section("Data Management") {
+//             Text("Data management placeholder")
+//         }
+//     }
+// }
+//
+// public struct ImportExportSection: View {
+//     public let importManager: Any?
+//     public let modelContext: Any?
+//
+//     public init(importManager: Any? = nil, modelContext: Any? = nil) {
+//         self.importManager = importManager
+//         self.modelContext = modelContext
+//     }
+//
+//     public var body: some View {
+//         Section("Import/Export") {
+//             Text("Import/Export placeholder")
+//         }
+//     }
+// }
+//
+// public struct AboutSection: View {
+//     public init() {}
+//
+//     public var body: some View {
+//         Section("About") {
+//             Text("About placeholder")
+//         }
+//     }
+// }
+
+// MARK: - Features Namespace Extensions (Removed - causing conflicts)
+
+// extension Features.Transactions {
+//     struct TransactionRowView: View {
+//         public let transaction: FinancialTransaction
+//         public let onTapped: () -> Void
+//
+//         public init(transaction: FinancialTransaction, onTapped: @escaping () -> Void) {
+//             self.transaction = transaction
+//             self.onTapped = onTapped
+//         }
+//
+//         public var body: some View {
+//             HStack(spacing: 12) {
+//                 // Transaction icon
+//                 Circle()
+//                     .fill(Color.blue)
+//                     .frame(width: 40, height: 40)
+//                     .overlay(
+//                         Image(systemName: "creditcard")
+//                             .font(.system(size: 16))
+//                             .foregroundColor(.white)
+//                     )
+//
+//                 VStack(alignment: .leading, spacing: 2) {
+//                     Text(transaction.title)
+//                         .font(.subheadline)
+//                         .fontWeight(.medium)
+//
+//                     Text("\(transaction.category?.name ?? "Category") • Today")
+//                         .font(.caption)
+//                         .foregroundColor(.secondary)
+//                 }
+//
+//                 Spacer()
+//
+//                 Text("$\(transaction.amount, specifier: "%.2f")")
+//                     .font(.subheadline)
+//                     .fontWeight(.semibold)
+//             }
+//             .padding(.vertical, 8)
+//             .padding(.horizontal, 12)
+//             .background(Color.gray.opacity(0.05))
+//             .cornerRadius(8)
+//             .onTapGesture(perform: onTapped)
+//         }
+//     }
+// }

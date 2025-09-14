@@ -1,3 +1,7 @@
+import Foundation
+import Combine
+import SwiftUI
+
 //
 // MLIntegrationService.swift
 // CodingReviewer
@@ -5,10 +9,6 @@
 // AI/ML Integration Bridge Service
 // Created on July 29, 2025
 //
-
-import Combine
-import Foundation
-import SwiftUI
 
 // MARK: - ML Integration Service
 
@@ -178,7 +178,7 @@ final class MLIntegrationService: ObservableObject {
                     "path": file.path,
                     "language": file.language.rawValue,
                     "size": "\(file.size)",
-                    "content_preview": String(file.content.prefix(1000)),
+                    "content_preview": String(file.content.prefix(1000))
                 ]
             }
 
@@ -352,8 +352,7 @@ final class MLIntegrationService: ObservableObject {
         let range = NSRange(text.startIndex..., in: text)
 
         if let match = regex?.firstMatch(in: text, options: [], range: range),
-           let matchRange = Range(match.range(at: 1), in: text)
-        {
+           let matchRange = Range(match.range(at: 1), in: text) {
             return Int(text[matchRange])
         }
         return nil

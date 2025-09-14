@@ -78,7 +78,7 @@ class CloudKitManager: ObservableObject {
         }
 
         do {
-            // TODO: Implement actual sync operations
+            /// - TODO: Implement actual sync operations
             // This is a placeholder implementation
             try await SwiftUI.Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay for demo
 
@@ -106,22 +106,22 @@ class CloudKitManager: ObservableObject {
     // MARK: - Placeholder Methods for Future Implementation
 
     func syncTasks() async {
-        // TODO: Implement task synchronization
+        /// - TODO: Implement task synchronization
         print("Task sync - placeholder implementation")
     }
 
     func syncGoals() async {
-        // TODO: Implement goal synchronization
+        /// - TODO: Implement goal synchronization
         print("Goal sync - placeholder implementation")
     }
 
     func syncJournalEntries() async {
-        // TODO: Implement journal entry synchronization
+        /// - TODO: Implement journal entry synchronization
         print("Journal entry sync - placeholder implementation")
     }
 
     func syncCalendarEvents() async {
-        // TODO: Implement calendar event synchronization
+        /// - TODO: Implement calendar event synchronization
         print("Calendar event sync - placeholder implementation")
     }
 

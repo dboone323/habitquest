@@ -56,9 +56,11 @@ struct APIKeySetupView: View {
                         Text("Ollama Setup")
                             .font(.headline)
 
-                        Text("Ollama runs locally on your machine. Make sure Ollama is installed and running.")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                        Text(
+                            "Ollama runs locally on your machine. Make sure Ollama is installed and running."
+                        )
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
 
                         Text("Install Ollama: https://ollama.ai/download")
                             .font(.caption)
@@ -94,40 +96,55 @@ struct APIKeySetupView: View {
 
                 // Action Buttons
                 HStack(spacing: 16) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
+                    Button(
+                        "Cancel",
+                        action: {
+                            dismiss()
+                        }
+                    )
                     .buttonStyle(.bordered)
 
                     if selectedProvider == "Ollama" {
-                        Button("Test Connection") {
-                            Task {
-                                await validateKey()
+                        Button(
+                            "Test Connection",
+                            action: {
+                                Task {
+                                    await validateKey()
+                                }
                             }
-                        }
+                        )
                         .disabled(isValidating)
                         .buttonStyle(.bordered)
 
-                        Button("Save Configuration") {
-                            Task {
-                                await saveKey()
+                        Button(
+                            "Save Configuration",
+                            action: {
+                                Task {
+                                    await saveKey()
+                                }
                             }
-                        }
+                        )
                         .buttonStyle(.borderedProminent)
                     } else {
-                        Button("Test Key") {
-                            Task {
-                                await validateKey()
+                        Button(
+                            "Test Key",
+                            action: {
+                                Task {
+                                    await validateKey()
+                                }
                             }
-                        }
+                        )
                         .disabled(tempKey.isEmpty || isValidating)
                         .buttonStyle(.bordered)
 
-                        Button("Save") {
-                            Task {
-                                await saveKey()
+                        Button(
+                            "Save",
+                            action: {
+                                Task {
+                                    await saveKey()
+                                }
                             }
-                        }
+                        )
                         .disabled(tempKey.isEmpty)
                         .buttonStyle(.borderedProminent)
                     }
@@ -138,9 +155,11 @@ struct APIKeySetupView: View {
             .navigationTitle("API Key Setup")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        dismiss()
-                    }
+                    Button(
+                        "Done",
+                        action: {
+                            dismiss()
+                        })
                 }
             }
         }
@@ -151,13 +170,14 @@ struct APIKeySetupView: View {
         isValidating = true
         validationResult = "Validating..."
 
-        let isValid: Bool = if selectedProvider == "Ollama" {
-            // Check if Ollama is running locally
-            await checkOllamaAvailability()
-        } else {
-            // Validate Hugging Face token format
-            tempKey.hasPrefix("hf_") && tempKey.count > 10
-        }
+        let isValid: Bool =
+            if selectedProvider == "Ollama" {
+                // Check if Ollama is running locally
+                await checkOllamaAvailability()
+            } else {
+                // Validate Hugging Face token format
+                tempKey.hasPrefix("hf_") && tempKey.count > 10
+            }
 
         // Simulate API call delay
         try? await Task.sleep(nanoseconds: 1_000_000_000)
@@ -165,9 +185,14 @@ struct APIKeySetupView: View {
         await MainActor.run {
             self.isValidating = false
             if selectedProvider == "Ollama" {
-                self.validationResult = isValid ? "✅ Ollama is running and available" : "❌ Ollama is not available. Please start with 'ollama serve'"
+                self.validationResult =
+                    isValid
+                    ? "✅ Ollama is running and available"
+                    : "❌ Ollama is not available. Please start with 'ollama serve'"
             } else {
-                self.validationResult = isValid ? "✅ Valid Hugging Face token format" : "❌ Invalid Hugging Face token format"
+                self.validationResult =
+                    isValid
+                    ? "✅ Valid Hugging Face token format" : "❌ Invalid Hugging Face token format"
             }
         }
     }
@@ -201,9 +226,9 @@ struct APIKeySetupView: View {
 
         await MainActor.run {
             self.isValidating = false
-            self.validationResult = selectedProvider == "Ollama" ?
-                "✅ Ollama configuration saved" :
-                "✅ Hugging Face token saved successfully"
+            self.validationResult =
+                selectedProvider == "Ollama"
+                ? "✅ Ollama configuration saved" : "✅ Hugging Face token saved successfully"
 
             // Auto-dismiss after showing success message
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {

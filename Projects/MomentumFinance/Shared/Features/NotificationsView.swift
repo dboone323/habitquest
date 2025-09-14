@@ -37,40 +37,56 @@ struct NotificationsView: View {
             }
             .navigationTitle("Notifications")
             #if os(iOS)
-                .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
             #endif
-                .toolbar {
-                    #if os(iOS)
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button("Clear All") {
-                                clearAllNotifications()
-                            }
-                            .foregroundColor(.red)
+            .toolbar {
+                #if os(iOS)
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(
+                        "Clear All",
+                        action: {
+                            clearAllNotifications()
                         }
-
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done") {
-                                dismiss()
-                            }
-                        }
-                    #else
-                        ToolbarItem {
-                            Button("Clear All") {
-                                clearAllNotifications()
-                            }
-                            .foregroundColor(.red)
-                        }
-
-                        ToolbarItem {
-                            Button("Done") {
-                                dismiss()
-                            }
-                        }
-                    #endif
+                    )
+                    .accessibilityLabel("Button")
+                    .foregroundColor(.red)
                 }
-                .task {
-                    await loadNotifications()
+
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(
+                        "Done",
+                        action: {
+                            dismiss()
+                        }
+                    )
+                    .accessibilityLabel("Button")
                 }
+                #else
+                ToolbarItem {
+                    Button(
+                        "Clear All",
+                        action: {
+                            clearAllNotifications()
+                        }
+                    )
+                    .accessibilityLabel("Button")
+                    .foregroundColor(.red)
+                }
+
+                ToolbarItem {
+                    Button(
+                        "Done",
+                        action: {
+                            dismiss()
+                        }
+                    )
+                    .accessibilityLabel("Button")
+                }
+                #endif
+            }
+            .task {
+                await loadNotifications()
+            }
         }
     }
 
@@ -84,7 +100,7 @@ struct NotificationsView: View {
                         filter: filter,
                         isSelected: selectedFilter == filter,
                         count: getNotificationCount(for: filter),
-                    ) {
+                        ) {
                         selectedFilter = filter
                     }
                 }
@@ -109,7 +125,7 @@ struct NotificationsView: View {
                         onDismiss: {
                             dismissNotification(notification)
                         },
-                    )
+                        )
                 }
             }
             .padding(.horizontal, 16)
@@ -129,11 +145,13 @@ struct NotificationsView: View {
                 .font(.title2.weight(.medium))
                 .foregroundColor(.primary)
 
-            Text("You're all caught up! Notifications will appear here when you have budget alerts, upcoming payments, or goal milestones.")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+            Text(
+                "You're all caught up! Notifications will appear here when you have budget alerts, upcoming payments, or goal milestones."
+            )
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 32)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -199,7 +217,9 @@ struct NotificationsView: View {
         pendingNotifications.removeAll { $0.id == notification.id }
 
         // Remove from system
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [notification.id])
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [
+            notification.id
+        ])
     }
 
     private func clearAllNotifications() {
@@ -235,7 +255,7 @@ struct FilterButton: View {
     let action: () -> Void
 
     private var isEmpty: Bool {
-        count == 0
+        isEmpty
     }
 
     var body: some View {
@@ -259,12 +279,13 @@ struct FilterButton: View {
             .padding(.vertical, 8)
             .background(
                 isSelected ? Color.blue : Color.gray.opacity(0.2),
-            )
+                )
             .foregroundColor(
                 isSelected ? .white : .primary,
-            )
+                )
             .cornerRadius(20)
         }
+        .accessibilityLabel("Button")
         .buttonStyle(PlainButtonStyle())
     }
 }
@@ -311,26 +332,38 @@ struct NotificationRow: View {
 
             // Actions
             VStack(spacing: 8) {
-                Button("View") {
-                    onTap()
-                }
+                Button(
+                    "View",
+                    action: {
+                        onTap()
+                    }
+                )
                 .font(.caption.weight(.medium))
                 .foregroundColor(.blue)
+                .accessibilityLabel("Button")
 
-                Button("Dismiss") {
-                    onDismiss()
-                }
+                Button(
+                    "Dismiss",
+                    action: {
+                        onDismiss()
+                    }
+                )
                 .font(.caption.weight(.medium))
                 .foregroundColor(.red)
+                .accessibilityLabel("Button")
             }
         }
         .padding(16)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-            Button("Dismiss") {
-                onDismiss()
-            }
+            Button(
+                "Dismiss",
+                action: {
+                    onDismiss()
+                }
+            )
             .tint(.red)
+            .accessibilityLabel("Button")
         }
     }
 

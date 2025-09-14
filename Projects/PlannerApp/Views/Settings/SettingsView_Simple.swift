@@ -76,7 +76,7 @@ struct SettingsView: View {
                     HStack {
                         Text("Name")
                             .foregroundColor(themeManager.currentTheme.secondaryTextColor)
-                        TextField("Enter your name", text: $userName)
+                        TextField("Enter your name", text: $userName).accessibilityLabel("Text Field")
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(themeManager.currentTheme.primaryTextColor)
                     }
@@ -91,7 +91,7 @@ struct SettingsView: View {
                         }
                     }
 
-                    Button(action: { showingThemePreview = true }) {
+                    Button(action: { showingThemePreview = true }).accessibilityLabel("Button") {
                         HStack {
                             Text("Theme Preview")
                                 .foregroundColor(themeManager.currentTheme.primaryTextColor)
@@ -170,7 +170,7 @@ struct SettingsView: View {
 
                 // --- Sync & Cloud Section ---
                 Section("Sync & Cloud") {
-                    Button(action: { showingCloudKitSheet = true }) {
+                    Button(action: { showingCloudKitSheet = true }).accessibilityLabel("Button") {
                         HStack {
                             Image(systemName: "icloud")
                                 .foregroundColor(.blue)
@@ -209,14 +209,14 @@ struct SettingsView: View {
 
                 // --- Data Management Section ---
                 Section("Data Management") {
-                    Button("Export Data", action: exportData)
+                    Button("Export Data", action: exportData).accessibilityLabel("Button")
                         .foregroundColor(themeManager.currentTheme.primaryAccentColor)
 
-                    Button("Clear Old Completed Tasks...", action: { showingClearDataConfirmation = true })
+                    Button("Clear Old Completed Tasks...", action: { showingClearDataConfirmation = true }).accessibilityLabel("Button")
                         .foregroundColor(themeManager.currentTheme.destructiveColor)
                         .alert("Confirm Deletion", isPresented: $showingClearDataConfirmation) {
-                            Button("Delete", role: .destructive, action: performClearOldData)
-                            Button("Cancel", role: .cancel) {}
+                            Button("Delete", role: .destructive, action: performClearOldData).accessibilityLabel("Button")
+                            Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
                         } message: {
                             Text("Are you sure you want to permanently delete completed tasks older than \\(autoDeleteDays) days? This cannot be undone.")
                         }
@@ -250,7 +250,7 @@ struct SettingsView: View {
                         .padding()
                     Text("CloudKit integration coming soon...")
                         .foregroundColor(.secondary)
-                    Button("Done") {
+                    Button("Done").accessibilityLabel("Button") {
                         showingCloudKitSheet = false
                     }
                     .padding()
@@ -265,7 +265,7 @@ struct SettingsView: View {
                         .padding()
                     Text("Theme preview coming soon...")
                         .foregroundColor(.secondary)
-                    Button("Done") {
+                    Button("Done").accessibilityLabel("Button") {
                         showingThemePreview = false
                     }
                     .padding()
@@ -286,8 +286,8 @@ struct SettingsView: View {
 
     @ViewBuilder
     func notificationAlertActions() -> some View {
-        Button("Open Settings", action: openAppSettings)
-        Button("Cancel", role: .cancel) {}
+        Button("Open Settings", action: openAppSettings).accessibilityLabel("Button")
+        Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
     }
 
     func requestNotificationPermission() {

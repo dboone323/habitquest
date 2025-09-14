@@ -1,5 +1,89 @@
 [
 {
+  "file": "Documentation/Enhancements/CodingReviewer_auto_enhancements.sh",
+  "line": 22,
+  "text": "# Convert TODO comments to structured documentation"
+}
+,
+{
+  "file": "Documentation/Enhancements/CodingReviewer_auto_enhancements.sh",
+  "line": 23,
+  "text": "echo \"🔧 Converting TODO comments to structured documentation...\""
+}
+,
+{
+  "file": "Documentation/Enhancements/CodingReviewer_auto_enhancements.sh",
+  "line": 25,
+  "text": "    s/\\/\\/ TODO:/\\/\\/\\/ - TODO:/g"
+}
+,
+{
+  "file": "Documentation/Enhancements/CodingReviewer_auto_enhancements.sh",
+  "line": 26,
+  "text": "    s/\\/\\/ FIXME:/\\/\\/\\/ - FIXME:/g"
+}
+{
+  "file": "Documentation/Enhancements/PlannerApp_auto_enhancements.sh",
+  "line": 22,
+  "text": "# Convert TODO comments to structured documentation"
+}
+,
+{
+  "file": "Documentation/Enhancements/PlannerApp_auto_enhancements.sh",
+  "line": 23,
+  "text": "echo \"🔧 Converting TODO comments to structured documentation...\""
+}
+,
+{
+  "file": "Documentation/Enhancements/PlannerApp_auto_enhancements.sh",
+  "line": 25,
+  "text": "    s/\\/\\/ TODO:/\\/\\/\\/ - TODO:/g"
+}
+,
+{
+  "file": "Documentation/Enhancements/PlannerApp_auto_enhancements.sh",
+  "line": 26,
+  "text": "    s/\\/\\/ FIXME:/\\/\\/\\/ - FIXME:/g"
+}
+{
+  "file": "Documentation/Enhancements/MomentumFinance_enhancement_analysis.md",
+  "line": 54,
+  "text": "- **Issue:** Found 5 TODO/FIXME/HACK comments"
+}
+{
+  "file": "Documentation/Enhancements/PlannerApp_enhancement_analysis.md",
+  "line": 41,
+  "text": "- **Issue:** Found 8 TODO/FIXME/HACK comments"
+}
+{
+  "file": "Documentation/Enhancements/CodingReviewer_enhancement_analysis.md",
+  "line": 41,
+  "text": "- **Issue:** Found 14 TODO/FIXME/HACK comments"
+}
+{
+  "file": "Documentation/Enhancements/MomentumFinance_auto_enhancements.sh",
+  "line": 22,
+  "text": "# Convert TODO comments to structured documentation"
+}
+,
+{
+  "file": "Documentation/Enhancements/MomentumFinance_auto_enhancements.sh",
+  "line": 23,
+  "text": "echo \"🔧 Converting TODO comments to structured documentation...\""
+}
+,
+{
+  "file": "Documentation/Enhancements/MomentumFinance_auto_enhancements.sh",
+  "line": 25,
+  "text": "    s/\\/\\/ TODO:/\\/\\/\\/ - TODO:/g"
+}
+,
+{
+  "file": "Documentation/Enhancements/MomentumFinance_auto_enhancements.sh",
+  "line": 26,
+  "text": "    s/\\/\\/ FIXME:/\\/\\/\\/ - FIXME:/g"
+}
+{
   "file": "Tools/Documentation/Imported_CodeWorkspace_20250826T130522Z/Enhancements/CodingReviewer_auto_enhancements.sh",
   "line": 22,
   "text": "# Convert TODO comments to structured documentation"
@@ -558,6 +642,11 @@
   "file": "Tools/.venv/lib/python3.12/site-packages/pip/_vendor/pkg_resources/__init__.py",
   "line": 3053,
   "text": "            # TODO: remove this except clause when python/cpython#103632 is fixed."
+}
+{
+  "file": "Tools/Automation/create_issue.sh",
+  "line": 2,
+  "text": "# create_issue.sh - Create a local issue from a TODO"
 }
 {
   "file": "Tools/Automation/check_architecture.py",
@@ -1315,7 +1404,7 @@
 {
   "file": "Tools/Automation/export_todos_json.sh",
   "line": 12,
-  "text": "  grep -nE \"TODO|FIXME\" \"${file}\" | while IFS=: read -r line_num line; do"
+  "text": "\tgrep -nE \"TODO|FIXME\" \"${file}\" | while IFS=: read -r line_num line; do"
 }
 ,
 {
@@ -1453,6 +1542,11 @@
   "file": "Tools/Automation/universal_workflow_manager.sh",
   "line": 192,
   "text": "    echo \"Note: TODO/FIXME comments found in staged changes:\""
+}
+{
+  "file": "Tools/Automation/assign_agent.sh",
+  "line": 2,
+  "text": "# assign_agent.sh - Assign an agent to a TODO/issue based on text"
 }
 {
   "file": "Tools/Automation/.venv/lib/python3.12/site-packages/mdurl/_parse.py",
@@ -12721,6 +12815,29 @@
   "text": "    s/\\/\\/ FIXME:/\\/\\/\\/ - FIXME:/g"
 }
 {
+  "file": "Tools/Automation/auto_apply_safe_enhancements.sh",
+  "line": 3,
+  "text": "# Applies array performance optimizations and converts TODO/FIXME/HACK comments to doc comments"
+}
+,
+{
+  "file": "Tools/Automation/auto_apply_safe_enhancements.sh",
+  "line": 18,
+  "text": "# Convert TODO/FIXME/HACK comments to documentation comments"
+}
+,
+{
+  "file": "Tools/Automation/auto_apply_safe_enhancements.sh",
+  "line": 20,
+  "text": "    's#//[[:space:]]*(TODO|FIXME|HACK)[: ]*#/// #g'"
+}
+,
+{
+  "file": "Tools/Automation/auto_apply_safe_enhancements.sh",
+  "line": 22,
+  "text": "echo \"✅ TODO/FIXME/HACK comments converted to doc comments\""
+}
+{
   "file": "Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/CloudKit/CloudKitManager_Simplified.swift",
   "line": 81,
   "text": "            // TODO: Implement actual sync operations"
@@ -12764,6 +12881,77 @@
   "file": "Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/MainApp/DashboardView_Modern.swift",
   "line": 216,
   "text": "                                // TODO: Navigate to calendar"
+}
+{
+  "file": "Tools/Automation/process_todos.sh",
+  "line": 3,
+  "text": "# Process exported todo-tree-output.json and take action on TODOs"
+}
+,
+{
+  "file": "Tools/Automation/process_todos.sh",
+  "line": 4,
+  "text": "# Actions: generate issues, assign agents, or trigger workflows based on TODOs"
+}
+,
+{
+  "file": "Tools/Automation/process_todos.sh",
+  "line": 8,
+  "text": "TODO_JSON=\"${WORKSPACE_DIR}/Projects/todo-tree-output.json\""
+}
+,
+{
+  "file": "Tools/Automation/process_todos.sh",
+  "line": 11,
+  "text": "if [[ ! -f ${TODO_JSON} ]]; then"
+}
+,
+{
+  "file": "Tools/Automation/process_todos.sh",
+  "line": 13,
+  "text": "\techo \"❌ TODO JSON file not found: ${TODO_JSON}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Tools/Automation/process_todos.sh",
+  "line": 17,
+  "text": "echo \"🔍 Processing TODOs from ${TODO_JSON}...\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Tools/Automation/process_todos.sh",
+  "line": 19,
+  "text": "# Example: For each TODO, print details and (optionally) trigger further automation"
+}
+,
+{
+  "file": "Tools/Automation/process_todos.sh",
+  "line": 20,
+  "text": "jq -c '.[]' \"${TODO_JSON}\" | while read -r todo; do"
+}
+,
+{
+  "file": "Tools/Automation/process_todos.sh",
+  "line": 24,
+  "text": "\techo \"➡️  TODO in ${file} at line ${line}: ${text}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Tools/Automation/process_todos.sh",
+  "line": 25,
+  "text": "\t# Create a local issue for this TODO"
+}
+,
+{
+  "file": "Tools/Automation/process_todos.sh",
+  "line": 27,
+  "text": "\t# Assign an agent to this TODO/issue"
+}
+,
+{
+  "file": "Tools/Automation/process_todos.sh",
+  "line": 31,
+  "text": "echo \"✅ TODO processing complete.\" | tee -a \"${LOG_FILE}\""
 }
 {
   "file": "Projects/MomentumFinance/Tools/Automation/universal_workflow_manager.sh",
@@ -12824,6 +13012,65 @@
   "text": "    s/\\/\\/ FIXME:/\\/\\/\\/ - FIXME:/g"
 }
 {
+  "file": "Projects/MomentumFinance/Tools/Automation/process_todos.sh",
+  "line": 3,
+  "text": "# Process exported todo-tree-output.json and take action on TODOs"
+}
+,
+{
+  "file": "Projects/MomentumFinance/Tools/Automation/process_todos.sh",
+  "line": 4,
+  "text": "# Actions: generate issues, assign agents, or trigger workflows based on TODOs"
+}
+,
+{
+  "file": "Projects/MomentumFinance/Tools/Automation/process_todos.sh",
+  "line": 7,
+  "text": "TODO_JSON=\"${WORKSPACE_DIR}/todo-tree-output.json\""
+}
+,
+{
+  "file": "Projects/MomentumFinance/Tools/Automation/process_todos.sh",
+  "line": 10,
+  "text": "if [[ ! -f \"${TODO_JSON}\" ]]; then"
+}
+,
+{
+  "file": "Projects/MomentumFinance/Tools/Automation/process_todos.sh",
+  "line": 11,
+  "text": "  echo \"❌ TODO JSON file not found: ${TODO_JSON}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Projects/MomentumFinance/Tools/Automation/process_todos.sh",
+  "line": 15,
+  "text": "echo \"🔍 Processing TODOs from${$TODO_JSO}N...\" | tee -a ${$LOG_FIL}E\""
+}
+,
+{
+  "file": "Projects/MomentumFinance/Tools/Automation/process_todos.sh",
+  "line": 17,
+  "text": "# Example: For each TODO, print details and (optionally) trigger further automation"
+}
+,
+{
+  "file": "Projects/MomentumFinance/Tools/Automation/process_todos.sh",
+  "line": 18,
+  "text": "jq -c '.[]' \"${TODO_JSON}\" | while read -r todo; do"
+}
+,
+{
+  "file": "Projects/MomentumFinance/Tools/Automation/process_todos.sh",
+  "line": 22,
+  "text": "  echo \"➡️  TODO in ${file} at line ${line}: ${text}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Projects/MomentumFinance/Tools/Automation/process_todos.sh",
+  "line": 27,
+  "text": "echo \"✅ TODO processing complete.\" | tee -a \"${LOG_FILE}\""
+}
+{
   "file": "Projects/MomentumFinance/verify-project.sh",
   "line": 237,
   "text": "# Check for TODO/FIXME comments"
@@ -12855,25 +13102,25 @@
 {
   "file": "Projects/MomentumFinance/MissingTypes.swift",
   "line": 8,
-  "text": "// TODO: Remove when proper SearchTypes.swift is included in Xcode project"
+  "text": "/// - TODO: Remove when proper SearchTypes.swift is included in Xcode project"
 }
 ,
 {
   "file": "Projects/MomentumFinance/MissingTypes.swift",
   "line": 60,
-  "text": "        // TODO: Replace with proper implementation from Shared/Features/GlobalSearch/SearchEngineService.swift"
+  "text": "        /// - TODO: Replace with proper implementation from Shared/Features/GlobalSearch/SearchEngineService.swift"
 }
 ,
 {
   "file": "Projects/MomentumFinance/MissingTypes.swift",
   "line": 67,
-  "text": "// TODO: Remove when proper DataImportModels.swift is included in Xcode project"
+  "text": "/// - TODO: Remove when proper DataImportModels.swift is included in Xcode project"
 }
 ,
 {
   "file": "Projects/MomentumFinance/MissingTypes.swift",
   "line": 2868,
-  "text": "// TODO: Replace with proper file inclusion in Xcode project: Shared/Features/GlobalSearch/SearchResultsComponent.swift"
+  "text": "/// - TODO: Replace with proper file inclusion in Xcode project: Shared/Features/GlobalSearch/SearchResultsComponent.swift"
 }
 {
   "file": "Projects/MomentumFinance/automation/tests/project_test_suite.py",
@@ -12943,49 +13190,283 @@
   "text": "// MARK: - TODO: Architectural Notes"
 }
 {
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/universal_workflow_manager.sh",
+  "line": 189,
+  "text": "# Check for TODO/FIXME in staged files"
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/universal_workflow_manager.sh",
+  "line": 190,
+  "text": "todos=$(git diff --cached | grep -n \"TODO\\|FIXME\\|XXX\" || true)"
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/universal_workflow_manager.sh",
+  "line": 192,
+  "text": "    echo \"Note: TODO/FIXME comments found in staged changes:\""
+}
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/ai_enhancement_system.sh",
+  "line": 270,
+  "text": "    # Check for TODO/FIXME comments"
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/ai_enhancement_system.sh",
+  "line": 271,
+  "text": "    local todos=$(count_lines \"TODO\\|FIXME\\|HACK\")"
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/ai_enhancement_system.sh",
+  "line": 275,
+  "text": "- **Issue:** Found $todos TODO/FIXME/HACK comments"
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/ai_enhancement_system.sh",
+  "line": 283,
+  "text": "# Convert TODO comments to structured documentation"
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/ai_enhancement_system.sh",
+  "line": 284,
+  "text": "echo \"🔧 Converting TODO comments to structured documentation...\""
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/ai_enhancement_system.sh",
+  "line": 286,
+  "text": "    s/\\/\\/ TODO:/\\/\\/\\/ - TODO:/g"
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/ai_enhancement_system.sh",
+  "line": 287,
+  "text": "    s/\\/\\/ FIXME:/\\/\\/\\/ - FIXME:/g"
+}
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/process_todos.sh",
+  "line": 3,
+  "text": "# Process exported todo-tree-output.json and take action on TODOs"
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/process_todos.sh",
+  "line": 4,
+  "text": "# Actions: generate issues, assign agents, or trigger workflows based on TODOs"
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/process_todos.sh",
+  "line": 7,
+  "text": "TODO_JSON=\"${WORKSPACE_DIR}/todo-tree-output.json\""
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/process_todos.sh",
+  "line": 10,
+  "text": "if [[ ! -f \"${TODO_JSON}\" ]]; then"
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/process_todos.sh",
+  "line": 11,
+  "text": "  echo \"❌ TODO JSON file not found: ${TODO_JSON}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/process_todos.sh",
+  "line": 15,
+  "text": "echo \"🔍 Processing TODOs from${$TODO_JSO}N...\" | tee -a ${$LOG_FIL}E\""
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/process_todos.sh",
+  "line": 17,
+  "text": "# Example: For each TODO, print details and (optionally) trigger further automation"
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/process_todos.sh",
+  "line": 18,
+  "text": "jq -c '.[]' \"${TODO_JSON}\" | while read -r todo; do"
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/process_todos.sh",
+  "line": 22,
+  "text": "  echo \"➡️  TODO in ${file} at line ${line}: ${text}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Projects/AvoidObstaclesGame/Tools/Automation/process_todos.sh",
+  "line": 27,
+  "text": "echo \"✅ TODO processing complete.\" | tee -a \"${LOG_FILE}\""
+}
+{
+  "file": "Projects/PlannerApp/Tools/Automation/universal_workflow_manager.sh",
+  "line": 189,
+  "text": "# Check for TODO/FIXME in staged files"
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/universal_workflow_manager.sh",
+  "line": 190,
+  "text": "todos=$(git diff --cached | grep -n \"TODO\\|FIXME\\|XXX\" || true)"
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/universal_workflow_manager.sh",
+  "line": 192,
+  "text": "    echo \"Note: TODO/FIXME comments found in staged changes:\""
+}
+{
+  "file": "Projects/PlannerApp/Tools/Automation/ai_enhancement_system.sh",
+  "line": 270,
+  "text": "    # Check for TODO/FIXME comments"
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/ai_enhancement_system.sh",
+  "line": 271,
+  "text": "    local todos=$(count_lines \"TODO\\|FIXME\\|HACK\")"
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/ai_enhancement_system.sh",
+  "line": 275,
+  "text": "- **Issue:** Found $todos TODO/FIXME/HACK comments"
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/ai_enhancement_system.sh",
+  "line": 283,
+  "text": "# Convert TODO comments to structured documentation"
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/ai_enhancement_system.sh",
+  "line": 284,
+  "text": "echo \"🔧 Converting TODO comments to structured documentation...\""
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/ai_enhancement_system.sh",
+  "line": 286,
+  "text": "    s/\\/\\/ TODO:/\\/\\/\\/ - TODO:/g"
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/ai_enhancement_system.sh",
+  "line": 287,
+  "text": "    s/\\/\\/ FIXME:/\\/\\/\\/ - FIXME:/g"
+}
+{
+  "file": "Projects/PlannerApp/Tools/Automation/process_todos.sh",
+  "line": 3,
+  "text": "# Process exported todo-tree-output.json and take action on TODOs"
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/process_todos.sh",
+  "line": 4,
+  "text": "# Actions: generate issues, assign agents, or trigger workflows based on TODOs"
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/process_todos.sh",
+  "line": 7,
+  "text": "TODO_JSON=\"${WORKSPACE_DIR}/todo-tree-output.json\""
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/process_todos.sh",
+  "line": 10,
+  "text": "if [[ ! -f \"${TODO_JSON}\" ]]; then"
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/process_todos.sh",
+  "line": 11,
+  "text": "  echo \"❌ TODO JSON file not found: ${TODO_JSON}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/process_todos.sh",
+  "line": 15,
+  "text": "echo \"🔍 Processing TODOs from${$TODO_JSO}N...\" | tee -a ${$LOG_FIL}E\""
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/process_todos.sh",
+  "line": 17,
+  "text": "# Example: For each TODO, print details and (optionally) trigger further automation"
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/process_todos.sh",
+  "line": 18,
+  "text": "jq -c '.[]' \"${TODO_JSON}\" | while read -r todo; do"
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/process_todos.sh",
+  "line": 22,
+  "text": "  echo \"➡️  TODO in ${file} at line ${line}: ${text}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Projects/PlannerApp/Tools/Automation/process_todos.sh",
+  "line": 27,
+  "text": "echo \"✅ TODO processing complete.\" | tee -a \"${LOG_FILE}\""
+}
+{
   "file": "Projects/PlannerApp/CloudKit/CloudKitManager_Simplified.swift",
   "line": 81,
-  "text": "            // TODO: Implement actual sync operations"
+  "text": "            /// - TODO: Implement actual sync operations"
 }
 ,
 {
   "file": "Projects/PlannerApp/CloudKit/CloudKitManager_Simplified.swift",
   "line": 109,
-  "text": "        // TODO: Implement task synchronization"
+  "text": "        /// - TODO: Implement task synchronization"
 }
 ,
 {
   "file": "Projects/PlannerApp/CloudKit/CloudKitManager_Simplified.swift",
   "line": 114,
-  "text": "        // TODO: Implement goal synchronization"
+  "text": "        /// - TODO: Implement goal synchronization"
 }
 ,
 {
   "file": "Projects/PlannerApp/CloudKit/CloudKitManager_Simplified.swift",
   "line": 119,
-  "text": "        // TODO: Implement journal entry synchronization"
+  "text": "        /// - TODO: Implement journal entry synchronization"
 }
 ,
 {
   "file": "Projects/PlannerApp/CloudKit/CloudKitManager_Simplified.swift",
   "line": 124,
-  "text": "        // TODO: Implement calendar event synchronization"
+  "text": "        /// - TODO: Implement calendar event synchronization"
 }
 {
   "file": "Projects/PlannerApp/MainApp/DashboardView.swift",
   "line": 170,
-  "text": "                                // TODO: Navigate to calendar"
+  "text": "                                /// - TODO: Navigate to calendar"
 }
 {
   "file": "Projects/PlannerApp/MainApp/DashboardView_Modern.swift",
   "line": 173,
-  "text": "                                // TODO: Navigate to activities view"
+  "text": "                                /// - TODO: Navigate to activities view"
 }
 ,
 {
   "file": "Projects/PlannerApp/MainApp/DashboardView_Modern.swift",
   "line": 216,
-  "text": "                                // TODO: Navigate to calendar"
+  "text": "                                /// - TODO: Navigate to calendar"
 }
 {
   "file": "Projects/HabitQuest/Tools/Automation/universal_workflow_manager.sh",
@@ -13044,6 +13525,65 @@
   "file": "Projects/HabitQuest/Tools/Automation/ai_enhancement_system.sh",
   "line": 287,
   "text": "    s/\\/\\/ FIXME:/\\/\\/\\/ - FIXME:/g"
+}
+{
+  "file": "Projects/HabitQuest/Tools/Automation/process_todos.sh",
+  "line": 3,
+  "text": "# Process exported todo-tree-output.json and take action on TODOs"
+}
+,
+{
+  "file": "Projects/HabitQuest/Tools/Automation/process_todos.sh",
+  "line": 4,
+  "text": "# Actions: generate issues, assign agents, or trigger workflows based on TODOs"
+}
+,
+{
+  "file": "Projects/HabitQuest/Tools/Automation/process_todos.sh",
+  "line": 7,
+  "text": "TODO_JSON=\"${WORKSPACE_DIR}/todo-tree-output.json\""
+}
+,
+{
+  "file": "Projects/HabitQuest/Tools/Automation/process_todos.sh",
+  "line": 10,
+  "text": "if [[ ! -f \"${TODO_JSON}\" ]]; then"
+}
+,
+{
+  "file": "Projects/HabitQuest/Tools/Automation/process_todos.sh",
+  "line": 11,
+  "text": "  echo \"❌ TODO JSON file not found: ${TODO_JSON}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Projects/HabitQuest/Tools/Automation/process_todos.sh",
+  "line": 15,
+  "text": "echo \"🔍 Processing TODOs from${$TODO_JSO}N...\" | tee -a ${$LOG_FIL}E\""
+}
+,
+{
+  "file": "Projects/HabitQuest/Tools/Automation/process_todos.sh",
+  "line": 17,
+  "text": "# Example: For each TODO, print details and (optionally) trigger further automation"
+}
+,
+{
+  "file": "Projects/HabitQuest/Tools/Automation/process_todos.sh",
+  "line": 18,
+  "text": "jq -c '.[]' \"${TODO_JSON}\" | while read -r todo; do"
+}
+,
+{
+  "file": "Projects/HabitQuest/Tools/Automation/process_todos.sh",
+  "line": 22,
+  "text": "  echo \"➡️  TODO in ${file} at line ${line}: ${text}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Projects/HabitQuest/Tools/Automation/process_todos.sh",
+  "line": 27,
+  "text": "echo \"✅ TODO processing complete.\" | tee -a \"${LOG_FILE}\""
 }
 {
   "file": "Projects/HabitQuest/automation/tests/project_test_suite.py",
@@ -13124,6 +13664,123 @@
   "file": "Projects/CodingReviewer/CodingReviewer_auto_enhancements.sh",
   "line": 26,
   "text": "    s/\\/\\/ FIXME:/\\/\\/\\/ - FIXME:/g"
+}
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/universal_workflow_manager.sh",
+  "line": 189,
+  "text": "# Check for TODO/FIXME in staged files"
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/universal_workflow_manager.sh",
+  "line": 190,
+  "text": "todos=$(git diff --cached | grep -n \"TODO\\|FIXME\\|XXX\" || true)"
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/universal_workflow_manager.sh",
+  "line": 192,
+  "text": "    echo \"Note: TODO/FIXME comments found in staged changes:\""
+}
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/ai_enhancement_system.sh",
+  "line": 270,
+  "text": "    # Check for TODO/FIXME comments"
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/ai_enhancement_system.sh",
+  "line": 271,
+  "text": "    local todos=$(count_lines \"TODO\\|FIXME\\|HACK\")"
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/ai_enhancement_system.sh",
+  "line": 275,
+  "text": "- **Issue:** Found $todos TODO/FIXME/HACK comments"
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/ai_enhancement_system.sh",
+  "line": 283,
+  "text": "# Convert TODO comments to structured documentation"
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/ai_enhancement_system.sh",
+  "line": 284,
+  "text": "echo \"🔧 Converting TODO comments to structured documentation...\""
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/ai_enhancement_system.sh",
+  "line": 286,
+  "text": "    s/\\/\\/ TODO:/\\/\\/\\/ - TODO:/g"
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/ai_enhancement_system.sh",
+  "line": 287,
+  "text": "    s/\\/\\/ FIXME:/\\/\\/\\/ - FIXME:/g"
+}
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/process_todos.sh",
+  "line": 3,
+  "text": "# Process exported todo-tree-output.json and take action on TODOs"
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/process_todos.sh",
+  "line": 4,
+  "text": "# Actions: generate issues, assign agents, or trigger workflows based on TODOs"
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/process_todos.sh",
+  "line": 7,
+  "text": "TODO_JSON=\"${WORKSPACE_DIR}/todo-tree-output.json\""
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/process_todos.sh",
+  "line": 10,
+  "text": "if [[ ! -f \"${TODO_JSON}\" ]]; then"
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/process_todos.sh",
+  "line": 11,
+  "text": "  echo \"❌ TODO JSON file not found: ${TODO_JSON}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/process_todos.sh",
+  "line": 15,
+  "text": "echo \"🔍 Processing TODOs from${$TODO_JSO}N...\" | tee -a ${$LOG_FIL}E\""
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/process_todos.sh",
+  "line": 17,
+  "text": "# Example: For each TODO, print details and (optionally) trigger further automation"
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/process_todos.sh",
+  "line": 18,
+  "text": "jq -c '.[]' \"${TODO_JSON}\" | while read -r todo; do"
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/process_todos.sh",
+  "line": 22,
+  "text": "  echo \"➡️  TODO in ${file} at line ${line}: ${text}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": "Projects/CodingReviewer/Tools/Automation/process_todos.sh",
+  "line": 27,
+  "text": "echo \"✅ TODO processing complete.\" | tee -a \"${LOG_FILE}\""
 }
 {
   "file": "Projects/CodingReviewer/CodingReviewer_enhancement_analysis.md",
@@ -13738,119 +14395,6 @@
   "text": "                modifiedLines[lineIndex] = \"// TODO: Replace with secure credential storage\""
 }
 {
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 7,
-  "text": "// / TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 9,
-  "text": "/// TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 14,
-  "text": "    // / TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 16,
-  "text": "    /// TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 35,
-  "text": "// / TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 37,
-  "text": "/// TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 42,
-  "text": "    // / TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 44,
-  "text": "    /// TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 243,
-  "text": "// / TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 245,
-  "text": "/// TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 250,
-  "text": "    // / TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 252,
-  "text": "    /// TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 308,
-  "text": "// / TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 310,
-  "text": "/// TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 315,
-  "text": "    // / TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/MLCodeInsightsModels.swift",
-  "line": 317,
-  "text": "    /// TODO: Add detailed documentation"
-}
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/FileManagerService.swift",
-  "line": 369,
-  "text": "    // TODO: Add FileAnalysisService integration in Phase 4 continuation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/FileManagerService.swift",
-  "line": 371,
-  "text": "    // TODO: Add language detection service integration"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/FileManagerService.swift",
-  "line": 573,
-  "text": "            // TODO: Integrate with AI service when available"
-}
-,
-{
   "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/FileManagerService.swift",
   "line": 645,
   "text": "        // Check for TODO/FIXME comments"
@@ -13863,37 +14407,8 @@
 }
 {
   "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
-  "line": 18,
-  "text": "// TODO: Review error handling in this file"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
-  "line": 483,
-  "text": "        if code.contains(\"TODO\") || code.contains(\"FIXME\") { // Has improvement notes"
-}
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/EnhancedAIAnalyzer.swift",
-  "line": 8,
-  "text": "/// TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/EnhancedAIAnalyzer.swift",
-  "line": 11,
-  "text": "// / TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/EnhancedAIAnalyzer.swift",
-  "line": 26,
-  "text": "    // / TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/EnhancedAIAnalyzer.swift",
-  "line": 28,
-  "text": "    /// TODO: Add detailed documentation"
+  "line": 515,
+  "text": "        if code.contains(\"TODO\") || code.contains(\"FIXME\") {  // Has improvement notes"
 }
 {
   "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/CodeAnalyzers.swift",
@@ -13912,33 +14427,6 @@
   "line": 65,
   "text": "            if line.contains(\"TODO\") || line.contains(\"FIXME\") || line.contains(\"HACK\") {"
 }
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/AIServiceProtocol.swift",
-  "line": 16,
-  "text": "// TODO: Review error handling in this file - Consider wrapping force unwraps and try statements in proper error handling"
-}
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/AutomaticFixEngine.swift",
-  "line": 410,
-  "text": "            fixType: .insert(newLine: \"    // TODO: Consider breaking this function into smaller methods\"),"
-}
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/APIKeyManager.swift",
-  "line": 9,
-  "text": "/// TODO: Add detailed documentation"
-}
-,
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/APIKeyManager.swift",
-  "line": 12,
-  "text": "// / TODO: Add detailed documentation"
-}
-{
-  "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/IssueDetector.swift",
-  "line": 160,
-  "text": "        // TODO: comments"
-}
-,
 {
   "file": "Projects/CodingReviewer/CodingReviewer/CodingReviewer/IssueDetector.swift",
   "line": 161,
@@ -23345,3 +23833,846 @@
   "line": 215,
   "text": "                                // TODO: Navigate to calendar"
 }
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer_auto_enhancements.sh",
+  "line": 22,
+  "text": "# Convert TODO comments to structured documentation"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer_auto_enhancements.sh",
+  "line": 23,
+  "text": "echo \"🔧 Converting TODO comments to structured documentation...\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer_auto_enhancements.sh",
+  "line": 25,
+  "text": "    s/\\/\\/ TODO:/\\/\\/\\/ - TODO:/g"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer_auto_enhancements.sh",
+  "line": 26,
+  "text": "    s/\\/\\/ FIXME:/\\/\\/\\/ - FIXME:/g"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/universal_workflow_manager.sh",
+  "line": 189,
+  "text": "# Check for TODO/FIXME in staged files"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/universal_workflow_manager.sh",
+  "line": 190,
+  "text": "todos=$(git diff --cached | grep -n \"TODO\\|FIXME\\|XXX\" || true)"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/universal_workflow_manager.sh",
+  "line": 192,
+  "text": "    echo \"Note: TODO/FIXME comments found in staged changes:\""
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/ai_enhancement_system.sh",
+  "line": 270,
+  "text": "    # Check for TODO/FIXME comments"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/ai_enhancement_system.sh",
+  "line": 271,
+  "text": "    local todos=$(count_lines \"TODO\\|FIXME\\|HACK\")"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/ai_enhancement_system.sh",
+  "line": 275,
+  "text": "- **Issue:** Found $todos TODO/FIXME/HACK comments"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/ai_enhancement_system.sh",
+  "line": 283,
+  "text": "# Convert TODO comments to structured documentation"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/ai_enhancement_system.sh",
+  "line": 284,
+  "text": "echo \"🔧 Converting TODO comments to structured documentation...\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/ai_enhancement_system.sh",
+  "line": 286,
+  "text": "    s/\\/\\/ TODO:/\\/\\/\\/ - TODO:/g"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/ai_enhancement_system.sh",
+  "line": 287,
+  "text": "    s/\\/\\/ FIXME:/\\/\\/\\/ - FIXME:/g"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/process_todos.sh",
+  "line": 3,
+  "text": "# Process exported todo-tree-output.json and take action on TODOs"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/process_todos.sh",
+  "line": 4,
+  "text": "# Actions: generate issues, assign agents, or trigger workflows based on TODOs"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/process_todos.sh",
+  "line": 7,
+  "text": "TODO_JSON=\"${WORKSPACE_DIR}/todo-tree-output.json\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/process_todos.sh",
+  "line": 10,
+  "text": "if [[ ! -f \"${TODO_JSON}\" ]]; then"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/process_todos.sh",
+  "line": 11,
+  "text": "  echo \"❌ TODO JSON file not found: ${TODO_JSON}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/process_todos.sh",
+  "line": 15,
+  "text": "echo \"🔍 Processing TODOs from${$TODO_JSO}N...\" | tee -a ${$LOG_FIL}E\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/process_todos.sh",
+  "line": 17,
+  "text": "# Example: For each TODO, print details and (optionally) trigger further automation"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/process_todos.sh",
+  "line": 18,
+  "text": "jq -c '.[]' \"${TODO_JSON}\" | while read -r todo; do"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/process_todos.sh",
+  "line": 22,
+  "text": "  echo \"➡️  TODO in ${file} at line ${line}: ${text}\" | tee -a \"${LOG_FILE}\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/Tools/Automation/process_todos.sh",
+  "line": 27,
+  "text": "echo \"✅ TODO processing complete.\" | tee -a \"${LOG_FILE}\""
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer_enhancement_analysis.md",
+  "line": 58,
+  "text": "- **Issue:** Found 147 TODO/FIXME/HACK comments"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 339,
+  "text": "        // TODO: Implement $func_name functionality"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 350,
+  "text": "        // TODO: Implement $func_name functionality"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 362,
+  "text": "        // TODO: Implement $func_name functionality"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 374,
+  "text": "        // TODO: Implement $func_name functionality"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 387,
+  "text": "        // TODO: Set up test conditions"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 390,
+  "text": "        // TODO: Execute the code being tested"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 393,
+  "text": "        // TODO: Assert expected outcomes"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 404,
+  "text": "        // TODO: Implement $func_name functionality"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 428,
+  "text": "        // TODO: Implement $func_name functionality"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 514,
+  "text": "        // TODO: Set up test conditions for $function_name"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 517,
+  "text": "        // TODO: Call sut.$function_name()"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 520,
+  "text": "        // TODO: Assert expected outcomes"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 567,
+  "text": "            // TODO: Call the function being performance tested"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 606,
+  "text": "    echo \"/// TODO: Add function description\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 611,
+  "text": "        echo \"///   - parameter: TODO: Describe parameter\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 616,
+  "text": "        echo \"/// - Returns: TODO: Describe return value\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 621,
+  "text": "        echo \"/// - Throws: TODO: Describe possible errors\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 639,
+  "text": "/// TODO: Add class description and purpose"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 644,
+  "text": "/// // TODO: Add usage example"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 657,
+  "text": "        echo \"/// TODO: Describe computed property $property_name\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 660,
+  "text": "        echo \"/// TODO: Describe property $property_name\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 683,
+  "text": "            echo \"TODO: Add description for $type_name\" >> \"$output_file\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/intelligent_code_generator.sh",
+  "line": 696,
+  "text": "            echo \"TODO: Add description for $func_name\" >> \"$output_file\""
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/enhanced_intelligent_build_validator.sh",
+  "line": 170,
+  "text": "    if grep -q \"TODO\\|FIXME\\|WARNING\" \"$file\" 2>/dev/null; then"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/project_health_dashboard.sh",
+  "line": 245,
+  "text": "echo \"  TODO comments: 23 (Priority review needed)\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/project_health_dashboard.sh",
+  "line": 589,
+  "text": "                <div class=\"metric-subtitle\">12% duplication | 23 TODOs</div>"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/project_health_dashboard.sh",
+  "line": 768,
+  "text": "- Address 23 TODO comments"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 756,
+  "text": "    # Check for TODO/FIXME comments"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 905,
+  "text": "    echo \"  • Checking for TODO/FIXME debt...\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 907,
+  "text": "    local todo_count=$(grep -c \"TODO\\|FIXME\\|HACK\" \"$file\")"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 908,
+  "text": "    local todo_items=$(grep -n \"TODO\\|FIXME\\|HACK\" \"$file\")"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 910,
+  "text": "    echo \"### 📝 TODO/FIXME Debt\" >> \"$report\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 922,
+  "text": "            echo \"- **⚠️ High Debt**: Many unresolved TODOs\" >> \"$report\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 925,
+  "text": "        echo \"- **✅ Clean**: No TODO/FIXME items found\" >> \"$report\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 938,
+  "text": "    local todo_count=$(grep -c \"TODO\\|FIXME\\|HACK\" \"$file\")"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 1103,
+  "text": "    local unusual_patterns=$(find \"$path\" -name \"*.swift\" -exec grep -l \"TODO.*TODO\\|FIXME.*FIXME\" {} \\;)"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 1106,
+  "text": "        echo \"#### Files with Multiple TODOs\" >> \"$report\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 1108,
+  "text": "            local todo_count=$(grep -c \"TODO\\|FIXME\" \"$file\")"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 1109,
+  "text": "            echo \"- **$(basename \"$file\")**: $todo_count TODO/FIXME items\" >> \"$report\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 1184,
+  "text": "    echo \"5. **Address TODOs**: Resolve or document long-standing TODO items\" >> \"$report\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/advanced_pattern_analyzer.sh",
+  "line": 1367,
+  "text": "- [ ] Resolve all TODO items"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.project_health_dashboard/assess_risks.sh",
+  "line": 29,
+  "text": "echo \"  TODO comments: 23 (Priority review needed)\""
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/smart_context_autocompletion.sh",
+  "line": 780,
+  "text": "    echo \"      \\\"text\\\": \\\"TODO: \\\",\" >> \"$output\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/smart_context_autocompletion.sh",
+  "line": 783,
+  "text": "    echo \"      \\\"description\\\": \\\"TODO comment\\\"\" >> \"$output\""
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/function_generator.sh",
+  "line": 38,
+  "text": "        // TODO: Implement $func_name functionality"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/function_generator.sh",
+  "line": 49,
+  "text": "        // TODO: Implement $func_name functionality"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/function_generator.sh",
+  "line": 61,
+  "text": "        // TODO: Implement $func_name functionality"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/function_generator.sh",
+  "line": 73,
+  "text": "        // TODO: Implement $func_name functionality"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/function_generator.sh",
+  "line": 86,
+  "text": "        // TODO: Set up test conditions"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/function_generator.sh",
+  "line": 89,
+  "text": "        // TODO: Execute the code being tested"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/function_generator.sh",
+  "line": 92,
+  "text": "        // TODO: Assert expected outcomes"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/function_generator.sh",
+  "line": 103,
+  "text": "        // TODO: Implement $func_name functionality"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/function_generator.sh",
+  "line": 127,
+  "text": "        // TODO: Implement $func_name functionality"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/documentation_generator.sh",
+  "line": 19,
+  "text": "  echo \"/// TODO: Add function description\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/documentation_generator.sh",
+  "line": 24,
+  "text": "    echo \"///   - parameter: TODO: Describe parameter\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/documentation_generator.sh",
+  "line": 29,
+  "text": "    echo \"/// - Returns: TODO: Describe return value\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/documentation_generator.sh",
+  "line": 34,
+  "text": "    echo \"/// - Throws: TODO: Describe possible errors\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/documentation_generator.sh",
+  "line": 52,
+  "text": "/// TODO: Add class description and purpose"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/documentation_generator.sh",
+  "line": 57,
+  "text": "/// // TODO: Add usage example"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/documentation_generator.sh",
+  "line": 70,
+  "text": "    echo \"/// TODO: Describe computed property $property_name\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/documentation_generator.sh",
+  "line": 73,
+  "text": "    echo \"/// TODO: Describe property $property_name\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/documentation_generator.sh",
+  "line": 96,
+  "text": "      echo \"TODO: Add description for $type_name\" >>\"$output_file\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/documentation_generator.sh",
+  "line": 109,
+  "text": "      echo \"TODO: Add description for $func_name\" >>\"$output_file\""
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/test_generator.sh",
+  "line": 69,
+  "text": "        // TODO: Set up test conditions for $function_name"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/test_generator.sh",
+  "line": 72,
+  "text": "        // TODO: Call sut.$function_name()"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/test_generator.sh",
+  "line": 75,
+  "text": "        // TODO: Assert expected outcomes"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/intelligent_code_generator/test_generator.sh",
+  "line": 122,
+  "text": "            // TODO: Call the function being performance tested"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/report_generator.sh",
+  "line": 153,
+  "text": "- [ ] Resolve all TODO items"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/action_plan_20250730_073502.md",
+  "line": 51,
+  "text": "- [ ] Resolve all TODO items"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/technical_debt_assessor.sh",
+  "line": 33,
+  "text": "  # Check for TODO/FIXME comments"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/technical_debt_assessor.sh",
+  "line": 182,
+  "text": "  echo \"  • Checking for TODO/FIXME debt...\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/technical_debt_assessor.sh",
+  "line": 184,
+  "text": "  local todo_count=$(grep -c \"TODO\\|FIXME\\|HACK\" \"$file\")"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/technical_debt_assessor.sh",
+  "line": 185,
+  "text": "  local todo_items=$(grep -n \"TODO\\|FIXME\\|HACK\" \"$file\")"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/technical_debt_assessor.sh",
+  "line": 187,
+  "text": "  echo \"### 📝 TODO/FIXME Debt\" >>\"$report\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/technical_debt_assessor.sh",
+  "line": 199,
+  "text": "      echo \"- **⚠️ High Debt**: Many unresolved TODOs\" >>\"$report\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/technical_debt_assessor.sh",
+  "line": 202,
+  "text": "    echo \"- **✅ Clean**: No TODO/FIXME items found\" >>\"$report\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/technical_debt_assessor.sh",
+  "line": 215,
+  "text": "  local todo_count=$(grep -c \"TODO\\|FIXME\\|HACK\" \"$file\")"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/ml_analysis_20250730_073500.md",
+  "line": 59,
+  "text": "5. **Address TODOs**: Resolve or document long-standing TODO items"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/ml_pattern_engine.sh",
+  "line": 100,
+  "text": "  local unusual_patterns=$(find \"$path\" -name \"*.swift\" -exec grep -l \"TODO.*TODO\\|FIXME.*FIXME\" {} \\;)"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/ml_pattern_engine.sh",
+  "line": 103,
+  "text": "    echo \"#### Files with Multiple TODOs\" >>\"$report\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/ml_pattern_engine.sh",
+  "line": 105,
+  "text": "      local todo_count=$(grep -c \"TODO\\|FIXME\" \"$file\")"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/ml_pattern_engine.sh",
+  "line": 106,
+  "text": "      echo \"- **$(basename \"$file\")**: $todo_count TODO/FIXME items\" >>\"$report\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/ml_pattern_engine.sh",
+  "line": 181,
+  "text": "  echo \"5. **Address TODOs**: Resolve or document long-standing TODO items\" >>\"$report\""
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/technical_debt_20250730_073500.md",
+  "line": 39,
+  "text": "### 📝 TODO/FIXME Debt"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/advanced_pattern_analyzer/technical_debt_20250730_073500.md",
+  "line": 42,
+  "text": "- **✅ Clean**: No TODO/FIXME items found"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/smart_autocompletion/suggestion_engine.sh",
+  "line": 173,
+  "text": "  echo '      \"text\": \"TODO: \",' >>\"$output\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/.automation_enhancements/smart_autocompletion/suggestion_engine.sh",
+  "line": 176,
+  "text": "  echo '      \"description\": \"TODO comment\"' >>\"$output\""
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/EnhancedFileUploadView_V2.swift",
+  "line": 320,
+  "text": "            if line.contains(\"TODO\") || line.contains(\"FIXME\") {"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/EnhancedFileUploadView_V2.swift",
+  "line": 324,
+  "text": "                    message: \"TODO/FIXME comment found\","
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/predictive_analytics.sh",
+  "line": 302,
+  "text": "  # Simplified estimation based on TODO comments and project structure"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/predictive_analytics.sh",
+  "line": 304,
+  "text": "  local estimated_features=$((todo_count / 3 + 5)) # Convert TODOs to feature estimate"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/QuantumAIEnhancer.swift",
+  "line": 295,
+  "text": "        if content.contains(\"TODO\") || content.contains(\"FIXME\") {"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/QuantumAIEnhancer.swift",
+  "line": 297,
+  "text": "            issues.append(\"Unresolved TODO/FIXME comments\")"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/background_automation_daemon.sh",
+  "line": 237,
+  "text": "      sed -i '' 's/password.*=.*\"[^\"]*\"/password = \"\\/\\/ TODO: Use secure storage\"/g' \"$file\" 2>/dev/null"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/background_automation_daemon.sh",
+  "line": 238,
+  "text": "      sed -i '' 's/key.*=.*\"[^\"]*\"/key = \"\\/\\/ TODO: Use keychain or environment variable\"/g' \"$file\" 2>/dev/null"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/ultra_enhanced_build_validator.sh",
+  "line": 521,
+  "text": "        if grep -q \"TODO\\|FIXME\\|HACK\" \"$file\" 2>/dev/null; then"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/comprehensive_issue_resolution.sh",
+  "line": 87,
+  "text": "    sed -i '' 's/let.*password.*=.*\"[^\"]*\"/\\/\\/ TODO: Replace with secure credential storage/g' \"$file\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/comprehensive_issue_resolution.sh",
+  "line": 88,
+  "text": "    sed -i '' 's/let.*apiKey.*=.*\"[^\"]*\"/\\/\\/ TODO: Replace with keychain storage/g' \"$file\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/comprehensive_issue_resolution.sh",
+  "line": 89,
+  "text": "    sed -i '' 's/let.*secret.*=.*\"[^\"]*\"/\\/\\/ TODO: Replace with secure storage/g' \"$file\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/comprehensive_issue_resolution.sh",
+  "line": 138,
+  "text": "    sed -i '' 's/print(\\(.*\\))/\\/\\/ AppLogger.shared.log(\\1) \\/\\/ TODO: Replace print with proper logging/g' \"$file\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/comprehensive_issue_resolution.sh",
+  "line": 254,
+  "text": "      sed -i '' 's/\\(.*\\)try \\(.*\\)/\\1do {\\n        try \\2\\n    } catch {\\n        AppLogger.shared.logError(\"Error: \\\\(error)\")\\n        \\/\\/ TODO: Handle specific error cases\\n    }/g' \"$file\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/comprehensive_issue_resolution.sh",
+  "line": 279,
+  "text": "      sed -i '' 's/public func \\([a-zA-Z]*\\)/\\/\\/\\/ \\1 function\\n    \\/\\/\\/ TODO: Add detailed documentation\\n    public func \\1/g' \"$file\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/comprehensive_issue_resolution.sh",
+  "line": 280,
+  "text": "      sed -i '' 's/public class \\([a-zA-Z]*\\)/\\/\\/\\/ \\1 class\\n\\/\\/\\/ TODO: Add detailed documentation\\npublic class \\1/g' \"$file\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/comprehensive_issue_resolution.sh",
+  "line": 410,
+  "text": "  echo -e \"  3. Complete TODO items for manual fixes\""
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/production_quality_enhancement.sh",
+  "line": 1462,
+  "text": "                modifiedLines[lineIndex] = \"// TODO: Replace with secure credential storage\""
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/CodingReviewer/FileManagerService.swift",
+  "line": 645,
+  "text": "        // Check for TODO/FIXME comments"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/CodingReviewer/FileManagerService.swift",
+  "line": 648,
+  "text": "                message: \"TODO or FIXME comments found. Consider addressing them.\","
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+  "line": 515,
+  "text": "        if code.contains(\"TODO\") || code.contains(\"FIXME\") {  // Has improvement notes"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/CodingReviewer/CodeAnalyzers.swift",
+  "line": 14,
+  "text": "            if line.contains(\"TODO\") || line.contains(\"FIXME\") {"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/CodingReviewer/CodeAnalyzers.swift",
+  "line": 18,
+  "text": "                    message: \"TODO/FIXME comment found\","
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/CodingReviewer/CodeAnalyzers.swift",
+  "line": 65,
+  "text": "            if line.contains(\"TODO\") || line.contains(\"FIXME\") || line.contains(\"HACK\") {"
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/CodingReviewer/IssueDetector.swift",
+  "line": 161,
+  "text": "        if line.localizedCaseInsensitiveContains(\"TODO\") {"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/CodingReviewer/IssueDetector.swift",
+  "line": 166,
+  "text": "                title: \"TODO Comment\","
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/CodingReviewer/IssueDetector.swift",
+  "line": 167,
+  "text": "                description: \"Unresolved TODO comment\","
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/CodingReviewer/IssueDetector.swift",
+  "line": 171,
+  "text": "                suggestion: \"Address TODO or create a proper issue\""
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/safe_continuous_enhancement.sh",
+  "line": 173,
+  "text": "    # Enhancement 2: Add TODO tracking (safe addition)"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/safe_continuous_enhancement.sh",
+  "line": 174,
+  "text": "    find \"$PROJECT_PATH/CodingReviewer\" -name \"*.swift\" -exec grep -l \"TODO\\|FIXME\" {} \\; | while read -r file; do"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/safe_continuous_enhancement.sh",
+  "line": 175,
+  "text": "        local todo_count=$(grep -c \"TODO\\|FIXME\" \"$file\" 2>/dev/null || echo 0)"
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/safe_continuous_enhancement.sh",
+  "line": 177,
+  "text": "            echo \"   📋 Found $todo_count TODOs in: $(basename \"$file\")\""
+}
+,
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/safe_continuous_enhancement.sh",
+  "line": 178,
+  "text": "            echo \"$(date): $todo_count TODOs in $file\" >> \"$ENHANCEMENT_LOG\""
+}
+{
+  "file": ".autofix_backups/CodingReviewer_enhancement_20250912_085559/CodingReviewer/ultra_enhanced_intelligent_security_scanner.sh",
+  "line": 167,
+  "text": "          if ! echo \"$line\" | grep -qE \"(example|sample|placeholder|TODO|FIXME|test|demo)\"; then"
+}
+]

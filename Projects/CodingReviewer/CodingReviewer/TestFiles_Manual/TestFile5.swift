@@ -10,7 +10,7 @@ class TestClass5: ObservableObject {
     @Published var data: [String] = []
 
     func loadData() {
-        data = Array(1 ... 10).map { "Item $0 from TestFile5" }
+        data = Array(1 ... 10).map { "Item \($0) from TestFile5" }
     }
 
     func processData() {

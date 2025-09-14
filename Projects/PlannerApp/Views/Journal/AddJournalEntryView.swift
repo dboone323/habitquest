@@ -2,23 +2,23 @@ import Foundation
 import SwiftUI
 
 struct AddJournalEntryView: View {
-    @Environment(\.dismiss) var dismiss // Use dismiss environment
-    @Binding var journalEntries: [JournalEntry] // Assumes using model from PlannerApp/Models/
+    @Environment(\.dismiss) var dismiss  // Use dismiss environment
+    @Binding var journalEntries: [JournalEntry]  // Assumes using model from PlannerApp/Models/
 
     @State private var title = ""
-    @State private var entryBody = "" // Renamed for clarity
+    @State private var entryBody = ""  // Renamed for clarity
     @State private var date = Date()
-    @State private var mood = "😊" // Default mood
+    @State private var mood = "😊"  // Default mood
 
     // Focus states for iOS keyboard management
     @FocusState private var isTitleFocused: Bool
     @FocusState private var isEntryBodyFocused: Bool
 
-    let moods = ["😊", "😢", "😡", "😌", "😔", "🤩", "🥱", "🤔", "🥳", "😐"] // Expanded moods
+    let moods = ["😊", "😢", "😡", "😌", "😔", "🤩", "🥱", "🤔", "🥳", "😐"]  // Expanded moods
 
     private var isFormValid: Bool {
-        !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-            !entryBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && !entryBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     var body: some View {
@@ -31,8 +31,9 @@ struct AddJournalEntryView: View {
                     #endif
                     dismiss()
                 }
+                .accessibilityLabel("Button")
                 #if os(iOS)
-                .buttonStyle(.iOSSecondary)
+                    .buttonStyle(.iOSSecondary)
                 #endif
                 .foregroundColor(.blue)
 
@@ -51,8 +52,9 @@ struct AddJournalEntryView: View {
                     saveEntry()
                     dismiss()
                 }
+                .accessibilityLabel("Button")
                 #if os(iOS)
-                .buttonStyle(.iOSPrimary)
+                    .buttonStyle(.iOSPrimary)
                 #endif
                 .disabled(!isFormValid)
                 .foregroundColor(isFormValid ? .blue : .gray)
@@ -64,75 +66,78 @@ struct AddJournalEntryView: View {
                 .background(Color(.systemBackground))
             #endif
             #if os(iOS)
-            .iOSEnhancedTouchTarget()
+                .iOSEnhancedTouchTarget()
             #endif
 
             Form {
-                TextField("Title", text: $title)
+                TextField("Title", text: $title).accessibilityLabel("Text Field")
                     .focused($isTitleFocused)
-                #if os(iOS)
-                    .textInputAutocapitalization(.words)
-                    .submitLabel(.next)
-                    .onSubmit {
-                        isTitleFocused = false
-                        isEntryBodyFocused = true
-                    }
-                #endif
+                    #if os(iOS)
+                        .textInputAutocapitalization(.words)
+                        .submitLabel(.next)
+                        .onSubmit {
+                            isTitleFocused = false
+                            isEntryBodyFocused = true
+                        }
+                    #endif
 
                 // Consider a Segmented Picker for fewer options or keep Wheel
                 Picker("Mood", selection: $mood) {
                     ForEach(moods, id: \.self) { mood in
-                        Text(mood).tag(mood) // Ensure tag is set for selection
+                        Text(mood).tag(mood)  // Ensure tag is set for selection
                     }
                 }
                 #if os(iOS)
-                .pickerStyle(.menu) // Better for iOS touch interaction
-                .onChange(of: mood) { _, _ in
-                    HapticManager.selectionChanged()
-                }
+                    .pickerStyle(.menu)  // Better for iOS touch interaction
+                    .onChange(of: mood) { _, _ in
+                        HapticManager.selectionChanged()
+                    }
                 #endif
 
                 DatePicker("Date", selection: $date, displayedComponents: .date)
 
-                Section("Entry") { // Use Section header
-                    TextEditor(text: $entryBody) // Use entryBody state variable
-                        .frame(height: 200) // Increased height
+                Section("Entry") {  // Use Section header
+                    TextEditor(text: $entryBody)  // Use entryBody state variable
+                        .frame(height: 200)  // Increased height
                         .focused($isEntryBodyFocused)
-                    #if os(iOS)
-                        .scrollContentBackground(.hidden)
-                    #endif
+                        #if os(iOS)
+                            .scrollContentBackground(.hidden)
+                        #endif
                 }
             }
             #if os(iOS)
-            .iOSKeyboardDismiss()
-            .toolbar {
-                ToolbarItem(placement: .keyboard) {
-                    HStack {
-                        Spacer()
-                        Button("Done") {
-                            isTitleFocused = false
-                            isEntryBodyFocused = false
-                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                .iOSKeyboardDismiss()
+                .toolbar {
+                    ToolbarItem(placement: .keyboard) {
+                        HStack {
+                            Spacer()
+                            Button("Done") {
+                                isTitleFocused = false
+                                isEntryBodyFocused = false
+                                UIApplication.shared.sendAction(
+                                    #selector(UIResponder.resignFirstResponder), to: nil, from: nil,
+                                    for: nil)
+                            }
+                            .accessibilityLabel("Button")
+                            .buttonStyle(.iOSPrimary)
+                            .foregroundColor(.blue)
+                            .font(.body.weight(.semibold))
                         }
-                        .buttonStyle(.iOSPrimary)
-                        .foregroundColor(.blue)
-                        .font(.body.weight(.semibold))
                     }
                 }
-            }
             #endif
         }
         #if os(macOS)
-        .frame(minWidth: 500, minHeight: 400)
+            .frame(minWidth: 500, minHeight: 400)
         #else
-        .iOSPopupOptimizations()
+            .iOSPopupOptimizations()
         #endif
     }
 
     private func saveEntry() {
         let newEntry = JournalEntry(
             title: title.trimmingCharacters(in: .whitespacesAndNewlines),
-            body: entryBody.trimmingCharacters(in: .whitespacesAndNewlines), // Use entryBody
+            body: entryBody.trimmingCharacters(in: .whitespacesAndNewlines),  // Use entryBody
             date: date,
             mood: mood
         )

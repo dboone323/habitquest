@@ -11,37 +11,40 @@ extension Features.Transactions {
     final class TransactionsViewModel {
         private var modelContext: ModelContext?
 
-    /// <#Description#>
-    /// - Returns: <#description#>
+        /// <#Description#>
+        /// - Returns: <#description#>
         func setModelContext(_ context: ModelContext) {
             self.modelContext = context
         }
 
         /// Filter transactions by type
-    /// <#Description#>
-    /// - Returns: <#description#>
-        func filterTransactions(_ transactions: [FinancialTransaction], by type: TransactionType?) -> [FinancialTransaction] {
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func filterTransactions(_ transactions: [FinancialTransaction], by type: TransactionType?)
+        -> [FinancialTransaction] {
             guard let type else { return transactions }
             return transactions.filter { $0.transactionType == type }
         }
 
         /// Search transactions by title or category
-    /// <#Description#>
-    /// - Returns: <#description#>
-        func searchTransactions(_ transactions: [FinancialTransaction], query: String) -> [FinancialTransaction] {
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func searchTransactions(_ transactions: [FinancialTransaction], query: String)
+        -> [FinancialTransaction] {
             guard !query.isEmpty else { return transactions }
 
             return transactions.filter { transaction in
-                transaction.title.localizedCaseInsensitiveContains(query) ||
-                    transaction.category?.name.localizedCaseInsensitiveContains(query) == true ||
-                    transaction.notes?.localizedCaseInsensitiveContains(query) == true
+                transaction.title.localizedCaseInsensitiveContains(query)
+                    || transaction.category?.name.localizedCaseInsensitiveContains(query) == true
+                    || transaction.notes?.localizedCaseInsensitiveContains(query) == true
             }
         }
 
         /// Group transactions by month
-    /// <#Description#>
-    /// - Returns: <#description#>
-        func groupTransactionsByMonth(_ transactions: [FinancialTransaction]) -> [String: [FinancialTransaction]] {
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func groupTransactionsByMonth(_ transactions: [FinancialTransaction]) -> [String:
+            [FinancialTransaction]] {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM yyyy"
 
@@ -51,50 +54,58 @@ extension Features.Transactions {
         }
 
         /// Get total income for a period
-    /// <#Description#>
-    /// - Returns: <#description#>
-        func totalIncome(_ transactions: [FinancialTransaction], for period: DateInterval? = nil) -> Double {
-            let filteredTransactions: [FinancialTransaction] = if let period {
-                transactions.filter { transaction in
-                    period.contains(transaction.date)
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func totalIncome(_ transactions: [FinancialTransaction], for period: DateInterval? = nil)
+        -> Double {
+            let filteredTransactions: [FinancialTransaction] =
+                if let period {
+                    transactions.filter { transaction in
+                        period.contains(transaction.date)
+                    }
+                } else {
+                    transactions
                 }
-            } else {
-                transactions
-            }
 
-            return filteredTransactions
+            return
+                filteredTransactions
                 .filter { $0.transactionType == .income }
                 .reduce(0.0) { $0 + $1.amount }
         }
 
         /// Get total expenses for a period
-    /// <#Description#>
-    /// - Returns: <#description#>
-        func totalExpenses(_ transactions: [FinancialTransaction], for period: DateInterval? = nil) -> Double {
-            let filteredTransactions: [FinancialTransaction] = if let period {
-                transactions.filter { transaction in
-                    period.contains(transaction.date)
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func totalExpenses(_ transactions: [FinancialTransaction], for period: DateInterval? = nil)
+        -> Double {
+            let filteredTransactions: [FinancialTransaction] =
+                if let period {
+                    transactions.filter { transaction in
+                        period.contains(transaction.date)
+                    }
+                } else {
+                    transactions
                 }
-            } else {
-                transactions
-            }
 
-            return filteredTransactions
+            return
+                filteredTransactions
                 .filter { $0.transactionType == .expense }
                 .reduce(0.0) { $0 + $1.amount }
         }
 
         /// Get net income for a period
-    /// <#Description#>
-    /// - Returns: <#description#>
-        func netIncome(_ transactions: [FinancialTransaction], for period: DateInterval? = nil) -> Double {
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func netIncome(_ transactions: [FinancialTransaction], for period: DateInterval? = nil)
+        -> Double {
             totalIncome(transactions, for: period) - totalExpenses(transactions, for: period)
         }
 
         /// Get transactions for current month
-    /// <#Description#>
-    /// - Returns: <#description#>
-        func currentMonthTransactions(_ transactions: [FinancialTransaction]) -> [FinancialTransaction] {
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func currentMonthTransactions(_ transactions: [FinancialTransaction])
+        -> [FinancialTransaction] {
             let calendar = Calendar.current
             let now = Date()
 
@@ -104,17 +115,19 @@ extension Features.Transactions {
         }
 
         /// Get recent transactions
-    /// <#Description#>
-    /// - Returns: <#description#>
-        func recentTransactions(_ transactions: [FinancialTransaction], limit: Int = 10) -> [FinancialTransaction] {
-            Array(transactions
-                .sorted { $0.date > $1.date }
-                .prefix(limit))
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func recentTransactions(_ transactions: [FinancialTransaction], limit: Int = 10)
+        -> [FinancialTransaction] {
+            Array(
+                transactions
+                    .sorted { $0.date > $1.date }
+                    .prefix(limit))
         }
 
         /// Delete transaction and update account balance
-    /// <#Description#>
-    /// - Returns: <#description#>
+        /// <#Description#>
+        /// - Returns: <#description#>
         func deleteTransaction(_ transaction: FinancialTransaction) {
             guard let modelContext else { return }
 
@@ -125,6 +138,9 @@ extension Features.Transactions {
                     account.balance -= transaction.amount
                 case .expense:
                     account.balance += transaction.amount
+                case .transfer:
+                    // Transfer transactions don't affect account balance in delete
+                    break
                 }
             }
 
@@ -146,7 +162,7 @@ extension Features.Transactions {
             account: FinancialAccount,
             date: Date = Date(),
             notes: String? = nil,
-        ) {
+            ) {
             guard let modelContext else { return }
 
             let transaction = FinancialTransaction(
@@ -155,7 +171,7 @@ extension Features.Transactions {
                 date: date,
                 transactionType: type,
                 notes: notes,
-            )
+                )
 
             transaction.category = category
             transaction.account = account
@@ -173,16 +189,19 @@ extension Features.Transactions {
         }
 
         /// Get spending by category for a given period
-    /// <#Description#>
-    /// - Returns: <#description#>
-        func spendingByCategory(_ transactions: [FinancialTransaction], for period: DateInterval? = nil) -> [String: Double] {
-            let filteredTransactions: [FinancialTransaction] = if let period {
-                transactions.filter { transaction in
-                    transaction.transactionType == .expense && period.contains(transaction.date)
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func spendingByCategory(
+            _ transactions: [FinancialTransaction], for period: DateInterval? = nil
+        ) -> [String: Double] {
+            let filteredTransactions: [FinancialTransaction] =
+                if let period {
+                    transactions.filter { transaction in
+                        transaction.transactionType == .expense && period.contains(transaction.date)
+                    }
+                } else {
+                    transactions.filter { $0.transactionType == .expense }
                 }
-            } else {
-                transactions.filter { $0.transactionType == .expense }
-            }
 
             var spending: [String: Double] = [:]
 

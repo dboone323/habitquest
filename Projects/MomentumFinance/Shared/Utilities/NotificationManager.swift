@@ -1,7 +1,9 @@
 import Foundation
-import os
 import OSLog
 import SwiftData
+import os
+
+@preconcurrency import UserNotifications
 
 //
 //  NotificationManager.swift
@@ -10,8 +12,6 @@ import SwiftData
 //  Created by Daniel Stevens on 6/2/25.
 //  Copyright © 2025 Daniel Stevens. All rights reserved.
 //
-
-@preconcurrency import UserNotifications
 
 /// Manages smart notifications for budget limits and subscription due dates
 ///
@@ -29,7 +29,8 @@ class NotificationManager: ObservableObject {
     @Published var pendingNotifications: [ScheduledNotification] = []
 
     private let center = UNUserNotificationCenter.current()
-    private let logger = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance", category: "Notifications")
+    private let logger = OSLog(
+        subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance", category: "Notifications")
 
     // Component delegates
     private let permissionManager: NotificationPermissionManager
@@ -56,7 +57,8 @@ class NotificationManager: ObservableObject {
     }
 
     func checkNotificationPermission() {
-        permissionManager.checkNotificationPermission { granted in
+        Task { @MainActor in
+            let granted = await permissionManager.checkNotificationPermissionAsync()
             self.isNotificationPermissionGranted = granted
         }
     }
@@ -93,7 +95,8 @@ class NotificationManager: ObservableObject {
     func clearNotifications(ofType type: String) {
         Task { @MainActor in
             let requests = await center.pendingNotificationRequests()
-            let identifiersToRemove = requests
+            let identifiersToRemove =
+                requests
                 .filter { request in
                     (request.content.userInfo["type"] as? String) == type
                 }
@@ -112,7 +115,8 @@ class NotificationManager: ObservableObject {
                 title: request.content.title,
                 body: request.content.body,
                 type: request.content.userInfo["type"] as? String ?? "unknown",
-                scheduledDate: (request.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()
+                scheduledDate: (request.trigger as? UNCalendarNotificationTrigger)?
+                    .nextTriggerDate()
             )
         }
     }
@@ -137,7 +141,7 @@ class NotificationManager: ObservableObject {
 
         UNUserNotificationCenter.current().setNotificationCategories([
             budgetCategory,
-            subscriptionCategory,
+            subscriptionCategory
         ])
     }
 }

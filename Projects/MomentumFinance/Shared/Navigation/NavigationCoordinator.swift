@@ -1,23 +1,67 @@
+import Foundation  // For SearchTypes dependencies
 import LocalAuthentication
-import Observation
 import OSLog
+import Observation
 import SwiftUI
 
-//
-//  NavigationCoordinator.swift
-//  MomentumFinance
-//
-//  Created by Daniel Stevens on 6/2/25.
-//  Copyright © 2025 Daniel Stevens. All rights reserved.
-//
+// SearchResult types are available from Shared/SearchTypes.swift
+// Explicit import to ensure SearchTypes are available
+// macOS-specific navigation types
+#if os(macOS)
+// Sidebar navigation items
+public enum SidebarItem: Hashable {
+    case dashboard
+    case transactions
+    case budgets
+    case subscriptions
+    case goalsAndReports
+}
 
-// Import the proper SearchResult types
-// Note: These should be available from the proper architectural location
-// If this causes issues, the SearchTypes.swift file needs to be added to Xcode project
+// Listable items for the content column
+public struct ListableItem: Identifiable, Hashable {
+    public let id: String?
+    public let name: String
+    public let type: ListItemType
+
+    public var identifier: String {
+        "\(type)_\(id ?? "unknown")"
+    }
+
+    // Identifiable conformance
+    public var identifierId: String { identifier }
+
+    // Hashable conformance
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+    }
+
+    public static func == (lhs: ListableItem, rhs: ListableItem) -> Bool {
+        lhs.identifier == rhs.identifier
+    }
+
+    public init(id: String?, name: String, type: ListItemType) {
+        self.id = id
+        self.name = name
+        self.type = type
+    }
+}
+
+// Types of items that can be displayed in the content column
+public enum ListItemType: Hashable {
+    case account
+    case transaction
+    case budget
+    case subscription
+    case goal
+    case report
+}
+#endif
+
+// Type alias to disambiguate from SwiftUI's TabSection
+// typealias AppTabSection = TabSection
 
 /// Handles cross-module navigation in the app with advanced deep linking and search
 @MainActor
-@Observable
 final class NavigationCoordinator: ObservableObject {
     static let shared = NavigationCoordinator()
 
@@ -42,7 +86,7 @@ final class NavigationCoordinator: ObservableObject {
     var isAuthenticated: Bool = false
     var requiresAuthentication: Bool = true
     var lastAuthenticationTime: Date?
-    var authenticationTimeoutInterval: TimeInterval = 300 // 5 minutes
+    var authenticationTimeoutInterval: TimeInterval = 300  // 5 minutes
 
     // MARK: - Deep Linking State
 
@@ -53,39 +97,37 @@ final class NavigationCoordinator: ObservableObject {
     // MARK: - Notification Management
 
     var hasUnreadNotifications: Bool = false
-    var notificationBadgeCounts: [TabSection: Int] = [:]
-
-    // MARK: - macOS Support
+    var tabNotificationCounts: [AppTabSection: Int] = [:]
 
     #if os(macOS)
-        var selectedSidebarItem: SidebarItem? = .dashboard
-        var selectedListItem: ListableItem?
-        var columnVisibility = NavigationSplitViewVisibility.all
+    var selectedSidebarItem: SidebarItem? = .dashboard
+    var selectedListItem: ListableItem?
+    var columnVisibility = NavigationSplitViewVisibility.all
     #endif
 
     private let logger = Logger()
 
     init() {
         // Initialize notification badge counts
-        for section in TabSection.allCases {
-            notificationBadgeCounts[section] = 0
+        for section in AppTabSection.allCases {
+            tabNotificationCounts[section] = 0
         }
     }
 
     // MARK: - Navigation Methods
 
     func navigateToBudgets() {
-        selectedTab = 2 // Assuming budgets is tab index 2
+        selectedTab = 2  // Assuming budgets is tab index 2
         budgetsNavPath = NavigationPath()
     }
 
     func navigateToSubscriptions() {
-        selectedTab = 3 // Assuming subscriptions is tab index 3
+        selectedTab = 3  // Assuming subscriptions is tab index 3
         subscriptionsNavPath = NavigationPath()
     }
 
     func navigateToGoals() {
-        selectedTab = 4 // Assuming goals is tab index 4
+        selectedTab = 4  // Assuming goals is tab index 4
         goalsAndReportsNavPath = NavigationPath()
     }
 
@@ -108,16 +150,16 @@ final class NavigationCoordinator: ObservableObject {
         // Navigate based on the search result type
         switch result.type {
         case .accounts:
-            selectedTab = 0 // Dashboard tab
+            selectedTab = 0  // Dashboard tab
             dashboardNavPath = NavigationPath()
         case .transactions:
-            selectedTab = 1 // Transactions tab
+            selectedTab = 1  // Transactions tab
             transactionsNavPath = NavigationPath()
         case .budgets:
-            selectedTab = 2 // Budgets tab
+            selectedTab = 2  // Budgets tab
             budgetsNavPath = NavigationPath()
         case .subscriptions:
-            selectedTab = 3 // Subscriptions tab
+            selectedTab = 3  // Subscriptions tab
             subscriptionsNavPath = NavigationPath()
         case .all:
             // For 'all' type, default to dashboard

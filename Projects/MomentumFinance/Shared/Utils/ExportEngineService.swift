@@ -170,50 +170,50 @@ final class ExportEngineService {
     private func generatePDFData(settings: ExportSettings) async throws -> Data {
         // Keep platform-safe PDF generation. For brevity we call through to a basic renderer
         #if os(iOS)
-            // iOS PDF rendering omitted in this simplified engine to avoid UIKit dependency in tests
-            throw ExportError.pdfGenerationFailed
+        // iOS PDF rendering omitted in this simplified engine to avoid UIKit dependency in tests
+        throw ExportError.pdfGenerationFailed
         #else
-            let pdfData = NSMutableData()
-            let pdfInfo = [kCGPDFContextCreator: "Momentum Finance"] as CFDictionary
-            guard let dataConsumer = CGDataConsumer(data: pdfData as CFMutableData),
-                  let pdfContext = CGContext(consumer: dataConsumer, mediaBox: nil, pdfInfo)
-            else { throw ExportError.pdfGenerationFailed }
+        let pdfData = NSMutableData()
+        let pdfInfo = [kCGPDFContextCreator: "Momentum Finance"] as CFDictionary
+        guard let dataConsumer = CGDataConsumer(data: pdfData as CFMutableData),
+              let pdfContext = CGContext(consumer: dataConsumer, mediaBox: nil, pdfInfo)
+        else { throw ExportError.pdfGenerationFailed }
 
-            let pageRect = CGRect(x: 0, y: 0, width: 612, height: 792)
-            pdfContext.beginPDFPage(nil)
+        let pageRect = CGRect(x: 0, y: 0, width: 612, height: 792)
+        pdfContext.beginPDFPage(nil)
 
-            NSGraphicsContext.saveGraphicsState()
-            let nsContext = NSGraphicsContext(cgContext: pdfContext, flipped: false)
-            NSGraphicsContext.current = nsContext
+        NSGraphicsContext.saveGraphicsState()
+        let nsContext = NSGraphicsContext(cgContext: pdfContext, flipped: false)
+        NSGraphicsContext.current = nsContext
 
-            // Title
-            let titleAttributes: [NSAttributedString.Key: Any] = [
-                .font: NSFont.boldSystemFont(ofSize: 24),
-                .foregroundColor: NSColor.black,
-            ]
-            let title = "Momentum Finance Report"
-            title.draw(at: CGPoint(x: 50, y: pageRect.height - 50), withAttributes: titleAttributes)
+        // Title
+        let titleAttributes: [NSAttributedString.Key: Any] = [
+            .font: NSFont.boldSystemFont(ofSize: 24),
+            .foregroundColor: NSColor.black
+        ]
+        let title = "Momentum Finance Report"
+        title.draw(at: CGPoint(x: 50, y: pageRect.height - 50), withAttributes: titleAttributes)
 
-            let dateFormatter = DateFormatter(); dateFormatter.dateStyle = .long
-            let dateRange = "Period: \(dateFormatter.string(from: settings.startDate)) - \(dateFormatter.string(from: settings.endDate))"
-            let dateAttributes: [NSAttributedString.Key: Any] = [
-                .font: NSFont.systemFont(ofSize: 14),
-                .foregroundColor: NSColor.gray,
-            ]
-            dateRange.draw(at: CGPoint(x: 50, y: pageRect.height - 80), withAttributes: dateAttributes)
+        let dateFormatter = DateFormatter(); dateFormatter.dateStyle = .long
+        let dateRange = "Period: \(dateFormatter.string(from: settings.startDate)) - \(dateFormatter.string(from: settings.endDate))"
+        let dateAttributes: [NSAttributedString.Key: Any] = [
+            .font: NSFont.systemFont(ofSize: 14),
+            .foregroundColor: NSColor.gray
+        ]
+        dateRange.draw(at: CGPoint(x: 50, y: pageRect.height - 80), withAttributes: dateAttributes)
 
-            var yPosition = pageRect.height - 120
-            if settings.includeTransactions {
-                yPosition = try drawTransactionsSummary(context: pdfContext, yPosition: yPosition, settings: settings)
-            }
-            if settings.includeAccounts {
-                yPosition = try drawAccountsSummary(context: pdfContext, yPosition: yPosition, settings: settings)
-            }
+        var yPosition = pageRect.height - 120
+        if settings.includeTransactions {
+            yPosition = try drawTransactionsSummary(context: pdfContext, yPosition: yPosition, settings: settings)
+        }
+        if settings.includeAccounts {
+            yPosition = try drawAccountsSummary(context: pdfContext, yPosition: yPosition, settings: settings)
+        }
 
-            pdfContext.endPDFPage()
-            NSGraphicsContext.restoreGraphicsState()
+        pdfContext.endPDFPage()
+        NSGraphicsContext.restoreGraphicsState()
 
-            return pdfData as Data
+        return pdfData as Data
         #endif
     }
 
@@ -222,11 +222,11 @@ final class ExportEngineService {
 
         let headerAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.boldSystemFont(ofSize: 18),
-            .foregroundColor: NSColor.black,
+            .foregroundColor: NSColor.black
         ]
         let textAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.systemFont(ofSize: 12),
-            .foregroundColor: NSColor.black,
+            .foregroundColor: NSColor.black
         ]
 
         "Transactions Summary".draw(at: CGPoint(x: 50, y: yPosition), withAttributes: headerAttributes)
@@ -257,11 +257,11 @@ final class ExportEngineService {
 
         let headerAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.boldSystemFont(ofSize: 18),
-            .foregroundColor: NSColor.black,
+            .foregroundColor: NSColor.black
         ]
         let textAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.systemFont(ofSize: 12),
-            .foregroundColor: NSColor.black,
+            .foregroundColor: NSColor.black
         ]
 
         "Accounts Summary".draw(at: CGPoint(x: 50, y: yPosition), withAttributes: headerAttributes)
@@ -287,7 +287,7 @@ final class ExportEngineService {
             "startDate": ISO8601DateFormatter().string(from: settings.startDate),
             "endDate": ISO8601DateFormatter().string(from: settings.endDate),
             "app": "Momentum Finance",
-            "version": "1.0.0",
+            "version": "1.0.0"
         ]
 
         if settings.includeTransactions {
@@ -318,35 +318,35 @@ final class ExportEngineService {
                 transaction.date >= startDate && transaction.date <= endDate
             },
             sortBy: [SortDescriptor(\.date, order: .reverse)],
-        )
+            )
         return try modelContext.fetch(descriptor)
     }
 
     private func fetchAccounts() throws -> [FinancialAccount] {
         let descriptor = FetchDescriptor<FinancialAccount>(
             sortBy: [SortDescriptor(\.name)],
-        )
+            )
         return try modelContext.fetch(descriptor)
     }
 
     private func fetchBudgets() throws -> [Budget] {
         let descriptor = FetchDescriptor<Budget>(
             sortBy: [SortDescriptor(\.name)],
-        )
+            )
         return try modelContext.fetch(descriptor)
     }
 
     private func fetchSubscriptions() throws -> [Subscription] {
         let descriptor = FetchDescriptor<Subscription>(
             sortBy: [SortDescriptor(\.name)],
-        )
+            )
         return try modelContext.fetch(descriptor)
     }
 
     private func fetchGoals() throws -> [SavingsGoal] {
         let descriptor = FetchDescriptor<SavingsGoal>(
             sortBy: [SortDescriptor(\.name)],
-        )
+            )
         return try modelContext.fetch(descriptor)
     }
 
@@ -365,7 +365,7 @@ final class ExportEngineService {
                 "type": transaction.transactionType.rawValue,
                 "category": transaction.category?.name ?? "",
                 "account": transaction.account?.name ?? "",
-                "notes": transaction.notes ?? "",
+                "notes": transaction.notes ?? ""
             ]
         }
     }
@@ -381,7 +381,7 @@ final class ExportEngineService {
                 "balance": account.balance,
                 "type": account.accountType.rawValue,
                 "currencyCode": account.currencyCode,
-                "createdDate": formatter.string(from: account.createdDate),
+                "createdDate": formatter.string(from: account.createdDate)
             ]
         }
     }
@@ -398,7 +398,7 @@ final class ExportEngineService {
                 "spentAmount": budget.spentAmount,
                 "category": budget.category?.name ?? "",
                 "month": formatter.string(from: budget.month),
-                "createdDate": formatter.string(from: budget.createdDate),
+                "createdDate": formatter.string(from: budget.createdDate)
             ]
         }
     }
@@ -416,7 +416,7 @@ final class ExportEngineService {
                 "nextDueDate": formatter.string(from: subscription.nextDueDate),
                 "category": subscription.category?.name ?? "",
                 "account": subscription.account?.name ?? "",
-                "isActive": subscription.isActive,
+                "isActive": subscription.isActive
             ]
         }
     }
@@ -431,7 +431,7 @@ final class ExportEngineService {
                 "name": goal.name,
                 "targetAmount": goal.targetAmount,
                 "currentAmount": goal.currentAmount,
-                "progressPercentage": goal.progressPercentage,
+                "progressPercentage": goal.progressPercentage
             ]
 
             if let targetDate = goal.targetDate {

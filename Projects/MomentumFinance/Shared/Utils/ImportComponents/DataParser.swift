@@ -10,7 +10,6 @@ import Foundation
 
 /// Handles parsing and validation of financial data from CSV fields
 enum DataParser {
-
     /// Parses date strings using multiple common formats
     static func parseDate(_ dateString: String) throws -> Date {
         let formatters = [
@@ -22,7 +21,7 @@ enum DataParser {
             "dd-MM-yyyy",
             "yyyy.MM.dd",
             "MM.dd.yyyy",
-            "dd.MM.yyyy",
+            "dd.MM.yyyy"
         ]
 
         for format in formatters {
@@ -62,14 +61,12 @@ enum DataParser {
             lowerType.contains("deposit") ||
             lowerType.contains("credit") ||
             lowerType.contains("salary") ||
-            lowerType.contains("payment received")
-        {
+            lowerType.contains("payment received") {
             return .income
         } else if lowerType.contains("expense") ||
-            lowerType.contains("debit") ||
-            lowerType.contains("withdrawal") ||
-            lowerType.contains("payment")
-        {
+                    lowerType.contains("debit") ||
+                    lowerType.contains("withdrawal") ||
+                    lowerType.contains("payment") {
             return .expense
         } else {
             // Fallback to amount-based detection

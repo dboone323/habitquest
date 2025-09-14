@@ -9,11 +9,11 @@
 import Observation
 import SwiftUI
 #if canImport(UIKit)
-    import UIKit
+import UIKit
 #endif
 
 /// ColorTheme provides a consistent color palette across the app with proper dark mode support
-/// 
+///
 /// This main coordinator delegates to focused component implementations:
 /// - ColorDefinitions: Static color definitions for light and dark schemes
 /// - ThemeEnums: Type definitions and mode enums
@@ -43,11 +43,11 @@ final class ColorTheme {
             return true
         case .system:
             #if os(iOS)
-                return UITraitCollection.current.userInterfaceStyle == .dark
+            return UITraitCollection.current.userInterfaceStyle == .dark
             #elseif os(macOS)
-                return NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            return NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
             #else
-                return false
+            return false
             #endif
         }
     }
@@ -147,17 +147,17 @@ final class ColorTheme {
             return dark
         case .system:
             #if os(iOS)
-                return Color(uiColor: UIColor { traitCollection in
-                    switch traitCollection.userInterfaceStyle {
-                    case .dark:
-                        UIColor(dark)
-                    default:
-                        UIColor(light)
-                    }
-                })
+            return Color(uiColor: UIColor { traitCollection in
+                switch traitCollection.userInterfaceStyle {
+                case .dark:
+                    UIColor(dark)
+                default:
+                    UIColor(light)
+                }
+            })
             #else
-                // On macOS, use system appearance
-                return dark // Simplified for now - could be improved with NSAppearance detection
+            // On macOS, use system appearance
+            return dark // Simplified for now - could be improved with NSAppearance detection
             #endif
         }
     }

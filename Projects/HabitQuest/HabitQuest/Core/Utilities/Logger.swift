@@ -60,7 +60,7 @@ struct Logger {
         let logMessage = "\(level.prefix) [\(fileName):\(line)] \(function) - \(message)"
 
         #if DEBUG
-            print(logMessage)
+        print(logMessage)
         #endif
 
         os_log("%{public}@", log: osLog, type: level.osLogType, logMessage)

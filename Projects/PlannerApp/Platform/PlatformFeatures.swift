@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 #if os(iOS)
     import UIKit
     import WidgetKit
@@ -134,7 +135,10 @@ import SwiftUI
 
         @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
-        init(@ViewBuilder primary: () -> PrimaryContent, @ViewBuilder secondary: () -> SecondaryContent) {
+        init(
+            @ViewBuilder primary: () -> PrimaryContent,
+            @ViewBuilder secondary: () -> SecondaryContent
+        ) {
             self.primaryContent = primary()
             self.secondaryContent = secondary()
         }
@@ -164,7 +168,7 @@ import SwiftUI
         let placeholder: String
 
         var body: some View {
-            TextField(placeholder, text: $text)
+            TextField(placeholder, text: $text).accessibilityLabel("Text Field")
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .onAppear {
                     // Enable Scribble for this text field
@@ -207,7 +211,8 @@ import SwiftUI
 
         var body: some View {
             Color.clear
-                .onReceive(NotificationCenter.default.publisher(for: .init("KeyboardShortcut"))) { notification in
+                .onReceive(NotificationCenter.default.publisher(for: .init("KeyboardShortcut"))) {
+                    notification in
                     handleKeyboardShortcut(notification)
                 }
         }
@@ -244,7 +249,8 @@ import SwiftUI
             statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
 
             if let button = statusItem?.button {
-                button.image = NSImage(systemSymbolName: "calendar", accessibilityDescription: "PlannerApp")
+                button.image = NSImage(
+                    systemSymbolName: "calendar", accessibilityDescription: "PlannerApp")
                 button.action = #selector(showQuickMenu)
                 button.target = self
             }
@@ -259,11 +265,19 @@ import SwiftUI
         private func setupQuickMenu() {
             let menu = NSMenu()
 
-            menu.addItem(NSMenuItem(title: "Quick Add Task", action: #selector(quickAddTask), keyEquivalent: ""))
-            menu.addItem(NSMenuItem(title: "Quick Add Goal", action: #selector(quickAddGoal), keyEquivalent: ""))
+            menu.addItem(
+                NSMenuItem(
+                    title: "Quick Add Task", action: #selector(quickAddTask), keyEquivalent: ""))
+            menu.addItem(
+                NSMenuItem(
+                    title: "Quick Add Goal", action: #selector(quickAddGoal), keyEquivalent: ""))
             menu.addItem(NSMenuItem.separator())
-            menu.addItem(NSMenuItem(title: "Show Dashboard", action: #selector(showDashboard), keyEquivalent: ""))
-            menu.addItem(NSMenuItem(title: "Quit PlannerApp", action: #selector(quitApp), keyEquivalent: "q"))
+            menu.addItem(
+                NSMenuItem(
+                    title: "Show Dashboard", action: #selector(showDashboard), keyEquivalent: ""))
+            menu.addItem(
+                NSMenuItem(title: "Quit PlannerApp", action: #selector(quitApp), keyEquivalent: "q")
+            )
 
             statusItem?.menu = menu
         }
@@ -307,26 +321,38 @@ import SwiftUI
 
     @available(macOS 10.12.2, *)
     extension TouchBarProvider: NSTouchBarDelegate {
-        func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {
+        func touchBar(
+            _ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier
+        ) -> NSTouchBarItem? {
             switch identifier {
             case .addTask:
                 let item = NSCustomTouchBarItem(identifier: identifier)
                 item.view = NSButton(title: "Add Task", target: self, action: #selector(addTask))
+                (item.view as? NSButton)?.setAccessibilityLabel("Button")
                 return item
 
             case .addGoal:
                 let item = NSCustomTouchBarItem(identifier: identifier)
                 item.view = NSButton(title: "Add Goal", target: self, action: #selector(addGoal))
+                (item.view as? NSButton)?.setAccessibilityLabel("Button")
                 return item
 
             case .search:
                 let item = NSCustomTouchBarItem(identifier: identifier)
-                item.view = NSButton(image: NSImage(systemSymbolName: "magnifyingglass", accessibilityDescription: "Search")!, target: self, action: #selector(search))
+                item.view = NSButton(
+                    image: NSImage(
+                        systemSymbolName: "magnifyingglass", accessibilityDescription: "Search")!,
+                    target: self, action: #selector(search))
+                (item.view as? NSButton)?.setAccessibilityLabel("Button")
                 return item
 
             case .calendar:
                 let item = NSCustomTouchBarItem(identifier: identifier)
-                item.view = NSButton(image: NSImage(systemSymbolName: "calendar", accessibilityDescription: "Calendar")!, target: self, action: #selector(showCalendar))
+                item.view = NSButton(
+                    image: NSImage(
+                        systemSymbolName: "calendar", accessibilityDescription: "Calendar")!,
+                    target: self, action: #selector(showCalendar))
+                (item.view as? NSButton)?.setAccessibilityLabel("Button")
                 return item
 
             default:
@@ -363,12 +389,13 @@ import SwiftUI
     // Multiple windows support
     enum WindowManager {
         static func openNewWindow(content: AnyView) {
-            let windowController = NSWindowController(window: NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 800, height: 600),
-                styleMask: [.titled, .closable, .miniaturizable, .resizable],
-                backing: .buffered,
-                defer: false
-            ))
+            let windowController = NSWindowController(
+                window: NSWindow(
+                    contentRect: NSRect(x: 0, y: 0, width: 800, height: 600),
+                    styleMask: [.titled, .closable, .miniaturizable, .resizable],
+                    backing: .buffered,
+                    defer: false
+                ))
 
             windowController.window?.contentView = NSHostingView(rootView: content)
             windowController.window?.center()
@@ -450,8 +477,9 @@ class iOSFeatureProvider: PlatformFeatureProvider {
 
     func shareContent(_ content: String) {
         #if os(iOS)
-            let activityViewController = UIActivityViewController(activityItems: [content], applicationActivities: nil)
-            // Present share sheet
+            let activityViewController = UIActivityViewController(
+                activityItems: [content], applicationActivities: nil)
+        // Present share sheet
         #endif
     }
 

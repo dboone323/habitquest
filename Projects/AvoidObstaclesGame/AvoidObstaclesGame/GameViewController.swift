@@ -9,17 +9,20 @@ import GameplayKit
 import SpriteKit
 import UIKit
 
+/// The main view controller for AvoidObstaclesGame.
+/// Responsible for loading and presenting the SpriteKit game scene.
 class GameViewController: UIViewController {
 
+    /// Called after the controller's view is loaded into memory.
+    /// Sets up and presents the main game scene.
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Configure the view.
+        // Configure the view as an SKView and present the game scene.
         if let view = self.view as? SKView {
-            // Create and configure the scene.
-            // The size is set to the view's bounds, so it fills the screen.
+            // Create and configure the scene to fill the screen.
             let scene = GameScene(size: view.bounds.size)
-            scene.scaleMode = .aspectFill // Or .resizeFill, or .fill depending on preference
+            scene.scaleMode = .aspectFill
 
             // Present the scene.
             view.presentScene(scene)
@@ -34,7 +37,8 @@ class GameViewController: UIViewController {
         }
     }
 
-    // Standard iOS view controller overrides for orientation and status bar.
+    /// Specifies the supported interface orientations for the game.
+    /// - Returns: The allowed interface orientations depending on device type.
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
             .allButUpsideDown
@@ -43,7 +47,8 @@ class GameViewController: UIViewController {
         }
     }
 
+    /// Hides the status bar for a more immersive game experience.
     override var prefersStatusBarHidden: Bool {
-        true // Hides the status bar for a more immersive game experience
+        true
     }
 }

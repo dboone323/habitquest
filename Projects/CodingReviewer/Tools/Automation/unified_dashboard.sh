@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Unified Workflow Status Dashboard
-CODE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+CODE_DIR="/Users/danielstevens/Desktop/Quantum-workspace"
 PROJECTS_DIR="$CODE_DIR/Projects"
 
 # Colors

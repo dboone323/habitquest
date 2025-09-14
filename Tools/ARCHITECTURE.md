@@ -2,6 +2,74 @@
 
 ## Core Architectural Decisions (August 7, 2025)
 
+## Cross-Language Architecture (Swift, Python, etc.)
+
+### Universal Principles
+
+- **Separation of Concerns:** Data models, business logic, and UI must be in separate files/modules.
+- **No UI Imports in Data Models:** Never import UI libraries (SwiftUI, tkinter, etc.) in data model files.
+- **No Serialization in Core Models:** Avoid direct serialization (Codable, pickle, etc.) in complex models. Use DTOs or serializers.
+- **Descriptive Naming:** Avoid generic names ("Manager", "Dashboard"). Use specific, descriptive names.
+- **Consistent Folder Structure:** All projects should use a layered folder structure:
+
+```
+ProjectRoot/
+├── SharedTypes/      # Pure data models (no UI or serialization imports)
+├── Extensions/       # UI or utility extensions for data models
+├── Components/       # Reusable UI components/widgets
+├── Views/            # Main app views/screens
+├── Services/         # Business logic/services
+├── Scripts/          # Automation and CLI scripts
+└── Tests/            # Unit and integration tests
+```
+
+### Python-Specific Best Practices
+
+- **Data Models:** Place pure data classes (using @dataclass, no UI or serialization logic) in `SharedTypes/`.
+- **UI Extensions:** Place UI-specific logic (e.g., color mapping, display helpers) in `Extensions/`.
+- **Business Logic:** Place core algorithms/services in `Services/`.
+- **No Circular Imports:** Enforce strict boundaries between layers.
+- **Serialization:** Use DTOs or separate serializers for JSON/pickle, not in core models.
+- **Testing:** Place all tests in `Tests/` with clear naming and coverage.
+
+### Example Python Structure
+
+```
+SharedTypes/
+    user.py         # Pure data class
+Extensions/
+    user_ui.py      # UI helpers for user
+Services/
+    user_service.py # Business logic
+Views/
+    user_view.py    # UI code (tkinter, PyQt, etc.)
+```
+
+### Automation and Build
+
+- Keep automation scripts in `Scripts/` or a dedicated automation folder.
+- Use Makefile, shell scripts, or Python scripts for build/test automation.
+- Each project must have a documented build/test process in its README.
+
+### Platform Build/Run Policy
+
+- **Swift/iOS:** Build and test on iPhone 17 simulator.
+- **Swift/macOS:** Build and test on Mac.
+- **Python:** Run and test on Mac (or Linux if specified).
+
+### Migration/Refactor Checklist
+
+1. Ensure folder structure matches above.
+2. Move pure data models to `SharedTypes/`.
+3. Move UI helpers/extensions to `Extensions/`.
+4. Move business logic to `Services/`.
+5. Move automation/build scripts to `Scripts/`.
+6. Move all tests to `Tests/`.
+7. Update README with build/run/test instructions.
+8. Use descriptive, non-generic names for all files/classes.
+9. Remove UI/serialization imports from data models.
+10. Confirm build/test on the correct platform.
+
 ### 1. **Clean Separation of Concerns**
 
 **RULE: Data models NEVER import SwiftUI**

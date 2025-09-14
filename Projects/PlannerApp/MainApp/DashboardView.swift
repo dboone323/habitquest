@@ -1,6 +1,6 @@
-import _Concurrency // Explicitly import _Concurrency
 import Foundation
 import SwiftUI
+import _Concurrency  // Explicitly import _Concurrency
 
 struct DashboardView: View {
     @EnvironmentObject var themeManager: ThemeManager
@@ -22,7 +22,7 @@ struct DashboardView: View {
     @State private var showAddGoal = false
     @State private var showAddEvent = false
     @State private var showAddJournal = false
-    @State private var showDemoDelay: Bool = true // Added state variable
+    @State private var showDemoDelay: Bool = true  // Added state variable
 
     // Date formatters
     private var dateFormatter: DateFormatter {
@@ -57,7 +57,8 @@ struct DashboardView: View {
                                     Text(userName)
                                         .font(.title)
                                         .fontWeight(.bold)
-                                        .foregroundColor(themeManager.currentTheme.primaryAccentColor)
+                                        .foregroundColor(
+                                            themeManager.currentTheme.primaryAccentColor)
                                 }
 
                                 Text(dateFormatter.string(from: Date()))
@@ -120,7 +121,10 @@ struct DashboardView: View {
                             Spacer()
                         }
 
-                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 16) {
+                        LazyVGrid(
+                            columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2),
+                            spacing: 16
+                        ) {
                             QuickActionCard(
                                 title: "Add Task",
                                 icon: "plus.circle.fill",
@@ -166,16 +170,20 @@ struct DashboardView: View {
 
                             Spacer()
 
-                            Button("View Calendar") {
-                                // TODO: Navigate to calendar
+                            Button(action: {
+                                /// - TODO: Navigate to calendar
                                 print("View Calendar tapped")
+                            }) {
+                                Text("View Calendar")
+                                    .accessibilityLabel("Button")
                             }
                             .font(.caption)
                             .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                         }
 
                         LazyVStack(spacing: 12) {
-                            ForEach(viewModel.upcomingItems.prefix(dashboardItemLimit), id: \.id) { item in
+                            ForEach(viewModel.upcomingItems.prefix(dashboardItemLimit), id: \.id) {
+                                item in
                                 UpcomingItemView(item: item)
                             }
 
@@ -183,15 +191,18 @@ struct DashboardView: View {
                                 VStack(spacing: 12) {
                                     Image(systemName: "calendar")
                                         .font(.system(size: 40))
-                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(
+                                            themeManager.currentTheme.secondaryTextColor)
 
                                     Text("Nothing upcoming")
                                         .font(.subheadline)
-                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(
+                                            themeManager.currentTheme.secondaryTextColor)
 
                                     Text("Schedule some events to see them here")
                                         .font(.caption)
-                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(
+                                            themeManager.currentTheme.secondaryTextColor)
                                 }
                                 .padding(.vertical, 40)
                             }
@@ -208,35 +219,35 @@ struct DashboardView: View {
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-                .overlay(
-                    Group {
-                        if showLoadingOverlay {
-                            ZStack {
-                                Color.black.opacity(0.3)
-                                    .ignoresSafeArea()
+            .overlay(
+                Group {
+                    if showLoadingOverlay {
+                        ZStack {
+                            Color.black.opacity(0.3)
+                                .ignoresSafeArea()
 
-                                VStack(spacing: 16) {
-                                    ProgressView()
-                                        .scaleEffect(1.5)
-                                        .tint(themeManager.currentTheme.primaryAccentColor)
+                            VStack(spacing: 16) {
+                                ProgressView()
+                                    .scaleEffect(1.5)
+                                    .tint(themeManager.currentTheme.primaryAccentColor)
 
-                                    Text("Refreshing...")
-                                        .font(.subheadline)
-                                        .foregroundColor(themeManager.currentTheme.primaryTextColor)
-                                }
-                                .padding(32)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .fill(themeManager.currentTheme.secondaryBackgroundColor)
-                                        .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
-                                )
+                                Text("Refreshing...")
+                                    .font(.subheadline)
+                                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
                             }
+                            .padding(32)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(themeManager.currentTheme.secondaryBackgroundColor)
+                                    .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
+                            )
                         }
                     }
-                )
+                }
+            )
         }
         .onAppear {
-            _Concurrency.Task { @MainActor in // Changed to _Concurrency.Task
+            _Concurrency.Task { @MainActor in  // Changed to _Concurrency.Task
                 await refreshData()
             }
         }
@@ -292,13 +303,13 @@ struct DashboardView: View {
         showLoadingOverlay = true
 
         // Small delay to ensure UI updates are visible
-        try? await _Concurrency.Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+        try? await _Concurrency.Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
 
         // Perform data refresh asynchronously
         await viewModel.refreshData()
 
         // Small delay to ensure UI has time to update with new data
-        try? await _Concurrency.Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
+        try? await _Concurrency.Task.sleep(nanoseconds: 200_000_000)  // 0.2 seconds
 
         isRefreshing = false
         showLoadingOverlay = false
@@ -310,7 +321,7 @@ struct DashboardView: View {
         showLoadingOverlay = true
 
         // Simulate a longer network call or processing
-        try? await _Concurrency.Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
+        try? await _Concurrency.Task.sleep(nanoseconds: 200_000_000)  // 0.2 seconds
 
         // Perform data refresh asynchronously
         await viewModel.refreshData()
@@ -319,7 +330,7 @@ struct DashboardView: View {
         if showDemoDelay {
             // This demonstrates a longer, user-configurable delay
             print("Starting demo delay...")
-            try? await _Concurrency.Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay for demonstration
+            try? await _Concurrency.Task.sleep(nanoseconds: 1_000_000_000)  // 1 second delay for demonstration
             print("Demo delay finished.")
         }
 
@@ -330,11 +341,11 @@ struct DashboardView: View {
     private var greetingText: String {
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
-        case 5 ..< 12:
+        case 5..<12:
             return "Good Morning"
-        case 12 ..< 17:
+        case 12..<17:
             return "Good Afternoon"
-        case 17 ..< 22:
+        case 17..<22:
             return "Good Evening"
         default:
             return "Good Night"
@@ -406,6 +417,7 @@ struct QuickActionCard: View {
                     .fontWeight(.medium)
                     .foregroundColor(themeManager.currentTheme.primaryTextColor)
                     .multilineTextAlignment(.center)
+                    .accessibilityLabel("Button")
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 20)

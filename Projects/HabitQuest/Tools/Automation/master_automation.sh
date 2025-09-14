@@ -194,49 +194,6 @@ check_tool() {
     fi
 }
 
-# Run all automation for every project (format -> lint -> project automation if available)
-run_all_automation() {
-    print_status "Running automation for all projects..."
-
-    for project in "$PROJECTS_DIR"/*; do
-        if [[ -d "$project" ]]; then
-            local project_name=$(basename "$project")
-            print_status "--- Processing: $project_name ---"
-
-            # Ensure per-project logs dir exists
-            mkdir -p "$project/Tools/Automation/logs"
-
-            # Format code (non-fatal)
-            if command -v swiftformat &> /dev/null; then
-                print_status "Formatting $project_name..."
-                swiftformat "$project" --exclude "*.backup" 2>/dev/null || true
-            else
-                print_warning "swiftformat not installed; skipping formatting for $project_name"
-            fi
-
-            # Lint code and capture output
-            if command -v swiftlint &> /dev/null; then
-                print_status "Linting $project_name..."
-                (cd "$project" && swiftlint) 2>&1 | tee "$project/Tools/Automation/logs/swiftlint.log" || true
-            else
-                print_warning "swiftlint not installed; skipping lint for $project_name"
-            fi
-
-            # Run project-specific automation if present
-            if [[ -f "$project/automation/run_automation.sh" ]]; then
-                print_status "Running project automation for $project_name..."
-                (cd "$project" && bash automation/run_automation.sh) 2>&1 | tee "$project/Tools/Automation/logs/project_automation.log" || true
-            else
-                print_warning "No project automation found for $project_name"
-            fi
-
-            print_success "Completed: $project_name"
-        fi
-    done
-
-    print_success "All project automations executed (logs under each project's Tools/Automation/logs)"
-}
-
 # Main execution
 case "${1:-}" in
     "list")

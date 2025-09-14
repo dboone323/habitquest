@@ -76,11 +76,13 @@ struct CharacterAvatarSection: View {
             // Avatar Circle
             ZStack {
                 Circle()
-                    .fill(LinearGradient(
-                        colors: [.blue, .purple],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ))
+                    .fill(
+                        LinearGradient(
+                            colors: [.blue, .purple],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
                     .frame(width: 120, height: 120)
 
                 Image(systemName: avatarImageName)
@@ -177,7 +179,8 @@ struct StatsSection: View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 12) {
                 StatCard(title: "Total Habits", value: "\(totalHabits)", icon: "list.bullet")
                 StatCard(title: "Active Streaks", value: "\(activeStreaks)", icon: "flame")
-                StatCard(title: "Completed Today", value: "\(completedToday)", icon: "checkmark.circle")
+                StatCard(
+                    title: "Completed Today", value: "\(completedToday)", icon: "checkmark.circle")
                 StatCard(title: "Longest Streak", value: "\(longestStreak)", icon: "star")
                 StatCard(title: "Perfect Days", value: "\(perfectDays)", icon: "crown")
                 StatCard(title: "Weekly Rate", value: "\(Int(weeklyCompletion))%", icon: "percent")
@@ -230,6 +233,7 @@ struct AchievementsSection: View {
                     Button("View All") {
                         // Navigate to achievements view
                     }
+                    .accessibilityLabel("Button")
                     .font(.caption)
                     .foregroundColor(.blue)
                 }
@@ -450,12 +454,14 @@ struct AdvancedAnalyticsView: View {
                             .font(.headline)
                             .fontWeight(.semibold)
 
-                        Text("Advanced heat map visualization will be available when habits are selected.")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .padding()
-                            .background(Color(.systemGray6))
-                            .cornerRadius(12)
+                        Text(
+                            "Advanced heat map visualization will be available when habits are selected."
+                        )
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
                     }
                     .padding()
                     .background(Color(.systemGray6))
@@ -475,6 +481,7 @@ struct AdvancedAnalyticsView: View {
                     Button("Done") {
                         dismiss()
                     }
+                    .accessibilityLabel("Button")
                 }
             }
         }
@@ -492,7 +499,8 @@ struct AnalyticsInsightsCard: View {
                 InsightRow(
                     icon: "brain",
                     title: "Optimal Scheduling",
-                    insight: "Your success rate is 34% higher when habits are scheduled before 10 AM",
+                    insight:
+                        "Your success rate is 34% higher when habits are scheduled before 10 AM",
                     color: .blue
                 )
 

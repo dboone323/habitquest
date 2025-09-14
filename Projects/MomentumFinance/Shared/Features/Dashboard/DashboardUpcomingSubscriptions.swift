@@ -75,7 +75,7 @@ extension Features.Dashboard {
 
                         // View all subscriptions button
                         if subscriptions.count > 3 {
-                            Button(action: onViewAllTap) {
+                            Button(action: onViewAllTap).accessibilityLabel("Button") {
                                 Text("View All \(subscriptions.count) Subscriptions")
                                     .font(.caption)
                                     .fontWeight(.medium)
@@ -98,7 +98,7 @@ extension Features.Dashboard {
                                 .foregroundStyle(colorTheme.secondaryText)
                                 .multilineTextAlignment(.center)
 
-                            Button("Add Subscription") {
+                            Button("Add Subscription").accessibilityLabel("Button") {
                                 onViewAllTap()
                             }
                             .buttonStyle(.borderedProminent)

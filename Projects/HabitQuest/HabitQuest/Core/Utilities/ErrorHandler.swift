@@ -1,7 +1,7 @@
 import Foundation
-import os
 import OSLog
 import SwiftUI
+import os
 
 /// Centralized error handling for the HabitQuest app
 /// Provides consistent error management and user-friendly error messages
@@ -53,8 +53,7 @@ struct ErrorHandler: Sendable {
                        showToUser: Bool = true,
                        file: String = #file,
                        function: String = #function,
-                       line: Int = #line)
-    {
+                       line: Int = #line) {
 
         // Log the error
         logger.error("Error occurred: \(error.localizedDescription)", file: file, function: function, line: line)

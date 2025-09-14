@@ -35,14 +35,15 @@ enum LogCategory: String, CaseIterable {
 }
 
 // / Enhanced application logger with categorization and performance tracking
-final class AppLogger {
-    private let logger = Logger(subsystem: "com.DanielStevens.CodingReviewer", category: "CodeAnalysis")
+public final class AppLogger {
+    private let logger = Logger(
+        subsystem: "com.DanielStevens.CodingReviewer", category: "CodeAnalysis")
     private var performanceMetrics: [String: Date] = [:]
 
-    static let shared = AppLogger()
+    nonisolated(unsafe) static let shared = AppLogger()
     private init() {}
 
-    func log(
+    nonisolated func log(
         _ message: String,
         level: LogLevel = .info,
         category: LogCategory = .general,
@@ -51,7 +52,8 @@ final class AppLogger {
         line: Int = #line
     ) {
         let filename = (file as NSString).lastPathComponent
-        let logMessage = "\(category.emoji) \(level.rawValue) [\(filename):\(line)] \(function) - \(message)"
+        let logMessage =
+            "\(category.emoji) \(level.rawValue) [\(filename):\(line)] \(function) - \(message)"
 
         switch level {
         case .debug:
@@ -67,55 +69,68 @@ final class AppLogger {
         }
     }
 
-    func startMeasurement(for operation: String) -> Date {
+    nonisolated func startMeasurement(for operation: String) -> Date {
         let startTime = Date()
         performanceMetrics[operation] = startTime
         log("Started measuring: \(operation)", level: .debug, category: .performance)
         return startTime
     }
 
-    func endMeasurement(for operation: String, startTime: Date) {
+    nonisolated func endMeasurement(for operation: String, startTime: Date) {
         let duration = Date().timeIntervalSince(startTime)
         performanceMetrics.removeValue(forKey: operation)
-        log("Completed \(operation) in \(String(format: "%.3f", duration))s",
+        log(
+            "Completed \(operation) in \(String(format: "%.3f", duration))s",
             level: .info, category: .performance)
     }
 
-    func logAnalysisStart(codeLength: Int) {
-        log("Starting code analysis for \(codeLength) characters", level: .info, category: .analysis)
+    nonisolated func logAnalysisStart(codeLength: Int) {
+        log(
+            "Starting code analysis for \(codeLength) characters", level: .info, category: .analysis
+        )
     }
 
-    func logAnalysisComplete(resultsCount: Int, duration: TimeInterval) {
-        log("Analysis completed: \(resultsCount) results in \(String(format: "%.2f", duration))s",
+    nonisolated func logAnalysisComplete(resultsCount: Int, duration: TimeInterval) {
+        log(
+            "Analysis completed: \(resultsCount) results in \(String(format: "%.2f", duration))s",
             level: .info, category: .analysis)
     }
 
-    func logError(_ error: Error, context: String, category: LogCategory = .general) {
+    nonisolated func logError(_ error: Error, context: String, category: LogCategory = .general) {
         log("Error in \(context): \(error.localizedDescription)", level: .error, category: category)
     }
 
-    func logAIRequest(type: String, tokenCount: Int) {
+    nonisolated func logAIRequest(type: String, tokenCount: Int) {
         log("AI \(type) request - \(tokenCount) tokens", level: .info, category: .ai)
     }
 
-    func logAIResponse(type: String, success: Bool, duration: TimeInterval) {
+    nonisolated func logAIResponse(type: String, success: Bool, duration: TimeInterval) {
         let status = success ? "successful" : "failed"
-        log("AI \(type) response \(status) in \(String(format: "%.2f", duration))s",
+        log(
+            "AI \(type) response \(status) in \(String(format: "%.2f", duration))s",
             level: success ? .info : .warning, category: .ai)
     }
 
     // Convenience method for debug logging
-    func debug(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+    nonisolated func debug(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
         log(message, level: .debug, category: .general, file: file, function: function, line: line)
     }
 
     // Convenience method for warning logging
-    func logWarning(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        log(message, level: .warning, category: .general, file: file, function: function, line: line)
+    nonisolated func logWarning(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
+        log(
+            message, level: .warning, category: .general, file: file, function: function, line: line
+        )
     }
 
     // Convenience method for security logging
-    func logSecurity(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+    nonisolated func logSecurity(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
         log(message, level: .info, category: .security, file: file, function: function, line: line)
     }
 }
@@ -131,7 +146,7 @@ enum CodeReviewError: LocalizedError {
         switch self {
         case .analysisTimeout:
             "Analysis timed out. Please try with a smaller code sample."
-        case let .invalidInput(reason):
+        case .invalidInput(let reason):
             "Invalid input: \(reason)"
         case .analysisInterrupted:
             "Analysis was interrupted. Please try again."
@@ -165,9 +180,9 @@ actor PerformanceMonitor {
     func endMeasurement(for operation: String, startTime: Date) {
         let duration = Date().timeIntervalSince(startTime)
         analysisMetrics[operation] = duration
-        Task {
-            await AppLogger.shared.log("Performance: \(operation) took \(String(format: "%.2f", duration))s", level: .debug, category: .performance)
-        }
+        AppLogger.shared.log(
+            "Performance: \(operation) took \(String(format: "%.2f", duration))s",
+            level: .debug, category: .performance)
     }
 
     func getMetrics() -> [String: TimeInterval] {

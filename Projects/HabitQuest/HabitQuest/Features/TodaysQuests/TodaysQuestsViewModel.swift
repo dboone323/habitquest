@@ -1,5 +1,5 @@
-import Combine
 import Foundation
+import Combine
 import SwiftData
 
 //
@@ -72,8 +72,8 @@ class TodaysQuestsViewModel: ObservableObject {
         let earnedExperiencePoints = calculateXP(for: habit)
         awardXP(earnedExperiencePoints)
 
-    // Show completion message
-    completionMessage = "Quest completed! +\(earnedExperiencePoints) XP"
+        // Show completion message
+        completionMessage = "Quest completed! +\(earnedExperiencePoints) XP"
         showingCompletionAlert = true
 
         // Refresh today's habits

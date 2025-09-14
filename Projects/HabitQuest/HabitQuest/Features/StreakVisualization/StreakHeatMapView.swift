@@ -61,15 +61,22 @@ struct StreakHeatMapView: View {
 
             Spacer()
 
-            Button(action: { showingDetails.toggle() }, label: {
-                Image(systemName: showingDetails ? "chevron.up" : "info.circle")
-                    .foregroundColor(.blue)
-            })
+            Button(
+                action: { showingDetails.toggle() },
+                label: {
+                    Image(systemName: showingDetails ? "chevron.up" : "info.circle")
+                        .foregroundColor(.blue)
+                }
+            )
+            .accessibilityLabel("Toggle Details")
         }
     }
 
     private var heatMapGrid: some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 2), count: timeRange.columns), spacing: 2) {
+        LazyVGrid(
+            columns: Array(repeating: GridItem(.flexible(), spacing: 2), count: timeRange.columns),
+            spacing: 2
+        ) {
             ForEach(heatMapData, id: \.date) { dayData in
                 Rectangle()
                     .fill(intensityColor(for: dayData.intensity))
@@ -77,7 +84,9 @@ struct StreakHeatMapView: View {
                     .cornerRadius(2)
                     .overlay(
                         RoundedRectangle(cornerRadius: 2)
-                            .stroke(selectedDate == dayData.date ? Color.blue : Color.clear, lineWidth: 2)
+                            .stroke(
+                                selectedDate == dayData.date ? Color.blue : Color.clear,
+                                lineWidth: 2)
                     )
                     .onTapGesture {
                         selectedDate = dayData.date
@@ -96,7 +105,7 @@ struct StreakHeatMapView: View {
                 .foregroundColor(.secondary)
 
             HStack(spacing: 2) {
-                ForEach(0 ..< 5) { intensity in
+                ForEach(0..<5) { intensity in
                     Rectangle()
                         .fill(intensityColor(for: Double(intensity)))
                         .frame(width: 10, height: 10)
@@ -125,8 +134,11 @@ struct StreakHeatMapView: View {
                 .fontWeight(.medium)
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 8) {
-                MetricCard(title: "Consistency", value: "\(Int(analytics.streakPercentile * 100))%", color: .green)
-                MetricCard(title: "Best Streak", value: "\(analytics.longestStreak) days", color: .orange)
+                MetricCard(
+                    title: "Consistency", value: "\(Int(analytics.streakPercentile * 100))%",
+                    color: .green)
+                MetricCard(
+                    title: "Best Streak", value: "\(analytics.longestStreak) days", color: .orange)
                 MetricCard(title: "Total Days", value: "\(completedDays)", color: .blue)
                 MetricCard(title: "Success Rate", value: "\(successRate)%", color: .purple)
             }
@@ -154,7 +166,8 @@ struct StreakHeatMapView: View {
     private var heatMapData: [DayIntensity] {
         let calendar = Calendar.current
         let endDate = Date()
-        let startDate = calendar.date(byAdding: .day, value: -timeRange.days, to: endDate) ?? endDate
+        let startDate =
+            calendar.date(byAdding: .day, value: -timeRange.days, to: endDate) ?? endDate
 
         var data: [DayIntensity] = []
         var currentDate = startDate
@@ -233,11 +246,11 @@ struct StreakHeatMapView: View {
         switch intensity {
         case 0:
             Color(.systemGray5)
-        case 0.01 ..< 0.3:
+        case 0.01..<0.3:
             Color.green.opacity(0.3)
-        case 0.3 ..< 0.6:
+        case 0.3..<0.6:
             Color.green.opacity(0.6)
-        case 0.6 ..< 0.8:
+        case 0.6..<0.8:
             Color.green.opacity(0.8)
         default:
             Color.green

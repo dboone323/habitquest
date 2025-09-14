@@ -10,7 +10,6 @@ import Foundation
 
 /// Handles CSV parsing and column mapping functionality
 enum CSVParser {
-
     /// Parses a CSV row handling quoted fields and escaped quotes
     static func parseCSVRow(_ row: String) -> [String] {
         var fields: [String] = []
@@ -62,48 +61,42 @@ enum CSVParser {
 
             // Title/Description column mapping
             else if normalizedHeader.contains("description") ||
-                normalizedHeader.contains("title") ||
-                normalizedHeader.contains("merchant") ||
-                normalizedHeader.contains("payee") ||
-                normalizedHeader == "name"
-            {
+                        normalizedHeader.contains("title") ||
+                        normalizedHeader.contains("merchant") ||
+                        normalizedHeader.contains("payee") ||
+                        normalizedHeader == "name" {
                 mapping.titleIndex = index
             }
 
             // Amount column mapping
             else if normalizedHeader.contains("amount") ||
-                normalizedHeader.contains("value") ||
-                normalizedHeader == "sum"
-            {
+                        normalizedHeader.contains("value") ||
+                        normalizedHeader == "sum" {
                 mapping.amountIndex = index
             }
 
             // Type column mapping
             else if normalizedHeader.contains("type") ||
-                normalizedHeader.contains("transaction")
-            {
+                        normalizedHeader.contains("transaction") {
                 mapping.typeIndex = index
             }
 
             // Category column mapping
             else if normalizedHeader.contains("category") ||
-                normalizedHeader.contains("tag")
-            {
+                        normalizedHeader.contains("tag") {
                 mapping.categoryIndex = index
             }
 
             // Account column mapping
             else if normalizedHeader.contains("account") ||
-                normalizedHeader.contains("bank")
-            {
+                        normalizedHeader.contains("bank") {
                 mapping.accountIndex = index
             }
 
             // Notes column mapping
             else if normalizedHeader.contains("note") ||
-                normalizedHeader.contains("memo") ||
-                normalizedHeader.contains("comment")
-            {
+                        normalizedHeader.contains("memo") ||
+                        normalizedHeader.contains("comment") {
                 mapping.notesIndex = index
             }
         }

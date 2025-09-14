@@ -142,7 +142,7 @@ final class BudgetsViewModel {
             onTrackCount: onTrackCount,
             overBudgetCount: overBudgetCount,
             totalBudgets: monthBudgets.count,
-        )
+            )
     }
 
     /// Get spending trend for categories
@@ -163,7 +163,7 @@ final class BudgetsViewModel {
                 month: monthDate,
                 amount: spent,
                 categoryName: category.name,
-            )
+                )
             trend.insert(monthSpending, at: 0)
         }
 

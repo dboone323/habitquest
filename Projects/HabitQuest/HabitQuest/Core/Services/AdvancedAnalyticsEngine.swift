@@ -105,7 +105,7 @@ final class AdvancedAnalyticsEngine {
             generateCategoryBasedSuggestions(profile: userProfile),
             generateTimeBasedSuggestions(profile: userProfile),
             generateComplementarySuggestions(existing: existingHabits),
-            generateTrendingSuggestions(),
+            generateTrendingSuggestions()
         ].flatMap(\.self)
     }
 

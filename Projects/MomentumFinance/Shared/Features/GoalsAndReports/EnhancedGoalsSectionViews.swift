@@ -1,7 +1,7 @@
+import AppKit
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
 #endif
 
 // Momentum Finance - Personal Finance App
@@ -20,11 +20,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
@@ -87,11 +87,11 @@ extension Features.GoalsAndReports {
                                     gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
                                     startPoint: .leading,
                                     endPoint: .trailing,
-                                ),
-                            )
+                                    ),
+                                )
                             .cornerRadius(12)
                     },
-                )
+                    )
 
                 Spacer()
             }
@@ -181,17 +181,17 @@ extension Features.GoalsAndReports {
                     .fill(
                         LinearGradient(
                             gradient: Gradient(colors: [
-                                Color.blue.opacity(0.05), Color.blue.opacity(0.1),
+                                Color.blue.opacity(0.05), Color.blue.opacity(0.1)
                             ]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing,
-                        ),
-                    )
+                            ),
+                        )
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
                             .stroke(Color.blue.opacity(0.2), lineWidth: 1),
-                    ),
-            )
+                        ),
+                )
         }
 
         @ViewBuilder private var activeGoalsSection: some View {
@@ -237,11 +237,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
@@ -296,8 +296,8 @@ extension Features.GoalsAndReports {
                                     .overlay(
                                         Capsule()
                                             .stroke(Color.blue.opacity(0.3), lineWidth: 1),
-                                    ),
-                            )
+                                        ),
+                                )
                     }
                 }
 
@@ -358,8 +358,8 @@ extension Features.GoalsAndReports {
                                                 : [.blue, .blue.opacity(0.7)]),
                                         startPoint: .leading,
                                         endPoint: .trailing,
-                                    ),
-                                )
+                                        ),
+                                    )
                                 .frame(
                                     width: geometry.size.width * min(goal.progressPercentage, 1.0),
                                     height: 12
@@ -408,7 +408,7 @@ extension Features.GoalsAndReports {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColor)
                     .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
-            )
+                )
         }
     }
 }
