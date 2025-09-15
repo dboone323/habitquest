@@ -1,5 +1,6 @@
 // PlannerApp/MainApp/MainTabView.swift (Updated)
 import SwiftUI
+
 #if os(macOS)
     import AppKit
 #else
@@ -28,8 +29,8 @@ struct MainTabView: View {
         TabView(selection: $selectedTabTag) {
             // --- Dashboard Tab ---
             DashboardView()
-                .tabItem { Label(TabTags.dashboard, systemImage: "house") } // Text and icon for the tab item
-                .tag(TabTags.dashboard) // Assign a unique tag to identify this tab
+                .tabItem { Label(TabTags.dashboard, systemImage: "house") }  // Text and icon for the tab item
+                .tag(TabTags.dashboard)  // Assign a unique tag to identify this tab
 
             // --- Tasks Tab ---
             TaskManagerView()
@@ -47,9 +48,13 @@ struct MainTabView: View {
                 .tag(TabTags.goals)
 
             // --- Journal Tab ---
-            JournalView() // Consider adding biometric check wrapper here if enabled
+            JournalView()  // Consider adding biometric check wrapper here if enabled
                 .tabItem { Label(TabTags.journal, systemImage: "book") }
                 .tag(TabTags.journal)
+
+            // TODO: Add haptic feedback for tab switches on iOS devices
+            // TODO: Implement tab reordering functionality for user customization
+            // TODO: Add keyboard shortcuts for tab navigation on macOS
 
             // --- Settings Tab ---
             SettingsView()
@@ -61,7 +66,10 @@ struct MainTabView: View {
         // Attempt to influence the appearance of unselected tabs by setting the color scheme.
         // This is an indirect way, as direct styling of unselected items is limited.
         // It tells SwiftUI whether the overall view context is light or dark.
-        .environment(\.colorScheme, themeManager.currentTheme.primaryBackgroundColor.isDark() ? .dark : .light)
+        .environment(
+            \.colorScheme,
+            themeManager.currentTheme.primaryBackgroundColor.isDark() ? .dark : .light
+        )
         #if os(macOS)
             // Ensure full window utilization on macOS
             .frame(minWidth: 800, minHeight: 600)

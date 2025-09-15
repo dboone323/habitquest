@@ -223,8 +223,8 @@ struct AvoidObstaclesGameTests {
 
         // Simulate generating multiple obstacles
         for i in 1...100 {
-            let obstacleData = ["id": i, "type": "spike", "x": i * 50]
-            #expect(obstacleData["id"] == i)
+            let obstacleData: [String: Any] = ["id": i, "type": "spike", "x": i * 50]
+            #expect((obstacleData["id"] as? Int) == i)
         }
 
         let endTime = Date()

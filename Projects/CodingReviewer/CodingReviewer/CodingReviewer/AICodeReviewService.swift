@@ -209,6 +209,7 @@ import OSLog
 
 // Consider wrapping force unwraps and try statements in proper error handling
 
+@MainActor
 final class EnhancedAICodeReviewService: ObservableObject {
     @Published var isAnalyzing = false
     @Published var analysisProgress: Double = 0.0
@@ -217,12 +218,13 @@ final class EnhancedAICodeReviewService: ObservableObject {
 
     private let logger = OSLog(subsystem: "CodingReviewer", category: "AICodeReviewService")
 
+    @MainActor
     private func log(_ message: String) async {
         os_log("🤖 AI Service: %{public}@", log: logger, type: .info, message)
     }
 
     init() {
-        Task {
+        Task { @MainActor in
             await log("🤖 Enhanced AI Service initialized for Phase 3")
         }
     }

@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 import SwiftUI
 
 // MARK: - Simplified AI Learning System
@@ -32,8 +32,8 @@ class AILearningCoordinator: ObservableObject {
         }
 
         // Simulate basic learning process
-        for i in 1 ... 10 {
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+        for i in 1...10 {
+            try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
             await MainActor.run {
                 learningProgress = Double(i) / 10.0
             }

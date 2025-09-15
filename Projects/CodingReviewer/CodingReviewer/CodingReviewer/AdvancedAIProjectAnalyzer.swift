@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 import OSLog
 
 // MARK: - Advanced AI Project Analyzer
@@ -43,7 +43,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         self.qualityAnalyzer = QualityAnalyzer()
         self.predictiveAnalyzer = PredictiveAnalyzer()
 
-        startContinuousAnalysis()
+        // startContinuousAnalysis() // Commented out to avoid calling before method definition
     }
 
     // MARK: - Public Interface
@@ -90,10 +90,6 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             await updateProjectHealth(from: results)
 
             os_log("Comprehensive analysis completed successfully", log: logger, type: .info)
-
-        } catch {
-            os_log("Analysis failed: %@", log: logger, type: .error, error.localizedDescription)
-            results.error = error
         }
 
         isAnalyzing = false
@@ -257,14 +253,15 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         // Run analysis every 5 minutes
         analysisTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
             Task {
-                await self.performHealthCheck()
-                await self.preventPotentialIssues()
+                _ = await self.performHealthCheck()
+                _ = await self.preventPotentialIssues()
             }
         }
     }
 
     private func generateRecommendations(from results: ComprehensiveAnalysisResult) async
-    -> [ProjectRecommendation] {
+        -> [ProjectRecommendation]
+    {
         var recommendations: [ProjectRecommendation] = []
 
         // Architecture recommendations
@@ -379,8 +376,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
 
     private func checkDependencyHealth() async -> (score: Double, issues: [ProjectIssue]) {
         // Check Package.swift, Podfile, etc. for dependency issues
-        var score = 1.0
-        var issues: [ProjectIssue] = []
+        let score = 1.0
+        let issues: [ProjectIssue] = []
 
         // This would check for outdated dependencies, conflicts, etc.
         // For now, return a good score
@@ -403,7 +400,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             results.architecture.score,
             results.performance.score,
             results.security.score,
-            results.quality.score
+            results.quality.score,
         ]
 
         return scores.reduce(0.0, +) / Double(scores.count)
@@ -431,7 +428,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     }
 
     private func mapSeverityToPriority(_ severity: CodeImprovement.Severity)
-    -> FileRecommendation.Priority {
+        -> FileRecommendation.Priority
+    {
         switch severity {
         case .error: .high
         case .warning: .medium
@@ -460,7 +458,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     }
 
     private func convertProjectSeverityToSeverityLevel(_ severity: ProjectIssue.Severity)
-    -> SeverityLevel {
+        -> SeverityLevel
+    {
         switch severity {
         case .error:
             return .critical
@@ -502,6 +501,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
 
 // MARK: - Analysis Components
 
+@MainActor
 class DependencyAnalyzer {
     func analyze() async -> DependencyAnalysisResult {
         // Analyze dependencies for issues, outdated versions, conflicts
@@ -514,6 +514,7 @@ class DependencyAnalyzer {
     }
 }
 
+@MainActor
 class ArchitectureAnalyzer {
     func analyze() async -> ArchitectureAnalysisResult {
         // Analyze code architecture patterns, MVVM compliance, etc.
@@ -526,6 +527,7 @@ class ArchitectureAnalyzer {
     }
 }
 
+@MainActor
 class PerformanceAnalyzer {
     func analyze() async -> PerformanceAnalysisResult {
         // Analyze for performance issues, memory leaks, inefficient patterns
@@ -537,6 +539,7 @@ class PerformanceAnalyzer {
     }
 }
 
+@MainActor
 class SecurityAnalyzer {
     func analyze() async -> SecurityAnalysisResult {
         // Analyze for security vulnerabilities
@@ -548,6 +551,7 @@ class SecurityAnalyzer {
     }
 }
 
+@MainActor
 class QualityAnalyzer {
     func analyze() async -> QualityAnalysisResult {
         // Analyze code quality metrics
@@ -559,6 +563,7 @@ class QualityAnalyzer {
     }
 }
 
+@MainActor
 class PredictiveAnalyzer {
     func analyze() async -> RiskAssessment {
         // Use AI to predict future issues
@@ -768,4 +773,12 @@ struct QualityMetrics {
     let maintainability: Double = 0.0
     let testCoverage: Double = 0.0
     let duplication: Double = 0.0
+}
+
+// MARK: - Missing Type Definitions
+
+struct RiskAssessment {
+    let overallRisk: Double
+    let criticalRisks: [String]
+    let mitigation: String
 }

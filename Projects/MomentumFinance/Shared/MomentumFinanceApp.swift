@@ -25,6 +25,9 @@ struct MomentumFinanceApp: App {
 
     init() {
         print("MomentumFinanceApp: init started")
+        // TODO: Implement app initialization analytics tracking
+        // TODO: Add crash reporting setup in init method
+        // TODO: Initialize user preferences and settings on app launch
     }
 
     var sharedModelContainer: ModelContainer? = {
@@ -36,7 +39,7 @@ struct MomentumFinanceApp: App {
             ModelReferences.subscriptions,
             ModelReferences.budgets,
             ModelReferences.categories,
-            ModelReferences.goals
+            ModelReferences.goals,
         ])
 
         print("MomentumFinanceApp: Schema created")
@@ -99,10 +102,10 @@ struct MomentumFinanceApp: App {
 
                     Button("Quit App") {
                         #if os(iOS)
-                        // iOS doesn't allow programmatic app termination
-                        // User must manually close the app
+                            // iOS doesn't allow programmatic app termination
+                            // User must manually close the app
                         #else
-                        NSApplication.shared.terminate(nil)
+                            NSApplication.shared.terminate(nil)
                         #endif
                     }
                     .accessibilityLabel("Button")
@@ -111,9 +114,9 @@ struct MomentumFinanceApp: App {
                 .padding()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 #if os(iOS)
-                .background(Color(uiColor: .systemBackground))
+                    .background(Color(uiColor: .systemBackground))
                 #else
-                .background(Color(NSColor.windowBackgroundColor))
+                    .background(Color(NSColor.windowBackgroundColor))
                 #endif
                 .onAppear {
                     print("MomentumFinanceApp: Error view appeared")
@@ -122,15 +125,15 @@ struct MomentumFinanceApp: App {
         }
 
         #if os(macOS)
-        Settings {
-            if let container = sharedModelContainer {
-                SettingsView()
-                    .modelContainer(container)
-            } else {
-                Text("Settings unavailable - Database error")
-                    .padding()
+            Settings {
+                if let container = sharedModelContainer {
+                    SettingsView()
+                        .modelContainer(container)
+                } else {
+                    Text("Settings unavailable - Database error")
+                        .padding()
+                }
             }
-        }
         #endif
     }
 }

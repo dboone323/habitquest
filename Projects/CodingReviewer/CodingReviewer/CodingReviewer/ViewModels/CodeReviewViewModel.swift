@@ -1,10 +1,10 @@
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Protocol for code review functionality
 
 protocol CodeReviewService {
-    func analyzeCode(_ code: String) async -> CodeAnalysisReport
+    @MainActor func analyzeCode(_ code: String) async -> CodeAnalysisReport
 }
 
 // MARK: - Analysis Data Structures (minimal, aligned with tests)
@@ -180,7 +180,7 @@ final class CodeReviewViewModel: ObservableObject {
 // MARK: - Default Service (simple stub for runtime completeness)
 
 private final class DefaultCodeReviewService: CodeReviewService {
-    func analyzeCode(_ code: String) async -> CodeAnalysisReport {
+    @MainActor func analyzeCode(_ code: String) async -> CodeAnalysisReport {
         let metrics = CodeMetrics(
             characterCount: code.count,
             lineCount: code.components(separatedBy: .newlines).count,

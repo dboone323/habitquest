@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 import SwiftUI
 
 //
@@ -35,7 +35,9 @@ final class MLIntegrationService: ObservableObject {
         isAnalyzing = true
         analysisProgress = 0.0
 
-        logger.log("🚀 Starting comprehensive ML analysis with \(fileData.count) files", level: .info, category: .ai)
+        logger.log(
+            "🚀 Starting comprehensive ML analysis with \(fileData.count) files", level: .info,
+            category: .ai)
 
         // Run ML pattern recognition
         analysisProgress = 0.25
@@ -62,11 +64,16 @@ final class MLIntegrationService: ObservableObject {
     // MARK: - Individual Analysis Components
 
     func runMLPatternRecognition(fileData: [CodeFile] = []) async {
-        logger.log("🔍 Running ML pattern recognition on \(fileData.count) files", level: .info, category: .ai)
+        logger.log(
+            "🔍 Running ML pattern recognition on \(fileData.count) files", level: .info,
+            category: .ai)
 
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/bin/bash")
-        task.arguments = ["-c", "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./ml_pattern_recognition.sh"]
+        task.arguments = [
+            "-c",
+            "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./ml_pattern_recognition.sh",
+        ]
 
         // Create temp file list for ML processing
         if !fileData.isEmpty {
@@ -85,11 +92,16 @@ final class MLIntegrationService: ObservableObject {
     }
 
     func runPredictiveAnalytics(fileData: [CodeFile] = []) async {
-        logger.log("📈 Running predictive analytics on \(fileData.count) files", level: .info, category: .ai)
+        logger.log(
+            "📈 Running predictive analytics on \(fileData.count) files", level: .info, category: .ai
+        )
 
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/bin/bash")
-        task.arguments = ["-c", "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./predictive_analytics.sh"]
+        task.arguments = [
+            "-c",
+            "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./predictive_analytics.sh",
+        ]
 
         // Create temp file list for predictive processing
         if !fileData.isEmpty {
@@ -108,11 +120,16 @@ final class MLIntegrationService: ObservableObject {
     }
 
     func runAdvancedAIIntegration(fileData: [CodeFile] = []) async {
-        logger.log("🤖 Running advanced AI integration on \(fileData.count) files", level: .info, category: .ai)
+        logger.log(
+            "🤖 Running advanced AI integration on \(fileData.count) files", level: .info,
+            category: .ai)
 
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/bin/bash")
-        task.arguments = ["-c", "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./advanced_ai_integration.sh"]
+        task.arguments = [
+            "-c",
+            "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./advanced_ai_integration.sh",
+        ]
 
         // Create temp file list for AI processing
         if !fileData.isEmpty {
@@ -123,7 +140,7 @@ final class MLIntegrationService: ObservableObject {
             try task.run()
             task.waitUntilExit()
 
-            await refreshMLData() // AI suggestions feed into ML insights
+            await refreshMLData()  // AI suggestions feed into ML insights
             logger.log("✅ Advanced AI integration completed", level: .info, category: .ai)
         } catch {
             logger.log("❌ Advanced AI integration failed: \(error)", level: .error, category: .ai)
@@ -178,14 +195,17 @@ final class MLIntegrationService: ObservableObject {
                     "path": file.path,
                     "language": file.language.rawValue,
                     "size": "\(file.size)",
-                    "content_preview": String(file.content.prefix(1000))
+                    "content_preview": String(file.content.prefix(1000)),
                 ]
             }
 
-            let jsonData = try JSONSerialization.data(withJSONObject: fileInfo, options: .prettyPrinted)
+            let jsonData = try JSONSerialization.data(
+                withJSONObject: fileInfo, options: .prettyPrinted)
             try jsonData.write(to: fileListURL)
 
-            logger.log("📝 Created temp file list with \(fileData.count) files for ML processing", level: .info, category: .ai)
+            logger.log(
+                "📝 Created temp file list with \(fileData.count) files for ML processing",
+                level: .info, category: .ai)
         } catch {
             logger.log("❌ Failed to create temp file list: \(error)", level: .error, category: .ai)
         }
@@ -237,7 +257,8 @@ final class MLIntegrationService: ObservableObject {
 
     private func loadCrossProjectLearnings() async {
         // Load from cross-project learning insights
-        let insightsPath = ".cross_project_learning/insights/cross_patterns_\(getCurrentDateString()).md"
+        let insightsPath =
+            ".cross_project_learning/insights/cross_patterns_\(getCurrentDateString()).md"
 
         if let content = try? String(contentsOfFile: insightsPath, encoding: .utf8) {
             let learnings = parseCrossProjectInsights(content)
@@ -254,38 +275,42 @@ final class MLIntegrationService: ObservableObject {
 
         // Parse code quality patterns
         if content.contains("High Complexity Files") {
-            insights.append(MLInsight(
-                type: .codeQuality,
-                title: "High Complexity Detection",
-                description: "ML analysis identified files with complexity score > 50",
-                confidence: 0.87,
-                recommendation: "Consider refactoring identified files for better maintainability",
-                impact: .medium
-            ))
+            insights.append(
+                MLInsight(
+                    type: .codeQuality,
+                    title: "High Complexity Detection",
+                    description: "ML analysis identified files with complexity score > 50",
+                    confidence: 0.87,
+                    recommendation:
+                        "Consider refactoring identified files for better maintainability",
+                    impact: .medium
+                ))
         }
 
         // Parse automation optimization
         if content.contains("87%") {
-            insights.append(MLInsight(
-                type: .automation,
-                title: "Automation Success Rate",
-                description: "Current automation pipeline running at 87% success rate",
-                confidence: 0.95,
-                recommendation: "Monitor batch operations for continued efficiency",
-                impact: .high
-            ))
+            insights.append(
+                MLInsight(
+                    type: .automation,
+                    title: "Automation Success Rate",
+                    description: "Current automation pipeline running at 87% success rate",
+                    confidence: 0.95,
+                    recommendation: "Monitor batch operations for continued efficiency",
+                    impact: .high
+                ))
         }
 
         // Parse learning progress
         if content.contains("patterns learned") {
-            insights.append(MLInsight(
-                type: .learning,
-                title: "Pattern Recognition Progress",
-                description: "ML system has learned multiple patterns with high confidence",
-                confidence: 0.85,
-                recommendation: "Focus on error pattern recognition and automated fixing",
-                impact: .high
-            ))
+            insights.append(
+                MLInsight(
+                    type: .learning,
+                    title: "Pattern Recognition Progress",
+                    description: "ML system has learned multiple patterns with high confidence",
+                    confidence: 0.85,
+                    recommendation: "Focus on error pattern recognition and automated fixing",
+                    impact: .high
+                ))
         }
 
         return insights
@@ -293,12 +318,14 @@ final class MLIntegrationService: ObservableObject {
 
     private func parsePredictiveAnalysis(_ htmlContent: String) -> PredictiveAnalysis {
         // Extract key metrics from HTML dashboard
-        let completionConfidence = extractMetric(from: htmlContent, pattern: "confidence.*?(\\d+)%") ?? 78
+        let completionConfidence =
+            extractMetric(from: htmlContent, pattern: "confidence.*?(\\d+)%") ?? 78
         let riskScore = extractMetric(from: htmlContent, pattern: "risk.*?(\\d+)%") ?? 15
 
         return PredictiveAnalysis(
             projectCompletion: ProjectCompletion(
-                estimatedDate: Calendar.current.date(byAdding: .day, value: 17, to: Date()) ?? Date(),
+                estimatedDate: Calendar.current.date(byAdding: .day, value: 17, to: Date())
+                    ?? Date(),
                 confidence: Double(completionConfidence) / 100.0,
                 remainingWork: "3 major features"
             ),
@@ -320,26 +347,28 @@ final class MLIntegrationService: ObservableObject {
 
         // Parse MVVM+SwiftUI patterns
         if content.contains("MVVM + SwiftUI") {
-            learnings.append(CrossProjectLearning(
-                pattern: "MVVM + SwiftUI Architecture",
-                transferability: 0.95,
-                successRate: 0.87,
-                description: "High transferability pattern suitable for iOS, macOS, watchOS",
-                implementations: ["Reactive state management", "Protocol-oriented design"],
-                benefits: "15-30% better performance than traditional callbacks"
-            ))
+            learnings.append(
+                CrossProjectLearning(
+                    pattern: "MVVM + SwiftUI Architecture",
+                    transferability: 0.95,
+                    successRate: 0.87,
+                    description: "High transferability pattern suitable for iOS, macOS, watchOS",
+                    implementations: ["Reactive state management", "Protocol-oriented design"],
+                    benefits: "15-30% better performance than traditional callbacks"
+                ))
         }
 
         // Parse reactive programming patterns
         if content.contains("Reactive Programming") {
-            learnings.append(CrossProjectLearning(
-                pattern: "Reactive Programming with Combine",
-                transferability: 0.90,
-                successRate: 0.85,
-                description: "Publisher/Subscriber pattern becoming standard",
-                implementations: ["Combine framework", "AsyncSequence"],
-                benefits: "Improved testability and reduced coupling"
-            ))
+            learnings.append(
+                CrossProjectLearning(
+                    pattern: "Reactive Programming with Combine",
+                    transferability: 0.90,
+                    successRate: 0.85,
+                    description: "Publisher/Subscriber pattern becoming standard",
+                    implementations: ["Combine framework", "AsyncSequence"],
+                    benefits: "Improved testability and reduced coupling"
+                ))
         }
 
         return learnings
@@ -352,7 +381,8 @@ final class MLIntegrationService: ObservableObject {
         let range = NSRange(text.startIndex..., in: text)
 
         if let match = regex?.firstMatch(in: text, options: [], range: range),
-           let matchRange = Range(match.range(at: 1), in: text) {
+            let matchRange = Range(match.range(at: 1), in: text)
+        {
             return Int(text[matchRange])
         }
         return nil
@@ -448,12 +478,6 @@ struct ProjectCompletion {
     let estimatedDate: Date
     let confidence: Double
     let remainingWork: String
-}
-
-struct RiskAssessment {
-    let overallRisk: Double
-    let criticalRisks: [String]
-    let mitigation: String
 }
 
 struct PerformanceForecasting {

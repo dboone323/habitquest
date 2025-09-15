@@ -103,26 +103,27 @@ class AutomaticFixEngine {
     /*
      private func prioritizeFixes(recommended: [RecommendedFix], traditional: [AutomaticFix]) -> [AutomaticFix] {
      var prioritizedFixes: [AutomaticFix] = []
-
+    
      // Add high-confidence AI recommendations first
      let highConfidenceRecommended = recommended.filter { $0.confidence > 0.8 }
      prioritizedFixes.append(contentsOf: highConfidenceRecommended.map { $0.suggestedFix })
-
+    
      // Add traditional fixes not covered by AI recommendations
      let coveredTypes = Set(highConfidenceRecommended.map { $0.issue.type })
      let uncoveredTraditionalFixes = traditional.filter { !coveredTypes.contains($0.type) }
      prioritizedFixes.append(contentsOf: uncoveredTraditionalFixes)
-
+    
      // Add medium-confidence AI recommendations
      let mediumConfidenceRecommended = recommended.filter { $0.confidence > 0.5 && $0.confidence <= 0.8 }
      prioritizedFixes.append(contentsOf: mediumConfidenceRecommended.map { $0.suggestedFix })
-
+    
      return prioritizedFixes
      }
      */
 
     private func applyFixes(_ fixes: [AutomaticFix], to content: String, filePath: String)
-    async throws -> FixApplicationResult {
+        async throws -> FixApplicationResult
+    {
         var modifiedContent = content
         var appliedFixes: [AutomaticFix] = []
         var failedFixes: [FixFailure] = []
@@ -258,7 +259,8 @@ extension AutomaticFixEngine {
 
         // Detect mutable variables that should be immutable
         if line.contains("variable") && line.contains("was never mutated")
-            && line.contains("consider changing to 'let'") {
+            && line.contains("consider changing to 'let'")
+        {
             issues.append(
                 FixEngineIssue(
                     type: .immutableVariable,
@@ -290,7 +292,8 @@ extension AutomaticFixEngine {
         // Detect magic numbers
         let magicNumberPattern = #"\b([2-9]|[1-9][0-9]+)\b"#
         if line.range(of: magicNumberPattern, options: .regularExpression) != nil
-            && !line.contains("//") && !line.contains("case") {
+            && !line.contains("//") && !line.contains("case")
+        {
             issues.append(
                 FixEngineIssue(
                     type: .magicNumber,
