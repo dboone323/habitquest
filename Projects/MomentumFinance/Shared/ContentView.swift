@@ -8,7 +8,7 @@ import SwiftUI
 // Temporary placeholder views until namespace issues are resolved
 struct DashboardView: View {
     var body: some View {
-        Text("Dashboard - Coming Soon")
+        Features.Dashboard.DashboardView()
     }
 }
 
@@ -21,13 +21,13 @@ struct ContentView: View {
             selection: Binding(
                 get: { navigationCoordinator.selectedTab },
                 set: { navigationCoordinator.selectedTab = $0 },
-                )
+            )
         ) {
             NavigationStack(
                 path: Binding(
                     get: { navigationCoordinator.dashboardNavPath },
                     set: { navigationCoordinator.dashboardNavPath = $0 },
-                    )
+                )
             ) {
                 DashboardView()
             }
@@ -41,7 +41,7 @@ struct ContentView: View {
                 path: Binding(
                     get: { navigationCoordinator.transactionsNavPath },
                     set: { navigationCoordinator.transactionsNavPath = $0 },
-                    )
+                )
             ) {
                 Features.Transactions.TransactionsView()
             }
@@ -57,7 +57,7 @@ struct ContentView: View {
                 path: Binding(
                     get: { navigationCoordinator.budgetsNavPath },
                     set: { navigationCoordinator.budgetsNavPath = $0 },
-                    )
+                )
             ) {
                 Features.Budgets.BudgetsView()
             }
@@ -73,7 +73,7 @@ struct ContentView: View {
                 path: Binding(
                     get: { navigationCoordinator.subscriptionsNavPath },
                     set: { navigationCoordinator.subscriptionsNavPath = $0 },
-                    )
+                )
             ) {
                 Features.Subscriptions.SubscriptionsView()
             }
@@ -89,7 +89,7 @@ struct ContentView: View {
                 path: Binding(
                     get: { navigationCoordinator.goalsAndReportsNavPath },
                     set: { navigationCoordinator.goalsAndReportsNavPath = $0 },
-                    )
+                )
             ) {
                 Features.GoalsAndReports.GoalsAndReportsView()
             }
@@ -109,38 +109,38 @@ struct ContentView: View {
             isGlobalSearchPresented = newValue
         }
         #if os(iOS)
-        .onAppear {
-            // Configure navigation bar appearance
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            UINavigationBar.appearance().standardAppearance = appearance
-            UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        }
-        .iOSOptimizations()
+            .onAppear {
+                // Configure navigation bar appearance
+                let appearance = UINavigationBarAppearance()
+                appearance.configureWithOpaqueBackground()
+                UINavigationBar.appearance().standardAppearance = appearance
+                UINavigationBar.appearance().scrollEdgeAppearance = appearance
+            }
+            .iOSOptimizations()
         #elseif os(macOS)
-        .macOSOptimizations()
+            .macOSOptimizations()
         #endif
     }
 }
 
 #if os(iOS)
-extension View {
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func iOSOptimizations() -> some View {
-        self
-            .tint(.blue)
+    extension View {
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func iOSOptimizations() -> some View {
+            self
+                .tint(.blue)
+        }
     }
-}
 
 #elseif os(macOS)
-extension View {
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func macOSOptimizations() -> some View {
-        self
-            .preferredColorScheme(.light)
-            .tint(.indigo)
+    extension View {
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func macOSOptimizations() -> some View {
+            self
+                .preferredColorScheme(.light)
+                .tint(.indigo)
+        }
     }
-}
 #endif

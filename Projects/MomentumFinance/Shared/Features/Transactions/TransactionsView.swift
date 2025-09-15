@@ -1,7 +1,9 @@
-import AppKit
 import SwiftData
 import SwiftUI
-import UIKit
+
+#if canImport(AppKit)
+    import AppKit
+#endif
 
 #if canImport(UIKit)
 #endif
@@ -54,7 +56,7 @@ extension Features.Transactions {
                 filtered = filtered.filter { transaction in
                     transaction.title.localizedCaseInsensitiveContains(searchText)
                         || transaction.category?.name.localizedCaseInsensitiveContains(searchText)
-                        == true
+                            == true
                 }
             }
 

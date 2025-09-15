@@ -17,6 +17,9 @@ struct AccountDetailView: View {
     @State private var showingAddTransaction = false
     @State private var timeRange: TimeRange = .month
 
+    let categories: [ExpenseCategory]
+    let accounts: [FinancialAccount]
+
     enum TimeRange: String, CaseIterable {
         case week = "Week"
         case month = "Month"
@@ -40,8 +43,10 @@ struct AccountDetailView: View {
         }
     }
 
-    init(account: FinancialAccount) {
+    init(account: FinancialAccount, categories: [ExpenseCategory], accounts: [FinancialAccount]) {
         self.account = account
+        self.categories = categories
+        self.accounts = accounts
 
         // Populate transactions from the provided account relationship if available.
         // This avoids using the SwiftData @Query attribute which may not be available
@@ -225,9 +230,7 @@ struct AccountDetailView: View {
             }
         }
         .sheet(isPresented: $showingAddTransaction) {
-            // TODO: Implement AddTransactionView
-            Text("Add Transaction View - Coming Soon")
-                .padding()
+            AddTransactionView(categories: categories, accounts: accounts)
         }
     }
 

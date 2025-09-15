@@ -7,14 +7,23 @@ import SwiftUI
 extension Features.Transactions {
     struct AccountsListView: View {
         #if canImport(SwiftData)
-        #if canImport(SwiftData)
-        private var accounts: [FinancialAccount] = []
+            #if canImport(SwiftData)
+                private var accounts: [FinancialAccount] = []
+            #else
+                private var accounts: [FinancialAccount] = []
+            #endif
         #else
-        private var accounts: [FinancialAccount] = []
+            private var accounts: [FinancialAccount] = []
         #endif
-        #else
-        private var accounts: [FinancialAccount] = []
-        #endif
+
+        let categories: [ExpenseCategory]
+        let accountsList: [FinancialAccount]
+
+        init(categories: [ExpenseCategory] = [], accounts: [FinancialAccount] = []) {
+            self.categories = categories
+            self.accountsList = accounts
+            self.accounts = accounts
+        }
 
         var body: some View {
             ScrollView {
@@ -36,11 +45,14 @@ extension Features.Transactions {
                         RoundedRectangle(cornerRadius: 12)
                             .fill(backgroundColorForPlatform())
                             .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                        )
+                    )
 
                     // Account Cards
                     ForEach(accounts) { account in
-                        NavigationLink(destination: AccountDetailView(account: account)) {
+                        NavigationLink(
+                            destination: AccountDetailView(
+                                account: account, categories: categories, accounts: accountsList)
+                        ) {
                             accountCard(for: account)
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -83,7 +95,7 @@ extension Features.Transactions {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColorForPlatform())
                     .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                )
+            )
         }
 
         private var totalBalance: Double {
@@ -92,9 +104,9 @@ extension Features.Transactions {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #else
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #endif
         }
 

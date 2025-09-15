@@ -1,5 +1,8 @@
-import AppKit
 import SwiftUI
+
+#if canImport(AppKit)
+    import AppKit
+#endif
 
 #if canImport(AppKit)
 #endif
@@ -22,11 +25,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -104,7 +107,7 @@ extension Features.GoalsAndReports {
                         .padding(.vertical, 8)
                         .background(buttonBackground(isSelected: isSelected))
                 },
-                ).accessibilityLabel("Button")
+            ).accessibilityLabel("Button")
         }
 
         private func buttonBackground(isSelected: Bool) -> some View {
@@ -115,13 +118,13 @@ extension Features.GoalsAndReports {
                             gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
                             startPoint: .leading,
                             endPoint: .trailing,
-                            )
+                        )
                         : LinearGradient(
                             gradient: Gradient(colors: [Color.gray.opacity(0.1)]),
                             startPoint: .leading,
                             endPoint: .trailing,
-                            ),
-                    )
+                        ),
+                )
         }
 
         private var contentSection: some View {
@@ -129,28 +132,24 @@ extension Features.GoalsAndReports {
                 EnhancedFinancialSummaryCard(
                     transactions: filteredTransactions,
                     timeframe: selectedTimeframe,
-                    )
-                .padding(.horizontal)
+                )
+                .padding(.horizontal, 16)
 
-                Text("Spending by Category - Coming Soon")
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(8)
-                    .padding(.horizontal)
+                // Spending by Category Chart
+                SpendingByCategoryChart(transactions: filteredTransactions)
+                    .padding(.horizontal, 16)
 
                 if !budgets.isEmpty {
-                    Text("Budget Performance - Coming Soon")
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(8)
-                        .padding(.horizontal)
+                    // Budget Performance Chart
+                    BudgetPerformanceChart(
+                        budgets: currentPeriodBudgets, transactions: filteredTransactions
+                    )
+                    .padding(.horizontal, 16)
                 }
 
-                Text("Recent Transactions - Coming Soon")
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(8)
-                    .padding(.horizontal)
+                // Recent Transactions List
+                RecentTransactionsList(transactions: Array(filteredTransactions.prefix(5)))
+                    .padding(.horizontal, 16)
             }
         }
 
@@ -176,8 +175,8 @@ extension Features.GoalsAndReports {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color.gray.opacity(0.1)),
-                )
-            .padding(.horizontal)
+            )
+            .padding(.horizontal, 16)
         }
 
         private var filteredTransactions: [FinancialTransaction] {
@@ -220,144 +219,253 @@ extension Features.GoalsAndReports {
         }
     }
 
-    // Helper views for enhanced reports section
+    // Simple Financial Summary Card
     struct EnhancedFinancialSummaryCard: View {
         let transactions: [FinancialTransaction]
         let timeframe: EnhancedReportsSection.TimeFrame
 
-        // Cross-platform color support
-        private var backgroundColor: Color {
-            #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
-            #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
-            #else
-            return Color.white
-            #endif
-        }
-
-        private var totalIncome: Double {
-            transactions.filter { $0.transactionType == .income }.reduce(0) { $0 + $1.amount }
-        }
-
-        private var totalExpenses: Double {
-            transactions.filter { $0.transactionType == .expense }.reduce(0) { $0 + $1.amount }
-        }
-
-        private var netIncome: Double {
-            totalIncome - totalExpenses
-        }
-
         var body: some View {
-            VStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 12) {
                 Text("Financial Summary")
                     .font(.headline)
                     .fontWeight(.semibold)
-                    .foregroundColor(.primary)
 
-                HStack(spacing: 16) {
-                    // Income
-                    VStack(spacing: 8) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "arrow.up.circle.fill")
-                                .foregroundColor(.green)
-
-                            Text("Income")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Text(totalIncome.formatted(.currency(code: "USD")))
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.green)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.green.opacity(0.1))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.green.opacity(0.3), lineWidth: 1),
-                                ),
-                        )
-
-                    // Expenses
-                    VStack(spacing: 8) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "arrow.down.circle.fill")
-                                .foregroundColor(.red)
-
-                            Text("Expenses")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Text(totalExpenses.formatted(.currency(code: "USD")))
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.red)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.red.opacity(0.1))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.red.opacity(0.3), lineWidth: 1),
-                                ),
-                        )
-                }
-
-                // Net Income
                 VStack(spacing: 8) {
-                    Text("Net Income")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                    Text("Income: $\(incomeAmount)")
+                        .foregroundColor(.green)
 
-                    Text(netIncome.formatted(.currency(code: "USD")))
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(netIncome >= 0 ? .green : .red)
+                    Text("Expenses: $\(expenseAmount)")
+                        .foregroundColor(.red)
+
+                    Text("Net: $\(netAmount)")
+                        .foregroundColor(netValue >= 0 ? .green : .red)
                 }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(
-                            LinearGradient(
-                                gradient: Gradient(colors: [
-                                    (netIncome >= 0 ? Color.green : Color.red).opacity(0.05),
-                                    (netIncome >= 0 ? Color.green : Color.red).opacity(0.1)
-                                ]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing,
-                                ),
-                            )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(
-                                    (netIncome >= 0 ? Color.green : Color.red).opacity(0.2),
-                                    lineWidth: 1
-                                ),
-                            ),
-                    )
             }
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(backgroundColor)
-                    .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
-                )
+                    .fill(Color.gray.opacity(0.1))
+            )
+        }
+
+        private var incomeAmount: String {
+            let total = transactions.filter { $0.transactionType == .income }.reduce(0) {
+                $0 + $1.amount
+            }
+            return String(format: "%.2f", total)
+        }
+
+        private var expenseAmount: String {
+            let total = transactions.filter { $0.transactionType == .expense }.reduce(0) {
+                $0 + $1.amount
+            }
+            return String(format: "%.2f", total)
+        }
+
+        private var netValue: Double {
+            let income = transactions.filter { $0.transactionType == .income }.reduce(0) {
+                $0 + $1.amount
+            }
+            let expenses = transactions.filter { $0.transactionType == .expense }.reduce(0) {
+                $0 + $1.amount
+            }
+            return income - expenses
+        }
+
+        private var netAmount: String {
+            return String(format: "%.2f", netValue)
         }
     }
-}
 
-#Preview {
-    Features.GoalsAndReports.EnhancedReportsSection(
-        transactions: [],
-        budgets: [],
-        categories: [],
-        )
+    // Helper views for enhanced reports section
+    struct SpendingByCategoryChart: View {
+        let transactions: [FinancialTransaction]
+
+        private var categorySpending: [(String, Double)] {
+            let expenseTransactions = transactions.filter { $0.transactionType == .expense }
+            var spendingByCategory: [String: Double] = [:]
+
+            for transaction in expenseTransactions {
+                let categoryName = transaction.category?.name ?? "Uncategorized"
+                spendingByCategory[categoryName, default: 0] += transaction.amount
+            }
+
+            return spendingByCategory.sorted { $0.value > $1.value }
+        }
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Spending by Category")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+
+                if categorySpending.isEmpty {
+                    Text("No expense data available")
+                        .foregroundColor(.secondary)
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                } else {
+                    VStack(spacing: 12) {
+                        ForEach(categorySpending.prefix(5), id: \.0) { category, amount in
+                            HStack {
+                                Text(category)
+                                    .font(.subheadline)
+                                Spacer()
+                                Text(amount.formatted(.currency(code: "USD")))
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                            }
+                        }
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.gray.opacity(0.1))
+                    )
+                }
+            }
+        }
+    }
+
+    struct BudgetPerformanceChart: View {
+        let budgets: [Budget]
+        let transactions: [FinancialTransaction]
+
+        private var budgetPerformance: [(Budget, Double, Double)] {
+            budgets.map { budget in
+                let spent =
+                    transactions
+                    .filter {
+                        $0.category?.name == budget.category?.name && $0.transactionType == .expense
+                    }
+                    .reduce(0) { $0 + $1.amount }
+                return (budget, spent, budget.limitAmount)
+            }
+        }
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Budget Performance")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+
+                if budgetPerformance.isEmpty {
+                    Text("No budget data available")
+                        .foregroundColor(.secondary)
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                } else {
+                    VStack(spacing: 12) {
+                        ForEach(budgetPerformance, id: \.0.id) { budget, spent, budgeted in
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(budget.category?.name ?? "Unknown")
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+
+                                GeometryReader { geometry in
+                                    ZStack(alignment: .leading) {
+                                        Rectangle()
+                                            .fill(Color.gray.opacity(0.2))
+                                            .frame(height: 8)
+                                            .cornerRadius(4)
+
+                                        Rectangle()
+                                            .fill(spent > budgeted ? Color.red : Color.green)
+                                            .frame(
+                                                width: min(
+                                                    geometry.size.width * (spent / budgeted),
+                                                    geometry.size.width), height: 8
+                                            )
+                                            .cornerRadius(4)
+                                    }
+                                }
+                                .frame(height: 8)
+
+                                HStack {
+                                    Text("Spent: \(spent.formatted(.currency(code: "USD")))")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Spacer()
+                                    Text("Budget: \(budgeted.formatted(.currency(code: "USD")))")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.gray.opacity(0.1))
+                    )
+                }
+            }
+        }
+    }
+
+    struct RecentTransactionsList: View {
+        let transactions: [FinancialTransaction]
+
+        private var sortedTransactions: [FinancialTransaction] {
+            Array(transactions.sorted { $0.date > $1.date }.prefix(5))
+        }
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Recent Transactions")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+
+                if transactions.isEmpty {
+                    emptyStateView
+                } else {
+                    transactionsListView
+                }
+            }
+        }
+
+        private var emptyStateView: some View {
+            Text("No recent transactions")
+                .foregroundColor(.secondary)
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .center)
+        }
+
+        private var transactionsListView: some View {
+            VStack(spacing: 8) {
+                ForEach(sortedTransactions, id: \.id) { transaction in
+                    transactionRow(for: transaction)
+                }
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.1))
+            )
+        }
+
+        private func transactionRow(for transaction: FinancialTransaction) -> some View {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(transaction.title)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                    Text(transaction.category?.name ?? "Uncategorized")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+                VStack(alignment: .trailing) {
+                    Text(transaction.amount.formatted(.currency(code: "USD")))
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor(transaction.transactionType == .income ? .green : .red)
+                    Text(transaction.date.formatted(date: .abbreviated, time: .omitted))
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding(.vertical, 4)
+        }
+    }
 }

@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		681809762DF34D4F00EB877A /* DataExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681809732DF34D4F00EB877A /* DataExportView.swift */; };
-		681809772DF34D4F00EB877A /* DataImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681809742DF34D4F00EB877A /* DataImportView.swift */; };
-		681809782DF34D4F00EB877A /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681809752DF34D4F00EB877A /* HapticManager.swift */; };
+		681809762DF34D4F00EB877A /* Shared/Views/Settings/DataExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681809732DF34D4F00EB877A /* Shared/Views/Settings/DataExportView.swift */; };
+		681809772DF34D4F00EB877A /* Shared/Views/Settings/DataImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681809742DF34D4F00EB877A /* Shared/Views/Settings/DataImportView.swift */; };
+		681809782DF34D4F00EB877A /* Shared/Utils/HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681809752DF34D4F00EB877A /* Shared/Utils/HapticManager.swift */; };
 		6B1A2B2C2C0D1E8F00123456 /* MomentumFinanceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B2B2C0D1E8F00123456 /* MomentumFinanceApp.swift */; };
 		6B1A2B2E2C0D1E8F00123456 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B2D2C0D1E8F00123456 /* ContentView.swift */; };
 		6B1A2B302C0D1E9000123456 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B1A2B2F2C0D1E9000123456 /* Assets.xcassets */; };
@@ -49,7 +49,7 @@
 		6B1A2B820C0D1E9100123456 /* ReportsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B812C0D1E9100123456 /* ReportsViews.swift */; };
 		6B1A2B840C0D1E9100123456 /* EnhancedReportsSectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B832C0D1E9100123456 /* EnhancedReportsSectionViews.swift */; };
 		6B1A2B860C0D1E9100123456 /* GoalUtilityViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B852C0D1E9100123456 /* GoalUtilityViews.swift */; };
-		6B1A2B880C0D1E9100123456 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B872C0D1E9100123456 /* SettingsView.swift */; };
+		6B1A2B880C0D1E9100123456 /* Shared/Views/Settings/SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B872C0D1E9100123456 /* Shared/Views/Settings/SettingsView.swift */; };
 		6B1A2B992C0D1E9100123456 /* MissingTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B952C0D1E9100123456 /* MissingTypes.swift */; };
 		6B1A2B9A2C0D1E9100123456 /* SearchEngineService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B962C0D1E9100123456 /* SearchEngineService.swift */; };
 		6B1A2B9B2C0D1E9100123456 /* SearchTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B972C0D1E9100123456 /* SearchTypes.swift */; };
@@ -57,9 +57,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		681809732DF34D4F00EB877A /* DataExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Views/Settings/DataExportView.swift; sourceTree = SOURCE_ROOT; };
-		681809742DF34D4F00EB877A /* DataImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Views/Settings/DataImportView.swift; sourceTree = SOURCE_ROOT; };
-		681809752DF34D4F00EB877A /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Utils/HapticManager.swift; sourceTree = SOURCE_ROOT; };
+		681809732DF34D4F00EB877A /* Shared/Views/Settings/DataExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Views/Settings/DataExportView.swift; sourceTree = SOURCE_ROOT; };
+		681809742DF34D4F00EB877A /* Shared/Views/Settings/DataImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Views/Settings/DataImportView.swift; sourceTree = SOURCE_ROOT; };
+		681809752DF34D4F00EB877A /* Shared/Utils/HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Utils/HapticManager.swift; sourceTree = SOURCE_ROOT; };
 		6B1A2B282C0D1E8F00123456 /* MomentumFinance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MomentumFinance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B1A2B2B2C0D1E8F00123456 /* MomentumFinanceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentumFinanceApp.swift; sourceTree = "<group>"; };
 		6B1A2B2D2C0D1E8F00123456 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -100,10 +100,11 @@
 		6B1A2B812C0D1E9100123456 /* ReportsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsViews.swift; sourceTree = "<group>"; };
 		6B1A2B832C0D1E9100123456 /* EnhancedReportsSectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedReportsSectionViews.swift; sourceTree = "<group>"; };
 		6B1A2B852C0D1E9100123456 /* GoalUtilityViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalUtilityViews.swift; sourceTree = "<group>"; };
-		6B1A2B872C0D1E9100123456 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Views/Settings/SettingsView.swift; sourceTree = SOURCE_ROOT; };
+		6B1A2B872C0D1E9100123456 /* Shared/Views/Settings/SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Views/Settings/SettingsView.swift; sourceTree = SOURCE_ROOT; };
 		6B1A2B952C0D1E9100123456 /* MissingTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingTypes.swift; sourceTree = "<group>"; };
 		6B1A2B962C0D1E9100123456 /* SearchEngineService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineService.swift; sourceTree = "<group>"; };
 		6B1A2B972C0D1E9100123456 /* SearchTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTypes.swift; sourceTree = "<group>"; };
+		6B1A2B9C2C0D1E9100123456 /* TabSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,33 +218,6 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		6B1A2B932C0D1E9100123456 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				6B1A2B982C0D1E9100123456 /* Settings */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		6B1A2B942C0D1E9100123456 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				681809752DF34D4F00EB877A /* HapticManager.swift */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		6B1A2B9C2C0D1E9100123456 /* TabSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSection.swift; sourceTree = "<group>"; };
-		6B1A2B982C0D1E9100123456 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				681809732DF34D4F00EB877A /* DataExportView.swift */,
-				681809742DF34D4F00EB877A /* DataImportView.swift */,
-				6B1A2B872C0D1E9100123456 /* SettingsView.swift */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
 		6B1A2B8E2C0D1E9100123456 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -298,6 +272,32 @@
 			path = GoalsAndReports;
 			sourceTree = "<group>";
 		};
+		6B1A2B932C0D1E9100123456 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B982C0D1E9100123456 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6B1A2B942C0D1E9100123456 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				681809752DF34D4F00EB877A /* Shared/Utils/HapticManager.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		6B1A2B982C0D1E9100123456 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				681809732DF34D4F00EB877A /* Shared/Views/Settings/DataExportView.swift */,
+				681809742DF34D4F00EB877A /* Shared/Views/Settings/DataImportView.swift */,
+				6B1A2B872C0D1E9100123456 /* Shared/Views/Settings/SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -324,7 +324,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					6B1A2B272C0D1E8F00123456 = {
 						CreatedOnToolsVersion = 15.3;
@@ -396,14 +396,14 @@
 				6B1A2B7A0C0D1E9100123456 /* GoalsAndReportsView.swift in Sources */,
 				6B1A2B7C0C0D1E9100123456 /* GoalsAndReportsViewModel.swift in Sources */,
 				6B1A2B7E0C0D1E9100123456 /* SavingsGoalViews.swift in Sources */,
-				681809762DF34D4F00EB877A /* DataExportView.swift in Sources */,
-				681809772DF34D4F00EB877A /* DataImportView.swift in Sources */,
-				681809782DF34D4F00EB877A /* HapticManager.swift in Sources */,
+				681809762DF34D4F00EB877A /* Shared/Views/Settings/DataExportView.swift in Sources */,
+				681809772DF34D4F00EB877A /* Shared/Views/Settings/DataImportView.swift in Sources */,
+				681809782DF34D4F00EB877A /* Shared/Utils/HapticManager.swift in Sources */,
 				6B1A2B800C0D1E9100123456 /* SavingsGoalManagementViews.swift in Sources */,
 				6B1A2B820C0D1E9100123456 /* ReportsViews.swift in Sources */,
 				6B1A2B840C0D1E9100123456 /* EnhancedReportsSectionViews.swift in Sources */,
 				6B1A2B860C0D1E9100123456 /* GoalUtilityViews.swift in Sources */,
-				6B1A2B880C0D1E9100123456 /* SettingsView.swift in Sources */,
+				6B1A2B880C0D1E9100123456 /* Shared/Views/Settings/SettingsView.swift in Sources */,
 				6B1A2B992C0D1E9100123456 /* MissingTypes.swift in Sources */,
 				6B1A2B9A2C0D1E9100123456 /* SearchEngineService.swift in Sources */,
 				6B1A2B9B2C0D1E9100123456 /* SearchTypes.swift in Sources */,
@@ -447,7 +447,9 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3N5528D82R;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -471,6 +473,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
@@ -511,7 +514,9 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3N5528D82R;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -528,6 +533,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 6.0;
 				VALIDATE_PRODUCT = YES;
@@ -541,8 +547,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MomentumFinance/Preview Content\"";
-				DEVELOPMENT_TEAM = 3N5528D82R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -558,9 +564,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.momentumfinance.MomentumFinance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
 		};
@@ -571,8 +578,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MomentumFinance/Preview Content\"";
-				DEVELOPMENT_TEAM = 3N5528D82R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -588,9 +595,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.momentumfinance.MomentumFinance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Release;
 		};
