@@ -1,5 +1,8 @@
-import AppKit
 import SwiftUI
+
+#if canImport(AppKit)
+    import AppKit
+#endif
 
 #if canImport(AppKit)
 #endif
@@ -48,29 +51,29 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
         private var secondaryBackgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemGroupedBackground)
+                return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.gray.opacity(0.1)
+                return Color.gray.opacity(0.1)
             #endif
         }
 
         private var toolbarPlacement: ToolbarItemPlacement {
             #if canImport(UIKit)
-            return .navigationBarTrailing
+                return .navigationBarTrailing
             #else
-            return .primaryAction
+                return .primaryAction
             #endif
         }
 
@@ -97,13 +100,13 @@ extension Features.Subscriptions {
                         subscriptions: subscriptions,
                         selectedFilter: $selectedFilter,
                         showingAddSubscription: $showingAddSubscription,
-                        )
+                    )
 
                     // Content Section
                     SubscriptionContentView(
                         filteredSubscriptions: filteredSubscriptions,
                         selectedSubscription: $selectedSubscription,
-                        )
+                    )
                 }
                 .navigationTitle("Subscriptions")
                 .toolbar {
@@ -127,10 +130,7 @@ extension Features.Subscriptions {
                     }
                 }
                 .sheet(isPresented: $showingAddSubscription) {
-                    // MARK: - Add Subscription Feature (Implementation pending)
-
-                    Text("Add Subscription - Coming Soon")
-                        .padding()
+                    AddSubscriptionView(categories: categories, accounts: accounts)
                 }
                 .sheet(isPresented: $showingSearch) {
                     Features.GlobalSearch.GlobalSearchView()
@@ -152,9 +152,9 @@ extension Features.Subscriptions {
             accounts: [FinancialAccount] = []
         ) {
             #if !canImport(SwiftData)
-            self.subscriptions = subscriptions
-            self.categories = categories
-            self.accounts = accounts
+                self.subscriptions = subscriptions
+                self.categories = categories
+                self.accounts = accounts
             #endif
         }
     }
@@ -280,9 +280,99 @@ extension Features.Subscriptions {
     }
 }
 
-// MARK: - Preview
+// MARK: - Add Subscription View
 
-#Preview {
-    Features.Subscriptions.SubscriptionsView()
-        .modelContainer(for: [Subscription.self, ExpenseCategory.self, FinancialAccount.self])
+struct AddSubscriptionView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var name = ""
+    @State private var amount = ""
+    @State private var billingCycle: BillingCycle = .monthly
+    @State private var selectedCategory: ExpenseCategory?
+    @State private var selectedAccount: FinancialAccount?
+    @State private var startDate = Date()
+    @State private var notes = ""
+
+    let categories: [ExpenseCategory]
+    let accounts: [FinancialAccount]
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Subscription Details") {
+                    TextField("Name", text: $name)
+                    TextField("Amount", text: $amount)
+                        #if canImport(UIKit)
+                            .keyboardType(.decimalPad)
+                        #endif
+
+                    Picker("Billing Cycle", selection: $billingCycle) {
+                        ForEach(BillingCycle.allCases, id: \.self) { cycle in
+                            Text(cycle.rawValue).tag(cycle)
+                        }
+                    }
+                }
+
+                Section("Category & Account") {
+                    Picker("Category", selection: $selectedCategory) {
+                        Text("None").tag(ExpenseCategory?.none)
+                        ForEach(categories, id: \.id) { category in
+                            Text(category.name).tag(category as ExpenseCategory?)
+                        }
+                    }
+
+                    Picker("Account", selection: $selectedAccount) {
+                        Text("None").tag(FinancialAccount?.none)
+                        ForEach(accounts, id: \.id) { account in
+                            Text(account.name).tag(account as FinancialAccount?)
+                        }
+                    }
+                }
+
+                Section("Additional Info") {
+                    DatePicker("Start Date", selection: $startDate, displayedComponents: .date)
+                    TextField("Notes (Optional)", text: $notes)
+                }
+            }
+            .navigationTitle("Add Subscription")
+            #if canImport(UIKit)
+                .navigationBarTitleDisplayMode(.inline)
+            #endif
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        saveSubscription()
+                    }
+                    .disabled(name.isEmpty || amount.isEmpty)
+                }
+            }
+        }
+    }
+
+    private func saveSubscription() {
+        guard let amountValue = Double(amount) else { return }
+
+        let subscription = Subscription(
+            name: name,
+            amount: amountValue,
+            billingCycle: billingCycle,
+            nextDueDate: startDate
+        )
+
+        // Set optional properties
+        subscription.category = selectedCategory
+        subscription.account = selectedAccount
+        if !notes.isEmpty {
+            subscription.notes = notes
+        }
+
+        modelContext.insert(subscription)
+        dismiss()
+    }
 }

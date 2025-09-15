@@ -1,7 +1,9 @@
-import AppKit
 import SwiftData
 import SwiftUI
-import UIKit
+
+#if canImport(AppKit)
+    import AppKit
+#endif
 
 #if canImport(UIKit)
 #endif
@@ -27,7 +29,7 @@ struct SavingsGoalsSection: View {
                 "No Savings Goals",
                 systemImage: "target",
                 description: Text("Create your first savings goal to start building your future"),
-                )
+            )
         } else {
             ScrollView {
                 LazyVStack(spacing: 16) {
@@ -50,11 +52,11 @@ struct SavingsGoalCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
         #else
-        return Color.white
+            return Color.white
         #endif
     }
 

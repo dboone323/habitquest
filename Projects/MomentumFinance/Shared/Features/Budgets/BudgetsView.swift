@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 extension Features.Budgets {
@@ -19,16 +19,16 @@ extension Features.Budgets {
         private var modelContext
         @State private var viewModel = BudgetsViewModel()
         #if canImport(SwiftData)
-        #if canImport(SwiftData)
-        private var budgets: [Budget] = []
-        private var categories: [Category] = []
+            #if canImport(SwiftData)
+                private var budgets: [Budget] = []
+                private var categories: [Category] = []
+            #else
+                private var budgets: [Budget] = []
+                private var categories: [Category] = []
+            #endif
         #else
-        private var budgets: [Budget] = []
-        private var categories: [Category] = []
-        #endif
-        #else
-        private var budgets: [Budget] = []
-        private var categories: [Category] = []
+            private var budgets: [Budget] = []
+            private var categories: [Category] = []
         #endif
         @State private var showingAddBudget = false
         @State private var selectedTimeframe: TimeFrame = .thisMonth
@@ -83,9 +83,7 @@ extension Features.Budgets {
                     AddBudgetView(categories: categories)
                 }
                 .sheet(isPresented: $showingSearch) {
-                    // TODO: Implement GlobalSearchView or use a placeholder
-                    Text("Search functionality coming soon")
-                        .padding()
+                    BudgetSearchView(budgets: budgets)
                 }
             }
         }
@@ -209,9 +207,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-            return Color(uiColor: .systemGroupedBackground)
+                return Color(uiColor: .systemGroupedBackground)
             #else
-            return Color(nsColor: .controlBackgroundColor)
+                return Color(nsColor: .controlBackgroundColor)
             #endif
         }
     }
@@ -266,7 +264,7 @@ extension Features.Budgets {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColorForPlatform())
                     .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                )
+            )
         }
 
         private var totalBudget: Double {
@@ -299,9 +297,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-            return Color(uiColor: .systemGroupedBackground)
+                return Color(uiColor: .systemGroupedBackground)
             #else
-            return Color(nsColor: .controlBackgroundColor)
+                return Color(nsColor: .controlBackgroundColor)
             #endif
         }
     }
@@ -346,7 +344,7 @@ extension Features.Budgets {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColorForPlatform())
                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 1),
-                )
+            )
         }
 
         private var spentPercentage: Double {
@@ -367,9 +365,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-            return Color(uiColor: .systemGroupedBackground)
+                return Color(uiColor: .systemGroupedBackground)
             #else
-            return Color(nsColor: .controlBackgroundColor)
+                return Color(nsColor: .controlBackgroundColor)
             #endif
         }
     }
@@ -391,7 +389,7 @@ extension Features.Budgets {
                             "Text Field"
                         )
                         #if os(iOS)
-                        .keyboardType(.decimalPad)
+                            .keyboardType(.decimalPad)
                         #endif
                     }
 
@@ -408,7 +406,7 @@ extension Features.Budgets {
                 }
                 .navigationTitle("New Budget")
                 #if os(iOS)
-                .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarTitleDisplayMode(.inline)
                 #endif
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
@@ -432,6 +430,61 @@ extension Features.Budgets {
     }
 }
 
-#Preview {
-    Features.Budgets.BudgetsView()
+struct BudgetSearchView: View {
+    let budgets: [Budget]
+    @Environment(\.dismiss) private var dismiss
+    @State private var searchText = ""
+
+    private var filteredBudgets: [Budget] {
+        if searchText.isEmpty {
+            return budgets
+        } else {
+            return budgets.filter { budget in
+                budget.name.localizedCaseInsensitiveContains(searchText)
+                    || budget.category?.name.localizedCaseInsensitiveContains(searchText) ?? false
+            }
+        }
+    }
+
+    var body: some View {
+        NavigationStack {
+            List {
+                if filteredBudgets.isEmpty {
+                    Text("No budgets found")
+                        .foregroundColor(.secondary)
+                        .padding()
+                } else {
+                    ForEach(filteredBudgets, id: \.name) { budget in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(budget.name)
+                                .font(.headline)
+                            if let categoryName = budget.category?.name {
+                                Text("Category: \(categoryName)")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            Text(
+                                "Budget: $\(budget.limitAmount, specifier: "%.2f") • Spent: $\(budget.spentAmount, specifier: "%.2f")"
+                            )
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+            }
+            .navigationTitle("Search Budgets")
+            #if canImport(UIKit)
+                .navigationBarTitleDisplayMode(.inline)
+            #endif
+            .searchable(text: $searchText, prompt: "Search budgets...")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
 }

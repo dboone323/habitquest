@@ -1,8 +1,8 @@
-import AppKit
 import SwiftData
 import SwiftUI
 
 #if canImport(AppKit)
+    import AppKit
 #endif
 
 // Temporary ColorTheme stub for macOS compatibility
@@ -139,7 +139,7 @@ extension Features.Dashboard {
                 .background(Color.secondary.opacity(0.05))
                 .navigationTitle("Dashboard")
                 #if os(iOS)
-                .navigationBarTitleDisplayMode(.large)
+                    .navigationBarTitleDisplayMode(.large)
                 #endif
                 .onAppear {
                     viewModel.setModelContext(modelContext)
@@ -155,9 +155,9 @@ extension Features.Dashboard {
                         Features.Transactions.TransactionsView()
                     case .subscriptions:
                         #if canImport(SwiftData)
-                        Features.Subscriptions.SubscriptionsView()
+                            Features.Subscriptions.SubscriptionsView()
                         #else
-                        Text("Subscriptions View - SwiftData not available")
+                            Text("Subscriptions View - SwiftData not available")
                         #endif
                     case .budgets:
                         Features.Budgets.BudgetsView()
