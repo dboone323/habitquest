@@ -213,4 +213,4 @@ class RobustFileUploadViewTests: XCTestCase {
         // TODO: Implement method tests for structProgressIndicatorView:View{
         XCTAssertTrue(true, "Placeholder test for structProgressIndicatorView:View{ methods")
     }
-}
+    }

@@ -73,4 +73,4 @@ class AILearningCoordinatorTests: XCTestCase {
         // TODO: Implement method tests for structRecommendedFix{
         XCTAssertTrue(true, "Placeholder test for structRecommendedFix{ methods")
     }
-}
+    }

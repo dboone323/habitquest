@@ -33,4 +33,4 @@ class CodingReviewerAppTests: XCTestCase {
         // TODO: Implement method tests for structCodingReviewerApp:App{
         XCTAssertTrue(true, "Placeholder test for structCodingReviewerApp:App{ methods")
     }
-}
+    }

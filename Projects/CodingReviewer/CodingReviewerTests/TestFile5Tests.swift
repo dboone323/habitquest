@@ -53,4 +53,4 @@ class TestFile5Tests: XCTestCase {
         // TODO: Implement method tests for structTestView5:View{
         XCTAssertTrue(true, "Placeholder test for structTestView5:View{ methods")
     }
-}
+    }

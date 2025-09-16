@@ -153,4 +153,4 @@ class FileUploadViewTests: XCTestCase {
         // TODO: Implement method tests for structAnalysisResultsView:View{
         XCTAssertTrue(true, "Placeholder test for structAnalysisResultsView:View{ methods")
     }
-}
+    }

@@ -173,4 +173,4 @@ class AIServiceProtocolTests: XCTestCase {
         // TODO: Implement method tests for structAPIUsageStats:Codable{
         XCTAssertTrue(true, "Placeholder test for structAPIUsageStats:Codable{ methods")
     }
-}
+    }

@@ -33,4 +33,4 @@ class CodeAnalyzersTests: XCTestCase {
         // TODO: Implement method tests for enumCodeAnalyzers{
         XCTAssertTrue(true, "Placeholder test for enumCodeAnalyzers{ methods")
     }
-}
+    }

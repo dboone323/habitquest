@@ -33,4 +33,4 @@ class sampleTests: XCTestCase {
         // TODO: Implement method tests for classTestClass{
         XCTAssertTrue(true, "Placeholder test for classTestClass{ methods")
     }
-}
+    }

@@ -53,4 +53,4 @@ class PerformanceTrackerTests: XCTestCase {
         // TODO: Implement method tests for structPerformanceMetric{
         XCTAssertTrue(true, "Placeholder test for structPerformanceMetric{ methods")
     }
-}
+    }

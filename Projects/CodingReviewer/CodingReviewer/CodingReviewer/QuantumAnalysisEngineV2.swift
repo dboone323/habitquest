@@ -21,8 +21,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
 
     /// Ultra-enhanced quantum analysis with 300x+ performance target
     func quantumAnalyzeCodeV2(_ code: String, language: ProgrammingLanguage) async
-        -> QuantumAnalysisResultV2
-    {
+    -> QuantumAnalysisResultV2 {
         let quantumStart = Date()
         isQuantumActive = true
         processingStatus = "Quantum processing active..."
@@ -123,8 +122,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
     }
 
     private func processEnhancedQuantumChunk(_ chunk: String, index: Int) async
-        -> EnhancedAnalysisChunk
-    {
+    -> EnhancedAnalysisChunk {
         // Enhanced quantum processing with optimized algorithms
         let startTime = Date()
 
@@ -215,8 +213,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
         return issues
     }
 
-    private func generateQuantumInsightsV2(_ patterns: [ConsciousnessPattern]) -> [QuantumInsightV2]
-    {
+    private func generateQuantumInsightsV2(_ patterns: [ConsciousnessPattern]) -> [QuantumInsightV2] {
         patterns.map { pattern in
             QuantumInsightV2(
                 title: pattern.type.description,
@@ -230,8 +227,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
     }
 
     private func calculatePerformanceMetrics(_ executionTime: TimeInterval, _ chunkCount: Int)
-        -> QuantumPerformanceMetrics
-    {
+    -> QuantumPerformanceMetrics {
         let throughput = Double(chunkCount) / executionTime
         let efficiency = min(1.0, throughput / Double(quantumThreads))
         let quantumAdvantage = min(500.0, 1.0 / max(executionTime, 0.001) * 0.001)
@@ -276,7 +272,7 @@ struct ConsciousnessPattern {
 
     enum PatternType {
         case highComplexity, designPatternRich, evolutionaryPattern, quantumOptimized,
-            consciousnessEnhanced
+             consciousnessEnhanced
 
         var description: String {
             switch self {
@@ -399,8 +395,7 @@ class ConsciousnessNeuralProcessor {
 @MainActor
 class BiologicalEvolutionEngine {
     func evolveCodeStructure(_ code: String, patterns: [ConsciousnessPattern]) async
-        -> BiologicalEvolutionResult
-    {
+    -> BiologicalEvolutionResult {
         // Simulate biological evolution of code structure
         try? await Task.sleep(nanoseconds: 300_000)  // 0.3ms evolution time
 

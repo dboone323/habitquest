@@ -113,4 +113,4 @@ class MLIntegrationServiceTests: XCTestCase {
         // TODO: Implement method tests for structCrossProjectLearning:Identifiable{
         XCTAssertTrue(true, "Placeholder test for structCrossProjectLearning:Identifiable{ methods")
     }
-}
+    }

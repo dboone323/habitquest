@@ -73,4 +73,4 @@ class QuantumUIV2Tests: XCTestCase {
         // TODO: Implement method tests for structMetricCard:View{
         XCTAssertTrue(true, "Placeholder test for structMetricCard:View{ methods")
     }
-}
+    }

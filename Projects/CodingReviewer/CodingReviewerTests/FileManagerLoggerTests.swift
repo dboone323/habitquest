@@ -53,4 +53,4 @@ class FileManagerLoggerTests: XCTestCase {
         // TODO: Implement method tests for structSimpleLogger{
         XCTAssertTrue(true, "Placeholder test for structSimpleLogger{ methods")
     }
-}
+    }

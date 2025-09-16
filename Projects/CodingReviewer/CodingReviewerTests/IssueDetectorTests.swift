@@ -37,100 +37,100 @@ class IssueDetectorTests: XCTestCase {
     // MARK: - structDetectedIssue:Identifiable,Codable{ Tests
 
     func teststructDetectedIssue:Identifiable,Codable{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for structDetectedIssue:Identifiable,Codable{
-        XCTAssertTrue(true, "Placeholder test for structDetectedIssue:Identifiable,Codable{")
+    // Test basic initialization
+    // TODO: Implement initialization test for structDetectedIssue:Identifiable,Codable{
+    XCTAssertTrue(true, "Placeholder test for structDetectedIssue:Identifiable,Codable{")
     }
 
     func teststructDetectedIssue:Identifiable,Codable{Properties() {
-        // Test property access and validation
-        // TODO: Implement property tests for structDetectedIssue:Identifiable,Codable{
-        XCTAssertTrue(true, "Placeholder test for structDetectedIssue:Identifiable,Codable{ properties")
+    // Test property access and validation
+    // TODO: Implement property tests for structDetectedIssue:Identifiable,Codable{
+    XCTAssertTrue(true, "Placeholder test for structDetectedIssue:Identifiable,Codable{ properties")
     }
 
     func teststructDetectedIssue:Identifiable,Codable{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for structDetectedIssue:Identifiable,Codable{
-        XCTAssertTrue(true, "Placeholder test for structDetectedIssue:Identifiable,Codable{ methods")
+    // Test method functionality
+    // TODO: Implement method tests for structDetectedIssue:Identifiable,Codable{
+    XCTAssertTrue(true, "Placeholder test for structDetectedIssue:Identifiable,Codable{ methods")
     }
 
     // MARK: - structAutoFix:Identifiable,Codable{ Tests
 
     func teststructAutoFix:Identifiable,Codable{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for structAutoFix:Identifiable,Codable{
-        XCTAssertTrue(true, "Placeholder test for structAutoFix:Identifiable,Codable{")
+    // Test basic initialization
+    // TODO: Implement initialization test for structAutoFix:Identifiable,Codable{
+    XCTAssertTrue(true, "Placeholder test for structAutoFix:Identifiable,Codable{")
     }
 
     func teststructAutoFix:Identifiable,Codable{Properties() {
-        // Test property access and validation
-        // TODO: Implement property tests for structAutoFix:Identifiable,Codable{
-        XCTAssertTrue(true, "Placeholder test for structAutoFix:Identifiable,Codable{ properties")
+    // Test property access and validation
+    // TODO: Implement property tests for structAutoFix:Identifiable,Codable{
+    XCTAssertTrue(true, "Placeholder test for structAutoFix:Identifiable,Codable{ properties")
     }
 
     func teststructAutoFix:Identifiable,Codable{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for structAutoFix:Identifiable,Codable{
-        XCTAssertTrue(true, "Placeholder test for structAutoFix:Identifiable,Codable{ methods")
+    // Test method functionality
+    // TODO: Implement method tests for structAutoFix:Identifiable,Codable{
+    XCTAssertTrue(true, "Placeholder test for structAutoFix:Identifiable,Codable{ methods")
     }
 
     // MARK: - structSmartEnhancementView:View{ Tests
 
     func teststructSmartEnhancementView:View{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for structSmartEnhancementView:View{
-        XCTAssertTrue(true, "Placeholder test for structSmartEnhancementView:View{")
+    // Test basic initialization
+    // TODO: Implement initialization test for structSmartEnhancementView:View{
+    XCTAssertTrue(true, "Placeholder test for structSmartEnhancementView:View{")
     }
 
     func teststructSmartEnhancementView:View{Properties() {
-        // Test property access and validation
-        // TODO: Implement property tests for structSmartEnhancementView:View{
-        XCTAssertTrue(true, "Placeholder test for structSmartEnhancementView:View{ properties")
+    // Test property access and validation
+    // TODO: Implement property tests for structSmartEnhancementView:View{
+    XCTAssertTrue(true, "Placeholder test for structSmartEnhancementView:View{ properties")
     }
 
     func teststructSmartEnhancementView:View{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for structSmartEnhancementView:View{
-        XCTAssertTrue(true, "Placeholder test for structSmartEnhancementView:View{ methods")
+    // Test method functionality
+    // TODO: Implement method tests for structSmartEnhancementView:View{
+    XCTAssertTrue(true, "Placeholder test for structSmartEnhancementView:View{ methods")
     }
 
     // MARK: - structDetectedIssueRowView:View{ Tests
 
     func teststructDetectedIssueRowView:View{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for structDetectedIssueRowView:View{
-        XCTAssertTrue(true, "Placeholder test for structDetectedIssueRowView:View{")
+    // Test basic initialization
+    // TODO: Implement initialization test for structDetectedIssueRowView:View{
+    XCTAssertTrue(true, "Placeholder test for structDetectedIssueRowView:View{")
     }
 
     func teststructDetectedIssueRowView:View{Properties() {
-        // Test property access and validation
-        // TODO: Implement property tests for structDetectedIssueRowView:View{
-        XCTAssertTrue(true, "Placeholder test for structDetectedIssueRowView:View{ properties")
+    // Test property access and validation
+    // TODO: Implement property tests for structDetectedIssueRowView:View{
+    XCTAssertTrue(true, "Placeholder test for structDetectedIssueRowView:View{ properties")
     }
 
     func teststructDetectedIssueRowView:View{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for structDetectedIssueRowView:View{
-        XCTAssertTrue(true, "Placeholder test for structDetectedIssueRowView:View{ methods")
+    // Test method functionality
+    // TODO: Implement method tests for structDetectedIssueRowView:View{
+    XCTAssertTrue(true, "Placeholder test for structDetectedIssueRowView:View{ methods")
     }
 
     // MARK: - structScanControlsView:View{ Tests
 
     func teststructScanControlsView:View{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for structScanControlsView:View{
-        XCTAssertTrue(true, "Placeholder test for structScanControlsView:View{")
+    // Test basic initialization
+    // TODO: Implement initialization test for structScanControlsView:View{
+    XCTAssertTrue(true, "Placeholder test for structScanControlsView:View{")
     }
 
     func teststructScanControlsView:View{Properties() {
-        // Test property access and validation
-        // TODO: Implement property tests for structScanControlsView:View{
-        XCTAssertTrue(true, "Placeholder test for structScanControlsView:View{ properties")
+    // Test property access and validation
+    // TODO: Implement property tests for structScanControlsView:View{
+    XCTAssertTrue(true, "Placeholder test for structScanControlsView:View{ properties")
     }
 
     func teststructScanControlsView:View{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for structScanControlsView:View{
-        XCTAssertTrue(true, "Placeholder test for structScanControlsView:View{ methods")
+    // Test method functionality
+    // TODO: Implement method tests for structScanControlsView:View{
+    XCTAssertTrue(true, "Placeholder test for structScanControlsView:View{ methods")
     }
-}
+    }

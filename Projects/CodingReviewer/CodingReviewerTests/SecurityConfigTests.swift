@@ -33,4 +33,4 @@ class SecurityConfigTests: XCTestCase {
         // TODO: Implement method tests for enumSecurityConfig{
         XCTAssertTrue(true, "Placeholder test for enumSecurityConfig{ methods")
     }
-}
+    }

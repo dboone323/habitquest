@@ -73,4 +73,4 @@ class PatternAnalysisViewTests: XCTestCase {
         // TODO: Implement method tests for structFeatureItem:View{
         XCTAssertTrue(true, "Placeholder test for structFeatureItem:View{ methods")
     }
-}
+    }

@@ -53,4 +53,4 @@ class CodeReviewViewModelTests: XCTestCase {
         // TODO: Implement method tests for structCodeMetrics{
         XCTAssertTrue(true, "Placeholder test for structCodeMetrics{ methods")
     }
-}
+    }

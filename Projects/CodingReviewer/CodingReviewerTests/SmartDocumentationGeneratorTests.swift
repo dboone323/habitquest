@@ -57,20 +57,20 @@ class SmartDocumentationGeneratorTests: XCTestCase {
     // MARK: - structDocumentationSuggestion:Codable,Identifiable{ Tests
 
     func teststructDocumentationSuggestion:Codable,Identifiable{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for structDocumentationSuggestion:Codable,Identifiable{
-        XCTAssertTrue(true, "Placeholder test for structDocumentationSuggestion:Codable,Identifiable{")
+    // Test basic initialization
+    // TODO: Implement initialization test for structDocumentationSuggestion:Codable,Identifiable{
+    XCTAssertTrue(true, "Placeholder test for structDocumentationSuggestion:Codable,Identifiable{")
     }
 
     func teststructDocumentationSuggestion:Codable,Identifiable{Properties() {
-        // Test property access and validation
-        // TODO: Implement property tests for structDocumentationSuggestion:Codable,Identifiable{
-        XCTAssertTrue(true, "Placeholder test for structDocumentationSuggestion:Codable,Identifiable{ properties")
+    // Test property access and validation
+    // TODO: Implement property tests for structDocumentationSuggestion:Codable,Identifiable{
+    XCTAssertTrue(true, "Placeholder test for structDocumentationSuggestion:Codable,Identifiable{ properties")
     }
 
     func teststructDocumentationSuggestion:Codable,Identifiable{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for structDocumentationSuggestion:Codable,Identifiable{
-        XCTAssertTrue(true, "Placeholder test for structDocumentationSuggestion:Codable,Identifiable{ methods")
+    // Test method functionality
+    // TODO: Implement method tests for structDocumentationSuggestion:Codable,Identifiable{
+    XCTAssertTrue(true, "Placeholder test for structDocumentationSuggestion:Codable,Identifiable{ methods")
     }
-}
+    }

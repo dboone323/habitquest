@@ -133,4 +133,4 @@ class AutomaticFixEngineTests: XCTestCase {
         // TODO: Implement method tests for enumFixEngineError:LocalizedError{
         XCTAssertTrue(true, "Placeholder test for enumFixEngineError:LocalizedError{ methods")
     }
-}
+    }

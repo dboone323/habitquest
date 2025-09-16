@@ -17,20 +17,20 @@ class CodeFileTests: XCTestCase {
     // MARK: - structCodeFile:Identifiable,Hashable,Codable,Equatable{ Tests
 
     func teststructCodeFile:Identifiable,Hashable,Codable,Equatable{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for structCodeFile:Identifiable,Hashable,Codable,Equatable{
-        XCTAssertTrue(true, "Placeholder test for structCodeFile:Identifiable,Hashable,Codable,Equatable{")
+    // Test basic initialization
+    // TODO: Implement initialization test for structCodeFile:Identifiable,Hashable,Codable,Equatable{
+    XCTAssertTrue(true, "Placeholder test for structCodeFile:Identifiable,Hashable,Codable,Equatable{")
     }
 
     func teststructCodeFile:Identifiable,Hashable,Codable,Equatable{Properties() {
-        // Test property access and validation
-        // TODO: Implement property tests for structCodeFile:Identifiable,Hashable,Codable,Equatable{
-        XCTAssertTrue(true, "Placeholder test for structCodeFile:Identifiable,Hashable,Codable,Equatable{ properties")
+    // Test property access and validation
+    // TODO: Implement property tests for structCodeFile:Identifiable,Hashable,Codable,Equatable{
+    XCTAssertTrue(true, "Placeholder test for structCodeFile:Identifiable,Hashable,Codable,Equatable{ properties")
     }
 
     func teststructCodeFile:Identifiable,Hashable,Codable,Equatable{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for structCodeFile:Identifiable,Hashable,Codable,Equatable{
-        XCTAssertTrue(true, "Placeholder test for structCodeFile:Identifiable,Hashable,Codable,Equatable{ methods")
+    // Test method functionality
+    // TODO: Implement method tests for structCodeFile:Identifiable,Hashable,Codable,Equatable{
+    XCTAssertTrue(true, "Placeholder test for structCodeFile:Identifiable,Hashable,Codable,Equatable{ methods")
     }
 }

@@ -33,4 +33,4 @@ class ViewControllerTests: XCTestCase {
         // TODO: Implement method tests for classViewController:NSViewController{
         XCTAssertTrue(true, "Placeholder test for classViewController:NSViewController{ methods")
     }
-}
+    }

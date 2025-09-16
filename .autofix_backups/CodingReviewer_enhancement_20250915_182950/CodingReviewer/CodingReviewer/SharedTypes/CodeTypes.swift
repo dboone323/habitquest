@@ -1,0 +1,72 @@
+//
+// CodeTypes.swift
+// CodingReviewer
+//
+// SharedTypes Module - Centralized type definitions
+// Created on July 27, 2025
+//
+
+import Foundation
+
+// MARK: - Programming Language Types
+
+// Note: CodeLanguage enum is now defined in Services/LanguageDetectionService.swift
+// This allows the service to manage language-specific functionality independently
+
+// MARK: - Quality and Analysis Types
+
+// Severity enum removed - using SeverityLevel from UnifiedDataModels.swift
+
+enum QualityLevel: String, CaseIterable, Codable {
+    case excellent = "Excellent"
+    case good = "Good"
+    case fair = "Fair"
+    case poor = "Poor"
+    case critical = "Critical"
+
+    var score: Int {
+        switch self {
+        case .excellent: 90
+        case .good: 75
+        case .fair: 60
+        case .poor: 40
+        case .critical: 20
+        }
+    }
+}
+
+enum EffortLevel: String, CaseIterable, Codable {
+    case minimal = "Minimal"
+    case low = "Low"
+    case medium = "Medium"
+    case high = "High"
+    case extensive = "Extensive"
+
+    var estimatedHours: String {
+        switch self {
+        case .minimal: "< 1 hour"
+        case .low: "1-4 hours"
+        case .medium: "1-2 days"
+        case .high: "3-5 days"
+        case .extensive: "1+ weeks"
+        }
+    }
+}
+
+enum ImpactLevel: String, CaseIterable, Codable {
+    case negligible = "Negligible"
+    case minor = "Minor"
+    case moderate = "Moderate"
+    case major = "Major"
+    case critical = "Critical"
+
+    var priority: Int {
+        switch self {
+        case .negligible: 1
+        case .minor: 2
+        case .moderate: 3
+        case .major: 4
+        case .critical: 5
+        }
+    }
+}

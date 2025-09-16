@@ -260,8 +260,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     }
 
     private func generateRecommendations(from results: ComprehensiveAnalysisResult) async
-        -> [ProjectRecommendation]
-    {
+    -> [ProjectRecommendation] {
         var recommendations: [ProjectRecommendation] = []
 
         // Architecture recommendations
@@ -400,7 +399,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             results.architecture.score,
             results.performance.score,
             results.security.score,
-            results.quality.score,
+            results.quality.score
         ]
 
         return scores.reduce(0.0, +) / Double(scores.count)
@@ -428,8 +427,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     }
 
     private func mapSeverityToPriority(_ severity: CodeImprovement.Severity)
-        -> FileRecommendation.Priority
-    {
+    -> FileRecommendation.Priority {
         switch severity {
         case .error: .high
         case .warning: .medium
@@ -458,8 +456,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     }
 
     private func convertProjectSeverityToSeverityLevel(_ severity: ProjectIssue.Severity)
-        -> SeverityLevel
-    {
+    -> SeverityLevel {
         switch severity {
         case .error:
             return .critical

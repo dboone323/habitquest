@@ -33,4 +33,4 @@ class AppErrorTests: XCTestCase {
         // TODO: Implement method tests for enumAppError:LocalizedError{
         XCTAssertTrue(true, "Placeholder test for enumAppError:LocalizedError{ methods")
     }
-}
+    }

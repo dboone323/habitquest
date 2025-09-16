@@ -33,4 +33,4 @@ class AISettingsViewTests: XCTestCase {
         // TODO: Implement method tests for structAISettingsView:View{
         XCTAssertTrue(true, "Placeholder test for structAISettingsView:View{ methods")
     }
-}
+    }

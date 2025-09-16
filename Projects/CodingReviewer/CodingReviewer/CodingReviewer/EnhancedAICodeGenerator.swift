@@ -128,8 +128,7 @@ class EnhancedAICodeGenerator: ObservableObject {
     }
 
     func generateSwiftUIView(name: String, properties: [Property], context: GenerationContext) async
-        -> String
-    {
+    -> String {
         let request = CodeGenerationRequest(
             type: .swiftUIView(name: name, properties: properties),
             context: context,
@@ -141,8 +140,7 @@ class EnhancedAICodeGenerator: ObservableObject {
     }
 
     func generateTests(for targetClass: String, methods: [String], context: GenerationContext) async
-        -> String
-    {
+    -> String {
         let request = CodeGenerationRequest(
             type: .testClass(targetClass: targetClass, methods: methods),
             context: context,
@@ -406,8 +404,7 @@ class CodeTemplateEngine {
     }
 
     func generateCode(using patterns: [GenerationPattern], context: GenerationContext) async
-        -> String
-    {
+    -> String {
         guard let primaryPattern = patterns.first else {
             return "// No suitable pattern found"
         }
@@ -659,7 +656,7 @@ extension GenerationType: Equatable {
     static func == (lhs: GenerationType, rhs: GenerationType) -> Bool {
         switch (lhs, rhs) {
         case (.function, .function), (.class, .class), (.swiftUIView, .swiftUIView),
-            (.testClass, .testClass), (.documentation, .documentation):
+             (.testClass, .testClass), (.documentation, .documentation):
             true
         default:
             false

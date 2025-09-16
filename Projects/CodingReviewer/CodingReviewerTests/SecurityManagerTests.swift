@@ -33,4 +33,4 @@ class SecurityManagerTests: XCTestCase {
         // TODO: Implement method tests for classSecurityManager{
         XCTAssertTrue(true, "Placeholder test for classSecurityManager{ methods")
     }
-}
+    }

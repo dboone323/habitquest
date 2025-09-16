@@ -193,4 +193,4 @@ class FixApplicationViewTests: XCTestCase {
         // TODO: Implement method tests for structFixActionBar:View{
         XCTAssertTrue(true, "Placeholder test for structFixActionBar:View{ methods")
     }
-}
+    }

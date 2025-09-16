@@ -133,4 +133,4 @@ class EnhancedFileUploadView_V2Tests: XCTestCase {
         // TODO: Implement method tests for structAnalysisProgressView:View{
         XCTAssertTrue(true, "Placeholder test for structAnalysisProgressView:View{ methods")
     }
-}
+    }
