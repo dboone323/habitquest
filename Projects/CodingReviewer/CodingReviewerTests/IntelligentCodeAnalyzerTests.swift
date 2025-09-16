@@ -93,4 +93,4 @@ class IntelligentCodeAnalyzerTests: XCTestCase {
         // TODO: Implement method tests for classIntelligentCodeAnalyzer:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classIntelligentCodeAnalyzer:ObservableObject{ methods")
     }
-}
+    }

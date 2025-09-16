@@ -157,40 +157,40 @@ class DiffPreviewViewTests: XCTestCase {
     // MARK: - structFixHistoryEntry:Identifiable,Codable{ Tests
 
     func teststructFixHistoryEntry:Identifiable,Codable{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for structFixHistoryEntry:Identifiable,Codable{
-        XCTAssertTrue(true, "Placeholder test for structFixHistoryEntry:Identifiable,Codable{")
+    // Test basic initialization
+    // TODO: Implement initialization test for structFixHistoryEntry:Identifiable,Codable{
+    XCTAssertTrue(true, "Placeholder test for structFixHistoryEntry:Identifiable,Codable{")
     }
 
     func teststructFixHistoryEntry:Identifiable,Codable{Properties() {
-        // Test property access and validation
-        // TODO: Implement property tests for structFixHistoryEntry:Identifiable,Codable{
-        XCTAssertTrue(true, "Placeholder test for structFixHistoryEntry:Identifiable,Codable{ properties")
+    // Test property access and validation
+    // TODO: Implement property tests for structFixHistoryEntry:Identifiable,Codable{
+    XCTAssertTrue(true, "Placeholder test for structFixHistoryEntry:Identifiable,Codable{ properties")
     }
 
     func teststructFixHistoryEntry:Identifiable,Codable{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for structFixHistoryEntry:Identifiable,Codable{
-        XCTAssertTrue(true, "Placeholder test for structFixHistoryEntry:Identifiable,Codable{ methods")
+    // Test method functionality
+    // TODO: Implement method tests for structFixHistoryEntry:Identifiable,Codable{
+    XCTAssertTrue(true, "Placeholder test for structFixHistoryEntry:Identifiable,Codable{ methods")
     }
 
     // MARK: - classFixHistoryManager:ObservableObject{ Tests
 
     func testclassFixHistoryManager:ObservableObject{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for classFixHistoryManager:ObservableObject{
-        XCTAssertTrue(true, "Placeholder test for classFixHistoryManager:ObservableObject{")
+    // Test basic initialization
+    // TODO: Implement initialization test for classFixHistoryManager:ObservableObject{
+    XCTAssertTrue(true, "Placeholder test for classFixHistoryManager:ObservableObject{")
     }
 
     func testclassFixHistoryManager:ObservableObject{Properties() {
-        // Test property access and validation
-        // TODO: Implement property tests for classFixHistoryManager:ObservableObject{
-        XCTAssertTrue(true, "Placeholder test for classFixHistoryManager:ObservableObject{ properties")
+    // Test property access and validation
+    // TODO: Implement property tests for classFixHistoryManager:ObservableObject{
+    XCTAssertTrue(true, "Placeholder test for classFixHistoryManager:ObservableObject{ properties")
     }
 
     func testclassFixHistoryManager:ObservableObject{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for classFixHistoryManager:ObservableObject{
-        XCTAssertTrue(true, "Placeholder test for classFixHistoryManager:ObservableObject{ methods")
+    // Test method functionality
+    // TODO: Implement method tests for classFixHistoryManager:ObservableObject{
+    XCTAssertTrue(true, "Placeholder test for classFixHistoryManager:ObservableObject{ methods")
     }
-}
+    }

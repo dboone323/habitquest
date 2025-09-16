@@ -73,4 +73,4 @@ class AICodeReviewServiceTests: XCTestCase {
         // TODO: Implement method tests for structAnalysisSummary{
         XCTAssertTrue(true, "Placeholder test for structAnalysisSummary{ methods")
     }
-}
+    }

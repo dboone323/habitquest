@@ -72,7 +72,7 @@ final class MLIntegrationService: ObservableObject {
         task.executableURL = URL(fileURLWithPath: "/bin/bash")
         task.arguments = [
             "-c",
-            "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./ml_pattern_recognition.sh",
+            "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./ml_pattern_recognition.sh"
         ]
 
         // Create temp file list for ML processing
@@ -100,7 +100,7 @@ final class MLIntegrationService: ObservableObject {
         task.executableURL = URL(fileURLWithPath: "/bin/bash")
         task.arguments = [
             "-c",
-            "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./predictive_analytics.sh",
+            "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./predictive_analytics.sh"
         ]
 
         // Create temp file list for predictive processing
@@ -128,7 +128,7 @@ final class MLIntegrationService: ObservableObject {
         task.executableURL = URL(fileURLWithPath: "/bin/bash")
         task.arguments = [
             "-c",
-            "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./advanced_ai_integration.sh",
+            "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./advanced_ai_integration.sh"
         ]
 
         // Create temp file list for AI processing
@@ -195,7 +195,7 @@ final class MLIntegrationService: ObservableObject {
                     "path": file.path,
                     "language": file.language.rawValue,
                     "size": "\(file.size)",
-                    "content_preview": String(file.content.prefix(1000)),
+                    "content_preview": String(file.content.prefix(1000))
                 ]
             }
 
@@ -381,8 +381,7 @@ final class MLIntegrationService: ObservableObject {
         let range = NSRange(text.startIndex..., in: text)
 
         if let match = regex?.firstMatch(in: text, options: [], range: range),
-            let matchRange = Range(match.range(at: 1), in: text)
-        {
+           let matchRange = Range(match.range(at: 1), in: text) {
             return Int(text[matchRange])
         }
         return nil

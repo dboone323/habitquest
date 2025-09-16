@@ -113,4 +113,4 @@ class FileUploadManagerTests: XCTestCase {
         // TODO: Implement method tests for classFileUploadManager:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classFileUploadManager:ObservableObject{ methods")
     }
-}
+    }

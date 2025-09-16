@@ -33,4 +33,4 @@ class APIKeySetupViewTests: XCTestCase {
         // TODO: Implement method tests for structAPIKeySetupView:View{
         XCTAssertTrue(true, "Placeholder test for structAPIKeySetupView:View{ methods")
     }
-}
+    }

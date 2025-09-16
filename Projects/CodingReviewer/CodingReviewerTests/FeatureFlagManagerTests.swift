@@ -37,40 +37,40 @@ class FeatureFlagManagerTests: XCTestCase {
     // MARK: - enumFeatureFlag:String,CaseIterable{ Tests
 
     func testenumFeatureFlag:String,CaseIterable{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for enumFeatureFlag:String,CaseIterable{
-        XCTAssertTrue(true, "Placeholder test for enumFeatureFlag:String,CaseIterable{")
+    // Test basic initialization
+    // TODO: Implement initialization test for enumFeatureFlag:String,CaseIterable{
+    XCTAssertTrue(true, "Placeholder test for enumFeatureFlag:String,CaseIterable{")
     }
 
     func testenumFeatureFlag:String,CaseIterable{Properties() {
-        // Test property access and validation
-        // TODO: Implement property tests for enumFeatureFlag:String,CaseIterable{
-        XCTAssertTrue(true, "Placeholder test for enumFeatureFlag:String,CaseIterable{ properties")
+    // Test property access and validation
+    // TODO: Implement property tests for enumFeatureFlag:String,CaseIterable{
+    XCTAssertTrue(true, "Placeholder test for enumFeatureFlag:String,CaseIterable{ properties")
     }
 
     func testenumFeatureFlag:String,CaseIterable{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for enumFeatureFlag:String,CaseIterable{
-        XCTAssertTrue(true, "Placeholder test for enumFeatureFlag:String,CaseIterable{ methods")
+    // Test method functionality
+    // TODO: Implement method tests for enumFeatureFlag:String,CaseIterable{
+    XCTAssertTrue(true, "Placeholder test for enumFeatureFlag:String,CaseIterable{ methods")
     }
 
     // MARK: - enumBuildEnvironment{ Tests
 
     func testenumBuildEnvironment{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for enumBuildEnvironment{
-        XCTAssertTrue(true, "Placeholder test for enumBuildEnvironment{")
+    // Test basic initialization
+    // TODO: Implement initialization test for enumBuildEnvironment{
+    XCTAssertTrue(true, "Placeholder test for enumBuildEnvironment{")
     }
 
     func testenumBuildEnvironment{Properties() {
-        // Test property access and validation
-        // TODO: Implement property tests for enumBuildEnvironment{
-        XCTAssertTrue(true, "Placeholder test for enumBuildEnvironment{ properties")
+    // Test property access and validation
+    // TODO: Implement property tests for enumBuildEnvironment{
+    XCTAssertTrue(true, "Placeholder test for enumBuildEnvironment{ properties")
     }
 
     func testenumBuildEnvironment{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for enumBuildEnvironment{
-        XCTAssertTrue(true, "Placeholder test for enumBuildEnvironment{ methods")
+    // Test method functionality
+    // TODO: Implement method tests for enumBuildEnvironment{
+    XCTAssertTrue(true, "Placeholder test for enumBuildEnvironment{ methods")
     }
-}
+    }

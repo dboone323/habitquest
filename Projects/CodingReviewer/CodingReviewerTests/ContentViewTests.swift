@@ -213,4 +213,4 @@ class ContentViewTests: XCTestCase {
         // TODO: Implement method tests for structContentView_Previews:PreviewProvider{
         XCTAssertTrue(true, "Placeholder test for structContentView_Previews:PreviewProvider{ methods")
     }
-}
+    }

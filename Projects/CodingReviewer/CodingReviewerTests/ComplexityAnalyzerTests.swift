@@ -53,4 +53,4 @@ class ComplexityAnalyzerTests: XCTestCase {
         // TODO: Implement method tests for structFunctionComplexity{
         XCTAssertTrue(true, "Placeholder test for structFunctionComplexity{ methods")
     }
-}
+    }

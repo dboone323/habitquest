@@ -276,8 +276,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     private func performIntelligentAnalysis(content: String, fileName: String)
-        -> EnhancedAnalysisResult
-    {
+    -> EnhancedAnalysisResult {
         // Phase 3: Enhanced analysis with intelligent suggestions
 
         let language = detectLanguageFromFileName(fileName)
@@ -528,8 +527,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     private func generateNaturalLanguageExplanation(content: String, suggestions: [String])
-        -> String
-    {
+    -> String {
         let lines = content.components(separatedBy: CharacterSet.newlines)
         let wordCount = content.components(separatedBy: CharacterSet.whitespacesAndNewlines).count(
             where: { !$0.isEmpty })
@@ -609,16 +607,14 @@ final class EnhancedAICodeReviewService: ObservableObject {
             let trimmedLine = line.trimmingCharacters(in: .whitespaces)
 
             if trimmedLine.contains("func ") || trimmedLine.contains("function ")
-                || trimmedLine.contains("def ")
-            {
+                || trimmedLine.contains("def ") {
                 inFunction = true
                 currentFunctionLines = 1
             } else if inFunction {
                 currentFunctionLines += 1
 
                 if trimmedLine == "}" || trimmedLine.hasPrefix("def ")
-                    || trimmedLine.hasPrefix("func ") || trimmedLine.hasPrefix("function ")
-                {
+                    || trimmedLine.hasPrefix("func ") || trimmedLine.hasPrefix("function ") {
                     if currentFunctionLines > 50 {
                         suggestions.append(
                             "🔧 Consider breaking down long functions (>50 lines) into smaller, focused methods"
@@ -694,8 +690,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     private func createSmartFix(for issue: String, content: String, language: String)
-        -> AIGeneratedFix?
-    {
+    -> AIGeneratedFix? {
         // Generate intelligent fixes based on issue content
         if issue.contains("force unwrap") {
             return AIGeneratedFix(
@@ -752,8 +747,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         } else if message.lowercased().contains("long") || message.lowercased().contains("large") {
             "maintainability"
         } else if message.lowercased().contains("line length")
-            || message.lowercased().contains("readable")
-        {
+                    || message.lowercased().contains("readable") {
             "readability"
         } else {
             "quality"

@@ -57,20 +57,20 @@ class UtilitiesTests: XCTestCase {
     // MARK: - enumValidationError:Error,LocalizedError{ Tests
 
     func testenumValidationError:Error,LocalizedError{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for enumValidationError:Error,LocalizedError{
-        XCTAssertTrue(true, "Placeholder test for enumValidationError:Error,LocalizedError{")
+    // Test basic initialization
+    // TODO: Implement initialization test for enumValidationError:Error,LocalizedError{
+    XCTAssertTrue(true, "Placeholder test for enumValidationError:Error,LocalizedError{")
     }
 
     func testenumValidationError:Error,LocalizedError{Properties() {
-        // Test property access and validation
-        // TODO: Implement property tests for enumValidationError:Error,LocalizedError{
-        XCTAssertTrue(true, "Placeholder test for enumValidationError:Error,LocalizedError{ properties")
+    // Test property access and validation
+    // TODO: Implement property tests for enumValidationError:Error,LocalizedError{
+    XCTAssertTrue(true, "Placeholder test for enumValidationError:Error,LocalizedError{ properties")
     }
 
     func testenumValidationError:Error,LocalizedError{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for enumValidationError:Error,LocalizedError{
-        XCTAssertTrue(true, "Placeholder test for enumValidationError:Error,LocalizedError{ methods")
+    // Test method functionality
+    // TODO: Implement method tests for enumValidationError:Error,LocalizedError{
+    XCTAssertTrue(true, "Placeholder test for enumValidationError:Error,LocalizedError{ methods")
     }
-}
+    }

@@ -139,7 +139,7 @@ class CodingReviewerTests: XCTestCase {
             "fileName": "TestFile.swift",
             "reviewDate": Date().description,
             "issuesFound": "3",
-            "suggestions": "5",
+            "suggestions": "5"
         ]
 
         XCTAssertEqual(testReviewData["fileName"], "TestFile.swift")
@@ -153,7 +153,7 @@ class CodingReviewerTests: XCTestCase {
             "theme": "dark",
             "language": "en",
             "notifications": "enabled",
-            "autoAnalysis": "true",
+            "autoAnalysis": "true"
         ]
 
         XCTAssertEqual(testConfig["theme"], "dark")
@@ -191,7 +191,7 @@ class CodingReviewerTests: XCTestCase {
             "totalIssues": 5,
             "criticalIssues": 1,
             "warnings": 3,
-            "suggestions": 1,
+            "suggestions": 1
         ]
 
         let total = mockResults["totalIssues"] ?? 0

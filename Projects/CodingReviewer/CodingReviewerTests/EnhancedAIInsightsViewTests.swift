@@ -313,4 +313,4 @@ class EnhancedAIInsightsViewTests: XCTestCase {
         // TODO: Implement method tests for structUploadedFilesDisplayView:View{
         XCTAssertTrue(true, "Placeholder test for structUploadedFilesDisplayView:View{ methods")
     }
-}
+    }

@@ -53,4 +53,4 @@ class EnhancedAnalysisRecordRowTests: XCTestCase {
         // TODO: Implement method tests for structEnhancedAnalysisRecordRow_Previews:PreviewProvider{
         XCTAssertTrue(true, "Placeholder test for structEnhancedAnalysisRecordRow_Previews:PreviewProvider{ methods")
     }
-}
+    }
