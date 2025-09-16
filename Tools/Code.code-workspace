@@ -46,7 +46,7 @@
     },
     "extensions": {
         "recommendations": [
-            "sswg.swift-lang",
+            "swiftlang.swift-vscode",
             "ms-python.python",
             "ms-vscode.vscode-json"
         ]

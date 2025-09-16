@@ -16,11 +16,13 @@ let package = Package(
             targets: ["MomentumFinance"]
         ),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(path: "../Shared")
+    ],
     targets: [
         .target(
             name: "MomentumFinance",
-            dependencies: [],
+            dependencies: ["SharedKit"],
             path: "Shared",
             resources: [],
             swiftSettings: [
