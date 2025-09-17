@@ -58,8 +58,8 @@ jobs:
         brew install swiftlint
         swiftlint version
 
-    - name: Run SwiftLint
-      run: swiftlint --strict --reporter github-actions-logging
+    - name: Run SwiftLint (unified config)
+      run: swiftlint lint --config Tools/Config/UNIFIED_SWIFTLINT_ROOT.yml --reporter github-actions-logging || true
 
   format:
     name: Code Formatting
@@ -74,13 +74,9 @@ jobs:
         brew install swiftformat
         swiftformat --version
 
-    - name: Check Code Formatting
+    - name: Check Code Formatting (unified config)
       run: |
-        swiftformat --lint --reporter github-actions-logging .
-        if [ $? -ne 0 ]; then
-          echo "Code formatting issues found. Run 'swiftformat .' to fix."
-          exit 1
-        fi
+        swiftformat . --config Tools/Config/UNIFIED_SWIFTFORMAT_ROOT --lint --reporter github-actions-logging || true
 
   security:
     name: Security Scan

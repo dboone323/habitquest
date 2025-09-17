@@ -10,6 +10,7 @@
     "swiftformat.swiftformat-vscode",
     "gitlab.commitizen",
     "eamodio.gitlens",
+    "github.vscode-pull-request-github",
     "ollama.vscode-ollama"
   ]
 }

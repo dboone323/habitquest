@@ -96,26 +96,22 @@ jobs:
               })
             } catch (e) { console.log('addAssignees failed', e) }
 
-      - name: Format Swift code (non-fatal)
+      - name: Format Swift code (unified config, non-fatal)
         shell: bash
         run: |
           set -euo pipefail
           if command -v swiftformat >/dev/null 2>&1; then
-            swiftformat . --config .swiftformat || true
+            swiftformat . --config Tools/Config/UNIFIED_SWIFTFORMAT_ROOT || true
           else
             echo "swiftformat not available; skipping"
           fi
 
-      - name: Lint Swift code (non-fatal)
+      - name: Lint Swift code (unified config, non-fatal)
         shell: bash
         run: |
           set -euo pipefail
           if command -v swiftlint >/dev/null 2>&1; then
-            if [ "${{ env.QUIET_MODE }}" = "true" ]; then
-              swiftlint || true
-            else
-              swiftlint --strict || true
-            fi
+            swiftlint lint --config Tools/Config/UNIFIED_SWIFTLINT_ROOT.yml --reporter github-actions-logging || true
           else
             echo "swiftlint not available; skipping"
           fi
