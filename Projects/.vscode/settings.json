@@ -18,6 +18,9 @@
     "[python]": {
         "editor.defaultFormatter": "ms-python.python"
     },
+    // Python virtual environment
+    "python.defaultInterpreterPath": "../.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
     "[swift]": {
         "editor.defaultFormatter": "swiftlang.swift-vscode",
         "editor.codeActionsOnSave": {
@@ -50,11 +53,32 @@
         "**/DerivedData": true,
         "**/.build": true,
         "**/Pods": true,
-        "**/Carthage": true
+        "**/Carthage": true,
+        "**/.git": true,
+        "**/Testing": true,
+        "**/Tests": true,
+        "**/*.log": true,
+        "**/logs": true,
+        "**/build": true,
+        "**/dist": true,
+        "**/node_modules": true,
+        "**/.pytest_cache": true,
+        "**/__pycache__": true,
+        "**/.swiftpm": true,
+        "**/.venv": true
     },
     "search.exclude": {
         "**/DerivedData": true,
-        "**/.build": true
+        "**/.build": true,
+        "**/.git": true,
+        "**/Testing": true,
+        "**/Tests": true,
+        "**/*.log": true,
+        "**/logs": true,
+        "**/node_modules": true,
+        "**/.pytest_cache": true,
+        "**/__pycache__": true,
+        "**/.venv": true
     },
     "[ignore]": {
         "editor.defaultFormatter": "trunk.io"

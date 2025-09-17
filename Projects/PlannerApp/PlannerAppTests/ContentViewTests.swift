@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import PlannerApp
 
 class ContentViewTests: XCTestCase {
@@ -13,24 +14,23 @@ class ContentViewTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - ContentView Tests
 
-    // MARK: - structContentView:View{ Tests
-
-    func teststructContentView:View{Initialization() {
+    func testContentViewInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structContentView:View{
-        XCTAssertTrue(true, "Placeholder test for structContentView:View{")
+        // TODO: Implement initialization test for ContentView
+        XCTAssertTrue(true, "Placeholder test for ContentView")
     }
 
-    func teststructContentView:View{Properties() {
+    func testContentViewProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structContentView:View{
-        XCTAssertTrue(true, "Placeholder test for structContentView:View{ properties")
+        // TODO: Implement property tests for ContentView
+        XCTAssertTrue(true, "Placeholder test for ContentView properties")
     }
 
-    func teststructContentView:View{Methods() {
+    func testContentViewMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structContentView:View{
-        XCTAssertTrue(true, "Placeholder test for structContentView:View{ methods")
+        // TODO: Implement method tests for ContentView
+        XCTAssertTrue(true, "Placeholder test for ContentView methods")
     }
 }

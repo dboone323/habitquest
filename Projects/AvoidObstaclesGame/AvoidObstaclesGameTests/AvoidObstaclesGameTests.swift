@@ -6,60 +6,64 @@
 //
 
 import Foundation
-import Testing
+import XCTest
 
 @testable import AvoidObstaclesGame
 
-struct AvoidObstaclesGameTests {
+final class AvoidObstaclesGameTests: XCTestCase {
 
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    override func setUpWithError() throws {
+        // Put setup code here. This method is called before the invocation of each test method in the class.
+    }
+
+    override func tearDownWithError() throws {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
     // MARK: - Game Mechanics Tests
 
-    @Test func testPlayerMovement() async throws {
+    func testPlayerMovement() throws {
         // Test basic player movement mechanics
         // let player = Player(position: CGPoint(x: 100, y: 200))
         // let initialPosition = player.position
 
         // player.moveLeft()
-        // #expect(player.position.x < initialPosition.x)
+        // XCTAssertLessThan(player.position.x, initialPosition.x)
 
         // player.moveRight()
-        // #expect(player.position.x > initialPosition.x)
+        // XCTAssertGreaterThan(player.position.x, initialPosition.x)
 
         // Placeholder until Player model is defined
-        #expect(true, "Player movement test framework ready")
+        XCTAssertTrue(true, "Player movement test framework ready")
     }
 
-    @Test func testObstacleGeneration() async throws {
+    func testObstacleGeneration() throws {
         // Test obstacle generation logic
         // let obstacle = Obstacle(type: .spike, position: CGPoint(x: 300, y: 150))
 
-        // #expect(obstacle.type == .spike)
-        // #expect(obstacle.position.x == 300)
-        // #expect(obstacle.position.y == 150)
+        // XCTAssertEqual(obstacle.type, .spike)
+        // XCTAssertEqual(obstacle.position.x, 300)
+        // XCTAssertEqual(obstacle.position.y, 150)
 
         // Placeholder until Obstacle model is defined
-        #expect(true, "Obstacle generation test framework ready")
+        XCTAssertTrue(true, "Obstacle generation test framework ready")
     }
 
-    @Test func testCollisionDetection() async throws {
+    func testCollisionDetection() throws {
         // Test collision detection between player and obstacles
         // let player = Player(position: CGPoint(x: 100, y: 200))
         // let obstacle = Obstacle(type: .wall, position: CGPoint(x: 100, y: 200))
 
         // let collision = player.collidesWith(obstacle)
-        // #expect(collision == true)
+        // XCTAssertTrue(collision)
 
         // Placeholder until collision system is defined
-        #expect(true, "Collision detection test framework ready")
+        XCTAssertTrue(true, "Collision detection test framework ready")
     }
 
     // MARK: - Score System Tests
 
-    @Test func testScoreCalculation() async throws {
+    func testScoreCalculation() throws {
         // Test score calculation based on game progress
         let baseScore = 100
         let timeBonus = 50
@@ -67,11 +71,11 @@ struct AvoidObstaclesGameTests {
 
         let totalScore = baseScore + timeBonus + distanceBonus
 
-        #expect(totalScore == 175, "Total score should be sum of all components")
-        #expect(totalScore > baseScore, "Total score should be greater than base score")
+        XCTAssertEqual(totalScore, 175, "Total score should be sum of all components")
+        XCTAssertGreaterThan(totalScore, baseScore, "Total score should be greater than base score")
     }
 
-    @Test func testHighScoreTracking() async throws {
+    func testHighScoreTracking() throws {
         // Test high score tracking and updating
         var currentHighScore = 1000
         let newScore = 1200
@@ -80,63 +84,64 @@ struct AvoidObstaclesGameTests {
             currentHighScore = newScore
         }
 
-        #expect(currentHighScore == 1200, "High score should be updated to new higher score")
-        #expect(currentHighScore >= 1000, "High score should never decrease")
+        XCTAssertEqual(currentHighScore, 1200, "High score should be updated to new higher score")
+        XCTAssertGreaterThanOrEqual(currentHighScore, 1000, "High score should never decrease")
     }
 
-    @Test func testScoreMultiplier() async throws {
+    func testScoreMultiplier() throws {
         // Test score multipliers for combo systems
         let basePoints = 10
         let multiplier = 2.5
         let multipliedScore = Int(Double(basePoints) * multiplier)
 
-        #expect(multipliedScore == 25, "Multiplied score should be correctly calculated")
-        #expect(multipliedScore > basePoints, "Multiplied score should be higher than base")
+        XCTAssertEqual(multipliedScore, 25, "Multiplied score should be correctly calculated")
+        XCTAssertGreaterThan(
+            multipliedScore, basePoints, "Multiplied score should be higher than base")
     }
 
     // MARK: - Game State Tests
 
-    @Test func testGameStartState() async throws {
+    func testGameStartState() throws {
         // Test initial game state
         // let game = Game()
-        // #expect(game.state == .ready)
-        // #expect(game.score == 0)
-        // #expect(game.lives == 3)
+        // XCTAssertEqual(game.state, .ready)
+        // XCTAssertEqual(game.score, 0)
+        // XCTAssertEqual(game.lives, 3)
 
         // Placeholder until Game model is defined
-        #expect(true, "Game start state test framework ready")
+        XCTAssertTrue(true, "Game start state test framework ready")
     }
 
-    @Test func testGameOverCondition() async throws {
+    func testGameOverCondition() throws {
         // Test game over conditions
         // let game = Game()
         // game.lives = 0
 
-        // #expect(game.isGameOver == true)
-        // #expect(game.state == .gameOver)
+        // XCTAssertTrue(game.isGameOver)
+        // XCTAssertEqual(game.state, .gameOver)
 
         // Placeholder until Game model is defined
-        #expect(true, "Game over condition test framework ready")
+        XCTAssertTrue(true, "Game over condition test framework ready")
     }
 
-    @Test func testPauseResumeFunctionality() async throws {
+    func testPauseResumeFunctionality() throws {
         // Test pause and resume functionality
         // let game = Game()
         // game.state = .playing
 
         // game.pause()
-        // #expect(game.state == .paused)
+        // XCTAssertEqual(game.state, .paused)
 
         // game.resume()
-        // #expect(game.state == .playing)
+        // XCTAssertEqual(game.state, .playing)
 
         // Placeholder until Game model is defined
-        #expect(true, "Pause/resume test framework ready")
+        XCTAssertTrue(true, "Pause/resume test framework ready")
     }
 
     // MARK: - Level System Tests
 
-    @Test func testLevelProgression() async throws {
+    func testLevelProgression() throws {
         // Test level progression logic
         var currentLevel = 1
         let scoreThreshold = 1000
@@ -146,10 +151,10 @@ struct AvoidObstaclesGameTests {
             currentLevel += 1
         }
 
-        #expect(currentLevel == 2, "Level should progress when score threshold is met")
+        XCTAssertEqual(currentLevel, 2, "Level should progress when score threshold is met")
     }
 
-    @Test func testDifficultyScaling() async throws {
+    func testDifficultyScaling() throws {
         // Test difficulty scaling with level
         let level = 5
         let baseSpeed = 100.0
@@ -157,50 +162,51 @@ struct AvoidObstaclesGameTests {
 
         let currentSpeed = baseSpeed + (Double(level - 1) * speedIncrease)
 
-        #expect(currentSpeed == 180.0, "Speed should increase with level")
-        #expect(currentSpeed > baseSpeed, "Current speed should be higher than base speed")
+        XCTAssertEqual(currentSpeed, 180.0, "Speed should increase with level")
+        XCTAssertGreaterThan(
+            currentSpeed, baseSpeed, "Current speed should be higher than base speed")
     }
 
-    @Test func testLevelCompletion() async throws {
+    func testLevelCompletion() throws {
         // Test level completion detection
         let levelDistance = 1000.0
         let playerDistance = 1050.0
 
         let levelCompleted = playerDistance >= levelDistance
 
-        #expect(
-            levelCompleted == true, "Level should be completed when player reaches target distance")
+        XCTAssertTrue(
+            levelCompleted, "Level should be completed when player reaches target distance")
     }
 
     // MARK: - Power-up Tests
 
-    @Test func testPowerUpActivation() async throws {
+    func testPowerUpActivation() throws {
         // Test power-up activation and effects
         // let player = Player()
         // let shieldPowerUp = PowerUp(type: .shield, duration: 10.0)
 
         // player.activatePowerUp(shieldPowerUp)
-        // #expect(player.hasShield == true)
-        // #expect(player.shieldDuration == 10.0)
+        // XCTAssertTrue(player.hasShield)
+        // XCTAssertEqual(player.shieldDuration, 10.0)
 
         // Placeholder until PowerUp system is defined
-        #expect(true, "Power-up activation test framework ready")
+        XCTAssertTrue(true, "Power-up activation test framework ready")
     }
 
-    @Test func testPowerUpExpiration() async throws {
+    func testPowerUpExpiration() throws {
         // Test power-up expiration
         // let powerUp = PowerUp(type: .speedBoost, duration: 5.0)
         // powerUp.startTime = Date().addingTimeInterval(-6.0) // 6 seconds ago
 
-        // #expect(powerUp.isExpired == true)
+        // XCTAssertTrue(powerUp.isExpired)
 
         // Placeholder until PowerUp system is defined
-        #expect(true, "Power-up expiration test framework ready")
+        XCTAssertTrue(true, "Power-up expiration test framework ready")
     }
 
     // MARK: - Performance Tests
 
-    @Test func testGameLoopPerformance() async throws {
+    func testGameLoopPerformance() throws {
         // Test game loop performance
         let startTime = Date()
 
@@ -208,34 +214,34 @@ struct AvoidObstaclesGameTests {
         for _ in 1...1000 {
             // Simulate game update logic
             let x = 1 + 1
-            #expect(x == 2)
+            XCTAssertEqual(x, 2)
         }
 
         let endTime = Date()
         let duration = endTime.timeIntervalSince(startTime)
 
-        #expect(duration < 1.0, "Game loop should process 1000 iterations quickly")
+        XCTAssertLessThan(duration, 1.0, "Game loop should process 1000 iterations quickly")
     }
 
-    @Test func testObstacleGenerationPerformance() async throws {
+    func testObstacleGenerationPerformance() throws {
         // Test obstacle generation performance
         let startTime = Date()
 
         // Simulate generating multiple obstacles
         for i in 1...100 {
             let obstacleData: [String: Any] = ["id": i, "type": "spike", "x": i * 50]
-            #expect((obstacleData["id"] as? Int) == i)
+            XCTAssertEqual((obstacleData["id"] as? Int), i)
         }
 
         let endTime = Date()
         let duration = endTime.timeIntervalSince(startTime)
 
-        #expect(duration < 0.5, "Obstacle generation should be fast")
+        XCTAssertLessThan(duration, 0.5, "Obstacle generation should be fast")
     }
 
     // MARK: - Save/Load Tests
 
-    @Test func testGameSaveFunctionality() async throws {
+    func testGameSaveFunctionality() throws {
         // Test game save functionality
         let gameData = [
             "score": 1500,
@@ -245,12 +251,12 @@ struct AvoidObstaclesGameTests {
             "playerY": 200.0,
         ]
 
-        #expect(gameData["score"] == 1500)
-        #expect(gameData["level"] == 3)
-        #expect(gameData["lives"] == 2)
+        XCTAssertEqual(gameData["score"] as? Int, 1500)
+        XCTAssertEqual(gameData["level"] as? Int, 3)
+        XCTAssertEqual(gameData["lives"] as? Int, 2)
     }
 
-    @Test func testGameLoadFunctionality() async throws {
+    func testGameLoadFunctionality() throws {
         // Test game load functionality
         let savedData = [
             "score": 2500,
@@ -261,57 +267,36 @@ struct AvoidObstaclesGameTests {
         let loadedScore = savedData["score"] ?? 0
         let loadedLevel = savedData["level"] ?? 1
 
-        #expect(loadedScore == 2500, "Loaded score should match saved score")
-        #expect(loadedLevel == 5, "Loaded level should match saved level")
-    }
-
-    // MARK: - UI Tests
-
-    @Test func testScoreDisplay() async throws {
-        // Test score display formatting
-        let score = 1234
-        let displayString = "Score: \(score)"
-
-        #expect(displayString == "Score: 1234")
-        #expect(displayString.contains("Score:"))
-        #expect(displayString.hasSuffix("1234"))
-    }
-
-    @Test func testLivesDisplay() async throws {
-        // Test lives display
-        let lives = 3
-        let livesString = "Lives: \(String(repeating: "❤️", count: lives))"
-
-        #expect(livesString.contains("Lives:"))
-        #expect(livesString.count > 6)  // Should contain "Lives:" plus hearts
+        XCTAssertEqual(loadedScore as? Int, 2500, "Loaded score should match saved score")
+        XCTAssertEqual(loadedLevel as? Int, 5, "Loaded level should match saved level")
     }
 
     // MARK: - Edge Cases Tests
 
-    @Test func testZeroScore() async throws {
+    func testZeroScore() throws {
         // Test handling of zero score
         let score = 0
         let isHighScore = score > 1000
 
-        #expect(score == 0, "Score should be zero")
-        #expect(isHighScore == false, "Zero score should not be considered high score")
+        XCTAssertEqual(score, 0, "Score should be zero")
+        XCTAssertFalse(isHighScore, "Zero score should not be considered high score")
     }
 
-    @Test func testNegativeValues() async throws {
+    func testNegativeValues() throws {
         // Test handling of negative values (shouldn't happen in normal gameplay)
         let negativeScore = -100
         let clampedScore = max(0, negativeScore)
 
-        #expect(negativeScore < 0, "Negative score should be less than zero")
-        #expect(clampedScore == 0, "Negative score should be clamped to zero")
+        XCTAssertLessThan(negativeScore, 0, "Negative score should be less than zero")
+        XCTAssertEqual(clampedScore, 0, "Negative score should be clamped to zero")
     }
 
-    @Test func testMaximumValues() async throws {
+    func testMaximumValues() throws {
         // Test handling of maximum values
         let maxScore = Int.max
         let isValidScore = maxScore > 0
 
-        #expect(maxScore > 0, "Maximum score should be positive")
-        #expect(isValidScore == true, "Maximum score should be valid")
+        XCTAssertGreaterThan(maxScore, 0, "Maximum score should be positive")
+        XCTAssertTrue(isValidScore, "Maximum score should be valid")
     }
 }

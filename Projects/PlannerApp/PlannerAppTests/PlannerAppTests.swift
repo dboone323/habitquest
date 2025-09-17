@@ -6,95 +6,157 @@
 //
 
 import Foundation
-import Testing
+import SwiftData
+import XCTest
 
-struct PlannerAppTests {
+@testable import PlannerApp
 
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+final class PlannerAppTests: XCTestCase {
+
+    var modelContainer: ModelContainer!
+    var modelContext: ModelContext!
+
+    override func setUpWithError() throws {
+        // Create in-memory model container for testing
+        let schema = Schema([
+            // Add your PlannerApp models here when they are defined
+            // Example: Task.self, Project.self, Category.self
+        ])
+        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+        modelContainer = try ModelContainer(for: schema, configurations: [configuration])
+        modelContext = ModelContext(modelContainer)
+    }
+
+    override func tearDownWithError() throws {
+        modelContainer = nil
+        modelContext = nil
     }
 
     // MARK: - Task Management Tests
 
-    @Test func testTaskCreation() async throws {
+    func testTaskCreation() throws {
         // Test basic task creation
         // let task = Task(title: "Test Task", description: "A test task", dueDate: Date(), priority: .medium)
 
-        // #expect(task.title == "Test Task")
-        // #expect(task.description == "A test task")
-        // #expect(task.priority == .medium)
+        // XCTAssertEqual(task.title, "Test Task")
+        // XCTAssertEqual(task.description, "A test task")
+        // XCTAssertEqual(task.priority, .medium)
 
         // Placeholder until Task model is defined
-        #expect(true, "Task creation test framework ready")
+        XCTAssertTrue(true, "Task creation test framework ready")
     }
 
-    @Test func testTaskPriority() async throws {
+    func testTaskPriority() throws {
         // Test task priority levels
         // let highPriorityTask = Task(title: "High Priority", description: "Urgent task", dueDate: Date(), priority: .high)
         // let lowPriorityTask = Task(title: "Low Priority", description: "Optional task", dueDate: Date(), priority: .low)
 
-        // #expect(highPriorityTask.priority == .high)
-        // #expect(lowPriorityTask.priority == .low)
-        // #expect(highPriorityTask.priority != lowPriorityTask.priority)
+        // XCTAssertEqual(highPriorityTask.priority, .high)
+        // XCTAssertEqual(lowPriorityTask.priority, .low)
+        // XCTAssertNotEqual(highPriorityTask.priority, lowPriorityTask.priority)
 
         // Placeholder until Task model is defined
-        #expect(true, "Task priority test framework ready")
+        XCTAssertTrue(true, "Task priority test framework ready")
     }
 
-    @Test func testTaskDueDate() async throws {
+    func testTaskDueDate() throws {
         // Test task due date handling
         let futureDate = Date().addingTimeInterval(86400)  // Tomorrow
         let pastDate = Date().addingTimeInterval(-86400)  // Yesterday
 
-        // #expect(futureDate > Date())
-        // #expect(pastDate < Date())
+        XCTAssertGreaterThan(futureDate, Date(), "Future date should be after current date")
+        XCTAssertLessThan(pastDate, Date(), "Past date should be before current date")
+    }
 
-        #expect(futureDate > Date(), "Future date should be after current date")
-        #expect(pastDate < Date(), "Past date should be before current date")
+    func testTaskPersistence() throws {
+        // Test task persistence
+        // let task = Task(title: "Persistent Task", description: "Test persistence", dueDate: Date(), priority: .medium)
+        // modelContext.insert(task)
+        // try modelContext.save()
+
+        // let fetchRequest = FetchDescriptor<Task>()
+        // let savedTasks = try modelContext.fetch(fetchRequest)
+
+        // XCTAssertEqual(savedTasks.count, 1)
+        // XCTAssertEqual(savedTasks.first?.title, "Persistent Task")
+
+        // Placeholder until Task model is defined
+        XCTAssertTrue(true, "Task persistence test framework ready")
+    }
+
+    func testTaskStatusUpdates() throws {
+        // Test task status changes
+        // let task = Task(title: "Status Test", description: "Test status changes", dueDate: Date(), priority: .medium)
+
+        // XCTAssertEqual(task.status, .pending)
+        // task.status = .inProgress
+        // XCTAssertEqual(task.status, .inProgress)
+        // task.status = .completed
+        // XCTAssertEqual(task.status, .completed)
+
+        // Placeholder until Task model is defined
+        XCTAssertTrue(true, "Task status updates test framework ready")
     }
 
     // MARK: - Project Management Tests
 
-    @Test func testProjectCreation() async throws {
+    func testProjectCreation() throws {
         // Test project creation
         // let project = Project(name: "Test Project", description: "A test project", color: .blue)
 
-        // #expect(project.name == "Test Project")
-        // #expect(project.description == "A test project")
+        // XCTAssertEqual(project.name, "Test Project")
+        // XCTAssertEqual(project.description, "A test project")
 
         // Placeholder until Project model is defined
-        #expect(true, "Project creation test framework ready")
+        XCTAssertTrue(true, "Project creation test framework ready")
     }
 
-    @Test func testProjectTaskRelationship() async throws {
+    func testProjectTaskRelationship() throws {
         // Test relationship between projects and tasks
         // let project = Project(name: "Work Project", description: "Work tasks", color: .blue)
         // let task = Task(title: "Project Task", description: "Task in project", dueDate: Date(), priority: .medium)
         // project.tasks.append(task)
 
-        // #expect(project.tasks.count == 1)
-        // #expect(project.tasks.first?.title == "Project Task")
+        // XCTAssertEqual(project.tasks.count, 1)
+        // XCTAssertEqual(project.tasks.first?.title, "Project Task")
 
         // Placeholder until models are defined
-        #expect(true, "Project-task relationship test framework ready")
+        XCTAssertTrue(true, "Project-task relationship test framework ready")
+    }
+
+    func testProjectProgressCalculation() throws {
+        // Test project progress based on completed tasks
+        // let project = Project(name: "Progress Test", description: "Test progress", color: .green)
+        // let task1 = Task(title: "Task 1", description: "First task", dueDate: Date(), priority: .medium)
+        // let task2 = Task(title: "Task 2", description: "Second task", dueDate: Date(), priority: .medium)
+        // let task3 = Task(title: "Task 3", description: "Third task", dueDate: Date(), priority: .medium)
+
+        // project.tasks = [task1, task2, task3]
+        // task1.status = .completed
+        // task2.status = .completed
+
+        // XCTAssertEqual(project.progress, 0.67, accuracy: 0.01)  // 2/3 completed
+
+        // Placeholder until models are defined
+        XCTAssertTrue(true, "Project progress calculation test framework ready")
     }
 
     // MARK: - Category Tests
 
-    @Test func testCategoryCreation() async throws {
+    func testCategoryCreation() throws {
         // Test category creation
         // let workCategory = Category(name: "Work", color: .blue, icon: "briefcase")
         // let personalCategory = Category(name: "Personal", color: .green, icon: "person")
 
-        // #expect(workCategory.name == "Work")
-        // #expect(personalCategory.name == "Personal")
-        // #expect(workCategory.color != personalCategory.color)
+        // XCTAssertEqual(workCategory.name, "Work")
+        // XCTAssertEqual(personalCategory.name, "Personal")
+        // XCTAssertNotEqual(workCategory.color, personalCategory.color)
 
         // Placeholder until Category model is defined
-        #expect(true, "Category creation test framework ready")
+        XCTAssertTrue(true, "Category creation test framework ready")
     }
 
-    @Test func testCategoryTaskGrouping() async throws {
+    func testCategoryTaskGrouping() throws {
         // Test grouping tasks by category
         // let workCategory = Category(name: "Work", color: .blue, icon: "briefcase")
         // let workTask1 = Task(title: "Meeting", description: "Team meeting", dueDate: Date(), priority: .high)
@@ -103,159 +165,369 @@ struct PlannerAppTests {
         // workCategory.tasks.append(workTask1)
         // workCategory.tasks.append(workTask2)
 
-        // #expect(workCategory.tasks.count == 2)
+        // XCTAssertEqual(workCategory.tasks.count, 2)
 
         // Placeholder until models are defined
-        #expect(true, "Category grouping test framework ready")
+        XCTAssertTrue(true, "Category grouping test framework ready")
+    }
+
+    func testCategoryStatistics() throws {
+        // Test category statistics
+        // let category = Category(name: "Test Category", color: .red, icon: "circle")
+        // let completedTask = Task(title: "Done", description: "Completed task", dueDate: Date(), priority: .medium)
+        // let pendingTask = Task(title: "Pending", description: "Pending task", dueDate: Date(), priority: .medium)
+
+        // completedTask.status = .completed
+        // category.tasks = [completedTask, pendingTask]
+
+        // XCTAssertEqual(category.completedTasksCount, 1)
+        // XCTAssertEqual(category.pendingTasksCount, 1)
+        // XCTAssertEqual(category.completionRate, 0.5)
+
+        // Placeholder until models are defined
+        XCTAssertTrue(true, "Category statistics test framework ready")
     }
 
     // MARK: - Date and Time Tests
 
-    @Test func testDateCalculations() async throws {
+    func testDateCalculations() throws {
         // Test date calculation utilities
         let today = Date()
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
         let nextWeek = Calendar.current.date(byAdding: .day, value: 7, to: today)!
 
-        #expect(tomorrow > today, "Tomorrow should be after today")
-        #expect(nextWeek > tomorrow, "Next week should be after tomorrow")
+        XCTAssertGreaterThan(tomorrow, today, "Tomorrow should be after today")
+        XCTAssertGreaterThan(nextWeek, tomorrow, "Next week should be after tomorrow")
     }
 
-    @Test func testTaskOverdueDetection() async throws {
+    func testTaskOverdueDetection() throws {
         // Test detection of overdue tasks
         let yesterday = Date().addingTimeInterval(-86400)
         let tomorrow = Date().addingTimeInterval(86400)
 
-        // #expect(isOverdue(yesterday) == true)
-        // #expect(isOverdue(tomorrow) == false)
+        XCTAssertLessThan(yesterday, Date(), "Yesterday should be in the past")
+        XCTAssertGreaterThan(tomorrow, Date(), "Tomorrow should be in the future")
+    }
 
-        #expect(yesterday < Date(), "Yesterday should be in the past")
-        #expect(tomorrow > Date(), "Tomorrow should be in the future")
+    func testDueDateValidation() throws {
+        // Test due date validation
+        let pastDate = Date().addingTimeInterval(-86400)
+        let futureDate = Date().addingTimeInterval(86400)
+
+        // Tasks should be able to have past due dates (for overdue tracking)
+        // but typically we'd validate future dates for new tasks
+        XCTAssertLessThan(pastDate, Date())
+        XCTAssertGreaterThan(futureDate, Date())
     }
 
     // MARK: - Search and Filter Tests
 
-    @Test func testTaskSearch() async throws {
+    func testTaskSearch() throws {
         // Test task search functionality
         let searchTerm = "meeting"
 
-        // #expect(searchTasks(with: searchTerm).count >= 0)
-
-        #expect(!searchTerm.isEmpty, "Search term should not be empty")
-        #expect(searchTerm.lowercased() == "meeting", "Search term should be lowercase")
+        XCTAssertFalse(searchTerm.isEmpty, "Search term should not be empty")
+        XCTAssertEqual(searchTerm.lowercased(), "meeting", "Search term should be lowercase")
     }
 
-    @Test func testTaskFiltering() async throws {
+    func testTaskFiltering() throws {
         // Test task filtering by priority
         // let highPriorityTasks = filterTasks(by: .high)
         // let mediumPriorityTasks = filterTasks(by: .medium)
 
-        // #expect(highPriorityTasks.count >= 0)
-        // #expect(mediumPriorityTasks.count >= 0)
+        // XCTAssertGreaterThanOrEqual(highPriorityTasks.count, 0)
+        // XCTAssertGreaterThanOrEqual(mediumPriorityTasks.count, 0)
 
-        #expect(true, "Task filtering test framework ready")
+        XCTAssertTrue(true, "Task filtering test framework ready")
+    }
+
+    func testAdvancedFiltering() throws {
+        // Test advanced filtering options
+        // let completedTasks = filterTasks(by: .completed)
+        // let overdueTasks = filterTasks(by: .overdue)
+        // let highPriorityOverdueTasks = filterTasks(by: [.high, .overdue])
+
+        // XCTAssertGreaterThanOrEqual(completedTasks.count, 0)
+        // XCTAssertGreaterThanOrEqual(overdueTasks.count, 0)
+        // XCTAssertGreaterThanOrEqual(highPriorityOverdueTasks.count, 0)
+
+        XCTAssertTrue(true, "Advanced filtering test framework ready")
     }
 
     // MARK: - Data Persistence Tests
 
-    @Test func testDataPersistence() async throws {
+    func testDataPersistence() throws {
         // Test data persistence across app launches
         let testData = ["key": "value", "number": "42"]
 
-        #expect(testData["key"] == "value")
-        #expect(testData["number"] == "42")
-        #expect(testData.count == 2)
+        XCTAssertEqual(testData["key"], "value")
+        XCTAssertEqual(testData["number"], "42")
+        XCTAssertEqual(testData.count, 2)
     }
 
-    @Test func testDataMigration() async throws {
+    func testDataMigration() throws {
         // Test data migration between app versions
         let oldVersionData = ["version": "1.0", "tasks": "[]"]
         let newVersionData = ["version": "2.0", "tasks": "[]", "projects": "[]"]
 
-        #expect(oldVersionData["version"] == "1.0")
-        #expect(newVersionData["version"] == "2.0")
-        #expect(newVersionData.keys.contains("projects"))
+        XCTAssertEqual(oldVersionData["version"], "1.0")
+        XCTAssertEqual(newVersionData["version"], "2.0")
+        XCTAssertTrue(newVersionData.keys.contains("projects"))
+    }
+
+    func testDataBackupAndRestore() throws {
+        // Test data backup and restore functionality
+        // let backupService = DataBackupService()
+        // let testData = ["tasks": ["task1", "task2"], "projects": ["project1"]]
+
+        // try backupService.createBackup(from: testData)
+        // let restoredData = try backupService.restoreFromBackup()
+
+        // XCTAssertEqual(restoredData["tasks"]?.count, 2)
+        // XCTAssertEqual(restoredData["projects"]?.count, 1)
+
+        XCTAssertTrue(true, "Data backup and restore test framework ready")
     }
 
     // MARK: - Performance Tests
 
-    @Test func testTaskCreationPerformance() async throws {
+    func testTaskCreationPerformance() throws {
         // Test performance of creating multiple tasks
         let startTime = Date()
 
         // Simulate creating multiple tasks
         for i in 1...100 {
             let taskData: [String: Any] = ["id": i, "title": "Task \(i)"]
-            #expect((taskData["id"] as? Int) == i)
+            XCTAssertEqual((taskData["id"] as? Int), i)
         }
 
         let endTime = Date()
         let duration = endTime.timeIntervalSince(startTime)
 
-        #expect(duration < 1.0, "Creating 100 tasks should take less than 1 second")
+        XCTAssertLessThan(duration, 1.0, "Creating 100 tasks should take less than 1 second")
     }
 
-    @Test func testSearchPerformance() async throws {
+    func testSearchPerformance() throws {
         // Test performance of search operations
         let startTime = Date()
 
         // Simulate search through multiple items
         for i in 1...1000 {
             let item = "Item \(i)"
-            #expect(item.contains("Item"))
+            XCTAssertTrue(item.contains("Item"))
         }
 
         let endTime = Date()
         let duration = endTime.timeIntervalSince(startTime)
 
-        #expect(duration < 0.5, "Searching through 1000 items should be fast")
+        XCTAssertLessThan(duration, 0.5, "Searching through 1000 items should be fast")
+    }
+
+    func testBulkOperationsPerformance() throws {
+        // Test performance of bulk operations
+        let startTime = Date()
+
+        // Simulate bulk task operations
+        var tasks: [[String: Any]] = []
+        for i in 1...500 {
+            let task: [String: Any] = ["id": i, "title": "Bulk Task \(i)", "completed": i % 2 == 0]
+            tasks.append(task)
+        }
+
+        let completedTasks = tasks.filter { $0["completed"] as? Bool == true }
+        let endTime = Date()
+        let duration = endTime.timeIntervalSince(startTime)
+
+        XCTAssertLessThan(duration, 2.0, "Bulk operations should be fast")
+        XCTAssertEqual(completedTasks.count, 250)
     }
 
     // MARK: - UI Logic Tests
 
-    @Test func testTaskDisplayFormatting() async throws {
+    func testTaskDisplayFormatting() throws {
         // Test formatting of task display strings
         let taskTitle = "Complete Project Report"
         let formattedTitle = taskTitle.uppercased()
 
-        #expect(formattedTitle == "COMPLETE PROJECT REPORT")
-        #expect(formattedTitle.hasSuffix("REPORT"))
+        XCTAssertEqual(formattedTitle, "COMPLETE PROJECT REPORT")
+        XCTAssertTrue(formattedTitle.hasSuffix("REPORT"))
     }
 
-    @Test func testDateDisplayFormatting() async throws {
+    func testDateDisplayFormatting() throws {
         // Test formatting of date display strings
         let date = Date()
         let dateString = date.description
 
-        #expect(!dateString.isEmpty)
-        #expect(dateString.contains("-"))  // ISO date format contains hyphens
+        XCTAssertFalse(dateString.isEmpty)
+        XCTAssertTrue(dateString.contains("-"))  // ISO date format contains hyphens
+    }
+
+    func testPriorityColorMapping() throws {
+        // Test mapping of priority levels to colors
+        // let highPriorityColor = UIColor.red
+        // let mediumPriorityColor = UIColor.orange
+        // let lowPriorityColor = UIColor.green
+
+        // XCTAssertNotEqual(highPriorityColor, mediumPriorityColor)
+        // XCTAssertNotEqual(mediumPriorityColor, lowPriorityColor)
+
+        XCTAssertTrue(true, "Priority color mapping test framework ready")
     }
 
     // MARK: - Integration Tests
 
-    @Test func testTaskProjectIntegration() async throws {
+    func testTaskProjectIntegration() throws {
         // Test integration between tasks and projects
         // let project = Project(name: "Integration Test", description: "Test integration", color: .red)
         // let task = Task(title: "Integration Task", description: "Test task", dueDate: Date(), priority: .high)
 
         // project.addTask(task)
 
-        // #expect(project.tasks.contains(task))
-        // #expect(task.project == project)
+        // XCTAssertTrue(project.tasks.contains(task))
+        // XCTAssertEqual(task.project, project)
 
-        #expect(true, "Task-project integration test framework ready")
+        XCTAssertTrue(true, "Task-project integration test framework ready")
     }
 
-    @Test func testCategoryTaskIntegration() async throws {
+    func testCategoryTaskIntegration() throws {
         // Test integration between categories and tasks
         // let category = Category(name: "Integration", color: .purple, icon: "circle")
         // let task = Task(title: "Category Task", description: "Test category task", dueDate: Date(), priority: .medium)
 
         // category.addTask(task)
 
-        // #expect(category.tasks.contains(task))
-        // #expect(task.category == category)
+        // XCTAssertTrue(category.tasks.contains(task))
+        // XCTAssertEqual(task.category, category)
 
-        #expect(true, "Category-task integration test framework ready")
+        XCTAssertTrue(true, "Category-task integration test framework ready")
+    }
+
+    func testFullWorkflowIntegration() throws {
+        // Test complete workflow from project creation to task completion
+        // let project = Project(name: "Full Workflow", description: "Complete workflow test", color: .blue)
+        // let category = Category(name: "Workflow Category", color: .green, icon: "checklist")
+        // let task = Task(title: "Workflow Task", description: "Test full workflow", dueDate: Date(), priority: .high)
+
+        // project.addTask(task)
+        // category.addTask(task)
+
+        // XCTAssertEqual(project.tasks.count, 1)
+        // XCTAssertEqual(category.tasks.count, 1)
+        // XCTAssertEqual(task.project, project)
+        // XCTAssertEqual(task.category, category)
+
+        // task.status = .completed
+        // XCTAssertEqual(task.status, .completed)
+        // XCTAssertEqual(project.completedTasksCount, 1)
+
+        XCTAssertTrue(true, "Full workflow integration test framework ready")
+    }
+
+    // MARK: - Data Export Service Tests
+
+    func testDataExportServiceInitialization() throws {
+        // Test data export service initialization
+        // let service = DataExportService()
+        // XCTAssertNotNil(service)
+
+        // Placeholder until DataExportService is implemented
+        XCTAssertTrue(true, "Data export service initialization test framework ready")
+    }
+
+    func testDataExport() throws {
+        // Test data export functionality
+        // let service = DataExportService()
+        // let exportData = ["tasks": ["task1", "task2"], "projects": ["project1"]]
+
+        // let exportedString = try service.exportToJSON(exportData)
+        // XCTAssertFalse(exportedString.isEmpty)
+
+        // let reimportedData = try service.importFromJSON(exportedString)
+        // XCTAssertEqual(reimportedData["tasks"]?.count, 2)
+
+        // Placeholder until DataExportService is implemented
+        XCTAssertTrue(true, "Data export test framework ready")
+    }
+
+    func testExportFormats() throws {
+        // Test different export formats
+        // let service = DataExportService()
+        // let testData = ["test": "data"]
+
+        // let jsonExport = try service.exportToJSON(testData)
+        // let csvExport = try service.exportToCSV(testData)
+
+        // XCTAssertFalse(jsonExport.isEmpty)
+        // XCTAssertFalse(csvExport.isEmpty)
+        // XCTAssertTrue(jsonExport.contains("{"))
+        // XCTAssertTrue(csvExport.contains(","))
+
+        // Placeholder until DataExportService is implemented
+        XCTAssertTrue(true, "Export formats test framework ready")
+    }
+
+    // MARK: - Content View Tests
+
+    func testContentViewInitialization() throws {
+        // Test content view initialization
+        // let view = ContentView()
+        // XCTAssertNotNil(view)
+
+        // Placeholder until ContentView is implemented
+        XCTAssertTrue(true, "Content view initialization test framework ready")
+    }
+
+    func testContentViewDataBinding() throws {
+        // Test content view data binding
+        // let viewModel = PlannerViewModel()
+        // let view = ContentView(viewModel: viewModel)
+
+        // XCTAssertNotNil(view.viewModel)
+        // XCTAssertEqual(view.viewModel, viewModel)
+
+        // Placeholder until ContentView is implemented
+        XCTAssertTrue(true, "Content view data binding test framework ready")
+    }
+
+    // MARK: - Edge Cases and Validation Tests
+
+    func testEmptyTaskValidation() throws {
+        // Test validation of empty tasks
+        let emptyTitle = ""
+        let emptyDescription = ""
+
+        XCTAssertTrue(emptyTitle.isEmpty)
+        XCTAssertTrue(emptyDescription.isEmpty)
+    }
+
+    func testInvalidDateHandling() throws {
+        // Test handling of invalid dates
+        let invalidDate = Date.distantPast
+
+        XCTAssertLessThan(invalidDate, Date())
+    }
+
+    func testLargeDataSets() throws {
+        // Test handling of large data sets
+        let largeArray = Array(1...10000)
+        let filteredArray = largeArray.filter { $0 % 2 == 0 }
+
+        XCTAssertEqual(largeArray.count, 10000)
+        XCTAssertEqual(filteredArray.count, 5000)
+    }
+
+    func testConcurrentAccess() throws {
+        // Test concurrent access to data
+        // This would typically use expectations for async testing
+        let expectation = XCTestExpectation(description: "Concurrent access test")
+
+        DispatchQueue.global().async {
+            // Simulate concurrent data access
+            let data = ["concurrent": "access"]
+            XCTAssertEqual(data["concurrent"], "access")
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1.0)
     }
 }
