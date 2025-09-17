@@ -46,7 +46,6 @@
     // Commit assistant (GitLab Commitizen placeholder)
     "gitlab.commitizen.enable": true,
     // Terminal / shell preferences
-    "terminal.integrated.shell.osx": "/bin/zsh",
     "terminal.integrated.defaultProfile.osx": "zsh",
     // Exclusions
     "files.exclude": {
@@ -65,7 +64,9 @@
         "**/.pytest_cache": true,
         "**/__pycache__": true,
         "**/.swiftpm": true,
-        "**/.venv": true
+        "**/.venv": true,
+        "**/.autofix_backups": true,
+        "Tools/Automation/Archive": true
     },
     "search.exclude": {
         "**/DerivedData": true,
@@ -78,10 +79,9 @@
         "**/node_modules": true,
         "**/.pytest_cache": true,
         "**/__pycache__": true,
-        "**/.venv": true
-    },
-    "[ignore]": {
-        "editor.defaultFormatter": "trunk.io"
+        "**/.venv": true,
+        "**/.autofix_backups": true,
+        "Tools/Automation/Archive": true
     },
     // Gemini Code Assist
     "gemini.enable": true,
