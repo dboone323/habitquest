@@ -23,20 +23,20 @@ final class AdvancedAnalyticsEngine {
     /// - Returns: <#description#>
     func predictStreakSuccess(for habit: Habit, days: Int = 7) async -> StreakPrediction {
         let patterns = await analyzeHabitPatterns(habit)
-        let timeFactors = analyzeTimeFactors(habit)
-        let streakMomentum = calculateStreakMomentum(habit)
+        let timeFactors = self.analyzeTimeFactors(habit)
+        let streakMomentum = self.calculateStreakMomentum(habit)
 
-        let baseProbability = calculateBaseProbability(patterns: patterns)
-        let timeAdjustment = calculateTimeAdjustment(timeFactors)
-        let momentumBonus = calculateMomentumBonus(streakMomentum)
+        let baseProbability = self.calculateBaseProbability(patterns: patterns)
+        let timeAdjustment = self.calculateTimeAdjustment(timeFactors)
+        let momentumBonus = self.calculateMomentumBonus(streakMomentum)
 
         let finalProbability = min(95.0, max(5.0, baseProbability + timeAdjustment + momentumBonus))
 
         return StreakPrediction(
             nextMilestone: habit.streak < 7 ? "7 days" : "\(((habit.streak / 7) + 1) * 7) days",
             probability: finalProbability,
-            trend: determineTrend(patterns: patterns),
-            recommendedAction: generateSmartRecommendation(
+            trend: self.determineTrend(patterns: patterns),
+            recommendedAction: self.generateSmartRecommendation(
                 habit: habit,
                 patterns: patterns,
                 probability: finalProbability
@@ -56,14 +56,14 @@ final class AdvancedAnalyticsEngine {
             log.isCompleted ? Calendar.current.dateComponents([.hour], from: log.completionDate).hour : nil
         }
 
-        let optimalHour = findOptimalHour(from: completionTimes)
-        let successRate = calculateHourlySuccessRate(habit: habit, hour: optimalHour)
+        let optimalHour = self.findOptimalHour(from: completionTimes)
+        let successRate = self.calculateHourlySuccessRate(habit: habit, hour: optimalHour)
 
         return SchedulingRecommendation(
             optimalTime: optimalHour,
             successRateAtTime: successRate,
-            reasoning: generateSchedulingReasoning(hour: optimalHour, successRate: successRate),
-            alternativeTimes: findAlternativeHours(from: completionTimes)
+            reasoning: self.generateSchedulingReasoning(hour: optimalHour, successRate: successRate),
+            alternativeTimes: self.findAlternativeHours(from: completionTimes)
         )
     }
 
@@ -76,9 +76,9 @@ final class AdvancedAnalyticsEngine {
     /// - Returns: <#description#>
     func analyzeBehavioralPatterns(for habit: Habit) async -> BehavioralInsights {
         let moodCorrelation = await calculateMoodCorrelation(habit)
-        let dayOfWeekPattern = analyzeDayOfWeekPattern(habit)
-        let streakBreakFactors = analyzeStreakBreakFactors(habit)
-        let motivationTriggers = identifyMotivationTriggers(habit)
+        let dayOfWeekPattern = self.analyzeDayOfWeekPattern(habit)
+        let streakBreakFactors = self.analyzeStreakBreakFactors(habit)
+        let motivationTriggers = self.identifyMotivationTriggers(habit)
 
         return BehavioralInsights(
             moodCorrelation: moodCorrelation,
@@ -86,7 +86,7 @@ final class AdvancedAnalyticsEngine {
             weakestDays: dayOfWeekPattern.weakest,
             streakBreakFactors: streakBreakFactors,
             motivationTriggers: motivationTriggers,
-            personalityInsights: generatePersonalityInsights(habit)
+            personalityInsights: self.generatePersonalityInsights(habit)
         )
     }
 
@@ -102,10 +102,10 @@ final class AdvancedAnalyticsEngine {
         let userProfile = await analyzeUserProfile(from: existingHabits)
 
         return [
-            generateCategoryBasedSuggestions(profile: userProfile),
-            generateTimeBasedSuggestions(profile: userProfile),
-            generateComplementarySuggestions(existing: existingHabits),
-            generateTrendingSuggestions()
+            self.generateCategoryBasedSuggestions(profile: userProfile),
+            self.generateTimeBasedSuggestions(profile: userProfile),
+            self.generateComplementarySuggestions(existing: existingHabits),
+            self.generateTrendingSuggestions()
         ].flatMap(\.self)
     }
 
@@ -114,16 +114,16 @@ final class AdvancedAnalyticsEngine {
     private func analyzeHabitPatterns(_ habit: Habit) async -> HabitPatterns {
         let recentLogs = habit.logs.suffix(30).sorted { $0.completionDate < $1.completionDate }
 
-        let consistency = calculateConsistency(from: ArraySlice(recentLogs))
-        let momentum = calculateMomentum(from: ArraySlice(recentLogs))
-        let volatility = calculateVolatility(from: ArraySlice(recentLogs))
+        let consistency = self.calculateConsistency(from: ArraySlice(recentLogs))
+        let momentum = self.calculateMomentum(from: ArraySlice(recentLogs))
+        let volatility = self.calculateVolatility(from: ArraySlice(recentLogs))
 
         return HabitPatterns(
             consistency: consistency,
             momentum: momentum,
             volatility: volatility,
-            weekdayPreference: analyzeWeekdayPreference(recentLogs),
-            timePreference: analyzeTimePreference(recentLogs)
+            weekdayPreference: self.analyzeWeekdayPreference(recentLogs),
+            timePreference: self.analyzeTimePreference(recentLogs)
         )
     }
 
@@ -134,14 +134,14 @@ final class AdvancedAnalyticsEngine {
         let currentHour = calendar.component(.hour, from: now)
         let dayOfWeek = calendar.component(.weekday, from: now)
 
-        let hourSuccessRate = calculateSuccessRateForHour(habit: habit, hour: currentHour)
-        let daySuccessRate = calculateSuccessRateForWeekday(habit: habit, weekday: dayOfWeek)
+        let hourSuccessRate = self.calculateSuccessRateForHour(habit: habit, hour: currentHour)
+        let daySuccessRate = self.calculateSuccessRateForWeekday(habit: habit, weekday: dayOfWeek)
 
         return TimeFactors(
             currentHourSuccessRate: hourSuccessRate,
             currentDaySuccessRate: daySuccessRate,
-            timesSinceLastCompletion: calculateTimeSinceLastCompletion(habit),
-            optimalTimeWindow: findOptimalTimeWindow(habit)
+            timesSinceLastCompletion: self.calculateTimeSinceLastCompletion(habit),
+            optimalTimeWindow: self.findOptimalTimeWindow(habit)
         )
     }
 
@@ -149,8 +149,8 @@ final class AdvancedAnalyticsEngine {
         let recentCompletions = habit.logs.suffix(7).filter(\.isCompleted)
         let momentum = Double(recentCompletions.count) / 7.0
 
-        let longestRecentStreak = calculateLongestRecentStreak(habit)
-        let streakAcceleration = calculateStreakAcceleration(habit)
+        let longestRecentStreak = self.calculateLongestRecentStreak(habit)
+        let streakAcceleration = self.calculateStreakAcceleration(habit)
 
         return StreakMomentum(
             weeklyMomentum: momentum,
@@ -205,13 +205,13 @@ final class AdvancedAnalyticsEngine {
         probability: Double
     ) -> String {
         switch (patterns.momentum, probability) {
-        case (let momentumValue, let probabilityValue) where momentumValue > 0.8 && probabilityValue > 80:
+        case let (momentumValue, probabilityValue) where momentumValue > 0.8 && probabilityValue > 80:
             "🚀 Exceptional momentum! Consider expanding this habit or adding a complementary one."
-        case (let momentumValue, let probabilityValue) where momentumValue > 0.6 && probabilityValue > 70:
+        case let (momentumValue, probabilityValue) where momentumValue > 0.6 && probabilityValue > 70:
             "💪 Strong pattern! Focus on maintaining consistency during weekends."
-        case (let momentumValue, let probabilityValue) where momentumValue < 0.4 && probabilityValue < 50:
+        case let (momentumValue, probabilityValue) where momentumValue < 0.4 && probabilityValue < 50:
             "🎯 Try habit stacking: attach this to an established routine."
-        case (_, let probabilityValue) where probabilityValue < 30:
+        case let (_, probabilityValue) where probabilityValue < 30:
             "🔄 Consider reducing frequency or simplifying the habit to rebuild momentum."
         default:
             "📈 Small wins lead to big changes. Focus on consistency over perfection."
@@ -222,7 +222,7 @@ final class AdvancedAnalyticsEngine {
 
     private func fetchAllHabits() async -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
-        return (try? modelContext.fetch(descriptor)) ?? []
+        return (try? self.modelContext.fetch(descriptor)) ?? []
     }
 
     private func calculateConsistency(from logs: ArraySlice<HabitLog>) -> Double {
@@ -237,8 +237,8 @@ final class AdvancedAnalyticsEngine {
         let firstHalf = logs.prefix(logs.count / 2)
         let secondHalf = logs.suffix(logs.count / 2)
 
-        let firstConsistency = calculateConsistency(from: firstHalf)
-        let secondConsistency = calculateConsistency(from: secondHalf)
+        let firstConsistency = self.calculateConsistency(from: firstHalf)
+        let secondConsistency = self.calculateConsistency(from: secondHalf)
 
         return secondConsistency > firstConsistency ?
             min(1.0, secondConsistency + 0.1) : secondConsistency
@@ -372,7 +372,7 @@ final class AdvancedAnalyticsEngine {
             log.isCompleted ? Calendar.current.component(.hour, from: log.completionDate) : nil
         }
 
-        let optimalHour = findOptimalHour(from: completionHours)
+        let optimalHour = self.findOptimalHour(from: completionHours)
         return (optimalHour - 1) ... (optimalHour + 1)
     }
 

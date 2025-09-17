@@ -119,23 +119,23 @@ struct GradientCard<Content: View>: View {
     }
 
     var body: some View {
-        content
+        self.content
             .padding()
             .background(
                 Group {
-                    if useGradient {
+                    if self.useGradient {
                         Color.gradient(
-                            from: themeManager.currentTheme.primaryAccentColor.opacity(0.1),
-                            to: themeManager.currentTheme.secondaryAccentColor.opacity(0.05)
+                            from: self.themeManager.currentTheme.primaryAccentColor.opacity(0.1),
+                            to: self.themeManager.currentTheme.secondaryAccentColor.opacity(0.05)
                         )
                     } else {
-                        themeManager.currentTheme.secondaryBackgroundColor
+                        self.themeManager.currentTheme.secondaryBackgroundColor
                     }
                 }
             )
             .cornerRadius(16)
             .shadow(
-                color: themeManager.currentTheme.primaryAccentColor.opacity(0.1),
+                color: self.themeManager.currentTheme.primaryAccentColor.opacity(0.1),
                 radius: 8,
                 x: 0,
                 y: 4

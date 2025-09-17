@@ -23,18 +23,18 @@ extension Features.Dashboard {
         }
 
         var body: some View {
-            themeComponents.cardWithHeader(title: "Upcoming Subscriptions") {
+            self.themeComponents.cardWithHeader(title: "Upcoming Subscriptions") {
                 VStack(spacing: 16) {
-                    if !subscriptions.isEmpty {
-                        ForEach(Array(subscriptions.prefix(3).enumerated()), id: \.element.id) {
+                    if !self.subscriptions.isEmpty {
+                        ForEach(Array(self.subscriptions.prefix(3).enumerated()), id: \.element.id) {
                             index, subscription in
                             HStack {
                                 // Icon with colorful background
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 8)
                                         .fill(
-                                            colorTheme.categoryColors[
-                                                index % colorTheme.categoryColors.count
+                                            self.colorTheme.categoryColors[
+                                                index % self.colorTheme.categoryColors.count
                                             ]
                                         )
                                         .frame(width: 36, height: 36)
@@ -47,16 +47,16 @@ extension Features.Dashboard {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(subscription.name)
                                         .font(.subheadline)
-                                        .foregroundStyle(colorTheme.primaryText)
+                                        .foregroundStyle(self.colorTheme.primaryText)
 
-                                    Text(subscription.nextBillingDate.map(formattedDateString) ?? "No date set")
+                                    Text(subscription.nextBillingDate.map(self.formattedDateString) ?? "No date set")
                                         .font(.caption)
-                                        .foregroundStyle(colorTheme.secondaryText)
+                                        .foregroundStyle(self.colorTheme.secondaryText)
                                 }
 
                                 Spacer()
 
-                                themeComponents.currencyDisplay(
+                                self.themeComponents.currencyDisplay(
                                     amount: Decimal(subscription.amount),
                                     showSign: true,
                                     font: .subheadline.weight(.medium)
@@ -64,22 +64,22 @@ extension Features.Dashboard {
                             }
                             .contentShape(Rectangle())
                             .onTapGesture {
-                                onSubscriptionTap(subscription)
+                                self.onSubscriptionTap(subscription)
                             }
 
-                            if index < min(2, subscriptions.count - 1) {
+                            if index < min(2, self.subscriptions.count - 1) {
                                 Divider()
-                                    .background(colorTheme.secondaryText.opacity(0.3))
+                                    .background(self.colorTheme.secondaryText.opacity(0.3))
                             }
                         }
 
                         // View all subscriptions button
-                        if subscriptions.count > 3 {
-                            Button(action: onViewAllTap).accessibilityLabel("Button") {
-                                Text("View All \(subscriptions.count) Subscriptions")
+                        if self.subscriptions.count > 3 {
+                            Button(action: self.onViewAllTap).accessibilityLabel("Button") {
+                                Text("View All \(self.subscriptions.count) Subscriptions")
                                     .font(.caption)
                                     .fontWeight(.medium)
-                                    .foregroundStyle(colorTheme.accentPrimary)
+                                    .foregroundStyle(self.colorTheme.accentPrimary)
                             }
                             .padding(.top, 8)
                         }
@@ -87,19 +87,19 @@ extension Features.Dashboard {
                         VStack(spacing: 12) {
                             Image(systemName: "repeat.circle")
                                 .font(.largeTitle)
-                                .foregroundStyle(colorTheme.secondaryText.opacity(0.6))
+                                .foregroundStyle(self.colorTheme.secondaryText.opacity(0.6))
 
                             Text("No Subscriptions")
                                 .font(.subheadline)
-                                .foregroundStyle(colorTheme.secondaryText)
+                                .foregroundStyle(self.colorTheme.secondaryText)
 
                             Text("Add your recurring subscriptions to track upcoming payments")
                                 .font(.caption)
-                                .foregroundStyle(colorTheme.secondaryText)
+                                .foregroundStyle(self.colorTheme.secondaryText)
                                 .multilineTextAlignment(.center)
 
                             Button("Add Subscription").accessibilityLabel("Button") {
-                                onViewAllTap()
+                                self.onViewAllTap()
                             }
                             .buttonStyle(.borderedProminent)
                             .font(.caption)

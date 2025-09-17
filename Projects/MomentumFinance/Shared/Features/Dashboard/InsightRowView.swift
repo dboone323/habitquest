@@ -10,30 +10,30 @@ public struct InsightRowView: View {
     }
 
     public var body: some View {
-        Button(role: .none, action: action).accessibilityLabel("Button") {
+        Button(role: .none, action: self.action).accessibilityLabel("Button") {
             HStack(spacing: 12) {
                 // Priority indicator
                 Circle()
-                    .fill(priorityColor)
+                    .fill(self.priorityColor)
                     .frame(width: 12, height: 12)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(insight.title)
+                    Text(self.insight.title)
                         .font(.headline)
                         .foregroundColor(.primary)
                         .lineLimit(1)
 
-                    Text(insight.description)
+                    Text(self.insight.description)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .lineLimit(2)
 
                     HStack(spacing: 12) {
-                        Label(insight.type.rawValue, systemImage: "tag")
+                        Label(self.insight.type.rawValue, systemImage: "tag")
                             .font(.caption)
                             .foregroundColor(.secondary)
 
-                        Text("\(Int(insight.confidence * 100))% confidence")
+                        Text("\(Int(self.insight.confidence * 100))% confidence")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -54,7 +54,7 @@ public struct InsightRowView: View {
     }
 
     private var priorityColor: Color {
-        switch insight.priority {
+        switch self.insight.priority {
         case .critical: .red
         case .high: .orange
         case .medium: .yellow

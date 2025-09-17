@@ -28,14 +28,14 @@ struct ModernCard<Content: View>: View {
     }
 
     var body: some View {
-        content
-            .padding(padding)
+        self.content
+            .padding(self.padding)
             .background(
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(themeManager.currentTheme.secondaryBackgroundColor)
+                RoundedRectangle(cornerRadius: self.cornerRadius)
+                    .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
                     .shadow(
                         color: Color.black.opacity(0.08),
-                        radius: shadowRadius,
+                        radius: self.shadowRadius,
                         x: 0,
                         y: 2
                     )
@@ -86,50 +86,50 @@ struct ModernButton: View {
     }
 
     var body: some View {
-        Button(action: action) {
-            Text(title)
-                .font(.system(size: size.fontSize, weight: .medium))
-                .foregroundColor(textColor)
+        Button(action: self.action) {
+            Text(self.title)
+                .font(.system(size: self.size.fontSize, weight: .medium))
+                .foregroundColor(self.textColor)
                 .frame(maxWidth: .infinity)
-                .frame(height: size.height)
-                .padding(.horizontal, size.padding)
+                .frame(height: self.size.height)
+                .padding(.horizontal, self.size.padding)
         }
         .accessibilityLabel("Button")
-        .background(backgroundColor)
+        .background(self.backgroundColor)
         .cornerRadius(12)
-        .disabled(isDisabled)
-        .opacity(isDisabled ? 0.6 : 1.0)
+        .disabled(self.isDisabled)
+        .opacity(self.isDisabled ? 0.6 : 1.0)
     }
 
     private var backgroundColor: Color {
-        if isDisabled {
-            return themeManager.currentTheme.secondaryTextColor.opacity(0.3)
+        if self.isDisabled {
+            return self.themeManager.currentTheme.secondaryTextColor.opacity(0.3)
         }
 
-        if isDestructive {
-            return themeManager.currentTheme.destructiveColor
+        if self.isDestructive {
+            return self.themeManager.currentTheme.destructiveColor
         }
 
-        switch style {
+        switch self.style {
         case .primary:
-            return themeManager.currentTheme.primaryAccentColor
+            return self.themeManager.currentTheme.primaryAccentColor
         case .secondary:
-            return themeManager.currentTheme.secondaryAccentColor
+            return self.themeManager.currentTheme.secondaryAccentColor
         case .tertiary:
             return Color.clear
         }
     }
 
     private var textColor: Color {
-        if isDestructive || style == .primary {
+        if self.isDestructive || self.style == .primary {
             return Color.white
         }
 
-        switch style {
+        switch self.style {
         case .secondary:
-            return themeManager.currentTheme.primaryTextColor
+            return self.themeManager.currentTheme.primaryTextColor
         case .tertiary:
-            return themeManager.currentTheme.primaryAccentColor
+            return self.themeManager.currentTheme.primaryAccentColor
         default:
             return Color.white
         }
@@ -138,7 +138,7 @@ struct ModernButton: View {
 
 // Progress indicator component
 struct ProgressBar: View {
-    let progress: Double  // 0.0 to 1.0
+    let progress: Double // 0.0 to 1.0
     @EnvironmentObject var themeManager: ThemeManager
 
     var height: CGFloat = 8
@@ -146,28 +146,28 @@ struct ProgressBar: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            if showPercentage {
+            if self.showPercentage {
                 HStack {
                     Spacer()
-                    Text("\(Int(progress * 100))%")
+                    Text("\(Int(self.progress * 100))%")
                         .font(.caption)
-                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
                 }
             }
 
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: height / 2)
-                        .fill(themeManager.currentTheme.secondaryAccentColor.opacity(0.3))
-                        .frame(height: height)
+                    RoundedRectangle(cornerRadius: self.height / 2)
+                        .fill(self.themeManager.currentTheme.secondaryAccentColor.opacity(0.3))
+                        .frame(height: self.height)
 
-                    RoundedRectangle(cornerRadius: height / 2)
-                        .fill(themeManager.currentTheme.primaryAccentColor)
-                        .frame(width: geometry.size.width * CGFloat(progress), height: height)
-                        .animation(.easeInOut(duration: 0.3), value: progress)
+                    RoundedRectangle(cornerRadius: self.height / 2)
+                        .fill(self.themeManager.currentTheme.primaryAccentColor)
+                        .frame(width: geometry.size.width * CGFloat(self.progress), height: self.height)
+                        .animation(.easeInOut(duration: 0.3), value: self.progress)
                 }
             }
-            .frame(height: height)
+            .frame(height: self.height)
         }
     }
 }
@@ -180,32 +180,33 @@ struct ModernTextField: View {
 
     var isSecure: Bool = false
     #if os(iOS)
-        var keyboardType: UIKeyboardType = .default
+    var keyboardType: UIKeyboardType = .default
     #endif
 
     var body: some View {
         Group {
-            if isSecure {
-                SecureField(placeholder, text: $text)
+            if self.isSecure {
+                SecureField(self.placeholder, text: self.$text)
             } else {
-                TextField(placeholder, text: $text).accessibilityLabel("Text Field")
-                    #if os(iOS)
-                        .keyboardType(keyboardType)
-                    #endif
+                TextField(self.placeholder, text: self.$text).accessibilityLabel("Text Field")
+                #if os(iOS)
+                    .keyboardType(self.keyboardType)
+                #endif
             }
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(themeManager.currentTheme.secondaryBackgroundColor)
+                .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(
-                            themeManager.currentTheme.secondaryAccentColor.opacity(0.3),
-                            lineWidth: 1)
+                            self.themeManager.currentTheme.secondaryAccentColor.opacity(0.3),
+                            lineWidth: 1
+                        )
                 )
         )
-        .foregroundColor(themeManager.currentTheme.primaryTextColor)
+        .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
     }
 }
 

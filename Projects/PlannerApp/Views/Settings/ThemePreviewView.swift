@@ -29,41 +29,41 @@ struct ThemePreviewView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
-                    themeSelectionGrid
+                    self.themeSelectionGrid
                     Divider().padding(.horizontal)
-                    livePreviewSection
+                    self.livePreviewSection
                 }
                 .padding(.vertical)
             }
-            .background(selectedTheme.primaryBackgroundColor.ignoresSafeArea())
+            .background(self.selectedTheme.primaryBackgroundColor.ignoresSafeArea())
             .navigationTitle("Theme Preview")
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Text("Cancel")
-                            .accessibilityLabel("Button")
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(action: {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Text("Cancel")
+                                .accessibilityLabel("Button")
+                        }
                     }
-                }
 
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(action: {
-                        themeManager.setTheme(selectedTheme)
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Text("Apply")
-                            .fontWeight(.semibold)
-                            .accessibilityLabel("Button")
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button(action: {
+                            self.themeManager.setTheme(self.selectedTheme)
+                            self.presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Text("Apply")
+                                .fontWeight(.semibold)
+                                .accessibilityLabel("Button")
+                        }
                     }
                 }
-            }
         }
         .onAppear {
-            selectedTheme = themeManager.currentTheme
+            self.selectedTheme = self.themeManager.currentTheme
         }
     }
 
@@ -72,13 +72,13 @@ struct ThemePreviewView: View {
             ForEach(Theme.availableThemes, id: \.name) { theme in
                 ThemePreviewCard(
                     theme: theme,
-                    isSelected: selectedTheme.name == theme.name
+                    isSelected: self.selectedTheme.name == theme.name
                 ) {
-                    selectedTheme = theme
+                    self.selectedTheme = theme
                     // Apply haptic feedback if enabled
                     #if os(iOS)
-                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                        impactFeedback.impactOccurred()
+                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                    impactFeedback.impactOccurred()
                     #endif
                 }
             }
@@ -90,12 +90,12 @@ struct ThemePreviewView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Preview")
                 .font(.title2.bold())
-                .foregroundColor(selectedTheme.primaryTextColor)
+                .foregroundColor(self.selectedTheme.primaryTextColor)
                 .padding(.horizontal)
 
-            sampleDashboardCard
-            sampleButtonsSection
-            sampleGoalsSection
+            self.sampleDashboardCard
+            self.sampleButtonsSection
+            self.sampleGoalsSection
         }
     }
 
@@ -105,43 +105,43 @@ struct ThemePreviewView: View {
                 HStack {
                     Text("Today's Tasks")
                         .font(.headline)
-                        .foregroundColor(selectedTheme.primaryTextColor)
+                        .foregroundColor(self.selectedTheme.primaryTextColor)
                     Spacer()
                     Text("4")
                         .font(.title2.bold())
-                        .foregroundColor(selectedTheme.primaryAccentColor)
+                        .foregroundColor(self.selectedTheme.primaryAccentColor)
                 }
 
-                ForEach(sampleTasks.prefix(3), id: \.self) { task in
+                ForEach(self.sampleTasks.prefix(3), id: \.self) { task in
                     HStack {
                         Image(systemName: "circle")
-                            .foregroundColor(selectedTheme.secondaryAccentColor)
+                            .foregroundColor(self.selectedTheme.secondaryAccentColor)
                         Text(task)
                             .font(.body)
-                            .foregroundColor(selectedTheme.primaryTextColor)
+                            .foregroundColor(self.selectedTheme.primaryTextColor)
                         Spacer()
                     }
                 }
 
                 ProgressBar(progress: 0.6, showPercentage: true)
-                    .environmentObject(createThemeManager(for: selectedTheme))
+                    .environmentObject(self.createThemeManager(for: self.selectedTheme))
             }
         }
-        .environmentObject(createThemeManager(for: selectedTheme))
+        .environmentObject(self.createThemeManager(for: self.selectedTheme))
         .padding(.horizontal)
     }
 
     private var sampleButtonsSection: some View {
         VStack(spacing: 12) {
             ModernButton(title: "Primary Action") {}
-                .environmentObject(createThemeManager(for: selectedTheme))
+                .environmentObject(self.createThemeManager(for: self.selectedTheme))
 
             HStack(spacing: 12) {
                 ModernButton(title: "Secondary") {}
-                    .environmentObject(createThemeManager(for: selectedTheme))
+                    .environmentObject(self.createThemeManager(for: self.selectedTheme))
 
                 ModernButton(title: "Destructive") {}
-                    .environmentObject(createThemeManager(for: selectedTheme))
+                    .environmentObject(self.createThemeManager(for: self.selectedTheme))
             }
         }
         .padding(.horizontal)
@@ -152,20 +152,20 @@ struct ThemePreviewView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text("Goals Progress")
                     .font(.headline)
-                    .foregroundColor(selectedTheme.primaryTextColor)
+                    .foregroundColor(self.selectedTheme.primaryTextColor)
 
-                ForEach(Array(sampleGoals.enumerated()), id: \.offset) { index, goal in
+                ForEach(Array(self.sampleGoals.enumerated()), id: \.offset) { index, goal in
                     VStack(alignment: .leading, spacing: 4) {
                         Text(goal)
                             .font(.body)
-                            .foregroundColor(selectedTheme.primaryTextColor)
+                            .foregroundColor(self.selectedTheme.primaryTextColor)
                         ProgressBar(progress: Double(index + 1) * 0.3)
-                            .environmentObject(createThemeManager(for: selectedTheme))
+                            .environmentObject(self.createThemeManager(for: self.selectedTheme))
                     }
                 }
             }
         }
-        .environmentObject(createThemeManager(for: selectedTheme))
+        .environmentObject(self.createThemeManager(for: self.selectedTheme))
         .padding(.horizontal)
     }
 
@@ -182,31 +182,31 @@ struct ThemePreviewCard: View {
     let onTap: () -> Void
 
     var body: some View {
-        Button(action: onTap) {
+        Button(action: self.onTap) {
             VStack(spacing: 12) {
                 // Theme color swatches
                 HStack(spacing: 8) {
                     Circle()
-                        .fill(theme.primaryAccentColor)
+                        .fill(self.theme.primaryAccentColor)
                         .frame(width: 24, height: 24)
                     Circle()
-                        .fill(theme.secondaryAccentColor)
+                        .fill(self.theme.secondaryAccentColor)
                         .frame(width: 20, height: 20)
                     Circle()
-                        .fill(theme.completedColor)
+                        .fill(self.theme.completedColor)
                         .frame(width: 16, height: 16)
                     Spacer()
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(theme.name)
+                    Text(self.theme.name)
                         .font(.headline)
-                        .foregroundColor(theme.primaryTextColor)
+                        .foregroundColor(self.theme.primaryTextColor)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     Text("Sample text")
                         .font(.caption)
-                        .foregroundColor(theme.secondaryTextColor)
+                        .foregroundColor(self.theme.secondaryTextColor)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .accessibilityLabel("Button")
                 }
@@ -215,11 +215,11 @@ struct ThemePreviewCard: View {
             }
             .padding()
             .frame(height: 100)
-            .background(theme.secondaryBackgroundColor)
+            .background(self.theme.secondaryBackgroundColor)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(
-                        isSelected ? theme.primaryAccentColor : Color.clear,
+                        self.isSelected ? self.theme.primaryAccentColor : Color.clear,
                         lineWidth: 2
                     )
             )

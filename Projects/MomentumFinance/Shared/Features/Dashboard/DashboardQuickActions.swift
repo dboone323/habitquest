@@ -17,28 +17,28 @@ struct DashboardQuickActions: View {
                     title: "Add Transaction",
                     icon: "plus.circle.fill",
                     color: .mint,
-                    action: onAddTransaction
+                    action: self.onAddTransaction
                 )
 
                 QuickActionButton(
                     title: "Pay Bills",
                     icon: "creditcard.fill",
                     color: .blue,
-                    action: onPayBills
+                    action: self.onPayBills
                 )
 
                 QuickActionButton(
                     title: "View Reports",
                     icon: "chart.bar.fill",
                     color: .orange,
-                    action: onViewReports
+                    action: self.onViewReports
                 )
 
                 QuickActionButton(
                     title: "Set Goals",
                     icon: "target",
                     color: .purple,
-                    action: onSetGoals
+                    action: self.onSetGoals
                 )
             }
         }
@@ -52,13 +52,13 @@ struct QuickActionButton: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: action).accessibilityLabel("Button") {
+        Button(action: self.action).accessibilityLabel("Button") {
             VStack(spacing: 8) {
-                Image(systemName: icon)
+                Image(systemName: self.icon)
                     .font(.title2)
-                    .foregroundStyle(color)
+                    .foregroundStyle(self.color)
 
-                Text(title)
+                Text(self.title)
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(.primary)

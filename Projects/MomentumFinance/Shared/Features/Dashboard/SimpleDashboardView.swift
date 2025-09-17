@@ -52,7 +52,7 @@ struct SimpleDashboardView: View {
                         Text("Account Balances")
                             .font(.headline)
 
-                        ForEach(accounts) { account in
+                        ForEach(self.accounts) { account in
                             HStack {
                                 Text(account.name)
                                 Spacer()
@@ -64,7 +64,7 @@ struct SimpleDashboardView: View {
                             .cornerRadius(8)
                         }
 
-                        if accounts.isEmpty {
+                        if self.accounts.isEmpty {
                             Text("No accounts found")
                                 .foregroundStyle(.secondary)
                                 .italic()
@@ -76,7 +76,7 @@ struct SimpleDashboardView: View {
                         Text("Upcoming Subscriptions")
                             .font(.headline)
 
-                        ForEach(Array(subscriptions.prefix(3))) { subscription in
+                        ForEach(Array(self.subscriptions.prefix(3))) { subscription in
                             HStack {
                                 Text(subscription.name)
                                 Spacer()
@@ -88,7 +88,7 @@ struct SimpleDashboardView: View {
                             .cornerRadius(8)
                         }
 
-                        if subscriptions.isEmpty {
+                        if self.subscriptions.isEmpty {
                             Text("No subscriptions found")
                                 .foregroundStyle(.secondary)
                                 .italic()
@@ -100,7 +100,7 @@ struct SimpleDashboardView: View {
                         Text("Budget Progress")
                             .font(.headline)
 
-                        ForEach(budgets) { budget in
+                        ForEach(self.budgets) { budget in
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
                                     Text(budget.name)
@@ -119,7 +119,7 @@ struct SimpleDashboardView: View {
                             .cornerRadius(8)
                         }
 
-                        if budgets.isEmpty {
+                        if self.budgets.isEmpty {
                             Text("No budgets found")
                                 .foregroundStyle(.secondary)
                                 .italic()

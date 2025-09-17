@@ -13,9 +13,10 @@ struct InsightsWidget: View {
 
     private var topInsights: [FinancialInsight] {
         Array(
-            intelligenceService.insights
+            self.intelligenceService.insights
                 .sorted { $0.priority > $1.priority }
-                .prefix(3))
+                .prefix(3)
+        )
     }
 
     var body: some View {
@@ -28,11 +29,11 @@ struct InsightsWidget: View {
 
                 Spacer()
 
-                if intelligenceService.isAnalyzing {
+                if self.intelligenceService.isAnalyzing {
                     ProgressView()
                         .scaleEffect(0.8)
-                } else if !intelligenceService.insights.isEmpty {
-                    Button(action: { showAllInsights = true }) {
+                } else if !self.intelligenceService.insights.isEmpty {
+                    Button(action: { self.showAllInsights = true }) {
                         Text("View All")
                             .accessibilityLabel("View All Insights")
                     }
@@ -42,25 +43,25 @@ struct InsightsWidget: View {
             }
 
             // Content
-            if intelligenceService.isAnalyzing {
-                loadingContent
-            } else if topInsights.isEmpty {
-                emptyContent
+            if self.intelligenceService.isAnalyzing {
+                self.loadingContent
+            } else if self.topInsights.isEmpty {
+                self.emptyContent
             } else {
-                insightsContent
+                self.insightsContent
             }
         }
         .padding()
         .background(.regularMaterial)
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
-        .sheet(isPresented: $showAllInsights) {
+        .sheet(isPresented: self.$showAllInsights) {
             InsightsView()
         }
         .onAppear {
             Task {
-                if intelligenceService.insights.isEmpty {
-                    await intelligenceService.analyzeFinancialData(modelContext: modelContext)
+                if self.intelligenceService.insights.isEmpty {
+                    await self.intelligenceService.analyzeFinancialData(modelContext: self.modelContext)
                 }
             }
         }
@@ -108,19 +109,19 @@ struct InsightsWidget: View {
 
     private var insightsContent: some View {
         VStack(spacing: 12) {
-            ForEach(topInsights) { insight in
+            ForEach(self.topInsights) { insight in
                 CompactInsightRow(insight: insight)
             }
 
-            if intelligenceService.insights.count > 3 {
+            if self.intelligenceService.insights.count > 3 {
                 HStack {
-                    Text("\(intelligenceService.insights.count - 3) more insights available")
+                    Text("\(self.intelligenceService.insights.count - 3) more insights available")
                         .font(.caption)
                         .foregroundColor(.secondary)
 
                     Spacer()
 
-                    Button(action: { showAllInsights = true }) {
+                    Button(action: { self.showAllInsights = true }) {
                         Text("View All")
                             .accessibilityLabel("View All Insights")
                     }
@@ -140,22 +141,22 @@ struct CompactInsightRow: View {
     @State private var showDetail = false
 
     var body: some View {
-        Button(action: { showDetail = true }) {
+        Button(action: { self.showDetail = true }) {
             HStack(spacing: 12) {
                 // Priority indicator
                 RoundedRectangle(cornerRadius: 3)
-                    .fill(insight.priority.color)
+                    .fill(self.insight.priority.color)
                     .frame(width: 4, height: 40)
 
                 // Content
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(insight.title)
+                    Text(self.insight.title)
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.primary)
                         .lineLimit(1)
 
-                    Text(insight.description)
+                    Text(self.insight.description)
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .lineLimit(2)
@@ -164,16 +165,16 @@ struct CompactInsightRow: View {
                 Spacer()
 
                 // Type icon
-                Image(systemName: insight.type.icon)
+                Image(systemName: self.insight.type.icon)
                     .font(.caption)
                     .foregroundColor(.blue)
             }
             .padding(.vertical, 4)
         }
         .buttonStyle(PlainButtonStyle())
-        .accessibilityLabel("View insight details for \(insight.title)")
-        .sheet(isPresented: $showDetail) {
-            InsightDetailView(insight: insight)
+        .accessibilityLabel("View insight details for \(self.insight.title)")
+        .sheet(isPresented: self.$showDetail) {
+            InsightDetailView(insight: self.insight)
         }
     }
 }
@@ -192,5 +193,6 @@ struct CompactInsightRow: View {
             FinancialTransaction.self,
             Budget.self,
             ExpenseCategory.self
-        ], inMemory: true)
+        ], inMemory: true
+    )
 }

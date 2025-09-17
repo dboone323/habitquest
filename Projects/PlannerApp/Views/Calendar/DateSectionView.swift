@@ -11,23 +11,23 @@ struct DateSectionView<Content: View>: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Circle()
-                    .fill(color)
+                    .fill(self.color)
                     .frame(width: 12, height: 12)
 
-                Text(title)
+                Text(self.title)
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 
                 Spacer()
             }
 
             VStack(spacing: 6) {
-                content
+                self.content
             }
         }
         .padding(12)
-        .background(themeManager.currentTheme.secondaryBackgroundColor)
+        .background(self.themeManager.currentTheme.secondaryBackgroundColor)
         .cornerRadius(12)
     }
 }

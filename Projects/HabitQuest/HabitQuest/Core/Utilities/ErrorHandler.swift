@@ -1,12 +1,11 @@
 import Foundation
+import os
 import OSLog
 import SwiftUI
-import os
 
 /// Centralized error handling for the HabitQuest app
 /// Provides consistent error management and user-friendly error messages
 struct ErrorHandler: Sendable {
-
     /// Common error types in the HabitQuest app
     enum HabitQuestError: LocalizedError, @unchecked Sendable {
         case dataModelError(String)
@@ -17,13 +16,13 @@ struct ErrorHandler: Sendable {
 
         nonisolated var errorDescription: String? {
             switch self {
-            case .dataModelError(let message):
+            case let .dataModelError(message):
                 "Data Error: \(message)"
-            case .gameLogicError(let message):
+            case let .gameLogicError(message):
                 "Game Logic Error: \(message)"
-            case .validationError(let message):
+            case let .validationError(message):
                 "Validation Error: \(message)"
-            case .networkError(let message):
+            case let .networkError(message):
                 "Network Error: \(message)"
             case .unknownError:
                 "An unexpected error occurred"
@@ -49,25 +48,26 @@ struct ErrorHandler: Sendable {
     private static let logger = Logger(category: .general)
 
     /// Handle an error with logging and optional user notification
-    static func handle(_ error: Error,
-                       showToUser: Bool = true,
-                       file: String = #file,
-                       function: String = #function,
-                       line: Int = #line) {
-
+    static func handle(
+        _ error: Error,
+        showToUser: Bool = true,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
         // Log the error
-        logger.error("Error occurred: \(error.localizedDescription)", file: file, function: function, line: line)
+        self.logger.error("Error occurred: \(error.localizedDescription)", file: file, function: function, line: line)
 
         // Additional logging for HabitQuestError
         if let habitError = error as? HabitQuestError {
-            logger.error("HabitQuest Error Type: \(habitError)", file: file, function: function, line: line)
+            self.logger.error("HabitQuest Error Type: \(habitError)", file: file, function: function, line: line)
         }
 
         // Handle user notification if needed
         if showToUser {
             // In a real app, this would trigger a user notification
             // For now, we'll just log it
-            logger.info("User should be notified of error: \(error.localizedDescription)")
+            self.logger.info("User should be notified of error: \(error.localizedDescription)")
         }
     }
 

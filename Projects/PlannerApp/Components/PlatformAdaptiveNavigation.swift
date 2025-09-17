@@ -17,26 +17,26 @@ struct PlatformAdaptiveNavigation<Content: View>: View {
 
     var body: some View {
         #if os(macOS)
+        NavigationSplitView {
+            SidebarView()
+        } detail: {
+            self.content
+        }
+        .navigationSplitViewStyle(.balanced)
+        #elseif os(iOS)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            // iPad layout
             NavigationSplitView {
                 SidebarView()
             } detail: {
-                content
+                self.content
             }
-            .navigationSplitViewStyle(.balanced)
-        #elseif os(iOS)
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                // iPad layout
-                NavigationSplitView {
-                    SidebarView()
-                } detail: {
-                    content
-                }
-            } else {
-                // iPhone layout
-                NavigationStack {
-                    content
-                }
+        } else {
+            // iPhone layout
+            NavigationStack {
+                self.content
             }
+        }
         #endif
     }
 }
@@ -67,24 +67,24 @@ struct SidebarView: View {
 
     var body: some View {
         #if os(macOS)
-            List(Tab.allCases, id: \.self, selection: $selectedTab) { tab in
-                NavigationLink(value: tab) {
-                    Label(tab.rawValue, systemImage: tab.icon)
-                }
+        List(Tab.allCases, id: \.self, selection: self.$selectedTab) { tab in
+            NavigationLink(value: tab) {
+                Label(tab.rawValue, systemImage: tab.icon)
             }
-            .navigationTitle("PlannerApp")
-            .listStyle(SidebarListStyle())
-            .frame(minWidth: 200)
+        }
+        .navigationTitle("PlannerApp")
+        .listStyle(SidebarListStyle())
+        .frame(minWidth: 200)
         #else
-            // iOS/iPadOS: Use regular List without selection binding
-            List(Tab.allCases, id: \.self) { tab in
-                NavigationLink(value: tab) {
-                    Label(tab.rawValue, systemImage: tab.icon)
-                }
+        // iOS/iPadOS: Use regular List without selection binding
+        List(Tab.allCases, id: \.self) { tab in
+            NavigationLink(value: tab) {
+                Label(tab.rawValue, systemImage: tab.icon)
             }
-            .navigationTitle("PlannerApp")
-            .listStyle(SidebarListStyle())
-            .frame(minWidth: 200)
+        }
+        .navigationTitle("PlannerApp")
+        .listStyle(SidebarListStyle())
+        .frame(minWidth: 200)
         #endif
     }
 }
@@ -102,8 +102,7 @@ struct PlatformToolbar: ViewModifier {
         let action: () -> Void
         let isDestructive: Bool
 
-        init(title: String, icon: String, isDestructive: Bool = false, action: @escaping () -> Void)
-        {
+        init(title: String, icon: String, isDestructive: Bool = false, action: @escaping () -> Void) {
             self.title = title
             self.icon = icon
             self.isDestructive = isDestructive
@@ -113,51 +112,51 @@ struct PlatformToolbar: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .navigationTitle(title)
+            .navigationTitle(self.title)
             .toolbar {
                 #if os(macOS)
-                    ToolbarItemGroup(placement: .primaryAction) {
-                        ForEach(primaryActions.indices, id: \.self) { index in
-                            let action = primaryActions[index]
-                            Button(action: action.action) {
-                                Label(action.title, systemImage: action.icon)
-                            }
-                            .accessibilityLabel("Button")
-                            .help(action.title)
+                ToolbarItemGroup(placement: .primaryAction) {
+                    ForEach(self.primaryActions.indices, id: \.self) { index in
+                        let action = self.primaryActions[index]
+                        Button(action: action.action) {
+                            Label(action.title, systemImage: action.icon)
+                        }
+                        .accessibilityLabel("Button")
+                        .help(action.title)
+                    }
+                }
+
+                ToolbarItemGroup(placement: .secondaryAction) {
+                    Menu("More") {
+                        ForEach(self.secondaryActions.indices, id: \.self) { index in
+                            let action = self.secondaryActions[index]
+                            Button(action.title, action: action.action)
+                                .accessibilityLabel("Button")
                         }
                     }
+                }
+                #else
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    ForEach(self.primaryActions.indices, id: \.self) { index in
+                        let action = self.primaryActions[index]
+                        Button(action: action.action) {
+                            Image(systemName: action.icon)
+                        }
+                        .accessibilityLabel("Button")
+                    }
 
-                    ToolbarItemGroup(placement: .secondaryAction) {
-                        Menu("More") {
-                            ForEach(secondaryActions.indices, id: \.self) { index in
-                                let action = secondaryActions[index]
+                    if !self.secondaryActions.isEmpty {
+                        Menu {
+                            ForEach(self.secondaryActions.indices, id: \.self) { index in
+                                let action = self.secondaryActions[index]
                                 Button(action.title, action: action.action)
                                     .accessibilityLabel("Button")
                             }
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
                         }
                     }
-                #else
-                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                        ForEach(primaryActions.indices, id: \.self) { index in
-                            let action = primaryActions[index]
-                            Button(action: action.action) {
-                                Image(systemName: action.icon)
-                            }
-                            .accessibilityLabel("Button")
-                        }
-
-                        if !secondaryActions.isEmpty {
-                            Menu {
-                                ForEach(secondaryActions.indices, id: \.self) { index in
-                                    let action = secondaryActions[index]
-                                    Button(action.title, action: action.action)
-                                        .accessibilityLabel("Button")
-                                }
-                            } label: {
-                                Image(systemName: "ellipsis.circle")
-                            }
-                        }
-                    }
+                }
                 #endif
             }
     }
@@ -174,7 +173,8 @@ extension View {
                 title: title,
                 primaryActions: primaryActions,
                 secondaryActions: secondaryActions
-            ))
+            )
+        )
     }
 }
 
@@ -189,15 +189,15 @@ struct PlatformContextMenu<MenuContent: View>: ViewModifier {
 
     func body(content: Content) -> some View {
         #if os(macOS)
-            content
-                .contextMenu {
-                    menuContent
-                }
+        content
+            .contextMenu {
+                self.menuContent
+            }
         #else
-            content
-                .contextMenu {
-                    menuContent
-                }
+        content
+            .contextMenu {
+                self.menuContent
+            }
         #endif
     }
 }
@@ -222,21 +222,21 @@ struct AdaptiveGrid<Content: View>: View {
 
     private var columns: [GridItem] {
         #if os(macOS)
-            return Array(repeating: .init(.flexible()), count: 3)
+        return Array(repeating: .init(.flexible()), count: 3)
         #else
-            if horizontalSizeClass == .regular {
-                // iPad or iPhone landscape
-                return Array(repeating: .init(.flexible()), count: 2)
-            } else {
-                // iPhone portrait
-                return [.init(.flexible())]
-            }
+        if self.horizontalSizeClass == .regular {
+            // iPad or iPhone landscape
+            return Array(repeating: .init(.flexible()), count: 2)
+        } else {
+            // iPhone portrait
+            return [.init(.flexible())]
+        }
         #endif
     }
 
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 16) {
-            content
+        LazyVGrid(columns: self.columns, spacing: 16) {
+            self.content
         }
     }
 }
@@ -254,18 +254,18 @@ struct PlatformSheet<SheetContent: View>: ViewModifier {
 
     func body(content: Content) -> some View {
         #if os(macOS)
-            content
-                .sheet(isPresented: $isPresented) {
-                    self.sheetContent
-                        .frame(minWidth: 400, minHeight: 300)
-                }
+        content
+            .sheet(isPresented: self.$isPresented) {
+                self.sheetContent
+                    .frame(minWidth: 400, minHeight: 300)
+            }
         #else
-            content
-                .sheet(isPresented: $isPresented) {
-                    NavigationStack {
-                        self.sheetContent
-                    }
+        content
+            .sheet(isPresented: self.$isPresented) {
+                NavigationStack {
+                    self.sheetContent
                 }
+            }
         #endif
     }
 }
@@ -289,13 +289,13 @@ struct ExamplePlatformView: View {
         PlatformAdaptiveNavigation {
             ScrollView {
                 AdaptiveGrid {
-                    ForEach(0..<6, id: \.self) { index in
+                    ForEach(0 ..< 6, id: \.self) { index in
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(themeManager.currentTheme.secondaryBackgroundColor)
+                            .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
                             .frame(height: 120)
                             .overlay(
                                 Text("Item \(index + 1)")
-                                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
                             )
                             .platformContextMenu {
                                 Button("Edit") {}
@@ -311,7 +311,7 @@ struct ExamplePlatformView: View {
                 title: "Example View",
                 primaryActions: [
                     .init(title: "Add Item", icon: "plus") {
-                        showingAddItem = true
+                        self.showingAddItem = true
                     }
                 ],
                 secondaryActions: [
@@ -319,19 +319,19 @@ struct ExamplePlatformView: View {
                     .init(title: "Filter", icon: "line.3.horizontal.decrease.circle") {},
                 ]
             )
-            .platformSheet(isPresented: $showingAddItem) {
+            .platformSheet(isPresented: self.$showingAddItem) {
                 Text("Add Item Sheet")
                     .navigationTitle("Add Item")
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Cancel") {
-                                showingAddItem = false
+                                self.showingAddItem = false
                             }
                             .accessibilityLabel("Button")
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Save") {
-                                showingAddItem = false
+                                self.showingAddItem = false
                             }
                             .accessibilityLabel("Button")
                         }

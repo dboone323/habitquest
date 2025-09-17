@@ -19,8 +19,8 @@ struct AddGoalView: View {
 
     // Computed property to check if the form is valid for saving
     private var isFormValid: Bool {
-        !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-            !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !self.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+            !self.description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     var body: some View {
@@ -28,16 +28,16 @@ struct AddGoalView: View {
             // Header with buttons for better macOS compatibility
             HStack {
                 Button("Cancel").accessibilityLabel("Button") {
-                    dismiss()
+                    self.dismiss()
                 }
-                .foregroundColor(themeManager.currentTheme.primaryAccentColor)
+                .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
 
                 Spacer()
 
                 Text("Add Goal")
                     .font(.headline)
                     .fontWeight(.semibold)
-                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 
                 Spacer()
 
@@ -45,58 +45,60 @@ struct AddGoalView: View {
                     // Create the new goal
                     let newGoal = Goal(
                         title: title.trimmingCharacters(in: .whitespacesAndNewlines),
-                        description: description.trimmingCharacters(in: .whitespacesAndNewlines),
-                        targetDate: targetDate
+                        description: self.description.trimmingCharacters(in: .whitespacesAndNewlines),
+                        targetDate: self.targetDate
                     )
 
                     // Append the new goal to the array
-                    goals.append(newGoal)
+                    self.goals.append(newGoal)
 
                     // Save goals to the data manager
-                    GoalDataManager.shared.save(goals: goals)
+                    GoalDataManager.shared.save(goals: self.goals)
 
                     // Dismiss the sheet
-                    dismiss()
+                    self.dismiss()
                 }
-                .disabled(!isFormValid)
-                .foregroundColor(isFormValid ? themeManager.currentTheme.primaryAccentColor : themeManager.currentTheme.secondaryTextColor)
+                .disabled(!self.isFormValid)
+                .foregroundColor(self.isFormValid ? self.themeManager.currentTheme.primaryAccentColor : self.themeManager.currentTheme
+                    .secondaryTextColor
+                )
             }
             .padding()
-            .background(themeManager.currentTheme.secondaryBackgroundColor)
+            .background(self.themeManager.currentTheme.secondaryBackgroundColor)
 
             // Use Form for standard iOS settings/input layout
             Form {
                 // Section for the main goal details
                 Section("Goal Details") {
                     // TextField for the goal title
-                    TextField("Goal Title", text: $title).accessibilityLabel("Text Field")
-                        .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.primaryFontName, size: 16))
-                        .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                    TextField("Goal Title", text: self.$title).accessibilityLabel("Text Field")
+                        .font(self.themeManager.currentTheme.font(forName: self.themeManager.currentTheme.primaryFontName, size: 16))
+                        .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 
                     // TextEditor for the goal description
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Description")
                             .font(.caption)
-                            .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                            .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
 
-                        TextEditor(text: $description)
+                        TextEditor(text: self.$description)
                             .frame(minHeight: 80)
-                            .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.secondaryFontName, size: 15))
-                            .foregroundColor(themeManager.currentTheme.primaryTextColor)
-                            .focused($isDescriptionFocused)
+                            .font(self.themeManager.currentTheme.font(forName: self.themeManager.currentTheme.secondaryFontName, size: 15))
+                            .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                            .focused(self.$isDescriptionFocused)
                     }
 
                     // DatePicker for the target date
-                    DatePicker("Target Date", selection: $targetDate, displayedComponents: .date)
-                        .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.primaryFontName, size: 16))
-                        .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                    DatePicker("Target Date", selection: self.$targetDate, displayedComponents: .date)
+                        .font(self.themeManager.currentTheme.font(forName: self.themeManager.currentTheme.primaryFontName, size: 16))
+                        .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
                 }
-                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
             }
-            .background(themeManager.currentTheme.primaryBackgroundColor)
+            .background(self.themeManager.currentTheme.primaryBackgroundColor)
             .scrollContentBackground(.hidden)
         }
-        .background(themeManager.currentTheme.primaryBackgroundColor)
+        .background(self.themeManager.currentTheme.primaryBackgroundColor)
     }
 }
 

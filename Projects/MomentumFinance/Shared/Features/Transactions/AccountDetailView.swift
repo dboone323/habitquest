@@ -56,11 +56,11 @@ struct AccountDetailView: View {
 
     var filteredTransactions: [FinancialTransaction] {
         guard let days = timeRange.days else {
-            return transactions
+            return self.transactions
         }
 
         let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
-        return transactions.filter { $0.date >= cutoffDate }
+        return self.transactions.filter { $0.date >= cutoffDate }
     }
 
     var body: some View {
@@ -70,16 +70,16 @@ struct AccountDetailView: View {
                 VStack(spacing: 16) {
                     // Account Icon and Balance
                     VStack(spacing: 8) {
-                        Image(systemName: account.iconName)
+                        Image(systemName: self.account.iconName)
                             .font(.largeTitle)
                             .foregroundColor(.blue)
                             .frame(width: 60, height: 60)
                             .background(
                                 Circle()
                                     .fill(Color.blue.opacity(0.2)),
-                                )
+                            )
 
-                        Text(account.name)
+                        Text(self.account.name)
                             .font(.title)
                             .fontWeight(.bold)
 
@@ -87,39 +87,39 @@ struct AccountDetailView: View {
                             .font(.subheadline)
                             .foregroundColor(.secondary)
 
-                        Text(formattedCurrency(account.balance))
+                        Text(self.formattedCurrency(self.account.balance))
                             .font(.largeTitle)
                             .fontWeight(.bold)
-                            .foregroundColor(account.balance >= 0 ? .primary : .red)
+                            .foregroundColor(self.account.balance >= 0 ? .primary : .red)
                     }
 
                     // Activity Summary
                     HStack(spacing: 20) {
                         StatView(
                             title: "Income",
-                            value: formattedCurrency(incomeSummary),
+                            value: self.formattedCurrency(self.incomeSummary),
                             color: .green,
-                            )
+                        )
 
                         Divider()
 
                         StatView(
                             title: "Expenses",
-                            value: formattedCurrency(expenseSummary),
+                            value: self.formattedCurrency(self.expenseSummary),
                             color: .red,
-                            )
+                        )
                     }
                     .padding(.horizontal)
                 }
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(backgroundColorForPlatform())
+                        .fill(self.backgroundColorForPlatform())
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                    )
+                )
 
                 // Time Filter
-                Picker("Time Range", selection: $timeRange) {
+                Picker("Time Range", selection: self.$timeRange) {
                     ForEach(TimeRange.allCases, id: \.self) { range in
                         Text(range.rawValue).tag(range)
                     }
@@ -134,25 +134,26 @@ struct AccountDetailView: View {
                         .padding(.horizontal)
 
                     // Chart comes here
-                    if filteredTransactions.isEmpty {
+                    if self.filteredTransactions.isEmpty {
                         ContentUnavailableView(
                             "No Transactions",
                             systemImage: "chart.line.downtrend.xyaxis",
                             description: Text(
-                                "No transaction data available for the selected time period."),
-                            )
+                                "No transaction data available for the selected time period."
+                            ),
+                        )
                         .frame(height: 200)
                     } else {
-                        ActivityChartView(transactions: filteredTransactions)
+                        ActivityChartView(transactions: self.filteredTransactions)
                             .frame(height: 200)
                     }
                 }
                 .padding(.vertical)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(backgroundColorForPlatform())
+                        .fill(self.backgroundColorForPlatform())
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                    )
+                )
 
                 // Transactions List
                 VStack(alignment: .leading, spacing: 12) {
@@ -164,31 +165,33 @@ struct AccountDetailView: View {
 
                         Button(
                             action: {
-                                showingAddTransaction = true
+                                self.showingAddTransaction = true
                             },
                             label: {
                                 Image(systemName: "plus.circle")
-                            })
+                            }
+                        )
                     }
                     .padding(.horizontal)
 
-                    if filteredTransactions.isEmpty {
+                    if self.filteredTransactions.isEmpty {
                         ContentUnavailableView(
                             "No Transactions",
                             systemImage: "list.bullet",
                             description: Text(
-                                "No transactions in this account for the selected time period."),
-                            )
+                                "No transactions in this account for the selected time period."
+                            ),
+                        )
                         .frame(height: 100)
                     } else {
-                        ForEach(filteredTransactions.prefix(5)) { transaction in
+                        ForEach(self.filteredTransactions.prefix(5)) { transaction in
                             TransactionRowView(transaction: transaction, onTap: {})
                                 .padding(.horizontal, 16)
                         }
 
-                        if filteredTransactions.count > 5 {
+                        if self.filteredTransactions.count > 5 {
                             NavigationLink(destination: Features.Transactions.TransactionsView()) {
-                                Text("View All \(filteredTransactions.count) Transactions")
+                                Text("View All \(self.filteredTransactions.count) Transactions")
                                     .font(.subheadline)
                                     .foregroundColor(.blue)
                                     .padding(.top, 8)
@@ -199,9 +202,9 @@ struct AccountDetailView: View {
                 .padding(.vertical)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(backgroundColorForPlatform())
+                        .fill(self.backgroundColorForPlatform())
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                    )
+                )
             }
             .padding()
         }
@@ -211,11 +214,12 @@ struct AccountDetailView: View {
                 Menu {
                     Button(
                         action: {
-                            showingAddTransaction = true
+                            self.showingAddTransaction = true
                         },
                         label: {
                             Label("Add Transaction", systemImage: "plus")
-                        })
+                        }
+                    )
 
                     Button(
                         action: {
@@ -223,25 +227,26 @@ struct AccountDetailView: View {
                         },
                         label: {
                             Label("Edit Account", systemImage: "pencil")
-                        })
+                        }
+                    )
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
             }
         }
-        .sheet(isPresented: $showingAddTransaction) {
-            AddTransactionView(categories: categories, accounts: accounts)
+        .sheet(isPresented: self.$showingAddTransaction) {
+            AddTransactionView(categories: self.categories, accounts: self.accounts)
         }
     }
 
     private var incomeSummary: Double {
-        filteredTransactions
+        self.filteredTransactions
             .filter { $0.transactionType == .income }
             .reduce(0) { $0 + $1.amount }
     }
 
     private var expenseSummary: Double {
-        filteredTransactions
+        self.filteredTransactions
             .filter { $0.transactionType == .expense }
             .reduce(0) { $0 + $1.amount }
     }
@@ -269,14 +274,14 @@ struct StatView: View {
 
     var body: some View {
         VStack(spacing: 4) {
-            Text(title)
+            Text(self.title)
                 .font(.caption)
                 .foregroundColor(.secondary)
 
-            Text(value)
+            Text(self.value)
                 .font(.title3)
                 .fontWeight(.semibold)
-                .foregroundColor(color)
+                .foregroundColor(self.color)
         }
         .frame(maxWidth: .infinity)
     }
@@ -294,18 +299,18 @@ struct ActivityChartView: View {
         var day: String {
             let formatter = DateFormatter()
             formatter.dateFormat = "dd"
-            return formatter.string(from: date)
+            return formatter.string(from: self.date)
         }
     }
 
     var chartData: [DailyTransactionData] {
         let calendar = Calendar.current
         let today = Date()
-        let numberOfDays = 14  // Show last 2 weeks
+        let numberOfDays = 14 // Show last 2 weeks
 
         // Create data for each day
         var result: [DailyTransactionData] = []
-        for dayOffset in (0..<numberOfDays).reversed() {
+        for dayOffset in (0 ..< numberOfDays).reversed() {
             if let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) {
                 // Get start and end of day
                 let startOfDay = calendar.startOfDay(for: date)
@@ -314,20 +319,20 @@ struct ActivityChartView: View {
                 }
 
                 // Filter transactions for this day
-                let dayTransactions = transactions.filter {
+                let dayTransactions = self.transactions.filter {
                     $0.date >= startOfDay && $0.date < endOfDay
                 }
 
                 // Calculate income and expense totals
                 let income =
                     dayTransactions
-                    .filter { $0.transactionType == .income }
-                    .reduce(0) { $0 + $1.amount }
+                        .filter { $0.transactionType == .income }
+                        .reduce(0) { $0 + $1.amount }
 
                 let expense =
                     dayTransactions
-                    .filter { $0.transactionType == .expense }
-                    .reduce(0) { $0 + $1.amount }
+                        .filter { $0.transactionType == .expense }
+                        .reduce(0) { $0 + $1.amount }
 
                 result.append(DailyTransactionData(date: date, income: income, expense: expense))
             }
@@ -338,12 +343,12 @@ struct ActivityChartView: View {
 
     var body: some View {
         Chart {
-            ForEach(chartData) { data in
+            ForEach(self.chartData) { data in
                 LineMark(
                     x: .value("Day", data.day),
                     y: .value("Income", data.income),
                     series: .value("Type", "Income"),
-                    )
+                )
                 .foregroundStyle(.green)
                 .symbol(Circle().strokeBorder(lineWidth: 2))
                 .symbolSize(30)
@@ -352,7 +357,7 @@ struct ActivityChartView: View {
                     x: .value("Day", data.day),
                     y: .value("Expense", data.expense),
                     series: .value("Type", "Expense"),
-                    )
+                )
                 .foregroundStyle(.red)
                 .symbol(Circle().strokeBorder(lineWidth: 2))
                 .symbolSize(30)

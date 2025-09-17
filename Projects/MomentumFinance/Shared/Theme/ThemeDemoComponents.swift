@@ -19,22 +19,22 @@ struct ThemeSelectorCard: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Theme Selector")
                 .font(.headline)
-                .foregroundStyle(theme.primaryText)
+                .foregroundStyle(self.theme.primaryText)
 
-            Picker("Theme Mode", selection: $selectedThemeMode) {
+            Picker("Theme Mode", selection: self.$selectedThemeMode) {
                 ForEach(ThemeMode.allCases, id: \.self) { mode in
                     Text(mode.displayName).tag(mode)
                 }
             }
             .pickerStyle(.segmented)
-            .onChange(of: selectedThemeMode) { _, newValue in
-                theme.setThemeMode(newValue)
+            .onChange(of: self.selectedThemeMode) { _, newValue in
+                self.theme.setThemeMode(newValue)
             }
         }
         .padding()
-        .background(theme.cardBackground)
+        .background(self.theme.cardBackground)
         .cornerRadius(12)
-        .shadow(color: Color.black.opacity(theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(self.theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
     }
 }
 
@@ -46,17 +46,17 @@ struct ThemeFinancialSummaryCard: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Financial Summary")
                 .font(.headline)
-                .foregroundStyle(theme.primaryText)
+                .foregroundStyle(self.theme.primaryText)
 
             HStack(spacing: 20) {
                 VStack(alignment: .leading) {
                     Text("Total Balance")
                         .font(.subheadline)
-                        .foregroundStyle(theme.secondaryText)
+                        .foregroundStyle(self.theme.secondaryText)
                     Text("$12,211.50")
                         .font(.title2)
                         .bold()
-                        .foregroundStyle(theme.income)
+                        .foregroundStyle(self.theme.income)
                 }
 
                 Spacer()
@@ -64,17 +64,17 @@ struct ThemeFinancialSummaryCard: View {
                 VStack(alignment: .trailing) {
                     Text("This Month")
                         .font(.subheadline)
-                        .foregroundStyle(theme.secondaryText)
+                        .foregroundStyle(self.theme.secondaryText)
                     Text("+$1,250.75")
                         .font(.title3)
-                        .foregroundStyle(theme.income)
+                        .foregroundStyle(self.theme.income)
                 }
             }
         }
         .padding()
-        .background(theme.cardBackground)
+        .background(self.theme.cardBackground)
         .cornerRadius(12)
-        .shadow(color: Color.black.opacity(theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(self.theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
     }
 }
 
@@ -87,23 +87,23 @@ struct ThemeAccountsList: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Accounts")
                 .font(.headline)
-                .foregroundStyle(theme.primaryText)
+                .foregroundStyle(self.theme.primaryText)
 
-            ForEach(accounts, id: \.0) { account in
+            ForEach(self.accounts, id: \.0) { account in
                 HStack {
                     Image(systemName: account.1)
                         .frame(width: 32, height: 32)
-                        .foregroundStyle(theme.accentPrimary)
-                        .background(theme.secondaryBackground)
+                        .foregroundStyle(self.theme.accentPrimary)
+                        .background(self.theme.secondaryBackground)
                         .clipShape(Circle())
 
                     VStack(alignment: .leading) {
                         Text(account.0)
                             .font(.subheadline)
-                            .foregroundStyle(theme.primaryText)
+                            .foregroundStyle(self.theme.primaryText)
                         Text("$\(String(format: "%.2f", account.2))")
                             .font(.caption)
-                            .foregroundStyle(theme.secondaryText)
+                            .foregroundStyle(self.theme.secondaryText)
                     }
 
                     Spacer()
@@ -112,9 +112,9 @@ struct ThemeAccountsList: View {
             }
         }
         .padding()
-        .background(theme.cardBackground)
+        .background(self.theme.cardBackground)
         .cornerRadius(12)
-        .shadow(color: Color.black.opacity(theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(self.theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
     }
 }
 
@@ -127,27 +127,27 @@ struct ThemeBudgetProgress: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Budget Progress")
                 .font(.headline)
-                .foregroundStyle(theme.primaryText)
+                .foregroundStyle(self.theme.primaryText)
 
-            ForEach(budgets, id: \.0) { budget in
+            ForEach(self.budgets, id: \.0) { budget in
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Text(budget.0)
                             .font(.subheadline)
-                            .foregroundStyle(theme.primaryText)
+                            .foregroundStyle(self.theme.primaryText)
                         Spacer()
                         Text("$\(String(format: "%.0f", budget.1)) / $\(String(format: "%.0f", budget.2))")
                             .font(.caption)
-                            .foregroundStyle(theme.secondaryText)
+                            .foregroundStyle(self.theme.secondaryText)
                     }
 
                     let progress = budget.2 > 0 ? budget.1 / budget.2 : 0
-                    let color: Color = progress > 1.0 ? theme.expense : theme.budgetUnder
+                    let color: Color = progress > 1.0 ? self.theme.expense : self.theme.budgetUnder
 
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
                             Rectangle()
-                                .fill(theme.secondaryBackground)
+                                .fill(self.theme.secondaryBackground)
                                 .frame(height: 6)
                                 .cornerRadius(3)
 
@@ -162,9 +162,9 @@ struct ThemeBudgetProgress: View {
             }
         }
         .padding()
-        .background(theme.cardBackground)
+        .background(self.theme.cardBackground)
         .cornerRadius(12)
-        .shadow(color: Color.black.opacity(theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(self.theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
     }
 }
 
@@ -177,38 +177,38 @@ struct ThemeSubscriptionsList: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Subscriptions")
                 .font(.headline)
-                .foregroundStyle(theme.primaryText)
+                .foregroundStyle(self.theme.primaryText)
 
-            ForEach(subscriptions, id: \.0) { subscription in
+            ForEach(self.subscriptions, id: \.0) { subscription in
                 HStack {
                     Image(systemName: subscription.1)
                         .frame(width: 32, height: 32)
-                        .foregroundStyle(theme.accentPrimary)
-                        .background(theme.secondaryBackground)
+                        .foregroundStyle(self.theme.accentPrimary)
+                        .background(self.theme.secondaryBackground)
                         .clipShape(Circle())
 
                     VStack(alignment: .leading) {
                         Text(subscription.0)
                             .font(.subheadline)
-                            .foregroundStyle(theme.primaryText)
+                            .foregroundStyle(self.theme.primaryText)
                         Text("Renews \(subscription.2)")
                             .font(.caption)
-                            .foregroundStyle(theme.secondaryText)
+                            .foregroundStyle(self.theme.secondaryText)
                     }
 
                     Spacer()
 
                     Text("$\(String(format: "%.2f", subscription.3))")
                         .font(.subheadline)
-                        .foregroundStyle(theme.primaryText)
+                        .foregroundStyle(self.theme.primaryText)
                 }
                 .padding(.vertical, 8)
             }
         }
         .padding()
-        .background(theme.cardBackground)
+        .background(self.theme.cardBackground)
         .cornerRadius(12)
-        .shadow(color: Color.black.opacity(theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(self.theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
     }
 }
 
@@ -220,54 +220,54 @@ struct ThemeTypographyShowcase: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Typography")
                 .font(.headline)
-                .foregroundStyle(theme.primaryText)
+                .foregroundStyle(self.theme.primaryText)
 
             Group {
                 Text("Large Title")
                     .font(.largeTitle)
-                    .foregroundStyle(theme.primaryText)
+                    .foregroundStyle(self.theme.primaryText)
 
                 Text("Title")
                     .font(.title)
-                    .foregroundStyle(theme.primaryText)
+                    .foregroundStyle(self.theme.primaryText)
 
                 Text("Title 2")
                     .font(.title2)
-                    .foregroundStyle(theme.primaryText)
+                    .foregroundStyle(self.theme.primaryText)
 
                 Text("Title 3")
                     .font(.title3)
-                    .foregroundStyle(theme.primaryText)
+                    .foregroundStyle(self.theme.primaryText)
 
                 Text("Headline")
                     .font(.headline)
-                    .foregroundStyle(theme.primaryText)
+                    .foregroundStyle(self.theme.primaryText)
 
                 Text("Subheadline")
                     .font(.subheadline)
-                    .foregroundStyle(theme.primaryText)
+                    .foregroundStyle(self.theme.primaryText)
 
                 Text("Body")
                     .font(.body)
-                    .foregroundStyle(theme.primaryText)
+                    .foregroundStyle(self.theme.primaryText)
 
                 Text("Callout")
                     .font(.callout)
-                    .foregroundStyle(theme.primaryText)
+                    .foregroundStyle(self.theme.primaryText)
 
                 Text("Caption")
                     .font(.caption)
-                    .foregroundStyle(theme.primaryText)
+                    .foregroundStyle(self.theme.primaryText)
 
                 Text("Caption 2")
                     .font(.caption2)
-                    .foregroundStyle(theme.secondaryText)
+                    .foregroundStyle(self.theme.secondaryText)
             }
         }
         .padding()
-        .background(theme.cardBackground)
+        .background(self.theme.cardBackground)
         .cornerRadius(12)
-        .shadow(color: Color.black.opacity(theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(self.theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
     }
 }
 
@@ -279,28 +279,28 @@ struct ThemeButtonStylesShowcase: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Button Styles")
                 .font(.headline)
-                .foregroundStyle(theme.primaryText)
+                .foregroundStyle(self.theme.primaryText)
 
             VStack(spacing: 12) {
                 Button("Primary Button").accessibilityLabel("Button") {}
                     .buttonStyle(.borderedProminent)
-                    .tint(theme.accentPrimary)
+                    .tint(self.theme.accentPrimary)
 
                 Button("Secondary Button").accessibilityLabel("Button") {}
                     .buttonStyle(.bordered)
-                    .tint(theme.secondaryBackground)
+                    .tint(self.theme.secondaryBackground)
 
                 Button("Text Button").accessibilityLabel("Button") {}
-                    .foregroundStyle(theme.accentPrimary)
+                    .foregroundStyle(self.theme.accentPrimary)
 
                 Button("Destructive Button").accessibilityLabel("Button") {}
-                    .foregroundStyle(theme.expense)
+                    .foregroundStyle(self.theme.expense)
             }
         }
         .padding()
-        .background(theme.cardBackground)
+        .background(self.theme.cardBackground)
         .cornerRadius(12)
-        .shadow(color: Color.black.opacity(theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(self.theme.isDarkMode ? 0.3 : 0.1), radius: 8, x: 0, y: 2)
     }
 }
 
@@ -315,24 +315,24 @@ struct ThemeSettingsSheet: View {
         NavigationStack {
             Form {
                 Section("Theme Mode") {
-                    Picker("Mode", selection: $selectedThemeMode) {
+                    Picker("Mode", selection: self.$selectedThemeMode) {
                         ForEach(ThemeMode.allCases, id: \.self) { mode in
                             Text(mode.displayName).tag(mode)
                         }
                     }
                     .pickerStyle(.inline)
-                    .onChange(of: selectedThemeMode) { _, newValue in
-                        theme.setThemeMode(newValue)
+                    .onChange(of: self.selectedThemeMode) { _, newValue in
+                        self.theme.setThemeMode(newValue)
                     }
                 }
 
                 Section("Accent Adjustment") {
-                    Slider(value: $sliderValue, in: 0...1) {
+                    Slider(value: self.$sliderValue, in: 0 ... 1) {
                         Text("Accent Intensity")
                     }
-                    Text("Value: \(String(format: "%.2f", sliderValue))")
+                    Text("Value: \(String(format: "%.2f", self.sliderValue))")
                         .font(.caption)
-                        .foregroundStyle(theme.secondaryText)
+                        .foregroundStyle(self.theme.secondaryText)
                 }
             }
             .navigationTitle("Theme Settings")
@@ -340,7 +340,7 @@ struct ThemeSettingsSheet: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done").accessibilityLabel("Button") {
-                        showSheet = false
+                        self.showSheet = false
                     }
                 }
             }

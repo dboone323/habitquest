@@ -1,7 +1,7 @@
-import Foundation  // For SearchTypes dependencies
+import Foundation // For SearchTypes dependencies
 import LocalAuthentication
-import OSLog
 import Observation
+import OSLog
 import SwiftUI
 
 // SearchResult types are available from Shared/SearchTypes.swift
@@ -24,15 +24,15 @@ public struct ListableItem: Identifiable, Hashable {
     public let type: ListItemType
 
     public var identifier: String {
-        "\(type)_\(id ?? "unknown")"
+        "\(self.type)_\(self.id ?? "unknown")"
     }
 
     // Identifiable conformance
-    public var identifierId: String { identifier }
+    public var identifierId: String { self.identifier }
 
     // Hashable conformance
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
+        hasher.combine(self.identifier)
     }
 
     public static func == (lhs: ListableItem, rhs: ListableItem) -> Bool {
@@ -86,7 +86,7 @@ final class NavigationCoordinator: ObservableObject {
     var isAuthenticated: Bool = false
     var requiresAuthentication: Bool = true
     var lastAuthenticationTime: Date?
-    var authenticationTimeoutInterval: TimeInterval = 300  // 5 minutes
+    var authenticationTimeoutInterval: TimeInterval = 300 // 5 minutes
 
     // MARK: - Deep Linking State
 
@@ -110,65 +110,65 @@ final class NavigationCoordinator: ObservableObject {
     init() {
         // Initialize notification badge counts
         for section in AppTabSection.allCases {
-            tabNotificationCounts[section] = 0
+            self.tabNotificationCounts[section] = 0
         }
     }
 
     // MARK: - Navigation Methods
 
     func navigateToBudgets() {
-        selectedTab = 2  // Assuming budgets is tab index 2
-        budgetsNavPath = NavigationPath()
+        self.selectedTab = 2 // Assuming budgets is tab index 2
+        self.budgetsNavPath = NavigationPath()
     }
 
     func navigateToSubscriptions() {
-        selectedTab = 3  // Assuming subscriptions is tab index 3
-        subscriptionsNavPath = NavigationPath()
+        self.selectedTab = 3 // Assuming subscriptions is tab index 3
+        self.subscriptionsNavPath = NavigationPath()
     }
 
     func navigateToGoals() {
-        selectedTab = 4  // Assuming goals is tab index 4
-        goalsAndReportsNavPath = NavigationPath()
+        self.selectedTab = 4 // Assuming goals is tab index 4
+        self.goalsAndReportsNavPath = NavigationPath()
     }
 
     // MARK: - Search helpers
 
     func activateSearch() {
         // Keep this minimal and self-contained so callers can toggle search
-        isSearchActive = true
+        self.isSearchActive = true
         // breadcrumb helper may be provided by other extensions; append a simple marker
         // Avoid referencing external types here to keep this method safe during incremental builds
     }
 
     func deactivateSearch() {
-        isSearchActive = false
-        searchQuery = ""
-        isShowingSearchResults = false
+        self.isSearchActive = false
+        self.searchQuery = ""
+        self.isShowingSearchResults = false
     }
 
     func navigateToSearchResult(_ result: SearchResult) {
         // Navigate based on the search result type
         switch result.type {
         case .accounts:
-            selectedTab = 0  // Dashboard tab
-            dashboardNavPath = NavigationPath()
+            self.selectedTab = 0 // Dashboard tab
+            self.dashboardNavPath = NavigationPath()
         case .transactions:
-            selectedTab = 1  // Transactions tab
-            transactionsNavPath = NavigationPath()
+            self.selectedTab = 1 // Transactions tab
+            self.transactionsNavPath = NavigationPath()
         case .budgets:
-            selectedTab = 2  // Budgets tab
-            budgetsNavPath = NavigationPath()
+            self.selectedTab = 2 // Budgets tab
+            self.budgetsNavPath = NavigationPath()
         case .subscriptions:
-            selectedTab = 3  // Subscriptions tab
-            subscriptionsNavPath = NavigationPath()
+            self.selectedTab = 3 // Subscriptions tab
+            self.subscriptionsNavPath = NavigationPath()
         case .all:
             // For 'all' type, default to dashboard
-            selectedTab = 0
-            dashboardNavPath = NavigationPath()
+            self.selectedTab = 0
+            self.dashboardNavPath = NavigationPath()
         }
 
         // Deactivate search after navigation
-        deactivateSearch()
+        self.deactivateSearch()
     }
 }
 

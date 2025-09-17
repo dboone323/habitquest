@@ -41,19 +41,19 @@ struct StreakAnalyticsView: View {
             ScrollView {
                 LazyVStack(spacing: 20) {
                     if let errorMessage {
-                        errorView(message: errorMessage)
-                    } else if isLoading {
-                        loadingView
+                        self.errorView(message: errorMessage)
+                    } else if self.isLoading {
+                        self.loadingView
                     } else if let data = analyticsData {
-                        timeframePicker
-                        overviewCards(data: data)
-                        streakDistributionChart(data: data)
-                        topPerformersSection(data: data)
-                        consistencyInsights(data: data)
-                        weeklyPatternView(data: data)
-                        lastUpdatedView
+                        self.timeframePicker
+                        self.overviewCards(data: data)
+                        self.streakDistributionChart(data: data)
+                        self.topPerformersSection(data: data)
+                        self.consistencyInsights(data: data)
+                        self.weeklyPatternView(data: data)
+                        self.lastUpdatedView
                     } else {
-                        emptyStateView
+                        self.emptyStateView
                     }
                 }
                 .padding()
@@ -65,45 +65,45 @@ struct StreakAnalyticsView: View {
                     if let data = analyticsData {
                         Menu {
                             Button("Export Data", systemImage: "square.and.arrow.up") {
-                                Task { await exportAnalytics(data) }
+                                Task { await self.exportAnalytics(data) }
                             }
                             .accessibilityLabel("Export Data")
 
                             Button("Share Report", systemImage: "square.and.arrow.up.fill") {
-                                shareAnalyticsReport(data)
+                                self.shareAnalyticsReport(data)
                             }
                             .accessibilityLabel("Share Report")
 
                             Divider()
 
                             Button("Refresh", systemImage: "arrow.clockwise") {
-                                Task { await refreshAnalytics() }
+                                Task { await self.refreshAnalytics() }
                             }
                             .accessibilityLabel("Refresh")
                         } label: {
                             Image(systemName: "ellipsis.circle")
                         }
-                        .disabled(isLoading)
+                        .disabled(self.isLoading)
                     } else {
                         Button("Refresh") {
-                            Task { await refreshAnalytics() }
+                            Task { await self.refreshAnalytics() }
                         }
                         .accessibilityLabel("Refresh")
-                        .disabled(isLoading)
+                        .disabled(self.isLoading)
                     }
                 }
             }
             .onAppear {
-                setupService()
+                self.setupService()
             }
             .task {
-                await loadAnalytics()
+                await self.loadAnalytics()
             }
             .refreshable {
-                await refreshAnalytics()
+                await self.refreshAnalytics()
             }
-            .sheet(isPresented: $showingExportSheet) {
-                AnalyticsExportView(analyticsData: analyticsData)
+            .sheet(isPresented: self.$showingExportSheet) {
+                AnalyticsExportView(analyticsData: self.analyticsData)
             }
         }
     }
@@ -155,14 +155,14 @@ struct StreakAnalyticsView: View {
     }
 
     private var timeframePicker: some View {
-        Picker("Timeframe", selection: $selectedTimeframe) {
+        Picker("Timeframe", selection: self.$selectedTimeframe) {
             ForEach(Timeframe.allCases, id: \.self) { timeframe in
                 Text(timeframe.rawValue).tag(timeframe)
             }
         }
         .pickerStyle(.segmented)
-        .onChange(of: selectedTimeframe) { _, _ in
-            Task { await loadAnalytics() }
+        .onChange(of: self.selectedTimeframe) { _, _ in
+            Task { await self.loadAnalytics() }
         }
     }
 
@@ -189,7 +189,7 @@ struct StreakAnalyticsView: View {
             AnalyticsCard(
                 title: "Avg Consistency",
                 value: "\(Int(data.averageConsistency * 100))%",
-                subtitle: selectedTimeframe.title.lowercased(),
+                subtitle: self.selectedTimeframe.title.lowercased(),
                 color: .green,
                 icon: "target"
             )
@@ -279,16 +279,16 @@ struct StreakAnalyticsView: View {
     // MARK: - Data Loading
 
     private func setupService() {
-        streakService = StreakService(modelContext: modelContext)
+        self.streakService = StreakService(modelContext: self.modelContext)
     }
 
     private func loadAnalytics() async {
-        isLoading = true
-        errorMessage = nil
+        self.isLoading = true
+        self.errorMessage = nil
         defer { isLoading = false }
 
         guard let service = streakService else {
-            errorMessage = "Failed to initialize streak service"
+            self.errorMessage = "Failed to initialize streak service"
             return
         }
 
@@ -310,7 +310,7 @@ struct StreakAnalyticsView: View {
     }
 
     private func generateAnalyticsData(habits: [Habit], service: StreakService) async
-    -> StreakAnalyticsData {
+        -> StreakAnalyticsData {
         var streakAnalytics: [StreakAnalytics] = []
         var topPerformers: [TopPerformer] = []
 
@@ -325,7 +325,8 @@ struct StreakAnalyticsView: View {
                         currentStreak: analytics.currentStreak,
                         longestStreak: analytics.longestStreak,
                         consistency: analytics.streakPercentile
-                    ))
+                    )
+                )
             }
         }
 
@@ -333,14 +334,14 @@ struct StreakAnalyticsView: View {
         topPerformers.sort { $0.currentStreak > $1.currentStreak }
 
         return await StreakAnalyticsData(
-            totalActiveStreaks: streakAnalytics.filter { $0.currentStreak > 0 }.count,
+            totalActiveStreaks: streakAnalytics.count(where: { $0.currentStreak > 0 }),
             longestOverallStreak: streakAnalytics.map(\.longestStreak).max() ?? 0,
-            averageConsistency: calculateAverageConsistency(streakAnalytics),
-            milestonesAchieved: countRecentMilestones(streakAnalytics),
-            streakDistribution: generateStreakDistribution(streakAnalytics),
+            averageConsistency: self.calculateAverageConsistency(streakAnalytics),
+            milestonesAchieved: self.countRecentMilestones(streakAnalytics),
+            streakDistribution: self.generateStreakDistribution(streakAnalytics),
             topPerformingHabits: topPerformers,
-            consistencyInsights: generateConsistencyInsights(streakAnalytics),
-            weeklyPatterns: generateWeeklyPatterns(habits: habits, service: service)
+            consistencyInsights: self.generateConsistencyInsights(streakAnalytics),
+            weeklyPatterns: self.generateWeeklyPatterns(habits: habits, service: service)
         )
     }
 
@@ -355,18 +356,18 @@ struct StreakAnalyticsView: View {
     }
 
     private func generateStreakDistribution(_ analytics: [StreakAnalytics])
-    -> [StreakDistributionData] {
+        -> [StreakDistributionData] {
         let streaks = analytics.map(\.currentStreak)
         let ranges = [
-            (0...2, "Getting Started"),
-            (3...6, "Building"),
-            (7...29, "Strong"),
-            (30...99, "Impressive"),
-            (100...Int.max, "Legendary")
+            (0 ... 2, "Getting Started"),
+            (3 ... 6, "Building"),
+            (7 ... 29, "Strong"),
+            (30 ... 99, "Impressive"),
+            (100 ... Int.max, "Legendary")
         ]
 
         return ranges.map { range, label in
-            let count = streaks.filter { range.contains($0) }.count
+            let count = streaks.count(where: { range.contains($0) })
             return StreakDistributionData(range: label, count: count)
         }
     }
@@ -375,7 +376,7 @@ struct StreakAnalyticsView: View {
         // Generate insights based on streak patterns
         var insights: [ConsistencyInsight] = []
 
-        let strongStreaks = analytics.filter { $0.currentStreak >= 7 }.count
+        let strongStreaks = analytics.count(where: { $0.currentStreak >= 7 })
 
         if strongStreaks > 0 {
             insights.append(
@@ -383,41 +384,43 @@ struct StreakAnalyticsView: View {
                     title: "Strong Momentum",
                     description: "You have \(strongStreaks) habits with week+ streaks",
                     type: .positive
-                ))
+                )
+            )
         }
 
-        let strugglingHabits = analytics.filter { $0.currentStreak == 0 }.count
+        let strugglingHabits = analytics.count(where: { $0.currentStreak == 0 })
         if strugglingHabits > 0 {
             insights.append(
                 ConsistencyInsight(
                     title: "Growth Opportunity",
                     description: "\(strugglingHabits) habits could use more attention",
                     type: .improvement
-                ))
+                )
+            )
         }
 
         return insights
     }
 
     private func generateWeeklyPatterns(habits: [Habit], service: StreakService) async
-    -> [WeeklyPattern] {
+        -> [WeeklyPattern] {
         // Simplified weekly pattern generation
         let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         return daysOfWeek.map { day in
-            WeeklyPattern(day: day, completionRate: Double.random(in: 0.3...0.9))  // Placeholder
+            WeeklyPattern(day: day, completionRate: Double.random(in: 0.3 ... 0.9)) // Placeholder
         }
     }
 
     // MARK: - Export and Sharing
 
     private func refreshAnalytics() async {
-        await loadAnalytics()
+        await self.loadAnalytics()
     }
 
     private func exportAnalytics(_ data: StreakAnalyticsData) async {
         // Export logic here
         // For now, just a placeholder action
-        showingExportSheet = true
+        self.showingExportSheet = true
     }
 
     private func shareAnalyticsReport(_ data: StreakAnalyticsData) {

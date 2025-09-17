@@ -11,9 +11,9 @@ public struct SectionHeader: View {
 
     public var body: some View {
         HStack(spacing: 8) {
-            Image(systemName: icon)
+            Image(systemName: self.icon)
                 .foregroundColor(.blue)
-            Text(title)
+            Text(self.title)
                 .font(.headline)
                 .foregroundColor(.primary)
             Spacer()

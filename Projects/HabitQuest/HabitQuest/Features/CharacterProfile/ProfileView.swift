@@ -10,35 +10,35 @@ struct ProfileView: View {
                 VStack(spacing: 20) {
                     // Character Avatar Section
                     CharacterAvatarSection(
-                        level: viewModel.level,
-                        currentXP: viewModel.currentXP,
-                        xpToNextLevel: viewModel.xpForNextLevel,
+                        level: self.viewModel.level,
+                        currentXP: self.viewModel.currentXP,
+                        xpToNextLevel: self.viewModel.xpForNextLevel,
                         avatarImageName: "person.circle.fill"
                     )
 
                     // Progress Section
                     ProgressSection(
-                        currentXP: viewModel.currentXP,
-                        xpToNextLevel: viewModel.xpForNextLevel,
-                        totalXP: viewModel.currentXP
+                        currentXP: self.viewModel.currentXP,
+                        xpToNextLevel: self.viewModel.xpForNextLevel,
+                        totalXP: self.viewModel.currentXP
                     )
 
                     // Stats Section
                     StatsSection(
-                        totalHabits: viewModel.totalHabits,
+                        totalHabits: self.viewModel.totalHabits,
                         activeStreaks: 0,
-                        completedToday: viewModel.completedToday,
-                        longestStreak: viewModel.longestStreak,
+                        completedToday: self.viewModel.completedToday,
+                        longestStreak: self.viewModel.longestStreak,
                         perfectDays: 0,
                         weeklyCompletion: 0.0
                     )
 
                     // Achievements Section
-                    AchievementsSection(achievements: viewModel.achievements)
+                    AchievementsSection(achievements: self.viewModel.achievements)
 
                     // Advanced Analytics Button
                     Button(action: {
-                        showingAdvancedAnalytics = true
+                        self.showingAdvancedAnalytics = true
                     }) {
                         HStack {
                             Image(systemName: "chart.bar.xaxis")
@@ -58,7 +58,7 @@ struct ProfileView: View {
                 .padding()
             }
             .navigationTitle("Profile")
-            .sheet(isPresented: $showingAdvancedAnalytics) {
+            .sheet(isPresented: self.$showingAdvancedAnalytics) {
                 AdvancedAnalyticsView()
             }
         }
@@ -85,13 +85,13 @@ struct CharacterAvatarSection: View {
                     )
                     .frame(width: 120, height: 120)
 
-                Image(systemName: avatarImageName)
+                Image(systemName: self.avatarImageName)
                     .font(.system(size: 40))
                     .foregroundColor(.white)
             }
 
             // Level Badge
-            Text("Level \(level)")
+            Text("Level \(self.level)")
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
@@ -103,12 +103,12 @@ struct CharacterAvatarSection: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Spacer()
-                    Text("\(currentXP) / \(xpToNextLevel)")
+                    Text("\(self.currentXP) / \(self.xpToNextLevel)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
 
-                ProgressView(value: Double(currentXP), total: Double(xpToNextLevel))
+                ProgressView(value: Double(self.currentXP), total: Double(self.xpToNextLevel))
                     .progressViewStyle(LinearProgressViewStyle(tint: .blue))
                     .scaleEffect(x: 1, y: 1.5)
             }
@@ -137,12 +137,12 @@ struct ProgressSection: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     Spacer()
-                    Text("\(currentXP) / \(xpToNextLevel)")
+                    Text("\(self.currentXP) / \(self.xpToNextLevel)")
                         .font(.subheadline)
                         .fontWeight(.medium)
                 }
 
-                ProgressView(value: Double(currentXP), total: Double(xpToNextLevel))
+                ProgressView(value: Double(self.currentXP), total: Double(self.xpToNextLevel))
                     .progressViewStyle(LinearProgressViewStyle(tint: .blue))
 
                 HStack {
@@ -150,7 +150,7 @@ struct ProgressSection: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     Spacer()
-                    Text("\(totalXP)")
+                    Text("\(self.totalXP)")
                         .font(.subheadline)
                         .fontWeight(.medium)
                 }
@@ -177,13 +177,14 @@ struct StatsSection: View {
                 .fontWeight(.semibold)
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 12) {
-                StatCard(title: "Total Habits", value: "\(totalHabits)", icon: "list.bullet")
-                StatCard(title: "Active Streaks", value: "\(activeStreaks)", icon: "flame")
+                StatCard(title: "Total Habits", value: "\(self.totalHabits)", icon: "list.bullet")
+                StatCard(title: "Active Streaks", value: "\(self.activeStreaks)", icon: "flame")
                 StatCard(
-                    title: "Completed Today", value: "\(completedToday)", icon: "checkmark.circle")
-                StatCard(title: "Longest Streak", value: "\(longestStreak)", icon: "star")
-                StatCard(title: "Perfect Days", value: "\(perfectDays)", icon: "crown")
-                StatCard(title: "Weekly Rate", value: "\(Int(weeklyCompletion))%", icon: "percent")
+                    title: "Completed Today", value: "\(self.completedToday)", icon: "checkmark.circle"
+                )
+                StatCard(title: "Longest Streak", value: "\(self.longestStreak)", icon: "star")
+                StatCard(title: "Perfect Days", value: "\(self.perfectDays)", icon: "crown")
+                StatCard(title: "Weekly Rate", value: "\(Int(self.weeklyCompletion))%", icon: "percent")
             }
         }
         .padding()
@@ -199,16 +200,16 @@ struct StatCard: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            Image(systemName: icon)
+            Image(systemName: self.icon)
                 .font(.title2)
                 .foregroundColor(.blue)
 
-            Text(value)
+            Text(self.value)
                 .font(.title3)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
 
-            Text(title)
+            Text(self.title)
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -229,7 +230,7 @@ struct AchievementsSection: View {
                     .font(.headline)
                     .fontWeight(.semibold)
                 Spacer()
-                if achievements.count > 3 {
+                if self.achievements.count > 3 {
                     Button("View All") {
                         // Navigate to achievements view
                     }
@@ -239,14 +240,14 @@ struct AchievementsSection: View {
                 }
             }
 
-            if achievements.isEmpty {
+            if self.achievements.isEmpty {
                 Text("No achievements yet. Keep building habits!")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .padding(.vertical)
             } else {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
-                    ForEach(achievements.prefix(6)) { achievement in
+                    ForEach(self.achievements.prefix(6)) { achievement in
                         AchievementBadge(achievement: achievement)
                     }
                 }
@@ -263,18 +264,18 @@ struct AchievementBadge: View {
 
     var body: some View {
         VStack(spacing: 4) {
-            Image(systemName: achievement.iconName)
+            Image(systemName: self.achievement.iconName)
                 .font(.title2)
-                .foregroundColor(achievement.isUnlocked ? .yellow : .gray)
+                .foregroundColor(self.achievement.isUnlocked ? .yellow : .gray)
 
-            Text(achievement.name)
+            Text(self.achievement.name)
                 .font(.caption2)
                 .fontWeight(.medium)
                 .multilineTextAlignment(.center)
-                .foregroundColor(achievement.isUnlocked ? .primary : .secondary)
+                .foregroundColor(self.achievement.isUnlocked ? .primary : .secondary)
         }
         .padding(8)
-        .background(achievement.isUnlocked ? Color.yellow.opacity(0.1) : Color.gray.opacity(0.1))
+        .background(self.achievement.isUnlocked ? Color.yellow.opacity(0.1) : Color.gray.opacity(0.1))
         .cornerRadius(8)
     }
 }
@@ -288,7 +289,7 @@ struct AnalyticsTabView: View {
                 .font(.headline)
                 .fontWeight(.semibold)
 
-            Picker("Analytics Tab", selection: $selectedTab) {
+            Picker("Analytics Tab", selection: self.$selectedTab) {
                 Text("Trends").tag(0)
                 Text("Patterns").tag(1)
                 Text("Insights").tag(2)
@@ -296,7 +297,7 @@ struct AnalyticsTabView: View {
             .pickerStyle(SegmentedPickerStyle())
 
             Group {
-                switch selectedTab {
+                switch self.selectedTab {
                 case 0:
                     TrendsView()
                 case 1:
@@ -479,7 +480,7 @@ struct AdvancedAnalyticsView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
-                        dismiss()
+                        self.dismiss()
                     }
                     .accessibilityLabel("Button")
                 }
@@ -500,7 +501,7 @@ struct AnalyticsInsightsCard: View {
                     icon: "brain",
                     title: "Optimal Scheduling",
                     insight:
-                        "Your success rate is 34% higher when habits are scheduled before 10 AM",
+                    "Your success rate is 34% higher when habits are scheduled before 10 AM",
                     color: .blue
                 )
 
@@ -533,17 +534,17 @@ struct InsightRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            Image(systemName: icon)
+            Image(systemName: self.icon)
                 .font(.title3)
-                .foregroundColor(color)
+                .foregroundColor(self.color)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(title)
+                Text(self.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
 
-                Text(insight)
+                Text(self.insight)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -595,18 +596,18 @@ struct PredictionRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text(title)
+                Text(self.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
                 Spacer()
-                Text("\(Int(probability * 100))%")
+                Text("\(Int(self.probability * 100))%")
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundColor(color)
+                    .foregroundColor(self.color)
             }
 
-            ProgressView(value: probability)
-                .progressViewStyle(LinearProgressViewStyle(tint: color))
+            ProgressView(value: self.probability)
+                .progressViewStyle(LinearProgressViewStyle(tint: self.color))
                 .scaleEffect(x: 1, y: 1.2)
         }
     }
@@ -663,17 +664,17 @@ struct PatternRow: View {
 
     var body: some View {
         HStack {
-            Image(systemName: icon)
+            Image(systemName: self.icon)
                 .font(.title3)
-                .foregroundColor(color)
+                .foregroundColor(self.color)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(title)
+                Text(self.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
 
-                Text(value)
+                Text(self.value)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

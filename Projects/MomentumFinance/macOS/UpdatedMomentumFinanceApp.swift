@@ -48,7 +48,7 @@ struct MomentumFinanceApp: App {
                 .environment(NavigationCoordinator.shared)
             #endif
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(self.sharedModelContainer)
 
         #if os(macOS)
         Settings {

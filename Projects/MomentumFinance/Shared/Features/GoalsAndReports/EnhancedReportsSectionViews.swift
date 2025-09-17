@@ -1,7 +1,7 @@
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 #if canImport(AppKit)
@@ -25,11 +25,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
@@ -43,17 +43,17 @@ extension Features.GoalsAndReports {
         var body: some View {
             ScrollView {
                 LazyVStack(spacing: 20) {
-                    headerSection
+                    self.headerSection
 
-                    if !filteredTransactions.isEmpty {
-                        contentSection
+                    if !self.filteredTransactions.isEmpty {
+                        self.contentSection
                     } else {
-                        emptyStateSection
+                        self.emptyStateSection
                     }
                 }
                 .padding(.vertical)
             }
-            .background(backgroundColor)
+            .background(self.backgroundColor)
         }
 
         private var headerSection: some View {
@@ -73,7 +73,7 @@ extension Features.GoalsAndReports {
                     Spacer()
                 }
 
-                timeframePicker
+                self.timeframePicker
             }
             .padding(.horizontal)
         }
@@ -82,7 +82,7 @@ extension Features.GoalsAndReports {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(TimeFrame.allCases, id: \.self) { timeframe in
-                        timeframeButton(for: timeframe).accessibilityLabel("Button")
+                        self.timeframeButton(for: timeframe).accessibilityLabel("Button")
                     }
                 }
                 .padding(.horizontal)
@@ -90,12 +90,12 @@ extension Features.GoalsAndReports {
         }
 
         private func timeframeButton(for timeframe: TimeFrame) -> some View {
-            let isSelected = selectedTimeframe == timeframe
+            let isSelected = self.selectedTimeframe == timeframe
 
             return Button(
                 action: {
                     withAnimation(.easeInOut(duration: 0.2)) {
-                        selectedTimeframe = timeframe
+                        self.selectedTimeframe = timeframe
                     }
                 },
                 label: {
@@ -105,7 +105,7 @@ extension Features.GoalsAndReports {
                         .foregroundColor(isSelected ? .white : .primary)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 8)
-                        .background(buttonBackground(isSelected: isSelected))
+                        .background(self.buttonBackground(isSelected: isSelected))
                 },
             ).accessibilityLabel("Button")
         }
@@ -130,25 +130,25 @@ extension Features.GoalsAndReports {
         private var contentSection: some View {
             VStack(spacing: 20) {
                 EnhancedFinancialSummaryCard(
-                    transactions: filteredTransactions,
-                    timeframe: selectedTimeframe,
+                    transactions: self.filteredTransactions,
+                    timeframe: self.selectedTimeframe,
                 )
                 .padding(.horizontal, 16)
 
                 // Spending by Category Chart
-                SpendingByCategoryChart(transactions: filteredTransactions)
+                SpendingByCategoryChart(transactions: self.filteredTransactions)
                     .padding(.horizontal, 16)
 
-                if !budgets.isEmpty {
+                if !self.budgets.isEmpty {
                     // Budget Performance Chart
                     BudgetPerformanceChart(
-                        budgets: currentPeriodBudgets, transactions: filteredTransactions
+                        budgets: self.currentPeriodBudgets, transactions: self.filteredTransactions
                     )
                     .padding(.horizontal, 16)
                 }
 
                 // Recent Transactions List
-                RecentTransactionsList(transactions: Array(filteredTransactions.prefix(5)))
+                RecentTransactionsList(transactions: Array(self.filteredTransactions.prefix(5)))
                     .padding(.horizontal, 16)
             }
         }
@@ -165,7 +165,7 @@ extension Features.GoalsAndReports {
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
 
-                    Text("No transactions found for \(selectedTimeframe.rawValue.lowercased())")
+                    Text("No transactions found for \(self.selectedTimeframe.rawValue.lowercased())")
                         .font(.body)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
@@ -183,27 +183,27 @@ extension Features.GoalsAndReports {
             let calendar = Calendar.current
             let now = Date()
 
-            switch selectedTimeframe {
+            switch self.selectedTimeframe {
             case .thisWeek:
                 guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: now) else {
-                    return transactions
+                    return self.transactions
                 }
-                return transactions.filter { weekInterval.contains($0.date) }
+                return self.transactions.filter { weekInterval.contains($0.date) }
 
             case .thisMonth:
-                return transactions.filter {
+                return self.transactions.filter {
                     calendar.isDate($0.date, equalTo: now, toGranularity: .month)
                 }
 
             case .last3Months:
                 guard let threeMonthsAgo = calendar.date(byAdding: .month, value: -3, to: now)
                 else {
-                    return transactions
+                    return self.transactions
                 }
-                return transactions.filter { $0.date >= threeMonthsAgo }
+                return self.transactions.filter { $0.date >= threeMonthsAgo }
 
             case .thisYear:
-                return transactions.filter {
+                return self.transactions.filter {
                     calendar.isDate($0.date, equalTo: now, toGranularity: .year)
                 }
             }
@@ -213,7 +213,7 @@ extension Features.GoalsAndReports {
             let calendar = Calendar.current
             let now = Date()
 
-            return budgets.filter { budget in
+            return self.budgets.filter { budget in
                 calendar.isDate(budget.month, equalTo: now, toGranularity: .month)
             }
         }
@@ -231,14 +231,14 @@ extension Features.GoalsAndReports {
                     .fontWeight(.semibold)
 
                 VStack(spacing: 8) {
-                    Text("Income: $\(incomeAmount)")
+                    Text("Income: $\(self.incomeAmount)")
                         .foregroundColor(.green)
 
-                    Text("Expenses: $\(expenseAmount)")
+                    Text("Expenses: $\(self.expenseAmount)")
                         .foregroundColor(.red)
 
-                    Text("Net: $\(netAmount)")
-                        .foregroundColor(netValue >= 0 ? .green : .red)
+                    Text("Net: $\(self.netAmount)")
+                        .foregroundColor(self.netValue >= 0 ? .green : .red)
                 }
             }
             .padding()
@@ -249,31 +249,31 @@ extension Features.GoalsAndReports {
         }
 
         private var incomeAmount: String {
-            let total = transactions.filter { $0.transactionType == .income }.reduce(0) {
+            let total = self.transactions.filter { $0.transactionType == .income }.reduce(0) {
                 $0 + $1.amount
             }
             return String(format: "%.2f", total)
         }
 
         private var expenseAmount: String {
-            let total = transactions.filter { $0.transactionType == .expense }.reduce(0) {
+            let total = self.transactions.filter { $0.transactionType == .expense }.reduce(0) {
                 $0 + $1.amount
             }
             return String(format: "%.2f", total)
         }
 
         private var netValue: Double {
-            let income = transactions.filter { $0.transactionType == .income }.reduce(0) {
+            let income = self.transactions.filter { $0.transactionType == .income }.reduce(0) {
                 $0 + $1.amount
             }
-            let expenses = transactions.filter { $0.transactionType == .expense }.reduce(0) {
+            let expenses = self.transactions.filter { $0.transactionType == .expense }.reduce(0) {
                 $0 + $1.amount
             }
             return income - expenses
         }
 
         private var netAmount: String {
-            return String(format: "%.2f", netValue)
+            String(format: "%.2f", self.netValue)
         }
     }
 
@@ -282,7 +282,7 @@ extension Features.GoalsAndReports {
         let transactions: [FinancialTransaction]
 
         private var categorySpending: [(String, Double)] {
-            let expenseTransactions = transactions.filter { $0.transactionType == .expense }
+            let expenseTransactions = self.transactions.filter { $0.transactionType == .expense }
             var spendingByCategory: [String: Double] = [:]
 
             for transaction in expenseTransactions {
@@ -299,14 +299,14 @@ extension Features.GoalsAndReports {
                     .font(.headline)
                     .fontWeight(.semibold)
 
-                if categorySpending.isEmpty {
+                if self.categorySpending.isEmpty {
                     Text("No expense data available")
                         .foregroundColor(.secondary)
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .center)
                 } else {
                     VStack(spacing: 12) {
-                        ForEach(categorySpending.prefix(5), id: \.0) { category, amount in
+                        ForEach(self.categorySpending.prefix(5), id: \.0) { category, amount in
                             HStack {
                                 Text(category)
                                     .font(.subheadline)
@@ -332,13 +332,13 @@ extension Features.GoalsAndReports {
         let transactions: [FinancialTransaction]
 
         private var budgetPerformance: [(Budget, Double, Double)] {
-            budgets.map { budget in
+            self.budgets.map { budget in
                 let spent =
-                    transactions
-                    .filter {
-                        $0.category?.name == budget.category?.name && $0.transactionType == .expense
-                    }
-                    .reduce(0) { $0 + $1.amount }
+                    self.transactions
+                        .filter {
+                            $0.category?.name == budget.category?.name && $0.transactionType == .expense
+                        }
+                        .reduce(0) { $0 + $1.amount }
                 return (budget, spent, budget.limitAmount)
             }
         }
@@ -349,14 +349,14 @@ extension Features.GoalsAndReports {
                     .font(.headline)
                     .fontWeight(.semibold)
 
-                if budgetPerformance.isEmpty {
+                if self.budgetPerformance.isEmpty {
                     Text("No budget data available")
                         .foregroundColor(.secondary)
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .center)
                 } else {
                     VStack(spacing: 12) {
-                        ForEach(budgetPerformance, id: \.0.id) { budget, spent, budgeted in
+                        ForEach(self.budgetPerformance, id: \.0.id) { budget, spent, budgeted in
                             VStack(alignment: .leading, spacing: 8) {
                                 Text(budget.category?.name ?? "Unknown")
                                     .font(.subheadline)
@@ -374,7 +374,8 @@ extension Features.GoalsAndReports {
                                             .frame(
                                                 width: min(
                                                     geometry.size.width * (spent / budgeted),
-                                                    geometry.size.width), height: 8
+                                                    geometry.size.width
+                                                ), height: 8
                                             )
                                             .cornerRadius(4)
                                     }
@@ -407,7 +408,7 @@ extension Features.GoalsAndReports {
         let transactions: [FinancialTransaction]
 
         private var sortedTransactions: [FinancialTransaction] {
-            Array(transactions.sorted { $0.date > $1.date }.prefix(5))
+            Array(self.transactions.sorted { $0.date > $1.date }.prefix(5))
         }
 
         var body: some View {
@@ -416,10 +417,10 @@ extension Features.GoalsAndReports {
                     .font(.headline)
                     .fontWeight(.semibold)
 
-                if transactions.isEmpty {
-                    emptyStateView
+                if self.transactions.isEmpty {
+                    self.emptyStateView
                 } else {
-                    transactionsListView
+                    self.transactionsListView
                 }
             }
         }
@@ -433,8 +434,8 @@ extension Features.GoalsAndReports {
 
         private var transactionsListView: some View {
             VStack(spacing: 8) {
-                ForEach(sortedTransactions, id: \.id) { transaction in
-                    transactionRow(for: transaction)
+                ForEach(self.sortedTransactions, id: \.id) { transaction in
+                    self.transactionRow(for: transaction)
                 }
             }
             .padding()

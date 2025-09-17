@@ -19,56 +19,56 @@ struct ColorThemePreview: View {
         NavigationStack {
             List {
                 Section("Theme Mode") {
-                    Picker("Theme Mode", selection: $selectedMode) {
+                    Picker("Theme Mode", selection: self.$selectedMode) {
                         ForEach(ThemeMode.allCases) { mode in
                             Label(mode.displayName, systemImage: mode.icon)
                                 .tag(mode)
                         }
                     }
                     .pickerStyle(.menu)
-                    .onChange(of: selectedMode) { _, newValue in
-                        theme.setThemeMode(newValue)
+                    .onChange(of: self.selectedMode) { _, newValue in
+                        self.theme.setThemeMode(newValue)
                     }
                 }
 
                 Section("Background Colors") {
-                    colorRow("Background", color: theme.background)
-                    colorRow("Secondary Background", color: theme.secondaryBackground)
-                    colorRow("Grouped Background", color: theme.groupedBackground)
-                    colorRow("Card Background", color: theme.cardBackground)
+                    self.colorRow("Background", color: self.theme.background)
+                    self.colorRow("Secondary Background", color: self.theme.secondaryBackground)
+                    self.colorRow("Grouped Background", color: self.theme.groupedBackground)
+                    self.colorRow("Card Background", color: self.theme.cardBackground)
                 }
 
                 Section("Text Colors") {
-                    colorRow("Primary Text", color: theme.primaryText)
-                    colorRow("Secondary Text", color: theme.secondaryText)
-                    colorRow("Tertiary Text", color: theme.tertiaryText)
+                    self.colorRow("Primary Text", color: self.theme.primaryText)
+                    self.colorRow("Secondary Text", color: self.theme.secondaryText)
+                    self.colorRow("Tertiary Text", color: self.theme.tertiaryText)
                 }
 
                 Section("Accent Colors") {
-                    colorRow("Primary Accent", color: theme.accentPrimary)
-                    colorRow("Secondary Accent", color: theme.accentSecondary)
+                    self.colorRow("Primary Accent", color: self.theme.accentPrimary)
+                    self.colorRow("Secondary Accent", color: self.theme.accentSecondary)
                 }
 
                 Section("Financial Colors") {
-                    colorRow("Income", color: theme.income)
-                    colorRow("Expense", color: theme.expense)
-                    colorRow("Savings", color: theme.savings)
-                    colorRow("Warning", color: theme.warning)
-                    colorRow("Critical", color: theme.critical)
+                    self.colorRow("Income", color: self.theme.income)
+                    self.colorRow("Expense", color: self.theme.expense)
+                    self.colorRow("Savings", color: self.theme.savings)
+                    self.colorRow("Warning", color: self.theme.warning)
+                    self.colorRow("Critical", color: self.theme.critical)
                 }
 
                 Section("Budget Colors") {
-                    colorRow("Under Budget", color: theme.budgetUnder)
-                    colorRow("Near Budget", color: theme.budgetNear)
-                    colorRow("Over Budget", color: theme.budgetOver)
+                    self.colorRow("Under Budget", color: self.theme.budgetUnder)
+                    self.colorRow("Near Budget", color: self.theme.budgetNear)
+                    self.colorRow("Over Budget", color: self.theme.budgetOver)
                 }
 
                 Section("Category Colors") {
                     ScrollView(.horizontal) {
                         HStack(spacing: 10) {
-                            ForEach(0 ..< theme.categoryColors.count, id: \.self) { index in
+                            ForEach(0 ..< self.theme.categoryColors.count, id: \.self) { index in
                                 Circle()
-                                    .fill(theme.categoryColors[index])
+                                    .fill(self.theme.categoryColors[index])
                                     .frame(width: 40, height: 40)
                             }
                         }

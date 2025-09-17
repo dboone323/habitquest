@@ -8,7 +8,7 @@ func fi_suggestIdleCashInsights(transactions: [FinancialTransaction], accounts: 
 
     let checkingAccounts = accounts.filter { $0.accountType == .checking }
     for account in checkingAccounts {
-        guard account.balance > 5_000 else { continue }
+        guard account.balance > 5000 else { continue }
 
         let accountTransactions = transactions.filter {
             $0.account?.id == account.id && $0.amount < 0

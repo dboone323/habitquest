@@ -41,6 +41,6 @@ struct HabitQuestApp: App {
         WindowGroup {
             AppMainView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(self.sharedModelContainer)
     }
 }

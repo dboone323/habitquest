@@ -20,19 +20,19 @@ final class TransactionPatternAnalyzer {
         var insights: [FinancialInsight] = []
 
         // Analyze spending by day of week
-        let weekdaySpending = analyzeWeekdaySpending(transactions)
+        let weekdaySpending = self.analyzeWeekdaySpending(transactions)
         if let weekdayInsight = weekdaySpending {
             insights.append(weekdayInsight)
         }
 
         // Analyze spending by time of month
-        let monthlySpending = analyzeMonthlySpending(transactions)
+        let monthlySpending = self.analyzeMonthlySpending(transactions)
         if let monthlyInsight = monthlySpending {
             insights.append(monthlyInsight)
         }
 
         // Detect unusual transactions
-        let anomalies = detectAnomalies(transactions)
+        let anomalies = self.detectAnomalies(transactions)
         insights.append(contentsOf: anomalies)
 
         return insights
@@ -108,7 +108,7 @@ final class TransactionPatternAnalyzer {
 
         let amounts = expenses.map { abs($0.amount) }
         let average = amounts.reduce(0, +) / Double(amounts.count)
-        let standardDeviation = calculateStandardDeviation(amounts, mean: average)
+        let standardDeviation = self.calculateStandardDeviation(amounts, mean: average)
 
         // Find transactions that are more than 2 standard deviations above the mean
         let threshold = average + (2 * standardDeviation)

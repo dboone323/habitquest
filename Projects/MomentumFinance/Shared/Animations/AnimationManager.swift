@@ -165,7 +165,7 @@ extension View {
             .transition(.asymmetric(
                 insertion: .move(edge: edge).combined(with: .opacity),
                 removal: .move(edge: edge.opposite).combined(with: .opacity),
-                ))
+            ))
             .animation(AnimationManager.Springs.smooth.delay(delay), value: true)
     }
 
@@ -198,14 +198,14 @@ extension View {
                             ]),
                             startPoint: .leading,
                             endPoint: .trailing,
-                            ),
-                        )
+                        ),
+                    )
                     .offset(x: -100)
                     .animation(
                         Animation.linear(duration: 1.5).repeatForever(autoreverses: false),
                         value: true,
-                        ),
-                )
+                    ),
+            )
             .clipped()
     }
 }
@@ -231,7 +231,7 @@ extension AnyTransition {
         .asymmetric(
             insertion: .scale.combined(with: .opacity),
             removal: .scale.combined(with: .opacity),
-            )
+        )
     }
 
     /// Slide and fade from bottom
@@ -239,7 +239,7 @@ extension AnyTransition {
         .asymmetric(
             insertion: .move(edge: .bottom).combined(with: .opacity),
             removal: .move(edge: .bottom).combined(with: .opacity),
-            )
+        )
     }
 
     /// Card flip transition
@@ -248,12 +248,12 @@ extension AnyTransition {
             insertion: .modifier(
                 active: CardFlipModifier(rotation: 90),
                 identity: CardFlipModifier(rotation: 0),
-                ),
+            ),
             removal: .modifier(
                 active: CardFlipModifier(rotation: -90),
                 identity: CardFlipModifier(rotation: 0),
-                ),
-            )
+            ),
+        )
     }
 
     /// Push transition for navigation
@@ -261,7 +261,7 @@ extension AnyTransition {
         .asymmetric(
             insertion: .move(edge: .trailing),
             removal: .move(edge: .leading),
-            )
+        )
     }
 }
 
@@ -275,9 +275,9 @@ struct CardFlipModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .rotation3DEffect(
-                .degrees(rotation),
+                .degrees(self.rotation),
                 axis: (x: 0, y: 1, z: 0),
-                )
+            )
     }
 }
 
@@ -294,20 +294,20 @@ struct LoadingIndicator: View {
 
     var body: some View {
         Group {
-            switch style {
+            switch self.style {
             case .dots:
                 HStack(spacing: 4) {
                     ForEach(0 ..< 3, id: \.self) { index in
                         Circle()
                             .fill(Color.accentColor)
                             .frame(width: 8, height: 8)
-                            .scaleEffect(isAnimating ? 1.2 : 0.8)
+                            .scaleEffect(self.isAnimating ? 1.2 : 0.8)
                             .animation(
                                 Animation.easeInOut(duration: 0.6)
                                     .repeatForever()
                                     .delay(Double(index) * 0.2),
-                                value: isAnimating,
-                                )
+                                value: self.isAnimating,
+                            )
                     }
                 }
 
@@ -316,29 +316,29 @@ struct LoadingIndicator: View {
                     .trim(from: 0, to: 0.7)
                     .stroke(Color.accentColor, lineWidth: 3)
                     .frame(width: 24, height: 24)
-                    .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                    .rotationEffect(.degrees(self.isAnimating ? 360 : 0))
                     .animation(
                         Animation.linear(duration: 1).repeatForever(autoreverses: false),
-                        value: isAnimating,
-                        )
+                        value: self.isAnimating,
+                    )
 
             case .pulse:
                 Circle()
                     .fill(Color.accentColor)
                     .frame(width: 20, height: 20)
-                    .scaleEffect(isAnimating ? 1.2 : 0.8)
-                    .opacity(isAnimating ? 0.5 : 1.0)
+                    .scaleEffect(self.isAnimating ? 1.2 : 0.8)
+                    .opacity(self.isAnimating ? 0.5 : 1.0)
                     .animation(
                         Animation.easeInOut(duration: 1).repeatForever(autoreverses: true),
-                        value: isAnimating,
-                        )
+                        value: self.isAnimating,
+                    )
             }
         }
         .onAppear {
-            isAnimating = true
+            self.isAnimating = true
         }
         .onDisappear {
-            isAnimating = false
+            self.isAnimating = false
         }
     }
 }
@@ -354,25 +354,25 @@ struct AnimatedProgressBar: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Rectangle()
-                    .fill(color.opacity(0.2))
-                    .frame(height: height)
+                    .fill(self.color.opacity(0.2))
+                    .frame(height: self.height)
 
                 Rectangle()
-                    .fill(color)
-                    .frame(width: geometry.size.width * animatedProgress, height: height)
-                    .animation(AnimationManager.Springs.gentle, value: animatedProgress)
+                    .fill(self.color)
+                    .frame(width: geometry.size.width * self.animatedProgress, height: self.height)
+                    .animation(AnimationManager.Springs.gentle, value: self.animatedProgress)
             }
         }
-        .frame(height: height)
-        .clipShape(RoundedRectangle(cornerRadius: height / 2))
+        .frame(height: self.height)
+        .clipShape(RoundedRectangle(cornerRadius: self.height / 2))
         .onAppear {
             withAnimation(AnimationManager.budgetProgress.delay(0.3)) {
-                animatedProgress = min(max(progress, 0), 1)
+                self.animatedProgress = min(max(self.progress, 0), 1)
             }
         }
-        .onChange(of: progress) { _, newValue in
+        .onChange(of: self.progress) { _, newValue in
             withAnimation(AnimationManager.budgetProgress) {
-                animatedProgress = min(max(newValue, 0), 1)
+                self.animatedProgress = min(max(newValue, 0), 1)
             }
         }
     }

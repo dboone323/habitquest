@@ -30,21 +30,21 @@ final class BudgetsViewModel {
     /// <#Description#>
     /// - Returns: <#description#>
     func totalBudgetedAmount(_ budgets: [Budget], for month: Date) -> Double {
-        budgetsForMonth(budgets, month: month).reduce(0) { $0 + $1.limitAmount }
+        self.budgetsForMonth(budgets, month: month).reduce(0) { $0 + $1.limitAmount }
     }
 
     /// Get total spent amount for budgets in a month
     /// <#Description#>
     /// - Returns: <#description#>
     func totalSpentAmount(_ budgets: [Budget], for month: Date) -> Double {
-        budgetsForMonth(budgets, month: month).reduce(0) { $0 + $1.spentAmount }
+        self.budgetsForMonth(budgets, month: month).reduce(0) { $0 + $1.spentAmount }
     }
 
     /// Get remaining budget for a month
     /// <#Description#>
     /// - Returns: <#description#>
     func remainingBudget(_ budgets: [Budget], for month: Date) -> Double {
-        let monthBudgets = budgetsForMonth(budgets, month: month)
+        let monthBudgets = self.budgetsForMonth(budgets, month: month)
         let totalBudgeted = monthBudgets.reduce(0) { $0 + $1.limitAmount }
         let totalSpent = monthBudgets.reduce(0) { $0 + $1.spentAmount }
         return totalBudgeted - totalSpent
@@ -54,14 +54,14 @@ final class BudgetsViewModel {
     /// <#Description#>
     /// - Returns: <#description#>
     func hasOverBudgetCategories(_ budgets: [Budget], for month: Date) -> Bool {
-        budgetsForMonth(budgets, month: month).contains { $0.isOverBudget }
+        self.budgetsForMonth(budgets, month: month).contains { $0.isOverBudget }
     }
 
     /// Get categories that are over budget
     /// <#Description#>
     /// - Returns: <#description#>
     func overBudgetCategories(_ budgets: [Budget], for month: Date) -> [Budget] {
-        budgetsForMonth(budgets, month: month).filter(\.isOverBudget)
+        self.budgetsForMonth(budgets, month: month).filter(\.isOverBudget)
     }
 
     /// Create a new budget
@@ -104,7 +104,7 @@ final class BudgetsViewModel {
         budget.limitAmount = newLimit
 
         do {
-            try modelContext?.save()
+            try self.modelContext?.save()
         } catch {
             Logger.logError(error, context: "Updating budget")
         }
@@ -129,7 +129,7 @@ final class BudgetsViewModel {
     /// <#Description#>
     /// - Returns: <#description#>
     func budgetProgressSummary(_ budgets: [Budget], for month: Date) -> BudgetProgressSummary {
-        let monthBudgets = budgetsForMonth(budgets, month: month)
+        let monthBudgets = self.budgetsForMonth(budgets, month: month)
 
         let totalBudgeted = monthBudgets.reduce(0) { $0 + $1.limitAmount }
         let totalSpent = monthBudgets.reduce(0) { $0 + $1.spentAmount }
@@ -142,14 +142,14 @@ final class BudgetsViewModel {
             onTrackCount: onTrackCount,
             overBudgetCount: overBudgetCount,
             totalBudgets: monthBudgets.count,
-            )
+        )
     }
 
     /// Get spending trend for categories
     /// <#Description#>
     /// - Returns: <#description#>
     func spendingTrend(for category: ExpenseCategory, months: Int = 6) -> [MonthlySpending] {
-        guard modelContext != nil else { return [] }
+        guard self.modelContext != nil else { return [] }
 
         let calendar = Calendar.current
         let now = Date()
@@ -163,7 +163,7 @@ final class BudgetsViewModel {
                 month: monthDate,
                 amount: spent,
                 categoryName: category.name,
-                )
+            )
             trend.insert(monthSpending, at: 0)
         }
 
@@ -179,12 +179,12 @@ struct BudgetProgressSummary {
     let totalBudgets: Int
 
     var remainingAmount: Double {
-        totalBudgeted - totalSpent
+        self.totalBudgeted - self.totalSpent
     }
 
     var progressPercentage: Double {
-        guard totalBudgeted > 0 else { return 0.0 }
-        return totalSpent / totalBudgeted
+        guard self.totalBudgeted > 0 else { return 0.0 }
+        return self.totalSpent / self.totalBudgeted
     }
 }
 
@@ -196,10 +196,10 @@ struct MonthlySpending {
     var formattedMonth: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM"
-        return formatter.string(from: month)
+        return formatter.string(from: self.month)
     }
 
     var formattedAmount: String {
-        amount.formatted(.currency(code: "USD"))
+        self.amount.formatted(.currency(code: "USD"))
     }
 }

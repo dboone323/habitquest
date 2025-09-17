@@ -69,16 +69,17 @@ public struct NotificationPermissionManager {
             let granted = try await center.requestAuthorization(options: [.alert, .badge, .sound])
 
             if granted {
-                os_log("Notification permission granted", log: logger, type: .info)
+                os_log("Notification permission granted", log: self.logger, type: .info)
             } else {
-                os_log("Notification permission denied", log: logger, type: .error)
+                os_log("Notification permission denied", log: self.logger, type: .error)
             }
 
             return granted
         } catch {
             os_log(
-                "Error requesting notification permission: %@", log: logger, type: .error,
-                error.localizedDescription)
+                "Error requesting notification permission: %@", log: self.logger, type: .error,
+                error.localizedDescription
+            )
             return false
         }
     }
@@ -113,7 +114,7 @@ public struct NotificationPermissionManager {
             options: .customDismissAction
         )
 
-        center.setNotificationCategories([budgetCategory, subscriptionCategory, goalCategory])
+        self.center.setNotificationCategories([budgetCategory, subscriptionCategory, goalCategory])
     }
 }
 
@@ -133,8 +134,8 @@ public struct BudgetNotificationScheduler {
             let spentPercentage = budget.spentAmount / budget.limitAmount
 
             // 75% spending warning
-            if spentPercentage >= 0.75 && spentPercentage < 0.90 {
-                scheduleBudgetWarning(
+            if spentPercentage >= 0.75, spentPercentage < 0.90 {
+                self.scheduleBudgetWarning(
                     budget: budget,
                     percentage: 75,
                     urgency: .medium
@@ -142,8 +143,8 @@ public struct BudgetNotificationScheduler {
             }
 
             // 90% spending warning
-            if spentPercentage >= 0.90 && spentPercentage < 1.0 {
-                scheduleBudgetWarning(
+            if spentPercentage >= 0.90, spentPercentage < 1.0 {
+                self.scheduleBudgetWarning(
                     budget: budget,
                     percentage: 90,
                     urgency: .high
@@ -152,7 +153,7 @@ public struct BudgetNotificationScheduler {
 
             // Over budget alert
             if spentPercentage >= 1.0 {
-                scheduleBudgetWarning(
+                self.scheduleBudgetWarning(
                     budget: budget,
                     percentage: 100,
                     urgency: .critical
@@ -170,11 +171,11 @@ public struct BudgetNotificationScheduler {
         let identifier = "budget_warning_\(budget.persistentModelID)_\(percentage)"
 
         // Remove existing notification for this budget/percentage
-        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+        self.center.removePendingNotificationRequests(withIdentifiers: [identifier])
 
         let content = UNMutableNotificationContent()
         content.title = urgency.title
-        content.body = createBudgetWarningMessage(budget: budget, percentage: percentage)
+        content.body = self.createBudgetWarningMessage(budget: budget, percentage: percentage)
         content.sound = urgency.sound
         content.categoryIdentifier = "BUDGET_WARNING"
         content.userInfo = [
@@ -186,16 +187,18 @@ public struct BudgetNotificationScheduler {
         // Schedule immediately for current warnings
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(
-            identifier: identifier, content: content, trigger: trigger)
+            identifier: identifier, content: content, trigger: trigger
+        )
 
         // Extract category name before the closure to avoid capturing budget
         let categoryName = budget.category?.name ?? "Unknown"
 
-        center.add(request) { [logger] error in
+        self.center.add(request) { [logger] error in
             if let error {
                 os_log(
                     "Failed to schedule budget notification: %@", log: logger, type: .error,
-                    error.localizedDescription)
+                    error.localizedDescription
+                )
             } else {
                 os_log("Scheduled budget warning for %@", log: logger, type: .info, categoryName)
             }
@@ -249,26 +252,27 @@ public struct SubscriptionNotificationScheduler {
     /// Schedules due date reminders for subscriptions
     public func scheduleDueDateReminders(for subscriptions: [Subscription]) {
         for subscription in subscriptions {
-            scheduleDueDateReminder(for: subscription)
+            self.scheduleDueDateReminder(for: subscription)
         }
     }
 
     /// Alias for scheduleDueDateReminders to match NotificationManager interface
     public func scheduleNotifications(for subscriptions: [Subscription]) {
-        scheduleDueDateReminders(for: subscriptions)
+        self.scheduleDueDateReminders(for: subscriptions)
     }
 
     private func scheduleDueDateReminder(for subscription: Subscription) {
         let identifier = "subscription_reminder_\(subscription.persistentModelID)"
 
         // Remove existing notifications for this subscription
-        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+        self.center.removePendingNotificationRequests(withIdentifiers: [identifier])
 
         // Calculate next due date
         guard let nextDueDate = subscription.nextBillingDate else {
             os_log(
-                "No next billing date for subscription %@", log: logger, type: .info,
-                subscription.name)
+                "No next billing date for subscription %@", log: self.logger, type: .info,
+                subscription.name
+            )
             return
         }
 
@@ -277,8 +281,9 @@ public struct SubscriptionNotificationScheduler {
 
         guard let reminderDate, reminderDate > Date() else {
             os_log(
-                "Reminder date is in the past for subscription %@", log: logger, type: .info,
-                subscription.name)
+                "Reminder date is in the past for subscription %@", log: self.logger, type: .info,
+                subscription.name
+            )
             return
         }
 
@@ -294,23 +299,27 @@ public struct SubscriptionNotificationScheduler {
         ]
 
         let triggerComponents = Calendar.current.dateComponents(
-            [.year, .month, .day, .hour, .minute], from: reminderDate)
+            [.year, .month, .day, .hour, .minute], from: reminderDate
+        )
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
         let request = UNNotificationRequest(
-            identifier: identifier, content: content, trigger: trigger)
+            identifier: identifier, content: content, trigger: trigger
+        )
 
         // Extract subscription name before the closure
         let subscriptionName = subscription.name
 
-        center.add(request) { [logger] error in
+        self.center.add(request) { [logger] error in
             if let error {
                 os_log(
                     "Failed to schedule subscription reminder: %@", log: logger, type: .error,
-                    error.localizedDescription)
+                    error.localizedDescription
+                )
             } else {
                 os_log(
                     "Scheduled subscription reminder for %@", log: logger, type: .info,
-                    subscriptionName)
+                    subscriptionName
+                )
             }
         }
     }
@@ -328,27 +337,27 @@ public struct GoalNotificationScheduler {
     /// Schedules progress reminders for savings goals
     public func scheduleProgressReminders(for goals: [SavingsGoal]) {
         for goal in goals {
-            scheduleProgressReminder(for: goal)
+            self.scheduleProgressReminder(for: goal)
         }
     }
 
     /// Alias for scheduleProgressReminders to match NotificationManager interface
     public func checkMilestones(for goals: [SavingsGoal]) {
-        scheduleProgressReminders(for: goals)
+        self.scheduleProgressReminders(for: goals)
     }
 
     private func scheduleProgressReminder(for goal: SavingsGoal) {
         let identifier = "goal_progress_\(goal.persistentModelID)"
 
         // Remove existing notifications for this goal
-        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+        self.center.removePendingNotificationRequests(withIdentifiers: [identifier])
 
         // Calculate progress percentage
         let progressPercentage = goal.currentAmount / goal.targetAmount
         let progressPercent = Int(progressPercentage * 100)
 
         // Only schedule if goal is active and has meaningful progress
-        guard !goal.isCompleted && progressPercentage > 0.1 else {
+        guard !goal.isCompleted, progressPercentage > 0.1 else {
             return
         }
 
@@ -369,19 +378,22 @@ public struct GoalNotificationScheduler {
         let triggerComponents = Calendar.current.dateComponents([.weekday, .hour], from: nextWeek)
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: true)
         let request = UNNotificationRequest(
-            identifier: identifier, content: content, trigger: trigger)
+            identifier: identifier, content: content, trigger: trigger
+        )
 
         // Extract goal title before the closure
         let goalTitle = goal.title
 
-        center.add(request) { [logger] error in
+        self.center.add(request) { [logger] error in
             if let error {
                 os_log(
                     "Failed to schedule goal progress reminder: %@", log: logger, type: .error,
-                    error.localizedDescription)
+                    error.localizedDescription
+                )
             } else {
                 os_log(
-                    "Scheduled goal progress reminder for %@", log: logger, type: .info, goalTitle)
+                    "Scheduled goal progress reminder for %@", log: logger, type: .info, goalTitle
+                )
             }
         }
     }

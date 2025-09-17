@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 #if canImport(UIKit)
@@ -33,10 +33,10 @@ extension Features.Transactions {
         @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
 
         var filteredTransactions: [FinancialTransaction] {
-            var filtered = transactions
+            var filtered = self.transactions
 
             // Apply type filter
-            switch selectedFilter {
+            switch self.selectedFilter {
             case .all:
                 break
             case .income:
@@ -52,11 +52,11 @@ extension Features.Transactions {
             }
 
             // Apply search filter
-            if !searchText.isEmpty {
+            if !self.searchText.isEmpty {
                 filtered = filtered.filter { transaction in
-                    transaction.title.localizedCaseInsensitiveContains(searchText)
-                        || transaction.category?.name.localizedCaseInsensitiveContains(searchText)
-                            == true
+                    transaction.title.localizedCaseInsensitiveContains(self.searchText)
+                        || transaction.category?.name.localizedCaseInsensitiveContains(self.searchText)
+                        == true
                 }
             }
 
@@ -66,37 +66,37 @@ extension Features.Transactions {
         var body: some View {
             NavigationView {
                 VStack(spacing: 0) {
-                    headerSection
+                    self.headerSection
 
-                    if filteredTransactions.isEmpty {
-                        TransactionEmptyStateView(searchText: searchText) {
-                            showingAddTransaction = true
+                    if self.filteredTransactions.isEmpty {
+                        TransactionEmptyStateView(searchText: self.searchText) {
+                            self.showingAddTransaction = true
                         }
                     } else {
                         TransactionListView(
-                            transactions: filteredTransactions,
+                            transactions: self.filteredTransactions,
                             onTransactionTapped: { transaction in
-                                selectedTransaction = transaction
+                                self.selectedTransaction = transaction
                             },
-                            onDeleteTransaction: deleteTransaction
+                            onDeleteTransaction: self.deleteTransaction
                         )
                     }
                 }
                 .navigationTitle("Transactions")
                 .toolbar {
-                    toolbarContent
+                    self.toolbarContent
                 }
-                .sheet(isPresented: $showingAddTransaction) {
-                    AddTransactionView(categories: categories, accounts: accounts)
+                .sheet(isPresented: self.$showingAddTransaction) {
+                    AddTransactionView(categories: self.categories, accounts: self.accounts)
                 }
-                .sheet(isPresented: $showingSearch) {
+                .sheet(isPresented: self.$showingSearch) {
                     Features.GlobalSearch.GlobalSearchView()
                 }
-                .sheet(item: $selectedTransaction) { transaction in
+                .sheet(item: self.$selectedTransaction) { transaction in
                     TransactionDetailView(transaction: transaction)
                 }
                 .onAppear {
-                    viewModel.setModelContext(modelContext)
+                    self.viewModel.setModelContext(self.modelContext)
                 }
             }
         }
@@ -104,12 +104,12 @@ extension Features.Transactions {
         @ViewBuilder
         private var headerSection: some View {
             VStack(spacing: 20) {
-                TransactionStatsCard(transactions: filteredTransactions)
+                TransactionStatsCard(transactions: self.filteredTransactions)
 
                 SearchAndFilterSection(
-                    searchText: $searchText,
-                    selectedFilter: $selectedFilter,
-                    showingSearch: $showingSearch
+                    searchText: self.$searchText,
+                    selectedFilter: self.$selectedFilter,
+                    showingSearch: self.$showingSearch
                 )
             }
             .padding(.horizontal, 16)
@@ -121,14 +121,14 @@ extension Features.Transactions {
             ToolbarItem(placement: .primaryAction) {
                 HStack(spacing: 12) {
                     Button(action: {
-                        showingSearch = true
+                        self.showingSearch = true
                         NavigationCoordinator.shared.activateSearch()
                     }) {
                         Image(systemName: "magnifyingglass")
                     }
 
                     Button(action: {
-                        showingAddTransaction = true
+                        self.showingAddTransaction = true
                     }) {
                         Image(systemName: "plus")
                     }
@@ -151,8 +151,8 @@ extension Features.Transactions {
                 }
             }
 
-            modelContext.delete(transaction)
-            try? modelContext.save()
+            self.modelContext.delete(transaction)
+            try? self.modelContext.save()
         }
     }
 }

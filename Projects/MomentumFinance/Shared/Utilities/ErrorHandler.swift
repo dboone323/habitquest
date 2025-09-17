@@ -1,7 +1,7 @@
 import Foundation
 import Observation
-import SwiftUI
 import os
+import SwiftUI
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
@@ -30,9 +30,9 @@ final class ErrorHandler {
     }
 
     /// Handle an error and optionally show it to the user
-    @MainActor
     /// <#Description#>
     /// - Returns: <#description#>
+    @MainActor
     func handle(
         _ error: Error, showToUser: Bool = true, context: String = "", file: String = #file,
         function: String = #function, line: Int = #line
@@ -40,22 +40,22 @@ final class ErrorHandler {
         let appError = AppError.from(error, context: context)
 
         // Track error frequency
-        trackError(appError)
+        self.trackError(appError)
 
         // Log the error with source information
         Logger.logError(
             appError,
             context:
-                "\(context) [\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)]",
-            )
+            "\(context) [\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)]",
+        )
 
         // Determine if this is a frequent error (same type occurring rapidly)
-        let isFrequentError = isErrorOccurringFrequently(appError)
+        let isFrequentError = self.isErrorOccurringFrequently(appError)
 
         // Generate recovery options based on error type
-        let options = generateRecoveryOptions(for: appError)
+        let options = self.generateRecoveryOptions(for: appError)
 
-        if showToUser && !isFrequentError {
+        if showToUser, !isFrequentError {
             DispatchQueue.main.async {
                 self.currentError = appError
                 self.recoveryOptions = options
@@ -66,7 +66,7 @@ final class ErrorHandler {
             Logger.logDebug(
                 "Suppressing frequent error: \(appError.errorDescription ?? "Unknown")",
                 category: Logger.ui,
-                )
+            )
         }
     }
 
@@ -84,22 +84,22 @@ final class ErrorHandler {
     /// Track error frequency to avoid spamming users with the same error
     private func trackError(_ error: AppError) {
         let errorKey = error.id
-        errorCounts[errorKey, default: 0] += 1
-        lastErrorTime = Date()
+        self.errorCounts[errorKey, default: 0] += 1
+        self.lastErrorTime = Date()
     }
 
     /// Check if an error is occurring too frequently (potential issue causing repeated errors)
     private func isErrorOccurringFrequently(_ error: AppError) -> Bool {
         let errorKey = error.id
-        let count = errorCounts[errorKey, default: 0]
+        let count = self.errorCounts[errorKey, default: 0]
 
         // Reset error counts after a period of no errors (10 minutes)
         if let lastTime = lastErrorTime, Date().timeIntervalSince(lastTime) > 600 {
-            errorCounts = [:]
+            self.errorCounts = [:]
             return false
         }
 
-        return count > maxErrorsPerType
+        return count > self.maxErrorsPerType
     }
 
     /// Generate recovery options based on error type
@@ -115,7 +115,9 @@ final class ErrorHandler {
                         // User would retry the operation that failed
                         Logger.logUI("User selected 'Try Again' for network error")
                         // Implementation depends on the specific context of the error
-                    }))
+                    }
+                )
+            )
         }
 
         // Add data repair option for data errors
@@ -126,7 +128,9 @@ final class ErrorHandler {
                     action: {
                         Logger.logData("User initiated data repair")
                         // Implementation would attempt to fix corrupted data
-                    }))
+                    }
+                )
+            )
         }
 
         // Add common options for all errors
@@ -135,7 +139,9 @@ final class ErrorHandler {
                 title: "Dismiss",
                 action: {
                     self.clearError()
-                }))
+                }
+            )
+        )
 
         return options
     }
@@ -149,7 +155,8 @@ final class ErrorHandler {
 
         #if DEBUG
         Logger.logDebug(
-            "Error would be reported to analytics: \(error.errorDescription ?? "Unknown")")
+            "Error would be reported to analytics: \(error.errorDescription ?? "Unknown")"
+        )
         #endif
     }
 }
@@ -178,58 +185,58 @@ enum AppError: LocalizedError, Identifiable {
 
     var id: String {
         switch self {
-        case .dataError(let message):
+        case let .dataError(message):
             "data_\(message)"
-        case .validationError(let message):
+        case let .validationError(message):
             "validation_\(message)"
-        case .networkError(let message):
+        case let .networkError(message):
             "network_\(message)"
-        case .businessLogicError(let message):
+        case let .businessLogicError(message):
             "business_\(message)"
-        case .subscriptionError(let message):
+        case let .subscriptionError(message):
             "subscription_\(message)"
-        case .budgetError(let message):
+        case let .budgetError(message):
             "budget_\(message)"
-        case .goalError(let message):
+        case let .goalError(message):
             "goal_\(message)"
-        case .permissionError(let message):
+        case let .permissionError(message):
             "permission_\(message)"
-        case .authenticationError(let message):
+        case let .authenticationError(message):
             "auth_\(message)"
-        case .syncError(let message):
+        case let .syncError(message):
             "sync_\(message)"
-        case .fileSystemError(let message):
+        case let .fileSystemError(message):
             "file_\(message)"
-        case .unknown(let message):
+        case let .unknown(message):
             "unknown_\(message)"
         }
     }
 
     var errorDescription: String? {
         switch self {
-        case .dataError(let message):
+        case let .dataError(message):
             "Data Error: \(message)"
-        case .validationError(let message):
+        case let .validationError(message):
             "Validation Error: \(message)"
-        case .networkError(let message):
+        case let .networkError(message):
             "Network Error: \(message)"
-        case .businessLogicError(let message):
+        case let .businessLogicError(message):
             "Business Logic Error: \(message)"
-        case .subscriptionError(let message):
+        case let .subscriptionError(message):
             "Subscription Error: \(message)"
-        case .budgetError(let message):
+        case let .budgetError(message):
             "Budget Error: \(message)"
-        case .goalError(let message):
+        case let .goalError(message):
             "Goal Error: \(message)"
-        case .permissionError(let message):
+        case let .permissionError(message):
             "Permission Error: \(message)"
-        case .authenticationError(let message):
+        case let .authenticationError(message):
             "Authentication Error: \(message)"
-        case .syncError(let message):
+        case let .syncError(message):
             "Sync Error: \(message)"
-        case .fileSystemError(let message):
+        case let .fileSystemError(message):
             "File System Error: \(message)"
-        case .unknown(let message):
+        case let .unknown(message):
             "Unknown Error: \(message)"
         }
     }
@@ -315,7 +322,7 @@ enum AppError: LocalizedError, Identifiable {
         }
 
         // Generic error handling based on error type name
-        return classifyErrorByName(error, context: context)
+        return self.classifyErrorByName(error, context: context)
     }
 
     private static func handleNSErrorDomain(_ nsError: NSError, context: String) -> AppError? {
@@ -324,7 +331,7 @@ enum AppError: LocalizedError, Identifiable {
             .networkError("\(context) \(nsError.localizedDescription)")
 
         case NSCocoaErrorDomain:
-            handleCocoaError(nsError, context: context)
+            self.handleCocoaError(nsError, context: context)
 
         default:
             nil
@@ -335,7 +342,7 @@ enum AppError: LocalizedError, Identifiable {
         if nsError.code == NSValidationErrorMinimum {
             return .validationError("\(context) \(nsError.localizedDescription)")
         } else if nsError.code == NSFileReadNoSuchFileError
-                    || nsError.code == NSFileWriteOutOfSpaceError {
+            || nsError.code == NSFileWriteOutOfSpaceError {
             return .fileSystemError("\(context) \(nsError.localizedDescription)")
         }
         return .dataError("\(context) \(nsError.localizedDescription)")
@@ -377,18 +384,18 @@ struct ErrorAlert: ViewModifier {
     @State var errorHandler = ErrorHandler.shared
 
     private var alertTitle: String {
-        errorHandler.currentError?.errorDescription ?? "Error"
+        self.errorHandler.currentError?.errorDescription ?? "Error"
     }
 
     private var isShowingErrorBinding: Binding<Bool> {
         Binding(
-            get: { errorHandler.isShowingError },
-            set: { errorHandler.isShowingError = $0 }
+            get: { self.errorHandler.isShowingError },
+            set: { self.errorHandler.isShowingError = $0 }
         )
     }
 
     private func alertActions(_ error: Error) -> some View {
-        ForEach(errorHandler.recoveryOptions) { option in
+        ForEach(self.errorHandler.recoveryOptions) { option in
             Button(action: {
                 option.action()
             }) {
@@ -418,11 +425,11 @@ struct ErrorAlert: ViewModifier {
     func body(content: Content) -> some View {
         content
             .alert(
-                alertTitle,
-                isPresented: isShowingErrorBinding,
-                presenting: errorHandler.currentError,
-                actions: alertActions,
-                message: alertMessage
+                self.alertTitle,
+                isPresented: self.isShowingErrorBinding,
+                presenting: self.errorHandler.currentError,
+                actions: self.alertActions,
+                message: self.alertMessage
             )
     }
 }

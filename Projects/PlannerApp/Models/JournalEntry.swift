@@ -13,13 +13,13 @@ class JournalDataManager {
 
     /// Removes all journal entries from memory.
     func clearAllEntries() {
-        entries.removeAll()
+        self.entries.removeAll()
     }
 
     /// Loads all journal entries from memory.
     /// - Returns: Array of `JournalEntry` objects.
     func load() -> [JournalEntry] {
-        entries
+        self.entries
     }
 
     /// Saves the provided journal entries to memory.
@@ -38,7 +38,7 @@ struct JournalEntry: Identifiable, Codable {
     var body: String
     var date: Date
     var mood: String
-    var modifiedAt: Date?  // Added for CloudKit sync/merge
+    var modifiedAt: Date? // Added for CloudKit sync/merge
 
     init(
         id: UUID = UUID(), title: String, body: String, date: Date, mood: String,
@@ -57,28 +57,30 @@ struct JournalEntry: Identifiable, Codable {
     /// Convert to CloudKit record for syncing
     func toCKRecord() -> CKRecord {
         let record = CKRecord(
-            recordType: "JournalEntry", recordID: CKRecord.ID(recordName: id.uuidString))
-        record["title"] = title
-        record["body"] = body
-        record["date"] = date
-        record["mood"] = mood
-        record["modifiedAt"] = modifiedAt
+            recordType: "JournalEntry", recordID: CKRecord.ID(recordName: self.id.uuidString)
+        )
+        record["title"] = self.title
+        record["body"] = self.body
+        record["date"] = self.date
+        record["mood"] = self.mood
+        record["modifiedAt"] = self.modifiedAt
         return record
     }
 
     /// Create a JournalEntry from CloudKit record
     static func from(ckRecord: CKRecord) throws -> JournalEntry {
         guard let title = ckRecord["title"] as? String,
-            let body = ckRecord["body"] as? String,
-            let date = ckRecord["date"] as? Date,
-            let mood = ckRecord["mood"] as? String,
-            let id = UUID(uuidString: ckRecord.recordID.recordName)
+              let body = ckRecord["body"] as? String,
+              let date = ckRecord["date"] as? Date,
+              let mood = ckRecord["mood"] as? String,
+              let id = UUID(uuidString: ckRecord.recordID.recordName)
         else {
             throw NSError(
                 domain: "JournalEntryConversionError", code: 1,
                 userInfo: [
                     NSLocalizedDescriptionKey: "Failed to convert CloudKit record to JournalEntry"
-                ])
+                ]
+            )
         }
 
         return JournalEntry(

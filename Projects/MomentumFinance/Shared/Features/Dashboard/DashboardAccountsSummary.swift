@@ -26,60 +26,60 @@ extension Features.Dashboard {
                     HStack {
                         Text("Total Balance")
                             .font(.headline)
-                            .foregroundStyle(colorTheme.primaryText)
+                            .foregroundStyle(self.colorTheme.primaryText)
 
                         Spacer()
 
-                        themeComponents.currencyDisplay(
-                            amount: accounts.reduce(Decimal(0)) { $0 + Decimal($1.balance) },
+                        self.themeComponents.currencyDisplay(
+                            amount: self.accounts.reduce(Decimal(0)) { $0 + Decimal($1.balance) },
                             font: .headline.weight(.semibold)
                         )
                     }
 
                     Divider()
-                        .background(colorTheme.secondaryText.opacity(0.3))
+                        .background(self.colorTheme.secondaryText.opacity(0.3))
 
-                    ForEach(Array(accounts.prefix(3))) { account in
+                    ForEach(Array(self.accounts.prefix(3))) { account in
                         HStack {
                             Image(systemName: account.iconName)
                                 .font(.subheadline)
-                                .foregroundStyle(colorTheme.accentPrimary)
+                                .foregroundStyle(self.colorTheme.accentPrimary)
                                 .frame(width: 24, height: 24)
 
                             Text(account.name)
                                 .font(.subheadline)
-                                .foregroundStyle(colorTheme.primaryText)
+                                .foregroundStyle(self.colorTheme.primaryText)
                                 .lineLimit(1)
 
                             Spacer()
 
-                            themeComponents.currencyDisplay(
+                            self.themeComponents.currencyDisplay(
                                 amount: Decimal(account.balance),
                                 font: .subheadline.weight(.medium)
                             )
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            onAccountTap(String(describing: account.id))
+                            self.onAccountTap(String(describing: account.id))
                         }
 
-                        if account != Array(accounts.prefix(3)).last {
+                        if account != Array(self.accounts.prefix(3)).last {
                             Divider()
                                 .padding(.leading, 32)
                         }
                     }
 
-                    if accounts.count > 3 {
-                        Button(action: onViewAllTap).accessibilityLabel("Button") {
-                            Text("View All \(accounts.count) Accounts")
+                    if self.accounts.count > 3 {
+                        Button(action: self.onViewAllTap).accessibilityLabel("Button") {
+                            Text("View All \(self.accounts.count) Accounts")
                                 .font(.caption)
                                 .fontWeight(.medium)
-                                .foregroundStyle(colorTheme.accentPrimary)
+                                .foregroundStyle(self.colorTheme.accentPrimary)
                         }
                     }
                 }
                 .padding()
-                .background(colorTheme.primaryBackground)
+                .background(self.colorTheme.primaryBackground)
                 .cornerRadius(16)
                 .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
             }

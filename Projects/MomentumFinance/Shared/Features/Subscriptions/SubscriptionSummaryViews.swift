@@ -34,21 +34,21 @@ extension Features.Subscriptions {
         }
 
         private var monthlyTotal: Double {
-            subscriptions.reduce(0) { total, subscription in
+            self.subscriptions.reduce(0) { total, subscription in
                 total + subscription.monthlyEquivalent
             }
         }
 
         private var yearlyTotal: Double {
-            monthlyTotal * 12
+            self.monthlyTotal * 12
         }
 
         private var activeSubscriptions: Int {
-            subscriptions.filter(\.isActive).count
+            self.subscriptions.filter(\.isActive).count
         }
 
         private var nextPayment: Subscription? {
-            subscriptions
+            self.subscriptions
                 .filter { $0.isActive && $0.nextDueDate > Date() }
                 .min { $0.nextDueDate < $1.nextDueDate }
         }
@@ -64,7 +64,7 @@ extension Features.Subscriptions {
 
                     Spacer()
 
-                    Text("\(activeSubscriptions) active")
+                    Text("\(self.activeSubscriptions) active")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.horizontal, 8)
@@ -75,8 +75,8 @@ extension Features.Subscriptions {
                                 .overlay(
                                     Capsule()
                                         .stroke(Color.blue.opacity(0.3), lineWidth: 1),
-                                    ),
-                            )
+                                ),
+                        )
                 }
 
                 // Cost Summary
@@ -92,7 +92,7 @@ extension Features.Subscriptions {
                             .font(.caption)
                             .foregroundColor(.secondary)
 
-                        Text(monthlyTotal.formatted(.currency(code: "USD")))
+                        Text(self.monthlyTotal.formatted(.currency(code: "USD")))
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(.blue)
@@ -105,8 +105,8 @@ extension Features.Subscriptions {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.blue.opacity(0.2), lineWidth: 1),
-                                ),
-                        )
+                            ),
+                    )
 
                     // Yearly Total
                     VStack(spacing: 4) {
@@ -114,7 +114,7 @@ extension Features.Subscriptions {
                             .font(.caption)
                             .foregroundColor(.secondary)
 
-                        Text(yearlyTotal.formatted(.currency(code: "USD")))
+                        Text(self.yearlyTotal.formatted(.currency(code: "USD")))
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(.green)
@@ -127,8 +127,8 @@ extension Features.Subscriptions {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.green.opacity(0.2), lineWidth: 1),
-                                ),
-                        )
+                            ),
+                    )
                 }
 
                 // Next Payment
@@ -150,7 +150,8 @@ extension Features.Subscriptions {
                         VStack(alignment: .trailing, spacing: 2) {
                             Text(
                                 nextPayment.nextDueDate.formatted(
-                                    date: .abbreviated, time: .omitted)
+                                    date: .abbreviated, time: .omitted
+                                )
                             )
                             .font(.subheadline)
                             .fontWeight(.medium)
@@ -168,16 +169,16 @@ extension Features.Subscriptions {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.orange.opacity(0.2), lineWidth: 1),
-                                ),
-                        )
+                            ),
+                    )
                 }
             }
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(backgroundColor)
+                    .fill(self.backgroundColor)
                     .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
-                )
+            )
         }
     }
 
@@ -198,13 +199,13 @@ extension Features.Subscriptions {
         }
 
         private var monthlyTotal: Double {
-            subscriptions.reduce(0) { total, subscription in
+            self.subscriptions.reduce(0) { total, subscription in
                 total + subscription.monthlyEquivalent
             }
         }
 
         private var yearlyTotal: Double {
-            monthlyTotal * 12
+            self.monthlyTotal * 12
         }
 
         var body: some View {
@@ -213,7 +214,7 @@ extension Features.Subscriptions {
                     Text("Monthly Total")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text(monthlyTotal.formatted(.currency(code: "USD")))
+                    Text(self.monthlyTotal.formatted(.currency(code: "USD")))
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(.blue)
@@ -225,7 +226,7 @@ extension Features.Subscriptions {
                     Text("Yearly Total")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text(yearlyTotal.formatted(.currency(code: "USD")))
+                    Text(self.yearlyTotal.formatted(.currency(code: "USD")))
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(.green)
@@ -234,8 +235,8 @@ extension Features.Subscriptions {
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(backgroundColor),
-                )
+                    .fill(self.backgroundColor),
+            )
         }
     }
 }

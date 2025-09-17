@@ -25,9 +25,9 @@ class HapticManager: ObservableObject {
     private init() {
         #if os(iOS)
         // Prepare generators for better responsiveness
-        impactFeedbackGenerator.prepare()
-        notificationFeedbackGenerator.prepare()
-        selectionFeedbackGenerator.prepare()
+        self.impactFeedbackGenerator.prepare()
+        self.notificationFeedbackGenerator.prepare()
+        self.selectionFeedbackGenerator.prepare()
         #endif
     }
 
@@ -38,7 +38,7 @@ class HapticManager: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func impact(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
-        guard isEnabled else { return }
+        guard self.isEnabled else { return }
 
         let generator = UIImpactFeedbackGenerator(style: style)
         generator.prepare()
@@ -57,9 +57,9 @@ class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func lightImpact() {
         #if os(iOS)
-        impact(.light)
+        self.impact(.light)
         #else
-        impact(())
+        self.impact(())
         #endif
     }
 
@@ -68,9 +68,9 @@ class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func mediumImpact() {
         #if os(iOS)
-        impact(.medium)
+        self.impact(.medium)
         #else
-        impact(())
+        self.impact(())
         #endif
     }
 
@@ -79,9 +79,9 @@ class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func heavyImpact() {
         #if os(iOS)
-        impact(.heavy)
+        self.impact(.heavy)
         #else
-        impact(())
+        self.impact(())
         #endif
     }
 
@@ -92,8 +92,8 @@ class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func success() {
         #if os(iOS)
-        guard isEnabled else { return }
-        notificationFeedbackGenerator.notificationOccurred(.success)
+        guard self.isEnabled else { return }
+        self.notificationFeedbackGenerator.notificationOccurred(.success)
         #endif
     }
 
@@ -102,8 +102,8 @@ class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func warning() {
         #if os(iOS)
-        guard isEnabled else { return }
-        notificationFeedbackGenerator.notificationOccurred(.warning)
+        guard self.isEnabled else { return }
+        self.notificationFeedbackGenerator.notificationOccurred(.warning)
         #endif
     }
 
@@ -112,8 +112,8 @@ class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func error() {
         #if os(iOS)
-        guard isEnabled else { return }
-        notificationFeedbackGenerator.notificationOccurred(.error)
+        guard self.isEnabled else { return }
+        self.notificationFeedbackGenerator.notificationOccurred(.error)
         #endif
     }
 
@@ -124,8 +124,8 @@ class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func selection() {
         #if os(iOS)
-        guard isEnabled else { return }
-        selectionFeedbackGenerator.selectionChanged()
+        guard self.isEnabled else { return }
+        self.selectionFeedbackGenerator.selectionChanged()
         #endif
     }
 
@@ -137,11 +137,11 @@ class HapticManager: ObservableObject {
     func transactionFeedback(for transactionType: TransactionType) {
         switch transactionType {
         case .income:
-            success()
+            self.success()
         case .expense:
-            lightImpact()
+            self.lightImpact()
         case .transfer:
-            mediumImpact()
+            self.mediumImpact()
         }
     }
 
@@ -150,9 +150,9 @@ class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func budgetFeedback(isOverBudget: Bool) {
         if isOverBudget {
-            warning()
+            self.warning()
         } else {
-            lightImpact()
+            self.lightImpact()
         }
     }
 
@@ -178,28 +178,28 @@ class HapticManager: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func deletion() {
-        heavyImpact()
+        self.heavyImpact()
     }
 
     /// Feedback for navigation actions
     /// <#Description#>
     /// - Returns: <#description#>
     func navigation() {
-        lightImpact()
+        self.lightImpact()
     }
 
     /// Feedback for data refresh
     /// <#Description#>
     /// - Returns: <#description#>
     func refresh() {
-        mediumImpact()
+        self.mediumImpact()
     }
 
     /// Feedback for authentication success
     /// <#Description#>
     /// - Returns: <#description#>
     func authenticationSuccess() {
-        success()
+        self.success()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.lightImpact()
         }
@@ -209,7 +209,7 @@ class HapticManager: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func authenticationFailure() {
-        error()
+        self.error()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             self.lightImpact()
         }
@@ -242,9 +242,9 @@ struct HapticFeedbackModifier: ViewModifier {
     /// - Returns: <#description#>
     func body(content: Content) -> some View {
         content
-            .onChange(of: trigger) { _, _ in
+            .onChange(of: self.trigger) { _, _ in
                 #if os(iOS)
-                HapticManager.shared.impact(style)
+                HapticManager.shared.impact(self.style)
                 #endif
             }
     }
@@ -257,7 +257,7 @@ struct SelectionHapticModifier: ViewModifier {
     /// - Returns: <#description#>
     func body(content: Content) -> some View {
         content
-            .onChange(of: trigger) { _, _ in
+            .onChange(of: self.trigger) { _, _ in
                 HapticManager.shared.selection()
             }
     }
@@ -270,7 +270,7 @@ struct SuccessHapticModifier: ViewModifier {
     /// - Returns: <#description#>
     func body(content: Content) -> some View {
         content
-            .onChange(of: trigger) { _, _ in
+            .onChange(of: self.trigger) { _, _ in
                 HapticManager.shared.success()
             }
     }
@@ -282,7 +282,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func hapticFeedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle, trigger: Bool)
-    -> some View {
+        -> some View {
         modifier(HapticFeedbackModifier(style: style, trigger: trigger))
     }
     #else

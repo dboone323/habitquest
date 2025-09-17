@@ -30,13 +30,13 @@ extension Features.Transactions {
 
         // Get the specific category
         private var category: ExpenseCategory? {
-            categories.first { $0.persistentModelID == categoryId }
+            self.categories.first { $0.persistentModelID == self.categoryId }
         }
 
         // Filter transactions by category
         private var filteredTransactions: [FinancialTransaction] {
             guard let category else { return [] }
-            return transactions.filter {
+            return self.transactions.filter {
                 $0.category?.persistentModelID == category.persistentModelID
             }
             .sorted { $0.date > $1.date }
@@ -59,7 +59,7 @@ extension Features.Transactions {
                                 Text(category.name)
                                     .font(.headline)
 
-                                Text("\(filteredTransactions.count) transactions")
+                                Text("\(self.filteredTransactions.count) transactions")
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
@@ -68,27 +68,27 @@ extension Features.Transactions {
 
                             // Total amount for this category
                             VStack(alignment: .trailing) {
-                                Text(totalAmount.formatted(.currency(code: "USD")))
+                                Text(self.totalAmount.formatted(.currency(code: "USD")))
                                     .font(.headline)
-                                    .foregroundColor(totalAmount < 0 ? .red : .primary)
+                                    .foregroundColor(self.totalAmount < 0 ? .red : .primary)
                             }
                         }
                         .padding()
                         .background(
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(platformBackgroundColor)
+                                .fill(self.platformBackgroundColor)
                                 .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                            )
+                        )
                         .padding(.horizontal)
                     }
 
                     // Transactions list
                     List {
-                        ForEach(filteredTransactions) { transaction in
+                        ForEach(self.filteredTransactions) { transaction in
                             TransactionRowView(transaction: transaction, onTap: {})
                                 .swipeActions {
                                     Button(role: .destructive) {
-                                        deleteTransaction(transaction)
+                                        self.deleteTransaction(transaction)
                                     } label: {
                                         Label("Delete", systemImage: "trash")
                                     }
@@ -102,10 +102,10 @@ extension Features.Transactions {
                         "Category Not Found",
                         systemImage: "tag.slash",
                         description: Text("The selected category could not be found"),
-                        )
+                    )
                 }
             }
-            .navigationTitle(category?.name ?? "Category Transactions")
+            .navigationTitle(self.category?.name ?? "Category Transactions")
         }
 
         // Delete a transaction
@@ -121,15 +121,15 @@ extension Features.Transactions {
             }
 
             // Delete the transaction
-            modelContext.delete(transaction)
+            self.modelContext.delete(transaction)
 
             // Save changes
-            try? modelContext.save()
+            try? self.modelContext.save()
         }
 
         // Calculate the total amount for this category
         private var totalAmount: Double {
-            filteredTransactions.reduce(0) { result, transaction in
+            self.filteredTransactions.reduce(0) { result, transaction in
                 if transaction.transactionType == .expense {
                     result - transaction.amount
                 } else {

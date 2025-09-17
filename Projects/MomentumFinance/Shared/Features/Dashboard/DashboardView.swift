@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 // Temporary ColorTheme stub for macOS compatibility
@@ -46,42 +46,43 @@ extension Features.Dashboard {
         private let themeComponents = ThemeComponents()
 
         var body: some View {
-            NavigationStack(path: $navigationPath) {
+            NavigationStack(path: self.$navigationPath) {
                 ScrollView {
                     LazyVStack(spacing: 24) {
                         // Welcome Header
                         DashboardWelcomeHeader(
-                            greeting: timeOfDayGreeting,
+                            greeting: self.timeOfDayGreeting,
                             wellnessPercentage: 70,
-                            totalBalance: totalBalanceDouble,
-                            monthlyIncome: monthlyIncomeDouble,
-                            monthlyExpenses: monthlyExpensesDouble
+                            totalBalance: self.totalBalanceDouble,
+                            monthlyIncome: self.monthlyIncomeDouble,
+                            monthlyExpenses: self.monthlyExpensesDouble
                         )
 
                         // Account Balances Summary
                         DashboardAccountsSummary(
-                            accounts: accounts,
+                            accounts: self.accounts,
                             onAccountTap: { accountId in
-                                navigationPath.append(DashboardDestination.accountDetail(accountId))
+                                self.navigationPath.append(DashboardDestination.accountDetail(accountId))
                             },
                             onViewAllTap: {
-                                navigationPath.append(DashboardDestination.transactions)
+                                self.navigationPath.append(DashboardDestination.transactions)
                             }
                         )
                         .transition(
                             .asymmetric(
                                 insertion: .move(edge: .leading).combined(with: .opacity),
                                 removal: .move(edge: .trailing).combined(with: .opacity)
-                            ))
+                            )
+                        )
 
                         // Upcoming Subscriptions
                         DashboardSubscriptionsSection(
-                            subscriptions: subscriptions,
+                            subscriptions: self.subscriptions,
                             onSubscriptionTapped: { _ in
                                 // Navigate to subscription detail
                             },
                             onViewAllTapped: {
-                                navigationPath.append(DashboardDestination.subscriptions)
+                                self.navigationPath.append(DashboardDestination.subscriptions)
                             },
                             onAddTapped: {
                                 // Navigate to add subscription
@@ -91,23 +92,25 @@ extension Features.Dashboard {
                             .asymmetric(
                                 insertion: .move(edge: .trailing).combined(with: .opacity),
                                 removal: .move(edge: .leading).combined(with: .opacity)
-                            ))
+                            )
+                        )
 
                         // Budget Progress
                         DashboardBudgetProgress(
-                            budgets: budgets,
+                            budgets: self.budgets,
                             onBudgetTap: { _ in
-                                navigationPath.append(DashboardDestination.budgets)
+                                self.navigationPath.append(DashboardDestination.budgets)
                             },
                             onViewAllTap: {
-                                navigationPath.append(DashboardDestination.budgets)
+                                self.navigationPath.append(DashboardDestination.budgets)
                             }
                         )
                         .transition(
                             .asymmetric(
                                 insertion: .move(edge: .bottom).combined(with: .opacity),
                                 removal: .move(edge: .top).combined(with: .opacity)
-                            ))
+                            )
+                        )
 
                         // Insights Section
                         DashboardInsights(
@@ -141,30 +144,30 @@ extension Features.Dashboard {
                 #if os(iOS)
                     .navigationBarTitleDisplayMode(.large)
                 #endif
-                .onAppear {
-                    viewModel.setModelContext(modelContext)
-                    loadData()
-                }
-                .task {
-                    // Process overdue subscriptions asynchronously
-                    await viewModel.processOverdueSubscriptions(subscriptions)
-                }
-                .navigationDestination(for: DashboardDestination.self) { destination in
-                    switch destination {
-                    case .transactions:
-                        Features.Transactions.TransactionsView()
-                    case .subscriptions:
-                        #if canImport(SwiftData)
-                            Features.Subscriptions.SubscriptionsView()
-                        #else
-                            Text("Subscriptions View - SwiftData not available")
-                        #endif
-                    case .budgets:
-                        Features.Budgets.BudgetsView()
-                    case .accountDetail(let accountId):
-                        Text("Account Detail: \(accountId)")
+                    .onAppear {
+                        self.viewModel.setModelContext(self.modelContext)
+                        self.loadData()
                     }
-                }
+                    .task {
+                        // Process overdue subscriptions asynchronously
+                        await self.viewModel.processOverdueSubscriptions(self.subscriptions)
+                    }
+                    .navigationDestination(for: DashboardDestination.self) { destination in
+                        switch destination {
+                        case .transactions:
+                            Features.Transactions.TransactionsView()
+                        case .subscriptions:
+                            #if canImport(SwiftData)
+                            Features.Subscriptions.SubscriptionsView()
+                            #else
+                            Text("Subscriptions View - SwiftData not available")
+                            #endif
+                        case .budgets:
+                            Features.Budgets.BudgetsView()
+                        case let .accountDetail(accountId):
+                            Text("Account Detail: \(accountId)")
+                        }
+                    }
             }
         }
 
@@ -173,14 +176,14 @@ extension Features.Dashboard {
         private var timeOfDayGreeting: String {
             let hour = Calendar.current.component(.hour, from: Date())
             switch hour {
-            case 0..<12: return "Morning"
-            case 12..<17: return "Afternoon"
+            case 0 ..< 12: return "Morning"
+            case 12 ..< 17: return "Afternoon"
             default: return "Evening"
             }
         }
 
         private var totalBalance: String {
-            let total = accounts.reduce(0) { $0 + $1.balance }
+            let total = self.accounts.reduce(0) { $0 + $1.balance }
             let formatter = NumberFormatter()
             formatter.numberStyle = .currency
             formatter.currencySymbol = "$"
@@ -198,17 +201,17 @@ extension Features.Dashboard {
         }
 
         private var totalBalanceDouble: Double {
-            accounts.reduce(0) { $0 + $1.balance }
+            self.accounts.reduce(0) { $0 + $1.balance }
         }
 
         private var monthlyIncomeDouble: Double {
             // Calculate monthly income from transactions
-            2_450.0
+            2450.0
         }
 
         private var monthlyExpensesDouble: Double {
             // Calculate monthly expenses from transactions
-            1_890.0
+            1890.0
         }
 
         // MARK: - Data Loading
@@ -216,13 +219,13 @@ extension Features.Dashboard {
         private func loadData() {
             do {
                 let accountDescriptor = FetchDescriptor<FinancialAccount>()
-                accounts = try modelContext.fetch(accountDescriptor)
+                self.accounts = try self.modelContext.fetch(accountDescriptor)
 
                 let subscriptionDescriptor = FetchDescriptor<Subscription>()
-                subscriptions = try modelContext.fetch(subscriptionDescriptor)
+                self.subscriptions = try self.modelContext.fetch(subscriptionDescriptor)
 
                 let budgetDescriptor = FetchDescriptor<Budget>()
-                budgets = try modelContext.fetch(budgetDescriptor)
+                self.budgets = try self.modelContext.fetch(budgetDescriptor)
             } catch {
                 print("Error loading dashboard data: \(error)")
             }

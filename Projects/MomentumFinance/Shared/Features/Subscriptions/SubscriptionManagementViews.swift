@@ -51,95 +51,96 @@ extension Features.Subscriptions {
         }
 
         private var isValidForm: Bool {
-            !name.isEmpty && !amount.isEmpty && Double(amount) != nil && Double(amount)! > 0
+            !self.name.isEmpty && !self.amount.isEmpty && Double(self.amount) != nil && Double(self.amount)! > 0
         }
 
         var body: some View {
             NavigationView {
                 Form {
                     Section(header: Text("Subscription Details")) {
-                        TextField("Subscription Name", text: $name).accessibilityLabel("Text Field")
+                        TextField("Subscription Name", text: self.$name).accessibilityLabel("Text Field")
 
                         HStack {
                             Text("$")
-                            TextField("Amount", text: $amount).accessibilityLabel("Text Field")
-                                #if canImport(UIKit)
+                            TextField("Amount", text: self.$amount).accessibilityLabel("Text Field")
+                            #if canImport(UIKit)
                                 .keyboardType(.decimalPad)
                             #endif
                         }
 
-                        Picker("Frequency", selection: $frequency) {
+                        Picker("Frequency", selection: self.$frequency) {
                             ForEach(BillingCycle.allCases, id: \.self) { freq in
                                 Text(freq.rawValue.capitalized).tag(freq)
                             }
                         }
 
                         DatePicker(
-                            "Next Due Date", selection: $nextDueDate, displayedComponents: .date)
+                            "Next Due Date", selection: self.$nextDueDate, displayedComponents: .date
+                        )
 
-                        Toggle("Active", isOn: $isActive)
+                        Toggle("Active", isOn: self.$isActive)
                     }
 
                     Section(header: Text("Organization")) {
-                        Picker("Category", selection: $selectedCategory) {
+                        Picker("Category", selection: self.$selectedCategory) {
                             Text("None").tag(ExpenseCategory?.none)
-                            ForEach(categories, id: \.id) { category in
+                            ForEach(self.categories, id: \.id) { category in
                                 Text(category.name).tag(category as ExpenseCategory?)
                             }
                         }
 
-                        Picker("Account", selection: $selectedAccount) {
+                        Picker("Account", selection: self.$selectedAccount) {
                             Text("None").tag(FinancialAccount?.none)
-                            ForEach(accounts, id: \.id) { account in
+                            ForEach(self.accounts, id: \.id) { account in
                                 Text(account.name).tag(account as FinancialAccount?)
                             }
                         }
                     }
 
                     Section(header: Text("Notes")) {
-                        TextField("Notes (optional)", text: $notes, axis: .vertical)
-                            .lineLimit(3...6)
+                        TextField("Notes (optional)", text: self.$notes, axis: .vertical)
+                            .lineLimit(3 ... 6)
                             .accessibilityLabel("Text Field")
                     }
                 }
                 .navigationTitle("Add Subscription")
                 #if os(iOS)
-                .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarTitleDisplayMode(.inline)
                 #endif
-                .toolbar(content: {
-                    #if os(iOS)
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
-                            dismiss()
+                    .toolbar(content: {
+                        #if os(iOS)
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("Cancel") {
+                                self.dismiss()
+                            }
+                            .accessibilityLabel("Cancel Button")
                         }
-                        .accessibilityLabel("Cancel Button")
-                    }
 
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Save") {
-                            saveSubscription()
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("Save") {
+                                self.saveSubscription()
+                            }
+                            .disabled(!self.isValidForm)
+                            .accessibilityLabel("Save Button")
                         }
-                        .disabled(!isValidForm)
-                        .accessibilityLabel("Save Button")
-                    }
-                    #else
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
-                            dismiss()
+                        #else
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") {
+                                self.dismiss()
+                            }
+                            .accessibilityLabel("Cancel Button")
                         }
-                        .accessibilityLabel("Cancel Button")
-                    }
 
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Save") {
-                            saveSubscription()
+                        ToolbarItem(placement: .primaryAction) {
+                            Button("Save") {
+                                self.saveSubscription()
+                            }
+                            .disabled(!self.isValidForm)
+                            .accessibilityLabel("Save Button")
                         }
-                        .disabled(!isValidForm)
-                        .accessibilityLabel("Save Button")
-                    }
-                    #endif
-                })
-                .background(backgroundColor)
+                        #endif
+                    })
+                    .background(self.backgroundColor)
             }
         }
 
@@ -151,18 +152,18 @@ extension Features.Subscriptions {
                 amount: amountValue,
                 billingCycle: frequency,
                 nextDueDate: nextDueDate,
-                notes: notes.isEmpty ? nil : notes,
-                )
+                notes: notes.isEmpty ? nil : self.notes,
+            )
 
-            subscription.category = selectedCategory
-            subscription.account = selectedAccount
-            subscription.isActive = isActive
+            subscription.category = self.selectedCategory
+            subscription.account = self.selectedAccount
+            subscription.isActive = self.isActive
 
-            modelContext.insert(subscription)
+            self.modelContext.insert(subscription)
 
             do {
-                try modelContext.save()
-                dismiss()
+                try self.modelContext.save()
+                self.dismiss()
             } catch {
                 Logger.logError(error, context: "Failed to save subscription")
             }
@@ -178,16 +179,16 @@ extension Features.Subscriptions {
 
         var body: some View {
             HStack {
-                Image(systemName: icon)
+                Image(systemName: self.icon)
                     .foregroundColor(.blue)
                     .frame(width: 20)
 
-                Text(title)
+                Text(self.title)
                     .foregroundColor(.secondary)
 
                 Spacer()
 
-                Text(value)
+                Text(self.value)
                     .fontWeight(.medium)
             }
         }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 #if canImport(AppKit)
@@ -32,7 +32,7 @@ struct ReportsSection: View {
         ScrollView {
             VStack(spacing: 20) {
                 // Timeframe Picker
-                Picker("Timeframe", selection: $selectedTimeframe) {
+                Picker("Timeframe", selection: self.$selectedTimeframe) {
                     ForEach(TimeFrame.allCases, id: \.self) { timeframe in
                         Text(timeframe.rawValue).tag(timeframe)
                     }
@@ -42,26 +42,26 @@ struct ReportsSection: View {
 
                 // Financial Summary Card
                 FinancialSummaryCard(
-                    transactions: filteredTransactions,
-                    timeframe: selectedTimeframe,
+                    transactions: self.filteredTransactions,
+                    timeframe: self.selectedTimeframe,
                 )
                 .padding(.horizontal)
 
                 // Spending by Category Chart
                 SpendingByCategoryCard(
-                    transactions: filteredTransactions,
-                    categories: categories,
+                    transactions: self.filteredTransactions,
+                    categories: self.categories,
                 )
                 .padding(.horizontal)
 
                 // Budget Performance Card
-                if !budgets.isEmpty {
-                    BudgetPerformanceCard(budgets: currentPeriodBudgets)
+                if !self.budgets.isEmpty {
+                    BudgetPerformanceCard(budgets: self.currentPeriodBudgets)
                         .padding(.horizontal)
                 }
 
                 // Recent Transactions
-                RecentTransactionsCard(transactions: Array(filteredTransactions.prefix(5)))
+                RecentTransactionsCard(transactions: Array(self.filteredTransactions.prefix(5)))
                     .padding(.horizontal)
             }
             .padding(.vertical)
@@ -72,26 +72,26 @@ struct ReportsSection: View {
         let calendar = Calendar.current
         let now = Date()
 
-        switch selectedTimeframe {
+        switch self.selectedTimeframe {
         case .thisWeek:
             guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: now) else {
-                return transactions
+                return self.transactions
             }
-            return transactions.filter { weekInterval.contains($0.date) }
+            return self.transactions.filter { weekInterval.contains($0.date) }
 
         case .thisMonth:
-            return transactions.filter {
+            return self.transactions.filter {
                 calendar.isDate($0.date, equalTo: now, toGranularity: .month)
             }
 
         case .last3Months:
             guard let threeMonthsAgo = calendar.date(byAdding: .month, value: -3, to: now) else {
-                return transactions
+                return self.transactions
             }
-            return transactions.filter { $0.date >= threeMonthsAgo }
+            return self.transactions.filter { $0.date >= threeMonthsAgo }
 
         case .thisYear:
-            return transactions.filter {
+            return self.transactions.filter {
                 calendar.isDate($0.date, equalTo: now, toGranularity: .year)
             }
         }
@@ -101,7 +101,7 @@ struct ReportsSection: View {
         let calendar = Calendar.current
         let now = Date()
 
-        return budgets.filter { budget in
+        return self.budgets.filter { budget in
             calendar.isDate(budget.month, equalTo: now, toGranularity: .month)
         }
     }
@@ -114,29 +114,29 @@ struct FinancialSummaryCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+        return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+        return Color(NSColor.controlBackgroundColor)
         #else
-            return Color.white
+        return Color.white
         #endif
     }
 
     private var totalIncome: Double {
-        transactions.filter { $0.transactionType == .income }.reduce(0) { $0 + $1.amount }
+        self.transactions.filter { $0.transactionType == .income }.reduce(0) { $0 + $1.amount }
     }
 
     private var totalExpenses: Double {
-        transactions.filter { $0.transactionType == .expense }.reduce(0) { $0 + $1.amount }
+        self.transactions.filter { $0.transactionType == .expense }.reduce(0) { $0 + $1.amount }
     }
 
     private var netIncome: Double {
-        totalIncome - totalExpenses
+        self.totalIncome - self.totalExpenses
     }
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("Financial Summary - \(timeframe.rawValue)")
+            Text("Financial Summary - \(self.timeframe.rawValue)")
                 .font(.headline)
                 .foregroundColor(.primary)
 
@@ -146,7 +146,7 @@ struct FinancialSummaryCard: View {
                         Text("Income")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Text(totalIncome.formatted(.currency(code: "USD")))
+                        Text(self.totalIncome.formatted(.currency(code: "USD")))
                             .font(.title2)
                             .fontWeight(.semibold)
                             .foregroundColor(.green)
@@ -156,7 +156,7 @@ struct FinancialSummaryCard: View {
                         Text("Expenses")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Text(totalExpenses.formatted(.currency(code: "USD")))
+                        Text(self.totalExpenses.formatted(.currency(code: "USD")))
                             .font(.title2)
                             .fontWeight(.semibold)
                             .foregroundColor(.red)
@@ -169,15 +169,15 @@ struct FinancialSummaryCard: View {
                     Text("Net Income")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text(netIncome.formatted(.currency(code: "USD")))
+                    Text(self.netIncome.formatted(.currency(code: "USD")))
                         .font(.title)
                         .fontWeight(.bold)
-                        .foregroundColor(netIncome >= 0 ? .green : .red)
+                        .foregroundColor(self.netIncome >= 0 ? .green : .red)
                 }
             }
         }
         .padding()
-        .background(backgroundColor)
+        .background(self.backgroundColor)
         .cornerRadius(12)
         .shadow(radius: 2)
     }
@@ -190,16 +190,16 @@ struct SpendingByCategoryCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+        return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+        return Color(NSColor.controlBackgroundColor)
         #else
-            return Color.white
+        return Color.white
         #endif
     }
 
     private var expenseTransactions: [FinancialTransaction] {
-        transactions.filter { $0.transactionType == .expense }
+        self.transactions.filter { $0.transactionType == .expense }
     }
 
     private var categorySpending: [(String, Double)] {
@@ -213,7 +213,7 @@ struct SpendingByCategoryCard: View {
     }
 
     private var totalSpending: Double {
-        categorySpending.reduce(0) { $0 + $1.1 }
+        self.categorySpending.reduce(0) { $0 + $1.1 }
     }
 
     var body: some View {
@@ -222,7 +222,7 @@ struct SpendingByCategoryCard: View {
                 .font(.headline)
                 .foregroundColor(.primary)
 
-            if categorySpending.isEmpty {
+            if self.categorySpending.isEmpty {
                 Text("No expenses in this period")
                     .font(.body)
                     .foregroundColor(.secondary)
@@ -230,7 +230,7 @@ struct SpendingByCategoryCard: View {
                     .padding()
             } else {
                 VStack(spacing: 8) {
-                    ForEach(Array(categorySpending.prefix(5)), id: \.0) { category, amount in
+                    ForEach(Array(self.categorySpending.prefix(5)), id: \.0) { category, amount in
                         HStack {
                             Text(category)
                                 .font(.body)
@@ -242,8 +242,8 @@ struct SpendingByCategoryCard: View {
                                     .font(.body)
                                     .fontWeight(.medium)
 
-                                if totalSpending > 0 {
-                                    Text("\(Int((amount / totalSpending) * 100))%")
+                                if self.totalSpending > 0 {
+                                    Text("\(Int((amount / self.totalSpending) * 100))%")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
@@ -255,7 +255,7 @@ struct SpendingByCategoryCard: View {
             }
         }
         .padding()
-        .background(backgroundColor)
+        .background(self.backgroundColor)
         .cornerRadius(12)
         .shadow(radius: 2)
     }
@@ -267,20 +267,20 @@ struct BudgetPerformanceCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+        return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+        return Color(NSColor.controlBackgroundColor)
         #else
-            return Color.white
+        return Color.white
         #endif
     }
 
     private var onTrackBudgets: [Budget] {
-        budgets.filter { !$0.isOverBudget }
+        self.budgets.filter { !$0.isOverBudget }
     }
 
     private var overBudgets: [Budget] {
-        budgets.filter(\.isOverBudget)
+        self.budgets.filter(\.isOverBudget)
     }
 
     var body: some View {
@@ -289,7 +289,7 @@ struct BudgetPerformanceCard: View {
                 .font(.headline)
                 .foregroundColor(.primary)
 
-            if budgets.isEmpty {
+            if self.budgets.isEmpty {
                 Text("No budgets set for this month")
                     .font(.body)
                     .foregroundColor(.secondary)
@@ -299,28 +299,28 @@ struct BudgetPerformanceCard: View {
                 VStack(spacing: 12) {
                     HStack {
                         Label(
-                            "\(onTrackBudgets.count) On Track", systemImage: "checkmark.circle.fill"
+                            "\(self.onTrackBudgets.count) On Track", systemImage: "checkmark.circle.fill"
                         )
                         .foregroundColor(.green)
 
                         Spacer()
 
-                        if !overBudgets.isEmpty {
+                        if !self.overBudgets.isEmpty {
                             Label(
-                                "\(overBudgets.count) Over Budget",
+                                "\(self.overBudgets.count) Over Budget",
                                 systemImage: "exclamationmark.triangle.fill"
                             )
                             .foregroundColor(.red)
                         }
                     }
 
-                    if !overBudgets.isEmpty {
+                    if !self.overBudgets.isEmpty {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Categories Over Budget:")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
 
-                            ForEach(overBudgets.prefix(3), id: \.createdDate) { budget in
+                            ForEach(self.overBudgets.prefix(3), id: \.createdDate) { budget in
                                 HStack {
                                     Text(budget.category?.name ?? "Unknown")
                                         .font(.caption)
@@ -338,7 +338,7 @@ struct BudgetPerformanceCard: View {
             }
         }
         .padding()
-        .background(backgroundColor)
+        .background(self.backgroundColor)
         .cornerRadius(12)
         .shadow(radius: 2)
     }
@@ -350,11 +350,11 @@ struct RecentTransactionsCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+        return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+        return Color(NSColor.controlBackgroundColor)
         #else
-            return Color.white
+        return Color.white
         #endif
     }
 
@@ -364,7 +364,7 @@ struct RecentTransactionsCard: View {
                 .font(.headline)
                 .foregroundColor(.primary)
 
-            if transactions.isEmpty {
+            if self.transactions.isEmpty {
                 Text("No transactions in this period")
                     .font(.body)
                     .foregroundColor(.secondary)
@@ -372,7 +372,7 @@ struct RecentTransactionsCard: View {
                     .padding()
             } else {
                 VStack(spacing: 8) {
-                    ForEach(transactions, id: \.date) { transaction in
+                    ForEach(self.transactions, id: \.date) { transaction in
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(transaction.title)
@@ -390,7 +390,8 @@ struct RecentTransactionsCard: View {
                                 .font(.body)
                                 .fontWeight(.semibold)
                                 .foregroundColor(
-                                    transaction.transactionType == .income ? .green : .red)
+                                    transaction.transactionType == .income ? .green : .red
+                                )
                         }
                         .padding(.vertical, 4)
                     }
@@ -398,7 +399,7 @@ struct RecentTransactionsCard: View {
             }
         }
         .padding()
-        .background(backgroundColor)
+        .background(self.backgroundColor)
         .cornerRadius(12)
         .shadow(radius: 2)
     }

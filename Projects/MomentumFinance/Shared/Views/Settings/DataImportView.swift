@@ -24,16 +24,16 @@ struct DataImportView: View {
                 DataImportHeaderComponent()
 
                 if let fileURL = selectedFileURL {
-                    selectedFileSection(fileURL)
+                    self.selectedFileSection(fileURL)
                 } else {
-                    FileSelectionComponent(showingFilePicker: $showingFilePicker)
+                    FileSelectionComponent(showingFilePicker: self.$showingFilePicker)
                 }
 
-                if isImporting {
-                    ImportProgressComponent(progress: importProgress)
-                } else if selectedFileURL != nil {
-                    ImportButtonComponent(isImporting: isImporting) {
-                        Task { await importData() }
+                if self.isImporting {
+                    ImportProgressComponent(progress: self.importProgress)
+                } else if self.selectedFileURL != nil {
+                    ImportButtonComponent(isImporting: self.isImporting) {
+                        Task { await self.importData() }
                     }
                 }
 
@@ -44,37 +44,37 @@ struct DataImportView: View {
             .padding()
             .navigationTitle("Import Data")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.large)
+                .navigationBarTitleDisplayMode(.large)
             #endif
-            .toolbar(content: {
-                #if os(iOS)
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") { dismiss() }
-                        .accessibilityLabel("Cancel")
+                .toolbar(content: {
+                    #if os(iOS)
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button("Cancel") { self.dismiss() }
+                            .accessibilityLabel("Cancel")
+                    }
+                    #else
+                    ToolbarItem {
+                        Button("Cancel") { self.dismiss() }
+                            .accessibilityLabel("Cancel")
+                    }
+                    #endif
+                })
+                .fileImporter(
+                    isPresented: self.$showingFilePicker,
+                    allowedContentTypes: [.commaSeparatedText, .plainText],
+                    allowsMultipleSelection: false
+                ) { result in
+                    self.handleFileSelection(result)
                 }
-                #else
-                ToolbarItem {
-                    Button("Cancel") { dismiss() }
-                        .accessibilityLabel("Cancel")
+                .alert("Import Error", isPresented: .constant(self.importError != nil)) {
+                    Button("OK") { self.importError = nil }
+                        .accessibilityLabel("OK")
+                } message: {
+                    if let error = importError { Text(error) }
                 }
-                #endif
-            })
-            .fileImporter(
-                isPresented: $showingFilePicker,
-                allowedContentTypes: [.commaSeparatedText, .plainText],
-                allowsMultipleSelection: false
-            ) { result in
-                handleFileSelection(result)
-            }
-            .alert("Import Error", isPresented: .constant(importError != nil)) {
-                Button("OK") { importError = nil }
-                    .accessibilityLabel("OK")
-            } message: {
-                if let error = importError { Text(error) }
-            }
-            .sheet(isPresented: $showingResult) {
-                if let result = importResult { ImportResultView(result: result) { dismiss() } }
-            }
+                .sheet(isPresented: self.$showingResult) {
+                    if let result = importResult { ImportResultView(result: result) { self.dismiss() } }
+                }
         }
     }
 
@@ -107,8 +107,8 @@ struct DataImportView: View {
                         Spacer()
 
                         Button("Change") {
-                            selectedFileURL = nil
-                            showingFilePicker = true
+                            self.selectedFileURL = nil
+                            self.showingFilePicker = true
                         }
                         .accessibilityLabel("Change")
                         .font(.caption)
@@ -121,15 +121,15 @@ struct DataImportView: View {
 
     private func handleFileSelection(_ result: Result<[URL], Error>) {
         switch result {
-        case .success(let urls):
+        case let .success(urls):
             if let url = urls.first {
-                selectedFileURL = url
+                self.selectedFileURL = url
                 #if os(iOS)
                 HapticManager.shared.success()
                 #endif
             }
-        case .failure(let error):
-            importError = "Failed to select file: \(error.localizedDescription)"
+        case let .failure(error):
+            self.importError = "Failed to select file: \(error.localizedDescription)"
             #if os(iOS)
             HapticManager.shared.error()
             #endif
@@ -140,8 +140,8 @@ struct DataImportView: View {
     private func importData() async {
         guard let fileURL = selectedFileURL else { return }
 
-        isImporting = true
-        importProgress = 0
+        self.isImporting = true
+        self.importProgress = 0
         #if os(iOS)
         HapticManager.shared.mediumImpact()
         #endif
@@ -149,27 +149,27 @@ struct DataImportView: View {
         do {
             let importer = DataImporter(modelContainer: modelContext.container)
 
-            for i in 1...10 {
+            for i in 1 ... 10 {
                 try await Task.sleep(nanoseconds: 100_000_000)
-                importProgress = Double(i) / 10.0
+                self.importProgress = Double(i) / 10.0
             }
 
             let content = try String(contentsOf: fileURL, encoding: .utf8)
             let result = try await importer.importFromCSV(content)
-            importResult = result
-            showingResult = true
+            self.importResult = result
+            self.showingResult = true
             #if os(iOS)
             HapticManager.shared.success()
             #endif
         } catch {
-            importError = error.localizedDescription
+            self.importError = error.localizedDescription
             #if os(iOS)
             HapticManager.shared.error()
             #endif
         }
 
-        isImporting = false
-        importProgress = 0
+        self.isImporting = false
+        self.importProgress = 0
     }
 }
 

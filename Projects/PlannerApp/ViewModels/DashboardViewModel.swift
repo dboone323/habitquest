@@ -25,7 +25,6 @@ struct UpcomingItem: Identifiable {
 
 // ObservableObject makes this class publish changes to its @Published properties.
 class DashboardViewModel: ObservableObject {
-
     // --- Published Properties for View Updates ---
     // These arrays hold the data to be displayed on the dashboard, limited by user settings.
     @Published var todaysEvents: [CalendarEvent] = []
@@ -73,7 +72,7 @@ class DashboardViewModel: ObservableObject {
 
         // Get the current calendar and configure it with the user's setting for the first day of the week.
         var calendar = Calendar.current
-        calendar.firstWeekday = firstDayOfWeekSetting
+        calendar.firstWeekday = self.firstDayOfWeekSetting
 
         // Calculate date ranges needed for filtering (today, next week).
         let today = Date()
@@ -83,7 +82,7 @@ class DashboardViewModel: ObservableObject {
               let endOfWeek = calendar.date(byAdding: .day, value: 7, to: startOfToday)
         else {
             print("Error calculating date ranges for dashboard.")
-            resetData() // Clear displayed data if dates are invalid
+            self.resetData() // Clear displayed data if dates are invalid
             return
         }
 
@@ -125,23 +124,25 @@ class DashboardViewModel: ObservableObject {
         self.incompleteTasks = Array(filteredIncompleteTasks.prefix(limit))
         self.upcomingGoals = Array(filteredUpcomingGoals.prefix(limit))
 
-        print("Dashboard data fetched. Limit: \(limit). Today: \(totalTodaysEventsCount), Tasks: \(totalIncompleteTasksCount), Goals: \(totalUpcomingGoalsCount)") // Debugging log
+        print(
+            "Dashboard data fetched. Limit: \(limit). Today: \(self.totalTodaysEventsCount), Tasks: \(self.totalIncompleteTasksCount), Goals: \(self.totalUpcomingGoalsCount)"
+        ) // Debugging log
     }
 
     // New method for modern dashboard
     @MainActor
     func refreshData() async {
         // Call existing method
-        fetchDashboardData()
+        self.fetchDashboardData()
 
         // Update quick stats
-        updateQuickStats()
+        self.updateQuickStats()
 
         // Generate recent activities
-        generateRecentActivities()
+        self.generateRecentActivities()
 
         // Generate upcoming items
-        generateUpcomingItems()
+        self.generateUpcomingItems()
 
         print("Dashboard refresh completed") // Debugging log
     }
@@ -166,7 +167,8 @@ class DashboardViewModel: ObservableObject {
             // Only include tasks that are actually completed AND were created or completed recently
             task.isCompleted &&
                 (Calendar.current.isDateInYesterday(task.createdAt) ||
-                    Calendar.current.isDateInToday(task.createdAt))
+                    Calendar.current.isDateInToday(task.createdAt)
+                )
         }.prefix(3)
 
         for task in recentCompletedTasks {

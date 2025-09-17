@@ -1,7 +1,7 @@
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 extension Features.GoalsAndReports {
@@ -15,14 +15,14 @@ extension Features.GoalsAndReports {
                     .font(.headline)
                     .fontWeight(.semibold)
 
-                Text("Income: $\(calculateIncome())")
+                Text("Income: $\(self.calculateIncome())")
                     .foregroundColor(.green)
 
-                Text("Expenses: $\(calculateExpenses())")
+                Text("Expenses: $\(self.calculateExpenses())")
                     .foregroundColor(.red)
 
-                Text("Net: $\(calculateNet())")
-                    .foregroundColor(calculateNet() >= 0 ? .green : .red)
+                Text("Net: $\(self.calculateNet())")
+                    .foregroundColor(self.calculateNet() >= 0 ? .green : .red)
             }
             .padding()
             .background(
@@ -32,24 +32,24 @@ extension Features.GoalsAndReports {
         }
 
         private func calculateIncome() -> String {
-            let total = transactions.filter { $0.transactionType == .income }.reduce(0) {
+            let total = self.transactions.filter { $0.transactionType == .income }.reduce(0) {
                 $0 + $1.amount
             }
             return String(format: "%.2f", total)
         }
 
         private func calculateExpenses() -> String {
-            let total = transactions.filter { $0.transactionType == .expense }.reduce(0) {
+            let total = self.transactions.filter { $0.transactionType == .expense }.reduce(0) {
                 $0 + $1.amount
             }
             return String(format: "%.2f", total)
         }
 
         private func calculateNet() -> Double {
-            let income = transactions.filter { $0.transactionType == .income }.reduce(0) {
+            let income = self.transactions.filter { $0.transactionType == .income }.reduce(0) {
                 $0 + $1.amount
             }
-            let expenses = transactions.filter { $0.transactionType == .expense }.reduce(0) {
+            let expenses = self.transactions.filter { $0.transactionType == .expense }.reduce(0) {
                 $0 + $1.amount
             }
             return income - expenses

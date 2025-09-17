@@ -6,7 +6,6 @@ import XCTest
 
 /// Unit tests for AvoidObstaclesGame model functionality
 final class GameModelTests: XCTestCase {
-
     var modelContainer: ModelContainer!
     var modelContext: ModelContext!
 
@@ -17,13 +16,13 @@ final class GameModelTests: XCTestCase {
             // Example: GameScore.self, Player.self, GameSession.self
         ])
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        modelContainer = try ModelContainer(for: schema, configurations: [configuration])
-        modelContext = ModelContext(modelContainer)
+        self.modelContainer = try ModelContainer(for: schema, configurations: [configuration])
+        self.modelContext = ModelContext(self.modelContainer)
     }
 
     override func tearDownWithError() throws {
-        modelContainer = nil
-        modelContext = nil
+        self.modelContainer = nil
+        self.modelContext = nil
     }
 
     // MARK: - Game Score Tests

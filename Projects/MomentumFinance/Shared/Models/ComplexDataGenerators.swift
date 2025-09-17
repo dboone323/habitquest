@@ -38,76 +38,76 @@ class TransactionsDataGenerator: DataGenerator {
         let transactions = [
             // Income transactions
             (
-                title: "Salary", amount: 3_500.0, date: Date().addingTimeInterval(-86_400 * 15),
+                title: "Salary", amount: 3500.0, date: Date().addingTimeInterval(-86400 * 15),
                 type: TransactionType.income, category: "Income", account: checkingAccount
             ),
             (
-                title: "Freelance Work", amount: 500.0, date: Date().addingTimeInterval(-86_400 * 8),
+                title: "Freelance Work", amount: 500.0, date: Date().addingTimeInterval(-86400 * 8),
                 type: TransactionType.income, category: "Income", account: checkingAccount
             ),
             (
-                title: "Interest", amount: 25.0, date: Date().addingTimeInterval(-86_400 * 3),
+                title: "Interest", amount: 25.0, date: Date().addingTimeInterval(-86400 * 3),
                 type: TransactionType.income, category: "Income", account: savingsAccount
             ),
 
             // Expense transactions
             (
-                title: "Rent", amount: 1_200.0, date: Date().addingTimeInterval(-86_400 * 28),
+                title: "Rent", amount: 1200.0, date: Date().addingTimeInterval(-86400 * 28),
                 type: TransactionType.expense, category: "Housing", account: checkingAccount
             ),
             (
-                title: "Groceries", amount: 120.50, date: Date().addingTimeInterval(-86_400 * 25),
+                title: "Groceries", amount: 120.50, date: Date().addingTimeInterval(-86400 * 25),
                 type: TransactionType.expense, category: "Food", account: creditCard
             ),
             (
                 title: "Electricity Bill", amount: 85.0,
-                date: Date().addingTimeInterval(-86_400 * 20),
+                date: Date().addingTimeInterval(-86400 * 20),
                 type: TransactionType.expense, category: "Utilities", account: checkingAccount
             ),
             (
-                title: "Internet", amount: 60.0, date: Date().addingTimeInterval(-86_400 * 18),
+                title: "Internet", amount: 60.0, date: Date().addingTimeInterval(-86400 * 18),
                 type: TransactionType.expense, category: "Utilities", account: creditCard
             ),
             (
-                title: "Gas", amount: 45.0, date: Date().addingTimeInterval(-86_400 * 15),
+                title: "Gas", amount: 45.0, date: Date().addingTimeInterval(-86400 * 15),
                 type: TransactionType.expense, category: "Transportation", account: creditCard
             ),
             (
-                title: "Dinner", amount: 65.75, date: Date().addingTimeInterval(-86_400 * 12),
+                title: "Dinner", amount: 65.75, date: Date().addingTimeInterval(-86400 * 12),
                 type: TransactionType.expense, category: "Food", account: creditCard
             ),
             (
-                title: "Movie Tickets", amount: 30.0, date: Date().addingTimeInterval(-86_400 * 10),
+                title: "Movie Tickets", amount: 30.0, date: Date().addingTimeInterval(-86400 * 10),
                 type: TransactionType.expense, category: "Entertainment", account: creditCard
             ),
             (
-                title: "Coffee", amount: 4.50, date: Date().addingTimeInterval(-86_400 * 7),
+                title: "Coffee", amount: 4.50, date: Date().addingTimeInterval(-86400 * 7),
                 type: TransactionType.expense, category: "Food", account: creditCard
             ),
             (
-                title: "Gym Membership", amount: 50.0, date: Date().addingTimeInterval(-86_400 * 5),
+                title: "Gym Membership", amount: 50.0, date: Date().addingTimeInterval(-86400 * 5),
                 type: TransactionType.expense, category: "Personal Care", account: checkingAccount
             ),
             (
-                title: "Online Course", amount: 200.0, date: Date().addingTimeInterval(-86_400 * 2),
+                title: "Online Course", amount: 200.0, date: Date().addingTimeInterval(-86400 * 2),
                 type: TransactionType.expense, category: "Education", account: creditCard
             ),
 
             // Previous month transactions
             (
-                title: "Salary", amount: 3_500.0, date: Date().addingTimeInterval(-86_400 * 45),
+                title: "Salary", amount: 3500.0, date: Date().addingTimeInterval(-86400 * 45),
                 type: TransactionType.income, category: "Income", account: checkingAccount
             ),
             (
-                title: "Rent", amount: 1_200.0, date: Date().addingTimeInterval(-86_400 * 58),
+                title: "Rent", amount: 1200.0, date: Date().addingTimeInterval(-86400 * 58),
                 type: TransactionType.expense, category: "Housing", account: checkingAccount
             ),
             (
-                title: "Groceries", amount: 160.30, date: Date().addingTimeInterval(-86_400 * 50),
+                title: "Groceries", amount: 160.30, date: Date().addingTimeInterval(-86400 * 50),
                 type: TransactionType.expense, category: "Food", account: creditCard
             ),
             (
-                title: "Travel", amount: 500.0, date: Date().addingTimeInterval(-86_400 * 40),
+                title: "Travel", amount: 500.0, date: Date().addingTimeInterval(-86400 * 40),
                 type: TransactionType.expense, category: "Travel", account: creditCard
             )
         ]
@@ -118,17 +118,17 @@ class TransactionsDataGenerator: DataGenerator {
                 amount: transaction.amount,
                 date: transaction.date,
                 transactionType: transaction.type,
-                )
+            )
             newTransaction.category = categoryDict[transaction.category]
             newTransaction.account = transaction.account
 
             // Update account balance based on transaction
             transaction.account?.updateBalance(for: newTransaction)
 
-            modelContext.insert(newTransaction)
+            self.modelContext.insert(newTransaction)
         }
 
-        try? modelContext.save()
+        try? self.modelContext.save()
     }
 }
 
@@ -174,8 +174,9 @@ class SubscriptionsDataGenerator: DataGenerator {
 
         guard let checkingAccount, let creditCard else { return }
 
-        let subscriptions = createSubscriptionDataArray(
-            checkingAccount: checkingAccount, creditCard: creditCard)
+        let subscriptions = self.createSubscriptionDataArray(
+            checkingAccount: checkingAccount, creditCard: creditCard
+        )
 
         for subscription in subscriptions {
             let newSubscription = Subscription(
@@ -183,16 +184,16 @@ class SubscriptionsDataGenerator: DataGenerator {
                 amount: subscription.amount,
                 billingCycle: subscription.cycle,
                 nextDueDate: subscription.nextDue,
-                )
+            )
 
             newSubscription.category = categoryDict[subscription.category]
             newSubscription.account = subscription.account
             newSubscription.isActive = subscription.isActive
 
-            modelContext.insert(newSubscription)
+            self.modelContext.insert(newSubscription)
         }
 
-        try? modelContext.save()
+        try? self.modelContext.save()
     }
 
     /// Creates an array of sample subscription data for all categories.
@@ -203,11 +204,12 @@ class SubscriptionsDataGenerator: DataGenerator {
     private func createSubscriptionDataArray(
         checkingAccount: FinancialAccount, creditCard: FinancialAccount
     ) -> [SubscriptionData] {
-        let entertainment = createEntertainmentSubscriptions(creditCard: creditCard)
-        let utilities = createUtilitySubscriptions(
-            checkingAccount: checkingAccount, creditCard: creditCard)
-        let personal = createPersonalSubscriptions(checkingAccount: checkingAccount)
-        let transportation = createTransportationSubscriptions(checkingAccount: checkingAccount)
+        let entertainment = self.createEntertainmentSubscriptions(creditCard: creditCard)
+        let utilities = self.createUtilitySubscriptions(
+            checkingAccount: checkingAccount, creditCard: creditCard
+        )
+        let personal = self.createPersonalSubscriptions(checkingAccount: checkingAccount)
+        let transportation = self.createTransportationSubscriptions(checkingAccount: checkingAccount)
 
         return entertainment + utilities + personal + transportation
     }
@@ -216,7 +218,7 @@ class SubscriptionsDataGenerator: DataGenerator {
     /// - Parameter creditCard: The user's credit card account.
     /// - Returns: An array of entertainment `SubscriptionData`.
     private func createEntertainmentSubscriptions(creditCard: FinancialAccount)
-    -> [SubscriptionData] {
+        -> [SubscriptionData] {
         let calendar = Calendar.current
         let today = Date()
 
@@ -235,7 +237,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Entertainment",
                 account: creditCard,
                 isActive: true,
-                ),
+            ),
             SubscriptionData(
                 name: "Spotify",
                 amount: 9.99,
@@ -244,7 +246,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Entertainment",
                 account: creditCard,
                 isActive: true,
-                ),
+            ),
             SubscriptionData(
                 name: "Video Streaming",
                 amount: 7.99,
@@ -253,7 +255,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Entertainment",
                 account: creditCard,
                 isActive: false,
-                )
+            )
         ]
     }
 
@@ -283,7 +285,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Utilities",
                 account: creditCard,
                 isActive: true,
-                ),
+            ),
             SubscriptionData(
                 name: "Phone Bill",
                 amount: 65.0,
@@ -292,7 +294,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Utilities",
                 account: checkingAccount,
                 isActive: true,
-                ),
+            ),
             SubscriptionData(
                 name: "Internet",
                 amount: 60.0,
@@ -301,7 +303,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Utilities",
                 account: checkingAccount,
                 isActive: true,
-                )
+            )
         ]
     }
 
@@ -309,7 +311,7 @@ class SubscriptionsDataGenerator: DataGenerator {
     /// - Parameter checkingAccount: The user's checking account.
     /// - Returns: An array of personal `SubscriptionData`.
     private func createPersonalSubscriptions(checkingAccount: FinancialAccount)
-    -> [SubscriptionData] {
+        -> [SubscriptionData] {
         let calendar = Calendar.current
         let today = Date()
 
@@ -328,7 +330,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Personal Care",
                 account: checkingAccount,
                 isActive: true,
-                )
+            )
         ]
     }
 
@@ -336,7 +338,7 @@ class SubscriptionsDataGenerator: DataGenerator {
     /// - Parameter checkingAccount: The user's checking account.
     /// - Returns: An array of transportation `SubscriptionData`.
     private func createTransportationSubscriptions(checkingAccount: FinancialAccount)
-    -> [SubscriptionData] {
+        -> [SubscriptionData] {
         let calendar = Calendar.current
         let today = Date()
 
@@ -355,7 +357,7 @@ class SubscriptionsDataGenerator: DataGenerator {
                 category: "Transportation",
                 account: checkingAccount,
                 isActive: true,
-                )
+            )
         ]
     }
 }

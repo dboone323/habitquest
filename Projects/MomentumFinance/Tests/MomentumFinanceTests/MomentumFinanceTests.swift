@@ -4,7 +4,6 @@ import XCTest
 @testable import MomentumFinance
 
 final class MomentumFinanceTests: XCTestCase {
-
     var modelContainer: ModelContainer!
     var modelContext: ModelContext!
 
@@ -19,13 +18,13 @@ final class MomentumFinanceTests: XCTestCase {
             ExpenseCategory.self,
         ])
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        modelContainer = try ModelContainer(for: schema, configurations: [configuration])
-        modelContext = ModelContext(modelContainer)
+        self.modelContainer = try ModelContainer(for: schema, configurations: [configuration])
+        self.modelContext = ModelContext(self.modelContainer)
     }
 
     override func tearDownWithError() throws {
-        modelContainer = nil
-        modelContext = nil
+        self.modelContainer = nil
+        self.modelContext = nil
     }
 
     // MARK: - Transaction Model Tests
@@ -54,8 +53,8 @@ final class MomentumFinanceTests: XCTestCase {
             categoryName: "Work"
         )
 
-        modelContext.insert(transaction)
-        try modelContext.save()
+        self.modelContext.insert(transaction)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>()
         let savedTransactions = try modelContext.fetch(fetchRequest)
@@ -71,15 +70,17 @@ final class MomentumFinanceTests: XCTestCase {
         )
         let income2 = Transaction(
             amount: 500.0, description: "Freelance", date: Date(), type: .income,
-            categoryName: "Side Work")
+            categoryName: "Side Work"
+        )
         let expense = Transaction(
             amount: 200.0, description: "Groceries", date: Date(), type: .expense,
-            categoryName: "Food")
+            categoryName: "Food"
+        )
 
-        modelContext.insert(income1)
-        modelContext.insert(income2)
-        modelContext.insert(expense)
-        try modelContext.save()
+        self.modelContext.insert(income1)
+        self.modelContext.insert(income2)
+        self.modelContext.insert(expense)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>(
             predicate: #Predicate { $0.type == .income }
@@ -94,13 +95,15 @@ final class MomentumFinanceTests: XCTestCase {
     func testExpenseCalculation() throws {
         let expense1 = Transaction(
             amount: 100.0, description: "Gas", date: Date(), type: .expense,
-            categoryName: "Transport")
+            categoryName: "Transport"
+        )
         let expense2 = Transaction(
-            amount: 50.0, description: "Coffee", date: Date(), type: .expense, categoryName: "Food")
+            amount: 50.0, description: "Coffee", date: Date(), type: .expense, categoryName: "Food"
+        )
 
-        modelContext.insert(expense1)
-        modelContext.insert(expense2)
-        try modelContext.save()
+        self.modelContext.insert(expense1)
+        self.modelContext.insert(expense2)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>(
             predicate: #Predicate { $0.type == .expense }
@@ -118,18 +121,21 @@ final class MomentumFinanceTests: XCTestCase {
         let lastWeek = Calendar.current.date(byAdding: .day, value: -7, to: today)!
 
         let todayTransaction = Transaction(
-            amount: 25.0, description: "Lunch", date: today, type: .expense, categoryName: "Food")
+            amount: 25.0, description: "Lunch", date: today, type: .expense, categoryName: "Food"
+        )
         let yesterdayTransaction = Transaction(
             amount: 15.0, description: "Snack", date: yesterday, type: .expense,
-            categoryName: "Food")
+            categoryName: "Food"
+        )
         let oldTransaction = Transaction(
             amount: 100.0, description: "Old Purchase", date: lastWeek, type: .expense,
-            categoryName: "Other")
+            categoryName: "Other"
+        )
 
-        modelContext.insert(todayTransaction)
-        modelContext.insert(yesterdayTransaction)
-        modelContext.insert(oldTransaction)
-        try modelContext.save()
+        self.modelContext.insert(todayTransaction)
+        self.modelContext.insert(yesterdayTransaction)
+        self.modelContext.insert(oldTransaction)
+        try self.modelContext.save()
 
         // Test recent transactions (last 3 days)
         let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: today)!
@@ -143,17 +149,20 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testTransactionsByCategory() throws {
         let foodTransaction1 = Transaction(
-            amount: 25.0, description: "Lunch", date: Date(), type: .expense, categoryName: "Food")
+            amount: 25.0, description: "Lunch", date: Date(), type: .expense, categoryName: "Food"
+        )
         let foodTransaction2 = Transaction(
-            amount: 15.0, description: "Coffee", date: Date(), type: .expense, categoryName: "Food")
+            amount: 15.0, description: "Coffee", date: Date(), type: .expense, categoryName: "Food"
+        )
         let transportTransaction = Transaction(
             amount: 30.0, description: "Gas", date: Date(), type: .expense,
-            categoryName: "Transport")
+            categoryName: "Transport"
+        )
 
-        modelContext.insert(foodTransaction1)
-        modelContext.insert(foodTransaction2)
-        modelContext.insert(transportTransaction)
-        try modelContext.save()
+        self.modelContext.insert(foodTransaction1)
+        self.modelContext.insert(foodTransaction2)
+        self.modelContext.insert(transportTransaction)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>(
             predicate: #Predicate { $0.categoryName == "Food" }
@@ -173,8 +182,8 @@ final class MomentumFinanceTests: XCTestCase {
             categoryName: "Test"
         )
 
-        modelContext.insert(zeroTransaction)
-        try modelContext.save()
+        self.modelContext.insert(zeroTransaction)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>()
         let allTransactions = try modelContext.fetch(fetchRequest)
@@ -193,8 +202,8 @@ final class MomentumFinanceTests: XCTestCase {
             categoryName: "Refunds"
         )
 
-        modelContext.insert(refundTransaction)
-        try modelContext.save()
+        self.modelContext.insert(refundTransaction)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>()
         let allTransactions = try modelContext.fetch(fetchRequest)
@@ -207,7 +216,7 @@ final class MomentumFinanceTests: XCTestCase {
         let startTime = Date()
 
         // Insert 1000 transactions
-        for i in 1...1000 {
+        for i in 1 ... 1000 {
             let transaction = Transaction(
                 amount: Double(i),
                 description: "Transaction \(i)",
@@ -215,14 +224,15 @@ final class MomentumFinanceTests: XCTestCase {
                 type: i % 2 == 0 ? .income : .expense,
                 categoryName: "Category \(i % 10)"
             )
-            modelContext.insert(transaction)
+            self.modelContext.insert(transaction)
         }
 
-        try modelContext.save()
+        try self.modelContext.save()
 
         let insertTime = Date().timeIntervalSince(startTime)
         XCTAssertLessThan(
-            insertTime, 5.0, "Inserting 1000 transactions should take less than 5 seconds")
+            insertTime, 5.0, "Inserting 1000 transactions should take less than 5 seconds"
+        )
 
         // Test fetch performance
         let fetchStartTime = Date()
@@ -232,14 +242,16 @@ final class MomentumFinanceTests: XCTestCase {
 
         XCTAssertEqual(allTransactions.count, 1000)
         XCTAssertLessThan(
-            fetchTime, 1.0, "Fetching 1000 transactions should take less than 1 second")
+            fetchTime, 1.0, "Fetching 1000 transactions should take less than 1 second"
+        )
     }
 
     // MARK: - Financial Account Model Tests
 
     func testAccountCreation() throws {
         let account = FinancialAccount(
-            name: "Checking", balance: 1000.0, iconName: "bank", accountType: .checking)
+            name: "Checking", balance: 1000.0, iconName: "bank", accountType: .checking
+        )
         XCTAssertEqual(account.name, "Checking")
         XCTAssertEqual(account.balance, 1000.0)
         XCTAssertEqual(account.accountType, .checking)
@@ -247,9 +259,10 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testAccountPersistence() throws {
         let account = FinancialAccount(
-            name: "Savings", balance: 5000.0, iconName: "piggy", accountType: .savings)
-        modelContext.insert(account)
-        try modelContext.save()
+            name: "Savings", balance: 5000.0, iconName: "piggy", accountType: .savings
+        )
+        self.modelContext.insert(account)
+        try self.modelContext.save()
         let fetchRequest = FetchDescriptor<FinancialAccount>()
         let savedAccounts = try modelContext.fetch(fetchRequest)
         XCTAssertEqual(savedAccounts.count, 1)
@@ -258,33 +271,41 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testUpdateBalanceForIncomeTransaction() throws {
         let account = FinancialAccount(
-            name: "Main", balance: 100.0, iconName: "wallet", accountType: .checking)
+            name: "Main", balance: 100.0, iconName: "wallet", accountType: .checking
+        )
         let transaction = FinancialTransaction(
-            title: "Paycheck", amount: 500.0, date: Date(), transactionType: .income)
+            title: "Paycheck", amount: 500.0, date: Date(), transactionType: .income
+        )
         account.updateBalance(for: transaction)
         XCTAssertEqual(account.balance, 600.0)
     }
 
     func testUpdateBalanceForExpenseTransaction() throws {
         let account = FinancialAccount(
-            name: "Main", balance: 100.0, iconName: "wallet", accountType: .checking)
+            name: "Main", balance: 100.0, iconName: "wallet", accountType: .checking
+        )
         let transaction = FinancialTransaction(
-            title: "Coffee", amount: 5.0, date: Date(), transactionType: .expense)
+            title: "Coffee", amount: 5.0, date: Date(), transactionType: .expense
+        )
         account.updateBalance(for: transaction)
         XCTAssertEqual(account.balance, 95.0)
     }
 
     func testAccountBalanceCalculations() throws {
         let account = FinancialAccount(
-            name: "Test Account", balance: 1000.0, iconName: "test", accountType: .checking)
+            name: "Test Account", balance: 1000.0, iconName: "test", accountType: .checking
+        )
 
         // Test multiple transactions
         let income = FinancialTransaction(
-            title: "Income", amount: 500.0, date: Date(), transactionType: .income)
+            title: "Income", amount: 500.0, date: Date(), transactionType: .income
+        )
         let expense1 = FinancialTransaction(
-            title: "Expense 1", amount: 100.0, date: Date(), transactionType: .expense)
+            title: "Expense 1", amount: 100.0, date: Date(), transactionType: .expense
+        )
         let expense2 = FinancialTransaction(
-            title: "Expense 2", amount: 50.0, date: Date(), transactionType: .expense)
+            title: "Expense 2", amount: 50.0, date: Date(), transactionType: .expense
+        )
 
         account.updateBalance(for: income)
         account.updateBalance(for: expense1)
@@ -297,7 +318,8 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testExpenseCategoryCreation() throws {
         let category = ExpenseCategory(
-            name: "Food", iconName: "fork.knife", colorHex: "#FF6B6B", budgetAmount: 500.0)
+            name: "Food", iconName: "fork.knife", colorHex: "#FF6B6B", budgetAmount: 500.0
+        )
 
         XCTAssertEqual(category.name, "Food")
         XCTAssertEqual(category.iconName, "fork.knife")
@@ -307,10 +329,11 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testExpenseCategoryPersistence() throws {
         let category = ExpenseCategory(
-            name: "Transportation", iconName: "car", colorHex: "#4ECDC4", budgetAmount: 300.0)
+            name: "Transportation", iconName: "car", colorHex: "#4ECDC4", budgetAmount: 300.0
+        )
 
-        modelContext.insert(category)
-        try modelContext.save()
+        self.modelContext.insert(category)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<ExpenseCategory>()
         let savedCategories = try modelContext.fetch(fetchRequest)
@@ -322,7 +345,8 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testCategoryBudgetTracking() throws {
         let category = ExpenseCategory(
-            name: "Entertainment", iconName: "tv", colorHex: "#45B7D1", budgetAmount: 200.0)
+            name: "Entertainment", iconName: "tv", colorHex: "#45B7D1", budgetAmount: 200.0
+        )
 
         // Simulate spending
         category.spentAmount = 150.0
@@ -335,7 +359,8 @@ final class MomentumFinanceTests: XCTestCase {
     func testCategoryOverBudget() throws {
         let category = ExpenseCategory(
             name: "Dining Out", iconName: "fork.knife.circle", colorHex: "#FFA07A",
-            budgetAmount: 100.0)
+            budgetAmount: 100.0
+        )
 
         // Simulate overspending
         category.spentAmount = 120.0
@@ -349,7 +374,8 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testFinancialTransactionCreation() throws {
         let transaction = FinancialTransaction(
-            title: "Grocery Shopping", amount: 75.50, date: Date(), transactionType: .expense)
+            title: "Grocery Shopping", amount: 75.50, date: Date(), transactionType: .expense
+        )
 
         XCTAssertEqual(transaction.title, "Grocery Shopping")
         XCTAssertEqual(transaction.amount, 75.50)
@@ -358,10 +384,11 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testFinancialTransactionPersistence() throws {
         let transaction = FinancialTransaction(
-            title: "Salary Deposit", amount: 2500.0, date: Date(), transactionType: .income)
+            title: "Salary Deposit", amount: 2500.0, date: Date(), transactionType: .income
+        )
 
-        modelContext.insert(transaction)
-        try modelContext.save()
+        self.modelContext.insert(transaction)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<FinancialTransaction>()
         let savedTransactions = try modelContext.fetch(fetchRequest)
@@ -373,16 +400,19 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testTransactionTypeFiltering() throws {
         let incomeTransaction = FinancialTransaction(
-            title: "Paycheck", amount: 2000.0, date: Date(), transactionType: .income)
+            title: "Paycheck", amount: 2000.0, date: Date(), transactionType: .income
+        )
         let expenseTransaction1 = FinancialTransaction(
-            title: "Rent", amount: 800.0, date: Date(), transactionType: .expense)
+            title: "Rent", amount: 800.0, date: Date(), transactionType: .expense
+        )
         let expenseTransaction2 = FinancialTransaction(
-            title: "Utilities", amount: 150.0, date: Date(), transactionType: .expense)
+            title: "Utilities", amount: 150.0, date: Date(), transactionType: .expense
+        )
 
-        modelContext.insert(incomeTransaction)
-        modelContext.insert(expenseTransaction1)
-        modelContext.insert(expenseTransaction2)
-        try modelContext.save()
+        self.modelContext.insert(incomeTransaction)
+        self.modelContext.insert(expenseTransaction1)
+        self.modelContext.insert(expenseTransaction2)
+        try self.modelContext.save()
 
         let incomeFetchRequest = FetchDescriptor<FinancialTransaction>(
             predicate: #Predicate { $0.transactionType == .income }
@@ -403,17 +433,22 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testAccountTransactionIntegration() throws {
         let account = FinancialAccount(
-            name: "Primary Checking", balance: 1000.0, iconName: "bank", accountType: .checking)
+            name: "Primary Checking", balance: 1000.0, iconName: "bank", accountType: .checking
+        )
 
         let transactions = [
             FinancialTransaction(
-                title: "Deposit", amount: 500.0, date: Date(), transactionType: .income),
+                title: "Deposit", amount: 500.0, date: Date(), transactionType: .income
+            ),
             FinancialTransaction(
-                title: "Grocery", amount: 75.0, date: Date(), transactionType: .expense),
+                title: "Grocery", amount: 75.0, date: Date(), transactionType: .expense
+            ),
             FinancialTransaction(
-                title: "Gas", amount: 40.0, date: Date(), transactionType: .expense),
+                title: "Gas", amount: 40.0, date: Date(), transactionType: .expense
+            ),
             FinancialTransaction(
-                title: "Coffee", amount: 5.0, date: Date(), transactionType: .expense),
+                title: "Coffee", amount: 5.0, date: Date(), transactionType: .expense
+            ),
         ]
 
         // Apply all transactions to account
@@ -424,11 +459,11 @@ final class MomentumFinanceTests: XCTestCase {
         XCTAssertEqual(account.balance, 1380.0)
 
         // Verify account and transactions are properly linked
-        modelContext.insert(account)
+        self.modelContext.insert(account)
         for transaction in transactions {
-            modelContext.insert(transaction)
+            self.modelContext.insert(transaction)
         }
-        try modelContext.save()
+        try self.modelContext.save()
 
         let accountFetchRequest = FetchDescriptor<FinancialAccount>()
         let transactionFetchRequest = FetchDescriptor<FinancialTransaction>()
@@ -443,10 +478,12 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testCategoryTransactionIntegration() throws {
         let foodCategory = ExpenseCategory(
-            name: "Food & Dining", iconName: "fork.knife", colorHex: "#FF6B6B", budgetAmount: 600.0)
+            name: "Food & Dining", iconName: "fork.knife", colorHex: "#FF6B6B", budgetAmount: 600.0
+        )
 
         let transportCategory = ExpenseCategory(
-            name: "Transportation", iconName: "car", colorHex: "#4ECDC4", budgetAmount: 300.0)
+            name: "Transportation", iconName: "car", colorHex: "#4ECDC4", budgetAmount: 300.0
+        )
 
         // Simulate spending in categories
         foodCategory.spentAmount = 450.0
@@ -458,9 +495,9 @@ final class MomentumFinanceTests: XCTestCase {
         XCTAssertFalse(transportCategory.isOverBudget)
 
         // Persist categories
-        modelContext.insert(foodCategory)
-        modelContext.insert(transportCategory)
-        try modelContext.save()
+        self.modelContext.insert(foodCategory)
+        self.modelContext.insert(transportCategory)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<ExpenseCategory>()
         let savedCategories = try modelContext.fetch(fetchRequest)
@@ -477,7 +514,8 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testEmptyAccountName() throws {
         let account = FinancialAccount(
-            name: "", balance: 0.0, iconName: "bank", accountType: .checking)
+            name: "", balance: 0.0, iconName: "bank", accountType: .checking
+        )
 
         XCTAssertTrue(account.name.isEmpty)
         XCTAssertEqual(account.balance, 0.0)
@@ -485,7 +523,8 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testNegativeBalance() throws {
         let account = FinancialAccount(
-            name: "Overdraft Account", balance: -100.0, iconName: "bank", accountType: .checking)
+            name: "Overdraft Account", balance: -100.0, iconName: "bank", accountType: .checking
+        )
 
         XCTAssertEqual(account.balance, -100.0)
         XCTAssertLessThan(account.balance, 0.0)
@@ -493,7 +532,8 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testZeroBudgetCategory() throws {
         let category = ExpenseCategory(
-            name: "No Budget", iconName: "circle", colorHex: "#808080", budgetAmount: 0.0)
+            name: "No Budget", iconName: "circle", colorHex: "#808080", budgetAmount: 0.0
+        )
 
         category.spentAmount = 50.0
 
@@ -504,10 +544,12 @@ final class MomentumFinanceTests: XCTestCase {
 
     func testLargeNumbers() throws {
         let account = FinancialAccount(
-            name: "Investment", balance: 1_000_000.0, iconName: "chart", accountType: .investment)
+            name: "Investment", balance: 1_000_000.0, iconName: "chart", accountType: .investment
+        )
 
         let largeTransaction = FinancialTransaction(
-            title: "Large Deposit", amount: 500_000.0, date: Date(), transactionType: .income)
+            title: "Large Deposit", amount: 500_000.0, date: Date(), transactionType: .income
+        )
 
         account.updateBalance(for: largeTransaction)
 
@@ -520,30 +562,33 @@ final class MomentumFinanceTests: XCTestCase {
         let startTime = Date()
 
         // Create multiple accounts
-        for i in 1...100 {
+        for i in 1 ... 100 {
             let account = FinancialAccount(
                 name: "Account \(i)", balance: Double(i * 100), iconName: "bank",
-                accountType: .checking)
-            modelContext.insert(account)
+                accountType: .checking
+            )
+            self.modelContext.insert(account)
         }
 
         // Create multiple transactions
-        for i in 1...500 {
+        for i in 1 ... 500 {
             let transaction = FinancialTransaction(
                 title: "Transaction \(i)", amount: Double(i), date: Date(),
-                transactionType: i % 2 == 0 ? .income : .expense)
-            modelContext.insert(transaction)
+                transactionType: i % 2 == 0 ? .income : .expense
+            )
+            self.modelContext.insert(transaction)
         }
 
         // Create multiple categories
-        for i in 1...50 {
+        for i in 1 ... 50 {
             let category = ExpenseCategory(
                 name: "Category \(i)", iconName: "circle", colorHex: "#000000",
-                budgetAmount: Double(i * 20))
-            modelContext.insert(category)
+                budgetAmount: Double(i * 20)
+            )
+            self.modelContext.insert(category)
         }
 
-        try modelContext.save()
+        try self.modelContext.save()
 
         let endTime = Date()
         let duration = endTime.timeIntervalSince(startTime)

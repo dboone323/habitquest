@@ -14,25 +14,25 @@ struct ContentView_macOS: View {
     @State private var columnVisibility = NavigationSplitViewVisibility.all
 
     var body: some View {
-        NavigationSplitView(columnVisibility: $columnVisibility) {
+        NavigationSplitView(columnVisibility: self.$columnVisibility) {
             // Sidebar column
-            List(selection: $selectedSidebarItem) {
+            List(selection: self.$selectedSidebarItem) {
                 Section("Main") {
-                    sidebarItem(title: "Dashboard", icon: "house", item: .dashboard)
-                    sidebarItem(title: "Transactions", icon: "creditcard", item: .transactions)
-                    sidebarItem(title: "Budgets", icon: "chart.pie", item: .budgets)
+                    self.sidebarItem(title: "Dashboard", icon: "house", item: .dashboard)
+                    self.sidebarItem(title: "Transactions", icon: "creditcard", item: .transactions)
+                    self.sidebarItem(title: "Budgets", icon: "chart.pie", item: .budgets)
                 }
 
                 Section("Planning") {
-                    sidebarItem(title: "Subscriptions", icon: "calendar.badge.clock", item: .subscriptions)
-                    sidebarItem(title: "Goals & Reports", icon: "chart.bar", item: .goalsAndReports)
+                    self.sidebarItem(title: "Subscriptions", icon: "calendar.badge.clock", item: .subscriptions)
+                    self.sidebarItem(title: "Goals & Reports", icon: "chart.bar", item: .goalsAndReports)
                 }
             }
             .listStyle(.sidebar)
             .frame(minWidth: 220)
             .toolbar {
                 ToolbarItem(placement: .automatic) {
-                    Button(action: toggleSidebar).accessibilityLabel("Button") {
+                    Button(action: self.toggleSidebar).accessibilityLabel("Button") {
                         Image(systemName: "sidebar.left")
                     }
                     .help("Toggle Sidebar")
@@ -41,7 +41,7 @@ struct ContentView_macOS: View {
         } content: {
             // Middle column content (context-sensitive list)
             Group {
-                switch selectedSidebarItem {
+                switch self.selectedSidebarItem {
                 case .dashboard:
                     Features.Dashboard.DashboardListView()
                 case .transactions:
@@ -87,7 +87,7 @@ struct ContentView_macOS: View {
                     }
                 } else {
                     // Default view when no item is selected
-                    switch selectedSidebarItem {
+                    switch self.selectedSidebarItem {
                     case .dashboard:
                         Features.Dashboard.DashboardView()
                     case .transactions:
@@ -116,7 +116,7 @@ struct ContentView_macOS: View {
             .frame(minWidth: 450)
         }
         .navigationSplitViewStyle(.balanced)
-        .frame(minWidth: 1_000, minHeight: 700)
+        .frame(minWidth: 1000, minHeight: 700)
         .macOSOptimizations()
         .onAppear {
             macOSSpecificViews.configureWindow()
@@ -125,7 +125,7 @@ struct ContentView_macOS: View {
 
     // Helper method to create consistent sidebar items
     private func sidebarItem(title: String, icon: String, item: SidebarItem) -> some View {
-        Label(title, systemImage: selectedSidebarItem == item ? "\(icon).fill" : icon)
+        Label(title, systemImage: self.selectedSidebarItem == item ? "\(icon).fill" : icon)
             .tag(item)
     }
 
@@ -154,8 +154,8 @@ struct ListableItem: Identifiable, Hashable {
     /// <#Description#>
     /// - Returns: <#description#>
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(type)
+        hasher.combine(self.id)
+        hasher.combine(self.type)
     }
 
     static func == (lhs: ListableItem, rhs: ListableItem) -> Bool {

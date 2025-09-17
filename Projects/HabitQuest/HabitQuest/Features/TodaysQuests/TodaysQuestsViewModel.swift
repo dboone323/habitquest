@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 import SwiftData
 
 //
@@ -29,7 +29,7 @@ class TodaysQuestsViewModel: ObservableObject {
     /// - Returns: <#description#>
     func setModelContext(_ context: ModelContext) {
         self.modelContext = context
-        loadTodaysHabits()
+        self.loadTodaysHabits()
     }
 
     /// Load habits that are due today based on their frequency
@@ -40,8 +40,8 @@ class TodaysQuestsViewModel: ObservableObject {
 
         do {
             let allHabits = try context.fetch(request)
-            todaysHabits = allHabits.filter { habit in
-                isDueToday(habit)
+            self.todaysHabits = allHabits.filter { habit in
+                self.isDueToday(habit)
             }
         } catch {
             print("Error loading habits: \(error)")
@@ -69,15 +69,15 @@ class TodaysQuestsViewModel: ObservableObject {
         context.insert(newLog)
 
         // Award XP to the player
-        let earnedExperiencePoints = calculateXP(for: habit)
-        awardXP(earnedExperiencePoints)
+        let earnedExperiencePoints = self.calculateXP(for: habit)
+        self.awardXP(earnedExperiencePoints)
 
         // Show completion message
-        completionMessage = "Quest completed! +\(earnedExperiencePoints) XP"
-        showingCompletionAlert = true
+        self.completionMessage = "Quest completed! +\(earnedExperiencePoints) XP"
+        self.showingCompletionAlert = true
 
         // Refresh today's habits
-        loadTodaysHabits()
+        self.loadTodaysHabits()
 
         // Save context
         do {
@@ -129,7 +129,7 @@ class TodaysQuestsViewModel: ObservableObject {
 
         do {
             try context.save()
-            loadTodaysHabits()
+            self.loadTodaysHabits()
         } catch {
             print("Error adding habit: \(error)")
         }

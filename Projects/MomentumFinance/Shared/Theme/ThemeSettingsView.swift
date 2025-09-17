@@ -16,27 +16,27 @@ struct ThemeSettingsView: View {
     var body: some View {
         NavigationStack {
             List {
-                themeModeSection
-                colorPalettePreview
+                self.themeModeSection
+                self.colorPalettePreview
             }
             .navigationTitle("Appearance")
             .toolbar {
                 #if os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done").accessibilityLabel("Button") {
-                        dismiss()
+                        self.dismiss()
                     }
                 }
                 #else
                 ToolbarItem(placement: .primaryAction) {
                     Button("Done").accessibilityLabel("Button") {
-                        dismiss()
+                        self.dismiss()
                     }
                 }
                 #endif
             }
             .onAppear {
-                selectedMode = theme.currentThemeMode
+                self.selectedMode = self.theme.currentThemeMode
             }
         }
     }
@@ -46,26 +46,26 @@ struct ThemeSettingsView: View {
         Section {
             ForEach(Array(ThemeMode.allCases), id: \.self) { mode in
                 Button {
-                    selectedMode = mode
-                    theme.setThemeMode(mode)
+                    self.selectedMode = mode
+                    self.theme.setThemeMode(mode)
                 } label: {
                     HStack {
                         Label {
                             Text(mode.displayName)
                         } icon: {
                             Image(systemName: mode.icon)
-                                .foregroundStyle(theme.accentPrimary)
+                                .foregroundStyle(self.theme.accentPrimary)
                         }
 
                         Spacer()
 
-                        if selectedMode == mode {
+                        if self.selectedMode == mode {
                             Image(systemName: "checkmark")
-                                .foregroundStyle(theme.accentPrimary)
+                                .foregroundStyle(self.theme.accentPrimary)
                         }
                     }
                 }
-                .foregroundStyle(theme.primaryText)
+                .foregroundStyle(self.theme.primaryText)
             }
         } header: {
             Text("Theme Mode")
@@ -80,30 +80,30 @@ struct ThemeSettingsView: View {
             VStack(spacing: 16) {
                 // Background colors preview
                 HStack {
-                    colorBlock(theme.background, name: "Background")
-                    colorBlock(theme.secondaryBackground, name: "Secondary")
-                    colorBlock(theme.cardBackground, name: "Card")
+                    self.colorBlock(self.theme.background, name: "Background")
+                    self.colorBlock(self.theme.secondaryBackground, name: "Secondary")
+                    self.colorBlock(self.theme.cardBackground, name: "Card")
                 }
 
                 // Text colors preview
                 HStack {
-                    colorBlock(theme.primaryText, name: "Primary")
-                    colorBlock(theme.secondaryText, name: "Secondary")
-                    colorBlock(theme.tertiaryText, name: "Tertiary")
+                    self.colorBlock(self.theme.primaryText, name: "Primary")
+                    self.colorBlock(self.theme.secondaryText, name: "Secondary")
+                    self.colorBlock(self.theme.tertiaryText, name: "Tertiary")
                 }
 
                 // Financial colors preview
                 HStack {
-                    colorBlock(theme.income, name: "Income")
-                    colorBlock(theme.expense, name: "Expense")
-                    colorBlock(theme.savings, name: "Savings")
+                    self.colorBlock(self.theme.income, name: "Income")
+                    self.colorBlock(self.theme.expense, name: "Expense")
+                    self.colorBlock(self.theme.savings, name: "Savings")
                 }
 
                 // Budget status colors preview
                 HStack {
-                    colorBlock(theme.budgetUnder, name: "Under")
-                    colorBlock(theme.budgetNear, name: "Near")
-                    colorBlock(theme.budgetOver, name: "Over")
+                    self.colorBlock(self.theme.budgetUnder, name: "Under")
+                    self.colorBlock(self.theme.budgetNear, name: "Near")
+                    self.colorBlock(self.theme.budgetOver, name: "Over")
                 }
             }
             .padding(.vertical, 8)
@@ -123,11 +123,11 @@ struct ThemeSettingsView: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
                         .strokeBorder(Color.gray.opacity(0.2), lineWidth: 1),
-                    )
+                )
 
             Text(name)
                 .font(.caption)
-                .foregroundStyle(theme.primaryText)
+                .foregroundStyle(self.theme.primaryText)
         }
         .frame(maxWidth: .infinity)
     }
@@ -144,17 +144,17 @@ struct ThemeModeOption: View {
     var body: some View {
         HStack {
             Label {
-                Text(mode.displayName)
+                Text(self.mode.displayName)
             } icon: {
-                Image(systemName: mode.icon)
-                    .foregroundStyle(theme.accentPrimary)
+                Image(systemName: self.mode.icon)
+                    .foregroundStyle(self.theme.accentPrimary)
             }
 
             Spacer()
 
-            if isSelected {
+            if self.isSelected {
                 Image(systemName: "checkmark")
-                    .foregroundStyle(theme.accentPrimary)
+                    .foregroundStyle(self.theme.accentPrimary)
             }
         }
     }

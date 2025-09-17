@@ -43,7 +43,7 @@ struct EntityManager {
             iconName: "creditcard.fill"
         )
 
-        modelContext.insert(newAccount)
+        self.modelContext.insert(newAccount)
         return newAccount
     }
 
@@ -77,7 +77,7 @@ struct EntityManager {
             iconName: "folder.fill"
         )
 
-        modelContext.insert(newCategory)
+        self.modelContext.insert(newCategory)
         return newCategory
     }
 }

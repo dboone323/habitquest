@@ -28,66 +28,66 @@ struct DataExportView: View {
     var body: some View {
         NavigationView {
             Form {
-                formatSection
-                dateRangeSection
-                dataSelectionSection
-                exportSection
+                self.formatSection
+                self.dateRangeSection
+                self.dataSelectionSection
+                self.exportSection
             }
             .navigationTitle("Export Data")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.large)
+                .navigationBarTitleDisplayMode(.large)
             #endif
-            .toolbar {
-                #if os(iOS)
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
+                .toolbar {
+                    #if os(iOS)
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button("Cancel") {
+                            self.dismiss()
+                        }
+                        .accessibilityLabel("Cancel")
                     }
-                    .accessibilityLabel("Cancel")
-                }
-                #else
-                ToolbarItem {
-                    Button("Cancel") {
-                        dismiss()
+                    #else
+                    ToolbarItem {
+                        Button("Cancel") {
+                            self.dismiss()
+                        }
+                        .accessibilityLabel("Cancel")
                     }
-                    .accessibilityLabel("Cancel")
+                    #endif
                 }
-                #endif
-            }
-            .sheet(isPresented: $showingShareSheet) {
-                if let url = exportedFileURL {
-                    ShareSheet(activityItems: [url])
+                .sheet(isPresented: self.$showingShareSheet) {
+                    if let url = exportedFileURL {
+                        ShareSheet(activityItems: [url])
+                    }
                 }
-            }
-            .alert("Export Error", isPresented: .constant(exportError != nil)) {
-                Button("OK") {
-                    exportError = nil
+                .alert("Export Error", isPresented: .constant(self.exportError != nil)) {
+                    Button("OK") {
+                        self.exportError = nil
+                    }
+                    .accessibilityLabel("Button")
+                } message: {
+                    if let error = exportError {
+                        Text(error)
+                    }
                 }
-                .accessibilityLabel("Button")
-            } message: {
-                if let error = exportError {
-                    Text(error)
-                }
-            }
         }
     }
 
     private var formatSection: some View {
         Section {
-            Picker("Export Format", selection: $exportFormat) {
+            Picker("Export Format", selection: self.$exportFormat) {
                 ForEach(ExportFormat.allCases, id: \.self) { format in
                     Label(format.displayName, systemImage: format.icon)
                         .tag(format)
                 }
             }
             .pickerStyle(.segmented)
-            .onChange(of: exportFormat) { _, _ in
+            .onChange(of: self.exportFormat) { _, _ in
                 #if os(iOS)
                 HapticManager.shared.selection()
                 #endif
             }
 
-            Text(exportFormat.displayName)
+            Text(self.exportFormat.displayName)
                 .font(.caption)
                 .foregroundColor(.secondary)
         } header: {
@@ -97,23 +97,23 @@ struct DataExportView: View {
 
     private var dateRangeSection: some View {
         Section {
-            Picker("Date Range", selection: $dateRange) {
+            Picker("Date Range", selection: self.$dateRange) {
                 ForEach(DateRange.allCases, id: \.self) { range in
                     Text(range.displayName).tag(range)
                 }
             }
-            .onChange(of: dateRange) { _, _ in
+            .onChange(of: self.dateRange) { _, _ in
                 #if os(iOS)
                 HapticManager.shared.selection()
                 #endif
             }
 
-            if dateRange == .custom {
-                DatePicker("Start Date", selection: $customStartDate, displayedComponents: .date)
-                DatePicker("End Date", selection: $customEndDate, displayedComponents: .date)
+            if self.dateRange == .custom {
+                DatePicker("Start Date", selection: self.$customStartDate, displayedComponents: .date)
+                DatePicker("End Date", selection: self.$customEndDate, displayedComponents: .date)
             }
 
-            Text(dateRangeDescription)
+            Text(self.dateRangeDescription)
                 .font(.caption)
                 .foregroundColor(.secondary)
         } header: {
@@ -123,36 +123,36 @@ struct DataExportView: View {
 
     private var dataSelectionSection: some View {
         Section {
-            Toggle("Transactions", isOn: $includeTransactions)
-                .onChange(of: includeTransactions) { _, _ in
+            Toggle("Transactions", isOn: self.$includeTransactions)
+                .onChange(of: self.includeTransactions) { _, _ in
                     #if os(iOS)
                     HapticManager.shared.lightImpact()
                     #endif
                 }
 
-            Toggle("Accounts", isOn: $includeAccounts)
-                .onChange(of: includeAccounts) { _, _ in
+            Toggle("Accounts", isOn: self.$includeAccounts)
+                .onChange(of: self.includeAccounts) { _, _ in
                     #if os(iOS)
                     HapticManager.shared.lightImpact()
                     #endif
                 }
 
-            Toggle("Budgets", isOn: $includeBudgets)
-                .onChange(of: includeBudgets) { _, _ in
+            Toggle("Budgets", isOn: self.$includeBudgets)
+                .onChange(of: self.includeBudgets) { _, _ in
                     #if os(iOS)
                     HapticManager.shared.lightImpact()
                     #endif
                 }
 
-            Toggle("Subscriptions", isOn: $includeSubscriptions)
-                .onChange(of: includeSubscriptions) { _, _ in
+            Toggle("Subscriptions", isOn: self.$includeSubscriptions)
+                .onChange(of: self.includeSubscriptions) { _, _ in
                     #if os(iOS)
                     HapticManager.shared.lightImpact()
                     #endif
                 }
 
-            Toggle("Savings Goals", isOn: $includeGoals)
-                .onChange(of: includeGoals) { _, _ in
+            Toggle("Savings Goals", isOn: self.$includeGoals)
+                .onChange(of: self.includeGoals) { _, _ in
                     #if os(iOS)
                     HapticManager.shared.lightImpact()
                     #endif
@@ -168,26 +168,26 @@ struct DataExportView: View {
         Section {
             Button(action: {
                 Task {
-                    await exportData()
+                    await self.exportData()
                 }
             }) {
                 HStack {
-                    if isExporting {
+                    if self.isExporting {
                         ProgressView()
                             .scaleEffect(0.8)
                     } else {
                         Image(systemName: "square.and.arrow.up")
                     }
 
-                    Text(isExporting ? "Exporting..." : "Export Data")
+                    Text(self.isExporting ? "Exporting..." : "Export Data")
                 }
             }
-            .disabled(isExporting || !hasDataSelected)
+            .disabled(self.isExporting || !self.hasDataSelected)
             #if os(iOS)
-            .hapticFeedback(.medium, trigger: isExporting)
+                .hapticFeedback(.medium, trigger: self.isExporting)
             #endif
         } footer: {
-            if !hasDataSelected {
+            if !self.hasDataSelected {
                 Text("Please select at least one data type to export.")
                     .foregroundColor(.red)
             }
@@ -195,20 +195,20 @@ struct DataExportView: View {
     }
 
     private var hasDataSelected: Bool {
-        includeTransactions || includeAccounts || includeBudgets || includeSubscriptions
-            || includeGoals
+        self.includeTransactions || self.includeAccounts || self.includeBudgets || self.includeSubscriptions
+            || self.includeGoals
     }
 
     private var dateRangeDescription: String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
 
-        let (startDate, endDate) = getDateRange()
+        let (startDate, endDate) = self.getDateRange()
         return "From \(formatter.string(from: startDate)) to \(formatter.string(from: endDate))"
     }
 
     private func getDateRange() -> (start: Date, end: Date) {
-        switch dateRange {
+        switch self.dateRange {
         case .lastWeek:
             let start = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
             return (start, Date())
@@ -227,20 +227,20 @@ struct DataExportView: View {
         case .allTime:
             return (Date.distantPast, Date())
         case .custom:
-            return (customStartDate, customEndDate)
+            return (self.customStartDate, self.customEndDate)
         }
     }
 
     @MainActor
     private func exportData() async {
-        isExporting = true
+        self.isExporting = true
         #if os(iOS)
         HapticManager.shared.mediumImpact()
         #endif
 
         do {
             let exporter = DataExporter(modelContainer: modelContext.container)
-            let (startDate, endDate) = getDateRange()
+            let (startDate, endDate) = self.getDateRange()
 
             let exportSettings = ExportSettings(
                 format: exportFormat,
@@ -251,19 +251,19 @@ struct DataExportView: View {
             )
 
             let fileURL = try await exporter.exportData(settings: exportSettings)
-            exportedFileURL = fileURL
-            showingShareSheet = true
+            self.exportedFileURL = fileURL
+            self.showingShareSheet = true
             #if os(iOS)
             HapticManager.shared.success()
             #endif
         } catch {
-            exportError = error.localizedDescription
+            self.exportError = error.localizedDescription
             #if os(iOS)
             HapticManager.shared.error()
             #endif
         }
 
-        isExporting = false
+        self.isExporting = false
     }
 }
 
@@ -279,7 +279,7 @@ struct ShareSheet: UIViewControllerRepresentable {
         let controller = UIActivityViewController(
             activityItems: activityItems,
             applicationActivities: nil,
-            )
+        )
         return controller
     }
 

@@ -78,7 +78,7 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
     }
 
     // Cash flow forecast
-    if !recentMonthlyIncomes.isEmpty && !recentMonthlyExpenses.isEmpty {
+    if !recentMonthlyIncomes.isEmpty, !recentMonthlyExpenses.isEmpty {
         let avgIncome = recentMonthlyIncomes.reduce(0, +) / Double(recentMonthlyIncomes.count)
         let avgExpenses = recentMonthlyExpenses.reduce(0, +) / Double(recentMonthlyExpenses.count)
         let netCashFlow = avgIncome - avgExpenses

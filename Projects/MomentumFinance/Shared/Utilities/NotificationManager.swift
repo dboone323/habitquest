@@ -1,7 +1,7 @@
 import Foundation
+import os
 import OSLog
 import SwiftData
-import os
 
 @preconcurrency import UserNotifications
 
@@ -30,7 +30,8 @@ class NotificationManager: ObservableObject {
 
     private let center = UNUserNotificationCenter.current()
     private let logger = OSLog(
-        subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance", category: "Notifications")
+        subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance", category: "Notifications"
+    )
 
     // Component delegates
     private let permissionManager: NotificationPermissionManager
@@ -40,20 +41,20 @@ class NotificationManager: ObservableObject {
 
     private init() {
         // Initialize component delegates
-        permissionManager = NotificationPermissionManager(logger: logger)
-        budgetScheduler = BudgetNotificationScheduler(logger: logger)
-        subscriptionScheduler = SubscriptionNotificationScheduler(logger: logger)
-        goalScheduler = GoalNotificationScheduler(logger: logger)
+        self.permissionManager = NotificationPermissionManager(logger: self.logger)
+        self.budgetScheduler = BudgetNotificationScheduler(logger: self.logger)
+        self.subscriptionScheduler = SubscriptionNotificationScheduler(logger: self.logger)
+        self.goalScheduler = GoalNotificationScheduler(logger: self.logger)
 
-        checkNotificationPermission()
-        setupNotificationCategories()
+        self.checkNotificationPermission()
+        self.setupNotificationCategories()
     }
 
     // MARK: - Permission Management (Delegate to PermissionManager)
 
     func requestNotificationPermission() async {
         let granted = await permissionManager.requestNotificationPermission()
-        isNotificationPermissionGranted = granted
+        self.isNotificationPermissionGranted = granted
     }
 
     func checkNotificationPermission() {
@@ -66,30 +67,30 @@ class NotificationManager: ObservableObject {
     // MARK: - Smart Budget Notifications (Delegate to BudgetScheduler)
 
     func schedulebudgetWarningNotifications(for budgets: [Budget]) {
-        guard isNotificationPermissionGranted else { return }
-        budgetScheduler.scheduleWarningNotifications(for: budgets)
+        guard self.isNotificationPermissionGranted else { return }
+        self.budgetScheduler.scheduleWarningNotifications(for: budgets)
     }
 
     // MARK: - Subscription Due Date Notifications (Delegate to SubscriptionScheduler)
 
     func scheduleSubscriptionNotifications(for subscriptions: [Subscription]) {
-        guard isNotificationPermissionGranted else { return }
-        subscriptionScheduler.scheduleNotifications(for: subscriptions)
+        guard self.isNotificationPermissionGranted else { return }
+        self.subscriptionScheduler.scheduleNotifications(for: subscriptions)
     }
 
     // MARK: - Goal Milestone Notifications (Delegate to GoalScheduler)
 
     func checkGoalMilestones(for goals: [SavingsGoal]) {
-        guard isNotificationPermissionGranted else { return }
-        goalScheduler.checkMilestones(for: goals)
+        guard self.isNotificationPermissionGranted else { return }
+        self.goalScheduler.checkMilestones(for: goals)
     }
 
     // MARK: - Notification Management
 
     func clearAllNotifications() {
-        center.removeAllPendingNotificationRequests()
-        center.removeAllDeliveredNotifications()
-        pendingNotifications.removeAll()
+        self.center.removeAllPendingNotificationRequests()
+        self.center.removeAllDeliveredNotifications()
+        self.pendingNotifications.removeAll()
     }
 
     func clearNotifications(ofType type: String) {
@@ -97,12 +98,12 @@ class NotificationManager: ObservableObject {
             let requests = await center.pendingNotificationRequests()
             let identifiersToRemove =
                 requests
-                .filter { request in
-                    (request.content.userInfo["type"] as? String) == type
-                }
-                .map(\.identifier)
+                    .filter { request in
+                        (request.content.userInfo["type"] as? String) == type
+                    }
+                    .map(\.identifier)
 
-            center.removePendingNotificationRequests(withIdentifiers: identifiersToRemove)
+            self.center.removePendingNotificationRequests(withIdentifiers: identifiersToRemove)
         }
     }
 

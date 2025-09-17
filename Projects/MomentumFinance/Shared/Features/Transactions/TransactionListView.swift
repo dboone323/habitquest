@@ -26,16 +26,16 @@ extension Features.Transactions {
 
         var body: some View {
             List {
-                ForEach(Array(groupedTransactions.enumerated()), id: \.element.key) {
+                ForEach(Array(self.groupedTransactions.enumerated()), id: \.element.key) {
                     _, group in
                     Section {
                         ForEach(group.value, id: \.persistentModelID) { transaction in
                             Features.Transactions.TransactionRowView(transaction: transaction) {
-                                onTransactionTapped(transaction)
+                                self.onTransactionTapped(transaction)
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                 Button("Delete", role: .destructive).accessibilityLabel("Button") {
-                                    onDeleteTransaction(transaction)
+                                    self.onDeleteTransaction(transaction)
                                 }
                             }
                         }

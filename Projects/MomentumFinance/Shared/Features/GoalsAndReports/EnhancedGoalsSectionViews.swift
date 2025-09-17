@@ -29,27 +29,27 @@ extension Features.GoalsAndReports {
         }
 
         private var activeGoals: [SavingsGoal] {
-            goals.filter { !$0.isCompleted }
+            self.goals.filter { !$0.isCompleted }
         }
 
         private var completedGoals: [SavingsGoal] {
-            goals.filter(\.isCompleted)
+            self.goals.filter(\.isCompleted)
         }
 
         private var totalSaved: Double {
-            goals.reduce(0) { $0 + $1.currentAmount }
+            self.goals.reduce(0) { $0 + $1.currentAmount }
         }
 
         private var totalTarget: Double {
-            goals.reduce(0) { $0 + $1.targetAmount }
+            self.goals.reduce(0) { $0 + $1.targetAmount }
         }
 
         var body: some View {
             VStack(spacing: 20) {
-                if goals.isEmpty {
-                    emptyGoalsView
+                if self.goals.isEmpty {
+                    self.emptyGoalsView
                 } else {
-                    goalsContentView
+                    self.goalsContentView
                 }
             }
         }
@@ -76,7 +76,7 @@ extension Features.GoalsAndReports {
                 }
 
                 Button(
-                    action: { showingAddGoal = true },
+                    action: { self.showingAddGoal = true },
                     label: {
                         Label("Create Your First Goal", systemImage: "target")
                             .font(.headline)
@@ -87,28 +87,28 @@ extension Features.GoalsAndReports {
                                     gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
                                     startPoint: .leading,
                                     endPoint: .trailing,
-                                    ),
-                                )
+                                ),
+                            )
                             .cornerRadius(12)
                     },
-                    )
+                )
 
                 Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(backgroundColor)
+            .background(self.backgroundColor)
         }
 
         private var goalsContentView: some View {
             ScrollView {
                 LazyVStack(spacing: 16) {
-                    summarySection
-                    activeGoalsSection
-                    completedGoalsSection
+                    self.summarySection
+                    self.activeGoalsSection
+                    self.completedGoalsSection
                 }
                 .padding()
             }
-            .background(backgroundColor)
+            .background(self.backgroundColor)
         }
 
         private var summarySection: some View {
@@ -120,7 +120,7 @@ extension Features.GoalsAndReports {
                             .fontWeight(.semibold)
                             .foregroundColor(.primary)
 
-                        Text("\(activeGoals.count) active • \(completedGoals.count) completed")
+                        Text("\(self.activeGoals.count) active • \(self.completedGoals.count) completed")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -134,7 +134,7 @@ extension Features.GoalsAndReports {
                             .font(.subheadline)
                             .foregroundColor(.secondary)
 
-                        Text(totalSaved.formatted(.currency(code: "USD")))
+                        Text(self.totalSaved.formatted(.currency(code: "USD")))
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(.green)
@@ -147,14 +147,14 @@ extension Features.GoalsAndReports {
                             .font(.subheadline)
                             .foregroundColor(.secondary)
 
-                        Text(totalTarget.formatted(.currency(code: "USD")))
+                        Text(self.totalTarget.formatted(.currency(code: "USD")))
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(.blue)
                     }
                 }
 
-                if totalTarget > 0 {
+                if self.totalTarget > 0 {
                     VStack(spacing: 8) {
                         HStack {
                             Text("Overall Progress")
@@ -163,13 +163,13 @@ extension Features.GoalsAndReports {
 
                             Spacer()
 
-                            Text("\(Int((totalSaved / totalTarget) * 100))%")
+                            Text("\(Int((self.totalSaved / self.totalTarget) * 100))%")
                                 .font(.headline)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.blue)
                         }
 
-                        ProgressView(value: totalSaved / totalTarget)
+                        ProgressView(value: self.totalSaved / self.totalTarget)
                             .progressViewStyle(LinearProgressViewStyle(tint: .blue))
                             .scaleEffect(x: 1, y: 2, anchor: .center)
                     }
@@ -185,27 +185,27 @@ extension Features.GoalsAndReports {
                             ]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing,
-                            ),
-                        )
+                        ),
+                    )
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
                             .stroke(Color.blue.opacity(0.2), lineWidth: 1),
-                        ),
-                )
+                    ),
+            )
         }
 
         @ViewBuilder private var activeGoalsSection: some View {
-            if !activeGoals.isEmpty {
+            if !self.activeGoals.isEmpty {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Active Goals")
                         .font(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
 
-                    ForEach(activeGoals, id: \.name) { goal in
+                    ForEach(self.activeGoals, id: \.name) { goal in
                         EnhancedSavingsGoalCard(goal: goal)
                             .onTapGesture {
-                                selectedGoal = goal
+                                self.selectedGoal = goal
                             }
                     }
                 }
@@ -213,17 +213,17 @@ extension Features.GoalsAndReports {
         }
 
         @ViewBuilder private var completedGoalsSection: some View {
-            if !completedGoals.isEmpty {
+            if !self.completedGoals.isEmpty {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Completed Goals")
                         .font(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
 
-                    ForEach(completedGoals, id: \.name) { goal in
+                    ForEach(self.completedGoals, id: \.name) { goal in
                         EnhancedSavingsGoalCard(goal: goal)
                             .onTapGesture {
-                                selectedGoal = goal
+                                self.selectedGoal = goal
                             }
                     }
                 }
@@ -250,7 +250,7 @@ extension Features.GoalsAndReports {
                 // Header
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(goal.name)
+                        Text(self.goal.name)
                             .font(.headline)
                             .fontWeight(.semibold)
                             .foregroundColor(.primary)
@@ -272,7 +272,7 @@ extension Features.GoalsAndReports {
 
                     Spacer()
 
-                    if goal.isCompleted {
+                    if self.goal.isCompleted {
                         HStack(spacing: 4) {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.title3)
@@ -284,7 +284,7 @@ extension Features.GoalsAndReports {
                                 .foregroundColor(.green)
                         }
                     } else {
-                        Text("\(Int(goal.progressPercentage * 100))%")
+                        Text("\(Int(self.goal.progressPercentage * 100))%")
                             .font(.title3)
                             .fontWeight(.bold)
                             .foregroundColor(.blue)
@@ -296,8 +296,8 @@ extension Features.GoalsAndReports {
                                     .overlay(
                                         Capsule()
                                             .stroke(Color.blue.opacity(0.3), lineWidth: 1),
-                                        ),
-                                )
+                                    ),
+                            )
                     }
                 }
 
@@ -309,7 +309,7 @@ extension Features.GoalsAndReports {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
 
-                            Text(goal.formattedCurrentAmount)
+                            Text(self.goal.formattedCurrentAmount)
                                 .font(.title3)
                                 .fontWeight(.bold)
                                 .foregroundColor(.green)
@@ -318,14 +318,14 @@ extension Features.GoalsAndReports {
                         Spacer()
 
                         VStack(alignment: .center, spacing: 2) {
-                            Text(goal.isCompleted ? "Achieved!" : "Remaining")
+                            Text(self.goal.isCompleted ? "Achieved!" : "Remaining")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
 
-                            Text(goal.isCompleted ? "🎉" : goal.formattedRemainingAmount)
+                            Text(self.goal.isCompleted ? "🎉" : self.goal.formattedRemainingAmount)
                                 .font(.title3)
                                 .fontWeight(.bold)
-                                .foregroundColor(goal.isCompleted ? .green : .orange)
+                                .foregroundColor(self.goal.isCompleted ? .green : .orange)
                         }
 
                         Spacer()
@@ -335,7 +335,7 @@ extension Features.GoalsAndReports {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
 
-                            Text(goal.formattedTargetAmount)
+                            Text(self.goal.formattedTargetAmount)
                                 .font(.title3)
                                 .fontWeight(.bold)
                                 .foregroundColor(.blue)
@@ -353,19 +353,20 @@ extension Features.GoalsAndReports {
                                 .fill(
                                     LinearGradient(
                                         gradient: Gradient(
-                                            colors: goal.isCompleted
+                                            colors: self.goal.isCompleted
                                                 ? [.green, .green.opacity(0.8)]
-                                                : [.blue, .blue.opacity(0.7)]),
+                                                : [.blue, .blue.opacity(0.7)]
+                                        ),
                                         startPoint: .leading,
                                         endPoint: .trailing,
-                                        ),
-                                    )
+                                    ),
+                                )
                                 .frame(
-                                    width: geometry.size.width * min(goal.progressPercentage, 1.0),
+                                    width: geometry.size.width * min(self.goal.progressPercentage, 1.0),
                                     height: 12
                                 )
                                 .animation(
-                                    .easeInOut(duration: 0.5), value: goal.progressPercentage
+                                    .easeInOut(duration: 0.5), value: self.goal.progressPercentage
                                 )
                         }
                     }
@@ -373,7 +374,7 @@ extension Features.GoalsAndReports {
                 }
 
                 // Details Row
-                if !goal.isCompleted {
+                if !self.goal.isCompleted {
                     HStack {
                         if let daysRemaining = goal.daysRemaining {
                             HStack(spacing: 4) {
@@ -406,9 +407,9 @@ extension Features.GoalsAndReports {
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(backgroundColor)
+                    .fill(self.backgroundColor)
                     .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
-                )
+            )
         }
     }
 }

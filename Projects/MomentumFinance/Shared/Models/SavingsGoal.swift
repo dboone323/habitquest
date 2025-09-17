@@ -41,18 +41,18 @@ public final class SavingsGoal {
 
     /// The progress toward the goal as a percentage (0.0 to 1.0).
     var progressPercentage: Double {
-        guard targetAmount > 0 else { return 0.0 }
-        return min(1.0, currentAmount / targetAmount)
+        guard self.targetAmount > 0 else { return 0.0 }
+        return min(1.0, self.currentAmount / self.targetAmount)
     }
 
     /// The remaining amount needed to reach the goal.
     var remainingAmount: Double {
-        max(0, targetAmount - currentAmount)
+        max(0, self.targetAmount - self.currentAmount)
     }
 
     /// Whether the goal has been achieved.
     var isCompleted: Bool {
-        currentAmount >= targetAmount
+        self.currentAmount >= self.targetAmount
     }
 
     /// The target amount formatted as a currency string.
@@ -60,7 +60,7 @@ public final class SavingsGoal {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: targetAmount)) ?? "$0.00"
+        return formatter.string(from: NSNumber(value: self.targetAmount)) ?? "$0.00"
     }
 
     /// The current amount formatted as a currency string.
@@ -68,7 +68,7 @@ public final class SavingsGoal {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: currentAmount)) ?? "$0.00"
+        return formatter.string(from: NSNumber(value: self.currentAmount)) ?? "$0.00"
     }
 
     /// The remaining amount formatted as a currency string.
@@ -76,19 +76,19 @@ public final class SavingsGoal {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: remainingAmount)) ?? "$0.00"
+        return formatter.string(from: NSNumber(value: self.remainingAmount)) ?? "$0.00"
     }
 
     /// Adds money to the savings goal.
     /// - Parameter amount: The amount to add.
     func addFunds(_ amount: Double) {
-        currentAmount += amount
+        self.currentAmount += amount
     }
 
     /// Removes money from the savings goal.
     /// - Parameter amount: The amount to remove.
     func removeFunds(_ amount: Double) {
-        currentAmount = max(0, currentAmount - amount)
+        self.currentAmount = max(0, self.currentAmount - amount)
     }
 
     /// The number of days remaining until the target date (if set).
@@ -101,6 +101,6 @@ public final class SavingsGoal {
 
     /// Compatibility accessor: code expects `title` on goals; maps to `name`.
     var title: String {
-        name
+        self.name
     }
 }

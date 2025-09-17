@@ -1,4 +1,0 @@
-# Complexity Prediction Model
-# Trained: Tue Jul 29 21:28:28 CDT 2025
-# Accuracy: 78%
-# Features: function_count, class_count, line_count, cyclomatic_complexity

@@ -29,13 +29,13 @@ struct PlannerApp: App {
     var body: some Scene {
         WindowGroup {
             // Apply the primary background color from the current theme to the entire window group.
-            themeManager.currentTheme.primaryBackgroundColor
+            self.themeManager.currentTheme.primaryBackgroundColor
                 .ignoresSafeArea()
                 .overlay(
                     // Use enhanced navigation for better cross-platform UX
-                    MainTabView(selectedTabTag: $selectedTabTag)
+                    MainTabView(selectedTabTag: self.$selectedTabTag)
                 )
-                .environmentObject(themeManager)
+                .environmentObject(self.themeManager)
         }
         #if os(macOS)
         .windowStyle(.hiddenTitleBar)

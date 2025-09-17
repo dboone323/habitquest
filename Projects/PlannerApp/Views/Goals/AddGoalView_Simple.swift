@@ -10,20 +10,20 @@ struct AddGoalView: View {
     @State private var targetDate = Date()
 
     private var isFormValid: Bool {
-        !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-            !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !self.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+            !self.description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     var body: some View {
         NavigationView {
             Form {
                 Section("Goal Details") {
-                    TextField("Goal Title", text: $title).accessibilityLabel("Text Field")
+                    TextField("Goal Title", text: self.$title).accessibilityLabel("Text Field")
 
-                    TextField("Description", text: $description, axis: .vertical).accessibilityLabel("Text Field")
+                    TextField("Description", text: self.$description, axis: .vertical).accessibilityLabel("Text Field")
                         .lineLimit(3 ... 6)
 
-                    DatePicker("Target Date", selection: $targetDate, displayedComponents: .date)
+                    DatePicker("Target Date", selection: self.$targetDate, displayedComponents: .date)
                 }
             }
             .navigationTitle("New Goal")
@@ -31,16 +31,16 @@ struct AddGoalView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel").accessibilityLabel("Button") {
-                        dismiss()
+                        self.dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save").accessibilityLabel("Button") {
-                        saveGoal()
-                        dismiss()
+                        self.saveGoal()
+                        self.dismiss()
                     }
-                    .disabled(!isFormValid)
+                    .disabled(!self.isFormValid)
                 }
             }
         }
@@ -49,11 +49,11 @@ struct AddGoalView: View {
     private func saveGoal() {
         let newGoal = Goal(
             title: title.trimmingCharacters(in: .whitespacesAndNewlines),
-            description: description.trimmingCharacters(in: .whitespacesAndNewlines),
-            targetDate: targetDate
+            description: self.description.trimmingCharacters(in: .whitespacesAndNewlines),
+            targetDate: self.targetDate
         )
-        goals.append(newGoal)
-        GoalDataManager.shared.save(goals: goals)
+        self.goals.append(newGoal)
+        GoalDataManager.shared.save(goals: self.goals)
     }
 }
 

@@ -8,7 +8,6 @@ import SwiftUI
 // Include AppSettingKeys from Utilities directory
 
 class ThemeManager: ObservableObject {
-
     // Published property holding the currently active theme. Views observe this.
     // Initialize by finding the theme matching the name currently stored in UserDefaults.
     @Published var currentTheme: Theme = .availableThemes.first {
@@ -20,21 +19,21 @@ class ThemeManager: ObservableObject {
     // the `didSet` observer calls `updateCurrentTheme`.
     @AppStorage(AppSettingKeys.themeColorName) var currentThemeName: String = Theme.defaultTheme.name {
         didSet {
-            updateCurrentTheme()
+            self.updateCurrentTheme()
         }
     }
 
     init() {
         // Initial theme is set by the @Published property initializer above.
         // This ensures the theme is correct even before `selectedThemeName.didSet` is first called.
-        print("ThemeManager initialized. Current theme loaded: \(currentTheme.name)")
+        print("ThemeManager initialized. Current theme loaded: \(self.currentTheme.name)")
     }
 
     // Finds the Theme struct corresponding to the name stored in `currentThemeName`
     // and updates the `currentTheme` published property if it has changed.
     private func updateCurrentTheme() {
         // Find the theme matching the name stored in `currentThemeName`.
-        let newTheme = Theme.availableThemes.first { $0.name == currentThemeName } ?? Theme.defaultTheme
+        let newTheme = Theme.availableThemes.first { $0.name == self.currentThemeName } ?? Theme.defaultTheme
 
         // Only update the published property if the theme actually changed.
         // This prevents unnecessary UI refreshes if the picker selects the current theme again.
@@ -52,7 +51,7 @@ class ThemeManager: ObservableObject {
 
     // Manually set a theme (used by ThemePreviewView)
     func setTheme(_ theme: Theme) {
-        currentThemeName = theme.name
+        self.currentThemeName = theme.name
         // The didSet observer will trigger updateCurrentTheme automatically
     }
 }

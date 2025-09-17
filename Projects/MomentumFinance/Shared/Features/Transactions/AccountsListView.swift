@@ -7,13 +7,13 @@ import SwiftUI
 extension Features.Transactions {
     struct AccountsListView: View {
         #if canImport(SwiftData)
-            #if canImport(SwiftData)
-                private var accounts: [FinancialAccount] = []
-            #else
-                private var accounts: [FinancialAccount] = []
-            #endif
+        #if canImport(SwiftData)
+        private var accounts: [FinancialAccount] = []
         #else
-            private var accounts: [FinancialAccount] = []
+        private var accounts: [FinancialAccount] = []
+        #endif
+        #else
+        private var accounts: [FinancialAccount] = []
         #endif
 
         let categories: [ExpenseCategory]
@@ -33,27 +33,28 @@ extension Features.Transactions {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Total Balance")
                                 .font(.headline)
-                            Text(formattedCurrency(totalBalance))
+                            Text(self.formattedCurrency(self.totalBalance))
                                 .font(.title)
                                 .fontWeight(.bold)
-                                .foregroundColor(totalBalance >= 0 ? .primary : .red)
+                                .foregroundColor(self.totalBalance >= 0 ? .primary : .red)
                         }
                         Spacer()
                     }
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(backgroundColorForPlatform())
+                            .fill(self.backgroundColorForPlatform())
                             .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
                     )
 
                     // Account Cards
-                    ForEach(accounts) { account in
+                    ForEach(self.accounts) { account in
                         NavigationLink(
                             destination: AccountDetailView(
-                                account: account, categories: categories, accounts: accountsList)
+                                account: account, categories: self.categories, accounts: self.accountsList
+                            )
                         ) {
-                            accountCard(for: account)
+                            self.accountCard(for: account)
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
@@ -78,7 +79,7 @@ extension Features.Transactions {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(account.name)
                         .font(.headline)
-                    Text("Last updated \(formatDate(account.createdDate))")
+                    Text("Last updated \(self.formatDate(account.createdDate))")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -86,27 +87,27 @@ extension Features.Transactions {
                 Spacer()
 
                 // Balance
-                Text(formattedCurrency(account.balance))
+                Text(self.formattedCurrency(account.balance))
                     .font(.headline)
                     .foregroundColor(account.balance >= 0 ? .primary : .red)
             }
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(backgroundColorForPlatform())
+                    .fill(self.backgroundColorForPlatform())
                     .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
             )
         }
 
         private var totalBalance: Double {
-            accounts.reduce(0) { $0 + $1.balance }
+            self.accounts.reduce(0) { $0 + $1.balance }
         }
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #else
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #endif
         }
 

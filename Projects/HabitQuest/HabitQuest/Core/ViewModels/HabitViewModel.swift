@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 import SwiftData
 import SwiftUI
 
@@ -12,7 +12,6 @@ import SwiftUI
 @MainActor
 @Observable
 public class HabitViewModel: BaseViewModel {
-
     /// State struct representing the current UI state for habits.
     public struct State {
         /// The list of all loaded habits.
@@ -29,8 +28,9 @@ public class HabitViewModel: BaseViewModel {
         case loadHabits
         /// Create a new habit with the given parameters.
         case createHabit(
-                name: String, description: String, frequency: HabitFrequency, category: HabitCategory,
-                difficulty: HabitDifficulty)
+            name: String, description: String, frequency: HabitFrequency, category: HabitCategory,
+            difficulty: HabitDifficulty
+        )
         /// Mark a habit as completed for today.
         case completeHabit(Habit)
         /// Delete a habit (soft delete).
@@ -53,14 +53,14 @@ public class HabitViewModel: BaseViewModel {
 
     /// Initializes the HabitViewModel and loads all habits.
     public init() {
-        handle(.loadHabits)
+        self.handle(.loadHabits)
     }
 
     /// Sets the model context for data access and reloads habits.
     /// - Parameter context: The SwiftData model context to use.
     func setModelContext(_ context: ModelContext) {
         self.modelContext = context
-        handle(.loadHabits)
+        self.handle(.loadHabits)
     }
 
     // MARK: - Public Methods
@@ -70,37 +70,38 @@ public class HabitViewModel: BaseViewModel {
     public func handle(_ action: Action) {
         switch action {
         case .loadHabits:
-            loadHabits()
-        case .createHabit(let name, let description, let frequency, let category, let difficulty):
-            createHabit(
+            self.loadHabits()
+        case let .createHabit(name, description, frequency, category, difficulty):
+            self.createHabit(
                 name: name, description: description, frequency: frequency, category: category,
-                difficulty: difficulty)
-        case .completeHabit(let habit):
-            completeHabit(habit)
-        case .deleteHabit(let habit):
-            deleteHabit(habit)
-        case .setSearchText(let text):
-            state.searchText = text
-        case .setCategory(let category):
-            state.selectedCategory = category
+                difficulty: difficulty
+            )
+        case let .completeHabit(habit):
+            self.completeHabit(habit)
+        case let .deleteHabit(habit):
+            self.deleteHabit(habit)
+        case let .setSearchText(text):
+            self.state.searchText = text
+        case let .setCategory(category):
+            self.state.selectedCategory = category
         }
     }
 
     /// Loads all active habits from the data store and updates state.
     private func loadHabits() {
         guard let context = modelContext else { return }
-        isLoading = true
-        errorMessage = nil
+        self.isLoading = true
+        self.errorMessage = nil
         do {
             let descriptor = FetchDescriptor<Habit>(
                 predicate: #Predicate { $0.isActive },
                 sortBy: [SortDescriptor(\.creationDate, order: .reverse)]
             )
-            state.habits = try context.fetch(descriptor)
+            self.state.habits = try context.fetch(descriptor)
         } catch {
             setError(AppError.dataError("Failed to load habits: \(error.localizedDescription)"))
         }
-        isLoading = false
+        self.isLoading = false
     }
 
     /// Creates a new habit and saves it to the data store.
@@ -115,7 +116,7 @@ public class HabitViewModel: BaseViewModel {
         difficulty: HabitDifficulty
     ) {
         guard let context = modelContext else { return }
-        let xpValue = calculateXPValue(for: difficulty, frequency: frequency)
+        let xpValue = self.calculateXPValue(for: difficulty, frequency: frequency)
         let newHabit = Habit(
             name: name,
             habitDescription: description,
@@ -127,7 +128,7 @@ public class HabitViewModel: BaseViewModel {
         context.insert(newHabit)
         do {
             try context.save()
-            loadHabits()
+            self.loadHabits()
         } catch {
             setError(AppError.dataError("Failed to create habit: \(error.localizedDescription)"))
         }
@@ -140,10 +141,10 @@ public class HabitViewModel: BaseViewModel {
         if habit.isCompletedToday { return }
         let log = HabitLog(habit: habit, isCompleted: true)
         context.insert(log)
-        updateStreak(for: habit)
+        self.updateStreak(for: habit)
         do {
             try context.save()
-            loadHabits()
+            self.loadHabits()
         } catch {
             setError(AppError.dataError("Failed to complete habit: \(error.localizedDescription)"))
         }
@@ -156,7 +157,7 @@ public class HabitViewModel: BaseViewModel {
         habit.isActive = false
         do {
             try context.save()
-            loadHabits()
+            self.loadHabits()
         } catch {
             setError(AppError.dataError("Failed to delete habit: \(error.localizedDescription)"))
         }
@@ -164,14 +165,14 @@ public class HabitViewModel: BaseViewModel {
 
     /// Returns the list of habits filtered by search text and selected category.
     var filteredHabits: [Habit] {
-        var filtered = state.habits
+        var filtered = self.state.habits
         if let category = state.selectedCategory {
             filtered = filtered.filter { $0.category == category }
         }
-        if !state.searchText.isEmpty {
+        if !self.state.searchText.isEmpty {
             filtered = filtered.filter { habit in
-                habit.name.localizedCaseInsensitiveContains(state.searchText)
-                    || habit.habitDescription.localizedCaseInsensitiveContains(state.searchText)
+                habit.name.localizedCaseInsensitiveContains(self.state.searchText)
+                    || habit.habitDescription.localizedCaseInsensitiveContains(self.state.searchText)
             }
         }
         return filtered
@@ -179,14 +180,14 @@ public class HabitViewModel: BaseViewModel {
 
     /// Returns the list of habits that need to be completed today.
     var todaysHabits: [Habit] {
-        return state.habits.filter { habit in
+        self.state.habits.filter { habit in
             switch habit.frequency {
             case .daily:
-                return !habit.isCompletedToday
+                !habit.isCompletedToday
             case .weekly:
-                return !isCompletedThisWeek(habit)
+                !self.isCompletedThisWeek(habit)
             case .custom:
-                return !habit.isCompletedToday
+                !habit.isCompletedToday
             }
         }
     }
@@ -195,7 +196,7 @@ public class HabitViewModel: BaseViewModel {
     var todaysXP: Int {
         let today = Date()
         let calendar = Calendar.current
-        return state.habits.compactMap { habit in
+        return self.state.habits.compactMap { habit in
             habit.logs.filter { log in
                 calendar.isDate(log.completionDate, inSameDayAs: today) && log.isCompleted
             }.first?.habit?.xpValue
@@ -210,11 +211,10 @@ public class HabitViewModel: BaseViewModel {
     ///   - frequency: The frequency of the habit.
     /// - Returns: The calculated XP value.
     private func calculateXPValue(for difficulty: HabitDifficulty, frequency: HabitFrequency) -> Int {
-        let baseXP: Int
-        switch frequency {
-        case .daily: baseXP = 10
-        case .weekly: baseXP = 50
-        case .custom: baseXP = 25
+        let baseXP = switch frequency {
+        case .daily: 10
+        case .weekly: 50
+        case .custom: 25
         }
 
         return baseXP * difficulty.xpMultiplier
@@ -231,7 +231,7 @@ public class HabitViewModel: BaseViewModel {
         if wasCompletedYesterday || habit.streak == 0 {
             habit.streak += 1
         } else {
-            habit.streak = 1  // Reset streak if there was a gap
+            habit.streak = 1 // Reset streak if there was a gap
         }
     }
 

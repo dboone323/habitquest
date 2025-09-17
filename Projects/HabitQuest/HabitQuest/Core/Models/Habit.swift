@@ -85,11 +85,11 @@ public final class Habit {
                 to: Date()
             ) ?? Date()
 
-        let recentLogs = logs.filter { $0.completionDate >= thirtyDaysAgo }
+        let recentLogs = self.logs.filter { $0.completionDate >= thirtyDaysAgo }
 
         guard !recentLogs.isEmpty else { return 0.0 }
 
-        let completedCount = recentLogs.filter { $0.isCompleted }.count
+        let completedCount = recentLogs.count(where: { $0.isCompleted })
         return Double(completedCount) / Double(recentLogs.count)
     }
 }

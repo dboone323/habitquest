@@ -9,7 +9,7 @@ import UserNotifications
 // Temporary definition of InsightType to resolve compilation issues
 public enum InsightType: Sendable {
     case spendingPattern, anomaly, budgetAlert, forecast, optimization, budgetRecommendation,
-        positiveSpendingTrend
+         positiveSpendingTrend
 
     public var displayName: String {
         switch self {
@@ -106,9 +106,9 @@ public struct ImportResult: Codable, Sendable {
 // MARK: - ModelContext for compatibility
 
 #if !canImport(SwiftData)
-    public struct ModelContext: Sendable {
-        public init() {}
-    }
+public struct ModelContext: Sendable {
+    public init() {}
+}
 #endif
 
 // MARK: - Theme Types
@@ -201,14 +201,14 @@ public struct ColorDefinitions: Sendable {
     }
 
     public static let categoryColors: [Color] = [
-        Color.orange,  // food
-        Color.blue,  // transport
-        Color.purple,  // entertainment
-        Color.green,  // shopping
-        Color.red,  // bills
-        Color.mint,  // income
-        Color.teal,  // savings
-        Color.gray,  // other
+        Color.orange, // food
+        Color.blue, // transport
+        Color.purple, // entertainment
+        Color.green, // shopping
+        Color.red, // bills
+        Color.mint, // income
+        Color.teal, // savings
+        Color.gray, // other
     ]
 
     // Additional methods for complex color system
@@ -440,7 +440,7 @@ public struct DeepLink: Sendable {
 
 public protocol EntityManager: Sendable {
     func save() async throws
-    func delete<T>(_ entity: T) async throws
+    func delete(_ entity: some Any) async throws
     func fetch<T>(_ type: T.Type) async throws -> [T]
     func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping) async throws
         -> FinancialAccount?
@@ -457,17 +457,16 @@ public final class DefaultEntityManager: EntityManager {
     public func fetch<T>(_ type: T.Type) async throws -> [T] { [] }
 
     public func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping)
-        async throws -> FinancialAccount?
-    {
+        async throws -> FinancialAccount? {
         // Mock implementation - return a default account
-        return FinancialAccount(name: "Default Account", type: .checking)
+        FinancialAccount(name: "Default Account", type: .checking)
     }
 
     public func getOrCreateCategory(
         from fields: [String], columnMapping: CSVColumnMapping, transactionType: TransactionType
     ) async throws -> ExpenseCategory? {
         // Mock implementation - return a default category
-        return ExpenseCategory(name: "General")
+        ExpenseCategory(name: "General")
     }
 }
 
@@ -485,7 +484,7 @@ public final class ExportEngineService: Sendable {
 
     public func export(settings: Any) async throws -> URL {
         // Simplified export implementation
-        try await exportToCSV()
+        try await self.exportToCSV()
     }
 
     private func exportToJSON() async throws -> URL {
@@ -536,8 +535,8 @@ public enum AnimatedButtonComponent {
         let label: String
 
         public var body: some View {
-            Button(action: action) {
-                Text(label)
+            Button(action: self.action) {
+                Text(self.label)
                     .padding()
                     .background(Color.blue)
                     .foregroundColor(.white)
@@ -583,7 +582,7 @@ public enum AnimatedProgressComponents {
         let progress: Double
 
         public var body: some View {
-            ProgressView(value: progress)
+            ProgressView(value: self.progress)
                 .progressViewStyle(LinearProgressViewStyle())
         }
 
@@ -596,7 +595,7 @@ public enum AnimatedProgressComponents {
         let value: Double
 
         public var body: some View {
-            Text("\(value, specifier: "%.2f")")
+            Text("\(self.value, specifier: "%.2f")")
                 .font(.title)
                 .fontWeight(.bold)
         }
@@ -613,8 +612,8 @@ public enum FloatingActionButtonComponent {
         let icon: String
 
         public var body: some View {
-            Button(action: action) {
-                Image(systemName: icon)
+            Button(action: self.action) {
+                Image(systemName: self.icon)
                     .font(.title2)
                     .foregroundColor(.white)
                     .frame(width: 56, height: 56)
@@ -662,8 +661,8 @@ public struct FileSelectionComponent: View {
     public var body: some View {
         VStack(spacing: 16) {
             Button(action: {
-                showingFilePicker = true
-                onFileSelected()
+                self.showingFilePicker = true
+                self.onFileSelected()
             }) {
                 VStack(spacing: 12) {
                     Image(systemName: "doc.badge.plus")
@@ -695,10 +694,10 @@ public struct ImportProgressComponent: View {
             Text("Importing...")
                 .font(.headline)
 
-            ProgressView(value: progress)
+            ProgressView(value: self.progress)
                 .progressViewStyle(LinearProgressViewStyle())
 
-            Text("\(Int(progress * 100))% Complete")
+            Text("\(Int(self.progress * 100))% Complete")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -715,21 +714,21 @@ public struct ImportButtonComponent: View {
     public let action: () -> Void
 
     public var body: some View {
-        Button(action: action) {
+        Button(action: self.action) {
             HStack {
-                if isImporting {
+                if self.isImporting {
                     ProgressView()
                         .scaleEffect(0.8)
                 }
-                Text(isImporting ? "Importing..." : "Import Data")
+                Text(self.isImporting ? "Importing..." : "Import Data")
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(isImporting ? Color.gray : Color.blue)
+            .background(self.isImporting ? Color.gray : Color.blue)
             .foregroundColor(.white)
             .cornerRadius(12)
         }
-        .disabled(isImporting)
+        .disabled(self.isImporting)
         .accessibilityLabel("Button")
     }
 
@@ -746,10 +745,10 @@ public struct ImportInstructionsComponent: View {
                 .font(.headline)
 
             VStack(alignment: .leading, spacing: 8) {
-                instructionRow("1.", "Prepare a CSV file with your transaction data")
-                instructionRow("2.", "Include columns: Date, Amount, Description")
-                instructionRow("3.", "Optional: Category, Account columns")
-                instructionRow("4.", "Select your file and click Import")
+                self.instructionRow("1.", "Prepare a CSV file with your transaction data")
+                self.instructionRow("2.", "Include columns: Date, Amount, Description")
+                self.instructionRow("3.", "Optional: Category, Account columns")
+                self.instructionRow("4.", "Select your file and click Import")
             }
         }
         .padding()
@@ -795,19 +794,19 @@ public struct ThemeSelectorCard: View {
             HStack(spacing: 12) {
                 ForEach(ThemeMode.allCases, id: \.self) { mode in
                     Button(action: {
-                        selectedThemeMode = mode
+                        self.selectedThemeMode = mode
                     }) {
                         VStack(spacing: 8) {
-                            Image(systemName: themeIcon(for: mode))
+                            Image(systemName: self.themeIcon(for: mode))
                                 .font(.title2)
                             Text(mode.displayName)
                                 .font(.caption)
                         }
                         .padding()
                         .background(
-                            selectedThemeMode == mode ? Color.blue : Color.gray.opacity(0.2)
+                            self.selectedThemeMode == mode ? Color.blue : Color.gray.opacity(0.2)
                         )
-                        .foregroundColor(selectedThemeMode == mode ? .white : .primary)
+                        .foregroundColor(self.selectedThemeMode == mode ? .white : .primary)
                         .cornerRadius(8)
                     }
                 }
@@ -833,7 +832,6 @@ public struct ThemeSelectorCard: View {
 }
 
 public struct ThemeFinancialSummaryCard: View {
-
     public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Financial Summary")
@@ -886,7 +884,6 @@ public struct ThemeFinancialSummaryCard: View {
 }
 
 public struct ThemeAccountsList: View {
-
     public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Accounts")
@@ -894,9 +891,9 @@ public struct ThemeAccountsList: View {
                 .fontWeight(.semibold)
 
             VStack(spacing: 8) {
-                accountRow("Checking", "$3,456.78")
-                accountRow("Savings", "$8,888.89")
-                accountRow("Credit Card", "-$567.12")
+                self.accountRow("Checking", "$3,456.78")
+                self.accountRow("Savings", "$8,888.89")
+                self.accountRow("Credit Card", "-$567.12")
             }
         }
         .padding()
@@ -990,16 +987,16 @@ public struct InsightRowView: View {
         HStack(spacing: 12) {
             // Priority indicator
             Circle()
-                .fill(priorityColor(insight.priority))
+                .fill(self.priorityColor(self.insight.priority))
                 .frame(width: 8, height: 8)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(insight.title)
+                Text(self.insight.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .lineLimit(2)
 
-                Text(insight.description)
+                Text(self.insight.description)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(3)
@@ -1008,7 +1005,7 @@ public struct InsightRowView: View {
             Spacer()
 
             // Show confidence as percentage
-            Text("\(Int(insight.confidence * 100))%")
+            Text("\(Int(self.insight.confidence * 100))%")
                 .font(.caption)
                 .fontWeight(.semibold)
                 .foregroundColor(.blue)
@@ -1016,7 +1013,7 @@ public struct InsightRowView: View {
         .padding(.vertical, 8)
         .contentShape(Rectangle())
         .onTapGesture {
-            action()
+            self.action()
         }
     }
 
@@ -1076,25 +1073,25 @@ public struct InsightsFilterBar: View {
     public var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
-                FilterChip(title: "All", isSelected: filterPriority == nil && filterType == nil) {
-                    filterPriority = nil
-                    filterType = nil
+                FilterChip(title: "All", isSelected: self.filterPriority == nil && self.filterType == nil) {
+                    self.filterPriority = nil
+                    self.filterType = nil
                 }
 
-                FilterChip(title: "High Priority", isSelected: filterPriority == .high) {
-                    filterPriority = filterPriority == .high ? nil : .high
+                FilterChip(title: "High Priority", isSelected: self.filterPriority == .high) {
+                    self.filterPriority = self.filterPriority == .high ? nil : .high
                 }
 
-                FilterChip(title: "Urgent", isSelected: filterPriority == .urgent) {
-                    filterPriority = filterPriority == .urgent ? nil : .urgent
+                FilterChip(title: "Urgent", isSelected: self.filterPriority == .urgent) {
+                    self.filterPriority = self.filterPriority == .urgent ? nil : .urgent
                 }
 
-                FilterChip(title: "Spending", isSelected: filterType == .spendingPattern) {
-                    filterType = filterType == .spendingPattern ? nil : .spendingPattern
+                FilterChip(title: "Spending", isSelected: self.filterType == .spendingPattern) {
+                    self.filterType = self.filterType == .spendingPattern ? nil : .spendingPattern
                 }
 
-                FilterChip(title: "Budget", isSelected: filterType == .budgetAlert) {
-                    filterType = filterType == .budgetAlert ? nil : .budgetAlert
+                FilterChip(title: "Budget", isSelected: self.filterType == .budgetAlert) {
+                    self.filterType = self.filterType == .budgetAlert ? nil : .budgetAlert
                 }
             }
             .padding(.horizontal)
@@ -1113,14 +1110,14 @@ public struct FilterChip: View {
     let action: () -> Void
 
     public var body: some View {
-        Button(action: action) {
-            Text(title)
+        Button(action: self.action) {
+            Text(self.title)
                 .font(.caption)
                 .fontWeight(.medium)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
-                .background(isSelected ? Color.blue : Color.gray.opacity(0.2))
-                .foregroundColor(isSelected ? .white : .primary)
+                .background(self.isSelected ? Color.blue : Color.gray.opacity(0.2))
+                .foregroundColor(self.isSelected ? .white : .primary)
                 .cornerRadius(16)
         }
         .accessibilityLabel("Button")
@@ -1145,28 +1142,28 @@ public struct InsightDetailView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Circle()
-                                .fill(priorityColor(insight.priority))
+                                .fill(self.priorityColor(self.insight.priority))
                                 .frame(width: 12, height: 12)
 
-                            Text(priorityText(insight.priority))
+                            Text(self.priorityText(self.insight.priority))
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .foregroundColor(.secondary)
                         }
 
-                        Text(insight.title)
+                        Text(self.insight.title)
                             .font(.title2)
                             .fontWeight(.bold)
                     }
 
                     // Confidence
-                    Text("Confidence: \(Int(insight.confidence * 100))%")
+                    Text("Confidence: \(Int(self.insight.confidence * 100))%")
                         .font(.title3)
                         .fontWeight(.semibold)
                         .foregroundColor(.blue)
 
                     // Description
-                    Text(insight.description)
+                    Text(self.insight.description)
                         .font(.body)
                         .foregroundColor(.secondary)
 
@@ -1177,7 +1174,7 @@ public struct InsightDetailView: View {
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
 
-                        Text(insight.type.displayName)
+                        Text(self.insight.type.displayName)
                             .font(.subheadline)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
@@ -1194,14 +1191,14 @@ public struct InsightDetailView: View {
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Done") {
-                        dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Done") {
+                            self.dismiss()
+                        }
+                        .accessibilityLabel("Button")
                     }
-                    .accessibilityLabel("Button")
                 }
-            }
         }
     }
 
@@ -1230,8 +1227,8 @@ public struct InsightDetailView: View {
 
 // MARK: - Data Import Support
 
-extension CSVColumnMapping {
-    public var notesIndex: Int? {
+public extension CSVColumnMapping {
+    var notesIndex: Int? {
         // Return a default notes column index or nil
         nil
     }
@@ -1319,12 +1316,12 @@ public struct TransactionEmptyStateView: View {
                 .font(.system(size: 64))
                 .foregroundColor(.gray)
 
-            Text(searchText.isEmpty ? "No Transactions" : "No Results")
+            Text(self.searchText.isEmpty ? "No Transactions" : "No Results")
                 .font(.title2)
                 .fontWeight(.semibold)
 
             Text(
-                searchText.isEmpty
+                self.searchText.isEmpty
                     ? "Start tracking your finances by adding your first transaction"
                     : "No transactions match your search criteria"
             )
@@ -1333,9 +1330,9 @@ public struct TransactionEmptyStateView: View {
             .multilineTextAlignment(.center)
             .padding(.horizontal)
 
-            if searchText.isEmpty {
+            if self.searchText.isEmpty {
                 Button("Add Transaction") {
-                    onAddTransaction()
+                    self.onAddTransaction()
                 }
                 .buttonStyle(.borderedProminent)
                 .accessibilityLabel("Add Transaction")
@@ -1357,11 +1354,11 @@ public struct TransactionListView: View {
 
     public var body: some View {
         LazyVStack(spacing: 8) {
-            ForEach(0..<transactions.count, id: \.self) { index in
+            ForEach(0 ..< self.transactions.count, id: \.self) { index in
                 TransactionRowView(
-                    transaction: transactions[index],
-                    onTap: { onTransactionTapped(transactions[index]) },
-                    onDelete: { onDeleteTransaction(transactions[index]) }
+                    transaction: self.transactions[index],
+                    onTap: { self.onTransactionTapped(self.transactions[index]) },
+                    onDelete: { self.onDeleteTransaction(self.transactions[index]) }
                 )
             }
         }
@@ -1397,18 +1394,18 @@ public struct TransactionRowView: View {
                 )
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(transaction.title)
+                Text(self.transaction.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
 
-                Text("\(transaction.category?.name ?? "Category") • Today")
+                Text("\(self.transaction.category?.name ?? "Category") • Today")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
 
             Spacer()
 
-            Text("$\(transaction.amount, specifier: "%.2f")")
+            Text("$\(self.transaction.amount, specifier: "%.2f")")
                 .font(.subheadline)
                 .fontWeight(.semibold)
         }
@@ -1416,7 +1413,7 @@ public struct TransactionRowView: View {
         .padding(.horizontal, 12)
         .background(Color.gray.opacity(0.05))
         .cornerRadius(8)
-        .onTapGesture(perform: onTap)
+        .onTapGesture(perform: self.onTap)
         .swipeActions(edge: .trailing) {
             if let onDelete {
                 Button("Delete", role: .destructive) {
@@ -1449,7 +1446,7 @@ public struct AddTransactionView: View {
                     .font(.title2)
                     .fontWeight(.semibold)
 
-                Text("Categories: \(categories.count), Accounts: \(accounts.count)")
+                Text("Categories: \(self.categories.count), Accounts: \(self.accounts.count)")
                     .foregroundColor(.secondary)
 
                 Text("Transaction form would go here")
@@ -1461,22 +1458,22 @@ public struct AddTransactionView: View {
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            self.dismiss()
+                        }
+                        .accessibilityLabel("Cancel")
                     }
-                    .accessibilityLabel("Cancel")
-                }
 
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Save") {
-                        dismiss()
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Save") {
+                            self.dismiss()
+                        }
+                        .fontWeight(.semibold)
+                        .accessibilityLabel("Save")
                     }
-                    .fontWeight(.semibold)
-                    .accessibilityLabel("Save")
                 }
-            }
         }
     }
 
@@ -1508,10 +1505,10 @@ public struct TransactionDetailView: View {
 
                     // Transaction info
                     VStack(alignment: .leading, spacing: 12) {
-                        detailRow("Category", "General")
-                        detailRow("Date", "Today")
-                        detailRow("Account", "Checking")
-                        detailRow("Description", "Transaction details")
+                        self.detailRow("Category", "General")
+                        self.detailRow("Date", "Today")
+                        self.detailRow("Account", "Checking")
+                        self.detailRow("Description", "Transaction details")
                     }
 
                     Spacer()
@@ -1519,12 +1516,12 @@ public struct TransactionDetailView: View {
                 .padding()
             }
             #if os(iOS)
-                .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
             #endif
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button("Done") {
-                        dismiss()
+                        self.dismiss()
                     }
                     .accessibilityLabel("Done")
                 }
@@ -1576,7 +1573,7 @@ public struct TransactionStatsCard: View {
                     Text("Transactions")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text("\(transactions.count)")
+                    Text("\(self.transactions.count)")
                         .font(.title3)
                         .fontWeight(.bold)
                 }
@@ -1604,12 +1601,12 @@ public struct SearchAndFilterSection: View {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.secondary)
 
-                TextField("Search transactions...", text: $searchText).accessibilityLabel(
+                TextField("Search transactions...", text: self.$searchText).accessibilityLabel(
                     "Text Field"
                 )
                 .textFieldStyle(PlainTextFieldStyle())
 
-                Button(action: { showingSearch = true }) {
+                Button(action: { self.showingSearch = true }) {
                     Image(systemName: "line.horizontal.3.decrease.circle")
                         .foregroundColor(.blue)
                 }
@@ -1624,7 +1621,7 @@ public struct SearchAndFilterSection: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(TransactionFilter.allCases, id: \.self) { filter in
-                        filterChip(filter.displayName, selectedFilter == filter, filter)
+                        self.filterChip(filter.displayName, self.selectedFilter == filter, filter)
                     }
                 }
                 .padding(.horizontal)
@@ -1633,10 +1630,9 @@ public struct SearchAndFilterSection: View {
     }
 
     private func filterChip(_ title: String, _ isSelected: Bool, _ filter: TransactionFilter)
-        -> some View
-    {
+        -> some View {
         Button(action: {
-            selectedFilter = filter
+            self.selectedFilter = filter
         }) {
             Text(title)
                 .font(.caption)
@@ -1756,9 +1752,9 @@ public struct ThemeSettingsSheet: View {
         NavigationView {
             VStack {
                 Text("Theme Settings")
-                Slider(value: $sliderValue, in: 0...1)
+                Slider(value: self.$sliderValue, in: 0 ... 1)
                 Button("Close") {
-                    showSheet = false
+                    self.showSheet = false
                 }
                 .accessibilityLabel("Close")
             }

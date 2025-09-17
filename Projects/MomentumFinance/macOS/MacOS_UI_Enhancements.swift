@@ -19,9 +19,9 @@ extension Features.Dashboard {
         @State private var selectedItem: ListableItem?
 
         var body: some View {
-            List(selection: $selectedItem) {
+            List(selection: self.$selectedItem) {
                 Section("Accounts") {
-                    ForEach(accounts) { account in
+                    ForEach(self.accounts) { account in
                         NavigationLink(value: ListableItem(id: account.id, name: account.name, type: .account)) {
                             HStack {
                                 Image(systemName: account.type == .checking ? "banknote" : "creditcard")
@@ -40,7 +40,7 @@ extension Features.Dashboard {
                 }
 
                 Section("Recent Transactions") {
-                    ForEach(recentTransactions.prefix(5)) { transaction in
+                    ForEach(self.recentTransactions.prefix(5)) { transaction in
                         NavigationLink(value: ListableItem(id: transaction.id, name: transaction.name, type: .transaction)) {
                             HStack {
                                 Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
@@ -102,32 +102,32 @@ extension Features.Transactions {
         @State private var sortOrder: SortOrder = .dateDescending
 
         var filteredTransactions: [FinancialTransaction] {
-            if searchText.isEmpty {
-                sortedTransactions
+            if self.searchText.isEmpty {
+                self.sortedTransactions
             } else {
-                sortedTransactions.filter {
-                    $0.name.localizedCaseInsensitiveContains(searchText) ||
-                        $0.category?.name.localizedCaseInsensitiveContains(searchText) ?? false
+                self.sortedTransactions.filter {
+                    $0.name.localizedCaseInsensitiveContains(self.searchText) ||
+                        $0.category?.name.localizedCaseInsensitiveContains(self.searchText) ?? false
                 }
             }
         }
 
         var sortedTransactions: [FinancialTransaction] {
-            switch sortOrder {
+            switch self.sortOrder {
             case .dateDescending:
-                transactions.sorted { $0.date > $1.date }
+                self.transactions.sorted { $0.date > $1.date }
             case .dateAscending:
-                transactions.sorted { $0.date < $1.date }
+                self.transactions.sorted { $0.date < $1.date }
             case .amountDescending:
-                transactions.sorted { $0.amount > $1.amount }
+                self.transactions.sorted { $0.amount > $1.amount }
             case .amountAscending:
-                transactions.sorted { $0.amount < $1.amount }
+                self.transactions.sorted { $0.amount < $1.amount }
             }
         }
 
         var body: some View {
-            List(selection: $selectedItem) {
-                ForEach(filteredTransactions) { transaction in
+            List(selection: self.$selectedItem) {
+                ForEach(self.filteredTransactions) { transaction in
                     NavigationLink(value: ListableItem(id: transaction.id, name: transaction.name, type: .transaction)) {
                         HStack {
                             Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
@@ -157,10 +157,10 @@ extension Features.Transactions {
                 }
             }
             .navigationTitle("Transactions")
-            .searchable(text: $searchText, prompt: "Search transactions")
+            .searchable(text: self.$searchText, prompt: "Search transactions")
             .toolbar {
                 ToolbarItem {
-                    Picker("Sort", selection: $sortOrder) {
+                    Picker("Sort", selection: self.$sortOrder) {
                         Text("Newest First").tag(SortOrder.dateDescending)
                         Text("Oldest First").tag(SortOrder.dateAscending)
                         Text("Highest Amount").tag(SortOrder.amountDescending)
@@ -187,7 +187,7 @@ extension Features.Transactions {
         @State private var isEditing = false
 
         var transaction: FinancialTransaction? {
-            transactions.first(where: { $0.id == transactionId })
+            self.transactions.first(where: { $0.id == self.transactionId })
         }
 
         var body: some View {
@@ -281,8 +281,8 @@ extension Features.Transactions {
                     }
                     .toolbar {
                         ToolbarItem {
-                            Button(action: { isEditing.toggle().accessibilityLabel("Button") }) {
-                                Text(isEditing ? "Done" : "Edit")
+                            Button(action: { self.isEditing.toggle().accessibilityLabel("Button") }) {
+                                Text(self.isEditing ? "Done" : "Edit")
                             }
                         }
 
@@ -300,9 +300,11 @@ extension Features.Transactions {
                         }
                     }
                 } else {
-                    ContentUnavailableView("Transaction Not Found",
-                                           systemImage: "exclamationmark.triangle",
-                                           description: Text("The transaction you're looking for could not be found."))
+                    ContentUnavailableView(
+                        "Transaction Not Found",
+                        systemImage: "exclamationmark.triangle",
+                        description: Text("The transaction you're looking for could not be found.")
+                    )
                 }
             }
             .navigationTitle("Transaction Details")
@@ -342,20 +344,22 @@ extension Features.Budgets {
         @State private var selectedItem: ListableItem?
 
         var body: some View {
-            List(selection: $selectedItem) {
-                ForEach(budgets) { budget in
+            List(selection: self.$selectedItem) {
+                ForEach(self.budgets) { budget in
                     NavigationLink(value: ListableItem(id: budget.id, name: budget.name, type: .budget)) {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
                                 Text(budget.name)
                                     .font(.headline)
                                 Spacer()
-                                Text("\(budget.spent.formatted(.currency(code: "USD"))) of \(budget.amount.formatted(.currency(code: "USD")))")
-                                    .font(.subheadline)
+                                Text(
+                                    "\(budget.spent.formatted(.currency(code: "USD"))) of \(budget.amount.formatted(.currency(code: "USD")))"
+                                )
+                                .font(.subheadline)
                             }
 
                             ProgressView(value: budget.spent, total: budget.amount)
-                                .tint(getBudgetColor(spent: budget.spent, total: budget.amount))
+                                .tint(self.getBudgetColor(spent: budget.spent, total: budget.amount))
                         }
                         .padding(.vertical, 4)
                     }
@@ -394,7 +398,7 @@ extension Features.Budgets {
         @State private var isEditing = false
 
         var budget: Budget? {
-            budgets.first(where: { $0.id == budgetId })
+            self.budgets.first(where: { $0.id == self.budgetId })
         }
 
         var relatedTransactions: [FinancialTransaction] {
@@ -403,7 +407,7 @@ extension Features.Budgets {
             }
 
             // Get all transactions for this budget's category within the current period
-            return transactions.filter { transaction in
+            return self.transactions.filter { transaction in
                 if transaction.category?.id == category.id {
                     // Check if transaction is within the current budget period
                     // This is simplified - would need actual date range logic
@@ -455,11 +459,13 @@ extension Features.Budgets {
 
                                     Spacer()
 
-                                    Text("\(budget.spent.formatted(.currency(code: "USD"))) of \(budget.amount.formatted(.currency(code: "USD")))")
+                                    Text(
+                                        "\(budget.spent.formatted(.currency(code: "USD"))) of \(budget.amount.formatted(.currency(code: "USD")))"
+                                    )
                                 }
 
                                 ProgressView(value: budget.spent, total: budget.amount)
-                                    .tint(getBudgetColor(spent: budget.spent, total: budget.amount))
+                                    .tint(self.getBudgetColor(spent: budget.spent, total: budget.amount))
                                     .scaleEffect(y: 2.0)
                                     .padding(.vertical, 8)
 
@@ -470,7 +476,7 @@ extension Features.Budgets {
                                     Spacer()
 
                                     Text("\(Int((budget.spent / budget.amount) * 100))%")
-                                        .foregroundStyle(getBudgetColor(spent: budget.spent, total: budget.amount))
+                                        .foregroundStyle(self.getBudgetColor(spent: budget.spent, total: budget.amount))
                                         .bold()
                                 }
                             }
@@ -485,18 +491,18 @@ extension Features.Budgets {
 
                                     Spacer()
 
-                                    Text("\(relatedTransactions.count) transactions")
+                                    Text("\(self.relatedTransactions.count) transactions")
                                         .font(.subheadline)
                                         .foregroundStyle(.secondary)
                                 }
 
-                                if relatedTransactions.isEmpty {
+                                if self.relatedTransactions.isEmpty {
                                     Text("No transactions found for this budget category")
                                         .foregroundStyle(.secondary)
                                         .padding()
                                 } else {
                                     // Show transactions table
-                                    TransactionsTable(transactions: relatedTransactions)
+                                    TransactionsTable(transactions: self.relatedTransactions)
                                 }
                             }
 
@@ -507,15 +513,17 @@ extension Features.Budgets {
                     }
                     .toolbar {
                         ToolbarItem {
-                            Button(action: { isEditing.toggle().accessibilityLabel("Button") }) {
-                                Text(isEditing ? "Done" : "Edit")
+                            Button(action: { self.isEditing.toggle().accessibilityLabel("Button") }) {
+                                Text(self.isEditing ? "Done" : "Edit")
                             }
                         }
                     }
                 } else {
-                    ContentUnavailableView("Budget Not Found",
-                                           systemImage: "exclamationmark.triangle",
-                                           description: Text("The budget you're looking for could not be found."))
+                    ContentUnavailableView(
+                        "Budget Not Found",
+                        systemImage: "exclamationmark.triangle",
+                        description: Text("The budget you're looking for could not be found.")
+                    )
                 }
             }
             .navigationTitle("Budget Details")
@@ -557,7 +565,7 @@ extension Features.Budgets {
 
                 Divider()
 
-                ForEach(transactions) { transaction in
+                ForEach(self.transactions) { transaction in
                     HStack {
                         Text(transaction.date.formatted(date: .abbreviated, time: .omitted))
                             .frame(width: 100, alignment: .leading)
@@ -594,8 +602,8 @@ extension Features.Subscriptions {
         }
 
         var body: some View {
-            List(selection: $selectedItem) {
-                ForEach(getGroupedSubscriptions()) { group in
+            List(selection: self.$selectedItem) {
+                ForEach(self.getGroupedSubscriptions()) { group in
                     Section(header: Text(group.title)) {
                         ForEach(group.items) { subscription in
                             NavigationLink(value: ListableItem(id: subscription.id, name: subscription.name, type: .subscription)) {
@@ -633,7 +641,7 @@ extension Features.Subscriptions {
             .navigationTitle("Subscriptions")
             .toolbar {
                 ToolbarItem {
-                    Picker("Group By", selection: $groupBy) {
+                    Picker("Group By", selection: self.$groupBy) {
                         Text("Next Payment").tag(GroupOption.date)
                         Text("Amount").tag(GroupOption.amount)
                         Text("Provider").tag(GroupOption.provider)
@@ -657,21 +665,21 @@ extension Features.Subscriptions {
         }
 
         private func getGroupedSubscriptions() -> [SubscriptionGroup] {
-            switch groupBy {
+            switch self.groupBy {
             case .date:
                 // Group by next payment date (simplified)
-                let thisWeek = subscriptions.filter {
+                let thisWeek = self.subscriptions.filter {
                     guard let nextDate = $0.nextPaymentDate else { return false }
                     return Calendar.current.isDate(nextDate, equalTo: Date(), toGranularity: .weekOfYear)
                 }
 
-                let thisMonth = subscriptions.filter {
+                let thisMonth = self.subscriptions.filter {
                     guard let nextDate = $0.nextPaymentDate else { return false }
                     return Calendar.current.isDate(nextDate, equalTo: Date(), toGranularity: .month) &&
                         !Calendar.current.isDate(nextDate, equalTo: Date(), toGranularity: .weekOfYear)
                 }
 
-                let future = subscriptions.filter {
+                let future = self.subscriptions.filter {
                     guard let nextDate = $0.nextPaymentDate else { return false }
                     return nextDate > Date() &&
                         !Calendar.current.isDate(nextDate, equalTo: Date(), toGranularity: .month)
@@ -692,9 +700,9 @@ extension Features.Subscriptions {
 
             case .amount:
                 // Group by price tiers
-                let lowTier = subscriptions.filter { $0.amount < 10 }
-                let midTier = subscriptions.filter { $0.amount >= 10 && $0.amount < 25 }
-                let highTier = subscriptions.filter { $0.amount >= 25 }
+                let lowTier = self.subscriptions.filter { $0.amount < 10 }
+                let midTier = self.subscriptions.filter { $0.amount >= 10 && $0.amount < 25 }
+                let highTier = self.subscriptions.filter { $0.amount >= 25 }
 
                 var result: [SubscriptionGroup] = []
                 if !lowTier.isEmpty {
@@ -734,17 +742,17 @@ extension Features.GoalsAndReports {
 
         var body: some View {
             VStack {
-                Picker("View", selection: $viewType) {
+                Picker("View", selection: self.$viewType) {
                     Text("Savings Goals").tag(ViewType.goals)
                     Text("Reports").tag(ViewType.reports)
                 }
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
 
-                if viewType == .goals {
-                    goalsList
+                if self.viewType == .goals {
+                    self.goalsList
                 } else {
-                    reportsList
+                    self.reportsList
                 }
             }
             .navigationTitle("Goals & Reports")
@@ -759,8 +767,8 @@ extension Features.GoalsAndReports {
         }
 
         var goalsList: some View {
-            List(selection: $selectedItem) {
-                ForEach(goals) { goal in
+            List(selection: self.$selectedItem) {
+                ForEach(self.goals) { goal in
                     NavigationLink(value: ListableItem(id: goal.id, name: goal.name, type: .goal)) {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
@@ -769,8 +777,10 @@ extension Features.GoalsAndReports {
 
                                 Spacer()
 
-                                Text("\(goal.currentAmount.formatted(.currency(code: "USD"))) of \(goal.targetAmount.formatted(.currency(code: "USD")))")
-                                    .font(.subheadline)
+                                Text(
+                                    "\(goal.currentAmount.formatted(.currency(code: "USD"))) of \(goal.targetAmount.formatted(.currency(code: "USD")))"
+                                )
+                                .font(.subheadline)
                             }
 
                             ProgressView(value: goal.currentAmount, total: goal.targetAmount)
@@ -799,7 +809,7 @@ extension Features.GoalsAndReports {
         }
 
         var reportsList: some View {
-            List(selection: $selectedItem) {
+            List(selection: self.$selectedItem) {
                 NavigationLink(value: ListableItem(id: "spending", name: "Spending by Category", type: .report)) {
                     HStack {
                         Image(systemName: "chart.pie")
@@ -850,7 +860,7 @@ extension Features.GoalsAndReports {
         @State private var isEditing = false
 
         var goal: SavingsGoal? {
-            goals.first(where: { $0.id == goalId })
+            self.goals.first(where: { $0.id == self.goalId })
         }
 
         var body: some View {
@@ -893,7 +903,9 @@ extension Features.GoalsAndReports {
 
                                     Spacer()
 
-                                    Text("\(goal.currentAmount.formatted(.currency(code: "USD"))) of \(goal.targetAmount.formatted(.currency(code: "USD")))")
+                                    Text(
+                                        "\(goal.currentAmount.formatted(.currency(code: "USD"))) of \(goal.targetAmount.formatted(.currency(code: "USD")))"
+                                    )
                                 }
 
                                 ProgressView(value: goal.currentAmount, total: goal.targetAmount)
@@ -934,8 +946,10 @@ extension Features.GoalsAndReports {
                                         let monthsRemaining = Double(daysRemaining) / 30.0
                                         if monthsRemaining > 0 {
                                             let requiredMonthlySavings = remainingAmount / monthsRemaining
-                                            Text("You need to save \(requiredMonthlySavings.formatted(.currency(code: "USD"))) per month to reach your goal on time.")
-                                                .foregroundStyle(.secondary)
+                                            Text(
+                                                "You need to save \(requiredMonthlySavings.formatted(.currency(code: "USD"))) per month to reach your goal on time."
+                                            )
+                                            .foregroundStyle(.secondary)
                                         }
                                     } else {
                                         Text("Target date has passed")
@@ -967,8 +981,8 @@ extension Features.GoalsAndReports {
                     }
                     .toolbar {
                         ToolbarItem {
-                            Button(action: { isEditing.toggle().accessibilityLabel("Button") }) {
-                                Text(isEditing ? "Done" : "Edit")
+                            Button(action: { self.isEditing.toggle().accessibilityLabel("Button") }) {
+                                Text(self.isEditing ? "Done" : "Edit")
                             }
                         }
 
@@ -979,9 +993,11 @@ extension Features.GoalsAndReports {
                         }
                     }
                 } else {
-                    ContentUnavailableView("Goal Not Found",
-                                           systemImage: "exclamationmark.triangle",
-                                           description: Text("The savings goal you're looking for could not be found."))
+                    ContentUnavailableView(
+                        "Goal Not Found",
+                        systemImage: "exclamationmark.triangle",
+                        description: Text("The savings goal you're looking for could not be found.")
+                    )
                 }
             }
             .navigationTitle("Goal Details")
@@ -994,21 +1010,23 @@ extension Features.GoalsAndReports {
         var body: some View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text(getReportTitle())
+                    Text(self.getReportTitle())
                         .font(.largeTitle)
                         .bold()
 
-                    ReportChartView(reportType: reportType)
+                    ReportChartView(reportType: self.reportType)
 
                     Divider()
 
                     Text("Analysis")
                         .font(.headline)
 
-                    Text("This report provides insights into your \(getReportDescription()). Use this information to make informed financial decisions and track your progress toward your financial goals.")
-                        .padding()
-                        .background(Color(.windowBackgroundColor).opacity(0.3))
-                        .cornerRadius(8)
+                    Text(
+                        "This report provides insights into your \(self.getReportDescription()). Use this information to make informed financial decisions and track your progress toward your financial goals."
+                    )
+                    .padding()
+                    .background(Color(.windowBackgroundColor).opacity(0.3))
+                    .cornerRadius(8)
 
                     Spacer()
                 }
@@ -1047,7 +1065,7 @@ extension Features.GoalsAndReports {
         }
 
         private func getReportTitle() -> String {
-            switch reportType {
+            switch self.reportType {
             case "spending":
                 "Spending by Category"
             case "income":
@@ -1062,7 +1080,7 @@ extension Features.GoalsAndReports {
         }
 
         private func getReportDescription() -> String {
-            switch reportType {
+            switch self.reportType {
             case "spending":
                 "spending patterns across different categories"
             case "income":
@@ -1116,17 +1134,17 @@ struct ListableItem: Identifiable, Hashable {
     let type: ListItemType
 
     var identifier: String {
-        "\(type)_\(id ?? "unknown")"
+        "\(self.type)_\(self.id ?? "unknown")"
     }
 
     // Identifiable conformance
-    var identifierId: String { identifier }
+    var identifierId: String { self.identifier }
 
     // Hashable conformance
     /// <#Description#>
     /// - Returns: <#description#>
     func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
+        hasher.combine(self.identifier)
     }
 
     static func == (lhs: ListableItem, rhs: ListableItem) -> Bool {
@@ -1159,25 +1177,25 @@ struct ContentView_macOS: View {
     @State private var columnVisibility = NavigationSplitViewVisibility.all
 
     var body: some View {
-        NavigationSplitView(columnVisibility: $columnVisibility) {
+        NavigationSplitView(columnVisibility: self.$columnVisibility) {
             // Sidebar column
-            List(selection: $selectedSidebarItem) {
+            List(selection: self.$selectedSidebarItem) {
                 Section("Main") {
-                    sidebarItem(title: "Dashboard", icon: "house", item: .dashboard)
-                    sidebarItem(title: "Transactions", icon: "creditcard", item: .transactions)
-                    sidebarItem(title: "Budgets", icon: "chart.pie", item: .budgets)
+                    self.sidebarItem(title: "Dashboard", icon: "house", item: .dashboard)
+                    self.sidebarItem(title: "Transactions", icon: "creditcard", item: .transactions)
+                    self.sidebarItem(title: "Budgets", icon: "chart.pie", item: .budgets)
                 }
 
                 Section("Planning") {
-                    sidebarItem(title: "Subscriptions", icon: "calendar.badge.clock", item: .subscriptions)
-                    sidebarItem(title: "Goals & Reports", icon: "chart.bar", item: .goalsAndReports)
+                    self.sidebarItem(title: "Subscriptions", icon: "calendar.badge.clock", item: .subscriptions)
+                    self.sidebarItem(title: "Goals & Reports", icon: "chart.bar", item: .goalsAndReports)
                 }
             }
             .listStyle(.sidebar)
             .frame(minWidth: 220)
             .toolbar {
                 ToolbarItem(placement: .automatic) {
-                    Button(action: toggleSidebar).accessibilityLabel("Button") {
+                    Button(action: self.toggleSidebar).accessibilityLabel("Button") {
                         Image(systemName: "sidebar.left")
                     }
                     .help("Toggle Sidebar")
@@ -1186,7 +1204,7 @@ struct ContentView_macOS: View {
         } content: {
             // Middle column content (context-sensitive list)
             Group {
-                switch selectedSidebarItem {
+                switch self.selectedSidebarItem {
                 case .dashboard:
                     Features.Dashboard.DashboardListView()
                 case .transactions:
@@ -1232,7 +1250,7 @@ struct ContentView_macOS: View {
                     }
                 } else {
                     // Default view when no item is selected
-                    switch selectedSidebarItem {
+                    switch self.selectedSidebarItem {
                     case .dashboard:
                         Features.Dashboard.DashboardView()
                     case .transactions:
@@ -1261,7 +1279,7 @@ struct ContentView_macOS: View {
             .frame(minWidth: 450)
         }
         .navigationSplitViewStyle(.balanced)
-        .frame(minWidth: 1_000, minHeight: 700)
+        .frame(minWidth: 1000, minHeight: 700)
         .onAppear {
             macOSSpecificViews.configureWindow()
         }
@@ -1269,7 +1287,7 @@ struct ContentView_macOS: View {
 
     // Helper method to create consistent sidebar items
     private func sidebarItem(title: String, icon: String, item: SidebarItem) -> some View {
-        Label(title, systemImage: selectedSidebarItem == item ? "\(icon).fill" : icon)
+        Label(title, systemImage: self.selectedSidebarItem == item ? "\(icon).fill" : icon)
             .tag(item)
     }
 

@@ -55,9 +55,9 @@ final class GoalsAndReportsViewModel {
     /// <#Description#>
     /// - Returns: <#description#>
     func overallSavingsProgress(_ goals: [SavingsGoal]) -> Double {
-        let totalTarget = totalTargetAmount(goals)
+        let totalTarget = self.totalTargetAmount(goals)
         guard totalTarget > 0 else { return 0.0 }
-        return totalSavings(goals) / totalTarget
+        return self.totalSavings(goals) / totalTarget
     }
 
     /// Create a new savings goal
@@ -66,7 +66,7 @@ final class GoalsAndReportsViewModel {
         targetAmount: Double,
         targetDate: Date? = nil,
         notes: String? = nil,
-        ) {
+    ) {
         guard let modelContext else { return }
 
         let goal = SavingsGoal(
@@ -74,7 +74,7 @@ final class GoalsAndReportsViewModel {
             targetAmount: targetAmount,
             targetDate: targetDate,
             notes: notes,
-            )
+        )
 
         modelContext.insert(goal)
 
@@ -92,7 +92,7 @@ final class GoalsAndReportsViewModel {
         goal.addFunds(amount)
 
         do {
-            try modelContext?.save()
+            try self.modelContext?.save()
         } catch {
             Logger.logError(error, context: "Adding funds to goal")
         }
@@ -105,7 +105,7 @@ final class GoalsAndReportsViewModel {
         goal.removeFunds(amount)
 
         do {
-            try modelContext?.save()
+            try self.modelContext?.save()
         } catch {
             Logger.logError(error, context: "Removing funds from goal")
         }
@@ -130,7 +130,7 @@ final class GoalsAndReportsViewModel {
     func spendingReport(
         _ transactions: [FinancialTransaction],
         for period: DateInterval,
-        ) -> SpendingReport {
+    ) -> SpendingReport {
         let periodTransactions = transactions.filter { period.contains($0.date) }
 
         let income = periodTransactions
@@ -143,7 +143,7 @@ final class GoalsAndReportsViewModel {
 
         let categorySpending = Dictionary(
             grouping: periodTransactions.filter { $0.transactionType == .expense },
-            ) { transaction in
+        ) { transaction in
             transaction.category?.name ?? "Uncategorized"
         }.mapValues { transactions in
             transactions.reduce(0.0) { $0 + $1.amount }
@@ -156,14 +156,14 @@ final class GoalsAndReportsViewModel {
             netIncome: income - expenses,
             categorySpending: categorySpending,
             transactionCount: periodTransactions.count,
-            )
+        )
     }
 
     /// Get monthly spending trend
     func monthlySpendingTrend(
         _ transactions: [FinancialTransaction],
         months: Int = 6,
-        ) -> [MonthlySpendingData] {
+    ) -> [MonthlySpendingData] {
         let calendar = Calendar.current
         let now = Date()
         var trend: [MonthlySpendingData] = []
@@ -190,7 +190,7 @@ final class GoalsAndReportsViewModel {
                 income: income,
                 expenses: expenses,
                 netIncome: income - expenses,
-                )
+            )
 
             trend.insert(monthData, at: 0)
         }
@@ -203,9 +203,9 @@ final class GoalsAndReportsViewModel {
         _ transactions: [FinancialTransaction],
         currentPeriod: DateInterval,
         previousPeriod: DateInterval,
-        ) -> [CategorySpendingComparison] {
-        let currentSpending = getCategorySpending(transactions, for: currentPeriod)
-        let previousSpending = getCategorySpending(transactions, for: previousPeriod)
+    ) -> [CategorySpendingComparison] {
+        let currentSpending = self.getCategorySpending(transactions, for: currentPeriod)
+        let previousSpending = self.getCategorySpending(transactions, for: previousPeriod)
 
         let allCategories = Set(currentSpending.keys).union(Set(previousSpending.keys))
 
@@ -221,7 +221,7 @@ final class GoalsAndReportsViewModel {
                 previousAmount: previous,
                 change: change,
                 percentageChange: percentageChange,
-                )
+            )
         }
         .sorted { $0.currentAmount > $1.currentAmount }
     }
@@ -229,7 +229,7 @@ final class GoalsAndReportsViewModel {
     private func getCategorySpending(
         _ transactions: [FinancialTransaction],
         for period: DateInterval,
-        ) -> [String: Double] {
+    ) -> [String: Double] {
         let filteredTransactions = transactions.filter {
             $0.transactionType == .expense && period.contains($0.date)
         }
@@ -254,7 +254,7 @@ final class GoalsAndReportsViewModel {
                 actualAmount: budget.spentAmount,
                 difference: budget.remainingAmount,
                 isOverBudget: budget.isOverBudget,
-                )
+            )
         }
         .sorted { $0.actualAmount > $1.actualAmount }
     }
@@ -273,23 +273,23 @@ struct SpendingReport {
     var formattedPeriod: String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
-        return "\(formatter.string(from: period.start)) - \(formatter.string(from: period.end))"
+        return "\(formatter.string(from: self.period.start)) - \(formatter.string(from: self.period.end))"
     }
 
     var formattedTotalIncome: String {
-        totalIncome.formatted(.currency(code: "USD"))
+        self.totalIncome.formatted(.currency(code: "USD"))
     }
 
     var formattedTotalExpenses: String {
-        totalExpenses.formatted(.currency(code: "USD"))
+        self.totalExpenses.formatted(.currency(code: "USD"))
     }
 
     var formattedNetIncome: String {
-        netIncome.formatted(.currency(code: "USD"))
+        self.netIncome.formatted(.currency(code: "USD"))
     }
 
     var topSpendingCategories: [(String, Double)] {
-        categorySpending.sorted { $0.value > $1.value }
+        self.categorySpending.sorted { $0.value > $1.value }
     }
 }
 
@@ -302,19 +302,19 @@ struct MonthlySpendingData {
     var formattedMonth: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM"
-        return formatter.string(from: month)
+        return formatter.string(from: self.month)
     }
 
     var formattedIncome: String {
-        income.formatted(.currency(code: "USD"))
+        self.income.formatted(.currency(code: "USD"))
     }
 
     var formattedExpenses: String {
-        expenses.formatted(.currency(code: "USD"))
+        self.expenses.formatted(.currency(code: "USD"))
     }
 
     var formattedNetIncome: String {
-        netIncome.formatted(.currency(code: "USD"))
+        self.netIncome.formatted(.currency(code: "USD"))
     }
 }
 
@@ -326,25 +326,25 @@ struct CategorySpendingComparison {
     let percentageChange: Double
 
     var formattedCurrentAmount: String {
-        currentAmount.formatted(.currency(code: "USD"))
+        self.currentAmount.formatted(.currency(code: "USD"))
     }
 
     var formattedPreviousAmount: String {
-        previousAmount.formatted(.currency(code: "USD"))
+        self.previousAmount.formatted(.currency(code: "USD"))
     }
 
     var formattedChange: String {
-        let sign = change >= 0 ? "+" : ""
-        return "\(sign)\(change.formatted(.currency(code: "USD")))"
+        let sign = self.change >= 0 ? "+" : ""
+        return "\(sign)\(self.change.formatted(.currency(code: "USD")))"
     }
 
     var formattedPercentageChange: String {
-        let sign = percentageChange >= 0 ? "+" : ""
-        return "\(sign)\(percentageChange.formatted(.number.precision(.fractionLength(1))))%"
+        let sign = self.percentageChange >= 0 ? "+" : ""
+        return "\(sign)\(self.percentageChange.formatted(.number.precision(.fractionLength(1))))%"
     }
 
     var isIncreased: Bool {
-        change > 0
+        self.change > 0
     }
 }
 
@@ -356,23 +356,23 @@ struct BudgetVsActual {
     let isOverBudget: Bool
 
     var formattedBudgetedAmount: String {
-        budgetedAmount.formatted(.currency(code: "USD"))
+        self.budgetedAmount.formatted(.currency(code: "USD"))
     }
 
     var formattedActualAmount: String {
-        actualAmount.formatted(.currency(code: "USD"))
+        self.actualAmount.formatted(.currency(code: "USD"))
     }
 
     var formattedDifference: String {
-        let sign = difference >= 0 ? "+" : ""
-        return "\(sign)\(difference.formatted(.currency(code: "USD")))"
+        let sign = self.difference >= 0 ? "+" : ""
+        return "\(sign)\(self.difference.formatted(.currency(code: "USD")))"
     }
 
     var performanceDescription: String {
-        if isOverBudget {
-            "Over by \(abs(difference).formatted(.currency(code: "USD")))"
+        if self.isOverBudget {
+            "Over by \(abs(self.difference).formatted(.currency(code: "USD")))"
         } else {
-            "Under by \(difference.formatted(.currency(code: "USD")))"
+            "Under by \(self.difference.formatted(.currency(code: "USD")))"
         }
     }
 }

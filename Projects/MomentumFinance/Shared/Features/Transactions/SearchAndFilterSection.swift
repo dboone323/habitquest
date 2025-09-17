@@ -25,13 +25,13 @@ extension Features.Transactions {
         var body: some View {
             VStack(spacing: 12) {
                 // Simple Search Bar
-                TextField("Search transactions...", text: $searchText).accessibilityLabel("Text Field")
+                TextField("Search transactions...", text: self.$searchText).accessibilityLabel("Text Field")
                     .padding()
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(8)
 
                 // Filter Picker
-                Picker("Filter", selection: $selectedFilter) {
+                Picker("Filter", selection: self.$selectedFilter) {
                     ForEach(TransactionFilter.allCases, id: \.self) { filter in
                         Text(filter.rawValue).tag(filter)
                     }

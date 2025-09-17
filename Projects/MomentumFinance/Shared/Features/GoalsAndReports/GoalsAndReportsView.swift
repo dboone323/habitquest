@@ -48,24 +48,24 @@ extension Features.GoalsAndReports {
                 VStack(spacing: 0) {
                     // Enhanced Header Section
                     HeaderSection(
-                        selectedTab: $selectedTab,
-                        showingAddGoal: $showingAddGoal,
-                        )
+                        selectedTab: self.$selectedTab,
+                        showingAddGoal: self.$showingAddGoal,
+                    )
 
                     // Content with Animation
-                    TabView(selection: $selectedTab) {
+                    TabView(selection: self.$selectedTab) {
                         SavingsGoalsTab(
-                            goals: savingsGoals,
-                            showingAddGoal: $showingAddGoal,
-                            selectedGoal: $selectedGoal,
-                            )
+                            goals: self.savingsGoals,
+                            showingAddGoal: self.$showingAddGoal,
+                            selectedGoal: self.$selectedGoal,
+                        )
                         .tag(0)
 
                         ReportsTab(
-                            transactions: transactions,
-                            budgets: budgets,
-                            categories: categories,
-                            )
+                            transactions: self.transactions,
+                            budgets: self.budgets,
+                            categories: self.categories,
+                        )
                         .tag(1)
                     }
                     #if canImport(UIKit)
@@ -74,42 +74,42 @@ extension Features.GoalsAndReports {
                 }
                 .navigationTitle("Goals & Reports")
                 #if canImport(UIKit)
-                .navigationBarHidden(true)
+                    .navigationBarHidden(true)
                 #endif
-                .toolbar {
-                    ToolbarItem(placement: .automatic) {
-                        HStack(spacing: 12) {
-                            // Search Button
-                            Button {
-                                showingSearch = true
-                                NavigationCoordinator.shared.activateSearch()
-                            } label: {
-                                Image(systemName: "magnifyingglass")
-                                    .font(.system(size: 18, weight: .semibold))
-                            }
+                    .toolbar {
+                        ToolbarItem(placement: .automatic) {
+                            HStack(spacing: 12) {
+                                // Search Button
+                                Button {
+                                    self.showingSearch = true
+                                    NavigationCoordinator.shared.activateSearch()
+                                } label: {
+                                    Image(systemName: "magnifyingglass")
+                                        .font(.system(size: 18, weight: .semibold))
+                                }
 
-                            // Add Goal Button
-                            Button {
-                                showingAddGoal = true
-                            } label: {
-                                Image(systemName: "plus")
-                                    .font(.system(size: 18, weight: .semibold))
+                                // Add Goal Button
+                                Button {
+                                    self.showingAddGoal = true
+                                } label: {
+                                    Image(systemName: "plus")
+                                        .font(.system(size: 18, weight: .semibold))
+                                }
                             }
                         }
                     }
-                }
-                .sheet(isPresented: $showingAddGoal) {
-                    AddSavingsGoalView()
-                }
-                .sheet(isPresented: $showingSearch) {
-                    Features.GlobalSearch.GlobalSearchView()
-                }
-                .sheet(item: $selectedGoal) { goal in
-                    SavingsGoalDetailView(goal: goal)
-                }
-                .onAppear {
-                    viewModel.setModelContext(modelContext)
-                }
+                    .sheet(isPresented: self.$showingAddGoal) {
+                        AddSavingsGoalView()
+                    }
+                    .sheet(isPresented: self.$showingSearch) {
+                        Features.GlobalSearch.GlobalSearchView()
+                    }
+                    .sheet(item: self.$selectedGoal) { goal in
+                        SavingsGoalDetailView(goal: goal)
+                    }
+                    .onAppear {
+                        self.viewModel.setModelContext(self.modelContext)
+                    }
             }
         }
 
@@ -156,15 +156,15 @@ extension Features.GoalsAndReports {
 
                         Spacer()
 
-                        if selectedTab == 0 {
+                        if self.selectedTab == 0 {
                             Button(
-                                action: { showingAddGoal = true },
+                                action: { self.showingAddGoal = true },
                                 label: {
                                     Image(systemName: "plus.circle.fill")
                                         .font(.title2)
                                         .foregroundColor(.blue)
                                 },
-                                )
+                            )
                         }
                     }
 
@@ -172,12 +172,12 @@ extension Features.GoalsAndReports {
                     HStack(spacing: 0) {
                         ForEach(["Goals", "Reports"], id: \.self) { tab in
                             let index = tab == "Goals" ? 0 : 1
-                            let isSelected = selectedTab == index
+                            let isSelected = self.selectedTab == index
 
                             Button(
                                 action: {
                                     withAnimation(.easeInOut(duration: 0.3)) {
-                                        selectedTab = index
+                                        self.selectedTab = index
                                     }
                                 },
                                 label: {
@@ -210,33 +210,33 @@ extension Features.GoalsAndReports {
                                                         ]),
                                                         startPoint: .leading,
                                                         endPoint: .trailing,
-                                                        )
+                                                    )
                                                     : LinearGradient(
                                                         gradient: Gradient(colors: [Color.clear]),
                                                         startPoint: .leading,
                                                         endPoint: .trailing,
-                                                        ),
-                                                ),
-                                        )
+                                                    ),
+                                            ),
+                                    )
                                 },
-                                )
+                            )
                         }
                         .padding(4)
                         .background(
                             RoundedRectangle(cornerRadius: 14)
-                                .fill(secondaryBackgroundColor)
+                                .fill(self.secondaryBackgroundColor)
                                 .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
-                            )
+                        )
                     }
                 }
                 .padding()
                 .background(
                     LinearGradient(
-                        gradient: Gradient(colors: [backgroundColor, secondaryBackgroundColor]),
+                        gradient: Gradient(colors: [self.backgroundColor, self.secondaryBackgroundColor]),
                         startPoint: .top,
                         endPoint: .bottom,
-                        ),
-                    )
+                    ),
+                )
             }
         }
 
@@ -253,16 +253,16 @@ extension Features.GoalsAndReports {
                 VStack {
                     Text("Savings Goals")
                         .font(.headline)
-                    if goals.isEmpty {
+                    if self.goals.isEmpty {
                         Text("No savings goals yet")
                             .foregroundColor(.secondary)
-                        Button(action: { showingAddGoal = true }) {
+                        Button(action: { self.showingAddGoal = true }) {
                             Text("Add Goal")
                                 .accessibilityLabel("Button")
                         }
                         .padding()
                     } else {
-                        ForEach(goals, id: \.id) { goal in
+                        ForEach(self.goals, id: \.id) { goal in
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text(goal.name)
@@ -279,7 +279,7 @@ extension Features.GoalsAndReports {
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(8)
                             .onTapGesture {
-                                selectedGoal = goal
+                                self.selectedGoal = goal
                             }
                         }
                     }
@@ -295,10 +295,10 @@ extension Features.GoalsAndReports {
 
             var body: some View {
                 Features.GoalsAndReports.EnhancedReportsSection(
-                    transactions: transactions,
-                    budgets: budgets,
-                    categories: categories,
-                    )
+                    transactions: self.transactions,
+                    budgets: self.budgets,
+                    categories: self.categories,
+                )
             }
         }
     }

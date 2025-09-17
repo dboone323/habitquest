@@ -16,7 +16,7 @@ struct JournalDetailView: View {
         formatter.dateStyle = .long // e.g., April 29, 2025
         formatter.timeStyle = .short // e.g., 1:47 PM or 13:47
         // Set locale based on 24-hour setting
-        formatter.locale = Locale(identifier: use24HourTime ? "en_GB" : "en_US")
+        formatter.locale = Locale(identifier: self.use24HourTime ? "en_GB" : "en_US")
         return formatter
     }
 
@@ -27,42 +27,44 @@ struct JournalDetailView: View {
             VStack(alignment: .leading, spacing: 15) { // Add spacing between elements
                 // Mood Emoji Section
                 HStack {
-                    Text(entry.mood)
+                    Text(self.entry.mood)
                         .font(.system(size: 60)) // Make emoji large
                     Spacer() // Push emoji to the left (or center if desired)
                 }
 
                 // Title Section
-                Text(entry.title)
+                Text(self.entry.title)
                     // Apply theme font (primary, large title size, bold) and color
-                    .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.primaryFontName, size: 30, weight: .bold))
-                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                    .font(self.themeManager.currentTheme.font(
+                        forName: self.themeManager.currentTheme.primaryFontName,
+                        size: 30,
+                        weight: .bold
+                    ))
+                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 
                 // Date Section
-                Text(entry.date, formatter: detailDateFormatter) // Use the detailed formatter
+                Text(self.entry.date, formatter: self.detailDateFormatter) // Use the detailed formatter
                     // Apply theme font (secondary, smaller size) and color
-                    .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.secondaryFontName, size: 16))
-                    .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                    .font(self.themeManager.currentTheme.font(forName: self.themeManager.currentTheme.secondaryFontName, size: 16))
+                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
 
                 // Divider line (uses system/theme appropriate color)
                 Divider()
 
                 // Body Text Section
-                Text(entry.body)
+                Text(self.entry.body)
                     // Apply theme font (primary, body size) and color
-                    .font(themeManager.currentTheme.font(forName: themeManager.currentTheme.primaryFontName, size: 17))
-                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                    .font(self.themeManager.currentTheme.font(forName: self.themeManager.currentTheme.primaryFontName, size: 17))
+                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
                     .lineSpacing(5) // Add extra space between lines for readability
-
             } // End VStack
             .padding() // Add padding around the entire content VStack
-
         } // End ScrollView
         .navigationTitle("Entry Details") // Set navigation bar title
         // Apply theme background color to the ScrollView's content area
-        .background(themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
+        .background(self.themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
         // Apply theme accent color for potential interactive elements (though none here)
-        .accentColor(themeManager.currentTheme.primaryAccentColor)
+        .accentColor(self.themeManager.currentTheme.primaryAccentColor)
     }
 }
 
@@ -72,9 +74,14 @@ struct JournalDetailView_Previews: PreviewProvider {
         // Embed in NavigationStack for the preview to show the title bar
         NavigationStack {
             // Create a sample entry for the preview
-            JournalDetailView(entry: JournalEntry(title: "A Wonderful Day", body: "Spent the afternoon reading in the park. The weather was perfect and it felt great to relax and unwind.", date: Date(), mood: "😊"))
-                // Provide the ThemeManager environment object for the preview
-                .environmentObject(ThemeManager())
+            JournalDetailView(entry: JournalEntry(
+                title: "A Wonderful Day",
+                body: "Spent the afternoon reading in the park. The weather was perfect and it felt great to relax and unwind.",
+                date: Date(),
+                mood: "😊"
+            ))
+            // Provide the ThemeManager environment object for the preview
+            .environmentObject(ThemeManager())
         }
     }
 }

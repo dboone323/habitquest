@@ -38,7 +38,7 @@ class DataManagementViewModel: ObservableObject {
     /// - Returns: <#description#>
     func setModelContext(_ context: ModelContext) {
         self.modelContext = context
-        loadDataStatistics()
+        self.loadDataStatistics()
     }
 
     /// Export user data to JSON file
@@ -51,7 +51,7 @@ class DataManagementViewModel: ObservableObject {
     func exportData() {
         guard let modelContext else { return }
 
-        isExporting = true
+        self.isExporting = true
 
         Task {
             do {
@@ -66,7 +66,7 @@ class DataManagementViewModel: ObservableObject {
                     self.updateLastBackupDate()
                 }
 
-                logger.info("Data export prepared successfully")
+                self.logger.info("Data export prepared successfully")
 
             } catch {
                 await MainActor.run {
@@ -85,7 +85,7 @@ class DataManagementViewModel: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func importData() {
-        showingFileImporter = true
+        self.showingFileImporter = true
     }
 
     /// Handle the result of file export
@@ -97,14 +97,14 @@ class DataManagementViewModel: ObservableObject {
     /// - Returns: <#description#>
     func handleExportResult(_ result: Result<URL, Error>) {
         switch result {
-        case .success(let url):
-            logger.info("Data exported successfully to: \(url.path)")
-            showingExportSuccess = true
-            updateLastBackupDate()
+        case let .success(url):
+            self.logger.info("Data exported successfully to: \(url.path)")
+            self.showingExportSuccess = true
+            self.updateLastBackupDate()
 
-        case .failure(let error):
-            logger.error("Export failed: \(error.localizedDescription)")
-            handleError(error)
+        case let .failure(error):
+            self.logger.error("Export failed: \(error.localizedDescription)")
+            self.handleError(error)
         }
     }
 
@@ -117,10 +117,10 @@ class DataManagementViewModel: ObservableObject {
     /// - Returns: <#description#>
     func handleImportResult(_ result: Result<[URL], Error>) {
         switch result {
-        case .success(let urls):
+        case let .success(urls):
             guard let url = urls.first else { return }
 
-            isImporting = true
+            self.isImporting = true
 
             Task {
                 do {
@@ -142,7 +142,7 @@ class DataManagementViewModel: ObservableObject {
                         self.loadDataStatistics() // Refresh stats after import
                     }
 
-                    logger.info("Data imported successfully from: \(url.path)")
+                    self.logger.info("Data imported successfully from: \(url.path)")
 
                 } catch {
                     await MainActor.run {
@@ -152,9 +152,9 @@ class DataManagementViewModel: ObservableObject {
                 }
             }
 
-        case .failure(let error):
-            logger.error("Import selection failed: \(error.localizedDescription)")
-            handleError(error)
+        case let .failure(error):
+            self.logger.error("Import selection failed: \(error.localizedDescription)")
+            self.handleError(error)
         }
     }
 
@@ -171,14 +171,14 @@ class DataManagementViewModel: ObservableObject {
         Task {
             do {
                 // Delete all data using the service
-                try await clearAllDataFromService(modelContext)
+                try await self.clearAllDataFromService(modelContext)
 
                 await MainActor.run {
                     self.loadDataStatistics() // Refresh stats
                     self.lastBackupDate = "Never"
                 }
 
-                logger.info("All data cleared successfully")
+                self.logger.info("All data cleared successfully")
 
             } catch {
                 await MainActor.run {
@@ -196,28 +196,28 @@ class DataManagementViewModel: ObservableObject {
             // Load habits
             let habitsDescriptor = FetchDescriptor<Habit>()
             let habits = try modelContext.fetch(habitsDescriptor)
-            totalHabits = habits.count
+            self.totalHabits = habits.count
 
             // Load completions
             let logsDescriptor = FetchDescriptor<HabitLog>()
             let logs = try modelContext.fetch(logsDescriptor)
-            totalCompletions = logs.count
+            self.totalCompletions = logs.count
 
             // Load achievements
             let achievementsDescriptor = FetchDescriptor<Achievement>()
             let achievements = try modelContext.fetch(achievementsDescriptor)
-            unlockedAchievements = achievements.filter(\.isUnlocked).count
+            self.unlockedAchievements = achievements.filter(\.isUnlocked).count
 
             // Load player profile
             let profileDescriptor = FetchDescriptor<PlayerProfile>()
             let profiles = try modelContext.fetch(profileDescriptor)
-            currentLevel = profiles.first?.level ?? 1
+            self.currentLevel = profiles.first?.level ?? 1
 
-            logger.info("Loaded data statistics: \(totalHabits) habits, \(totalCompletions) completions")
+            self.logger.info("Loaded data statistics: \(self.totalHabits) habits, \(self.totalCompletions) completions")
 
         } catch {
-            logger.error("Failed to load data statistics: \(error.localizedDescription)")
-            handleError(error)
+            self.logger.error("Failed to load data statistics: \(error.localizedDescription)")
+            self.handleError(error)
         }
     }
 
@@ -226,7 +226,7 @@ class DataManagementViewModel: ObservableObject {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
-        lastBackupDate = formatter.string(from: Date())
+        self.lastBackupDate = formatter.string(from: Date())
 
         // Store in UserDefaults for persistence
         UserDefaults.standard.set(Date(), forKey: "lastBackupDate")
@@ -238,20 +238,20 @@ class DataManagementViewModel: ObservableObject {
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
             formatter.timeStyle = .short
-            lastBackupDate = formatter.string(from: date)
+            self.lastBackupDate = formatter.string(from: date)
         } else {
-            lastBackupDate = "Never"
+            self.lastBackupDate = "Never"
         }
     }
 
     /// Handle errors and show user-friendly messages
     private func handleError(_ error: Error) {
         if let dataError = error as? DataExportError {
-            errorMessage = dataError.localizedDescription
+            self.errorMessage = dataError.localizedDescription
         } else {
-            errorMessage = "An unexpected error occurred: \(error.localizedDescription)"
+            self.errorMessage = "An unexpected error occurred: \(error.localizedDescription)"
         }
-        showingError = true
+        self.showingError = true
     }
 
     /// Clear all data using a background task

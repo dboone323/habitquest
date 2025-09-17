@@ -14,11 +14,11 @@ final class ExportEngineService {
     func export(settings: ExportSettings) async throws -> URL {
         switch settings.format {
         case .csv:
-            try await exportToCSV(settings: settings)
+            try await self.exportToCSV(settings: settings)
         case .pdf:
-            try await exportToPDF(settings: settings)
+            try await self.exportToPDF(settings: settings)
         case .json:
-            try await exportToJSON(settings: settings)
+            try await self.exportToJSON(settings: settings)
         }
     }
 
@@ -28,26 +28,26 @@ final class ExportEngineService {
         var csvContent = ""
 
         if settings.includeTransactions {
-            csvContent += try await generateTransactionsCSV(settings: settings)
+            csvContent += try await self.generateTransactionsCSV(settings: settings)
             csvContent += "\n\n"
         }
         if settings.includeAccounts {
-            csvContent += try await generateAccountsCSV(settings: settings)
+            csvContent += try await self.generateAccountsCSV(settings: settings)
             csvContent += "\n\n"
         }
         if settings.includeBudgets {
-            csvContent += try await generateBudgetsCSV(settings: settings)
+            csvContent += try await self.generateBudgetsCSV(settings: settings)
             csvContent += "\n\n"
         }
         if settings.includeSubscriptions {
-            csvContent += try await generateSubscriptionsCSV(settings: settings)
+            csvContent += try await self.generateSubscriptionsCSV(settings: settings)
             csvContent += "\n\n"
         }
         if settings.includeGoals {
-            csvContent += try await generateGoalsCSV(settings: settings)
+            csvContent += try await self.generateGoalsCSV(settings: settings)
         }
 
-        return try saveToFile(content: csvContent, filename: ExportConstants.csvFilename)
+        return try self.saveToFile(content: csvContent, filename: ExportConstants.csvFilename)
     }
 
     private func generateTransactionsCSV(settings: ExportSettings) async throws -> String {
@@ -60,12 +60,12 @@ final class ExportEngineService {
 
         for transaction in transactions {
             let date = formatter.string(from: transaction.date)
-            let title = escapeCSVField(transaction.title)
+            let title = self.escapeCSVField(transaction.title)
             let amount = String(transaction.amount)
             let type = transaction.transactionType.rawValue
-            let category = escapeCSVField(transaction.category?.name ?? "")
-            let account = escapeCSVField(transaction.account?.name ?? "")
-            let notes = escapeCSVField(transaction.notes ?? "")
+            let category = self.escapeCSVField(transaction.category?.name ?? "")
+            let account = self.escapeCSVField(transaction.account?.name ?? "")
+            let notes = self.escapeCSVField(transaction.notes ?? "")
 
             csv += "\(date),\(title),\(amount),\(type),\(category),\(account),\(notes)\n"
         }
@@ -82,7 +82,7 @@ final class ExportEngineService {
         let formatter = DateFormatter(); formatter.dateFormat = "yyyy-MM-dd"
 
         for account in accounts {
-            let name = escapeCSVField(account.name)
+            let name = self.escapeCSVField(account.name)
             let balance = String(account.balance)
             let type = account.accountType.rawValue
             let currency = account.currencyCode
@@ -103,10 +103,10 @@ final class ExportEngineService {
         let formatter = DateFormatter(); formatter.dateFormat = "yyyy-MM-dd"
 
         for budget in budgets {
-            let name = escapeCSVField(budget.name)
+            let name = self.escapeCSVField(budget.name)
             let limit = String(budget.limitAmount)
             let spent = String(budget.spentAmount)
-            let category = escapeCSVField(budget.category?.name ?? "")
+            let category = self.escapeCSVField(budget.category?.name ?? "")
             let month = formatter.string(from: budget.month)
             let created = formatter.string(from: budget.createdDate)
 
@@ -125,12 +125,12 @@ final class ExportEngineService {
         let formatter = DateFormatter(); formatter.dateFormat = "yyyy-MM-dd"
 
         for subscription in subscriptions {
-            let name = escapeCSVField(subscription.name)
+            let name = self.escapeCSVField(subscription.name)
             let amount = String(subscription.amount)
             let cycle = subscription.billingCycle.rawValue
             let nextDue = formatter.string(from: subscription.nextDueDate)
-            let category = escapeCSVField(subscription.category?.name ?? "")
-            let account = escapeCSVField(subscription.account?.name ?? "")
+            let category = self.escapeCSVField(subscription.category?.name ?? "")
+            let account = self.escapeCSVField(subscription.account?.name ?? "")
             let isActive = subscription.isActive ? "Yes" : "No"
 
             csv += "\(name),\(amount),\(cycle),\(nextDue),\(category),\(account),\(isActive)\n"
@@ -148,7 +148,7 @@ final class ExportEngineService {
         let formatter = DateFormatter(); formatter.dateFormat = "yyyy-MM-dd"
 
         for goal in goals {
-            let name = escapeCSVField(goal.name)
+            let name = self.escapeCSVField(goal.name)
             let target = String(goal.targetAmount)
             let current = String(goal.currentAmount)
             let targetDate = goal.targetDate.map { formatter.string(from: $0) } ?? ""
@@ -164,7 +164,7 @@ final class ExportEngineService {
 
     private func exportToPDF(settings: ExportSettings) async throws -> URL {
         let pdfData = try await generatePDFData(settings: settings)
-        return try saveToFile(data: pdfData, filename: ExportConstants.pdfFilename)
+        return try self.saveToFile(data: pdfData, filename: ExportConstants.pdfFilename)
     }
 
     private func generatePDFData(settings: ExportSettings) async throws -> Data {
@@ -204,10 +204,10 @@ final class ExportEngineService {
 
         var yPosition = pageRect.height - 120
         if settings.includeTransactions {
-            yPosition = try drawTransactionsSummary(context: pdfContext, yPosition: yPosition, settings: settings)
+            yPosition = try self.drawTransactionsSummary(context: pdfContext, yPosition: yPosition, settings: settings)
         }
         if settings.includeAccounts {
-            yPosition = try drawAccountsSummary(context: pdfContext, yPosition: yPosition, settings: settings)
+            yPosition = try self.drawAccountsSummary(context: pdfContext, yPosition: yPosition, settings: settings)
         }
 
         pdfContext.endPDFPage()
@@ -291,23 +291,23 @@ final class ExportEngineService {
         ]
 
         if settings.includeTransactions {
-            exportData["transactions"] = try await fetchTransactionsJSON(settings: settings)
+            exportData["transactions"] = try await self.fetchTransactionsJSON(settings: settings)
         }
         if settings.includeAccounts {
-            exportData["accounts"] = try await fetchAccountsJSON()
+            exportData["accounts"] = try await self.fetchAccountsJSON()
         }
         if settings.includeBudgets {
-            exportData["budgets"] = try await fetchBudgetsJSON()
+            exportData["budgets"] = try await self.fetchBudgetsJSON()
         }
         if settings.includeSubscriptions {
-            exportData["subscriptions"] = try await fetchSubscriptionsJSON()
+            exportData["subscriptions"] = try await self.fetchSubscriptionsJSON()
         }
         if settings.includeGoals {
-            exportData["goals"] = try await fetchGoalsJSON()
+            exportData["goals"] = try await self.fetchGoalsJSON()
         }
 
         let jsonData = try JSONSerialization.data(withJSONObject: exportData, options: .prettyPrinted)
-        return try saveToFile(data: jsonData, filename: ExportConstants.jsonFilename)
+        return try self.saveToFile(data: jsonData, filename: ExportConstants.jsonFilename)
     }
 
     // MARK: - Fetching
@@ -318,36 +318,36 @@ final class ExportEngineService {
                 transaction.date >= startDate && transaction.date <= endDate
             },
             sortBy: [SortDescriptor(\.date, order: .reverse)],
-            )
-        return try modelContext.fetch(descriptor)
+        )
+        return try self.modelContext.fetch(descriptor)
     }
 
     private func fetchAccounts() throws -> [FinancialAccount] {
         let descriptor = FetchDescriptor<FinancialAccount>(
             sortBy: [SortDescriptor(\.name)],
-            )
-        return try modelContext.fetch(descriptor)
+        )
+        return try self.modelContext.fetch(descriptor)
     }
 
     private func fetchBudgets() throws -> [Budget] {
         let descriptor = FetchDescriptor<Budget>(
             sortBy: [SortDescriptor(\.name)],
-            )
-        return try modelContext.fetch(descriptor)
+        )
+        return try self.modelContext.fetch(descriptor)
     }
 
     private func fetchSubscriptions() throws -> [Subscription] {
         let descriptor = FetchDescriptor<Subscription>(
             sortBy: [SortDescriptor(\.name)],
-            )
-        return try modelContext.fetch(descriptor)
+        )
+        return try self.modelContext.fetch(descriptor)
     }
 
     private func fetchGoals() throws -> [SavingsGoal] {
         let descriptor = FetchDescriptor<SavingsGoal>(
             sortBy: [SortDescriptor(\.name)],
-            )
-        return try modelContext.fetch(descriptor)
+        )
+        return try self.modelContext.fetch(descriptor)
     }
 
     // MARK: - JSON Converters

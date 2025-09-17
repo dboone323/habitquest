@@ -207,7 +207,7 @@ class StreakService {
             currentMilestone: currentMilestone,
             nextMilestone: nextMilestone,
             progressToNextMilestone: progressToNext,
-            streakPercentile: calculateStreakPercentile(currentStreak)
+            streakPercentile: self.calculateStreakPercentile(currentStreak)
         )
     }
 
@@ -246,12 +246,12 @@ struct StreakAnalytics {
 
     /// Formatted streak description
     var streakDescription: String {
-        if currentStreak == 0 {
+        if self.currentStreak == 0 {
             "Ready to start your streak!"
-        } else if currentStreak == 1 {
+        } else if self.currentStreak == 1 {
             "1 day streak - great start!"
         } else {
-            "\(currentStreak) day streak"
+            "\(self.currentStreak) day streak"
         }
     }
 
@@ -261,7 +261,7 @@ struct StreakAnalytics {
             return "You've reached legendary status!"
         }
 
-        let daysToNext = nextMilestone.streakCount - currentStreak
+        let daysToNext = nextMilestone.streakCount - self.currentStreak
 
         if daysToNext == 1 {
             return "Just 1 more day to reach \(nextMilestone.title)!"

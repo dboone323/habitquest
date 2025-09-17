@@ -30,13 +30,13 @@ class CloudKitManager: ObservableObject {
     }
 
     private init() {
-        checkiCloudStatus()
+        self.checkiCloudStatus()
     }
 
     // MARK: - iCloud Status
 
     func checkiCloudStatus() {
-        container.accountStatus { [weak self] status, _ in
+        self.container.accountStatus { [weak self] status, _ in
             DispatchQueue.main.async {
                 switch status {
                 case .available:
@@ -51,46 +51,46 @@ class CloudKitManager: ObservableObject {
     }
 
     func checkAccountStatus() async {
-        syncStatus = .syncing
+        self.syncStatus = .syncing
 
         do {
             let status = try await container.accountStatus()
             switch status {
             case .available:
-                isSignedInToiCloud = true
-                syncStatus = .success
+                self.isSignedInToiCloud = true
+                self.syncStatus = .success
             case .noAccount, .restricted, .couldNotDetermine, .temporarilyUnavailable:
-                isSignedInToiCloud = false
-                syncStatus = .error
+                self.isSignedInToiCloud = false
+                self.syncStatus = .error
             @unknown default:
-                isSignedInToiCloud = false
-                syncStatus = .error
+                self.isSignedInToiCloud = false
+                self.syncStatus = .error
             }
         } catch {
-            isSignedInToiCloud = false
-            syncStatus = .error
+            self.isSignedInToiCloud = false
+            self.syncStatus = .error
         }
     }
 
     func requestiCloudAccess() {
         // For iOS 14+, we can't request userDiscoverability permission
         // Just check the account status instead
-        checkiCloudStatus()
+        self.checkiCloudStatus()
     }
 
     func handleNewDeviceLogin() async {
         // Stub implementation for new device setup
-        await syncAllData()
+        await self.syncAllData()
     }
 
     func performSync() async {
-        await syncAllData()
+        await self.syncAllData()
     }
 
     // MARK: - Sync Methods (Stubs)
 
     func syncAllData() async {
-        syncStatus = .syncing
+        self.syncStatus = .syncing
 
         // Simulate sync delay
         await withCheckedContinuation { continuation in
@@ -99,8 +99,8 @@ class CloudKitManager: ObservableObject {
             }
         }
 
-        syncStatus = .success
-        lastSyncDate = Date()
+        self.syncStatus = .success
+        self.lastSyncDate = Date()
     }
 
     func requestCloudKitPermission() async -> Bool {

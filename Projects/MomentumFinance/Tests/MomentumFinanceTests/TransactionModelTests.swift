@@ -4,7 +4,6 @@ import XCTest
 
 /// Unit tests for Transaction model functionality
 final class TransactionModelTests: XCTestCase {
-
     var modelContainer: ModelContainer!
     var modelContext: ModelContext!
 
@@ -12,13 +11,13 @@ final class TransactionModelTests: XCTestCase {
         // Create in-memory model container for testing
         let schema = Schema([Transaction.self, Account.self, Category.self])
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        modelContainer = try ModelContainer(for: schema, configurations: [configuration])
-        modelContext = ModelContext(modelContainer)
+        self.modelContainer = try ModelContainer(for: schema, configurations: [configuration])
+        self.modelContext = ModelContext(self.modelContainer)
     }
 
     override func tearDownWithError() throws {
-        modelContainer = nil
-        modelContext = nil
+        self.modelContainer = nil
+        self.modelContext = nil
     }
 
     // MARK: - Transaction Creation Tests
@@ -51,8 +50,8 @@ final class TransactionModelTests: XCTestCase {
             categoryName: "Work",
         )
 
-        modelContext.insert(transaction)
-        try modelContext.save()
+        self.modelContext.insert(transaction)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>()
         let savedTransactions = try modelContext.fetch(fetchRequest)
@@ -71,10 +70,10 @@ final class TransactionModelTests: XCTestCase {
         let income2 = Transaction(amount: 500.0, description: "Freelance", date: Date(), type: .income, categoryName: "Side Work")
         let expense = Transaction(amount: 200.0, description: "Groceries", date: Date(), type: .expense, categoryName: "Food")
 
-        modelContext.insert(income1)
-        modelContext.insert(income2)
-        modelContext.insert(expense)
-        try modelContext.save()
+        self.modelContext.insert(income1)
+        self.modelContext.insert(income2)
+        self.modelContext.insert(expense)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>(
             predicate: #Predicate { $0.type == .income },
@@ -92,9 +91,9 @@ final class TransactionModelTests: XCTestCase {
         let expense1 = Transaction(amount: 100.0, description: "Gas", date: Date(), type: .expense, categoryName: "Transport")
         let expense2 = Transaction(amount: 50.0, description: "Coffee", date: Date(), type: .expense, categoryName: "Food")
 
-        modelContext.insert(expense1)
-        modelContext.insert(expense2)
-        try modelContext.save()
+        self.modelContext.insert(expense1)
+        self.modelContext.insert(expense2)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>(
             predicate: #Predicate { $0.type == .expense },
@@ -119,10 +118,10 @@ final class TransactionModelTests: XCTestCase {
         let yesterdayTransaction = Transaction(amount: 15.0, description: "Snack", date: yesterday, type: .expense, categoryName: "Food")
         let oldTransaction = Transaction(amount: 100.0, description: "Old Purchase", date: lastWeek, type: .expense, categoryName: "Other")
 
-        modelContext.insert(todayTransaction)
-        modelContext.insert(yesterdayTransaction)
-        modelContext.insert(oldTransaction)
-        try modelContext.save()
+        self.modelContext.insert(todayTransaction)
+        self.modelContext.insert(yesterdayTransaction)
+        self.modelContext.insert(oldTransaction)
+        try self.modelContext.save()
 
         // Test recent transactions (last 3 days)
         let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: today)!
@@ -143,10 +142,10 @@ final class TransactionModelTests: XCTestCase {
         let foodTransaction2 = Transaction(amount: 15.0, description: "Coffee", date: Date(), type: .expense, categoryName: "Food")
         let transportTransaction = Transaction(amount: 30.0, description: "Gas", date: Date(), type: .expense, categoryName: "Transport")
 
-        modelContext.insert(foodTransaction1)
-        modelContext.insert(foodTransaction2)
-        modelContext.insert(transportTransaction)
-        try modelContext.save()
+        self.modelContext.insert(foodTransaction1)
+        self.modelContext.insert(foodTransaction2)
+        self.modelContext.insert(transportTransaction)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>(
             predicate: #Predicate { $0.categoryName == "Food" },
@@ -170,8 +169,8 @@ final class TransactionModelTests: XCTestCase {
             categoryName: "Test",
         )
 
-        modelContext.insert(zeroTransaction)
-        try modelContext.save()
+        self.modelContext.insert(zeroTransaction)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>()
         let allTransactions = try modelContext.fetch(fetchRequest)
@@ -192,8 +191,8 @@ final class TransactionModelTests: XCTestCase {
             categoryName: "Refunds",
         )
 
-        modelContext.insert(refundTransaction)
-        try modelContext.save()
+        self.modelContext.insert(refundTransaction)
+        try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>()
         let allTransactions = try modelContext.fetch(fetchRequest)
@@ -218,10 +217,10 @@ final class TransactionModelTests: XCTestCase {
                 type: i % 2 == 0 ? .income : .expense,
                 categoryName: "Category \(i % 10)",
             )
-            modelContext.insert(transaction)
+            self.modelContext.insert(transaction)
         }
 
-        try modelContext.save()
+        try self.modelContext.save()
 
         let insertTime = Date().timeIntervalSince(startTime)
         XCTAssertLessThan(insertTime, 5.0, "Inserting 1000 transactions should take less than 5 seconds")

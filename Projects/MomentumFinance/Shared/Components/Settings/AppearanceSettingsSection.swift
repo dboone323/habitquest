@@ -5,7 +5,7 @@ struct AppearanceSettingsSection: View {
 
     var body: some View {
         Section(header: Text("Appearance")) {
-            Picker("Theme", selection: .constant(darkModePreference)) {
+            Picker("Theme", selection: .constant(self.darkModePreference)) {
                 ForEach(DarkModePreference.allCases, id: \.self) { preference in
                     Text(preference.displayName).tag(preference)
                 }

@@ -21,14 +21,14 @@ struct EnhancedAccountDetailView: View {
     @State private var showingExportOptions = false
 
     private var account: FinancialAccount? {
-        accounts.first(where: { $0.id == accountId })
+        self.accounts.first(where: { $0.id == self.accountId })
     }
 
     private var filteredTransactions: [FinancialTransaction] {
         guard let account else { return [] }
 
-        return transactions
-            .filter { $0.account?.id == accountId && isTransactionInSelectedTimeFrame($0.date) }
+        return self.transactions
+            .filter { $0.account?.id == self.accountId && self.isTransactionInSelectedTimeFrame($0.date) }
             .sorted { $0.date > $1.date }
     }
 
@@ -60,26 +60,26 @@ struct EnhancedAccountDetailView: View {
 
                 Spacer()
 
-                Picker("Time Frame", selection: $selectedTimeFrame) {
+                Picker("Time Frame", selection: self.$selectedTimeFrame) {
                     ForEach(TimeFrame.allCases) { timeFrame in
                         Text(timeFrame.rawValue).tag(timeFrame)
                     }
                 }
                 .frame(width: 150)
 
-                Button(action: { isEditing.toggle().accessibilityLabel("Button") }) {
-                    Text(isEditing ? "Done" : "Edit")
+                Button(action: { self.isEditing.toggle().accessibilityLabel("Button") }) {
+                    Text(self.isEditing ? "Done" : "Edit")
                 }
                 .keyboardShortcut("e", modifiers: .command)
 
                 Menu {
-                    Button("Add Transaction", action: addTransaction).accessibilityLabel("Button")
+                    Button("Add Transaction", action: self.addTransaction).accessibilityLabel("Button")
                     Divider()
-                    Button("Export Transactions...", action: { showingExportOptions = true }).accessibilityLabel("Button")
-                    Button("Print Account Summary", action: printAccountSummary).accessibilityLabel("Button")
+                    Button("Export Transactions...", action: { self.showingExportOptions = true }).accessibilityLabel("Button")
+                    Button("Print Account Summary", action: self.printAccountSummary).accessibilityLabel("Button")
                     Divider()
                     Button("Delete Account", role: .destructive).accessibilityLabel("Button") {
-                        showingDeleteConfirmation = true
+                        self.showingDeleteConfirmation = true
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -90,32 +90,32 @@ struct EnhancedAccountDetailView: View {
 
             Divider()
 
-            if isEditing, let account {
-                editView(for: account)
+            if self.isEditing, let account {
+                self.editView(for: account)
                     .padding()
                     .transition(.opacity)
             } else {
-                detailView()
+                self.detailView()
                     .transition(.opacity)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .alert("Delete Account", isPresented: $showingDeleteConfirmation) {
+        .alert("Delete Account", isPresented: self.$showingDeleteConfirmation) {
             Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
             Button("Delete", role: .destructive).accessibilityLabel("Button") {
-                deleteAccount()
+                self.deleteAccount()
             }
         } message: {
             Text("Are you sure you want to delete this account? This will also delete all associated transactions and cannot be undone.")
         }
-        .sheet(isPresented: $showingExportOptions) {
-            ExportOptionsView(account: account, transactions: filteredTransactions)
+        .sheet(isPresented: self.$showingExportOptions) {
+            ExportOptionsView(account: self.account, transactions: self.filteredTransactions)
                 .frame(width: 500, height: 400)
         }
         .onAppear {
             // Initialize edit model if needed
             if let account, editedAccount == nil {
-                editedAccount = AccountEditModel(from: account)
+                self.editedAccount = AccountEditModel(from: account)
             }
         }
     }
@@ -125,10 +125,12 @@ struct EnhancedAccountDetailView: View {
     private func detailView() -> some View {
         guard let account else {
             return AnyView(
-                ContentUnavailableView("Account Not Found",
-                                       systemImage: "exclamationmark.triangle",
-                                       description: Text("The account you're looking for could not be found.")),
-                )
+                ContentUnavailableView(
+                    "Account Not Found",
+                    systemImage: "exclamationmark.triangle",
+                    description: Text("The account you're looking for could not be found.")
+                ),
+            )
         }
 
         return AnyView(
@@ -172,18 +174,27 @@ struct EnhancedAccountDetailView: View {
                             // Quick stats
                             Grid(alignment: .leading, horizontalSpacing: 40, verticalSpacing: 12) {
                                 GridRow {
-                                    DetailField(label: "Income", value: getIncomeTotal().formatted(.currency(code: account.currencyCode)))
-                                        .foregroundStyle(.green)
+                                    DetailField(
+                                        label: "Income",
+                                        value: self.getIncomeTotal().formatted(.currency(code: account.currencyCode))
+                                    )
+                                    .foregroundStyle(.green)
 
-                                    DetailField(label: "Expenses", value: getExpensesTotal().formatted(.currency(code: account.currencyCode)))
-                                        .foregroundStyle(.red)
+                                    DetailField(
+                                        label: "Expenses",
+                                        value: self.getExpensesTotal().formatted(.currency(code: account.currencyCode))
+                                    )
+                                    .foregroundStyle(.red)
                                 }
 
                                 GridRow {
-                                    DetailField(label: "Net Flow", value: getNetCashFlow().formatted(.currency(code: account.currencyCode)))
-                                        .foregroundStyle(getNetCashFlow() >= 0 ? .green : .red)
+                                    DetailField(
+                                        label: "Net Flow",
+                                        value: self.getNetCashFlow().formatted(.currency(code: account.currencyCode))
+                                    )
+                                    .foregroundStyle(self.getNetCashFlow() >= 0 ? .green : .red)
 
-                                    DetailField(label: "Transactions", value: "\(filteredTransactions.count)")
+                                    DetailField(label: "Transactions", value: "\(self.filteredTransactions.count)")
                                 }
 
                                 if let interestRate = account.interestRate, interestRate > 0 {
@@ -204,7 +215,7 @@ struct EnhancedAccountDetailView: View {
                             Text("Balance Trend")
                                 .font(.headline)
 
-                            BalanceTrendChart(account: account, timeFrame: selectedTimeFrame)
+                            BalanceTrendChart(account: account, timeFrame: self.selectedTimeFrame)
                                 .frame(height: 220)
                         }
                         .padding()
@@ -216,7 +227,7 @@ struct EnhancedAccountDetailView: View {
                             Text("Spending Breakdown")
                                 .font(.headline)
 
-                            SpendingBreakdownChart(transactions: filteredTransactions)
+                            SpendingBreakdownChart(transactions: self.filteredTransactions)
                                 .frame(height: 280)
                         }
                         .padding()
@@ -260,7 +271,7 @@ struct EnhancedAccountDetailView: View {
 
                         Spacer()
 
-                        Button(action: addTransaction).accessibilityLabel("Button") {
+                        Button(action: self.addTransaction).accessibilityLabel("Button") {
                             Label("Add", systemImage: "plus")
                         }
                         .buttonStyle(.bordered)
@@ -271,28 +282,28 @@ struct EnhancedAccountDetailView: View {
                     Divider()
 
                     // Transactions list
-                    if filteredTransactions.isEmpty {
+                    if self.filteredTransactions.isEmpty {
                         ContentUnavailableView {
                             Label("No Transactions", systemImage: "list.bullet")
                         } description: {
                             Text("No transactions found for this account in the selected time period.")
                         } actions: {
                             Button("Add Transaction").accessibilityLabel("Button") {
-                                addTransaction()
+                                self.addTransaction()
                             }
                             .buttonStyle(.bordered)
                         }
                         .frame(maxHeight: .infinity)
                     } else {
-                        List(filteredTransactions, selection: $selectedTransactionIds) {
-                            transactionRow(for: $0)
+                        List(self.filteredTransactions, selection: self.$selectedTransactionIds) {
+                            self.transactionRow(for: $0)
                         }
                         .listStyle(.inset)
                     }
                 }
                 .frame(width: 400)
             },
-            )
+        )
     }
 
     // MARK: - Edit View
@@ -311,7 +322,7 @@ struct EnhancedAccountDetailView: View {
                     TextField("Account name", text: Binding(
                         get: { self.editedAccount?.name ?? account.name },
                         set: { self.editedAccount?.name = $0 },
-                        ))
+                    ))
                     .textFieldStyle(.roundedBorder)
                 }
 
@@ -323,7 +334,7 @@ struct EnhancedAccountDetailView: View {
                     Picker("Type", selection: Binding(
                         get: { self.editedAccount?.type ?? account.type },
                         set: { self.editedAccount?.type = $0 },
-                        )) {
+                    )) {
                         Text("Checking").tag(FinancialAccount.AccountType.checking)
                         Text("Savings").tag(FinancialAccount.AccountType.savings)
                         Text("Credit").tag(FinancialAccount.AccountType.credit)
@@ -342,14 +353,14 @@ struct EnhancedAccountDetailView: View {
                         TextField("Balance", value: Binding(
                             get: { self.editedAccount?.balance ?? account.balance },
                             set: { self.editedAccount?.balance = $0 },
-                            ), format: .currency(code: account.currencyCode))
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 150)
+                        ), format: .currency(code: account.currencyCode))
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: 150)
 
                         Picker("Currency", selection: Binding(
                             get: { self.editedAccount?.currencyCode ?? account.currencyCode },
                             set: { self.editedAccount?.currencyCode = $0 },
-                            )) {
+                        )) {
                             Text("USD").tag("USD")
                             Text("EUR").tag("EUR")
                             Text("GBP").tag("GBP")
@@ -366,7 +377,7 @@ struct EnhancedAccountDetailView: View {
                     TextField("Bank or financial institution", text: Binding(
                         get: { self.editedAccount?.institution ?? account.institution ?? "" },
                         set: { self.editedAccount?.institution = $0 },
-                        ))
+                    ))
                     .textFieldStyle(.roundedBorder)
                 }
 
@@ -378,7 +389,7 @@ struct EnhancedAccountDetailView: View {
                     TextField("Account number", text: Binding(
                         get: { self.editedAccount?.accountNumber ?? account.accountNumber ?? "" },
                         set: { self.editedAccount?.accountNumber = $0 },
-                        ))
+                    ))
                     .textFieldStyle(.roundedBorder)
                 }
 
@@ -391,9 +402,9 @@ struct EnhancedAccountDetailView: View {
                         TextField("Interest rate", value: Binding(
                             get: { ((self.editedAccount?.interestRate ?? account.interestRate) ?? 0) * 100 },
                             set: { self.editedAccount?.interestRate = $0 / 100 },
-                            ), format: .number)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 100)
+                        ), format: .number)
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: 100)
                     }
                 }
 
@@ -406,9 +417,9 @@ struct EnhancedAccountDetailView: View {
                         TextField("Credit limit", value: Binding(
                             get: { self.editedAccount?.creditLimit ?? account.creditLimit ?? 0 },
                             set: { self.editedAccount?.creditLimit = $0 },
-                            ), format: .currency(code: account.currencyCode))
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 150)
+                        ), format: .currency(code: account.currencyCode))
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: 150)
                     }
 
                     GridRow {
@@ -418,7 +429,7 @@ struct EnhancedAccountDetailView: View {
                         Picker("Due Date", selection: Binding(
                             get: { self.editedAccount?.dueDate ?? account.dueDate ?? 1 },
                             set: { self.editedAccount?.dueDate = $0 },
-                            )) {
+                        )) {
                             ForEach(1 ... 31, id: \.self) { day in
                                 Text("\(day)").tag(day)
                             }
@@ -434,7 +445,7 @@ struct EnhancedAccountDetailView: View {
                     Toggle("Include this account in dashboard totals", isOn: Binding(
                         get: { self.editedAccount?.includeInTotal ?? account.includeInTotal },
                         set: { self.editedAccount?.includeInTotal = $0 },
-                        ))
+                    ))
                 }
 
                 // Active/Inactive
@@ -445,7 +456,7 @@ struct EnhancedAccountDetailView: View {
                     Toggle("Account is active", isOn: Binding(
                         get: { self.editedAccount?.isActive ?? account.isActive },
                         set: { self.editedAccount?.isActive = $0 },
-                        ))
+                    ))
                 }
             }
             .padding(.bottom, 20)
@@ -456,7 +467,7 @@ struct EnhancedAccountDetailView: View {
             TextEditor(text: Binding(
                 get: { self.editedAccount?.notes ?? account.notes ?? "" },
                 set: { self.editedAccount?.notes = $0 },
-                ))
+            ))
             .font(.body)
             .frame(minHeight: 100)
             .padding(4)
@@ -467,17 +478,17 @@ struct EnhancedAccountDetailView: View {
                 Spacer()
 
                 Button("Cancel").accessibilityLabel("Button") {
-                    isEditing = false
+                    self.isEditing = false
                     // Reset edited account to original
                     if let account {
-                        editedAccount = AccountEditModel(from: account)
+                        self.editedAccount = AccountEditModel(from: account)
                     }
                 }
                 .buttonStyle(.bordered)
                 .keyboardShortcut(.escape, modifiers: [])
 
                 Button("Save").accessibilityLabel("Button") {
-                    saveChanges()
+                    self.saveChanges()
                 }
                 .buttonStyle(.borderedProminent)
                 .keyboardShortcut(.return, modifiers: .command)
@@ -517,13 +528,13 @@ struct EnhancedAccountDetailView: View {
             }
 
             Button("Mark as \(transaction.isReconciled ? "Unreconciled" : "Reconciled").accessibilityLabel("Button")") {
-                toggleTransactionStatus(transaction)
+                self.toggleTransactionStatus(transaction)
             }
 
             Divider()
 
             Button("Delete", role: .destructive).accessibilityLabel("Button") {
-                deleteTransaction(transaction)
+                self.deleteTransaction(transaction)
             }
         }
     }
@@ -534,11 +545,11 @@ struct EnhancedAccountDetailView: View {
 
         var body: some View {
             VStack(alignment: .leading, spacing: 4) {
-                Text(label)
+                Text(self.label)
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                Text(value)
+                Text(self.value)
                     .font(.body)
             }
         }
@@ -548,7 +559,7 @@ struct EnhancedAccountDetailView: View {
         let type: FinancialAccount.AccountType
 
         private var text: String {
-            switch type {
+            switch self.type {
             case .checking: "Checking"
             case .savings: "Savings"
             case .credit: "Credit"
@@ -557,7 +568,7 @@ struct EnhancedAccountDetailView: View {
         }
 
         private var color: Color {
-            switch type {
+            switch self.type {
             case .checking: .green
             case .savings: .blue
             case .credit: .purple
@@ -566,12 +577,12 @@ struct EnhancedAccountDetailView: View {
         }
 
         var body: some View {
-            Text(text)
+            Text(self.text)
                 .font(.caption)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 3)
-                .background(color.opacity(0.1))
-                .foregroundColor(color)
+                .background(self.color.opacity(0.1))
+                .foregroundColor(self.color)
                 .cornerRadius(4)
         }
     }
@@ -590,18 +601,18 @@ struct EnhancedAccountDetailView: View {
                 (date: "Mar", balance: 2100.50),
                 (date: "Apr", balance: 1825.75),
                 (date: "May", balance: 2200.00),
-                (date: "Jun", balance: account.balance),
+                (date: "Jun", balance: self.account.balance),
             ]
         }
 
         var body: some View {
             VStack(alignment: .leading, spacing: 8) {
                 Chart {
-                    ForEach(generateSampleData(), id: \.date) { item in
+                    ForEach(self.generateSampleData(), id: \.date) { item in
                         LineMark(
                             x: .value("Month", item.date),
                             y: .value("Balance", item.balance),
-                            )
+                        )
                         .foregroundStyle(.blue)
                         .symbol {
                             Circle()
@@ -611,21 +622,21 @@ struct EnhancedAccountDetailView: View {
                         .interpolationMethod(.catmullRom)
                     }
 
-                    ForEach(generateSampleData(), id: \.date) { item in
+                    ForEach(self.generateSampleData(), id: \.date) { item in
                         PointMark(
                             x: .value("Month", item.date),
                             y: .value("Balance", item.balance),
-                            )
+                        )
                         .foregroundStyle(.blue)
                     }
 
                     // Average line
-                    let average = generateSampleData().reduce(0) { $0 + $1.balance } / Double(generateSampleData().count)
+                    let average = self.generateSampleData().reduce(0) { $0 + $1.balance } / Double(self.generateSampleData().count)
                     RuleMark(y: .value("Average", average))
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [5, 5]))
                         .foregroundStyle(.gray)
                         .annotation(position: .top, alignment: .trailing) {
-                            Text("Average: \(average.formatted(.currency(code: account.currencyCode)))")
+                            Text("Average: \(average.formatted(.currency(code: self.account.currencyCode)))")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -646,7 +657,7 @@ struct EnhancedAccountDetailView: View {
                         Text("Change")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        Text("+\((account.balance - 1250).formatted(.currency(code: account.currencyCode)))")
+                        Text("+\((self.account.balance - 1250).formatted(.currency(code: self.account.currencyCode)))")
                             .font(.subheadline)
                             .foregroundStyle(.green)
                     }
@@ -657,7 +668,7 @@ struct EnhancedAccountDetailView: View {
                         Text("Current Balance")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        Text("\(account.balance.formatted(.currency(code: account.currencyCode)))")
+                        Text("\(self.account.balance.formatted(.currency(code: self.account.currencyCode)))")
                             .font(.subheadline)
                             .bold()
                     }
@@ -682,7 +693,7 @@ struct EnhancedAccountDetailView: View {
         }
 
         private var totalSpending: Double {
-            categories.reduce(0) { $0 + $1.amount }
+            self.categories.reduce(0) { $0 + $1.amount }
         }
 
         var body: some View {
@@ -690,12 +701,12 @@ struct EnhancedAccountDetailView: View {
                 // Pie chart
                 HStack {
                     ZStack {
-                        PieChartView(categories: categories)
+                        PieChartView(categories: self.categories)
                             .frame(width: 180, height: 180)
                     }
 
                     VStack(alignment: .leading, spacing: 8) {
-                        ForEach(categories, id: \.name) { category in
+                        ForEach(self.categories, id: \.name) { category in
                             HStack {
                                 Rectangle()
                                     .fill(category.color)
@@ -709,7 +720,7 @@ struct EnhancedAccountDetailView: View {
                                 Text(category.amount.formatted(.currency(code: "USD")))
                                     .font(.subheadline)
 
-                                Text("(\(Int((category.amount / totalSpending) * 100))%)")
+                                Text("(\(Int((category.amount / self.totalSpending) * 100))%)")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -762,15 +773,15 @@ struct EnhancedAccountDetailView: View {
 
             var body: some View {
                 HStack {
-                    Text(name)
+                    Text(self.name)
                         .frame(width: 120, alignment: .leading)
 
                     Spacer()
 
-                    Text("\(count)")
+                    Text("\(self.count)")
                         .frame(width: 100, alignment: .center)
 
-                    Text(total.formatted(.currency(code: "USD")))
+                    Text(self.total.formatted(.currency(code: "USD")))
                         .frame(width: 100, alignment: .trailing)
                 }
                 .padding(.vertical, 2)
@@ -781,8 +792,8 @@ struct EnhancedAccountDetailView: View {
             let categories: [(name: String, amount: Double, color: Color)]
 
             var body: some View {
-                let total = categories.reduce(0) { $0 + $1.amount }
-                let sortedCategories = categories.sorted { $0.amount > $1.amount }
+                let total = self.categories.reduce(0) { $0 + $1.amount }
+                let sortedCategories = self.categories.sorted { $0.amount > $1.amount }
 
                 Canvas { context, size in
                     // Define the center and radius
@@ -800,11 +811,13 @@ struct EnhancedAccountDetailView: View {
                         // Create a path for the slice
                         var path = Path()
                         path.move(to: center)
-                        path.addArc(center: center,
-                                    radius: radius,
-                                    startAngle: .degrees(startAngle),
-                                    endAngle: .degrees(endAngle),
-                                    clockwise: false)
+                        path.addArc(
+                            center: center,
+                            radius: radius,
+                            startAngle: .degrees(startAngle),
+                            endAngle: .degrees(endAngle),
+                            clockwise: false
+                        )
                         path.closeSubpath()
 
                         // Fill the slice with the category color
@@ -816,10 +829,12 @@ struct EnhancedAccountDetailView: View {
 
                     // Add a white circle in the center for a donut chart effect
                     let innerRadius = radius * 0.6
-                    let innerCirclePath = Path(ellipseIn: CGRect(x: center.x - innerRadius,
-                                                                 y: center.y - innerRadius,
-                                                                 width: innerRadius * 2,
-                                                                 height: innerRadius * 2))
+                    let innerCirclePath = Path(ellipseIn: CGRect(
+                        x: center.x - innerRadius,
+                        y: center.y - innerRadius,
+                        width: innerRadius * 2,
+                        height: innerRadius * 2
+                    ))
                     context.fill(innerCirclePath, with: .color(.white))
                 }
             }
@@ -838,20 +853,21 @@ struct EnhancedAccountDetailView: View {
                     GridRow {
                         DetailField(
                             label: "Credit Limit",
-                            value: (account.creditLimit ?? 0).formatted(.currency(code: account.currencyCode)),
-                            )
+                            value: (self.account.creditLimit ?? 0).formatted(.currency(code: self.account.currencyCode)),
+                        )
 
                         DetailField(
                             label: "Available Credit",
-                            value: ((account.creditLimit ?? 0) - abs(account.balance)).formatted(.currency(code: account.currencyCode)),
-                            )
+                            value: ((self.account.creditLimit ?? 0) - abs(self.account.balance))
+                                .formatted(.currency(code: self.account.currencyCode)),
+                        )
                     }
 
                     GridRow {
                         DetailField(
                             label: "Interest Rate",
-                            value: ((account.interestRate ?? 0) * 100).formatted(.number.precision(.fractionLength(2))) + "%",
-                            )
+                            value: ((self.account.interestRate ?? 0) * 100).formatted(.number.precision(.fractionLength(2))) + "%",
+                        )
 
                         if let dueDate = account.dueDate {
                             DetailField(label: "Payment Due", value: "Every \(dueDate.ordinal) of month")
@@ -861,15 +877,15 @@ struct EnhancedAccountDetailView: View {
                     GridRow {
                         DetailField(
                             label: "Utilization",
-                            value: account.creditLimit != nil && account.creditLimit! > 0 ?
-                                "\(Int((abs(account.balance) / (account.creditLimit ?? 1)) * 100))%" :
+                            value: self.account.creditLimit != nil && self.account.creditLimit! > 0 ?
+                                "\(Int((abs(self.account.balance) / (self.account.creditLimit ?? 1)) * 100))%" :
                                 "N/A",
-                            )
+                        )
 
                         DetailField(
                             label: "Statement Balance",
-                            value: abs(account.balance).formatted(.currency(code: account.currencyCode)),
-                            )
+                            value: abs(self.account.balance).formatted(.currency(code: self.account.currencyCode)),
+                        )
                     }
                 }
                 .padding()
@@ -880,17 +896,17 @@ struct EnhancedAccountDetailView: View {
                         Text("Credit Utilization")
                             .font(.subheadline)
 
-                        ProgressView(value: abs(account.balance), total: creditLimit)
-                            .tint(getCreditUtilizationColor(used: abs(account.balance), limit: creditLimit))
+                        ProgressView(value: abs(self.account.balance), total: creditLimit)
+                            .tint(self.getCreditUtilizationColor(used: abs(self.account.balance), limit: creditLimit))
 
                         HStack {
-                            Text("Used: \(abs(account.balance).formatted(.currency(code: account.currencyCode)))")
+                            Text("Used: \(abs(self.account.balance).formatted(.currency(code: self.account.currencyCode)))")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
 
                             Spacer()
 
-                            Text("Limit: \(creditLimit.formatted(.currency(code: account.currencyCode)))")
+                            Text("Limit: \(creditLimit.formatted(.currency(code: self.account.currencyCode)))")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -949,7 +965,7 @@ struct EnhancedAccountDetailView: View {
                         Text("Export Format")
                             .font(.headline)
 
-                        Picker("Format", selection: $exportFormat) {
+                        Picker("Format", selection: self.$exportFormat) {
                             ForEach(ExportFormat.allCases, id: \.self) { format in
                                 Text(format.rawValue).tag(format)
                             }
@@ -962,7 +978,7 @@ struct EnhancedAccountDetailView: View {
                         Text("Date Range")
                             .font(.headline)
 
-                        Picker("Date Range", selection: $dateRange) {
+                        Picker("Date Range", selection: self.$dateRange) {
                             ForEach(DateRange.allCases, id: \.self) { range in
                                 Text(range.rawValue).tag(range)
                             }
@@ -971,19 +987,19 @@ struct EnhancedAccountDetailView: View {
                         .frame(width: 400)
                     }
 
-                    if dateRange == .custom {
+                    if self.dateRange == .custom {
                         HStack(spacing: 20) {
                             VStack(alignment: .leading) {
                                 Text("Start Date")
                                     .font(.subheadline)
-                                DatePicker("", selection: $customStartDate, displayedComponents: .date)
+                                DatePicker("", selection: self.$customStartDate, displayedComponents: .date)
                                     .labelsHidden()
                             }
 
                             VStack(alignment: .leading) {
                                 Text("End Date")
                                     .font(.subheadline)
-                                DatePicker("", selection: $customEndDate, displayedComponents: .date)
+                                DatePicker("", selection: self.$customEndDate, displayedComponents: .date)
                                     .labelsHidden()
                             }
                         }
@@ -994,11 +1010,11 @@ struct EnhancedAccountDetailView: View {
                             .font(.headline)
 
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("• Account Name: \(account?.name ?? "Unknown")")
-                            Text("• Transaction Count: \(transactions.count)")
+                            Text("• Account Name: \(self.account?.name ?? "Unknown")")
+                            Text("• Transaction Count: \(self.transactions.count)")
                             Text("• Fields: Date, Description, Category, Amount, Balance")
 
-                            if exportFormat == .pdf {
+                            if self.exportFormat == .pdf {
                                 Text("• Includes account summary and balance chart")
                             }
                         }
@@ -1010,15 +1026,15 @@ struct EnhancedAccountDetailView: View {
 
                 HStack {
                     Button("Cancel").accessibilityLabel("Button") {
-                        dismiss()
+                        self.dismiss()
                     }
                     .buttonStyle(.bordered)
 
                     Spacer()
 
                     Button("Export").accessibilityLabel("Button") {
-                        performExport()
-                        dismiss()
+                        self.performExport()
+                        self.dismiss()
                     }
                     .buttonStyle(.borderedProminent)
                 }
@@ -1070,7 +1086,7 @@ struct EnhancedAccountDetailView: View {
         let calendar = Calendar.current
         let today = Date()
 
-        switch selectedTimeFrame {
+        switch self.selectedTimeFrame {
         case .last30Days:
             guard let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: today) else { return false }
             return date >= thirtyDaysAgo && date <= today
@@ -1093,22 +1109,22 @@ struct EnhancedAccountDetailView: View {
     }
 
     private func getIncomeTotal() -> Double {
-        filteredTransactions.filter { $0.amount > 0 }.reduce(0) { $0 + $1.amount }
+        self.filteredTransactions.filter { $0.amount > 0 }.reduce(0) { $0 + $1.amount }
     }
 
     private func getExpensesTotal() -> Double {
-        filteredTransactions.filter { $0.amount < 0 }.reduce(0) { $0 + abs($1.amount) }
+        self.filteredTransactions.filter { $0.amount < 0 }.reduce(0) { $0 + abs($1.amount) }
     }
 
     private func getNetCashFlow() -> Double {
-        getIncomeTotal() - getExpensesTotal()
+        self.getIncomeTotal() - self.getExpensesTotal()
     }
 
     // MARK: - Action Methods
 
     private func saveChanges() {
         guard let account, let editData = editedAccount else {
-            isEditing = false
+            self.isEditing = false
             return
         }
 
@@ -1127,22 +1143,22 @@ struct EnhancedAccountDetailView: View {
         account.notes = editData.notes
 
         // Save changes to the model context
-        try? modelContext.save()
+        try? self.modelContext.save()
 
-        isEditing = false
+        self.isEditing = false
     }
 
     private func deleteAccount() {
         guard let account else { return }
 
         // First delete all associated transactions
-        for transaction in filteredTransactions {
-            modelContext.delete(transaction)
+        for transaction in self.filteredTransactions {
+            self.modelContext.delete(transaction)
         }
 
         // Then delete the account
-        modelContext.delete(account)
-        try? modelContext.save()
+        self.modelContext.delete(account)
+        try? self.modelContext.save()
 
         // Navigate back would happen here
     }
@@ -1157,26 +1173,26 @@ struct EnhancedAccountDetailView: View {
             date: Date(),
             notes: "",
             isReconciled: false,
-            )
+        )
 
         // Set the account relationship
         transaction.account = account
 
         // Add transaction to the model context
-        modelContext.insert(transaction)
-        try? modelContext.save()
+        self.modelContext.insert(transaction)
+        try? self.modelContext.save()
 
         // Ideally navigate to this transaction for editing
     }
 
     private func toggleTransactionStatus(_ transaction: FinancialTransaction) {
         transaction.isReconciled.toggle()
-        try? modelContext.save()
+        try? self.modelContext.save()
     }
 
     private func deleteTransaction(_ transaction: FinancialTransaction) {
-        modelContext.delete(transaction)
-        try? modelContext.save()
+        self.modelContext.delete(transaction)
+        try? self.modelContext.save()
     }
 
     private func printAccountSummary() {

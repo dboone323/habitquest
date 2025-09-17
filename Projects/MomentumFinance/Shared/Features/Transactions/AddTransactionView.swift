@@ -23,84 +23,84 @@ extension Features.Transactions {
         @State private var notes = ""
 
         private var isFormValid: Bool {
-            !title.isEmpty && !amount.isEmpty && Double(amount) != nil && selectedAccount != nil
+            !self.title.isEmpty && !self.amount.isEmpty && Double(self.amount) != nil && self.selectedAccount != nil
         }
 
         var body: some View {
             NavigationView {
                 Form {
                     Section(header: Text("Transaction Details")) {
-                        TextField("Title", text: $title).accessibilityLabel("Text Field")
+                        TextField("Title", text: self.$title).accessibilityLabel("Text Field")
 
-                        TextField("Amount", text: $amount).accessibilityLabel("Text Field")
-                            #if canImport(UIKit)
+                        TextField("Amount", text: self.$amount).accessibilityLabel("Text Field")
+                        #if canImport(UIKit)
                             .keyboardType(.decimalPad)
                         #endif
 
-                        Picker("Type", selection: $selectedTransactionType) {
+                        Picker("Type", selection: self.$selectedTransactionType) {
                             ForEach(TransactionType.allCases, id: \.self) { type in
                                 Text(type.rawValue).tag(type)
                             }
                         }
                         .pickerStyle(SegmentedPickerStyle())
 
-                        DatePicker("Date", selection: $date, displayedComponents: .date)
+                        DatePicker("Date", selection: self.$date, displayedComponents: .date)
                     }
 
                     Section(header: Text("Category & Account")) {
-                        Picker("Category", selection: $selectedCategory) {
+                        Picker("Category", selection: self.$selectedCategory) {
                             Text("None").tag(nil as ExpenseCategory?)
-                            ForEach(categories, id: \.name) { category in
+                            ForEach(self.categories, id: \.name) { category in
                                 Text(category.name).tag(category as ExpenseCategory?)
                             }
                         }
 
-                        Picker("Account", selection: $selectedAccount) {
+                        Picker("Account", selection: self.$selectedAccount) {
                             Text("Select Account").tag(nil as FinancialAccount?)
-                            ForEach(accounts, id: \.name) { account in
+                            ForEach(self.accounts, id: \.name) { account in
                                 Text(account.name).tag(account as FinancialAccount?)
                             }
                         }
                     }
 
                     Section(header: Text("Notes (Optional)")) {
-                        TextField("Add notes...", text: $notes, axis: .vertical).accessibilityLabel("Text Field")
+                        TextField("Add notes...", text: self.$notes, axis: .vertical).accessibilityLabel("Text Field")
                             .lineLimit(3 ... 6)
                     }
                 }
                 .navigationTitle("Add Transaction")
                 #if canImport(UIKit)
-                .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarTitleDisplayMode(.inline)
                 #endif
-                .toolbar {
-                    #if canImport(UIKit)
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel").accessibilityLabel("Button") {
-                            dismiss()
+                    .toolbar {
+                        #if canImport(UIKit)
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("Cancel").accessibilityLabel("Button") {
+                                self.dismiss()
+                            }
                         }
-                    }
 
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Save").accessibilityLabel("Button") {
-                            saveTransaction()
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("Save").accessibilityLabel("Button") {
+                                self.saveTransaction()
+                            }
+                            .disabled(!self.isFormValid)
                         }
-                        .disabled(!isFormValid)
-                    }
-                    #else
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel").accessibilityLabel("Button") {
-                            dismiss()
+                        #else
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel").accessibilityLabel("Button") {
+                                self.dismiss()
+                            }
                         }
-                    }
 
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Save").accessibilityLabel("Button") {
-                            saveTransaction()
+                        ToolbarItem(placement: .primaryAction) {
+                            Button("Save").accessibilityLabel("Button") {
+                                self.saveTransaction()
+                            }
+                            .disabled(!self.isFormValid)
                         }
-                        .disabled(!isFormValid)
+                        #endif
                     }
-                    #endif
-                }
             }
         }
 
@@ -114,19 +114,19 @@ extension Features.Transactions {
                 amount: amountValue,
                 date: date,
                 transactionType: selectedTransactionType,
-                notes: notes.isEmpty ? nil : notes,
-                )
+                notes: notes.isEmpty ? nil : self.notes,
+            )
 
-            transaction.category = selectedCategory
+            transaction.category = self.selectedCategory
             transaction.account = account
 
             // Update account balance
             account.updateBalance(for: transaction)
 
-            modelContext.insert(transaction)
+            self.modelContext.insert(transaction)
 
-            try? modelContext.save()
-            dismiss()
+            try? self.modelContext.save()
+            self.dismiss()
         }
     }
 }

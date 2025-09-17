@@ -11,7 +11,6 @@ import XCTest
 @testable import AvoidObstaclesGame
 
 final class AvoidObstaclesGameTests: XCTestCase {
-
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -96,7 +95,8 @@ final class AvoidObstaclesGameTests: XCTestCase {
 
         XCTAssertEqual(multipliedScore, 25, "Multiplied score should be correctly calculated")
         XCTAssertGreaterThan(
-            multipliedScore, basePoints, "Multiplied score should be higher than base")
+            multipliedScore, basePoints, "Multiplied score should be higher than base"
+        )
     }
 
     // MARK: - Game State Tests
@@ -164,7 +164,8 @@ final class AvoidObstaclesGameTests: XCTestCase {
 
         XCTAssertEqual(currentSpeed, 180.0, "Speed should increase with level")
         XCTAssertGreaterThan(
-            currentSpeed, baseSpeed, "Current speed should be higher than base speed")
+            currentSpeed, baseSpeed, "Current speed should be higher than base speed"
+        )
     }
 
     func testLevelCompletion() throws {
@@ -175,7 +176,8 @@ final class AvoidObstaclesGameTests: XCTestCase {
         let levelCompleted = playerDistance >= levelDistance
 
         XCTAssertTrue(
-            levelCompleted, "Level should be completed when player reaches target distance")
+            levelCompleted, "Level should be completed when player reaches target distance"
+        )
     }
 
     // MARK: - Power-up Tests
@@ -211,7 +213,7 @@ final class AvoidObstaclesGameTests: XCTestCase {
         let startTime = Date()
 
         // Simulate game loop iterations
-        for _ in 1...1000 {
+        for _ in 1 ... 1000 {
             // Simulate game update logic
             let x = 1 + 1
             XCTAssertEqual(x, 2)
@@ -228,7 +230,7 @@ final class AvoidObstaclesGameTests: XCTestCase {
         let startTime = Date()
 
         // Simulate generating multiple obstacles
-        for i in 1...100 {
+        for i in 1 ... 100 {
             let obstacleData: [String: Any] = ["id": i, "type": "spike", "x": i * 50]
             XCTAssertEqual((obstacleData["id"] as? Int), i)
         }

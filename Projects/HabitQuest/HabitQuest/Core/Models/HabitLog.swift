@@ -5,7 +5,6 @@ import SwiftData
 /// Stores completion date, status, notes, XP earned, mood, and links to the associated habit.
 @Model
 public final class HabitLog {
-
     /// Unique identifier for the log entry.
     public var id: UUID
     /// The date this habit was completed (or attempted).
@@ -45,8 +44,8 @@ public final class HabitLog {
         self.notes = notes
         self.xpEarned =
             isCompleted
-            ? habit.xpValue * habit.difficulty.xpMultiplier
-            : 0
+                ? habit.xpValue * habit.difficulty.xpMultiplier
+                : 0
         self.mood = mood
         self.completionTime = isCompleted ? Date() : nil
     }

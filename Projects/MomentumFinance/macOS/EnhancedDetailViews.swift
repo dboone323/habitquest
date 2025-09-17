@@ -25,7 +25,7 @@ extension Features.Transactions {
         @State private var showRelatedTransactions = false
 
         private var transaction: FinancialTransaction? {
-            transactions.first(where: { $0.id == transactionId })
+            self.transactions.first(where: { $0.id == self.transactionId })
         }
 
         var body: some View {
@@ -34,7 +34,7 @@ extension Features.Transactions {
                     VStack(spacing: 0) {
                         // Top action bar
                         HStack {
-                            Picker("View", selection: $selectedTab) {
+                            Picker("View", selection: self.$selectedTab) {
                                 Text("Details").tag("details")
                                 Text("Analysis").tag("analysis")
                                 if transaction.isRecurring {
@@ -48,22 +48,22 @@ extension Features.Transactions {
                             Spacer()
 
                             HStack(spacing: 12) {
-                                if !isEditing {
-                                    Button(action: { isEditing = true }).accessibilityLabel("Button") {
+                                if !self.isEditing {
+                                    Button(action: { self.isEditing = true }).accessibilityLabel("Button") {
                                         Text("Edit")
                                             .frame(width: 80)
                                     }
                                     .buttonStyle(.bordered)
                                     .keyboardShortcut("e", modifiers: .command)
                                 } else {
-                                    Button(action: saveChanges).accessibilityLabel("Button") {
+                                    Button(action: self.saveChanges).accessibilityLabel("Button") {
                                         Text("Save")
                                             .frame(width: 80)
                                     }
                                     .buttonStyle(.borderedProminent)
                                     .keyboardShortcut(.return, modifiers: .command)
 
-                                    Button(action: { isEditing = false }).accessibilityLabel("Button") {
+                                    Button(action: { self.isEditing = false }).accessibilityLabel("Button") {
                                         Text("Cancel")
                                             .frame(width: 80)
                                     }
@@ -75,16 +75,21 @@ extension Features.Transactions {
                                     .frame(height: 20)
 
                                 Menu {
-                                    Button("Duplicate Transaction", action: duplicateTransaction).accessibilityLabel("Button")
-                                    Button("Mark as \(transaction.isReconciled ? "Unreconciled" : "Reconciled").accessibilityLabel("Button")", action: toggleReconciled)
+                                    Button("Duplicate Transaction", action: self.duplicateTransaction).accessibilityLabel("Button")
+                                    Button(
+                                        "Mark as \(transaction.isReconciled ? "Unreconciled" : "Reconciled").accessibilityLabel("Button")",
+                                        action: self.toggleReconciled
+                                    )
                                     Divider()
-                                    Button("Find Similar Transactions", action: { showRelatedTransactions = true }).accessibilityLabel("Button")
-                                    Button("Show in Account", action: navigateToAccount).accessibilityLabel("Button")
+                                    Button("Find Similar Transactions", action: { self.showRelatedTransactions = true })
+                                        .accessibilityLabel("Button")
+                                    Button("Show in Account", action: self.navigateToAccount).accessibilityLabel("Button")
                                     Divider()
-                                    Button("Export as CSV", action: { showingExportOptions = true }).accessibilityLabel("Button")
-                                    Button("Print", action: printTransaction).accessibilityLabel("Button")
+                                    Button("Export as CSV", action: { self.showingExportOptions = true }).accessibilityLabel("Button")
+                                    Button("Print", action: self.printTransaction).accessibilityLabel("Button")
                                     Divider()
-                                    Button("Delete Transaction", role: .destructive, action: { showingDeleteConfirmation = true }).accessibilityLabel("Button")
+                                    Button("Delete Transaction", role: .destructive, action: { self.showingDeleteConfirmation = true })
+                                        .accessibilityLabel("Button")
                                 } label: {
                                     Image(systemName: "ellipsis.circle")
                                 }
@@ -98,24 +103,24 @@ extension Features.Transactions {
                         Divider()
 
                         // Main content area
-                        if isEditing {
-                            editView(for: transaction)
+                        if self.isEditing {
+                            self.editView(for: transaction)
                                 .padding()
                                 .transition(.opacity)
                         } else {
-                            TabView(selection: $selectedTab) {
-                                detailsView(for: transaction)
+                            TabView(selection: self.$selectedTab) {
+                                self.detailsView(for: transaction)
                                     .tag("details")
 
-                                analysisView(for: transaction)
+                                self.analysisView(for: transaction)
                                     .tag("analysis")
 
                                 if transaction.isRecurring {
-                                    seriesView(for: transaction)
+                                    self.seriesView(for: transaction)
                                         .tag("series")
                                 }
 
-                                notesView(for: transaction)
+                                self.notesView(for: transaction)
                                     .tag("notes")
                             }
                             .tabViewStyle(.page(indexDisplayMode: .never))
@@ -123,30 +128,32 @@ extension Features.Transactions {
                         }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .alert("Delete Transaction", isPresented: $showingDeleteConfirmation) {
+                    .alert("Delete Transaction", isPresented: self.$showingDeleteConfirmation) {
                         Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
                         Button("Delete", role: .destructive).accessibilityLabel("Button") {
-                            deleteTransaction(transaction)
+                            self.deleteTransaction(transaction)
                         }
                     } message: {
                         Text("Are you sure you want to delete this transaction? This action cannot be undone.")
                     }
-                    .sheet(isPresented: $showingExportOptions) {
+                    .sheet(isPresented: self.$showingExportOptions) {
                         ExportOptionsView(transaction: transaction)
                     }
-                    .sheet(isPresented: $showRelatedTransactions) {
+                    .sheet(isPresented: self.$showRelatedTransactions) {
                         RelatedTransactionsView(transaction: transaction)
                     }
                     .onAppear {
                         // Initialize edit model if needed
-                        if editedTransaction == nil {
-                            editedTransaction = TransactionEditModel(from: transaction)
+                        if self.editedTransaction == nil {
+                            self.editedTransaction = TransactionEditModel(from: transaction)
                         }
                     }
                 } else {
-                    ContentUnavailableView("Transaction Not Found",
-                                           systemImage: "exclamationmark.triangle",
-                                           description: Text("The transaction you're looking for could not be found or has been deleted."))
+                    ContentUnavailableView(
+                        "Transaction Not Found",
+                        systemImage: "exclamationmark.triangle",
+                        description: Text("The transaction you're looking for could not be found or has been deleted.")
+                    )
                 }
             }
         }
@@ -329,7 +336,7 @@ extension Features.Transactions {
                                     .gridColumnAlignment(.trailing)
                                 Text("15 found")
                                 Button("View All").accessibilityLabel("Button") {
-                                    showRelatedTransactions = true
+                                    self.showRelatedTransactions = true
                                 }
                                 .foregroundStyle(.blue)
                             }
@@ -397,7 +404,10 @@ extension Features.Transactions {
                                 Text(transaction.name)
                                     .font(.headline)
 
-                                Text(Calendar.current.date(byAdding: .month, value: i - 2, to: transaction.date)?.formatted(date: .abbreviated, time: .omitted) ?? "")
+                                Text(Calendar.current.date(byAdding: .month, value: i - 2, to: transaction.date)?.formatted(
+                                    date: .abbreviated,
+                                    time: .omitted
+                                ) ?? "")
                                     .font(.caption)
                             }
 
@@ -453,10 +463,10 @@ extension Features.Transactions {
 
                 Spacer()
 
-                if !isEditing {
+                if !self.isEditing {
                     Button("Edit Notes").accessibilityLabel("Button") {
-                        isEditing = true
-                        selectedTab = "notes"
+                        self.isEditing = true
+                        self.selectedTab = "notes"
                     }
                     .buttonStyle(.bordered)
                 }
@@ -480,7 +490,7 @@ extension Features.Transactions {
                         TextField("Transaction name", text: Binding(
                             get: { self.editedTransaction?.name ?? transaction.name },
                             set: { self.editedTransaction?.name = $0 },
-                            ))
+                        ))
                         .textFieldStyle(.roundedBorder)
                     }
 
@@ -493,9 +503,9 @@ extension Features.Transactions {
                             TextField("Amount", value: Binding(
                                 get: { self.editedTransaction?.amount ?? transaction.amount },
                                 set: { self.editedTransaction?.amount = $0 },
-                                ), format: .currency(code: transaction.currencyCode))
-                            .textFieldStyle(.roundedBorder)
-                            .frame(width: 150)
+                            ), format: .currency(code: transaction.currencyCode))
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 150)
 
                             Picker("Type", selection: Binding(
                                 get: { self.editedTransaction?.amount ?? transaction.amount >= 0 },
@@ -504,7 +514,7 @@ extension Features.Transactions {
                                         self.editedTransaction?.amount = isIncome ? abs(amount) : -abs(amount)
                                     }
                                 },
-                                )) {
+                            )) {
                                 Text("Expense").tag(false)
                                 Text("Income").tag(true)
                             }
@@ -520,7 +530,7 @@ extension Features.Transactions {
                         DatePicker("Date", selection: Binding(
                             get: { self.editedTransaction?.date ?? transaction.date },
                             set: { self.editedTransaction?.date = $0 },
-                            ))
+                        ))
                         .datePickerStyle(.compact)
                         .labelsHidden()
                     }
@@ -534,9 +544,9 @@ extension Features.Transactions {
                             Picker("Category", selection: Binding(
                                 get: { self.editedTransaction?.categoryId ?? transaction.category?.id ?? "" },
                                 set: { self.editedTransaction?.categoryId = $0 },
-                                )) {
+                            )) {
                                 Text("None").tag("")
-                                ForEach(categories) { category in
+                                ForEach(self.categories) { category in
                                     Text(category.name).tag(category.id)
                                 }
                             }
@@ -546,7 +556,7 @@ extension Features.Transactions {
                                 TextField("Subcategory (optional).accessibilityLabel("Text Field")", text: Binding(
                                     get: { subcategory },
                                     set: { self.editedTransaction?.subcategory = $0 },
-                                    ))
+                                ))
                                 .textFieldStyle(.roundedBorder)
                             }
                         }
@@ -560,7 +570,7 @@ extension Features.Transactions {
                         Picker("Account", selection: Binding(
                             get: { self.editedTransaction?.accountId ?? transaction.account?.id ?? "" },
                             set: { self.editedTransaction?.accountId = $0 },
-                            )) {
+                        )) {
                             Text("None").tag("")
                             // This would be populated with accounts
                             Text("Checking Account").tag("checking1")
@@ -578,7 +588,7 @@ extension Features.Transactions {
                         Picker("Status", selection: Binding(
                             get: { self.editedTransaction?.isReconciled ?? transaction.isReconciled },
                             set: { self.editedTransaction?.isReconciled = $0 },
-                            )) {
+                        )) {
                             Text("Pending").tag(false)
                             Text("Reconciled").tag(true)
                         }
@@ -594,7 +604,7 @@ extension Features.Transactions {
                         Toggle("This transaction repeats regularly", isOn: Binding(
                             get: { self.editedTransaction?.isRecurring ?? transaction.isRecurring },
                             set: { self.editedTransaction?.isRecurring = $0 },
-                            ))
+                        ))
                     }
 
                     // Location field
@@ -605,7 +615,7 @@ extension Features.Transactions {
                         TextField("Transaction location", text: Binding(
                             get: { self.editedTransaction?.location ?? transaction.location ?? "" },
                             set: { self.editedTransaction?.location = $0 },
-                            ))
+                        ))
                         .textFieldStyle(.roundedBorder)
                     }
                 }
@@ -616,7 +626,7 @@ extension Features.Transactions {
                 TextEditor(text: Binding(
                     get: { self.editedTransaction?.notes ?? transaction.notes },
                     set: { self.editedTransaction?.notes = $0 },
-                    ))
+                ))
                 .font(.body)
                 .frame(minHeight: 100)
                 .padding(4)
@@ -661,11 +671,11 @@ extension Features.Transactions {
 
             var body: some View {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(label)
+                    Text(self.label)
                         .font(.caption)
                         .foregroundStyle(.secondary)
 
-                    Text(value)
+                    Text(self.value)
                         .font(.body)
                 }
             }
@@ -677,15 +687,15 @@ extension Features.Transactions {
             var body: some View {
                 HStack(spacing: 4) {
                     Circle()
-                        .fill(getCategoryColor(category.colorHex))
+                        .fill(self.getCategoryColor(self.category.colorHex))
                         .frame(width: 10, height: 10)
 
-                    Text(category.name)
+                    Text(self.category.name)
                         .font(.subheadline)
                 }
                 .padding(.horizontal, 8)
                 .padding(.vertical, 2)
-                .background(getCategoryColor(category.colorHex).opacity(0.1))
+                .background(self.getCategoryColor(self.category.colorHex).opacity(0.1))
                 .cornerRadius(4)
             }
 
@@ -709,7 +719,7 @@ extension Features.Transactions {
                             .frame(width: 40, height: 40)
                             .padding(.bottom, 4)
 
-                        Text(attachment)
+                        Text(self.attachment)
                             .font(.caption)
                             .lineLimit(1)
                     }
@@ -718,7 +728,7 @@ extension Features.Transactions {
                     .background(Color(.windowBackgroundColor).opacity(0.5))
                     .cornerRadius(8)
 
-                    if showDeleteButton {
+                    if self.showDeleteButton {
                         Button(action: {}).accessibilityLabel("Button") {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundStyle(.red)
@@ -746,7 +756,7 @@ extension Features.Transactions {
 
                     HStack(alignment: .top) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(category.name)
+                            Text(self.category.name)
                                 .font(.subheadline)
 
                             Text("Monthly Budget")
@@ -758,30 +768,30 @@ extension Features.Transactions {
 
                         VStack(alignment: .trailing, spacing: 4) {
                             HStack {
-                                Text("\(budgetSpent.formatted(.currency(code: "USD")))")
+                                Text("\(self.budgetSpent.formatted(.currency(code: "USD")))")
                                 Text("of")
                                     .foregroundStyle(.secondary)
-                                Text("\(budgetTotal.formatted(.currency(code: "USD")))")
+                                Text("\(self.budgetTotal.formatted(.currency(code: "USD")))")
                             }
                             .font(.subheadline)
 
-                            Text("\(Int((budgetSpent / budgetTotal) * 100))% Used")
+                            Text("\(Int((self.budgetSpent / self.budgetTotal) * 100))% Used")
                                 .font(.caption)
-                                .foregroundStyle(getBudgetColor(budgetSpent / budgetTotal))
+                                .foregroundStyle(self.getBudgetColor(self.budgetSpent / self.budgetTotal))
                         }
                     }
 
-                    ProgressView(value: budgetSpent, total: budgetTotal)
-                        .tint(getBudgetColor(budgetSpent / budgetTotal))
+                    ProgressView(value: self.budgetSpent, total: self.budgetTotal)
+                        .tint(self.getBudgetColor(self.budgetSpent / self.budgetTotal))
 
                     HStack {
-                        Text("This transaction: \(transactionAmount.formatted(.currency(code: "USD")))")
+                        Text("This transaction: \(self.transactionAmount.formatted(.currency(code: "USD")))")
                             .font(.caption)
                             .foregroundStyle(.secondary)
 
                         Spacer()
 
-                        Text("\(Int((transactionAmount / budgetTotal) * 100))% of monthly budget")
+                        Text("\(Int((self.transactionAmount / self.budgetTotal) * 100))% of monthly budget")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -818,11 +828,11 @@ extension Features.Transactions {
             var body: some View {
                 VStack(alignment: .leading, spacing: 8) {
                     Chart {
-                        ForEach(monthlyData, id: \.month) { item in
+                        ForEach(self.monthlyData, id: \.month) { item in
                             BarMark(
                                 x: .value("Month", item.month),
                                 y: .value("Amount", item.amount),
-                                )
+                            )
                             .foregroundStyle(Color.blue.gradient)
                         }
 
@@ -884,20 +894,20 @@ extension Features.Transactions {
             var body: some View {
                 VStack(alignment: .leading) {
                     Chart {
-                        ForEach(transactions, id: \.date) { item in
+                        ForEach(self.transactions, id: \.date) { item in
                             LineMark(
                                 x: .value("Date", item.date),
                                 y: .value("Amount", item.amount),
-                                )
+                            )
                             .symbol(Circle().strokeBorder(lineWidth: 2))
                             .foregroundStyle(.blue)
                         }
 
-                        ForEach(transactions, id: \.date) { item in
+                        ForEach(self.transactions, id: \.date) { item in
                             PointMark(
                                 x: .value("Date", item.date),
                                 y: .value("Amount", item.amount),
-                                )
+                            )
                             .foregroundStyle(.blue)
                         }
                     }
@@ -926,7 +936,7 @@ extension Features.Transactions {
 
                     HStack {
                         Button("Cancel").accessibilityLabel("Button") {
-                            dismiss()
+                            self.dismiss()
                         }
                         .buttonStyle(.bordered)
 
@@ -934,7 +944,7 @@ extension Features.Transactions {
 
                         Button("Export").accessibilityLabel("Button") {
                             // Export logic
-                            dismiss()
+                            self.dismiss()
                         }
                         .buttonStyle(.borderedProminent)
                     }
@@ -960,11 +970,11 @@ extension Features.Transactions {
 
             var body: some View {
                 VStack {
-                    Text("Transactions Similar to '\(transaction.name)'")
+                    Text("Transactions Similar to '\(self.transaction.name)'")
                         .font(.headline)
                         .padding()
 
-                    List(relatedTransactions, id: \.self) { name in
+                    List(self.relatedTransactions, id: \.self) { name in
                         HStack {
                             Text(name)
                             Spacer()
@@ -974,7 +984,7 @@ extension Features.Transactions {
                     }
 
                     Button("Close").accessibilityLabel("Button") {
-                        dismiss()
+                        self.dismiss()
                     }
                     .buttonStyle(.bordered)
                     .padding()
@@ -1015,7 +1025,7 @@ extension Features.Transactions {
 
         private func saveChanges() {
             guard let transaction, let editData = editedTransaction else {
-                isEditing = false
+                self.isEditing = false
                 return
             }
 
@@ -1032,14 +1042,14 @@ extension Features.Transactions {
             // Category and account relationships would be handled here
 
             // Save changes to the model context
-            try? modelContext.save()
+            try? self.modelContext.save()
 
-            isEditing = false
+            self.isEditing = false
         }
 
         private func deleteTransaction(_ transaction: FinancialTransaction) {
-            modelContext.delete(transaction)
-            try? modelContext.save()
+            self.modelContext.delete(transaction)
+            try? self.modelContext.save()
             // Navigate back
         }
 
@@ -1052,7 +1062,7 @@ extension Features.Transactions {
                 date: Date(),
                 notes: original.notes,
                 isReconciled: false,
-                )
+            )
 
             // Copy other properties and relationships
             duplicate.isRecurring = original.isRecurring
@@ -1060,14 +1070,14 @@ extension Features.Transactions {
             duplicate.subcategory = original.subcategory
             // Category and account would be set here
 
-            modelContext.insert(duplicate)
-            try? modelContext.save()
+            self.modelContext.insert(duplicate)
+            try? self.modelContext.save()
         }
 
         private func toggleReconciled() {
             guard let transaction else { return }
             transaction.isReconciled.toggle()
-            try? modelContext.save()
+            try? self.modelContext.save()
         }
 
         private func navigateToAccount() {

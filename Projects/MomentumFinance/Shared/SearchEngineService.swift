@@ -28,7 +28,7 @@ public final class SearchEngineService: ObservableObject {
     ///   - filter: Type of data to search
     /// - Returns: Array of search results
     public func search(query: String, filter: SearchFilter) -> [SearchResult] {
-        guard let modelContext = modelContext, !query.isEmpty else {
+        guard let modelContext, !query.isEmpty else {
             return []
         }
 
@@ -36,62 +36,62 @@ public final class SearchEngineService: ObservableObject {
 
         switch filter {
         case .all:
-            return searchAll(query: normalizedQuery)
+            return self.searchAll(query: normalizedQuery)
         case .accounts:
-            return searchAccounts(query: normalizedQuery)
+            return self.searchAccounts(query: normalizedQuery)
         case .transactions:
-            return searchTransactions(query: normalizedQuery)
+            return self.searchTransactions(query: normalizedQuery)
         case .subscriptions:
-            return searchSubscriptions(query: normalizedQuery)
+            return self.searchSubscriptions(query: normalizedQuery)
         case .budgets:
-            return searchBudgets(query: normalizedQuery)
+            return self.searchBudgets(query: normalizedQuery)
         }
     }
 
     private func searchAll(query: String) -> [SearchResult] {
         var results: [SearchResult] = []
 
-        results.append(contentsOf: searchAccounts(query: query))
-        results.append(contentsOf: searchTransactions(query: query))
-        results.append(contentsOf: searchSubscriptions(query: query))
-        results.append(contentsOf: searchBudgets(query: query))
+        results.append(contentsOf: self.searchAccounts(query: query))
+        results.append(contentsOf: self.searchTransactions(query: query))
+        results.append(contentsOf: self.searchSubscriptions(query: query))
+        results.append(contentsOf: self.searchBudgets(query: query))
 
         // Sort by relevance score and limit results
         return
             results
-            .sorted { $0.relevanceScore > $1.relevanceScore }
-            .prefix(SearchConfiguration.maxResults)
-            .map { $0 }
+                .sorted { $0.relevanceScore > $1.relevanceScore }
+                .prefix(SearchConfiguration.maxResults)
+                .map(\.self)
     }
 
     private func searchAccounts(query: String) -> [SearchResult] {
-        guard let modelContext = modelContext else { return [] }
+        guard let modelContext else { return [] }
 
         let descriptor = FetchDescriptor<FinancialAccount>()
         guard let accounts = try? modelContext.fetch(descriptor) else { return [] }
 
         return
             accounts
-            .filter { account in
-                account.name.lowercased().contains(query)
-                    || account.accountType.rawValue.lowercased().contains(query)
-            }
-            .map { account in
-                SearchResult(
-                    id: String(describing: account.persistentModelID),
-                    title: account.name,
-                    subtitle:
+                .filter { account in
+                    account.name.lowercased().contains(query)
+                        || account.accountType.rawValue.lowercased().contains(query)
+                }
+                .map { account in
+                    SearchResult(
+                        id: String(describing: account.persistentModelID),
+                        title: account.name,
+                        subtitle:
                         "\(account.accountType.rawValue) • $\(account.balance, default: "%.2f")",
-                    type: .accounts,
-                    iconName: "creditcard",
-                    data: account,
-                    relevanceScore: calculateRelevance(query: query, text: account.name)
-                )
-            }
+                        type: .accounts,
+                        iconName: "creditcard",
+                        data: account,
+                        relevanceScore: self.calculateRelevance(query: query, text: account.name)
+                    )
+                }
     }
 
     private func searchTransactions(query: String) -> [SearchResult] {
-        guard let modelContext = modelContext else { return [] }
+        guard let modelContext else { return [] }
 
         let descriptor = FetchDescriptor<FinancialTransaction>(
             sortBy: [SortDescriptor(\FinancialTransaction.date, order: .reverse)]
@@ -100,76 +100,77 @@ public final class SearchEngineService: ObservableObject {
 
         return
             transactions
-            .filter { transaction in
-                transaction.title.lowercased().contains(query)
-                    || transaction.category?.name.lowercased().contains(query) ?? false
-            }
-            .prefix(50)  // Limit for performance
-            .map { transaction in
-                SearchResult(
-                    id: String(describing: transaction.persistentModelID),
-                    title: transaction.title,
-                    subtitle:
+                .filter { transaction in
+                    transaction.title.lowercased().contains(query)
+                        || transaction.category?.name.lowercased().contains(query) ?? false
+                }
+                .prefix(50) // Limit for performance
+                .map { transaction in
+                    SearchResult(
+                        id: String(describing: transaction.persistentModelID),
+                        title: transaction.title,
+                        subtitle:
                         "\(transaction.category?.name ?? "No Category") • $\(transaction.amount, default: "%.2f")",
-                    type: .transactions,
-                    iconName: transaction.amount >= 0 ? "arrow.up.circle" : "arrow.down.circle",
-                    data: transaction,
-                    relevanceScore: calculateRelevance(query: query, text: transaction.title)
-                )
-            }
+                        type: .transactions,
+                        iconName: transaction.amount >= 0 ? "arrow.up.circle" : "arrow.down.circle",
+                        data: transaction,
+                        relevanceScore: self.calculateRelevance(query: query, text: transaction.title)
+                    )
+                }
     }
 
     private func searchSubscriptions(query: String) -> [SearchResult] {
-        guard let modelContext = modelContext else { return [] }
+        guard let modelContext else { return [] }
 
         let descriptor = FetchDescriptor<Subscription>()
         guard let subscriptions = try? modelContext.fetch(descriptor) else { return [] }
 
         return
             subscriptions
-            .filter { subscription in
-                subscription.name.lowercased().contains(query)
-                    || subscription.category?.name.lowercased().contains(query) ?? false
-            }
-            .map { subscription in
-                SearchResult(
-                    id: String(describing: subscription.persistentModelID),
-                    title: subscription.name,
-                    subtitle:
+                .filter { subscription in
+                    subscription.name.lowercased().contains(query)
+                        || subscription.category?.name.lowercased().contains(query) ?? false
+                }
+                .map { subscription in
+                    SearchResult(
+                        id: String(describing: subscription.persistentModelID),
+                        title: subscription.name,
+                        subtitle:
                         "$\(subscription.amount, default: "%.2f") • \(subscription.billingCycle.rawValue)",
-                    type: .subscriptions,
-                    iconName: "calendar",
-                    data: subscription,
-                    relevanceScore: calculateRelevance(query: query, text: subscription.name)
-                )
-            }
+                        type: .subscriptions,
+                        iconName: "calendar",
+                        data: subscription,
+                        relevanceScore: self.calculateRelevance(query: query, text: subscription.name)
+                    )
+                }
     }
 
     private func searchBudgets(query: String) -> [SearchResult] {
-        guard let modelContext = modelContext else { return [] }
+        guard let modelContext else { return [] }
 
         let descriptor = FetchDescriptor<Budget>()
         guard let budgets = try? modelContext.fetch(descriptor) else { return [] }
 
         return
             budgets
-            .filter { budget in
-                budget.category?.name.lowercased().contains(query) ?? false
-            }
-            .map { budget in
-                let spentPercent = budget.spentAmount / budget.limitAmount
-                return SearchResult(
-                    id: String(describing: budget.persistentModelID),
-                    title: budget.category?.name ?? "Budget",
-                    subtitle:
+                .filter { budget in
+                    budget.category?.name.lowercased().contains(query) ?? false
+                }
+                .map { budget in
+                    let spentPercent = budget.spentAmount / budget.limitAmount
+                    return SearchResult(
+                        id: String(describing: budget.persistentModelID),
+                        title: budget.category?.name ?? "Budget",
+                        subtitle:
                         "$\(budget.spentAmount, default: "%.2f") / $\(budget.limitAmount, default: "%.2f") (\(Int(spentPercent * 100))%)",
-                    type: .budgets,
-                    iconName: spentPercent > 1.0 ? "exclamationmark.triangle" : "chart.pie",
-                    data: budget,
-                    relevanceScore: calculateRelevance(
-                        query: query, text: budget.category?.name ?? "")
-                )
-            }
+                        type: .budgets,
+                        iconName: spentPercent > 1.0 ? "exclamationmark.triangle" : "chart.pie",
+                        data: budget,
+                        relevanceScore: self.calculateRelevance(
+                            query: query, text: budget.category?.name ?? ""
+                        )
+                    )
+                }
     }
 
     /// Calculate relevance score for search results

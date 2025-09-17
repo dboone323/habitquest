@@ -6,9 +6,9 @@ struct AccessibilitySettingsSection: View {
 
     var body: some View {
         Section(header: Text("Accessibility")) {
-            Toggle("Haptic Feedback", isOn: $hapticFeedbackEnabled)
+            Toggle("Haptic Feedback", isOn: self.$hapticFeedbackEnabled)
 
-            Toggle("Reduce Motion", isOn: $reducedMotion)
+            Toggle("Reduce Motion", isOn: self.$reducedMotion)
         }
     }
 }

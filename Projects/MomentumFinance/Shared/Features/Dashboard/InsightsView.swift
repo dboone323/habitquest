@@ -1,5 +1,5 @@
-import Foundation
 import Charts
+import Foundation
 import SwiftData
 import SwiftUI
 
@@ -23,23 +23,24 @@ struct InsightsView: View {
                 VStack(spacing: 0) {
                     // Filter Bar
                     InsightsFilterBar(
-                        filterPriority: $filterPriority,
-                        filterType: $filterType
+                        filterPriority: self.$filterPriority,
+                        filterType: self.$filterType
                     )
 
                     // Insights Content
-                    insightsContent
+                    self.insightsContent
                 }
                 .navigationTitle("Financial Insights")
                 .toolbar {
                     ToolbarItem(placement: .navigation) {
                         Button("Refresh").accessibilityLabel("Button") {
                             Task {
-                                await intelligenceService.analyzeFinancialData(
-                                    modelContext: modelContext)
+                                await self.intelligenceService.analyzeFinancialData(
+                                    modelContext: self.modelContext
+                                )
                             }
                         }
-                        .disabled(intelligenceService.isAnalyzing)
+                        .disabled(self.intelligenceService.isAnalyzing)
                     }
                 }
             }
@@ -48,35 +49,36 @@ struct InsightsView: View {
                 VStack(spacing: 0) {
                     // Filter Bar
                     InsightsFilterBar(
-                        filterPriority: $filterPriority,
-                        filterType: $filterType
+                        filterPriority: self.$filterPriority,
+                        filterType: self.$filterType
                     )
 
                     // Insights Content
-                    insightsContent
+                    self.insightsContent
                 }
                 .navigationTitle("Financial Insights")
                 .navigationBarItems(
                     trailing:
-                        Button("Refresh") {
-                            Task {
-                                await intelligenceService.analyzeFinancialData(
-                                    modelContext: modelContext)
-                            }
+                    Button("Refresh") {
+                        Task {
+                            await self.intelligenceService.analyzeFinancialData(
+                                modelContext: self.modelContext
+                            )
                         }
-                        .disabled(intelligenceService.isAnalyzing)
-                        .accessibilityLabel("Button")
+                    }
+                    .disabled(self.intelligenceService.isAnalyzing)
+                    .accessibilityLabel("Button")
                 )
             }
             #endif
         }
-        .sheet(item: $selectedInsight) { insight in
+        .sheet(item: self.$selectedInsight) { insight in
             InsightDetailView(insight: insight)
         }
         .onAppear {
             Task {
-                if intelligenceService.insights.isEmpty {
-                    await intelligenceService.analyzeFinancialData(modelContext: modelContext)
+                if self.intelligenceService.insights.isEmpty {
+                    await self.intelligenceService.analyzeFinancialData(modelContext: self.modelContext)
                 }
             }
         }
@@ -84,20 +86,20 @@ struct InsightsView: View {
 
     @ViewBuilder
     private var insightsContent: some View {
-        if intelligenceService.isAnalyzing {
+        if self.intelligenceService.isAnalyzing {
             InsightsLoadingView()
-        } else if intelligenceService.insights.isEmpty {
+        } else if self.intelligenceService.insights.isEmpty {
             InsightsEmptyStateView()
         } else {
-            insightsList
+            self.insightsList
         }
     }
 
     private var insightsList: some View {
         List {
-            ForEach(filteredInsights) { insight in
+            ForEach(self.filteredInsights) { insight in
                 InsightRowView(insight: insight) {
-                    selectedInsight = insight
+                    self.selectedInsight = insight
                 }
             }
         }
@@ -105,7 +107,7 @@ struct InsightsView: View {
     }
 
     private var filteredInsights: [FinancialInsight] {
-        intelligenceService.insights
+        self.intelligenceService.insights
             .filter { insight in
                 if let priority = filterPriority, insight.priority != priority {
                     return false
@@ -115,7 +117,7 @@ struct InsightsView: View {
                 }
                 return true
             }
-            .sorted { $0.priority > $1.priority }  // Sort by priority (critical first)
+            .sorted { $0.priority > $1.priority } // Sort by priority (critical first)
     }
 }
 

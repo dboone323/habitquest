@@ -34,8 +34,8 @@ public struct SearchResult: Identifiable, Hashable {
     }
 
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(type)
+        hasher.combine(self.id)
+        hasher.combine(self.type)
     }
 
     public static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {

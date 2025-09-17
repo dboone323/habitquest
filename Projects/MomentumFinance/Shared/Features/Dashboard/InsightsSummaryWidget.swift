@@ -52,27 +52,27 @@ struct InsightsSummaryWidget: View {
                 }
             }
 
-            if isLoading {
+            if self.isLoading {
                 HStack {
                     Spacer()
                     ProgressView()
                     Spacer()
                 }
                 .frame(height: 100)
-            } else if accounts.isEmpty {
-                insightEmptyStateView
+            } else if self.accounts.isEmpty {
+                self.insightEmptyStateView
             } else {
-                insightContentView
+                self.insightContentView
             }
         }
         .padding(15)
-        .background(insightBackgroundColor())
+        .background(self.insightBackgroundColor())
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
         .onAppear {
             // Simulate loading insights data
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                isLoading = false
+                self.isLoading = false
             }
         }
     }
@@ -96,7 +96,7 @@ struct InsightsSummaryWidget: View {
     private var insightContentView: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Total balance insight
-            let totalBalance = accounts.reduce(0) { $0 + $1.balance }
+            let totalBalance = self.accounts.reduce(0) { $0 + $1.balance }
 
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
@@ -104,14 +104,14 @@ struct InsightsSummaryWidget: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
 
-                    Text(formatCurrency(totalBalance))
+                    Text(self.formatCurrency(totalBalance))
                         .font(.headline)
                 }
 
                 Spacer()
 
                 // Monthly trend indicator
-                monthlyTrendView(value: calculateMonthlyChange())
+                self.monthlyTrendView(value: self.calculateMonthlyChange())
             }
 
             Divider()
@@ -123,14 +123,14 @@ struct InsightsSummaryWidget: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
 
-                    Text(formatCurrency(calculateRecentSpending()))
+                    Text(self.formatCurrency(self.calculateRecentSpending()))
                         .font(.headline)
                 }
 
                 Spacer()
 
                 // This month vs last month comparison
-                expenseComparisonView()
+                self.expenseComparisonView()
             }
         }
     }
@@ -147,7 +147,7 @@ struct InsightsSummaryWidget: View {
     }
 
     private func expenseComparisonView() -> some View {
-        let currentRatio = calculateMonthComparisonRatio()
+        let currentRatio = self.calculateMonthComparisonRatio()
 
         return HStack {
             Image(
@@ -182,9 +182,9 @@ struct InsightsSummaryWidget: View {
         let lastWeek = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
 
         return
-            transactions
-            .filter { $0.date > lastWeek && $0.transactionType == .expense }
-            .reduce(0) { $0 + $1.amount }
+            self.transactions
+                .filter { $0.date > lastWeek && $0.transactionType == .expense }
+                .reduce(0) { $0 + $1.amount }
     }
 
     private func calculateMonthComparisonRatio() -> Double {

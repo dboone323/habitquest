@@ -41,17 +41,17 @@ final class FinancialMLModels {
 
         // Simple linear regression for prediction
         let n = Double(historicalData.count)
-        let sumX = (0..<historicalData.count).reduce(0.0) { $0 + Double($1) }
+        let sumX = (0 ..< historicalData.count).reduce(0.0) { $0 + Double($1) }
         let sumY = historicalData.reduce(0.0, +)
-        let sumXY = (0..<historicalData.count).reduce(0.0) { $0 + Double($1) * historicalData[$1] }
-        let sumXX = (0..<historicalData.count).reduce(0.0) { $0 + Double($1 * $1) }
+        let sumXY = (0 ..< historicalData.count).reduce(0.0) { $0 + Double($1) * historicalData[$1] }
+        let sumXX = (0 ..< historicalData.count).reduce(0.0) { $0 + Double($1 * $1) }
 
         let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX)
         let intercept = (sumY - slope * sumX) / n
 
         // Generate predictions
         var predictions: [Double] = []
-        for i in 1...months {
+        for i in 1 ... months {
             let prediction = slope * (n + Double(i)) + intercept
             predictions.append(max(0, prediction)) // Ensure non-negative
         }

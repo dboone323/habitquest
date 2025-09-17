@@ -21,7 +21,7 @@ extension Features.Transactions {
         /// <#Description#>
         /// - Returns: <#description#>
         func filterTransactions(_ transactions: [FinancialTransaction], by type: TransactionType?)
-        -> [FinancialTransaction] {
+            -> [FinancialTransaction] {
             guard let type else { return transactions }
             return transactions.filter { $0.transactionType == type }
         }
@@ -30,7 +30,7 @@ extension Features.Transactions {
         /// <#Description#>
         /// - Returns: <#description#>
         func searchTransactions(_ transactions: [FinancialTransaction], query: String)
-        -> [FinancialTransaction] {
+            -> [FinancialTransaction] {
             guard !query.isEmpty else { return transactions }
 
             return transactions.filter { transaction in
@@ -44,7 +44,8 @@ extension Features.Transactions {
         /// <#Description#>
         /// - Returns: <#description#>
         func groupTransactionsByMonth(_ transactions: [FinancialTransaction]) -> [String:
-            [FinancialTransaction]] {
+            [FinancialTransaction]
+        ] {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM yyyy"
 
@@ -57,7 +58,7 @@ extension Features.Transactions {
         /// <#Description#>
         /// - Returns: <#description#>
         func totalIncome(_ transactions: [FinancialTransaction], for period: DateInterval? = nil)
-        -> Double {
+            -> Double {
             let filteredTransactions: [FinancialTransaction] =
                 if let period {
                     transactions.filter { transaction in
@@ -69,15 +70,15 @@ extension Features.Transactions {
 
             return
                 filteredTransactions
-                .filter { $0.transactionType == .income }
-                .reduce(0.0) { $0 + $1.amount }
+                    .filter { $0.transactionType == .income }
+                    .reduce(0.0) { $0 + $1.amount }
         }
 
         /// Get total expenses for a period
         /// <#Description#>
         /// - Returns: <#description#>
         func totalExpenses(_ transactions: [FinancialTransaction], for period: DateInterval? = nil)
-        -> Double {
+            -> Double {
             let filteredTransactions: [FinancialTransaction] =
                 if let period {
                     transactions.filter { transaction in
@@ -89,23 +90,23 @@ extension Features.Transactions {
 
             return
                 filteredTransactions
-                .filter { $0.transactionType == .expense }
-                .reduce(0.0) { $0 + $1.amount }
+                    .filter { $0.transactionType == .expense }
+                    .reduce(0.0) { $0 + $1.amount }
         }
 
         /// Get net income for a period
         /// <#Description#>
         /// - Returns: <#description#>
         func netIncome(_ transactions: [FinancialTransaction], for period: DateInterval? = nil)
-        -> Double {
-            totalIncome(transactions, for: period) - totalExpenses(transactions, for: period)
+            -> Double {
+            self.totalIncome(transactions, for: period) - self.totalExpenses(transactions, for: period)
         }
 
         /// Get transactions for current month
         /// <#Description#>
         /// - Returns: <#description#>
         func currentMonthTransactions(_ transactions: [FinancialTransaction])
-        -> [FinancialTransaction] {
+            -> [FinancialTransaction] {
             let calendar = Calendar.current
             let now = Date()
 
@@ -118,11 +119,12 @@ extension Features.Transactions {
         /// <#Description#>
         /// - Returns: <#description#>
         func recentTransactions(_ transactions: [FinancialTransaction], limit: Int = 10)
-        -> [FinancialTransaction] {
+            -> [FinancialTransaction] {
             Array(
                 transactions
                     .sorted { $0.date > $1.date }
-                    .prefix(limit))
+                    .prefix(limit)
+            )
         }
 
         /// Delete transaction and update account balance
@@ -162,7 +164,7 @@ extension Features.Transactions {
             account: FinancialAccount,
             date: Date = Date(),
             notes: String? = nil,
-            ) {
+        ) {
             guard let modelContext else { return }
 
             let transaction = FinancialTransaction(
@@ -171,7 +173,7 @@ extension Features.Transactions {
                 date: date,
                 transactionType: type,
                 notes: notes,
-                )
+            )
 
             transaction.category = category
             transaction.account = account

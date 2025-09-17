@@ -6,7 +6,7 @@ struct GoalRowView: View {
     let goal: Goal
 
     private var priorityColor: Color {
-        switch goal.priority {
+        switch self.goal.priority {
         case .high:
             .red
         case .medium:
@@ -17,7 +17,7 @@ struct GoalRowView: View {
     }
 
     private var priorityText: String {
-        switch goal.priority {
+        switch self.goal.priority {
         case .high:
             "High"
         case .medium:
@@ -28,7 +28,7 @@ struct GoalRowView: View {
     }
 
     private var progressPercentage: Double {
-        goal.progress
+        self.goal.progress
     }
 
     var body: some View {
@@ -36,46 +36,46 @@ struct GoalRowView: View {
             // Priority indicator
             VStack(alignment: .center, spacing: 2) {
                 Circle()
-                    .fill(priorityColor)
+                    .fill(self.priorityColor)
                     .frame(width: 8, height: 8)
 
-                Text(priorityText)
+                Text(self.priorityText)
                     .font(.caption2)
                     .fontWeight(.medium)
-                    .foregroundColor(priorityColor)
+                    .foregroundColor(self.priorityColor)
             }
             .frame(width: 50)
 
             // Goal details
             VStack(alignment: .leading, spacing: 4) {
-                Text(goal.title)
+                Text(self.goal.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
                     .lineLimit(2)
 
-                if !goal.description.isEmpty {
-                    Text(goal.description)
+                if !self.goal.description.isEmpty {
+                    Text(self.goal.description)
                         .font(.caption)
-                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
                         .lineLimit(1)
                 }
 
                 // Progress bar
-                if progressPercentage > 0 {
+                if self.progressPercentage > 0 {
                     VStack(alignment: .leading, spacing: 2) {
                         HStack {
                             Text("Progress")
                                 .font(.caption2)
-                                .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
                             Spacer()
-                            Text("\(Int(progressPercentage * 100))%")
+                            Text("\(Int(self.progressPercentage * 100))%")
                                 .font(.caption2)
                                 .fontWeight(.medium)
                                 .foregroundColor(.green)
                         }
 
-                        ProgressView(value: progressPercentage)
+                        ProgressView(value: self.progressPercentage)
                             .progressViewStyle(LinearProgressViewStyle(tint: .green))
                             .scaleEffect(y: 0.8)
                     }
@@ -85,7 +85,7 @@ struct GoalRowView: View {
             Spacer()
 
             // Completion status
-            if goal.isCompleted {
+            if self.goal.isCompleted {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.green)
                     .font(.title3)

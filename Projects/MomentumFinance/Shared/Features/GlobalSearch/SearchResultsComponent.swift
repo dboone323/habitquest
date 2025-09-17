@@ -13,10 +13,10 @@ public struct SearchResultsComponent: View {
 
     public var body: some View {
         Group {
-            if isLoading {
+            if self.isLoading {
                 ProgressView("Searching...")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if results.isEmpty {
+            } else if self.results.isEmpty {
                 VStack(spacing: 16) {
                     Image(systemName: "magnifyingglass")
                         .font(.system(size: 48))
@@ -30,8 +30,8 @@ public struct SearchResultsComponent: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                List(results) { result in
-                    SearchResultRow(result: result, onResultTapped: onResultTapped)
+                List(self.results) { result in
+                    SearchResultRow(result: result, onResultTapped: self.onResultTapped)
                 }
                 .listStyle(.plain)
             }
@@ -44,15 +44,15 @@ private struct SearchResultRow: View {
     var onResultTapped: ((SearchResult) -> Void)?
 
     var body: some View {
-        Button(action: { onResultTapped?(result).accessibilityLabel("Button") }) {
+        Button(action: { self.onResultTapped?(self.result).accessibilityLabel("Button") }) {
             HStack(spacing: 12) {
                 // Icon based on type
-                Image(systemName: result.iconName)
+                Image(systemName: self.result.iconName)
                     .foregroundColor(.blue)
                     .frame(width: 24, height: 24)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(result.title)
+                    Text(self.result.title)
                         .font(.headline)
                         .foregroundColor(.primary)
                         .lineLimit(1)
@@ -68,7 +68,7 @@ private struct SearchResultRow: View {
                 Spacer()
 
                 // Type indicator
-                Text(result.type.rawValue)
+                Text(self.result.type.rawValue)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.horizontal, 8)

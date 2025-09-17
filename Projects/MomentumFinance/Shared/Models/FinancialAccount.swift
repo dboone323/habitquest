@@ -74,9 +74,9 @@ public final class FinancialAccount: Hashable {
     func updateBalance(for transaction: FinancialTransaction) {
         switch transaction.transactionType {
         case .income:
-            balance += transaction.amount
+            self.balance += transaction.amount
         case .expense:
-            balance -= transaction.amount
+            self.balance -= transaction.amount
         case .transfer:
             // Transfer transactions don't affect the account balance
             // as they move money between accounts
@@ -88,9 +88,9 @@ public final class FinancialAccount: Hashable {
 
     /// Hashes the account by name, type, and creation date.
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(accountType)
-        hasher.combine(createdDate)
+        hasher.combine(self.name)
+        hasher.combine(self.accountType)
+        hasher.combine(self.createdDate)
     }
 
     /// Compares two accounts for equality by name, type, and creation date.

@@ -38,7 +38,7 @@ actor DataImporter {
         }
 
         let csvContent = try String(contentsOf: fileURL, encoding: .utf8)
-        return try await parseAndImportCSV(content: csvContent)
+        return try await self.parseAndImportCSV(content: csvContent)
     }
 
     private func parseAndImportCSV(content: String) async throws -> ImportResult {
@@ -125,7 +125,8 @@ actor DataImporter {
         let transactionType: TransactionType
         if let typeIndex = columnMapping.typeIndex, typeIndex < fields.count {
             let typeString = fields[typeIndex].lowercased().trimmingCharacters(
-                in: .whitespacesAndNewlines)
+                in: .whitespacesAndNewlines
+            )
             transactionType = DataParser.parseTransactionType(typeString, amount: amount)
         } else {
             transactionType = amount >= 0 ? .income : .expense

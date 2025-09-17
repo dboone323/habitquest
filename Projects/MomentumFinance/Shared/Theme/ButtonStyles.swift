@@ -19,7 +19,7 @@ public struct PrimaryButtonStyle: ButtonStyle {
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity)
-            .background(theme.accentPrimary.opacity(configuration.isPressed ? 0.8 : 1.0))
+            .background(self.theme.accentPrimary.opacity(configuration.isPressed ? 0.8 : 1.0))
             .foregroundStyle(Color.white)
             .font(.body.weight(.medium))
             .cornerRadius(8)
@@ -37,12 +37,12 @@ public struct SecondaryButtonStyle: ButtonStyle {
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity)
-            .background(theme.secondaryBackground)
-            .foregroundStyle(theme.accentPrimary)
+            .background(self.theme.secondaryBackground)
+            .foregroundStyle(self.theme.accentPrimary)
             .font(.body.weight(.medium))
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .strokeBorder(theme.accentPrimary, lineWidth: 1)
+                    .strokeBorder(self.theme.accentPrimary, lineWidth: 1)
             )
             .cornerRadius(8)
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
@@ -56,7 +56,7 @@ public struct TextButtonStyle: ButtonStyle {
 
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundStyle(theme.accentPrimary.opacity(configuration.isPressed ? 0.7 : 1.0))
+            .foregroundStyle(self.theme.accentPrimary.opacity(configuration.isPressed ? 0.7 : 1.0))
             .font(.body.weight(.medium))
             .padding(.vertical, 8)
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
@@ -73,7 +73,7 @@ public struct DestructiveButtonStyle: ButtonStyle {
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity)
-            .background(theme.critical.opacity(configuration.isPressed ? 0.8 : 1.0))
+            .background(self.theme.critical.opacity(configuration.isPressed ? 0.8 : 1.0))
             .foregroundStyle(Color.white)
             .font(.body.weight(.medium))
             .cornerRadius(8)

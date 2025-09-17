@@ -19,7 +19,7 @@ extension Features.Dashboard {
         var body: some View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Text("Good \(greeting)")
+                    Text("Good \(self.greeting)")
                         .font(.title2)
                         .fontWeight(.semibold)
                         .foregroundStyle(.primary)
@@ -40,31 +40,31 @@ extension Features.Dashboard {
 
                 Text("Here's a summary of your finances")
                     .font(.subheadline)
-                    .foregroundStyle(colorTheme.secondaryText)
+                    .foregroundStyle(self.colorTheme.secondaryText)
                     .padding(.bottom, 8)
 
                 // Financial Wellness Score
                 HStack(spacing: 16) {
                     Text("Financial Wellness")
                         .font(.caption)
-                        .foregroundStyle(colorTheme.secondaryText)
+                        .foregroundStyle(self.colorTheme.secondaryText)
 
                     Spacer()
 
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(colorTheme.secondaryBackground)
+                            .fill(self.colorTheme.secondaryBackground)
                             .frame(width: 170, height: 8)
 
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(colorTheme.savings)
-                            .frame(width: 170 * Double(wellnessPercentage) / 100, height: 8)
+                            .fill(self.colorTheme.savings)
+                            .frame(width: 170 * Double(self.wellnessPercentage) / 100, height: 8)
                     }
 
-                    Text("\(wellnessPercentage)%")
+                    Text("\(self.wellnessPercentage)%")
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundStyle(colorTheme.primaryText)
+                        .foregroundStyle(self.colorTheme.primaryText)
                 }
                 .padding(.vertical, 2)
             }

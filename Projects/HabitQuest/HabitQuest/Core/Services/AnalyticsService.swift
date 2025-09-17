@@ -24,14 +24,14 @@ final class AnalyticsService {
         let logs = await fetchAllLogs()
 
         return HabitAnalytics(
-            overallStats: calculateOverallStats(habits: habits, logs: logs),
-            streakAnalytics: calculateStreakAnalytics(habits: habits),
-            categoryBreakdown: calculateCategoryBreakdown(habits: habits),
-            moodCorrelation: calculateMoodCorrelation(logs: logs),
-            timePatterns: calculateTimePatterns(logs: logs),
-            weeklyProgress: calculateWeeklyProgress(logs: logs),
-            monthlyTrends: calculateMonthlyTrends(logs: logs),
-            habitPerformance: calculateHabitPerformance(habits: habits)
+            overallStats: self.calculateOverallStats(habits: habits, logs: logs),
+            streakAnalytics: self.calculateStreakAnalytics(habits: habits),
+            categoryBreakdown: self.calculateCategoryBreakdown(habits: habits),
+            moodCorrelation: self.calculateMoodCorrelation(logs: logs),
+            timePatterns: self.calculateTimePatterns(logs: logs),
+            weeklyProgress: self.calculateWeeklyProgress(logs: logs),
+            monthlyTrends: self.calculateMonthlyTrends(logs: logs),
+            habitPerformance: self.calculateHabitPerformance(habits: habits)
         )
     }
 
@@ -55,9 +55,9 @@ final class AnalyticsService {
 
         return HabitTrendData(
             habitId: habitId,
-            completionRates: calculateDailyCompletionRates(logs: recentLogs, days: days),
-            streaks: calculateDailyStreaks(logs: recentLogs),
-            xpEarned: calculateDailyXP(logs: recentLogs, days: days)
+            completionRates: self.calculateDailyCompletionRates(logs: recentLogs, days: days),
+            streaks: self.calculateDailyStreaks(logs: recentLogs),
+            xpEarned: self.calculateDailyXP(logs: recentLogs, days: days)
         )
     }
 
@@ -102,7 +102,7 @@ final class AnalyticsService {
         return ProductivityMetrics(
             period: period,
             completionRate: Double(completedLogs.count) / Double(max(totalPossibleCompletions, 1)),
-            streakCount: calculateActiveStreaks(habits: habits),
+            streakCount: self.calculateActiveStreaks(habits: habits),
             xpEarned: completedLogs.reduce(0) { $0 + $1.xpEarned },
             missedOpportunities: totalPossibleCompletions - completedLogs.count
         )
@@ -112,17 +112,17 @@ final class AnalyticsService {
 
     private func fetchAllHabits() async -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
-        return (try? modelContext.fetch(descriptor)) ?? []
+        return (try? self.modelContext.fetch(descriptor)) ?? []
     }
 
     private func fetchAllLogs() async -> [HabitLog] {
         let descriptor = FetchDescriptor<HabitLog>()
-        return (try? modelContext.fetch(descriptor)) ?? []
+        return (try? self.modelContext.fetch(descriptor)) ?? []
     }
 
     private func fetchHabit(id: UUID) async -> Habit? {
         let descriptor = FetchDescriptor<Habit>()
-        let habits = try? modelContext.fetch(descriptor)
+        let habits = try? self.modelContext.fetch(descriptor)
         return habits?.first { $0.id == id }
     }
 
@@ -147,7 +147,7 @@ final class AnalyticsService {
             currentStreaks: streaks,
             longestStreak: streaks.max() ?? 0,
             averageStreak: streaks.reduce(0, +) / max(streaks.count, 1),
-            activeStreaks: streaks.filter { $0 > 0 }.count
+            activeStreaks: streaks.count(where: { $0 > 0 })
         )
     }
 
@@ -191,7 +191,7 @@ final class AnalyticsService {
         return TimePatterns(
             peakHours: hourGroups.max { $0.value.count < $1.value.count }?.key ?? 12,
             hourlyDistribution: hourGroups.mapValues { $0.count },
-            weekdayPatterns: calculateWeekdayPatterns(logs: logs)
+            weekdayPatterns: self.calculateWeekdayPatterns(logs: logs)
         )
     }
 
@@ -204,7 +204,7 @@ final class AnalyticsService {
             completedHabits: completedThisWeek,
             totalOpportunities: weekLogs.count,
             xpEarned: weekLogs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned },
-            dailyBreakdown: calculateDailyBreakdown(logs: weekLogs)
+            dailyBreakdown: self.calculateDailyBreakdown(logs: weekLogs)
         )
     }
 
@@ -226,7 +226,7 @@ final class AnalyticsService {
     private func calculateHabitPerformance(habits: [Habit]) -> [HabitPerformance] {
         habits.map { habit in
             let completedLogs = habit.logs.filter(\.isCompleted)
-            let trends = calculateHabitTrends(logs: habit.logs)
+            let trends = self.calculateHabitTrends(logs: habit.logs)
 
             return HabitPerformance(
                 habitId: habit.id,
@@ -291,7 +291,7 @@ final class AnalyticsService {
     }
 
     private func calculateActiveStreaks(habits: [Habit]) -> Int {
-        habits.filter { $0.streak > 0 }.count
+        habits.count(where: { $0.streak > 0 })
     }
 
     private func calculateWeekdayPatterns(logs: [HabitLog]) -> [Int: Int] {

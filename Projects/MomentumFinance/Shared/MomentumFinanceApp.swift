@@ -1,14 +1,14 @@
 import Foundation
+import os
 import SwiftData
 import SwiftUI
-import os
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
 // Model references for SwiftData container
-extension MomentumFinanceApp {
-    fileprivate enum ModelReferences {
+fileprivate extension MomentumFinanceApp {
+    enum ModelReferences {
         static let accounts = FinancialAccount.self
         static let transactions = FinancialTransaction.self
         static let subscriptions = Subscription.self
@@ -57,7 +57,8 @@ struct MomentumFinanceApp: App {
             print("MomentumFinanceApp: ERROR creating ModelContainer: \(error)")
             os_log(
                 "Could not create ModelContainer: %@", log: .default, type: .error,
-                error.localizedDescription)
+                error.localizedDescription
+            )
 
             // Try with in-memory storage as fallback
             do {
@@ -69,7 +70,8 @@ struct MomentumFinanceApp: App {
                 print("MomentumFinanceApp: ERROR creating in-memory ModelContainer: \(error)")
                 os_log(
                     "Could not create in-memory ModelContainer: %@", log: .default, type: .error,
-                    error.localizedDescription)
+                    error.localizedDescription
+                )
                 return nil
             }
         }
@@ -102,10 +104,10 @@ struct MomentumFinanceApp: App {
 
                     Button("Quit App") {
                         #if os(iOS)
-                            // iOS doesn't allow programmatic app termination
-                            // User must manually close the app
+                        // iOS doesn't allow programmatic app termination
+                        // User must manually close the app
                         #else
-                            NSApplication.shared.terminate(nil)
+                        NSApplication.shared.terminate(nil)
                         #endif
                     }
                     .accessibilityLabel("Button")
@@ -118,22 +120,22 @@ struct MomentumFinanceApp: App {
                 #else
                     .background(Color(NSColor.windowBackgroundColor))
                 #endif
-                .onAppear {
-                    print("MomentumFinanceApp: Error view appeared")
-                }
+                    .onAppear {
+                        print("MomentumFinanceApp: Error view appeared")
+                    }
             }
         }
 
         #if os(macOS)
-            Settings {
-                if let container = sharedModelContainer {
-                    SettingsView()
-                        .modelContainer(container)
-                } else {
-                    Text("Settings unavailable - Database error")
-                        .padding()
-                }
+        Settings {
+            if let container = sharedModelContainer {
+                SettingsView()
+                    .modelContainer(container)
+            } else {
+                Text("Settings unavailable - Database error")
+                    .padding()
             }
+        }
         #endif
     }
 }

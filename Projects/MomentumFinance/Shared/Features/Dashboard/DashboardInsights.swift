@@ -14,7 +14,7 @@ struct DashboardInsights: View {
 
                 Spacer()
 
-                Button("Details", action: onDetailsTapped).accessibilityLabel("Button")
+                Button("Details", action: self.onDetailsTapped).accessibilityLabel("Button")
                     .font(.subheadline)
                     .foregroundColor(.accentColor)
             }
@@ -39,12 +39,12 @@ struct DashboardInsights: View {
         }
         .padding(15)
         #if os(iOS)
-        .background(Color(UIColor.secondarySystemBackground))
+            .background(Color(UIColor.secondarySystemBackground))
         #else
-        .background(Color.secondary.opacity(0.1))
+            .background(Color.secondary.opacity(0.1))
         #endif
-        .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+            .cornerRadius(12)
+            .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
 }
 
@@ -55,10 +55,10 @@ struct InsightItem: View {
     var body: some View {
         HStack {
             Circle()
-                .fill(color)
+                .fill(self.color)
                 .frame(width: 10, height: 10)
 
-            Text(text)
+            Text(self.text)
                 .font(.subheadline)
         }
     }

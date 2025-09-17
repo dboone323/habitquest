@@ -20,15 +20,16 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             // MARK: - Sidebar with Enhanced Navigation
+
             VStack(alignment: .leading, spacing: 0) {
                 // Header Section
                 HeaderView()
 
                 // Main Content List
-                ItemListView(items: items, onDelete: deleteItems, onAdd: addItem)
+                ItemListView(items: self.items, onDelete: self.deleteItems, onAdd: self.addItem)
 
                 // Footer with Stats
-                FooterStatsView(itemCount: items.count)
+                FooterStatsView(itemCount: self.items.count)
             }
         } detail: {
             DetailView()
@@ -40,14 +41,14 @@ struct ContentView: View {
     private func addItem() {
         withAnimation {
             let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
+            self.modelContext.insert(newItem)
         }
     }
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(items[index])
+                self.modelContext.delete(self.items[index])
             }
         }
     }
@@ -89,14 +90,14 @@ struct ItemListView: View {
 
     var body: some View {
         List {
-            ForEach(items) { item in
+            ForEach(self.items) { item in
                 NavigationLink {
                     ItemDetailView(item: item)
                 } label: {
                     ItemRowView(item: item)
                 }
             }
-            .onDelete(perform: onDelete)
+            .onDelete(perform: self.onDelete)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -104,7 +105,7 @@ struct ItemListView: View {
                     .accessibilityLabel("Edit Items")
             }
             ToolbarItem {
-                Button(action: onAdd) {
+                Button(action: self.onAdd) {
                     Label("Add Item", systemImage: "plus")
                 }
                 .accessibilityLabel("Add New Item")
@@ -119,15 +120,15 @@ struct ItemRowView: View {
     var body: some View {
         HStack {
             // Icon based on time of day
-            Image(systemName: timeBasedIcon)
-                .foregroundColor(timeBasedColor)
+            Image(systemName: self.timeBasedIcon)
+                .foregroundColor(self.timeBasedColor)
                 .frame(width: 24, height: 24)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text("Quest Entry")
                     .font(.headline)
 
-                Text(item.timestamp, format: Date.FormatStyle(date: .abbreviated, time: .shortened))
+                Text(self.item.timestamp, format: Date.FormatStyle(date: .abbreviated, time: .shortened))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -143,21 +144,21 @@ struct ItemRowView: View {
     }
 
     private var timeBasedIcon: String {
-        let hour = Calendar.current.component(.hour, from: item.timestamp)
+        let hour = Calendar.current.component(.hour, from: self.item.timestamp)
         switch hour {
-        case 6..<12: return "sunrise.fill"
-        case 12..<18: return "sun.max.fill"
-        case 18..<22: return "sunset.fill"
+        case 6 ..< 12: return "sunrise.fill"
+        case 12 ..< 18: return "sun.max.fill"
+        case 18 ..< 22: return "sunset.fill"
         default: return "moon.stars.fill"
         }
     }
 
     private var timeBasedColor: Color {
-        let hour = Calendar.current.component(.hour, from: item.timestamp)
+        let hour = Calendar.current.component(.hour, from: self.item.timestamp)
         switch hour {
-        case 6..<12: return .orange
-        case 12..<18: return .yellow
-        case 18..<22: return .red
+        case 6 ..< 12: return .orange
+        case 12 ..< 18: return .yellow
+        case 18 ..< 22: return .red
         default: return .purple
         }
     }
@@ -183,7 +184,7 @@ struct ItemDetailView: View {
             VStack(alignment: .leading, spacing: 12) {
                 DetailRow(
                     title: "Created",
-                    value: item.timestamp.formatted(date: .complete, time: .shortened)
+                    value: self.item.timestamp.formatted(date: .complete, time: .shortened)
                 )
 
                 DetailRow(
@@ -214,12 +215,12 @@ struct DetailRow: View {
 
     var body: some View {
         HStack {
-            Text(title)
+            Text(self.title)
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .frame(width: 80, alignment: .leading)
 
-            Text(value)
+            Text(self.value)
                 .font(.body)
 
             Spacer()
@@ -235,7 +236,7 @@ struct FooterStatsView: View {
             Divider()
 
             HStack {
-                Label("\(itemCount) entries", systemImage: "list.bullet")
+                Label("\(self.itemCount) entries", systemImage: "list.bullet")
                     .font(.caption)
                     .foregroundColor(.secondary)
 

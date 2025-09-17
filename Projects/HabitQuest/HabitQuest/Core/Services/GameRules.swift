@@ -3,7 +3,6 @@ import Foundation
 /// Contains all game logic and progression calculations
 /// Pure functions that handle XP calculation, level progression, and habit completion rewards
 enum GameRules {
-
     /// Calculate the total XP required to reach a specific level
     /// Uses an exponential curve: 100 * (1.5 ^ (level - 1))
     /// - Parameter level: The target level
@@ -17,7 +16,7 @@ enum GameRules {
     /// - Parameter level: Current level
     /// - Returns: XP needed to reach the next level
     nonisolated static func calculateXPForNextLevel(forLevel level: Int) -> Int {
-        calculateXPForLevel(
+        self.calculateXPForLevel(
             level + 1
         )
     }
@@ -37,18 +36,18 @@ enum GameRules {
         var leveledUp = false
         var newLevel = profile.level
 
-        while profile.currentXP >= calculateXPForLevel(newLevel + 1) {
+        while profile.currentXP >= self.calculateXPForLevel(newLevel + 1) {
             newLevel += 1
             leveledUp = true
         }
 
         if leveledUp {
             profile.level = newLevel
-            profile.xpForNextLevel = calculateXPForNextLevel(forLevel: newLevel)
+            profile.xpForNextLevel = self.calculateXPForNextLevel(forLevel: newLevel)
         }
 
         // Update habit streak
-        updateHabitStreak(habit: habit)
+        self.updateHabitStreak(habit: habit)
 
         // Update longest streak if necessary
         if habit.streak > profile.longestStreak {
@@ -160,7 +159,7 @@ enum GameRules {
         var leveledUp = false
         var newLevel = profile.level
 
-        while profile.currentXP >= calculateXPForLevel(
+        while profile.currentXP >= self.calculateXPForLevel(
             newLevel + 1
         ) {
             newLevel += 1
@@ -169,7 +168,7 @@ enum GameRules {
 
         if leveledUp {
             profile.level = newLevel
-            profile.xpForNextLevel = calculateXPForNextLevel(forLevel: newLevel)
+            profile.xpForNextLevel = self.calculateXPForNextLevel(forLevel: newLevel)
         }
 
         return (leveledUp: leveledUp, newLevel: newLevel)

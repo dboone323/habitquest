@@ -2,8 +2,8 @@ import Foundation
 import SwiftUI
 
 struct AddCalendarEventView: View {
-    @Environment(\.dismiss) var dismiss  // Use dismiss environment
-    @Binding var events: [CalendarEvent]  // Assumes using model from PlannerApp/Models/
+    @Environment(\.dismiss) var dismiss // Use dismiss environment
+    @Binding var events: [CalendarEvent] // Assumes using model from PlannerApp/Models/
 
     @State private var title = ""
     @State private var date = Date()
@@ -12,7 +12,7 @@ struct AddCalendarEventView: View {
     @FocusState private var isTitleFocused: Bool
 
     private var isTitleValid: Bool {
-        !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !self.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     var body: some View {
@@ -21,15 +21,15 @@ struct AddCalendarEventView: View {
             HStack {
                 Button("Cancel") {
                     #if os(iOS)
-                        HapticManager.lightImpact()
+                    HapticManager.lightImpact()
                     #endif
-                    dismiss()
+                    self.dismiss()
                 }
                 .accessibilityLabel("Button")
                 #if os(iOS)
                     .buttonStyle(.iOSSecondary)
                 #endif
-                .foregroundColor(.blue)
+                    .foregroundColor(.blue)
 
                 Spacer()
 
@@ -41,17 +41,17 @@ struct AddCalendarEventView: View {
 
                 Button("Save") {
                     #if os(iOS)
-                        HapticManager.notificationSuccess()
+                    HapticManager.notificationSuccess()
                     #endif
-                    saveEvent()
-                    dismiss()
+                    self.saveEvent()
+                    self.dismiss()
                 }
                 .accessibilityLabel("Button")
                 #if os(iOS)
                     .buttonStyle(.iOSPrimary)
                 #endif
-                .disabled(!isTitleValid)
-                .foregroundColor(isTitleValid ? .blue : .gray)
+                    .disabled(!self.isTitleValid)
+                    .foregroundColor(self.isTitleValid ? .blue : .gray)
             }
             .padding()
             #if os(macOS)
@@ -60,58 +60,61 @@ struct AddCalendarEventView: View {
                 .background(Color(.systemBackground))
             #endif
             #if os(iOS)
-                .iOSEnhancedTouchTarget()
+            .iOSEnhancedTouchTarget()
             #endif
 
             Form {
-                TextField("Event Title", text: $title).accessibilityLabel("Text Field")
-                    .focused($isTitleFocused)
-                    #if os(iOS)
-                        .textInputAutocapitalization(.words)
-                        .submitLabel(.done)
-                        .onSubmit {
-                            isTitleFocused = false
-                        }
-                    #endif
+                TextField("Event Title", text: self.$title).accessibilityLabel("Text Field")
+                    .focused(self.$isTitleFocused)
+                #if os(iOS)
+                    .textInputAutocapitalization(.words)
+                    .submitLabel(.done)
+                    .onSubmit {
+                        self.isTitleFocused = false
+                    }
+                #endif
                 DatePicker(
-                    "Event Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                    "Event Date", selection: self.$date, displayedComponents: [.date, .hourAndMinute]
+                )
             }
             #if os(iOS)
-                .iOSKeyboardDismiss()
-                .toolbar {
-                    ToolbarItem(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            Button("Done") {
-                                isTitleFocused = false
-                                UIApplication.shared.sendAction(
-                                    #selector(UIResponder.resignFirstResponder), to: nil, from: nil,
-                                    for: nil)
-                            }
-                            .accessibilityLabel("Button")
-                            .buttonStyle(.iOSPrimary)
-                            .foregroundColor(.blue)
-                            .font(.body.weight(.semibold))
+            .iOSKeyboardDismiss()
+            .toolbar {
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button("Done") {
+                            self.isTitleFocused = false
+                            UIApplication.shared.sendAction(
+                                #selector(UIResponder.resignFirstResponder), to: nil, from: nil,
+                                for: nil
+                            )
                         }
+                        .accessibilityLabel("Button")
+                        .buttonStyle(.iOSPrimary)
+                        .foregroundColor(.blue)
+                        .font(.body.weight(.semibold))
                     }
                 }
+            }
             #endif
         }
         #if os(macOS)
-            .frame(minWidth: 500, minHeight: 400)
+        .frame(minWidth: 500, minHeight: 400)
         #else
-            .iOSPopupOptimizations()
+        .iOSPopupOptimizations()
         #endif
     }
 
     private func saveEvent() {
         let newEvent = CalendarEvent(
             title: title.trimmingCharacters(in: .whitespacesAndNewlines),
-            date: date)
-        events.append(newEvent)
+            date: self.date
+        )
+        self.events.append(newEvent)
 
         // Save to persistent storage via data manager
-        CalendarDataManager.shared.save(events: events)
+        CalendarDataManager.shared.save(events: self.events)
     }
 }
 

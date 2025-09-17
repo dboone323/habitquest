@@ -91,38 +91,38 @@ public final class Subscription {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: amount)) ?? "$0.00"
+        return formatter.string(from: NSNumber(value: self.amount)) ?? "$0.00"
     }
 
     /// Returns the number of days until the next payment is due.
     var daysUntilDue: Int {
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.day], from: Date(), to: nextDueDate)
+        let components = calendar.dateComponents([.day], from: Date(), to: self.nextDueDate)
         return max(0, components.day ?? 0)
     }
 
     /// Compatibility accessor: some code expects `nextBillingDate` (optional).
     /// Maps to the canonical `nextDueDate` property.
     var nextBillingDate: Date? {
-        get { nextDueDate }
+        get { self.nextDueDate }
         set {
             // If a new date is provided, update the canonical nextDueDate.
             // If nil is assigned, ignore to preserve existing non-optional storage.
             if let newValue {
-                nextDueDate = newValue
+                self.nextDueDate = newValue
             }
         }
     }
 
     /// Returns the monthly equivalent amount for budgeting calculations.
     var monthlyEquivalent: Double {
-        switch billingCycle {
+        switch self.billingCycle {
         case .weekly:
-            amount * 52 / 12  // Weekly * 52 weeks / 12 months
+            self.amount * 52 / 12 // Weekly * 52 weeks / 12 months
         case .monthly:
-            amount
+            self.amount
         case .yearly:
-            amount / 12
+            self.amount / 12
         }
     }
 
@@ -138,15 +138,15 @@ public final class Subscription {
             transactionType: .expense,
             notes: "Auto-generated from subscription"
         )
-        transaction.category = category
-        transaction.account = account
+        transaction.category = self.category
+        transaction.account = self.account
 
         modelContext.insert(transaction)
 
         // Update account balance
-        account?.updateBalance(for: transaction)
+        self.account?.updateBalance(for: transaction)
 
         // Set next due date
-        nextDueDate = billingCycle.nextDueDate(from: nextDueDate)
+        self.nextDueDate = self.billingCycle.nextDueDate(from: self.nextDueDate)
     }
 }

@@ -24,7 +24,7 @@ enum CSVParser {
                 if insideQuotes {
                     // Check if this is an escaped quote
                     let nextIndex = row.index(after: i)
-                    if nextIndex < row.endIndex && row[nextIndex] == "\"" {
+                    if nextIndex < row.endIndex, row[nextIndex] == "\"" {
                         currentField.append("\"")
                         i = nextIndex
                     } else {
@@ -33,7 +33,7 @@ enum CSVParser {
                 } else {
                     insideQuotes = true
                 }
-            } else if char == "," && !insideQuotes {
+            } else if char == ",", !insideQuotes {
                 fields.append(currentField)
                 currentField = ""
             } else {
@@ -61,42 +61,42 @@ enum CSVParser {
 
             // Title/Description column mapping
             else if normalizedHeader.contains("description") ||
-                        normalizedHeader.contains("title") ||
-                        normalizedHeader.contains("merchant") ||
-                        normalizedHeader.contains("payee") ||
-                        normalizedHeader == "name" {
+                normalizedHeader.contains("title") ||
+                normalizedHeader.contains("merchant") ||
+                normalizedHeader.contains("payee") ||
+                normalizedHeader == "name" {
                 mapping.titleIndex = index
             }
 
             // Amount column mapping
             else if normalizedHeader.contains("amount") ||
-                        normalizedHeader.contains("value") ||
-                        normalizedHeader == "sum" {
+                normalizedHeader.contains("value") ||
+                normalizedHeader == "sum" {
                 mapping.amountIndex = index
             }
 
             // Type column mapping
             else if normalizedHeader.contains("type") ||
-                        normalizedHeader.contains("transaction") {
+                normalizedHeader.contains("transaction") {
                 mapping.typeIndex = index
             }
 
             // Category column mapping
             else if normalizedHeader.contains("category") ||
-                        normalizedHeader.contains("tag") {
+                normalizedHeader.contains("tag") {
                 mapping.categoryIndex = index
             }
 
             // Account column mapping
             else if normalizedHeader.contains("account") ||
-                        normalizedHeader.contains("bank") {
+                normalizedHeader.contains("bank") {
                 mapping.accountIndex = index
             }
 
             // Notes column mapping
             else if normalizedHeader.contains("note") ||
-                        normalizedHeader.contains("memo") ||
-                        normalizedHeader.contains("comment") {
+                normalizedHeader.contains("memo") ||
+                normalizedHeader.contains("comment") {
                 mapping.notesIndex = index
             }
         }

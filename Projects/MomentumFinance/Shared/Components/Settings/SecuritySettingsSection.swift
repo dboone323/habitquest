@@ -6,10 +6,10 @@ struct SecuritySettingsSection: View {
 
     var body: some View {
         Section(header: Text("Security")) {
-            Toggle("Enable Biometric Authentication", isOn: $biometricEnabled)
+            Toggle("Enable Biometric Authentication", isOn: self.$biometricEnabled)
 
-            if biometricEnabled {
-                Picker("Auto-lock after", selection: $authenticationTimeout) {
+            if self.biometricEnabled {
+                Picker("Auto-lock after", selection: self.$authenticationTimeout) {
                     Text("1 minute").tag(1)
                     Text("5 minutes").tag(5)
                     Text("15 minutes").tag(15)

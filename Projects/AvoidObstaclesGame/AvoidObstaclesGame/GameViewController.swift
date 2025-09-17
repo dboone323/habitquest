@@ -12,7 +12,6 @@ import UIKit
 /// The main view controller for AvoidObstaclesGame.
 /// Responsible for loading and presenting the SpriteKit game scene.
 class GameViewController: UIViewController {
-
     /// Called after the controller's view is loaded into memory.
     /// Sets up and presents the main game scene.
     override func viewDidLoad() {

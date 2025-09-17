@@ -16,17 +16,17 @@ extension Features.Transactions {
             VStack(spacing: 20) {
                 Spacer()
 
-                Image(systemName: searchText.isEmpty ? "list.bullet" : "magnifyingglass")
+                Image(systemName: self.searchText.isEmpty ? "list.bullet" : "magnifyingglass")
                     .font(.system(size: 48))
                     .foregroundColor(.secondary)
 
                 VStack(spacing: 8) {
-                    Text(searchText.isEmpty ? "No Transactions" : "No Results Found")
+                    Text(self.searchText.isEmpty ? "No Transactions" : "No Results Found")
                         .font(.title2)
                         .fontWeight(.semibold)
 
                     Text(
-                        searchText.isEmpty
+                        self.searchText.isEmpty
                             ? "Add your first transaction to get started"
                             : "Try adjusting your search or filters"
                     )
@@ -35,9 +35,9 @@ extension Features.Transactions {
                     .multilineTextAlignment(.center)
                 }
 
-                if searchText.isEmpty {
+                if self.searchText.isEmpty {
                     Button("Add Transaction").accessibilityLabel("Button") {
-                        onAddTransaction()
+                        self.onAddTransaction()
                     }
                     .buttonStyle(.borderedProminent)
                 }

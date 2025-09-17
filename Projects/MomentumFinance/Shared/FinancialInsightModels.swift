@@ -5,7 +5,6 @@ import SwiftUI
 
 public struct FinancialInsightModels {
     // This serves as a namespace for insight-related types
-
 }
 
 // MARK: - Risk Level Enum
@@ -278,18 +277,18 @@ public final class FinancialInsight {
 /// Confidence levels for AI-generated insights
 public enum AIConfidenceLevel: String, CaseIterable {
     case veryHigh // 90-100%
-    case high     // 80-89%
-    case medium   // 60-79%
-    case low      // 40-59%
-    case veryLow  // 0-39%
+    case high // 80-89%
+    case medium // 60-79%
+    case low // 40-59%
+    case veryLow // 0-39%
 
     public var range: ClosedRange<Double> {
         switch self {
-        case .veryHigh: 0.90...1.0
-        case .high: 0.80...0.89
-        case .medium: 0.60...0.79
-        case .low: 0.40...0.59
-        case .veryLow: 0.0...0.39
+        case .veryHigh: 0.90 ... 1.0
+        case .high: 0.80 ... 0.89
+        case .medium: 0.60 ... 0.79
+        case .low: 0.40 ... 0.59
+        case .veryLow: 0.0 ... 0.39
         }
     }
 

@@ -1,7 +1,7 @@
 import Foundation
+import os.log
 import OSLog
 import SwiftData
-import os.log
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
@@ -26,67 +26,67 @@ class SampleDataGenerator {
     /// <#Description#>
     /// - Returns: <#description#>
     func generateAllSampleData() {
-        resetAllData()
+        self.resetAllData()
 
         // Generate data in dependency order
-        generateCategories()
-        generateAccounts()
-        generateBudgets()
-        generateSavingsGoals()
-        generateTransactions()
-        generateSubscriptions()
+        self.generateCategories()
+        self.generateAccounts()
+        self.generateBudgets()
+        self.generateSavingsGoals()
+        self.generateTransactions()
+        self.generateSubscriptions()
     }
 
     /// Generate expense categories
     /// <#Description#>
     /// - Returns: <#description#>
     func generateCategories() {
-        categoriesGenerator.generate()
+        self.categoriesGenerator.generate()
     }
 
     /// Generate financial accounts
     /// <#Description#>
     /// - Returns: <#description#>
     func generateAccounts() {
-        accountsGenerator.generate()
+        self.accountsGenerator.generate()
     }
 
     /// Generate budgets
     /// <#Description#>
     /// - Returns: <#description#>
     func generateBudgets() {
-        budgetsGenerator.generate()
+        self.budgetsGenerator.generate()
     }
 
     /// Generate savings goals
     /// <#Description#>
     /// - Returns: <#description#>
     func generateSavingsGoals() {
-        savingsGoalsGenerator.generate()
+        self.savingsGoalsGenerator.generate()
     }
 
     /// Generate transactions
     /// <#Description#>
     /// - Returns: <#description#>
     func generateTransactions() {
-        transactionsGenerator.generate()
+        self.transactionsGenerator.generate()
     }
 
     /// Generate subscriptions
     /// <#Description#>
     /// - Returns: <#description#>
     func generateSubscriptions() {
-        subscriptionsGenerator.generate()
+        self.subscriptionsGenerator.generate()
     }
 
     /// Reset all data in the model context
     private func resetAllData() {
-        deleteAllEntities(of: FinancialTransaction.self)
-        deleteAllEntities(of: Subscription.self)
-        deleteAllEntities(of: Budget.self)
-        deleteAllEntities(of: SavingsGoal.self)
-        deleteAllEntities(of: FinancialAccount.self)
-        deleteAllEntities(of: ExpenseCategory.self)
+        self.deleteAllEntities(of: FinancialTransaction.self)
+        self.deleteAllEntities(of: Subscription.self)
+        self.deleteAllEntities(of: Budget.self)
+        self.deleteAllEntities(of: SavingsGoal.self)
+        self.deleteAllEntities(of: FinancialAccount.self)
+        self.deleteAllEntities(of: ExpenseCategory.self)
     }
 
     /// Generic method to delete all entities of a specific type
@@ -94,9 +94,9 @@ class SampleDataGenerator {
         do {
             let entities = try modelContext.fetch(FetchDescriptor<T>())
             for entity in entities {
-                modelContext.delete(entity)
+                self.modelContext.delete(entity)
             }
-            try modelContext.save()
+            try self.modelContext.save()
         } catch {
             Logger.logError(error, context: "Deleting entities of type \(String(describing: type))")
         }

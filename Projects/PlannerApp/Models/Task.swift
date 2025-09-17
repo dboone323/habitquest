@@ -14,13 +14,13 @@ class TaskDataManager {
 
     /// Removes all tasks from memory.
     func clearAllTasks() {
-        tasks.removeAll()
+        self.tasks.removeAll()
     }
 
     /// Loads all tasks from memory.
     /// - Returns: Array of `Task` objects.
     func load() -> [Task] {
-        tasks
+        self.tasks
     }
 
     /// Saves the provided tasks to memory.
@@ -69,7 +69,7 @@ struct Task: Identifiable, Codable, Transferable {
     /// The date the task was created.
     var createdAt: Date
     /// The date the task was last modified (optional).
-    var modifiedAt: Date?  // Added for CloudKit sync/merge
+    var modifiedAt: Date? // Added for CloudKit sync/merge
 
     /// Creates a new task.
     /// - Parameters:
@@ -100,14 +100,14 @@ struct Task: Identifiable, Codable, Transferable {
 
     /// Converts this task to a CloudKit record for syncing.
     func toCKRecord() -> CKRecord {
-        let record = CKRecord(recordType: "Task", recordID: CKRecord.ID(recordName: id.uuidString))
-        record["title"] = title
-        record["description"] = description
-        record["isCompleted"] = isCompleted
-        record["priority"] = priority.rawValue
-        record["dueDate"] = dueDate
-        record["createdAt"] = createdAt
-        record["modifiedAt"] = modifiedAt
+        let record = CKRecord(recordType: "Task", recordID: CKRecord.ID(recordName: self.id.uuidString))
+        record["title"] = self.title
+        record["description"] = self.description
+        record["isCompleted"] = self.isCompleted
+        record["priority"] = self.priority.rawValue
+        record["dueDate"] = self.dueDate
+        record["createdAt"] = self.createdAt
+        record["modifiedAt"] = self.modifiedAt
         return record
     }
 
@@ -124,7 +124,8 @@ struct Task: Identifiable, Codable, Transferable {
         else {
             throw NSError(
                 domain: "TaskConversionError", code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "Failed to convert CloudKit record to Task"])
+                userInfo: [NSLocalizedDescriptionKey: "Failed to convert CloudKit record to Task"]
+            )
         }
 
         return Task(

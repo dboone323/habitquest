@@ -19,12 +19,12 @@ struct JournalView: View {
 
     // Filtered and sorted entries
     private var filteredEntries: [JournalEntry] {
-        let sorted = journalEntries.sorted(by: { $0.date > $1.date })
-        if searchText.isEmpty { return sorted }
+        let sorted = self.journalEntries.sorted(by: { $0.date > $1.date })
+        if self.searchText.isEmpty { return sorted }
         return sorted.filter {
-            $0.title.localizedCaseInsensitiveContains(searchText)
-                || $0.body.localizedCaseInsensitiveContains(searchText)
-                || $0.mood.contains(searchText)
+            $0.title.localizedCaseInsensitiveContains(self.searchText)
+                || $0.body.localizedCaseInsensitiveContains(self.searchText)
+                || $0.mood.contains(self.searchText)
         }
     }
 
@@ -33,13 +33,13 @@ struct JournalView: View {
     var body: some View {
         NavigationStack {
             // Directly show journal content, bypassing lock checks
-            journalContent
+            self.journalContent
                 .navigationTitle("Journal")
                 .toolbar {
                     // Always show toolbar items
                     ToolbarItem(placement: .primaryAction) {
                         Button {
-                            showAddEntry.toggle()
+                            self.showAddEntry.toggle()
                         } label: {
                             Image(systemName: "plus")
                         }
@@ -51,21 +51,20 @@ struct JournalView: View {
                         .accessibilityLabel("Button")
                     }
                 }
-                .sheet(isPresented: $showAddEntry) {
-                    AddJournalEntryView(journalEntries: $journalEntries)
-                        .environmentObject(themeManager)  // Pass ThemeManager
-                        .onDisappear(perform: saveEntries)
+                .sheet(isPresented: self.$showAddEntry) {
+                    AddJournalEntryView(journalEntries: self.$journalEntries)
+                        .environmentObject(self.themeManager) // Pass ThemeManager
+                        .onDisappear(perform: self.saveEntries)
                 }
                 .onAppear {
                     print("[JournalView Simplified] onAppear.")
                     // Only load entries
-                    loadEntries()
+                    self.loadEntries()
                 }
                 // Apply theme accent color to toolbar items
-                .accentColor(themeManager.currentTheme.primaryAccentColor)
+                .accentColor(self.themeManager.currentTheme.primaryAccentColor)
             // Removed alert for authentication errors
-
-        }  // End NavigationStack
+        } // End NavigationStack
         // Removed .onChange(of: biometricsEnabled)
     }
 
@@ -74,40 +73,41 @@ struct JournalView: View {
     private var journalContent: some View {
         VStack(spacing: 0) {
             List {
-                if journalEntries.isEmpty {
-                    makeEmptyStateText("No journal entries yet. Tap '+' to add one.")
-                } else if filteredEntries.isEmpty && !searchText.isEmpty {
-                    makeEmptyStateText("No results found for \"\(searchText)\"")
+                if self.journalEntries.isEmpty {
+                    self.makeEmptyStateText("No journal entries yet. Tap '+' to add one.")
+                } else if self.filteredEntries.isEmpty, !self.searchText.isEmpty {
+                    self.makeEmptyStateText("No results found for \"\(self.searchText)\"")
                 } else {
-                    ForEach(filteredEntries) { entry in
+                    ForEach(self.filteredEntries) { entry in
                         NavigationLink {
                             JournalDetailView(entry: entry)
-                                .environmentObject(themeManager)
+                                .environmentObject(self.themeManager)
                         } label: {
                             JournalRow(entry: entry)
-                                .environmentObject(themeManager)
+                                .environmentObject(self.themeManager)
                         }
                     }
-                    .onDelete(perform: deleteEntry)  // Use the updated deleteEntry function
-                    .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
+                    .onDelete(perform: self.deleteEntry) // Use the updated deleteEntry function
+                    .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
                 }
             }
-            .background(themeManager.currentTheme.primaryBackgroundColor)
+            .background(self.themeManager.currentTheme.primaryBackgroundColor)
             .scrollContentBackground(.hidden)
-            .searchable(text: $searchText, prompt: "Search Entries")
+            .searchable(text: self.$searchText, prompt: "Search Entries")
         }
-        .background(themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
+        .background(self.themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
     }
 
     // Helper for empty state text (Unchanged)
     private func makeEmptyStateText(_ text: String) -> some View {
         Text(text)
-            .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+            .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
             .font(
-                themeManager.currentTheme.font(
-                    forName: themeManager.currentTheme.secondaryFontName, size: 15)
+                self.themeManager.currentTheme.font(
+                    forName: self.themeManager.currentTheme.secondaryFontName, size: 15
+                )
             )
-            .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
+            .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical)
     }
@@ -120,24 +120,24 @@ struct JournalView: View {
     private func deleteEntry(at offsets: IndexSet) {
         print("[JournalView Simplified] deleteEntry called with offsets: \(offsets)")
         let idsToDelete = offsets.map { offset -> UUID in
-            return filteredEntries[offset].id
+            return self.filteredEntries[offset].id
         }
         print("[JournalView Simplified] IDs to delete: \(idsToDelete)")
-        journalEntries.removeAll { entry in
+        self.journalEntries.removeAll { entry in
             idsToDelete.contains(entry.id)
         }
-        saveEntries()
+        self.saveEntries()
     }
 
     private func loadEntries() {
         print("[JournalView Simplified] loadEntries called")
-        journalEntries = JournalDataManager.shared.load()
-        print("[JournalView Simplified] Loaded \(journalEntries.count) entries.")
+        self.journalEntries = JournalDataManager.shared.load()
+        print("[JournalView Simplified] Loaded \(self.journalEntries.count) entries.")
     }
 
     private func saveEntries() {
         print("[JournalView Simplified] saveEntries called")
-        JournalDataManager.shared.save(entries: journalEntries)
+        JournalDataManager.shared.save(entries: self.journalEntries)
     }
 }
 
@@ -156,30 +156,33 @@ struct JournalRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(entry.title)
+                Text(self.entry.title)
                     .font(
-                        themeManager.currentTheme.font(
-                            forName: themeManager.currentTheme.primaryFontName, size: 17,
-                            weight: .medium)
+                        self.themeManager.currentTheme.font(
+                            forName: self.themeManager.currentTheme.primaryFontName, size: 17,
+                            weight: .medium
+                        )
                     )
-                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
                     .lineLimit(1)
-                Text(entry.date, formatter: rowDateFormatter)
+                Text(self.entry.date, formatter: self.rowDateFormatter)
                     .font(
-                        themeManager.currentTheme.font(
-                            forName: themeManager.currentTheme.secondaryFontName, size: 14)
+                        self.themeManager.currentTheme.font(
+                            forName: self.themeManager.currentTheme.secondaryFontName, size: 14
+                        )
                     )
-                    .foregroundColor(themeManager.currentTheme.secondaryTextColor)
-                Text(entry.body)
+                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                Text(self.entry.body)
                     .font(
-                        themeManager.currentTheme.font(
-                            forName: themeManager.currentTheme.secondaryFontName, size: 13)
+                        self.themeManager.currentTheme.font(
+                            forName: self.themeManager.currentTheme.secondaryFontName, size: 13
+                        )
                     )
-                    .foregroundColor(themeManager.currentTheme.secondaryTextColor.opacity(0.8))
+                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor.opacity(0.8))
                     .lineLimit(1)
             }
             Spacer()
-            Text(entry.mood)
+            Text(self.entry.mood)
                 .font(.system(size: 30))
         }
         .padding(.vertical, 5)

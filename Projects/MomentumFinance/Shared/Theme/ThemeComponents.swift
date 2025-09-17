@@ -68,7 +68,7 @@ struct ThemeComponents: @unchecked Sendable {
 
     @MainActor
     func listRow(icon: String, title: String, @ViewBuilder trailing: @escaping () -> some View)
-    -> some View {
+        -> some View {
         let theme = ColorTheme.shared
         return HStack {
             Image(systemName: icon)
@@ -135,7 +135,7 @@ struct ThemeComponents: @unchecked Sendable {
             formatter.numberStyle = .currency
             formatter.maximumFractionDigits = 2
 
-            if showSign && amount > 0 {
+            if showSign, amount > 0 {
                 return "+" + (formatter.string(from: NSDecimalNumber(decimal: amount)) ?? "$0.00")
             }
 
@@ -156,16 +156,14 @@ struct ThemeComponents: @unchecked Sendable {
         let theme = ColorTheme.shared
         let ratio = (total == 0) ? Decimal(0) : (spent / total)
         let progress = min(1.0, Double(NSDecimalNumber(decimal: ratio).doubleValue))
-        let color: Color = {
-            switch progress {
-            case 0..<0.8:
-                return theme.budgetUnder
-            case 0.8..<1.0:
-                return theme.budgetNear
-            default:
-                return theme.budgetOver
-            }
-        }()
+        let color: Color = switch progress {
+        case 0 ..< 0.8:
+            theme.budgetUnder
+        case 0.8 ..< 1.0:
+            theme.budgetNear
+        default:
+            theme.budgetOver
+        }
 
         return VStack(alignment: .leading, spacing: 4) {
             GeometryReader { geometry in

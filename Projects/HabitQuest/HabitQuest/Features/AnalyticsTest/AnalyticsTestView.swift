@@ -6,13 +6,13 @@ import SwiftUI
 struct TestResults {
     private(set) var tests: [TestResult] = []
 
-    var passedCount: Int { tests.filter(\.passed).count }
-    var failedCount: Int { tests.filter { !$0.passed }.count }
-    var totalCount: Int { tests.count }
-    var allPassed: Bool { failedCount == 0 }
+    var passedCount: Int { self.tests.filter(\.passed).count }
+    var failedCount: Int { self.tests.count(where: { !$0.passed }) }
+    var totalCount: Int { self.tests.count }
+    var allPassed: Bool { self.failedCount == 0 }
 
     mutating func addResult(name: String, passed: Bool, error: String? = nil, note: String? = nil) {
-        tests.append(TestResult(name: name, passed: passed, error: error, note: note))
+        self.tests.append(TestResult(name: name, passed: passed, error: error, note: note))
     }
 
     /// <#Description#>
@@ -25,7 +25,7 @@ struct TestResults {
         print("\n📊 Analytics Test Results:")
         print("─────────────────────────")
 
-        for test in tests {
+        for test in self.tests {
             let status = test.passed ? "✅" : "❌"
             print("\(status) \(test.name)")
             if let error = test.error {
@@ -37,8 +37,8 @@ struct TestResults {
         }
 
         print("─────────────────────────")
-        print("Total: \(totalCount) | Passed: \(passedCount) | Failed: \(failedCount)")
-        print(allPassed ? "🎉 All tests passed!" : "⚠️  Some tests failed")
+        print("Total: \(self.totalCount) | Passed: \(self.passedCount) | Failed: \(self.failedCount)")
+        print(self.allPassed ? "🎉 All tests passed!" : "⚠️  Some tests failed")
     }
 }
 
@@ -80,15 +80,15 @@ struct AnalyticsTestView: View {
 
                 Spacer()
 
-                Button(action: runTests) {
+                Button(action: self.runTests) {
                     HStack {
-                        if isRunning {
+                        if self.isRunning {
                             ProgressView()
                                 .scaleEffect(0.8)
                         } else {
                             Image(systemName: "play.circle.fill")
                         }
-                        Text(isRunning ? "Running Tests..." : "Run Analytics Tests")
+                        Text(self.isRunning ? "Running Tests..." : "Run Analytics Tests")
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -97,7 +97,7 @@ struct AnalyticsTestView: View {
                     .cornerRadius(12)
                 }
                 .accessibilityLabel("Button")
-                .disabled(isRunning)
+                .disabled(self.isRunning)
                 .padding(.horizontal)
             }
             .navigationTitle("Analytics Tests")
@@ -106,7 +106,7 @@ struct AnalyticsTestView: View {
     }
 
     private func runTests() {
-        isRunning = true
+        self.isRunning = true
 
         Task {
             let results = await runAnalyticsTests(with: modelContext)
@@ -122,7 +122,7 @@ struct AnalyticsTestView: View {
     /// Simple analytics test runner for the live app
     private func runAnalyticsTests(with modelContext: ModelContext) async -> TestResults {
         // First, ensure we have some test data
-        await createSampleDataIfNeeded(with: modelContext)
+        await self.createSampleDataIfNeeded(with: modelContext)
 
         let analyticsService = AnalyticsService(modelContext: modelContext)
         var results = TestResults()
@@ -139,7 +139,7 @@ struct AnalyticsTestView: View {
         let metrics = await analyticsService.getProductivityMetrics(for: .week)
         let validMetrics =
             metrics.completionRate >= 0.0 && metrics.completionRate <= 1.0
-            && metrics.streakCount >= 0
+                && metrics.streakCount >= 0
         results.addResult(name: "Productivity Metrics", passed: validMetrics)
 
         // Test 4: Data Consistency
@@ -150,9 +150,9 @@ struct AnalyticsTestView: View {
         // Test 5: Analytics Data Structure Validation
         let hasValidStructure =
             analytics.overallStats.totalCompletions >= 0
-            && analytics.overallStats.completionRate >= 0.0
-            && analytics.overallStats.completionRate <= 1.0
-            && analytics.streakAnalytics.longestStreak >= 0
+                && analytics.overallStats.completionRate >= 0.0
+                && analytics.overallStats.completionRate <= 1.0
+                && analytics.streakAnalytics.longestStreak >= 0
         results.addResult(name: "Analytics Structure", passed: hasValidStructure)
 
         return results
@@ -165,7 +165,7 @@ struct AnalyticsTestView: View {
         let existingHabits = (try? modelContext.fetch(descriptor)) ?? []
 
         if !existingHabits.isEmpty {
-            return  // Data already exists
+            return // Data already exists
         }
 
         // Create sample habits
@@ -205,7 +205,7 @@ struct AnalyticsTestView: View {
         let calendar = Calendar.current
         let today = Date()
 
-        for dayOffset in 0..<7 {
+        for dayOffset in 0 ..< 7 {
             guard let logDate = calendar.date(byAdding: .day, value: -dayOffset, to: today) else {
                 continue
             }
@@ -247,16 +247,16 @@ struct TestResultsView: View {
                             .font(.headline)
                         Spacer()
                         Image(
-                            systemName: results.allPassed
+                            systemName: self.results.allPassed
                                 ? "checkmark.circle.fill" : "exclamationmark.triangle.fill"
                         )
-                        .foregroundColor(results.allPassed ? .green : .orange)
+                        .foregroundColor(self.results.allPassed ? .green : .orange)
                     }
 
                     HStack(spacing: 20) {
-                        StatItem(title: "Total", value: "\(results.totalCount)", color: .blue)
-                        StatItem(title: "Passed", value: "\(results.passedCount)", color: .green)
-                        StatItem(title: "Failed", value: "\(results.failedCount)", color: .red)
+                        StatItem(title: "Total", value: "\(self.results.totalCount)", color: .blue)
+                        StatItem(title: "Passed", value: "\(self.results.passedCount)", color: .green)
+                        StatItem(title: "Failed", value: "\(self.results.failedCount)", color: .red)
                     }
                 }
                 .padding()
@@ -265,7 +265,7 @@ struct TestResultsView: View {
 
                 // Individual Test Results
                 LazyVStack(spacing: 8) {
-                    ForEach(Array(results.tests.enumerated()), id: \.offset) { _, test in
+                    ForEach(Array(self.results.tests.enumerated()), id: \.offset) { _, test in
                         TestResultRow(test: test)
                     }
                 }
@@ -282,10 +282,10 @@ struct TestResultRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Image(systemName: test.passed ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .foregroundColor(test.passed ? .green : .red)
+                Image(systemName: self.test.passed ? "checkmark.circle.fill" : "xmark.circle.fill")
+                    .foregroundColor(self.test.passed ? .green : .red)
 
-                Text(test.name)
+                Text(self.test.name)
                     .font(.subheadline)
                     .fontWeight(.medium)
 
@@ -320,12 +320,12 @@ struct StatItem: View {
 
     var body: some View {
         VStack(spacing: 4) {
-            Text(value)
+            Text(self.value)
                 .font(.title2)
                 .fontWeight(.bold)
-                .foregroundColor(color)
+                .foregroundColor(self.color)
 
-            Text(title)
+            Text(self.title)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }

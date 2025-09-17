@@ -122,35 +122,4 @@ jobs:
           pod audit
         fi
 
-  deploy:
-    name: Deploy to TestFlight
-    runs-on: macos-latest
-    needs: test
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Xcode
-        uses: maxim-lobanov/setup-xcode@1.6.0
-        with:
-          xcode-version: '15.4'
-      - name: Build Archive
-        run: |
-          xcodebuild -workspace PlannerApp.xcworkspace \
-            -scheme PlannerApp \
-            -configuration Release \
-            -archivePath ${{ github.workspace }}/build/PlannerApp.xcarchive \
-            clean archive
-      - name: Export IPA
-        run: |
-          xcodebuild -exportArchive \
-            -archivePath ${{ github.workspace }}/build/PlannerApp.xcarchive \
-            -exportOptionsPlist ExportOptions.plist \
-            -exportPath ${{ github.workspace }}/build
-      - name: Upload to TestFlight
-        uses: apple-actions/upload-testflight-build@v1
-        with:
-          api-key-id: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-          api-issuer-id: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-          api-private-key: ${{ secrets.APP_STORE_CONNECT_API_PRIVATE_KEY }}
-          ipa-path: ${{ github.workspace }}/build/PlannerApp.ipa
+  # TestFlight deploy removed (internal-only CI)

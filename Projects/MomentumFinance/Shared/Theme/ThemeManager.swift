@@ -1,7 +1,7 @@
-import OSLog
 import Observation
-import SwiftUI
 import os
+import OSLog
+import SwiftUI
 
 //
 //  ThemeManager.swift
@@ -25,7 +25,7 @@ final class ThemeManager {
     private init() {
         // Load the saved theme preference on initialization
         let savedTheme = ThemePersistence.loadThemePreference()
-        theme.setThemeMode(savedTheme)
+        self.theme.setThemeMode(savedTheme)
         os_log("Initialized ThemeManager with saved mode: %@", log: .default, type: .info, savedTheme.rawValue)
     }
 
@@ -33,7 +33,7 @@ final class ThemeManager {
     /// <#Description#>
     /// - Returns: <#description#>
     func setAndSaveThemeMode(_ mode: ThemeMode) {
-        theme.setThemeMode(mode)
+        self.theme.setThemeMode(mode)
         // Save the theme preference
         ThemePersistence.saveThemePreference(mode)
         os_log("Theme mode changed and saved: %@", log: .default, type: .info, mode.rawValue)
@@ -41,7 +41,7 @@ final class ThemeManager {
 
     /// Get the current theme mode
     var currentThemeMode: ThemeMode {
-        theme.currentThemeMode
+        self.theme.currentThemeMode
     }
 
     // MARK: - Dynamic Typography Support
@@ -136,8 +136,8 @@ final class ThemeManager {
     /// <#Description#>
     /// - Returns: <#description#>
     func animateThemeChange(_ mode: ThemeMode) {
-        withAnimation(themeChangeAnimation) {
-            setAndSaveThemeMode(mode)
+        withAnimation(self.themeChangeAnimation) {
+            self.setAndSaveThemeMode(mode)
         }
     }
 }

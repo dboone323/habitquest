@@ -71,10 +71,10 @@ struct SettingsView: View {
     var body: some View {
         TabView {
             GeneralSettingsView(
-                defaultCurrency: $defaultCurrency,
-                enableNotifications: $enableNotifications,
-                autoBackup: $autoBackup,
-                )
+                defaultCurrency: self.$defaultCurrency,
+                enableNotifications: self.$enableNotifications,
+                autoBackup: self.$autoBackup,
+            )
             .tabItem {
                 Label("General", systemImage: "gear")
             }
@@ -103,8 +103,8 @@ struct GeneralSettingsView: View {
     var body: some View {
         Form {
             Section("Currency") {
-                Picker("Default Currency", selection: $defaultCurrency) {
-                    ForEach(currencies, id: \.self) { currency in
+                Picker("Default Currency", selection: self.$defaultCurrency) {
+                    ForEach(self.currencies, id: \.self) { currency in
                         Text(currency).tag(currency)
                     }
                 }
@@ -112,12 +112,12 @@ struct GeneralSettingsView: View {
             }
 
             Section("Notifications") {
-                Toggle("Enable Notifications", isOn: $enableNotifications)
+                Toggle("Enable Notifications", isOn: self.$enableNotifications)
                     .help("Show notifications for upcoming subscriptions and budget alerts")
             }
 
             Section("Backup") {
-                Toggle("Automatic Backup", isOn: $autoBackup)
+                Toggle("Automatic Backup", isOn: self.$autoBackup)
                     .help("Automatically backup your data to iCloud")
             }
         }
@@ -178,16 +178,16 @@ struct AdvancedSettingsView: View {
     var body: some View {
         Form {
             Section("Developer Options") {
-                Toggle("Enable Debug Mode", isOn: $enableDebugMode)
+                Toggle("Enable Debug Mode", isOn: self.$enableDebugMode)
                     .help("Enable debug logging and additional developer features")
 
-                Picker("Log Level", selection: $logLevel) {
-                    ForEach(logLevels, id: \.self) { level in
+                Picker("Log Level", selection: self.$logLevel) {
+                    ForEach(self.logLevels, id: \.self) { level in
                         Text(level).tag(level)
                     }
                 }
                 .pickerStyle(MenuPickerStyle())
-                .disabled(!enableDebugMode)
+                .disabled(!self.enableDebugMode)
             }
 
             Section("Performance") {

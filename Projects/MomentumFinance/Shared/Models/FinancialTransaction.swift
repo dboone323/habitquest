@@ -58,8 +58,8 @@ public final class FinancialTransaction {
         formatter.numberStyle = .currency
         formatter.currencyCode = "USD"
 
-        let sign = transactionType == .income ? "+" : "-"
-        let formattedValue = formatter.string(from: NSNumber(value: amount)) ?? "$0.00"
+        let sign = self.transactionType == .income ? "+" : "-"
+        let formattedValue = formatter.string(from: NSNumber(value: self.amount)) ?? "$0.00"
 
         return "\(sign)\(formattedValue)"
     }
@@ -69,6 +69,6 @@ public final class FinancialTransaction {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
-        return formatter.string(from: date)
+        return formatter.string(from: self.date)
     }
 }

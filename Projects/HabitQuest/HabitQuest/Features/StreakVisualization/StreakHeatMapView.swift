@@ -37,14 +37,14 @@ struct StreakHeatMapView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            headerSection
-            heatMapGrid
-            legendSection
-            if showingDetails {
-                detailsSection
+            self.headerSection
+            self.heatMapGrid
+            self.legendSection
+            if self.showingDetails {
+                self.detailsSection
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: showingDetails)
+        .animation(.easeInOut(duration: 0.3), value: self.showingDetails)
     }
 
     private var headerSection: some View {
@@ -54,7 +54,7 @@ struct StreakHeatMapView: View {
                     .font(.headline)
                     .fontWeight(.semibold)
 
-                Text("\(analytics.currentStreak) day current streak")
+                Text("\(self.analytics.currentStreak) day current streak")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -62,9 +62,9 @@ struct StreakHeatMapView: View {
             Spacer()
 
             Button(
-                action: { showingDetails.toggle() },
+                action: { self.showingDetails.toggle() },
                 label: {
-                    Image(systemName: showingDetails ? "chevron.up" : "info.circle")
+                    Image(systemName: self.showingDetails ? "chevron.up" : "info.circle")
                         .foregroundColor(.blue)
                 }
             )
@@ -74,25 +74,26 @@ struct StreakHeatMapView: View {
 
     private var heatMapGrid: some View {
         LazyVGrid(
-            columns: Array(repeating: GridItem(.flexible(), spacing: 2), count: timeRange.columns),
+            columns: Array(repeating: GridItem(.flexible(), spacing: 2), count: self.timeRange.columns),
             spacing: 2
         ) {
-            ForEach(heatMapData, id: \.date) { dayData in
+            ForEach(self.heatMapData, id: \.date) { dayData in
                 Rectangle()
-                    .fill(intensityColor(for: dayData.intensity))
-                    .frame(width: cellSize, height: cellSize)
+                    .fill(self.intensityColor(for: dayData.intensity))
+                    .frame(width: self.cellSize, height: self.cellSize)
                     .cornerRadius(2)
                     .overlay(
                         RoundedRectangle(cornerRadius: 2)
                             .stroke(
-                                selectedDate == dayData.date ? Color.blue : Color.clear,
-                                lineWidth: 2)
+                                self.selectedDate == dayData.date ? Color.blue : Color.clear,
+                                lineWidth: 2
+                            )
                     )
                     .onTapGesture {
-                        selectedDate = dayData.date
-                        hapticFeedback()
+                        self.selectedDate = dayData.date
+                        self.hapticFeedback()
                     }
-                    .animation(.spring(response: 0.3), value: selectedDate)
+                    .animation(.spring(response: 0.3), value: self.selectedDate)
             }
         }
         .padding(.horizontal, 4)
@@ -105,9 +106,9 @@ struct StreakHeatMapView: View {
                 .foregroundColor(.secondary)
 
             HStack(spacing: 2) {
-                ForEach(0..<5) { intensity in
+                ForEach(0 ..< 5) { intensity in
                     Rectangle()
-                        .fill(intensityColor(for: Double(intensity)))
+                        .fill(self.intensityColor(for: Double(intensity)))
                         .frame(width: 10, height: 10)
                         .cornerRadius(2)
                 }
@@ -135,12 +136,14 @@ struct StreakHeatMapView: View {
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 8) {
                 MetricCard(
-                    title: "Consistency", value: "\(Int(analytics.streakPercentile * 100))%",
-                    color: .green)
+                    title: "Consistency", value: "\(Int(self.analytics.streakPercentile * 100))%",
+                    color: .green
+                )
                 MetricCard(
-                    title: "Best Streak", value: "\(analytics.longestStreak) days", color: .orange)
-                MetricCard(title: "Total Days", value: "\(completedDays)", color: .blue)
-                MetricCard(title: "Success Rate", value: "\(successRate)%", color: .purple)
+                    title: "Best Streak", value: "\(self.analytics.longestStreak) days", color: .orange
+                )
+                MetricCard(title: "Total Days", value: "\(self.completedDays)", color: .blue)
+                MetricCard(title: "Success Rate", value: "\(self.successRate)%", color: .purple)
             }
 
             if let prediction = streakPrediction {
@@ -155,7 +158,7 @@ struct StreakHeatMapView: View {
     // MARK: - Computed Properties
 
     private var cellSize: CGFloat {
-        switch timeRange {
+        switch self.timeRange {
         case .week: 32
         case .month: 24
         case .quarter: 18
@@ -167,13 +170,13 @@ struct StreakHeatMapView: View {
         let calendar = Calendar.current
         let endDate = Date()
         let startDate =
-            calendar.date(byAdding: .day, value: -timeRange.days, to: endDate) ?? endDate
+            calendar.date(byAdding: .day, value: -self.timeRange.days, to: endDate) ?? endDate
 
         var data: [DayIntensity] = []
         var currentDate = startDate
 
         while currentDate <= endDate {
-            let intensity = calculateIntensity(for: currentDate)
+            let intensity = self.calculateIntensity(for: currentDate)
             data.append(DayIntensity(date: currentDate, intensity: intensity))
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate
         }
@@ -182,25 +185,25 @@ struct StreakHeatMapView: View {
     }
 
     private var completedDays: Int {
-        heatMapData.filter { $0.intensity > 0 }.count
+        self.heatMapData.count(where: { $0.intensity > 0 })
     }
 
     private var successRate: Int {
-        let total = heatMapData.count
-        return total > 0 ? Int((Double(completedDays) / Double(total)) * 100) : 0
+        let total = self.heatMapData.count
+        return total > 0 ? Int((Double(self.completedDays) / Double(total)) * 100) : 0
     }
 
     private var streakPrediction: StreakPrediction? {
         // Advanced ML-based prediction (simplified for now)
-        let recentPerformance = heatMapData.suffix(7).map(\.intensity).reduce(0, +) / 7
+        let recentPerformance = self.heatMapData.suffix(7).map(\.intensity).reduce(0, +) / 7
         let trend = recentPerformance > 0.5 ? "improving" : "declining"
         let probability = min(recentPerformance * 100, 95)
 
         return StreakPrediction(
-            nextMilestone: analytics.nextMilestone?.title ?? "7 days",
+            nextMilestone: self.analytics.nextMilestone?.title ?? "7 days",
             probability: probability,
             trend: trend,
-            recommendedAction: generateRecommendation(trend: trend, performance: recentPerformance)
+            recommendedAction: self.generateRecommendation(trend: trend, performance: recentPerformance)
         )
     }
 
@@ -208,13 +211,13 @@ struct StreakHeatMapView: View {
 
     private func calculateIntensity(for date: Date) -> Double {
         // Check if habit was completed on this date
-        let completed = habit.logs.contains { log in
+        let completed = self.habit.logs.contains { log in
             Calendar.current.isDate(log.completionDate, inSameDayAs: date) && log.isCompleted
         }
 
         if completed {
             // Scale intensity based on streak context
-            let dayOfStreak = calculateDayInStreak(for: date)
+            let dayOfStreak = self.calculateDayInStreak(for: date)
             return min(1.0, 0.3 + (Double(dayOfStreak) * 0.1))
         }
 
@@ -229,7 +232,7 @@ struct StreakHeatMapView: View {
 
         while checkDate > calendar.date(byAdding: .day, value: -30, to: date) ?? date {
             checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate) ?? checkDate
-            let wasCompleted = habit.logs.contains { log in
+            let wasCompleted = self.habit.logs.contains { log in
                 calendar.isDate(log.completionDate, inSameDayAs: checkDate) && log.isCompleted
             }
             if wasCompleted {
@@ -246,11 +249,11 @@ struct StreakHeatMapView: View {
         switch intensity {
         case 0:
             Color(.systemGray5)
-        case 0.01..<0.3:
+        case 0.01 ..< 0.3:
             Color.green.opacity(0.3)
-        case 0.3..<0.6:
+        case 0.3 ..< 0.6:
             Color.green.opacity(0.6)
-        case 0.6..<0.8:
+        case 0.6 ..< 0.8:
             Color.green.opacity(0.8)
         default:
             Color.green
@@ -259,11 +262,11 @@ struct StreakHeatMapView: View {
 
     private func generateRecommendation(trend: String, performance: Double) -> String {
         switch (trend, performance) {
-        case ("improving", let performance) where performance > 0.7:
+        case let ("improving", performance) where performance > 0.7:
             "Great momentum! Keep it up."
         case ("improving", _):
             "Building consistency. Stay focused."
-        case ("declining", let performance) where performance < 0.3:
+        case let ("declining", performance) where performance < 0.3:
             "Consider adjusting your approach."
         default:
             "Small steps lead to big changes."
@@ -297,12 +300,12 @@ struct MetricCard: View {
 
     var body: some View {
         VStack(spacing: 4) {
-            Text(value)
+            Text(self.value)
                 .font(.title3)
                 .fontWeight(.bold)
-                .foregroundColor(color)
+                .foregroundColor(self.color)
 
-            Text(title)
+            Text(self.title)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -326,7 +329,7 @@ struct PredictionCard: View {
                     .fontWeight(.medium)
             }
 
-            Text("Next milestone: \(prediction.nextMilestone)")
+            Text("Next milestone: \(self.prediction.nextMilestone)")
                 .font(.caption)
 
             HStack {
@@ -336,13 +339,13 @@ struct PredictionCard: View {
 
                 Spacer()
 
-                Text("\(Int(prediction.probability))%")
+                Text("\(Int(self.prediction.probability))%")
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundColor(.blue)
             }
 
-            Text(prediction.recommendedAction)
+            Text(self.prediction.recommendedAction)
                 .font(.caption)
                 .italic()
                 .foregroundColor(.secondary)

@@ -13,38 +13,42 @@ final class FinancialTransactionModelTests: XCTestCase {
             FinancialTransaction.self, FinancialAccount.self, ExpenseCategory.self,
         ])
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        modelContainer = try ModelContainer(for: schema, configurations: [configuration])
-        modelContext = ModelContext(modelContainer)
+        self.modelContainer = try ModelContainer(for: schema, configurations: [configuration])
+        self.modelContext = ModelContext(self.modelContainer)
     }
 
     override func tearDownWithError() throws {
-        modelContainer = nil
-        modelContext = nil
+        self.modelContainer = nil
+        self.modelContext = nil
     }
 
     func testTransactionFormattedAmountIncome() throws {
         let transaction = FinancialTransaction(
-            title: "Salary", amount: 2000.0, date: Date(), transactionType: .income)
+            title: "Salary", amount: 2000.0, date: Date(), transactionType: .income
+        )
         XCTAssertTrue(transaction.formattedAmount.hasPrefix("+"))
     }
 
     func testTransactionFormattedAmountExpense() throws {
         let transaction = FinancialTransaction(
-            title: "Groceries", amount: 100.0, date: Date(), transactionType: .expense)
+            title: "Groceries", amount: 100.0, date: Date(), transactionType: .expense
+        )
         XCTAssertTrue(transaction.formattedAmount.hasPrefix("-"))
     }
 
     func testTransactionFormattedDate() throws {
         let transaction = FinancialTransaction(
-            title: "Test", amount: 10.0, date: Date(), transactionType: .expense)
+            title: "Test", amount: 10.0, date: Date(), transactionType: .expense
+        )
         XCTAssertFalse(transaction.formattedDate.isEmpty)
     }
 
     func testTransactionPersistence() throws {
         let transaction = FinancialTransaction(
-            title: "Coffee", amount: 5.0, date: Date(), transactionType: .expense)
-        modelContext.insert(transaction)
-        try modelContext.save()
+            title: "Coffee", amount: 5.0, date: Date(), transactionType: .expense
+        )
+        self.modelContext.insert(transaction)
+        try self.modelContext.save()
         let fetchRequest = FetchDescriptor<FinancialTransaction>()
         let savedTransactions = try modelContext.fetch(fetchRequest)
         XCTAssertEqual(savedTransactions.count, 1)

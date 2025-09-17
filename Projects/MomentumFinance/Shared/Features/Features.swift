@@ -7,38 +7,38 @@ import SwiftUI
 public enum Features {}
 
 // Dashboard namespace
-extension Features {
-    public enum Dashboard {}
+public extension Features {
+    enum Dashboard {}
 }
 
 // Transactions namespace
-extension Features {
-    public enum Transactions {}
+public extension Features {
+    enum Transactions {}
 }
 
 // Budgets namespace
-extension Features {
-    public enum Budgets {}
+public extension Features {
+    enum Budgets {}
 }
 
 // Subscriptions namespace
-extension Features {
-    public enum Subscriptions {}
+public extension Features {
+    enum Subscriptions {}
 }
 
 // GoalsAndReports namespace
-extension Features {
-    public enum GoalsAndReports {}
+public extension Features {
+    enum GoalsAndReports {}
 }
 
 // Theme namespace
-extension Features {
-    public enum Theme {}
+public extension Features {
+    enum Theme {}
 }
 
 // Global Search namespace
-extension Features {
-    public enum GlobalSearch {
+public extension Features {
+    enum GlobalSearch {
         /// Global search coordinator with advanced filtering and navigation
         public struct GlobalSearchView: View {
             @Environment(\.modelContext) private var modelContext
@@ -69,9 +69,11 @@ extension Features {
             public init() {
                 // Initialize search engine with placeholder context - will be updated in onAppear
                 let container = try! ModelContainer(
-                    for: FinancialAccount.self, FinancialTransaction.self)
+                    for: FinancialAccount.self, FinancialTransaction.self
+                )
                 self._searchEngine = StateObject(
-                    wrappedValue: SearchEngineService(modelContext: ModelContext(container)))
+                    wrappedValue: SearchEngineService(modelContext: ModelContext(container))
+                )
             }
 
             public var body: some View {
@@ -82,12 +84,12 @@ extension Features {
                             HStack {
                                 Image(systemName: "magnifyingglass")
                                     .foregroundColor(.secondary)
-                                TextField("Search...", text: $searchText)
+                                TextField("Search...", text: self.$searchText)
                                     .textFieldStyle(.plain)
-                                if !searchText.isEmpty {
+                                if !self.searchText.isEmpty {
                                     Button(action: {
-                                        searchText = ""
-                                        performSearch()
+                                        self.searchText = ""
+                                        self.performSearch()
                                     }) {
                                         Image(systemName: "xmark.circle.fill")
                                             .foregroundColor(.secondary)
@@ -101,7 +103,7 @@ extension Features {
                             .padding(.horizontal)
 
                             // Filter Picker
-                            Picker("Filter", selection: $selectedFilter) {
+                            Picker("Filter", selection: self.$selectedFilter) {
                                 ForEach(SearchFilter.allCases, id: \.self) { filter in
                                     Text(filter.rawValue).tag(filter)
                                 }
@@ -113,10 +115,10 @@ extension Features {
 
                         // Inline Search Results Component
                         Group {
-                            if isLoading {
+                            if self.isLoading {
                                 ProgressView("Searching...")
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            } else if searchResults.isEmpty && !searchText.isEmpty {
+                            } else if self.searchResults.isEmpty, !self.searchText.isEmpty {
                                 VStack(spacing: 16) {
                                     Image(systemName: "magnifyingglass")
                                         .font(.system(size: 48))
@@ -132,7 +134,7 @@ extension Features {
                             } else {
                                 ScrollView {
                                     LazyVStack(spacing: 12) {
-                                        ForEach(searchResults, id: \.id) { result in
+                                        ForEach(self.searchResults, id: \.id) { result in
                                             VStack(alignment: .leading, spacing: 8) {
                                                 Text(result.title)
                                                     .font(.headline)
@@ -148,8 +150,8 @@ extension Features {
                                             .background(Color.gray.opacity(0.05))
                                             .cornerRadius(8)
                                             .onTapGesture {
-                                                navigationCoordinator.navigateToSearchResult(result)
-                                                dismiss()
+                                                self.navigationCoordinator.navigateToSearchResult(result)
+                                                self.dismiss()
                                             }
                                         }
                                     }
@@ -160,50 +162,50 @@ extension Features {
                     }
                     .navigationTitle("Search")
                     #if os(iOS)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done") {
-                                NavigationCoordinator.shared.deactivateSearch()
-                                dismiss()
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Done") {
+                                    NavigationCoordinator.shared.deactivateSearch()
+                                    self.dismiss()
+                                }
+                                .accessibilityLabel("Done")
                             }
-                            .accessibilityLabel("Done")
                         }
-                    }
                     #else
-                    .toolbar {
-                    ToolbarItem(placement: .automatic) {
-                    Button("Done") {
-                    NavigationCoordinator.shared.deactivateSearch()
-                    dismiss()
-                    }
-                    .accessibilityLabel("Done")
-                    }
-                    }
+                        .toolbar {
+                            ToolbarItem(placement: .automatic) {
+                                Button("Done") {
+                                    NavigationCoordinator.shared.deactivateSearch()
+                                    self.dismiss()
+                                }
+                                .accessibilityLabel("Done")
+                            }
+                        }
                     #endif
                 }
                 .onAppear {
                     // Update search engine with actual model context
-                    _searchEngine.wrappedValue.setModelContext(modelContext)
+                    _searchEngine.wrappedValue.setModelContext(self.modelContext)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        performSearch()
+                        self.performSearch()
                     }
                 }
             }
 
             private func performSearch() {
-                guard !searchText.isEmpty else {
-                    searchResults = []
-                    isLoading = false
+                guard !self.searchText.isEmpty else {
+                    self.searchResults = []
+                    self.isLoading = false
                     return
                 }
 
-                isLoading = true
+                self.isLoading = true
 
                 Task {
-                    let results = searchEngine.search(query: searchText, filter: selectedFilter)
-                    searchResults = results
-                    isLoading = false
+                    let results = self.searchEngine.search(query: self.searchText, filter: self.selectedFilter)
+                    self.searchResults = results
+                    self.isLoading = false
                 }
             }
         }

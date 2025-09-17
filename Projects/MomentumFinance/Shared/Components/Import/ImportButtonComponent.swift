@@ -5,24 +5,24 @@ struct ImportButtonComponent: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: action).accessibilityLabel("Button") {
+        Button(action: self.action).accessibilityLabel("Button") {
             HStack {
-                if isImporting {
+                if self.isImporting {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                 } else {
                     Image(systemName: "square.and.arrow.down")
                 }
 
-                Text(isImporting ? "Importing..." : "Import Data")
+                Text(self.isImporting ? "Importing..." : "Import Data")
                     .fontWeight(.semibold)
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(isImporting ? Color.gray : Color.blue)
+            .background(self.isImporting ? Color.gray : Color.blue)
             .foregroundColor(.white)
             .cornerRadius(12)
         }
-        .disabled(isImporting)
+        .disabled(self.isImporting)
     }
 }

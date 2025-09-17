@@ -22,16 +22,16 @@ extension Features.Budgets {
         @State private var showingDeleteConfirmation = false
 
         private var budget: Budget? {
-            budgets.first(where: { $0.id == budgetId })
+            self.budgets.first(where: { $0.id == self.budgetId })
         }
 
         private var relatedTransactions: [FinancialTransaction] {
             guard let budget, let categoryId = budget.category?.id else { return [] }
 
-            let relevantTransactions = transactions.filter {
+            let relevantTransactions = self.transactions.filter {
                 $0.category?.id == categoryId &&
                     $0.amount < 0 && // Only expenses
-                    isTransactionInSelectedTimeFrame($0.date)
+                    self.isTransactionInSelectedTimeFrame($0.date)
             }
 
             return relevantTransactions.sorted { $0.date > $1.date }
@@ -60,24 +60,24 @@ extension Features.Budgets {
 
                     Spacer()
 
-                    Picker("Time Frame", selection: $selectedTimeFrame) {
+                    Picker("Time Frame", selection: self.$selectedTimeFrame) {
                         ForEach(TimeFrame.allCases) { timeFrame in
                             Text(timeFrame.rawValue).tag(timeFrame)
                         }
                     }
                     .frame(width: 180)
 
-                    Button(action: { isEditing.toggle().accessibilityLabel("Button") }) {
-                        Text(isEditing ? "Done" : "Edit")
+                    Button(action: { self.isEditing.toggle().accessibilityLabel("Button") }) {
+                        Text(self.isEditing ? "Done" : "Edit")
                     }
                     .keyboardShortcut("e", modifiers: .command)
 
                     Menu {
-                        Button("Export as PDF", action: exportAsPDF).accessibilityLabel("Button")
-                        Button("Print", action: printBudget).accessibilityLabel("Button")
+                        Button("Export as PDF", action: self.exportAsPDF).accessibilityLabel("Button")
+                        Button("Print", action: self.printBudget).accessibilityLabel("Button")
                         Divider()
                         Button("Delete", role: .destructive).accessibilityLabel("Button") {
-                            showingDeleteConfirmation = true
+                            self.showingDeleteConfirmation = true
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
@@ -88,20 +88,20 @@ extension Features.Budgets {
 
                 Divider()
 
-                if isEditing, let budget {
-                    editView(for: budget)
+                if self.isEditing, let budget {
+                    self.editView(for: budget)
                         .padding()
                         .transition(.opacity)
                 } else {
-                    detailView()
+                    self.detailView()
                         .transition(.opacity)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .alert("Delete Budget", isPresented: $showingDeleteConfirmation) {
+            .alert("Delete Budget", isPresented: self.$showingDeleteConfirmation) {
                 Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
                 Button("Delete", role: .destructive).accessibilityLabel("Button") {
-                    deleteBudget()
+                    self.deleteBudget()
                 }
             } message: {
                 Text("Are you sure you want to delete this budget? This action cannot be undone.")
@@ -109,7 +109,7 @@ extension Features.Budgets {
             .onAppear {
                 // Initialize edit model if needed
                 if let budget, editedBudget == nil {
-                    editedBudget = BudgetEditModel(from: budget)
+                    self.editedBudget = BudgetEditModel(from: budget)
                 }
             }
         }
@@ -119,10 +119,12 @@ extension Features.Budgets {
         private func detailView() -> some View {
             guard let budget else {
                 return AnyView(
-                    ContentUnavailableView("Budget Not Found",
-                                           systemImage: "exclamationmark.triangle",
-                                           description: Text("The budget you're looking for could not be found.")),
-                    )
+                    ContentUnavailableView(
+                        "Budget Not Found",
+                        systemImage: "exclamationmark.triangle",
+                        description: Text("The budget you're looking for could not be found.")
+                    ),
+                )
             }
 
             return AnyView(
@@ -139,7 +141,7 @@ extension Features.Budgets {
                                                 .padding(.bottom, 4)
                                         }
 
-                                        Text(getTimeFrameDescription())
+                                        Text(self.getTimeFrameDescription())
                                             .font(.headline)
                                             .foregroundStyle(.secondary)
                                     }
@@ -166,11 +168,13 @@ extension Features.Budgets {
 
                                         Spacer()
 
-                                        Text("\(budget.spent.formatted(.currency(code: "USD"))) of \(budget.amount.formatted(.currency(code: "USD")))")
+                                        Text(
+                                            "\(budget.spent.formatted(.currency(code: "USD"))) of \(budget.amount.formatted(.currency(code: "USD")))"
+                                        )
                                     }
 
                                     ProgressView(value: budget.spent, total: budget.amount)
-                                        .tint(getBudgetColor(spent: budget.spent, total: budget.amount))
+                                        .tint(self.getBudgetColor(spent: budget.spent, total: budget.amount))
                                         .scaleEffect(y: 2.0)
                                         .padding(.vertical, 8)
 
@@ -181,7 +185,7 @@ extension Features.Budgets {
                                         Spacer()
 
                                         Text("\(Int((budget.spent / budget.amount) * 100))%")
-                                            .foregroundStyle(getBudgetColor(spent: budget.spent, total: budget.amount))
+                                            .foregroundStyle(self.getBudgetColor(spent: budget.spent, total: budget.amount))
                                             .bold()
                                     }
                                 }
@@ -198,7 +202,7 @@ extension Features.Budgets {
                                 Text("Spending Trends")
                                     .font(.headline)
 
-                                SpendingTrendChart(budget: budget, timeFrame: selectedTimeFrame)
+                                SpendingTrendChart(budget: budget, timeFrame: self.selectedTimeFrame)
                                     .frame(height: 220)
                             }
                             .padding()
@@ -265,7 +269,7 @@ extension Features.Budgets {
 
                             Spacer()
 
-                            Button(action: addTransaction).accessibilityLabel("Button") {
+                            Button(action: self.addTransaction).accessibilityLabel("Button") {
                                 Label("Add", systemImage: "plus")
                             }
                             .buttonStyle(.bordered)
@@ -276,28 +280,28 @@ extension Features.Budgets {
                         Divider()
 
                         // Transactions list
-                        if relatedTransactions.isEmpty {
+                        if self.relatedTransactions.isEmpty {
                             ContentUnavailableView {
                                 Label("No Transactions", systemImage: "list.bullet")
                             } description: {
                                 Text("No transactions found in this category for the selected time period.")
                             } actions: {
                                 Button("Add Transaction").accessibilityLabel("Button") {
-                                    addTransaction()
+                                    self.addTransaction()
                                 }
                                 .buttonStyle(.bordered)
                             }
                             .frame(maxHeight: .infinity)
                         } else {
-                            List(relatedTransactions, selection: $selectedTransactions) {
-                                transactionRow(for: $0)
+                            List(self.relatedTransactions, selection: self.$selectedTransactions) {
+                                self.transactionRow(for: $0)
                             }
                             .listStyle(.inset)
                         }
                     }
                     .frame(width: 400)
                 },
-                )
+            )
         }
 
         // MARK: - Edit View
@@ -316,7 +320,7 @@ extension Features.Budgets {
                         TextField("Budget name", text: Binding(
                             get: { self.editedBudget?.name ?? budget.name },
                             set: { self.editedBudget?.name = $0 },
-                            ))
+                        ))
                         .textFieldStyle(.roundedBorder)
                     }
 
@@ -329,9 +333,9 @@ extension Features.Budgets {
                             TextField("Amount", value: Binding(
                                 get: { self.editedBudget?.amount ?? budget.amount },
                                 set: { self.editedBudget?.amount = $0 },
-                                ), format: .currency(code: "USD"))
-                            .textFieldStyle(.roundedBorder)
-                            .frame(width: 150)
+                            ), format: .currency(code: "USD"))
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 150)
                         }
                     }
 
@@ -344,9 +348,9 @@ extension Features.Budgets {
                             Picker("Category", selection: Binding(
                                 get: { self.editedBudget?.categoryId ?? budget.category?.id ?? "" },
                                 set: { self.editedBudget?.categoryId = $0 },
-                                )) {
+                            )) {
                                 Text("None").tag("")
-                                ForEach(categories) { category in
+                                ForEach(self.categories) { category in
                                     Text(category.name).tag(category.id)
                                 }
                             }
@@ -362,7 +366,7 @@ extension Features.Budgets {
                         Picker("Period", selection: Binding(
                             get: { self.editedBudget?.period ?? budget.period },
                             set: { self.editedBudget?.period = $0 },
-                            )) {
+                        )) {
                             Text("Monthly").tag("monthly")
                             Text("Weekly").tag("weekly")
                             Text("Annual").tag("annual")
@@ -379,7 +383,7 @@ extension Features.Budgets {
                         Picker("Reset", selection: Binding(
                             get: { self.editedBudget?.resetOption ?? "monthly" },
                             set: { self.editedBudget?.resetOption = $0 },
-                            )) {
+                        )) {
                             Text("Monthly").tag("monthly")
                             Text("Never (Continuous)").tag("never")
                         }
@@ -395,7 +399,7 @@ extension Features.Budgets {
                         Toggle("Roll over unused budget to next period", isOn: Binding(
                             get: { self.editedBudget?.rollover ?? budget.rollover },
                             set: { self.editedBudget?.rollover = $0 },
-                            ))
+                        ))
                     }
                 }
                 .padding(.bottom, 20)
@@ -406,7 +410,7 @@ extension Features.Budgets {
                 TextEditor(text: Binding(
                     get: { self.editedBudget?.notes ?? budget.notes },
                     set: { self.editedBudget?.notes = $0 },
-                    ))
+                ))
                 .font(.body)
                 .frame(minHeight: 100)
                 .padding(4)
@@ -417,17 +421,17 @@ extension Features.Budgets {
                     Spacer()
 
                     Button("Cancel").accessibilityLabel("Button") {
-                        isEditing = false
+                        self.isEditing = false
                         // Reset edited budget to original
                         if let budget {
-                            editedBudget = BudgetEditModel(from: budget)
+                            self.editedBudget = BudgetEditModel(from: budget)
                         }
                     }
                     .buttonStyle(.bordered)
                     .keyboardShortcut(.escape, modifiers: [])
 
                     Button("Save").accessibilityLabel("Button") {
-                        saveChanges()
+                        self.saveChanges()
                     }
                     .buttonStyle(.borderedProminent)
                     .keyboardShortcut(.return, modifiers: .command)
@@ -479,15 +483,15 @@ extension Features.Budgets {
             var body: some View {
                 HStack(spacing: 6) {
                     Circle()
-                        .fill(getCategoryColor(category.colorHex))
+                        .fill(self.getCategoryColor(self.category.colorHex))
                         .frame(width: 12, height: 12)
 
-                    Text(category.name)
+                    Text(self.category.name)
                         .font(.headline)
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
-                .background(getCategoryColor(category.colorHex).opacity(0.1))
+                .background(self.getCategoryColor(self.category.colorHex).opacity(0.1))
                 .cornerRadius(6)
             }
 
@@ -512,12 +516,12 @@ extension Features.Budgets {
                 let calendar = Calendar.current
                 let date = Date()
                 let day = calendar.component(.day, from: date)
-                return daysInMonth - day + 1 // Including today
+                return self.daysInMonth - day + 1 // Including today
             }
 
             var dailyAllowance: Double {
-                let remaining = budget.amount - budget.spent
-                return remaining > 0 ? remaining / Double(daysRemaining) : 0
+                let remaining = self.budget.amount - self.budget.spent
+                return remaining > 0 ? remaining / Double(self.daysRemaining) : 0
             }
 
             var body: some View {
@@ -527,7 +531,7 @@ extension Features.Budgets {
 
                     HStack(alignment: .top, spacing: 20) {
                         VStack(alignment: .center, spacing: 8) {
-                            Text("\((budget.amount - budget.spent).formatted(.currency(code: "USD")))")
+                            Text("\((self.budget.amount - self.budget.spent).formatted(.currency(code: "USD")))")
                                 .font(.system(size: 20, weight: .bold))
 
                             Text("Remaining")
@@ -539,7 +543,7 @@ extension Features.Budgets {
                         Divider()
 
                         VStack(alignment: .center, spacing: 8) {
-                            Text("\(daysRemaining)")
+                            Text("\(self.daysRemaining)")
                                 .font(.system(size: 20, weight: .bold))
 
                             Text("Days Left")
@@ -551,9 +555,9 @@ extension Features.Budgets {
                         Divider()
 
                         VStack(alignment: .center, spacing: 8) {
-                            Text("\(dailyAllowance.formatted(.currency(code: "USD")))")
+                            Text("\(self.dailyAllowance.formatted(.currency(code: "USD")))")
                                 .font(.system(size: 20, weight: .bold))
-                                .foregroundStyle(dailyAllowance > 10 ? .green : .orange)
+                                .foregroundStyle(self.dailyAllowance > 10 ? .green : .orange)
 
                             Text("Per Day")
                                 .font(.caption)
@@ -590,20 +594,20 @@ extension Features.Budgets {
                 VStack(alignment: .leading, spacing: 8) {
                     Chart {
                         // Daily spending bars
-                        ForEach(dailyData, id: \.day) { item in
+                        ForEach(self.dailyData, id: \.day) { item in
                             BarMark(
                                 x: .value("Day", item.day),
                                 y: .value("Amount", item.amount),
-                                )
+                            )
                             .foregroundStyle(Color.blue.gradient)
                         }
 
                         // Budget limit reference line
-                        RuleMark(y: .value("Daily Budget", budget.amount / 30.0))
+                        RuleMark(y: .value("Daily Budget", self.budget.amount / 30.0))
                             .lineStyle(StrokeStyle(lineWidth: 2, dash: [5, 5]))
                             .foregroundStyle(.red)
                             .annotation(position: .top, alignment: .trailing) {
-                                Text("Daily Budget: \((budget.amount / 30.0).formatted(.currency(code: "USD")))")
+                                Text("Daily Budget: \((self.budget.amount / 30.0).formatted(.currency(code: "USD")))")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -658,11 +662,11 @@ extension Features.Budgets {
 
             var body: some View {
                 Chart {
-                    ForEach(monthlyData, id: \.month) { item in
+                    ForEach(self.monthlyData, id: \.month) { item in
                         LineMark(
                             x: .value("Month", item.month),
                             y: .value("Amount", item.amount),
-                            )
+                        )
                         .foregroundStyle(.blue)
                         .symbol {
                             Circle()
@@ -672,11 +676,11 @@ extension Features.Budgets {
                         .interpolationMethod(.catmullRom)
                     }
 
-                    ForEach(monthlyData, id: \.month) { item in
+                    ForEach(self.monthlyData, id: \.month) { item in
                         PointMark(
                             x: .value("Month", item.month),
                             y: .value("Amount", item.amount),
-                            )
+                        )
                         .foregroundStyle(.blue)
                     }
 
@@ -731,7 +735,7 @@ extension Features.Budgets {
             let calendar = Calendar.current
             let today = Date()
 
-            switch selectedTimeFrame {
+            switch self.selectedTimeFrame {
             case .currentMonth:
                 return calendar.isDate(date, equalTo: today, toGranularity: .month)
             case .lastMonth:
@@ -754,7 +758,7 @@ extension Features.Budgets {
         }
 
         private func getTimeFrameDescription() -> String {
-            switch selectedTimeFrame {
+            switch self.selectedTimeFrame {
             case .currentMonth:
                 return "Budget for \(Date().formatted(.dateTime.month(.wide).year()))"
             case .lastMonth:
@@ -777,7 +781,7 @@ extension Features.Budgets {
 
         private func saveChanges() {
             guard let budget, let editData = editedBudget else {
-                isEditing = false
+                self.isEditing = false
                 return
             }
 
@@ -791,17 +795,17 @@ extension Features.Budgets {
             // Category relationship would be handled here
 
             // Save changes to the model context
-            try? modelContext.save()
+            try? self.modelContext.save()
 
-            isEditing = false
+            self.isEditing = false
         }
 
         private func deleteBudget() {
             guard let budget else { return }
 
             // Delete the budget from the model context
-            modelContext.delete(budget)
-            try? modelContext.save()
+            self.modelContext.delete(budget)
+            try? self.modelContext.save()
 
             // Navigate back would happen here
         }

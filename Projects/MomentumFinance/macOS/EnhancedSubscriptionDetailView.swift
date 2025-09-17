@@ -24,13 +24,13 @@ extension Features.Subscriptions {
         @State private var showingShoppingAlternatives = false
 
         private var subscription: Subscription? {
-            subscriptions.first(where: { $0.id == subscriptionId })
+            self.subscriptions.first(where: { $0.id == self.subscriptionId })
         }
 
         private var relatedTransactions: [FinancialTransaction] {
             guard let subscription, let subscriptionId = subscription.id else { return [] }
 
-            return transactions.filter { transaction in
+            return self.transactions.filter { transaction in
                 // Match transactions by subscription ID or by name pattern
                 if let relatedSubscriptionId = transaction.subscriptionId, relatedSubscriptionId == subscriptionId {
                     return true
@@ -66,32 +66,32 @@ extension Features.Subscriptions {
 
                     Spacer()
 
-                    Picker("Time Span", selection: $selectedTimespan) {
+                    Picker("Time Span", selection: self.$selectedTimespan) {
                         ForEach(Timespan.allCases) { timespan in
                             Text(timespan.rawValue).tag(timespan)
                         }
                     }
                     .frame(width: 150)
 
-                    Button(action: { isEditing.toggle().accessibilityLabel("Button") }) {
-                        Text(isEditing ? "Done" : "Edit")
+                    Button(action: { self.isEditing.toggle().accessibilityLabel("Button") }) {
+                        Text(self.isEditing ? "Done" : "Edit")
                     }
                     .keyboardShortcut("e", modifiers: .command)
 
                     Menu {
-                        Button("Mark as Paid", action: markAsPaid).accessibilityLabel("Button")
-                        Button("Skip Next Payment", action: skipNextPayment).accessibilityLabel("Button")
+                        Button("Mark as Paid", action: self.markAsPaid).accessibilityLabel("Button")
+                        Button("Skip Next Payment", action: self.skipNextPayment).accessibilityLabel("Button")
                         Divider()
-                        Button("Pause Subscription", action: pauseSubscription).accessibilityLabel("Button")
-                        Button("Cancel Subscription...", action: { showingCancelFlow = true }).accessibilityLabel("Button")
+                        Button("Pause Subscription", action: self.pauseSubscription).accessibilityLabel("Button")
+                        Button("Cancel Subscription...", action: { self.showingCancelFlow = true }).accessibilityLabel("Button")
                         Divider()
-                        Button("Find Alternatives...", action: { showingShoppingAlternatives = true }).accessibilityLabel("Button")
+                        Button("Find Alternatives...", action: { self.showingShoppingAlternatives = true }).accessibilityLabel("Button")
                         Divider()
-                        Button("Export as PDF", action: exportAsPDF).accessibilityLabel("Button")
-                        Button("Print", action: printSubscription).accessibilityLabel("Button")
+                        Button("Export as PDF", action: self.exportAsPDF).accessibilityLabel("Button")
+                        Button("Print", action: self.printSubscription).accessibilityLabel("Button")
                         Divider()
                         Button("Delete", role: .destructive).accessibilityLabel("Button") {
-                            showingDeleteConfirmation = true
+                            self.showingDeleteConfirmation = true
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
@@ -102,36 +102,36 @@ extension Features.Subscriptions {
 
                 Divider()
 
-                if isEditing, let subscription {
-                    editView(for: subscription)
+                if self.isEditing, let subscription {
+                    self.editView(for: subscription)
                         .padding()
                         .transition(.opacity)
                 } else {
-                    detailView()
+                    self.detailView()
                         .transition(.opacity)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .alert("Delete Subscription", isPresented: $showingDeleteConfirmation) {
+            .alert("Delete Subscription", isPresented: self.$showingDeleteConfirmation) {
                 Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
                 Button("Delete", role: .destructive).accessibilityLabel("Button") {
-                    deleteSubscription()
+                    self.deleteSubscription()
                 }
             } message: {
                 Text("Are you sure you want to delete this subscription? This action cannot be undone.")
             }
-            .sheet(isPresented: $showingCancelFlow) {
-                CancellationAssistantView(subscription: subscription)
+            .sheet(isPresented: self.$showingCancelFlow) {
+                CancellationAssistantView(subscription: self.subscription)
                     .frame(width: 600, height: 500)
             }
-            .sheet(isPresented: $showingShoppingAlternatives) {
-                AlternativesView(subscription: subscription)
+            .sheet(isPresented: self.$showingShoppingAlternatives) {
+                AlternativesView(subscription: self.subscription)
                     .frame(width: 700, height: 600)
             }
             .onAppear {
                 // Initialize edit model if needed
                 if let subscription, editedSubscription == nil {
-                    editedSubscription = SubscriptionEditModel(from: subscription)
+                    self.editedSubscription = SubscriptionEditModel(from: subscription)
                 }
             }
         }
@@ -141,10 +141,12 @@ extension Features.Subscriptions {
         private func detailView() -> some View {
             guard let subscription else {
                 return AnyView(
-                    ContentUnavailableView("Subscription Not Found",
-                                           systemImage: "exclamationmark.triangle",
-                                           description: Text("The subscription you're looking for could not be found.")),
-                    )
+                    ContentUnavailableView(
+                        "Subscription Not Found",
+                        systemImage: "exclamationmark.triangle",
+                        description: Text("The subscription you're looking for could not be found.")
+                    ),
+                )
             }
 
             return AnyView(
@@ -182,7 +184,7 @@ extension Features.Subscriptions {
                                         Text(subscription.amount.formatted(.currency(code: subscription.currencyCode)))
                                             .font(.system(size: 28, weight: .bold))
 
-                                        Text(formatBillingCycle(subscription.billingCycle))
+                                        Text(self.formatBillingCycle(subscription.billingCycle))
                                             .font(.subheadline)
                                             .foregroundStyle(.secondary)
                                     }
@@ -193,14 +195,25 @@ extension Features.Subscriptions {
                                 // Cost breakdown
                                 Grid(alignment: .leading, horizontalSpacing: 40, verticalSpacing: 12) {
                                     GridRow {
-                                        DetailField(label: "Monthly Cost", value: calculateMonthlyCost(subscription).formatted(.currency(code: subscription.currencyCode)))
+                                        DetailField(
+                                            label: "Monthly Cost",
+                                            value: self.calculateMonthlyCost(subscription)
+                                                .formatted(.currency(code: subscription.currencyCode))
+                                        )
 
-                                        DetailField(label: "Annual Cost", value: calculateAnnualCost(subscription).formatted(.currency(code: subscription.currencyCode)))
+                                        DetailField(
+                                            label: "Annual Cost",
+                                            value: self.calculateAnnualCost(subscription)
+                                                .formatted(.currency(code: subscription.currencyCode))
+                                        )
                                     }
 
                                     GridRow {
                                         if let nextPayment = subscription.nextPaymentDate {
-                                            DetailField(label: "Next Payment", value: nextPayment.formatted(date: .abbreviated, time: .omitted))
+                                            DetailField(
+                                                label: "Next Payment",
+                                                value: nextPayment.formatted(date: .abbreviated, time: .omitted)
+                                            )
                                         } else {
                                             DetailField(label: "Next Payment", value: "Not scheduled")
                                         }
@@ -228,7 +241,7 @@ extension Features.Subscriptions {
                                 Text("Cost Analysis")
                                     .font(.headline)
 
-                                SubscriptionCostChart(subscription: subscription, timespan: selectedTimespan)
+                                SubscriptionCostChart(subscription: subscription, timespan: self.selectedTimespan)
                                     .frame(height: 220)
 
                                 HStack {
@@ -236,7 +249,7 @@ extension Features.Subscriptions {
                                         Text("Total Spent")
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
-                                        Text(calculateTotalSpent(subscription).formatted(.currency(code: subscription.currencyCode)))
+                                        Text(self.calculateTotalSpent(subscription).formatted(.currency(code: subscription.currencyCode)))
                                             .font(.headline)
                                     }
 
@@ -246,7 +259,7 @@ extension Features.Subscriptions {
                                         Text("Average Monthly")
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
-                                        Text(calculateMonthlyCost(subscription).formatted(.currency(code: subscription.currencyCode)))
+                                        Text(self.calculateMonthlyCost(subscription).formatted(.currency(code: subscription.currencyCode)))
                                             .font(.headline)
                                     }
 
@@ -299,7 +312,11 @@ extension Features.Subscriptions {
                                                     Text(nextDate.formatted(date: .abbreviated, time: .omitted))
                                                         .foregroundStyle(.primary)
                                                 } else {
-                                                    Text(calculateFuturePaymentDate(from: nextDate, offset: i, cycle: subscription.billingCycle).formatted(date: .abbreviated, time: .omitted))
+                                                    Text(self.calculateFuturePaymentDate(
+                                                        from: nextDate,
+                                                        offset: i,
+                                                        cycle: subscription.billingCycle
+                                                    ).formatted(date: .abbreviated, time: .omitted))
                                                         .foregroundStyle(.secondary)
                                                 }
 
@@ -339,7 +356,7 @@ extension Features.Subscriptions {
 
                             Spacer()
 
-                            Button(action: addTransaction).accessibilityLabel("Button") {
+                            Button(action: self.addTransaction).accessibilityLabel("Button") {
                                 Label("Add", systemImage: "plus")
                             }
                             .buttonStyle(.bordered)
@@ -350,28 +367,28 @@ extension Features.Subscriptions {
                         Divider()
 
                         // Transactions list
-                        if relatedTransactions.isEmpty {
+                        if self.relatedTransactions.isEmpty {
                             ContentUnavailableView {
                                 Label("No Payment History", systemImage: "creditcard")
                             } description: {
                                 Text("No payment records found for this subscription.")
                             } actions: {
                                 Button("Add Payment Record").accessibilityLabel("Button") {
-                                    addTransaction()
+                                    self.addTransaction()
                                 }
                                 .buttonStyle(.bordered)
                             }
                             .frame(maxHeight: .infinity)
                         } else {
-                            List(relatedTransactions, selection: $selectedTransactionIds) {
-                                paymentRow(for: $0)
+                            List(self.relatedTransactions, selection: self.$selectedTransactionIds) {
+                                self.paymentRow(for: $0)
                             }
                             .listStyle(.inset)
                         }
                     }
                     .frame(width: 350)
                 },
-                )
+            )
         }
 
         // MARK: - Edit View
@@ -390,7 +407,7 @@ extension Features.Subscriptions {
                         TextField("Subscription name", text: Binding(
                             get: { self.editedSubscription?.name ?? subscription.name },
                             set: { self.editedSubscription?.name = $0 },
-                            ))
+                        ))
                         .textFieldStyle(.roundedBorder)
                     }
 
@@ -402,7 +419,7 @@ extension Features.Subscriptions {
                         TextField("Service provider", text: Binding(
                             get: { self.editedSubscription?.provider ?? subscription.provider },
                             set: { self.editedSubscription?.provider = $0 },
-                            ))
+                        ))
                         .textFieldStyle(.roundedBorder)
                     }
 
@@ -415,14 +432,14 @@ extension Features.Subscriptions {
                             TextField("Amount", value: Binding(
                                 get: { self.editedSubscription?.amount ?? subscription.amount },
                                 set: { self.editedSubscription?.amount = $0 },
-                                ), format: .currency(code: subscription.currencyCode))
-                            .textFieldStyle(.roundedBorder)
-                            .frame(width: 150)
+                            ), format: .currency(code: subscription.currencyCode))
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 150)
 
                             Picker("Currency", selection: Binding(
                                 get: { self.editedSubscription?.currencyCode ?? subscription.currencyCode },
                                 set: { self.editedSubscription?.currencyCode = $0 },
-                                )) {
+                            )) {
                                 Text("USD").tag("USD")
                                 Text("EUR").tag("EUR")
                                 Text("GBP").tag("GBP")
@@ -439,7 +456,7 @@ extension Features.Subscriptions {
                         Picker("Billing Cycle", selection: Binding(
                             get: { self.editedSubscription?.billingCycle ?? subscription.billingCycle },
                             set: { self.editedSubscription?.billingCycle = $0 },
-                            )) {
+                        )) {
                             Text("Monthly").tag("monthly")
                             Text("Quarterly").tag("quarterly")
                             Text("Annual").tag("annual")
@@ -457,8 +474,8 @@ extension Features.Subscriptions {
                         DatePicker("Start Date", selection: Binding(
                             get: { self.editedSubscription?.startDate ?? subscription.startDate ?? Date() },
                             set: { self.editedSubscription?.startDate = $0 },
-                            ), displayedComponents: .date)
-                        .labelsHidden()
+                        ), displayedComponents: .date)
+                            .labelsHidden()
                     }
 
                     GridRow {
@@ -468,8 +485,8 @@ extension Features.Subscriptions {
                         DatePicker("Next Payment", selection: Binding(
                             get: { self.editedSubscription?.nextPaymentDate ?? subscription.nextPaymentDate ?? Date() },
                             set: { self.editedSubscription?.nextPaymentDate = $0 },
-                            ), displayedComponents: .date)
-                        .labelsHidden()
+                        ), displayedComponents: .date)
+                            .labelsHidden()
                     }
 
                     // Payment method field
@@ -480,7 +497,7 @@ extension Features.Subscriptions {
                         Picker("Payment Method", selection: Binding(
                             get: { self.editedSubscription?.paymentMethod ?? subscription.paymentMethod ?? "" },
                             set: { self.editedSubscription?.paymentMethod = $0 },
-                            )) {
+                        )) {
                             Text("None").tag("")
                             Text("Credit Card").tag("Credit Card")
                             Text("Bank Account").tag("Bank Account")
@@ -497,7 +514,7 @@ extension Features.Subscriptions {
                         Picker("Category", selection: Binding(
                             get: { self.editedSubscription?.category ?? subscription.category ?? "" },
                             set: { self.editedSubscription?.category = $0 },
-                            )) {
+                        )) {
                             Text("None").tag("")
                             Text("Entertainment").tag("Entertainment")
                             Text("Software").tag("Software")
@@ -515,7 +532,7 @@ extension Features.Subscriptions {
                         Toggle("This subscription auto-renews", isOn: Binding(
                             get: { self.editedSubscription?.autoRenews ?? subscription.autoRenews },
                             set: { self.editedSubscription?.autoRenews = $0 },
-                            ))
+                        ))
                     }
                 }
                 .padding(.bottom, 20)
@@ -526,7 +543,7 @@ extension Features.Subscriptions {
                 TextEditor(text: Binding(
                     get: { self.editedSubscription?.notes ?? subscription.notes },
                     set: { self.editedSubscription?.notes = $0 },
-                    ))
+                ))
                 .font(.body)
                 .frame(minHeight: 100)
                 .padding(4)
@@ -537,17 +554,17 @@ extension Features.Subscriptions {
                     Spacer()
 
                     Button("Cancel").accessibilityLabel("Button") {
-                        isEditing = false
+                        self.isEditing = false
                         // Reset edited subscription to original
                         if let subscription {
-                            editedSubscription = SubscriptionEditModel(from: subscription)
+                            self.editedSubscription = SubscriptionEditModel(from: subscription)
                         }
                     }
                     .buttonStyle(.bordered)
                     .keyboardShortcut(.escape, modifiers: [])
 
                     Button("Save").accessibilityLabel("Button") {
-                        saveChanges()
+                        self.saveChanges()
                     }
                     .buttonStyle(.borderedProminent)
                     .keyboardShortcut(.return, modifiers: .command)
@@ -588,7 +605,7 @@ extension Features.Subscriptions {
                 Divider()
 
                 Button("Mark as \(transaction.isReconciled ? "Unpaid" : "Paid").accessibilityLabel("Button")") {
-                    toggleTransactionStatus(transaction)
+                    self.toggleTransactionStatus(transaction)
                 }
             }
         }
@@ -599,11 +616,11 @@ extension Features.Subscriptions {
 
             var body: some View {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(label)
+                    Text(self.label)
                         .font(.caption)
                         .foregroundStyle(.secondary)
 
-                    Text(value)
+                    Text(self.value)
                         .font(.body)
                 }
             }
@@ -614,7 +631,7 @@ extension Features.Subscriptions {
 
             // Map common providers to system images
             private var iconName: String {
-                switch provider.lowercased() {
+                switch self.provider.lowercased() {
                 case "netflix": "play.tv"
                 case "spotify": "music.note"
                 case "apple": "apple.logo"
@@ -630,7 +647,7 @@ extension Features.Subscriptions {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(Color.blue.opacity(0.1))
 
-                    Image(systemName: iconName)
+                    Image(systemName: self.iconName)
                         .font(.system(size: 22))
                         .foregroundColor(.blue)
                 }
@@ -641,7 +658,7 @@ extension Features.Subscriptions {
             let status: String
 
             private var color: Color {
-                switch status.lowercased() {
+                switch self.status.lowercased() {
                 case "active": .green
                 case "inactive": .red
                 case "paused": .orange
@@ -650,12 +667,12 @@ extension Features.Subscriptions {
             }
 
             var body: some View {
-                Text(status)
+                Text(self.status)
                     .font(.caption)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
-                    .background(color.opacity(0.1))
-                    .foregroundColor(color)
+                    .background(self.color.opacity(0.1))
+                    .foregroundColor(self.color)
                     .cornerRadius(4)
             }
         }
@@ -669,30 +686,30 @@ extension Features.Subscriptions {
             /// - Returns: <#description#>
             func generateSampleData() -> [(month: String, amount: Double)] {
                 [
-                    (month: "Jun", amount: subscription.amount),
-                    (month: "Jul", amount: subscription.amount),
-                    (month: "Aug", amount: subscription.amount),
-                    (month: "Sep", amount: subscription.amount),
-                    (month: "Oct", amount: subscription.amount),
-                    (month: "Nov", amount: subscription.amount),
+                    (month: "Jun", amount: self.subscription.amount),
+                    (month: "Jul", amount: self.subscription.amount),
+                    (month: "Aug", amount: self.subscription.amount),
+                    (month: "Sep", amount: self.subscription.amount),
+                    (month: "Oct", amount: self.subscription.amount),
+                    (month: "Nov", amount: self.subscription.amount),
                 ]
             }
 
             var body: some View {
                 VStack(alignment: .leading, spacing: 8) {
                     Chart {
-                        ForEach(generateSampleData(), id: \.month) { item in
+                        ForEach(self.generateSampleData(), id: \.month) { item in
                             BarMark(
                                 x: .value("Month", item.month),
                                 y: .value("Amount", item.amount),
-                                )
+                            )
                             .foregroundStyle(Color.blue.gradient)
                         }
 
-                        RuleMark(y: .value("Average", subscription.amount))
+                        RuleMark(y: .value("Average", self.subscription.amount))
                             .lineStyle(StrokeStyle(lineWidth: 2, dash: [5, 5]))
                             .annotation(position: .top, alignment: .trailing) {
-                                Text("Monthly: \(subscription.amount.formatted(.currency(code: subscription.currencyCode)))")
+                                Text("Monthly: \(self.subscription.amount.formatted(.currency(code: self.subscription.currencyCode)))")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -710,15 +727,15 @@ extension Features.Subscriptions {
             // Calculate cost per use
             private var costPerUse: Double {
                 // Assuming monthly billing and usage 5 times per month
-                subscription.amount / 5.0
+                self.subscription.amount / 5.0
             }
 
             private var valueAssessment: String {
-                if usageRating > 0.8 {
+                if self.usageRating > 0.8 {
                     "Excellent Value"
-                } else if usageRating > 0.5 {
+                } else if self.usageRating > 0.5 {
                     "Good Value"
-                } else if usageRating > 0.3 {
+                } else if self.usageRating > 0.3 {
                     "Fair Value"
                 } else {
                     "Poor Value"
@@ -726,11 +743,11 @@ extension Features.Subscriptions {
             }
 
             private var valueColor: Color {
-                if usageRating > 0.8 {
+                if self.usageRating > 0.8 {
                     .green
-                } else if usageRating > 0.5 {
+                } else if self.usageRating > 0.5 {
                     .blue
-                } else if usageRating > 0.3 {
+                } else if self.usageRating > 0.3 {
                     .orange
                 } else {
                     .red
@@ -750,17 +767,17 @@ extension Features.Subscriptions {
                                     .frame(width: 100, height: 100)
 
                                 Circle()
-                                    .trim(from: 0, to: usageRating)
-                                    .stroke(valueColor, lineWidth: 10)
+                                    .trim(from: 0, to: self.usageRating)
+                                    .stroke(self.valueColor, lineWidth: 10)
                                     .frame(width: 100, height: 100)
                                     .rotationEffect(.degrees(-90))
 
                                 VStack {
-                                    Text(valueAssessment)
+                                    Text(self.valueAssessment)
                                         .font(.headline)
-                                        .foregroundStyle(valueColor)
+                                        .foregroundStyle(self.valueColor)
 
-                                    Text("\(Int(usageRating * 100))%")
+                                    Text("\(Int(self.usageRating * 100))%")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
@@ -781,7 +798,7 @@ extension Features.Subscriptions {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
 
-                                Text(subscription.amount.formatted(.currency(code: subscription.currencyCode)))
+                                Text(self.subscription.amount.formatted(.currency(code: self.subscription.currencyCode)))
                                     .font(.title2)
                             }
 
@@ -790,7 +807,7 @@ extension Features.Subscriptions {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
 
-                                Text(costPerUse.formatted(.currency(code: subscription.currencyCode)))
+                                Text(self.costPerUse.formatted(.currency(code: self.subscription.currencyCode)))
                                     .font(.title3)
                             }
 
@@ -799,8 +816,10 @@ extension Features.Subscriptions {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
 
-                                Text("\((subscription.amount * 0.9).formatted(.currency(code: subscription.currencyCode))) - \((subscription.amount * 1.1).formatted(.currency(code: subscription.currencyCode)))")
-                                    .font(.body)
+                                Text(
+                                    "\((self.subscription.amount * 0.9).formatted(.currency(code: self.subscription.currencyCode))) - \((self.subscription.amount * 1.1).formatted(.currency(code: self.subscription.currencyCode)))"
+                                )
+                                .font(.body)
                             }
                         }
                     }
@@ -834,7 +853,7 @@ extension Features.Subscriptions {
                         .font(.system(size: 6))
                         .padding(.top, 6)
 
-                    Text(text)
+                    Text(self.text)
                 }
             }
         }
@@ -849,7 +868,7 @@ extension Features.Subscriptions {
                         .font(.title2)
                         .padding(.top)
 
-                    Text("Let us help you cancel your \(subscription?.name ?? "subscription")")
+                    Text("Let us help you cancel your \(self.subscription?.name ?? "subscription")")
                         .font(.headline)
 
                     VStack(alignment: .leading, spacing: 20) {
@@ -943,7 +962,7 @@ extension Features.Subscriptions {
                     Spacer()
 
                     Button("Close").accessibilityLabel("Button") {
-                        dismiss()
+                        self.dismiss()
                     }
                     .keyboardShortcut(.escape, modifiers: [])
                 }
@@ -959,7 +978,11 @@ extension Features.Subscriptions {
             let alternatives = [
                 (name: "CompetitorA", price: 7.99, features: ["HD Streaming", "2 devices", "Limited library"]),
                 (name: "CompetitorB", price: 9.99, features: ["4K Streaming", "4 devices", "Full library", "Downloads"]),
-                (name: "CompetitorC", price: 12.99, features: ["4K Streaming", "Unlimited devices", "Full library", "Downloads", "Live TV"]),
+                (
+                    name: "CompetitorC",
+                    price: 12.99,
+                    features: ["4K Streaming", "Unlimited devices", "Full library", "Downloads", "Live TV"]
+                ),
             ]
 
             var body: some View {
@@ -968,7 +991,7 @@ extension Features.Subscriptions {
                         .font(.title2)
                         .padding(.top)
 
-                    Text("Compare alternatives to \(subscription?.name ?? "this service")")
+                    Text("Compare alternatives to \(self.subscription?.name ?? "this service")")
                         .font(.headline)
 
                     HStack(alignment: .top, spacing: 0) {
@@ -982,13 +1005,13 @@ extension Features.Subscriptions {
 
                             Divider()
 
-                            Text(subscription?.name ?? "Current")
+                            Text(self.subscription?.name ?? "Current")
                                 .font(.title3)
                                 .padding()
 
                             Divider()
 
-                            Text(subscription?.amount.formatted(.currency(code: subscription?.currencyCode ?? "USD")) ?? "$0.00")
+                            Text(self.subscription?.amount.formatted(.currency(code: self.subscription?.currencyCode ?? "USD")) ?? "$0.00")
                                 .font(.title3)
                                 .bold()
                                 .padding()
@@ -1011,7 +1034,7 @@ extension Features.Subscriptions {
                         .cornerRadius(8)
 
                         // Alternatives columns
-                        ForEach(alternatives, id: \.name) { alternative in
+                        ForEach(self.alternatives, id: \.name) { alternative in
                             VStack(spacing: 0) {
                                 Text("Alternative")
                                     .font(.headline)
@@ -1057,7 +1080,7 @@ extension Features.Subscriptions {
                     }
 
                     Button("Close").accessibilityLabel("Button") {
-                        dismiss()
+                        self.dismiss()
                     }
                     .keyboardShortcut(.escape, modifiers: [])
                     .padding(.top)
@@ -1072,10 +1095,10 @@ extension Features.Subscriptions {
 
             var body: some View {
                 HStack {
-                    Image(systemName: isIncluded ? "checkmark.circle.fill" : "xmark.circle")
-                        .foregroundStyle(isIncluded ? .green : .secondary)
+                    Image(systemName: self.isIncluded ? "checkmark.circle.fill" : "xmark.circle")
+                        .foregroundStyle(self.isIncluded ? .green : .secondary)
 
-                    Text(text)
+                    Text(self.text)
                 }
             }
         }
@@ -1150,7 +1173,7 @@ extension Features.Subscriptions {
             guard let startDate = subscription.startDate else { return 0 }
 
             let monthsSinceStart = Calendar.current.dateComponents([.month], from: startDate, to: Date()).month ?? 0
-            return calculateMonthlyCost(subscription) * Double(monthsSinceStart)
+            return self.calculateMonthlyCost(subscription) * Double(monthsSinceStart)
         }
 
         private func calculateFuturePaymentDate(from date: Date, offset: Int, cycle: String) -> Date {
@@ -1176,7 +1199,7 @@ extension Features.Subscriptions {
 
         private func saveChanges() {
             guard let subscription, let editData = editedSubscription else {
-                isEditing = false
+                self.isEditing = false
                 return
             }
 
@@ -1194,17 +1217,17 @@ extension Features.Subscriptions {
             subscription.autoRenews = editData.autoRenews
 
             // Save changes to the model context
-            try? modelContext.save()
+            try? self.modelContext.save()
 
-            isEditing = false
+            self.isEditing = false
         }
 
         private func deleteSubscription() {
             guard let subscription else { return }
 
             // Delete the subscription from the model context
-            modelContext.delete(subscription)
-            try? modelContext.save()
+            self.modelContext.delete(subscription)
+            try? self.modelContext.save()
 
             // Navigate back would happen here
         }
@@ -1215,7 +1238,7 @@ extension Features.Subscriptions {
 
         private func toggleTransactionStatus(_ transaction: FinancialTransaction) {
             transaction.isReconciled.toggle()
-            try? modelContext.save()
+            try? self.modelContext.save()
         }
 
         private func markAsPaid() {
@@ -1228,7 +1251,7 @@ extension Features.Subscriptions {
                 date: nextDate,
                 notes: "Automatic payment for subscription",
                 isReconciled: true,
-                )
+            )
 
             transaction.subscriptionId = subscription.id
 
@@ -1238,8 +1261,8 @@ extension Features.Subscriptions {
             }
 
             // Add transaction to the model context
-            modelContext.insert(transaction)
-            try? modelContext.save()
+            self.modelContext.insert(transaction)
+            try? self.modelContext.save()
         }
 
         private func skipNextPayment() {
@@ -1248,7 +1271,7 @@ extension Features.Subscriptions {
             // Calculate next payment date based on billing cycle and skip one period
             if let newNextDate = calculateFuturePaymentDate(from: nextDate, offset: 1, cycle: subscription.billingCycle) {
                 subscription.nextPaymentDate = newNextDate
-                try? modelContext.save()
+                try? self.modelContext.save()
             }
         }
 
@@ -1261,7 +1284,7 @@ extension Features.Subscriptions {
 
             // Clear the next payment date to indicate paused status
             subscription.nextPaymentDate = nil
-            try? modelContext.save()
+            try? self.modelContext.save()
         }
 
         private func exportAsPDF() {

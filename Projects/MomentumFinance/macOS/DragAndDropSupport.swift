@@ -87,7 +87,7 @@ extension FinancialAccount {
         let provider = NSItemProvider()
 
         // Add representation for dragItemType
-        provider.registerDataRepresentation(forTypeIdentifier: dragItemType.uniformType.identifier, visibility: .all) { completion in
+        provider.registerDataRepresentation(forTypeIdentifier: self.dragItemType.uniformType.identifier, visibility: .all) { completion in
             do {
                 let encoder = JSONEncoder()
                 let data = try encoder.encode(self)
@@ -119,7 +119,7 @@ extension FinancialTransaction {
         let provider = NSItemProvider()
 
         // Add representation for dragItemType
-        provider.registerDataRepresentation(forTypeIdentifier: dragItemType.uniformType.identifier, visibility: .all) { completion in
+        provider.registerDataRepresentation(forTypeIdentifier: self.dragItemType.uniformType.identifier, visibility: .all) { completion in
             do {
                 let encoder = JSONEncoder()
                 let data = try encoder.encode(self)
@@ -170,10 +170,10 @@ struct FinanceItemDragPreview<Content: View>: View {
     var body: some View {
         VStack {
             HStack(spacing: 8) {
-                Image(systemName: iconName)
+                Image(systemName: self.iconName)
                     .font(.system(size: 18))
 
-                Text(title)
+                Text(self.title)
                     .font(.headline)
             }
             .padding(10)
@@ -181,7 +181,7 @@ struct FinanceItemDragPreview<Content: View>: View {
             .cornerRadius(8)
             .shadow(radius: 3)
 
-            content
+            self.content
                 .frame(maxWidth: 320, maxHeight: 200)
                 .cornerRadius(8)
                 .shadow(radius: 5)
@@ -209,14 +209,23 @@ struct DraggableFinanceItemModifier<Item: DraggableFinanceItem>: ViewModifier {
     func body(content: Content) -> some View {
         content
             .onDrag {
-                onDragStarted?()
-                return item.asItemProvider()
+                self.onDragStarted?()
+                return self.item.asItemProvider()
             } preview: {
-                FinanceItemDragPreview(title: item.dragItemTitle, iconName: item.dragItemIconName) {
+                FinanceItemDragPreview(title: self.item.dragItemTitle, iconName: self.item.dragItemIconName) {
                     content
                 }
             }
-            .onDrop(of: [UTType.financeAccount, UTType.financeTransaction, UTType.financeBudget, UTType.financeSubscription, UTType.financeGoal], isTargeted: nil) { _, _ in
+            .onDrop(
+                of: [
+                    UTType.financeAccount,
+                    UTType.financeTransaction,
+                    UTType.financeBudget,
+                    UTType.financeSubscription,
+                    UTType.financeGoal
+                ],
+                isTargeted: nil
+            ) { _, _ in
                 false // This modifier only handles drag, not drop
             }
     }
@@ -232,10 +241,10 @@ struct DroppableFinanceItemModifier<T: DraggableFinanceItem>: ViewModifier {
     private let logger = Logger(subsystem: "com.momentum.finance", category: "DragAndDrop")
 
     private var isDraggingOver: Binding<Bool> {
-        isTargeted ?? Binding<Bool>(
-            get: { isDraggingOverInternal },
-            set: { isDraggingOverInternal = $0 },
-            )
+        self.isTargeted ?? Binding<Bool>(
+            get: { self.isDraggingOverInternal },
+            set: { self.isDraggingOverInternal = $0 },
+        )
     }
 
     init(acceptedTypes: [FinanceDragItemType], isTargeted: Binding<Bool>? = nil, onDrop: @escaping ([T], CGPoint) -> Bool) {
@@ -248,12 +257,12 @@ struct DroppableFinanceItemModifier<T: DraggableFinanceItem>: ViewModifier {
     /// - Returns: <#description#>
     func body(content: Content) -> some View {
         content
-            .onDrop(of: acceptedTypes.map(\.uniformType), isTargeted: isDraggingOver) { providers, location in
+            .onDrop(of: self.acceptedTypes.map(\.uniformType), isTargeted: self.isDraggingOver) { providers, location in
                 Task {
                     var droppedItems: [T] = []
 
                     for provider in providers {
-                        for type in acceptedTypes {
+                        for type in self.acceptedTypes {
                             if provider.hasItemConformingToTypeIdentifier(type.uniformType.identifier) {
                                 do {
                                     let data = try await provider.loadDataRepresentation(forTypeIdentifier: type.uniformType.identifier)
@@ -261,14 +270,14 @@ struct DroppableFinanceItemModifier<T: DraggableFinanceItem>: ViewModifier {
                                     let item = try decoder.decode(T.self, from: data)
                                     droppedItems.append(item)
                                 } catch {
-                                    logger.error("Error decoding dropped item: \(error)")
+                                    self.logger.error("Error decoding dropped item: \(error)")
                                 }
                             }
                         }
                     }
 
                     if !droppedItems.isEmpty {
-                        return onDrop(droppedItems, location)
+                        return self.onDrop(droppedItems, location)
                     }
 
                     return false
@@ -276,7 +285,7 @@ struct DroppableFinanceItemModifier<T: DraggableFinanceItem>: ViewModifier {
 
                 return true
             }
-            .onChange(of: isDraggingOver.wrappedValue) { _, _ in
+            .onChange(of: self.isDraggingOver.wrappedValue) { _, _ in
                 // Apply visual state changes when drag enters/exits
                 withAnimation(.easeInOut(duration: 0.2)) {
                     // Visual feedback can be applied in the calling code using the isTargeted binding
@@ -289,16 +298,20 @@ struct DroppableFinanceItemModifier<T: DraggableFinanceItem>: ViewModifier {
 
 extension View {
     /// Make a view draggable with a finance item
-    func draggable(item: some DraggableFinanceItem,
-                   onDragStarted: (() -> Void)? = nil,
-                   onDragEnded: ((Bool) -> Void)? = nil) -> some View {
+    func draggable(
+        item: some DraggableFinanceItem,
+        onDragStarted: (() -> Void)? = nil,
+        onDragEnded: ((Bool) -> Void)? = nil
+    ) -> some View {
         modifier(DraggableFinanceItemModifier(item: item, onDragStarted: onDragStarted, onDragEnded: onDragEnded))
     }
 
     /// Make a view accept drops of finance items
-    func droppable<T: DraggableFinanceItem>(acceptedTypes: [FinanceDragItemType],
-                                            isTargeted: Binding<Bool>? = nil,
-                                            onDrop: @escaping ([T], CGPoint) -> Bool) -> some View {
+    func droppable<T: DraggableFinanceItem>(
+        acceptedTypes: [FinanceDragItemType],
+        isTargeted: Binding<Bool>? = nil,
+        onDrop: @escaping ([T], CGPoint) -> Bool
+    ) -> some View {
         modifier(DroppableFinanceItemModifier(acceptedTypes: acceptedTypes, isTargeted: isTargeted, onDrop: onDrop))
     }
 }
@@ -312,31 +325,31 @@ struct TransactionItemView: View {
 
     var body: some View {
         HStack {
-            Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
-                .foregroundStyle(transaction.amount < 0 ? .red : .green)
+            Image(systemName: self.transaction.amount < 0 ? "arrow.down" : "arrow.up")
+                .foregroundStyle(self.transaction.amount < 0 ? .red : .green)
 
             VStack(alignment: .leading) {
-                Text(transaction.name)
+                Text(self.transaction.name)
                     .font(.headline)
 
-                Text(transaction.amount.formatted(.currency(code: "USD")))
+                Text(self.transaction.amount.formatted(.currency(code: "USD")))
                     .font(.subheadline)
             }
 
             Spacer()
 
-            Text(transaction.date.formatted(date: .abbreviated, time: .omitted))
+            Text(self.transaction.date.formatted(date: .abbreviated, time: .omitted))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
         .padding()
-        .background(isTargeted ? Color.accentColor.opacity(0.1) : Color.clear)
+        .background(self.isTargeted ? Color.accentColor.opacity(0.1) : Color.clear)
         .cornerRadius(8)
-        .draggable(item: transaction)
-        .droppable(acceptedTypes: [.budget, .account], isTargeted: $isTargeted) { (items: [Budget], _) in
+        .draggable(item: self.transaction)
+        .droppable(acceptedTypes: [.budget, .account], isTargeted: self.$isTargeted) { (items: [Budget], _) in
             if let budget = items.first {
                 // Associate transaction with this budget
-                logger.info("Transaction \(transaction.name) associated with budget \(budget.name)")
+                self.logger.info("Transaction \(self.transaction.name) associated with budget \(budget.name)")
                 return true
             }
             return false
@@ -357,11 +370,11 @@ extension Features.Budgets {
         @State private var associatedTransactionIds: [String] = []
 
         var budget: Budget? {
-            budgets.first(where: { $0.id == budgetId })
+            self.budgets.first(where: { $0.id == self.budgetId })
         }
 
         var associatedTransactions: [FinancialTransaction] {
-            transactions.filter { associatedTransactionIds.contains($0.id) }
+            self.transactions.filter { self.associatedTransactionIds.contains($0.id) }
         }
 
         var body: some View {
@@ -374,7 +387,7 @@ extension Features.Budgets {
                     Text("Associated Transactions")
                         .font(.headline)
 
-                    if associatedTransactions.isEmpty {
+                    if self.associatedTransactions.isEmpty {
                         VStack {
                             Text("Drag transactions here to associate them with this budget")
                                 .foregroundStyle(.secondary)
@@ -386,35 +399,35 @@ extension Features.Budgets {
                         .background(
                             RoundedRectangle(cornerRadius: 8)
                                 .strokeBorder(style: StrokeStyle(lineWidth: 2, dash: [5]))
-                                .foregroundColor(isDraggingOver ? .accentColor : .secondary)
-                                .animation(.easeInOut, value: isDraggingOver),
-                            )
+                                .foregroundColor(self.isDraggingOver ? .accentColor : .secondary)
+                                .animation(.easeInOut, value: self.isDraggingOver),
+                        )
                         .contentShape(Rectangle())
-                        .droppable(acceptedTypes: [.transaction], isTargeted: $isDraggingOver) { (items: [FinancialTransaction], _) in
+                        .droppable(acceptedTypes: [.transaction], isTargeted: self.$isDraggingOver) { (items: [FinancialTransaction], _) in
                             for transaction in items {
-                                if !associatedTransactionIds.contains(transaction.id) {
-                                    associatedTransactionIds.append(transaction.id)
+                                if !self.associatedTransactionIds.contains(transaction.id) {
+                                    self.associatedTransactionIds.append(transaction.id)
                                 }
                             }
                             return true
                         }
                     } else {
                         List {
-                            ForEach(associatedTransactions) { transaction in
+                            ForEach(self.associatedTransactions) { transaction in
                                 TransactionItemView(transaction: transaction)
                                     .contextMenu {
                                         Button("Remove from Budget", role: .destructive).accessibilityLabel("Button") {
-                                            removeTransaction(transaction)
+                                            self.removeTransaction(transaction)
                                         }
                                     }
                             }
-                            .onDelete(perform: deleteTransactions)
+                            .onDelete(perform: self.deleteTransactions)
                         }
                         .frame(minHeight: 200)
-                        .droppable(acceptedTypes: [.transaction], isTargeted: $isDraggingOver) { (items: [FinancialTransaction], _) in
+                        .droppable(acceptedTypes: [.transaction], isTargeted: self.$isDraggingOver) { (items: [FinancialTransaction], _) in
                             for transaction in items {
-                                if !associatedTransactionIds.contains(transaction.id) {
-                                    associatedTransactionIds.append(transaction.id)
+                                if !self.associatedTransactionIds.contains(transaction.id) {
+                                    self.associatedTransactionIds.append(transaction.id)
                                 }
                             }
                             return true
@@ -435,12 +448,12 @@ extension Features.Budgets {
         }
 
         private func removeTransaction(_ transaction: FinancialTransaction) {
-            associatedTransactionIds.removeAll { $0 == transaction.id }
+            self.associatedTransactionIds.removeAll { $0 == transaction.id }
         }
 
         private func deleteTransactions(at offsets: IndexSet) {
-            let idsToRemove = offsets.map { associatedTransactions[$0].id }
-            associatedTransactionIds.removeAll { idsToRemove.contains($0) }
+            let idsToRemove = offsets.map { self.associatedTransactions[$0].id }
+            self.associatedTransactionIds.removeAll { idsToRemove.contains($0) }
         }
     }
 }

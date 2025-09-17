@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 #if canImport(UIKit)
@@ -24,7 +24,7 @@ struct SavingsGoalsSection: View {
     @Binding var selectedGoal: SavingsGoal?
 
     var body: some View {
-        if goals.isEmpty {
+        if self.goals.isEmpty {
             ContentUnavailableView(
                 "No Savings Goals",
                 systemImage: "target",
@@ -33,10 +33,10 @@ struct SavingsGoalsSection: View {
         } else {
             ScrollView {
                 LazyVStack(spacing: 16) {
-                    ForEach(goals, id: \.name) { goal in
+                    ForEach(self.goals, id: \.name) { goal in
                         SavingsGoalCard(goal: goal)
                             .onTapGesture {
-                                selectedGoal = goal
+                                self.selectedGoal = goal
                             }
                     }
                 }
@@ -52,11 +52,11 @@ struct SavingsGoalCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+        return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+        return Color(NSColor.controlBackgroundColor)
         #else
-            return Color.white
+        return Color.white
         #endif
     }
 
@@ -65,7 +65,7 @@ struct SavingsGoalCard: View {
             // Header
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(goal.name)
+                    Text(self.goal.name)
                         .font(.headline)
                         .fontWeight(.semibold)
 
@@ -78,7 +78,7 @@ struct SavingsGoalCard: View {
 
                 Spacer()
 
-                if goal.isCompleted {
+                if self.goal.isCompleted {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.title2)
                         .foregroundColor(.green)
@@ -88,32 +88,33 @@ struct SavingsGoalCard: View {
             // Progress Section
             VStack(spacing: 8) {
                 HStack {
-                    Text(goal.formattedCurrentAmount)
+                    Text(self.goal.formattedCurrentAmount)
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(.green)
 
-                    Text("of \(goal.formattedTargetAmount)")
+                    Text("of \(self.goal.formattedTargetAmount)")
                         .font(.title3)
                         .foregroundColor(.secondary)
 
                     Spacer()
 
-                    Text("\(Int(goal.progressPercentage * 100))%")
+                    Text("\(Int(self.goal.progressPercentage * 100))%")
                         .font(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(.blue)
                 }
 
-                ProgressView(value: goal.progressPercentage)
+                ProgressView(value: self.goal.progressPercentage)
                     .progressViewStyle(
-                        LinearProgressViewStyle(tint: goal.isCompleted ? .green : .blue))
+                        LinearProgressViewStyle(tint: self.goal.isCompleted ? .green : .blue)
+                    )
             }
 
             // Details Row
             HStack {
-                if !goal.isCompleted {
-                    Text("Remaining: \(goal.formattedRemainingAmount)")
+                if !self.goal.isCompleted {
+                    Text("Remaining: \(self.goal.formattedRemainingAmount)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 } else {
@@ -133,7 +134,7 @@ struct SavingsGoalCard: View {
             }
         }
         .padding()
-        .background(backgroundColor)
+        .background(self.backgroundColor)
         .cornerRadius(12)
         .shadow(radius: 2)
     }

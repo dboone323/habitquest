@@ -13,18 +13,19 @@ final class FinancialAccountModelTests: XCTestCase {
             FinancialAccount.self, FinancialTransaction.self, ExpenseCategory.self,
         ])
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        modelContainer = try ModelContainer(for: schema, configurations: [configuration])
-        modelContext = ModelContext(modelContainer)
+        self.modelContainer = try ModelContainer(for: schema, configurations: [configuration])
+        self.modelContext = ModelContext(self.modelContainer)
     }
 
     override func tearDownWithError() throws {
-        modelContainer = nil
-        modelContext = nil
+        self.modelContainer = nil
+        self.modelContext = nil
     }
 
     func testAccountCreation() throws {
         let account = FinancialAccount(
-            name: "Checking", balance: 1000.0, iconName: "bank", accountType: .checking)
+            name: "Checking", balance: 1000.0, iconName: "bank", accountType: .checking
+        )
         XCTAssertEqual(account.name, "Checking")
         XCTAssertEqual(account.balance, 1000.0)
         XCTAssertEqual(account.accountType, .checking)
@@ -32,9 +33,10 @@ final class FinancialAccountModelTests: XCTestCase {
 
     func testAccountPersistence() throws {
         let account = FinancialAccount(
-            name: "Savings", balance: 5000.0, iconName: "piggy", accountType: .savings)
-        modelContext.insert(account)
-        try modelContext.save()
+            name: "Savings", balance: 5000.0, iconName: "piggy", accountType: .savings
+        )
+        self.modelContext.insert(account)
+        try self.modelContext.save()
         let fetchRequest = FetchDescriptor<FinancialAccount>()
         let savedAccounts = try modelContext.fetch(fetchRequest)
         XCTAssertEqual(savedAccounts.count, 1)
@@ -43,18 +45,22 @@ final class FinancialAccountModelTests: XCTestCase {
 
     func testUpdateBalanceForIncomeTransaction() throws {
         let account = FinancialAccount(
-            name: "Main", balance: 100.0, iconName: "wallet", accountType: .checking)
+            name: "Main", balance: 100.0, iconName: "wallet", accountType: .checking
+        )
         let transaction = FinancialTransaction(
-            title: "Paycheck", amount: 500.0, date: Date(), transactionType: .income)
+            title: "Paycheck", amount: 500.0, date: Date(), transactionType: .income
+        )
         account.updateBalance(for: transaction)
         XCTAssertEqual(account.balance, 600.0)
     }
 
     func testUpdateBalanceForExpenseTransaction() throws {
         let account = FinancialAccount(
-            name: "Main", balance: 100.0, iconName: "wallet", accountType: .checking)
+            name: "Main", balance: 100.0, iconName: "wallet", accountType: .checking
+        )
         let transaction = FinancialTransaction(
-            title: "Groceries", amount: 40.0, date: Date(), transactionType: .expense)
+            title: "Groceries", amount: 40.0, date: Date(), transactionType: .expense
+        )
         account.updateBalance(for: transaction)
         XCTAssertEqual(account.balance, 60.0)
     }
@@ -62,7 +68,8 @@ final class FinancialAccountModelTests: XCTestCase {
     func testAccountWithCreditLimit() throws {
         let account = FinancialAccount(
             name: "Credit Card", balance: -200.0, iconName: "creditcard", accountType: .credit,
-            creditLimit: 1000.0)
+            creditLimit: 1000.0
+        )
         XCTAssertEqual(account.creditLimit, 1000.0)
         XCTAssertEqual(account.accountType, .credit)
     }

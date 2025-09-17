@@ -36,7 +36,7 @@ final class ColorTheme {
 
     /// Returns if the current effective color scheme is dark
     var isDarkMode: Bool {
-        switch currentThemeMode {
+        switch self.currentThemeMode {
         case .light:
             return false
         case .dark:
@@ -56,79 +56,79 @@ final class ColorTheme {
 
     // Background colors
     var background: Color {
-        themeColor(light: ColorDefinitions.background(.light), dark: ColorDefinitions.background(.dark))
+        self.themeColor(light: ColorDefinitions.background(.light), dark: ColorDefinitions.background(.dark))
     }
 
     var secondaryBackground: Color {
-        themeColor(light: ColorDefinitions.secondaryBackground(.light), dark: ColorDefinitions.secondaryBackground(.dark))
+        self.themeColor(light: ColorDefinitions.secondaryBackground(.light), dark: ColorDefinitions.secondaryBackground(.dark))
     }
 
     var groupedBackground: Color {
-        themeColor(light: ColorDefinitions.groupedBackground(.light), dark: ColorDefinitions.groupedBackground(.dark))
+        self.themeColor(light: ColorDefinitions.groupedBackground(.light), dark: ColorDefinitions.groupedBackground(.dark))
     }
 
     var cardBackground: Color {
-        themeColor(light: ColorDefinitions.cardBackground(.light), dark: ColorDefinitions.cardBackground(.dark))
+        self.themeColor(light: ColorDefinitions.cardBackground(.light), dark: ColorDefinitions.cardBackground(.dark))
     }
 
     var primaryBackground: Color {
-        background
+        self.background
     }
 
     // Text colors
     var primaryText: Color {
-        themeColor(light: ColorDefinitions.text(.primary, .light), dark: ColorDefinitions.text(.primary, .dark))
+        self.themeColor(light: ColorDefinitions.text(.primary, .light), dark: ColorDefinitions.text(.primary, .dark))
     }
 
     var secondaryText: Color {
-        themeColor(light: ColorDefinitions.text(.secondary, .light), dark: ColorDefinitions.text(.secondary, .dark))
+        self.themeColor(light: ColorDefinitions.text(.secondary, .light), dark: ColorDefinitions.text(.secondary, .dark))
     }
 
     var tertiaryText: Color {
-        themeColor(light: ColorDefinitions.text(.tertiary, .light), dark: ColorDefinitions.text(.tertiary, .dark))
+        self.themeColor(light: ColorDefinitions.text(.tertiary, .light), dark: ColorDefinitions.text(.tertiary, .dark))
     }
 
     // Accent colors
     var accentPrimary: Color {
-        themeColor(light: ColorDefinitions.accent(.primary, .light), dark: ColorDefinitions.accent(.primary, .dark))
+        self.themeColor(light: ColorDefinitions.accent(.primary, .light), dark: ColorDefinitions.accent(.primary, .dark))
     }
 
     var accentSecondary: Color {
-        themeColor(light: ColorDefinitions.accent(.secondary, .light), dark: ColorDefinitions.accent(.secondary, .dark))
+        self.themeColor(light: ColorDefinitions.accent(.secondary, .light), dark: ColorDefinitions.accent(.secondary, .dark))
     }
 
     // Financial colors
     var income: Color {
-        themeColor(light: ColorDefinitions.financial(.income, .light), dark: ColorDefinitions.financial(.income, .dark))
+        self.themeColor(light: ColorDefinitions.financial(.income, .light), dark: ColorDefinitions.financial(.income, .dark))
     }
 
     var expense: Color {
-        themeColor(light: ColorDefinitions.financial(.expense, .light), dark: ColorDefinitions.financial(.expense, .dark))
+        self.themeColor(light: ColorDefinitions.financial(.expense, .light), dark: ColorDefinitions.financial(.expense, .dark))
     }
 
     var savings: Color {
-        themeColor(light: ColorDefinitions.financial(.savings, .light), dark: ColorDefinitions.financial(.savings, .dark))
+        self.themeColor(light: ColorDefinitions.financial(.savings, .light), dark: ColorDefinitions.financial(.savings, .dark))
     }
 
     var warning: Color {
-        themeColor(light: ColorDefinitions.financial(.warning, .light), dark: ColorDefinitions.financial(.warning, .dark))
+        self.themeColor(light: ColorDefinitions.financial(.warning, .light), dark: ColorDefinitions.financial(.warning, .dark))
     }
 
     var critical: Color {
-        themeColor(light: ColorDefinitions.financial(.critical, .light), dark: ColorDefinitions.financial(.critical, .dark))
+        self.themeColor(light: ColorDefinitions.financial(.critical, .light), dark: ColorDefinitions.financial(.critical, .dark))
     }
 
     // Budget progress colors
     var budgetUnder: Color {
-        themeColor(light: ColorDefinitions.budget(.under, .light), dark: ColorDefinitions.budget(.under, .dark))
+        self.themeColor(light: ColorDefinitions.budget(.under, .light), dark: ColorDefinitions.budget(.under, .dark))
     }
 
     var budgetNear: Color {
-        themeColor(light: ColorDefinitions.budget(.near, .light), dark: ColorDefinitions.budget(.near, .dark))
+        self.themeColor(light: ColorDefinitions.budget(.near, .light), dark: ColorDefinitions.budget(.near, .dark))
     }
 
     var budgetOver: Color {
-        themeColor(light: ColorDefinitions.budget(.over, .light), dark: ColorDefinitions.budget(.over, .dark))
+        self.themeColor(light: ColorDefinitions.budget(.over, .light), dark: ColorDefinitions.budget(.over, .dark))
     }
 
     // Category colors - used for visualizations and charts
@@ -140,7 +140,7 @@ final class ColorTheme {
 
     /// Returns the appropriate color based on the current theme mode
     private func themeColor(light: Color, dark: Color) -> Color {
-        switch currentThemeMode {
+        switch self.currentThemeMode {
         case .light:
             return light
         case .dark:

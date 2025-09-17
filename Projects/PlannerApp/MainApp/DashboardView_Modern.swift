@@ -33,7 +33,7 @@ struct DashboardView: View {
         let formatter = DateFormatter()
         formatter.dateStyle = .none
         formatter.timeStyle = .short
-        formatter.locale = Locale(identifier: use24HourTime ? "en_GB" : "en_US")
+        formatter.locale = Locale(identifier: self.use24HourTime ? "en_GB" : "en_US")
         return formatter
     }
 
@@ -41,9 +41,9 @@ struct DashboardView: View {
         NavigationStack {
             ScrollView {
                 #if os(iOS)
-                    PullToRefresh(coordinateSpaceName: "pullToRefresh") {
-                        await refreshDataWithDelay()
-                    }
+                PullToRefresh(coordinateSpaceName: "pullToRefresh") {
+                    await self.refreshDataWithDelay()
+                }
                 #endif
 
                 LazyVStack(spacing: 20) {
@@ -51,34 +51,34 @@ struct DashboardView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text(greetingText)
+                                Text(self.greetingText)
                                     .font(.title2)
                                     .fontWeight(.medium)
-                                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 
-                                if !userName.isEmpty {
-                                    Text(userName)
+                                if !self.userName.isEmpty {
+                                    Text(self.userName)
                                         .font(.title)
                                         .fontWeight(.bold)
-                                        .foregroundColor(themeManager.currentTheme.primaryAccentColor)
+                                        .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
                                 }
 
-                                Text(dateFormatter.string(from: Date()))
+                                Text(self.dateFormatter.string(from: Date()))
                                     .font(.subheadline)
-                                    .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
                             }
 
                             Spacer()
 
                             VStack(alignment: .trailing, spacing: 4) {
-                                Text(timeFormatter.string(from: Date()))
+                                Text(self.timeFormatter.string(from: Date()))
                                     .font(.title2)
                                     .fontWeight(.semibold)
-                                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 
                                 Text("Today")
                                     .font(.caption)
-                                    .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
                             }
                         }
                     }
@@ -89,23 +89,23 @@ struct DashboardView: View {
                     HStack(spacing: 16) {
                         QuickStatCard(
                             title: "Tasks",
-                            value: "\(viewModel.totalTasks)",
-                            subtitle: "\(viewModel.completedTasks) completed",
+                            value: "\(self.viewModel.totalTasks)",
+                            subtitle: "\(self.viewModel.completedTasks) completed",
                             icon: "checkmark.circle.fill",
-                            color: themeManager.currentTheme.primaryAccentColor
+                            color: self.themeManager.currentTheme.primaryAccentColor
                         )
 
                         QuickStatCard(
                             title: "Goals",
-                            value: "\(viewModel.totalGoals)",
-                            subtitle: "\(viewModel.completedGoals) achieved",
+                            value: "\(self.viewModel.totalGoals)",
+                            subtitle: "\(self.viewModel.completedGoals) achieved",
                             icon: "target",
                             color: .green
                         )
 
                         QuickStatCard(
                             title: "Events",
-                            value: "\(viewModel.todayEvents)",
+                            value: "\(self.viewModel.todayEvents)",
                             subtitle: "today",
                             icon: "calendar",
                             color: .orange
@@ -119,7 +119,7 @@ struct DashboardView: View {
                             Text("Quick Actions")
                                 .font(.title3)
                                 .fontWeight(.semibold)
-                                .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
                             Spacer()
                         }
 
@@ -127,9 +127,9 @@ struct DashboardView: View {
                             QuickActionCard(
                                 title: "Add Task",
                                 icon: "plus.circle.fill",
-                                color: themeManager.currentTheme.primaryAccentColor
+                                color: self.themeManager.currentTheme.primaryAccentColor
                             ) {
-                                handleQuickAction(.addTask)
+                                self.handleQuickAction(.addTask)
                             }
 
                             QuickActionCard(
@@ -137,7 +137,7 @@ struct DashboardView: View {
                                 icon: "target",
                                 color: .green
                             ) {
-                                handleQuickAction(.addGoal)
+                                self.handleQuickAction(.addGoal)
                             }
 
                             QuickActionCard(
@@ -145,7 +145,7 @@ struct DashboardView: View {
                                 icon: "calendar.badge.plus",
                                 color: .orange
                             ) {
-                                handleQuickAction(.addEvent)
+                                self.handleQuickAction(.addEvent)
                             }
 
                             QuickActionCard(
@@ -153,7 +153,7 @@ struct DashboardView: View {
                                 icon: "book.fill",
                                 color: .purple
                             ) {
-                                handleQuickAction(.addJournal)
+                                self.handleQuickAction(.addJournal)
                             }
                         }
                     }
@@ -165,7 +165,7 @@ struct DashboardView: View {
                             Text("Recent Activities")
                                 .font(.title3)
                                 .fontWeight(.semibold)
-                                .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 
                             Spacer()
 
@@ -174,27 +174,27 @@ struct DashboardView: View {
                                 print("View All tapped")
                             }
                             .font(.caption)
-                            .foregroundColor(themeManager.currentTheme.primaryAccentColor)
+                            .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
                         }
 
                         LazyVStack(spacing: 12) {
-                            ForEach(viewModel.recentActivities.prefix(dashboardItemLimit), id: \.id) { activity in
+                            ForEach(self.viewModel.recentActivities.prefix(self.dashboardItemLimit), id: \.id) { activity in
                                 ActivityRowView(activity: activity)
                             }
 
-                            if viewModel.recentActivities.isEmpty {
+                            if self.viewModel.recentActivities.isEmpty {
                                 VStack(spacing: 12) {
                                     Image(systemName: "tray")
                                         .font(.system(size: 40))
-                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
 
                                     Text("No recent activities")
                                         .font(.subheadline)
-                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
 
                                     Text("Start by creating a task or goal!")
                                         .font(.caption)
-                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
                                 }
                                 .padding(.vertical, 40)
                             }
@@ -208,7 +208,7 @@ struct DashboardView: View {
                             Text("Upcoming")
                                 .font(.title3)
                                 .fontWeight(.semibold)
-                                .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 
                             Spacer()
 
@@ -217,27 +217,27 @@ struct DashboardView: View {
                                 print("View Calendar tapped")
                             }
                             .font(.caption)
-                            .foregroundColor(themeManager.currentTheme.primaryAccentColor)
+                            .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
                         }
 
                         LazyVStack(spacing: 12) {
-                            ForEach(viewModel.upcomingItems.prefix(dashboardItemLimit), id: \.id) { item in
+                            ForEach(self.viewModel.upcomingItems.prefix(self.dashboardItemLimit), id: \.id) { item in
                                 UpcomingItemView(item: item)
                             }
 
-                            if viewModel.upcomingItems.isEmpty {
+                            if self.viewModel.upcomingItems.isEmpty {
                                 VStack(spacing: 12) {
                                     Image(systemName: "calendar")
                                         .font(.system(size: 40))
-                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
 
                                     Text("Nothing upcoming")
                                         .font(.subheadline)
-                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
 
                                     Text("Schedule some events to see them here")
                                         .font(.caption)
-                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
                                 }
                                 .padding(.vertical, 40)
                             }
@@ -252,14 +252,14 @@ struct DashboardView: View {
             #if os(iOS)
             .coordinateSpace(name: "pullToRefresh")
             #endif
-            .background(themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
+            .background(self.themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
             .navigationTitle("Dashboard")
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
                 .overlay(
                     Group {
-                        if showLoadingOverlay {
+                        if self.showLoadingOverlay {
                             ZStack {
                                 Color.black.opacity(0.3)
                                     .ignoresSafeArea()
@@ -267,16 +267,16 @@ struct DashboardView: View {
                                 VStack(spacing: 16) {
                                     ProgressView()
                                         .scaleEffect(1.5)
-                                        .tint(themeManager.currentTheme.primaryAccentColor)
+                                        .tint(self.themeManager.currentTheme.primaryAccentColor)
 
                                     Text("Refreshing...")
                                         .font(.subheadline)
-                                        .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                                        .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
                                 }
                                 .padding(32)
                                 .background(
                                     RoundedRectangle(cornerRadius: 16)
-                                        .fill(themeManager.currentTheme.secondaryBackgroundColor)
+                                        .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
                                         .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
                                 )
                             }
@@ -286,24 +286,24 @@ struct DashboardView: View {
         }
         .onAppear {
             _Concurrency.Task { @MainActor in
-                await refreshData()
+                await self.refreshData()
             }
         }
-        .sheet(isPresented: $showAddTask) {
+        .sheet(isPresented: self.$showAddTask) {
             TaskManagerView()
-                .environmentObject(themeManager)
+                .environmentObject(self.themeManager)
         }
-        .sheet(isPresented: $showAddGoal) {
-            AddGoalView(goals: $viewModel.allGoals)
-                .environmentObject(themeManager)
+        .sheet(isPresented: self.$showAddGoal) {
+            AddGoalView(goals: self.$viewModel.allGoals)
+                .environmentObject(self.themeManager)
         }
-        .sheet(isPresented: $showAddEvent) {
-            AddCalendarEventView(events: $viewModel.allEvents)
-                .environmentObject(themeManager)
+        .sheet(isPresented: self.$showAddEvent) {
+            AddCalendarEventView(events: self.$viewModel.allEvents)
+                .environmentObject(self.themeManager)
         }
-        .sheet(isPresented: $showAddJournal) {
-            AddJournalEntryView(journalEntries: $viewModel.allJournalEntries)
-                .environmentObject(themeManager)
+        .sheet(isPresented: self.$showAddJournal) {
+            AddJournalEntryView(journalEntries: self.$viewModel.allJournalEntries)
+                .environmentObject(self.themeManager)
         }
     }
 
@@ -316,53 +316,53 @@ struct DashboardView: View {
     private func handleQuickAction(_ action: QuickAction) {
         // Add haptic feedback for better UX
         #if os(iOS)
-            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-            impactFeedback.impactOccurred()
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.impactOccurred()
         #endif
 
         switch action {
         case .addTask:
-            showAddTask = true
+            self.showAddTask = true
 
         case .addGoal:
-            showAddGoal = true
+            self.showAddGoal = true
 
         case .addEvent:
-            showAddEvent = true
+            self.showAddEvent = true
 
         case .addJournal:
-            showAddJournal = true
+            self.showAddJournal = true
         }
     }
 
     @MainActor
     private func refreshData() async {
-        guard !isRefreshing else { return } // Prevent multiple concurrent refreshes
+        guard !self.isRefreshing else { return } // Prevent multiple concurrent refreshes
 
-        isRefreshing = true
-        showLoadingOverlay = true
+        self.isRefreshing = true
+        self.showLoadingOverlay = true
 
         // Small delay to ensure UI updates are visible
         try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
 
         // Perform data refresh asynchronously
-        await viewModel.refreshData()
+        await self.viewModel.refreshData()
 
         // Small delay to ensure UI has time to update with new data
         try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
 
-        isRefreshing = false
-        showLoadingOverlay = false
+        self.isRefreshing = false
+        self.showLoadingOverlay = false
     }
 
     @MainActor
     private func refreshDataWithDelay() async {
-        guard !isRefreshing else { return } // Prevent multiple concurrent refreshes
+        guard !self.isRefreshing else { return } // Prevent multiple concurrent refreshes
 
-        showLoadingOverlay = true
+        self.showLoadingOverlay = true
         await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay for demonstration
-        await viewModel.refreshData()
-        showLoadingOverlay = false
+        await self.viewModel.refreshData()
+        self.showLoadingOverlay = false
     }
 
     private var greetingText: String {
@@ -394,31 +394,31 @@ struct QuickStatCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Image(systemName: icon)
-                    .foregroundColor(color)
+                Image(systemName: self.icon)
+                    .foregroundColor(self.color)
                     .font(.title3)
 
                 Spacer()
             }
 
-            Text(value)
+            Text(self.value)
                 .font(.title2)
                 .fontWeight(.bold)
-                .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 
-            Text(title)
+            Text(self.title)
                 .font(.caption)
                 .fontWeight(.medium)
-                .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 
-            Text(subtitle)
+            Text(self.subtitle)
                 .font(.caption2)
-                .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
         }
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(themeManager.currentTheme.secondaryBackgroundColor)
+                .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
                 .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
         )
     }
@@ -433,23 +433,23 @@ struct QuickActionCard: View {
     @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
-        Button(action: action).accessibilityLabel("Button") {
+        Button(action: self.action).accessibilityLabel("Button") {
             VStack(spacing: 12) {
-                Image(systemName: icon)
+                Image(systemName: self.icon)
                     .font(.title2)
-                    .foregroundColor(color)
+                    .foregroundColor(self.color)
 
-                Text(title)
+                Text(self.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
                     .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 20)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(themeManager.currentTheme.secondaryBackgroundColor)
+                    .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
                     .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
             )
         }
@@ -463,33 +463,33 @@ struct ActivityRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: activity.icon)
-                .foregroundColor(activity.color)
+            Image(systemName: self.activity.icon)
+                .foregroundColor(self.activity.color)
                 .font(.title3)
                 .frame(width: 24, height: 24)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(activity.title)
+                Text(self.activity.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 
-                Text(activity.subtitle)
+                Text(self.activity.subtitle)
                     .font(.caption)
-                    .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
             }
 
             Spacer()
 
-            Text(timeAgoString(from: activity.timestamp))
+            Text(self.timeAgoString(from: self.activity.timestamp))
                 .font(.caption2)
-                .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(themeManager.currentTheme.secondaryBackgroundColor)
+                .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
                 .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
         )
     }
@@ -519,46 +519,46 @@ struct UpcomingItemView: View {
     var body: some View {
         HStack(spacing: 12) {
             VStack(spacing: 4) {
-                Text(dayFormatter.string(from: item.date))
+                Text(self.dayFormatter.string(from: self.item.date))
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
 
-                Text(dayNumberFormatter.string(from: item.date))
+                Text(self.dayNumberFormatter.string(from: self.item.date))
                     .font(.title3)
                     .fontWeight(.bold)
-                    .foregroundColor(themeManager.currentTheme.primaryAccentColor)
+                    .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
             }
             .frame(width: 40)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(item.title)
+                Text(self.item.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
+                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 
                 if let subtitle = item.subtitle {
                     Text(subtitle)
                         .font(.caption)
-                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
                 }
 
-                Text(timeFormatter.string(from: item.date))
+                Text(self.timeFormatter.string(from: self.item.date))
                     .font(.caption2)
-                    .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
             }
 
             Spacer()
 
-            Image(systemName: item.icon)
-                .foregroundColor(item.color)
+            Image(systemName: self.item.icon)
+                .foregroundColor(self.item.color)
                 .font(.title3)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(themeManager.currentTheme.secondaryBackgroundColor)
+                .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
                 .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
         )
     }

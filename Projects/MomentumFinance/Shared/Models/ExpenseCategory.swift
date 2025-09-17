@@ -49,10 +49,10 @@ public final class ExpenseCategory: Hashable {
         }
 
         return
-            transactions
-            .filter { $0.transactionType == .expense }
-            .filter { $0.date >= startOfMonth && $0.date < endOfMonth }
-            .reduce(0) { $0 + $1.amount }
+            self.transactions
+                .filter { $0.transactionType == .expense }
+                .filter { $0.date >= startOfMonth && $0.date < endOfMonth }
+                .reduce(0) { $0 + $1.amount }
     }
 
     // MARK: - Hashable Conformance

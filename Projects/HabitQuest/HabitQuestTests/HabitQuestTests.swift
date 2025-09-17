@@ -11,7 +11,6 @@ import XCTest
 @testable import HabitQuest
 
 final class HabitQuestTests: XCTestCase {
-
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -26,20 +25,22 @@ final class HabitQuestTests: XCTestCase {
         // Test basic habit creation
         let habit = Habit(
             name: "Test Habit", habitDescription: "A test habit", frequency: .daily,
-            xpValue: 10)
+            xpValue: 10
+        )
 
         XCTAssertEqual(habit.name, "Test Habit")
         XCTAssertEqual(habit.habitDescription, "A test habit")
         XCTAssertEqual(habit.frequency, .daily)
         XCTAssertEqual(habit.xpValue, 10)
-        XCTAssertEqual(habit.streak, 0)  // Default streak should be 0
-        XCTAssertTrue(habit.isActive)  // Default should be active
+        XCTAssertEqual(habit.streak, 0) // Default streak should be 0
+        XCTAssertTrue(habit.isActive) // Default should be active
     }
 
     func testHabitWithCustomFrequency() throws {
         // Test habit with weekly frequency
         let habit = Habit(
-            name: "Weekly Habit", habitDescription: "Weekly test", frequency: .weekly, xpValue: 25)
+            name: "Weekly Habit", habitDescription: "Weekly test", frequency: .weekly, xpValue: 25
+        )
 
         XCTAssertEqual(habit.name, "Weekly Habit")
         XCTAssertEqual(habit.frequency, .weekly)
@@ -52,7 +53,8 @@ final class HabitQuestTests: XCTestCase {
         // Test habit completion tracking
         let habit = Habit(
             name: "Daily Exercise", habitDescription: "Exercise daily", frequency: .daily,
-            xpValue: 20)
+            xpValue: 20
+        )
 
         // Simulate completion by setting streak
         habit.streak = 1
@@ -65,7 +67,8 @@ final class HabitQuestTests: XCTestCase {
     func testHabitStreakCalculation() throws {
         // Test streak calculation logic
         let habit = Habit(
-            name: "Reading", habitDescription: "Read daily", frequency: .daily, xpValue: 15)
+            name: "Reading", habitDescription: "Read daily", frequency: .daily, xpValue: 15
+        )
 
         // Simulate multiple completions
         habit.streak = 5
@@ -79,10 +82,10 @@ final class HabitQuestTests: XCTestCase {
         // Test player profile creation
         let profile = PlayerProfile()
 
-        XCTAssertEqual(profile.level, 1)  // Should start at level 1
-        XCTAssertEqual(profile.currentXP, 0)  // Should start with 0 XP
-        XCTAssertEqual(profile.xpForNextLevel, 100)  // Should need 100 XP for level 2
-        XCTAssertEqual(profile.longestStreak, 0)  // Should start with 0 longest streak
+        XCTAssertEqual(profile.level, 1) // Should start at level 1
+        XCTAssertEqual(profile.currentXP, 0) // Should start with 0 XP
+        XCTAssertEqual(profile.xpForNextLevel, 100) // Should need 100 XP for level 2
+        XCTAssertEqual(profile.longestStreak, 0) // Should start with 0 longest streak
     }
 
     func testPlayerLevelProgression() throws {
@@ -114,8 +117,8 @@ final class HabitQuestTests: XCTestCase {
         XCTAssertEqual(achievement.achievementDescription, "Complete your first habit")
         XCTAssertEqual(achievement.xpReward, 50)
         XCTAssertFalse(achievement.isHidden)
-        XCTAssertEqual(achievement.progress, 0.0)  // Should start with 0 progress
-        XCTAssertNil(achievement.unlockedDate)  // Should not be unlocked initially
+        XCTAssertEqual(achievement.progress, 0.0) // Should start with 0 progress
+        XCTAssertNil(achievement.unlockedDate) // Should not be unlocked initially
     }
 
     func testAchievementUnlock() throws {
@@ -144,7 +147,8 @@ final class HabitQuestTests: XCTestCase {
         // Test basic analytics calculations
         let habit = Habit(
             name: "Test Analytics", habitDescription: "Analytics test", frequency: .daily,
-            xpValue: 10)
+            xpValue: 10
+        )
 
         // Add some mock data
         habit.streak = 3
@@ -158,7 +162,8 @@ final class HabitQuestTests: XCTestCase {
         // Test completion rate calculations
         let habit = Habit(
             name: "Completion Test", habitDescription: "Test completion rates", frequency: .daily,
-            xpValue: 10)
+            xpValue: 10
+        )
 
         // Simulate completion history
         habit.streak = 7
@@ -174,7 +179,8 @@ final class HabitQuestTests: XCTestCase {
         // Test habit data validation
         let validHabit = Habit(
             name: "Valid Habit", habitDescription: "Valid description", frequency: .daily,
-            xpValue: 10)
+            xpValue: 10
+        )
 
         XCTAssertFalse(validHabit.name.isEmpty)
         XCTAssertEqual(validHabit.xpValue, 10)
@@ -184,7 +190,8 @@ final class HabitQuestTests: XCTestCase {
     func testInvalidHabitData() throws {
         // Test handling of invalid habit data
         let emptyNameHabit = Habit(
-            name: "", habitDescription: "Empty name test", frequency: .daily, xpValue: 5)
+            name: "", habitDescription: "Empty name test", frequency: .daily, xpValue: 5
+        )
 
         XCTAssertTrue(emptyNameHabit.name.isEmpty)
         XCTAssertEqual(emptyNameHabit.xpValue, 5)
@@ -198,10 +205,11 @@ final class HabitQuestTests: XCTestCase {
         let startTime = Date()
 
         // Create multiple habits
-        for i in 1...10 {  // Reduced from 100 to 10 for more reliable performance test
-            let _ = Habit(
+        for i in 1 ... 10 { // Reduced from 100 to 10 for more reliable performance test
+            _ = Habit(
                 name: "Habit \(i)", habitDescription: "Performance test habit", frequency: .daily,
-                xpValue: 10)
+                xpValue: 10
+            )
         }
 
         let endTime = Date()
@@ -214,12 +222,13 @@ final class HabitQuestTests: XCTestCase {
         // Test performance of streak calculations
         let habit = Habit(
             name: "Performance Test", habitDescription: "Streak performance test",
-            frequency: .daily, xpValue: 10)
+            frequency: .daily, xpValue: 10
+        )
 
         let startTime = Date()
 
         // Simulate many streak updates
-        for i in 1...100 {  // Reduced from 1000 to 100 for more reliable performance test
+        for i in 1 ... 100 { // Reduced from 1000 to 100 for more reliable performance test
             habit.streak = i
         }
 

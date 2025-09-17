@@ -64,9 +64,9 @@ enum DataParser {
             lowerType.contains("payment received") {
             return .income
         } else if lowerType.contains("expense") ||
-                    lowerType.contains("debit") ||
-                    lowerType.contains("withdrawal") ||
-                    lowerType.contains("payment") {
+            lowerType.contains("debit") ||
+            lowerType.contains("withdrawal") ||
+            lowerType.contains("payment") {
             return .expense
         } else {
             // Fallback to amount-based detection

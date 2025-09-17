@@ -166,7 +166,7 @@ enum AchievementService {
             achievement.progress = newProgress
 
             // Check if achievement was just unlocked
-            if newProgress >= 1.0 && previousProgress < 1.0 {
+            if newProgress >= 1.0, previousProgress < 1.0 {
                 unlockAchievement(achievement, for: player)
                 newlyUnlocked.append(achievement)
                 logger.info("Achievement unlocked: \(achievement.name)")
@@ -184,21 +184,21 @@ enum AchievementService {
         logs: [HabitLog]
     ) -> Float {
         switch achievement.requirement {
-        case .streakDays(let targetDays):
+        case let .streakDays(targetDays):
             let maxStreak = habits.map(\.streak).max() ?? 0
             return min(Float(maxStreak) / Float(targetDays), 1.0)
 
-        case .totalCompletions(let targetCount):
+        case let .totalCompletions(targetCount):
             let totalCompletions = logs.count
             return min(Float(totalCompletions) / Float(targetCount), 1.0)
 
-        case .reachLevel(let targetLevel):
+        case let .reachLevel(targetLevel):
             return min(Float(player.level) / Float(targetLevel), 1.0)
 
         case .perfectWeek:
-            return calculatePerfectWeekProgress(habits: habits, logs: logs)
+            return self.calculatePerfectWeekProgress(habits: habits, logs: logs)
 
-        case .habitVariety(let targetCount):
+        case let .habitVariety(targetCount):
             let activeHabits = habits.filter { habit in
                 // Consider a habit active if it has been completed in the last 7 days
                 let logs = habit.logs
@@ -208,13 +208,13 @@ enum AchievementService {
             return min(Float(activeHabits.count) / Float(targetCount), 1.0)
 
         case .earlyBird:
-            return calculateTimeBasedProgress(logs: logs, beforeHour: 9, targetDays: 7)
+            return self.calculateTimeBasedProgress(logs: logs, beforeHour: 9, targetDays: 7)
 
         case .nightOwl:
-            return calculateTimeBasedProgress(logs: logs, afterHour: 21, targetDays: 7)
+            return self.calculateTimeBasedProgress(logs: logs, afterHour: 21, targetDays: 7)
 
         case .weekendWarrior:
-            return calculateWeekendWarriorProgress(logs: logs)
+            return self.calculateWeekendWarriorProgress(logs: logs)
         }
     }
 
@@ -229,10 +229,10 @@ enum AchievementService {
             for: player
         )
 
-        logger.info("Achievement '\(achievement.name)' unlocked! Awarded \(achievement.xpReward) XP")
+        self.logger.info("Achievement '\(achievement.name)' unlocked! Awarded \(achievement.xpReward) XP")
 
         if levelUpResult.leveledUp {
-            logger.info("Level up occurred from achievement XP! New level: \(levelUpResult.newLevel)")
+            self.logger.info("Level up occurred from achievement XP! New level: \(levelUpResult.newLevel)")
         }
     }
 
@@ -254,7 +254,7 @@ enum AchievementService {
             // Check if all active habits were completed that day
             let activeHabitsCount = habits.count // Simplified - could be more sophisticated
 
-            if uniqueHabitsCompletedThatDay.count >= activeHabitsCount && activeHabitsCount > 0 {
+            if uniqueHabitsCompletedThatDay.count >= activeHabitsCount, activeHabitsCount > 0 {
                 consecutivePerfectDays += 1
                 maxConsecutiveDays = max(maxConsecutiveDays, consecutivePerfectDays)
             } else {

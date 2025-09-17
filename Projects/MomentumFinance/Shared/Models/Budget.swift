@@ -35,23 +35,23 @@ public final class Budget {
     /// The total amount spent for this budget's category and month.
     var spentAmount: Double {
         guard let category else { return 0.0 }
-        return category.totalSpent(for: month)
+        return category.totalSpent(for: self.month)
     }
 
     /// The remaining amount available in the budget.
     var remainingAmount: Double {
-        max(0, limitAmount - spentAmount)
+        max(0, self.limitAmount - self.spentAmount)
     }
 
     /// The budget progress as a percentage (0.0 to 1.0+).
     var progressPercentage: Double {
-        guard limitAmount > 0 else { return 0.0 }
-        return spentAmount / limitAmount
+        guard self.limitAmount > 0 else { return 0.0 }
+        return self.spentAmount / self.limitAmount
     }
 
     /// Whether the budget has been exceeded.
     var isOverBudget: Bool {
-        spentAmount > limitAmount
+        self.spentAmount > self.limitAmount
     }
 
     /// The limit amount formatted as a currency string.
@@ -59,7 +59,7 @@ public final class Budget {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: limitAmount)) ?? "$0.00"
+        return formatter.string(from: NSNumber(value: self.limitAmount)) ?? "$0.00"
     }
 
     /// The spent amount formatted as a currency string.
@@ -67,7 +67,7 @@ public final class Budget {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: spentAmount)) ?? "$0.00"
+        return formatter.string(from: NSNumber(value: self.spentAmount)) ?? "$0.00"
     }
 
     /// The remaining amount formatted as a currency string.
@@ -75,13 +75,13 @@ public final class Budget {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: remainingAmount)) ?? "$0.00"
+        return formatter.string(from: NSNumber(value: self.remainingAmount)) ?? "$0.00"
     }
 
     /// The month formatted for display (e.g., "September 2025").
     var formattedMonth: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM yyyy"
-        return formatter.string(from: month)
+        return formatter.string(from: self.month)
     }
 }

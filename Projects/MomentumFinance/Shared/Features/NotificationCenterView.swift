@@ -36,25 +36,25 @@ struct NotificationCenterView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                if notificationManager.pendingNotifications.isEmpty {
+                if self.notificationManager.pendingNotifications.isEmpty {
                     EmptyNotificationsView()
                 } else {
-                    notificationsList()
+                    self.notificationsList()
                 }
             }
             .navigationTitle("Notifications")
             .toolbar {
                 ToolbarItem(placement: .automatic) {
                     Button("Done") {
-                        dismiss()
+                        self.dismiss()
                     }
                     .accessibilityLabel("Done")
                 }
 
-                if !notificationManager.pendingNotifications.isEmpty {
+                if !self.notificationManager.pendingNotifications.isEmpty {
                     ToolbarItem(placement: .automatic) {
                         Button("Clear All") {
-                            notificationManager.clearAllNotifications()
+                            self.notificationManager.clearAllNotifications()
                         }
                         .accessibilityLabel("Clear All")
                     }
@@ -62,32 +62,32 @@ struct NotificationCenterView: View {
             }
         }
         .task {
-            await loadNotifications()
+            await self.loadNotifications()
         }
     }
 
     private func loadNotifications() async {
-        notificationManager.pendingNotifications =
-            await notificationManager.getPendingNotifications()
+        self.notificationManager.pendingNotifications =
+            await self.notificationManager.getPendingNotifications()
     }
 
     @ViewBuilder
     private func notificationsList() -> some View {
         List {
-            ForEach(notificationManager.pendingNotifications, id: \.id) { notification in
+            ForEach(self.notificationManager.pendingNotifications, id: \.id) { notification in
                 ScheduledNotificationRow(
                     notification: notification,
                     onDismiss: {
-                        dismissNotification(notification)
+                        self.dismissNotification(notification)
                     },
-                    )
+                )
             }
         }
         .listStyle(PlainListStyle())
     }
 
     private func dismissNotification(_ notification: ScheduledNotification) {
-        notificationManager.pendingNotifications.removeAll { $0.id == notification.id }
+        self.notificationManager.pendingNotifications.removeAll { $0.id == notification.id }
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [
             notification.id
         ])
@@ -126,19 +126,19 @@ struct ScheduledNotificationRow: View {
     var body: some View {
         HStack(spacing: 12) {
             // Notification Type Icon
-            Image(systemName: iconForType(notification.type))
+            Image(systemName: self.iconForType(self.notification.type))
                 .font(.title2)
-                .foregroundColor(colorForType(notification.type))
+                .foregroundColor(self.colorForType(self.notification.type))
                 .frame(width: 32, height: 32)
                 .background(
                     Circle()
-                        .fill(colorForType(notification.type).opacity(0.1)),
-                    )
+                        .fill(self.colorForType(self.notification.type).opacity(0.1)),
+                )
 
             // Notification Content
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text(notification.title)
+                    Text(self.notification.title)
                         .font(.headline)
                         .foregroundColor(.primary)
 
@@ -151,14 +151,14 @@ struct ScheduledNotificationRow: View {
                     }
                 }
 
-                Text(notification.body)
+                Text(self.notification.body)
                     .font(.body)
                     .foregroundColor(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
             // Dismiss Button
-            Button(action: onDismiss) {
+            Button(action: self.onDismiss) {
                 Image(systemName: "xmark.circle.fill")
                     .font(.title3)
                     .foregroundColor(.secondary)
@@ -169,12 +169,12 @@ struct ScheduledNotificationRow: View {
         .padding(.vertical, 8)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(isHighPriority ? Color.red.opacity(0.05) : Color.clear),
-            )
+                .fill(self.isHighPriority ? Color.red.opacity(0.05) : Color.clear),
+        )
     }
 
     private var isHighPriority: Bool {
-        notification.type.contains("exceeded") || notification.type.contains("critical")
+        self.notification.type.contains("exceeded") || self.notification.type.contains("critical")
     }
 
     private func iconForType(_ type: String) -> String {

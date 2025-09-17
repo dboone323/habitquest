@@ -26,13 +26,13 @@ class NetworkMonitor {
     }
 
     private init() {
-        startMonitoring()
+        self.startMonitoring()
     }
 
     func startMonitoring() {
-        monitor.start(queue: queue)
+        self.monitor.start(queue: self.queue)
 
-        monitor.pathUpdateHandler = { [weak self] path in
+        self.monitor.pathUpdateHandler = { [weak self] path in
             self?.isConnected = path.status == .satisfied
             self?.getConnectionType(path)
 
@@ -46,18 +46,18 @@ class NetworkMonitor {
     }
 
     func stopMonitoring() {
-        monitor.cancel()
+        self.monitor.cancel()
     }
 
     private func getConnectionType(_ path: NWPath) {
         if path.usesInterfaceType(.wifi) {
-            connectionType = .wifi
+            self.connectionType = .wifi
         } else if path.usesInterfaceType(.cellular) {
-            connectionType = .cellular
+            self.connectionType = .cellular
         } else if path.usesInterfaceType(.wiredEthernet) {
-            connectionType = .ethernet
+            self.connectionType = .ethernet
         } else {
-            connectionType = .unknown
+            self.connectionType = .unknown
         }
     }
 }

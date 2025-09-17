@@ -14,34 +14,34 @@ import OSLog
 
 /// Centralized logging system for MomentumFinance
 /// Provides structured logging across different categories and severity levels
-struct Logger {
+enum Logger {
     // MARK: - Core Logger Categories
 
     static let ui = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
         category: "UI",
-        )
+    )
     static let data = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
         category: "Data",
-        )
+    )
     static let business = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
         category: "Business",
-        )
+    )
     static let network = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
         category: "Network",
-        )
+    )
     static let performance = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
         category: "Performance",
-        )
+    )
 
     private static let defaultLog = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
         category: "General",
-        )
+    )
 }
 
 // MARK: - Core Logging Methods
@@ -54,11 +54,11 @@ extension Logger {
         file: String = #file,
         function: String = #function,
         line: Int = #line,
-        ) {
+    ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
         let message =
             "\(context.isEmpty ? "" : "\(context) - ")\(error.localizedDescription) [\(source)]"
-        os_log("%@", log: defaultLog, type: .error, message)
+        os_log("%@", log: self.defaultLog, type: .error, message)
     }
 
     /// Log debug information
@@ -68,7 +68,7 @@ extension Logger {
         file: String = #file,
         function: String = #function,
         line: Int = #line,
-        ) {
+    ) {
         #if DEBUG
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
         os_log("[DEBUG] %@ [%@]", log: category, type: .debug, message, source)
@@ -94,7 +94,7 @@ extension Logger {
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
-        os_log("[BUSINESS] %@ [%@]", log: business, type: .info, message, source)
+        os_log("[BUSINESS] %@ [%@]", log: self.business, type: .info, message, source)
     }
 
     /// Log UI-related events
@@ -102,7 +102,7 @@ extension Logger {
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
-        os_log("[UI] %@ [%@]", log: ui, type: .info, message, source)
+        os_log("[UI] %@ [%@]", log: self.ui, type: .info, message, source)
     }
 
     /// Log data operations
@@ -110,7 +110,7 @@ extension Logger {
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
-        os_log("[DATA] %@ [%@]", log: data, type: .info, message, source)
+        os_log("[DATA] %@ [%@]", log: self.data, type: .info, message, source)
     }
 
     /// Log network operations
@@ -118,7 +118,7 @@ extension Logger {
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
-        os_log("[NETWORK] %@ [%@]", log: network, type: .info, message, source)
+        os_log("[NETWORK] %@ [%@]", log: self.network, type: .info, message, source)
     }
 }
 
@@ -132,8 +132,9 @@ extension Logger {
         let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
 
         os_log(
-            "[PERFORMANCE] %@ completed in %.4f seconds", log: performance, type: .info, operation,
-            timeElapsed)
+            "[PERFORMANCE] %@ completed in %.4f seconds", log: self.performance, type: .info, operation,
+            timeElapsed
+        )
         return result
     }
 
@@ -159,7 +160,7 @@ extension Logger {
     /// Log analytics events
     static func logAnalytics(_ event: String, parameters: [String: Any] = [:]) {
         let paramString = parameters.isEmpty ? "" : " | Parameters: \(parameters)"
-        os_log("[ANALYTICS] %@%@", log: defaultLog, type: .info, event, paramString)
+        os_log("[ANALYTICS] %@%@", log: self.defaultLog, type: .info, event, paramString)
     }
 }
 
@@ -173,7 +174,7 @@ extension Logger {
             let documentsPath = FileManager.default.urls(
                 for: .documentDirectory,
                 in: .userDomainMask,
-                ).first
+            ).first
         else { return }
         let logURL = documentsPath.appendingPathComponent(fileName)
 
@@ -202,18 +203,18 @@ struct PerformanceMeasurement {
     /// <#Description#>
     /// - Returns: <#description#>
     func end() {
-        let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
+        let timeElapsed = CFAbsoluteTimeGetCurrent() - self.startTime
         Logger.logInfo(
-            "[PERFORMANCE] \(operation) completed in \(String(format: "%.4f", timeElapsed)) seconds",
+            "[PERFORMANCE] \(self.operation) completed in \(String(format: "%.4f", timeElapsed)) seconds",
             category: Logger.performance,
-            )
+        )
     }
 }
 
 // MARK: - Extensions
 
-extension DateFormatter {
-    fileprivate static let logFormatter: DateFormatter = {
+fileprivate extension DateFormatter {
+    static let logFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         return formatter

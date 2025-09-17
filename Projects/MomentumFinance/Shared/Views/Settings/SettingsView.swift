@@ -2,6 +2,7 @@ import LocalAuthentication
 import SwiftUI
 
 // MARK: - Settings View Coordinator
+
 struct SettingsView: View {
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @AppStorage("biometricEnabled") private var biometricEnabled = false
@@ -10,12 +11,14 @@ struct SettingsView: View {
     private var authenticationTimeout: Binding<Int> {
         Binding(
             get: {
-                Int(authenticationTimeoutRaw) ?? 300
+                Int(self.authenticationTimeoutRaw) ?? 300
             },
             set: { newVal in
-                authenticationTimeoutRaw = String(newVal)
-            })
+                self.authenticationTimeoutRaw = String(newVal)
+            }
+        )
     }
+
     @AppStorage("hapticFeedbackEnabled") private var hapticFeedbackEnabled = true
     @AppStorage("reducedMotion") private var reducedMotion = false
     @AppStorage("highContrastMode") private var highContrastMode = false
@@ -31,11 +34,12 @@ struct SettingsView: View {
     private var darkModePreference: Binding<DarkModePreference> {
         Binding(
             get: {
-                DarkModePreference(rawValue: darkModePreferenceRaw) ?? .system
+                DarkModePreference(rawValue: self.darkModePreferenceRaw) ?? .system
             },
             set: { newVal in
-                darkModePreferenceRaw = newVal.rawValue
-            })
+                self.darkModePreferenceRaw = newVal.rawValue
+            }
+        )
     }
 
     var body: some View {
@@ -43,24 +47,24 @@ struct SettingsView: View {
             List {
                 // Security Settings Section
                 Section(header: Text("Security")) {
-                    Toggle("Biometric Authentication", isOn: $biometricEnabled)
-                    Picker("Authentication Timeout", selection: authenticationTimeout) {
+                    Toggle("Biometric Authentication", isOn: self.$biometricEnabled)
+                    Picker("Authentication Timeout", selection: self.authenticationTimeout) {
                         Text("1 minute").tag(60)
                         Text("5 minutes").tag(300)
                         Text("15 minutes").tag(900)
-                        Text("1 hour").tag(3_600)
+                        Text("1 hour").tag(3600)
                     }
                 }
 
                 // Accessibility Settings Section
                 Section(header: Text("Accessibility")) {
-                    Toggle("Haptic Feedback", isOn: $hapticFeedbackEnabled)
-                    Toggle("Reduced Motion", isOn: $reducedMotion)
+                    Toggle("Haptic Feedback", isOn: self.$hapticFeedbackEnabled)
+                    Toggle("Reduced Motion", isOn: self.$reducedMotion)
                 }
 
                 // Appearance Settings Section
                 Section(header: Text("Appearance")) {
-                    Picker("Theme", selection: darkModePreference) {
+                    Picker("Theme", selection: self.darkModePreference) {
                         Text("System").tag(DarkModePreference.system)
                         Text("Light").tag(DarkModePreference.light)
                         Text("Dark").tag(DarkModePreference.dark)
@@ -70,7 +74,7 @@ struct SettingsView: View {
 
                 // Data Management Section
                 Section(header: Text("Data Management")) {
-                    Picker("Data Retention", selection: $dataRetentionDays) {
+                    Picker("Data Retention", selection: self.$dataRetentionDays) {
                         Text("30 days").tag(30.0)
                         Text("90 days").tag(90.0)
                         Text("1 year").tag(365.0)
@@ -78,7 +82,7 @@ struct SettingsView: View {
                     }
 
                     Button("Delete All Data", role: .destructive) {
-                        showingDeleteConfirmation = true
+                        self.showingDeleteConfirmation = true
                     }
                 }
 
@@ -111,7 +115,7 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
-            .alert("Delete Transaction", isPresented: $showDeleteAlert) {
+            .alert("Delete Transaction", isPresented: self.$showDeleteAlert) {
                 Button("Cancel", role: .cancel) {}
                     .accessibilityLabel("Cancel button")
                 Button("Delete", role: .destructive) {}
@@ -119,11 +123,11 @@ struct SettingsView: View {
             } message: {
                 Text("This action cannot be undone.")
             }
-            .alert("Delete All Data", isPresented: $showDeleteAllAlert) {
+            .alert("Delete All Data", isPresented: self.$showDeleteAllAlert) {
                 Button("Cancel", role: .cancel) {}
                     .accessibilityLabel("Cancel delete all button")
                 Button("Delete All", role: .destructive) {
-                    deleteAllData()
+                    self.deleteAllData()
                 }
                 .accessibilityLabel("Confirm delete all button")
             } message: {
@@ -137,21 +141,22 @@ struct SettingsView: View {
     private func deleteAllData() {
         Task {
             await MainActor.run {
-                deleteAllProgress = true
+                self.deleteAllProgress = true
             }
 
             // Simulate deletion process
             try? await Task.sleep(nanoseconds: 2_000_000_000)
 
             await MainActor.run {
-                deleteAllProgress = false
-                showDeleteAllAlert = false
+                self.deleteAllProgress = false
+                self.showDeleteAllAlert = false
             }
         }
     }
 }
 
 // MARK: - Preview
+
 #Preview {
     SettingsView()
         .environmentObject(NavigationCoordinator())

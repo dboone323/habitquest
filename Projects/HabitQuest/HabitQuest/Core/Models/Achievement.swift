@@ -47,7 +47,7 @@ final class Achievement {
             guard let encoded = try? JSONEncoder().encode(newValue) else {
                 return
             }
-            requirementData = encoded
+            self.requirementData = encoded
         }
     }
 
@@ -60,13 +60,15 @@ final class Achievement {
     ///   - xpReward: XP bonus when unlocked
     ///   - isHidden: Whether hidden until unlocked
     ///   - requirement: What needs to be accomplished
-    init(name: String,
-         description: String,
-         iconName: String,
-         category: AchievementCategory,
-         xpReward: Int = 50,
-         isHidden: Bool = false,
-         requirement: AchievementRequirement) {
+    init(
+        name: String,
+        description: String,
+        iconName: String,
+        category: AchievementCategory,
+        xpReward: Int = 50,
+        isHidden: Bool = false,
+        requirement: AchievementRequirement
+    ) {
         self.id = UUID()
         self.name = name
         self.achievementDescription = description
@@ -87,12 +89,12 @@ final class Achievement {
 
     /// Check if this achievement is unlocked
     var isUnlocked: Bool {
-        unlockedDate != nil
+        self.unlockedDate != nil
     }
 
     /// Get progress as a percentage string
     var progressPercentage: String {
-        String(format: "%.0f%%", progress * 100)
+        String(format: "%.0f%%", self.progress * 100)
     }
 }
 
@@ -138,15 +140,15 @@ enum AchievementRequirement: @preconcurrency Codable, @unchecked Sendable {
 
     var description: String {
         switch self {
-        case .streakDays(let days):
+        case let .streakDays(days):
             "Maintain a \(days)-day streak"
-        case .totalCompletions(let count):
+        case let .totalCompletions(count):
             "Complete \(count) habits total"
-        case .reachLevel(let level):
+        case let .reachLevel(level):
             "Reach level \(level)"
         case .perfectWeek:
             "Complete all habits for 7 consecutive days"
-        case .habitVariety(let count):
+        case let .habitVariety(count):
             "Have \(count) different active habits"
         case .earlyBird:
             "Complete habits before 9 AM for 7 days"

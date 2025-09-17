@@ -11,7 +11,7 @@ struct CalendarGrid: View {
 
     private var calendar: Calendar {
         var cal = Calendar.current
-        cal.firstWeekday = firstDayOfWeek
+        cal.firstWeekday = self.firstDayOfWeek
         return cal
     }
 
@@ -24,7 +24,7 @@ struct CalendarGrid: View {
         let monthEnd = monthInterval.end
 
         // Get the first day of the week that contains the first day of the month
-        let firstWeekday = calendar.dateInterval(of: .weekOfYear, for: monthStart)?.start ?? monthStart
+        let firstWeekday = self.calendar.dateInterval(of: .weekOfYear, for: monthStart)?.start ?? monthStart
 
         // Get all dates from the first weekday to the end of the month's week
         var dates: [Date] = []
@@ -32,13 +32,13 @@ struct CalendarGrid: View {
 
         while currentDate < monthEnd {
             dates.append(currentDate)
-            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate
+            currentDate = self.calendar.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate
         }
 
         // Add extra days to fill the last week if needed
         while dates.count % 7 != 0 {
-            dates.append(calendar.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate)
-            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate
+            dates.append(self.calendar.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate)
+            currentDate = self.calendar.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate
         }
 
         return dates
@@ -51,8 +51,8 @@ struct CalendarGrid: View {
         var symbols = formatter.shortWeekdaySymbols!
 
         // Adjust for first day of week setting
-        if firstDayOfWeek != 1 { // If not Sunday
-            let sundayIndex = firstDayOfWeek - 1
+        if self.firstDayOfWeek != 1 { // If not Sunday
+            let sundayIndex = self.firstDayOfWeek - 1
             symbols = Array(symbols[sundayIndex...]) + Array(symbols[..<sundayIndex])
         }
 
@@ -63,11 +63,11 @@ struct CalendarGrid: View {
         VStack(spacing: 8) {
             // Weekday headers
             HStack(spacing: 0) {
-                ForEach(weekdayHeaders, id: \.self) { weekday in
+                ForEach(self.weekdayHeaders, id: \.self) { weekday in
                     Text(weekday)
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -75,16 +75,16 @@ struct CalendarGrid: View {
 
             // Calendar grid
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 4) {
-                ForEach(monthDates, id: \.self) { date in
+                ForEach(self.monthDates, id: \.self) { date in
                     CalendarDayView(
                         date: date,
-                        selectedDate: $selectedDate,
-                        isCurrentMonth: calendar.isDate(date, equalTo: selectedDate, toGranularity: .month),
-                        hasEvent: eventDates.contains(calendar.startOfDay(for: date)),
-                        hasGoal: goalDates.contains(calendar.startOfDay(for: date)),
-                        hasTask: taskDates.contains(calendar.startOfDay(for: date))
+                        selectedDate: self.$selectedDate,
+                        isCurrentMonth: self.calendar.isDate(date, equalTo: self.selectedDate, toGranularity: .month),
+                        hasEvent: self.eventDates.contains(self.calendar.startOfDay(for: date)),
+                        hasGoal: self.goalDates.contains(self.calendar.startOfDay(for: date)),
+                        hasTask: self.taskDates.contains(self.calendar.startOfDay(for: date))
                     )
-                    .environmentObject(themeManager)
+                    .environmentObject(self.themeManager)
                 }
             }
             .padding(.horizontal, 20)
@@ -104,46 +104,46 @@ struct CalendarDayView: View {
     private var calendar: Calendar { Calendar.current }
 
     private var isSelected: Bool {
-        calendar.isDate(date, inSameDayAs: selectedDate)
+        self.calendar.isDate(self.date, inSameDayAs: self.selectedDate)
     }
 
     private var isToday: Bool {
-        calendar.isDateInToday(date)
+        self.calendar.isDateInToday(self.date)
     }
 
     private var dayNumber: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "d"
-        return formatter.string(from: date)
+        return formatter.string(from: self.date)
     }
 
     var body: some View {
         VStack(spacing: 2) {
             // Day number
-            Text(dayNumber)
-                .font(.system(size: 16, weight: isToday ? .bold : .medium))
-                .foregroundColor(dayTextColor)
+            Text(self.dayNumber)
+                .font(.system(size: 16, weight: self.isToday ? .bold : .medium))
+                .foregroundColor(self.dayTextColor)
                 .frame(width: 32, height: 32)
-                .background(dayBackgroundColor)
+                .background(self.dayBackgroundColor)
                 .clipShape(Circle())
                 .overlay(
                     Circle()
-                        .stroke(isSelected ? themeManager.currentTheme.primaryAccentColor : Color.clear, lineWidth: 2)
+                        .stroke(self.isSelected ? self.themeManager.currentTheme.primaryAccentColor : Color.clear, lineWidth: 2)
                 )
 
             // Indicator dots
             HStack(spacing: 2) {
-                if hasEvent {
+                if self.hasEvent {
                     Circle()
                         .fill(Color.blue)
                         .frame(width: 4, height: 4)
                 }
-                if hasGoal {
+                if self.hasGoal {
                     Circle()
                         .fill(Color.green)
                         .frame(width: 4, height: 4)
                 }
-                if hasTask {
+                if self.hasTask {
                     Circle()
                         .fill(Color.orange)
                         .frame(width: 4, height: 4)
@@ -154,27 +154,27 @@ struct CalendarDayView: View {
         .frame(height: 44)
         .contentShape(Rectangle())
         .onTapGesture {
-            selectedDate = date
+            self.selectedDate = self.date
         }
     }
 
     private var dayTextColor: Color {
-        if isSelected {
-            themeManager.currentTheme.primaryBackgroundColor
-        } else if isToday {
-            themeManager.currentTheme.primaryAccentColor
-        } else if isCurrentMonth {
-            themeManager.currentTheme.primaryTextColor
+        if self.isSelected {
+            self.themeManager.currentTheme.primaryBackgroundColor
+        } else if self.isToday {
+            self.themeManager.currentTheme.primaryAccentColor
+        } else if self.isCurrentMonth {
+            self.themeManager.currentTheme.primaryTextColor
         } else {
-            themeManager.currentTheme.secondaryTextColor.opacity(0.5)
+            self.themeManager.currentTheme.secondaryTextColor.opacity(0.5)
         }
     }
 
     private var dayBackgroundColor: Color {
-        if isSelected {
-            themeManager.currentTheme.primaryAccentColor
-        } else if isToday {
-            themeManager.currentTheme.primaryAccentColor.opacity(0.1)
+        if self.isSelected {
+            self.themeManager.currentTheme.primaryAccentColor
+        } else if self.isToday {
+            self.themeManager.currentTheme.primaryAccentColor.opacity(0.1)
         } else {
             Color.clear
         }

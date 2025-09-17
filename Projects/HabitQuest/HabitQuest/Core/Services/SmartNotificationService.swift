@@ -30,7 +30,7 @@ final class SmartNotificationService {
         let habits = await fetchActiveHabits()
 
         for habit in habits {
-            await scheduleOptimalNotification(for: habit)
+            await self.scheduleOptimalNotification(for: habit)
         }
     }
 
@@ -39,13 +39,13 @@ final class SmartNotificationService {
         let scheduling = await analyticsEngine.generateOptimalScheduling(for: habit)
         let prediction = await analyticsEngine.predictStreakSuccess(for: habit)
 
-        let content = generateSmartContent(
+        let content = self.generateSmartContent(
             for: habit,
             scheduling: scheduling,
             prediction: prediction
         )
 
-        let trigger = createOptimalTrigger(
+        let trigger = self.createOptimalTrigger(
             for: habit,
             recommendedHour: scheduling.optimalTime,
             successRate: scheduling.successRateAtTime
@@ -58,7 +58,7 @@ final class SmartNotificationService {
         )
 
         do {
-            try await notificationCenter.add(request)
+            try await self.notificationCenter.add(request)
         } catch {
             print("Failed to schedule notification for \(habit.name): \(error)")
         }
@@ -74,23 +74,23 @@ final class SmartNotificationService {
         let content = UNMutableNotificationContent()
 
         // Personalized title based on streak status
-        content.title = generatePersonalizedTitle(for: habit, prediction: prediction)
+        content.title = self.generatePersonalizedTitle(for: habit, prediction: prediction)
 
         // Context-aware body message
-        content.body = generateContextualMessage(
+        content.body = self.generateContextualMessage(
             for: habit,
             scheduling: scheduling,
             prediction: prediction
         )
 
         // Dynamic notification priority
-        content.interruptionLevel = determineInterruptionLevel(
+        content.interruptionLevel = self.determineInterruptionLevel(
             habit: habit,
             successRate: scheduling.successRateAtTime
         )
 
         // Custom sound based on habit category
-        content.sound = selectOptimalSound(for: habit.category)
+        content.sound = self.selectOptimalSound(for: habit.category)
 
         // Rich actions for quick interaction
         content.categoryIdentifier = "HABIT_REMINDER"
@@ -110,13 +110,13 @@ final class SmartNotificationService {
         let streak = habit.streak
 
         switch (streak, prediction.probability) {
-        case (let streakCount, let probabilityValue) where streakCount >= 21 && probabilityValue > 80:
+        case let (streakCount, probabilityValue) where streakCount >= 21 && probabilityValue > 80:
             return "🔥 Keep the \(streakCount)-day streak alive!"
-        case (let streakCount, let probabilityValue) where streakCount >= 7 && probabilityValue > 70:
+        case let (streakCount, probabilityValue) where streakCount >= 7 && probabilityValue > 70:
             return "💪 \(streakCount) days strong - don't break it now!"
-        case (let streakCount, _) where streakCount >= 3:
+        case let (streakCount, _) where streakCount >= 3:
             return "⭐ \(streakCount)-day streak in progress"
-        case (_, let probabilityValue) where probabilityValue < 40:
+        case let (_, probabilityValue) where probabilityValue < 40:
             return "🎯 Small step, big impact"
         default:
             return "✨ Time for \(habit.name)"
@@ -128,8 +128,8 @@ final class SmartNotificationService {
         scheduling: SchedulingRecommendation,
         prediction: StreakPrediction
     ) -> String {
-        let timeContext = generateTimeContext(hour: scheduling.optimalTime)
-        let motivationalMessage = selectMotivationalMessage(prediction: prediction)
+        let timeContext = self.generateTimeContext(hour: scheduling.optimalTime)
+        let motivationalMessage = self.selectMotivationalMessage(prediction: prediction)
 
         return "\(timeContext) \(motivationalMessage) \(prediction.recommendedAction)"
     }
@@ -186,7 +186,7 @@ final class SmartNotificationService {
         case .daily:
             return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         case .weekly:
-            dateComponents.weekday = findOptimalWeekday(for: habit)
+            dateComponents.weekday = self.findOptimalWeekday(for: habit)
             return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         case .custom:
             return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
@@ -195,7 +195,7 @@ final class SmartNotificationService {
 
     private func determineInterruptionLevel(habit: Habit, successRate: Double) -> UNNotificationInterruptionLevel {
         // High-priority for struggling streaks, low for established ones
-        if habit.streak > 7 && successRate > 0.7 {
+        if habit.streak > 7, successRate > 0.7 {
             .passive
         } else if successRate < 0.3 {
             .timeSensitive
@@ -231,7 +231,7 @@ final class SmartNotificationService {
         guard let habit else { return }
 
         // Log interaction for machine learning
-        await logNotificationInteraction(
+        await self.logNotificationInteraction(
             habit: habit,
             interaction: interactionType,
             timestamp: Date()
@@ -239,9 +239,9 @@ final class SmartNotificationService {
 
         // Adjust future notifications based on response
         if case .dismissed = interactionType {
-            await adjustNotificationTiming(for: habit, direction: .later)
+            await self.adjustNotificationTiming(for: habit, direction: .later)
         } else if case .completed = interactionType {
-            await reinforceCurrentTiming(for: habit)
+            await self.reinforceCurrentTiming(for: habit)
         }
     }
 
@@ -260,10 +260,10 @@ final class SmartNotificationService {
 
             if recentSuccess > 0.8 {
                 // Reduce frequency for well-established habits
-                await adjustNotificationFrequency(for: habit, factor: 0.7)
+                await self.adjustNotificationFrequency(for: habit, factor: 0.7)
             } else if recentSuccess < 0.3 {
                 // Increase support for struggling habits
-                await adjustNotificationFrequency(for: habit, factor: 1.3)
+                await self.adjustNotificationFrequency(for: habit, factor: 1.3)
             }
         }
     }
@@ -294,7 +294,7 @@ final class SmartNotificationService {
             trigger: trigger
         )
 
-        try? await notificationCenter.add(request)
+        try? await self.notificationCenter.add(request)
     }
 
     /// Send recovery notifications for broken streaks
@@ -308,7 +308,7 @@ final class SmartNotificationService {
         let content = UNMutableNotificationContent()
         content.title = "🌱 Fresh Start"
         content.body = "Yesterday is gone, today is a new opportunity to build \(habit.name) back up!"
-        content.sound = selectOptimalSound(for: habit.category)
+        content.sound = self.selectOptimalSound(for: habit.category)
         content.interruptionLevel = .passive
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 86400, repeats: false) // 24 hours
@@ -319,20 +319,20 @@ final class SmartNotificationService {
             trigger: trigger
         )
 
-        try? await notificationCenter.add(request)
+        try? await self.notificationCenter.add(request)
     }
 
     // MARK: - Utility Methods
 
     private func fetchActiveHabits() async -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
-        let allHabits = (try? modelContext.fetch(descriptor)) ?? []
+        let allHabits = (try? self.modelContext.fetch(descriptor)) ?? []
         return allHabits.filter(\.isActive)
     }
 
     private func fetchHabit(id: UUID) async -> Habit? {
         let descriptor = FetchDescriptor<Habit>()
-        let allHabits = (try? modelContext.fetch(descriptor)) ?? []
+        let allHabits = (try? self.modelContext.fetch(descriptor)) ?? []
         return allHabits.first { $0.id == id }
     }
 

@@ -21,7 +21,7 @@ class QuestLogViewModel: ObservableObject {
     /// - Returns: <#description#>
     func setModelContext(_ context: ModelContext) {
         self.modelContext = context
-        loadAllHabits()
+        self.loadAllHabits()
     }
 
     /// Load all habits from SwiftData
@@ -38,11 +38,11 @@ class QuestLogViewModel: ObservableObject {
             let fetchDescriptor = FetchDescriptor<Habit>()
             let fetchedHabits = try modelContext.fetch(fetchDescriptor)
             // Sort manually to avoid concurrency issues
-            allHabits = fetchedHabits.sorted { $0.creationDate > $1.creationDate }
-            logger.info("Loaded \(allHabits.count) habits")
+            self.allHabits = fetchedHabits.sorted { $0.creationDate > $1.creationDate }
+            self.logger.info("Loaded \(self.allHabits.count) habits")
 
         } catch {
-            logger.error("Failed to load habits: \(error.localizedDescription)")
+            self.logger.error("Failed to load habits: \(error.localizedDescription)")
             ErrorHandler.handle(error, showToUser: true)
         }
     }
@@ -67,11 +67,11 @@ class QuestLogViewModel: ObservableObject {
             modelContext.insert(habit)
             try modelContext.save()
 
-            loadAllHabits()
-            logger.info("Added new habit: \(habit.name)")
+            self.loadAllHabits()
+            self.logger.info("Added new habit: \(habit.name)")
 
         } catch {
-            logger.error("Failed to add habit: \(error.localizedDescription)")
+            self.logger.error("Failed to add habit: \(error.localizedDescription)")
             ErrorHandler.handle(error, showToUser: true)
         }
     }
@@ -95,11 +95,11 @@ class QuestLogViewModel: ObservableObject {
 
             try modelContext.save()
 
-            loadAllHabits()
-            logger.info("Updated habit: \(habit.name)")
+            self.loadAllHabits()
+            self.logger.info("Updated habit: \(habit.name)")
 
         } catch {
-            logger.error("Failed to update habit: \(error.localizedDescription)")
+            self.logger.error("Failed to update habit: \(error.localizedDescription)")
             ErrorHandler.handle(error, showToUser: true)
         }
     }
@@ -118,11 +118,11 @@ class QuestLogViewModel: ObservableObject {
             modelContext.delete(habit)
             try modelContext.save()
 
-            loadAllHabits()
-            logger.info("Deleted habit: \(habit.name)")
+            self.loadAllHabits()
+            self.logger.info("Deleted habit: \(habit.name)")
 
         } catch {
-            logger.error("Failed to delete habit: \(error.localizedDescription)")
+            self.logger.error("Failed to delete habit: \(error.localizedDescription)")
             ErrorHandler.handle(error, showToUser: true)
         }
     }
@@ -135,6 +135,6 @@ class QuestLogViewModel: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func editHabit(_ habit: Habit) {
-        editingHabit = habit
+        self.editingHabit = habit
     }
 }

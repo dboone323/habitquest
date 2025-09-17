@@ -35,7 +35,7 @@ class KeyboardShortcutManager {
     /// - Returns: <#description#>
     func registerGlobalShortcuts() {
         // macOS automatically handles keyboard shortcuts defined in the menu
-        NSApp.mainMenu = createMainMenu()
+        NSApp.mainMenu = self.createMainMenu()
     }
 
     /// Creates the main menu with keyboard shortcuts
@@ -47,9 +47,17 @@ class KeyboardShortcutManager {
         let appMenuItem = NSMenuItem(title: "Momentum Finance", action: nil, keyEquivalent: "")
         appMenuItem.submenu = appMenu
 
-        appMenu.addItem(NSMenuItem(title: "About Momentum Finance", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: ""))
+        appMenu.addItem(NSMenuItem(
+            title: "About Momentum Finance",
+            action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)),
+            keyEquivalent: ""
+        ))
         appMenu.addItem(NSMenuItem.separator())
-        appMenu.addItem(NSMenuItem(title: "Preferences...", action: #selector(NSApplication.shared.showPreferencesWindow), keyEquivalent: ","))
+        appMenu.addItem(NSMenuItem(
+            title: "Preferences...",
+            action: #selector(NSApplication.shared.showPreferencesWindow),
+            keyEquivalent: ","
+        ))
         appMenu.addItem(NSMenuItem.separator())
         appMenu.addItem(NSMenuItem(title: "Quit Momentum Finance", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
 
@@ -185,33 +193,33 @@ struct MacOSKeyboardShortcuts: ViewModifier {
     func body(content: Content) -> some View {
         content
             // Tab navigation shortcuts
-            .keyboardShortcut("1", modifiers: [.command], action: { navigateToTab(0) })
-            .keyboardShortcut("2", modifiers: [.command], action: { navigateToTab(1) })
-            .keyboardShortcut("3", modifiers: [.command], action: { navigateToTab(2) })
-            .keyboardShortcut("4", modifiers: [.command], action: { navigateToTab(3) })
-            .keyboardShortcut("5", modifiers: [.command], action: { navigateToTab(4) })
+            .keyboardShortcut("1", modifiers: [.command], action: { self.navigateToTab(0) })
+            .keyboardShortcut("2", modifiers: [.command], action: { self.navigateToTab(1) })
+            .keyboardShortcut("3", modifiers: [.command], action: { self.navigateToTab(2) })
+            .keyboardShortcut("4", modifiers: [.command], action: { self.navigateToTab(3) })
+            .keyboardShortcut("5", modifiers: [.command], action: { self.navigateToTab(4) })
             // Sidebar toggle
-            .keyboardShortcut("s", modifiers: [.command], action: { toggleSidebar() })
+            .keyboardShortcut("s", modifiers: [.command], action: { self.toggleSidebar() })
             // Search
-            .keyboardShortcut("f", modifiers: [.command], action: { activateSearch() })
+            .keyboardShortcut("f", modifiers: [.command], action: { self.activateSearch() })
             // Refresh data
-            .keyboardShortcut("r", modifiers: [.command], action: { refreshData() })
+            .keyboardShortcut("r", modifiers: [.command], action: { self.refreshData() })
             .onAppear {
                 // Setup notification listeners
-                setupNotificationHandlers()
+                self.setupNotificationHandlers()
             }
     }
 
     private func navigateToTab(_ index: Int) {
-        navigationCoordinator.navigateToTab(index)
+        self.navigationCoordinator.navigateToTab(index)
     }
 
     private func toggleSidebar() {
-        navigationCoordinator.toggleSidebar()
+        self.navigationCoordinator.toggleSidebar()
     }
 
     private func activateSearch() {
-        navigationCoordinator.activateSearch()
+        self.navigationCoordinator.activateSearch()
     }
 
     private func refreshData() {
@@ -221,31 +229,31 @@ struct MacOSKeyboardShortcuts: ViewModifier {
     private func setupNotificationHandlers() {
         // Setup notification handlers for the menu actions
         NotificationCenter.default.addObserver(forName: Notification.Name("ShowDashboard"), object: nil, queue: .main) { _ in
-            navigateToTab(0)
+            self.navigateToTab(0)
         }
 
         NotificationCenter.default.addObserver(forName: Notification.Name("ShowTransactions"), object: nil, queue: .main) { _ in
-            navigateToTab(1)
+            self.navigateToTab(1)
         }
 
         NotificationCenter.default.addObserver(forName: Notification.Name("ShowBudgets"), object: nil, queue: .main) { _ in
-            navigateToTab(2)
+            self.navigateToTab(2)
         }
 
         NotificationCenter.default.addObserver(forName: Notification.Name("ShowSubscriptions"), object: nil, queue: .main) { _ in
-            navigateToTab(3)
+            self.navigateToTab(3)
         }
 
         NotificationCenter.default.addObserver(forName: Notification.Name("ShowGoalsAndReports"), object: nil, queue: .main) { _ in
-            navigateToTab(4)
+            self.navigateToTab(4)
         }
 
         NotificationCenter.default.addObserver(forName: Notification.Name("ToggleSidebar"), object: nil, queue: .main) { _ in
-            toggleSidebar()
+            self.toggleSidebar()
         }
 
         NotificationCenter.default.addObserver(forName: Notification.Name("PerformGlobalSearch"), object: nil, queue: .main) { _ in
-            activateSearch()
+            self.activateSearch()
         }
     }
 }
@@ -279,9 +287,9 @@ struct KeyboardShortcutHandler: NSViewRepresentable {
     /// - Returns: <#description#>
     func makeNSView(context: Context) -> NSView {
         let view = KeyView()
-        view.key = key
-        view.modifiers = modifiers
-        view.action = action
+        view.key = self.key
+        view.modifiers = self.modifiers
+        view.action = self.action
         return view
     }
 
@@ -289,9 +297,9 @@ struct KeyboardShortcutHandler: NSViewRepresentable {
     /// - Returns: <#description#>
     func updateNSView(_ nsView: NSView, context: Context) {
         guard let view = nsView as? KeyView else { return }
-        view.key = key
-        view.modifiers = modifiers
-        view.action = action
+        view.key = self.key
+        view.modifiers = self.modifiers
+        view.action = self.action
     }
 
     private class KeyView: NSView {
@@ -310,8 +318,8 @@ struct KeyboardShortcutHandler: NSViewRepresentable {
             if event.modifierFlags.contains(.option) { pressedModifiers.insert(.option) }
             if event.modifierFlags.contains(.control) { pressedModifiers.insert(.control) }
 
-            if pressedKey == key.lowercased() && pressedModifiers == modifiers {
-                action?()
+            if pressedKey == self.key.lowercased(), pressedModifiers == self.modifiers {
+                self.action?()
             } else {
                 super.keyDown(with: event)
             }

@@ -48,35 +48,35 @@ struct AnalyticsCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            headerSection
-            valueSection
-            subtitleSection
+            self.headerSection
+            self.valueSection
+            self.subtitleSection
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(cardBackground)
+        .background(self.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: color.opacity(0.1), radius: 8, x: 0, y: 4)
-        .scaleEffect(animateValue ? 1.02 : 1.0)
-        .animation(.spring(response: 0.6, dampingFraction: 0.8), value: animateValue)
+        .shadow(color: self.color.opacity(0.1), radius: 8, x: 0, y: 4)
+        .scaleEffect(self.animateValue ? 1.02 : 1.0)
+        .animation(.spring(response: 0.6, dampingFraction: 0.8), value: self.animateValue)
         .onAppear {
             withAnimation(.easeInOut(duration: 0.8).delay(0.2)) {
-                showTrend = true
+                self.showTrend = true
             }
             withAnimation(.spring(response: 0.6).delay(0.1)) {
-                animateValue = true
+                self.animateValue = true
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(title): \(value), \(subtitle)")
+        .accessibilityLabel("\(self.title): \(self.value), \(self.subtitle)")
     }
 
     private var headerSection: some View {
         HStack {
-            Image(systemName: icon)
+            Image(systemName: self.icon)
                 .font(.title2)
-                .foregroundStyle(color.gradient)
-                .symbolEffect(.bounce, value: animateValue)
+                .foregroundStyle(self.color.gradient)
+                .symbolEffect(.bounce, value: self.animateValue)
 
             Spacer()
 
@@ -94,26 +94,27 @@ struct AnalyticsCard: View {
                     .asymmetric(
                         insertion: .move(edge: .trailing).combined(with: .opacity),
                         removal: .opacity
-                    ))
+                    )
+                )
             }
         }
     }
 
     private var valueSection: some View {
-        Text(value)
+        Text(self.value)
             .font(.system(size: 28, weight: .bold, design: .rounded))
-            .foregroundStyle(color.gradient)
+            .foregroundStyle(self.color.gradient)
             .contentTransition(.numericText(countsDown: false))
     }
 
     private var subtitleSection: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title)
+            Text(self.title)
                 .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundColor(.primary)
 
-            Text(subtitle)
+            Text(self.subtitle)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -124,7 +125,7 @@ struct AnalyticsCard: View {
             .fill(.regularMaterial)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(color.opacity(0.2), lineWidth: 1)
+                    .stroke(self.color.opacity(0.2), lineWidth: 1)
             )
     }
 }
@@ -137,43 +138,43 @@ struct TopPerformerRow: View {
 
     var body: some View {
         HStack(spacing: 16) {
-            performerInfo
+            self.performerInfo
             Spacer()
-            streakVisualization
+            self.streakVisualization
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
-        .background(rowBackground)
+        .background(self.rowBackground)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .scaleEffect(isPressed ? 0.98 : 1.0)
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isPressed)
+        .scaleEffect(self.isPressed ? 0.98 : 1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: self.isPressed)
         .onTapGesture {
-            hapticFeedback(.light)
-            showDetails.toggle()
+            self.hapticFeedback(.light)
+            self.showDetails.toggle()
         }
         .onLongPressGesture(
             minimumDuration: 0,
             maximumDistance: .infinity,
             pressing: { pressing in
-                isPressed = pressing
+                self.isPressed = pressing
             },
             perform: {}
         )
-        .sheet(isPresented: $showDetails) {
-            HabitDetailSheet(habit: performer.habit)
+        .sheet(isPresented: self.$showDetails) {
+            HabitDetailSheet(habit: self.performer.habit)
         }
     }
 
     private var performerInfo: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(performer.habit.name)
+            Text(self.performer.habit.name)
                 .font(.subheadline)
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
 
             HStack(spacing: 8) {
-                streakBadge
-                consistencyIndicator
+                self.streakBadge
+                self.consistencyIndicator
             }
         }
     }
@@ -184,7 +185,7 @@ struct TopPerformerRow: View {
                 .font(.caption2)
                 .foregroundColor(.orange)
 
-            Text("\(performer.currentStreak)")
+            Text("\(self.performer.currentStreak)")
                 .font(.caption)
                 .fontWeight(.medium)
                 .foregroundColor(.orange)
@@ -196,21 +197,21 @@ struct TopPerformerRow: View {
     }
 
     private var consistencyIndicator: some View {
-        Text("\(Int(performer.consistency * 100))% consistent")
+        Text("\(Int(self.performer.consistency * 100))% consistent")
             .font(.caption2)
             .foregroundColor(.secondary)
     }
 
     private var streakVisualization: some View {
         StreakVisualizationView(
-            habit: performer.habit,
+            habit: self.performer.habit,
             analytics: StreakAnalytics(
-                currentStreak: performer.currentStreak,
-                longestStreak: performer.longestStreak,
-                currentMilestone: StreakMilestone.milestone(for: performer.currentStreak),
-                nextMilestone: StreakMilestone.nextMilestone(for: performer.currentStreak),
+                currentStreak: self.performer.currentStreak,
+                longestStreak: self.performer.longestStreak,
+                currentMilestone: StreakMilestone.milestone(for: self.performer.currentStreak),
+                nextMilestone: StreakMilestone.nextMilestone(for: self.performer.currentStreak),
                 progressToNextMilestone: 0.5,
-                streakPercentile: performer.consistency
+                streakPercentile: self.performer.consistency
             ),
             displayMode: .compact
         )
@@ -238,12 +239,12 @@ struct StreakDistributionChartView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            chartTitle
-            chartBars
+            self.chartTitle
+            self.chartBars
         }
         .onAppear {
             withAnimation(.easeInOut(duration: 1.2).delay(0.3)) {
-                animateChart = true
+                self.animateChart = true
             }
         }
     }
@@ -264,10 +265,10 @@ struct StreakDistributionChartView: View {
 
     private var chartBars: some View {
         HStack(alignment: .bottom, spacing: 12) {
-            ForEach(Array(data.enumerated()), id: \.element.range) { index, item in
+            ForEach(Array(self.data.enumerated()), id: \.element.range) { index, item in
                 VStack(spacing: 8) {
-                    barColumn(for: item, index: index)
-                    barLabel(for: item)
+                    self.barColumn(for: item, index: index)
+                    self.barLabel(for: item)
                 }
             }
         }
@@ -275,15 +276,15 @@ struct StreakDistributionChartView: View {
     }
 
     private func barColumn(for item: StreakDistributionData, index: Int) -> some View {
-        let maxCount = data.map(\.count).max() ?? 1
+        let maxCount = self.data.map(\.count).max() ?? 1
         let normalizedHeight = max(0.1, Double(item.count) / Double(maxCount))
-        let barHeight = animateChart ? normalizedHeight * 120 : 0
+        let barHeight = self.animateChart ? normalizedHeight * 120 : 0
 
         return VStack {
             Spacer()
 
             RoundedRectangle(cornerRadius: 6)
-                .fill(barGradient(for: index))
+                .fill(self.barGradient(for: index))
                 .frame(height: barHeight)
                 .overlay(
                     Text("\(item.count)")
@@ -294,7 +295,8 @@ struct StreakDistributionChartView: View {
                 )
                 .animation(
                     .spring(response: 0.8, dampingFraction: 0.8).delay(Double(index) * 0.1),
-                    value: animateChart)
+                    value: self.animateChart
+                )
         }
     }
 
@@ -325,13 +327,13 @@ struct ConsistencyInsightView: View {
 
     var body: some View {
         LazyVStack(spacing: 12) {
-            ForEach(insights, id: \.title) { insight in
+            ForEach(self.insights, id: \.title) { insight in
                 InsightCard(
                     insight: insight,
-                    isExpanded: expandedInsight == insight.title
+                    isExpanded: self.expandedInsight == insight.title
                 ) {
                     withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                        expandedInsight = expandedInsight == insight.title ? nil : insight.title
+                        self.expandedInsight = self.expandedInsight == insight.title ? nil : insight.title
                     }
                 }
             }
@@ -346,48 +348,49 @@ struct InsightCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            cardHeader
+            self.cardHeader
 
-            if isExpanded {
-                expandedContent
+            if self.isExpanded {
+                self.expandedContent
                     .transition(
                         .asymmetric(
                             insertion: .move(edge: .top).combined(with: .opacity),
                             removal: .opacity
-                        ))
+                        )
+                    )
             }
         }
         .padding(16)
-        .background(cardBackground)
+        .background(self.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .onTapGesture(perform: onTap)
+        .onTapGesture(perform: self.onTap)
     }
 
     private var cardHeader: some View {
         HStack(spacing: 12) {
-            Image(systemName: insight.type.icon)
+            Image(systemName: self.insight.type.icon)
                 .font(.title3)
-                .foregroundColor(insight.type.color)
-                .symbolEffect(.bounce, value: isExpanded)
+                .foregroundColor(self.insight.type.color)
+                .symbolEffect(.bounce, value: self.isExpanded)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(insight.title)
+                Text(self.insight.title)
                     .font(.subheadline)
                     .fontWeight(.semibold)
 
-                Text(insight.description)
+                Text(self.insight.description)
                     .font(.caption)
                     .foregroundColor(.secondary)
-                    .lineLimit(isExpanded ? nil : 2)
+                    .lineLimit(self.isExpanded ? nil : 2)
             }
 
             Spacer()
 
-            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+            Image(systemName: self.isExpanded ? "chevron.up" : "chevron.down")
                 .font(.caption)
                 .foregroundColor(.secondary)
-                .rotationEffect(.degrees(isExpanded ? 180 : 0))
-                .animation(.spring(response: 0.4), value: isExpanded)
+                .rotationEffect(.degrees(self.isExpanded ? 180 : 0))
+                .animation(.spring(response: 0.4), value: self.isExpanded)
         }
     }
 
@@ -404,10 +407,10 @@ struct InsightCard: View {
 
     private var cardBackground: some View {
         RoundedRectangle(cornerRadius: 12)
-            .fill(insight.type.color.opacity(0.05))
+            .fill(self.insight.type.color.opacity(0.05))
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(insight.type.color.opacity(0.2), lineWidth: 1)
+                    .stroke(self.insight.type.color.opacity(0.2), lineWidth: 1)
             )
     }
 }
@@ -419,33 +422,33 @@ struct WeeklyPatternChartView: View {
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 8) {
-            ForEach(Array(patterns.enumerated()), id: \.element.day) { index, pattern in
+            ForEach(Array(self.patterns.enumerated()), id: \.element.day) { index, pattern in
                 VStack(spacing: 6) {
-                    patternBar(for: pattern, index: index)
-                    dayLabel(pattern.day)
+                    self.patternBar(for: pattern, index: index)
+                    self.dayLabel(pattern.day)
                 }
             }
         }
         .frame(height: 100)
         .onAppear {
             withAnimation(.easeInOut(duration: 1.0).delay(0.2)) {
-                animatePattern = true
+                self.animatePattern = true
             }
         }
     }
 
     private func patternBar(for pattern: WeeklyPattern, index: Int) -> some View {
-        let barHeight = animatePattern ? pattern.completionRate * 70 : 0
+        let barHeight = self.animatePattern ? pattern.completionRate * 70 : 0
 
         return VStack {
             Spacer()
 
             RoundedRectangle(cornerRadius: 4)
-                .fill(barColor(for: pattern.completionRate))
+                .fill(self.barColor(for: pattern.completionRate))
                 .frame(height: barHeight)
                 .animation(
                     .spring(response: 0.7, dampingFraction: 0.8).delay(Double(index) * 0.05),
-                    value: animatePattern
+                    value: self.animatePattern
                 )
         }
     }
@@ -476,15 +479,15 @@ struct HabitDetailSheet: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("Habit details for \(habit.name)")
+                Text("Habit details for \(self.habit.name)")
                     .font(.title2)
                 Spacer()
             }
-            .navigationTitle(habit.name)
+            .navigationTitle(self.habit.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") { dismiss() }
+                    Button("Done") { self.dismiss() }
                         .accessibilityLabel("Done")
                 }
             }
@@ -504,15 +507,19 @@ struct AnalyticsExportView: View {
                         .fontWeight(.semibold)
 
                     if let data = analyticsData {
-                        exportDetailView(
-                            title: "Total Active Streaks", value: "\(data.totalActiveStreaks)")
-                        exportDetailView(
-                            title: "Longest Overall Streak", value: "\(data.longestOverallStreak)")
-                        exportDetailView(
+                        self.exportDetailView(
+                            title: "Total Active Streaks", value: "\(data.totalActiveStreaks)"
+                        )
+                        self.exportDetailView(
+                            title: "Longest Overall Streak", value: "\(data.longestOverallStreak)"
+                        )
+                        self.exportDetailView(
                             title: "Average Consistency",
-                            value: "\(Int(data.averageConsistency * 100))%")
-                        exportDetailView(
-                            title: "Milestones Achieved", value: "\(data.milestonesAchieved)")
+                            value: "\(Int(data.averageConsistency * 100))%"
+                        )
+                        self.exportDetailView(
+                            title: "Milestones Achieved", value: "\(data.milestonesAchieved)"
+                        )
 
                         Divider()
 
@@ -520,7 +527,7 @@ struct AnalyticsExportView: View {
                             .font(.headline)
 
                         ForEach(data.streakDistribution, id: \.range) { item in
-                            exportDetailView(title: item.range, value: "\(item.count)")
+                            self.exportDetailView(title: item.range, value: "\(item.count)")
                         }
 
                         Divider()
@@ -529,9 +536,10 @@ struct AnalyticsExportView: View {
                             .font(.headline)
 
                         ForEach(data.topPerformingHabits.prefix(5), id: \.habit.id) { performer in
-                            exportDetailView(
+                            self.exportDetailView(
                                 title: performer.habit.name,
-                                value: "\(performer.currentStreak) days")
+                                value: "\(performer.currentStreak) days"
+                            )
                         }
                     } else {
                         Text("No analytics data available for export.")

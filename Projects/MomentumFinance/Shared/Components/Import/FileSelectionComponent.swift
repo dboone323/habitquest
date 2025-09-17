@@ -15,8 +15,8 @@ struct FileSelectionComponent: View {
                 .foregroundColor(.secondary)
 
             Button(action: {
-                showingFilePicker = true
-                onSelectFile()
+                self.showingFilePicker = true
+                self.onSelectFile()
             }) {
                 HStack {
                     Image(systemName: "folder")

@@ -20,14 +20,14 @@ class CloudKitManager: ObservableObject {
     @Published var syncStatus: SyncStatus = .idle
 
     private init() {
-        self.database = container.privateCloudDatabase
-        checkiCloudStatus()
+        self.database = self.container.privateCloudDatabase
+        self.checkiCloudStatus()
     }
 
     // MARK: - iCloud Status
 
     func checkiCloudStatus() {
-        container.accountStatus { [weak self] status, _ in
+        self.container.accountStatus { [weak self] status, _ in
             DispatchQueue.main.async {
                 switch status {
                 case .available:
@@ -43,10 +43,10 @@ class CloudKitManager: ObservableObject {
 
     func checkAccountStatus() async {
         await MainActor.run {
-            syncStatus = .syncing(.inProgress(0))
+            self.syncStatus = .syncing(.inProgress(0))
         }
 
-        container.accountStatus { [weak self] status, _ in
+        self.container.accountStatus { [weak self] status, _ in
             DispatchQueue.main.async {
                 switch status {
                 case .available:
@@ -66,15 +66,15 @@ class CloudKitManager: ObservableObject {
     // MARK: - Sync Operations
 
     func syncAllData() async {
-        guard isSignedInToiCloud else {
+        guard self.isSignedInToiCloud else {
             await MainActor.run {
-                syncStatus = .syncing(.error)
+                self.syncStatus = .syncing(.error)
             }
             return
         }
 
         await MainActor.run {
-            syncStatus = .syncing(.inProgress(0))
+            self.syncStatus = .syncing(.inProgress(0))
         }
 
         do {
@@ -83,15 +83,15 @@ class CloudKitManager: ObservableObject {
             try await SwiftUI.Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay for demo
 
             await MainActor.run {
-                syncStatus = .syncing(.success)
+                self.syncStatus = .syncing(.success)
             }
         } catch {
             await MainActor.run {
-                syncStatus = .syncing(.error)
+                self.syncStatus = .syncing(.error)
             }
         }
 
-        scheduleNextSync()
+        self.scheduleNextSync()
     }
 
     private func scheduleNextSync() {
@@ -130,7 +130,7 @@ class CloudKitManager: ObservableObject {
     func requestPermissions() {
         // Note: userDiscoverability is deprecated in macOS 14.0
         // This is a placeholder for when permissions are needed
-        checkiCloudStatus()
+        self.checkiCloudStatus()
     }
 }
 

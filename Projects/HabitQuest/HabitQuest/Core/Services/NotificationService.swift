@@ -34,15 +34,15 @@ enum NotificationService {
             let granted = try await center.requestAuthorization(options: [.alert, .sound, .badge])
 
             if granted {
-                await setupNotificationCategories()
-                logger.info("Notification permissions granted")
+                await self.setupNotificationCategories()
+                self.logger.info("Notification permissions granted")
             } else {
-                logger.warning("Notification permissions denied")
+                self.logger.warning("Notification permissions denied")
             }
 
             return granted
         } catch {
-            logger.error("Failed to request notification permissions: \(error)")
+            self.logger.error("Failed to request notification permissions: \(error)")
             return false
         }
     }
@@ -67,10 +67,10 @@ enum NotificationService {
 
         // Schedule new reminders
         for habit in habits {
-            await scheduleHabitReminder(for: habit)
+            await self.scheduleHabitReminder(for: habit)
         }
 
-        logger.info(
+        self.logger.info(
             "Scheduled reminders for \(habits.count) habits"
         )
     }
@@ -91,7 +91,7 @@ enum NotificationService {
         ]
 
         // Schedule based on habit frequency
-        let triggers = createNotificationTriggers(for: habit)
+        let triggers = self.createNotificationTriggers(for: habit)
 
         for (index, trigger) in triggers.enumerated() {
             let identifier = "habit_\(habit.id.uuidString)_\(index)"
@@ -99,9 +99,9 @@ enum NotificationService {
 
             do {
                 try await center.add(request)
-                logger.debug("Scheduled reminder for habit: \(habit.name)")
+                self.logger.debug("Scheduled reminder for habit: \(habit.name)")
             } catch {
-                logger.error("Failed to schedule reminder for \(habit.name): \(error)")
+                self.logger.error("Failed to schedule reminder for \(habit.name): \(error)")
             }
         }
     }
@@ -159,8 +159,8 @@ enum NotificationService {
         body: String,
         userInfo: [String: Any] = [:]
     ) async {
-        guard await checkNotificationPermissions() == .authorized else {
-            logger.warning("Cannot send immediate notification - permissions not granted")
+        guard await self.checkNotificationPermissions() == .authorized else {
+            self.logger.warning("Cannot send immediate notification - permissions not granted")
             return
         }
 
@@ -180,9 +180,9 @@ enum NotificationService {
 
         do {
             try await center.add(request)
-            logger.info("Sent immediate notification: \(title)")
+            self.logger.info("Sent immediate notification: \(title)")
         } catch {
-            logger.error("Failed to send immediate notification: \(error)")
+            self.logger.error("Failed to send immediate notification: \(error)")
         }
     }
 
@@ -213,9 +213,9 @@ enum NotificationService {
 
         do {
             try await center.add(request)
-            logger.debug("Scheduled streak motivation for: \(habit.name)")
+            self.logger.debug("Scheduled streak motivation for: \(habit.name)")
         } catch {
-            logger.error("Failed to schedule streak motivation: \(error)")
+            self.logger.error("Failed to schedule streak motivation: \(error)")
         }
     }
 
@@ -223,7 +223,7 @@ enum NotificationService {
     static func cancelAllNotifications() {
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
-        logger.info("Cancelled all scheduled notifications")
+        self.logger.info("Cancelled all scheduled notifications")
     }
 
     /// Cancel notifications for a specific habit
@@ -241,7 +241,7 @@ enum NotificationService {
             .map(\.identifier)
 
         center.removePendingNotificationRequests(withIdentifiers: identifiersToRemove)
-        logger.info("Cancelled notifications for habit: \(habit.name)")
+        self.logger.info("Cancelled notifications for habit: \(habit.name)")
     }
 
     /// Setup notification categories and actions
@@ -297,7 +297,7 @@ enum NotificationService {
             achievementCategory
         ])
 
-        logger.info("Setup notification categories")
+        self.logger.info("Setup notification categories")
     }
 
     /// Get the count of pending notifications

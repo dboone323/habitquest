@@ -27,7 +27,7 @@ struct ImportValidator {
             }
         )
 
-        return try !modelContext.fetch(descriptor).isEmpty
+        return try !self.modelContext.fetch(descriptor).isEmpty
     }
 
     /// Validates required fields are present and not empty

@@ -35,13 +35,13 @@ struct Goal: Identifiable, Codable {
     /// The date the goal was created.
     var createdAt: Date
     /// The date the goal was last modified (optional).
-    var modifiedAt: Date?  // Added for CloudKit sync/merge
+    var modifiedAt: Date? // Added for CloudKit sync/merge
     /// Whether the goal is completed.
-    var isCompleted: Bool  // Adding completion status for goals
+    var isCompleted: Bool // Adding completion status for goals
     /// The priority of the goal.
-    var priority: GoalPriority  // Goal priority
+    var priority: GoalPriority // Goal priority
     /// The progress toward the goal (0.0 to 1.0).
-    var progress: Double  // Goal progress (0.0 to 1.0)
+    var progress: Double // Goal progress (0.0 to 1.0)
 
     /// Creates a new goal.
     /// - Parameters:
@@ -74,15 +74,15 @@ struct Goal: Identifiable, Codable {
 
     /// Converts this goal to a CloudKit record for syncing.
     func toCKRecord() -> CKRecord {
-        let record = CKRecord(recordType: "Goal", recordID: CKRecord.ID(recordName: id.uuidString))
-        record["title"] = title
-        record["description"] = description
-        record["targetDate"] = targetDate
-        record["createdAt"] = createdAt
-        record["modifiedAt"] = modifiedAt
-        record["isCompleted"] = isCompleted
-        record["priority"] = priority.rawValue
-        record["progress"] = progress
+        let record = CKRecord(recordType: "Goal", recordID: CKRecord.ID(recordName: self.id.uuidString))
+        record["title"] = self.title
+        record["description"] = self.description
+        record["targetDate"] = self.targetDate
+        record["createdAt"] = self.createdAt
+        record["modifiedAt"] = self.modifiedAt
+        record["isCompleted"] = self.isCompleted
+        record["priority"] = self.priority.rawValue
+        record["progress"] = self.progress
         return record
     }
 
@@ -92,12 +92,13 @@ struct Goal: Identifiable, Codable {
     /// - Returns: A Goal instance.
     static func from(ckRecord: CKRecord) throws -> Goal {
         guard let title = ckRecord["title"] as? String,
-            let targetDate = ckRecord["targetDate"] as? Date,
-            let id = UUID(uuidString: ckRecord.recordID.recordName)
+              let targetDate = ckRecord["targetDate"] as? Date,
+              let id = UUID(uuidString: ckRecord.recordID.recordName)
         else {
             throw NSError(
                 domain: "GoalConversionError", code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "Failed to convert CloudKit record to Goal"])
+                userInfo: [NSLocalizedDescriptionKey: "Failed to convert CloudKit record to Goal"]
+            )
         }
 
         let priorityString = ckRecord["priority"] as? String ?? "medium"

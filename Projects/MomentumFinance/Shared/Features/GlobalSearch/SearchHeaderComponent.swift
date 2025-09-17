@@ -17,15 +17,15 @@ public struct SearchHeaderComponent: View {
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.secondary)
-                TextField("Search...", text: $searchText).accessibilityLabel("Text Field")
+                TextField("Search...", text: self.$searchText).accessibilityLabel("Text Field")
                     .textFieldStyle(.plain)
-                    .onChange(of: searchText) { _ in
-                        onSearchChanged?()
+                    .onChange(of: self.searchText) { _ in
+                        self.onSearchChanged?()
                     }
-                if !searchText.isEmpty {
+                if !self.searchText.isEmpty {
                     Button(action: {
-                        searchText = ""
-                        onSearchChanged?()
+                        self.searchText = ""
+                        self.onSearchChanged?()
                     }) {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.secondary)
@@ -37,7 +37,7 @@ public struct SearchHeaderComponent: View {
             .cornerRadius(12)
 
             // Filter Picker
-            Picker("Filter", selection: $selectedFilter) {
+            Picker("Filter", selection: self.$selectedFilter) {
                 ForEach(SearchFilter.allCases) { filter in
                     Text(filter.rawValue).tag(filter)
                 }

@@ -18,9 +18,9 @@ struct ThemeDemoView: View {
 
     // Sample financial data for demo
     private let accounts = [
-        ("Checking", "banknote", 1_250.50),
-        ("Savings", "dollarsign.circle", 4_320.75),
-        ("Investment", "chart.line.uptrend.xyaxis", 8_640.25)
+        ("Checking", "banknote", 1250.50),
+        ("Savings", "dollarsign.circle", 4320.75),
+        ("Investment", "chart.line.uptrend.xyaxis", 8640.25)
     ]
 
     private let budgets = [
@@ -41,12 +41,12 @@ struct ThemeDemoView: View {
                 VStack(spacing: 24) {
                     // Theme selector at top
                     ThemeSelectorCard(
-                        selectedThemeMode: $selectedThemeMode,
-                        theme: theme
+                        selectedThemeMode: self.$selectedThemeMode,
+                        theme: self.theme
                     )
 
                     // Financial summary card
-                    ThemeFinancialSummaryCard(theme: theme)
+                    ThemeFinancialSummaryCard(theme: self.theme)
 
                     // Account cards
                     ThemeAccountsList()
@@ -58,38 +58,38 @@ struct ThemeDemoView: View {
                     ThemeSubscriptionsList()
 
                     // Typography showcase
-                    ThemeTypographyShowcase(theme: theme)
+                    ThemeTypographyShowcase(theme: self.theme)
 
                     // Button styles showcase
-                    ThemeButtonStylesShowcase(theme: theme)
+                    ThemeButtonStylesShowcase(theme: self.theme)
                 }
                 .padding()
             }
-            .background(theme.background)
+            .background(self.theme.background)
             .navigationTitle("Theme Showcase")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button(action: { showSheet = true }) {
+                    Button(action: { self.showSheet = true }) {
                         Image(systemName: "gear")
                             .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(theme.accentPrimary)
+                            .foregroundStyle(self.theme.accentPrimary)
                     }
                     .accessibilityLabel("Button")
                 }
             }
-            .sheet(isPresented: $showSheet) {
+            .sheet(isPresented: self.$showSheet) {
                 ThemeSettingsSheet(
-                    selectedThemeMode: $selectedThemeMode,
-                    sliderValue: $sliderValue,
-                    showSheet: $showSheet,
-                    theme: theme
+                    selectedThemeMode: self.$selectedThemeMode,
+                    sliderValue: self.$sliderValue,
+                    showSheet: self.$showSheet,
+                    theme: self.theme
                 )
             }
-            .preferredColorScheme(theme.isDarkMode ? .dark : .light)
+            .preferredColorScheme(self.theme.isDarkMode ? .dark : .light)
         }
         .onAppear {
             // Initialize the selected mode from current theme
-            selectedThemeMode = theme.currentThemeMode
+            self.selectedThemeMode = self.theme.currentThemeMode
         }
     }
 }

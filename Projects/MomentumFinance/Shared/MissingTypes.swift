@@ -333,7 +333,7 @@ public class ImportValidator {
     /// - fields: The parsed CSV fields for a row
     /// - columnMapping: The mapping of columns to field types
     public static func validateRequiredFields(fields: [String], columnMapping: CSVColumnMapping)
-    throws {
+        throws {
         guard let dateIndex = columnMapping.dateIndex, dateIndex < fields.count else {
             throw ImportError.missingRequiredField("date")
         }
@@ -445,9 +445,9 @@ public class DataParser {
     public static func parseAmount(_ amountString: String) throws -> Double {
         let cleanedString =
             amountString
-            .replacingOccurrences(of: "$", with: "")
-            .replacingOccurrences(of: ",", with: "")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+                .replacingOccurrences(of: "$", with: "")
+                .replacingOccurrences(of: ",", with: "")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
 
         guard let amount = Double(cleanedString) else {
             throw ImportError.invalidAmountFormat(amountString)
@@ -463,11 +463,11 @@ public class DataParser {
     public static func parseTransactionType(_ typeString: String, amount: Double) -> TransactionType {
         switch typeString {
         case "income", "credit", "deposit":
-            return .income
+            .income
         case "expense", "debit", "withdrawal":
-            return .expense
+            .expense
         default:
-            return amount >= 0 ? .income : .expense
+            amount >= 0 ? .income : .expense
         }
     }
 }
@@ -478,7 +478,7 @@ public class DataParser {
 public protocol EntityManager {
     /// Gets or creates an account from CSV fields
     func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping) async throws
-    -> FinancialAccount
+        -> FinancialAccount
 
     /// Gets or creates a category from CSV fields
     func getOrCreateCategory(
@@ -491,7 +491,7 @@ public class DefaultEntityManager: EntityManager {
     public init() {}
 
     public func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping)
-    async throws -> FinancialAccount {
+        async throws -> FinancialAccount {
         // For now, create a default account
         // In a real implementation, this would search existing accounts or create new ones
         FinancialAccount(
@@ -525,11 +525,11 @@ extension Color {
         let g: UInt64
         let b: UInt64
         switch hex.count {
-        case 3:  // RGB (12-bit)
+        case 3: // RGB (12-bit)
             (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6:  // RGB (24-bit)
+        case 6: // RGB (24-bit)
             (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8:  // ARGB (32-bit)
+        case 8: // ARGB (32-bit)
             (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
         default:
             (a, r, g, b) = (1, 1, 1, 0)
@@ -578,18 +578,18 @@ public enum DeepLink {
 
     public var path: String {
         switch self {
-        case .dashboard: return "/dashboard"
-        case .transactions: return "/transactions"
-        case .budgets: return "/budgets"
-        case .subscriptions: return "/subscriptions"
-        case .goals: return "/goals"
-        case .settings: return "/settings"
-        case .search: return "/search"
-        case .transaction(let id): return "/transaction/\(id)"
-        case .account(let id): return "/account/\(id)"
-        case .subscription(let id): return "/subscription/\(id)"
-        case .budget(let id): return "/budget/\(id)"
-        case .goal(let id): return "/goal/\(id)"
+        case .dashboard: "/dashboard"
+        case .transactions: "/transactions"
+        case .budgets: "/budgets"
+        case .subscriptions: "/subscriptions"
+        case .goals: "/goals"
+        case .settings: "/settings"
+        case .search: "/search"
+        case let .transaction(id): "/transaction/\(id)"
+        case let .account(id): "/account/\(id)"
+        case let .subscription(id): "/subscription/\(id)"
+        case let .budget(id): "/budget/\(id)"
+        case let .goal(id): "/goal/\(id)"
         }
     }
 }
@@ -606,9 +606,9 @@ public struct ThemeComponents {
 
 // MARK: - Insight Type Extensions
 
-extension InsightType {
+public extension InsightType {
     /// Icon name for the insight type
-    public var icon: String {
+    var icon: String {
         switch self {
         case .spending:
             "creditcard.fill"
@@ -642,26 +642,26 @@ public struct TransactionRowView: View {
             ZStack {
                 Circle()
                     .fill(
-                        transaction.amount >= 0 ? Color.green.opacity(0.1) : Color.red.opacity(0.1)
+                        self.transaction.amount >= 0 ? Color.green.opacity(0.1) : Color.red.opacity(0.1)
                     )
                     .frame(width: 40, height: 40)
 
                 Image(
-                    systemName: transaction.amount >= 0
+                    systemName: self.transaction.amount >= 0
                         ? "arrow.down.circle.fill" : "arrow.up.circle.fill"
                 )
-                .foregroundColor(transaction.amount >= 0 ? .green : .red)
+                .foregroundColor(self.transaction.amount >= 0 ? .green : .red)
                 .font(.system(size: 16))
             }
 
             VStack(alignment: .leading, spacing: 4) {
                 // Transaction description
-                Text(transaction.title)
+                Text(self.transaction.title)
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(.primary)
 
                 // Transaction date
-                Text(transaction.date.formatted(date: .abbreviated, time: .omitted))
+                Text(self.transaction.date.formatted(date: .abbreviated, time: .omitted))
                     .font(.system(size: 14))
                     .foregroundColor(.secondary)
             }
@@ -669,9 +669,9 @@ public struct TransactionRowView: View {
             Spacer()
 
             // Transaction amount
-            Text(transaction.amount.formatted(.currency(code: "USD")))
+            Text(self.transaction.amount.formatted(.currency(code: "USD")))
                 .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(transaction.amount >= 0 ? .green : .red)
+                .foregroundColor(self.transaction.amount >= 0 ? .green : .red)
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 16)
@@ -679,7 +679,7 @@ public struct TransactionRowView: View {
         .cornerRadius(8)
         .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
         .onTapGesture {
-            onTap()
+            self.onTap()
         }
     }
 }
@@ -707,12 +707,12 @@ public struct DashboardWelcomeHeader: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Good \(greeting.lowercased())!")
+            Text("Good \(self.greeting.lowercased())!")
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
 
-            Text("Your financial wellness is at \(wellnessPercentage)%")
+            Text("Your financial wellness is at \(self.wellnessPercentage)%")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
@@ -721,7 +721,7 @@ public struct DashboardWelcomeHeader: View {
                     Text("Balance")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text(totalBalance.formatted(.currency(code: "USD")))
+                    Text(self.totalBalance.formatted(.currency(code: "USD")))
                         .font(.title3)
                         .fontWeight(.semibold)
                         .foregroundColor(.green)
@@ -731,10 +731,10 @@ public struct DashboardWelcomeHeader: View {
                     Text("This Month")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text((monthlyIncome - monthlyExpenses).formatted(.currency(code: "USD")))
+                    Text((self.monthlyIncome - self.monthlyExpenses).formatted(.currency(code: "USD")))
                         .font(.title3)
                         .fontWeight(.semibold)
-                        .foregroundColor((monthlyIncome - monthlyExpenses) >= 0 ? .green : .red)
+                        .foregroundColor((self.monthlyIncome - self.monthlyExpenses) >= 0 ? .green : .red)
                 }
             }
         }
@@ -769,7 +769,7 @@ public struct DashboardAccountsSummary: View {
                     .foregroundColor(.primary)
                 Spacer()
                 Button("View All") {
-                    onViewAllTap()
+                    self.onViewAllTap()
                 }
                 .font(.subheadline)
                 .foregroundColor(.blue)
@@ -794,7 +794,7 @@ public struct DashboardAccountsSummary: View {
                 .padding(.vertical, 4)
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    onAccountTap(String(describing: account.persistentModelID))
+                    self.onAccountTap(String(describing: account.persistentModelID))
                 }
             }
         }
@@ -830,13 +830,13 @@ public struct DashboardSubscriptionsSection: View {
                     .foregroundColor(.primary)
                 Spacer()
                 Button("View All") {
-                    onViewAllTapped()
+                    self.onViewAllTapped()
                 }
                 .font(.subheadline)
                 .foregroundColor(.blue)
             }
 
-            ForEach(subscriptions.prefix(3)) { subscription in
+            ForEach(self.subscriptions.prefix(3)) { subscription in
                 HStack {
                     Text(subscription.name)
                         .font(.subheadline)
@@ -849,11 +849,11 @@ public struct DashboardSubscriptionsSection: View {
                 .padding(.vertical, 4)
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    onSubscriptionTapped(subscription)
+                    self.onSubscriptionTapped(subscription)
                 }
             }
 
-            Button(action: onAddTapped) {
+            Button(action: self.onAddTapped) {
                 HStack {
                     Image(systemName: "plus.circle.fill")
                         .foregroundColor(.blue)
@@ -893,13 +893,13 @@ public struct DashboardBudgetProgress: View {
                     .foregroundColor(.primary)
                 Spacer()
                 Button("View All") {
-                    onViewAllTap()
+                    self.onViewAllTap()
                 }
                 .font(.subheadline)
                 .foregroundColor(.blue)
             }
 
-            ForEach(budgets.prefix(2)) { budget in
+            ForEach(self.budgets.prefix(2)) { budget in
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Text(budget.name)
@@ -914,12 +914,14 @@ public struct DashboardBudgetProgress: View {
                     ProgressView(value: budget.spentAmount / budget.limitAmount)
                         .progressViewStyle(
                             LinearProgressViewStyle(
-                                tint: budget.spentAmount > budget.limitAmount ? .red : .green))
+                                tint: budget.spentAmount > budget.limitAmount ? .red : .green
+                            )
+                        )
                 }
                 .padding(.vertical, 4)
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    onBudgetTap(budget)
+                    self.onBudgetTap(budget)
                 }
             }
         }
@@ -948,20 +950,20 @@ public struct DashboardInsights: View {
                     .foregroundColor(.primary)
                 Spacer()
                 Button("View All") {
-                    onDetailsTapped()
+                    self.onDetailsTapped()
                 }
                 .font(.subheadline)
                 .foregroundColor(.blue)
             }
 
-            if insights.isEmpty {
+            if self.insights.isEmpty {
                 Text("No insights available")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.vertical, 20)
             } else {
-                ForEach(insights.prefix(2)) { insight in
+                ForEach(self.insights.prefix(2)) { insight in
                     HStack(spacing: 12) {
                         Image(systemName: insight.type.icon)
                             .foregroundColor(.blue)
@@ -1028,7 +1030,7 @@ public struct DashboardQuickActions: View {
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                 }
-                .onTapGesture(perform: onAddTransaction)
+                .onTapGesture(perform: self.onAddTransaction)
 
                 VStack {
                     ZStack {
@@ -1046,7 +1048,7 @@ public struct DashboardQuickActions: View {
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                 }
-                .onTapGesture(perform: onPayBills)
+                .onTapGesture(perform: self.onPayBills)
 
                 VStack {
                     ZStack {
@@ -1064,7 +1066,7 @@ public struct DashboardQuickActions: View {
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                 }
-                .onTapGesture(perform: onViewReports)
+                .onTapGesture(perform: self.onViewReports)
 
                 VStack {
                     ZStack {
@@ -1082,7 +1084,7 @@ public struct DashboardQuickActions: View {
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                 }
-                .onTapGesture(perform: onSetGoals)
+                .onTapGesture(perform: self.onSetGoals)
             }
         }
         .padding()
@@ -1106,16 +1108,16 @@ public struct TransactionEmptyStateView: View {
 
     public var body: some View {
         VStack(spacing: 20) {
-            Image(systemName: searchText.isEmpty ? "doc.text.magnifyingglass" : "magnifyingglass")
+            Image(systemName: self.searchText.isEmpty ? "doc.text.magnifyingglass" : "magnifyingglass")
                 .font(.system(size: 48))
                 .foregroundColor(.secondary)
 
-            Text(searchText.isEmpty ? "No transactions yet" : "No transactions found")
+            Text(self.searchText.isEmpty ? "No transactions yet" : "No transactions found")
                 .font(.title2)
                 .foregroundColor(.primary)
 
             Text(
-                searchText.isEmpty
+                self.searchText.isEmpty
                     ? "Add your first transaction to get started"
                     : "Try adjusting your search or filter"
             )
@@ -1123,8 +1125,8 @@ public struct TransactionEmptyStateView: View {
             .foregroundColor(.secondary)
             .multilineTextAlignment(.center)
 
-            if searchText.isEmpty {
-                Button(action: onAddTransaction) {
+            if self.searchText.isEmpty {
+                Button(action: self.onAddTransaction) {
                     Label("Add Transaction", systemImage: "plus")
                         .padding()
                         .background(Color.blue)
@@ -1156,13 +1158,13 @@ public struct TransactionListView: View {
 
     public var body: some View {
         List {
-            ForEach(transactions) { transaction in
+            ForEach(self.transactions) { transaction in
                 TransactionRowView(transaction: transaction) {
-                    onTransactionTapped(transaction)
+                    self.onTransactionTapped(transaction)
                 }
                 .swipeActions {
                     Button(role: .destructive) {
-                        onDeleteTransaction(transaction)
+                        self.onDeleteTransaction(transaction)
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
@@ -1195,13 +1197,13 @@ public struct AddTransactionView: View {
         NavigationView {
             Form {
                 Section("Transaction Details") {
-                    TextField("Title", text: $title)
-                    TextField("Amount", text: $amount)
-                        #if os(iOS)
+                    TextField("Title", text: self.$title)
+                    TextField("Amount", text: self.$amount)
+                    #if os(iOS)
                         .keyboardType(.decimalPad)
                     #endif
 
-                    Picker("Type", selection: $transactionType) {
+                    Picker("Type", selection: self.$transactionType) {
                         Text("Income").tag(TransactionType.income)
                         Text("Expense").tag(TransactionType.expense)
                         Text("Transfer").tag(TransactionType.transfer)
@@ -1209,57 +1211,57 @@ public struct AddTransactionView: View {
                 }
 
                 Section("Category & Account") {
-                    Picker("Category", selection: $selectedCategory) {
+                    Picker("Category", selection: self.$selectedCategory) {
                         Text("None").tag(ExpenseCategory?.none)
-                        ForEach(categories) { category in
+                        ForEach(self.categories) { category in
                             Text(category.name).tag(category as ExpenseCategory?)
                         }
                     }
 
-                    Picker("Account", selection: $selectedAccount) {
+                    Picker("Account", selection: self.$selectedAccount) {
                         Text("None").tag(FinancialAccount?.none)
-                        ForEach(accounts) { account in
+                        ForEach(self.accounts) { account in
                             Text(account.name).tag(account as FinancialAccount?)
                         }
                     }
                 }
 
                 Section("Date") {
-                    DatePicker("Transaction Date", selection: $date, displayedComponents: .date)
+                    DatePicker("Transaction Date", selection: self.$date, displayedComponents: .date)
                 }
             }
             .navigationTitle("Add Transaction")
             #if os(iOS)
-            .navigationBarItems(
-                leading: Button("Cancel") {
-                    dismiss()
-                },
-                trailing: Button("Save") {
-                    saveTransaction()
-                }
-                .disabled(title.isEmpty || amount.isEmpty)
-            )
+                .navigationBarItems(
+                    leading: Button("Cancel") {
+                        self.dismiss()
+                    },
+                    trailing: Button("Save") {
+                        self.saveTransaction()
+                    }
+                    .disabled(self.title.isEmpty || self.amount.isEmpty)
+                )
             #elseif os(macOS)
-            .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-            Button("Cancel") {
-            dismiss()
-            }
-            }
-            ToolbarItem(placement: .confirmationAction) {
-            Button("Save") {
-            saveTransaction()
-            }
-            .disabled(title.isEmpty || amount.isEmpty)
-            }
-            }
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            self.dismiss()
+                        }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Save") {
+                            self.saveTransaction()
+                        }
+                        .disabled(self.title.isEmpty || self.amount.isEmpty)
+                    }
+                }
             #endif
         }
     }
 
     private func saveTransaction() {
         // Implementation would save the transaction
-        dismiss()
+        self.dismiss()
     }
 }
 
@@ -1276,22 +1278,24 @@ public struct TransactionDetailView: View {
             VStack(alignment: .leading, spacing: 20) {
                 // Transaction header
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(transaction.title)
+                    Text(self.transaction.title)
                         .font(.title)
                         .foregroundColor(.primary)
 
-                    Text(transaction.amount.formatted(.currency(code: "USD")))
+                    Text(self.transaction.amount.formatted(.currency(code: "USD")))
                         .font(.title2)
-                        .foregroundColor(transaction.amount >= 0 ? .green : .red)
+                        .foregroundColor(self.transaction.amount >= 0 ? .green : .red)
                 }
 
                 // Transaction details
                 VStack(alignment: .leading, spacing: 16) {
                     DetailRow(
                         label: "Date",
-                        value: transaction.date.formatted(date: .long, time: .omitted))
+                        value: self.transaction.date.formatted(date: .long, time: .omitted)
+                    )
                     DetailRow(
-                        label: "Type", value: transaction.transactionType.rawValue.capitalized)
+                        label: "Type", value: self.transaction.transactionType.rawValue.capitalized
+                    )
                     if let category = transaction.category {
                         DetailRow(label: "Category", value: category.name)
                     }
@@ -1318,33 +1322,33 @@ public struct TransactionStatsCard: View {
     }
 
     private var totalIncome: Double {
-        transactions.filter { $0.transactionType == .income }.reduce(0) { $0 + $1.amount }
+        self.transactions.filter { $0.transactionType == .income }.reduce(0) { $0 + $1.amount }
     }
 
     private var totalExpenses: Double {
-        transactions.filter { $0.transactionType == .expense }.reduce(0) { $0 + abs($1.amount) }
+        self.transactions.filter { $0.transactionType == .expense }.reduce(0) { $0 + abs($1.amount) }
     }
 
     public var body: some View {
         HStack(spacing: 20) {
             StatItem(
                 title: "Income",
-                amount: totalIncome,
+                amount: self.totalIncome,
                 color: .green,
                 icon: "arrow.down.circle.fill"
             )
 
             StatItem(
                 title: "Expenses",
-                amount: totalExpenses,
+                amount: self.totalExpenses,
                 color: .red,
                 icon: "arrow.up.circle.fill"
             )
 
             StatItem(
                 title: "Net",
-                amount: totalIncome - totalExpenses,
-                color: (totalIncome - totalExpenses) >= 0 ? .green : .red,
+                amount: self.totalIncome - self.totalExpenses,
+                color: (self.totalIncome - self.totalExpenses) >= 0 ? .green : .red,
                 icon: "equal.circle.fill"
             )
         }
@@ -1376,10 +1380,10 @@ public struct SearchAndFilterSection: View {
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.secondary)
-                TextField("Search transactions", text: $searchText)
+                TextField("Search transactions", text: self.$searchText)
                     .textFieldStyle(.plain)
-                if !searchText.isEmpty {
-                    Button(action: { searchText = "" }) {
+                if !self.searchText.isEmpty {
+                    Button(action: { self.searchText = "" }) {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.secondary)
                     }
@@ -1395,9 +1399,9 @@ public struct SearchAndFilterSection: View {
                     ForEach(TransactionFilter.allCases, id: \.self) { filter in
                         FilterButton(
                             title: filter.displayName,
-                            isSelected: selectedFilter == filter
+                            isSelected: self.selectedFilter == filter
                         ) {
-                            selectedFilter = filter
+                            self.selectedFilter = filter
                         }
                     }
                 }
@@ -1417,10 +1421,10 @@ private struct DetailRow: View {
 
     var body: some View {
         HStack {
-            Text(label)
+            Text(self.label)
                 .foregroundColor(.secondary)
                 .frame(width: 80, alignment: .leading)
-            Text(value)
+            Text(self.value)
                 .foregroundColor(.primary)
         }
     }
@@ -1435,18 +1439,18 @@ private struct StatItem: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 4) {
-            Image(systemName: icon)
-                .foregroundColor(color)
+            Image(systemName: self.icon)
+                .foregroundColor(self.color)
                 .font(.system(size: 20))
 
-            Text(title)
+            Text(self.title)
                 .font(.caption)
                 .foregroundColor(.secondary)
 
-            Text(amount.formatted(.currency(code: "USD")))
+            Text(self.amount.formatted(.currency(code: "USD")))
                 .font(.subheadline)
                 .fontWeight(.semibold)
-                .foregroundColor(color)
+                .foregroundColor(self.color)
         }
         .frame(maxWidth: .infinity)
     }
@@ -1459,13 +1463,13 @@ private struct FilterButton: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: action) {
-            Text(title)
+        Button(action: self.action) {
+            Text(self.title)
                 .font(.subheadline)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
-                .background(isSelected ? Color.blue : platformSecondaryGrayColor())
-                .foregroundColor(isSelected ? .white : .primary)
+                .background(self.isSelected ? Color.blue : platformSecondaryGrayColor())
+                .foregroundColor(self.isSelected ? .white : .primary)
                 .cornerRadius(16)
         }
     }
@@ -1485,9 +1489,9 @@ public enum ExportFormat: String, CaseIterable {
 
     var icon: String {
         switch self {
-        case .csv: return "tablecells"
-        case .pdf: return "doc.richtext"
-        case .json: return "curlybraces"
+        case .csv: "tablecells"
+        case .pdf: "doc.richtext"
+        case .json: "curlybraces"
         }
     }
 }
@@ -1612,7 +1616,7 @@ public struct FileSelectionComponent: View {
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
 
-            Button(action: { showingFilePicker = true }) {
+            Button(action: { self.showingFilePicker = true }) {
                 Label("Choose File", systemImage: "folder")
                     .padding()
                     .background(Color.blue)
@@ -1635,14 +1639,14 @@ public struct ImportProgressComponent: View {
 
     public var body: some View {
         VStack(spacing: 16) {
-            ProgressView(value: progress, total: 1.0)
+            ProgressView(value: self.progress, total: 1.0)
                 .progressViewStyle(CircularProgressViewStyle())
 
             Text("Importing data...")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
-            Text("\(Int(progress * 100))% complete")
+            Text("\(Int(self.progress * 100))% complete")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -1661,8 +1665,8 @@ public struct ImportButtonComponent: View {
     }
 
     public var body: some View {
-        Button(action: action) {
-            if isImporting {
+        Button(action: self.action) {
+            if self.isImporting {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: .white))
             } else {
@@ -1670,10 +1674,10 @@ public struct ImportButtonComponent: View {
             }
         }
         .padding()
-        .background(isImporting ? Color.gray : Color.blue)
+        .background(self.isImporting ? Color.gray : Color.blue)
         .foregroundColor(.white)
         .cornerRadius(8)
-        .disabled(isImporting)
+        .disabled(self.isImporting)
     }
 }
 
@@ -1713,36 +1717,36 @@ public struct ImportResultView: View {
 
     public var body: some View {
         VStack(spacing: 20) {
-            Image(systemName: result.success ? "checkmark.circle.fill" : "xmark.circle.fill")
+            Image(systemName: self.result.success ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .font(.system(size: 48))
-                .foregroundColor(result.success ? .green : .red)
+                .foregroundColor(self.result.success ? .green : .red)
 
-            Text(result.success ? "Import Successful" : "Import Failed")
+            Text(self.result.success ? "Import Successful" : "Import Failed")
                 .font(.title2)
                 .fontWeight(.bold)
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("Items imported: \(result.itemsImported)")
+                Text("Items imported: \(self.result.itemsImported)")
                     .font(.body)
 
-                if !result.errors.isEmpty {
+                if !self.result.errors.isEmpty {
                     Text("Errors:")
                         .font(.headline)
                         .foregroundColor(.red)
 
-                    ForEach(result.errors, id: \.self) { error in
+                    ForEach(self.result.errors, id: \.self) { error in
                         Text("• \(error)")
                             .font(.subheadline)
                             .foregroundColor(.red)
                     }
                 }
 
-                if !result.warnings.isEmpty {
+                if !self.result.warnings.isEmpty {
                     Text("Warnings:")
                         .font(.headline)
                         .foregroundColor(.orange)
 
-                    ForEach(result.warnings, id: \.self) { warning in
+                    ForEach(self.result.warnings, id: \.self) { warning in
                         Text("• \(warning)")
                             .font(.subheadline)
                             .foregroundColor(.orange)
@@ -1750,7 +1754,7 @@ public struct ImportResultView: View {
                 }
             }
 
-            Button("Done", action: onDismiss)
+            Button("Done", action: self.onDismiss)
                 .padding()
                 .background(Color.blue)
                 .foregroundColor(.white)

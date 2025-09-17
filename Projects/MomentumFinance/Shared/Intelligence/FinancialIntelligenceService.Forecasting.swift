@@ -3,7 +3,7 @@ import Foundation
 @MainActor
 extension FinancialIntelligenceService {
     func generateForecasts(transactions: [FinancialTransaction], accounts: [FinancialAccount])
-    -> [FinancialInsight] {
+        -> [FinancialInsight] {
         var insights: [FinancialInsight] = []
 
         // Analyze cash flow trend
@@ -21,7 +21,7 @@ extension FinancialIntelligenceService {
                 let title: String
                 let priority: InsightPriority
 
-                if nextMonthForecast < 0 && trendDirection == "declining" {
+                if nextMonthForecast < 0, trendDirection == "declining" {
                     title = "Negative Cash Flow Forecast"
                     priority = .critical
                 } else if nextMonthForecast < 0 {
@@ -96,7 +96,7 @@ extension FinancialIntelligenceService {
         }
 
         // Calculate average monthly change
-        let monthlyChanges = monthlyNetFlow.map { $0.1 }
+        let monthlyChanges = monthlyNetFlow.map(\.1)
         let averageMonthlyChange = monthlyChanges.reduce(0, +) / Double(monthlyChanges.count)
 
         // Forecast next 3 months
@@ -112,7 +112,7 @@ extension FinancialIntelligenceService {
         let priority: InsightPriority
         let description: String
 
-        if averageMonthlyChange < 0 && threeMonthPrediction < account.balance * 0.5 {
+        if averageMonthlyChange < 0, threeMonthPrediction < account.balance * 0.5 {
             title = "Critical Balance Reduction"
             priority = .critical
             let dropAmount = formatCurrency(
@@ -156,6 +156,6 @@ extension FinancialIntelligenceService {
     func fi_generateForecasts(
         transactions: [FinancialTransaction], accounts: [FinancialAccount]
     ) -> [FinancialInsight] {
-        generateForecasts(transactions: transactions, accounts: accounts)
+        self.generateForecasts(transactions: transactions, accounts: accounts)
     }
 }

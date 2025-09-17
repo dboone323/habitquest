@@ -8,12 +8,11 @@
 import XCTest
 
 final class TransactionUITests: XCTestCase {
-
     let app = XCUIApplication()
 
     override func setUpWithError() throws {
         continueAfterFailure = false
-        app.launch()
+        self.app.launch()
     }
 
     // MARK: - Transaction Creation Tests
@@ -21,14 +20,14 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testCreateIncomeTransaction() throws {
         // Navigate to add transaction
-        let addButton = app.buttons["Add Transaction"].firstMatch
+        let addButton = self.app.buttons["Add Transaction"].firstMatch
         XCTAssertTrue(addButton.exists, "Add transaction button should exist")
         addButton.tap()
 
         // Fill in transaction details
-        let amountField = app.textFields["Amount"].firstMatch
-        let descriptionField = app.textFields["Description"].firstMatch
-        let categoryPicker = app.popUpButtons["Category"].firstMatch
+        let amountField = self.app.textFields["Amount"].firstMatch
+        let descriptionField = self.app.textFields["Description"].firstMatch
+        let categoryPicker = self.app.popUpButtons["Category"].firstMatch
 
         if amountField.exists {
             amountField.tap()
@@ -42,20 +41,20 @@ final class TransactionUITests: XCTestCase {
 
         if categoryPicker.exists {
             categoryPicker.click()
-            let incomeCategory = app.menuItems["Income"].firstMatch
+            let incomeCategory = self.app.menuItems["Income"].firstMatch
             if incomeCategory.exists {
                 incomeCategory.click()
             }
         }
 
         // Save transaction
-        let saveButton = app.buttons["Save"].firstMatch
+        let saveButton = self.app.buttons["Save"].firstMatch
         if saveButton.exists {
             saveButton.tap()
         }
 
         // Verify transaction was added
-        let transactionList = app.tables["Transaction List"].firstMatch
+        let transactionList = self.app.tables["Transaction List"].firstMatch
         if transactionList.exists {
             let cells = transactionList.cells
             XCTAssertGreaterThan(cells.count, 0, "Transaction should be added to list")
@@ -65,14 +64,14 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testCreateExpenseTransaction() throws {
         // Navigate to add transaction
-        let addButton = app.buttons["Add Transaction"].firstMatch
+        let addButton = self.app.buttons["Add Transaction"].firstMatch
         XCTAssertTrue(addButton.exists, "Add transaction button should exist")
         addButton.tap()
 
         // Fill in expense details
-        let amountField = app.textFields["Amount"].firstMatch
-        let descriptionField = app.textFields["Description"].firstMatch
-        let categoryPicker = app.popUpButtons["Category"].firstMatch
+        let amountField = self.app.textFields["Amount"].firstMatch
+        let descriptionField = self.app.textFields["Description"].firstMatch
+        let categoryPicker = self.app.popUpButtons["Category"].firstMatch
 
         if amountField.exists {
             amountField.tap()
@@ -86,20 +85,20 @@ final class TransactionUITests: XCTestCase {
 
         if categoryPicker.exists {
             categoryPicker.click()
-            let expenseCategory = app.menuItems["Food & Dining"].firstMatch
+            let expenseCategory = self.app.menuItems["Food & Dining"].firstMatch
             if expenseCategory.exists {
                 expenseCategory.click()
             }
         }
 
         // Save transaction
-        let saveButton = app.buttons["Save"].firstMatch
+        let saveButton = self.app.buttons["Save"].firstMatch
         if saveButton.exists {
             saveButton.tap()
         }
 
         // Verify transaction was added
-        let transactionList = app.tables["Transaction List"].firstMatch
+        let transactionList = self.app.tables["Transaction List"].firstMatch
         if transactionList.exists {
             let cells = transactionList.cells
             XCTAssertGreaterThan(cells.count, 0, "Transaction should be added to list")
@@ -111,19 +110,19 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testEditTransaction() throws {
         // Select a transaction to edit
-        let transactionList = app.tables["Transaction List"].firstMatch
+        let transactionList = self.app.tables["Transaction List"].firstMatch
         if transactionList.exists {
             let firstCell = transactionList.cells.firstMatch
             if firstCell.exists {
                 firstCell.tap()
 
                 // Look for edit button
-                let editButton = app.buttons["Edit"].firstMatch
+                let editButton = self.app.buttons["Edit"].firstMatch
                 if editButton.exists {
                     editButton.tap()
 
                     // Modify amount
-                    let amountField = app.textFields["Amount"].firstMatch
+                    let amountField = self.app.textFields["Amount"].firstMatch
                     if amountField.exists {
                         amountField.tap()
                         amountField.clearText()
@@ -131,7 +130,7 @@ final class TransactionUITests: XCTestCase {
                     }
 
                     // Save changes
-                    let saveButton = app.buttons["Save"].firstMatch
+                    let saveButton = self.app.buttons["Save"].firstMatch
                     if saveButton.exists {
                         saveButton.tap()
                     }
@@ -148,21 +147,21 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testDeleteTransaction() throws {
         // Get initial count
-        let transactionList = app.tables["Transaction List"].firstMatch
+        let transactionList = self.app.tables["Transaction List"].firstMatch
         if transactionList.exists {
             let initialCount = transactionList.cells.count
 
             // Select and delete a transaction
             let firstCell = transactionList.cells.firstMatch
             if firstCell.exists {
-                firstCell.press(forDuration: 1.0)  // Long press for context menu
+                firstCell.press(forDuration: 1.0) // Long press for context menu
 
-                let deleteButton = app.buttons["Delete"].firstMatch
+                let deleteButton = self.app.buttons["Delete"].firstMatch
                 if deleteButton.exists {
                     deleteButton.tap()
 
                     // Confirm deletion
-                    let confirmButton = app.buttons["Delete"].firstMatch
+                    let confirmButton = self.app.buttons["Delete"].firstMatch
                     if confirmButton.exists {
                         confirmButton.tap()
                     }
@@ -182,33 +181,34 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testFilterByCategory() throws {
         // Open filter options
-        let filterButton = app.buttons["Filter"].firstMatch
+        let filterButton = self.app.buttons["Filter"].firstMatch
         if filterButton.exists {
             filterButton.tap()
 
             // Select category filter
-            let categoryFilter = app.buttons["By Category"].firstMatch
+            let categoryFilter = self.app.buttons["By Category"].firstMatch
             if categoryFilter.exists {
                 categoryFilter.tap()
 
                 // Choose a category
-                let foodCategory = app.buttons["Food & Dining"].firstMatch
+                let foodCategory = self.app.buttons["Food & Dining"].firstMatch
                 if foodCategory.exists {
                     foodCategory.tap()
                 }
 
                 // Apply filter
-                let applyButton = app.buttons["Apply"].firstMatch
+                let applyButton = self.app.buttons["Apply"].firstMatch
                 if applyButton.exists {
                     applyButton.tap()
                 }
 
                 // Verify filtered results
-                let transactionList = app.tables["Transaction List"].firstMatch
+                let transactionList = self.app.tables["Transaction List"].firstMatch
                 if transactionList.exists {
                     let cells = transactionList.cells
                     XCTAssertGreaterThanOrEqual(
-                        cells.count, 0, "Filtered results should be displayed")
+                        cells.count, 0, "Filtered results should be displayed"
+                    )
                 }
             }
         }
@@ -217,18 +217,18 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testFilterByDateRange() throws {
         // Open filter options
-        let filterButton = app.buttons["Filter"].firstMatch
+        let filterButton = self.app.buttons["Filter"].firstMatch
         if filterButton.exists {
             filterButton.tap()
 
             // Select date filter
-            let dateFilter = app.buttons["By Date"].firstMatch
+            let dateFilter = self.app.buttons["By Date"].firstMatch
             if dateFilter.exists {
                 dateFilter.tap()
 
                 // Set date range
-                let startDatePicker = app.datePickers["Start Date"].firstMatch
-                let endDatePicker = app.datePickers["End Date"].firstMatch
+                let startDatePicker = self.app.datePickers["Start Date"].firstMatch
+                let endDatePicker = self.app.datePickers["End Date"].firstMatch
 
                 if startDatePicker.exists {
                     startDatePicker.tap()
@@ -241,17 +241,18 @@ final class TransactionUITests: XCTestCase {
                 }
 
                 // Apply filter
-                let applyButton = app.buttons["Apply"].firstMatch
+                let applyButton = self.app.buttons["Apply"].firstMatch
                 if applyButton.exists {
                     applyButton.tap()
                 }
 
                 // Verify filtered results
-                let transactionList = app.tables["Transaction List"].firstMatch
+                let transactionList = self.app.tables["Transaction List"].firstMatch
                 if transactionList.exists {
                     let cells = transactionList.cells
                     XCTAssertGreaterThanOrEqual(
-                        cells.count, 0, "Date filtered results should be displayed")
+                        cells.count, 0, "Date filtered results should be displayed"
+                    )
                 }
             }
         }
@@ -262,20 +263,20 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testSearchTransactions() throws {
         // Use search functionality
-        let searchField = app.searchFields.firstMatch
+        let searchField = self.app.searchFields.firstMatch
         if searchField.exists {
             searchField.tap()
             searchField.typeText("grocery")
 
             // Verify search results
-            let searchResults = app.tables["Search Results"].firstMatch
+            let searchResults = self.app.tables["Search Results"].firstMatch
             if searchResults.exists {
                 let cells = searchResults.cells
                 XCTAssertGreaterThanOrEqual(cells.count, 0, "Search should return results")
             }
 
             // Clear search
-            let clearButton = app.buttons["Clear"].firstMatch
+            let clearButton = self.app.buttons["Clear"].firstMatch
             if clearButton.exists {
                 clearButton.tap()
             }
@@ -287,16 +288,16 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testSortByDate() throws {
         // Test sorting transactions by date
-        let sortButton = app.buttons["Sort"].firstMatch
+        let sortButton = self.app.buttons["Sort"].firstMatch
         if sortButton.exists {
             sortButton.tap()
 
-            let sortByDate = app.buttons["By Date"].firstMatch
+            let sortByDate = self.app.buttons["By Date"].firstMatch
             if sortByDate.exists {
                 sortByDate.tap()
 
                 // Verify sorting (this would require checking order of dates)
-                let transactionList = app.tables["Transaction List"].firstMatch
+                let transactionList = self.app.tables["Transaction List"].firstMatch
                 if transactionList.exists {
                     XCTAssertTrue(transactionList.exists, "Transactions should be sorted by date")
                 }
@@ -307,16 +308,16 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testSortByAmount() throws {
         // Test sorting transactions by amount
-        let sortButton = app.buttons["Sort"].firstMatch
+        let sortButton = self.app.buttons["Sort"].firstMatch
         if sortButton.exists {
             sortButton.tap()
 
-            let sortByAmount = app.buttons["By Amount"].firstMatch
+            let sortByAmount = self.app.buttons["By Amount"].firstMatch
             if sortByAmount.exists {
                 sortByAmount.tap()
 
                 // Verify sorting (this would require checking order of amounts)
-                let transactionList = app.tables["Transaction List"].firstMatch
+                let transactionList = self.app.tables["Transaction List"].firstMatch
                 if transactionList.exists {
                     XCTAssertTrue(transactionList.exists, "Transactions should be sorted by amount")
                 }
@@ -329,12 +330,12 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testBulkDeleteTransactions() throws {
         // Test bulk deletion of transactions
-        let transactionList = app.tables["Transaction List"].firstMatch
+        let transactionList = self.app.tables["Transaction List"].firstMatch
         if transactionList.exists {
             let initialCount = transactionList.cells.count
 
             // Enter selection mode
-            let selectButton = app.buttons["Select"].firstMatch
+            let selectButton = self.app.buttons["Select"].firstMatch
             if selectButton.exists {
                 selectButton.tap()
 
@@ -345,12 +346,12 @@ final class TransactionUITests: XCTestCase {
                     cells.element(boundBy: 1).tap()
 
                     // Delete selected
-                    let deleteButton = app.buttons["Delete Selected"].firstMatch
+                    let deleteButton = self.app.buttons["Delete Selected"].firstMatch
                     if deleteButton.exists {
                         deleteButton.tap()
 
                         // Confirm deletion
-                        let confirmButton = app.buttons["Delete"].firstMatch
+                        let confirmButton = self.app.buttons["Delete"].firstMatch
                         if confirmButton.exists {
                             confirmButton.tap()
                         }
@@ -358,7 +359,8 @@ final class TransactionUITests: XCTestCase {
                         // Verify transactions were deleted
                         let finalCount = transactionList.cells.count
                         XCTAssertLessThan(
-                            finalCount, initialCount, "Multiple transactions should be deleted")
+                            finalCount, initialCount, "Multiple transactions should be deleted"
+                        )
                     }
                 }
             }
@@ -370,13 +372,13 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testCreateRecurringTransaction() throws {
         // Test creating a recurring transaction
-        let addButton = app.buttons["Add Transaction"].firstMatch
+        let addButton = self.app.buttons["Add Transaction"].firstMatch
         if addButton.exists {
             addButton.tap()
 
             // Fill in transaction details
-            let amountField = app.textFields["Amount"].firstMatch
-            let descriptionField = app.textFields["Description"].firstMatch
+            let amountField = self.app.textFields["Amount"].firstMatch
+            let descriptionField = self.app.textFields["Description"].firstMatch
 
             if amountField.exists {
                 amountField.tap()
@@ -389,23 +391,23 @@ final class TransactionUITests: XCTestCase {
             }
 
             // Set as recurring
-            let recurringSwitch = app.switches["Recurring"].firstMatch
+            let recurringSwitch = self.app.switches["Recurring"].firstMatch
             if recurringSwitch.exists {
                 recurringSwitch.tap()
             }
 
             // Set frequency
-            let frequencyPicker = app.popUpButtons["Frequency"].firstMatch
+            let frequencyPicker = self.app.popUpButtons["Frequency"].firstMatch
             if frequencyPicker.exists {
                 frequencyPicker.click()
-                let monthlyOption = app.menuItems["Monthly"].firstMatch
+                let monthlyOption = self.app.menuItems["Monthly"].firstMatch
                 if monthlyOption.exists {
                     monthlyOption.click()
                 }
             }
 
             // Save transaction
-            let saveButton = app.buttons["Save"].firstMatch
+            let saveButton = self.app.buttons["Save"].firstMatch
             if saveButton.exists {
                 saveButton.tap()
             }
@@ -420,23 +422,24 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testInvalidAmountValidation() throws {
         // Test validation for invalid amounts
-        let addButton = app.buttons["Add Transaction"].firstMatch
+        let addButton = self.app.buttons["Add Transaction"].firstMatch
         if addButton.exists {
             addButton.tap()
 
-            let amountField = app.textFields["Amount"].firstMatch
+            let amountField = self.app.textFields["Amount"].firstMatch
             if amountField.exists {
                 amountField.tap()
                 amountField.typeText("invalid")
 
-                let saveButton = app.buttons["Save"].firstMatch
+                let saveButton = self.app.buttons["Save"].firstMatch
                 if saveButton.exists {
                     saveButton.tap()
 
                     // Check for validation error
-                    let errorMessage = app.staticTexts["Invalid amount format"].firstMatch
+                    let errorMessage = self.app.staticTexts["Invalid amount format"].firstMatch
                     XCTAssertTrue(
-                        errorMessage.exists, "Should show validation error for invalid amount")
+                        errorMessage.exists, "Should show validation error for invalid amount"
+                    )
                 }
             }
         }
@@ -445,19 +448,20 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testRequiredFieldValidation() throws {
         // Test validation for required fields
-        let addButton = app.buttons["Add Transaction"].firstMatch
+        let addButton = self.app.buttons["Add Transaction"].firstMatch
         if addButton.exists {
             addButton.tap()
 
             // Try to save without required fields
-            let saveButton = app.buttons["Save"].firstMatch
+            let saveButton = self.app.buttons["Save"].firstMatch
             if saveButton.exists {
                 saveButton.tap()
 
                 // Check for validation error
-                let errorMessage = app.staticTexts["Required field missing"].firstMatch
+                let errorMessage = self.app.staticTexts["Required field missing"].firstMatch
                 XCTAssertTrue(
-                    errorMessage.exists, "Should show validation error for missing required fields")
+                    errorMessage.exists, "Should show validation error for missing required fields"
+                )
             }
         }
     }
@@ -467,13 +471,13 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testTransactionListScrollingPerformance() throws {
         // Navigate to transactions
-        let transactionsTab = app.tabBars.buttons["Transactions"].firstMatch
+        let transactionsTab = self.app.tabBars.buttons["Transactions"].firstMatch
         if transactionsTab.exists {
             transactionsTab.tap()
         }
 
         // Measure scrolling performance
-        let transactionList = app.tables["Transaction List"].firstMatch
+        let transactionList = self.app.tables["Transaction List"].firstMatch
         if transactionList.exists {
             measure {
                 transactionList.swipeUp()
@@ -485,18 +489,18 @@ final class TransactionUITests: XCTestCase {
     @MainActor
     func testBulkTransactionCreationPerformance() throws {
         measure {
-            for i in 1...10 {
-                let addButton = app.buttons["Add Transaction"].firstMatch
+            for i in 1 ... 10 {
+                let addButton = self.app.buttons["Add Transaction"].firstMatch
                 if addButton.exists {
                     addButton.tap()
 
-                    let amountField = app.textFields["Amount"].firstMatch
+                    let amountField = self.app.textFields["Amount"].firstMatch
                     if amountField.exists {
                         amountField.tap()
                         amountField.typeText("\(i * 10).00")
                     }
 
-                    let saveButton = app.buttons["Save"].firstMatch
+                    let saveButton = self.app.buttons["Save"].firstMatch
                     if saveButton.exists {
                         saveButton.tap()
                     }

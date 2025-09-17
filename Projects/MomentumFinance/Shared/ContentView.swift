@@ -19,128 +19,132 @@ struct ContentView: View {
     var body: some View {
         TabView(
             selection: Binding(
-                get: { navigationCoordinator.selectedTab },
-                set: { navigationCoordinator.selectedTab = $0 },
+                get: { self.navigationCoordinator.selectedTab },
+                set: { self.navigationCoordinator.selectedTab = $0 },
             )
         ) {
             NavigationStack(
                 path: Binding(
-                    get: { navigationCoordinator.dashboardNavPath },
-                    set: { navigationCoordinator.dashboardNavPath = $0 },
+                    get: { self.navigationCoordinator.dashboardNavPath },
+                    set: { self.navigationCoordinator.dashboardNavPath = $0 },
                 )
             ) {
                 DashboardView()
             }
             .tabItem {
-                Image(systemName: navigationCoordinator.selectedTab == 0 ? "house.fill" : "house")
+                Image(systemName: self.navigationCoordinator.selectedTab == 0 ? "house.fill" : "house")
                 Text("Dashboard")
             }
             .tag(0)
 
             NavigationStack(
                 path: Binding(
-                    get: { navigationCoordinator.transactionsNavPath },
-                    set: { navigationCoordinator.transactionsNavPath = $0 },
+                    get: { self.navigationCoordinator.transactionsNavPath },
+                    set: { self.navigationCoordinator.transactionsNavPath = $0 },
                 )
             ) {
                 Features.Transactions.TransactionsView()
             }
             .tabItem {
                 Image(
-                    systemName: navigationCoordinator.selectedTab == 1
-                        ? "creditcard.fill" : "creditcard")
+                    systemName: self.navigationCoordinator.selectedTab == 1
+                        ? "creditcard.fill" : "creditcard"
+                )
                 Text("Transactions")
             }
             .tag(1)
 
             NavigationStack(
                 path: Binding(
-                    get: { navigationCoordinator.budgetsNavPath },
-                    set: { navigationCoordinator.budgetsNavPath = $0 },
+                    get: { self.navigationCoordinator.budgetsNavPath },
+                    set: { self.navigationCoordinator.budgetsNavPath = $0 },
                 )
             ) {
                 Features.Budgets.BudgetsView()
             }
             .tabItem {
                 Image(
-                    systemName: navigationCoordinator.selectedTab == 2
-                        ? "chart.pie.fill" : "chart.pie")
+                    systemName: self.navigationCoordinator.selectedTab == 2
+                        ? "chart.pie.fill" : "chart.pie"
+                )
                 Text("Budgets")
             }
             .tag(2)
 
             NavigationStack(
                 path: Binding(
-                    get: { navigationCoordinator.subscriptionsNavPath },
-                    set: { navigationCoordinator.subscriptionsNavPath = $0 },
+                    get: { self.navigationCoordinator.subscriptionsNavPath },
+                    set: { self.navigationCoordinator.subscriptionsNavPath = $0 },
                 )
             ) {
                 Features.Subscriptions.SubscriptionsView()
             }
             .tabItem {
                 Image(
-                    systemName: navigationCoordinator.selectedTab == 3
-                        ? "calendar.badge.clock.fill" : "calendar.badge.clock")
+                    systemName: self.navigationCoordinator.selectedTab == 3
+                        ? "calendar.badge.clock.fill" : "calendar.badge.clock"
+                )
                 Text("Subscriptions")
             }
             .tag(3)
 
             NavigationStack(
                 path: Binding(
-                    get: { navigationCoordinator.goalsAndReportsNavPath },
-                    set: { navigationCoordinator.goalsAndReportsNavPath = $0 },
+                    get: { self.navigationCoordinator.goalsAndReportsNavPath },
+                    set: { self.navigationCoordinator.goalsAndReportsNavPath = $0 },
                 )
             ) {
                 Features.GoalsAndReports.GoalsAndReportsView()
             }
             .tabItem {
                 Image(
-                    systemName: navigationCoordinator.selectedTab == 4
-                        ? "chart.bar.fill" : "chart.bar")
+                    systemName: self.navigationCoordinator.selectedTab == 4
+                        ? "chart.bar.fill" : "chart.bar"
+                )
                 Text("Goals & Reports")
             }
             .tag(4)
         }
-        .sheet(isPresented: $isGlobalSearchPresented) {
+        .sheet(isPresented: self.$isGlobalSearchPresented) {
             Features.GlobalSearch.GlobalSearchView()
         }
-        .environmentObject(navigationCoordinator)
-        .onChange(of: navigationCoordinator.isSearchActive) { _, newValue in
-            isGlobalSearchPresented = newValue
+        .environmentObject(self.navigationCoordinator)
+        .onChange(of: self.navigationCoordinator.isSearchActive) { _, newValue in
+            self.isGlobalSearchPresented = newValue
         }
         #if os(iOS)
-            .onAppear {
-                // Configure navigation bar appearance
-                let appearance = UINavigationBarAppearance()
-                appearance.configureWithOpaqueBackground()
-                UINavigationBar.appearance().standardAppearance = appearance
-                UINavigationBar.appearance().scrollEdgeAppearance = appearance
-            }
-            .iOSOptimizations()
+        .onAppear {
+            // Configure navigation bar appearance
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            UINavigationBar.appearance().standardAppearance = appearance
+            UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        }
+        .iOSOptimizations()
         #elseif os(macOS)
-            .macOSOptimizations()
+        .macOSOptimizations()
         #endif
     }
 }
 
 #if os(iOS)
-    extension View {
-        /// <#Description#>
-        /// - Returns: <#description#>
-        func iOSOptimizations() -> some View {
-            self
-                .tint(.blue)
-        }
+extension View {
+    /// <#Description#>
+    /// - Returns: <#description#>
+    func iOSOptimizations() -> some View {
+        self
+            .tint(.blue)
     }
+}
 
 #elseif os(macOS)
-    extension View {
-        /// <#Description#>
-        /// - Returns: <#description#>
-        func macOSOptimizations() -> some View {
-            self
-                .preferredColorScheme(.light)
-                .tint(.indigo)
-        }
+extension View {
+    /// <#Description#>
+    /// - Returns: <#description#>
+    func macOSOptimizations() -> some View {
+        self
+            .preferredColorScheme(.light)
+            .tint(.indigo)
     }
+}
 #endif

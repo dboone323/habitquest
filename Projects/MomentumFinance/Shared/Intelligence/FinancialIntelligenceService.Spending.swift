@@ -1,7 +1,8 @@
 import Foundation
 
 func fi_computeMonthlySpendingByCategory(transactions: [FinancialTransaction]) -> [String: [Date:
-    Double]] {
+        Double
+]] {
     let calendar = Calendar.current
     var monthlySpendingByCategory: [String: [Date: Double]] = [:]
 
@@ -35,32 +36,34 @@ func fi_generateSpendingInsightsFromMonthlyData(
         let last = sorted.last?.value ?? 0
         let prev = sorted.count > 1 ? sorted[sorted.count - 2].value : 0
 
-        if last > average * 1.2 && last > prev * 1.1 {
+        if last > average * 1.2, last > prev * 1.1 {
             let percentIncrease = prev > 0 ? Int(((last - prev) / prev) * 100) : 0
             insights.append(
                 FinancialInsight(
                     title: "Increased Spending in \(category.name)",
                     description:
-                        "Your spending in \(category.name) increased by \(percentIncrease)% last month.",
+                    "Your spending in \(category.name) increased by \(percentIncrease)% last month.",
                     priority: .medium,
                     type: .spendingPattern,
                     relatedCategoryId: categoryId,
                     visualizationType: .lineChart,
                     data: sorted.map { ($0.key.formatted(.dateTime.month(.abbreviated)), $0.value) }
-                ))
-        } else if last < average * 0.8 && last < prev * 0.9 {
+                )
+            )
+        } else if last < average * 0.8, last < prev * 0.9 {
             let percentDecrease = prev > 0 ? Int(((prev - last) / prev) * 100) : 0
             insights.append(
                 FinancialInsight(
                     title: "Reduced Spending in \(category.name)",
                     description:
-                        "Your spending in \(category.name) decreased by \(percentDecrease)% last month.",
+                    "Your spending in \(category.name) decreased by \(percentDecrease)% last month.",
                     priority: .low,
                     type: .positiveSpendingTrend,
                     relatedCategoryId: categoryId,
                     visualizationType: .lineChart,
                     data: sorted.map { ($0.key.formatted(.dateTime.month(.abbreviated)), $0.value) }
-                ))
+                )
+            )
         }
     }
 
@@ -85,7 +88,7 @@ func fi_topCategoriesInsight(
     return FinancialInsight(
         title: "Top Spending Categories",
         description:
-            "Your highest spending categories are \(topCategoryData.map(\.0).joined(separator: ", ")).",
+        "Your highest spending categories are \(topCategoryData.map(\.0).joined(separator: ", ")).",
         priority: .medium,
         type: .spendingPattern,
         visualizationType: .pieChart,
@@ -102,7 +105,8 @@ func fi_analyzeSpendingPatterns(
     insights.append(
         contentsOf: fi_generateSpendingInsightsFromMonthlyData(
             monthlySpendingByCategory: monthly, categories: categories
-        ))
+        )
+    )
 
     if let topInsight = fi_topCategoriesInsight(
         monthlySpendingByCategory: monthly, categories: categories
@@ -116,11 +120,12 @@ func fi_analyzeSpendingPatterns(
             FinancialInsight(
                 title: "Potential Recurring Expenses",
                 description:
-                    "You may have \(recurring.count) recurring payments that are not tracked as subscriptions.",
+                "You may have \(recurring.count) recurring payments that are not tracked as subscriptions.",
                 priority: .medium,
                 type: .subscriptionDetection,
                 data: recurring.prefix(5).map { ($0.title, abs($0.amount)) }
-            ))
+            )
+        )
     }
 
     return insights
@@ -133,7 +138,8 @@ func fi_checkBudgetExceeded(
 
     let overspent = totalSpent - budget.limitAmount
     let overspentFormatted = overspent.formatted(
-        .currency(code: Locale.current.currency?.identifier ?? "USD"))
+        .currency(code: Locale.current.currency?.identifier ?? "USD")
+    )
 
     return FinancialInsight(
         title: "Budget Exceeded",
@@ -160,7 +166,7 @@ struct BudgetAnalysisContext {
 }
 
 func fi_checkBudgetAtRisk(context: BudgetAnalysisContext) -> FinancialInsight? {
-    guard context.percentUsed > context.idealPercentage * 1.1 && context.percentUsed > 0.7 else {
+    guard context.percentUsed > context.idealPercentage * 1.1, context.percentUsed > 0.7 else {
         return nil
     }
 
@@ -171,9 +177,11 @@ func fi_checkBudgetAtRisk(context: BudgetAnalysisContext) -> FinancialInsight? {
     let projectedOverage = projectedTotal - context.budget.limitAmount
     let remainingBudget = context.budget.limitAmount - context.totalSpent
     let projectedOverageFormatted = projectedOverage.formatted(
-        .currency(code: Locale.current.currency?.identifier ?? "USD"))
+        .currency(code: Locale.current.currency?.identifier ?? "USD")
+    )
     let remainingBudgetFormatted = remainingBudget.formatted(
-        .currency(code: Locale.current.currency?.identifier ?? "USD"))
+        .currency(code: Locale.current.currency?.identifier ?? "USD")
+    )
 
     let baseMessage =
         "At your current rate, you'll exceed your \(context.budget.name) budget by \(projectedOverageFormatted)."
@@ -199,7 +207,7 @@ func fi_checkBudgetUnderutilized(
     budget: Budget, totalSpent: Double, percentUsed: Double,
     idealPercentage: Double, daysRemaining: Int
 ) -> FinancialInsight? {
-    guard percentUsed < idealPercentage * 0.5 && idealPercentage > 0.5 else { return nil }
+    guard percentUsed < idealPercentage * 0.5, idealPercentage > 0.5 else { return nil }
 
     let percentUsedInt = Int(percentUsed * 100)
     let baseMessage = "You've only used \(percentUsedInt)% of your \(budget.name) budget"
@@ -221,7 +229,7 @@ func fi_checkBudgetUnderutilized(
 }
 
 func fi_analyzeBudgets(transactions: [FinancialTransaction], budgets: [Budget])
--> [FinancialInsight] {
+    -> [FinancialInsight] {
     var insights: [FinancialInsight] = []
     let calendar = Calendar.current
     let currentMonth = calendar.component(.month, from: Date())
@@ -275,7 +283,8 @@ func fi_analyzeBudgets(transactions: [FinancialTransaction], budgets: [Budget])
 
     // Identify categories without budgets
     insights.append(
-        contentsOf: fi_findBudgetRecommendations(transactions: transactions, budgets: budgets))
+        contentsOf: fi_findBudgetRecommendations(transactions: transactions, budgets: budgets)
+    )
 
     return insights
 }
@@ -283,7 +292,7 @@ func fi_analyzeBudgets(transactions: [FinancialTransaction], budgets: [Budget])
 @MainActor
 extension FinancialIntelligenceService {
     private func findRecurringTransactionInsights(from transactions: [FinancialTransaction])
-    -> [FinancialInsight] {
+        -> [FinancialInsight] {
         let recurringTransactions = fi_findRecurringTransactions(transactions)
         guard !recurringTransactions.isEmpty else { return [] }
 
@@ -292,7 +301,7 @@ extension FinancialIntelligenceService {
         let insight = FinancialInsight(
             title: "Potential Recurring Expenses",
             description:
-                "You may have \(recurringTransactions.count) recurring payments that are not tracked as subscriptions.",
+            "You may have \(recurringTransactions.count) recurring payments that are not tracked as subscriptions.",
             priority: .medium,
             type: .subscriptionDetection,
             visualizationType: .none,

@@ -76,43 +76,43 @@ struct IntegratedMacOSContentView: View {
     // Binding to sidebar selection that updates the NavigationCoordinator
     private var selectedSidebarItemBinding: Binding<SidebarItem?> {
         Binding(
-            get: { navigationCoordinator.selectedSidebarItem },
+            get: { self.navigationCoordinator.selectedSidebarItem },
             set: {
-                navigationCoordinator.selectedSidebarItem = $0
+                self.navigationCoordinator.selectedSidebarItem = $0
                 // Clear detail selection when changing main navigation
-                navigationCoordinator.clearDetailSelection()
+                self.navigationCoordinator.clearDetailSelection()
             },
-            )
+        )
     }
 
     // Binding to list item selection that updates the NavigationCoordinator
     private var selectedListItemBinding: Binding<ListableItem?> {
         Binding(
-            get: { navigationCoordinator.selectedListItem },
-            set: { navigationCoordinator.navigateToDetail(item: $0) },
-            )
+            get: { self.navigationCoordinator.selectedListItem },
+            set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+        )
     }
 
     // Binding to column visibility that updates the NavigationCoordinator
     private var columnVisibilityBinding: Binding<NavigationSplitViewVisibility> {
         Binding(
-            get: { navigationCoordinator.columnVisibility },
-            set: { navigationCoordinator.columnVisibility = $0 },
-            )
+            get: { self.navigationCoordinator.columnVisibility },
+            set: { self.navigationCoordinator.columnVisibility = $0 },
+        )
     }
 
     var body: some View {
-        NavigationSplitView(columnVisibility: columnVisibilityBinding) {
+        NavigationSplitView(columnVisibility: self.columnVisibilityBinding) {
             // Sidebar column with main navigation
-            sidebar
+            self.sidebar
                 .frame(minWidth: 220)
         } content: {
             // Content column - list of items for the selected category
-            contentList
+            self.contentList
                 .frame(minWidth: 300)
         } detail: {
             // Detail view for the selected item
-            detailView
+            self.detailView
                 .frame(minWidth: 450)
         }
         .navigationSplitViewStyle(.balanced)
@@ -124,29 +124,29 @@ struct IntegratedMacOSContentView: View {
             // Register keyboard shortcuts
             KeyboardShortcutManager.shared.registerGlobalShortcuts()
             // Setup notification handlers
-            setupNotificationHandlers()
+            self.setupNotificationHandlers()
         }
     }
 
     // MARK: - Sidebar View
 
     private var sidebar: some View {
-        List(selection: selectedSidebarItemBinding) {
+        List(selection: self.selectedSidebarItemBinding) {
             Section("Main") {
-                sidebarItem(title: "Dashboard", icon: "house", item: .dashboard)
-                sidebarItem(title: "Transactions", icon: "creditcard", item: .transactions)
-                sidebarItem(title: "Budgets", icon: "chart.pie", item: .budgets)
+                self.sidebarItem(title: "Dashboard", icon: "house", item: .dashboard)
+                self.sidebarItem(title: "Transactions", icon: "creditcard", item: .transactions)
+                self.sidebarItem(title: "Budgets", icon: "chart.pie", item: .budgets)
             }
 
             Section("Planning") {
-                sidebarItem(title: "Subscriptions", icon: "calendar.badge.clock", item: .subscriptions)
-                sidebarItem(title: "Goals & Reports", icon: "chart.bar", item: .goalsAndReports)
+                self.sidebarItem(title: "Subscriptions", icon: "calendar.badge.clock", item: .subscriptions)
+                self.sidebarItem(title: "Goals & Reports", icon: "chart.bar", item: .goalsAndReports)
             }
         }
         .listStyle(.sidebar)
         .toolbar {
             ToolbarItem(placement: .automatic) {
-                Button(action: toggleSidebar).accessibilityLabel("Button") {
+                Button(action: self.toggleSidebar).accessibilityLabel("Button") {
                     Image(systemName: "sidebar.left")
                 }
                 .help("Toggle Sidebar")
@@ -156,49 +156,49 @@ struct IntegratedMacOSContentView: View {
     }
 
     private func sidebarItem(title: String, icon: String, item: SidebarItem) -> some View {
-        Label(title, systemImage: navigationCoordinator.selectedSidebarItem == item ? "\(icon).fill" : icon)
+        Label(title, systemImage: self.navigationCoordinator.selectedSidebarItem == item ? "\(icon).fill" : icon)
             .tag(item)
     }
 
     private func toggleSidebar() {
-        navigationCoordinator.toggleSidebar()
+        self.navigationCoordinator.toggleSidebar()
     }
 
     // MARK: - Content List View
 
     private var contentList: some View {
         Group {
-            switch navigationCoordinator.selectedSidebarItem {
+            switch self.navigationCoordinator.selectedSidebarItem {
             case .dashboard:
                 DashboardListView()
-                    .environmentObject(navigationCoordinator)
+                    .environmentObject(self.navigationCoordinator)
             case .transactions:
                 TransactionsListView()
-                    .environmentObject(navigationCoordinator)
+                    .environmentObject(self.navigationCoordinator)
             case .budgets:
                 BudgetListView()
-                    .environmentObject(navigationCoordinator)
+                    .environmentObject(self.navigationCoordinator)
             case .subscriptions:
                 SubscriptionListView()
-                    .environmentObject(navigationCoordinator)
+                    .environmentObject(self.navigationCoordinator)
             case .goalsAndReports:
                 GoalsListView()
-                    .environmentObject(navigationCoordinator)
+                    .environmentObject(self.navigationCoordinator)
             case .none:
                 EmptyView()
             }
         }
-        .searchable(text: $searchText, placement: .toolbar, prompt: "Search")
+        .searchable(text: self.$searchText, placement: .toolbar, prompt: "Search")
         .onSubmit(of: .search) {
-            performSearch()
+            self.performSearch()
         }
     }
 
     private func performSearch() {
-        guard !searchText.isEmpty else { return }
-        navigationCoordinator.searchQuery = searchText
-        navigationCoordinator.isSearchActive = true
-        isSearching = true
+        guard !self.searchText.isEmpty else { return }
+        self.navigationCoordinator.searchQuery = self.searchText
+        self.navigationCoordinator.isSearchActive = true
+        self.isSearching = true
     }
 
     // MARK: - Detail View
@@ -240,7 +240,7 @@ struct IntegratedMacOSContentView: View {
                 }
             } else {
                 // Default view when no item is selected
-                switch navigationCoordinator.selectedSidebarItem {
+                switch self.navigationCoordinator.selectedSidebarItem {
                 case .dashboard:
                     Features.Dashboard.DashboardView()
                 case .transactions:
@@ -263,31 +263,31 @@ struct IntegratedMacOSContentView: View {
     private func setupNotificationHandlers() {
         // Setup notification handlers for keyboard shortcut actions
         NotificationCenter.default.addObserver(forName: NSNotification.Name("ShowDashboard"), object: nil, queue: .main) { _ in
-            navigationCoordinator.selectedSidebarItem = .dashboard
+            self.navigationCoordinator.selectedSidebarItem = .dashboard
         }
 
         NotificationCenter.default.addObserver(forName: NSNotification.Name("ShowTransactions"), object: nil, queue: .main) { _ in
-            navigationCoordinator.selectedSidebarItem = .transactions
+            self.navigationCoordinator.selectedSidebarItem = .transactions
         }
 
         NotificationCenter.default.addObserver(forName: NSNotification.Name("ShowBudgets"), object: nil, queue: .main) { _ in
-            navigationCoordinator.selectedSidebarItem = .budgets
+            self.navigationCoordinator.selectedSidebarItem = .budgets
         }
 
         NotificationCenter.default.addObserver(forName: NSNotification.Name("ShowSubscriptions"), object: nil, queue: .main) { _ in
-            navigationCoordinator.selectedSidebarItem = .subscriptions
+            self.navigationCoordinator.selectedSidebarItem = .subscriptions
         }
 
         NotificationCenter.default.addObserver(forName: NSNotification.Name("ShowGoalsAndReports"), object: nil, queue: .main) { _ in
-            navigationCoordinator.selectedSidebarItem = .goalsAndReports
+            self.navigationCoordinator.selectedSidebarItem = .goalsAndReports
         }
 
         NotificationCenter.default.addObserver(forName: NSNotification.Name("ToggleSidebar"), object: nil, queue: .main) { _ in
-            toggleSidebar()
+            self.toggleSidebar()
         }
 
         NotificationCenter.default.addObserver(forName: NSNotification.Name("PerformGlobalSearch"), object: nil, queue: .main) { _ in
-            isSearching = true
+            self.isSearching = true
         }
     }
 }
@@ -303,11 +303,11 @@ struct DashboardListView: View {
 
     var body: some View {
         List(selection: Binding(
-            get: { navigationCoordinator.selectedListItem },
-            set: { navigationCoordinator.navigateToDetail(item: $0) },
-            )) {
+            get: { self.navigationCoordinator.selectedListItem },
+            set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+        )) {
             Section("Accounts") {
-                ForEach(accounts) { account in
+                ForEach(self.accounts) { account in
                     NavigationLink(value: ListableItem(id: account.id, name: account.name, type: .account)) {
                         HStack {
                             Image(systemName: account.type == .checking ? "banknote" : "creditcard")
@@ -326,7 +326,7 @@ struct DashboardListView: View {
             }
 
             Section("Recent Transactions") {
-                ForEach(recentTransactions.prefix(5)) { transaction in
+                ForEach(self.recentTransactions.prefix(5)) { transaction in
                     NavigationLink(value: ListableItem(id: transaction.id, name: transaction.name, type: .transaction)) {
                         HStack {
                             Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
@@ -349,7 +349,7 @@ struct DashboardListView: View {
             }
 
             Section("Upcoming Subscriptions") {
-                ForEach(upcomingSubscriptions) { subscription in
+                ForEach(self.upcomingSubscriptions) { subscription in
                     NavigationLink(value: ListableItem(id: subscription.id, name: subscription.name, type: .subscription)) {
                         HStack {
                             Image(systemName: "calendar.badge.clock")
@@ -397,7 +397,7 @@ struct TransactionsListView: View {
     @State private var filterCategory: String?
 
     var filteredTransactions: [FinancialTransaction] {
-        let sorted = sortedTransactions
+        let sorted = self.sortedTransactions
         if let filterCategory {
             return sorted.filter { $0.category?.id == filterCategory }
         }
@@ -405,22 +405,22 @@ struct TransactionsListView: View {
     }
 
     var sortedTransactions: [FinancialTransaction] {
-        switch sortOrder {
+        switch self.sortOrder {
         case .dateDescending:
-            transactions.sorted { $0.date > $1.date }
+            self.transactions.sorted { $0.date > $1.date }
         case .dateAscending:
-            transactions.sorted { $0.date < $1.date }
+            self.transactions.sorted { $0.date < $1.date }
         case .amountDescending:
-            transactions.sorted { $0.amount > $1.amount }
+            self.transactions.sorted { $0.amount > $1.amount }
         case .amountAscending:
-            transactions.sorted { $0.amount < $1.amount }
+            self.transactions.sorted { $0.amount < $1.amount }
         }
     }
 
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Picker("Sort", selection: $sortOrder) {
+                Picker("Sort", selection: self.$sortOrder) {
                     Text("Newest First").tag(SortOrder.dateDescending)
                     Text("Oldest First").tag(SortOrder.dateAscending)
                     Text("Highest Amount").tag(SortOrder.amountDescending)
@@ -445,11 +445,11 @@ struct TransactionsListView: View {
             Divider()
 
             List(selection: Binding(
-                get: { navigationCoordinator.selectedListItem },
-                set: { navigationCoordinator.navigateToDetail(item: $0) },
-                )) {
+                get: { self.navigationCoordinator.selectedListItem },
+                set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+            )) {
                 Section("Accounts") {
-                    ForEach(accounts) { account in
+                    ForEach(self.accounts) { account in
                         NavigationLink(value: ListableItem(id: account.id, name: account.name, type: .account)) {
                             HStack {
                                 Image(systemName: account.type == .checking ? "banknote" : "creditcard")
@@ -470,7 +470,7 @@ struct TransactionsListView: View {
                 }
 
                 Section("Transactions") {
-                    ForEach(filteredTransactions) { transaction in
+                    ForEach(self.filteredTransactions) { transaction in
                         NavigationLink(value: ListableItem(id: transaction.id, name: transaction.name, type: .transaction)) {
                             HStack {
                                 Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
@@ -535,22 +535,24 @@ struct BudgetListView: View {
             Divider()
 
             List(selection: Binding(
-                get: { navigationCoordinator.selectedListItem },
-                set: { navigationCoordinator.navigateToDetail(item: $0) },
-                )) {
-                ForEach(budgets) { budget in
+                get: { self.navigationCoordinator.selectedListItem },
+                set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+            )) {
+                ForEach(self.budgets) { budget in
                     NavigationLink(value: ListableItem(id: budget.id, name: budget.name, type: .budget)) {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
                                 Text(budget.name)
                                     .font(.headline)
                                 Spacer()
-                                Text("\(budget.spent.formatted(.currency(code: "USD"))) of \(budget.amount.formatted(.currency(code: "USD")))")
-                                    .font(.subheadline)
+                                Text(
+                                    "\(budget.spent.formatted(.currency(code: "USD"))) of \(budget.amount.formatted(.currency(code: "USD")))"
+                                )
+                                .font(.subheadline)
                             }
 
                             ProgressView(value: budget.spent, total: budget.amount)
-                                .tint(getBudgetColor(spent: budget.spent, total: budget.amount))
+                                .tint(self.getBudgetColor(spent: budget.spent, total: budget.amount))
                         }
                         .padding(.vertical, 4)
                     }
@@ -589,7 +591,7 @@ struct SubscriptionListView: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Picker("Group By", selection: $groupBy) {
+                Picker("Group By", selection: self.$groupBy) {
                     Text("Next Payment").tag(GroupOption.date)
                     Text("Amount").tag(GroupOption.amount)
                     Text("Provider").tag(GroupOption.provider)
@@ -613,10 +615,10 @@ struct SubscriptionListView: View {
             Divider()
 
             List(selection: Binding(
-                get: { navigationCoordinator.selectedListItem },
-                set: { navigationCoordinator.navigateToDetail(item: $0) },
-                )) {
-                ForEach(getGroupedSubscriptions()) { group in
+                get: { self.navigationCoordinator.selectedListItem },
+                set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+            )) {
+                ForEach(self.getGroupedSubscriptions()) { group in
                     Section(header: Text(group.title)) {
                         ForEach(group.items) { subscription in
                             NavigationLink(value: ListableItem(id: subscription.id, name: subscription.name, type: .subscription)) {
@@ -663,21 +665,21 @@ struct SubscriptionListView: View {
     }
 
     private func getGroupedSubscriptions() -> [SubscriptionGroup] {
-        switch groupBy {
+        switch self.groupBy {
         case .date:
             // Group by next payment date (simplified)
-            let thisWeek = subscriptions.filter {
+            let thisWeek = self.subscriptions.filter {
                 guard let nextDate = $0.nextPaymentDate else { return false }
                 return Calendar.current.isDate(nextDate, equalTo: Date(), toGranularity: .weekOfYear)
             }
 
-            let thisMonth = subscriptions.filter {
+            let thisMonth = self.subscriptions.filter {
                 guard let nextDate = $0.nextPaymentDate else { return false }
                 return Calendar.current.isDate(nextDate, equalTo: Date(), toGranularity: .month) &&
                     !Calendar.current.isDate(nextDate, equalTo: Date(), toGranularity: .weekOfYear)
             }
 
-            let future = subscriptions.filter {
+            let future = self.subscriptions.filter {
                 guard let nextDate = $0.nextPaymentDate else { return false }
                 return nextDate > Date() &&
                     !Calendar.current.isDate(nextDate, equalTo: Date(), toGranularity: .month)
@@ -698,9 +700,9 @@ struct SubscriptionListView: View {
 
         case .amount:
             // Group by price tiers
-            let lowTier = subscriptions.filter { $0.amount < 10 }
-            let midTier = subscriptions.filter { $0.amount >= 10 && $0.amount < 25 }
-            let highTier = subscriptions.filter { $0.amount >= 25 }
+            let lowTier = self.subscriptions.filter { $0.amount < 10 }
+            let midTier = self.subscriptions.filter { $0.amount >= 10 && $0.amount < 25 }
+            let highTier = self.subscriptions.filter { $0.amount >= 25 }
 
             var result: [SubscriptionGroup] = []
             if !lowTier.isEmpty {
@@ -739,7 +741,7 @@ struct GoalsListView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Picker("View", selection: $viewType) {
+            Picker("View", selection: self.$viewType) {
                 Text("Savings Goals").tag(ViewType.goals)
                 Text("Reports").tag(ViewType.reports)
             }
@@ -750,10 +752,10 @@ struct GoalsListView: View {
 
             Divider()
 
-            if viewType == .goals {
-                goalsList
+            if self.viewType == .goals {
+                self.goalsList
             } else {
-                reportsList
+                self.reportsList
             }
         }
         .navigationTitle("Goals & Reports")
@@ -761,10 +763,10 @@ struct GoalsListView: View {
 
     var goalsList: some View {
         List(selection: Binding(
-            get: { navigationCoordinator.selectedListItem },
-            set: { navigationCoordinator.navigateToDetail(item: $0) },
-            )) {
-            ForEach(goals) { goal in
+            get: { self.navigationCoordinator.selectedListItem },
+            set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+        )) {
+            ForEach(self.goals) { goal in
                 NavigationLink(value: ListableItem(id: goal.id, name: goal.name, type: .goal)) {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
@@ -773,8 +775,10 @@ struct GoalsListView: View {
 
                             Spacer()
 
-                            Text("\(goal.currentAmount.formatted(.currency(code: "USD"))) of \(goal.targetAmount.formatted(.currency(code: "USD")))")
-                                .font(.subheadline)
+                            Text(
+                                "\(goal.currentAmount.formatted(.currency(code: "USD"))) of \(goal.targetAmount.formatted(.currency(code: "USD")))"
+                            )
+                            .font(.subheadline)
                         }
 
                         ProgressView(value: goal.currentAmount, total: goal.targetAmount)
@@ -805,9 +809,9 @@ struct GoalsListView: View {
 
     var reportsList: some View {
         List(selection: Binding(
-            get: { navigationCoordinator.selectedListItem },
-            set: { navigationCoordinator.navigateToDetail(item: $0) },
-            )) {
+            get: { self.navigationCoordinator.selectedListItem },
+            set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+        )) {
             NavigationLink(value: ListableItem(id: "spending", name: "Spending by Category", type: .report)) {
                 HStack {
                     Image(systemName: "chart.pie")
@@ -859,19 +863,19 @@ struct TransactionsOverviewView: View {
     @Query private var accounts: [FinancialAccount]
 
     var totalIncome: Double {
-        transactions.filter { $0.amount > 0 }.reduce(0) { $0 + $1.amount }
+        self.transactions.filter { $0.amount > 0 }.reduce(0) { $0 + $1.amount }
     }
 
     var totalExpenses: Double {
-        transactions.filter { $0.amount < 0 }.reduce(0) { $0 + abs($1.amount) }
+        self.transactions.filter { $0.amount < 0 }.reduce(0) { $0 + abs($1.amount) }
     }
 
     var netCashflow: Double {
-        totalIncome - totalExpenses
+        self.totalIncome - self.totalExpenses
     }
 
     var totalBalance: Double {
-        accounts.reduce(0) { $0 + $1.balance }
+        self.accounts.reduce(0) { $0 + $1.balance }
     }
 
     var body: some View {
@@ -884,10 +888,15 @@ struct TransactionsOverviewView: View {
 
                 // Summary cards
                 HStack(spacing: 20) {
-                    SummaryCard(title: "Total Income", amount: totalIncome, icon: "arrow.up.circle.fill", color: .green)
-                    SummaryCard(title: "Total Expenses", amount: totalExpenses, icon: "arrow.down.circle.fill", color: .red)
-                    SummaryCard(title: "Net Cash Flow", amount: netCashflow, icon: "arrow.left.arrow.right.circle.fill", color: netCashflow >= 0 ? .blue : .orange)
-                    SummaryCard(title: "Total Balance", amount: totalBalance, icon: "banknote.fill", color: .purple)
+                    SummaryCard(title: "Total Income", amount: self.totalIncome, icon: "arrow.up.circle.fill", color: .green)
+                    SummaryCard(title: "Total Expenses", amount: self.totalExpenses, icon: "arrow.down.circle.fill", color: .red)
+                    SummaryCard(
+                        title: "Net Cash Flow",
+                        amount: self.netCashflow,
+                        icon: "arrow.left.arrow.right.circle.fill",
+                        color: self.netCashflow >= 0 ? .blue : .orange
+                    )
+                    SummaryCard(title: "Total Balance", amount: self.totalBalance, icon: "banknote.fill", color: .purple)
                 }
 
                 Text("Select an account or transaction from the list to view details.")
@@ -909,18 +918,18 @@ struct TransactionsOverviewView: View {
         var body: some View {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
-                    Image(systemName: icon)
+                    Image(systemName: self.icon)
                         .font(.title2)
-                        .foregroundStyle(color)
+                        .foregroundStyle(self.color)
 
-                    Text(title)
+                    Text(self.title)
                         .font(.headline)
                 }
 
-                Text(amount.formatted(.currency(code: "USD")))
+                Text(self.amount.formatted(.currency(code: "USD")))
                     .font(.title)
                     .bold()
-                    .foregroundStyle(color)
+                    .foregroundStyle(self.color)
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -945,8 +954,8 @@ struct BudgetsOverviewView: View {
                     .font(.title2)
 
                 // Total budget usage
-                let totalBudgeted = budgets.reduce(0) { $0 + $1.amount }
-                let totalSpent = budgets.reduce(0) { $0 + $1.spent }
+                let totalBudgeted = self.budgets.reduce(0) { $0 + $1.amount }
+                let totalSpent = self.budgets.reduce(0) { $0 + $1.spent }
                 let percentage = totalBudgeted > 0 ? (totalSpent / totalBudgeted) * 100 : 0
 
                 HStack(spacing: 20) {
@@ -1007,13 +1016,13 @@ struct SubscriptionsOverviewView: View {
     @Query private var subscriptions: [Subscription]
 
     var monthlyTotal: Double {
-        subscriptions.reduce(0) { total, subscription in
-            total + calculateMonthlyCost(subscription)
+        self.subscriptions.reduce(0) { total, subscription in
+            total + self.calculateMonthlyCost(subscription)
         }
     }
 
     var yearlyTotal: Double {
-        monthlyTotal * 12
+        self.monthlyTotal * 12
     }
 
     var body: some View {
@@ -1029,7 +1038,7 @@ struct SubscriptionsOverviewView: View {
                         Text("Active Subscriptions")
                             .font(.headline)
 
-                        Text("\(subscriptions.count)")
+                        Text("\(self.subscriptions.count)")
                             .font(.system(size: 36, weight: .bold))
                     }
                     .padding()
@@ -1041,7 +1050,7 @@ struct SubscriptionsOverviewView: View {
                         Text("Monthly Cost")
                             .font(.headline)
 
-                        Text(monthlyTotal.formatted(.currency(code: "USD")))
+                        Text(self.monthlyTotal.formatted(.currency(code: "USD")))
                             .font(.system(size: 36, weight: .bold))
                     }
                     .padding()
@@ -1053,7 +1062,7 @@ struct SubscriptionsOverviewView: View {
                         Text("Annual Cost")
                             .font(.headline)
 
-                        Text(yearlyTotal.formatted(.currency(code: "USD")))
+                        Text(self.yearlyTotal.formatted(.currency(code: "USD")))
                             .font(.system(size: 36, weight: .bold))
                     }
                     .padding()
@@ -1087,15 +1096,15 @@ struct GoalsAndReportsOverviewView: View {
     @Query private var goals: [SavingsGoal]
 
     var totalSaved: Double {
-        goals.reduce(0) { $0 + $1.currentAmount }
+        self.goals.reduce(0) { $0 + $1.currentAmount }
     }
 
     var totalTarget: Double {
-        goals.reduce(0) { $0 + $1.targetAmount }
+        self.goals.reduce(0) { $0 + $1.targetAmount }
     }
 
     var percentComplete: Double {
-        totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0
+        self.totalTarget > 0 ? (self.totalSaved / self.totalTarget) * 100 : 0
     }
 
     var body: some View {
@@ -1116,16 +1125,17 @@ struct GoalsAndReportsOverviewView: View {
 
                         Spacer()
 
-                        Text("\(totalSaved.formatted(.currency(code: "USD"))) of \(totalTarget.formatted(.currency(code: "USD")))")
-                            .bold()
+                        Text("\(self.totalSaved.formatted(.currency(code: "USD"))) of \(self.totalTarget.formatted(.currency(code: "USD")))"
+                        )
+                        .bold()
                     }
 
-                    ProgressView(value: totalSaved, total: totalTarget)
+                    ProgressView(value: self.totalSaved, total: self.totalTarget)
                         .tint(.blue)
                         .scaleEffect(y: 2.0)
                         .padding(.vertical, 8)
 
-                    Text("\(Int(percentComplete))% Complete")
+                    Text("\(Int(self.percentComplete))% Complete")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -1164,15 +1174,15 @@ struct WelcomeView: View {
                 .frame(height: 40)
 
             HStack(spacing: 30) {
-                quickAccessButton("Transactions", icon: "creditcard.fill", color: .blue).accessibilityLabel("Button") {
+                self.quickAccessButton("Transactions", icon: "creditcard.fill", color: .blue).accessibilityLabel("Button") {
                     NotificationCenter.default.post(name: NSNotification.Name("ShowTransactions"), object: nil)
                 }
 
-                quickAccessButton("Budgets", icon: "chart.pie.fill", color: .orange).accessibilityLabel("Button") {
+                self.quickAccessButton("Budgets", icon: "chart.pie.fill", color: .orange).accessibilityLabel("Button") {
                     NotificationCenter.default.post(name: NSNotification.Name("ShowBudgets"), object: nil)
                 }
 
-                quickAccessButton("Goals", icon: "target", color: .green).accessibilityLabel("Button") {
+                self.quickAccessButton("Goals", icon: "target", color: .green).accessibilityLabel("Button") {
                     NotificationCenter.default.post(name: NSNotification.Name("ShowGoalsAndReports"), object: nil)
                 }
             }
@@ -1181,7 +1191,12 @@ struct WelcomeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
-    private func quickAccessButton(_ title: String, icon: String, color: Color, action: @escaping ().accessibilityLabel("Button") -> Void) -> some View {
+    private func quickAccessButton(
+        _ title: String,
+        icon: String,
+        color: Color,
+        action: @escaping ().accessibilityLabel("Button") -> Void
+    ) -> some View {
         VStack {
             Button(action: action).accessibilityLabel("Button") {
                 VStack(spacing: 15) {
@@ -1208,7 +1223,7 @@ struct EnhancedAccountDetailView: View {
     let accountId: String
 
     var body: some View {
-        Text("Enhanced Account Detail View for \(accountId)")
+        Text("Enhanced Account Detail View for \(self.accountId)")
             .font(.largeTitle)
     }
 }
@@ -1217,7 +1232,7 @@ struct EnhancedGoalDetailView: View {
     let goalId: String
 
     var body: some View {
-        Text("Enhanced Goal Detail View for \(goalId)")
+        Text("Enhanced Goal Detail View for \(self.goalId)")
             .font(.largeTitle)
     }
 }
@@ -1226,7 +1241,7 @@ struct EnhancedReportDetailView: View {
     let reportType: String
 
     var body: some View {
-        Text("Enhanced Report View: \(reportType)")
+        Text("Enhanced Report View: \(self.reportType)")
             .font(.largeTitle)
     }
 }

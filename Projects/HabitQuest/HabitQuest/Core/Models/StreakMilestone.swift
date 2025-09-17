@@ -101,21 +101,21 @@ struct StreakMilestone: Identifiable, @unchecked Sendable {
 
     /// Get the milestone for a specific streak count
     static func milestone(for streakCount: Int) -> StreakMilestone? {
-        predefinedMilestones
+        self.predefinedMilestones
             .filter { $0.streakCount <= streakCount }
             .max(by: { $0.streakCount < $1.streakCount })
     }
 
     /// Get the next milestone to achieve
     static func nextMilestone(for streakCount: Int) -> StreakMilestone? {
-        predefinedMilestones
+        self.predefinedMilestones
             .first { $0.streakCount > streakCount }
     }
 
     /// Check if a streak count just achieved a new milestone
     static func isNewMilestone(streakCount: Int, previousCount: Int) -> Bool {
-        let currentMilestone = milestone(for: streakCount)
-        let previousMilestone = milestone(for: previousCount)
+        let currentMilestone = self.milestone(for: streakCount)
+        let previousMilestone = self.milestone(for: previousCount)
 
         return currentMilestone?.streakCount != previousMilestone?.streakCount &&
             currentMilestone?.streakCount == streakCount

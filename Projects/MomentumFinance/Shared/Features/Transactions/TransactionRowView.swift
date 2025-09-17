@@ -1,5 +1,5 @@
 //
-//  SimpleTransactionRow.swift
+//  TransactionRowView.swift
 //  MomentumFinance
 //
 //  Created by GitHub Copilot on 2025-08-19.
@@ -14,10 +14,10 @@ extension Features.Transactions {
         let onTapped: () -> Void
 
         var body: some View {
-            Button(action: onTapped).accessibilityLabel("Button") {
+            Button(action: self.onTapped).accessibilityLabel("Button") {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text(transaction.title)
+                        Text(self.transaction.title)
                             .font(.headline)
 
                         if let category = transaction.category {
@@ -30,11 +30,11 @@ extension Features.Transactions {
                     Spacer()
 
                     VStack(alignment: .trailing) {
-                        Text(transaction.formattedAmount)
+                        Text(self.transaction.formattedAmount)
                             .font(.headline)
-                            .foregroundColor(transaction.transactionType == .income ? .green : .red)
+                            .foregroundColor(self.transaction.transactionType == .income ? .green : .red)
 
-                        Text(transaction.formattedDate)
+                        Text(self.transaction.formattedDate)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

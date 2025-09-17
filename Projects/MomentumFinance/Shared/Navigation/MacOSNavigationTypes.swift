@@ -20,15 +20,15 @@ public struct ListableItem: Identifiable, Hashable {
     public let type: ListItemType
 
     public var identifier: String {
-        "\(type)_\(id ?? "unknown")"
+        "\(self.type)_\(self.id ?? "unknown")"
     }
 
     // Identifiable conformance
-    public var identifierId: String { identifier }
+    public var identifierId: String { self.identifier }
 
     // Hashable conformance
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
+        hasher.combine(self.identifier)
     }
 
     public static func == (lhs: ListableItem, rhs: ListableItem) -> Bool {

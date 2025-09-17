@@ -40,7 +40,7 @@ extension Features.Subscriptions {
         // Initialize with subscription ID (for cross-module navigation)
         init(subscriptionId: PersistentIdentifier) {
             self.subscriptionId = subscriptionId
-            self.subscription = nil  // Will be resolved in the resolvedSubscription property
+            self.subscription = nil // Will be resolved in the resolvedSubscription property
         }
 
         // Resolve the subscription from ID if needed
@@ -48,7 +48,7 @@ extension Features.Subscriptions {
             if let subscription {
                 return subscription
             }
-            return subscriptions.first { $0.persistentModelID == subscriptionId }
+            return self.subscriptions.first { $0.persistentModelID == self.subscriptionId }
         }
 
         var body: some View {
@@ -61,7 +61,7 @@ extension Features.Subscriptions {
                                 .font(.system(size: 42, weight: .bold))
                                 .foregroundColor(.primary)
 
-                            Text(billingFrequencyText(subscription.billingCycle))
+                            Text(self.billingFrequencyText(subscription.billingCycle))
                                 .font(.headline)
                                 .foregroundColor(.secondary)
 
@@ -71,9 +71,9 @@ extension Features.Subscriptions {
                                     get: { subscription.isActive },
                                     set: { newValue in
                                         subscription.isActive = newValue
-                                        try? modelContext.save()
+                                        try? self.modelContext.save()
                                     },
-                                    )
+                                )
                             )
                             .padding(.top, 8)
                             .toggleStyle(.switch)
@@ -104,15 +104,16 @@ extension Features.Subscriptions {
                             SubscriptionDetailRow(
                                 title: "Next Payment",
                                 value: subscription.nextDueDate.formatted(
-                                    date: .long, time: .omitted),
-                                highlight: isPaymentDueSoon(subscription),
-                                )
+                                    date: .long, time: .omitted
+                                ),
+                                highlight: self.isPaymentDueSoon(subscription),
+                            )
 
                             SubscriptionDetailRow(
                                 title: "Payment Status",
-                                value: paymentStatusText(subscription),
-                                highlight: isPaymentOverdue(subscription),
-                                )
+                                value: self.paymentStatusText(subscription),
+                                highlight: self.isPaymentOverdue(subscription),
+                            )
 
                             if let notes = subscription.notes, !notes.isEmpty {
                                 VStack(alignment: .leading, spacing: 8) {
@@ -129,16 +130,16 @@ extension Features.Subscriptions {
                         .padding()
                         .background(
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(platformBackgroundColor)
+                                .fill(self.platformBackgroundColor)
                                 .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                            )
+                        )
 
                         // Payment History (Placeholder)
                         VStack(alignment: .leading, spacing: 16) {
                             Text("Payment History")
                                 .font(.headline)
 
-                            let relatedTransactions = getRelatedTransactions(for: subscription)
+                            let relatedTransactions = self.getRelatedTransactions(for: subscription)
 
                             if relatedTransactions.isEmpty {
                                 Text("No payment history available")
@@ -152,7 +153,8 @@ extension Features.Subscriptions {
                                         VStack(alignment: .leading) {
                                             Text(
                                                 transaction.date.formatted(
-                                                    date: .abbreviated, time: .omitted)
+                                                    date: .abbreviated, time: .omitted
+                                                )
                                             )
                                             .font(.subheadline)
 
@@ -182,14 +184,14 @@ extension Features.Subscriptions {
                         .padding()
                         .background(
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(platformBackgroundColor)
+                                .fill(self.platformBackgroundColor)
                                 .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
-                            )
+                        )
 
                         // Action Button
                         Button(
                             action: {
-                                showingProcessPaymentConfirmation = true
+                                self.showingProcessPaymentConfirmation = true
                             },
                             label: {
                                 Label("Process Payment Now", systemImage: "creditcard.fill")
@@ -199,7 +201,7 @@ extension Features.Subscriptions {
                                     .background(
                                         RoundedRectangle(cornerRadius: 10)
                                             .fill(Color.blue),
-                                        )
+                                    )
                                     .foregroundColor(.white)
                             }
                         )
@@ -207,24 +209,25 @@ extension Features.Subscriptions {
                     }
                     .padding()
                     .navigationTitle("Subscription Details")
-                    .alert("Process Payment", isPresented: $showingProcessPaymentConfirmation) {
+                    .alert("Process Payment", isPresented: self.$showingProcessPaymentConfirmation) {
                         Button("Cancel", role: .cancel) {}
                             .accessibilityLabel("Button")
                         Button("Process Payment") {
-                            subscription.processPayment(modelContext: modelContext)
+                            subscription.processPayment(modelContext: self.modelContext)
                         }
                         .accessibilityLabel("Button")
                     } message: {
                         Text(
                             "Process a payment of \(subscription.amount.formatted(.currency(code: "USD"))) "
-                                + "for this subscription?")
+                                + "for this subscription?"
+                        )
                     }
                 } else {
                     ContentUnavailableView(
                         "Subscription Not Found",
                         systemImage: "creditcard.slash",
                         description: Text("The requested subscription could not be found"),
-                        )
+                    )
                 }
             }
         }
@@ -241,9 +244,9 @@ extension Features.Subscriptions {
         }
 
         private func paymentStatusText(_ subscription: Subscription) -> String {
-            if isPaymentOverdue(subscription) {
+            if self.isPaymentOverdue(subscription) {
                 "Overdue"
-            } else if isPaymentDueSoon(subscription) {
+            } else if self.isPaymentDueSoon(subscription) {
                 "Due Soon"
             } else {
                 "Up to Date"
@@ -257,15 +260,15 @@ extension Features.Subscriptions {
         private func isPaymentDueSoon(_ subscription: Subscription) -> Bool {
             let oneWeek: TimeInterval = 7 * 24 * 60 * 60
             let now = Date()
-            return !isPaymentOverdue(subscription)
+            return !self.isPaymentOverdue(subscription)
                 && subscription.nextDueDate < now.addingTimeInterval(oneWeek)
         }
 
         private func getRelatedTransactions(for subscription: Subscription)
-        -> [FinancialTransaction] {
+            -> [FinancialTransaction] {
             // In a real implementation, we would filter transactions specifically related to this subscription
             // For example, by matching notes field or subscription ID field
-            transactions
+            self.transactions
                 .filter {
                     $0.account?.id == subscription.account?.id && $0.amount == subscription.amount
                         && $0.transactionType == .expense
@@ -293,15 +296,15 @@ struct SubscriptionDetailRow: View {
 
     var body: some View {
         HStack {
-            Text(title)
+            Text(self.title)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
             Spacer()
 
-            Text(value)
+            Text(self.value)
                 .font(.body)
-                .foregroundColor(highlight ? .red : .primary)
+                .foregroundColor(self.highlight ? .red : .primary)
         }
     }
 }

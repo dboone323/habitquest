@@ -77,7 +77,7 @@ final class SubscriptionsViewModel {
     func processOverdueSubscriptions(_ subscriptions: [Subscription]) {
         guard let modelContext else { return }
 
-        let overdue = overdueSubscriptions(subscriptions)
+        let overdue = self.overdueSubscriptions(subscriptions)
 
         for subscription in overdue {
             subscription.processPayment(modelContext: modelContext)

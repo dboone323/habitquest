@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 #if canImport(UIKit)
-    import UIKit
+import UIKit
 #endif
 
 extension Features.Budgets {
@@ -19,16 +19,16 @@ extension Features.Budgets {
         private var modelContext
         @State private var viewModel = BudgetsViewModel()
         #if canImport(SwiftData)
-            #if canImport(SwiftData)
-                private var budgets: [Budget] = []
-                private var categories: [Category] = []
-            #else
-                private var budgets: [Budget] = []
-                private var categories: [Category] = []
-            #endif
+        #if canImport(SwiftData)
+        private var budgets: [Budget] = []
+        private var categories: [Category] = []
         #else
-            private var budgets: [Budget] = []
-            private var categories: [Category] = []
+        private var budgets: [Budget] = []
+        private var categories: [Category] = []
+        #endif
+        #else
+        private var budgets: [Budget] = []
+        private var categories: [Category] = []
         #endif
         @State private var showingAddBudget = false
         @State private var selectedTimeframe: TimeFrame = .thisMonth
@@ -46,14 +46,14 @@ extension Features.Budgets {
         var body: some View {
             NavigationView {
                 ZStack {
-                    backgroundColorForPlatform()
+                    self.backgroundColorForPlatform()
                         .ignoresSafeArea()
 
                     VStack(spacing: 0) {
-                        if budgets.isEmpty {
-                            emptyStateView
+                        if self.budgets.isEmpty {
+                            self.emptyStateView
                         } else {
-                            budgetContentView
+                            self.budgetContentView
                         }
                     }
                 }
@@ -63,7 +63,7 @@ extension Features.Budgets {
                         HStack(spacing: 12) {
                             // Search Button
                             Button {
-                                showingSearch = true
+                                self.showingSearch = true
                                 NavigationCoordinator.shared.activateSearch()
                             } label: {
                                 Image(systemName: "magnifyingglass")
@@ -71,7 +71,7 @@ extension Features.Budgets {
 
                             // Add Budget Button
                             Button(
-                                action: { showingAddBudget = true },
+                                action: { self.showingAddBudget = true },
                                 label: {
                                     Image(systemName: "plus")
                                 }
@@ -79,11 +79,11 @@ extension Features.Budgets {
                         }
                     }
                 }
-                .sheet(isPresented: $showingAddBudget) {
-                    AddBudgetView(categories: categories)
+                .sheet(isPresented: self.$showingAddBudget) {
+                    AddBudgetView(categories: self.categories)
                 }
-                .sheet(isPresented: $showingSearch) {
-                    BudgetSearchView(budgets: budgets)
+                .sheet(isPresented: self.$showingSearch) {
+                    BudgetSearchView(budgets: self.budgets)
                 }
             }
         }
@@ -110,7 +110,7 @@ extension Features.Budgets {
                 }
 
                 Button(
-                    action: { showingAddBudget = true },
+                    action: { self.showingAddBudget = true },
                     label: {
                         Label("Create Your First Budget", systemImage: "plus.circle.fill")
                             .font(.headline)
@@ -131,8 +131,8 @@ extension Features.Budgets {
         private var budgetContentView: some View {
             ScrollView {
                 LazyVStack(spacing: 16) {
-                    summarySection
-                    budgetListSection
+                    self.summarySection
+                    self.budgetListSection
                 }
                 .padding()
             }
@@ -147,10 +147,10 @@ extension Features.Budgets {
 
                     Spacer()
 
-                    timeframePicker
+                    self.timeframePicker
                 }
 
-                BudgetSummaryCard(budgets: filteredBudgets)
+                BudgetSummaryCard(budgets: self.filteredBudgets)
             }
         }
 
@@ -158,13 +158,13 @@ extension Features.Budgets {
             Menu {
                 ForEach(TimeFrame.allCases, id: \.self) { timeframe in
                     Button(timeframe.rawValue) {
-                        selectedTimeframe = timeframe
+                        self.selectedTimeframe = timeframe
                     }
                     .accessibilityLabel("Button")
                 }
             } label: {
                 HStack {
-                    Text(selectedTimeframe.rawValue)
+                    Text(self.selectedTimeframe.rawValue)
                         .font(.subheadline)
                         .fontWeight(.medium)
                     Image(systemName: "chevron.down")
@@ -184,7 +184,7 @@ extension Features.Budgets {
                     Spacer()
 
                     Button(
-                        action: { showingAddBudget = true },
+                        action: { self.showingAddBudget = true },
                         label: {
                             Image(systemName: "plus.circle")
                                 .foregroundColor(.blue)
@@ -193,7 +193,7 @@ extension Features.Budgets {
                 }
 
                 LazyVStack(spacing: 12) {
-                    ForEach(filteredBudgets, id: \.name) { budget in
+                    ForEach(self.filteredBudgets, id: \.name) { budget in
                         BudgetRowView(budget: budget)
                     }
                 }
@@ -202,14 +202,14 @@ extension Features.Budgets {
 
         private var filteredBudgets: [Budget] {
             // Simple filtering - in a real app you'd filter by the selected timeframe
-            budgets
+            self.budgets
         }
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-                return Color(uiColor: .systemGroupedBackground)
+            return Color(uiColor: .systemGroupedBackground)
             #else
-                return Color(nsColor: .controlBackgroundColor)
+            return Color(nsColor: .controlBackgroundColor)
             #endif
         }
     }
@@ -226,7 +226,7 @@ extension Features.Budgets {
                         Text("Total Budget")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Text("$\(totalBudget, specifier: "%.2f")")
+                        Text("$\(self.totalBudget, specifier: "%.2f")")
                             .font(.title2)
                             .fontWeight(.bold)
                     }
@@ -237,24 +237,24 @@ extension Features.Budgets {
                         Text("Spent")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Text("$\(totalSpent, specifier: "%.2f")")
+                        Text("$\(self.totalSpent, specifier: "%.2f")")
                             .font(.title2)
                             .fontWeight(.bold)
-                            .foregroundColor(spentColor)
+                            .foregroundColor(self.spentColor)
                     }
                 }
 
-                ProgressView(value: spentPercentage)
-                    .progressViewStyle(LinearProgressViewStyle(tint: spentColor))
+                ProgressView(value: self.spentPercentage)
+                    .progressViewStyle(LinearProgressViewStyle(tint: self.spentColor))
 
                 HStack {
-                    Text("\(Int(spentPercentage * 100))% spent")
+                    Text("\(Int(self.spentPercentage * 100))% spent")
                         .font(.caption)
                         .foregroundColor(.secondary)
 
                     Spacer()
 
-                    Text("$\(remaining, specifier: "%.2f") remaining")
+                    Text("$\(self.remaining, specifier: "%.2f") remaining")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -262,33 +262,33 @@ extension Features.Budgets {
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(backgroundColorForPlatform())
+                    .fill(self.backgroundColorForPlatform())
                     .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
             )
         }
 
         private var totalBudget: Double {
-            budgets.reduce(0) { $0 + $1.limitAmount }
+            self.budgets.reduce(0) { $0 + $1.limitAmount }
         }
 
         private var totalSpent: Double {
-            budgets.reduce(0) { $0 + $1.spentAmount }
+            self.budgets.reduce(0) { $0 + $1.spentAmount }
         }
 
         private var remaining: Double {
-            totalBudget - totalSpent
+            self.totalBudget - self.totalSpent
         }
 
         private var spentPercentage: Double {
-            guard totalBudget > 0 else { return 0 }
-            return min(totalSpent / totalBudget, 1.0)
+            guard self.totalBudget > 0 else { return 0 }
+            return min(self.totalSpent / self.totalBudget, 1.0)
         }
 
         private var spentColor: Color {
-            switch spentPercentage {
-            case 0..<0.5:
+            switch self.spentPercentage {
+            case 0 ..< 0.5:
                 .green
-            case 0.5..<0.8:
+            case 0.5 ..< 0.8:
                 .orange
             default:
                 .red
@@ -297,9 +297,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-                return Color(uiColor: .systemGroupedBackground)
+            return Color(uiColor: .systemGroupedBackground)
             #else
-                return Color(nsColor: .controlBackgroundColor)
+            return Color(nsColor: .controlBackgroundColor)
             #endif
         }
     }
@@ -311,11 +311,11 @@ extension Features.Budgets {
             VStack(spacing: 0) {
                 HStack(spacing: 16) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(budget.name)
+                        Text(self.budget.name)
                             .font(.headline)
                             .fontWeight(.semibold)
 
-                        Text("Budget: $\(budget.limitAmount, specifier: "%.2f")")
+                        Text("Budget: $\(self.budget.limitAmount, specifier: "%.2f")")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -323,40 +323,40 @@ extension Features.Budgets {
                     Spacer()
 
                     VStack(alignment: .trailing, spacing: 4) {
-                        Text("$\(budget.spentAmount, specifier: "%.2f")")
+                        Text("$\(self.budget.spentAmount, specifier: "%.2f")")
                             .font(.headline)
                             .fontWeight(.bold)
-                            .foregroundColor(spentColor)
+                            .foregroundColor(self.spentColor)
 
-                        Text("\(spentPercentage, specifier: "%.0f")% spent")
+                        Text("\(self.spentPercentage, specifier: "%.0f")% spent")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
                 .padding()
 
-                ProgressView(value: spentPercentage / 100)
-                    .progressViewStyle(LinearProgressViewStyle(tint: spentColor))
+                ProgressView(value: self.spentPercentage / 100)
+                    .progressViewStyle(LinearProgressViewStyle(tint: self.spentColor))
                     .padding(.horizontal)
                     .padding(.bottom)
             }
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(backgroundColorForPlatform())
+                    .fill(self.backgroundColorForPlatform())
                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 1),
             )
         }
 
         private var spentPercentage: Double {
-            guard budget.limitAmount > 0 else { return 0 }
-            return min((budget.spentAmount / budget.limitAmount) * 100, 100)
+            guard self.budget.limitAmount > 0 else { return 0 }
+            return min((self.budget.spentAmount / self.budget.limitAmount) * 100, 100)
         }
 
         private var spentColor: Color {
-            switch spentPercentage {
-            case 0..<50:
+            switch self.spentPercentage {
+            case 0 ..< 50:
                 .green
-            case 50..<80:
+            case 50 ..< 80:
                 .orange
             default:
                 .red
@@ -365,9 +365,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-                return Color(uiColor: .systemGroupedBackground)
+            return Color(uiColor: .systemGroupedBackground)
             #else
-                return Color(nsColor: .controlBackgroundColor)
+            return Color(nsColor: .controlBackgroundColor)
             #endif
         }
     }
@@ -384,20 +384,20 @@ extension Features.Budgets {
             NavigationView {
                 Form {
                     Section(header: Text("Budget Details")) {
-                        TextField("Budget Name", text: $name).accessibilityLabel("Text Field")
-                        TextField("Budget Amount", text: $limitAmount).accessibilityLabel(
+                        TextField("Budget Name", text: self.$name).accessibilityLabel("Text Field")
+                        TextField("Budget Amount", text: self.$limitAmount).accessibilityLabel(
                             "Text Field"
                         )
                         #if os(iOS)
-                            .keyboardType(.decimalPad)
+                        .keyboardType(.decimalPad)
                         #endif
                     }
 
-                    if !categories.isEmpty {
+                    if !self.categories.isEmpty {
                         Section(header: Text("Category")) {
-                            Picker("Category", selection: $selectedCategory) {
+                            Picker("Category", selection: self.$selectedCategory) {
                                 Text("Select Category").tag(nil as Category?)
-                                ForEach(categories, id: \.name) { category in
+                                ForEach(self.categories, id: \.name) { category in
                                     Text(category.name).tag(category as Category?)
                                 }
                             }
@@ -408,23 +408,23 @@ extension Features.Budgets {
                 #if os(iOS)
                     .navigationBarTitleDisplayMode(.inline)
                 #endif
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
-                            dismiss()
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") {
+                                self.dismiss()
+                            }
+                            .accessibilityLabel("Button")
                         }
-                        .accessibilityLabel("Button")
-                    }
 
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Save") {
-                            // Save budget logic would go here
-                            dismiss()
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Save") {
+                                // Save budget logic would go here
+                                self.dismiss()
+                            }
+                            .disabled(self.name.isEmpty || self.limitAmount.isEmpty)
+                            .accessibilityLabel("Button")
                         }
-                        .disabled(name.isEmpty || limitAmount.isEmpty)
-                        .accessibilityLabel("Button")
                     }
-                }
             }
         }
     }
@@ -436,12 +436,12 @@ struct BudgetSearchView: View {
     @State private var searchText = ""
 
     private var filteredBudgets: [Budget] {
-        if searchText.isEmpty {
-            return budgets
+        if self.searchText.isEmpty {
+            self.budgets
         } else {
-            return budgets.filter { budget in
-                budget.name.localizedCaseInsensitiveContains(searchText)
-                    || budget.category?.name.localizedCaseInsensitiveContains(searchText) ?? false
+            self.budgets.filter { budget in
+                budget.name.localizedCaseInsensitiveContains(self.searchText)
+                    || budget.category?.name.localizedCaseInsensitiveContains(self.searchText) ?? false
             }
         }
     }
@@ -449,12 +449,12 @@ struct BudgetSearchView: View {
     var body: some View {
         NavigationStack {
             List {
-                if filteredBudgets.isEmpty {
+                if self.filteredBudgets.isEmpty {
                     Text("No budgets found")
                         .foregroundColor(.secondary)
                         .padding()
                 } else {
-                    ForEach(filteredBudgets, id: \.name) { budget in
+                    ForEach(self.filteredBudgets, id: \.name) { budget in
                         VStack(alignment: .leading, spacing: 4) {
                             Text(budget.name)
                                 .font(.headline)
@@ -477,14 +477,14 @@ struct BudgetSearchView: View {
             #if canImport(UIKit)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-            .searchable(text: $searchText, prompt: "Search budgets...")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        dismiss()
+                .searchable(text: self.$searchText, prompt: "Search budgets...")
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") {
+                            self.dismiss()
+                        }
                     }
                 }
-            }
         }
     }
 }

@@ -19,7 +19,7 @@ public struct DashboardWelcomeHeader: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Welcome back, \(userName)!")
+            Text("Welcome back, \(self.userName)!")
                 .font(.largeTitle)
                 .fontWeight(.bold)
 
@@ -49,7 +49,7 @@ public struct DashboardAccountsSummary: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
-                    ForEach(accounts) { account in
+                    ForEach(self.accounts) { account in
                         AccountSummaryCard(account: account)
                     }
                 }
@@ -71,19 +71,19 @@ public struct AccountSummaryCard: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text(account.name)
+                Text(self.account.name)
                     .font(.headline)
                 Spacer()
-                Image(systemName: iconName)
+                Image(systemName: self.iconName)
                     .foregroundColor(.blue)
             }
 
-            Text(formatCurrency(account.balance))
+            Text(formatCurrency(self.account.balance))
                 .font(.title2)
                 .fontWeight(.semibold)
-                .foregroundColor(account.balance >= 0 ? .green : .red)
+                .foregroundColor(self.account.balance >= 0 ? .green : .red)
 
-            Text(account.type.rawValue.capitalized)
+            Text(self.account.type.rawValue.capitalized)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -94,7 +94,7 @@ public struct AccountSummaryCard: View {
     }
 
     private var iconName: String {
-        switch account.type {
+        switch self.account.type {
         case .checking:
             "creditcard"
         case .savings:
@@ -123,14 +123,14 @@ public struct DashboardMetricsCards: View {
             HStack(spacing: 12) {
                 MetricCard(
                     title: "Total Balance",
-                    value: formatCurrency(totalBalance),
+                    value: formatCurrency(self.totalBalance),
                     icon: "dollarsign.circle.fill",
                     color: .blue
                 )
 
                 MetricCard(
                     title: "Monthly Income",
-                    value: formatCurrency(monthlyIncome),
+                    value: formatCurrency(self.monthlyIncome),
                     icon: "arrow.up.circle.fill",
                     color: .green
                 )
@@ -138,7 +138,7 @@ public struct DashboardMetricsCards: View {
 
             MetricCard(
                 title: "Monthly Expenses",
-                value: formatCurrency(monthlyExpenses),
+                value: formatCurrency(self.monthlyExpenses),
                 icon: "arrow.down.circle.fill",
                 color: .red
             )
@@ -164,20 +164,20 @@ public struct MetricCard: View {
     public var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(title)
+                Text(self.title)
                     .font(.caption)
                     .foregroundColor(.secondary)
 
-                Text(value)
+                Text(self.value)
                     .font(.title2)
                     .fontWeight(.semibold)
             }
 
             Spacer()
 
-            Image(systemName: icon)
+            Image(systemName: self.icon)
                 .font(.title2)
-                .foregroundColor(color)
+                .foregroundColor(self.color)
         }
         .padding()
         .background(Color(UIColor.systemGray6))

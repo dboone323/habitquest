@@ -18,7 +18,7 @@ public enum AnimatedCardComponent {
         }
 
         public var body: some View {
-            content
+            self.content
                 .transition(.scale.combined(with: .opacity))
                 .animation(.easeInOut(duration: 0.3), value: UUID())
         }
@@ -36,7 +36,7 @@ public enum AnimatedButtonComponent {
         }
 
         public var body: some View {
-            Button(title, action: action).accessibilityLabel("Button")
+            Button(self.title, action: self.action).accessibilityLabel("Button")
                 .scaleEffect(1.0)
                 .animation(.easeInOut(duration: 0.2), value: UUID())
         }
@@ -52,7 +52,7 @@ public enum AnimatedTransactionComponent {
         }
 
         public var body: some View {
-            Text(title)
+            Text(self.title)
                 .transition(.slide)
                 .animation(.easeInOut(duration: 0.3), value: UUID())
         }
@@ -68,8 +68,8 @@ public enum AnimatedProgressComponents {
         }
 
         public var body: some View {
-            ProgressView(value: progress)
-                .animation(.easeInOut(duration: 0.5), value: progress)
+            ProgressView(value: self.progress)
+                .animation(.easeInOut(duration: 0.5), value: self.progress)
         }
     }
 
@@ -81,9 +81,9 @@ public enum AnimatedProgressComponents {
         }
 
         public var body: some View {
-            Text("\(count)")
+            Text("\(self.count)")
                 .contentTransition(.numericText())
-                .animation(.easeInOut(duration: 0.3), value: count)
+                .animation(.easeInOut(duration: 0.3), value: self.count)
         }
     }
 }
@@ -97,7 +97,7 @@ public enum FloatingActionButtonComponent {
         }
 
         public var body: some View {
-            Button(action: action).accessibilityLabel("Button") {
+            Button(action: self.action).accessibilityLabel("Button") {
                 Image(systemName: "plus")
                     .font(.title2)
                     .foregroundColor(.white)

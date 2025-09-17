@@ -13,13 +13,13 @@ class CalendarDataManager {
 
     /// Removes all events from memory.
     func clearAllEvents() {
-        events.removeAll()
+        self.events.removeAll()
     }
 
     /// Loads all events from memory.
     /// - Returns: Array of `CalendarEvent` objects.
     func load() -> [CalendarEvent] {
-        events
+        self.events
     }
 
     /// Saves the provided events to memory.
@@ -73,11 +73,12 @@ struct CalendarEvent: Identifiable, Codable {
     /// - Returns: A `CKRecord` representing this event.
     func toCKRecord() -> CKRecord {
         let record = CKRecord(
-            recordType: "CalendarEvent", recordID: CKRecord.ID(recordName: id.uuidString))
-        record["title"] = title
-        record["date"] = date
-        record["createdAt"] = createdAt
-        record["modifiedAt"] = modifiedAt
+            recordType: "CalendarEvent", recordID: CKRecord.ID(recordName: self.id.uuidString)
+        )
+        record["title"] = self.title
+        record["date"] = self.date
+        record["createdAt"] = self.createdAt
+        record["modifiedAt"] = self.modifiedAt
         return record
     }
 
@@ -87,14 +88,15 @@ struct CalendarEvent: Identifiable, Codable {
     /// - Returns: A `CalendarEvent` instance.
     static func from(ckRecord: CKRecord) throws -> CalendarEvent {
         guard let title = ckRecord["title"] as? String,
-            let date = ckRecord["date"] as? Date,
-            let id = UUID(uuidString: ckRecord.recordID.recordName)
+              let date = ckRecord["date"] as? Date,
+              let id = UUID(uuidString: ckRecord.recordID.recordName)
         else {
             throw NSError(
                 domain: "CalendarEventConversionError", code: 1,
                 userInfo: [
                     NSLocalizedDescriptionKey: "Failed to convert CloudKit record to CalendarEvent"
-                ])
+                ]
+            )
         }
 
         return CalendarEvent(

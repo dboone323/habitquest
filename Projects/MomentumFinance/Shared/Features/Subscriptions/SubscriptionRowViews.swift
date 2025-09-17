@@ -34,7 +34,7 @@ extension Features.Subscriptions {
         }
 
         private var statusColor: Color {
-            if !subscription.isActive {
+            if !self.subscription.isActive {
                 .red
             } else if let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date()),
                       subscription.nextDueDate <= weekFromNow {
@@ -45,7 +45,7 @@ extension Features.Subscriptions {
         }
 
         private var statusText: String {
-            if !subscription.isActive {
+            if !self.subscription.isActive {
                 "Inactive"
             } else if let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date()),
                       subscription.nextDueDate <= weekFromNow {
@@ -56,7 +56,7 @@ extension Features.Subscriptions {
         }
 
         private var daysUntilDue: Int {
-            Calendar.current.dateComponents([.day], from: Date(), to: subscription.nextDueDate).day
+            Calendar.current.dateComponents([.day], from: Date(), to: self.subscription.nextDueDate).day
                 ?? 0
         }
 
@@ -69,20 +69,20 @@ extension Features.Subscriptions {
                             gradient: Gradient(colors: [.blue, .blue.opacity(0.7)]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing,
-                            ),
-                        )
+                        ),
+                    )
                     .frame(width: 44, height: 44)
                     .overlay(
-                        Text(String(subscription.name.prefix(2).uppercased()))
+                        Text(String(self.subscription.name.prefix(2).uppercased()))
                             .font(.headline)
                             .fontWeight(.bold)
                             .foregroundColor(.white),
-                        )
+                    )
 
                 // Main Content
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text(subscription.name)
+                        Text(self.subscription.name)
                             .font(.headline)
                             .fontWeight(.semibold)
                             .foregroundColor(.primary)
@@ -90,7 +90,7 @@ extension Features.Subscriptions {
                         Spacer()
 
                         // Status Badge
-                        Text(statusText)
+                        Text(self.statusText)
                             .font(.caption)
                             .fontWeight(.medium)
                             .foregroundColor(.white)
@@ -98,38 +98,38 @@ extension Features.Subscriptions {
                             .padding(.vertical, 4)
                             .background(
                                 Capsule()
-                                    .fill(statusColor),
-                                )
+                                    .fill(self.statusColor),
+                            )
                     }
 
                     HStack {
                         // Amount and Frequency
-                        let amountText = subscription.amount.formatted(.currency(code: "USD"))
-                        Text("\(amountText) / \(subscription.billingCycle.rawValue)")
+                        let amountText = self.subscription.amount.formatted(.currency(code: "USD"))
+                        Text("\(amountText) / \(self.subscription.billingCycle.rawValue)")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
 
                         Spacer()
 
                         // Next Due Date
-                        if subscription.isActive {
+                        if self.subscription.isActive {
                             HStack(spacing: 4) {
                                 Image(systemName: "calendar")
                                     .font(.caption2)
-                                    .foregroundColor(statusColor)
+                                    .foregroundColor(self.statusColor)
 
-                                if daysUntilDue == 0 {
+                                if self.daysUntilDue == 0 {
                                     Text("Due Today")
                                         .font(.caption)
                                         .fontWeight(.medium)
-                                        .foregroundColor(statusColor)
-                                } else if daysUntilDue == 1 {
+                                        .foregroundColor(self.statusColor)
+                                } else if self.daysUntilDue == 1 {
                                     Text("Due Tomorrow")
                                         .font(.caption)
                                         .fontWeight(.medium)
-                                        .foregroundColor(statusColor)
-                                } else if daysUntilDue > 0 {
-                                    Text("Due in \(daysUntilDue) days")
+                                        .foregroundColor(self.statusColor)
+                                } else if self.daysUntilDue > 0 {
+                                    Text("Due in \(self.daysUntilDue) days")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 } else {
@@ -180,9 +180,9 @@ extension Features.Subscriptions {
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(backgroundColor)
+                    .fill(self.backgroundColor)
                     .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 1),
-                )
+            )
         }
     }
 
@@ -205,17 +205,17 @@ extension Features.Subscriptions {
         var body: some View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(subscription.name)
+                    Text(self.subscription.name)
                         .font(.headline)
                         .fontWeight(.semibold)
 
-                    let amountText = subscription.amount.formatted(.currency(code: "USD"))
-                    Text("\(amountText) / \(subscription.billingCycle.rawValue)")
+                    let amountText = self.subscription.amount.formatted(.currency(code: "USD"))
+                    Text("\(amountText) / \(self.subscription.billingCycle.rawValue)")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
 
                     Text(
-                        "Next: \(subscription.nextDueDate.formatted(date: .abbreviated, time: .omitted))"
+                        "Next: \(self.subscription.nextDueDate.formatted(date: .abbreviated, time: .omitted))"
                     )
                     .font(.caption)
                     .foregroundColor(.blue)
@@ -225,19 +225,19 @@ extension Features.Subscriptions {
 
                 VStack(alignment: .trailing) {
                     Circle()
-                        .fill(subscription.isActive ? Color.green : Color.red)
+                        .fill(self.subscription.isActive ? Color.green : Color.red)
                         .frame(width: 8, height: 8)
 
-                    Text(subscription.isActive ? "Active" : "Inactive")
+                    Text(self.subscription.isActive ? "Active" : "Inactive")
                         .font(.caption)
-                        .foregroundColor(subscription.isActive ? .green : .red)
+                        .foregroundColor(self.subscription.isActive ? .green : .red)
                 }
             }
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(backgroundColor),
-                )
+                    .fill(self.backgroundColor),
+            )
         }
     }
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 #if canImport(AppKit)
@@ -51,44 +51,44 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
         private var secondaryBackgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemGroupedBackground)
+            return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.gray.opacity(0.1)
+            return Color.gray.opacity(0.1)
             #endif
         }
 
         private var toolbarPlacement: ToolbarItemPlacement {
             #if canImport(UIKit)
-                return .navigationBarTrailing
+            return .navigationBarTrailing
             #else
-                return .primaryAction
+            return .primaryAction
             #endif
         }
 
         private var filteredSubscriptions: [Subscription] {
-            switch selectedFilter {
+            switch self.selectedFilter {
             case .all:
-                return subscriptions
+                return self.subscriptions
             case .active:
-                return subscriptions.filter(\.isActive)
+                return self.subscriptions.filter(\.isActive)
             case .inactive:
-                return subscriptions.filter { !$0.isActive }
+                return self.subscriptions.filter { !$0.isActive }
             case .dueSoon:
                 let sevenDaysFromNow =
                     Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
-                return subscriptions.filter { $0.isActive && $0.nextDueDate <= sevenDaysFromNow }
+                return self.subscriptions.filter { $0.isActive && $0.nextDueDate <= sevenDaysFromNow }
             }
         }
 
@@ -97,24 +97,24 @@ extension Features.Subscriptions {
                 VStack(spacing: 0) {
                     // Header Section
                     SubscriptionHeaderView(
-                        subscriptions: subscriptions,
-                        selectedFilter: $selectedFilter,
-                        showingAddSubscription: $showingAddSubscription,
+                        subscriptions: self.subscriptions,
+                        selectedFilter: self.$selectedFilter,
+                        showingAddSubscription: self.$showingAddSubscription,
                     )
 
                     // Content Section
                     SubscriptionContentView(
-                        filteredSubscriptions: filteredSubscriptions,
-                        selectedSubscription: $selectedSubscription,
+                        filteredSubscriptions: self.filteredSubscriptions,
+                        selectedSubscription: self.$selectedSubscription,
                     )
                 }
                 .navigationTitle("Subscriptions")
                 .toolbar {
-                    ToolbarItem(placement: toolbarPlacement) {
+                    ToolbarItem(placement: self.toolbarPlacement) {
                         HStack(spacing: 12) {
                             // Search Button
                             Button {
-                                showingSearch = true
+                                self.showingSearch = true
                                 NavigationCoordinator.shared.activateSearch()
                             } label: {
                                 Image(systemName: "magnifyingglass")
@@ -122,26 +122,27 @@ extension Features.Subscriptions {
 
                             // Add Subscription Button
                             Button(
-                                action: { showingAddSubscription = true },
+                                action: { self.showingAddSubscription = true },
                                 label: {
                                     Image(systemName: "plus")
-                                })
+                                }
+                            )
                         }
                     }
                 }
-                .sheet(isPresented: $showingAddSubscription) {
-                    AddSubscriptionView(categories: categories, accounts: accounts)
+                .sheet(isPresented: self.$showingAddSubscription) {
+                    AddSubscriptionView(categories: self.categories, accounts: self.accounts)
                 }
-                .sheet(isPresented: $showingSearch) {
+                .sheet(isPresented: self.$showingSearch) {
                     Features.GlobalSearch.GlobalSearchView()
                 }
-                .sheet(item: $selectedSubscription) { subscription in
+                .sheet(item: self.$selectedSubscription) { subscription in
                     SubscriptionDetailView(subscription: subscription)
                 }
                 .onAppear {
-                    viewModel.setModelContext(modelContext)
+                    self.viewModel.setModelContext(self.modelContext)
                 }
-                .background(backgroundColor)
+                .background(self.backgroundColor)
             }
         }
 
@@ -152,9 +153,9 @@ extension Features.Subscriptions {
             accounts: [FinancialAccount] = []
         ) {
             #if !canImport(SwiftData)
-                self.subscriptions = subscriptions
-                self.categories = categories
-                self.accounts = accounts
+            self.subscriptions = subscriptions
+            self.categories = categories
+            self.accounts = accounts
             #endif
         }
     }
@@ -175,13 +176,13 @@ extension Features.Subscriptions {
                 VStack {
                     Text("Subscriptions Summary")
                         .font(.headline)
-                    Text("\(subscriptions.count) active subscriptions")
+                    Text("\(self.subscriptions.count) active subscriptions")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
 
                 // Filter Picker
-                Picker("Filter", selection: $selectedFilter) {
+                Picker("Filter", selection: self.$selectedFilter) {
                     ForEach(SubscriptionFilter.allCases, id: \.self) { filter in
                         Text(filter.rawValue).tag(filter)
                     }
@@ -200,20 +201,20 @@ extension Features.Subscriptions {
         @Binding var selectedSubscription: Subscription?
 
         var body: some View {
-            if filteredSubscriptions.isEmpty {
+            if self.filteredSubscriptions.isEmpty {
                 EmptySubscriptionsView()
             } else {
-                subscriptionsList
+                self.subscriptionsList
             }
         }
 
         private var subscriptionsList: some View {
             ScrollView {
                 LazyVStack(spacing: 12) {
-                    ForEach(filteredSubscriptions, id: \.id) { subscription in
+                    ForEach(self.filteredSubscriptions, id: \.id) { subscription in
                         SubscriptionRowPlaceholder(subscription: subscription)
                             .onTapGesture {
-                                selectedSubscription = subscription
+                                self.selectedSubscription = subscription
                             }
                     }
                 }
@@ -230,16 +231,16 @@ extension Features.Subscriptions {
         var body: some View {
             HStack {
                 VStack(alignment: .leading) {
-                    Text(subscription.name)
+                    Text(self.subscription.name)
                         .font(.headline)
                     Text(
-                        "$\(subscription.amount, specifier: "%.2f") / \(subscription.billingCycle.rawValue)"
+                        "$\(self.subscription.amount, specifier: "%.2f") / \(self.subscription.billingCycle.rawValue)"
                     )
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 }
                 Spacer()
-                Text(subscription.nextDueDate, style: .date)
+                Text(self.subscription.nextDueDate, style: .date)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -301,13 +302,13 @@ struct AddSubscriptionView: View {
         NavigationStack {
             Form {
                 Section("Subscription Details") {
-                    TextField("Name", text: $name)
-                    TextField("Amount", text: $amount)
-                        #if canImport(UIKit)
-                            .keyboardType(.decimalPad)
-                        #endif
+                    TextField("Name", text: self.$name)
+                    TextField("Amount", text: self.$amount)
+                    #if canImport(UIKit)
+                        .keyboardType(.decimalPad)
+                    #endif
 
-                    Picker("Billing Cycle", selection: $billingCycle) {
+                    Picker("Billing Cycle", selection: self.$billingCycle) {
                         ForEach(BillingCycle.allCases, id: \.self) { cycle in
                             Text(cycle.rawValue).tag(cycle)
                         }
@@ -315,43 +316,43 @@ struct AddSubscriptionView: View {
                 }
 
                 Section("Category & Account") {
-                    Picker("Category", selection: $selectedCategory) {
+                    Picker("Category", selection: self.$selectedCategory) {
                         Text("None").tag(ExpenseCategory?.none)
-                        ForEach(categories, id: \.id) { category in
+                        ForEach(self.categories, id: \.id) { category in
                             Text(category.name).tag(category as ExpenseCategory?)
                         }
                     }
 
-                    Picker("Account", selection: $selectedAccount) {
+                    Picker("Account", selection: self.$selectedAccount) {
                         Text("None").tag(FinancialAccount?.none)
-                        ForEach(accounts, id: \.id) { account in
+                        ForEach(self.accounts, id: \.id) { account in
                             Text(account.name).tag(account as FinancialAccount?)
                         }
                     }
                 }
 
                 Section("Additional Info") {
-                    DatePicker("Start Date", selection: $startDate, displayedComponents: .date)
-                    TextField("Notes (Optional)", text: $notes)
+                    DatePicker("Start Date", selection: self.$startDate, displayedComponents: .date)
+                    TextField("Notes (Optional)", text: self.$notes)
                 }
             }
             .navigationTitle("Add Subscription")
             #if canImport(UIKit)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            self.dismiss()
+                        }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Save") {
+                            self.saveSubscription()
+                        }
+                        .disabled(self.name.isEmpty || self.amount.isEmpty)
                     }
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        saveSubscription()
-                    }
-                    .disabled(name.isEmpty || amount.isEmpty)
-                }
-            }
         }
     }
 
@@ -366,13 +367,13 @@ struct AddSubscriptionView: View {
         )
 
         // Set optional properties
-        subscription.category = selectedCategory
-        subscription.account = selectedAccount
-        if !notes.isEmpty {
-            subscription.notes = notes
+        subscription.category = self.selectedCategory
+        subscription.account = self.selectedAccount
+        if !self.notes.isEmpty {
+            subscription.notes = self.notes
         }
 
-        modelContext.insert(subscription)
-        dismiss()
+        self.modelContext.insert(subscription)
+        self.dismiss()
     }
 }

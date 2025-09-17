@@ -1,5 +1,5 @@
-import Foundation
 import CoreML
+import Foundation
 import OSLog
 import SwiftData
 import SwiftUI
@@ -54,20 +54,23 @@ class FinancialIntelligenceService: ObservableObject {
             let budgets = try modelContext.fetch(budgetsDescriptor)
 
             // Delegate to specialized analysis methods in Helpers
-            let spendingPatternInsights = analyzeSpendingPatterns(
-                transactions: transactions, categories: categories)
-            let anomalyInsights = detectAnomalies(transactions: transactions)
-            let budgetInsights = analyzeBudgets(transactions: transactions, budgets: budgets)
+            let spendingPatternInsights = self.analyzeSpendingPatterns(
+                transactions: transactions, categories: categories
+            )
+            let anomalyInsights = self.detectAnomalies(transactions: transactions)
+            let budgetInsights = self.analyzeBudgets(transactions: transactions, budgets: budgets)
             let forecastInsights = fi_generateForecasts(
-                transactions: transactions, accounts: accounts)
-            let optimizationInsights = suggestOptimizations(
+                transactions: transactions, accounts: accounts
+            )
+            let optimizationInsights = self.suggestOptimizations(
                 transactions: transactions,
-                accounts: accounts)
+                accounts: accounts
+            )
 
             // Combine all insights and sort by priority
             var allInsights =
                 spendingPatternInsights + anomalyInsights + budgetInsights + forecastInsights
-                + optimizationInsights
+                    + optimizationInsights
             allInsights.sort { $0.priority > $1.priority }
 
             // Update the UI
@@ -86,7 +89,7 @@ class FinancialIntelligenceService: ObservableObject {
 
     /// Categorizes a new transaction based on historical data
     func suggestCategoryForTransaction(_ transaction: FinancialTransaction) -> ExpenseCategory? {
-        mlModels.suggestCategoryForTransaction(transaction)
+        self.mlModels.suggestCategoryForTransaction(transaction)
     }
 
     // MARK: - Specific Analysis Methods (Delegate to Helpers)
@@ -102,7 +105,7 @@ class FinancialIntelligenceService: ObservableObject {
     }
 
     private func analyzeBudgets(transactions: [FinancialTransaction], budgets: [Budget])
-    -> [FinancialInsight] {
+        -> [FinancialInsight] {
         fi_analyzeBudgets(transactions: transactions, budgets: budgets)
     }
 
@@ -115,7 +118,8 @@ class FinancialIntelligenceService: ObservableObject {
         var insights: [FinancialInsight] = []
 
         insights.append(
-            contentsOf: fi_suggestIdleCashInsights(transactions: transactions, accounts: accounts))
+            contentsOf: fi_suggestIdleCashInsights(transactions: transactions, accounts: accounts)
+        )
         insights.append(contentsOf: fi_suggestCreditUtilizationInsights(accounts: accounts))
         insights.append(contentsOf: fi_suggestDuplicatePaymentInsights(transactions: transactions))
 

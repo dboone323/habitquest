@@ -30,7 +30,7 @@ public final class AppLogger {
     }
 
     func log(_ message: String, level: LogLevel = .info, category: LogCategory = .general) {
-        let oslog = osLog(for: category)
+        let oslog = self.osLog(for: category)
         switch level {
         case .debug:
             Logger.logDebug(message, category: oslog)

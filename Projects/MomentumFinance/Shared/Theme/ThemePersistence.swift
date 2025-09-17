@@ -1,6 +1,6 @@
 import Foundation
-import OSLog
 import os
+import OSLog
 
 //
 //  ThemePersistence.swift
@@ -17,13 +17,13 @@ enum ThemePersistence {
 
     /// Save the theme preference to UserDefaults
     static func saveThemePreference(_ mode: ThemeMode) {
-        UserDefaults.standard.set(mode.rawValue, forKey: themePreferenceKey)
+        UserDefaults.standard.set(mode.rawValue, forKey: self.themePreferenceKey)
         os_log("Saved theme preference: %@", log: .default, type: .info, mode.rawValue)
     }
 
     /// Load the saved theme preference
     static func loadThemePreference() -> ThemeMode {
-        let savedValue = UserDefaults.standard.string(forKey: themePreferenceKey)
+        let savedValue = UserDefaults.standard.string(forKey: self.themePreferenceKey)
 
         // If we have a saved value, try to create a ThemeMode from it
         if let savedValue,
@@ -40,7 +40,7 @@ enum ThemePersistence {
 
     /// Clear the saved theme preference
     static func clearThemePreference() {
-        UserDefaults.standard.removeObject(forKey: themePreferenceKey)
+        UserDefaults.standard.removeObject(forKey: self.themePreferenceKey)
         os_log("Cleared theme preference", log: .default, type: .info)
     }
 }

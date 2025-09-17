@@ -6,20 +6,20 @@ struct ImportResultView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            Image(systemName: result.success ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+            Image(systemName: self.result.success ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
                 .font(.system(size: 48))
-                .foregroundColor(result.success ? .green : .orange)
+                .foregroundColor(self.result.success ? .green : .orange)
 
-            Text(result.success ? "Import Successful" : "Import Completed with Issues")
+            Text(self.result.success ? "Import Successful" : "Import Completed with Issues")
                 .font(.title2)
                 .fontWeight(.bold)
 
-            Text("Imported \(result.transactionsImported) transactions")
+            Text("Imported \(self.result.transactionsImported) transactions")
                 .font(.body)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.secondary)
 
-            Button("Done", action: onDismiss).accessibilityLabel("Button")
+            Button("Done", action: self.onDismiss).accessibilityLabel("Button")
                 .font(.headline)
                 .padding()
                 .frame(maxWidth: .infinity)

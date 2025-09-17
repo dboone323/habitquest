@@ -12,7 +12,7 @@ public struct GlobalSearchView: View {
     @State private var selectedResult: SearchResult?
 
     private var searchEngine: SearchEngineService {
-        SearchEngineService(modelContext: modelContext)
+        SearchEngineService(modelContext: self.modelContext)
     }
 
     public init() {}
@@ -25,17 +25,17 @@ public struct GlobalSearchView: View {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.secondary)
 
-                    TextField("Search transactions, accounts, budgets...", text: $searchText)
+                    TextField("Search transactions, accounts, budgets...", text: self.$searchText)
                         .textFieldStyle(.plain)
                         .autocorrectionDisabled()
-                        .onChange(of: searchText) { _, newValue in
-                            performSearch(query: newValue)
+                        .onChange(of: self.searchText) { _, newValue in
+                            self.performSearch(query: newValue)
                         }
 
-                    if !searchText.isEmpty {
+                    if !self.searchText.isEmpty {
                         Button(action: {
-                            searchText = ""
-                            searchResults = []
+                            self.searchText = ""
+                            self.searchResults = []
                         }) {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.secondary)
@@ -49,34 +49,34 @@ public struct GlobalSearchView: View {
                 .padding(.top)
 
                 // Results
-                if isSearching {
+                if self.isSearching {
                     ProgressView("Searching...")
                         .padding()
-                } else if searchResults.isEmpty && !searchText.isEmpty {
-                    emptyStateView
-                } else if !searchResults.isEmpty {
-                    resultsList
+                } else if self.searchResults.isEmpty, !self.searchText.isEmpty {
+                    self.emptyStateView
+                } else if !self.searchResults.isEmpty {
+                    self.resultsList
                 } else {
-                    recentSearchesView
+                    self.recentSearchesView
                 }
             }
             .navigationTitle("Search")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            self.dismiss()
+                        }
                     }
                 }
-            }
-            .sheet(item: $selectedResult) { result in
-                SearchResultDetailView(result: result)
-            }
-            .onAppear {
-                // Model context is now passed to searchEngine via computed property
-            }
+                .sheet(item: self.$selectedResult) { result in
+                    SearchResultDetailView(result: result)
+                }
+                .onAppear {
+                    // Model context is now passed to searchEngine via computed property
+                }
         }
     }
 
@@ -131,12 +131,12 @@ public struct GlobalSearchView: View {
     private var resultsList: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                ForEach(searchResults) { result in
+                ForEach(self.searchResults) { result in
                     SearchResultRow(result: result)
                         .onTapGesture {
-                            selectedResult = result
-                            navigationCoordinator.navigateToSearchResult(result)
-                            dismiss()
+                            self.selectedResult = result
+                            self.navigationCoordinator.navigateToSearchResult(result)
+                            self.dismiss()
                         }
 
                     Divider()
@@ -148,15 +148,15 @@ public struct GlobalSearchView: View {
 
     private func performSearch(query: String) {
         guard !query.isEmpty else {
-            searchResults = []
+            self.searchResults = []
             return
         }
 
-        isSearching = true
+        self.isSearching = true
 
-        let results = searchEngine.search(query: query)
-        searchResults = results
-        isSearching = false
+        let results = self.searchEngine.search(query: query)
+        self.searchResults = results
+        self.isSearching = false
     }
 }
 
@@ -170,16 +170,16 @@ struct SearchResultRow: View {
             // Icon
             ZStack {
                 Circle()
-                    .fill(iconBackgroundColor)
+                    .fill(self.iconBackgroundColor)
                     .frame(width: 40, height: 40)
 
-                Image(systemName: result.iconName)
+                Image(systemName: self.result.iconName)
                     .foregroundColor(.white)
                     .font(.system(size: 16, weight: .semibold))
             }
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(result.title)
+                Text(self.result.title)
                     .font(.headline)
                     .foregroundColor(.primary)
 
@@ -189,7 +189,7 @@ struct SearchResultRow: View {
                         .foregroundColor(.secondary)
                 }
 
-                Text(result.type.rawValue.capitalized)
+                Text(self.result.type.rawValue.capitalized)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.horizontal, 6)
@@ -209,17 +209,17 @@ struct SearchResultRow: View {
     }
 
     private var iconBackgroundColor: Color {
-        switch result.type {
+        switch self.result.type {
         case .accounts:
-            return .blue
+            .blue
         case .transactions:
-            return .green
+            .green
         case .budgets:
-            return .orange
+            .orange
         case .subscriptions:
-            return .purple
+            .purple
         case .all:
-            return .gray
+            .gray
         }
     }
 }
@@ -235,15 +235,15 @@ struct SearchResultDetailView: View {
                 VStack(spacing: 8) {
                     ZStack {
                         Circle()
-                            .fill(iconBackgroundColor)
+                            .fill(self.iconBackgroundColor)
                             .frame(width: 60, height: 60)
 
-                        Image(systemName: result.iconName)
+                        Image(systemName: self.result.iconName)
                             .foregroundColor(.white)
                             .font(.system(size: 24, weight: .semibold))
                     }
 
-                    Text(result.title)
+                    Text(self.result.title)
                         .font(.title)
                         .fontWeight(.bold)
 
@@ -257,7 +257,7 @@ struct SearchResultDetailView: View {
 
                 // Details
                 VStack(alignment: .leading, spacing: 16) {
-                    DetailRow(label: "Type", value: result.type.rawValue.capitalized)
+                    DetailRow(label: "Type", value: self.result.type.rawValue.capitalized)
 
                     if let data = result.data as? [String: Any] {
                         ForEach(data.keys.sorted(), id: \.self) { key in
@@ -273,30 +273,30 @@ struct SearchResultDetailView: View {
             }
             .navigationTitle("Details")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") {
-                        dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Done") {
+                            self.dismiss()
+                        }
                     }
                 }
-            }
         }
     }
 
     private var iconBackgroundColor: Color {
-        switch result.type {
+        switch self.result.type {
         case .accounts:
-            return .blue
+            .blue
         case .transactions:
-            return .green
+            .green
         case .budgets:
-            return .orange
+            .orange
         case .subscriptions:
-            return .purple
+            .purple
         case .all:
-            return .gray
+            .gray
         }
     }
 }
@@ -307,12 +307,12 @@ struct DetailRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(label)
+            Text(self.label)
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .textCase(.uppercase)
 
-            Text(value)
+            Text(self.value)
                 .font(.body)
                 .foregroundColor(.primary)
         }

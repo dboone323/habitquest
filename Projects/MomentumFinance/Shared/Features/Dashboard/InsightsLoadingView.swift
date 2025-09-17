@@ -14,8 +14,8 @@ public struct InsightsLoadingView: View {
                     .trim(from: 0, to: 0.8)
                     .stroke(Color.blue, lineWidth: 4)
                     .frame(width: 60, height: 60)
-                    .rotationEffect(.degrees(isAnimating ? 360 : 0))
-                    .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: isAnimating)
+                    .rotationEffect(.degrees(self.isAnimating ? 360 : 0))
+                    .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: self.isAnimating)
             }
 
             VStack(spacing: 8) {
@@ -29,7 +29,7 @@ public struct InsightsLoadingView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
-            isAnimating = true
+            self.isAnimating = true
         }
     }
 }

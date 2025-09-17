@@ -19,12 +19,12 @@ extension Features.Transactions {
                 VStack(spacing: 20) {
                     // Amount Display
                     VStack(spacing: 8) {
-                        Text(transaction.formattedAmount)
+                        Text(self.transaction.formattedAmount)
                             .font(.largeTitle)
                             .fontWeight(.bold)
-                            .foregroundColor(transaction.transactionType == .income ? .green : .red)
+                            .foregroundColor(self.transaction.transactionType == .income ? .green : .red)
 
-                        Text(transaction.transactionType.rawValue)
+                        Text(self.transaction.transactionType.rawValue)
                             .font(.headline)
                             .foregroundColor(.secondary)
                     }
@@ -32,8 +32,8 @@ extension Features.Transactions {
 
                     // Details
                     VStack(alignment: .leading, spacing: 16) {
-                        DetailRow(label: "Title", value: transaction.title)
-                        DetailRow(label: "Date", value: transaction.formattedDate)
+                        DetailRow(label: "Title", value: self.transaction.title)
+                        DetailRow(label: "Date", value: self.transaction.formattedDate)
 
                         if let category = transaction.category {
                             DetailRow(label: "Category", value: category.name)
@@ -55,7 +55,7 @@ extension Features.Transactions {
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button("Done").accessibilityLabel("Button") {
-                            dismiss()
+                            self.dismiss()
                         }
                     }
                 }
@@ -69,10 +69,10 @@ extension Features.Transactions {
 
         var body: some View {
             VStack(alignment: .leading, spacing: 4) {
-                Text(label)
+                Text(self.label)
                     .font(.caption)
                     .foregroundColor(.secondary)
-                Text(value)
+                Text(self.value)
                     .font(.body)
             }
         }

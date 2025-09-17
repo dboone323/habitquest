@@ -42,14 +42,14 @@ enum AppError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .networkError(let message):
-            return "Network Error: \(message)"
-        case .dataError(let message):
-            return "Data Error: \(message)"
-        case .validationError(let message):
-            return "Validation Error: \(message)"
+        case let .networkError(message):
+            "Network Error: \(message)"
+        case let .dataError(message):
+            "Data Error: \(message)"
+        case let .validationError(message):
+            "Validation Error: \(message)"
         case .unknownError:
-            return "An unknown error occurred"
+            "An unknown error occurred"
         }
     }
 }

@@ -12,7 +12,6 @@ import XCTest
 @testable import PlannerApp
 
 final class PlannerAppTests: XCTestCase {
-
     var modelContainer: ModelContainer!
     var modelContext: ModelContext!
 
@@ -23,13 +22,13 @@ final class PlannerAppTests: XCTestCase {
             // Example: Task.self, Project.self, Category.self
         ])
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        modelContainer = try ModelContainer(for: schema, configurations: [configuration])
-        modelContext = ModelContext(modelContainer)
+        self.modelContainer = try ModelContainer(for: schema, configurations: [configuration])
+        self.modelContext = ModelContext(self.modelContainer)
     }
 
     override func tearDownWithError() throws {
-        modelContainer = nil
-        modelContext = nil
+        self.modelContainer = nil
+        self.modelContext = nil
     }
 
     // MARK: - Task Management Tests
@@ -61,8 +60,8 @@ final class PlannerAppTests: XCTestCase {
 
     func testTaskDueDate() throws {
         // Test task due date handling
-        let futureDate = Date().addingTimeInterval(86400)  // Tomorrow
-        let pastDate = Date().addingTimeInterval(-86400)  // Yesterday
+        let futureDate = Date().addingTimeInterval(86400) // Tomorrow
+        let pastDate = Date().addingTimeInterval(-86400) // Yesterday
 
         XCTAssertGreaterThan(futureDate, Date(), "Future date should be after current date")
         XCTAssertLessThan(pastDate, Date(), "Past date should be before current date")
@@ -296,7 +295,7 @@ final class PlannerAppTests: XCTestCase {
         let startTime = Date()
 
         // Simulate creating multiple tasks
-        for i in 1...100 {
+        for i in 1 ... 100 {
             let taskData: [String: Any] = ["id": i, "title": "Task \(i)"]
             XCTAssertEqual((taskData["id"] as? Int), i)
         }
@@ -312,7 +311,7 @@ final class PlannerAppTests: XCTestCase {
         let startTime = Date()
 
         // Simulate search through multiple items
-        for i in 1...1000 {
+        for i in 1 ... 1000 {
             let item = "Item \(i)"
             XCTAssertTrue(item.contains("Item"))
         }
@@ -329,7 +328,7 @@ final class PlannerAppTests: XCTestCase {
 
         // Simulate bulk task operations
         var tasks: [[String: Any]] = []
-        for i in 1...500 {
+        for i in 1 ... 500 {
             let task: [String: Any] = ["id": i, "title": "Bulk Task \(i)", "completed": i % 2 == 0]
             tasks.append(task)
         }
@@ -359,7 +358,7 @@ final class PlannerAppTests: XCTestCase {
         let dateString = date.description
 
         XCTAssertFalse(dateString.isEmpty)
-        XCTAssertTrue(dateString.contains("-"))  // ISO date format contains hyphens
+        XCTAssertTrue(dateString.contains("-")) // ISO date format contains hyphens
     }
 
     func testPriorityColorMapping() throws {
@@ -509,7 +508,7 @@ final class PlannerAppTests: XCTestCase {
 
     func testLargeDataSets() throws {
         // Test handling of large data sets
-        let largeArray = Array(1...10000)
+        let largeArray = Array(1 ... 10000)
         let filteredArray = largeArray.filter { $0 % 2 == 0 }
 
         XCTAssertEqual(largeArray.count, 10000)

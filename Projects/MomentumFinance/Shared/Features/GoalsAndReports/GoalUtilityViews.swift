@@ -15,27 +15,27 @@ extension Features.GoalsAndReports {
         var body: some View {
             HStack(spacing: 16) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
+                    Text(self.title)
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
 
-                    Text(subtitle)
+                    Text(self.subtitle)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
 
                 Spacer()
 
-                if selectedTab == 0 {
+                if self.selectedTab == 0 {
                     Button(
-                        action: { showingAddGoal = true },
+                        action: { self.showingAddGoal = true },
                         label: {
                             Image(systemName: "plus.circle.fill")
                                 .font(.title2)
                                 .foregroundColor(.blue)
                         },
-                        )
+                    )
                 }
             }
         }
@@ -66,7 +66,7 @@ extension Features.GoalsAndReports {
                 }
 
                 Button(
-                    action: { showingAddGoal = true },
+                    action: { self.showingAddGoal = true },
                     label: {
                         Label("Create Your First Goal", systemImage: "plus.circle.fill")
                             .font(.headline)
@@ -76,7 +76,7 @@ extension Features.GoalsAndReports {
                             .background(Color.blue)
                             .cornerRadius(12)
                     },
-                    )
+                )
 
                 Spacer()
             }
@@ -117,12 +117,12 @@ extension Features.GoalsAndReports {
             HStack(spacing: 0) {
                 ForEach(["Goals", "Reports"], id: \.self) { tab in
                     let index = tab == "Goals" ? 0 : 1
-                    let isSelected = selectedTab == index
+                    let isSelected = self.selectedTab == index
 
                     Button(
                         action: {
                             withAnimation(.easeInOut(duration: 0.3)) {
-                                selectedTab = index
+                                self.selectedTab = index
                             }
                         },
                         label: {
@@ -150,23 +150,23 @@ extension Features.GoalsAndReports {
                                                 gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
                                                 startPoint: .leading,
                                                 endPoint: .trailing,
-                                                ) :
+                                            ) :
                                             LinearGradient(
                                                 gradient: Gradient(colors: [Color.clear]),
                                                 startPoint: .leading,
                                                 endPoint: .trailing,
-                                                ),
-                                        ),
-                                )
+                                            ),
+                                    ),
+                            )
                         },
-                        )
+                    )
                 }
             }
             .padding(6)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color(.systemFill)),
-                )
+            )
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
         }

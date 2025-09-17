@@ -12,23 +12,23 @@ import SwiftUI
 
 /// Navigation destination enums for each module
 public enum TransactionsDestination: Hashable {
-    case accountDetail(String)  // Uses account ID
-    case categoryTransactions(String)  // Uses category ID
+    case accountDetail(String) // Uses account ID
+    case categoryTransactions(String) // Uses category ID
 }
 
 public enum BudgetsDestination: Hashable {
-    case categoryDetail(String)  // Uses category ID
-    case categoryTransactions(String)  // Uses category ID
+    case categoryDetail(String) // Uses category ID
+    case categoryTransactions(String) // Uses category ID
 }
 
 public enum SubscriptionsDestination: Hashable {
-    case subscriptionDetail(String)  // Uses subscription ID
-    case accountDetail(String)  // Uses account ID
+    case subscriptionDetail(String) // Uses subscription ID
+    case accountDetail(String) // Uses account ID
 }
 
 public enum GoalsDestination: Hashable {
-    case goalDetail(String)  // Uses goal ID
-    case relatedTransactions(String)  // Uses goal ID
+    case goalDetail(String) // Uses goal ID
+    case relatedTransactions(String) // Uses goal ID
 }
 
 /// Context for navigation between modules

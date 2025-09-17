@@ -3,7 +3,6 @@ import XCTest
 @testable import PlannerApp
 
 class ContentViewTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Put setup code here

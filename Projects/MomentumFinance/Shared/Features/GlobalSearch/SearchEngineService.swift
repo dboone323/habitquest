@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 import SwiftData
 
 @MainActor
@@ -22,18 +22,18 @@ public final class SearchEngineService: ObservableObject {
 
         switch filter {
         case .all:
-            results.append(contentsOf: searchAccounts(query))
-            results.append(contentsOf: searchTransactions(query))
-            results.append(contentsOf: searchSubscriptions(query))
-            results.append(contentsOf: searchBudgets(query))
+            results.append(contentsOf: self.searchAccounts(query))
+            results.append(contentsOf: self.searchTransactions(query))
+            results.append(contentsOf: self.searchSubscriptions(query))
+            results.append(contentsOf: self.searchBudgets(query))
         case .accounts:
-            results.append(contentsOf: searchAccounts(query))
+            results.append(contentsOf: self.searchAccounts(query))
         case .transactions:
-            results.append(contentsOf: searchTransactions(query))
+            results.append(contentsOf: self.searchTransactions(query))
         case .subscriptions:
-            results.append(contentsOf: searchSubscriptions(query))
+            results.append(contentsOf: self.searchSubscriptions(query))
         case .budgets:
-            results.append(contentsOf: searchBudgets(query))
+            results.append(contentsOf: self.searchBudgets(query))
         }
 
         // Sort by relevance score
@@ -45,8 +45,8 @@ public final class SearchEngineService: ObservableObject {
         guard let accounts = try? modelContext.fetch(descriptor) else { return [] }
 
         return accounts.compactMap { account in
-            let titleScore = calculateRelevance(account.name, query: query)
-            let balanceScore = calculateRelevance(String(format: "%.2f", account.balance), query: query)
+            let titleScore = self.calculateRelevance(account.name, query: query)
+            let balanceScore = self.calculateRelevance(String(format: "%.2f", account.balance), query: query)
 
             let score = max(titleScore, balanceScore)
             if score > 0 {
@@ -68,8 +68,8 @@ public final class SearchEngineService: ObservableObject {
         guard let transactions = try? modelContext.fetch(descriptor) else { return [] }
 
         return transactions.compactMap { transaction in
-            let titleScore = calculateRelevance(transaction.title, query: query)
-            let amountScore = calculateRelevance(String(format: "%.2f", transaction.amount), query: query)
+            let titleScore = self.calculateRelevance(transaction.title, query: query)
+            let amountScore = self.calculateRelevance(String(format: "%.2f", transaction.amount), query: query)
 
             let score = max(titleScore, amountScore)
             if score > 0 {
@@ -91,8 +91,8 @@ public final class SearchEngineService: ObservableObject {
         guard let subscriptions = try? modelContext.fetch(descriptor) else { return [] }
 
         return subscriptions.compactMap { subscription in
-            let titleScore = calculateRelevance(subscription.name, query: query)
-            let amountScore = calculateRelevance(String(format: "%.2f", subscription.amount), query: query)
+            let titleScore = self.calculateRelevance(subscription.name, query: query)
+            let amountScore = self.calculateRelevance(String(format: "%.2f", subscription.amount), query: query)
 
             let score = max(titleScore, amountScore)
             if score > 0 {
@@ -114,8 +114,8 @@ public final class SearchEngineService: ObservableObject {
         guard let budgets = try? modelContext.fetch(descriptor) else { return [] }
 
         return budgets.compactMap { budget in
-            let titleScore = calculateRelevance(budget.name, query: query)
-            let amountScore = calculateRelevance(String(format: "%.2f", budget.limitAmount), query: query)
+            let titleScore = self.calculateRelevance(budget.name, query: query)
+            let amountScore = self.calculateRelevance(String(format: "%.2f", budget.limitAmount), query: query)
 
             let score = max(titleScore, amountScore)
             if score > 0 {

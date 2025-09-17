@@ -13,13 +13,13 @@ final class ExpenseCategoryModelTests: XCTestCase {
             ExpenseCategory.self, FinancialTransaction.self, FinancialAccount.self,
         ])
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        modelContainer = try ModelContainer(for: schema, configurations: [configuration])
-        modelContext = ModelContext(modelContainer)
+        self.modelContainer = try ModelContainer(for: schema, configurations: [configuration])
+        self.modelContext = ModelContext(self.modelContainer)
     }
 
     override func tearDownWithError() throws {
-        modelContainer = nil
-        modelContext = nil
+        self.modelContainer = nil
+        self.modelContext = nil
     }
 
     func testCategoryCreation() throws {
@@ -30,8 +30,8 @@ final class ExpenseCategoryModelTests: XCTestCase {
 
     func testCategoryPersistence() throws {
         let category = ExpenseCategory(name: "Transport", iconName: "car")
-        modelContext.insert(category)
-        try modelContext.save()
+        self.modelContext.insert(category)
+        try self.modelContext.save()
         let fetchRequest = FetchDescriptor<ExpenseCategory>()
         let savedCategories = try modelContext.fetch(fetchRequest)
         XCTAssertEqual(savedCategories.count, 1)
@@ -42,9 +42,11 @@ final class ExpenseCategoryModelTests: XCTestCase {
         let category = ExpenseCategory(name: "Dining", iconName: "fork.knife")
         let now = Date()
         let transaction1 = FinancialTransaction(
-            title: "Lunch", amount: 20.0, date: now, transactionType: .expense)
+            title: "Lunch", amount: 20.0, date: now, transactionType: .expense
+        )
         let transaction2 = FinancialTransaction(
-            title: "Dinner", amount: 30.0, date: now, transactionType: .expense)
+            title: "Dinner", amount: 30.0, date: now, transactionType: .expense
+        )
         category.transactions = [transaction1, transaction2]
         let total = category.totalSpent(for: now)
         XCTAssertEqual(total, 50.0)

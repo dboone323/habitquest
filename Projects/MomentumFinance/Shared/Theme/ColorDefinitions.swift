@@ -9,42 +9,42 @@
 import SwiftUI
 
 /// Static color definitions for the Momentum Finance theme
-public struct ColorDefinitions {
+public enum ColorDefinitions {
     // MARK: - Background Colors
 
     public static func background(_ scheme: ColorScheme) -> Color {
         switch scheme {
         case .light:
-            return Color(hex: "#FFFFFF")
+            Color(hex: "#FFFFFF")
         case .dark:
-            return Color(hex: "#1C1C1E")
+            Color(hex: "#1C1C1E")
         }
     }
 
     public static func secondaryBackground(_ scheme: ColorScheme) -> Color {
         switch scheme {
         case .light:
-            return Color(hex: "#F2F2F7")
+            Color(hex: "#F2F2F7")
         case .dark:
-            return Color(hex: "#2C2C2E")
+            Color(hex: "#2C2C2E")
         }
     }
 
     public static func groupedBackground(_ scheme: ColorScheme) -> Color {
         switch scheme {
         case .light:
-            return Color(hex: "#FFFFFF")
+            Color(hex: "#FFFFFF")
         case .dark:
-            return Color(hex: "#1C1C1E")
+            Color(hex: "#1C1C1E")
         }
     }
 
     public static func cardBackground(_ scheme: ColorScheme) -> Color {
         switch scheme {
         case .light:
-            return Color(hex: "#FFFFFF")
+            Color(hex: "#FFFFFF")
         case .dark:
-            return Color(hex: "#2C2C2E")
+            Color(hex: "#2C2C2E")
         }
     }
 
@@ -53,17 +53,17 @@ public struct ColorDefinitions {
     public static func text(_ style: TextStyle, _ scheme: ColorScheme) -> Color {
         switch (style, scheme) {
         case (.primary, .light):
-            return Color(hex: "#000000")
+            Color(hex: "#000000")
         case (.primary, .dark):
-            return Color(hex: "#FFFFFF")
+            Color(hex: "#FFFFFF")
         case (.secondary, .light):
-            return Color(hex: "#6B6B6B")
+            Color(hex: "#6B6B6B")
         case (.secondary, .dark):
-            return Color(hex: "#A1A1A1")
+            Color(hex: "#A1A1A1")
         case (.tertiary, .light):
-            return Color(hex: "#8E8E93")
+            Color(hex: "#8E8E93")
         case (.tertiary, .dark):
-            return Color(hex: "#636366")
+            Color(hex: "#636366")
         }
     }
 
@@ -72,13 +72,13 @@ public struct ColorDefinitions {
     public static func accent(_ type: AccentType, _ scheme: ColorScheme) -> Color {
         switch (type, scheme) {
         case (.primary, .light):
-            return Color(hex: "#007AFF")
+            Color(hex: "#007AFF")
         case (.primary, .dark):
-            return Color(hex: "#0A84FF")
+            Color(hex: "#0A84FF")
         case (.secondary, .light):
-            return Color(hex: "#5AC8FA")
+            Color(hex: "#5AC8FA")
         case (.secondary, .dark):
-            return Color(hex: "#64D2FF")
+            Color(hex: "#64D2FF")
         }
     }
 
@@ -87,25 +87,25 @@ public struct ColorDefinitions {
     public static func financial(_ type: FinancialType, _ scheme: ColorScheme) -> Color {
         switch (type, scheme) {
         case (.income, .light):
-            return Color(hex: "#34C759")
+            Color(hex: "#34C759")
         case (.income, .dark):
-            return Color(hex: "#30D158")
+            Color(hex: "#30D158")
         case (.expense, .light):
-            return Color(hex: "#FF3B30")
+            Color(hex: "#FF3B30")
         case (.expense, .dark):
-            return Color(hex: "#FF453A")
+            Color(hex: "#FF453A")
         case (.savings, .light):
-            return Color(hex: "#007AFF")
+            Color(hex: "#007AFF")
         case (.savings, .dark):
-            return Color(hex: "#0A84FF")
+            Color(hex: "#0A84FF")
         case (.warning, .light):
-            return Color(hex: "#FF9500")
+            Color(hex: "#FF9500")
         case (.warning, .dark):
-            return Color(hex: "#FF9F0A")
+            Color(hex: "#FF9F0A")
         case (.critical, .light):
-            return Color(hex: "#FF3B30")
+            Color(hex: "#FF3B30")
         case (.critical, .dark):
-            return Color(hex: "#FF453A")
+            Color(hex: "#FF453A")
         }
     }
 
@@ -114,35 +114,35 @@ public struct ColorDefinitions {
     public static func budget(_ type: BudgetType, _ scheme: ColorScheme) -> Color {
         switch (type, scheme) {
         case (.under, .light):
-            return Color(hex: "#34C759")
+            Color(hex: "#34C759")
         case (.under, .dark):
-            return Color(hex: "#30D158")
+            Color(hex: "#30D158")
         case (.near, .light):
-            return Color(hex: "#FF9500")
+            Color(hex: "#FF9500")
         case (.near, .dark):
-            return Color(hex: "#FF9F0A")
+            Color(hex: "#FF9F0A")
         case (.over, .light):
-            return Color(hex: "#FF3B30")
+            Color(hex: "#FF3B30")
         case (.over, .dark):
-            return Color(hex: "#FF453A")
+            Color(hex: "#FF453A")
         }
     }
 
     // MARK: - Category Colors
 
     public static let categoryColors: [Color] = [
-        Color(hex: "#FF6B6B"),  // Red
-        Color(hex: "#4ECDC4"),  // Teal
-        Color(hex: "#45B7D1"),  // Blue
-        Color(hex: "#96CEB4"),  // Green
-        Color(hex: "#FFEAA7"),  // Yellow
-        Color(hex: "#DDA0DD"),  // Plum
-        Color(hex: "#98D8C8"),  // Mint
-        Color(hex: "#F7DC6F"),  // Gold
-        Color(hex: "#BB8FCE"),  // Purple
-        Color(hex: "#85C1E9"),  // Sky Blue
-        Color(hex: "#F8C471"),  // Orange
-        Color(hex: "#82E0AA")  // Light Green
+        Color(hex: "#FF6B6B"), // Red
+        Color(hex: "#4ECDC4"), // Teal
+        Color(hex: "#45B7D1"), // Blue
+        Color(hex: "#96CEB4"), // Green
+        Color(hex: "#FFEAA7"), // Yellow
+        Color(hex: "#DDA0DD"), // Plum
+        Color(hex: "#98D8C8"), // Mint
+        Color(hex: "#F7DC6F"), // Gold
+        Color(hex: "#BB8FCE"), // Purple
+        Color(hex: "#85C1E9"), // Sky Blue
+        Color(hex: "#F8C471"), // Orange
+        Color(hex: "#82E0AA") // Light Green
     ]
 }
 
@@ -158,11 +158,11 @@ extension Color {
         let g: UInt64
         let b: UInt64
         switch hex.count {
-        case 3:  // RGB (12-bit)
+        case 3: // RGB (12-bit)
             (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6:  // RGB (24-bit)
+        case 6: // RGB (24-bit)
             (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8:  // ARGB (32-bit)
+        case 8: // ARGB (32-bit)
             (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
         default:
             (a, r, g, b) = (1, 1, 1, 0)

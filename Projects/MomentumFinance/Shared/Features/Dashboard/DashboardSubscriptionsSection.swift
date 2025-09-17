@@ -24,17 +24,17 @@ struct DashboardSubscriptionsSection: View {
             .padding(.horizontal)
 
             VStack(spacing: 16) {
-                if !subscriptions.isEmpty {
-                    ForEach(subscriptions.prefix(3).indices, id: \.self) { index in
-                        let subscription = subscriptions[index]
+                if !self.subscriptions.isEmpty {
+                    ForEach(self.subscriptions.prefix(3).indices, id: \.self) { index in
+                        let subscription = self.subscriptions[index]
                         HStack {
                             // Icon with colorful background
                             ZStack {
                                 RoundedRectangle(cornerRadius: 8)
-                                    .fill(categoryColor(for: index))
+                                    .fill(self.categoryColor(for: index))
                                     .frame(width: 36, height: 36)
 
-                                Image(systemName: subscriptionIcon(subscription))
+                                Image(systemName: self.subscriptionIcon(subscription))
                                     .font(.caption)
                                     .foregroundStyle(.white)
                             }
@@ -44,7 +44,7 @@ struct DashboardSubscriptionsSection: View {
                                     .font(.subheadline)
                                     .foregroundStyle(.primary)
 
-                                Text(formattedDateString(subscription.nextDueDate))
+                                Text(self.formattedDateString(subscription.nextDueDate))
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -58,19 +58,19 @@ struct DashboardSubscriptionsSection: View {
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            onSubscriptionTapped(subscription)
+                            self.onSubscriptionTapped(subscription)
                         }
 
-                        if index < min(2, subscriptions.count - 1) {
+                        if index < min(2, self.subscriptions.count - 1) {
                             Divider()
                                 .background(Color.secondary.opacity(0.3))
                         }
                     }
 
                     // View all subscriptions button
-                    if subscriptions.count > 3 {
-                        Button(action: onViewAllTapped).accessibilityLabel("Button") {
-                            Text("View All \(subscriptions.count) Subscriptions")
+                    if self.subscriptions.count > 3 {
+                        Button(action: self.onViewAllTapped).accessibilityLabel("Button") {
+                            Text("View All \(self.subscriptions.count) Subscriptions")
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .foregroundStyle(.blue)
@@ -87,7 +87,7 @@ struct DashboardSubscriptionsSection: View {
                             .font(.callout)
                             .foregroundStyle(.secondary)
 
-                        Button(action: onAddTapped).accessibilityLabel("Button") {
+                        Button(action: self.onAddTapped).accessibilityLabel("Button") {
                             Text("Add Subscription")
                                 .padding(.vertical, 4)
                                 .frame(maxWidth: 180)
@@ -142,15 +142,15 @@ struct DashboardSubscriptionsSection: View {
     let sampleSubscriptions = [
         Subscription(
             name: "Netflix", amount: 15.99, billingCycle: .monthly,
-            nextDueDate: Date().addingTimeInterval(86_400 * 3)
+            nextDueDate: Date().addingTimeInterval(86400 * 3)
         ),
         Subscription(
             name: "Spotify", amount: 9.99, billingCycle: .monthly,
-            nextDueDate: Date().addingTimeInterval(86_400 * 7)
+            nextDueDate: Date().addingTimeInterval(86400 * 7)
         ),
         Subscription(
             name: "Apple iCloud", amount: 2.99, billingCycle: .monthly,
-            nextDueDate: Date().addingTimeInterval(86_400 * 14)
+            nextDueDate: Date().addingTimeInterval(86400 * 14)
         )
     ]
 

@@ -5,14 +5,14 @@ struct ImportProgressComponent: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            ProgressView(value: progress, total: 1.0)
+            ProgressView(value: self.progress, total: 1.0)
                 .progressViewStyle(CircularProgressViewStyle())
                 .scaleEffect(1.5)
 
             Text("Importing data...")
                 .font(.headline)
 
-            Text("\(Int(progress * 100))% complete")
+            Text("\(Int(self.progress * 100))% complete")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }

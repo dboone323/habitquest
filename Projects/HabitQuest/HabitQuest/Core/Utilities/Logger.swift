@@ -4,7 +4,6 @@ import os
 /// Centralized logging utility for the HabitQuest app
 /// Provides structured logging with different levels and categories
 struct Logger {
-
     /// Log categories for different parts of the application
     enum Category: String {
         case general = "HabitQuest.General"
@@ -63,7 +62,7 @@ struct Logger {
         print(logMessage)
         #endif
 
-        os_log("%{public}@", log: osLog, type: level.osLogType, logMessage)
+        os_log("%{public}@", log: self.osLog, type: level.osLogType, logMessage)
     }
 
     /// Convenience methods for different log levels
@@ -74,7 +73,7 @@ struct Logger {
     /// <#Description#>
     /// - Returns: <#description#>
     func debug(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        log(.debug, message, file: file, function: function, line: line)
+        self.log(.debug, message, file: file, function: function, line: line)
     }
 
     /// <#Description#>
@@ -84,7 +83,7 @@ struct Logger {
     /// <#Description#>
     /// - Returns: <#description#>
     func info(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        log(.info, message, file: file, function: function, line: line)
+        self.log(.info, message, file: file, function: function, line: line)
     }
 
     /// <#Description#>
@@ -94,7 +93,7 @@ struct Logger {
     /// <#Description#>
     /// - Returns: <#description#>
     func warning(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        log(.warning, message, file: file, function: function, line: line)
+        self.log(.warning, message, file: file, function: function, line: line)
     }
 
     /// <#Description#>
@@ -104,7 +103,7 @@ struct Logger {
     /// <#Description#>
     /// - Returns: <#description#>
     func error(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        log(.error, message, file: file, function: function, line: line)
+        self.log(.error, message, file: file, function: function, line: line)
     }
 
     /// <#Description#>
@@ -114,6 +113,6 @@ struct Logger {
     /// <#Description#>
     /// - Returns: <#description#>
     func critical(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        log(.critical, message, file: file, function: function, line: line)
+        self.log(.critical, message, file: file, function: function, line: line)
     }
 }
