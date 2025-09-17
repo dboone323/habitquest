@@ -1,3 +1,17 @@
+# Root ignore for generated artifacts and local state
+
+# TODO export output (generated)
+Projects/todo-tree-output.json
+todo-tree-output.json
+
+# Automation runtime files
+Tools/Automation/export_todos.pid
+Tools/Automation/process_todos.log
+Tools/logs/
+
+# macOS junk
+.DS_Store
+*/.DS_Store
 # Xcode
 DerivedData/
 *.xcworkspace/xcuserdata/
