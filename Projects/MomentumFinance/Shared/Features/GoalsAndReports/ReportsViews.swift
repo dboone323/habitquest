@@ -111,11 +111,11 @@ struct FinancialSummaryCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
         #else
-        return Color.white
+            return Color.white
         #endif
     }
 
@@ -187,11 +187,11 @@ struct SpendingByCategoryCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
         #else
-        return Color.white
+            return Color.white
         #endif
     }
 
@@ -264,11 +264,11 @@ struct BudgetPerformanceCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
         #else
-        return Color.white
+            return Color.white
         #endif
     }
 
@@ -296,7 +296,8 @@ struct BudgetPerformanceCard: View {
                 VStack(spacing: 12) {
                     HStack {
                         Label(
-                            "\(self.onTrackBudgets.count) On Track", systemImage: "checkmark.circle.fill"
+                            "\(self.onTrackBudgets.count) On Track",
+                            systemImage: "checkmark.circle.fill"
                         )
                         .foregroundColor(.green)
 
@@ -347,11 +348,11 @@ struct RecentTransactionsCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
         #else
-        return Color.white
+            return Color.white
         #endif
     }
 

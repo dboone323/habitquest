@@ -390,7 +390,6 @@
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CodingReviewer/Info.plist;
 				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
@@ -408,9 +407,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
-				   GENERATE_INFOPLIST_FILE = NO;
-				   INFOPLIST_FILE = CodingReviewer/Info.plist;
-				   SWIFT_VERSION = 6.0;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

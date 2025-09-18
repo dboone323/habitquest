@@ -20,11 +20,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -120,9 +120,11 @@ extension Features.GoalsAndReports {
                             .fontWeight(.semibold)
                             .foregroundColor(.primary)
 
-                        Text("\(self.activeGoals.count) active • \(self.completedGoals.count) completed")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        Text(
+                            "\(self.activeGoals.count) active • \(self.completedGoals.count) completed"
+                        )
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                     }
 
                     Spacer()
@@ -181,7 +183,7 @@ extension Features.GoalsAndReports {
                     .fill(
                         LinearGradient(
                             gradient: Gradient(colors: [
-                                Color.blue.opacity(0.05), Color.blue.opacity(0.1)
+                                Color.blue.opacity(0.05), Color.blue.opacity(0.1),
                             ]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing,
@@ -237,11 +239,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -362,7 +364,8 @@ extension Features.GoalsAndReports {
                                     ),
                                 )
                                 .frame(
-                                    width: geometry.size.width * min(self.goal.progressPercentage, 1.0),
+                                    width: geometry.size.width
+                                        * min(self.goal.progressPercentage, 1.0),
                                     height: 12
                                 )
                                 .animation(

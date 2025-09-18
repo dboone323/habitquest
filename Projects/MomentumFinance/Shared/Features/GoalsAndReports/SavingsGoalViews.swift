@@ -46,11 +46,11 @@ struct SavingsGoalCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
         #else
-        return Color.white
+            return Color.white
         #endif
     }
 

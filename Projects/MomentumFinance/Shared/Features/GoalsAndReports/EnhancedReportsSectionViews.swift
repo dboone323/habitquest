@@ -22,11 +22,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -162,10 +162,12 @@ extension Features.GoalsAndReports {
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
 
-                    Text("No transactions found for \(self.selectedTimeframe.rawValue.lowercased())")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
+                    Text(
+                        "No transactions found for \(self.selectedTimeframe.rawValue.lowercased())"
+                    )
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
                 }
             }
             .padding()
@@ -332,10 +334,10 @@ extension Features.GoalsAndReports {
             self.budgets.map { budget in
                 let spent =
                     self.transactions
-                        .filter {
-                            $0.category?.name == budget.category?.name && $0.transactionType == .expense
-                        }
-                        .reduce(0) { $0 + $1.amount }
+                    .filter {
+                        $0.category?.name == budget.category?.name && $0.transactionType == .expense
+                    }
+                    .reduce(0) { $0 + $1.amount }
                 return (budget, spent, budget.limitAmount)
             }
         }

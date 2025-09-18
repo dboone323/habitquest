@@ -25,11 +25,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -83,7 +83,7 @@ extension Features.Subscriptions {
                 LazyVGrid(
                     columns: [
                         GridItem(.flexible()),
-                        GridItem(.flexible())
+                        GridItem(.flexible()),
                     ], spacing: 12
                 ) {
                     // Monthly Total
@@ -190,11 +190,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemGroupedBackground)
+                return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 

@@ -20,7 +20,8 @@ struct AddSavingsGoalView: View {
     @State private var notes = ""
 
     private var isFormValid: Bool {
-        !self.name.isEmpty && !self.targetAmountString.isEmpty && Double(self.targetAmountString) != nil
+        !self.name.isEmpty && !self.targetAmountString.isEmpty
+            && Double(self.targetAmountString) != nil
     }
 
     var body: some View {
@@ -33,7 +34,7 @@ struct AddSavingsGoalView: View {
                         "Text Field"
                     )
                     #if canImport(UIKit)
-                    .keyboardType(.decimalPad)
+                        .keyboardType(.decimalPad)
                     #endif
 
                     Toggle("Set Target Date", isOn: self.$hasTargetDate)
@@ -53,45 +54,45 @@ struct AddSavingsGoalView: View {
                 Section(header: Text("Notes (Optional)")) {
                     TextField("Add notes about this goal...", text: self.$notes, axis: .vertical)
                         .accessibilityLabel("Text Field")
-                        .lineLimit(3 ... 6)
+                        .lineLimit(3...6)
                 }
             }
             .navigationTitle("Add Savings Goal")
             #if canImport(UIKit)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-                .toolbar {
-                    ToolbarItem(
-                        placement: {
-                            #if canImport(UIKit)
+            .toolbar {
+                ToolbarItem(
+                    placement: {
+                        #if canImport(UIKit)
                             return .navigationBarLeading
-                            #else
+                        #else
                             return .cancellationAction
-                            #endif
-                        }()
-                    ) {
-                        Button("Cancel") {
-                            self.dismiss()
-                        }
-                        .accessibilityLabel("Button")
+                        #endif
+                    }()
+                ) {
+                    Button("Cancel") {
+                        self.dismiss()
                     }
-
-                    ToolbarItem(
-                        placement: {
-                            #if canImport(UIKit)
-                            return .navigationBarTrailing
-                            #else
-                            return .primaryAction
-                            #endif
-                        }()
-                    ) {
-                        Button("Save") {
-                            self.saveSavingsGoal()
-                        }
-                        .disabled(!self.isFormValid)
-                        .accessibilityLabel("Button")
-                    }
+                    .accessibilityLabel("Button")
                 }
+
+                ToolbarItem(
+                    placement: {
+                        #if canImport(UIKit)
+                            return .navigationBarTrailing
+                        #else
+                            return .primaryAction
+                        #endif
+                    }()
+                ) {
+                    Button("Save") {
+                        self.saveSavingsGoal()
+                    }
+                    .disabled(!self.isFormValid)
+                    .accessibilityLabel("Button")
+                }
+            }
         }
     }
 
@@ -131,9 +132,12 @@ struct SavingsGoalDetailView: View {
                         .fill(Color.blue.opacity(0.2))
                         .frame(width: 80, height: 80)
                         .overlay {
-                            Image(systemName: self.goal.isCompleted ? "checkmark.circle.fill" : "target")
-                                .font(.largeTitle)
-                                .foregroundColor(self.goal.isCompleted ? .green : .blue)
+                            Image(
+                                systemName: self.goal.isCompleted
+                                    ? "checkmark.circle.fill" : "target"
+                            )
+                            .font(.largeTitle)
+                            .foregroundColor(self.goal.isCompleted ? .green : .blue)
                         }
 
                     Text(self.goal.name)
@@ -297,42 +301,42 @@ struct SavingsGoalDetailView: View {
             #if canImport(UIKit)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-                .toolbar {
-                    ToolbarItem(
-                        placement: {
-                            #if canImport(UIKit)
+            .toolbar {
+                ToolbarItem(
+                    placement: {
+                        #if canImport(UIKit)
                             return .navigationBarTrailing
-                            #else
+                        #else
                             return .primaryAction
-                            #endif
-                        }()
-                    ) {
-                        Button("Done") {
-                            self.dismiss()
-                        }
-                        .accessibilityLabel("Button")
+                        #endif
+                    }()
+                ) {
+                    Button("Done") {
+                        self.dismiss()
                     }
+                    .accessibilityLabel("Button")
                 }
-                .alert("Add Funds", isPresented: self.$showingAddFunds) {
-                    TextField("Amount", text: self.$amountToAdd).accessibilityLabel("Text Field")
+            }
+            .alert("Add Funds", isPresented: self.$showingAddFunds) {
+                TextField("Amount", text: self.$amountToAdd).accessibilityLabel("Text Field")
                     #if canImport(UIKit)
                         .keyboardType(.decimalPad)
                     #endif
-                    Button("Cancel", role: .cancel) {
-                        self.amountToAdd = ""
-                    }
-                    .accessibilityLabel("Button")
-                    Button("Add") {
-                        if let amount = Double(amountToAdd) {
-                            self.goal.addFunds(amount)
-                            try? self.modelContext.save()
-                        }
-                        self.amountToAdd = ""
-                    }
-                    .accessibilityLabel("Button")
-                } message: {
-                    Text("Enter the amount you want to add to this savings goal.")
+                Button("Cancel", role: .cancel) {
+                    self.amountToAdd = ""
                 }
+                .accessibilityLabel("Button")
+                Button("Add") {
+                    if let amount = Double(amountToAdd) {
+                        self.goal.addFunds(amount)
+                        try? self.modelContext.save()
+                    }
+                    self.amountToAdd = ""
+                }
+                .accessibilityLabel("Button")
+            } message: {
+                Text("Enter the amount you want to add to this savings goal.")
+            }
         }
     }
 }

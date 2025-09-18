@@ -25,11 +25,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -37,7 +37,8 @@ extension Features.Subscriptions {
             if !self.subscription.isActive {
                 .red
             } else if let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date()),
-                      subscription.nextDueDate <= weekFromNow {
+                subscription.nextDueDate <= weekFromNow
+            {
                 .orange
             } else {
                 .green
@@ -48,7 +49,8 @@ extension Features.Subscriptions {
             if !self.subscription.isActive {
                 "Inactive"
             } else if let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date()),
-                      subscription.nextDueDate <= weekFromNow {
+                subscription.nextDueDate <= weekFromNow
+            {
                 "Due Soon"
             } else {
                 "Active"
@@ -56,7 +58,8 @@ extension Features.Subscriptions {
         }
 
         private var daysUntilDue: Int {
-            Calendar.current.dateComponents([.day], from: Date(), to: self.subscription.nextDueDate).day
+            Calendar.current.dateComponents([.day], from: Date(), to: self.subscription.nextDueDate)
+                .day
                 ?? 0
         }
 
@@ -194,11 +197,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemGroupedBackground)
+                return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
