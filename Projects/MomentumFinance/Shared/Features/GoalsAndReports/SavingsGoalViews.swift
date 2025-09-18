@@ -2,13 +2,7 @@ import SwiftData
 import SwiftUI
 
 #if canImport(AppKit)
-import AppKit
-#endif
-
-#if canImport(UIKit)
-#endif
-
-#if canImport(AppKit)
+    import AppKit
 #endif
 
 // Momentum Finance - Personal Finance App

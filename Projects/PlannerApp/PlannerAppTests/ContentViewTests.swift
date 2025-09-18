@@ -3,16 +3,6 @@ import XCTest
 @testable import PlannerApp
 
 class ContentViewTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here
-    }
-
-    override func tearDown() {
-        // Put teardown code here
-        super.tearDown()
-    }
-
     // MARK: - ContentView Tests
 
     func testContentViewInitialization() {

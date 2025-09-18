@@ -71,11 +71,11 @@ enum ShortcutsIntentHandler {
         // For now, we'll outline the structure
     }
 
-    static func donateAddTaskIntent(taskTitle: String) {
+    static func donateAddTaskIntent(taskTitle _: String) {
         // Donate intent for Siri Shortcuts
     }
 
-    static func donateAddGoalIntent(goalTitle: String) {
+    static func donateAddGoalIntent(goalTitle _: String) {
         // Donate intent for Siri Shortcuts
     }
 }
@@ -319,7 +319,7 @@ class TouchBarProvider: NSViewController {
             .addGoal,
             .search,
             .flexibleSpace,
-            .calendar,
+            .calendar
         ]
 
         return touchBar
@@ -329,7 +329,7 @@ class TouchBarProvider: NSViewController {
 @available(macOS 10.12.2, *)
 extension TouchBarProvider: NSTouchBarDelegate {
     func touchBar(
-        _ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier
+        _: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier
     ) -> NSTouchBarItem? {
         switch identifier {
         case .addTask:
@@ -483,7 +483,7 @@ class iOSFeatureProvider: PlatformFeatureProvider {
         #endif
     }
 
-    func handleDeepLink(_ url: URL) {
+    func handleDeepLink(_: URL) {
         // Handle iOS deep links
     }
 
@@ -512,7 +512,7 @@ class macOSFeatureProvider: PlatformFeatureProvider {
         #endif
     }
 
-    func handleDeepLink(_ url: URL) {
+    func handleDeepLink(_: URL) {
         // Handle macOS URL schemes
     }
 

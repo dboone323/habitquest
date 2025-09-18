@@ -33,4 +33,4 @@ class TodaysQuestsViewModelTests: XCTestCase {
         // TODO: Implement method tests for classTodaysQuestsViewModel:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classTodaysQuestsViewModel:ObservableObject{ methods")
     }
-}
+    }

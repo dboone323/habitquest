@@ -102,7 +102,7 @@ public enum HabitFrequency: String, CaseIterable, Codable {
 
     /// Display name for the frequency
     var displayName: String {
-        self.rawValue
+        rawValue
     }
 }
 

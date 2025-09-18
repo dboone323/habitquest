@@ -133,4 +133,4 @@ class StreakAnalyticsViewTests: XCTestCase {
         // TODO: Implement method tests for structWeeklyPattern{
         XCTAssertTrue(true, "Placeholder test for structWeeklyPattern{ methods")
     }
-}
+    }

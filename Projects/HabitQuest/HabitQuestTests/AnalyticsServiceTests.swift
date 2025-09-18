@@ -313,4 +313,4 @@ class AnalyticsServiceTests: XCTestCase {
         // TODO: Implement method tests for enumHabitTrend:String{
         XCTAssertTrue(true, "Placeholder test for enumHabitTrend:String{ methods")
     }
-}
+    }

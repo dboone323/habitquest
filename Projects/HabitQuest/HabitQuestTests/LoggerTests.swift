@@ -33,4 +33,4 @@ class LoggerTests: XCTestCase {
         // TODO: Implement method tests for structLogger{
         XCTAssertTrue(true, "Placeholder test for structLogger{ methods")
     }
-}
+    }

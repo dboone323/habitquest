@@ -268,10 +268,10 @@ struct CalendarView: View {
 
 extension Calendar {
     func generateDatesInMonth(for date: Date, firstDayOfWeek: Int) -> [Date] {
-        guard let monthInterval = self.dateInterval(of: .month, for: date) else { return [] }
+        guard let monthInterval = dateInterval(of: .month, for: date) else { return [] }
 
         let monthStart = monthInterval.start
-        let firstWeekday = self.component(.weekday, from: monthStart)
+        let firstWeekday = component(.weekday, from: monthStart)
         let daysFromPreviousMonth = (firstWeekday - firstDayOfWeek + 7) % 7
 
         guard

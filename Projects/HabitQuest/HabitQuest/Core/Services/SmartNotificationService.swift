@@ -124,7 +124,7 @@ final class SmartNotificationService {
     }
 
     private func generateContextualMessage(
-        for habit: Habit,
+        for _: Habit,
         scheduling: SchedulingRecommendation,
         prediction: StreakPrediction
     ) -> String {
@@ -355,23 +355,23 @@ final class SmartNotificationService {
     }
 
     private func logNotificationInteraction(
-        habit: Habit,
-        interaction: NotificationInteraction,
-        timestamp: Date
+        habit _: Habit,
+        interaction _: NotificationInteraction,
+        timestamp _: Date
     ) async {
         // Store interaction data for ML learning
         // Implementation would save to analytics database
     }
 
-    private func adjustNotificationTiming(for habit: Habit, direction: TimingAdjustment) async {
+    private func adjustNotificationTiming(for _: Habit, direction _: TimingAdjustment) async {
         // Implement smart timing adjustment logic
     }
 
-    private func reinforceCurrentTiming(for habit: Habit) async {
+    private func reinforceCurrentTiming(for _: Habit) async {
         // Strengthen current timing preference
     }
 
-    private func adjustNotificationFrequency(for habit: Habit, factor: Double) async {
+    private func adjustNotificationFrequency(for _: Habit, factor _: Double) async {
         // Modify notification frequency based on success patterns
     }
 }

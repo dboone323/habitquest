@@ -49,7 +49,7 @@ class TodaysQuestsViewModel: ObservableObject {
     }
 
     /// Check if a habit is due today based on its frequency and last completion
-    private func isDueToday(_ habit: Habit) -> Bool {
+    private func isDueToday(_: Habit) -> Bool {
         // For now, show all habits as due today
         true
     }

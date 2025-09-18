@@ -509,39 +509,39 @@ class EnhancedCloudKitManager: ObservableObject {
 
     // MARK: - Conflict Detection
 
-    private func checkForTaskConflict(_ record: CKRecord) -> SyncConflict? {
+    private func checkForTaskConflict(_: CKRecord) -> SyncConflict? {
         // Implementation would check local records against CloudKit records
         // Return conflict if modification dates don't match
         nil
     }
 
-    private func checkForGoalConflict(_ record: CKRecord) -> SyncConflict? {
+    private func checkForGoalConflict(_: CKRecord) -> SyncConflict? {
         nil
     }
 
-    private func checkForEventConflict(_ record: CKRecord) -> SyncConflict? {
+    private func checkForEventConflict(_: CKRecord) -> SyncConflict? {
         nil
     }
 
-    private func checkForJournalConflict(_ record: CKRecord) -> SyncConflict? {
+    private func checkForJournalConflict(_: CKRecord) -> SyncConflict? {
         nil
     }
 
     // MARK: - Record Merging
 
-    private func mergeTaskRecord(_ record: CKRecord) async {
+    private func mergeTaskRecord(_: CKRecord) async {
         // Implementation would merge CloudKit record with local data
     }
 
-    private func mergeGoalRecord(_ record: CKRecord) async {
+    private func mergeGoalRecord(_: CKRecord) async {
         // Implementation would merge CloudKit record with local data
     }
 
-    private func mergeEventRecord(_ record: CKRecord) async {
+    private func mergeEventRecord(_: CKRecord) async {
         // Implementation would merge CloudKit record with local data
     }
 
-    private func mergeJournalRecord(_ record: CKRecord) async {
+    private func mergeJournalRecord(_: CKRecord) async {
         // Implementation would merge CloudKit record with local data
     }
 
@@ -1066,7 +1066,7 @@ extension EnhancedCloudKitManager {
     }
 
     /// Handle incoming silent push notification
-    func handleDatabaseNotification(_ notification: CKDatabaseNotification) async {
+    func handleDatabaseNotification(_: CKDatabaseNotification) async {
         print("Received database change notification, initiating sync")
         await self.performFullSync()
     }

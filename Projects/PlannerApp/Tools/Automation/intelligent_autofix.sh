@@ -3,7 +3,7 @@
 # Intelligent Auto-Fix System with Safety Checks and Rollback
 # Comprehensive error detection, automatic fixing, and validation
 
-set -euo pipefail
+set -eo pipefail
 
 # Color codes for output
 readonly RED='\033[0;31m'
@@ -23,6 +23,7 @@ print_status() { echo -e "${BLUE}🔄 $1${NC}"; }
 print_fix() { echo -e "${GREEN}🔧 FIXED:${NC} $1"; }
 print_skip() { echo -e "${YELLOW}⏭️  SKIPPED:${NC} $1"; }
 print_rollback() { echo -e "${RED}🔄 ROLLBACK:${NC} $1"; }
+print_quantum() { echo -e "${PURPLE}⚛️  QUANTUM:${NC} $1"; }
 
 # Configuration
 readonly CODE_DIR="${CODE_DIR:-/Users/danielstevens/Desktop/Quantum-workspace}"

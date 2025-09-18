@@ -203,7 +203,8 @@ struct DataExportService: Sendable {
             // Decode requirement
             var requirement: AchievementRequirement = .streakDays(1) // Default
             if let requirementData = Data(base64Encoded: exportedAchievement.requirement) {
-                requirement = (try? JSONDecoder().decode(AchievementRequirement.self, from: requirementData)) ?? .streakDays(1)
+                requirement = (try? JSONDecoder().decode(AchievementRequirement.self, from: requirementData)) ??
+                    .streakDays(1)
             }
 
             let achievement = Achievement(

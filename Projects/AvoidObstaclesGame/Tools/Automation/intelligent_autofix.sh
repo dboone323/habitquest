@@ -3,7 +3,7 @@
 # Intelligent Auto-Fix System with Safety Checks and Rollback
 # Comprehensive error detection, automatic fixing, and validation
 
-set -euo pipefail
+set -eo pipefail
 
 # Color codes for output
 readonly RED='\033[0;31m'
@@ -23,6 +23,7 @@ print_status() { echo -e "${BLUE}🔄 $1${NC}"; }
 print_fix() { echo -e "${GREEN}🔧 FIXED:${NC} $1"; }
 print_skip() { echo -e "${YELLOW}⏭️  SKIPPED:${NC} $1"; }
 print_rollback() { echo -e "${RED}🔄 ROLLBACK:${NC} $1"; }
+print_quantum() { echo -e "${PURPLE}⚛️  QUANTUM:${NC} $1"; }
 
 # Configuration
 readonly CODE_DIR="${CODE_DIR:-/Users/danielstevens/Desktop/Quantum-workspace}"
@@ -437,7 +438,8 @@ quantum_autofix() {
     # Predict overall fix success
     local overall_prediction
     overall_prediction=$(predict_fix_success "$project_path" "comprehensive")
-    print_quantum "Predicted success rate: $(echo "$overall_prediction * 100" | bc -l | xargs printf "%.0f")%"
+    local percentage=$(echo "$overall_prediction * 100 / 1" | bc)
+    print_quantum "Predicted success rate: ${percentage}%"
 
     # If prediction is too low, warn user
     if (( $(echo "$overall_prediction < 0.6" | bc -l) )); then
@@ -461,13 +463,16 @@ quantum_autofix() {
     if (( $(echo "$format_prediction > 0.7" | bc -l) )); then
         fix_swiftformat_issues "$project_path"
         local swiftformat_fixes=$?
+        echo "DEBUG: SwiftFormat returned $swiftformat_fixes" >&2
         ((total_fixes += swiftformat_fixes))
         ((fix_categories++))
-        print_quantum "SwiftFormat prediction: $(echo "$format_prediction * 100" | bc -l | xargs printf "%.0f")%"
+        local percentage=$(echo "$format_prediction * 100 / 1" | bc)
+        print_quantum "SwiftFormat prediction: ${percentage}%"
     else
         print_skip "SwiftFormat fixes skipped (low prediction)"
     fi
 
+    echo "DEBUG: About to start SwiftLint fixes" >&2
     # 2. SwiftLint fixes with prediction
     local lint_prediction
     lint_prediction=$(predict_fix_success "$project_path" "swiftlint")
@@ -476,7 +481,8 @@ quantum_autofix() {
         local swiftlint_fixes=$?
         ((total_fixes += swiftlint_fixes))
         ((fix_categories++))
-        print_quantum "SwiftLint prediction: $(echo "$lint_prediction * 100" | bc -l | xargs printf "%.0f")%"
+        local lint_percentage=$(echo "$lint_prediction * 100 / 1" | bc)
+        print_quantum "SwiftLint prediction: ${lint_percentage}%"
     else
         print_skip "SwiftLint fixes skipped (low prediction)"
     fi
@@ -489,7 +495,8 @@ quantum_autofix() {
         local build_fixes=$?
         ((total_fixes += build_fixes))
         ((fix_categories++))
-        print_quantum "Build fixes prediction: $(echo "$build_prediction * 100" | bc -l | xargs printf "%.0f")%"
+        local build_percentage=$(echo "$build_prediction * 100 / 1" | bc)
+        print_quantum "Build fixes prediction: ${build_percentage}%"
     else
         print_skip "Build fixes skipped (low prediction)"
     fi
@@ -502,7 +509,8 @@ quantum_autofix() {
         local common_fixes=$?
         ((total_fixes += common_fixes))
         ((fix_categories++))
-        print_quantum "Common fixes prediction: $(echo "$common_prediction * 100" | bc -l | xargs printf "%.0f")%"
+        local common_percentage=$(echo "$common_prediction * 100 / 1" | bc)
+        print_quantum "Common fixes prediction: ${common_percentage}%"
     else
         print_skip "Common fixes skipped (low prediction)"
     fi
@@ -976,6 +984,7 @@ fix_swiftformat_issues() {
         print_status "Code formatting is already consistent"
     fi
 
+    echo "DEBUG: SwiftFormat fixes completed, returning $fixes_applied" >&2
     return $fixes_applied
 }
 

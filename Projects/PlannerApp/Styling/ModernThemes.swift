@@ -82,7 +82,7 @@ extension Theme {
         midnightDark,
         highContrast,
         minimalGray,
-        rosePink,
+        rosePink
     ]
 }
 
@@ -100,7 +100,7 @@ extension Color {
 
     // Glass morphism effect
     var glassMorphism: some View {
-        self.opacity(0.7)
+        opacity(0.7)
             .background(.ultraThinMaterial)
     }
 }

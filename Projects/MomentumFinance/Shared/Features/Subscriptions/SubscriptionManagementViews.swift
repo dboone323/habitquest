@@ -1,7 +1,7 @@
-import AppKit
 import SwiftUI
 
 #if canImport(AppKit)
+    import AppKit
 #endif
 
 //
@@ -42,30 +42,32 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
         private var isValidForm: Bool {
-            !self.name.isEmpty && !self.amount.isEmpty && Double(self.amount) != nil && Double(self.amount)! > 0
+            !self.name.isEmpty && !self.amount.isEmpty && Double(self.amount) != nil
+                && Double(self.amount)! > 0
         }
 
         var body: some View {
             NavigationView {
                 Form {
                     Section(header: Text("Subscription Details")) {
-                        TextField("Subscription Name", text: self.$name).accessibilityLabel("Text Field")
+                        TextField("Subscription Name", text: self.$name).accessibilityLabel(
+                            "Text Field")
 
                         HStack {
                             Text("$")
                             TextField("Amount", text: self.$amount).accessibilityLabel("Text Field")
-                            #if canImport(UIKit)
-                                .keyboardType(.decimalPad)
-                            #endif
+                                #if canImport(UIKit)
+                                    .keyboardType(.decimalPad)
+                                #endif
                         }
 
                         Picker("Frequency", selection: self.$frequency) {
@@ -75,7 +77,8 @@ extension Features.Subscriptions {
                         }
 
                         DatePicker(
-                            "Next Due Date", selection: self.$nextDueDate, displayedComponents: .date
+                            "Next Due Date", selection: self.$nextDueDate,
+                            displayedComponents: .date
                         )
 
                         Toggle("Active", isOn: self.$isActive)
@@ -99,7 +102,7 @@ extension Features.Subscriptions {
 
                     Section(header: Text("Notes")) {
                         TextField("Notes (optional)", text: self.$notes, axis: .vertical)
-                            .lineLimit(3 ... 6)
+                            .lineLimit(3...6)
                             .accessibilityLabel("Text Field")
                     }
                 }
@@ -107,8 +110,8 @@ extension Features.Subscriptions {
                 #if os(iOS)
                     .navigationBarTitleDisplayMode(.inline)
                 #endif
-                    .toolbar(content: {
-                        #if os(iOS)
+                .toolbar(content: {
+                    #if os(iOS)
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button("Cancel") {
                                 self.dismiss()
@@ -123,7 +126,7 @@ extension Features.Subscriptions {
                             .disabled(!self.isValidForm)
                             .accessibilityLabel("Save Button")
                         }
-                        #else
+                    #else
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Cancel") {
                                 self.dismiss()
@@ -138,9 +141,9 @@ extension Features.Subscriptions {
                             .disabled(!self.isValidForm)
                             .accessibilityLabel("Save Button")
                         }
-                        #endif
-                    })
-                    .background(self.backgroundColor)
+                    #endif
+                })
+                .background(self.backgroundColor)
             }
         }
 

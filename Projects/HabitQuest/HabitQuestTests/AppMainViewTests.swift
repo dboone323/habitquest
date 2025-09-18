@@ -33,4 +33,4 @@ class AppMainViewTests: XCTestCase {
         // TODO: Implement method tests for structAppMainView:View{
         XCTAssertTrue(true, "Placeholder test for structAppMainView:View{ methods")
     }
-}
+    }

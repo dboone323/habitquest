@@ -33,4 +33,4 @@ class ProfileViewModelTests: XCTestCase {
         // TODO: Implement method tests for classProfileViewModel:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classProfileViewModel:ObservableObject{ methods")
     }
-}
+    }

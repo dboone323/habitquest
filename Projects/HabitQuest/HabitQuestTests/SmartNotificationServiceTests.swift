@@ -53,4 +53,4 @@ class SmartNotificationServiceTests: XCTestCase {
         // TODO: Implement method tests for enumTimingAdjustment{
         XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{ methods")
     }
-}
+    }

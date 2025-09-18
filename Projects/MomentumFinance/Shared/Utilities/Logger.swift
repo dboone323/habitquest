@@ -70,8 +70,8 @@ extension Logger {
         line: Int = #line,
     ) {
         #if DEBUG
-        let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
-        os_log("[DEBUG] %@ [%@]", log: category, type: .debug, message, source)
+            let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
+            os_log("[DEBUG] %@ [%@]", log: category, type: .debug, message, source)
         #endif
     }
 
@@ -132,7 +132,8 @@ extension Logger {
         let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
 
         os_log(
-            "[PERFORMANCE] %@ completed in %.4f seconds", log: self.performance, type: .info, operation,
+            "[PERFORMANCE] %@ completed in %.4f seconds", log: self.performance, type: .info,
+            operation,
             timeElapsed
         )
         return result
@@ -170,26 +171,26 @@ extension Logger {
     /// Write log to file for debugging purposes
     static func writeToFile(_ message: String, fileName: String = "momentum_finance.log") {
         #if DEBUG
-        guard
-            let documentsPath = FileManager.default.urls(
-                for: .documentDirectory,
-                in: .userDomainMask,
-            ).first
-        else { return }
-        let logURL = documentsPath.appendingPathComponent(fileName)
+            guard
+                let documentsPath = FileManager.default.urls(
+                    for: .documentDirectory,
+                    in: .userDomainMask,
+                ).first
+            else { return }
+            let logURL = documentsPath.appendingPathComponent(fileName)
 
-        let timestamp = DateFormatter.logFormatter.string(from: Date())
-        let logEntry = "[\(timestamp)] \(message)\n"
+            let timestamp = DateFormatter.logFormatter.string(from: Date())
+            let logEntry = "[\(timestamp)] \(message)\n"
 
-        if FileManager.default.fileExists(atPath: logURL.path) {
-            if let fileHandle = try? FileHandle(forWritingTo: logURL) {
-                fileHandle.seekToEndOfFile()
-                fileHandle.write(logEntry.data(using: .utf8) ?? Data())
-                fileHandle.closeFile()
+            if FileManager.default.fileExists(atPath: logURL.path) {
+                if let fileHandle = try? FileHandle(forWritingTo: logURL) {
+                    fileHandle.seekToEndOfFile()
+                    fileHandle.write(logEntry.data(using: .utf8) ?? Data())
+                    fileHandle.closeFile()
+                }
+            } else {
+                try? logEntry.write(to: logURL, atomically: true, encoding: .utf8)
             }
-        } else {
-            try? logEntry.write(to: logURL, atomically: true, encoding: .utf8)
-        }
         #endif
     }
 }
@@ -213,8 +214,8 @@ struct PerformanceMeasurement {
 
 // MARK: - Extensions
 
-fileprivate extension DateFormatter {
-    static let logFormatter: DateFormatter = {
+extension DateFormatter {
+    fileprivate static let logFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         return formatter

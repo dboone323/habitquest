@@ -399,7 +399,7 @@ struct TaskRow: View {
 extension [TaskModel] {
     // Sorts tasks stably based on their UUID string representation
     func sortedById() -> [TaskModel] {
-        self.sorted(by: { $0.id.uuidString < $1.id.uuidString })
+        sorted(by: { $0.id.uuidString < $1.id.uuidString })
     }
 }
 

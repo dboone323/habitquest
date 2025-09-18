@@ -376,7 +376,7 @@ struct AccessibilityDemoView: View {
                         },
                         .init(name: "Delete") {
                             ScreenReaderAnnouncement.announce("Task deleted")
-                        },
+                        }
                     ]
                 ) {
                     HStack {

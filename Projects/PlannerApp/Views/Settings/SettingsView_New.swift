@@ -48,7 +48,7 @@ struct SettingsView: View {
         "15 minutes": 900,
         "30 minutes": 1800,
         "1 hour": 3600,
-        "1 day": 86400,
+        "1 day": 86400
     ]
 
     private var sortedReminderKeys: [String] {

@@ -173,4 +173,4 @@ class ContentViewTests: XCTestCase {
         // TODO: Implement method tests for structDetailView:View{
         XCTAssertTrue(true, "Placeholder test for structDetailView:View{ methods")
     }
-}
+    }

@@ -402,7 +402,7 @@ struct StreakAnalyticsView: View {
         return insights
     }
 
-    private func generateWeeklyPatterns(habits: [Habit], service: StreakService) async
+    private func generateWeeklyPatterns(habits _: [Habit], service _: StreakService) async
         -> [WeeklyPattern] {
         // Simplified weekly pattern generation
         let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -417,13 +417,13 @@ struct StreakAnalyticsView: View {
         await self.loadAnalytics()
     }
 
-    private func exportAnalytics(_ data: StreakAnalyticsData) async {
+    private func exportAnalytics(_: StreakAnalyticsData) async {
         // Export logic here
         // For now, just a placeholder action
         self.showingExportSheet = true
     }
 
-    private func shareAnalyticsReport(_ data: StreakAnalyticsData) {
+    private func shareAnalyticsReport(_: StreakAnalyticsData) {
         // Sharing logic here
         // For now, just a placeholder action
         print("Sharing analytics report...")

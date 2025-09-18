@@ -1,7 +1,7 @@
-import Observation
-import os
 import OSLog
+import Observation
 import SwiftUI
+import os
 
 //
 //  ThemeManager.swift
@@ -16,7 +16,6 @@ import SwiftUI
 @Observable
 final class ThemeManager {
     @MainActor static let shared = ThemeManager()
-    private let logger = Logger()
     private let theme = ColorTheme.shared
 
     // MARK: - Theme Preference Management
@@ -26,7 +25,9 @@ final class ThemeManager {
         // Load the saved theme preference on initialization
         let savedTheme = ThemePersistence.loadThemePreference()
         self.theme.setThemeMode(savedTheme)
-        os_log("Initialized ThemeManager with saved mode: %@", log: .default, type: .info, savedTheme.rawValue)
+        os_log(
+            "Initialized ThemeManager with saved mode: %@", log: .default, type: .info,
+            savedTheme.rawValue)
     }
 
     /// Updates the theme mode with persistence
@@ -102,7 +103,9 @@ final class ThemeManager {
     /// Get a dynamic font with specified style
     /// <#Description#>
     /// - Returns: <#description#>
-    func font(_ style: TextStyle, weight: Font.Weight = .regular, design: Font.Design = .default) -> Font {
+    func font(_ style: TextStyle, weight: Font.Weight = .regular, design: Font.Design = .default)
+        -> Font
+    {
         let baseFont = style.font
 
         // Apply weight modifier
@@ -112,16 +115,18 @@ final class ThemeManager {
     /// Get a dynamic font with specific size
     /// <#Description#>
     /// - Returns: <#description#>
-    func dynamicFont(size: CGFloat, weight: Font.Weight = .regular, design: Font.Design = .default) -> Font {
+    func dynamicFont(size: CGFloat, weight: Font.Weight = .regular, design: Font.Design = .default)
+        -> Font
+    {
         Font.system(size: size, weight: weight, design: design)
     }
 
     /// Scale factor for dynamic type based on system settings
     var fontScaleFactor: CGFloat {
         #if os(iOS)
-        return UIFontMetrics.default.scaledValue(for: 1.0)
+            return UIFontMetrics.default.scaledValue(for: 1.0)
         #else
-        return 1.0 // Default for macOS
+            return 1.0  // Default for macOS
         #endif
     }
 

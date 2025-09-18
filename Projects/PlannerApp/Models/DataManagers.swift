@@ -1,3 +1,8 @@
+import Foundation
+
+// Intentionally left blank.
+// Data manager types were moved into dedicated files (e.g., GoalDataManager, TaskDataManager).
+
 
 // DataManagers.swift
 // This file contains stub implementations for data managers referenced in CloudKitMigrationHelper

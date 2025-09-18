@@ -373,4 +373,4 @@ class ProfileViewTests: XCTestCase {
         // TODO: Implement method tests for structPatternRow:View{
         XCTAssertTrue(true, "Placeholder test for structPatternRow:View{ methods")
     }
-}
+    }

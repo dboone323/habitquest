@@ -1,27 +1,31 @@
 import SwiftData
 import SwiftUI
 
+// AppKit is only available on macOS
 #if canImport(AppKit)
-import AppKit
+    import AppKit
 #endif
 
-// Temporary ColorTheme stub for macOS compatibility
-@Observable
-@MainActor
-final class ColorTheme {
-    static let shared = ColorTheme()
-
-    var background: Color { Color.gray.opacity(0.1) }
-    var secondaryBackground: Color { Color.gray.opacity(0.05) }
-    var primaryText: Color { Color.primary }
-    var secondaryText: Color { Color.secondary }
-    var accentPrimary: Color { Color.blue }
-    var cardBackground: Color { Color.white }
-    var isDarkMode: Bool { false }
-}
+// Temporary ColorTheme stub for macOS compatibility (only if not already defined)
+#if DEBUG
+    @available(iOS, deprecated: 9999)
+    @MainActor
+    final class _DebugColorThemeStub {
+        static let shared = _DebugColorThemeStub()
+        var background: Color { Color.gray.opacity(0.1) }
+        var secondaryBackground: Color { Color.gray.opacity(0.05) }
+        var primaryText: Color { Color.primary }
+        var secondaryText: Color { Color.secondary }
+        var accentPrimary: Color { Color.blue }
+        var cardBackground: Color { Color.white }
+        var isDarkMode: Bool { false }
+    }
+#endif
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
+
+// MARK: - Theme Types
 
 extension Features.Dashboard {
     // Enum for dashboard destinations
@@ -34,16 +38,12 @@ extension Features.Dashboard {
 
     struct DashboardView: View {
         @Environment(\.modelContext) private var modelContext
+        @State private var navigationPath = NavigationPath()
 
+        // Use simple stored arrays to keep builds stable when SwiftData's macros are unavailable.
         @State private var accounts: [FinancialAccount] = []
         @State private var subscriptions: [Subscription] = []
         @State private var budgets: [Budget] = []
-
-        @State private var viewModel = DashboardViewModel()
-        @State private var navigationPath = NavigationPath()
-
-        private let colorTheme = ColorTheme.shared
-        private let themeComponents = ThemeComponents()
 
         var body: some View {
             NavigationStack(path: self.$navigationPath) {
@@ -62,7 +62,8 @@ extension Features.Dashboard {
                         DashboardAccountsSummary(
                             accounts: self.accounts,
                             onAccountTap: { accountId in
-                                self.navigationPath.append(DashboardDestination.accountDetail(accountId))
+                                self.navigationPath.append(
+                                    DashboardDestination.accountDetail(accountId))
                             },
                             onViewAllTap: {
                                 self.navigationPath.append(DashboardDestination.transactions)
@@ -144,30 +145,29 @@ extension Features.Dashboard {
                 #if os(iOS)
                     .navigationBarTitleDisplayMode(.large)
                 #endif
-                    .onAppear {
-                        self.viewModel.setModelContext(self.modelContext)
-                        self.loadData()
-                    }
-                    .task {
-                        // Process overdue subscriptions asynchronously
-                        await self.viewModel.processOverdueSubscriptions(self.subscriptions)
-                    }
-                    .navigationDestination(for: DashboardDestination.self) { destination in
-                        switch destination {
-                        case .transactions:
-                            Features.Transactions.TransactionsView()
-                        case .subscriptions:
-                            #if canImport(SwiftData)
+                .onAppear {
+                    self.loadData()
+                }
+                .task {
+                    // Process overdue subscriptions asynchronously
+                    // await self.viewModel.processOverdueSubscriptions(self.subscriptions)
+                }
+                .navigationDestination(for: DashboardDestination.self) { destination in
+                    switch destination {
+                    case .transactions:
+                        Features.Transactions.TransactionsView()
+                    case .subscriptions:
+                        #if canImport(SwiftData)
                             Features.Subscriptions.SubscriptionsView()
-                            #else
+                        #else
                             Text("Subscriptions View - SwiftData not available")
-                            #endif
-                        case .budgets:
-                            Features.Budgets.BudgetsView()
-                        case let .accountDetail(accountId):
-                            Text("Account Detail: \(accountId)")
-                        }
+                        #endif
+                    case .budgets:
+                        Features.Budgets.BudgetsView()
+                    case .accountDetail(let accountId):
+                        Text("Account Detail: \(accountId)")
                     }
+                }
             }
         }
 
@@ -176,8 +176,8 @@ extension Features.Dashboard {
         private var timeOfDayGreeting: String {
             let hour = Calendar.current.component(.hour, from: Date())
             switch hour {
-            case 0 ..< 12: return "Morning"
-            case 12 ..< 17: return "Afternoon"
+            case 0..<12: return "Morning"
+            case 12..<17: return "Afternoon"
             default: return "Evening"
             }
         }

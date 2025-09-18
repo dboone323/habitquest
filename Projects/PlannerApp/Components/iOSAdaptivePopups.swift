@@ -13,8 +13,7 @@ extension View {
     /// Apply iOS-specific popup optimizations including presentation styles and sizing
     func iOSPopupOptimizations() -> some View {
         #if os(iOS)
-        self
-            .presentationDetents([.large])
+        presentationDetents([.large])
             .presentationDragIndicator(.visible)
             .interactiveDismissDisabled(false)
         #else
@@ -25,8 +24,7 @@ extension View {
     /// Apply adaptive sizing based on device
     func adaptiveFrameSize() -> some View {
         #if os(iOS)
-        self
-            .frame(maxWidth: .infinity)
+        frame(maxWidth: .infinity)
             .background(Color(.systemGroupedBackground))
         #else
         self
@@ -36,8 +34,7 @@ extension View {
     /// Enhanced touch targets for iOS
     func iOSEnhancedTouchTarget() -> some View {
         #if os(iOS)
-        self
-            .frame(minWidth: 44, minHeight: 44)
+        frame(minWidth: 44, minHeight: 44)
             .contentShape(Rectangle())
         #else
         self
@@ -47,13 +44,12 @@ extension View {
     /// iOS-specific keyboard management
     func iOSKeyboardDismiss() -> some View {
         #if os(iOS)
-        self
-            .onTapGesture {
-                // Dismiss keyboard when tapping outside
-                UIApplication.shared.sendAction(
-                    #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil
-                )
-            }
+        onTapGesture {
+            // Dismiss keyboard when tapping outside
+            UIApplication.shared.sendAction(
+                #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil
+            )
+        }
         #else
         self
         #endif

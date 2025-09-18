@@ -133,4 +133,4 @@ class AnalyticsTestViewTests: XCTestCase {
         // TODO: Implement method tests for structStatItem:View{
         XCTAssertTrue(true, "Placeholder test for structStatItem:View{ methods")
     }
-}
+    }

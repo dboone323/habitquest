@@ -173,4 +173,4 @@ class SharedAnalyticsComponentsTests: XCTestCase {
         // TODO: Implement method tests for structAnalyticsExportView:View{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsExportView:View{ methods")
     }
-}
+    }

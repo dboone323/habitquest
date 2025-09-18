@@ -1,7 +1,7 @@
 import SwiftUI
 
 #if canImport(AppKit)
-import AppKit
+    import AppKit
 #endif
 
 extension Features.GoalsAndReports {

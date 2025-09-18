@@ -18,7 +18,7 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
 
         // Configure the view as an SKView and present the game scene.
-        if let view = self.view as? SKView {
+        if let view = view as? SKView {
             // Create and configure the scene to fill the screen.
             let scene = GameScene(size: view.bounds.size)
             scene.scaleMode = .aspectFill

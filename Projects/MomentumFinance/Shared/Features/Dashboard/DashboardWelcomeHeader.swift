@@ -9,7 +9,6 @@ import SwiftUI
 
 extension Features.Dashboard {
     struct DashboardWelcomeHeader: View {
-        let colorTheme: ColorTheme
         let greeting: String
         let wellnessPercentage: Int
         let totalBalance: Double
@@ -40,31 +39,31 @@ extension Features.Dashboard {
 
                 Text("Here's a summary of your finances")
                     .font(.subheadline)
-                    .foregroundStyle(self.colorTheme.secondaryText)
+                    .foregroundStyle(.secondary)
                     .padding(.bottom, 8)
 
                 // Financial Wellness Score
                 HStack(spacing: 16) {
                     Text("Financial Wellness")
                         .font(.caption)
-                        .foregroundStyle(self.colorTheme.secondaryText)
+                        .foregroundStyle(.secondary)
 
                     Spacer()
 
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(self.colorTheme.secondaryBackground)
+                            .fill(Color.gray.opacity(0.2))
                             .frame(width: 170, height: 8)
 
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(self.colorTheme.savings)
+                            .fill(.green)
                             .frame(width: 170 * Double(self.wellnessPercentage) / 100, height: 8)
                     }
 
                     Text("\(self.wellnessPercentage)%")
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundStyle(self.colorTheme.primaryText)
+                        .foregroundStyle(.primary)
                 }
                 .padding(.vertical, 2)
             }

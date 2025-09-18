@@ -156,7 +156,7 @@ struct IPadSidebarView: View {
         ("Goals", "target"),
         ("Calendar", "calendar"),
         ("Journal", "book"),
-        ("Settings", "gear"),
+        ("Settings", "gear")
     ]
 
     var body: some View {

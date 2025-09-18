@@ -1,60 +1,60 @@
-import Foundation // For SearchTypes dependencies
+import Foundation  // For SearchTypes dependencies
 import LocalAuthentication
-import Observation
 import OSLog
+import Observation
 import SwiftUI
 
 // SearchResult types are available from Shared/SearchTypes.swift
 // Explicit import to ensure SearchTypes are available
 // macOS-specific navigation types
 #if os(macOS)
-// Sidebar navigation items
-public enum SidebarItem: Hashable {
-    case dashboard
-    case transactions
-    case budgets
-    case subscriptions
-    case goalsAndReports
-}
-
-// Listable items for the content column
-public struct ListableItem: Identifiable, Hashable {
-    public let id: String?
-    public let name: String
-    public let type: ListItemType
-
-    public var identifier: String {
-        "\(self.type)_\(self.id ?? "unknown")"
+    // Sidebar navigation items
+    public enum SidebarItem: Hashable {
+        case dashboard
+        case transactions
+        case budgets
+        case subscriptions
+        case goalsAndReports
     }
 
-    // Identifiable conformance
-    public var identifierId: String { self.identifier }
+    // Listable items for the content column
+    public struct ListableItem: Identifiable, Hashable {
+        public let id: String?
+        public let name: String
+        public let type: ListItemType
 
-    // Hashable conformance
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.identifier)
+        public var identifier: String {
+            "\(self.type)_\(self.id ?? "unknown")"
+        }
+
+        // Identifiable conformance
+        public var identifierId: String { self.identifier }
+
+        // Hashable conformance
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(self.identifier)
+        }
+
+        public static func == (lhs: ListableItem, rhs: ListableItem) -> Bool {
+            lhs.identifier == rhs.identifier
+        }
+
+        public init(id: String?, name: String, type: ListItemType) {
+            self.id = id
+            self.name = name
+            self.type = type
+        }
     }
 
-    public static func == (lhs: ListableItem, rhs: ListableItem) -> Bool {
-        lhs.identifier == rhs.identifier
+    // Types of items that can be displayed in the content column
+    public enum ListItemType: Hashable {
+        case account
+        case transaction
+        case budget
+        case subscription
+        case goal
+        case report
     }
-
-    public init(id: String?, name: String, type: ListItemType) {
-        self.id = id
-        self.name = name
-        self.type = type
-    }
-}
-
-// Types of items that can be displayed in the content column
-public enum ListItemType: Hashable {
-    case account
-    case transaction
-    case budget
-    case subscription
-    case goal
-    case report
-}
 #endif
 
 // Type alias to disambiguate from SwiftUI's TabSection
@@ -86,7 +86,7 @@ final class NavigationCoordinator: ObservableObject {
     var isAuthenticated: Bool = false
     var requiresAuthentication: Bool = true
     var lastAuthenticationTime: Date?
-    var authenticationTimeoutInterval: TimeInterval = 300 // 5 minutes
+    var authenticationTimeoutInterval: TimeInterval = 300  // 5 minutes
 
     // MARK: - Deep Linking State
 
@@ -100,12 +100,10 @@ final class NavigationCoordinator: ObservableObject {
     var tabNotificationCounts: [AppTabSection: Int] = [:]
 
     #if os(macOS)
-    var selectedSidebarItem: SidebarItem? = .dashboard
-    var selectedListItem: ListableItem?
-    var columnVisibility = NavigationSplitViewVisibility.all
+        var selectedSidebarItem: SidebarItem? = .dashboard
+        var selectedListItem: ListableItem?
+        var columnVisibility = NavigationSplitViewVisibility.all
     #endif
-
-    private let logger = Logger()
 
     init() {
         // Initialize notification badge counts
@@ -117,17 +115,17 @@ final class NavigationCoordinator: ObservableObject {
     // MARK: - Navigation Methods
 
     func navigateToBudgets() {
-        self.selectedTab = 2 // Assuming budgets is tab index 2
+        self.selectedTab = 2  // Assuming budgets is tab index 2
         self.budgetsNavPath = NavigationPath()
     }
 
     func navigateToSubscriptions() {
-        self.selectedTab = 3 // Assuming subscriptions is tab index 3
+        self.selectedTab = 3  // Assuming subscriptions is tab index 3
         self.subscriptionsNavPath = NavigationPath()
     }
 
     func navigateToGoals() {
-        self.selectedTab = 4 // Assuming goals is tab index 4
+        self.selectedTab = 4  // Assuming goals is tab index 4
         self.goalsAndReportsNavPath = NavigationPath()
     }
 
@@ -150,16 +148,16 @@ final class NavigationCoordinator: ObservableObject {
         // Navigate based on the search result type
         switch result.type {
         case .accounts:
-            self.selectedTab = 0 // Dashboard tab
+            self.selectedTab = 0  // Dashboard tab
             self.dashboardNavPath = NavigationPath()
         case .transactions:
-            self.selectedTab = 1 // Transactions tab
+            self.selectedTab = 1  // Transactions tab
             self.transactionsNavPath = NavigationPath()
         case .budgets:
-            self.selectedTab = 2 // Budgets tab
+            self.selectedTab = 2  // Budgets tab
             self.budgetsNavPath = NavigationPath()
         case .subscriptions:
-            self.selectedTab = 3 // Subscriptions tab
+            self.selectedTab = 3  // Subscriptions tab
             self.subscriptionsNavPath = NavigationPath()
         case .all:
             // For 'all' type, default to dashboard

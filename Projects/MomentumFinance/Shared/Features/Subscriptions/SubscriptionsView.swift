@@ -1,10 +1,7 @@
 import SwiftUI
 
 #if canImport(AppKit)
-import AppKit
-#endif
-
-#if canImport(AppKit)
+    import AppKit
 #endif
 
 //
@@ -51,29 +48,29 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
         private var secondaryBackgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemGroupedBackground)
+                return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.gray.opacity(0.1)
+                return Color.gray.opacity(0.1)
             #endif
         }
 
         private var toolbarPlacement: ToolbarItemPlacement {
             #if canImport(UIKit)
-            return .navigationBarTrailing
+                return .navigationBarTrailing
             #else
-            return .primaryAction
+                return .primaryAction
             #endif
         }
 
@@ -88,7 +85,9 @@ extension Features.Subscriptions {
             case .dueSoon:
                 let sevenDaysFromNow =
                     Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
-                return self.subscriptions.filter { $0.isActive && $0.nextDueDate <= sevenDaysFromNow }
+                return self.subscriptions.filter {
+                    $0.isActive && $0.nextDueDate <= sevenDaysFromNow
+                }
             }
         }
 
@@ -153,9 +152,9 @@ extension Features.Subscriptions {
             accounts: [FinancialAccount] = []
         ) {
             #if !canImport(SwiftData)
-            self.subscriptions = subscriptions
-            self.categories = categories
-            self.accounts = accounts
+                self.subscriptions = subscriptions
+                self.categories = categories
+                self.accounts = accounts
             #endif
         }
     }
@@ -304,9 +303,9 @@ struct AddSubscriptionView: View {
                 Section("Subscription Details") {
                     TextField("Name", text: self.$name)
                     TextField("Amount", text: self.$amount)
-                    #if canImport(UIKit)
-                        .keyboardType(.decimalPad)
-                    #endif
+                        #if canImport(UIKit)
+                            .keyboardType(.decimalPad)
+                        #endif
 
                     Picker("Billing Cycle", selection: self.$billingCycle) {
                         ForEach(BillingCycle.allCases, id: \.self) { cycle in
@@ -340,19 +339,19 @@ struct AddSubscriptionView: View {
             #if canImport(UIKit)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
-                            self.dismiss()
-                        }
-                    }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Save") {
-                            self.saveSubscription()
-                        }
-                        .disabled(self.name.isEmpty || self.amount.isEmpty)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        self.dismiss()
                     }
                 }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        self.saveSubscription()
+                    }
+                    .disabled(self.name.isEmpty || self.amount.isEmpty)
+                }
+            }
         }
     }
 

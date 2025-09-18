@@ -21,7 +21,7 @@ final class AdvancedAnalyticsEngine {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    func predictStreakSuccess(for habit: Habit, days: Int = 7) async -> StreakPrediction {
+    func predictStreakSuccess(for habit: Habit, days _: Int = 7) async -> StreakPrediction {
         let patterns = await analyzeHabitPatterns(habit)
         let timeFactors = self.analyzeTimeFactors(habit)
         let streakMomentum = self.calculateStreakMomentum(habit)
@@ -200,7 +200,7 @@ final class AdvancedAnalyticsEngine {
     // MARK: - Smart Recommendations
 
     private func generateSmartRecommendation(
-        habit: Habit,
+        habit _: Habit,
         patterns: HabitPatterns,
         probability: Double
     ) -> String {
@@ -290,39 +290,39 @@ final class AdvancedAnalyticsEngine {
         return Array(hourCounts.prefix(3).map(\.key))
     }
 
-    private func calculateMoodCorrelation(_ habit: Habit) async -> Double {
+    private func calculateMoodCorrelation(_: Habit) async -> Double {
         0.75 // Placeholder implementation
     }
 
-    private func analyzeDayOfWeekPattern(_ habit: Habit) -> (strongest: [String], weakest: [String]) {
+    private func analyzeDayOfWeekPattern(_: Habit) -> (strongest: [String], weakest: [String]) {
         (strongest: ["Monday", "Tuesday"], weakest: ["Saturday", "Sunday"])
     }
 
-    private func analyzeStreakBreakFactors(_ habit: Habit) -> [String] {
+    private func analyzeStreakBreakFactors(_: Habit) -> [String] {
         ["Weekend disruption", "Travel", "Stress"]
     }
 
-    private func identifyMotivationTriggers(_ habit: Habit) -> [String] {
+    private func identifyMotivationTriggers(_: Habit) -> [String] {
         ["Morning routine", "Workout buddy", "Progress tracking"]
     }
 
-    private func generatePersonalityInsights(_ habit: Habit) -> [String] {
+    private func generatePersonalityInsights(_: Habit) -> [String] {
         ["Consistent performer", "Responds well to routine"]
     }
 
-    private func analyzeUserProfile(from habits: [Habit]) async -> String {
+    private func analyzeUserProfile(from _: [Habit]) async -> String {
         "Routine-oriented user with consistent habits"
     }
 
-    private func generateCategoryBasedSuggestions(profile: String) -> [HabitSuggestion] {
+    private func generateCategoryBasedSuggestions(profile _: String) -> [HabitSuggestion] {
         []
     }
 
-    private func generateTimeBasedSuggestions(profile: String) -> [HabitSuggestion] {
+    private func generateTimeBasedSuggestions(profile _: String) -> [HabitSuggestion] {
         []
     }
 
-    private func generateComplementarySuggestions(existing: [Habit]) -> [HabitSuggestion] {
+    private func generateComplementarySuggestions(existing _: [Habit]) -> [HabitSuggestion] {
         []
     }
 
@@ -330,11 +330,11 @@ final class AdvancedAnalyticsEngine {
         []
     }
 
-    private func analyzeWeekdayPreference(_ logs: [HabitLog]) -> Int {
+    private func analyzeWeekdayPreference(_: [HabitLog]) -> Int {
         2 // Tuesday
     }
 
-    private func analyzeTimePreference(_ logs: [HabitLog]) -> Int {
+    private func analyzeTimePreference(_: [HabitLog]) -> Int {
         9 // 9 AM
     }
 

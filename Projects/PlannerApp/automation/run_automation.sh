@@ -15,7 +15,10 @@ if [[ -f "$AUTOMATION_DIR/ai_enhancement_system.sh" ]]; then
 fi
 
 # Run intelligent auto-fix
-if [[ -f "$AUTOMATION_DIR/intelligent_autofix.sh" ]]; then
+if [[ -f "$AUTOMATION_DIR/simple_autofix.sh" ]]; then
+    echo "🔧 Running simple auto-fix..."
+    bash "$AUTOMATION_DIR/simple_autofix.sh" "$PROJECT_PATH"
+elif [[ -f "$AUTOMATION_DIR/intelligent_autofix.sh" ]]; then
     echo "🔧 Running intelligent auto-fix..."
     bash "$AUTOMATION_DIR/intelligent_autofix.sh" fix "PlannerApp"
 fi
@@ -23,7 +26,7 @@ fi
 # Run MCP workflow checks
 if [[ -f "$AUTOMATION_DIR/mcp_workflow.sh" ]]; then
     echo "🔄 Running MCP workflow checks..."
-    bash "$AUTOMATION_DIR/mcp_workflow.sh" check "PlannerApp"
+    bash "$AUTOMATION_DIR/mcp_workflow.sh" status
 fi
 
 echo "✅ Quantum automation completed for PlannerApp"

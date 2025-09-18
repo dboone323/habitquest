@@ -33,4 +33,4 @@ class QuestLogViewModelTests: XCTestCase {
         // TODO: Implement method tests for classQuestLogViewModel:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classQuestLogViewModel:ObservableObject{ methods")
     }
-}
+    }

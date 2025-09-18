@@ -53,7 +53,7 @@ struct MainTabView_Enhanced: View {
             ),
             TabConfiguration(
                 tag: TabTags.settings, title: "Settings", icon: "gear", keyboardShortcut: ","
-            ),
+            )
         ]
     }
 

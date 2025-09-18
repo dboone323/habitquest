@@ -133,11 +133,13 @@ final class GoalsAndReportsViewModel {
     ) -> SpendingReport {
         let periodTransactions = transactions.filter { period.contains($0.date) }
 
-        let income = periodTransactions
+        let income =
+            periodTransactions
             .filter { $0.transactionType == .income }
             .reduce(0.0) { $0 + $1.amount }
 
-        let expenses = periodTransactions
+        let expenses =
+            periodTransactions
             .filter { $0.transactionType == .expense }
             .reduce(0.0) { $0 + $1.amount }
 
@@ -168,20 +170,22 @@ final class GoalsAndReportsViewModel {
         let now = Date()
         var trend: [MonthlySpendingData] = []
 
-        for i in 0 ..< months {
+        for i in 0..<months {
             guard let monthDate = calendar.date(byAdding: .month, value: -i, to: now),
-                  let monthInterval = calendar.dateInterval(of: .month, for: monthDate)
+                let monthInterval = calendar.dateInterval(of: .month, for: monthDate)
             else {
                 continue
             }
 
             let monthTransactions = transactions.filter { monthInterval.contains($0.date) }
 
-            let income = monthTransactions
+            let income =
+                monthTransactions
                 .filter { $0.transactionType == .income }
                 .reduce(0.0) { $0 + $1.amount }
 
-            let expenses = monthTransactions
+            let expenses =
+                monthTransactions
                 .filter { $0.transactionType == .expense }
                 .reduce(0.0) { $0 + $1.amount }
 
@@ -273,7 +277,8 @@ struct SpendingReport {
     var formattedPeriod: String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
-        return "\(formatter.string(from: self.period.start)) - \(formatter.string(from: self.period.end))"
+        return
+            "\(formatter.string(from: self.period.start)) - \(formatter.string(from: self.period.end))"
     }
 
     var formattedTotalIncome: String {

@@ -305,7 +305,7 @@ final class BudgetUITests: XCTestCase {
         let warningLabels = self.app.staticTexts.matching(identifier: "warning").allElementsBoundByIndex
 
         // If there are alerts, verify they are displayed properly
-        if alertIcons.count > 0 || warningLabels.count > 0 {
+        if !alertIcons.isEmpty || !warningLabels.isEmpty {
             XCTAssertTrue(true, "Budget alerts should be displayed when budgets are exceeded")
         }
     }
@@ -326,7 +326,7 @@ final class BudgetUITests: XCTestCase {
             .allElementsBoundByIndex
 
         // If budgets are exceeded, alerts should be shown
-        if overLimitLabels.count > 0 || exceededLabels.count > 0 {
+        if !overLimitLabels.isEmpty || !exceededLabels.isEmpty {
             XCTAssertTrue(true, "Should show alerts when budget is exceeded")
         }
     }

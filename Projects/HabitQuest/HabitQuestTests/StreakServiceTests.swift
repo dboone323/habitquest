@@ -73,4 +73,4 @@ class StreakServiceTests: XCTestCase {
         // TODO: Implement method tests for structStreakAnalytics{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalytics{ methods")
     }
-}
+    }

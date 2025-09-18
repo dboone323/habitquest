@@ -8,5 +8,5 @@ final class GoalDataManager {
     func load() -> [Goal] { [] }
 
     // Persists goals; stub is a no-op to satisfy callsites
-    func save(goals: [Goal]) {}
+    func save(goals _: [Goal]) {}
 }

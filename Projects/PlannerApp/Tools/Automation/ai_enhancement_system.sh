@@ -124,7 +124,7 @@ analyze_swift_project() {
 
 ## 📊 Project Overview
 - **Location:** $project_path
-- **Swift Files:** $(find . -name "*.swift" -type f | wc -l | xargs)
+- **Swift Files:** $(find . -name "*.swift" -type f | wc -l | tr -d " \n")
 - **Project Type:** $(detect_project_type)
 - **Analysis Date:** $(date)
 
@@ -364,7 +364,7 @@ EOF
 
     # Check for massive view controllers/views
     local large_files
-    large_files=$(find . -name "*.swift" -type f -exec wc -l {} \; | awk '$1 > 200 {print $2}' | wc -l | xargs || echo "0")
+    large_files=$(find . -name "*.swift" -type f -exec wc -l {} \; | awk '$1 > 200 {print $2}' | wc -l | tr -d " \n" || echo "0")
     if [[ "$large_files" -gt 0 ]]; then
         cat >> "$enhancement_file" << EOF
 #### ⚠️ MEDIUM - Large File Refactoring
@@ -387,7 +387,7 @@ EOF
 
     # Check for dependency injection opportunities
     local singletons
-    singletons=$(grep -r "shared\|sharedInstance" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+    singletons=$(grep -r "shared\|sharedInstance" **/*.swift 2>/dev/null | wc -l | tr -d " \n" || echo "0")
     if [[ "$singletons" -gt 2 ]]; then
         cat >> "$enhancement_file" << EOF
 #### ⚠️ MEDIUM - Dependency Injection Implementation
@@ -414,7 +414,7 @@ EOF
 
     # Check for hardcoded colors/fonts
     local hardcoded_ui
-    hardcoded_ui=$(grep -r "UIColor\|Color\.\|Font\." **/*.swift 2>/dev/null | grep -v "asset\|theme" | wc -l | xargs || echo "0")
+    hardcoded_ui=$(grep -r "UIColor\|Color\.\|Font\." **/*.swift 2>/dev/null | grep -v "asset\|theme" | wc -l | tr -d " \n" || echo "0")
     if [[ "$hardcoded_ui" -gt 5 ]]; then
         cat >> "$enhancement_file" << EOF
 #### ✅ LOW - Theme System Implementation
@@ -437,9 +437,9 @@ EOF
 
     # Check for accessibility improvements
     local accessibility_labels
-    accessibility_labels=$(grep -r "accessibilityLabel\|accessibilityHint" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+    accessibility_labels=$(grep -r "accessibilityLabel\|accessibilityHint" **/*.swift 2>/dev/null | wc -l | tr -d " \n" || echo "0")
     local ui_elements
-    ui_elements=$(grep -r "Button\|Text\|Image" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+    ui_elements=$(grep -r "Button\|Text\|Image" **/*.swift 2>/dev/null | wc -l | tr -d " \n" || echo "0")
 
     if [[ "$ui_elements" -gt "$accessibility_labels" ]]; then
         cat >> "$enhancement_file" << EOF
@@ -467,9 +467,9 @@ EOF
 
     # Check for sensitive data handling
     local keychain_usage
-    keychain_usage=$(grep -r "Keychain\|keychain" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+    keychain_usage=$(grep -r "Keychain\|keychain" **/*.swift 2>/dev/null | wc -l | tr -d " \n" || echo "0")
     local user_defaults
-    user_defaults=$(grep -r "UserDefaults\|@AppStorage" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+    user_defaults=$(grep -r "UserDefaults\|@AppStorage" **/*.swift 2>/dev/null | wc -l | tr -d " \n" || echo "0")
 
     if [[ "$user_defaults" -gt 0 && "$keychain_usage" -eq 0 ]]; then
         cat >> "$enhancement_file" << EOF
@@ -492,9 +492,9 @@ EOF
 
     # Check for network security
     local network_calls
-    network_calls=$(grep -r "URLSession\|HTTP" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+    network_calls=$(grep -r "URLSession\|HTTP" **/*.swift 2>/dev/null | wc -l | tr -d " \n" || echo "0")
     local ssl_pinning
-    ssl_pinning=$(grep -r "pinnedCertificates\|SSL" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+    ssl_pinning=$(grep -r "pinnedCertificates\|SSL" **/*.swift 2>/dev/null | wc -l | tr -d " \n" || echo "0")
 
     if [[ "$network_calls" -gt 0 && "$ssl_pinning" -eq 0 ]]; then
         cat >> "$enhancement_file" << EOF
@@ -522,9 +522,9 @@ EOF
 
     # Check test coverage
     local test_files
-    test_files=$(find . -name "*Test*.swift" -o -name "*Tests.swift" | wc -l | xargs || echo "0")
+    test_files=$(find . -name "*Test*.swift" -o -name "*Tests.swift" | wc -l | tr -d " \n" || echo "0")
     local source_files
-    source_files=$(find . -name "*.swift" -not -path "*/Test*" -not -name "*Test*.swift" | wc -l | xargs || echo "0")
+    source_files=$(find . -name "*.swift" -not -path "*/Test*" -not -name "*Test*.swift" | wc -l | tr -d " \n" || echo "0")
 
     if [[ "$source_files" -gt 0 ]]; then
         local test_ratio=$((test_files * 100 / source_files))
@@ -573,9 +573,9 @@ EOF
 
     # Check for basic accessibility implementation
     local accessibility_modifiers
-    accessibility_modifiers=$(grep -r "\.accessibilityLabel\|\.accessibilityHint\|\.accessibilityValue" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+    accessibility_modifiers=$(grep -r "\.accessibilityLabel\|\.accessibilityHint\|\.accessibilityValue" **/*.swift 2>/dev/null | wc -l | tr -d " \n" || echo "0")
     local interactive_elements
-    interactive_elements=$(grep -r "Button\|TextField\|Slider\|Stepper" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+    interactive_elements=$(grep -r "Button\|TextField\|Slider\|Stepper" **/*.swift 2>/dev/null | wc -l | tr -d " \n" || echo "0")
 
     if [[ "$interactive_elements" -gt 0 && "$accessibility_modifiers" -lt "$interactive_elements" ]]; then
         cat >> "$enhancement_file" << EOF
@@ -615,9 +615,9 @@ EOF
 
     # Check for public API documentation
     local public_functions
-    public_functions=$(grep -r "public func\|open func" **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+    public_functions=$(grep -r "public func\|open func" **/*.swift 2>/dev/null | wc -l | tr -d " \n" || echo "0")
     local documented_functions
-    documented_functions=$(grep -r "/// " **/*.swift 2>/dev/null | wc -l | xargs || echo "0")
+    documented_functions=$(grep -r "/// " **/*.swift 2>/dev/null | wc -l | tr -d " \n" || echo "0")
 
     if [[ "$public_functions" -gt 0 && "$documented_functions" -lt "$public_functions" ]]; then
         cat >> "$enhancement_file" << EOF

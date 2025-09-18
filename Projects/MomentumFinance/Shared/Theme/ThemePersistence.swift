@@ -1,6 +1,6 @@
 import Foundation
-import os
 import OSLog
+import os
 
 //
 //  ThemePersistence.swift
@@ -13,7 +13,6 @@ import OSLog
 /// Handles persistent storage of theme preferences
 enum ThemePersistence {
     private static let themePreferenceKey = "com.momentumfinance.themeMode"
-    private static let logger = Logger()
 
     /// Save the theme preference to UserDefaults
     static func saveThemePreference(_ mode: ThemeMode) {
@@ -27,14 +26,17 @@ enum ThemePersistence {
 
         // If we have a saved value, try to create a ThemeMode from it
         if let savedValue,
-           let mode = ThemeMode(rawValue: savedValue) {
+            let mode = ThemeMode(rawValue: savedValue)
+        {
             os_log("Loaded saved theme preference: %@", log: .default, type: .info, mode.rawValue)
             return mode
         }
 
         // Default to system theme if nothing saved
         let defaultMode = ThemeMode.system
-        os_log("No saved theme preference found, using default: %@", log: .default, type: .info, defaultMode.rawValue)
+        os_log(
+            "No saved theme preference found, using default: %@", log: .default, type: .info,
+            defaultMode.rawValue)
         return defaultMode
     }
 

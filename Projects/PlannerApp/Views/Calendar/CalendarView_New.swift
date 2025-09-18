@@ -1,3 +1,30 @@
+import SwiftUI
+
+struct CalendarView_New: View {
+    var body: some View {
+        Text("Calendar View")
+    }
+}
+
+struct CalendarView_New_Previews: PreviewProvider {
+    static var previews: some View {
+        CalendarView_New()
+    }
+}
+import SwiftUI
+
+struct CalendarView_New: View {
+    var body: some View {
+        Text("Calendar View")
+    }
+}
+
+struct CalendarView_New_Previews: PreviewProvider {
+    static var previews: some View {
+        CalendarView_New()
+    }
+}
+
 // filepath: /Users/danielstevens/Desktop/PlannerApp/Views/Calendar/CalendarView.swift
 // PlannerApp/Views/Calendar/CalendarView.swift
 

@@ -2,13 +2,7 @@ import SwiftData
 import SwiftUI
 
 #if canImport(AppKit)
-import AppKit
-#endif
-
-#if canImport(UIKit)
-#endif
-
-#if canImport(AppKit)
+    import AppKit
 #endif
 
 // Momentum Finance - Personal Finance App
@@ -55,8 +49,9 @@ extension Features.Transactions {
             if !self.searchText.isEmpty {
                 filtered = filtered.filter { transaction in
                     transaction.title.localizedCaseInsensitiveContains(self.searchText)
-                        || transaction.category?.name.localizedCaseInsensitiveContains(self.searchText)
-                        == true
+                        || transaction.category?.name.localizedCaseInsensitiveContains(
+                            self.searchText)
+                            == true
                 }
             }
 

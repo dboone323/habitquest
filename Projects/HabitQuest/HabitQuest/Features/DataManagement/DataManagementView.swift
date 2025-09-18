@@ -117,7 +117,7 @@ struct HabitQuestBackupDocument: FileDocument {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    nonisolated func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+    nonisolated func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
         FileWrapper(regularFileWithContents: self.data)
     }
 }

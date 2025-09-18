@@ -110,16 +110,16 @@ class CloudKitManager: ObservableObject {
 
     // MARK: - Record Management (Stubs)
 
-    func save(_ items: [some Any]) async throws {
+    func save(_: [some Any]) async throws {
         // Stub implementation
     }
 
-    func fetch<T>(_ type: T.Type) async throws -> [T] {
+    func fetch<T>(_: T.Type) async throws -> [T] {
         // Stub implementation
         []
     }
 
-    func delete(_ items: [some Any]) async throws {
+    func delete(_: [some Any]) async throws {
         // Stub implementation
     }
 

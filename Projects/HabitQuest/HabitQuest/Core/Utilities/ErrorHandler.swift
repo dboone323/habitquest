@@ -72,7 +72,7 @@ struct ErrorHandler: Sendable {
     }
 
     /// Convert a generic error to a HabitQuestError
-    static func wrap(_ error: Error, as type: HabitQuestError) -> HabitQuestError {
+    static func wrap(_: Error, as type: HabitQuestError) -> HabitQuestError {
         type
     }
 

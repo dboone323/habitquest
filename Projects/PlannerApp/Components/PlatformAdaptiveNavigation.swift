@@ -248,7 +248,7 @@ struct PlatformSheet<SheetContent: View>: ViewModifier {
     let sheetContent: SheetContent
 
     init(isPresented: Binding<Bool>, @ViewBuilder content: () -> SheetContent) {
-        self._isPresented = isPresented
+        _isPresented = isPresented
         self.sheetContent = content()
     }
 
@@ -316,7 +316,7 @@ struct ExamplePlatformView: View {
                 ],
                 secondaryActions: [
                     .init(title: "Sort", icon: "arrow.up.arrow.down") {},
-                    .init(title: "Filter", icon: "line.3.horizontal.decrease.circle") {},
+                    .init(title: "Filter", icon: "line.3.horizontal.decrease.circle") {}
                 ]
             )
             .platformSheet(isPresented: self.$showingAddItem) {

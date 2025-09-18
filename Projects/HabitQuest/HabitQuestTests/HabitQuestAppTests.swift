@@ -33,4 +33,4 @@ class HabitQuestAppTests: XCTestCase {
         // TODO: Implement method tests for structHabitQuestApp:App{
         XCTAssertTrue(true, "Placeholder test for structHabitQuestApp:App{ methods")
     }
-}
+    }

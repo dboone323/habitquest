@@ -133,4 +133,4 @@ class AnalyticsTypesTests: XCTestCase {
         // TODO: Implement method tests for structHabitSuggestion{
         XCTAssertTrue(true, "Placeholder test for structHabitSuggestion{ methods")
     }
-}
+    }

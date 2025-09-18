@@ -73,7 +73,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     /// Called when the scene is first presented by the view.
     /// Sets up the background, physics, UI, and starts the game.
     /// - Parameter view: The SKView presenting this scene.
-    override func didMove(to view: SKView) {
+    override func didMove(to _: SKView) {
         self.setupBackground()
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
@@ -382,7 +382,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Touch Handling
 
     /// Handles player movement by dragging on the screen.
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with _: UIEvent?) {
         // Called when a touch that began on the screen moves.
         if self.isGameOver { return } // Disable player movement if game is over.
 
@@ -404,7 +404,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     /// Handles tap to restart the game after game over.
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesBegan(_: Set<UITouch>, with _: UIEvent?) {
         // Called when a new touch begins on the screen.
         if self.isGameOver {
             // If the game is over, any tap will restart the game.
@@ -530,7 +530,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 // Animate the high score text
                 let pulse = SKAction.sequence([
                     SKAction.scale(to: 1.1, duration: 0.5),
-                    SKAction.scale(to: 1.0, duration: 0.5),
+                    SKAction.scale(to: 1.0, duration: 0.5)
                 ])
                 highScoreAchievedLabel.run(SKAction.repeatForever(pulse))
             }

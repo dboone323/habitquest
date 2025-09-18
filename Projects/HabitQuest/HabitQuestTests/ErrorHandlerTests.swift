@@ -33,4 +33,4 @@ class ErrorHandlerTests: XCTestCase {
         // TODO: Implement method tests for structErrorHandler:Sendable{
         XCTAssertTrue(true, "Placeholder test for structErrorHandler:Sendable{ methods")
     }
-}
+    }

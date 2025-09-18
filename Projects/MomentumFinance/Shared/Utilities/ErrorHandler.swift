@@ -1,7 +1,7 @@
 import Foundation
 import Observation
-import os
 import SwiftUI
+import os
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
@@ -25,7 +25,7 @@ final class ErrorHandler {
 
     private init() {
         #if DEBUG
-        Logger.logDebug("ErrorHandler initialized", category: Logger.ui)
+            Logger.logDebug("ErrorHandler initialized", category: Logger.ui)
         #endif
     }
 
@@ -46,7 +46,7 @@ final class ErrorHandler {
         Logger.logError(
             appError,
             context:
-            "\(context) [\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)]",
+                "\(context) [\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)]",
         )
 
         // Determine if this is a frequent error (same type occurring rapidly)
@@ -154,9 +154,9 @@ final class ErrorHandler {
         // Example: Crashlytics.record(error: error)
 
         #if DEBUG
-        Logger.logDebug(
-            "Error would be reported to analytics: \(error.errorDescription ?? "Unknown")"
-        )
+            Logger.logDebug(
+                "Error would be reported to analytics: \(error.errorDescription ?? "Unknown")"
+            )
         #endif
     }
 }
@@ -185,58 +185,58 @@ enum AppError: LocalizedError, Identifiable {
 
     var id: String {
         switch self {
-        case let .dataError(message):
+        case .dataError(let message):
             "data_\(message)"
-        case let .validationError(message):
+        case .validationError(let message):
             "validation_\(message)"
-        case let .networkError(message):
+        case .networkError(let message):
             "network_\(message)"
-        case let .businessLogicError(message):
+        case .businessLogicError(let message):
             "business_\(message)"
-        case let .subscriptionError(message):
+        case .subscriptionError(let message):
             "subscription_\(message)"
-        case let .budgetError(message):
+        case .budgetError(let message):
             "budget_\(message)"
-        case let .goalError(message):
+        case .goalError(let message):
             "goal_\(message)"
-        case let .permissionError(message):
+        case .permissionError(let message):
             "permission_\(message)"
-        case let .authenticationError(message):
+        case .authenticationError(let message):
             "auth_\(message)"
-        case let .syncError(message):
+        case .syncError(let message):
             "sync_\(message)"
-        case let .fileSystemError(message):
+        case .fileSystemError(let message):
             "file_\(message)"
-        case let .unknown(message):
+        case .unknown(let message):
             "unknown_\(message)"
         }
     }
 
     var errorDescription: String? {
         switch self {
-        case let .dataError(message):
+        case .dataError(let message):
             "Data Error: \(message)"
-        case let .validationError(message):
+        case .validationError(let message):
             "Validation Error: \(message)"
-        case let .networkError(message):
+        case .networkError(let message):
             "Network Error: \(message)"
-        case let .businessLogicError(message):
+        case .businessLogicError(let message):
             "Business Logic Error: \(message)"
-        case let .subscriptionError(message):
+        case .subscriptionError(let message):
             "Subscription Error: \(message)"
-        case let .budgetError(message):
+        case .budgetError(let message):
             "Budget Error: \(message)"
-        case let .goalError(message):
+        case .goalError(let message):
             "Goal Error: \(message)"
-        case let .permissionError(message):
+        case .permissionError(let message):
             "Permission Error: \(message)"
-        case let .authenticationError(message):
+        case .authenticationError(let message):
             "Authentication Error: \(message)"
-        case let .syncError(message):
+        case .syncError(let message):
             "Sync Error: \(message)"
-        case let .fileSystemError(message):
+        case .fileSystemError(let message):
             "File System Error: \(message)"
-        case let .unknown(message):
+        case .unknown(let message):
             "Unknown Error: \(message)"
         }
     }
@@ -342,7 +342,8 @@ enum AppError: LocalizedError, Identifiable {
         if nsError.code == NSValidationErrorMinimum {
             return .validationError("\(context) \(nsError.localizedDescription)")
         } else if nsError.code == NSFileReadNoSuchFileError
-            || nsError.code == NSFileWriteOutOfSpaceError {
+            || nsError.code == NSFileWriteOutOfSpaceError
+        {
             return .fileSystemError("\(context) \(nsError.localizedDescription)")
         }
         return .dataError("\(context) \(nsError.localizedDescription)")
@@ -367,7 +368,7 @@ enum AppError: LocalizedError, Identifiable {
             ("Goal", .goalError(description)),
             ("Sync", .syncError(description)),
             ("File", .fileSystemError(description)),
-            ("Storage", .fileSystemError(description))
+            ("Storage", .fileSystemError(description)),
         ]
 
         for (keyword, errorType) in errorMappings where errorName.contains(keyword) {

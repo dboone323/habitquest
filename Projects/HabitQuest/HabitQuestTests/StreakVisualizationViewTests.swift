@@ -73,4 +73,4 @@ class StreakVisualizationViewTests: XCTestCase {
         // TODO: Implement method tests for structHeatMapDay:View{
         XCTAssertTrue(true, "Placeholder test for structHeatMapDay:View{ methods")
     }
-}
+    }

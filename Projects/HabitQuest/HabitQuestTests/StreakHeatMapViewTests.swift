@@ -113,4 +113,4 @@ class StreakHeatMapViewTests: XCTestCase {
         // TODO: Implement method tests for structPredictionCard:View{
         XCTAssertTrue(true, "Placeholder test for structPredictionCard:View{ methods")
     }
-}
+    }

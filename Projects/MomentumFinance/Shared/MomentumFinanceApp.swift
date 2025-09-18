@@ -7,7 +7,7 @@ import SwiftUI
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
 // Model references for SwiftData container
-fileprivate extension MomentumFinanceApp {
+private extension MomentumFinanceApp {
     enum ModelReferences {
         static let accounts = FinancialAccount.self
         static let transactions = FinancialTransaction.self
@@ -39,7 +39,7 @@ struct MomentumFinanceApp: App {
             ModelReferences.subscriptions,
             ModelReferences.budgets,
             ModelReferences.categories,
-            ModelReferences.goals,
+            ModelReferences.goals
         ])
 
         print("MomentumFinanceApp: Schema created")

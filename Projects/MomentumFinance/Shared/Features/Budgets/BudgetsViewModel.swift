@@ -76,8 +76,8 @@ final class BudgetsViewModel {
 
         let calendar = Calendar.current
         let budgetExists = existingBudgets.contains { budget in
-            budget.category?.name == category.name &&
-                calendar.isDate(budget.month, equalTo: month, toGranularity: .month)
+            budget.category?.name == category.name
+                && calendar.isDate(budget.month, equalTo: month, toGranularity: .month)
         }
 
         if budgetExists {
@@ -155,8 +155,10 @@ final class BudgetsViewModel {
         let now = Date()
         var trend: [MonthlySpending] = []
 
-        for i in 0 ..< months {
-            guard let monthDate = calendar.date(byAdding: .month, value: -i, to: now) else { continue }
+        for i in 0..<months {
+            guard let monthDate = calendar.date(byAdding: .month, value: -i, to: now) else {
+                continue
+            }
 
             let spent = category.totalSpent(for: monthDate)
             let monthSpending = MonthlySpending(
