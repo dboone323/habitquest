@@ -16,19 +16,19 @@ class DataManagementViewModelTests: XCTestCase {
 
     // MARK: - classDataManagementViewModel:ObservableObject{ Tests
 
-    func testclassDataManagementViewModel:ObservableObject{Initialization() {
+    func testDataManagementViewModelInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classDataManagementViewModel:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classDataManagementViewModel:ObservableObject{")
     }
 
-    func testclassDataManagementViewModel:ObservableObject{Properties() {
+    func testDataManagementViewModelProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classDataManagementViewModel:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classDataManagementViewModel:ObservableObject{ properties")
     }
 
-    func testclassDataManagementViewModel:ObservableObject{Methods() {
+    func testDataManagementViewModelMethods() {
         // Test method functionality
         // TODO: Implement method tests for classDataManagementViewModel:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classDataManagementViewModel:ObservableObject{ methods")

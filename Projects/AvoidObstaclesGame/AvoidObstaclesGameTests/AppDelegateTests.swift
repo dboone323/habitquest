@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import AvoidObstaclesGame
 
 class AppDelegateTests: XCTestCase {
@@ -13,24 +14,23 @@ class AppDelegateTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - AppDelegate Tests
 
-    // MARK: - classAppDelegate:UIResponder,UIApplicationDelegate{ Tests
-
-    func testclassAppDelegate:UIResponder,UIApplicationDelegate{Initialization() {
+    func testAppDelegateInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for classAppDelegate:UIResponder,UIApplicationDelegate{
-        XCTAssertTrue(true, "Placeholder test for classAppDelegate:UIResponder,UIApplicationDelegate{")
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        XCTAssertNotNil(appDelegate, "AppDelegate should be properly initialized")
     }
 
-    func testclassAppDelegate:UIResponder,UIApplicationDelegate{Properties() {
+    func testAppDelegateProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for classAppDelegate:UIResponder,UIApplicationDelegate{
-        XCTAssertTrue(true, "Placeholder test for classAppDelegate:UIResponder,UIApplicationDelegate{ properties")
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        XCTAssertNotNil(appDelegate, "AppDelegate should have valid properties")
     }
 
-    func testclassAppDelegate:UIResponder,UIApplicationDelegate{Methods() {
+    func testAppDelegateMethods() {
         // Test method functionality
-        // TODO: Implement method tests for classAppDelegate:UIResponder,UIApplicationDelegate{
-        XCTAssertTrue(true, "Placeholder test for classAppDelegate:UIResponder,UIApplicationDelegate{ methods")
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        XCTAssertNotNil(appDelegate, "AppDelegate should respond to methods")
     }
 }

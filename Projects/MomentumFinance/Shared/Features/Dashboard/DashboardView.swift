@@ -145,29 +145,29 @@ extension Features.Dashboard {
                 #if os(iOS)
                     .navigationBarTitleDisplayMode(.large)
                 #endif
-                .onAppear {
-                    self.loadData()
-                }
-                .task {
-                    // Process overdue subscriptions asynchronously
-                    // await self.viewModel.processOverdueSubscriptions(self.subscriptions)
-                }
-                .navigationDestination(for: DashboardDestination.self) { destination in
-                    switch destination {
-                    case .transactions:
-                        Features.Transactions.TransactionsView()
-                    case .subscriptions:
-                        #if canImport(SwiftData)
-                            Features.Subscriptions.SubscriptionsView()
-                        #else
-                            Text("Subscriptions View - SwiftData not available")
-                        #endif
-                    case .budgets:
-                        Features.Budgets.BudgetsView()
-                    case .accountDetail(let accountId):
-                        Text("Account Detail: \(accountId)")
+                    .onAppear {
+                        self.loadData()
                     }
-                }
+                    .task {
+                        // Process overdue subscriptions asynchronously
+                        // await self.viewModel.processOverdueSubscriptions(self.subscriptions)
+                    }
+                    .navigationDestination(for: DashboardDestination.self) { destination in
+                        switch destination {
+                        case .transactions:
+                            Features.Transactions.TransactionsView()
+                        case .subscriptions:
+                            #if canImport(SwiftData)
+                                Features.Subscriptions.SubscriptionsView()
+                            #else
+                                Text("Subscriptions View - SwiftData not available")
+                            #endif
+                        case .budgets:
+                            Features.Budgets.BudgetsView()
+                        case let .accountDetail(accountId):
+                            Text("Account Detail: \(accountId)")
+                        }
+                    }
             }
         }
 
@@ -176,8 +176,8 @@ extension Features.Dashboard {
         private var timeOfDayGreeting: String {
             let hour = Calendar.current.component(.hour, from: Date())
             switch hour {
-            case 0..<12: return "Morning"
-            case 12..<17: return "Afternoon"
+            case 0 ..< 12: return "Morning"
+            case 12 ..< 17: return "Afternoon"
             default: return "Evening"
             }
         }
@@ -206,12 +206,12 @@ extension Features.Dashboard {
 
         private var monthlyIncomeDouble: Double {
             // Calculate monthly income from transactions
-            2450.0
+            2_450.0
         }
 
         private var monthlyExpensesDouble: Double {
             // Calculate monthly expenses from transactions
-            1890.0
+            1_890.0
         }
 
         // MARK: - Data Loading

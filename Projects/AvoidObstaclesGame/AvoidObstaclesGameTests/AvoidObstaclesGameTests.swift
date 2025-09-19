@@ -213,7 +213,7 @@ final class AvoidObstaclesGameTests: XCTestCase {
         let startTime = Date()
 
         // Simulate game loop iterations
-        for _ in 1 ... 1000 {
+        for _ in 1...1000 {
             // Simulate game update logic
             let x = 1 + 1
             XCTAssertEqual(x, 2)
@@ -230,7 +230,7 @@ final class AvoidObstaclesGameTests: XCTestCase {
         let startTime = Date()
 
         // Simulate generating multiple obstacles
-        for i in 1 ... 100 {
+        for i in 1...100 {
             let obstacleData: [String: Any] = ["id": i, "type": "spike", "x": i * 50]
             XCTAssertEqual((obstacleData["id"] as? Int), i)
         }
@@ -245,7 +245,7 @@ final class AvoidObstaclesGameTests: XCTestCase {
 
     func testGameSaveFunctionality() throws {
         // Test game save functionality
-        let gameData = [
+        let gameData: [String: Any] = [
             "score": 1500,
             "level": 3,
             "lives": 2,
@@ -256,6 +256,8 @@ final class AvoidObstaclesGameTests: XCTestCase {
         XCTAssertEqual(gameData["score"] as? Int, 1500)
         XCTAssertEqual(gameData["level"] as? Int, 3)
         XCTAssertEqual(gameData["lives"] as? Int, 2)
+        XCTAssertEqual(gameData["playerX"] as? Double, 100.0)
+        XCTAssertEqual(gameData["playerY"] as? Double, 200.0)
     }
 
     func testGameLoadFunctionality() throws {

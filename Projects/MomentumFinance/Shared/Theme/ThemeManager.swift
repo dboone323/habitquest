@@ -1,7 +1,7 @@
-import OSLog
 import Observation
-import SwiftUI
 import os
+import OSLog
+import SwiftUI
 
 //
 //  ThemeManager.swift
@@ -27,7 +27,8 @@ final class ThemeManager {
         self.theme.setThemeMode(savedTheme)
         os_log(
             "Initialized ThemeManager with saved mode: %@", log: .default, type: .info,
-            savedTheme.rawValue)
+            savedTheme.rawValue
+        )
     }
 
     /// Updates the theme mode with persistence
@@ -104,8 +105,7 @@ final class ThemeManager {
     /// <#Description#>
     /// - Returns: <#description#>
     func font(_ style: TextStyle, weight: Font.Weight = .regular, design: Font.Design = .default)
-        -> Font
-    {
+        -> Font {
         let baseFont = style.font
 
         // Apply weight modifier
@@ -116,8 +116,7 @@ final class ThemeManager {
     /// <#Description#>
     /// - Returns: <#description#>
     func dynamicFont(size: CGFloat, weight: Font.Weight = .regular, design: Font.Design = .default)
-        -> Font
-    {
+        -> Font {
         Font.system(size: size, weight: weight, design: design)
     }
 
@@ -126,7 +125,7 @@ final class ThemeManager {
         #if os(iOS)
             return UIFontMetrics.default.scaledValue(for: 1.0)
         #else
-            return 1.0  // Default for macOS
+            return 1.0 // Default for macOS
         #endif
     }
 

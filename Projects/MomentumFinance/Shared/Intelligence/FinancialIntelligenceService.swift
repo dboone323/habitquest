@@ -69,7 +69,7 @@ class FinancialIntelligenceService: ObservableObject {
             // Combine all insights and sort by priority
             var allInsights =
                 spendingPatternInsights + anomalyInsights + budgetInsights + forecastInsights
-                + optimizationInsights
+                    + optimizationInsights
             allInsights.sort { $0.priority > $1.priority }
 
             // Update the UI
@@ -104,8 +104,7 @@ class FinancialIntelligenceService: ObservableObject {
     }
 
     private func analyzeBudgets(transactions: [FinancialTransaction], budgets: [Budget])
-        -> [FinancialInsight]
-    {
+        -> [FinancialInsight] {
         fi_analyzeBudgets(transactions: transactions, budgets: budgets)
     }
 

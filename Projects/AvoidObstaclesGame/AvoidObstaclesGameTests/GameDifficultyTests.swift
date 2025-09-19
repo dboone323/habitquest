@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import AvoidObstaclesGame
 
 class GameDifficultyTests: XCTestCase {
@@ -13,24 +14,80 @@ class GameDifficultyTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - GameDifficulty Tests
 
-    // MARK: - structGameDifficulty{ Tests
-
-    func teststructGameDifficulty{Initialization() {
-        // Test basic initialization
-        // TODO: Implement initialization test for structGameDifficulty{
-        XCTAssertTrue(true, "Placeholder test for structGameDifficulty{")
+    func testGameDifficultyInitialization() {
+        // Test basic initialization with parameters
+        let difficulty = GameDifficulty(
+            spawnInterval: 1.0, obstacleSpeed: 3.0, scoreMultiplier: 1.5)
+        XCTAssertNotNil(difficulty, "GameDifficulty should initialize properly")
+        XCTAssertEqual(
+            difficulty.spawnInterval, 1.0, "GameDifficulty should have correct spawn interval")
+        XCTAssertEqual(
+            difficulty.obstacleSpeed, 3.0, "GameDifficulty should have correct obstacle speed")
+        XCTAssertEqual(
+            difficulty.scoreMultiplier, 1.5, "GameDifficulty should have correct score multiplier")
     }
 
-    func teststructGameDifficulty{Properties() {
+    func testGameDifficultyProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structGameDifficulty{
-        XCTAssertTrue(true, "Placeholder test for structGameDifficulty{ properties")
+        let difficulty = GameDifficulty(
+            spawnInterval: 0.8, obstacleSpeed: 2.5, scoreMultiplier: 2.0)
+        XCTAssertEqual(
+            difficulty.spawnInterval, 0.8, "GameDifficulty should have correct spawn interval")
+        XCTAssertEqual(
+            difficulty.obstacleSpeed, 2.5, "GameDifficulty should have correct obstacle speed")
+        XCTAssertEqual(
+            difficulty.scoreMultiplier, 2.0, "GameDifficulty should have correct score multiplier")
     }
 
-    func teststructGameDifficulty{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for structGameDifficulty{
-        XCTAssertTrue(true, "Placeholder test for structGameDifficulty{ methods")
+    func testGameDifficultyMethods() {
+        // Test static method functionality
+        let easyDifficulty = GameDifficulty.getDifficulty(for: 5)
+        let mediumDifficulty = GameDifficulty.getDifficulty(for: 20)
+        let hardDifficulty = GameDifficulty.getDifficulty(for: 75)
+
+        XCTAssertGreaterThan(
+            easyDifficulty.spawnInterval, hardDifficulty.spawnInterval,
+            "Easy should have slower spawn than hard")
+        XCTAssertGreaterThan(
+            easyDifficulty.obstacleSpeed, hardDifficulty.obstacleSpeed,
+            "Easy should have slower obstacles than hard")
+        XCTAssertLessThan(
+            easyDifficulty.scoreMultiplier, hardDifficulty.scoreMultiplier,
+            "Easy should have lower multiplier than hard")
+    }
+
+    func testGameDifficultyStaticMethods() {
+        // Test static method functionality
+        let level1 = GameDifficulty.getDifficultyLevel(for: 5)
+        let level2 = GameDifficulty.getDifficultyLevel(for: 15)
+        let level3 = GameDifficulty.getDifficultyLevel(for: 35)
+        let level4 = GameDifficulty.getDifficultyLevel(for: 75)
+        let level5 = GameDifficulty.getDifficultyLevel(for: 150)
+        let level6 = GameDifficulty.getDifficultyLevel(for: 250)
+
+        XCTAssertEqual(level1, 1, "Score 5 should be level 1")
+        XCTAssertEqual(level2, 2, "Score 15 should be level 2")
+        XCTAssertEqual(level3, 3, "Score 35 should be level 3")
+        XCTAssertEqual(level4, 4, "Score 75 should be level 4")
+        XCTAssertEqual(level5, 5, "Score 150 should be level 5")
+        XCTAssertEqual(level6, 6, "Score 250 should be level 6")
+    }
+
+    func testGameDifficultyProgression() {
+        // Test that difficulty increases with score
+        let lowScore = GameDifficulty.getDifficulty(for: 0)
+        let highScore = GameDifficulty.getDifficulty(for: 1000)
+
+        XCTAssertGreaterThan(
+            lowScore.spawnInterval, highScore.spawnInterval,
+            "Higher scores should have faster spawn rates")
+        XCTAssertGreaterThan(
+            lowScore.obstacleSpeed, highScore.obstacleSpeed,
+            "Higher scores should have faster obstacles")
+        XCTAssertLessThan(
+            lowScore.scoreMultiplier, highScore.scoreMultiplier,
+            "Higher scores should have higher multipliers")
     }
 }

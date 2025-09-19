@@ -17,22 +17,22 @@ extension Features.GoalsAndReports {
         @Environment(\.modelContext)
         private var modelContext
         #if canImport(SwiftData)
-        #if canImport(SwiftData)
-        private var savingsGoals: [SavingsGoal] = []
-        private var transactions: [FinancialTransaction] = []
-        private var budgets: [Budget] = []
-        private var categories: [ExpenseCategory] = []
+            #if canImport(SwiftData)
+                private var savingsGoals: [SavingsGoal] = []
+                private var transactions: [FinancialTransaction] = []
+                private var budgets: [Budget] = []
+                private var categories: [ExpenseCategory] = []
+            #else
+                private var savingsGoals: [SavingsGoal] = []
+                private var transactions: [FinancialTransaction] = []
+                private var budgets: [Budget] = []
+                private var categories: [ExpenseCategory] = []
+            #endif
         #else
-        private var savingsGoals: [SavingsGoal] = []
-        private var transactions: [FinancialTransaction] = []
-        private var budgets: [Budget] = []
-        private var categories: [ExpenseCategory] = []
-        #endif
-        #else
-        private var savingsGoals: [SavingsGoal] = []
-        private var transactions: [FinancialTransaction] = []
-        private var budgets: [Budget] = []
-        private var categories: [ExpenseCategory] = []
+            private var savingsGoals: [SavingsGoal] = []
+            private var transactions: [FinancialTransaction] = []
+            private var budgets: [Budget] = []
+            private var categories: [ExpenseCategory] = []
         #endif
 
         @State private var selectedTab = 0
@@ -122,21 +122,21 @@ extension Features.GoalsAndReports {
             // Cross-platform color support
             private var backgroundColor: Color {
                 #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+                    return Color(UIColor.systemBackground)
                 #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+                    return Color(NSColor.controlBackgroundColor)
                 #else
-                return Color.white
+                    return Color.white
                 #endif
             }
 
             private var secondaryBackgroundColor: Color {
                 #if canImport(UIKit)
-                return Color(UIColor.systemGroupedBackground)
+                    return Color(UIColor.systemGroupedBackground)
                 #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+                    return Color(NSColor.controlBackgroundColor)
                 #else
-                return Color.gray.opacity(0.1)
+                    return Color.gray.opacity(0.1)
                 #endif
             }
 

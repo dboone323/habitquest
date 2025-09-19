@@ -1,7 +1,7 @@
-import Foundation  // For SearchTypes dependencies
+import Foundation // For SearchTypes dependencies
 import LocalAuthentication
-import OSLog
 import Observation
+import OSLog
 import SwiftUI
 
 // SearchResult types are available from Shared/SearchTypes.swift
@@ -86,7 +86,7 @@ final class NavigationCoordinator: ObservableObject {
     var isAuthenticated: Bool = false
     var requiresAuthentication: Bool = true
     var lastAuthenticationTime: Date?
-    var authenticationTimeoutInterval: TimeInterval = 300  // 5 minutes
+    var authenticationTimeoutInterval: TimeInterval = 300 // 5 minutes
 
     // MARK: - Deep Linking State
 
@@ -115,17 +115,17 @@ final class NavigationCoordinator: ObservableObject {
     // MARK: - Navigation Methods
 
     func navigateToBudgets() {
-        self.selectedTab = 2  // Assuming budgets is tab index 2
+        self.selectedTab = 2 // Assuming budgets is tab index 2
         self.budgetsNavPath = NavigationPath()
     }
 
     func navigateToSubscriptions() {
-        self.selectedTab = 3  // Assuming subscriptions is tab index 3
+        self.selectedTab = 3 // Assuming subscriptions is tab index 3
         self.subscriptionsNavPath = NavigationPath()
     }
 
     func navigateToGoals() {
-        self.selectedTab = 4  // Assuming goals is tab index 4
+        self.selectedTab = 4 // Assuming goals is tab index 4
         self.goalsAndReportsNavPath = NavigationPath()
     }
 
@@ -148,16 +148,16 @@ final class NavigationCoordinator: ObservableObject {
         // Navigate based on the search result type
         switch result.type {
         case .accounts:
-            self.selectedTab = 0  // Dashboard tab
+            self.selectedTab = 0 // Dashboard tab
             self.dashboardNavPath = NavigationPath()
         case .transactions:
-            self.selectedTab = 1  // Transactions tab
+            self.selectedTab = 1 // Transactions tab
             self.transactionsNavPath = NavigationPath()
         case .budgets:
-            self.selectedTab = 2  // Budgets tab
+            self.selectedTab = 2 // Budgets tab
             self.budgetsNavPath = NavigationPath()
         case .subscriptions:
-            self.selectedTab = 3  // Subscriptions tab
+            self.selectedTab = 3 // Subscriptions tab
             self.subscriptionsNavPath = NavigationPath()
         case .all:
             // For 'all' type, default to dashboard

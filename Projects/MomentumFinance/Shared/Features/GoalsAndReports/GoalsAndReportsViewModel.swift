@@ -135,13 +135,13 @@ final class GoalsAndReportsViewModel {
 
         let income =
             periodTransactions
-            .filter { $0.transactionType == .income }
-            .reduce(0.0) { $0 + $1.amount }
+                .filter { $0.transactionType == .income }
+                .reduce(0.0) { $0 + $1.amount }
 
         let expenses =
             periodTransactions
-            .filter { $0.transactionType == .expense }
-            .reduce(0.0) { $0 + $1.amount }
+                .filter { $0.transactionType == .expense }
+                .reduce(0.0) { $0 + $1.amount }
 
         let categorySpending = Dictionary(
             grouping: periodTransactions.filter { $0.transactionType == .expense },
@@ -170,9 +170,9 @@ final class GoalsAndReportsViewModel {
         let now = Date()
         var trend: [MonthlySpendingData] = []
 
-        for i in 0..<months {
+        for i in 0 ..< months {
             guard let monthDate = calendar.date(byAdding: .month, value: -i, to: now),
-                let monthInterval = calendar.dateInterval(of: .month, for: monthDate)
+                  let monthInterval = calendar.dateInterval(of: .month, for: monthDate)
             else {
                 continue
             }
@@ -181,13 +181,13 @@ final class GoalsAndReportsViewModel {
 
             let income =
                 monthTransactions
-                .filter { $0.transactionType == .income }
-                .reduce(0.0) { $0 + $1.amount }
+                    .filter { $0.transactionType == .income }
+                    .reduce(0.0) { $0 + $1.amount }
 
             let expenses =
                 monthTransactions
-                .filter { $0.transactionType == .expense }
-                .reduce(0.0) { $0 + $1.amount }
+                    .filter { $0.transactionType == .expense }
+                    .reduce(0.0) { $0 + $1.amount }
 
             let monthData = MonthlySpendingData(
                 month: monthDate,

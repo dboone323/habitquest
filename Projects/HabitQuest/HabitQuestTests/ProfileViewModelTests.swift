@@ -16,19 +16,19 @@ class ProfileViewModelTests: XCTestCase {
 
     // MARK: - classProfileViewModel:ObservableObject{ Tests
 
-    func testclassProfileViewModel:ObservableObject{Initialization() {
+    func testProfileViewModelInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classProfileViewModel:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classProfileViewModel:ObservableObject{")
     }
 
-    func testclassProfileViewModel:ObservableObject{Properties() {
+    func testProfileViewModelProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classProfileViewModel:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classProfileViewModel:ObservableObject{ properties")
     }
 
-    func testclassProfileViewModel:ObservableObject{Methods() {
+    func testProfileViewModelMethods() {
         // Test method functionality
         // TODO: Implement method tests for classProfileViewModel:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classProfileViewModel:ObservableObject{ methods")

@@ -16,19 +16,19 @@ class StreakVisualizationViewTests: XCTestCase {
 
     // MARK: - structStreakVisualizationView:View{ Tests
 
-    func teststructStreakVisualizationView:View{Initialization() {
+    func testStreakVisualizationViewInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structStreakVisualizationView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakVisualizationView:View{")
     }
 
-    func teststructStreakVisualizationView:View{Properties() {
+    func testStreakVisualizationViewProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structStreakVisualizationView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakVisualizationView:View{ properties")
     }
 
-    func teststructStreakVisualizationView:View{Methods() {
+    func testStreakVisualizationViewMethods() {
         // Test method functionality
         // TODO: Implement method tests for structStreakVisualizationView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakVisualizationView:View{ methods")
@@ -36,19 +36,19 @@ class StreakVisualizationViewTests: XCTestCase {
 
     // MARK: - structStreakCelebrationView:View{ Tests
 
-    func teststructStreakCelebrationView:View{Initialization() {
+    func testStreakCelebrationViewInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structStreakCelebrationView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakCelebrationView:View{")
     }
 
-    func teststructStreakCelebrationView:View{Properties() {
+    func testStreakCelebrationViewProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structStreakCelebrationView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakCelebrationView:View{ properties")
     }
 
-    func teststructStreakCelebrationView:View{Methods() {
+    func testStreakCelebrationViewMethods() {
         // Test method functionality
         // TODO: Implement method tests for structStreakCelebrationView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakCelebrationView:View{ methods")
@@ -56,19 +56,19 @@ class StreakVisualizationViewTests: XCTestCase {
 
     // MARK: - structHeatMapDay:View{ Tests
 
-    func teststructHeatMapDay:View{Initialization() {
+    func testHeatMapDayInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structHeatMapDay:View{
         XCTAssertTrue(true, "Placeholder test for structHeatMapDay:View{")
     }
 
-    func teststructHeatMapDay:View{Properties() {
+    func testHeatMapDayProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structHeatMapDay:View{
         XCTAssertTrue(true, "Placeholder test for structHeatMapDay:View{ properties")
     }
 
-    func teststructHeatMapDay:View{Methods() {
+    func testHeatMapDayMethods() {
         // Test method functionality
         // TODO: Implement method tests for structHeatMapDay:View{
         XCTAssertTrue(true, "Placeholder test for structHeatMapDay:View{ methods")

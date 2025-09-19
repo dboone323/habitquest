@@ -17,7 +17,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "../Shared")
+        .package(path: "../../Shared")
     ],
     targets: [
         .target(
@@ -31,7 +31,8 @@ let package = Package(
         ),
         .testTarget(
             name: "MomentumFinanceTests",
-            dependencies: ["MomentumFinance"]
+            dependencies: ["MomentumFinance"],
+            path: "Tests/MomentumFinanceTests"
         ),
     ]
 )

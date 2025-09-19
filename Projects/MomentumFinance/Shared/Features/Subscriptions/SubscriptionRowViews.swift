@@ -37,8 +37,7 @@ extension Features.Subscriptions {
             if !self.subscription.isActive {
                 .red
             } else if let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date()),
-                subscription.nextDueDate <= weekFromNow
-            {
+                      subscription.nextDueDate <= weekFromNow {
                 .orange
             } else {
                 .green
@@ -49,8 +48,7 @@ extension Features.Subscriptions {
             if !self.subscription.isActive {
                 "Inactive"
             } else if let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date()),
-                subscription.nextDueDate <= weekFromNow
-            {
+                      subscription.nextDueDate <= weekFromNow {
                 "Due Soon"
             } else {
                 "Active"

@@ -106,9 +106,9 @@ public struct ImportResult: Codable, Sendable {
 // MARK: - ModelContext for compatibility
 
 #if !canImport(SwiftData)
-public struct ModelContext: Sendable {
-    public init() {}
-}
+    public struct ModelContext: Sendable {
+        public init() {}
+    }
 #endif
 
 // MARK: - Theme Types
@@ -457,7 +457,8 @@ public final class DefaultEntityManager: EntityManager {
     public func fetch<T>(_ type: T.Type) async throws -> [T] { [] }
 
     public func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping)
-        async throws -> FinancialAccount? {
+        async throws -> FinancialAccount?
+    {
         // Mock implementation - return a default account
         FinancialAccount(name: "Default Account", type: .checking)
     }
@@ -1630,7 +1631,8 @@ public struct SearchAndFilterSection: View {
     }
 
     private func filterChip(_ title: String, _ isSelected: Bool, _ filter: TransactionFilter)
-        -> some View {
+        -> some View
+    {
         Button(action: {
             self.selectedFilter = filter
         }) {

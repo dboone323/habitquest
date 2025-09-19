@@ -16,19 +16,19 @@ class AchievementServiceTests: XCTestCase {
 
     // MARK: - enumAchievementService{ Tests
 
-    func testenumAchievementService{Initialization() {
+    func testAchievementServiceInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumAchievementService{
         XCTAssertTrue(true, "Placeholder test for enumAchievementService{")
     }
 
-    func testenumAchievementService{Properties() {
+    func testAchievementServiceProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumAchievementService{
         XCTAssertTrue(true, "Placeholder test for enumAchievementService{ properties")
     }
 
-    func testenumAchievementService{Methods() {
+    func testAchievementServiceMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumAchievementService{
         XCTAssertTrue(true, "Placeholder test for enumAchievementService{ methods")

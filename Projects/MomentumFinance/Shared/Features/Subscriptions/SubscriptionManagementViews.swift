@@ -65,9 +65,9 @@ extension Features.Subscriptions {
                         HStack {
                             Text("$")
                             TextField("Amount", text: self.$amount).accessibilityLabel("Text Field")
-                                #if canImport(UIKit)
-                                    .keyboardType(.decimalPad)
-                                #endif
+                            #if canImport(UIKit)
+                                .keyboardType(.decimalPad)
+                            #endif
                         }
 
                         Picker("Frequency", selection: self.$frequency) {
@@ -102,7 +102,7 @@ extension Features.Subscriptions {
 
                     Section(header: Text("Notes")) {
                         TextField("Notes (optional)", text: self.$notes, axis: .vertical)
-                            .lineLimit(3...6)
+                            .lineLimit(3 ... 6)
                             .accessibilityLabel("Text Field")
                     }
                 }
@@ -110,40 +110,40 @@ extension Features.Subscriptions {
                 #if os(iOS)
                     .navigationBarTitleDisplayMode(.inline)
                 #endif
-                .toolbar(content: {
-                    #if os(iOS)
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button("Cancel") {
-                                self.dismiss()
+                    .toolbar(content: {
+                        #if os(iOS)
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button("Cancel") {
+                                    self.dismiss()
+                                }
+                                .accessibilityLabel("Cancel Button")
                             }
-                            .accessibilityLabel("Cancel Button")
-                        }
 
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Save") {
-                                self.saveSubscription()
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Save") {
+                                    self.saveSubscription()
+                                }
+                                .disabled(!self.isValidForm)
+                                .accessibilityLabel("Save Button")
                             }
-                            .disabled(!self.isValidForm)
-                            .accessibilityLabel("Save Button")
-                        }
-                    #else
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") {
-                                self.dismiss()
+                        #else
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Cancel") {
+                                    self.dismiss()
+                                }
+                                .accessibilityLabel("Cancel Button")
                             }
-                            .accessibilityLabel("Cancel Button")
-                        }
 
-                        ToolbarItem(placement: .primaryAction) {
-                            Button("Save") {
-                                self.saveSubscription()
+                            ToolbarItem(placement: .primaryAction) {
+                                Button("Save") {
+                                    self.saveSubscription()
+                                }
+                                .disabled(!self.isValidForm)
+                                .accessibilityLabel("Save Button")
                             }
-                            .disabled(!self.isValidForm)
-                            .accessibilityLabel("Save Button")
-                        }
-                    #endif
-                })
-                .background(self.backgroundColor)
+                        #endif
+                    })
+                    .background(self.backgroundColor)
             }
         }
 

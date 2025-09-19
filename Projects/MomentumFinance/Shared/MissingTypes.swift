@@ -17,33 +17,33 @@ import UserNotifications
 /// Get the appropriate background color for the current platform
 private func platformBackgroundColor() -> Color {
     #if os(iOS)
-    return Color(.systemBackground)
+        return Color(.systemBackground)
     #elseif os(macOS)
-    return Color(nsColor: .windowBackgroundColor)
+        return Color(nsColor: .windowBackgroundColor)
     #else
-    return Color.white
+        return Color.white
     #endif
 }
 
 /// Get the appropriate gray color for the current platform
 private func platformGrayColor() -> Color {
     #if os(iOS)
-    return Color(.systemGray6)
+        return Color(.systemGray6)
     #elseif os(macOS)
-    return Color.gray.opacity(0.2)
+        return Color.gray.opacity(0.2)
     #else
-    return Color.gray.opacity(0.2)
+        return Color.gray.opacity(0.2)
     #endif
 }
 
 /// Get the appropriate secondary gray color for the current platform
 private func platformSecondaryGrayColor() -> Color {
     #if os(iOS)
-    return Color(.systemGray5)
+        return Color(.systemGray5)
     #elseif os(macOS)
-    return Color.gray.opacity(0.15)
+        return Color.gray.opacity(0.15)
     #else
-    return Color.gray.opacity(0.15)
+        return Color.gray.opacity(0.15)
     #endif
 }
 

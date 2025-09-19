@@ -16,19 +16,19 @@ class AnalyticsTypesTests: XCTestCase {
 
     // MARK: - structHabitPatterns{ Tests
 
-    func teststructHabitPatterns{Initialization() {
+    func testHabitPatternsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structHabitPatterns{
         XCTAssertTrue(true, "Placeholder test for structHabitPatterns{")
     }
 
-    func teststructHabitPatterns{Properties() {
+    func testHabitPatternsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structHabitPatterns{
         XCTAssertTrue(true, "Placeholder test for structHabitPatterns{ properties")
     }
 
-    func teststructHabitPatterns{Methods() {
+    func testHabitPatternsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structHabitPatterns{
         XCTAssertTrue(true, "Placeholder test for structHabitPatterns{ methods")
@@ -36,19 +36,19 @@ class AnalyticsTypesTests: XCTestCase {
 
     // MARK: - structTimeFactors{ Tests
 
-    func teststructTimeFactors{Initialization() {
+    func testTimeFactorsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structTimeFactors{
         XCTAssertTrue(true, "Placeholder test for structTimeFactors{")
     }
 
-    func teststructTimeFactors{Properties() {
+    func testTimeFactorsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structTimeFactors{
         XCTAssertTrue(true, "Placeholder test for structTimeFactors{ properties")
     }
 
-    func teststructTimeFactors{Methods() {
+    func testTimeFactorsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structTimeFactors{
         XCTAssertTrue(true, "Placeholder test for structTimeFactors{ methods")
@@ -56,19 +56,19 @@ class AnalyticsTypesTests: XCTestCase {
 
     // MARK: - structStreakMomentum{ Tests
 
-    func teststructStreakMomentum{Initialization() {
+    func testStreakMomentumInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structStreakMomentum{
         XCTAssertTrue(true, "Placeholder test for structStreakMomentum{")
     }
 
-    func teststructStreakMomentum{Properties() {
+    func testStreakMomentumProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structStreakMomentum{
         XCTAssertTrue(true, "Placeholder test for structStreakMomentum{ properties")
     }
 
-    func teststructStreakMomentum{Methods() {
+    func testStreakMomentumMethods() {
         // Test method functionality
         // TODO: Implement method tests for structStreakMomentum{
         XCTAssertTrue(true, "Placeholder test for structStreakMomentum{ methods")
@@ -76,19 +76,19 @@ class AnalyticsTypesTests: XCTestCase {
 
     // MARK: - structSchedulingRecommendation{ Tests
 
-    func teststructSchedulingRecommendation{Initialization() {
+    func testSchedulingRecommendationInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structSchedulingRecommendation{
         XCTAssertTrue(true, "Placeholder test for structSchedulingRecommendation{")
     }
 
-    func teststructSchedulingRecommendation{Properties() {
+    func testSchedulingRecommendationProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structSchedulingRecommendation{
         XCTAssertTrue(true, "Placeholder test for structSchedulingRecommendation{ properties")
     }
 
-    func teststructSchedulingRecommendation{Methods() {
+    func testSchedulingRecommendationMethods() {
         // Test method functionality
         // TODO: Implement method tests for structSchedulingRecommendation{
         XCTAssertTrue(true, "Placeholder test for structSchedulingRecommendation{ methods")
@@ -96,19 +96,19 @@ class AnalyticsTypesTests: XCTestCase {
 
     // MARK: - structBehavioralInsights{ Tests
 
-    func teststructBehavioralInsights{Initialization() {
+    func testBehavioralInsightsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structBehavioralInsights{
         XCTAssertTrue(true, "Placeholder test for structBehavioralInsights{")
     }
 
-    func teststructBehavioralInsights{Properties() {
+    func testBehavioralInsightsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structBehavioralInsights{
         XCTAssertTrue(true, "Placeholder test for structBehavioralInsights{ properties")
     }
 
-    func teststructBehavioralInsights{Methods() {
+    func testBehavioralInsightsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structBehavioralInsights{
         XCTAssertTrue(true, "Placeholder test for structBehavioralInsights{ methods")
@@ -116,19 +116,19 @@ class AnalyticsTypesTests: XCTestCase {
 
     // MARK: - structHabitSuggestion{ Tests
 
-    func teststructHabitSuggestion{Initialization() {
+    func testHabitSuggestionInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structHabitSuggestion{
         XCTAssertTrue(true, "Placeholder test for structHabitSuggestion{")
     }
 
-    func teststructHabitSuggestion{Properties() {
+    func testHabitSuggestionProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structHabitSuggestion{
         XCTAssertTrue(true, "Placeholder test for structHabitSuggestion{ properties")
     }
 
-    func teststructHabitSuggestion{Methods() {
+    func testHabitSuggestionMethods() {
         // Test method functionality
         // TODO: Implement method tests for structHabitSuggestion{
         XCTAssertTrue(true, "Placeholder test for structHabitSuggestion{ methods")

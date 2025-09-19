@@ -17,16 +17,16 @@ extension Features.Subscriptions {
         var subscription: Subscription?
 
         #if canImport(SwiftData)
-        #if canImport(SwiftData)
-        private var subscriptions: [Subscription] = []
-        private var transactions: [FinancialTransaction] = []
+            #if canImport(SwiftData)
+                private var subscriptions: [Subscription] = []
+                private var transactions: [FinancialTransaction] = []
+            #else
+                private var subscriptions: [Subscription] = []
+                private var transactions: [FinancialTransaction] = []
+            #endif
         #else
-        private var subscriptions: [Subscription] = []
-        private var transactions: [FinancialTransaction] = []
-        #endif
-        #else
-        private var subscriptions: [Subscription] = []
-        private var transactions: [FinancialTransaction] = []
+            private var subscriptions: [Subscription] = []
+            private var transactions: [FinancialTransaction] = []
         #endif
 
         @State private var showingProcessPaymentConfirmation = false
@@ -279,11 +279,11 @@ extension Features.Subscriptions {
         // Cross-platform background color
         private var platformBackgroundColor: Color {
             #if canImport(UIKit)
-            return Color(uiColor: .systemBackground)
+                return Color(uiColor: .systemBackground)
             #elseif canImport(AppKit)
-            return Color(nsColor: .windowBackgroundColor)
+                return Color(nsColor: .windowBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
     }

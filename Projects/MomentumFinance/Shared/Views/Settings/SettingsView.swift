@@ -52,7 +52,7 @@ struct SettingsView: View {
                         Text("1 minute").tag(60)
                         Text("5 minutes").tag(300)
                         Text("15 minutes").tag(900)
-                        Text("1 hour").tag(3600)
+                        Text("1 hour").tag(3_600)
                     }
                 }
 

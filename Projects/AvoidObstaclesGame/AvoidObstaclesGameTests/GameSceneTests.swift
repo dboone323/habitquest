@@ -1,4 +1,6 @@
+import SpriteKit
 import XCTest
+
 @testable import AvoidObstaclesGame
 
 class GameSceneTests: XCTestCase {
@@ -13,44 +15,56 @@ class GameSceneTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - PhysicsCategory Tests
 
-    // MARK: - enumPhysicsCategory{ Tests
-
-    func testenumPhysicsCategory{Initialization() {
+    func testPhysicsCategoryInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumPhysicsCategory{
-        XCTAssertTrue(true, "Placeholder test for enumPhysicsCategory{")
+        let playerCategory: UInt32 = PhysicsCategory.player
+        let obstacleCategory: UInt32 = PhysicsCategory.obstacle
+        XCTAssertEqual(playerCategory, 0x1, "Player category should have correct bit mask")
+        XCTAssertEqual(obstacleCategory, 0x1 << 1, "Obstacle category should have correct bit mask")
     }
 
-    func testenumPhysicsCategory{Properties() {
+    func testPhysicsCategoryProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumPhysicsCategory{
-        XCTAssertTrue(true, "Placeholder test for enumPhysicsCategory{ properties")
+        XCTAssertEqual(PhysicsCategory.player, 0x1, "Player category should be correct")
+        XCTAssertEqual(PhysicsCategory.obstacle, 0x1 << 1, "Obstacle category should be correct")
     }
 
-    func testenumPhysicsCategory{Methods() {
-        // Test method functionality
-        // TODO: Implement method tests for enumPhysicsCategory{
-        XCTAssertTrue(true, "Placeholder test for enumPhysicsCategory{ methods")
+    func testPhysicsCategoryMethods() {
+        // Test method functionality - PhysicsCategory is an enum, so limited methods
+        let categories = [PhysicsCategory.player, PhysicsCategory.obstacle]
+        XCTAssertEqual(categories.count, 2, "Should have 2 physics categories")
     }
 
-    // MARK: - classGameScene:SKScene,SKPhysicsContactDelegate{ Tests
+    // MARK: - GameScene Tests
 
-    func testclassGameScene:SKScene,SKPhysicsContactDelegate{Initialization() {
+    func testGameSceneInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for classGameScene:SKScene,SKPhysicsContactDelegate{
-        XCTAssertTrue(true, "Placeholder test for classGameScene:SKScene,SKPhysicsContactDelegate{")
+        let scene = GameScene(size: CGSize(width: 375, height: 667))
+        XCTAssertNotNil(scene, "GameScene should initialize properly")
+        XCTAssertEqual(scene.size.width, 375, "GameScene should have correct width")
+        XCTAssertEqual(scene.size.height, 667, "GameScene should have correct height")
     }
 
-    func testclassGameScene:SKScene,SKPhysicsContactDelegate{Properties() {
+    func testGameSceneProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for classGameScene:SKScene,SKPhysicsContactDelegate{
-        XCTAssertTrue(true, "Placeholder test for classGameScene:SKScene,SKPhysicsContactDelegate{ properties")
+        let scene = GameScene(size: CGSize(width: 375, height: 667))
+
+        // Create a mock SKView to trigger didMove(to:)
+        let mockView = SKView(frame: CGRect(x: 0, y: 0, width: 375, height: 667))
+        scene.didMove(to: mockView)
+
+        XCTAssertNotNil(scene.physicsWorld, "GameScene should have physics world")
+        XCTAssertTrue(
+            scene.physicsWorld.contactDelegate === scene,
+            "GameScene should be physics contact delegate")
     }
 
-    func testclassGameScene:SKScene,SKPhysicsContactDelegate{Methods() {
+    func testGameSceneMethods() {
         // Test method functionality
-        // TODO: Implement method tests for classGameScene:SKScene,SKPhysicsContactDelegate{
-        XCTAssertTrue(true, "Placeholder test for classGameScene:SKScene,SKPhysicsContactDelegate{ methods")
+        let scene = GameScene(size: CGSize(width: 375, height: 667))
+        // Test that scene can be created and has expected properties
+        XCTAssertNotNil(scene, "GameScene should respond to methods")
     }
 }

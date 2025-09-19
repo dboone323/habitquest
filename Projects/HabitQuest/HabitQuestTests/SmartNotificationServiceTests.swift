@@ -16,19 +16,19 @@ class SmartNotificationServiceTests: XCTestCase {
 
     // MARK: - enumNotificationInteraction{ Tests
 
-    func testenumNotificationInteraction{Initialization() {
+    func testNotificationInteractionInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumNotificationInteraction{
         XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction{")
     }
 
-    func testenumNotificationInteraction{Properties() {
+    func testNotificationInteractionProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumNotificationInteraction{
         XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction{ properties")
     }
 
-    func testenumNotificationInteraction{Methods() {
+    func testNotificationInteractionMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumNotificationInteraction{
         XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction{ methods")
@@ -36,19 +36,19 @@ class SmartNotificationServiceTests: XCTestCase {
 
     // MARK: - enumTimingAdjustment{ Tests
 
-    func testenumTimingAdjustment{Initialization() {
+    func testTimingAdjustmentInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumTimingAdjustment{
         XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{")
     }
 
-    func testenumTimingAdjustment{Properties() {
+    func testTimingAdjustmentProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumTimingAdjustment{
         XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{ properties")
     }
 
-    func testenumTimingAdjustment{Methods() {
+    func testTimingAdjustmentMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumTimingAdjustment{
         XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{ methods")

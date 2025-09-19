@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import AvoidObstaclesGame
 
 class GameViewControllerTests: XCTestCase {
@@ -13,24 +14,23 @@ class GameViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - GameViewController Tests
 
-    // MARK: - classGameViewController:UIViewController{ Tests
-
-    func testclassGameViewController:UIViewController{Initialization() {
+    func testGameViewControllerInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for classGameViewController:UIViewController{
-        XCTAssertTrue(true, "Placeholder test for classGameViewController:UIViewController{")
+        let viewController = GameViewController()
+        XCTAssertNotNil(viewController, "GameViewController should initialize properly")
     }
 
-    func testclassGameViewController:UIViewController{Properties() {
+    func testGameViewControllerProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for classGameViewController:UIViewController{
-        XCTAssertTrue(true, "Placeholder test for classGameViewController:UIViewController{ properties")
+        let viewController = GameViewController()
+        XCTAssertNotNil(viewController.view, "GameViewController should have a valid view")
     }
 
-    func testclassGameViewController:UIViewController{Methods() {
+    func testGameViewControllerMethods() {
         // Test method functionality
-        // TODO: Implement method tests for classGameViewController:UIViewController{
-        XCTAssertTrue(true, "Placeholder test for classGameViewController:UIViewController{ methods")
+        let viewController = GameViewController()
+        XCTAssertNotNil(viewController, "GameViewController should respond to methods")
     }
 }

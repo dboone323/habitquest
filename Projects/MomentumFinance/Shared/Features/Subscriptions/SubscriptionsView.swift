@@ -303,9 +303,9 @@ struct AddSubscriptionView: View {
                 Section("Subscription Details") {
                     TextField("Name", text: self.$name)
                     TextField("Amount", text: self.$amount)
-                        #if canImport(UIKit)
-                            .keyboardType(.decimalPad)
-                        #endif
+                    #if canImport(UIKit)
+                        .keyboardType(.decimalPad)
+                    #endif
 
                     Picker("Billing Cycle", selection: self.$billingCycle) {
                         ForEach(BillingCycle.allCases, id: \.self) { cycle in
@@ -339,19 +339,19 @@ struct AddSubscriptionView: View {
             #if canImport(UIKit)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        self.dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            self.dismiss()
+                        }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Save") {
+                            self.saveSubscription()
+                        }
+                        .disabled(self.name.isEmpty || self.amount.isEmpty)
                     }
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        self.saveSubscription()
-                    }
-                    .disabled(self.name.isEmpty || self.amount.isEmpty)
-                }
-            }
         }
     }
 

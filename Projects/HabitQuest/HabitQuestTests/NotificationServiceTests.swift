@@ -16,19 +16,19 @@ class NotificationServiceTests: XCTestCase {
 
     // MARK: - enumNotificationService{ Tests
 
-    func testenumNotificationService{Initialization() {
+    func testNotificationServiceInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumNotificationService{
         XCTAssertTrue(true, "Placeholder test for enumNotificationService{")
     }
 
-    func testenumNotificationService{Properties() {
+    func testNotificationServiceProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumNotificationService{
         XCTAssertTrue(true, "Placeholder test for enumNotificationService{ properties")
     }
 
-    func testenumNotificationService{Methods() {
+    func testNotificationServiceMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumNotificationService{
         XCTAssertTrue(true, "Placeholder test for enumNotificationService{ methods")

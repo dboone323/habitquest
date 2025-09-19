@@ -214,8 +214,8 @@ struct PerformanceMeasurement {
 
 // MARK: - Extensions
 
-extension DateFormatter {
-    fileprivate static let logFormatter: DateFormatter = {
+private extension DateFormatter {
+    static let logFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         return formatter

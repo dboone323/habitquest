@@ -16,19 +16,19 @@ class StreakServiceTests: XCTestCase {
 
     // MARK: - classStreakService{ Tests
 
-    func testclassStreakService{Initialization() {
+    func testStreakServiceInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classStreakService{
         XCTAssertTrue(true, "Placeholder test for classStreakService{")
     }
 
-    func testclassStreakService{Properties() {
+    func testStreakServiceProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classStreakService{
         XCTAssertTrue(true, "Placeholder test for classStreakService{ properties")
     }
 
-    func testclassStreakService{Methods() {
+    func testStreakServiceMethods() {
         // Test method functionality
         // TODO: Implement method tests for classStreakService{
         XCTAssertTrue(true, "Placeholder test for classStreakService{ methods")
@@ -36,19 +36,19 @@ class StreakServiceTests: XCTestCase {
 
     // MARK: - structStreakDayData:Identifiable{ Tests
 
-    func teststructStreakDayData:Identifiable{Initialization() {
+    func testStreakDayDataInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structStreakDayData:Identifiable{
         XCTAssertTrue(true, "Placeholder test for structStreakDayData:Identifiable{")
     }
 
-    func teststructStreakDayData:Identifiable{Properties() {
+    func testStreakDayDataProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structStreakDayData:Identifiable{
         XCTAssertTrue(true, "Placeholder test for structStreakDayData:Identifiable{ properties")
     }
 
-    func teststructStreakDayData:Identifiable{Methods() {
+    func testStreakDayDataMethods() {
         // Test method functionality
         // TODO: Implement method tests for structStreakDayData:Identifiable{
         XCTAssertTrue(true, "Placeholder test for structStreakDayData:Identifiable{ methods")
@@ -56,19 +56,19 @@ class StreakServiceTests: XCTestCase {
 
     // MARK: - structStreakAnalytics{ Tests
 
-    func teststructStreakAnalytics{Initialization() {
+    func testStreakAnalyticsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structStreakAnalytics{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalytics{")
     }
 
-    func teststructStreakAnalytics{Properties() {
+    func testStreakAnalyticsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structStreakAnalytics{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalytics{ properties")
     }
 
-    func teststructStreakAnalytics{Methods() {
+    func testStreakAnalyticsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structStreakAnalytics{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalytics{ methods")

@@ -142,15 +142,15 @@ struct DashboardSubscriptionsSection: View {
     let sampleSubscriptions = [
         Subscription(
             name: "Netflix", amount: 15.99, billingCycle: .monthly,
-            nextDueDate: Date().addingTimeInterval(86400 * 3)
+            nextDueDate: Date().addingTimeInterval(86_400 * 3)
         ),
         Subscription(
             name: "Spotify", amount: 9.99, billingCycle: .monthly,
-            nextDueDate: Date().addingTimeInterval(86400 * 7)
+            nextDueDate: Date().addingTimeInterval(86_400 * 7)
         ),
         Subscription(
             name: "Apple iCloud", amount: 2.99, billingCycle: .monthly,
-            nextDueDate: Date().addingTimeInterval(86400 * 14)
+            nextDueDate: Date().addingTimeInterval(86_400 * 14)
         )
     ]
 

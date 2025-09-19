@@ -51,7 +51,7 @@ extension Features.Transactions {
                     transaction.title.localizedCaseInsensitiveContains(self.searchText)
                         || transaction.category?.name.localizedCaseInsensitiveContains(
                             self.searchText)
-                            == true
+                        == true
                 }
             }
 

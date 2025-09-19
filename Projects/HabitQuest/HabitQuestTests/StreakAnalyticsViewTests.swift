@@ -16,19 +16,19 @@ class StreakAnalyticsViewTests: XCTestCase {
 
     // MARK: - structStreakAnalyticsView:View{ Tests
 
-    func teststructStreakAnalyticsView:View{Initialization() {
+    func testStreakAnalyticsViewInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structStreakAnalyticsView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalyticsView:View{")
     }
 
-    func teststructStreakAnalyticsView:View{Properties() {
+    func testStreakAnalyticsViewProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structStreakAnalyticsView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalyticsView:View{ properties")
     }
 
-    func teststructStreakAnalyticsView:View{Methods() {
+    func testStreakAnalyticsViewMethods() {
         // Test method functionality
         // TODO: Implement method tests for structStreakAnalyticsView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalyticsView:View{ methods")
@@ -36,19 +36,19 @@ class StreakAnalyticsViewTests: XCTestCase {
 
     // MARK: - structStreakAnalyticsData{ Tests
 
-    func teststructStreakAnalyticsData{Initialization() {
+    func testStreakAnalyticsDataInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structStreakAnalyticsData{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalyticsData{")
     }
 
-    func teststructStreakAnalyticsData{Properties() {
+    func testStreakAnalyticsDataProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structStreakAnalyticsData{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalyticsData{ properties")
     }
 
-    func teststructStreakAnalyticsData{Methods() {
+    func testStreakAnalyticsDataMethods() {
         // Test method functionality
         // TODO: Implement method tests for structStreakAnalyticsData{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalyticsData{ methods")
@@ -56,19 +56,19 @@ class StreakAnalyticsViewTests: XCTestCase {
 
     // MARK: - structTopPerformer{ Tests
 
-    func teststructTopPerformer{Initialization() {
+    func testTopPerformerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structTopPerformer{
         XCTAssertTrue(true, "Placeholder test for structTopPerformer{")
     }
 
-    func teststructTopPerformer{Properties() {
+    func testTopPerformerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structTopPerformer{
         XCTAssertTrue(true, "Placeholder test for structTopPerformer{ properties")
     }
 
-    func teststructTopPerformer{Methods() {
+    func testTopPerformerMethods() {
         // Test method functionality
         // TODO: Implement method tests for structTopPerformer{
         XCTAssertTrue(true, "Placeholder test for structTopPerformer{ methods")
@@ -76,19 +76,19 @@ class StreakAnalyticsViewTests: XCTestCase {
 
     // MARK: - structStreakDistributionData{ Tests
 
-    func teststructStreakDistributionData{Initialization() {
+    func testStreakDistributionDataInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structStreakDistributionData{
         XCTAssertTrue(true, "Placeholder test for structStreakDistributionData{")
     }
 
-    func teststructStreakDistributionData{Properties() {
+    func testStreakDistributionDataProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structStreakDistributionData{
         XCTAssertTrue(true, "Placeholder test for structStreakDistributionData{ properties")
     }
 
-    func teststructStreakDistributionData{Methods() {
+    func testStreakDistributionDataMethods() {
         // Test method functionality
         // TODO: Implement method tests for structStreakDistributionData{
         XCTAssertTrue(true, "Placeholder test for structStreakDistributionData{ methods")
@@ -96,19 +96,19 @@ class StreakAnalyticsViewTests: XCTestCase {
 
     // MARK: - structConsistencyInsight{ Tests
 
-    func teststructConsistencyInsight{Initialization() {
+    func testConsistencyInsightInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structConsistencyInsight{
         XCTAssertTrue(true, "Placeholder test for structConsistencyInsight{")
     }
 
-    func teststructConsistencyInsight{Properties() {
+    func testConsistencyInsightProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structConsistencyInsight{
         XCTAssertTrue(true, "Placeholder test for structConsistencyInsight{ properties")
     }
 
-    func teststructConsistencyInsight{Methods() {
+    func testConsistencyInsightMethods() {
         // Test method functionality
         // TODO: Implement method tests for structConsistencyInsight{
         XCTAssertTrue(true, "Placeholder test for structConsistencyInsight{ methods")
@@ -116,19 +116,19 @@ class StreakAnalyticsViewTests: XCTestCase {
 
     // MARK: - structWeeklyPattern{ Tests
 
-    func teststructWeeklyPattern{Initialization() {
+    func testWeeklyPatternInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structWeeklyPattern{
         XCTAssertTrue(true, "Placeholder test for structWeeklyPattern{")
     }
 
-    func teststructWeeklyPattern{Properties() {
+    func testWeeklyPatternProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structWeeklyPattern{
         XCTAssertTrue(true, "Placeholder test for structWeeklyPattern{ properties")
     }
 
-    func teststructWeeklyPattern{Methods() {
+    func testWeeklyPatternMethods() {
         // Test method functionality
         // TODO: Implement method tests for structWeeklyPattern{
         XCTAssertTrue(true, "Placeholder test for structWeeklyPattern{ methods")

@@ -334,10 +334,10 @@ extension Features.GoalsAndReports {
             self.budgets.map { budget in
                 let spent =
                     self.transactions
-                    .filter {
-                        $0.category?.name == budget.category?.name && $0.transactionType == .expense
-                    }
-                    .reduce(0) { $0 + $1.amount }
+                        .filter {
+                            $0.category?.name == budget.category?.name && $0.transactionType == .expense
+                        }
+                        .reduce(0) { $0 + $1.amount }
                 return (budget, spent, budget.limitAmount)
             }
         }

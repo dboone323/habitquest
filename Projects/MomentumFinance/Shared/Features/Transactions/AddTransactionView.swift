@@ -74,31 +74,31 @@ extension Features.Transactions {
                 #endif
                     .toolbar {
                         #if canImport(UIKit)
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button("Cancel").accessibilityLabel("Button") {
-                                self.dismiss()
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button("Cancel").accessibilityLabel("Button") {
+                                    self.dismiss()
+                                }
                             }
-                        }
 
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Save").accessibilityLabel("Button") {
-                                self.saveTransaction()
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Save").accessibilityLabel("Button") {
+                                    self.saveTransaction()
+                                }
+                                .disabled(!self.isFormValid)
                             }
-                            .disabled(!self.isFormValid)
-                        }
                         #else
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel").accessibilityLabel("Button") {
-                                self.dismiss()
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Cancel").accessibilityLabel("Button") {
+                                    self.dismiss()
+                                }
                             }
-                        }
 
-                        ToolbarItem(placement: .primaryAction) {
-                            Button("Save").accessibilityLabel("Button") {
-                                self.saveTransaction()
+                            ToolbarItem(placement: .primaryAction) {
+                                Button("Save").accessibilityLabel("Button") {
+                                    self.saveTransaction()
+                                }
+                                .disabled(!self.isFormValid)
                             }
-                            .disabled(!self.isFormValid)
-                        }
                         #endif
                     }
             }

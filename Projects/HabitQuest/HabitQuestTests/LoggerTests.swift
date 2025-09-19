@@ -16,19 +16,19 @@ class LoggerTests: XCTestCase {
 
     // MARK: - structLogger{ Tests
 
-    func teststructLogger{Initialization() {
+    func testLoggerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structLogger{
         XCTAssertTrue(true, "Placeholder test for structLogger{")
     }
 
-    func teststructLogger{Properties() {
+    func testLoggerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structLogger{
         XCTAssertTrue(true, "Placeholder test for structLogger{ properties")
     }
 
-    func teststructLogger{Methods() {
+    func testLoggerMethods() {
         // Test method functionality
         // TODO: Implement method tests for structLogger{
         XCTAssertTrue(true, "Placeholder test for structLogger{ methods")

@@ -1,7 +1,7 @@
 import Foundation
 import Observation
-import SwiftUI
 import os
+import SwiftUI
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
@@ -46,7 +46,7 @@ final class ErrorHandler {
         Logger.logError(
             appError,
             context:
-                "\(context) [\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)]",
+            "\(context) [\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)]",
         )
 
         // Determine if this is a frequent error (same type occurring rapidly)
@@ -185,58 +185,58 @@ enum AppError: LocalizedError, Identifiable {
 
     var id: String {
         switch self {
-        case .dataError(let message):
+        case let .dataError(message):
             "data_\(message)"
-        case .validationError(let message):
+        case let .validationError(message):
             "validation_\(message)"
-        case .networkError(let message):
+        case let .networkError(message):
             "network_\(message)"
-        case .businessLogicError(let message):
+        case let .businessLogicError(message):
             "business_\(message)"
-        case .subscriptionError(let message):
+        case let .subscriptionError(message):
             "subscription_\(message)"
-        case .budgetError(let message):
+        case let .budgetError(message):
             "budget_\(message)"
-        case .goalError(let message):
+        case let .goalError(message):
             "goal_\(message)"
-        case .permissionError(let message):
+        case let .permissionError(message):
             "permission_\(message)"
-        case .authenticationError(let message):
+        case let .authenticationError(message):
             "auth_\(message)"
-        case .syncError(let message):
+        case let .syncError(message):
             "sync_\(message)"
-        case .fileSystemError(let message):
+        case let .fileSystemError(message):
             "file_\(message)"
-        case .unknown(let message):
+        case let .unknown(message):
             "unknown_\(message)"
         }
     }
 
     var errorDescription: String? {
         switch self {
-        case .dataError(let message):
+        case let .dataError(message):
             "Data Error: \(message)"
-        case .validationError(let message):
+        case let .validationError(message):
             "Validation Error: \(message)"
-        case .networkError(let message):
+        case let .networkError(message):
             "Network Error: \(message)"
-        case .businessLogicError(let message):
+        case let .businessLogicError(message):
             "Business Logic Error: \(message)"
-        case .subscriptionError(let message):
+        case let .subscriptionError(message):
             "Subscription Error: \(message)"
-        case .budgetError(let message):
+        case let .budgetError(message):
             "Budget Error: \(message)"
-        case .goalError(let message):
+        case let .goalError(message):
             "Goal Error: \(message)"
-        case .permissionError(let message):
+        case let .permissionError(message):
             "Permission Error: \(message)"
-        case .authenticationError(let message):
+        case let .authenticationError(message):
             "Authentication Error: \(message)"
-        case .syncError(let message):
+        case let .syncError(message):
             "Sync Error: \(message)"
-        case .fileSystemError(let message):
+        case let .fileSystemError(message):
             "File System Error: \(message)"
-        case .unknown(let message):
+        case let .unknown(message):
             "Unknown Error: \(message)"
         }
     }
@@ -342,8 +342,7 @@ enum AppError: LocalizedError, Identifiable {
         if nsError.code == NSValidationErrorMinimum {
             return .validationError("\(context) \(nsError.localizedDescription)")
         } else if nsError.code == NSFileReadNoSuchFileError
-            || nsError.code == NSFileWriteOutOfSpaceError
-        {
+            || nsError.code == NSFileWriteOutOfSpaceError {
             return .fileSystemError("\(context) \(nsError.localizedDescription)")
         }
         return .dataError("\(context) \(nsError.localizedDescription)")
@@ -368,7 +367,7 @@ enum AppError: LocalizedError, Identifiable {
             ("Goal", .goalError(description)),
             ("Sync", .syncError(description)),
             ("File", .fileSystemError(description)),
-            ("Storage", .fileSystemError(description)),
+            ("Storage", .fileSystemError(description))
         ]
 
         for (keyword, errorType) in errorMappings where errorName.contains(keyword) {
