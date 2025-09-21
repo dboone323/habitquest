@@ -25,12 +25,12 @@ struct AddJournalEntryView: View {
         VStack(spacing: 0) {
             // Header with buttons for better macOS compatibility
             HStack {
-                Button("Cancel") {
+                Button("Cancel", action: {
                     #if os(iOS)
                     HapticManager.lightImpact()
                     #endif
                     self.dismiss()
-                }
+                })
                 .accessibilityLabel("Button")
                 #if os(iOS)
                     .buttonStyle(.iOSSecondary)
@@ -45,13 +45,13 @@ struct AddJournalEntryView: View {
 
                 Spacer()
 
-                Button("Save") {
+                Button("Save", action: {
                     #if os(iOS)
                     HapticManager.notificationSuccess()
                     #endif
                     self.saveEntry()
                     self.dismiss()
-                }
+                })
                 .accessibilityLabel("Button")
                 #if os(iOS)
                     .buttonStyle(.iOSPrimary)
@@ -111,14 +111,14 @@ struct AddJournalEntryView: View {
                 ToolbarItem(placement: .keyboard) {
                     HStack {
                         Spacer()
-                        Button("Done") {
+                        Button("Done", action: {
                             self.isTitleFocused = false
                             self.isEntryBodyFocused = false
                             UIApplication.shared.sendAction(
                                 #selector(UIResponder.resignFirstResponder), to: nil, from: nil,
                                 for: nil
                             )
-                        }
+                        })
                         .accessibilityLabel("Button")
                         .buttonStyle(.iOSPrimary)
                         .foregroundColor(.blue)

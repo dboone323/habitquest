@@ -25,7 +25,7 @@ public struct GlobalSearchView: View {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.secondary)
 
-                    TextField("Search transactions, accounts, budgets...", text: self.$searchText)
+                    TextField("Search transactions, accounts, budgets...", text: self.$searchText).accessibilityLabel("Text Field")
                         .textFieldStyle(.plain)
                         .autocorrectionDisabled()
                         .onChange(of: self.searchText) { _, newValue in
@@ -66,7 +66,7 @@ public struct GlobalSearchView: View {
             #endif
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
+                        Button("Cancel").accessibilityLabel("Button") {
                             self.dismiss()
                         }
                     }
@@ -277,7 +277,7 @@ struct SearchResultDetailView: View {
             #endif
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Done") {
+                        Button("Done").accessibilityLabel("Button") {
                             self.dismiss()
                         }
                     }

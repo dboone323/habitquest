@@ -4,7 +4,6 @@ import XCTest
 @testable import AvoidObstaclesGame
 
 class GameSceneTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Put setup code here
@@ -58,7 +57,8 @@ class GameSceneTests: XCTestCase {
         XCTAssertNotNil(scene.physicsWorld, "GameScene should have physics world")
         XCTAssertTrue(
             scene.physicsWorld.contactDelegate === scene,
-            "GameScene should be physics contact delegate")
+            "GameScene should be physics contact delegate"
+        )
     }
 
     func testGameSceneMethods() {

@@ -54,7 +54,7 @@ extension Features.Transactions {
                 .navigationTitle("Transaction Details")
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
-                        Button("Done").accessibilityLabel("Button") {
+                        Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
                             self.dismiss()
                         }
                     }

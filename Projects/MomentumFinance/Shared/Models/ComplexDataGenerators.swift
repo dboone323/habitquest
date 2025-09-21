@@ -38,76 +38,76 @@ class TransactionsDataGenerator: DataGenerator {
         let transactions = [
             // Income transactions
             (
-                title: "Salary", amount: 3_500.0, date: Date().addingTimeInterval(-86_400 * 15),
+                title: "Salary", amount: 3500.0, date: Date().addingTimeInterval(-86400 * 15),
                 type: TransactionType.income, category: "Income", account: checkingAccount
             ),
             (
-                title: "Freelance Work", amount: 500.0, date: Date().addingTimeInterval(-86_400 * 8),
+                title: "Freelance Work", amount: 500.0, date: Date().addingTimeInterval(-86400 * 8),
                 type: TransactionType.income, category: "Income", account: checkingAccount
             ),
             (
-                title: "Interest", amount: 25.0, date: Date().addingTimeInterval(-86_400 * 3),
+                title: "Interest", amount: 25.0, date: Date().addingTimeInterval(-86400 * 3),
                 type: TransactionType.income, category: "Income", account: savingsAccount
             ),
 
             // Expense transactions
             (
-                title: "Rent", amount: 1_200.0, date: Date().addingTimeInterval(-86_400 * 28),
+                title: "Rent", amount: 1200.0, date: Date().addingTimeInterval(-86400 * 28),
                 type: TransactionType.expense, category: "Housing", account: checkingAccount
             ),
             (
-                title: "Groceries", amount: 120.50, date: Date().addingTimeInterval(-86_400 * 25),
+                title: "Groceries", amount: 120.50, date: Date().addingTimeInterval(-86400 * 25),
                 type: TransactionType.expense, category: "Food", account: creditCard
             ),
             (
                 title: "Electricity Bill", amount: 85.0,
-                date: Date().addingTimeInterval(-86_400 * 20),
+                date: Date().addingTimeInterval(-86400 * 20),
                 type: TransactionType.expense, category: "Utilities", account: checkingAccount
             ),
             (
-                title: "Internet", amount: 60.0, date: Date().addingTimeInterval(-86_400 * 18),
+                title: "Internet", amount: 60.0, date: Date().addingTimeInterval(-86400 * 18),
                 type: TransactionType.expense, category: "Utilities", account: creditCard
             ),
             (
-                title: "Gas", amount: 45.0, date: Date().addingTimeInterval(-86_400 * 15),
+                title: "Gas", amount: 45.0, date: Date().addingTimeInterval(-86400 * 15),
                 type: TransactionType.expense, category: "Transportation", account: creditCard
             ),
             (
-                title: "Dinner", amount: 65.75, date: Date().addingTimeInterval(-86_400 * 12),
+                title: "Dinner", amount: 65.75, date: Date().addingTimeInterval(-86400 * 12),
                 type: TransactionType.expense, category: "Food", account: creditCard
             ),
             (
-                title: "Movie Tickets", amount: 30.0, date: Date().addingTimeInterval(-86_400 * 10),
+                title: "Movie Tickets", amount: 30.0, date: Date().addingTimeInterval(-86400 * 10),
                 type: TransactionType.expense, category: "Entertainment", account: creditCard
             ),
             (
-                title: "Coffee", amount: 4.50, date: Date().addingTimeInterval(-86_400 * 7),
+                title: "Coffee", amount: 4.50, date: Date().addingTimeInterval(-86400 * 7),
                 type: TransactionType.expense, category: "Food", account: creditCard
             ),
             (
-                title: "Gym Membership", amount: 50.0, date: Date().addingTimeInterval(-86_400 * 5),
+                title: "Gym Membership", amount: 50.0, date: Date().addingTimeInterval(-86400 * 5),
                 type: TransactionType.expense, category: "Personal Care", account: checkingAccount
             ),
             (
-                title: "Online Course", amount: 200.0, date: Date().addingTimeInterval(-86_400 * 2),
+                title: "Online Course", amount: 200.0, date: Date().addingTimeInterval(-86400 * 2),
                 type: TransactionType.expense, category: "Education", account: creditCard
             ),
 
             // Previous month transactions
             (
-                title: "Salary", amount: 3_500.0, date: Date().addingTimeInterval(-86_400 * 45),
+                title: "Salary", amount: 3500.0, date: Date().addingTimeInterval(-86400 * 45),
                 type: TransactionType.income, category: "Income", account: checkingAccount
             ),
             (
-                title: "Rent", amount: 1_200.0, date: Date().addingTimeInterval(-86_400 * 58),
+                title: "Rent", amount: 1200.0, date: Date().addingTimeInterval(-86400 * 58),
                 type: TransactionType.expense, category: "Housing", account: checkingAccount
             ),
             (
-                title: "Groceries", amount: 160.30, date: Date().addingTimeInterval(-86_400 * 50),
+                title: "Groceries", amount: 160.30, date: Date().addingTimeInterval(-86400 * 50),
                 type: TransactionType.expense, category: "Food", account: creditCard
             ),
             (
-                title: "Travel", amount: 500.0, date: Date().addingTimeInterval(-86_400 * 40),
+                title: "Travel", amount: 500.0, date: Date().addingTimeInterval(-86400 * 40),
                 type: TransactionType.expense, category: "Travel", account: creditCard
             )
         ]

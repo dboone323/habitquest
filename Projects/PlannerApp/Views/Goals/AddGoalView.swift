@@ -19,20 +19,20 @@ struct AddGoalView: View {
         }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
+                Button("Cancel", action: {
                     self.dismiss()
-                }
+                })
                 .accessibilityLabel("Button")
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button("Save") {
+                Button("Save", action: {
                     let newGoal = Goal(
                         title: title, description: description, targetDate: targetDate
                     )
                     self.goals.append(newGoal)
                     GoalDataManager.shared.save(goals: self.goals)
                     self.dismiss()
-                }
+                })
                 .accessibilityLabel("Button")
                 .disabled(self.title.isEmpty || self.description.isEmpty)
             }

@@ -27,7 +27,12 @@
 		680BFB1A2DD7B8FE0051D714 /* AvoidObstaclesGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AvoidObstaclesGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		680BFB332DD7B9000051D714 /* AvoidObstaclesGameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AvoidObstaclesGameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		680BFB3D2DD7B9000051D714 /* AvoidObstaclesGameUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AvoidObstaclesGameUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		680BFB512DD7B9000051D714 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
+
+/* Begin PBXBuildFile section */
+		680BFB502DD7B9000051D714 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 680BFB512DD7B9000051D714 /* SpriteKit.framework */; };
+/* End PBXBuildFile section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		680BFB1C2DD7B8FE0051D714 /* AvoidObstaclesGame */ = {
@@ -52,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				680BFB502DD7B9000051D714 /* SpriteKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				680BFB502DD7B9000051D714 /* SpriteKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				680BFB502DD7B9000051D714 /* SpriteKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +280,7 @@
 		680BFB452DD7B9000051D714 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BASE_CONFIGURATION_FILE = Config/Base.xcconfig;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -336,6 +345,7 @@
 		680BFB462DD7B9000051D714 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BASE_CONFIGURATION_FILE = Config/Base.xcconfig;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;

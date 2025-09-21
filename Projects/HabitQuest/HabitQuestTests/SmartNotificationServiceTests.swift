@@ -1,8 +1,7 @@
-import XCTest
 @testable import HabitQuest
+import XCTest
 
 class SmartNotificationServiceTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Put setup code here
@@ -13,24 +12,23 @@ class SmartNotificationServiceTests: XCTestCase {
         super.tearDown()
     }
 
-
     // MARK: - enumNotificationInteraction{ Tests
 
     func testNotificationInteractionInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumNotificationInteraction{
+        /// - TODO: Implement initialization test for enumNotificationInteraction{
         XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction{")
     }
 
     func testNotificationInteractionProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumNotificationInteraction{
+        /// - TODO: Implement property tests for enumNotificationInteraction{
         XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction{ properties")
     }
 
     func testNotificationInteractionMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumNotificationInteraction{
+        /// - TODO: Implement method tests for enumNotificationInteraction{
         XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction{ methods")
     }
 
@@ -38,19 +36,19 @@ class SmartNotificationServiceTests: XCTestCase {
 
     func testTimingAdjustmentInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumTimingAdjustment{
+        /// - TODO: Implement initialization test for enumTimingAdjustment{
         XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{")
     }
 
     func testTimingAdjustmentProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumTimingAdjustment{
+        /// - TODO: Implement property tests for enumTimingAdjustment{
         XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{ properties")
     }
 
     func testTimingAdjustmentMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumTimingAdjustment{
+        /// - TODO: Implement method tests for enumTimingAdjustment{
         XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{ methods")
     }
-    }
+}

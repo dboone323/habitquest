@@ -7,13 +7,13 @@ import SwiftUI
 extension Features.Transactions {
     struct AccountsListView: View {
         #if canImport(SwiftData)
-            #if canImport(SwiftData)
-                private var accounts: [FinancialAccount] = []
-            #else
-                private var accounts: [FinancialAccount] = []
-            #endif
+        #if canImport(SwiftData)
+        private var accounts: [FinancialAccount] = []
         #else
-            private var accounts: [FinancialAccount] = []
+        private var accounts: [FinancialAccount] = []
+        #endif
+        #else
+        private var accounts: [FinancialAccount] = []
         #endif
 
         let categories: [ExpenseCategory]
@@ -105,9 +105,9 @@ extension Features.Transactions {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #else
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #endif
         }
 

@@ -70,7 +70,7 @@ extension Features.Dashboard {
                     }
 
                     if self.accounts.count > 3 {
-                        Button(action: self.onViewAllTap).accessibilityLabel("Button") {
+                        Button(action: self.onViewAllTap).accessibilityLabel("Button").accessibilityLabel("Button") {
                             Text("View All \(self.accounts.count) Accounts")
                                 .font(.caption)
                                 .fontWeight(.medium)

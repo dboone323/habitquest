@@ -5,7 +5,7 @@ import Foundation
 import SwiftData
 
 /// Represents the billing cycle for a subscription (weekly, monthly, yearly).
-enum BillingCycle: String, CaseIterable, Codable {
+public enum BillingCycle: String, CaseIterable, Codable {
     /// Weekly billing cycle.
     case weekly = "Weekly"
     /// Monthly billing cycle.
@@ -14,7 +14,7 @@ enum BillingCycle: String, CaseIterable, Codable {
     case yearly = "Yearly"
 
     /// Number of days in the billing cycle.
-    var daysInCycle: Int {
+    public var daysInCycle: Int {
         switch self {
         case .weekly:
             7
@@ -28,7 +28,7 @@ enum BillingCycle: String, CaseIterable, Codable {
     /// Calculates the next due date for this billing cycle from a given date.
     /// - Parameter date: The starting date.
     /// - Returns: The next due date as a Date.
-    func nextDueDate(from date: Date) -> Date {
+    public func nextDueDate(from date: Date) -> Date {
         let calendar = Calendar.current
         switch self {
         case .weekly:
@@ -45,25 +45,25 @@ enum BillingCycle: String, CaseIterable, Codable {
 @Model
 public final class Subscription {
     /// The name of the subscription (e.g., "Netflix").
-    var name: String
+    public var name: String
     /// The recurring payment amount.
-    var amount: Double
+    public var amount: Double
     /// The billing cycle for this subscription.
-    var billingCycle: BillingCycle
+    public var billingCycle: BillingCycle
     /// The next due date for payment.
-    var nextDueDate: Date
+    public var nextDueDate: Date
     /// Whether the subscription is currently active.
-    var isActive: Bool
+    public var isActive: Bool
     /// Optional notes or memo for the subscription.
-    var notes: String?
+    public var notes: String?
     /// The icon name for this subscription (for UI display).
-    var icon: String
+    public var icon: String
 
     // Relationships
     /// The category associated with this subscription (optional).
-    var category: ExpenseCategory?
+    public var category: ExpenseCategory?
     /// The financial account associated with this subscription (optional).
-    var account: FinancialAccount?
+    public var account: FinancialAccount?
 
     /// Creates a new subscription.
     /// - Parameters:
@@ -73,7 +73,7 @@ public final class Subscription {
     ///   - nextDueDate: The next due date for payment.
     ///   - notes: Optional notes or memo.
     ///   - icon: The icon name for UI display (default: "creditcard").
-    init(
+    public init(
         name: String, amount: Double, billingCycle: BillingCycle, nextDueDate: Date,
         notes: String? = nil, icon: String = "creditcard"
     ) {
@@ -87,7 +87,7 @@ public final class Subscription {
     }
 
     /// Returns the amount as a formatted currency string.
-    var formattedAmount: String {
+    public var formattedAmount: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.currencyCode = "USD"
@@ -95,7 +95,7 @@ public final class Subscription {
     }
 
     /// Returns the number of days until the next payment is due.
-    var daysUntilDue: Int {
+    public var daysUntilDue: Int {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.day], from: Date(), to: self.nextDueDate)
         return max(0, components.day ?? 0)
@@ -103,7 +103,7 @@ public final class Subscription {
 
     /// Compatibility accessor: some code expects `nextBillingDate` (optional).
     /// Maps to the canonical `nextDueDate` property.
-    var nextBillingDate: Date? {
+    public var nextBillingDate: Date? {
         get { self.nextDueDate }
         set {
             // If a new date is provided, update the canonical nextDueDate.
@@ -115,7 +115,7 @@ public final class Subscription {
     }
 
     /// Returns the monthly equivalent amount for budgeting calculations.
-    var monthlyEquivalent: Double {
+    public var monthlyEquivalent: Double {
         switch self.billingCycle {
         case .weekly:
             self.amount * 52 / 12 // Weekly * 52 weeks / 12 months
@@ -129,7 +129,7 @@ public final class Subscription {
     /// Processes a payment for this subscription: creates a transaction, updates account, and advances due date.
     /// - Parameter modelContext: The model context for inserting the transaction.
     @MainActor
-    func processPayment(modelContext: ModelContext) {
+    public func processPayment(modelContext: ModelContext) {
         // Create transaction for this subscription payment
         let transaction = FinancialTransaction(
             title: name,

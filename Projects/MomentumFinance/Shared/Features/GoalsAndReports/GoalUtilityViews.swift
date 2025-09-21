@@ -28,14 +28,13 @@ extension Features.GoalsAndReports {
                 Spacer()
 
                 if self.selectedTab == 0 {
-                    Button(
-                        action: { self.showingAddGoal = true },
-                        label: {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.title2)
-                                .foregroundColor(.blue)
-                        },
-                    )
+                    Button {
+                        self.showingAddGoal = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                    }
                 }
             }
         }
@@ -145,13 +144,15 @@ extension Features.GoalsAndReports {
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(
-                                        isSelected ?
-                                            LinearGradient(
-                                                gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
+                                        isSelected
+                                            ? LinearGradient(
+                                                gradient: Gradient(colors: [
+                                                    .blue, .blue.opacity(0.8),
+                                                ]),
                                                 startPoint: .leading,
                                                 endPoint: .trailing,
-                                            ) :
-                                            LinearGradient(
+                                            )
+                                            : LinearGradient(
                                                 gradient: Gradient(colors: [Color.clear]),
                                                 startPoint: .leading,
                                                 endPoint: .trailing,

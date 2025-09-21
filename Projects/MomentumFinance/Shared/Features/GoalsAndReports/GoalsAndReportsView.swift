@@ -17,22 +17,22 @@ extension Features.GoalsAndReports {
         @Environment(\.modelContext)
         private var modelContext
         #if canImport(SwiftData)
-            #if canImport(SwiftData)
-                private var savingsGoals: [SavingsGoal] = []
-                private var transactions: [FinancialTransaction] = []
-                private var budgets: [Budget] = []
-                private var categories: [ExpenseCategory] = []
-            #else
-                private var savingsGoals: [SavingsGoal] = []
-                private var transactions: [FinancialTransaction] = []
-                private var budgets: [Budget] = []
-                private var categories: [ExpenseCategory] = []
-            #endif
+        #if canImport(SwiftData)
+        private var savingsGoals: [SavingsGoal] = []
+        private var transactions: [FinancialTransaction] = []
+        private var budgets: [Budget] = []
+        private var categories: [ExpenseCategory] = []
         #else
-            private var savingsGoals: [SavingsGoal] = []
-            private var transactions: [FinancialTransaction] = []
-            private var budgets: [Budget] = []
-            private var categories: [ExpenseCategory] = []
+        private var savingsGoals: [SavingsGoal] = []
+        private var transactions: [FinancialTransaction] = []
+        private var budgets: [Budget] = []
+        private var categories: [ExpenseCategory] = []
+        #endif
+        #else
+        private var savingsGoals: [SavingsGoal] = []
+        private var transactions: [FinancialTransaction] = []
+        private var budgets: [Budget] = []
+        private var categories: [ExpenseCategory] = []
         #endif
 
         @State private var selectedTab = 0
@@ -122,21 +122,21 @@ extension Features.GoalsAndReports {
             // Cross-platform color support
             private var backgroundColor: Color {
                 #if canImport(UIKit)
-                    return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
                 #elseif canImport(AppKit)
-                    return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
                 #else
-                    return Color.white
+                return Color.white
                 #endif
             }
 
             private var secondaryBackgroundColor: Color {
                 #if canImport(UIKit)
-                    return Color(UIColor.systemGroupedBackground)
+                return Color(UIColor.systemGroupedBackground)
                 #elseif canImport(AppKit)
-                    return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
                 #else
-                    return Color.gray.opacity(0.1)
+                return Color.gray.opacity(0.1)
                 #endif
             }
 
@@ -206,7 +206,7 @@ extension Features.GoalsAndReports {
                                                 isSelected
                                                     ? LinearGradient(
                                                         gradient: Gradient(colors: [
-                                                            .blue, .blue.opacity(0.8)
+                                                            .blue, .blue.opacity(0.8),
                                                         ]),
                                                         startPoint: .leading,
                                                         endPoint: .trailing,
@@ -232,7 +232,9 @@ extension Features.GoalsAndReports {
                 .padding()
                 .background(
                     LinearGradient(
-                        gradient: Gradient(colors: [self.backgroundColor, self.secondaryBackgroundColor]),
+                        gradient: Gradient(colors: [
+                            self.backgroundColor, self.secondaryBackgroundColor,
+                        ]),
                         startPoint: .top,
                         endPoint: .bottom,
                     ),
@@ -256,10 +258,10 @@ extension Features.GoalsAndReports {
                     if self.goals.isEmpty {
                         Text("No savings goals yet")
                             .foregroundColor(.secondary)
-                        Button(action: { self.showingAddGoal = true }) {
-                            Text("Add Goal")
-                                .accessibilityLabel("Button")
+                        Button("Add Goal") {
+                            self.showingAddGoal = true
                         }
+                        .accessibilityLabel("Add Goal Button")
                         .padding()
                     } else {
                         ForEach(self.goals, id: \.id) { goal in
@@ -309,6 +311,6 @@ extension Features.GoalsAndReports {
 #Preview {
     Features.GoalsAndReports.GoalsAndReportsView()
         .modelContainer(for: [
-            SavingsGoal.self, FinancialTransaction.self, Budget.self, ExpenseCategory.self
+            SavingsGoal.self, FinancialTransaction.self, Budget.self, ExpenseCategory.self,
         ])
 }

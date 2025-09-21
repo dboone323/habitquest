@@ -10,7 +10,7 @@ public struct InsightRowView: View {
     }
 
     public var body: some View {
-        Button(role: .none, action: self.action).accessibilityLabel("Button") {
+        Button(role: .none, action: self.action).accessibilityLabel("Button").accessibilityLabel("Button") {
             HStack(spacing: 12) {
                 // Priority indicator
                 Circle()

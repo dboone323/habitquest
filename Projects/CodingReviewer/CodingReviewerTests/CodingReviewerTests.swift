@@ -10,7 +10,6 @@ import XCTest
 @testable import CodingReviewer
 
 class CodingReviewerTests: XCTestCase {
-
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -28,7 +27,8 @@ class CodingReviewerTests: XCTestCase {
         let appDelegate = AppDelegate()
         let mockApplication = NSApplication.shared
         let supportsRestorableState = appDelegate.applicationSupportsSecureRestorableState(
-            mockApplication)
+            mockApplication
+        )
         XCTAssertTrue(supportsRestorableState)
     }
 
@@ -54,5 +54,4 @@ class CodingReviewerTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-
 }

@@ -3,7 +3,6 @@ import XCTest
 @testable import AvoidObstaclesGame
 
 class HighScoreManagerTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Put setup code here
@@ -70,7 +69,8 @@ class HighScoreManagerTests: XCTestCase {
         // Test that scores are sorted (assuming descending order)
         if scores.count >= 2 {
             XCTAssertGreaterThanOrEqual(
-                scores[0], scores[1], "First score should be >= second score")
+                scores[0], scores[1], "First score should be >= second score"
+            )
         }
 
         // Test highest score

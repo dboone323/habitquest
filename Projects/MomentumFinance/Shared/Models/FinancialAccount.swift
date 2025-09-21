@@ -8,7 +8,7 @@ import SwiftUI
 // MARK: - Account Types
 
 /// Represents the type of a financial account (e.g., checking, savings).
-enum AccountType: String, CaseIterable, Codable {
+public enum AccountType: String, CaseIterable, Codable {
     /// Checking account.
     case checking = "Checking"
     /// Savings account.
@@ -25,27 +25,27 @@ enum AccountType: String, CaseIterable, Codable {
 @Model
 public final class FinancialAccount: Hashable {
     /// The name of the account (e.g., "Chase Checking").
-    var name: String
+    public var name: String
     /// The current balance of the account.
-    var balance: Double
+    public var balance: Double
     /// The icon name for this account (for UI display).
-    var iconName: String
+    public var iconName: String
     /// The date the account was created.
-    var createdDate: Date
+    public var createdDate: Date
     /// The type of account (checking, savings, etc.).
-    var accountType: AccountType
+    public var accountType: AccountType
     /// The currency code for this account (e.g., "USD").
-    var currencyCode: String
+    public var currencyCode: String
     /// The credit limit for credit card accounts (optional).
-    var creditLimit: Double?
+    public var creditLimit: Double?
 
     // Relationships
     /// All transactions associated with this account.
     @Relationship(deleteRule: .cascade)
-    var transactions: [FinancialTransaction] = []
+    public var transactions: [FinancialTransaction] = []
     /// All subscriptions associated with this account.
     @Relationship(deleteRule: .cascade)
-    var subscriptions: [Subscription] = []
+    public var subscriptions: [Subscription] = []
 
     /// Creates a new financial account.
     /// - Parameters:
@@ -55,7 +55,7 @@ public final class FinancialAccount: Hashable {
     ///   - accountType: The type of account (default: .checking).
     ///   - currencyCode: The currency code (default: "USD").
     ///   - creditLimit: The credit limit (optional).
-    init(
+    public init(
         name: String, balance: Double, iconName: String, accountType: AccountType = .checking,
         currencyCode: String = "USD", creditLimit: Double? = nil
     ) {
@@ -71,7 +71,7 @@ public final class FinancialAccount: Hashable {
     /// Updates the account balance based on a transaction.
     /// - Parameter transaction: The transaction to apply.
     @MainActor
-    func updateBalance(for transaction: FinancialTransaction) {
+    public func updateBalance(for transaction: FinancialTransaction) {
         switch transaction.transactionType {
         case .income:
             self.balance += transaction.amount

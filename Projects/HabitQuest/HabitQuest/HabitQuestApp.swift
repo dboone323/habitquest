@@ -29,9 +29,9 @@ struct HabitQuestApp: App {
                 return try ModelContainer(for: schema, configurations: [fallbackConfig])
             } catch {
                 print("❌ Failed to create fallback ModelContainer: \(error)")
-                // TODO: Implement proper error handling for model container failures
-                // TODO: Add user notification for data persistence issues
-                // TODO: Consider implementing data recovery mechanisms
+                /// - TODO: Implement proper error handling for model container failures
+                /// - TODO: Add user notification for data persistence issues
+                /// - TODO: Consider implementing data recovery mechanisms
                 fatalError("Could not create any ModelContainer: \(error)")
             }
         }

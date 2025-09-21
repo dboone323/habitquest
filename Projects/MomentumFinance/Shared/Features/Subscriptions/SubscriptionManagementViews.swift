@@ -1,7 +1,7 @@
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 //
@@ -42,11 +42,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
@@ -59,12 +59,13 @@ extension Features.Subscriptions {
             NavigationView {
                 Form {
                     Section(header: Text("Subscription Details")) {
-                        TextField("Subscription Name", text: self.$name).accessibilityLabel(
-                            "Text Field")
+                        TextField("Subscription Name", text: self.$name).accessibilityLabel("Text Field").accessibilityLabel(
+                            "Text Field"
+                        )
 
                         HStack {
                             Text("$")
-                            TextField("Amount", text: self.$amount).accessibilityLabel("Text Field")
+                            TextField("Amount", text: self.$amount).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
                             #if canImport(UIKit)
                                 .keyboardType(.decimalPad)
                             #endif
@@ -101,7 +102,7 @@ extension Features.Subscriptions {
                     }
 
                     Section(header: Text("Notes")) {
-                        TextField("Notes (optional)", text: self.$notes, axis: .vertical)
+                        TextField("Notes (optional).accessibilityLabel("Text Field")", text: self.$notes, axis: .vertical)
                             .lineLimit(3 ... 6)
                             .accessibilityLabel("Text Field")
                     }
@@ -112,35 +113,35 @@ extension Features.Subscriptions {
                 #endif
                     .toolbar(content: {
                         #if os(iOS)
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button("Cancel") {
-                                    self.dismiss()
-                                }
-                                .accessibilityLabel("Cancel Button")
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("Cancel").accessibilityLabel("Button") {
+                                self.dismiss()
                             }
+                            .accessibilityLabel("Cancel Button")
+                        }
 
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                Button("Save") {
-                                    self.saveSubscription()
-                                }
-                                .disabled(!self.isValidForm)
-                                .accessibilityLabel("Save Button")
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("Save").accessibilityLabel("Button") {
+                                self.saveSubscription()
                             }
+                            .disabled(!self.isValidForm)
+                            .accessibilityLabel("Save Button")
+                        }
                         #else
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Cancel") {
-                                    self.dismiss()
-                                }
-                                .accessibilityLabel("Cancel Button")
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel").accessibilityLabel("Button") {
+                                self.dismiss()
                             }
+                            .accessibilityLabel("Cancel Button")
+                        }
 
-                            ToolbarItem(placement: .primaryAction) {
-                                Button("Save") {
-                                    self.saveSubscription()
-                                }
-                                .disabled(!self.isValidForm)
-                                .accessibilityLabel("Save Button")
+                        ToolbarItem(placement: .primaryAction) {
+                            Button("Save").accessibilityLabel("Button") {
+                                self.saveSubscription()
                             }
+                            .disabled(!self.isValidForm)
+                            .accessibilityLabel("Save Button")
+                        }
                         #endif
                     })
                     .background(self.backgroundColor)

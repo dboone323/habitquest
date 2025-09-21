@@ -1,8 +1,7 @@
-import XCTest
 @testable import HabitQuest
+import XCTest
 
 class StreakHeatMapViewTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Put setup code here
@@ -13,24 +12,23 @@ class StreakHeatMapViewTests: XCTestCase {
         super.tearDown()
     }
 
-
     // MARK: - structStreakHeatMapView:View{ Tests
 
     func testStreakHeatMapViewInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structStreakHeatMapView:View{
+        /// - TODO: Implement initialization test for structStreakHeatMapView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakHeatMapView:View{")
     }
 
     func testStreakHeatMapViewProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structStreakHeatMapView:View{
+        /// - TODO: Implement property tests for structStreakHeatMapView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakHeatMapView:View{ properties")
     }
 
     func testStreakHeatMapViewMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structStreakHeatMapView:View{
+        /// - TODO: Implement method tests for structStreakHeatMapView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakHeatMapView:View{ methods")
     }
 
@@ -38,19 +36,19 @@ class StreakHeatMapViewTests: XCTestCase {
 
     func testDayIntensityInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structDayIntensity{
+        /// - TODO: Implement initialization test for structDayIntensity{
         XCTAssertTrue(true, "Placeholder test for structDayIntensity{")
     }
 
     func testDayIntensityProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structDayIntensity{
+        /// - TODO: Implement property tests for structDayIntensity{
         XCTAssertTrue(true, "Placeholder test for structDayIntensity{ properties")
     }
 
     func testDayIntensityMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structDayIntensity{
+        /// - TODO: Implement method tests for structDayIntensity{
         XCTAssertTrue(true, "Placeholder test for structDayIntensity{ methods")
     }
 
@@ -58,19 +56,19 @@ class StreakHeatMapViewTests: XCTestCase {
 
     func testStreakPredictionInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structStreakPrediction{
+        /// - TODO: Implement initialization test for structStreakPrediction{
         XCTAssertTrue(true, "Placeholder test for structStreakPrediction{")
     }
 
     func testStreakPredictionProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structStreakPrediction{
+        /// - TODO: Implement property tests for structStreakPrediction{
         XCTAssertTrue(true, "Placeholder test for structStreakPrediction{ properties")
     }
 
     func testStreakPredictionMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structStreakPrediction{
+        /// - TODO: Implement method tests for structStreakPrediction{
         XCTAssertTrue(true, "Placeholder test for structStreakPrediction{ methods")
     }
 
@@ -78,19 +76,19 @@ class StreakHeatMapViewTests: XCTestCase {
 
     func testMetricCardInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structMetricCard:View{
+        /// - TODO: Implement initialization test for structMetricCard:View{
         XCTAssertTrue(true, "Placeholder test for structMetricCard:View{")
     }
 
     func testMetricCardProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structMetricCard:View{
+        /// - TODO: Implement property tests for structMetricCard:View{
         XCTAssertTrue(true, "Placeholder test for structMetricCard:View{ properties")
     }
 
     func testMetricCardMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structMetricCard:View{
+        /// - TODO: Implement method tests for structMetricCard:View{
         XCTAssertTrue(true, "Placeholder test for structMetricCard:View{ methods")
     }
 
@@ -98,19 +96,19 @@ class StreakHeatMapViewTests: XCTestCase {
 
     func testPredictionCardInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structPredictionCard:View{
+        /// - TODO: Implement initialization test for structPredictionCard:View{
         XCTAssertTrue(true, "Placeholder test for structPredictionCard:View{")
     }
 
     func testPredictionCardProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structPredictionCard:View{
+        /// - TODO: Implement property tests for structPredictionCard:View{
         XCTAssertTrue(true, "Placeholder test for structPredictionCard:View{ properties")
     }
 
     func testPredictionCardMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structPredictionCard:View{
+        /// - TODO: Implement method tests for structPredictionCard:View{
         XCTAssertTrue(true, "Placeholder test for structPredictionCard:View{ methods")
     }
-    }
+}

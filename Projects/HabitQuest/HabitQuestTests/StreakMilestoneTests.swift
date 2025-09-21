@@ -1,8 +1,7 @@
-import XCTest
 @testable import HabitQuest
+import XCTest
 
 class StreakMilestoneTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Put setup code here
@@ -13,24 +12,23 @@ class StreakMilestoneTests: XCTestCase {
         super.tearDown()
     }
 
-
     // MARK: - structStreakMilestone:Identifiable,@uncheckedSendable{ Tests
 
     func testStreakMilestoneInitialization() {
-    // Test basic initialization
-    // TODO: Implement initialization test for structStreakMilestone:Identifiable,@uncheckedSendable{
-    XCTAssertTrue(true, "Placeholder test for structStreakMilestone:Identifiable,@uncheckedSendable{")
+        // Test basic initialization
+        /// - TODO: Implement initialization test for structStreakMilestone:Identifiable,@uncheckedSendable{
+        XCTAssertTrue(true, "Placeholder test for structStreakMilestone:Identifiable,@uncheckedSendable{")
     }
 
     func testStreakMilestoneProperties() {
-    // Test property access and validation
-    // TODO: Implement property tests for structStreakMilestone:Identifiable,@uncheckedSendable{
-    XCTAssertTrue(true, "Placeholder test for structStreakMilestone:Identifiable,@uncheckedSendable{ properties")
+        // Test property access and validation
+        /// - TODO: Implement property tests for structStreakMilestone:Identifiable,@uncheckedSendable{
+        XCTAssertTrue(true, "Placeholder test for structStreakMilestone:Identifiable,@uncheckedSendable{ properties")
     }
 
     func testStreakMilestoneMethods() {
-    // Test method functionality
-    // TODO: Implement method tests for structStreakMilestone:Identifiable,@uncheckedSendable{
-    XCTAssertTrue(true, "Placeholder test for structStreakMilestone:Identifiable,@uncheckedSendable{ methods")
+        // Test method functionality
+        /// - TODO: Implement method tests for structStreakMilestone:Identifiable,@uncheckedSendable{
+        XCTAssertTrue(true, "Placeholder test for structStreakMilestone:Identifiable,@uncheckedSendable{ methods")
     }
 }

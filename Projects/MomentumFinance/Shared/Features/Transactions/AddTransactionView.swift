@@ -30,9 +30,9 @@ extension Features.Transactions {
             NavigationView {
                 Form {
                     Section(header: Text("Transaction Details")) {
-                        TextField("Title", text: self.$title).accessibilityLabel("Text Field")
+                        TextField("Title", text: self.$title).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
 
-                        TextField("Amount", text: self.$amount).accessibilityLabel("Text Field")
+                        TextField("Amount", text: self.$amount).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
                         #if canImport(UIKit)
                             .keyboardType(.decimalPad)
                         #endif
@@ -65,6 +65,7 @@ extension Features.Transactions {
 
                     Section(header: Text("Notes (Optional)")) {
                         TextField("Add notes...", text: self.$notes, axis: .vertical).accessibilityLabel("Text Field")
+                            .accessibilityLabel("Text Field")
                             .lineLimit(3 ... 6)
                     }
                 }
@@ -74,31 +75,31 @@ extension Features.Transactions {
                 #endif
                     .toolbar {
                         #if canImport(UIKit)
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button("Cancel").accessibilityLabel("Button") {
-                                    self.dismiss()
-                                }
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("Cancel").accessibilityLabel("Button").accessibilityLabel("Button") {
+                                self.dismiss()
                             }
+                        }
 
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                Button("Save").accessibilityLabel("Button") {
-                                    self.saveTransaction()
-                                }
-                                .disabled(!self.isFormValid)
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("Save").accessibilityLabel("Button").accessibilityLabel("Button") {
+                                self.saveTransaction()
                             }
+                            .disabled(!self.isFormValid)
+                        }
                         #else
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Cancel").accessibilityLabel("Button") {
-                                    self.dismiss()
-                                }
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel").accessibilityLabel("Button").accessibilityLabel("Button") {
+                                self.dismiss()
                             }
+                        }
 
-                            ToolbarItem(placement: .primaryAction) {
-                                Button("Save").accessibilityLabel("Button") {
-                                    self.saveTransaction()
-                                }
-                                .disabled(!self.isFormValid)
+                        ToolbarItem(placement: .primaryAction) {
+                            Button("Save").accessibilityLabel("Button").accessibilityLabel("Button") {
+                                self.saveTransaction()
                             }
+                            .disabled(!self.isFormValid)
+                        }
                         #endif
                     }
             }

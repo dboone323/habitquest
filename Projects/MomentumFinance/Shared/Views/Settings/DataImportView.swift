@@ -48,15 +48,15 @@ struct DataImportView: View {
             #endif
                 .toolbar(content: {
                     #if os(iOS)
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button("Cancel") { self.dismiss() }
-                                .accessibilityLabel("Cancel")
-                        }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button("Cancel") { self.dismiss() }
+                            .accessibilityLabel("Cancel")
+                    }
                     #else
-                        ToolbarItem {
-                            Button("Cancel") { self.dismiss() }
-                                .accessibilityLabel("Cancel")
-                        }
+                    ToolbarItem {
+                        Button("Cancel") { self.dismiss() }
+                            .accessibilityLabel("Cancel")
+                    }
                     #endif
                 })
                 .fileImporter(
@@ -125,13 +125,13 @@ struct DataImportView: View {
             if let url = urls.first {
                 self.selectedFileURL = url
                 #if os(iOS)
-                    HapticManager.shared.success()
+                HapticManager.shared.success()
                 #endif
             }
         case let .failure(error):
             self.importError = "Failed to select file: \(error.localizedDescription)"
             #if os(iOS)
-                HapticManager.shared.error()
+            HapticManager.shared.error()
             #endif
         }
     }
@@ -143,7 +143,7 @@ struct DataImportView: View {
         self.isImporting = true
         self.importProgress = 0
         #if os(iOS)
-            HapticManager.shared.mediumImpact()
+        HapticManager.shared.mediumImpact()
         #endif
 
         do {
@@ -159,12 +159,12 @@ struct DataImportView: View {
             self.importResult = result
             self.showingResult = true
             #if os(iOS)
-                HapticManager.shared.success()
+            HapticManager.shared.success()
             #endif
         } catch {
             self.importError = error.localizedDescription
             #if os(iOS)
-                HapticManager.shared.error()
+            HapticManager.shared.error()
             #endif
         }
 

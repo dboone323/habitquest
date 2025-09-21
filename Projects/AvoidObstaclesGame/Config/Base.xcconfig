@@ -1,0 +1,2 @@
+#include "../../Config/WorkspaceBase.xcconfig"
+// App specific overrides (universal for macOS + iOS target groups)

@@ -421,7 +421,6 @@ struct QuickActionCard: View {
                     .fontWeight(.medium)
                     .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
                     .multilineTextAlignment(.center)
-                    .accessibilityLabel("Button")
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 20)

@@ -116,8 +116,7 @@ struct PlatformToolbar: ViewModifier {
             .toolbar {
                 #if os(macOS)
                 ToolbarItemGroup(placement: .primaryAction) {
-                    ForEach(self.primaryActions.indices, id: \.self) { index in
-                        let action = self.primaryActions[index]
+                    ForEach(self.primaryActions, id: \.title) { action in
                         Button(action: action.action) {
                             Label(action.title, systemImage: action.icon)
                         }
@@ -128,8 +127,7 @@ struct PlatformToolbar: ViewModifier {
 
                 ToolbarItemGroup(placement: .secondaryAction) {
                     Menu("More") {
-                        ForEach(self.secondaryActions.indices, id: \.self) { index in
-                            let action = self.secondaryActions[index]
+                        ForEach(self.secondaryActions, id: \.title) { action in
                             Button(action.title, action: action.action)
                                 .accessibilityLabel("Button")
                         }
@@ -137,8 +135,7 @@ struct PlatformToolbar: ViewModifier {
                 }
                 #else
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    ForEach(self.primaryActions.indices, id: \.self) { index in
-                        let action = self.primaryActions[index]
+                    ForEach(self.primaryActions, id: \.title) { action in
                         Button(action: action.action) {
                             Image(systemName: action.icon)
                         }
@@ -147,8 +144,7 @@ struct PlatformToolbar: ViewModifier {
 
                     if !self.secondaryActions.isEmpty {
                         Menu {
-                            ForEach(self.secondaryActions.indices, id: \.self) { index in
-                                let action = self.secondaryActions[index]
+                            ForEach(self.secondaryActions, id: \.title) { action in
                                 Button(action.title, action: action.action)
                                     .accessibilityLabel("Button")
                             }
@@ -298,10 +294,8 @@ struct ExamplePlatformView: View {
                                     .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
                             )
                             .platformContextMenu {
-                                Button("Edit") {}
-                                    .accessibilityLabel("Button")
-                                Button("Delete", role: .destructive) {}
-                                    .accessibilityLabel("Button")
+                                Button("Edit", action: {}).accessibilityLabel("Button")
+                                Button("Delete", role: .destructive, action: {}).accessibilityLabel("Button")
                             }
                     }
                 }
@@ -324,15 +318,15 @@ struct ExamplePlatformView: View {
                     .navigationTitle("Add Item")
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") {
+                            Button("Cancel", action: {
                                 self.showingAddItem = false
-                            }
+                            })
                             .accessibilityLabel("Button")
                         }
                         ToolbarItem(placement: .confirmationAction) {
-                            Button("Save") {
+                            Button("Save", action: {
                                 self.showingAddItem = false
-                            }
+                            })
                             .accessibilityLabel("Button")
                         }
                     }

@@ -168,7 +168,7 @@ struct ScribbleTextField: View {
     let placeholder: String
 
     var body: some View {
-        TextField(self.placeholder, text: self.$text).accessibilityLabel("Text Field")
+        TextField(self.placeholder, text: self.$text).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .onAppear {
                 // Enable Scribble for this text field

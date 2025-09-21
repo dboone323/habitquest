@@ -228,6 +228,7 @@ struct ModernTextField: View {
         ProgressBar(progress: 0.7, showPercentage: true)
 
         ModernTextField(text: Binding.constant(""), placeholder: "Enter text")
+            .accessibilityLabel("Text Field")
     }
     .padding()
     .environmentObject(ThemeManager())

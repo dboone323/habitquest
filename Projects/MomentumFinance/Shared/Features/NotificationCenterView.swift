@@ -18,19 +18,19 @@ struct NotificationCenterView: View {
     @StateObject private var notificationManager = NotificationManager.shared
 
     #if canImport(SwiftData)
-        #if canImport(SwiftData)
-            private var budgets: [Budget] = []
-            private var subscriptions: [Subscription] = []
-            private var accounts: [FinancialAccount] = []
-        #else
-            private var budgets: [Budget] = []
-            private var subscriptions: [Subscription] = []
-            private var accounts: [FinancialAccount] = []
-        #endif
+    #if canImport(SwiftData)
+    private var budgets: [Budget] = []
+    private var subscriptions: [Subscription] = []
+    private var accounts: [FinancialAccount] = []
     #else
-        private var budgets: [Budget] = []
-        private var subscriptions: [Subscription] = []
-        private var accounts: [FinancialAccount] = []
+    private var budgets: [Budget] = []
+    private var subscriptions: [Subscription] = []
+    private var accounts: [FinancialAccount] = []
+    #endif
+    #else
+    private var budgets: [Budget] = []
+    private var subscriptions: [Subscription] = []
+    private var accounts: [FinancialAccount] = []
     #endif
 
     var body: some View {
@@ -45,7 +45,7 @@ struct NotificationCenterView: View {
             .navigationTitle("Notifications")
             .toolbar {
                 ToolbarItem(placement: .automatic) {
-                    Button("Done") {
+                    Button("Done").accessibilityLabel("Button") {
                         self.dismiss()
                     }
                     .accessibilityLabel("Done")
@@ -53,7 +53,7 @@ struct NotificationCenterView: View {
 
                 if !self.notificationManager.pendingNotifications.isEmpty {
                     ToolbarItem(placement: .automatic) {
-                        Button("Clear All") {
+                        Button("Clear All").accessibilityLabel("Button") {
                             self.notificationManager.clearAllNotifications()
                         }
                         .accessibilityLabel("Clear All")
@@ -158,7 +158,7 @@ struct ScheduledNotificationRow: View {
             }
 
             // Dismiss Button
-            Button(action: self.onDismiss) {
+            Button(action: self.onDismiss).accessibilityLabel("Button") {
                 Image(systemName: "xmark.circle.fill")
                     .font(.title3)
                     .foregroundColor(.secondary)

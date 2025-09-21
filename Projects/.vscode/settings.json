@@ -1,5 +1,5 @@
 {
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
     "editor.defaultFormatter": "swiftlang.swift-vscode",
     // Language specific formatter for YAML
     "[yaml]": {
@@ -30,7 +30,7 @@
     // Linting / formatting tools
     "eslint.enable": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
+        "source.fixAll.eslint": "never"
     },
     "eslint.codeActionsOnSave.rules": null,
     "python.linting.enabled": true,
@@ -83,9 +83,9 @@
         "**/.autofix_backups": true,
         "Tools/Automation/Archive": true
     },
-    // Gemini Code Assist
-    "gemini.enable": true,
-    "gemini.suggestOnSave": true,
+    // Gemini Code Assist - Disabled to prevent stuck processes
+    "gemini.enable": false,
+    "gemini.suggestOnSave": false,
     // GitHub Copilot Chat
     "github.copilot.enable": true,
     "github.copilot.inlineSuggest.enable": true,

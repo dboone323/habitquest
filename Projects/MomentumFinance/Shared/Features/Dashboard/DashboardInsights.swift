@@ -14,7 +14,7 @@ struct DashboardInsights: View {
 
                 Spacer()
 
-                Button("Details", action: self.onDetailsTapped).accessibilityLabel("Button")
+                Button("Details", action: self.onDetailsTapped).accessibilityLabel("Button").accessibilityLabel("Button")
                     .font(.subheadline)
                     .foregroundColor(.accentColor)
             }

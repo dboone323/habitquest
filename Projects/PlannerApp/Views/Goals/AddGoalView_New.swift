@@ -27,7 +27,7 @@ struct AddGoalView: View {
         VStack(spacing: 0) {
             // Header with buttons for better macOS compatibility
             HStack {
-                Button("Cancel").accessibilityLabel("Button") {
+                Button("Cancel").accessibilityLabel("Button").accessibilityLabel("Button") {
                     self.dismiss()
                 }
                 .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
@@ -41,7 +41,7 @@ struct AddGoalView: View {
 
                 Spacer()
 
-                Button("Save").accessibilityLabel("Button") {
+                Button("Save").accessibilityLabel("Button").accessibilityLabel("Button") {
                     // Create the new goal
                     let newGoal = Goal(
                         title: title.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -71,7 +71,7 @@ struct AddGoalView: View {
                 // Section for the main goal details
                 Section("Goal Details") {
                     // TextField for the goal title
-                    TextField("Goal Title", text: self.$title).accessibilityLabel("Text Field")
+                    TextField("Goal Title", text: self.$title).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
                         .font(self.themeManager.currentTheme.font(forName: self.themeManager.currentTheme.primaryFontName, size: 16))
                         .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
 

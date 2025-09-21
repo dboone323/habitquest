@@ -23,7 +23,9 @@ func runTest(_ name: String, test: () throws -> Void) {
     }
 }
 
-// Mock models for testing (simplified versions based on actual PlannerApp models)
+// Mock models for test     var items: [String] = []
+items += (1 ... 1000).map { "Item \($0)" } var items: [String] = []
+items += (1 ... 1000).map { "Item \($0)" } g(simplified versions based on actual PlannerApp models)
 enum TaskPriority: String, CaseIterable, Codable {
     case low, medium, high
 
@@ -181,8 +183,8 @@ runTest("testTaskPriority") {
 }
 
 runTest("testTaskDueDate") {
-    let futureDate = Date().addingTimeInterval(86400)  // Tomorrow
-    let pastDate = Date().addingTimeInterval(-86400)  // Yesterday
+    let futureDate = Date().addingTimeInterval(86400) // Tomorrow
+    let pastDate = Date().addingTimeInterval(-86400) // Yesterday
 
     let taskWithFutureDate = Task(title: "Future Task", dueDate: futureDate)
     let taskWithPastDate = Task(title: "Past Task", dueDate: pastDate)
@@ -214,7 +216,7 @@ runTest("testTaskPersistence") {
 // MARK: - Goal Model Tests
 
 runTest("testGoalCreation") {
-    let futureDate = Date().addingTimeInterval(86400 * 30)  // 30 days from now
+    let futureDate = Date().addingTimeInterval(86400 * 30) // 30 days from now
     let goal = Goal(
         title: "Test Goal",
         description: "A test goal",
@@ -488,7 +490,7 @@ runTest("testAdvancedFiltering") {
     ]
     let pendingTasks = [Task(title: "Pending 1", isCompleted: false)]
 
-    assert(completedTasks.allSatisfy { $0.isCompleted })
+    assert(completedTasks.allSatisfy(\.isCompleted))
     assert(pendingTasks.allSatisfy { !$0.isCompleted })
 }
 
@@ -516,7 +518,7 @@ runTest("testTaskCreationPerformance") {
     let startTime = Date()
 
     var tasks: [Task] = []
-    for i in 1...100 {
+    for i in 1 ... 100 {
         let task = Task(title: "Task \(i)", priority: .medium)
         tasks.append(task)
     }
@@ -532,9 +534,7 @@ runTest("testSearchPerformance") {
     let startTime = Date()
 
     var items: [String] = []
-    for i in 1...1000 {
-        items.append("Item \(i)")
-    }
+    items += (1 ... 1000).map { "Item \($0)" }
 
     let searchResults = items.filter { $0.contains("Item") }
     let endTime = Date()
@@ -548,7 +548,7 @@ runTest("testBulkOperationsPerformance") {
     let startTime = Date()
 
     var tasks: [[String: Any]] = []
-    for i in 1...500 {
+    for i in 1 ... 500 {
         let task: [String: Any] = ["id": i, "title": "Bulk Task \(i)", "completed": i % 2 == 0]
         tasks.append(task)
     }
@@ -635,7 +635,7 @@ runTest("testInvalidDateHandling") {
 }
 
 runTest("testLargeDataSets") {
-    let largeArray = Array(1...10000)
+    let largeArray = Array(1 ... 10000)
     let filteredArray = largeArray.filter { $0 % 2 == 0 }
 
     assert(largeArray.count == 10000)
@@ -675,7 +675,7 @@ runTest("testMainNavigationTabs") {
 }
 
 runTest("testLaunchPerformance") {
-    let mockLaunchTime: Double = 0.5
+    let mockLaunchTime = 0.5
     assert(mockLaunchTime < 2.0, "App should launch within 2 seconds")
 }
 

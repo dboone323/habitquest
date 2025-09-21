@@ -1,7 +1,7 @@
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 //
@@ -48,29 +48,29 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
         private var secondaryBackgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemGroupedBackground)
+            return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.gray.opacity(0.1)
+            return Color.gray.opacity(0.1)
             #endif
         }
 
         private var toolbarPlacement: ToolbarItemPlacement {
             #if canImport(UIKit)
-                return .navigationBarTrailing
+            return .navigationBarTrailing
             #else
-                return .primaryAction
+            return .primaryAction
             #endif
         }
 
@@ -108,27 +108,24 @@ extension Features.Subscriptions {
                     )
                 }
                 .navigationTitle("Subscriptions")
-                .toolbar {
+                .toolbar(content: {
                     ToolbarItem(placement: self.toolbarPlacement) {
                         HStack(spacing: 12) {
-                            // Search Button
                             Button {
                                 self.showingSearch = true
                                 NavigationCoordinator.shared.activateSearch()
                             } label: {
                                 Image(systemName: "magnifyingglass")
                             }
+                            .accessibilityLabel("Search Subscriptions")
 
-                            // Add Subscription Button
-                            Button(
-                                action: { self.showingAddSubscription = true },
-                                label: {
-                                    Image(systemName: "plus")
-                                }
-                            )
+                            Button(action: { self.showingAddSubscription = true }) {
+                                Image(systemName: "plus")
+                            }
+                            .accessibilityLabel("Add Subscription")
                         }
                     }
-                }
+                })
                 .sheet(isPresented: self.$showingAddSubscription) {
                     AddSubscriptionView(categories: self.categories, accounts: self.accounts)
                 }
@@ -152,9 +149,9 @@ extension Features.Subscriptions {
             accounts: [FinancialAccount] = []
         ) {
             #if !canImport(SwiftData)
-                self.subscriptions = subscriptions
-                self.categories = categories
-                self.accounts = accounts
+            self.subscriptions = subscriptions
+            self.categories = categories
+            self.accounts = accounts
             #endif
         }
     }
@@ -211,7 +208,7 @@ extension Features.Subscriptions {
             ScrollView {
                 LazyVStack(spacing: 12) {
                     ForEach(self.filteredSubscriptions, id: \.id) { subscription in
-                        SubscriptionRowPlaceholder(subscription: subscription)
+                        SubscriptionRowView(subscription: subscription)
                             .onTapGesture {
                                 self.selectedSubscription = subscription
                             }
@@ -222,9 +219,9 @@ extension Features.Subscriptions {
         }
     }
 
-    // MARK: - Placeholder Row View
+    // MARK: - Subscription Row View
 
-    private struct SubscriptionRowPlaceholder: View {
+    private struct SubscriptionRowView: View {
         let subscription: Subscription
 
         var body: some View {
@@ -301,8 +298,8 @@ struct AddSubscriptionView: View {
         NavigationStack {
             Form {
                 Section("Subscription Details") {
-                    TextField("Name", text: self.$name)
-                    TextField("Amount", text: self.$amount)
+                    TextField("Name", text: self.$name).accessibilityLabel("Text Field")
+                    TextField("Amount", text: self.$amount).accessibilityLabel("Text Field")
                     #if canImport(UIKit)
                         .keyboardType(.decimalPad)
                     #endif
@@ -333,25 +330,24 @@ struct AddSubscriptionView: View {
                 Section("Additional Info") {
                     DatePicker("Start Date", selection: self.$startDate, displayedComponents: .date)
                     TextField("Notes (Optional)", text: self.$notes)
+                        .accessibilityLabel("Text Field")
                 }
             }
             .navigationTitle("Add Subscription")
             #if canImport(UIKit)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-                .toolbar {
+                .toolbar(content: {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
-                            self.dismiss()
-                        }
+                        Button("Cancel") { self.dismiss() }
+                            .accessibilityLabel("Cancel")
                     }
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Save") {
-                            self.saveSubscription()
-                        }
-                        .disabled(self.name.isEmpty || self.amount.isEmpty)
+                        Button("Save") { self.saveSubscription() }
+                            .accessibilityLabel("Save Subscription")
+                            .disabled(self.name.isEmpty || self.amount.isEmpty)
                     }
-                }
+                })
         }
     }
 

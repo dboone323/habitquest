@@ -90,9 +90,9 @@ struct GoalsView: View {
                 }
                 // Custom Edit button for macOS
                 ToolbarItem(placement: .navigation) {
-                    Button("Edit") {
+                    Button("Edit", action: {
                         // Custom edit implementation for macOS
-                    }
+                    })
                     .accessibilityLabel("Button")
                 }
             }

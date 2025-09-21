@@ -18,9 +18,9 @@ struct ThemeDemoView: View {
 
     // Sample financial data for demo
     private let accounts = [
-        ("Checking", "banknote", 1_250.50),
-        ("Savings", "dollarsign.circle", 4_320.75),
-        ("Investment", "chart.line.uptrend.xyaxis", 8_640.25)
+        ("Checking", "banknote", 1250.50),
+        ("Savings", "dollarsign.circle", 4320.75),
+        ("Investment", "chart.line.uptrend.xyaxis", 8640.25)
     ]
 
     private let budgets = [
@@ -69,7 +69,7 @@ struct ThemeDemoView: View {
             .navigationTitle("Theme Showcase")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button(action: { self.showSheet = true }) {
+                    Button(action: { self.showSheet = true }).accessibilityLabel("Button") {
                         Image(systemName: "gear")
                             .symbolRenderingMode(.hierarchical)
                             .foregroundStyle(self.theme.accentPrimary)

@@ -52,7 +52,7 @@ struct QuickActionButton: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: self.action).accessibilityLabel("Button") {
+        Button(action: self.action).accessibilityLabel("Button").accessibilityLabel("Button") {
             VStack(spacing: 8) {
                 Image(systemName: self.icon)
                     .font(.title2)

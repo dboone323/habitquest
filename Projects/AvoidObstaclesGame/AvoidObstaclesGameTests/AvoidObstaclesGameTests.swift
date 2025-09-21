@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SpriteKit
 import XCTest
 
 @testable import AvoidObstaclesGame
@@ -22,30 +23,44 @@ final class AvoidObstaclesGameTests: XCTestCase {
     // MARK: - Game Mechanics Tests
 
     func testPlayerMovement() throws {
-        // Test basic player movement mechanics
-        // let player = Player(position: CGPoint(x: 100, y: 200))
-        // let initialPosition = player.position
+        // Test basic player movement mechanics with GameScene
+        let scene = GameScene(size: CGSize(width: 375, height: 667))
+        let view = SKView(frame: CGRect(x: 0, y: 0, width: 375, height: 667))
+        view.presentScene(scene)
 
-        // player.moveLeft()
-        // XCTAssertLessThan(player.position.x, initialPosition.x)
+        // Manually trigger scene setup since didMove(to:) may not be called in test environment
+        scene.didMove(to: view)
 
-        // player.moveRight()
-        // XCTAssertGreaterThan(player.position.x, initialPosition.x)
+        // Test that scene was created successfully
+        XCTAssertNotNil(scene)
+        XCTAssertEqual(scene.size.width, 375)
+        XCTAssertEqual(scene.size.height, 667)
 
-        // Placeholder until Player model is defined
-        XCTAssertTrue(true, "Player movement test framework ready")
+        // Test physics world is configured
+        XCTAssertNotNil(scene.physicsWorld)
+        XCTAssertEqual(scene.physicsWorld.contactDelegate as? GameScene, scene)
     }
 
     func testObstacleGeneration() throws {
-        // Test obstacle generation logic
-        // let obstacle = Obstacle(type: .spike, position: CGPoint(x: 300, y: 150))
+        // Test obstacle node creation
+        let scene = GameScene(size: CGSize(width: 375, height: 667))
+        let view = SKView(frame: CGRect(x: 0, y: 0, width: 375, height: 667))
+        view.presentScene(scene)
 
-        // XCTAssertEqual(obstacle.type, .spike)
-        // XCTAssertEqual(obstacle.position.x, 300)
-        // XCTAssertEqual(obstacle.position.y, 150)
+        // Manually trigger scene setup since didMove(to:) may not be called in test environment
+        scene.didMove(to: view)
 
-        // Placeholder until Obstacle model is defined
-        XCTAssertTrue(true, "Obstacle generation test framework ready")
+        // Test that obstacles can be conceptually created with proper physics
+        let obstacleNode = SKSpriteNode(color: .red, size: CGSize(width: 50, height: 50))
+        obstacleNode.physicsBody = SKPhysicsBody(rectangleOf: obstacleNode.size)
+        obstacleNode.physicsBody?.categoryBitMask = PhysicsCategory.obstacle
+        obstacleNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
+        obstacleNode.physicsBody?.collisionBitMask = PhysicsCategory.none
+
+        XCTAssertNotNil(obstacleNode.physicsBody)
+        XCTAssertEqual(obstacleNode.physicsBody?.categoryBitMask, PhysicsCategory.obstacle)
+        XCTAssertEqual(obstacleNode.size.width, 50)
+        XCTAssertEqual(obstacleNode.size.height, 50)
     }
 
     func testCollisionDetection() throws {
@@ -213,7 +228,7 @@ final class AvoidObstaclesGameTests: XCTestCase {
         let startTime = Date()
 
         // Simulate game loop iterations
-        for _ in 1...1000 {
+        for _ in 1 ... 1000 {
             // Simulate game update logic
             let x = 1 + 1
             XCTAssertEqual(x, 2)
@@ -230,7 +245,7 @@ final class AvoidObstaclesGameTests: XCTestCase {
         let startTime = Date()
 
         // Simulate generating multiple obstacles
-        for i in 1...100 {
+        for i in 1 ... 100 {
             let obstacleData: [String: Any] = ["id": i, "type": "spike", "x": i * 50]
             XCTAssertEqual((obstacleData["id"] as? Int), i)
         }

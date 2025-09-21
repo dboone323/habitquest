@@ -7,7 +7,7 @@ import SwiftUI
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
 // Model references for SwiftData container
-private extension MomentumFinanceApp {
+fileprivate extension MomentumFinanceApp {
     enum ModelReferences {
         static let accounts = FinancialAccount.self
         static let transactions = FinancialTransaction.self
@@ -25,9 +25,9 @@ struct MomentumFinanceApp: App {
 
     init() {
         print("MomentumFinanceApp: init started")
-        // TODO: Implement app initialization analytics tracking
-        // TODO: Add crash reporting setup in init method
-        // TODO: Initialize user preferences and settings on app launch
+        /// - TODO: Implement app initialization analytics tracking
+        /// - TODO: Add crash reporting setup in init method
+        /// - TODO: Initialize user preferences and settings on app launch
     }
 
     var sharedModelContainer: ModelContainer? = {
@@ -39,7 +39,7 @@ struct MomentumFinanceApp: App {
             ModelReferences.subscriptions,
             ModelReferences.budgets,
             ModelReferences.categories,
-            ModelReferences.goals
+            ModelReferences.goals,
         ])
 
         print("MomentumFinanceApp: Schema created")
@@ -107,10 +107,10 @@ struct MomentumFinanceApp: App {
                         // iOS doesn't allow programmatic app termination
                         // User must manually close the app
                         #else
-                            NSApplication.shared.terminate(nil)
+                        NSApplication.shared.terminate(nil)
                         #endif
                     }
-                    .accessibilityLabel("Button")
+                    .accessibilityLabel("Quit App Button")
                     .buttonStyle(.borderedProminent)
                 }
                 .padding()
@@ -127,15 +127,15 @@ struct MomentumFinanceApp: App {
         }
 
         #if os(macOS)
-            Settings {
-                if let container = sharedModelContainer {
-                    SettingsView()
-                        .modelContainer(container)
-                } else {
-                    Text("Settings unavailable - Database error")
-                        .padding()
-                }
+        Settings {
+            if let container = sharedModelContainer {
+                SettingsView()
+                    .modelContainer(container)
+            } else {
+                Text("Settings unavailable - Database error")
+                    .padding()
             }
+        }
         #endif
     }
 }

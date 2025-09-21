@@ -26,6 +26,7 @@ extension Features.Transactions {
             VStack(spacing: 12) {
                 // Simple Search Bar
                 TextField("Search transactions...", text: self.$searchText).accessibilityLabel("Text Field")
+                    .accessibilityLabel("Text Field")
                     .padding()
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(8)

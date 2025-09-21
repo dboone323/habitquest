@@ -3,23 +3,23 @@ import SwiftUI
 
 // AppKit is only available on macOS
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 // Temporary ColorTheme stub for macOS compatibility (only if not already defined)
 #if DEBUG
-    @available(iOS, deprecated: 9999)
-    @MainActor
-    final class _DebugColorThemeStub {
-        static let shared = _DebugColorThemeStub()
-        var background: Color { Color.gray.opacity(0.1) }
-        var secondaryBackground: Color { Color.gray.opacity(0.05) }
-        var primaryText: Color { Color.primary }
-        var secondaryText: Color { Color.secondary }
-        var accentPrimary: Color { Color.blue }
-        var cardBackground: Color { Color.white }
-        var isDarkMode: Bool { false }
-    }
+@available(iOS, deprecated: 9999)
+@MainActor
+final class _DebugColorThemeStub {
+    static let shared = _DebugColorThemeStub()
+    var background: Color { Color.gray.opacity(0.1) }
+    var secondaryBackground: Color { Color.gray.opacity(0.05) }
+    var primaryText: Color { Color.primary }
+    var secondaryText: Color { Color.secondary }
+    var accentPrimary: Color { Color.blue }
+    var cardBackground: Color { Color.white }
+    var isDarkMode: Bool { false }
+}
 #endif
 
 // Momentum Finance - Personal Finance App
@@ -63,7 +63,8 @@ extension Features.Dashboard {
                             accounts: self.accounts,
                             onAccountTap: { accountId in
                                 self.navigationPath.append(
-                                    DashboardDestination.accountDetail(accountId))
+                                    DashboardDestination.accountDetail(accountId)
+                                )
                             },
                             onViewAllTap: {
                                 self.navigationPath.append(DashboardDestination.transactions)
@@ -158,9 +159,9 @@ extension Features.Dashboard {
                             Features.Transactions.TransactionsView()
                         case .subscriptions:
                             #if canImport(SwiftData)
-                                Features.Subscriptions.SubscriptionsView()
+                            Features.Subscriptions.SubscriptionsView()
                             #else
-                                Text("Subscriptions View - SwiftData not available")
+                            Text("Subscriptions View - SwiftData not available")
                             #endif
                         case .budgets:
                             Features.Budgets.BudgetsView()
@@ -206,12 +207,12 @@ extension Features.Dashboard {
 
         private var monthlyIncomeDouble: Double {
             // Calculate monthly income from transactions
-            2_450.0
+            2450.0
         }
 
         private var monthlyExpensesDouble: Double {
             // Calculate monthly expenses from transactions
-            1_890.0
+            1890.0
         }
 
         // MARK: - Data Loading

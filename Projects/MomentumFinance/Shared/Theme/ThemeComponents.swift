@@ -88,30 +88,30 @@ struct ThemeComponents: @unchecked Sendable {
     // MARK: - Button Components
 
     @MainActor
-    func primaryButton(@ViewBuilder label: () -> some View) -> some View {
+    func primaryButton(@ViewBuilder label: ().accessibilityLabel("Button") -> some View) -> some View {
         let theme = ColorTheme.shared
-        return Button(action: {}, label: label).accessibilityLabel("Button")
+        return Button(action: {}, label: label).accessibilityLabel("Button").accessibilityLabel("Button")
             .buttonStyle(PrimaryButtonStyle(theme: theme))
     }
 
     @MainActor
-    func secondaryButton(@ViewBuilder label: () -> some View) -> some View {
+    func secondaryButton(@ViewBuilder label: ().accessibilityLabel("Button") -> some View) -> some View {
         let theme = ColorTheme.shared
-        return Button(action: {}, label: label).accessibilityLabel("Button")
+        return Button(action: {}, label: label).accessibilityLabel("Button").accessibilityLabel("Button")
             .buttonStyle(SecondaryButtonStyle(theme: theme))
     }
 
     @MainActor
-    func textButton(@ViewBuilder label: () -> some View) -> some View {
+    func textButton(@ViewBuilder label: ().accessibilityLabel("Button") -> some View) -> some View {
         let theme = ColorTheme.shared
-        return Button(action: {}, label: label).accessibilityLabel("Button")
+        return Button(action: {}, label: label).accessibilityLabel("Button").accessibilityLabel("Button")
             .buttonStyle(TextButtonStyle(theme: theme))
     }
 
     @MainActor
-    func destructiveButton(@ViewBuilder label: () -> some View) -> some View {
+    func destructiveButton(@ViewBuilder label: ().accessibilityLabel("Button") -> some View) -> some View {
         let theme = ColorTheme.shared
-        return Button(action: {}, label: label).accessibilityLabel("Button")
+        return Button(action: {}, label: label).accessibilityLabel("Button").accessibilityLabel("Button")
             .buttonStyle(DestructiveButtonStyle(theme: theme))
     }
 

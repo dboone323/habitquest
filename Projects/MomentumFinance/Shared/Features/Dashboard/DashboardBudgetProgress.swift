@@ -62,7 +62,7 @@ extension Features.Dashboard {
                         }
 
                         if self.budgets.count > 3 {
-                            Button(action: self.onViewAllTap).accessibilityLabel("Button") {
+                            Button(action: self.onViewAllTap).accessibilityLabel("Button").accessibilityLabel("Button") {
                                 Text("View All \(self.budgets.count) Budgets")
                                     .font(.caption)
                                     .fontWeight(.medium)
@@ -85,7 +85,7 @@ extension Features.Dashboard {
                                 .foregroundStyle(self.colorTheme.secondaryText)
                                 .multilineTextAlignment(.center)
 
-                            Button("Create Budget").accessibilityLabel("Button") {
+                            Button("Create Budget").accessibilityLabel("Button").accessibilityLabel("Button") {
                                 self.onViewAllTap()
                             }
                             .buttonStyle(.borderedProminent)

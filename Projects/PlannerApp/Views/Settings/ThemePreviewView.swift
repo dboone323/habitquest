@@ -133,14 +133,14 @@ struct ThemePreviewView: View {
 
     private var sampleButtonsSection: some View {
         VStack(spacing: 12) {
-            ModernButton(title: "Primary Action") {}
+            ModernButton(title: "Primary Action", action: {})
                 .environmentObject(self.createThemeManager(for: self.selectedTheme))
 
             HStack(spacing: 12) {
-                ModernButton(title: "Secondary") {}
+                ModernButton(title: "Secondary", action: {})
                     .environmentObject(self.createThemeManager(for: self.selectedTheme))
 
-                ModernButton(title: "Destructive") {}
+                ModernButton(title: "Destructive", action: {})
                     .environmentObject(self.createThemeManager(for: self.selectedTheme))
             }
         }
@@ -208,7 +208,6 @@ struct ThemePreviewCard: View {
                         .font(.caption)
                         .foregroundColor(self.theme.secondaryTextColor)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityLabel("Button")
                 }
 
                 Spacer()
@@ -225,6 +224,7 @@ struct ThemePreviewCard: View {
             )
             .cornerRadius(12)
         }
+        .accessibilityLabel("Button")
         .buttonStyle(PlainButtonStyle())
     }
 }

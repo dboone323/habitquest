@@ -1,7 +1,8 @@
 import Foundation
 
 func fi_computeMonthlySpendingByCategory(transactions: [FinancialTransaction]) -> [String: [Date:
-        Double]] {
+        Double
+]] {
     let calendar = Calendar.current
     var monthlySpendingByCategory: [String: [Date: Double]] = [:]
 

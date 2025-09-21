@@ -1,8 +1,7 @@
-import XCTest
 @testable import HabitQuest
+import XCTest
 
 class AnalyticsTestViewTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Put setup code here
@@ -13,24 +12,23 @@ class AnalyticsTestViewTests: XCTestCase {
         super.tearDown()
     }
 
-
     // MARK: - structTestResults{ Tests
 
     func testTestResultsInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structTestResults{
+        /// - TODO: Implement initialization test for structTestResults{
         XCTAssertTrue(true, "Placeholder test for structTestResults{")
     }
 
     func testTestResultsProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structTestResults{
+        /// - TODO: Implement property tests for structTestResults{
         XCTAssertTrue(true, "Placeholder test for structTestResults{ properties")
     }
 
     func testTestResultsMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structTestResults{
+        /// - TODO: Implement method tests for structTestResults{
         XCTAssertTrue(true, "Placeholder test for structTestResults{ methods")
     }
 
@@ -38,19 +36,19 @@ class AnalyticsTestViewTests: XCTestCase {
 
     func testTestResultInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structTestResult{
+        /// - TODO: Implement initialization test for structTestResult{
         XCTAssertTrue(true, "Placeholder test for structTestResult{")
     }
 
     func testTestResultProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structTestResult{
+        /// - TODO: Implement property tests for structTestResult{
         XCTAssertTrue(true, "Placeholder test for structTestResult{ properties")
     }
 
     func testTestResultMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structTestResult{
+        /// - TODO: Implement method tests for structTestResult{
         XCTAssertTrue(true, "Placeholder test for structTestResult{ methods")
     }
 
@@ -58,19 +56,19 @@ class AnalyticsTestViewTests: XCTestCase {
 
     func testAnalyticsTestViewInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structAnalyticsTestView:View{
+        /// - TODO: Implement initialization test for structAnalyticsTestView:View{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsTestView:View{")
     }
 
     func testAnalyticsTestViewProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structAnalyticsTestView:View{
+        /// - TODO: Implement property tests for structAnalyticsTestView:View{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsTestView:View{ properties")
     }
 
     func testAnalyticsTestViewMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structAnalyticsTestView:View{
+        /// - TODO: Implement method tests for structAnalyticsTestView:View{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsTestView:View{ methods")
     }
 
@@ -78,19 +76,19 @@ class AnalyticsTestViewTests: XCTestCase {
 
     func testTestResultsViewInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structTestResultsView:View{
+        /// - TODO: Implement initialization test for structTestResultsView:View{
         XCTAssertTrue(true, "Placeholder test for structTestResultsView:View{")
     }
 
     func testTestResultsViewProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structTestResultsView:View{
+        /// - TODO: Implement property tests for structTestResultsView:View{
         XCTAssertTrue(true, "Placeholder test for structTestResultsView:View{ properties")
     }
 
     func testTestResultsViewMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structTestResultsView:View{
+        /// - TODO: Implement method tests for structTestResultsView:View{
         XCTAssertTrue(true, "Placeholder test for structTestResultsView:View{ methods")
     }
 
@@ -98,19 +96,19 @@ class AnalyticsTestViewTests: XCTestCase {
 
     func testTestResultRowInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structTestResultRow:View{
+        /// - TODO: Implement initialization test for structTestResultRow:View{
         XCTAssertTrue(true, "Placeholder test for structTestResultRow:View{")
     }
 
     func testTestResultRowProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structTestResultRow:View{
+        /// - TODO: Implement property tests for structTestResultRow:View{
         XCTAssertTrue(true, "Placeholder test for structTestResultRow:View{ properties")
     }
 
     func testTestResultRowMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structTestResultRow:View{
+        /// - TODO: Implement method tests for structTestResultRow:View{
         XCTAssertTrue(true, "Placeholder test for structTestResultRow:View{ methods")
     }
 
@@ -118,19 +116,19 @@ class AnalyticsTestViewTests: XCTestCase {
 
     func testStatItemInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structStatItem:View{
+        /// - TODO: Implement initialization test for structStatItem:View{
         XCTAssertTrue(true, "Placeholder test for structStatItem:View{")
     }
 
     func testStatItemProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structStatItem:View{
+        /// - TODO: Implement property tests for structStatItem:View{
         XCTAssertTrue(true, "Placeholder test for structStatItem:View{ properties")
     }
 
     func testStatItemMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structStatItem:View{
+        /// - TODO: Implement method tests for structStatItem:View{
         XCTAssertTrue(true, "Placeholder test for structStatItem:View{ methods")
     }
-    }
+}

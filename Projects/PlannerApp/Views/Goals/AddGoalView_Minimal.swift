@@ -12,17 +12,17 @@ struct AddGoalView: View {
     var body: some View {
         NavigationView {
             Form {
-                TextField("Goal Title", text: self.$title).accessibilityLabel("Text Field")
-                TextField("Description", text: self.$description).accessibilityLabel("Text Field")
+                TextField("Goal Title", text: self.$title).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
+                TextField("Description", text: self.$description).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
                 DatePicker("Target Date", selection: self.$targetDate, displayedComponents: .date)
             }
             .navigationTitle("New Goal")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel").accessibilityLabel("Button") { self.dismiss() }
+                    Button("Cancel").accessibilityLabel("Button").accessibilityLabel("Button") { self.dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save").accessibilityLabel("Button") {
+                    Button("Save").accessibilityLabel("Button").accessibilityLabel("Button") {
                         let newGoal = Goal(title: title, description: description, targetDate: targetDate)
                         self.goals.append(newGoal)
                         GoalDataManager.shared.save(goals: self.goals)

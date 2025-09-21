@@ -31,7 +31,7 @@ struct SettingsView: View {
                     HStack {
                         Text("Name")
                         Spacer()
-                        TextField("Your Name", text: self.$userName).accessibilityLabel("Text Field")
+                        TextField("Your Name", text: self.$userName).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
                             .multilineTextAlignment(.trailing)
                     }
                 }
@@ -46,7 +46,7 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.menu)
 
-                    Button(action: { self.showingThemePreview = true }).accessibilityLabel("Button") {
+                    Button(action: { self.showingThemePreview = true }).accessibilityLabel("Button").accessibilityLabel("Button") {
                         HStack {
                             Text("Theme Preview")
                                 .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
@@ -95,8 +95,8 @@ struct SettingsView: View {
                     .environmentObject(self.themeManager)
             }
             .alert("Notification Permissions", isPresented: self.$showingNotificationAlert) {
-                Button("Open Settings", action: self.openAppSettings).accessibilityLabel("Button")
-                Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
+                Button("Open Settings", action: self.openAppSettings).accessibilityLabel("Button").accessibilityLabel("Button")
+                Button("Cancel", role: .cancel).accessibilityLabel("Button").accessibilityLabel("Button") {}
             } message: {
                 Text("Enable notifications in Settings to receive reminders.")
             }
@@ -147,7 +147,7 @@ struct ThemePreviewSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done").accessibilityLabel("Button") {
+                    Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
                         self.dismiss()
                     }
                 }

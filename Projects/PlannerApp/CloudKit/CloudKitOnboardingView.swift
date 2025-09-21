@@ -96,14 +96,14 @@ struct CloudKitOnboardingView: View {
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .alert("This is a New Device", isPresented: self.$showingMergeOptions) {
-                Button("Merge from iCloud") {
+                Button("Merge from iCloud", action: {
                     self.mergeFromiCloud()
-                }
+                })
                 .accessibilityLabel("Button")
 
-                Button("Start Fresh") {
+                Button("Start Fresh", action: {
                     self.startFresh()
-                }
+                })
                 .accessibilityLabel("Button")
             } message: {
                 Text("Do you want to merge existing iCloud data with this device, or start fresh?")

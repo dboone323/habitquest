@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 #if canImport(UIKit)
-    import UIKit
+import UIKit
 #endif
 
 extension Features.Budgets {
@@ -19,16 +19,16 @@ extension Features.Budgets {
         private var modelContext
         @State private var viewModel = BudgetsViewModel()
         #if canImport(SwiftData)
-            #if canImport(SwiftData)
-                private var budgets: [Budget] = []
-                private var categories: [Category] = []
-            #else
-                private var budgets: [Budget] = []
-                private var categories: [Category] = []
-            #endif
+        #if canImport(SwiftData)
+        private var budgets: [Budget] = []
+        private var categories: [ExpenseCategory] = []
         #else
-            private var budgets: [Budget] = []
-            private var categories: [Category] = []
+        private var budgets: [Budget] = []
+        private var categories: [ExpenseCategory] = []
+        #endif
+        #else
+        private var budgets: [Budget] = []
+        private var categories: [ExpenseCategory] = []
         #endif
         @State private var showingAddBudget = false
         @State private var selectedTimeframe: TimeFrame = .thisMonth
@@ -58,27 +58,24 @@ extension Features.Budgets {
                     }
                 }
                 .navigationTitle("Budgets")
-                .toolbar {
+                .toolbar(content: {
                     ToolbarItem(placement: .primaryAction) {
                         HStack(spacing: 12) {
-                            // Search Button
                             Button {
                                 self.showingSearch = true
                                 NavigationCoordinator.shared.activateSearch()
                             } label: {
                                 Image(systemName: "magnifyingglass")
                             }
+                            .accessibilityLabel("Search Budgets")
 
-                            // Add Budget Button
-                            Button(
-                                action: { self.showingAddBudget = true },
-                                label: {
-                                    Image(systemName: "plus")
-                                }
-                            )
+                            Button(action: { self.showingAddBudget = true }) {
+                                Image(systemName: "plus")
+                            }
+                            .accessibilityLabel("Add Budget")
                         }
                     }
-                }
+                })
                 .sheet(isPresented: self.$showingAddBudget) {
                     AddBudgetView(categories: self.categories)
                 }
@@ -157,10 +154,8 @@ extension Features.Budgets {
         private var timeframePicker: some View {
             Menu {
                 ForEach(TimeFrame.allCases, id: \.self) { timeframe in
-                    Button(timeframe.rawValue) {
-                        self.selectedTimeframe = timeframe
-                    }
-                    .accessibilityLabel("Button")
+                    Button(timeframe.rawValue) { self.selectedTimeframe = timeframe }
+                        .accessibilityLabel(timeframe.rawValue)
                 }
             } label: {
                 HStack {
@@ -207,9 +202,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-                return Color(uiColor: .systemGroupedBackground)
+            return Color(uiColor: .systemGroupedBackground)
             #else
-                return Color(nsColor: .controlBackgroundColor)
+            return Color(nsColor: .controlBackgroundColor)
             #endif
         }
     }
@@ -297,9 +292,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-                return Color(uiColor: .systemGroupedBackground)
+            return Color(uiColor: .systemGroupedBackground)
             #else
-                return Color(nsColor: .controlBackgroundColor)
+            return Color(nsColor: .controlBackgroundColor)
             #endif
         }
     }
@@ -365,27 +360,30 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-                return Color(uiColor: .systemGroupedBackground)
+            return Color(uiColor: .systemGroupedBackground)
             #else
-                return Color(nsColor: .controlBackgroundColor)
+            return Color(nsColor: .controlBackgroundColor)
             #endif
         }
     }
 
     struct AddBudgetView: View {
-        let categories: [Category]
+        let categories: [ExpenseCategory]
         @Environment(\.dismiss)
         private var dismiss
         @State private var name = ""
         @State private var limitAmount = ""
-        @State private var selectedCategory: Category?
+        @State private var selectedCategory: ExpenseCategory?
 
         var body: some View {
             NavigationView {
                 Form {
                     Section(header: Text("Budget Details")) {
                         TextField("Budget Name", text: self.$name).accessibilityLabel("Text Field")
+                            .accessibilityLabel("Text Field")
                         TextField("Budget Amount", text: self.$limitAmount).accessibilityLabel(
+                            "Text Field"
+                        ).accessibilityLabel(
                             "Text Field"
                         )
                         #if os(iOS)
@@ -396,9 +394,9 @@ extension Features.Budgets {
                     if !self.categories.isEmpty {
                         Section(header: Text("Category")) {
                             Picker("Category", selection: self.$selectedCategory) {
-                                Text("Select Category").tag(nil as Category?)
+                                Text("Select Category").tag(nil as ExpenseCategory?)
                                 ForEach(self.categories, id: \.name) { category in
-                                    Text(category.name).tag(category as Category?)
+                                    Text(category.name).tag(category as ExpenseCategory?)
                                 }
                             }
                         }
@@ -408,23 +406,19 @@ extension Features.Budgets {
                 #if os(iOS)
                     .navigationBarTitleDisplayMode(.inline)
                 #endif
-                    .toolbar {
+                    .toolbar(content: {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") {
-                                self.dismiss()
-                            }
-                            .accessibilityLabel("Button")
+                            Button("Cancel") { self.dismiss() }
+                                .accessibilityLabel("Cancel")
                         }
-
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Save") {
-                                // Save budget logic would go here
                                 self.dismiss()
                             }
+                            .accessibilityLabel("Save Budget")
                             .disabled(self.name.isEmpty || self.limitAmount.isEmpty)
-                            .accessibilityLabel("Button")
                         }
-                    }
+                    })
             }
         }
     }
@@ -441,7 +435,8 @@ struct BudgetSearchView: View {
         } else {
             self.budgets.filter { budget in
                 budget.name.localizedCaseInsensitiveContains(self.searchText)
-                    || budget.category?.name.localizedCaseInsensitiveContains(self.searchText) ?? false
+                    || budget.category?.name.localizedCaseInsensitiveContains(self.searchText)
+                    ?? false
             }
         }
     }
@@ -478,13 +473,12 @@ struct BudgetSearchView: View {
                 .navigationBarTitleDisplayMode(.inline)
             #endif
                 .searchable(text: self.$searchText, prompt: "Search budgets...")
-                .toolbar {
+                .toolbar(content: {
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Done") {
-                            self.dismiss()
-                        }
+                        Button("Done") { self.dismiss() }
+                            .accessibilityLabel("Done")
                     }
-                }
+                })
         }
     }
 }

@@ -3,7 +3,6 @@ import XCTest
 @testable import AvoidObstaclesGame
 
 class GameDifficultyTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Put setup code here
@@ -19,26 +18,34 @@ class GameDifficultyTests: XCTestCase {
     func testGameDifficultyInitialization() {
         // Test basic initialization with parameters
         let difficulty = GameDifficulty(
-            spawnInterval: 1.0, obstacleSpeed: 3.0, scoreMultiplier: 1.5)
+            spawnInterval: 1.0, obstacleSpeed: 3.0, scoreMultiplier: 1.5
+        )
         XCTAssertNotNil(difficulty, "GameDifficulty should initialize properly")
         XCTAssertEqual(
-            difficulty.spawnInterval, 1.0, "GameDifficulty should have correct spawn interval")
+            difficulty.spawnInterval, 1.0, "GameDifficulty should have correct spawn interval"
+        )
         XCTAssertEqual(
-            difficulty.obstacleSpeed, 3.0, "GameDifficulty should have correct obstacle speed")
+            difficulty.obstacleSpeed, 3.0, "GameDifficulty should have correct obstacle speed"
+        )
         XCTAssertEqual(
-            difficulty.scoreMultiplier, 1.5, "GameDifficulty should have correct score multiplier")
+            difficulty.scoreMultiplier, 1.5, "GameDifficulty should have correct score multiplier"
+        )
     }
 
     func testGameDifficultyProperties() {
         // Test property access and validation
         let difficulty = GameDifficulty(
-            spawnInterval: 0.8, obstacleSpeed: 2.5, scoreMultiplier: 2.0)
+            spawnInterval: 0.8, obstacleSpeed: 2.5, scoreMultiplier: 2.0
+        )
         XCTAssertEqual(
-            difficulty.spawnInterval, 0.8, "GameDifficulty should have correct spawn interval")
+            difficulty.spawnInterval, 0.8, "GameDifficulty should have correct spawn interval"
+        )
         XCTAssertEqual(
-            difficulty.obstacleSpeed, 2.5, "GameDifficulty should have correct obstacle speed")
+            difficulty.obstacleSpeed, 2.5, "GameDifficulty should have correct obstacle speed"
+        )
         XCTAssertEqual(
-            difficulty.scoreMultiplier, 2.0, "GameDifficulty should have correct score multiplier")
+            difficulty.scoreMultiplier, 2.0, "GameDifficulty should have correct score multiplier"
+        )
     }
 
     func testGameDifficultyMethods() {
@@ -49,13 +56,16 @@ class GameDifficultyTests: XCTestCase {
 
         XCTAssertGreaterThan(
             easyDifficulty.spawnInterval, hardDifficulty.spawnInterval,
-            "Easy should have slower spawn than hard")
+            "Easy should have slower spawn than hard"
+        )
         XCTAssertGreaterThan(
             easyDifficulty.obstacleSpeed, hardDifficulty.obstacleSpeed,
-            "Easy should have slower obstacles than hard")
+            "Easy should have slower obstacles than hard"
+        )
         XCTAssertLessThan(
             easyDifficulty.scoreMultiplier, hardDifficulty.scoreMultiplier,
-            "Easy should have lower multiplier than hard")
+            "Easy should have lower multiplier than hard"
+        )
     }
 
     func testGameDifficultyStaticMethods() {
@@ -82,12 +92,15 @@ class GameDifficultyTests: XCTestCase {
 
         XCTAssertGreaterThan(
             lowScore.spawnInterval, highScore.spawnInterval,
-            "Higher scores should have faster spawn rates")
+            "Higher scores should have faster spawn rates"
+        )
         XCTAssertGreaterThan(
             lowScore.obstacleSpeed, highScore.obstacleSpeed,
-            "Higher scores should have faster obstacles")
+            "Higher scores should have faster obstacles"
+        )
         XCTAssertLessThan(
             lowScore.scoreMultiplier, highScore.scoreMultiplier,
-            "Higher scores should have higher multipliers")
+            "Higher scores should have higher multipliers"
+        )
     }
 }

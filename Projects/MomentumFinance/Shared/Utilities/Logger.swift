@@ -14,7 +14,7 @@ import OSLog
 
 /// Centralized logging system for MomentumFinance
 /// Provides structured logging across different categories and severity levels
-enum Logger {
+public enum Logger {
     // MARK: - Core Logger Categories
 
     static let ui = OSLog(
@@ -38,7 +38,7 @@ enum Logger {
         category: "Performance",
     )
 
-    private static let defaultLog = OSLog(
+    public static let defaultLog = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
         category: "General",
     )
@@ -46,7 +46,7 @@ enum Logger {
 
 // MARK: - Core Logging Methods
 
-extension Logger {
+public extension Logger {
     /// Log error messages with context
     static func logError(
         _ error: Error,
@@ -70,8 +70,8 @@ extension Logger {
         line: Int = #line,
     ) {
         #if DEBUG
-            let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
-            os_log("[DEBUG] %@ [%@]", log: category, type: .debug, message, source)
+        let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
+        os_log("[DEBUG] %@ [%@]", log: category, type: .debug, message, source)
         #endif
     }
 
@@ -88,7 +88,7 @@ extension Logger {
 
 // MARK: - Business Logic Logging
 
-extension Logger {
+public extension Logger {
     /// Log business-related events and decisions
     static func logBusiness(
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
@@ -124,7 +124,7 @@ extension Logger {
 
 // MARK: - Performance Measurement
 
-extension Logger {
+public extension Logger {
     /// Measure and log execution time of a code block
     static func measurePerformance<T>(_ operation: String, block: () throws -> T) rethrows -> T {
         let startTime = CFAbsoluteTimeGetCurrent()
@@ -147,7 +147,7 @@ extension Logger {
 
 // MARK: - Context-Aware Logging
 
-extension Logger {
+public extension Logger {
     /// Log with additional context information
     static func logWithContext(
         _ message: String, context: [String: Any], category: OSLog = defaultLog,
@@ -167,37 +167,37 @@ extension Logger {
 
 // MARK: - File Logging Support
 
-extension Logger {
+public extension Logger {
     /// Write log to file for debugging purposes
     static func writeToFile(_ message: String, fileName: String = "momentum_finance.log") {
         #if DEBUG
-            guard
-                let documentsPath = FileManager.default.urls(
-                    for: .documentDirectory,
-                    in: .userDomainMask,
-                ).first
-            else { return }
-            let logURL = documentsPath.appendingPathComponent(fileName)
+        guard
+            let documentsPath = FileManager.default.urls(
+                for: .documentDirectory,
+                in: .userDomainMask,
+            ).first
+        else { return }
+        let logURL = documentsPath.appendingPathComponent(fileName)
 
-            let timestamp = DateFormatter.logFormatter.string(from: Date())
-            let logEntry = "[\(timestamp)] \(message)\n"
+        let timestamp = DateFormatter.logFormatter.string(from: Date())
+        let logEntry = "[\(timestamp)] \(message)\n"
 
-            if FileManager.default.fileExists(atPath: logURL.path) {
-                if let fileHandle = try? FileHandle(forWritingTo: logURL) {
-                    fileHandle.seekToEndOfFile()
-                    fileHandle.write(logEntry.data(using: .utf8) ?? Data())
-                    fileHandle.closeFile()
-                }
-            } else {
-                try? logEntry.write(to: logURL, atomically: true, encoding: .utf8)
+        if FileManager.default.fileExists(atPath: logURL.path) {
+            if let fileHandle = try? FileHandle(forWritingTo: logURL) {
+                fileHandle.seekToEndOfFile()
+                fileHandle.write(logEntry.data(using: .utf8) ?? Data())
+                fileHandle.closeFile()
             }
+        } else {
+            try? logEntry.write(to: logURL, atomically: true, encoding: .utf8)
+        }
         #endif
     }
 }
 
 // MARK: - Supporting Types
 
-struct PerformanceMeasurement {
+public struct PerformanceMeasurement {
     let operation: String
     let startTime: CFAbsoluteTime
 

@@ -50,9 +50,9 @@ struct FinancialAccount {
     mutating func updateBalance(for transaction: FinancialTransaction) {
         switch transaction.transactionType {
         case .income:
-            balance += transaction.amount
+            self.balance += transaction.amount
         case .expense:
-            balance -= transaction.amount
+            self.balance -= transaction.amount
         }
     }
 }
@@ -68,14 +68,14 @@ struct FinancialTransaction {
     var transactionType: TransactionType2
 
     var formattedAmount: String {
-        let prefix = transactionType == .income ? "+" : "-"
-        return "\(prefix)$\(String(format: "%.2f", abs(amount)))"
+        let prefix = self.transactionType == .income ? "+" : "-"
+        return "\(prefix)$\(String(format: "%.2f", abs(self.amount)))"
     }
 
     var formattedDate: String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
-        return formatter.string(from: date)
+        return formatter.string(from: self.date)
     }
 }
 
@@ -88,11 +88,11 @@ struct ExpenseCategory {
     var transactions: [FinancialTransaction] = []
 
     var remainingBudget: Double {
-        budgetAmount - spentAmount
+        self.budgetAmount - self.spentAmount
     }
 
     var isOverBudget: Bool {
-        spentAmount > budgetAmount
+        self.spentAmount > self.budgetAmount
     }
 
     func totalSpent(for date: Date) -> Double {
@@ -100,7 +100,7 @@ struct ExpenseCategory {
         let month = calendar.component(.month, from: date)
         let year = calendar.component(.year, from: date)
 
-        return transactions.filter { transaction in
+        return self.transactions.filter { transaction in
             let transactionMonth = calendar.component(.month, from: transaction.date)
             let transactionYear = calendar.component(.year, from: transaction.date)
             return transactionMonth == month && transactionYear == year
@@ -140,12 +140,15 @@ runTest("testTransactionPersistence") {
 
 runTest("testIncomeCalculation") {
     let income1 = Transaction(
-        amount: 1000.0, description: "Salary", date: Date(), type: .income, categoryName: "Work")
+        amount: 1000.0, description: "Salary", date: Date(), type: .income, categoryName: "Work"
+    )
     let income2 = Transaction(
         amount: 500.0, description: "Freelance", date: Date(), type: .income,
-        categoryName: "Side Work")
+        categoryName: "Side Work"
+    )
     _ = Transaction(
-        amount: 200.0, description: "Groceries", date: Date(), type: .expense, categoryName: "Food")
+        amount: 200.0, description: "Groceries", date: Date(), type: .expense, categoryName: "Food"
+    )
 
     let totalIncome = [income1, income2].reduce(0) { $0 + $1.amount }
     assert(totalIncome == 1500.0)
@@ -153,9 +156,11 @@ runTest("testIncomeCalculation") {
 
 runTest("testExpenseCalculation") {
     let expense1 = Transaction(
-        amount: 100.0, description: "Gas", date: Date(), type: .expense, categoryName: "Transport")
+        amount: 100.0, description: "Gas", date: Date(), type: .expense, categoryName: "Transport"
+    )
     let expense2 = Transaction(
-        amount: 50.0, description: "Coffee", date: Date(), type: .expense, categoryName: "Food")
+        amount: 50.0, description: "Coffee", date: Date(), type: .expense, categoryName: "Food"
+    )
 
     let totalExpenses = [expense1, expense2].reduce(0) { $0 + $1.amount }
     assert(totalExpenses == 150.0)
@@ -167,12 +172,15 @@ runTest("testTransactionsByDateRange") {
     let lastWeek = Calendar.current.date(byAdding: .day, value: -7, to: today)!
 
     let todayTransaction = Transaction(
-        amount: 25.0, description: "Lunch", date: today, type: .expense, categoryName: "Food")
+        amount: 25.0, description: "Lunch", date: today, type: .expense, categoryName: "Food"
+    )
     let yesterdayTransaction = Transaction(
-        amount: 15.0, description: "Snack", date: yesterday, type: .expense, categoryName: "Food")
+        amount: 15.0, description: "Snack", date: yesterday, type: .expense, categoryName: "Food"
+    )
     let oldTransaction = Transaction(
         amount: 100.0, description: "Old Purchase", date: lastWeek, type: .expense,
-        categoryName: "Other")
+        categoryName: "Other"
+    )
 
     let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: today)!
     let recentTransactions = [todayTransaction, yesterdayTransaction, oldTransaction].filter {
@@ -183,11 +191,14 @@ runTest("testTransactionsByDateRange") {
 
 runTest("testTransactionsByCategory") {
     let foodTransaction1 = Transaction(
-        amount: 25.0, description: "Lunch", date: Date(), type: .expense, categoryName: "Food")
+        amount: 25.0, description: "Lunch", date: Date(), type: .expense, categoryName: "Food"
+    )
     let foodTransaction2 = Transaction(
-        amount: 15.0, description: "Coffee", date: Date(), type: .expense, categoryName: "Food")
+        amount: 15.0, description: "Coffee", date: Date(), type: .expense, categoryName: "Food"
+    )
     let transportTransaction = Transaction(
-        amount: 30.0, description: "Gas", date: Date(), type: .expense, categoryName: "Transport")
+        amount: 30.0, description: "Gas", date: Date(), type: .expense, categoryName: "Transport"
+    )
 
     let foodTransactions = [foodTransaction1, foodTransaction2, transportTransaction].filter {
         $0.categoryName == "Food"
@@ -308,11 +319,14 @@ runTest("testAccountBalanceCalculations") {
 
     let transactions = [
         FinancialTransaction(
-            title: "Income", amount: 500.0, date: Date(), transactionType: .income),
+            title: "Income", amount: 500.0, date: Date(), transactionType: .income
+        ),
         FinancialTransaction(
-            title: "Expense 1", amount: 100.0, date: Date(), transactionType: .expense),
+            title: "Expense 1", amount: 100.0, date: Date(), transactionType: .expense
+        ),
         FinancialTransaction(
-            title: "Expense 2", amount: 50.0, date: Date(), transactionType: .expense),
+            title: "Expense 2", amount: 50.0, date: Date(), transactionType: .expense
+        ),
     ]
 
     for transaction in transactions {
@@ -605,7 +619,7 @@ runTest("testLargeDatasetPerformance") {
 
     // Simulate inserting 1000 transactions
     var transactions: [Transaction] = []
-    for i in 1...1000 {
+    for i in 1 ... 1000 {
         let transaction = Transaction(
             amount: Double(i),
             description: "Transaction \(i)",
@@ -633,7 +647,7 @@ runTest("testBulkOperationsPerformance") {
 
     // Simulate creating multiple accounts
     var accounts: [FinancialAccount] = []
-    for i in 1...100 {
+    for i in 1 ... 100 {
         let account = FinancialAccount(
             name: "Account \(i)",
             balance: Double(i * 100),
@@ -645,7 +659,7 @@ runTest("testBulkOperationsPerformance") {
 
     // Simulate creating multiple transactions
     var transactions: [FinancialTransaction] = []
-    for i in 1...500 {
+    for i in 1 ... 500 {
         let transaction = FinancialTransaction(
             title: "Transaction \(i)",
             amount: Double(i),
@@ -657,7 +671,7 @@ runTest("testBulkOperationsPerformance") {
 
     // Simulate creating multiple categories
     var categories: [ExpenseCategory] = []
-    for i in 1...50 {
+    for i in 1 ... 50 {
         let category = ExpenseCategory(
             name: "Category \(i)",
             iconName: "circle",
@@ -688,9 +702,11 @@ runTest("testAccountTransactionIntegration") {
 
     let transactions = [
         FinancialTransaction(
-            title: "Deposit", amount: 500.0, date: Date(), transactionType: .income),
+            title: "Deposit", amount: 500.0, date: Date(), transactionType: .income
+        ),
         FinancialTransaction(
-            title: "Grocery", amount: 75.0, date: Date(), transactionType: .expense),
+            title: "Grocery", amount: 75.0, date: Date(), transactionType: .expense
+        ),
         FinancialTransaction(title: "Gas", amount: 40.0, date: Date(), transactionType: .expense),
         FinancialTransaction(title: "Coffee", amount: 5.0, date: Date(), transactionType: .expense),
     ]

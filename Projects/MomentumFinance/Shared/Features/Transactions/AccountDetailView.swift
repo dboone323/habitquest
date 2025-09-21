@@ -260,9 +260,9 @@ struct AccountDetailView: View {
 
     private func backgroundColorForPlatform() -> Color {
         #if os(iOS)
-            return Color(UIColor.systemBackground)
+        return Color(UIColor.systemBackground)
         #else
-            return Color(NSColor.controlBackgroundColor)
+        return Color(NSColor.controlBackgroundColor)
         #endif
     }
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 // Momentum Finance - Personal Finance App
@@ -22,11 +22,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
 
@@ -79,7 +79,7 @@ extension Features.GoalsAndReports {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(TimeFrame.allCases, id: \.self) { timeframe in
-                        self.timeframeButton(for: timeframe).accessibilityLabel("Button")
+                        self.timeframeButton(for: timeframe)
                     }
                 }
                 .padding(.horizontal)
@@ -89,22 +89,18 @@ extension Features.GoalsAndReports {
         private func timeframeButton(for timeframe: TimeFrame) -> some View {
             let isSelected = self.selectedTimeframe == timeframe
 
-            return Button(
-                action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        self.selectedTimeframe = timeframe
-                    }
-                },
-                label: {
-                    Text(timeframe.rawValue)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundColor(isSelected ? .white : .primary)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(self.buttonBackground(isSelected: isSelected))
-                },
-            ).accessibilityLabel("Button")
+            return Button(timeframe.rawValue) {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    self.selectedTimeframe = timeframe
+                }
+            }
+            .font(.subheadline)
+            .fontWeight(.medium)
+            .foregroundColor(isSelected ? .white : .primary)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(self.buttonBackground(isSelected: isSelected))
+            .accessibilityLabel("Timeframe: \(timeframe.rawValue)")
         }
 
         private func buttonBackground(isSelected: Bool) -> some View {

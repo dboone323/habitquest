@@ -30,12 +30,12 @@ struct TaskManagerView: View {
         VStack(spacing: 0) {
             // Header with buttons for better macOS compatibility
             HStack {
-                Button("Done") {
+                Button("Done", action: {
                     #if os(iOS)
                     HapticManager.lightImpact()
                     #endif
                     self.dismiss()
-                }
+                })
                 .accessibilityLabel("Button")
                 #if os(iOS)
                     .buttonStyle(.iOSSecondary)
@@ -70,8 +70,7 @@ struct TaskManagerView: View {
                 // --- Input Area ---
                 HStack {
                     // Text field for adding new tasks
-                    TextField("New Task", text: self.$newTaskTitle, onCommit: self.addTask)
-                        .accessibilityLabel("Text Field") // Add task on Return key
+                    TextField("New Task", text: self.$newTaskTitle, onCommit: self.addTask).accessibilityLabel("Text Field")
                         .textFieldStyle(.plain) // Use plain style for custom background/padding
                         .padding(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)) // Custom padding
                         .background(self.themeManager.currentTheme.secondaryBackgroundColor) // Themed background
@@ -197,16 +196,16 @@ struct TaskManagerView: View {
             .toolbar {
                 // Custom Edit button for macOS list reordering/deletion mode
                 ToolbarItem(placement: .navigation) {
-                    Button("Edit") {
+                    Button("Edit", action: {
                         // Custom edit implementation for macOS
-                    }
+                    })
                     .accessibilityLabel("Button")
                 }
                 // Add a "Done" button to the keyboard toolbar
                 ToolbarItem(placement: .keyboard) {
                     HStack {
                         Spacer() // Push button to the right
-                        Button("Done") { self.isInputFieldFocused = false } // Dismiss keyboard on tap
+                        Button("Done", action: { self.isInputFieldFocused = false }) // Dismiss keyboard on tap
                             .accessibilityLabel("Button")
                         // Uses theme accent color automatically
                     }

@@ -45,17 +45,17 @@ public extension Features {
             @Environment(\.dismiss) private var dismiss
 
             #if canImport(SwiftData)
-                private var accounts: [FinancialAccount] = []
-                private var transactions: [FinancialTransaction] = []
-                private var subscriptions: [Subscription] = []
-                private var budgets: [Budget] = []
-                private var goals: [SavingsGoal] = []
+            private var accounts: [FinancialAccount] = []
+            private var transactions: [FinancialTransaction] = []
+            private var subscriptions: [Subscription] = []
+            private var budgets: [Budget] = []
+            private var goals: [SavingsGoal] = []
             #else
-                private var accounts: [FinancialAccount] = []
-                private var transactions: [FinancialTransaction] = []
-                private var subscriptions: [Subscription] = []
-                private var budgets: [Budget] = []
-                private var goals: [SavingsGoal] = []
+            private var accounts: [FinancialAccount] = []
+            private var transactions: [FinancialTransaction] = []
+            private var subscriptions: [Subscription] = []
+            private var budgets: [Budget] = []
+            private var goals: [SavingsGoal] = []
             #endif
 
             @State private var searchText = ""
@@ -84,8 +84,10 @@ public extension Features {
                             HStack {
                                 Image(systemName: "magnifyingglass")
                                     .foregroundColor(.secondary)
-                                TextField("Search...", text: self.$searchText)
-                                    .textFieldStyle(.plain)
+                                TextField("Search...", text: self.$searchText).accessibilityLabel(
+                                    "Text Field"
+                                )
+                                .textFieldStyle(.plain)
                                 if !self.searchText.isEmpty {
                                     Button(action: {
                                         self.searchText = ""
@@ -150,7 +152,9 @@ public extension Features {
                                             .background(Color.gray.opacity(0.05))
                                             .cornerRadius(8)
                                             .onTapGesture {
-                                                self.navigationCoordinator.navigateToSearchResult(result)
+                                                self.navigationCoordinator.navigateToSearchResult(
+                                                    result
+                                                )
                                                 self.dismiss()
                                             }
                                         }
@@ -163,7 +167,7 @@ public extension Features {
                     .navigationTitle("Search")
                     #if os(iOS)
                         .navigationBarTitleDisplayMode(.inline)
-                        .toolbar {
+                        .toolbar(content: {
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button("Done") {
                                     NavigationCoordinator.shared.deactivateSearch()
@@ -171,17 +175,17 @@ public extension Features {
                                 }
                                 .accessibilityLabel("Done")
                             }
-                        }
+                        })
                     #else
-                        .toolbar {
-                                ToolbarItem(placement: .automatic) {
-                                    Button("Done") {
-                                        NavigationCoordinator.shared.deactivateSearch()
-                                        self.dismiss()
-                                    }
-                                    .accessibilityLabel("Done")
+                        .toolbar(content: {
+                            ToolbarItem(placement: .automatic) {
+                                Button("Done") {
+                                    NavigationCoordinator.shared.deactivateSearch()
+                                    self.dismiss()
                                 }
+                                .accessibilityLabel("Done")
                             }
+                        })
                     #endif
                 }
                 .onAppear {
@@ -203,7 +207,9 @@ public extension Features {
                 self.isLoading = true
 
                 Task {
-                    let results = self.searchEngine.search(query: self.searchText, filter: self.selectedFilter)
+                    let results = self.searchEngine.search(
+                        query: self.searchText, filter: self.selectedFilter
+                    )
                     self.searchResults = results
                     self.isLoading = false
                 }

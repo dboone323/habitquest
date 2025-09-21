@@ -1,8 +1,7 @@
-import XCTest
 @testable import HabitQuest
+import XCTest
 
 class NotificationServiceTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Put setup code here
@@ -13,24 +12,23 @@ class NotificationServiceTests: XCTestCase {
         super.tearDown()
     }
 
-
     // MARK: - enumNotificationService{ Tests
 
     func testNotificationServiceInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumNotificationService{
+        /// - TODO: Implement initialization test for enumNotificationService{
         XCTAssertTrue(true, "Placeholder test for enumNotificationService{")
     }
 
     func testNotificationServiceProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumNotificationService{
+        /// - TODO: Implement property tests for enumNotificationService{
         XCTAssertTrue(true, "Placeholder test for enumNotificationService{ properties")
     }
 
     func testNotificationServiceMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumNotificationService{
+        /// - TODO: Implement method tests for enumNotificationService{
         XCTAssertTrue(true, "Placeholder test for enumNotificationService{ methods")
     }
-    }
+}

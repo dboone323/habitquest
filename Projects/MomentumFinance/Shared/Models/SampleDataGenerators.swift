@@ -59,11 +59,11 @@ class AccountsDataGenerator: DataGenerator {
     /// - Returns: <#description#>
     func generate() {
         let accounts = [
-            (name: "Checking Account", icon: "creditcard.fill", balance: 2_500.0),
-            (name: "Savings Account", icon: "building.columns.fill", balance: 15_000.0),
+            (name: "Checking Account", icon: "creditcard.fill", balance: 2500.0),
+            (name: "Savings Account", icon: "building.columns.fill", balance: 15000.0),
             (name: "Credit Card", icon: "creditcard", balance: -850.0),
-            (name: "Investment Account", icon: "chart.line.uptrend.xyaxis", balance: 25_000.0),
-            (name: "Emergency Fund", icon: "shield.fill", balance: 5_000.0)
+            (name: "Investment Account", icon: "chart.line.uptrend.xyaxis", balance: 25000.0),
+            (name: "Emergency Fund", icon: "shield.fill", balance: 5000.0)
         ]
 
         for account in accounts {
@@ -96,7 +96,7 @@ class BudgetsDataGenerator: DataGenerator {
 
         // Current month budgets
         let currentMonthBudgets = [
-            (category: "Housing", limit: 1_300.0),
+            (category: "Housing", limit: 1300.0),
             (category: "Food", limit: 500.0),
             (category: "Transportation", limit: 200.0),
             (category: "Utilities", limit: 250.0),
@@ -160,26 +160,26 @@ class SavingsGoalsDataGenerator: DataGenerator {
         let savingsGoals = [
             (
                 name: "Emergency Fund",
-                target: 10_000.0,
-                current: 3_500.0,
+                target: 10000.0,
+                current: 3500.0,
                 targetDate: calendar.date(byAdding: .month, value: 12, to: Date())
             ),
             (
                 name: "Vacation Fund",
-                target: 5_000.0,
-                current: 1_200.0,
+                target: 5000.0,
+                current: 1200.0,
                 targetDate: calendar.date(byAdding: .month, value: 8, to: Date())
             ),
             (
                 name: "New Car",
-                target: 25_000.0,
-                current: 8_500.0,
+                target: 25000.0,
+                current: 8500.0,
                 targetDate: calendar.date(byAdding: .month, value: 24, to: Date())
             ),
             (
                 name: "Home Down Payment",
-                target: 50_000.0,
-                current: 15_000.0,
+                target: 50000.0,
+                current: 15000.0,
                 targetDate: calendar.date(byAdding: .month, value: 36, to: Date())
             )
         ]

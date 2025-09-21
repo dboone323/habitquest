@@ -106,9 +106,9 @@ public struct ImportResult: Codable, Sendable {
 // MARK: - ModelContext for compatibility
 
 #if !canImport(SwiftData)
-    public struct ModelContext: Sendable {
-        public init() {}
-    }
+public struct ModelContext: Sendable {
+    public init() {}
+}
 #endif
 
 // MARK: - Theme Types
@@ -457,8 +457,7 @@ public final class DefaultEntityManager: EntityManager {
     public func fetch<T>(_ type: T.Type) async throws -> [T] { [] }
 
     public func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping)
-        async throws -> FinancialAccount?
-    {
+        async throws -> FinancialAccount? {
         // Mock implementation - return a default account
         FinancialAccount(name: "Default Account", type: .checking)
     }
@@ -536,7 +535,7 @@ public enum AnimatedButtonComponent {
         let label: String
 
         public var body: some View {
-            Button(action: self.action) {
+            Button(action: self.action).accessibilityLabel("Button") {
                 Text(self.label)
                     .padding()
                     .background(Color.blue)
@@ -613,7 +612,7 @@ public enum FloatingActionButtonComponent {
         let icon: String
 
         public var body: some View {
-            Button(action: self.action) {
+            Button(action: self.action).accessibilityLabel("Button") {
                 Image(systemName: self.icon)
                     .font(.title2)
                     .foregroundColor(.white)
@@ -715,7 +714,7 @@ public struct ImportButtonComponent: View {
     public let action: () -> Void
 
     public var body: some View {
-        Button(action: self.action) {
+        Button(action: self.action).accessibilityLabel("Button") {
             HStack {
                 if self.isImporting {
                     ProgressView()
@@ -1111,7 +1110,7 @@ public struct FilterChip: View {
     let action: () -> Void
 
     public var body: some View {
-        Button(action: self.action) {
+        Button(action: self.action).accessibilityLabel("Button") {
             Text(self.title)
                 .font(.caption)
                 .fontWeight(.medium)
@@ -1194,7 +1193,7 @@ public struct InsightDetailView: View {
             #endif
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
-                        Button("Done") {
+                        Button("Done").accessibilityLabel("Button") {
                             self.dismiss()
                         }
                         .accessibilityLabel("Button")
@@ -1332,7 +1331,7 @@ public struct TransactionEmptyStateView: View {
             .padding(.horizontal)
 
             if self.searchText.isEmpty {
-                Button("Add Transaction") {
+                Button("Add Transaction").accessibilityLabel("Button") {
                     self.onAddTransaction()
                 }
                 .buttonStyle(.borderedProminent)
@@ -1417,7 +1416,7 @@ public struct TransactionRowView: View {
         .onTapGesture(perform: self.onTap)
         .swipeActions(edge: .trailing) {
             if let onDelete {
-                Button("Delete", role: .destructive) {
+                Button("Delete", role: .destructive).accessibilityLabel("Button") {
                     onDelete()
                 }
                 .accessibilityLabel("Delete")
@@ -1461,14 +1460,14 @@ public struct AddTransactionView: View {
             #endif
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
+                        Button("Cancel").accessibilityLabel("Button") {
                             self.dismiss()
                         }
                         .accessibilityLabel("Cancel")
                     }
 
                     ToolbarItem(placement: .primaryAction) {
-                        Button("Save") {
+                        Button("Save").accessibilityLabel("Button") {
                             self.dismiss()
                         }
                         .fontWeight(.semibold)
@@ -1521,7 +1520,7 @@ public struct TransactionDetailView: View {
             #endif
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button("Done") {
+                    Button("Done").accessibilityLabel("Button") {
                         self.dismiss()
                     }
                     .accessibilityLabel("Done")
@@ -1602,12 +1601,12 @@ public struct SearchAndFilterSection: View {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.secondary)
 
-                TextField("Search transactions...", text: self.$searchText).accessibilityLabel(
+                TextField("Search transactions...", text: self.$searchText).accessibilityLabel("Text Field").accessibilityLabel(
                     "Text Field"
                 )
                 .textFieldStyle(PlainTextFieldStyle())
 
-                Button(action: { self.showingSearch = true }) {
+                Button(action: { self.showingSearch = true }).accessibilityLabel("Button") {
                     Image(systemName: "line.horizontal.3.decrease.circle")
                         .foregroundColor(.blue)
                 }
@@ -1631,8 +1630,7 @@ public struct SearchAndFilterSection: View {
     }
 
     private func filterChip(_ title: String, _ isSelected: Bool, _ filter: TransactionFilter)
-        -> some View
-    {
+        -> some View {
         Button(action: {
             self.selectedFilter = filter
         }) {
@@ -1755,7 +1753,7 @@ public struct ThemeSettingsSheet: View {
             VStack {
                 Text("Theme Settings")
                 Slider(value: self.$sliderValue, in: 0 ... 1)
-                Button("Close") {
+                Button("Close").accessibilityLabel("Button") {
                     self.showSheet = false
                 }
                 .accessibilityLabel("Close")
@@ -1862,7 +1860,7 @@ public func formatCurrency(_ amount: Double) -> String {
 //                 Text("Categories: \(categories.count)")
 //                 Text("Accounts: \(accounts.count)")
 //
-//                 Button("Save Transaction") {
+//                 Button("Save Transaction").accessibilityLabel("Button") {
 //                     // Save logic
 //                 }
 //                 .buttonStyle(.borderedProminent)

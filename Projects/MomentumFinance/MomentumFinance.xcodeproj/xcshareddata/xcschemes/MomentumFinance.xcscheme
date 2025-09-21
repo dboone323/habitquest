@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A0TEST112F0ABCDE00000001"
+               BuildableName = "MomentumFinanceTests.xctest"
+               BlueprintName = "MomentumFinanceTests"
+               ReferencedContainer = "container:MomentumFinance.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "6B1A2B272C0D1E8F00123456"
+            BuildableName = "MomentumFinance.app"
+            BlueprintName = "MomentumFinance"
+            ReferencedContainer = "container:MomentumFinance.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

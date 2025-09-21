@@ -45,8 +45,10 @@ struct JournalView: View {
                         }
                     }
                     ToolbarItem(placement: .navigation) {
-                        Button("Edit") {
+                        Button(action: {
                             // Custom edit implementation for macOS
+                        }) {
+                            Text("Edit")
                         }
                         .accessibilityLabel("Button")
                     }

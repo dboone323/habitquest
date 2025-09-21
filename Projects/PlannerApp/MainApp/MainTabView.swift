@@ -52,9 +52,9 @@ struct MainTabView: View {
                 .tabItem { Label(TabTags.journal, systemImage: "book") }
                 .tag(TabTags.journal)
 
-            // TODO: Add haptic feedback for tab switches on iOS devices
-            // TODO: Implement tab reordering functionality for user customization
-            // TODO: Add keyboard shortcuts for tab navigation on macOS
+            /// - TODO: Add haptic feedback for tab switches on iOS devices
+            /// - TODO: Implement tab reordering functionality for user customization
+            /// - TODO: Add keyboard shortcuts for tab navigation on macOS
 
             // --- Settings Tab ---
             SettingsView()

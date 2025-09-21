@@ -76,7 +76,7 @@ struct SettingsView: View {
                     HStack {
                         Text("Name")
                             .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
-                        TextField("Enter your name", text: self.$userName).accessibilityLabel("Text Field")
+                        TextField("Enter your name", text: self.$userName).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
                     }
@@ -91,7 +91,7 @@ struct SettingsView: View {
                         }
                     }
 
-                    Button(action: { self.showingThemePreview = true }).accessibilityLabel("Button") {
+                    Button(action: { self.showingThemePreview = true }).accessibilityLabel("Button").accessibilityLabel("Button") {
                         HStack {
                             Text("Theme Preview")
                                 .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
@@ -174,7 +174,7 @@ struct SettingsView: View {
 
                 // --- Sync & Cloud Section ---
                 Section("Sync & Cloud") {
-                    Button(action: { self.showingCloudKitSheet = true }).accessibilityLabel("Button") {
+                    Button(action: { self.showingCloudKitSheet = true }).accessibilityLabel("Button").accessibilityLabel("Button") {
                         HStack {
                             Image(systemName: "icloud")
                                 .foregroundColor(.blue)
@@ -213,15 +213,17 @@ struct SettingsView: View {
 
                 // --- Data Management Section ---
                 Section("Data Management") {
-                    Button("Export Data", action: self.exportData).accessibilityLabel("Button")
+                    Button("Export Data", action: self.exportData).accessibilityLabel("Button").accessibilityLabel("Button")
                         .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
 
                     Button("Clear Old Completed Tasks...", action: { self.showingClearDataConfirmation = true })
                         .accessibilityLabel("Button")
+                        .accessibilityLabel("Button")
                         .foregroundColor(self.themeManager.currentTheme.destructiveColor)
                         .alert("Confirm Deletion", isPresented: self.$showingClearDataConfirmation) {
                             Button("Delete", role: .destructive, action: self.performClearOldData).accessibilityLabel("Button")
-                            Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
+                                .accessibilityLabel("Button")
+                            Button("Cancel", role: .cancel).accessibilityLabel("Button").accessibilityLabel("Button") {}
                         } message: {
                             Text(
                                 "Are you sure you want to permanently delete completed tasks older than \\(autoDeleteDays) days? This cannot be undone."
@@ -256,7 +258,7 @@ struct SettingsView: View {
                         .padding()
                     Text("CloudKit integration coming soon...")
                         .foregroundColor(.secondary)
-                    Button("Done").accessibilityLabel("Button") {
+                    Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
                         self.showingCloudKitSheet = false
                     }
                     .padding()
@@ -271,7 +273,7 @@ struct SettingsView: View {
                         .padding()
                     Text("Theme preview coming soon...")
                         .foregroundColor(.secondary)
-                    Button("Done").accessibilityLabel("Button") {
+                    Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
                         self.showingThemePreview = false
                     }
                     .padding()
@@ -292,8 +294,8 @@ struct SettingsView: View {
 
     @ViewBuilder
     func notificationAlertActions() -> some View {
-        Button("Open Settings", action: self.openAppSettings).accessibilityLabel("Button")
-        Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
+        Button("Open Settings", action: self.openAppSettings).accessibilityLabel("Button").accessibilityLabel("Button")
+        Button("Cancel", role: .cancel).accessibilityLabel("Button").accessibilityLabel("Button") {}
     }
 
     func requestNotificationPermission() {

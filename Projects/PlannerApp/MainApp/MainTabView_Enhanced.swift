@@ -74,39 +74,46 @@ struct MainTabView_Enhanced: View {
     #if os(macOS)
     private var macOSLayout: some View {
         NavigationSplitView {
-            // Sidebar
-            List(TabConfiguration.allTabs, id: \.tag, selection: self.$selectedTabTag) { tab in
-                Label(tab.title, systemImage: tab.icon)
-                    .foregroundColor(
-                        self.selectedTabTag == tab.tag
-                            ? self.themeManager.currentTheme.primaryAccentColor
-                            : self.themeManager.currentTheme.primaryTextColor
-                    )
-                    .tag(tab.tag)
-            }
-            .listStyle(SidebarListStyle())
-            .frame(minWidth: 200, idealWidth: 250)
-            .background(self.themeManager.currentTheme.secondaryBackgroundColor)
-            .toolbar(content: {
-                ToolbarItem(placement: .primaryAction) {
-                    Button(action: self.toggleSidebar) {
-                        Image(systemName: "sidebar.left")
-                    }
-                    .accessibilityLabel("Toggle Sidebar")
-                    .help("Toggle Sidebar")
-                }
-            })
+            self.macSidebar
         } detail: {
-            self.contentForSelectedTab
-                .frame(minWidth: 600)
-                .toolbar(content: {
-                    ToolbarItemGroup(placement: .primaryAction) {
-                        self.macOSToolbarButtons
-                    }
-                })
+            self.macDetail
         }
         .navigationSplitViewStyle(.balanced)
         .background(self.themeManager.currentTheme.primaryBackgroundColor)
+    }
+
+    private var macSidebar: some View {
+        List(TabConfiguration.allTabs, id: \.tag, selection: self.$selectedTabTag) { tab in
+            Label(tab.title, systemImage: tab.icon)
+                .foregroundColor(
+                    self.selectedTabTag == tab.tag
+                        ? self.themeManager.currentTheme.primaryAccentColor
+                        : self.themeManager.currentTheme.primaryTextColor
+                )
+                .tag(tab.tag)
+        }
+        .listStyle(SidebarListStyle())
+        .frame(minWidth: 200, idealWidth: 250)
+        .background(self.themeManager.currentTheme.secondaryBackgroundColor)
+        .toolbar(content: {
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: self.toggleSidebar) {
+                    Image(systemName: "sidebar.left")
+                }
+                .accessibilityLabel("Toggle Sidebar")
+                .help("Toggle Sidebar")
+            }
+        })
+    }
+
+    private var macDetail: some View {
+        self.contentForSelectedTab
+            .frame(minWidth: 600)
+            .toolbar(content: {
+                ToolbarItemGroup(placement: .primaryAction) {
+                    self.macOSToolbarButtons
+                }
+            })
     }
     #endif
 

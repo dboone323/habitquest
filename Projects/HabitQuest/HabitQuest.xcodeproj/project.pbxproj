@@ -108,6 +108,7 @@
 		68581EBA2E0F1EA600E5AADA /* HabitQuest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				AppInfo.plist,
 			);
 			path = HabitQuest;
 			sourceTree = "<group>";
@@ -115,6 +116,7 @@
 		68581ECA2E0F1EA800E5AADA /* HabitQuestTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				Info.plist,
 			);
 			path = HabitQuestTests;
 			sourceTree = "<group>";
@@ -122,6 +124,7 @@
 		68581ED42E0F1EA800E5AADA /* HabitQuestUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				Info.plist,
 			);
 			path = HabitQuestUITests;
 			sourceTree = "<group>";

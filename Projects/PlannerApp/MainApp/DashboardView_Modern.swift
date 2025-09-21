@@ -169,7 +169,7 @@ struct DashboardView: View {
 
                             Spacer()
 
-                            Button("View All").accessibilityLabel("Button") {
+                            Button("View All").accessibilityLabel("Button").accessibilityLabel("Button") {
                                 /// - TODO: Navigate to activities view
                                 print("View All tapped")
                             }
@@ -212,7 +212,7 @@ struct DashboardView: View {
 
                             Spacer()
 
-                            Button("View Calendar").accessibilityLabel("Button") {
+                            Button("View Calendar").accessibilityLabel("Button").accessibilityLabel("Button") {
                                 /// - TODO: Navigate to calendar
                                 print("View Calendar tapped")
                             }
@@ -433,7 +433,7 @@ struct QuickActionCard: View {
     @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
-        Button(action: self.action).accessibilityLabel("Button") {
+        Button(action: self.action).accessibilityLabel("Button").accessibilityLabel("Button") {
             VStack(spacing: 12) {
                 Image(systemName: self.icon)
                     .font(.title2)

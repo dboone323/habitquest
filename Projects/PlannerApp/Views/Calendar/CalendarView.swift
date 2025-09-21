@@ -114,13 +114,17 @@ struct CalendarView: View {
                         HStack(spacing: 12) {
                             Button(action: self.previousMonth) {
                                 Image(systemName: "chevron.left")
-                                    .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
+                                    .foregroundColor(
+                                        self.themeManager.currentTheme.primaryAccentColor
+                                    )
                             }
                             .accessibilityLabel("Button")
 
                             Button(action: self.nextMonth) {
                                 Image(systemName: "chevron.right")
-                                    .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
+                                    .foregroundColor(
+                                        self.themeManager.currentTheme.primaryAccentColor
+                                    )
                             }
                             .accessibilityLabel("Button")
                         }
@@ -238,12 +242,14 @@ struct CalendarView: View {
 
     private func previousMonth() {
         self.selectedDate =
-            Calendar.current.date(byAdding: .month, value: -1, to: self.selectedDate) ?? self.selectedDate
+            Calendar.current.date(byAdding: .month, value: -1, to: self.selectedDate)
+                ?? self.selectedDate
     }
 
     private func nextMonth() {
         self.selectedDate =
-            Calendar.current.date(byAdding: .month, value: 1, to: self.selectedDate) ?? self.selectedDate
+            Calendar.current.date(byAdding: .month, value: 1, to: self.selectedDate)
+                ?? self.selectedDate
     }
 
     // MARK: - Data Functions
@@ -282,7 +288,7 @@ extension Calendar {
 
         var dates: [Date] = []
         var currentDate = calendarStart
-
+        // Fill a 6x7 (42-day) grid starting at calendarStart
         for _ in 0 ..< 42 {
             dates.append(currentDate)
             guard let nextDate = self.date(byAdding: .day, value: 1, to: currentDate) else { break }

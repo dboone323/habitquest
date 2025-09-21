@@ -33,7 +33,7 @@ struct InsightsWidget: View {
                     ProgressView()
                         .scaleEffect(0.8)
                 } else if !self.intelligenceService.insights.isEmpty {
-                    Button(action: { self.showAllInsights = true }) {
+                    Button(action: { self.showAllInsights = true }).accessibilityLabel("Button") {
                         Text("View All")
                             .accessibilityLabel("View All Insights")
                     }
@@ -121,7 +121,7 @@ struct InsightsWidget: View {
 
                     Spacer()
 
-                    Button(action: { self.showAllInsights = true }) {
+                    Button(action: { self.showAllInsights = true }).accessibilityLabel("Button") {
                         Text("View All")
                             .accessibilityLabel("View All Insights")
                     }
@@ -141,7 +141,7 @@ struct CompactInsightRow: View {
     @State private var showDetail = false
 
     var body: some View {
-        Button(action: { self.showDetail = true }) {
+        Button(action: { self.showDetail = true }).accessibilityLabel("Button") {
             HStack(spacing: 12) {
                 // Priority indicator
                 RoundedRectangle(cornerRadius: 3)

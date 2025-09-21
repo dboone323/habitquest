@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 // Momentum Finance - Personal Finance App
@@ -39,10 +39,6 @@ extension Features.Transactions {
                 filtered = filtered.filter { $0.transactionType == .expense }
             case .transfer:
                 filtered = filtered.filter { $0.transactionType == .transfer }
-            case .thisWeek, .thisMonth, .lastMonth, .thisYear, .custom:
-                // For now, return all transactions for date-based filters
-                // In a real implementation, these would filter by date ranges
-                break
             }
 
             // Apply search filter
@@ -50,7 +46,8 @@ extension Features.Transactions {
                 filtered = filtered.filter { transaction in
                     transaction.title.localizedCaseInsensitiveContains(self.searchText)
                         || transaction.category?.name.localizedCaseInsensitiveContains(
-                            self.searchText)
+                            self.searchText
+                        )
                         == true
                 }
             }

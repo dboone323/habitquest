@@ -1,8 +1,7 @@
-import XCTest
 @testable import HabitQuest
+import XCTest
 
 class HabitQuestAppTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Put setup code here
@@ -13,24 +12,23 @@ class HabitQuestAppTests: XCTestCase {
         super.tearDown()
     }
 
-
     // MARK: - structHabitQuestApp:App{ Tests
 
     func testHabitQuestAppInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structHabitQuestApp:App{
+        /// - TODO: Implement initialization test for structHabitQuestApp:App{
         XCTAssertTrue(true, "Placeholder test for structHabitQuestApp:App{")
     }
 
     func testHabitQuestAppProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structHabitQuestApp:App{
+        /// - TODO: Implement property tests for structHabitQuestApp:App{
         XCTAssertTrue(true, "Placeholder test for structHabitQuestApp:App{ properties")
     }
 
     func testHabitQuestAppMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structHabitQuestApp:App{
+        /// - TODO: Implement method tests for structHabitQuestApp:App{
         XCTAssertTrue(true, "Placeholder test for structHabitQuestApp:App{ methods")
     }
-    }
+}

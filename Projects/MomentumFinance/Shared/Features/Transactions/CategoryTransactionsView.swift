@@ -16,16 +16,16 @@ extension Features.Transactions {
 
         // Query transactions but we'll filter in computed property
         #if canImport(SwiftData)
-            #if canImport(SwiftData)
-                private var transactions: [FinancialTransaction] = []
-                private var categories: [ExpenseCategory] = []
-            #else
-                private var transactions: [FinancialTransaction] = []
-                private var categories: [ExpenseCategory] = []
-            #endif
+        #if canImport(SwiftData)
+        private var transactions: [FinancialTransaction] = []
+        private var categories: [ExpenseCategory] = []
         #else
-            private var transactions: [FinancialTransaction] = []
-            private var categories: [ExpenseCategory] = []
+        private var transactions: [FinancialTransaction] = []
+        private var categories: [ExpenseCategory] = []
+        #endif
+        #else
+        private var transactions: [FinancialTransaction] = []
+        private var categories: [ExpenseCategory] = []
         #endif
 
         // Get the specific category
@@ -92,7 +92,7 @@ extension Features.Transactions {
                                     } label: {
                                         Label("Delete", systemImage: "trash")
                                     }
-                                    .accessibilityLabel("Button")
+                                    .accessibilityLabel("Delete")
                                 }
                         }
                     }
@@ -141,11 +141,11 @@ extension Features.Transactions {
         // Cross-platform background color
         private var platformBackgroundColor: Color {
             #if canImport(UIKit)
-                return Color(uiColor: .systemBackground)
+            return Color(uiColor: .systemBackground)
             #elseif canImport(AppKit)
-                return Color(nsColor: .windowBackgroundColor)
+            return Color(nsColor: .windowBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
     }

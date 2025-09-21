@@ -65,7 +65,7 @@ struct SettingsView: View {
                     HStack {
                         Text("Name")
                         Spacer()
-                        TextField("Your Name", text: self.$userName).accessibilityLabel("Text Field")
+                        TextField("Your Name", text: self.$userName).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
                             .multilineTextAlignment(.trailing)
                     }
                 }
@@ -80,7 +80,7 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.menu)
 
-                    Button(action: { self.showingThemePreview = true }).accessibilityLabel("Button") {
+                    Button(action: { self.showingThemePreview = true }).accessibilityLabel("Button").accessibilityLabel("Button") {
                         HStack {
                             Text("Theme Preview")
                                 .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
@@ -159,7 +159,7 @@ struct SettingsView: View {
 
                 // Sync & Cloud Section
                 Section("Sync & Cloud") {
-                    Button(action: { self.showingCloudKitSheet = true }).accessibilityLabel("Button") {
+                    Button(action: { self.showingCloudKitSheet = true }).accessibilityLabel("Button").accessibilityLabel("Button") {
                         HStack {
                             Image(systemName: "icloud")
                                 .foregroundColor(.blue)
@@ -198,10 +198,11 @@ struct SettingsView: View {
 
                 // Data Management Section
                 Section("Data Management") {
-                    Button("Export Data", action: self.exportData).accessibilityLabel("Button")
+                    Button("Export Data", action: self.exportData).accessibilityLabel("Button").accessibilityLabel("Button")
                         .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
 
                     Button("Clear Old Completed Tasks...", action: { self.showingClearDataConfirmation = true })
+                        .accessibilityLabel("Button")
                         .accessibilityLabel("Button")
                         .foregroundColor(self.themeManager.currentTheme.destructiveColor)
                 }
@@ -232,14 +233,15 @@ struct SettingsView: View {
                     .environmentObject(self.themeManager)
             }
             .alert("Notification Permissions", isPresented: self.$showingNotificationAlert) {
-                Button("Open Settings", action: self.openAppSettings).accessibilityLabel("Button")
-                Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
+                Button("Open Settings", action: self.openAppSettings).accessibilityLabel("Button").accessibilityLabel("Button")
+                Button("Cancel", role: .cancel).accessibilityLabel("Button").accessibilityLabel("Button") {}
             } message: {
                 Text("Enable notifications in Settings to receive reminders.")
             }
             .alert("Confirm Deletion", isPresented: self.$showingClearDataConfirmation) {
                 Button("Delete", role: .destructive, action: self.performClearOldData).accessibilityLabel("Button")
-                Button("Cancel", role: .cancel).accessibilityLabel("Button") {}
+                    .accessibilityLabel("Button")
+                Button("Cancel", role: .cancel).accessibilityLabel("Button").accessibilityLabel("Button") {}
             } message: {
                 Text(
                     "Are you sure you want to permanently delete completed tasks older than \(self.autoDeleteDays) days? This cannot be undone."
@@ -314,7 +316,7 @@ struct CloudKitSettingsView: View {
                     .padding()
                 Text("CloudKit integration coming soon...")
                     .foregroundColor(.secondary)
-                Button("Done").accessibilityLabel("Button") {
+                Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
                     self.dismiss()
                 }
                 .padding()
@@ -346,7 +348,7 @@ struct ThemePreviewSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done").accessibilityLabel("Button") {
+                    Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
                         self.dismiss()
                     }
                 }
@@ -364,7 +366,7 @@ struct ThemeCard: View {
     let onTap: () -> Void
 
     var body: some View {
-        Button(action: self.onTap).accessibilityLabel("Button") {
+        Button(action: self.onTap).accessibilityLabel("Button").accessibilityLabel("Button") {
             VStack(spacing: 8) {
                 HStack(spacing: 6) {
                     Circle()

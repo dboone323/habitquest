@@ -28,7 +28,7 @@ public final class SearchEngineService: ObservableObject {
     ///   - filter: Type of data to search
     /// - Returns: Array of search results
     public func search(query: String, filter: SearchFilter) -> [SearchResult] {
-        guard let modelContext, !query.isEmpty else {
+        guard self.modelContext != nil, !query.isEmpty else {
             return []
         }
 

@@ -18,21 +18,21 @@ public enum TransactionType: String, CaseIterable, Codable {
 @Model
 public final class FinancialTransaction {
     /// The title or description of the transaction.
-    var title: String
+    public var title: String
     /// The amount of money for the transaction.
-    var amount: Double
+    public var amount: Double
     /// The date the transaction occurred.
-    var date: Date
+    public var date: Date
     /// The type of transaction (income or expense).
-    var transactionType: TransactionType
+    public var transactionType: TransactionType
     /// Optional notes or memo for the transaction.
-    var notes: String?
+    public var notes: String?
 
     // Relationships
     /// The category associated with this transaction (optional).
-    var category: ExpenseCategory?
+    public var category: ExpenseCategory?
     /// The financial account associated with this transaction (optional).
-    var account: FinancialAccount?
+    public var account: FinancialAccount?
 
     /// Creates a new financial transaction.
     /// - Parameters:
@@ -41,7 +41,7 @@ public final class FinancialTransaction {
     ///   - date: The date of the transaction.
     ///   - transactionType: The type (income or expense).
     ///   - notes: Optional notes or memo.
-    init(
+    public init(
         title: String, amount: Double, date: Date, transactionType: TransactionType,
         notes: String? = nil
     ) {
@@ -53,7 +53,7 @@ public final class FinancialTransaction {
     }
 
     /// Returns the amount as a formatted currency string, with a sign based on transaction type.
-    var formattedAmount: String {
+    public var formattedAmount: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.currencyCode = "USD"
@@ -65,7 +65,7 @@ public final class FinancialTransaction {
     }
 
     /// Returns the transaction date as a formatted string for display.
-    var formattedDate: String {
+    public var formattedDate: String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none

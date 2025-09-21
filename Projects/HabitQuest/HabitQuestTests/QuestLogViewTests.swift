@@ -1,8 +1,7 @@
-import XCTest
 @testable import HabitQuest
+import XCTest
 
 class QuestLogViewTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Put setup code here
@@ -13,24 +12,23 @@ class QuestLogViewTests: XCTestCase {
         super.tearDown()
     }
 
-
     // MARK: - structQuestLogView:View{ Tests
 
     func testQuestLogViewInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structQuestLogView:View{
+        /// - TODO: Implement initialization test for structQuestLogView:View{
         XCTAssertTrue(true, "Placeholder test for structQuestLogView:View{")
     }
 
     func testQuestLogViewProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structQuestLogView:View{
+        /// - TODO: Implement property tests for structQuestLogView:View{
         XCTAssertTrue(true, "Placeholder test for structQuestLogView:View{ properties")
     }
 
     func testQuestLogViewMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structQuestLogView:View{
+        /// - TODO: Implement method tests for structQuestLogView:View{
         XCTAssertTrue(true, "Placeholder test for structQuestLogView:View{ methods")
     }
-    }
+}

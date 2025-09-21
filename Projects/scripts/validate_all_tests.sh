@@ -3,7 +3,8 @@
 # Comprehensive Test Validation Script for Quantum Workspace Projects
 # This script runs tests for all projects and validates test coverage
 
-set -e
+# Removed 'set -e' to ensure the script completes all project validations
+set -u
 
 echo "🚀 Starting Quantum Workspace Test Validation"
 echo "=============================================="
@@ -25,6 +26,35 @@ print_status() {
     echo -e "${color}${message}${NC}"
 }
 
+# Check built app bundle for Info.plist & CFBundleIdentifier
+check_app_plist() {
+    local app_path="$1"
+    if [ ! -d "$app_path" ]; then
+        print_status $RED "  ❌ App bundle not found: $app_path"
+        return 1
+    fi
+    local plist_candidates=(
+        "$app_path/Contents/Info.plist"      # macOS structure
+        "$app_path/Info.plist"               # iOS / Catalyst
+    )
+    local plist_file=""
+    for p in "${plist_candidates[@]}"; do
+        if [ -f "$p" ]; then
+            plist_file="$p"; break
+        fi
+    done
+    if [ -z "$plist_file" ]; then
+        print_status $RED "  ❌ Info.plist missing in app bundle"
+        return 1
+    fi
+    if ! /usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$plist_file" >/dev/null 2>&1; then
+        print_status $RED "  ❌ CFBundleIdentifier missing in Info.plist"
+        return 1
+    fi
+    print_status $GREEN "  ✅ Info.plist valid (CFBundleIdentifier present)"
+    return 0
+}
+
 # Function to run tests for a project
 run_project_tests() {
     local project=$1
@@ -44,19 +74,52 @@ run_project_tests() {
         print_status $YELLOW "  Building and testing with Xcode..."
 
         # Build the project
-        if xcodebuild -project "$project.xcodeproj" -scheme "$project" -configuration Debug -allowProvisioningUpdates build; then
+        local build_log="/tmp/${project}_build.log"
+        local test_log="/tmp/${project}_test.log"
+        if xcodebuild -project "$project.xcodeproj" -scheme "$project" -configuration Debug -allowProvisioningUpdates build >"$build_log" 2>&1; then
             print_status $GREEN "  ✅ Build successful for $project"
 
-            # Try to run tests
-            if xcodebuild -project "$project.xcodeproj" -scheme "$project" -configuration Debug -allowProvisioningUpdates test; then
-                print_status $GREEN "  ✅ Tests passed for $project"
+            # Try to locate built app (macOS or iOS simulator) for plist check
+            local derived="$(getconf DARWIN_USER_CACHE_DIR 2>/dev/null || echo "$HOME/Library/Developer/Xcode/DerivedData")"
+            # Fallback to standard DerivedData root if getconf path not valid
+            local app_bundle
+            app_bundle=$(find "$HOME/Library/Developer/Xcode/DerivedData" -type d -name "${project}.app" -maxdepth 8 2>/dev/null | head -n 1)
+            if [ -n "$app_bundle" ]; then
+                check_app_plist "$app_bundle" || print_status $YELLOW "  ⚠️  Proceeding despite plist issue"
+            else
+                print_status $YELLOW "  ⚠️  Could not locate built app bundle for plist validation"
+            fi
+
+            # Run tests capturing xcresult path
+            local xcresult_path=""
+            if xcodebuild -project "$project.xcodeproj" -scheme "$project" -configuration Debug -allowProvisioningUpdates test ENABLE_TESTABILITY=YES RESULT_BUNDLE_PATH="/tmp/${project}.xcresult" >"$test_log" 2>&1; then
+                xcresult_path="/tmp/${project}.xcresult"
+                print_status $GREEN "  ✅ All tests passed for $project"
+                # Parse counts
+                if [ -d "$xcresult_path" ]; then
+                    local summary_json="/tmp/${project}_summary.json"
+                    xcrun xcresulttool get --path "$xcresult_path" --format json > "$summary_json" 2>/dev/null || true
+                    # Basic extraction (total & failed) using grep/sed (lightweight)
+                    local total_tests failed_tests
+                    total_tests=$(grep -o '"testStatus"' "$summary_json" | wc -l | tr -d ' ')
+                    failed_tests=$(grep -o '"testStatus" : "Failure"' "$summary_json" | wc -l | tr -d ' ')
+                    print_status $BLUE "  ℹ️  Tests: total=$total_tests failed=$failed_tests"
+                fi
                 return 0
             else
-                print_status $RED "  ❌ Tests failed for $project"
+                # Classify failure: look for bundle identifier issue or UITest failure markers
+                if grep -q "CFBundleIdentifier not found" "$test_log"; then
+                    print_status $RED "  ❌ UITest launch failure (missing CFBundleIdentifier)"
+                elif grep -qi "UITest" "$test_log"; then
+                    print_status $RED "  ❌ UITest-related failure detected"
+                else
+                    print_status $RED "  ❌ Unit test or build during test phase failed"
+                fi
+                print_status $YELLOW "  ℹ️  See $test_log for details"
                 return 1
             fi
         else
-            print_status $RED "  ❌ Build failed for $project"
+            print_status $RED "  ❌ Build failed for $project (see $build_log)"
             return 1
         fi
     else
@@ -127,6 +190,7 @@ for project in "${PROJECTS[@]}"; do
         ((passed_validation++))
     else
         ((failed_validation++))
+        # Continue even if a project's test files are missing
     fi
     echo ""
 done
@@ -143,6 +207,7 @@ for project in "${PROJECTS[@]}"; do
         ((passed_tests++))
     else
         ((failed_tests++))
+        # Continue even if build/tests fail for a project
     fi
     echo ""
 done

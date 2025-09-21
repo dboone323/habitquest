@@ -1,0 +1,2 @@
+// Workspace-wide defaults
+MACOSX_DEPLOYMENT_TARGET = 26.0

@@ -282,18 +282,18 @@ struct ThemeButtonStylesShowcase: View {
                 .foregroundStyle(self.theme.primaryText)
 
             VStack(spacing: 12) {
-                Button("Primary Button").accessibilityLabel("Button") {}
+                Button("Primary Button").accessibilityLabel("Button").accessibilityLabel("Button") {}
                     .buttonStyle(.borderedProminent)
                     .tint(self.theme.accentPrimary)
 
-                Button("Secondary Button").accessibilityLabel("Button") {}
+                Button("Secondary Button").accessibilityLabel("Button").accessibilityLabel("Button") {}
                     .buttonStyle(.bordered)
                     .tint(self.theme.secondaryBackground)
 
-                Button("Text Button").accessibilityLabel("Button") {}
+                Button("Text Button").accessibilityLabel("Button").accessibilityLabel("Button") {}
                     .foregroundStyle(self.theme.accentPrimary)
 
-                Button("Destructive Button").accessibilityLabel("Button") {}
+                Button("Destructive Button").accessibilityLabel("Button").accessibilityLabel("Button") {}
                     .foregroundStyle(self.theme.expense)
             }
         }
@@ -339,7 +339,7 @@ struct ThemeSettingsSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done").accessibilityLabel("Button") {
+                    Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
                         self.showSheet = false
                     }
                 }

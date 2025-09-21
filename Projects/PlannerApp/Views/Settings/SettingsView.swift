@@ -32,7 +32,7 @@ struct SettingsView: View {
                     HStack {
                         Text("Name")
                         Spacer()
-                        TextField("Your Name", text: self.$userName).accessibilityLabel("Text Field")
+                        TextField("Your Name", text: self.$userName).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
                             .multilineTextAlignment(.trailing)
                     }
                 }
@@ -99,9 +99,9 @@ struct SettingsView: View {
                     .environmentObject(self.themeManager)
             }
             .alert("Notification Permissions", isPresented: self.$showingNotificationAlert) {
-                Button("Open Settings", action: self.openAppSettings)
+                Button("Open Settings", action: self.openAppSettings).accessibilityLabel("Button")
                     .accessibilityLabel("Open Settings Button")
-                Button("Cancel", role: .cancel, action: {})
+                Button("Cancel", role: .cancel, action: {}).accessibilityLabel("Button")
                     .accessibilityLabel("Cancel Button")
             } message: {
                 Text("Enable notifications in Settings to receive reminders.")

@@ -176,7 +176,8 @@ struct AccessibleListRow<Content: View>: View {
             .accessibilityActions {
                 ForEach(self.accessibilityActions.indices, id: \.self) { index in
                     let actionInfo = self.accessibilityActions[index]
-                    Button(actionInfo.name, action: actionInfo.action).accessibilityLabel("Button")
+                    Button(actionInfo.name, action: actionInfo.action)
+                        .accessibilityLabel("Button")
                 }
             }
     }

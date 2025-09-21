@@ -83,51 +83,56 @@ detect_platform() {
     echo unknown
   fi
 }
-
   for p in "${projects[@]}"; do
-  proj_file="${p}/$(basename "$p").xcodeproj"
-  scheme="$(basename "$p")"
-  if [ -d "$proj_file" ]; then
-    platform="$(detect_platform "$proj_file" "$scheme")"
-    case "$platform" in
-      ios)
-        echo "Building $scheme for iOS Simulator..."
-        xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug -destination 'generic/platform=iOS Simulator' | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat)
-        if [ -n "$SIM_NAME" ]; then
-          echo "Testing $scheme on $SIM_NAME..."
-          # Verify destination is recognized by xcodebuild before attempting tests
-          if xcodebuild -project "$proj_file" -scheme "$scheme" -showdestinations 2>/dev/null | grep -F "name: $SIM_NAME" >/dev/null; then
-            # Save raw log to check for zero-tests condition
-            if ! xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug -destination "platform=iOS Simulator,name=${SIM_NAME}" test 2>&1 | tee "/tmp/${scheme}_ios_test.log" | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat); then
-              echo "WARNING: Test run failed for $scheme on $SIM_NAME (likely missing runtime). Continuing CI without failing."
-            fi
-            if grep -q "Test run with 0 tests in 0 suites" "/tmp/${scheme}_ios_test.log"; then
-              echo "WARNING: No tests discovered for $scheme (iOS). Consider adding tests or disabling test step."
+    proj_file="${p}/$(basename "$p").xcodeproj"
+    scheme="$(basename "$p")"
+    if [ -d "$proj_file" ]; then
+      platform="$(detect_platform "$proj_file" "$scheme")"
+      case "$platform" in
+        ios)
+          echo "Building $scheme for iOS Simulator..."
+          xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug -destination 'generic/platform=iOS Simulator' | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat)
+          if [ -n "$SIM_NAME" ]; then
+            echo "Testing $scheme on $SIM_NAME..."
+            if xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug -destination "platform=iOS Simulator,name=${SIM_NAME}" test 2>&1 | tee "/tmp/${scheme}_ios_test.log" | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat); then
+              if grep -q "Test run with 0 tests in 0 suites" "/tmp/${scheme}_ios_test.log"; then
+                echo "WARNING: No tests discovered for $scheme (iOS)."
+              fi
+            else
+              echo "WARNING: Test run failed for $scheme on $SIM_NAME (continuing)."
             fi
           else
-            echo "No matching destination for $SIM_NAME; skipping tests for $scheme."
+            echo "No suitable simulator found; skipping tests for $scheme."
           fi
-        else
-          echo "No suitable simulator found; skipping tests for $scheme."
-        fi
-        ;;
-      macos)
-        echo "Building $scheme for macOS..."
-        xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug -destination 'platform=macOS' | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat)
-  echo "Testing $scheme on macOS (non-fatal)..."
-  xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug -destination 'platform=macOS' test 2>&1 | tee "/tmp/${scheme}_macos_test.log" | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat) || echo "WARNING: macOS tests failed for $scheme; continuing."
-        if grep -q "Test run with 0 tests in 0 suites" "/tmp/${scheme}_macos_test.log"; then
-          echo "WARNING: No tests discovered for $scheme (macOS). Consider adding tests or disabling test step."
-        fi
-        ;;
-      *)
-        echo "Unknown platform for $scheme; attempting generic build..."
-        xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat)
-        ;;
-    esac
-  else
-    echo "Skipping $p (no .xcodeproj)"
-  fi
+          ;;
+        macos)
+          echo "Building $scheme for macOS..."
+          xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug -destination 'platform=macOS' | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat)
+          echo "Testing $scheme on macOS (non-fatal)..."
+          if xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug -destination 'platform=macOS' test 2>&1 | tee "/tmp/${scheme}_macos_test.log" | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat); then
+            if grep -q "Test run with 0 tests in 0 suites" "/tmp/${scheme}_macos_test.log"; then
+              echo "WARNING: No tests discovered for $scheme (macOS)."
+            fi
+          else
+            echo "WARNING: macOS tests failed for $scheme; continuing."
+          fi
+          # Generic Info.plist validation for macOS app bundles
+          APP_PATH="$(find ~/Library/Developer/Xcode/DerivedData -path "*${scheme}*/Build/Products/Debug/${scheme}.app" -maxdepth 5 -type d 2>/dev/null | head -n1 || true)"
+          if [ -n "$APP_PATH" ] && [ -d "$APP_PATH" ]; then
+            echo "Validating Info.plist for $scheme..."
+            scripts/validate_plist.sh "$APP_PATH" || { echo "Info.plist validation failed for $scheme" >&2; exit 11; }
+          else
+            echo "WARNING: Could not locate app bundle for $scheme to validate plist." >&2
+          fi
+          ;;
+        *)
+          echo "Unknown platform for $scheme; attempting generic build..."
+          xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat)
+          ;;
+      esac
+    else
+      echo "Skipping $p (no .xcodeproj)"
+    fi
   done
 else
   echo "Skipping Xcode builds (SKIP_XCODE=1)."

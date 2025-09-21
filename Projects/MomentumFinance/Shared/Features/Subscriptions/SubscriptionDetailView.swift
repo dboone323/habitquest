@@ -17,16 +17,16 @@ extension Features.Subscriptions {
         var subscription: Subscription?
 
         #if canImport(SwiftData)
-            #if canImport(SwiftData)
-                private var subscriptions: [Subscription] = []
-                private var transactions: [FinancialTransaction] = []
-            #else
-                private var subscriptions: [Subscription] = []
-                private var transactions: [FinancialTransaction] = []
-            #endif
+        #if canImport(SwiftData)
+        private var subscriptions: [Subscription] = []
+        private var transactions: [FinancialTransaction] = []
         #else
-            private var subscriptions: [Subscription] = []
-            private var transactions: [FinancialTransaction] = []
+        private var subscriptions: [Subscription] = []
+        private var transactions: [FinancialTransaction] = []
+        #endif
+        #else
+        private var subscriptions: [Subscription] = []
+        private var transactions: [FinancialTransaction] = []
         #endif
 
         @State private var showingProcessPaymentConfirmation = false
@@ -210,12 +210,14 @@ extension Features.Subscriptions {
                     .padding()
                     .navigationTitle("Subscription Details")
                     .alert("Process Payment", isPresented: self.$showingProcessPaymentConfirmation) {
-                        Button("Cancel", role: .cancel) {}
-                            .accessibilityLabel("Button")
+                        Button("Cancel", role: .cancel) {
+                            self.showingProcessPaymentConfirmation = false
+                        }
+                        .accessibilityLabel("Cancel")
                         Button("Process Payment") {
                             subscription.processPayment(modelContext: self.modelContext)
                         }
-                        .accessibilityLabel("Button")
+                        .accessibilityLabel("Process Payment")
                     } message: {
                         Text(
                             "Process a payment of \(subscription.amount.formatted(.currency(code: "USD"))) "
@@ -279,11 +281,11 @@ extension Features.Subscriptions {
         // Cross-platform background color
         private var platformBackgroundColor: Color {
             #if canImport(UIKit)
-                return Color(uiColor: .systemBackground)
+            return Color(uiColor: .systemBackground)
             #elseif canImport(AppKit)
-                return Color(nsColor: .windowBackgroundColor)
+            return Color(nsColor: .windowBackgroundColor)
             #else
-                return Color.white
+            return Color.white
             #endif
         }
     }

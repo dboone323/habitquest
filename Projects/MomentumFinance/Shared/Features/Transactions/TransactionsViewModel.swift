@@ -44,7 +44,8 @@ extension Features.Transactions {
         /// <#Description#>
         /// - Returns: <#description#>
         func groupTransactionsByMonth(_ transactions: [FinancialTransaction]) -> [String:
-            [FinancialTransaction]] {
+            [FinancialTransaction]
+        ] {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM yyyy"
 

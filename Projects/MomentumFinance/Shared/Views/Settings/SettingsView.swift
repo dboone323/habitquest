@@ -52,7 +52,7 @@ struct SettingsView: View {
                         Text("1 minute").tag(60)
                         Text("5 minutes").tag(300)
                         Text("15 minutes").tag(900)
-                        Text("1 hour").tag(3_600)
+                        Text("1 hour").tag(3600)
                     }
                 }
 
@@ -84,6 +84,7 @@ struct SettingsView: View {
                     Button("Delete All Data", role: .destructive) {
                         self.showingDeleteConfirmation = true
                     }
+                    .accessibilityLabel("Delete All Data")
                 }
 
                 // Import/Export Section
@@ -91,10 +92,12 @@ struct SettingsView: View {
                     Button("Export Data") {
                         // Export functionality would go here
                     }
+                    .accessibilityLabel("Export Data")
 
                     Button("Import Data") {
                         // Import functionality would go here
                     }
+                    .accessibilityLabel("Import Data")
                 }
 
                 // About Section
@@ -116,20 +119,18 @@ struct SettingsView: View {
             }
             .navigationTitle("Settings")
             .alert("Delete Transaction", isPresented: self.$showDeleteAlert) {
-                Button("Cancel", role: .cancel) {}
-                    .accessibilityLabel("Cancel button")
-                Button("Delete", role: .destructive) {}
-                    .accessibilityLabel("Delete button")
+                Button("Cancel", role: .cancel) { /* dismiss automatically */ }
+                    .accessibilityLabel("Cancel")
+                Button("Delete", role: .destructive) { /* perform delete */ }
+                    .accessibilityLabel("Delete Transaction")
             } message: {
                 Text("This action cannot be undone.")
             }
             .alert("Delete All Data", isPresented: self.$showDeleteAllAlert) {
-                Button("Cancel", role: .cancel) {}
-                    .accessibilityLabel("Cancel delete all button")
-                Button("Delete All", role: .destructive) {
-                    self.deleteAllData()
-                }
-                .accessibilityLabel("Confirm delete all button")
+                Button("Cancel", role: .cancel) { /* dismiss automatically */ }
+                    .accessibilityLabel("Cancel Delete All")
+                Button("Delete All", role: .destructive) { self.deleteAllData() }
+                    .accessibilityLabel("Confirm Delete All Data")
             } message: {
                 Text(
                     "This will permanently delete all your financial data. This action cannot be undone."
