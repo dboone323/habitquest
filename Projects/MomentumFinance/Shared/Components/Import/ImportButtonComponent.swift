@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ImportButtonComponent: View {
+public struct ImportButtonComponent: View {
     let isImporting: Bool
     let action: () -> Void
 

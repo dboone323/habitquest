@@ -1,7 +1,7 @@
 import PlannerApp
 import SwiftUI
 
-struct AddGoalView: View {
+public struct AddGoalView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var goals: [Goal]
 
@@ -58,7 +58,7 @@ struct AddGoalView: View {
     }
 }
 
-struct AddGoalView_Previews: PreviewProvider {
+public struct AddGoalView_Previews: PreviewProvider {
     static var previews: some View {
         AddGoalView(goals: Binding.constant([]))
     }

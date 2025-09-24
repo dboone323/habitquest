@@ -3,11 +3,11 @@ import SwiftUI
 
 /// View displaying all user habits with management capabilities
 /// Users can view, add, edit, and delete their quests from this central location
-struct QuestLogView: View {
+public struct QuestLogView: View {
     @StateObject private var viewModel = QuestLogViewModel()
     @Environment(\.modelContext) private var modelContext
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             VStack {
                 if self.viewModel.allHabits.isEmpty {
@@ -59,7 +59,7 @@ struct QuestLogView: View {
 
 /// Empty state when no quests exist
 private struct EmptyQuestLogView: View {
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "book.closed")
                 .font(.system(size: 60))
@@ -84,7 +84,7 @@ private struct QuestListView: View {
     let onDelete: (Habit) -> Void
     let onEdit: (Habit) -> Void
 
-    var body: some View {
+    public var body: some View {
         List {
             ForEach(self.habits, id: \.id) { habit in
                 QuestLogRowView(
@@ -106,7 +106,7 @@ private struct QuestLogRowView: View {
     let habit: Habit
     let onEdit: (Habit) -> Void
 
-    var body: some View {
+    public var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 6) {
                 Text(self.habit.name)
@@ -163,7 +163,7 @@ private struct QuestStatChip: View {
     let text: String
     let color: Color
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: 4) {
             Image(systemName: self.icon)
                 .font(.caption)
@@ -203,7 +203,7 @@ private struct AddEditQuestView: View {
         self.habit != nil
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             Form {
                 Section("Quest Details") {

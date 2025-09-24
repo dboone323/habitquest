@@ -3,7 +3,7 @@
 import Foundation
 import SwiftUI
 
-struct SettingsView: View {
+public struct SettingsView: View {
     @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
@@ -14,7 +14,7 @@ struct SettingsView: View {
     }
 }
 
-struct SettingsView_Previews: PreviewProvider {
+public struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
             .environmentObject(ThemeManager())

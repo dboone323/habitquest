@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DataManagementSection: View {
+public struct DataManagementSection: View {
     @Binding var dataRetentionDays: Int
     @Binding var showingDeleteConfirmation: Bool
 

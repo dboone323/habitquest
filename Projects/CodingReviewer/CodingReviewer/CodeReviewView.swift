@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CodeReviewView: View {
+public struct CodeReviewView: View {
     let fileURL: URL
     @Binding var codeContent: String
     @Binding var analysisResult: CodeAnalysisResult?
@@ -20,30 +20,30 @@ struct CodeReviewView: View {
     let onGenerateDocumentation: () async -> Void
     let onGenerateTests: () async -> Void
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 0) {
             // Header
             HStack {
-                Text(fileURL.lastPathComponent)
+                Text(self.fileURL.lastPathComponent)
                     .font(.headline)
                 Spacer()
 
-                switch currentView {
+                switch self.currentView {
                 case .analysis:
-                    Button(action: { Task { await onAnalyze() } }) {
+                    Button(action: { Task { await self.onAnalyze() } }) {
                         Label("Analyze", systemImage: "play.fill")
                     }
-                    .disabled(isAnalyzing || codeContent.isEmpty)
+                    .disabled(self.isAnalyzing || self.codeContent.isEmpty)
                 case .documentation:
-                    Button(action: { Task { await onGenerateDocumentation() } }) {
+                    Button(action: { Task { await self.onGenerateDocumentation() } }) {
                         Label("Generate Docs", systemImage: "doc.text")
                     }
-                    .disabled(isAnalyzing || codeContent.isEmpty)
+                    .disabled(self.isAnalyzing || self.codeContent.isEmpty)
                 case .tests:
-                    Button(action: { Task { await onGenerateTests() } }) {
+                    Button(action: { Task { await self.onGenerateTests() } }) {
                         Label("Generate Tests", systemImage: "testtube.2")
                     }
-                    .disabled(isAnalyzing || codeContent.isEmpty)
+                    .disabled(self.isAnalyzing || self.codeContent.isEmpty)
                 }
             }
             .padding()
@@ -54,7 +54,7 @@ struct CodeReviewView: View {
             HSplitView {
                 // Code editor
                 ScrollView {
-                    TextEditor(text: $codeContent)
+                    TextEditor(text: self.$codeContent)
                         .font(.system(.body, design: .monospaced))
                         .padding()
                 }
@@ -62,11 +62,11 @@ struct CodeReviewView: View {
 
                 // Results panel
                 ResultsPanel(
-                    currentView: currentView,
-                    analysisResult: analysisResult,
-                    documentationResult: documentationResult,
-                    testResult: testResult,
-                    isAnalyzing: isAnalyzing
+                    currentView: self.currentView,
+                    analysisResult: self.analysisResult,
+                    documentationResult: self.documentationResult,
+                    testResult: self.testResult,
+                    isAnalyzing: self.isAnalyzing
                 )
                 .frame(minWidth: 300)
             }
@@ -74,21 +74,21 @@ struct CodeReviewView: View {
     }
 }
 
-struct ResultsPanel: View {
+public struct ResultsPanel: View {
     let currentView: ContentViewType
     let analysisResult: CodeAnalysisResult?
     let documentationResult: DocumentationResult?
     let testResult: TestGenerationResult?
     let isAnalyzing: Bool
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 0) {
             // Results header
             HStack {
-                Text(resultsTitle)
+                Text(self.resultsTitle)
                     .font(.headline)
                 Spacer()
-                if isAnalyzing {
+                if self.isAnalyzing {
                     ProgressView()
                         .scaleEffect(0.7)
                 }
@@ -100,11 +100,11 @@ struct ResultsPanel: View {
             // Results content
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    switch currentView {
+                    switch self.currentView {
                     case .analysis:
                         if let result = analysisResult {
                             AnalysisResultsView(result: result)
-                        } else if !isAnalyzing {
+                        } else if !self.isAnalyzing {
                             Text("Click Analyze to start code analysis")
                                 .foregroundColor(.secondary)
                                 .padding()
@@ -112,7 +112,7 @@ struct ResultsPanel: View {
                     case .documentation:
                         if let result = documentationResult {
                             DocumentationResultsView(result: result)
-                        } else if !isAnalyzing {
+                        } else if !self.isAnalyzing {
                             Text("Click Generate Docs to create documentation")
                                 .foregroundColor(.secondary)
                                 .padding()
@@ -120,7 +120,7 @@ struct ResultsPanel: View {
                     case .tests:
                         if let result = testResult {
                             TestResultsView(result: result)
-                        } else if !isAnalyzing {
+                        } else if !self.isAnalyzing {
                             Text("Click Generate Tests to create unit tests")
                                 .foregroundColor(.secondary)
                                 .padding()
@@ -133,10 +133,10 @@ struct ResultsPanel: View {
     }
 
     private var resultsTitle: String {
-        switch currentView {
-        case .analysis: return "Analysis Results"
-        case .documentation: return "Documentation"
-        case .tests: return "Generated Tests"
+        switch self.currentView {
+        case .analysis: "Analysis Results"
+        case .documentation: "Documentation"
+        case .tests: "Generated Tests"
         }
     }
 }

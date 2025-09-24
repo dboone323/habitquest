@@ -5,15 +5,15 @@
 //  Main content view for the CodingReviewer application
 //
 
-import SwiftUI
 import os
+import SwiftUI
 import UniformTypeIdentifiers
 
 enum ContentViewType {
     case analysis, documentation, tests
 }
 
-struct ContentView: View {
+public struct ContentView: View {
     private let logger = Logger(subsystem: "com.quantum.codingreviewer", category: "ContentView")
 
     // Service layer
@@ -29,14 +29,14 @@ struct ContentView: View {
     @State private var selectedAnalysisType: AnalysisType = .comprehensive
     @State private var currentView: ContentViewType = .analysis
 
-    var body: some View {
+    public var body: some View {
         NavigationSplitView {
             // Sidebar with file browser and analysis tools
             SidebarView(
-                selectedFileURL: $selectedFileURL,
-                showFilePicker: $showFilePicker,
-                selectedAnalysisType: $selectedAnalysisType,
-                currentView: $currentView
+                selectedFileURL: self.$selectedFileURL,
+                showFilePicker: self.$showFilePicker,
+                selectedAnalysisType: self.$selectedAnalysisType,
+                currentView: self.$currentView
             )
         } detail: {
             // Main content area
@@ -44,43 +44,43 @@ struct ContentView: View {
                 if let fileURL = selectedFileURL {
                     CodeReviewView(
                         fileURL: fileURL,
-                        codeContent: $codeContent,
-                        analysisResult: $analysisResult,
-                        documentationResult: $documentationResult,
-                        testResult: $testResult,
-                        isAnalyzing: $isAnalyzing,
-                        selectedAnalysisType: selectedAnalysisType,
-                        currentView: currentView,
-                        onAnalyze: { await analyzeCode() },
-                        onGenerateDocumentation: { await generateDocumentation() },
-                        onGenerateTests: { await generateTests() }
+                        codeContent: self.$codeContent,
+                        analysisResult: self.$analysisResult,
+                        documentationResult: self.$documentationResult,
+                        testResult: self.$testResult,
+                        isAnalyzing: self.$isAnalyzing,
+                        selectedAnalysisType: self.selectedAnalysisType,
+                        currentView: self.currentView,
+                        onAnalyze: { await self.analyzeCode() },
+                        onGenerateDocumentation: { await self.generateDocumentation() },
+                        onGenerateTests: { await self.generateTests() }
                     )
                 } else {
-                    WelcomeView(showFilePicker: $showFilePicker)
+                    WelcomeView(showFilePicker: self.$showFilePicker)
                 }
             }
         }
         .fileImporter(
-            isPresented: $showFilePicker,
+            isPresented: self.$showFilePicker,
             allowedContentTypes: [.swiftSource, .objectiveCSource, .cSource, .cHeader],
             allowsMultipleSelection: false
         ) { result in
-            handleFileSelection(result)
+            self.handleFileSelection(result)
         }
         .onAppear {
-            logger.info("ContentView appeared")
+            self.logger.info("ContentView appeared")
         }
     }
 
     private func handleFileSelection(_ result: Result<[URL], Error>) {
         switch result {
-        case .success(let urls):
+        case let .success(urls):
             if let url = urls.first {
-                selectedFileURL = url
-                loadFileContent(from: url)
+                self.selectedFileURL = url
+                self.loadFileContent(from: url)
             }
-        case .failure(let error):
-            logger.error("File selection failed: \(error.localizedDescription)")
+        case let .failure(error):
+            self.logger.error("File selection failed: \(error.localizedDescription)")
             // TODO: Handle error properly
         }
     }
@@ -88,67 +88,71 @@ struct ContentView: View {
     private func loadFileContent(from url: URL) {
         do {
             let content = try String(contentsOf: url, encoding: .utf8)
-            codeContent = content
-            logger.info("Loaded file content from: \(url.lastPathComponent)")
+            self.codeContent = content
+            self.logger.info("Loaded file content from: \(url.lastPathComponent)")
         } catch {
-            logger.error("Failed to load file content: \(error.localizedDescription)")
+            self.logger.error("Failed to load file content: \(error.localizedDescription)")
             // TODO: Handle error properly
         }
     }
 
     private func analyzeCode() async {
-        guard !codeContent.isEmpty else { return }
+        guard !self.codeContent.isEmpty else { return }
 
-        isAnalyzing = true
+        self.isAnalyzing = true
         defer { isAnalyzing = false }
 
         do {
-            let language = detectLanguage(from: selectedFileURL)
-            let result = try await codeReviewService.analyzeCode(codeContent, language: language, analysisType: selectedAnalysisType)
-            analysisResult = result
-            logger.info("Code analysis completed successfully")
+            let language = self.detectLanguage(from: self.selectedFileURL)
+            let result = try await codeReviewService.analyzeCode(
+                self.codeContent,
+                language: language,
+                analysisType: self.selectedAnalysisType
+            )
+            self.analysisResult = result
+            self.logger.info("Code analysis completed successfully")
         } catch {
-            logger.error("Code analysis failed: \(error.localizedDescription)")
+            self.logger.error("Code analysis failed: \(error.localizedDescription)")
             // TODO: Handle error properly
         }
     }
 
     private func generateDocumentation() async {
-        guard !codeContent.isEmpty else { return }
+        guard !self.codeContent.isEmpty else { return }
 
-        isAnalyzing = true
+        self.isAnalyzing = true
         defer { isAnalyzing = false }
 
         do {
-            let language = detectLanguage(from: selectedFileURL)
-            let result = try await codeReviewService.generateDocumentation(codeContent, language: language, includeExamples: true)
-            documentationResult = result
-            logger.info("Documentation generation completed successfully")
+            let language = self.detectLanguage(from: self.selectedFileURL)
+            let result = try await codeReviewService.generateDocumentation(self.codeContent, language: language, includeExamples: true)
+            self.documentationResult = result
+            self.logger.info("Documentation generation completed successfully")
         } catch {
-            logger.error("Documentation generation failed: \(error.localizedDescription)")
+            self.logger.error("Documentation generation failed: \(error.localizedDescription)")
             // TODO: Handle error properly
         }
     }
 
     private func generateTests() async {
-        guard !codeContent.isEmpty else { return }
+        guard !self.codeContent.isEmpty else { return }
 
-        isAnalyzing = true
+        self.isAnalyzing = true
         defer { isAnalyzing = false }
 
         do {
-            let language = detectLanguage(from: selectedFileURL)
-            let result = try await codeReviewService.generateTests(codeContent, language: language, testFramework: "XCTest")
-            testResult = result
-            logger.info("Test generation completed successfully")
+            let language = self.detectLanguage(from: self.selectedFileURL)
+            let result = try await codeReviewService.generateTests(self.codeContent, language: language, testFramework: "XCTest")
+            self.testResult = result
+            self.logger.info("Test generation completed successfully")
         } catch {
-            logger.error("Test generation failed: \(error.localizedDescription)")
+            self.logger.error("Test generation failed: \(error.localizedDescription)")
             // TODO: Handle error properly
         }
     }
 
     private func detectLanguage(from url: URL?) -> String {
-        guard let url = url else { return "Swift" }
+        guard let url else { return "Swift" }
 
         let pathExtension = url.pathExtension.lowercased()
         switch pathExtension {
@@ -171,8 +175,8 @@ struct ContentView: View {
 
 // MARK: - Preview
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
+public struct ContentView_Previews: PreviewProvider {
+    public static var previews: some View {
         ContentView()
     }
 }

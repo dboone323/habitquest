@@ -17,7 +17,7 @@ import SwiftUI
 /// - ThemeProgressComponents: Progress bars and indicators
 /// - ThemeViewExtensions: SwiftUI view extensions
 /// - ThemeComponentsPreview: Preview and development tools
-struct ThemeComponents: @unchecked Sendable {
+public struct ThemeComponents: @unchecked Sendable {
     // MARK: - Card Components
 
     @MainActor

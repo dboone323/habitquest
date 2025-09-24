@@ -162,14 +162,14 @@ final class ErrorHandler {
 }
 
 /// Struct to represent error recovery options
-struct ErrorRecoveryOption: Identifiable {
-    let id = UUID()
+public struct ErrorRecoveryOption: Identifiable {
+    public let id = UUID()
     let title: String
     let action: () -> Void
 }
 
 /// Application-specific error types
-enum AppError: LocalizedError, Identifiable {
+public enum AppError: LocalizedError, Identifiable {
     case dataError(String)
     case validationError(String)
     case networkError(String)
@@ -183,7 +183,7 @@ enum AppError: LocalizedError, Identifiable {
     case fileSystemError(String)
     case unknown(String)
 
-    var id: String {
+    public var id: String {
         switch self {
         case let .dataError(message):
             "data_\(message)"
@@ -212,7 +212,7 @@ enum AppError: LocalizedError, Identifiable {
         }
     }
 
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case let .dataError(message):
             "Data Error: \(message)"
@@ -241,7 +241,7 @@ enum AppError: LocalizedError, Identifiable {
         }
     }
 
-    var failureReason: String? {
+    public var failureReason: String? {
         switch self {
         case .dataError:
             "There was a problem with data storage or retrieval."
@@ -270,7 +270,7 @@ enum AppError: LocalizedError, Identifiable {
         }
     }
 
-    var recoverySuggestion: String? {
+    public var recoverySuggestion: String? {
         switch self {
         case .dataError:
             "Try restarting the app or repairing your data."
@@ -380,7 +380,7 @@ enum AppError: LocalizedError, Identifiable {
 
 // MARK: - SwiftUI Error Presentation
 
-struct ErrorAlert: ViewModifier {
+public struct ErrorAlert: ViewModifier {
     @State var errorHandler = ErrorHandler.shared
 
     private var alertTitle: String {
@@ -422,7 +422,7 @@ struct ErrorAlert: ViewModifier {
 
     /// <#Description#>
     /// - Returns: <#description#>
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .alert(
                 self.alertTitle,

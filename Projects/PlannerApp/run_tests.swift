@@ -23,10 +23,8 @@ func runTest(_ name: String, test: () throws -> Void) {
     }
 }
 
-// Mock models for test     var items: [String] = []
-items += (1 ... 1000).map { "Item \($0)" } var items: [String] = []
-items += (1 ... 1000).map { "Item \($0)" } g(simplified versions based on actual PlannerApp models)
-enum TaskPriority: String, CaseIterable, Codable {
+// Mock models for test (simplified versions based on actual PlannerApp models)
+public enum TaskPriority: String, CaseIterable, Codable {
     case low, medium, high
 
     var displayName: String {
@@ -38,7 +36,7 @@ enum TaskPriority: String, CaseIterable, Codable {
     }
 }
 
-struct Task: Identifiable, Codable {
+public struct PlannerTask: Identifiable, Codable {
     let id: UUID
     var title: String
     var description: String
@@ -66,24 +64,24 @@ struct Task: Identifiable, Codable {
 
 class TaskDataManager {
     static let shared = TaskDataManager()
-    var tasks: [Task] = []
+    var tasks: [PlannerTask] = []
 
     func clearAllTasks() {
         self.tasks.removeAll()
     }
 
-    func load() -> [Task] {
+    func load() -> [PlannerTask] {
         self.tasks
     }
 
-    func save(tasks: [Task]) {
+    func save(tasks: [PlannerTask]) {
         self.tasks = tasks
     }
 
     private init() {}
 }
 
-enum GoalPriority: String, CaseIterable, Codable {
+public enum GoalPriority: String, CaseIterable, Codable {
     case low, medium, high
 
     var displayName: String {
@@ -95,7 +93,7 @@ enum GoalPriority: String, CaseIterable, Codable {
     }
 }
 
-struct Goal: Identifiable, Codable {
+public struct Goal: Identifiable, Codable {
     let id: UUID
     var title: String
     var description: String
@@ -123,7 +121,7 @@ struct Goal: Identifiable, Codable {
     }
 }
 
-struct JournalEntry: Identifiable, Codable {
+public struct JournalEntry: Identifiable, Codable {
     let id: UUID
     var title: String
     var body: String
@@ -166,7 +164,7 @@ class JournalDataManager {
 // MARK: - Task Model Tests
 
 runTest("testTaskCreation") {
-    let task = Task(title: "Test Task", description: "A test task", priority: .medium)
+    let task = PlannerTask(title: "Test Task", description: "A test task", priority: .medium)
     assert(task.title == "Test Task")
     assert(task.description == "A test task")
     assert(task.priority == .medium)
@@ -174,8 +172,8 @@ runTest("testTaskCreation") {
 }
 
 runTest("testTaskPriority") {
-    let highPriorityTask = Task(title: "High Priority", priority: .high)
-    let lowPriorityTask = Task(title: "Low Priority", priority: .low)
+    let highPriorityTask = PlannerTask(title: "High Priority", priority: .high)
+    let lowPriorityTask = PlannerTask(title: "Low Priority", priority: .low)
 
     assert(highPriorityTask.priority == .high)
     assert(lowPriorityTask.priority == .low)
@@ -186,15 +184,15 @@ runTest("testTaskDueDate") {
     let futureDate = Date().addingTimeInterval(86400) // Tomorrow
     let pastDate = Date().addingTimeInterval(-86400) // Yesterday
 
-    let taskWithFutureDate = Task(title: "Future Task", dueDate: futureDate)
-    let taskWithPastDate = Task(title: "Past Task", dueDate: pastDate)
+    let taskWithFutureDate = PlannerTask(title: "Future Task", dueDate: futureDate)
+    let taskWithPastDate = PlannerTask(title: "Past Task", dueDate: pastDate)
 
     assert(taskWithFutureDate.dueDate! > Date())
     assert(taskWithPastDate.dueDate! < Date())
 }
 
 runTest("testTaskStatusUpdates") {
-    var task = Task(title: "Status Test", priority: .medium)
+    var task = PlannerTask(title: "Status Test", priority: .medium)
     assert(!task.isCompleted)
 
     task.isCompleted = true
@@ -205,7 +203,7 @@ runTest("testTaskPersistence") {
     let taskDataManager = TaskDataManager.shared
     taskDataManager.clearAllTasks()
 
-    let task = Task(title: "Persistent Task", description: "Test persistence", priority: .medium)
+    let task = PlannerTask(title: "Persistent Task", description: "Test persistence", priority: .medium)
     taskDataManager.save(tasks: [task])
 
     let loadedTasks = taskDataManager.load()
@@ -375,9 +373,9 @@ runTest("testTaskDataManagerOperations") {
     let manager = TaskDataManager.shared
     manager.clearAllTasks()
 
-    let task1 = Task(title: "Task 1", priority: .high)
-    let task2 = Task(title: "Task 2", priority: .medium)
-    let task3 = Task(title: "Task 3", priority: .low)
+    let task1 = PlannerTask(title: "Task 1", priority: .high)
+    let task2 = PlannerTask(title: "Task 2", priority: .medium)
+    let task3 = PlannerTask(title: "Task 3", priority: .low)
 
     manager.save(tasks: [task1, task2, task3])
     var loadedTasks = manager.load()
@@ -451,8 +449,8 @@ runTest("testTaskOverdueDetection") {
     let yesterday = Date().addingTimeInterval(-86400)
     let tomorrow = Date().addingTimeInterval(86400)
 
-    let overdueTask = Task(title: "Overdue", dueDate: yesterday)
-    let upcomingTask = Task(title: "Upcoming", dueDate: tomorrow)
+    let overdueTask = PlannerTask(title: "Overdue", dueDate: yesterday)
+    let upcomingTask = PlannerTask(title: "Upcoming", dueDate: tomorrow)
 
     assert(overdueTask.dueDate! < Date())
     assert(upcomingTask.dueDate! > Date())
@@ -476,9 +474,9 @@ runTest("testTaskSearch") {
 
 runTest("testTaskFiltering") {
     let highPriorityTasks = [
-        Task(title: "High 1", priority: .high), Task(title: "High 2", priority: .high),
+        PlannerTask(title: "High 1", priority: .high), PlannerTask(title: "High 2", priority: .high),
     ]
-    let mediumPriorityTasks = [Task(title: "Medium 1", priority: .medium)]
+    let mediumPriorityTasks = [PlannerTask(title: "Medium 1", priority: .medium)]
 
     assert(highPriorityTasks.allSatisfy { $0.priority == .high })
     assert(mediumPriorityTasks.allSatisfy { $0.priority == .medium })
@@ -486,9 +484,9 @@ runTest("testTaskFiltering") {
 
 runTest("testAdvancedFiltering") {
     let completedTasks = [
-        Task(title: "Done 1", isCompleted: true), Task(title: "Done 2", isCompleted: true),
+        PlannerTask(title: "Done 1", isCompleted: true), PlannerTask(title: "Done 2", isCompleted: true),
     ]
-    let pendingTasks = [Task(title: "Pending 1", isCompleted: false)]
+    let pendingTasks = [PlannerTask(title: "Pending 1", isCompleted: false)]
 
     assert(completedTasks.allSatisfy(\.isCompleted))
     assert(pendingTasks.allSatisfy { !$0.isCompleted })
@@ -517,9 +515,9 @@ runTest("testDataMigration") {
 runTest("testTaskCreationPerformance") {
     let startTime = Date()
 
-    var tasks: [Task] = []
+    var tasks: [PlannerTask] = []
     for i in 1 ... 100 {
-        let task = Task(title: "Task \(i)", priority: .medium)
+        let task = PlannerTask(title: "Task \(i)", priority: .medium)
         tasks.append(task)
     }
 
@@ -593,7 +591,7 @@ runTest("testPriorityColorMapping") {
 // MARK: - Integration Tests
 
 runTest("testTaskGoalIntegration") {
-    let task = Task(title: "Goal-related Task", priority: .high)
+    let task = PlannerTask(title: "Goal-related Task", priority: .high)
     let goal = Goal(
         title: "Related Goal",
         description: "Goal that relates to the task",
@@ -606,7 +604,7 @@ runTest("testTaskGoalIntegration") {
 }
 
 runTest("testJournalTaskIntegration") {
-    let task = Task(title: "Write Journal", priority: .medium)
+    let task = PlannerTask(title: "Write Journal", priority: .medium)
     let journalEntry = JournalEntry(
         title: "Task Reflection",
         body: "Reflecting on completed tasks",

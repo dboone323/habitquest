@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct AddGoalView: View {
+public struct AddGoalView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var goals: [Goal]
 
@@ -8,7 +8,7 @@ struct AddGoalView: View {
     @State private var description = ""
     @State private var targetDate = Date()
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             Form {
                 TextField("Goal Title", text: self.$title).accessibilityLabel("Text Field")

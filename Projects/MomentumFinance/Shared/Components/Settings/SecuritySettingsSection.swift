@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct SecuritySettingsSection: View {
+public struct SecuritySettingsSection: View {
     @Binding var biometricEnabled: Bool
     @Binding var authenticationTimeout: Int
 

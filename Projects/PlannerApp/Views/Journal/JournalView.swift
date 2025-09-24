@@ -3,7 +3,7 @@ import SwiftUI
 
 // Removed LocalAuthentication import
 
-struct JournalView: View {
+public struct JournalView: View {
     // Access shared ThemeManager and data/settings
     @EnvironmentObject var themeManager: ThemeManager
     @State private var journalEntries: [JournalEntry] = []
@@ -30,88 +30,52 @@ struct JournalView: View {
 
     // Removed init() related to isUnlocked state
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             // Directly show journal content, bypassing lock checks
-            self.journalContent
-                .navigationTitle("Journal")
-                .toolbar {
-                    // Always show toolbar items
-                    ToolbarItem(placement: .primaryAction) {
-                        Button {
-                            self.showAddEntry.toggle()
-                        } label: {
-                            Image(systemName: "plus")
-                        }
+            VStack(spacing: 0) {
+                JournalListView(
+                    filteredEntries: self.filteredEntries,
+                    searchText: self.searchText,
+                    journalEntries: self.journalEntries,
+                    onDeleteEntry: self.deleteEntry
+                )
+                .searchable(text: self.$searchText, prompt: "Search Entries")
+            }
+            .background(self.themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
+            .navigationTitle("Journal")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        self.showAddEntry.toggle()
+                    } label: {
+                        Image(systemName: "plus")
                     }
-                    ToolbarItem(placement: .navigation) {
-                        Button(action: {
-                            // Custom edit implementation for macOS
-                        }) {
-                            Text("Edit")
-                        }
-                        .accessibilityLabel("Button")
+                }
+                ToolbarItem(placement: .navigation) {
+                    Button(action: {
+                        // Custom edit implementation for macOS
+                    }) {
+                        Text("Edit")
                     }
+                    .accessibilityLabel("Button")
                 }
-                .sheet(isPresented: self.$showAddEntry) {
-                    AddJournalEntryView(journalEntries: self.$journalEntries)
-                        .environmentObject(self.themeManager) // Pass ThemeManager
-                        .onDisappear(perform: self.saveEntries)
-                }
-                .onAppear {
-                    print("[JournalView Simplified] onAppear.")
-                    // Only load entries
-                    self.loadEntries()
-                }
-                // Apply theme accent color to toolbar items
-                .accentColor(self.themeManager.currentTheme.primaryAccentColor)
+            }
+            .sheet(isPresented: self.$showAddEntry) {
+                AddJournalEntryView(journalEntries: self.$journalEntries)
+                    .environmentObject(self.themeManager) // Pass ThemeManager
+                    .onDisappear(perform: self.saveEntries)
+            }
+            .onAppear {
+                print("[JournalView Simplified] onAppear.")
+                // Only load entries
+                self.loadEntries()
+            }
+            // Apply theme accent color to toolbar items
+            .accentColor(self.themeManager.currentTheme.primaryAccentColor)
             // Removed alert for authentication errors
         } // End NavigationStack
         // Removed .onChange(of: biometricsEnabled)
-    }
-
-    // --- View Builder for Journal Content ---
-    @ViewBuilder
-    private var journalContent: some View {
-        VStack(spacing: 0) {
-            List {
-                if self.journalEntries.isEmpty {
-                    self.makeEmptyStateText("No journal entries yet. Tap '+' to add one.")
-                } else if self.filteredEntries.isEmpty, !self.searchText.isEmpty {
-                    self.makeEmptyStateText("No results found for \"\(self.searchText)\"")
-                } else {
-                    ForEach(self.filteredEntries) { entry in
-                        NavigationLink {
-                            JournalDetailView(entry: entry)
-                                .environmentObject(self.themeManager)
-                        } label: {
-                            JournalRow(entry: entry)
-                                .environmentObject(self.themeManager)
-                        }
-                    }
-                    .onDelete(perform: self.deleteEntry) // Use the updated deleteEntry function
-                    .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
-                }
-            }
-            .background(self.themeManager.currentTheme.primaryBackgroundColor)
-            .scrollContentBackground(.hidden)
-            .searchable(text: self.$searchText, prompt: "Search Entries")
-        }
-        .background(self.themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
-    }
-
-    // Helper for empty state text (Unchanged)
-    private func makeEmptyStateText(_ text: String) -> some View {
-        Text(text)
-            .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
-            .font(
-                self.themeManager.currentTheme.font(
-                    forName: self.themeManager.currentTheme.secondaryFontName, size: 15
-                )
-            )
-            .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
-            .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.vertical)
     }
 
     // --- View Builder for Locked State (REMOVED) ---
@@ -143,57 +107,9 @@ struct JournalView: View {
     }
 }
 
-// --- JournalRow Subview (Unchanged) ---
-struct JournalRow: View {
-    @EnvironmentObject var themeManager: ThemeManager
-    let entry: JournalEntry
-
-    private var rowDateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .none
-        return formatter
-    }
-
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(self.entry.title)
-                    .font(
-                        self.themeManager.currentTheme.font(
-                            forName: self.themeManager.currentTheme.primaryFontName, size: 17,
-                            weight: .medium
-                        )
-                    )
-                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
-                    .lineLimit(1)
-                Text(self.entry.date, formatter: self.rowDateFormatter)
-                    .font(
-                        self.themeManager.currentTheme.font(
-                            forName: self.themeManager.currentTheme.secondaryFontName, size: 14
-                        )
-                    )
-                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
-                Text(self.entry.body)
-                    .font(
-                        self.themeManager.currentTheme.font(
-                            forName: self.themeManager.currentTheme.secondaryFontName, size: 13
-                        )
-                    )
-                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor.opacity(0.8))
-                    .lineLimit(1)
-            }
-            Spacer()
-            Text(self.entry.mood)
-                .font(.system(size: 30))
-        }
-        .padding(.vertical, 5)
-    }
-}
-
 // --- Preview Provider (Unchanged) ---
-struct JournalView_Previews: PreviewProvider {
-    static var previews: some View {
+public struct JournalView_Previews: PreviewProvider {
+    public static var previews: some View {
         JournalView()
             .environmentObject(ThemeManager())
     }

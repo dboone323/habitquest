@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ThemeSettingsView: View {
+public struct ThemeSettingsView: View {
     @State private var theme = ColorTheme.shared
     @State private var selectedMode: ThemeMode = .system
     @Environment(\.dismiss) private var dismiss
@@ -136,7 +136,7 @@ struct ThemeSettingsView: View {
 // MARK: - Helper Views
 
 /// A view that shows a single theme mode option
-struct ThemeModeOption: View {
+public struct ThemeModeOption: View {
     let mode: ThemeMode
     let isSelected: Bool
     let theme: ColorTheme

@@ -15,7 +15,7 @@ import SwiftUI
 /// - FinancialInsightModels: Insight data structures and enums
 /// - FinancialIntelligenceService.Helpers: Analysis algorithms (existing)
 @MainActor
-class FinancialIntelligenceService: ObservableObject {
+public class FinancialIntelligenceService: ObservableObject {
     @MainActor static let shared = FinancialIntelligenceService()
 
     @Published var insights: [FinancialInsight] = []

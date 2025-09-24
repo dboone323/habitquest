@@ -7,7 +7,7 @@ import AppKit
 import UIKit
 #endif
 
-struct MainTabView: View {
+public struct MainTabView: View {
     // Access the shared ThemeManager instance from the environment.
     @EnvironmentObject var themeManager: ThemeManager
     // Receive the binding for the selected tab tag from the parent view (PlannerApp).
@@ -24,11 +24,11 @@ struct MainTabView: View {
         static let settings = "Settings"
     }
 
-    var body: some View {
+    public var body: some View {
         // TabView container. The `selection` parameter is bound to `selectedTabTag`.
         TabView(selection: self.$selectedTabTag) {
             // --- Dashboard Tab ---
-            DashboardView()
+            DashboardView(selectedTabTag: self.$selectedTabTag)
                 .tabItem { Label(TabTags.dashboard, systemImage: "house") } // Text and icon for the tab item
                 .tag(TabTags.dashboard) // Assign a unique tag to identify this tab
 
@@ -114,8 +114,8 @@ extension Color {
 }
 
 // Preview Provider for MainTabView
-struct MainTabView_Previews: PreviewProvider {
-    static var previews: some View {
+public struct MainTabView_Previews: PreviewProvider {
+    public static var previews: some View {
         // Provide a constant binding for the preview (doesn't change).
         MainTabView(selectedTabTag: .constant(MainTabView.TabTags.dashboard))
             // Provide the ThemeManager environment object for the preview.

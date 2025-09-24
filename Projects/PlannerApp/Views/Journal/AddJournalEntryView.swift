@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-struct AddJournalEntryView: View {
+public struct AddJournalEntryView: View {
     @Environment(\.dismiss) var dismiss // Use dismiss environment
     @Binding var journalEntries: [JournalEntry] // Assumes using model from PlannerApp/Models/
 
@@ -21,7 +21,7 @@ struct AddJournalEntryView: View {
             && !self.entryBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 0) {
             // Header with buttons for better macOS compatibility
             HStack {
@@ -144,7 +144,6 @@ struct AddJournalEntryView: View {
         )
         self.journalEntries.append(newEntry)
 
-        // Save to persistent storage via data manager
         JournalDataManager.shared.save(entries: self.journalEntries)
     }
 }

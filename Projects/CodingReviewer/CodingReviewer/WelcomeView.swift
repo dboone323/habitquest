@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct WelcomeView: View {
+public struct WelcomeView: View {
     @Binding var showFilePicker: Bool
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "doc.text.magnifyingglass")
                 .font(.system(size: 64))
@@ -26,7 +26,7 @@ struct WelcomeView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 
-            Button(action: { showFilePicker = true }) {
+            Button(action: { self.showFilePicker = true }) {
                 Label("Open Code File", systemImage: "doc.badge.plus")
                     .font(.headline)
                     .padding()

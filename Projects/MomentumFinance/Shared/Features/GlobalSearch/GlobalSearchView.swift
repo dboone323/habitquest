@@ -162,7 +162,7 @@ public struct GlobalSearchView: View {
 
 // MARK: - Supporting Views
 
-struct SearchResultRow: View {
+public struct SearchResultRow: View {
     let result: SearchResult
 
     var body: some View {
@@ -224,7 +224,7 @@ struct SearchResultRow: View {
     }
 }
 
-struct SearchResultDetailView: View {
+public struct SearchResultDetailView: View {
     let result: SearchResult
     @Environment(\.dismiss) private var dismiss
 
@@ -301,7 +301,7 @@ struct SearchResultDetailView: View {
     }
 }
 
-struct DetailRow: View {
+public struct DetailRow: View {
     let label: String
     let value: String
 

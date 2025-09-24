@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct AppearanceSettingsSection: View {
+public struct AppearanceSettingsSection: View {
     var darkModePreference: DarkModePreference
 
     var body: some View {

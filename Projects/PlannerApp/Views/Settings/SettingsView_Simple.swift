@@ -9,7 +9,7 @@ import AppKit
 #endif
 import Foundation
 
-struct SettingsView: View {
+public struct SettingsView: View {
     // Environment Object to access the shared ThemeManager instance
     @EnvironmentObject var themeManager: ThemeManager
 

@@ -15,6 +15,9 @@
         {
             "name": "📚 Documentation",
             "path": "./Documentation"
+        },
+        {
+            "path": "."
         }
     ],
     "settings": {

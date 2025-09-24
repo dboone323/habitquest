@@ -1,9 +1,9 @@
 // PlannerApp/Views/Calendar/TaskRowView.swift
 import SwiftUI
 
-struct TaskRowView: View {
+public struct TaskRowView: View {
     @EnvironmentObject var themeManager: ThemeManager
-    let task: Task
+    let task: PlannerTask
 
     private var priorityColor: Color {
         switch self.task.priority {
@@ -32,7 +32,7 @@ struct TaskRowView: View {
         return !self.task.isCompleted && dueDate < Date()
     }
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: 12) {
             // Priority and status indicator
             VStack(alignment: .center, spacing: 2) {
@@ -106,7 +106,7 @@ struct TaskRowView: View {
 
 #Preview {
     VStack {
-        TaskRowView(task: Task(
+        TaskRowView(task: PlannerTask(
             id: UUID(),
             title: "Review Pull Request",
             description: "Check the new feature implementation",
@@ -115,7 +115,7 @@ struct TaskRowView: View {
             dueDate: Date()
         ))
 
-        TaskRowView(task: Task(
+        TaskRowView(task: PlannerTask(
             id: UUID(),
             title: "Buy Groceries",
             description: "Get items for dinner party",
@@ -124,7 +124,7 @@ struct TaskRowView: View {
             dueDate: Calendar.current.date(byAdding: .hour, value: -2, to: Date())
         ))
 
-        TaskRowView(task: Task(
+        TaskRowView(task: PlannerTask(
             id: UUID(),
             title: "Completed Task",
             description: "This task is done",

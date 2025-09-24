@@ -1,7 +1,7 @@
 import PlannerApp
 import SwiftUI
 
-struct AddGoalView: View {
+public struct AddGoalView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var goals: [Goal]
 

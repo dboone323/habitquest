@@ -5,7 +5,7 @@ import SwiftUI
 
 /// Centralized error handling for the HabitQuest app
 /// Provides consistent error management and user-friendly error messages
-struct ErrorHandler: Sendable {
+public struct ErrorHandler: Sendable {
     /// Common error types in the HabitQuest app
     enum HabitQuestError: LocalizedError, @unchecked Sendable {
         case dataModelError(String)

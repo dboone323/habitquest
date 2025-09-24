@@ -2,8 +2,8 @@ import SwiftUI
 
 /// Main app view containing the primary TabView navigation
 /// This serves as the central hub connecting all feature modules
-struct AppMainView: View {
-    var body: some View {
+public struct AppMainView: View {
+    public var body: some View {
         TabView {
             // Today's Quests Tab
             TodaysQuestsView()

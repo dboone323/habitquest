@@ -12,12 +12,12 @@ import AppKit
 #elseif canImport(AppKit)
 #endif
 
-struct SavingsGoalsSection: View {
+public struct SavingsGoalsSection: View {
     let goals: [SavingsGoal]
     @Binding var showingAddGoal: Bool
     @Binding var selectedGoal: SavingsGoal?
 
-    var body: some View {
+    public var body: some View {
         if self.goals.isEmpty {
             ContentUnavailableView(
                 "No Savings Goals",
@@ -40,7 +40,7 @@ struct SavingsGoalsSection: View {
     }
 }
 
-struct SavingsGoalCard: View {
+public struct SavingsGoalCard: View {
     let goal: SavingsGoal
 
     // Cross-platform color support
@@ -54,7 +54,7 @@ struct SavingsGoalCard: View {
         #endif
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 16) {
             // Header
             HStack {

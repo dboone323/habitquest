@@ -1,7 +1,7 @@
 // PlannerApp/Views/Calendar/GoalRowView.swift
 import SwiftUI
 
-struct GoalRowView: View {
+public struct GoalRowView: View {
     @EnvironmentObject var themeManager: ThemeManager
     let goal: Goal
 
@@ -31,7 +31,7 @@ struct GoalRowView: View {
         self.goal.progress
     }
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: 12) {
             // Priority indicator
             VStack(alignment: .center, spacing: 2) {

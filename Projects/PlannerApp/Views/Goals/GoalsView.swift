@@ -1,7 +1,7 @@
 // PlannerApp/Views/Goals/GoalsView.swift (Updated)
 import SwiftUI
 
-struct GoalsView: View {
+public struct GoalsView: View {
     // Access shared ThemeManager and data
     @EnvironmentObject var themeManager: ThemeManager
     @State private var goals: [Goal] = [] // Holds all goals
@@ -10,91 +10,19 @@ struct GoalsView: View {
     // Read date/time settings if needed for display (e.g., formatter locale)
     @AppStorage(AppSettingKeys.use24HourTime) private var use24HourTime: Bool = false // Example, not used in formatter below
 
-    // Formatter for displaying the target date
-    private var targetDateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium // e.g., Apr 29, 2025
-        formatter.timeStyle = .none
-        return formatter
-    }
-
-    var body: some View {
+    public var body: some View {
         NavigationStack {
-            // Use List to display goals
-            List {
-                // Display a message if no goals exist
-                if self.goals.isEmpty {
-                    Text("No goals set yet. Tap '+' to add one!")
-                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
-                        .font(
-                            self.themeManager.currentTheme.font(
-                                forName: self.themeManager.currentTheme.secondaryFontName, size: 15
-                            )
-                        )
-                        .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
-                        .frame(maxWidth: .infinity, alignment: .center) // Center the text
-                } else {
-                    // Iterate over goals sorted by target date
-                    ForEach(self.goals.sorted(by: { $0.targetDate < $1.targetDate })) { goal in
-                        // Layout for each goal row
-                        VStack(alignment: .leading, spacing: 4) { // Control spacing within the VStack
-                            // Goal Title
-                            Text(goal.title)
-                                .font(
-                                    self.themeManager.currentTheme.font(
-                                        forName: self.themeManager.currentTheme.primaryFontName,
-                                        size: 17, weight: .semibold
-                                    )
-                                )
-                                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
-                            // Goal Description
-                            Text(goal.description)
-                                .font(
-                                    self.themeManager.currentTheme.font(
-                                        forName: self.themeManager.currentTheme.secondaryFontName,
-                                        size: 15
-                                    )
-                                )
-                                .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
-                                .lineLimit(2) // Limit description to 2 lines
-                            // Target Date
-                            Text("Target: \(goal.targetDate, formatter: self.targetDateFormatter)") // Formatted date
-                                .font(
-                                    self.themeManager.currentTheme.font(
-                                        forName: self.themeManager.currentTheme.secondaryFontName,
-                                        size: 13
-                                    )
-                                )
-                                .foregroundColor(
-                                    self.themeManager.currentTheme.secondaryTextColor.opacity(0.8)
-                                ) // Slightly dimmer
-                        }
-                        .padding(.vertical, 6) // Add vertical padding inside the row
-                    }
-                    .onDelete(perform: self.deleteGoal) // Enable swipe-to-delete
-                    // Apply theme background to all rows in the list
-                    .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
-                }
-            }
-            .background(self.themeManager.currentTheme.primaryBackgroundColor) // Apply theme background to List
-            .scrollContentBackground(.hidden) // Hide default List background style
-            .navigationTitle("Goals")
-            .toolbar {
-                // Button to show the AddGoalView sheet
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        self.showAddGoal.toggle()
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-                // Custom Edit button for macOS
-                ToolbarItem(placement: .navigation) {
-                    Button("Edit", action: {
-                        // Custom edit implementation for macOS
-                    })
-                    .accessibilityLabel("Button")
-                }
+            VStack(spacing: 0) {
+                GoalsHeaderView(showAddGoal: self.$showAddGoal)
+                    .environmentObject(self.themeManager)
+
+                GoalsListView(
+                    goals: self.goals,
+                    onDelete: self.deleteGoal,
+                    onProgressUpdate: self.updateGoalProgress,
+                    onCompletionToggle: self.toggleGoalCompletion
+                )
+                .environmentObject(self.themeManager)
             }
             .sheet(isPresented: self.$showAddGoal) {
                 // Present AddGoalView, passing binding and theme
@@ -105,13 +33,40 @@ struct GoalsView: View {
             }
             // Load goals when the view appears
             .onAppear(perform: self.loadGoals)
-            // Apply theme accent color to toolbar items
-            .accentColor(self.themeManager.currentTheme.primaryAccentColor)
         } // End NavigationStack
         // Use stack navigation style
     }
 
     // --- Data Functions ---
+
+    // Updates the progress of a specific goal
+    private func updateGoalProgress(goalId: UUID, progress: Double) {
+        if let index = goals.firstIndex(where: { $0.id == goalId }) {
+            self.goals[index].progress = progress
+            self.goals[index].modifiedAt = Date()
+            self.saveGoals()
+        }
+    }
+
+    // Toggles the completion status of a specific goal
+    private func toggleGoalCompletion(goalId: UUID) {
+        if let index = goals.firstIndex(where: { $0.id == goalId }) {
+            let wasCompleted = self.goals[index].isCompleted
+            self.goals[index].isCompleted = !wasCompleted
+
+            // If marking as completed, set progress to 100%
+            if !wasCompleted {
+                self.goals[index].progress = 1.0
+            }
+            // If unmarking as completed, set progress to 95% (allowing room for adjustment)
+            else {
+                self.goals[index].progress = 0.95
+            }
+
+            self.goals[index].modifiedAt = Date()
+            self.saveGoals()
+        }
+    }
 
     // Deletes goals based on offsets from the sorted list displayed
     private func deleteGoal(at offsets: IndexSet) {
@@ -138,8 +93,8 @@ struct GoalsView: View {
 }
 
 // --- Preview Provider ---
-struct GoalsView_Previews: PreviewProvider {
-    static var previews: some View {
+public struct GoalsView_Previews: PreviewProvider {
+    public static var previews: some View {
         GoalsView()
             // Provide ThemeManager for the preview
             .environmentObject(ThemeManager())

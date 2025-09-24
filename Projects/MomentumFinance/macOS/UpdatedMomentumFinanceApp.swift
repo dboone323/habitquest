@@ -18,7 +18,7 @@ private extension MomentumFinanceApp {
 }
 
 @main
-struct MomentumFinanceApp: App {
+public struct MomentumFinanceApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             ModelReferences.accounts,

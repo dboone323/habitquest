@@ -3,7 +3,7 @@ import XCTest
 
 @testable import AvoidObstaclesGame
 
-class GameSceneTests: XCTestCase {
+public class GameSceneTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here

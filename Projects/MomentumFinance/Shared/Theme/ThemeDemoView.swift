@@ -9,7 +9,7 @@
 import SwiftUI
 
 /// A demonstration view showing the dark mode optimizations and theme system
-struct ThemeDemoView: View {
+public struct ThemeDemoView: View {
     @State private var theme = ColorTheme.shared
     @State private var themeManager = ThemeManager.shared
     @State private var selectedThemeMode: ThemeMode = .system

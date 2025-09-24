@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - Theme Demo Components
 
 /// Theme selector card for the demo view
-struct ThemeSelectorCard: View {
+public struct ThemeSelectorCard: View {
     @Binding var selectedThemeMode: ThemeMode
     let theme: ColorTheme
 
@@ -39,7 +39,7 @@ struct ThemeSelectorCard: View {
 }
 
 /// Financial summary card for the demo view
-struct ThemeFinancialSummaryCard: View {
+public struct ThemeFinancialSummaryCard: View {
     let theme: ColorTheme
 
     var body: some View {
@@ -79,7 +79,7 @@ struct ThemeFinancialSummaryCard: View {
 }
 
 /// Accounts list for the demo view
-struct ThemeAccountsList: View {
+public struct ThemeAccountsList: View {
     let accounts: [(String, String, Double)]
     let theme: ColorTheme
 
@@ -119,7 +119,7 @@ struct ThemeAccountsList: View {
 }
 
 /// Budget progress section for the demo view
-struct ThemeBudgetProgress: View {
+public struct ThemeBudgetProgress: View {
     let budgets: [(String, Double, Double)]
     let theme: ColorTheme
 
@@ -169,7 +169,7 @@ struct ThemeBudgetProgress: View {
 }
 
 /// Subscriptions list for the demo view
-struct ThemeSubscriptionsList: View {
+public struct ThemeSubscriptionsList: View {
     let subscriptions: [(String, String, String, Double)]
     let theme: ColorTheme
 
@@ -213,7 +213,7 @@ struct ThemeSubscriptionsList: View {
 }
 
 /// Typography showcase for the demo view
-struct ThemeTypographyShowcase: View {
+public struct ThemeTypographyShowcase: View {
     let theme: ColorTheme
 
     var body: some View {
@@ -272,7 +272,7 @@ struct ThemeTypographyShowcase: View {
 }
 
 /// Button styles showcase for the demo view
-struct ThemeButtonStylesShowcase: View {
+public struct ThemeButtonStylesShowcase: View {
     let theme: ColorTheme
 
     var body: some View {
@@ -305,7 +305,7 @@ struct ThemeButtonStylesShowcase: View {
 }
 
 /// Theme settings sheet for the demo view
-struct ThemeSettingsSheet: View {
+public struct ThemeSettingsSheet: View {
     @Binding var selectedThemeMode: ThemeMode
     @Binding var sliderValue: Double
     @Binding var showSheet: Bool

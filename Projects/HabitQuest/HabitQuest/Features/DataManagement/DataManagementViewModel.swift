@@ -4,7 +4,7 @@ import SwiftUI
 
 /// ViewModel for DataManagementView handling export/import operations
 @MainActor
-class DataManagementViewModel: ObservableObject {
+public class DataManagementViewModel: ObservableObject {
     @Published var isExporting = false
     @Published var isImporting = false
     @Published var showingFileExporter = false

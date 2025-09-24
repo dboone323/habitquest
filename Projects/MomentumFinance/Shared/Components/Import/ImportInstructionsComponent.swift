@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ImportInstructionsComponent: View {
+public struct ImportInstructionsComponent: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Import Instructions")

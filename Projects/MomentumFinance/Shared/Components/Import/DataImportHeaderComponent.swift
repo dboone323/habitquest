@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DataImportHeaderComponent: View {
+public struct DataImportHeaderComponent: View {
     var body: some View {
         VStack(spacing: 8) {
             Image(systemName: "square.and.arrow.down")

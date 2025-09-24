@@ -1,7 +1,7 @@
 // PlannerApp/Views/Journal/JournalDetailView.swift (Updated)
 import SwiftUI
 
-struct JournalDetailView: View {
+public struct JournalDetailView: View {
     // Access shared ThemeManager
     @EnvironmentObject var themeManager: ThemeManager
     // The specific journal entry to display
@@ -20,7 +20,7 @@ struct JournalDetailView: View {
         return formatter
     }
 
-    var body: some View {
+    public var body: some View {
         // Use ScrollView to allow content longer than the screen height
         ScrollView {
             // Main content laid out vertically
@@ -69,8 +69,8 @@ struct JournalDetailView: View {
 }
 
 // --- Preview Provider ---
-struct JournalDetailView_Previews: PreviewProvider {
-    static var previews: some View {
+public struct JournalDetailView_Previews: PreviewProvider {
+    public static var previews: some View {
         // Embed in NavigationStack for the preview to show the title bar
         NavigationStack {
             // Create a sample entry for the preview

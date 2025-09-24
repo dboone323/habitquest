@@ -92,7 +92,7 @@ struct EnhancedPlatformNavigation<Content: View>: View {
 
 // MARK: - macOS Sidebar
 
-struct MacOSSidebarView: View {
+public struct MacOSSidebarView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State private var selectedTab: Tab = .dashboard
 
@@ -127,7 +127,7 @@ struct MacOSSidebarView: View {
         }
     }
 
-    var body: some View {
+    public var body: some View {
         List(Tab.allCases, id: \.self) { tab in
             NavigationLink(value: tab) {
                 Label(tab.rawValue, systemImage: tab.icon)
@@ -146,7 +146,7 @@ struct MacOSSidebarView: View {
 
 // MARK: - iPad Sidebar
 
-struct IPadSidebarView: View {
+public struct IPadSidebarView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State private var selectedTab: String = "Dashboard"
 
@@ -159,7 +159,7 @@ struct IPadSidebarView: View {
         ("Settings", "gear")
     ]
 
-    var body: some View {
+    public var body: some View {
         List {
             Section("PlannerApp") {
                 ForEach(self.tabs, id: \.0) { tab in
@@ -227,10 +227,10 @@ struct IPadSidebarView: View {
 
 // MARK: - Toolbar Buttons
 
-struct MacOSToolbarButtons: View {
+public struct MacOSToolbarButtons: View {
     @EnvironmentObject var themeManager: ThemeManager
 
-    var body: some View {
+    public var body: some View {
         HStack {
             Button(action: {}) {
                 Label("Search", systemImage: "magnifyingglass")
@@ -257,8 +257,8 @@ struct MacOSToolbarButtons: View {
     }
 }
 
-struct IPadToolbarButtons: View {
-    var body: some View {
+public struct IPadToolbarButtons: View {
+    public var body: some View {
         HStack {
             Button(action: {}) {
                 Image(systemName: "magnifyingglass")
@@ -281,8 +281,8 @@ struct IPadToolbarButtons: View {
     }
 }
 
-struct IPhoneToolbarButtons: View {
-    var body: some View {
+public struct IPhoneToolbarButtons: View {
+    public var body: some View {
         HStack {
             Button(action: {}) {
                 Image(systemName: "plus")
@@ -302,7 +302,7 @@ struct IPhoneToolbarButtons: View {
 
 // MARK: - Quick Action Button
 
-struct QuickActionButton: View {
+public struct QuickActionButton: View {
     let title: String
     let icon: String
     let color: Color
@@ -310,7 +310,7 @@ struct QuickActionButton: View {
 
     @EnvironmentObject var themeManager: ThemeManager
 
-    var body: some View {
+    public var body: some View {
         Button(action: self.action) {
             HStack {
                 Image(systemName: self.icon)
@@ -335,8 +335,8 @@ struct QuickActionButton: View {
 
 // MARK: - Keyboard Shortcuts Support
 
-struct KeyboardShortcutsView: View {
-    var body: some View {
+public struct KeyboardShortcutsView: View {
+    public var body: some View {
         VStack {
             Text("Keyboard Shortcuts")
                 .font(.title2.bold())
@@ -359,11 +359,11 @@ struct KeyboardShortcutsView: View {
     }
 }
 
-struct ShortcutRow: View {
+public struct ShortcutRow: View {
     let key: String
     let description: String
 
-    var body: some View {
+    public var body: some View {
         HStack {
             Text(self.key)
                 .font(.system(.body, design: .monospaced))

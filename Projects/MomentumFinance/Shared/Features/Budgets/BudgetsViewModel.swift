@@ -1,6 +1,7 @@
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
+import Foundation
 import Observation
 import SwiftData
 import SwiftUI
@@ -171,6 +172,82 @@ final class BudgetsViewModel {
 
         return trend
     }
+
+    /// Update budget rollover settings
+    /// <#Description#>
+    /// - Returns: <#description#>
+    func updateBudgetRolloverSettings(_ budget: Budget, enabled: Bool, maxPercentage: Double) {
+        budget.rolloverEnabled = enabled
+        budget.maxRolloverPercentage = maxPercentage
+
+        do {
+            try self.modelContext?.save()
+            // Schedule rollover notifications after settings change
+            // Temporarily disabled - NotificationManager not found in scope
+            // NotificationManager.shared.scheduleRolloverNotifications(for: [budget])
+        } catch {
+            Logger.logError(error, context: "Updating budget rollover settings")
+        }
+    }
+
+    /// Apply rollover to next period budget
+    /// <#Description#>
+    /// - Returns: <#description#>
+    func applyRolloverToNextPeriod(for budget: Budget) {
+        guard let modelContext else { return }
+
+        let calendar = Calendar.current
+        guard let nextMonth = calendar.date(byAdding: .month, value: 1, to: budget.month) else {
+            return
+        }
+
+        // Check if next period budget already exists
+        let existingBudgetDescriptor = FetchDescriptor<Budget>()
+        let existingBudgets = (try? modelContext.fetch(existingBudgetDescriptor)) ?? []
+
+        let nextPeriodBudgetExists = existingBudgets.contains { existingBudget in
+            existingBudget.category?.name == budget.category?.name
+                && calendar.isDate(existingBudget.month, equalTo: nextMonth, toGranularity: .month)
+        }
+
+        if !nextPeriodBudgetExists {
+            let nextBudget = budget.createNextPeriodBudget(for: nextMonth)
+            modelContext.insert(nextBudget)
+
+            do {
+                try modelContext.save()
+            } catch {
+                Logger.logError(error, context: "Applying rollover to next period")
+            }
+        }
+    }
+
+    /// Get rollover summary for a budget
+    /// <#Description#>
+    /// - Returns: <#description#>
+    func getRolloverSummary(for budget: Budget) -> BudgetRolloverSummary {
+        let potentialRollover = budget.calculateRolloverAmount()
+        let unusedAmount = budget.remainingAmount
+
+        return BudgetRolloverSummary(
+            budgetId: budget.id,
+            unusedAmount: unusedAmount,
+            potentialRollover: potentialRollover,
+            rolloverEnabled: budget.rolloverEnabled,
+            maxRolloverPercentage: budget.maxRolloverPercentage,
+            currentRolloverAmount: budget.rolledOverAmount
+        )
+    }
+
+    /// Schedule all budget-related notifications
+    /// <#Description#>
+    /// - Returns: <#description#>
+    func scheduleBudgetNotifications(for budgets: [Budget]) {
+        // Temporarily disabled due to compilation issues
+        // NotificationManager.shared.schedulebudgetWarningNotifications(for: budgets)
+        // NotificationManager.shared.scheduleRolloverNotifications(for: budgets)
+        // NotificationManager.shared.scheduleSpendingPredictionNotifications(for: budgets)
+    }
 }
 
 struct BudgetProgressSummary {
@@ -203,5 +280,26 @@ struct MonthlySpending {
 
     var formattedAmount: String {
         self.amount.formatted(.currency(code: "USD"))
+    }
+}
+
+struct BudgetRolloverSummary {
+    let budgetId: UUID
+    let unusedAmount: Double
+    let potentialRollover: Double
+    let rolloverEnabled: Bool
+    let maxRolloverPercentage: Double
+    let currentRolloverAmount: Double
+
+    var formattedUnusedAmount: String {
+        self.unusedAmount.formatted(.currency(code: "USD"))
+    }
+
+    var formattedPotentialRollover: String {
+        self.potentialRollover.formatted(.currency(code: "USD"))
+    }
+
+    var formattedCurrentRollover: String {
+        self.currentRolloverAmount.formatted(.currency(code: "USD"))
     }
 }

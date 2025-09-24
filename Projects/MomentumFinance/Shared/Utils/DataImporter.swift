@@ -13,7 +13,7 @@
 // Shared/Utils/ExportTypes.swift. Do not duplicate the type here.
 
 // Errors thrown during import
-enum ImportError: Error {
+public enum ImportError: Error {
     case fileAccessDenied
     case invalidFormat(String)
     case parsingError(String)

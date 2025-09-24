@@ -267,7 +267,7 @@ extension AnyTransition {
 
 // MARK: - Custom View Modifier for Card Flip
 
-struct CardFlipModifier: ViewModifier {
+public struct CardFlipModifier: ViewModifier {
     let rotation: Double
 
     /// <#Description#>
@@ -284,7 +284,7 @@ struct CardFlipModifier: ViewModifier {
 // MARK: - Animated Components
 
 /// A loading indicator with customizable animation
-struct LoadingIndicator: View {
+public struct LoadingIndicator: View {
     @State private var isAnimating = false
     let style: Style
 
@@ -344,7 +344,7 @@ struct LoadingIndicator: View {
 }
 
 /// An animated progress bar
-struct AnimatedProgressBar: View {
+public struct AnimatedProgressBar: View {
     let progress: Double
     let color: Color
     let height: CGFloat
@@ -375,5 +375,26 @@ struct AnimatedProgressBar: View {
                 self.animatedProgress = min(max(newValue, 0), 1)
             }
         }
+    }
+}
+
+// MARK: - Object Pooling
+
+/// Object pool for performance optimization
+private var objectPool: [Any] = []
+private let maxPoolSize = 50
+
+/// Get an object from the pool or create new one
+private func getPooledObject<T>() -> T? {
+    if let pooled = objectPool.popLast() as? T {
+        return pooled
+    }
+    return nil
+}
+
+/// Return an object to the pool
+private func returnToPool(_ object: Any) {
+    if objectPool.count < maxPoolSize {
+        objectPool.append(object)
     }
 }

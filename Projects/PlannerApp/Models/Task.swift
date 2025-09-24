@@ -1,40 +1,11 @@
-// MARK: - Data Manager
+// MARK: - Task Model
 
 import CloudKit
 import CoreTransferable
 import Foundation
 
-/// Manages storage and retrieval of `Task` objects in memory.
-class TaskDataManager {
-    /// Shared singleton instance.
-    static let shared = TaskDataManager()
-
-    /// In-memory storage for tasks.
-    var tasks: [Task] = []
-
-    /// Removes all tasks from memory.
-    func clearAllTasks() {
-        self.tasks.removeAll()
-    }
-
-    /// Loads all tasks from memory.
-    /// - Returns: Array of `Task` objects.
-    func load() -> [Task] {
-        self.tasks
-    }
-
-    /// Saves the provided tasks to memory.
-    /// - Parameter tasks: Array of `Task` objects to save.
-    func save(tasks: [Task]) {
-        self.tasks = tasks
-    }
-
-    /// Private initializer to enforce singleton usage.
-    private init() {}
-}
-
 /// Represents the priority of a task (low, medium, high).
-enum TaskPriority: String, CaseIterable, Codable {
+public enum TaskPriority: String, CaseIterable, Codable {
     /// Low priority task.
     case low
     /// Medium priority task.
@@ -50,12 +21,21 @@ enum TaskPriority: String, CaseIterable, Codable {
         case .high: "High"
         }
     }
+
+    /// Sort order for priority (higher number = higher priority).
+    var sortOrder: Int {
+        switch self {
+        case .high: 3
+        case .medium: 2
+        case .low: 1
+        }
+    }
 }
 
 /// Represents a user task or to-do item in the PlannerApp.
-struct Task: Identifiable, Codable, Transferable {
+public struct PlannerTask: Identifiable, Codable, Transferable {
     /// Unique identifier for the task.
-    let id: UUID
+    public let id: UUID
     /// The title or summary of the task.
     var title: String
     /// Detailed description of the task.
@@ -115,7 +95,7 @@ struct Task: Identifiable, Codable, Transferable {
     /// - Parameter ckRecord: The CloudKit record to convert.
     /// - Throws: An error if conversion fails.
     /// - Returns: A Task instance.
-    static func from(ckRecord: CKRecord) throws -> Task {
+    static func from(ckRecord: CKRecord) throws -> PlannerTask {
         guard
             let title = ckRecord["title"] as? String,
             let createdAt = ckRecord["createdAt"] as? Date,
@@ -128,7 +108,7 @@ struct Task: Identifiable, Codable, Transferable {
             )
         }
 
-        return Task(
+        return PlannerTask(
             id: id,
             title: title,
             description: ckRecord["description"] as? String ?? "",
@@ -144,7 +124,7 @@ struct Task: Identifiable, Codable, Transferable {
     // MARK: - Transferable Implementation
 
     /// Transferable conformance for drag-and-drop and sharing.
-    static var transferRepresentation: some TransferRepresentation {
+    public static var transferRepresentation: some TransferRepresentation {
         CodableRepresentation(contentType: .data)
     }
 }

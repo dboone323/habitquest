@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ImportProgressComponent: View {
+public struct ImportProgressComponent: View {
     let progress: Double
 
     var body: some View {

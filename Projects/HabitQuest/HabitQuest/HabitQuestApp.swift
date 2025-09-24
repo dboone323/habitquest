@@ -1,6 +1,12 @@
 import SwiftData
 import SwiftUI
 
+// Import model classes
+import class HabitQuest.Achievement
+import class HabitQuest.Habit
+import class HabitQuest.HabitLog
+import class HabitQuest.PlayerProfile
+
 //
 //  HabitQuestApp.swift
 //  HabitQuest
@@ -9,8 +15,13 @@ import SwiftUI
 //
 
 @main
-struct HabitQuestApp: App {
-    var sharedModelContainer: ModelContainer = {
+public struct HabitQuestApp: App {
+    @State private var showDatabaseError = false
+    @State private var databaseError: Error?
+
+    public init() {}
+
+    var sharedModelContainer: ModelContainer? = {
         let schema = Schema([
             Habit.self,
             HabitLog.self,
@@ -29,18 +40,49 @@ struct HabitQuestApp: App {
                 return try ModelContainer(for: schema, configurations: [fallbackConfig])
             } catch {
                 print("❌ Failed to create fallback ModelContainer: \(error)")
-                /// - TODO: Implement proper error handling for model container failures
-                /// - TODO: Add user notification for data persistence issues
-                /// - TODO: Consider implementing data recovery mechanisms
-                fatalError("Could not create any ModelContainer: \(error)")
+                // Return nil to trigger error UI
+                return nil
             }
         }
     }()
 
-    var body: some Scene {
+    public var body: some Scene {
         WindowGroup {
-            AppMainView()
+            if let container = sharedModelContainer {
+                AppMainView()
+                    .modelContainer(container)
+            } else {
+                // Show error view when database initialization fails
+                VStack(spacing: 20) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.red)
+
+                    Text("Database Error")
+                        .font(.title)
+                        .fontWeight(.bold)
+
+                    Text("Unable to initialize the app database. Your data may not be saved properly.")
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+
+                    Button("Continue (Data may not persist)") {
+                        // Continue with limited functionality
+                        // In a real app, this might show a read-only mode
+                    }
+                    .buttonStyle(.borderedProminent)
+
+                    Button("Quit App") {
+                        #if os(iOS)
+                        // iOS doesn't allow programmatic termination
+                        #else
+                        NSApplication.shared.terminate(nil)
+                        #endif
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
         }
-        .modelContainer(self.sharedModelContainer)
     }
 }

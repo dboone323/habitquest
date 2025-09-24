@@ -1,26 +1,24 @@
 import SwiftUI
 
-struct CalendarView_New: View {
+public struct CalendarView_New: View {
     var body: some View {
         Text("Calendar View")
     }
 }
 
-struct CalendarView_New_Previews: PreviewProvider {
+public struct CalendarView_New_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView_New()
     }
 }
 
-import SwiftUI
-
-struct CalendarView_New: View {
+public struct CalendarView_New: View {
     var body: some View {
         Text("Calendar View")
     }
 }
 
-struct CalendarView_New_Previews: PreviewProvider {
+public struct CalendarView_New_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView_New()
     }
@@ -30,9 +28,8 @@ struct CalendarView_New_Previews: PreviewProvider {
 // PlannerApp/Views/Calendar/CalendarView.swift
 
 import Foundation
-import SwiftUI
 
-struct CalendarView: View {
+public struct CalendarView: View {
     // Access shared ThemeManager and data
     @EnvironmentObject var themeManager: ThemeManager
     @State private var events: [CalendarEvent] = []
@@ -280,10 +277,10 @@ struct CalendarView: View {
 
 extension Calendar {
     func generateDatesInMonth(for date: Date, firstDayOfWeek: Int) -> [Date] {
-        guard let monthInterval = self.dateInterval(of: .month, for: date) else { return [] }
+        guard let monthInterval = dateInterval(of: .month, for: date) else { return [] }
 
         let monthStart = monthInterval.start
-        let firstWeekday = self.component(.weekday, from: monthStart)
+        let firstWeekday = component(.weekday, from: monthStart)
         let daysFromPreviousMonth = (firstWeekday - firstDayOfWeek + 7) % 7
 
         guard let calendarStart = self.date(byAdding: .day, value: -daysFromPreviousMonth, to: monthStart) else { return [] }
@@ -303,7 +300,7 @@ extension Calendar {
 
 // MARK: - Preview Provider
 
-struct CalendarView_Previews: PreviewProvider {
+public struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView()
             .environmentObject(ThemeManager())

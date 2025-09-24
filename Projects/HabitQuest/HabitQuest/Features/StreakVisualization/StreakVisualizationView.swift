@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 /// Reusable streak visualization component with multiple display modes
-struct StreakVisualizationView: View {
+public struct StreakVisualizationView: View {
     let habit: Habit
     let analytics: StreakAnalytics
     let displayMode: DisplayMode
@@ -17,7 +17,7 @@ struct StreakVisualizationView: View {
         case milestone // Focus on milestone progress
     }
 
-    var body: some View {
+    public var body: some View {
         switch self.displayMode {
         case .compact:
             self.compactView
@@ -263,7 +263,7 @@ struct StreakVisualizationView: View {
 // MARK: - Celebration Animation View
 
 /// Animated celebration view for milestone achievements
-struct StreakCelebrationView: View {
+public struct StreakCelebrationView: View {
     let milestone: StreakMilestone
     @Binding var isPresented: Bool
 
@@ -271,7 +271,7 @@ struct StreakCelebrationView: View {
     @State private var particleAnimation: Bool = false
     @State private var scaleAnimation: Bool = false
 
-    var body: some View {
+    public var body: some View {
         ZStack {
             // Background overlay
             Color.black.opacity(0.3)
@@ -355,14 +355,14 @@ struct StreakCelebrationView: View {
 
 // MARK: - Heat Map Day Component
 
-struct HeatMapDay: View {
+public struct HeatMapDay: View {
     let date: Date
     let intensity: Double
     let isToday: Bool
 
     @State private var showTooltip = false
 
-    var body: some View {
+    public var body: some View {
         Rectangle()
             .fill(Color.green.opacity(max(0.1, self.intensity)))
             .frame(width: 12, height: 12)

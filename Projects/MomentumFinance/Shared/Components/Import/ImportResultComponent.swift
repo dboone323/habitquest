@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ImportResultView: View {
+public struct ImportResultView: View {
     let result: ImportResult
     let onDismiss: () -> Void
 

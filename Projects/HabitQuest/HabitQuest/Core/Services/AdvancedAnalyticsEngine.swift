@@ -2,408 +2,125 @@ import Foundation
 import SwiftData
 
 /// Advanced analytics engine with machine learning predictions and behavioral insights
+/// Now refactored to use specialized service classes for better separation of concerns
 @Observable
 final class AdvancedAnalyticsEngine {
     private let modelContext: ModelContext
     private let streakService: StreakService
 
+    // Service dependencies
+    private let predictionService: PredictionService
+    private let patternAnalysisService: PatternAnalysisService
+    private let behavioralInsightsService: BehavioralInsightsService
+    private let habitSuggestionService: HabitSuggestionService
+
     init(modelContext: ModelContext, streakService: StreakService) {
         self.modelContext = modelContext
         self.streakService = streakService
+
+        // Initialize specialized services
+        self.predictionService = PredictionService(modelContext: modelContext, streakService: streakService)
+        self.patternAnalysisService = PatternAnalysisService(modelContext: modelContext)
+        self.behavioralInsightsService = BehavioralInsightsService(modelContext: modelContext)
+        self.habitSuggestionService = HabitSuggestionService(modelContext: modelContext)
     }
 
     // MARK: - Predictive Analytics
 
     /// Predict streak continuation probability using behavioral patterns
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func predictStreakSuccess(for habit: Habit, days _: Int = 7) async -> StreakPrediction {
-        let patterns = await analyzeHabitPatterns(habit)
-        let timeFactors = self.analyzeTimeFactors(habit)
-        let streakMomentum = self.calculateStreakMomentum(habit)
-
-        let baseProbability = self.calculateBaseProbability(patterns: patterns)
-        let timeAdjustment = self.calculateTimeAdjustment(timeFactors)
-        let momentumBonus = self.calculateMomentumBonus(streakMomentum)
-
-        let finalProbability = min(95.0, max(5.0, baseProbability + timeAdjustment + momentumBonus))
-
-        return StreakPrediction(
-            nextMilestone: habit.streak < 7 ? "7 days" : "\(((habit.streak / 7) + 1) * 7) days",
-            probability: finalProbability,
-            trend: self.determineTrend(patterns: patterns),
-            recommendedAction: self.generateSmartRecommendation(
-                habit: habit,
-                patterns: patterns,
-                probability: finalProbability
-            )
-        )
+    func predictStreakSuccess(for habit: Habit, days: Int = 7) async -> StreakPrediction {
+        await self.predictionService.predictStreakSuccess(for: habit, days: days)
     }
 
     /// Generate optimal habit scheduling recommendations
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
     func generateOptimalScheduling(for habit: Habit) async -> SchedulingRecommendation {
-        let completionTimes = habit.logs.compactMap { log in
-            log.isCompleted ? Calendar.current.dateComponents([.hour], from: log.completionDate).hour : nil
-        }
-
-        let optimalHour = self.findOptimalHour(from: completionTimes)
-        let successRate = self.calculateHourlySuccessRate(habit: habit, hour: optimalHour)
-
-        return SchedulingRecommendation(
-            optimalTime: optimalHour,
-            successRateAtTime: successRate,
-            reasoning: self.generateSchedulingReasoning(hour: optimalHour, successRate: successRate),
-            alternativeTimes: self.findAlternativeHours(from: completionTimes)
-        )
-    }
-
-    /// Analyze behavioral patterns and correlations
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func analyzeBehavioralPatterns(for habit: Habit) async -> BehavioralInsights {
-        let moodCorrelation = await calculateMoodCorrelation(habit)
-        let dayOfWeekPattern = self.analyzeDayOfWeekPattern(habit)
-        let streakBreakFactors = self.analyzeStreakBreakFactors(habit)
-        let motivationTriggers = self.identifyMotivationTriggers(habit)
-
-        return BehavioralInsights(
-            moodCorrelation: moodCorrelation,
-            strongestDays: dayOfWeekPattern.strongest,
-            weakestDays: dayOfWeekPattern.weakest,
-            streakBreakFactors: streakBreakFactors,
-            motivationTriggers: motivationTriggers,
-            personalityInsights: self.generatePersonalityInsights(habit)
-        )
-    }
-
-    /// Generate personalized habit suggestions using ML
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func generateHabitSuggestions() async -> [HabitSuggestion] {
-        let existingHabits = await fetchAllHabits()
-        let userProfile = await analyzeUserProfile(from: existingHabits)
-
-        return [
-            self.generateCategoryBasedSuggestions(profile: userProfile),
-            self.generateTimeBasedSuggestions(profile: userProfile),
-            self.generateComplementarySuggestions(existing: existingHabits),
-            self.generateTrendingSuggestions()
-        ].flatMap(\.self)
+        await self.predictionService.generateOptimalScheduling(for: habit)
     }
 
     // MARK: - Pattern Analysis
 
-    private func analyzeHabitPatterns(_ habit: Habit) async -> HabitPatterns {
-        let recentLogs = habit.logs.suffix(30).sorted { $0.completionDate < $1.completionDate }
-
-        let consistency = self.calculateConsistency(from: ArraySlice(recentLogs))
-        let momentum = self.calculateMomentum(from: ArraySlice(recentLogs))
-        let volatility = self.calculateVolatility(from: ArraySlice(recentLogs))
-
-        return HabitPatterns(
-            consistency: consistency,
-            momentum: momentum,
-            volatility: volatility,
-            weekdayPreference: self.analyzeWeekdayPreference(recentLogs),
-            timePreference: self.analyzeTimePreference(recentLogs)
-        )
+    /// Analyze habit patterns for predictive modeling
+    func analyzeHabitPatterns(_ habit: Habit) -> HabitPatterns {
+        self.patternAnalysisService.analyzeHabitPatterns(habit)
     }
 
-    private func analyzeTimeFactors(_ habit: Habit) -> TimeFactors {
-        let now = Date()
-        let calendar = Calendar.current
-
-        let currentHour = calendar.component(.hour, from: now)
-        let dayOfWeek = calendar.component(.weekday, from: now)
-
-        let hourSuccessRate = self.calculateSuccessRateForHour(habit: habit, hour: currentHour)
-        let daySuccessRate = self.calculateSuccessRateForWeekday(habit: habit, weekday: dayOfWeek)
-
-        return TimeFactors(
-            currentHourSuccessRate: hourSuccessRate,
-            currentDaySuccessRate: daySuccessRate,
-            timesSinceLastCompletion: self.calculateTimeSinceLastCompletion(habit),
-            optimalTimeWindow: self.findOptimalTimeWindow(habit)
-        )
+    /// Analyze time-based factors affecting habit completion
+    func analyzeTimeFactors(_ habit: Habit) -> TimeFactors {
+        self.patternAnalysisService.analyzeTimeFactors(habit)
     }
 
-    private func calculateStreakMomentum(_ habit: Habit) -> StreakMomentum {
-        let recentCompletions = habit.logs.suffix(7).filter(\.isCompleted)
-        let momentum = Double(recentCompletions.count) / 7.0
-
-        let longestRecentStreak = self.calculateLongestRecentStreak(habit)
-        let streakAcceleration = self.calculateStreakAcceleration(habit)
-
-        return StreakMomentum(
-            weeklyMomentum: momentum,
-            longestRecentStreak: longestRecentStreak,
-            acceleration: streakAcceleration
-        )
+    /// Calculate streak momentum and acceleration metrics
+    func calculateStreakMomentum(_ habit: Habit) -> StreakMomentum {
+        self.patternAnalysisService.calculateStreakMomentum(habit)
     }
 
-    // MARK: - ML Calculations
+    // MARK: - Behavioral Insights
 
-    private func calculateBaseProbability(patterns: HabitPatterns) -> Double {
-        let consistencyWeight = 0.4
-        let momentumWeight = 0.3
-        let volatilityWeight = 0.3
-
-        return (patterns.consistency * consistencyWeight) +
-            (patterns.momentum * momentumWeight) +
-            ((1.0 - patterns.volatility) * volatilityWeight) * 100
+    /// Analyze behavioral patterns and correlations
+    func analyzeBehavioralPatterns(for habit: Habit) async -> BehavioralInsights {
+        await self.behavioralInsightsService.analyzeBehavioralPatterns(for: habit)
     }
 
-    private func calculateTimeAdjustment(_ timeFactors: TimeFactors) -> Double {
-        let hourAdjustment = (timeFactors.currentHourSuccessRate - 0.5) * 20
-        let dayAdjustment = (timeFactors.currentDaySuccessRate - 0.5) * 15
-
-        return hourAdjustment + dayAdjustment
+    /// Calculate correlation between mood and habit completion
+    func calculateMoodCorrelation(_ habit: Habit) async -> Double {
+        await self.behavioralInsightsService.calculateMoodCorrelation(habit)
     }
 
-    private func calculateMomentumBonus(_ momentum: StreakMomentum) -> Double {
-        let weeklyBonus = momentum.weeklyMomentum * 10
-        let accelerationBonus = momentum.acceleration * 5
-
-        return weeklyBonus + accelerationBonus
+    /// Analyze day-of-week completion patterns
+    func analyzeDayOfWeekPattern(_ habit: Habit) -> (strongest: [String], weakest: [String]) {
+        self.behavioralInsightsService.analyzeDayOfWeekPattern(habit)
     }
 
-    private func determineTrend(patterns: HabitPatterns) -> String {
-        if patterns.momentum > 0.7 {
-            "strongly improving"
-        } else if patterns.momentum > 0.5 {
-            "improving"
-        } else if patterns.momentum < 0.3 {
-            "declining"
-        } else {
-            "stable"
-        }
+    /// Analyze factors that commonly break streaks
+    func analyzeStreakBreakFactors(_ habit: Habit) -> [String] {
+        self.behavioralInsightsService.analyzeStreakBreakFactors(habit)
     }
 
-    // MARK: - Smart Recommendations
-
-    private func generateSmartRecommendation(
-        habit _: Habit,
-        patterns: HabitPatterns,
-        probability: Double
-    ) -> String {
-        switch (patterns.momentum, probability) {
-        case let (momentumValue, probabilityValue) where momentumValue > 0.8 && probabilityValue > 80:
-            "🚀 Exceptional momentum! Consider expanding this habit or adding a complementary one."
-        case let (momentumValue, probabilityValue) where momentumValue > 0.6 && probabilityValue > 70:
-            "💪 Strong pattern! Focus on maintaining consistency during weekends."
-        case let (momentumValue, probabilityValue) where momentumValue < 0.4 && probabilityValue < 50:
-            "🎯 Try habit stacking: attach this to an established routine."
-        case let (_, probabilityValue) where probabilityValue < 30:
-            "🔄 Consider reducing frequency or simplifying the habit to rebuild momentum."
-        default:
-            "📈 Small wins lead to big changes. Focus on consistency over perfection."
-        }
+    /// Identify motivation triggers based on completion patterns
+    func identifyMotivationTriggers(_ habit: Habit) -> [String] {
+        self.behavioralInsightsService.identifyMotivationTriggers(habit)
     }
 
-    // MARK: - Utility Methods
-
-    private func fetchAllHabits() async -> [Habit] {
-        let descriptor = FetchDescriptor<Habit>()
-        return (try? self.modelContext.fetch(descriptor)) ?? []
+    /// Generate personality insights based on habit patterns
+    func generatePersonalityInsights(_ habit: Habit) -> [String] {
+        self.behavioralInsightsService.generatePersonalityInsights(habit)
     }
 
-    private func calculateConsistency(from logs: ArraySlice<HabitLog>) -> Double {
-        guard !logs.isEmpty else { return 0 }
-        let completedCount = logs.filter(\.isCompleted).count
-        return Double(completedCount) / Double(logs.count)
+    // MARK: - Habit Suggestions
+
+    /// Generate personalized habit suggestions using ML
+    func generateHabitSuggestions() async -> [HabitSuggestion] {
+        await self.habitSuggestionService.generateHabitSuggestions()
     }
 
-    private func calculateMomentum(from logs: ArraySlice<HabitLog>) -> Double {
-        guard logs.count >= 14 else { return 0.5 }
-
-        let firstHalf = logs.prefix(logs.count / 2)
-        let secondHalf = logs.suffix(logs.count / 2)
-
-        let firstConsistency = self.calculateConsistency(from: firstHalf)
-        let secondConsistency = self.calculateConsistency(from: secondHalf)
-
-        return secondConsistency > firstConsistency ?
-            min(1.0, secondConsistency + 0.1) : secondConsistency
+    /// Generate suggestions based on user's existing habit categories
+    func generateCategoryBasedSuggestions(profile: UserProfile) -> [HabitSuggestion] {
+        self.habitSuggestionService.generateCategoryBasedSuggestions(profile: profile)
     }
 
-    private func calculateVolatility(from logs: ArraySlice<HabitLog>) -> Double {
-        // Simplified volatility calculation
-        guard logs.count > 1 else { return 0 }
-
-        let completions = logs.map { $0.isCompleted ? 1.0 : 0.0 }
-        let mean = completions.reduce(0, +) / Double(completions.count)
-        let variance = completions.map { pow($0 - mean, 2) }.reduce(0, +) / Double(completions.count)
-
-        return sqrt(variance)
+    /// Generate suggestions based on user's time patterns and availability
+    func generateTimeBasedSuggestions(profile: UserProfile) -> [HabitSuggestion] {
+        self.habitSuggestionService.generateTimeBasedSuggestions(profile: profile)
     }
 
-    private func findOptimalHour(from hours: [Int]) -> Int {
-        guard !hours.isEmpty else { return 9 } // Default to 9 AM
-
-        let hourCounts = Dictionary(grouping: hours, by: { $0 })
-            .mapValues(\.count)
-
-        return hourCounts.max(by: { $0.value < $1.value })?.key ?? 9
+    /// Generate complementary habits that work well with existing ones
+    func generateComplementarySuggestions(existing: [Habit]) -> [HabitSuggestion] {
+        self.habitSuggestionService.generateComplementarySuggestions(existing: existing)
     }
 
-    private func calculateHourlySuccessRate(habit: Habit, hour: Int) -> Double {
-        let logsInHour = habit.logs.filter { log in
-            Calendar.current.component(.hour, from: log.completionDate) == hour
-        }
-
-        guard !logsInHour.isEmpty else { return 0.5 }
-
-        let completedInHour = logsInHour.filter(\.isCompleted).count
-        return Double(completedInHour) / Double(logsInHour.count)
+    /// Generate trending habit suggestions
+    func generateTrendingSuggestions() -> [HabitSuggestion] {
+        self.habitSuggestionService.generateTrendingSuggestions()
     }
 
-    // MARK: - Missing Helper Methods
-
-    private func generateSchedulingReasoning(hour: Int, successRate: Double) -> String {
-        let timeOfDay = hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening"
-        return "Based on your patterns, \(timeOfDay) shows \(Int(successRate * 100))% success rate"
+    /// Generate habit stacking suggestions based on existing routines
+    func generateHabitStackingSuggestions(existing: [Habit]) -> [HabitSuggestion] {
+        self.habitSuggestionService.generateHabitStackingSuggestions(existing: existing)
     }
 
-    private func findAlternativeHours(from hours: [Int]) -> [Int] {
-        let hourCounts = Dictionary(grouping: hours, by: { $0 })
-            .mapValues(\.count)
-            .sorted { $0.value > $1.value }
-
-        return Array(hourCounts.prefix(3).map(\.key))
-    }
-
-    private func calculateMoodCorrelation(_: Habit) async -> Double {
-        0.75 // Placeholder implementation
-    }
-
-    private func analyzeDayOfWeekPattern(_: Habit) -> (strongest: [String], weakest: [String]) {
-        (strongest: ["Monday", "Tuesday"], weakest: ["Saturday", "Sunday"])
-    }
-
-    private func analyzeStreakBreakFactors(_: Habit) -> [String] {
-        ["Weekend disruption", "Travel", "Stress"]
-    }
-
-    private func identifyMotivationTriggers(_: Habit) -> [String] {
-        ["Morning routine", "Workout buddy", "Progress tracking"]
-    }
-
-    private func generatePersonalityInsights(_: Habit) -> [String] {
-        ["Consistent performer", "Responds well to routine"]
-    }
-
-    private func analyzeUserProfile(from _: [Habit]) async -> String {
-        "Routine-oriented user with consistent habits"
-    }
-
-    private func generateCategoryBasedSuggestions(profile _: String) -> [HabitSuggestion] {
-        []
-    }
-
-    private func generateTimeBasedSuggestions(profile _: String) -> [HabitSuggestion] {
-        []
-    }
-
-    private func generateComplementarySuggestions(existing _: [Habit]) -> [HabitSuggestion] {
-        []
-    }
-
-    private func generateTrendingSuggestions() -> [HabitSuggestion] {
-        []
-    }
-
-    private func analyzeWeekdayPreference(_: [HabitLog]) -> Int {
-        2 // Tuesday
-    }
-
-    private func analyzeTimePreference(_: [HabitLog]) -> Int {
-        9 // 9 AM
-    }
-
-    private func calculateSuccessRateForHour(habit: Habit, hour: Int) -> Double {
-        let logsInHour = habit.logs.filter { log in
-            Calendar.current.component(.hour, from: log.completionDate) == hour
-        }
-
-        guard !logsInHour.isEmpty else { return 0.5 }
-
-        let completedInHour = logsInHour.filter(\.isCompleted).count
-        return Double(completedInHour) / Double(logsInHour.count)
-    }
-
-    private func calculateSuccessRateForWeekday(habit: Habit, weekday: Int) -> Double {
-        let logsOnWeekday = habit.logs.filter { log in
-            Calendar.current.component(.weekday, from: log.completionDate) == weekday
-        }
-
-        guard !logsOnWeekday.isEmpty else { return 0.5 }
-
-        let completedOnWeekday = logsOnWeekday.filter(\.isCompleted).count
-        return Double(completedOnWeekday) / Double(logsOnWeekday.count)
-    }
-
-    private func calculateTimeSinceLastCompletion(_ habit: Habit) -> TimeInterval {
-        guard let lastCompletion = habit.logs.filter(\.isCompleted).last?.completionDate else {
-            return 0
-        }
-        return Date().timeIntervalSince(lastCompletion)
-    }
-
-    private func findOptimalTimeWindow(_ habit: Habit) -> ClosedRange<Int> {
-        let completionHours = habit.logs.compactMap { log in
-            log.isCompleted ? Calendar.current.component(.hour, from: log.completionDate) : nil
-        }
-
-        let optimalHour = self.findOptimalHour(from: completionHours)
-        return (optimalHour - 1) ... (optimalHour + 1)
-    }
-
-    private func calculateLongestRecentStreak(_ habit: Habit) -> Int {
-        let recentLogs = habit.logs.suffix(30).sorted { $0.completionDate < $1.completionDate }
-        var currentStreak = 0
-        var longestStreak = 0
-
-        for log in recentLogs {
-            if log.isCompleted {
-                currentStreak += 1
-                longestStreak = max(longestStreak, currentStreak)
-            } else {
-                currentStreak = 0
-            }
-        }
-
-        return longestStreak
-    }
-
-    private func calculateStreakAcceleration(_ habit: Habit) -> Double {
-        let recentLogs = habit.logs.suffix(14).sorted { $0.completionDate < $1.completionDate }
-        guard recentLogs.count >= 7 else { return 0.0 }
-
-        let firstHalf = recentLogs.prefix(7)
-        let secondHalf = recentLogs.suffix(7)
-
-        let firstHalfRate = Double(firstHalf.filter(\.isCompleted).count) / Double(firstHalf.count)
-        let secondHalfRate = Double(secondHalf.filter(\.isCompleted).count) / Double(secondHalf.count)
-
-        return secondHalfRate - firstHalfRate
+    /// Generate challenge-based suggestions for advanced users
+    func generateChallengeSuggestions(profile: UserProfile) -> [HabitSuggestion] {
+        self.habitSuggestionService.generateChallengeSuggestions(profile: profile)
     }
 }
 

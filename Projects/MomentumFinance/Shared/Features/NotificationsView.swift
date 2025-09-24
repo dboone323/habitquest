@@ -11,7 +11,7 @@ import UserNotifications
 
 /// Notification center for managing smart alerts and system notifications
 @MainActor
-struct NotificationsView: View {
+public struct NotificationsView: View {
     @Environment(\.dismiss) private var dismiss
 
     @StateObject private var notificationManager = NotificationManager.shared
@@ -230,7 +230,7 @@ struct NotificationsView: View {
 
 // MARK: - Filter Types
 
-enum NotificationFilter: String, CaseIterable {
+public enum NotificationFilter: String, CaseIterable {
     case all = "All"
     case budgets = "Budgets"
     case subscriptions = "Subscriptions"
@@ -248,7 +248,7 @@ enum NotificationFilter: String, CaseIterable {
 
 // MARK: - Filter Button
 
-struct FilterButton: View {
+public struct FilterButton: View {
     let filter: NotificationFilter
     let isSelected: Bool
     let count: Int
@@ -292,7 +292,7 @@ struct FilterButton: View {
 
 // MARK: - Notification Row
 
-struct NotificationRow: View {
+public struct NotificationRow: View {
     let notification: ScheduledNotification
     let onTap: () -> Void
     let onDismiss: () -> Void

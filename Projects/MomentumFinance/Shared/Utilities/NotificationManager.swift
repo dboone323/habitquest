@@ -22,7 +22,7 @@ import SwiftData
 /// - GoalNotificationScheduler: Milestone and achievement notifications
 /// - NotificationTypes: Supporting enums and data models
 @MainActor
-class NotificationManager: ObservableObject {
+public class NotificationManager: ObservableObject {
     static let shared = NotificationManager()
 
     @Published var isNotificationPermissionGranted = false
@@ -69,6 +69,16 @@ class NotificationManager: ObservableObject {
     func schedulebudgetWarningNotifications(for budgets: [Budget]) {
         guard self.isNotificationPermissionGranted else { return }
         self.budgetScheduler.scheduleWarningNotifications(for: budgets)
+    }
+
+    func scheduleRolloverNotifications(for budgets: [Budget]) {
+        guard self.isNotificationPermissionGranted else { return }
+        self.budgetScheduler.scheduleRolloverNotifications(for: budgets)
+    }
+
+    func scheduleSpendingPredictionNotifications(for budgets: [Budget]) {
+        guard self.isNotificationPermissionGranted else { return }
+        self.budgetScheduler.scheduleSpendingPredictionNotifications(for: budgets)
     }
 
     // MARK: - Subscription Due Date Notifications (Delegate to SubscriptionScheduler)
@@ -144,5 +154,26 @@ class NotificationManager: ObservableObject {
             budgetCategory,
             subscriptionCategory
         ])
+    }
+}
+
+// MARK: - Object Pooling
+
+/// Object pool for performance optimization
+private var objectPool: [Any] = []
+private let maxPoolSize = 50
+
+/// Get an object from the pool or create new one
+private func getPooledObject<T>() -> T? {
+    if let pooled = objectPool.popLast() as? T {
+        return pooled
+    }
+    return nil
+}
+
+/// Return an object to the pool
+private func returnToPool(_ object: Any) {
+    if objectPool.count < maxPoolSize {
+        objectPool.append(object)
     }
 }

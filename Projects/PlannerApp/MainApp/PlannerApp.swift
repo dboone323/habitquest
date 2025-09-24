@@ -3,7 +3,7 @@ import Foundation
 import SwiftUI
 
 @main
-struct PlannerApp: App {
+public struct PlannerApp: App {
     // Create and keep alive a single instance of ThemeManager for the entire app.
     // @StateObject ensures it persists throughout the app's lifecycle.
     @StateObject private var themeManager = ThemeManager()
@@ -15,7 +15,7 @@ struct PlannerApp: App {
     // Custom initializer to read the default view setting from UserDefaults
     // *before* the main body view is created. This ensures the correct tab
     // is selected right from the start.
-    init() {
+    public init() {
         // Read the saved default view identifier from UserDefaults.
         let initialTab = UserDefaults.standard.string(forKey: AppSettingKeys.defaultView)
             // Use the Dashboard tag as a fallback if nothing is saved.
@@ -26,7 +26,7 @@ struct PlannerApp: App {
         print("App starting. Initial tab set to: \(initialTab)") // Debugging log
     }
 
-    var body: some Scene {
+    public var body: some Scene {
         WindowGroup {
             // Apply the primary background color from the current theme to the entire window group.
             self.themeManager.currentTheme.primaryBackgroundColor

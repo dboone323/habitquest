@@ -4,7 +4,7 @@ import Foundation
 // PlannerApp/MainApp/DashboardView.swift (Modern Enhanced Version)
 import SwiftUI
 
-struct DashboardView: View {
+public struct DashboardView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @StateObject private var viewModel = DashboardViewModel()
     @AppStorage(AppSettingKeys.userName) private var userName: String = ""
@@ -382,7 +382,7 @@ struct DashboardView: View {
 
 // MARK: - Supporting Views
 
-struct QuickStatCard: View {
+public struct QuickStatCard: View {
     let title: String
     let value: String
     let subtitle: String
@@ -424,7 +424,7 @@ struct QuickStatCard: View {
     }
 }
 
-struct QuickActionCard: View {
+public struct QuickActionCard: View {
     let title: String
     let icon: String
     let color: Color
@@ -457,7 +457,7 @@ struct QuickActionCard: View {
     }
 }
 
-struct ActivityRowView: View {
+public struct ActivityRowView: View {
     let activity: DashboardActivity
     @EnvironmentObject var themeManager: ThemeManager
 
@@ -512,7 +512,7 @@ struct ActivityRowView: View {
     }
 }
 
-struct UpcomingItemView: View {
+public struct UpcomingItemView: View {
     let item: UpcomingItem
     @EnvironmentObject var themeManager: ThemeManager
 
@@ -583,6 +583,6 @@ struct UpcomingItemView: View {
 }
 
 #Preview {
-    DashboardView()
+    DashboardView(selectedTabTag: .constant("Dashboard"))
         .environmentObject(ThemeManager())
 }

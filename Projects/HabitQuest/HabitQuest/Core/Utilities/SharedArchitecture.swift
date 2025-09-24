@@ -34,13 +34,13 @@ extension BaseViewModel {
 // MARK: - Error Handling
 
 /// Standardized error types across projects
-enum AppError: LocalizedError {
+public enum AppError: LocalizedError {
     case networkError(String)
     case dataError(String)
     case validationError(String)
     case unknownError
 
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case let .networkError(message):
             "Network Error: \(message)"

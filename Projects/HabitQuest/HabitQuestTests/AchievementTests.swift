@@ -2,17 +2,7 @@ import XCTest
 
 @testable import HabitQuest
 
-class AchievementTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here
-    }
-
-    override func tearDown() {
-        // Put teardown code here
-        super.tearDown()
-    }
-
+public class AchievementTests: XCTestCase {
     // MARK: - enumAchievementCategory Tests
 
     func testAchievementCategoryInitialization() {
@@ -228,7 +218,7 @@ class AchievementTests: XCTestCase {
             Achievement(
                 name: "Special", description: "Special", iconName: "gem", category: .special,
                 xpReward: 100, isHidden: false, requirement: .earlyBird
-            ),
+            )
         ]
 
         XCTAssertEqual(achievements.count, 5)

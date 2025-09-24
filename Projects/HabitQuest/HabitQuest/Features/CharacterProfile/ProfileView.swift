@@ -1,10 +1,10 @@
 import SwiftUI
 
-struct ProfileView: View {
+public struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @State private var showingAdvancedAnalytics = false
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
@@ -65,13 +65,13 @@ struct ProfileView: View {
     }
 }
 
-struct CharacterAvatarSection: View {
+public struct CharacterAvatarSection: View {
     let level: Int
     let currentXP: Int
     let xpToNextLevel: Int
     let avatarImageName: String
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 12) {
             // Avatar Circle
             ZStack {
@@ -120,12 +120,12 @@ struct CharacterAvatarSection: View {
     }
 }
 
-struct ProgressSection: View {
+public struct ProgressSection: View {
     let currentXP: Int
     let xpToNextLevel: Int
     let totalXP: Int
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Progress")
                 .font(.headline)
@@ -162,7 +162,7 @@ struct ProgressSection: View {
     }
 }
 
-struct StatsSection: View {
+public struct StatsSection: View {
     let totalHabits: Int
     let activeStreaks: Int
     let completedToday: Int
@@ -170,7 +170,7 @@ struct StatsSection: View {
     let perfectDays: Int
     let weeklyCompletion: Double
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Statistics")
                 .font(.headline)
@@ -193,12 +193,12 @@ struct StatsSection: View {
     }
 }
 
-struct StatCard: View {
+public struct StatCard: View {
     let title: String
     let value: String
     let icon: String
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 8) {
             Image(systemName: self.icon)
                 .font(.title2)
@@ -220,10 +220,10 @@ struct StatCard: View {
     }
 }
 
-struct AchievementsSection: View {
+public struct AchievementsSection: View {
     let achievements: [Achievement]
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("Recent Achievements")
@@ -259,10 +259,10 @@ struct AchievementsSection: View {
     }
 }
 
-struct AchievementBadge: View {
+public struct AchievementBadge: View {
     let achievement: Achievement
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 4) {
             Image(systemName: self.achievement.iconName)
                 .font(.title2)
@@ -280,10 +280,10 @@ struct AchievementBadge: View {
     }
 }
 
-struct AnalyticsTabView: View {
+public struct AnalyticsTabView: View {
     @State private var selectedTab = 0
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Analytics Overview")
                 .font(.headline)
@@ -316,8 +316,8 @@ struct AnalyticsTabView: View {
     }
 }
 
-struct TrendsView: View {
-    var body: some View {
+public struct TrendsView: View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "chart.line.uptrend.xyaxis")
@@ -361,8 +361,8 @@ struct TrendsView: View {
     }
 }
 
-struct PatternsView: View {
-    var body: some View {
+public struct PatternsView: View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "clock")
@@ -406,8 +406,8 @@ struct PatternsView: View {
     }
 }
 
-struct InsightsView: View {
-    var body: some View {
+public struct InsightsView: View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "lightbulb")
@@ -442,10 +442,10 @@ struct InsightsView: View {
     }
 }
 
-struct AdvancedAnalyticsView: View {
+public struct AdvancedAnalyticsView: View {
     @Environment(\.dismiss) private var dismiss
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
@@ -489,8 +489,8 @@ struct AdvancedAnalyticsView: View {
     }
 }
 
-struct AnalyticsInsightsCard: View {
-    var body: some View {
+public struct AnalyticsInsightsCard: View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("AI-Powered Insights")
                 .font(.headline)
@@ -526,13 +526,13 @@ struct AnalyticsInsightsCard: View {
     }
 }
 
-struct InsightRow: View {
+public struct InsightRow: View {
     let icon: String
     let title: String
     let insight: String
     let color: Color
 
-    var body: some View {
+    public var body: some View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: self.icon)
                 .font(.title3)
@@ -555,8 +555,8 @@ struct InsightRow: View {
     }
 }
 
-struct PredictiveAnalyticsCard: View {
-    var body: some View {
+public struct PredictiveAnalyticsCard: View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Predictive Analytics")
                 .font(.headline)
@@ -588,12 +588,12 @@ struct PredictiveAnalyticsCard: View {
     }
 }
 
-struct PredictionRow: View {
+public struct PredictionRow: View {
     let title: String
     let probability: Double
     let color: Color
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text(self.title)
@@ -613,8 +613,8 @@ struct PredictionRow: View {
     }
 }
 
-struct BehavioralPatternsCard: View {
-    var body: some View {
+public struct BehavioralPatternsCard: View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Behavioral Patterns")
                 .font(.headline)
@@ -656,13 +656,13 @@ struct BehavioralPatternsCard: View {
     }
 }
 
-struct PatternRow: View {
+public struct PatternRow: View {
     let icon: String
     let title: String
     let value: String
     let color: Color
 
-    var body: some View {
+    public var body: some View {
         HStack {
             Image(systemName: self.icon)
                 .font(.title3)

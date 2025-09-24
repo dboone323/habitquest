@@ -25,6 +25,18 @@ public enum BillingCycle: String, CaseIterable, Codable {
         }
     }
 
+    /// Date component for calculating next billing date.
+    public var dateComponent: DateComponents {
+        switch self {
+        case .weekly:
+            DateComponents(weekOfYear: 1)
+        case .monthly:
+            DateComponents(month: 1)
+        case .yearly:
+            DateComponents(year: 1)
+        }
+    }
+
     /// Calculates the next due date for this billing cycle from a given date.
     /// - Parameter date: The starting date.
     /// - Returns: The next due date as a Date.
@@ -64,6 +76,9 @@ public final class Subscription {
     public var category: ExpenseCategory?
     /// The financial account associated with this subscription (optional).
     public var account: FinancialAccount?
+    /// Payment history for this subscription.
+    @Relationship(deleteRule: .cascade, inverse: \SubscriptionPayment.subscription)
+    public var payments: [SubscriptionPayment] = []
 
     /// Creates a new subscription.
     /// - Parameters:
@@ -148,5 +163,41 @@ public final class Subscription {
 
         // Set next due date
         self.nextDueDate = self.billingCycle.nextDueDate(from: self.nextDueDate)
+    }
+}
+
+/// Represents a payment made for a subscription.
+@Model
+public final class SubscriptionPayment {
+    /// The date the payment was made.
+    public var date: Date
+    /// The amount paid.
+    public var amount: Double
+    /// Optional notes about the payment.
+    public var notes: String?
+
+    // Relationships
+    /// The subscription this payment belongs to.
+    public var subscription: Subscription?
+
+    /// Creates a new subscription payment.
+    /// - Parameters:
+    ///   - date: The date the payment was made.
+    ///   - amount: The amount paid.
+    ///   - subscription: The subscription this payment belongs to.
+    ///   - notes: Optional notes about the payment.
+    public init(date: Date, amount: Double, subscription: Subscription? = nil, notes: String? = nil) {
+        self.date = date
+        self.amount = amount
+        self.subscription = subscription
+        self.notes = notes
+    }
+
+    /// Returns the amount as a formatted currency string.
+    public var formattedAmount: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = "USD"
+        return formatter.string(from: NSNumber(value: self.amount)) ?? "$0.00"
     }
 }

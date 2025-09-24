@@ -5,8 +5,8 @@ import SwiftUI // Needed for @AppStorage
 
 // MARK: - Data Structures
 
-struct DashboardActivity: Identifiable {
-    let id = UUID()
+public struct DashboardActivity: Identifiable {
+    public let id = UUID()
     let title: String
     let subtitle: String
     let icon: String
@@ -14,8 +14,8 @@ struct DashboardActivity: Identifiable {
     let timestamp: Date
 }
 
-struct UpcomingItem: Identifiable {
-    let id = UUID()
+public struct UpcomingItem: Identifiable {
+    public let id = UUID()
     let title: String
     let subtitle: String?
     let date: Date
@@ -24,11 +24,11 @@ struct UpcomingItem: Identifiable {
 }
 
 // ObservableObject makes this class publish changes to its @Published properties.
-class DashboardViewModel: ObservableObject {
+public class DashboardViewModel: ObservableObject {
     // --- Published Properties for View Updates ---
     // These arrays hold the data to be displayed on the dashboard, limited by user settings.
     @Published var todaysEvents: [CalendarEvent] = []
-    @Published var incompleteTasks: [Task] = []
+    @Published var incompleteTasks: [PlannerTask] = []
     @Published var upcomingGoals: [Goal] = []
 
     // These hold the *total* counts before the limit is applied.
@@ -88,20 +88,23 @@ class DashboardViewModel: ObservableObject {
 
         // --- Filter Data ---
         // Filter events happening today.
-        let filteredTodaysEvents = allEvents.filter { event in
+        let todaysEventsFiltered = allEvents.filter { event in
             event.date >= startOfToday && event.date < endOfToday
-        }.sorted(by: { $0.date < $1.date }) // Sort today's events by time
+        }
+        let filteredTodaysEvents = todaysEventsFiltered.sorted(by: { $0.date < $1.date }) // Sort today's events by time
 
         // Filter tasks that are not completed.
         let filteredIncompleteTasks = allTasks.filter { !$0.isCompleted }
         // .sorted(...) // Optional: Add sorting if needed
 
         // Filter goals due between today and the end of the next 7 days.
-        let filteredUpcomingGoals = allGoals.filter { goal in
+        let upcomingGoalsFiltered = allGoals.filter { goal in
             // Compare using the start of the day for the goal's target date for consistency.
             let goalTargetStartOfDay = calendar.startOfDay(for: goal.targetDate)
             return goalTargetStartOfDay >= startOfToday && goalTargetStartOfDay < endOfWeek
-        }.sorted(by: { $0.targetDate < $1.targetDate }) // Sort upcoming goals by target date
+        }
+        let filteredUpcomingGoals = upcomingGoalsFiltered
+            .sorted(by: { $0.targetDate < $1.targetDate }) // Sort upcoming goals by target date
 
         // --- Update Total Counts ---
         // Store the counts *before* applying the display limit.
@@ -163,13 +166,14 @@ class DashboardViewModel: ObservableObject {
 
         // Add completed tasks from last few days
         let allTasks = TaskDataManager.shared.load()
-        let recentCompletedTasks = allTasks.filter { task in
+        let completedTasksFilter = allTasks.filter { task in
             // Only include tasks that are actually completed AND were created or completed recently
             task.isCompleted &&
                 (Calendar.current.isDateInYesterday(task.createdAt) ||
                     Calendar.current.isDateInToday(task.createdAt)
                 )
-        }.prefix(3)
+        }
+        let recentCompletedTasks = completedTasksFilter.prefix(3)
 
         for task in recentCompletedTasks {
             activities.append(DashboardActivity(
@@ -183,9 +187,10 @@ class DashboardViewModel: ObservableObject {
 
         // Add recent events
         let allEvents = CalendarDataManager.shared.load()
-        let recentEvents = allEvents.filter { event in
+        let recentEventsFilter = allEvents.filter { event in
             Calendar.current.isDateInYesterday(event.date) || Calendar.current.isDateInToday(event.date)
-        }.prefix(2)
+        }
+        let recentEvents = recentEventsFilter.prefix(2)
 
         for event in recentEvents {
             activities.append(DashboardActivity(
@@ -205,7 +210,8 @@ class DashboardViewModel: ObservableObject {
 
         // Add upcoming events
         let allEvents = CalendarDataManager.shared.load()
-        let futureEvents = allEvents.filter { $0.date > Date() }.prefix(3)
+        let futureEventsFilter = allEvents.filter { $0.date > Date() }
+        let futureEvents = futureEventsFilter.prefix(3)
 
         for event in futureEvents {
             items.append(UpcomingItem(

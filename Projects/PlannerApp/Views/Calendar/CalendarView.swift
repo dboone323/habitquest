@@ -4,12 +4,12 @@
 import Foundation
 import SwiftUI
 
-struct CalendarView: View {
+public struct CalendarView: View {
     // Access shared ThemeManager and data
     @EnvironmentObject var themeManager: ThemeManager
     @State private var events: [CalendarEvent] = []
     @State private var goals: [Goal] = []
-    @State private var tasks: [Task] = []
+    @State private var tasks: [PlannerTask] = []
     @State private var showAddEvent = false
     @State private var selectedDate = Date()
     @State private var showingDateDetails = false
@@ -55,7 +55,7 @@ struct CalendarView: View {
     }
 
     // Get items for selected date
-    private var selectedDateItems: (events: [CalendarEvent], goals: [Goal], tasks: [Task]) {
+    private var selectedDateItems: (events: [CalendarEvent], goals: [Goal], tasks: [PlannerTask]) {
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: self.selectedDate)
         let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) ?? startOfDay
@@ -97,7 +97,7 @@ struct CalendarView: View {
         return formatter
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
                 // Calendar Widget
@@ -301,8 +301,8 @@ extension Calendar {
 
 // MARK: - Preview Provider
 
-struct CalendarView_Previews: PreviewProvider {
-    static var previews: some View {
+public struct CalendarView_Previews: PreviewProvider {
+    public static var previews: some View {
         CalendarView()
             .environmentObject(ThemeManager())
     }

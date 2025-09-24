@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct AccessibilitySettingsSection: View {
+public struct AccessibilitySettingsSection: View {
     @Binding var hapticFeedbackEnabled: Bool
     @Binding var reducedMotion: Bool
 

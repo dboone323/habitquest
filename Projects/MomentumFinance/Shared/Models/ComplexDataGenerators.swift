@@ -6,7 +6,7 @@ import SwiftData
 
 /// Generates sample transactions for testing and demo purposes.
 @MainActor
-class TransactionsDataGenerator: DataGenerator {
+public class TransactionsDataGenerator: DataGenerator {
     /// The SwiftData model context used for data operations.
     let modelContext: ModelContext
 
@@ -134,7 +134,7 @@ class TransactionsDataGenerator: DataGenerator {
 
 /// Generates sample subscriptions for testing and demo purposes.
 @MainActor
-class SubscriptionsDataGenerator: DataGenerator {
+public class SubscriptionsDataGenerator: DataGenerator {
     /// The SwiftData model context used for data operations.
     let modelContext: ModelContext
 

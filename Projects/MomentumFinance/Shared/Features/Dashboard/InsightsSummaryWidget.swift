@@ -5,7 +5,7 @@ import SwiftData
 import SwiftUI
 
 /// A summary widget to display financial insights on the dashboard
-struct InsightsSummaryWidget: View {
+public struct InsightsSummaryWidget: View {
     @Environment(\.modelContext) private var modelContext
     #if canImport(SwiftData)
     #if canImport(SwiftData)

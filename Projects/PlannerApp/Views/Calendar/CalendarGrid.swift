@@ -1,7 +1,7 @@
 // PlannerApp/Views/Calendar/CalendarGrid.swift
 import SwiftUI
 
-struct CalendarGrid: View {
+public struct CalendarGrid: View {
     @EnvironmentObject var themeManager: ThemeManager
     @Binding var selectedDate: Date
     let eventDates: Set<Date>
@@ -59,7 +59,7 @@ struct CalendarGrid: View {
         return symbols
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 8) {
             // Weekday headers
             HStack(spacing: 0) {
@@ -92,7 +92,7 @@ struct CalendarGrid: View {
     }
 }
 
-struct CalendarDayView: View {
+public struct CalendarDayView: View {
     @EnvironmentObject var themeManager: ThemeManager
     let date: Date
     @Binding var selectedDate: Date
@@ -117,7 +117,7 @@ struct CalendarDayView: View {
         return formatter.string(from: self.date)
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 2) {
             // Day number
             Text(self.dayNumber)

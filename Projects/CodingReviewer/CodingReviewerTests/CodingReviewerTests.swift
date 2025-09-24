@@ -9,7 +9,7 @@ import XCTest
 
 @testable import CodingReviewer
 
-class CodingReviewerTests: XCTestCase {
+public class CodingReviewerTests: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -131,7 +131,7 @@ class CodingReviewerTests: XCTestCase {
         // Create a large code sample to test background processing
         let largeCode = String(repeating: """
         class TestClass {
-            func method\(Int.random(in: 1...100))() {
+            func method\(Int.random(in: 1 ... 100))() {
                 print("Method implementation")
                 // Some code here
                 let result = 1 + 1

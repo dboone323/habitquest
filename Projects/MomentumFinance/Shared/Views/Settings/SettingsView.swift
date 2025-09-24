@@ -3,7 +3,7 @@ import SwiftUI
 
 // MARK: - Settings View Coordinator
 
-struct SettingsView: View {
+public struct SettingsView: View {
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @AppStorage("biometricEnabled") private var biometricEnabled = false
     @AppStorage("authenticationTimeout") private var authenticationTimeoutRaw: String = "300"
@@ -42,7 +42,7 @@ struct SettingsView: View {
         )
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             List {
                 // Security Settings Section

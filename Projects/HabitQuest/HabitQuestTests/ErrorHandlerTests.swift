@@ -1,17 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-class ErrorHandlerTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here
-    }
-
-    override func tearDown() {
-        // Put teardown code here
-        super.tearDown()
-    }
-
+public class ErrorHandlerTests: XCTestCase {
     // MARK: - structErrorHandler:Sendable{ Tests
 
     func testErrorHandlerInitialization() {

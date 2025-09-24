@@ -1,17 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-class DataManagementViewTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here
-    }
-
-    override func tearDown() {
-        // Put teardown code here
-        super.tearDown()
-    }
-
+public class DataManagementViewTests: XCTestCase {
     // MARK: - structDataManagementView:View{ Tests
 
     func testDataManagementViewInitialization() {

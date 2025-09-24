@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-struct AddGoalView: View {
+public struct AddGoalView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @Environment(\.dismiss) var dismiss
     @Binding var goals: [Goal]
@@ -99,7 +99,7 @@ struct AddGoalView: View {
     }
 }
 
-struct AddGoalView_Previews: PreviewProvider {
+public struct AddGoalView_Previews: PreviewProvider {
     static var previews: some View {
         AddGoalView(goals: Binding.constant([]))
             .environmentObject(ThemeManager())

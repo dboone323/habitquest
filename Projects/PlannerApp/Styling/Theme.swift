@@ -16,8 +16,8 @@ import UIKit
 #endif
 
 // Defines the properties of a visual theme
-struct Theme: Identifiable, Equatable { // Added Equatable for comparison
-    let id = UUID()
+public struct Theme: Identifiable, Equatable { // Added Equatable for comparison
+    public let id = UUID()
     let name: String
 
     // --- Colors ---
@@ -199,7 +199,7 @@ struct Theme: Identifiable, Equatable { // Added Equatable for comparison
     // These will be added via extension in ModernThemes.swift
 
     // Implement Equatable based on name to compare themes
-    static func == (lhs: Theme, rhs: Theme) -> Bool {
+    public static func == (lhs: Theme, rhs: Theme) -> Bool {
         lhs.name == rhs.name
     }
 }

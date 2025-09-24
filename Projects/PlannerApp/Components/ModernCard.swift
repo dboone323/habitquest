@@ -43,7 +43,7 @@ struct ModernCard<Content: View>: View {
     }
 }
 
-struct ModernButton: View {
+public struct ModernButton: View {
     let title: String
     let action: () -> Void
     @EnvironmentObject var themeManager: ThemeManager
@@ -85,7 +85,7 @@ struct ModernButton: View {
         }
     }
 
-    var body: some View {
+    public var body: some View {
         Button(action: self.action) {
             Text(self.title)
                 .font(.system(size: self.size.fontSize, weight: .medium))
@@ -137,14 +137,14 @@ struct ModernButton: View {
 }
 
 // Progress indicator component
-struct ProgressBar: View {
+public struct ProgressBar: View {
     let progress: Double // 0.0 to 1.0
     @EnvironmentObject var themeManager: ThemeManager
 
     var height: CGFloat = 8
     var showPercentage: Bool = false
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             if self.showPercentage {
                 HStack {
@@ -173,7 +173,7 @@ struct ProgressBar: View {
 }
 
 // Enhanced input field
-struct ModernTextField: View {
+public struct ModernTextField: View {
     @Binding var text: String
     let placeholder: String
     @EnvironmentObject var themeManager: ThemeManager
@@ -183,7 +183,7 @@ struct ModernTextField: View {
     var keyboardType: UIKeyboardType = .default
     #endif
 
-    var body: some View {
+    public var body: some View {
         Group {
             if self.isSecure {
                 SecureField(self.placeholder, text: self.$text)

@@ -5,17 +5,23 @@
 //  Main SwiftUI application for CodingReviewer
 //
 
-import SwiftUI
 import os
+import SwiftUI
 
 @main
-struct CodingReviewer: App {
+public struct CodingReviewer: App {
     private let logger = Logger(subsystem: "com.quantum.codingreviewer", category: "CodingReviewerApp")
 
-    var body: some Scene {
+    @State private var showNewReviewSheet = false
+    @State private var showAboutWindow = false
+
+    public var body: some Scene {
         WindowGroup {
             ContentView()
                 .frame(minWidth: 800, minHeight: 600)
+                .sheet(isPresented: $showNewReviewSheet) {
+                    NewReviewView()
+                }
         }
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unified)
@@ -23,27 +29,41 @@ struct CodingReviewer: App {
             // Add standard menu commands
             CommandGroup(replacing: .newItem) {
                 Button("New Review") {
-                    // TODO: Implement new review action
+                    showNewReviewSheet = true
                 }
                 .keyboardShortcut("n", modifiers: .command)
             }
 
             CommandGroup(replacing: .saveItem) {
                 Button("Save Review") {
-                    // TODO: Implement save review action
+                    saveCurrentReview()
                 }
                 .keyboardShortcut("s", modifiers: .command)
             }
 
             CommandGroup(replacing: CommandGroupPlacement.appInfo) {
                 Button("About CodingReviewer") {
-                    // TODO: Show about window
+                    showAboutWindow = true
                 }
             }
         }
+
+        // About window
+        WindowGroup(id: "about") {
+            AboutView()
+        }
+        .windowStyle(.titleBar)
+        .windowResizability(.contentSize)
+        .defaultPosition(.center)
     }
 
-    init() {
-        logger.info("CodingReviewer application initialized")
+    public init() {
+        self.logger.info("CodingReviewer application initialized")
+    }
+
+    private func saveCurrentReview() {
+        logger.info("Save review action triggered")
+        // TODO: Implement actual save functionality
+        // This would typically save the current review state to disk or database
     }
 }

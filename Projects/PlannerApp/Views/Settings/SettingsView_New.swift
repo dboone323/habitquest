@@ -9,7 +9,7 @@ import AppKit
 #endif
 import Foundation
 
-struct SettingsView: View {
+public struct SettingsView: View {
     // Import ThemeManager properly
     @EnvironmentObject var themeManager: ThemeManager
 
@@ -305,7 +305,7 @@ struct SettingsView: View {
 
 // MARK: - CloudKit Settings View
 
-struct CloudKitSettingsView: View {
+public struct CloudKitSettingsView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -328,7 +328,7 @@ struct CloudKitSettingsView: View {
 
 // MARK: - Theme Preview Sheet
 
-struct ThemePreviewSheet: View {
+public struct ThemePreviewSheet: View {
     @EnvironmentObject var themeManager: ThemeManager
     @Environment(\.dismiss) private var dismiss
 
@@ -360,7 +360,7 @@ struct ThemePreviewSheet: View {
 
 // MARK: - Theme Card
 
-struct ThemeCard: View {
+public struct ThemeCard: View {
     let theme: Theme
     let isSelected: Bool
     let onTap: () -> Void
@@ -410,7 +410,7 @@ extension Bundle {
 
 // MARK: - Preview
 
-struct SettingsView_Previews: PreviewProvider {
+public struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
             .environmentObject(ThemeManager())

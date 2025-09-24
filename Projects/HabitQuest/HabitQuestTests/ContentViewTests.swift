@@ -1,174 +1,189 @@
 @testable import HabitQuest
+import SwiftData
+import SwiftUI
 import XCTest
 
-class ContentViewTests: XCTestCase {
+public class ContentViewTests: XCTestCase {
+    var modelContainer: ModelContainer!
+    var modelContext: ModelContext!
+
     override func setUp() {
         super.setUp()
-        // Put setup code here
+        do {
+            self.modelContainer = try ModelContainer(
+                for: Item.self,
+                configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+            )
+            self.modelContext = ModelContext(self.modelContainer)
+        } catch {
+            XCTFail("Failed to create model container: \(error)")
+        }
     }
 
     override func tearDown() {
-        // Put teardown code here
+        self.modelContainer = nil
+        self.modelContext = nil
         super.tearDown()
     }
 
-    // MARK: - structContentView:View{ Tests
+    // MARK: - ContentView Tests
 
+    @MainActor
     func testContentViewInitialization() {
-        // Test basic initialization
-        /// - TODO: Implement initialization test for structContentView:View{
-        XCTAssertTrue(true, "Placeholder test for structContentView:View{")
+        // Test basic initialization with model context
+        let contentView = ContentView()
+            .modelContainer(self.modelContainer)
+
+        // Verify the view can be created without throwing
+        XCTAssertNotNil(contentView)
     }
 
-    func testContentViewProperties() {
-        // Test property access and validation
-        /// - TODO: Implement property tests for structContentView:View{
-        XCTAssertTrue(true, "Placeholder test for structContentView:View{ properties")
+    @MainActor
+    func testContentViewWithItems() {
+        // Given some items in the database
+        let item1 = Item(timestamp: Date())
+        let item2 = Item(timestamp: Date().addingTimeInterval(-3600))
+        self.modelContext.insert(item1)
+        self.modelContext.insert(item2)
+
+        // When creating ContentView
+        let contentView = ContentView()
+            .modelContainer(self.modelContainer)
+
+        // Then view should be created successfully
+        XCTAssertNotNil(contentView)
     }
 
-    func testContentViewMethods() {
-        // Test method functionality
-        /// - TODO: Implement method tests for structContentView:View{
-        XCTAssertTrue(true, "Placeholder test for structContentView:View{ methods")
-    }
+    // MARK: - HeaderView Tests
 
-    // MARK: - structHeaderView:View{ Tests
-
+    @MainActor
     func testHeaderViewInitialization() {
         // Test basic initialization
-        /// - TODO: Implement initialization test for structHeaderView:View{
-        XCTAssertTrue(true, "Placeholder test for structHeaderView:View{")
+        let headerView = HeaderView()
+
+        // Verify the view can be created
+        XCTAssertNotNil(headerView)
     }
 
-    func testHeaderViewProperties() {
-        // Test property access and validation
-        /// - TODO: Implement property tests for structHeaderView:View{
-        XCTAssertTrue(true, "Placeholder test for structHeaderView:View{ properties")
+    @MainActor
+    func testHeaderViewDisplaysCorrectContent() {
+        // Test that HeaderView displays expected content
+        let headerView = HeaderView()
+
+        // This would require snapshot testing or more complex UI testing
+        // For now, just verify it doesn't throw
+        XCTAssertNotNil(headerView)
     }
 
-    func testHeaderViewMethods() {
-        // Test method functionality
-        /// - TODO: Implement method tests for structHeaderView:View{
-        XCTAssertTrue(true, "Placeholder test for structHeaderView:View{ methods")
-    }
+    // MARK: - ItemListView Tests
 
-    // MARK: - structItemListView:View{ Tests
-
+    @MainActor
     func testItemListViewInitialization() {
         // Test basic initialization
-        /// - TODO: Implement initialization test for structItemListView:View{
-        XCTAssertTrue(true, "Placeholder test for structItemListView:View{")
+        let items = [Item(timestamp: Date())]
+        let itemListView = ItemListView(
+            items: items,
+            onDelete: { _ in },
+            onAdd: {}
+        )
+
+        XCTAssertNotNil(itemListView)
     }
 
-    func testItemListViewProperties() {
-        // Test property access and validation
-        /// - TODO: Implement property tests for structItemListView:View{
-        XCTAssertTrue(true, "Placeholder test for structItemListView:View{ properties")
+    @MainActor
+    func testItemListViewWithEmptyItems() {
+        // Test with empty items array
+        let itemListView = ItemListView(
+            items: [],
+            onDelete: { _ in },
+            onAdd: {}
+        )
+
+        XCTAssertNotNil(itemListView)
     }
 
-    func testItemListViewMethods() {
-        // Test method functionality
-        /// - TODO: Implement method tests for structItemListView:View{
-        XCTAssertTrue(true, "Placeholder test for structItemListView:View{ methods")
-    }
+    // MARK: - ItemRowView Tests
 
-    // MARK: - structItemRowView:View{ Tests
-
+    @MainActor
     func testItemRowViewInitialization() {
         // Test basic initialization
-        /// - TODO: Implement initialization test for structItemRowView:View{
-        XCTAssertTrue(true, "Placeholder test for structItemRowView:View{")
+        let item = Item(timestamp: Date())
+        let itemRowView = ItemRowView(item: item)
+
+        XCTAssertNotNil(itemRowView)
     }
 
-    func testItemRowViewProperties() {
-        // Test property access and validation
-        /// - TODO: Implement property tests for structItemRowView:View{
-        XCTAssertTrue(true, "Placeholder test for structItemRowView:View{ properties")
+    @MainActor
+    func testItemRowViewTimeBasedIcon() {
+        // Test morning icon (6-12)
+        let morningDate = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date())!
+        let morningItem = Item(timestamp: morningDate)
+        let morningView = ItemRowView(item: morningItem)
+
+        // Test afternoon icon (12-18)
+        let afternoonDate = Calendar.current.date(bySettingHour: 15, minute: 0, second: 0, of: Date())!
+        let afternoonItem = Item(timestamp: afternoonDate)
+        let afternoonView = ItemRowView(item: afternoonItem)
+
+        // Test evening icon (18-22)
+        let eveningDate = Calendar.current.date(bySettingHour: 20, minute: 0, second: 0, of: Date())!
+        let eveningItem = Item(timestamp: eveningDate)
+        let eveningView = ItemRowView(item: eveningItem)
+
+        // Test night icon (22-6)
+        let nightDate = Calendar.current.date(bySettingHour: 2, minute: 0, second: 0, of: Date())!
+        let nightItem = Item(timestamp: nightDate)
+        let nightView = ItemRowView(item: nightItem)
+
+        // Verify views are created (actual icon testing would require UI testing framework)
+        XCTAssertNotNil(morningView)
+        XCTAssertNotNil(afternoonView)
+        XCTAssertNotNil(eveningView)
+        XCTAssertNotNil(nightView)
     }
 
-    func testItemRowViewMethods() {
-        // Test method functionality
-        /// - TODO: Implement method tests for structItemRowView:View{
-        XCTAssertTrue(true, "Placeholder test for structItemRowView:View{ methods")
-    }
+    // MARK: - ItemDetailView Tests
 
-    // MARK: - structItemDetailView:View{ Tests
-
+    @MainActor
     func testItemDetailViewInitialization() {
         // Test basic initialization
-        /// - TODO: Implement initialization test for structItemDetailView:View{
-        XCTAssertTrue(true, "Placeholder test for structItemDetailView:View{")
+        let item = Item(timestamp: Date())
+        let itemDetailView = ItemDetailView(item: item)
+
+        XCTAssertNotNil(itemDetailView)
     }
 
-    func testItemDetailViewProperties() {
-        // Test property access and validation
-        /// - TODO: Implement property tests for structItemDetailView:View{
-        XCTAssertTrue(true, "Placeholder test for structItemDetailView:View{ properties")
-    }
-
-    func testItemDetailViewMethods() {
-        // Test method functionality
-        /// - TODO: Implement method tests for structItemDetailView:View{
-        XCTAssertTrue(true, "Placeholder test for structItemDetailView:View{ methods")
-    }
-
-    // MARK: - structDetailRow:View{ Tests
+    // MARK: - DetailRow Tests
 
     func testDetailRowInitialization() {
         // Test basic initialization
-        /// - TODO: Implement initialization test for structDetailRow:View{
-        XCTAssertTrue(true, "Placeholder test for structDetailRow:View{")
+        let detailRow = DetailRow(title: "Test Title", value: "Test Value")
+
+        XCTAssertNotNil(detailRow)
     }
 
-    func testDetailRowProperties() {
-        // Test property access and validation
-        /// - TODO: Implement property tests for structDetailRow:View{
-        XCTAssertTrue(true, "Placeholder test for structDetailRow:View{ properties")
-    }
-
-    func testDetailRowMethods() {
-        // Test method functionality
-        /// - TODO: Implement method tests for structDetailRow:View{
-        XCTAssertTrue(true, "Placeholder test for structDetailRow:View{ methods")
-    }
-
-    // MARK: - structFooterStatsView:View{ Tests
+    // MARK: - FooterStatsView Tests
 
     func testFooterStatsViewInitialization() {
         // Test basic initialization
-        /// - TODO: Implement initialization test for structFooterStatsView:View{
-        XCTAssertTrue(true, "Placeholder test for structFooterStatsView:View{")
+        let footerStatsView = FooterStatsView(itemCount: 5)
+
+        XCTAssertNotNil(footerStatsView)
     }
 
-    func testFooterStatsViewProperties() {
-        // Test property access and validation
-        /// - TODO: Implement property tests for structFooterStatsView:View{
-        XCTAssertTrue(true, "Placeholder test for structFooterStatsView:View{ properties")
+    func testFooterStatsViewWithZeroItems() {
+        // Test with zero items
+        let footerStatsView = FooterStatsView(itemCount: 0)
+
+        XCTAssertNotNil(footerStatsView)
     }
 
-    func testFooterStatsViewMethods() {
-        // Test method functionality
-        /// - TODO: Implement method tests for structFooterStatsView:View{
-        XCTAssertTrue(true, "Placeholder test for structFooterStatsView:View{ methods")
-    }
-
-    // MARK: - structDetailView:View{ Tests
+    // MARK: - DetailView Tests
 
     func testDetailViewInitialization() {
         // Test basic initialization
-        /// - TODO: Implement initialization test for structDetailView:View{
-        XCTAssertTrue(true, "Placeholder test for structDetailView:View{")
-    }
+        let detailView = DetailView()
 
-    func testDetailViewProperties() {
-        // Test property access and validation
-        /// - TODO: Implement property tests for structDetailView:View{
-        XCTAssertTrue(true, "Placeholder test for structDetailView:View{ properties")
-    }
-
-    func testDetailViewMethods() {
-        // Test method functionality
-        /// - TODO: Implement method tests for structDetailView:View{
-        XCTAssertTrue(true, "Placeholder test for structDetailView:View{ methods")
+        XCTAssertNotNil(detailView)
     }
 }

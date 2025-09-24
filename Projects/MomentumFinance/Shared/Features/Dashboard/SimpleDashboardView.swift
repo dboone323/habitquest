@@ -4,7 +4,7 @@
 import SwiftData
 import SwiftUI
 
-struct SimpleDashboardView: View {
+public struct SimpleDashboardView: View {
     @Environment(\.modelContext)
     private var modelContext
     #if canImport(SwiftData)

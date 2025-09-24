@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Dashboard Quick Actions
 
-struct DashboardQuickActions: View {
+public struct DashboardQuickActions: View {
     let onAddTransaction: () -> Void
     let onPayBills: () -> Void
     let onViewReports: () -> Void
@@ -45,7 +45,7 @@ struct DashboardQuickActions: View {
     }
 }
 
-struct QuickActionButton: View {
+public struct QuickActionButton: View {
     let title: String
     let icon: String
     let color: Color

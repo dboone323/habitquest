@@ -11,7 +11,7 @@ import UIKit
 #endif
 /// Centralized haptic feedback management for enhanced user experience
 @MainActor
-class HapticManager: ObservableObject {
+public class HapticManager: ObservableObject {
     static let shared = HapticManager()
 
     @Published var isEnabled: Bool = true
@@ -221,7 +221,7 @@ class HapticManager: ObservableObject {
 
 // MARK: - View Modifiers
 
-struct HapticFeedbackModifier: ViewModifier {
+public struct HapticFeedbackModifier: ViewModifier {
     #if os(iOS)
     let style: UIImpactFeedbackGenerator.FeedbackStyle
     #endif
@@ -240,7 +240,7 @@ struct HapticFeedbackModifier: ViewModifier {
 
     /// <#Description#>
     /// - Returns: <#description#>
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .onChange(of: self.trigger) { _, _ in
                 #if os(iOS)
@@ -250,12 +250,12 @@ struct HapticFeedbackModifier: ViewModifier {
     }
 }
 
-struct SelectionHapticModifier: ViewModifier {
+public struct SelectionHapticModifier: ViewModifier {
     let trigger: Bool
 
     /// <#Description#>
     /// - Returns: <#description#>
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .onChange(of: self.trigger) { _, _ in
                 HapticManager.shared.selection()
@@ -263,12 +263,12 @@ struct SelectionHapticModifier: ViewModifier {
     }
 }
 
-struct SuccessHapticModifier: ViewModifier {
+public struct SuccessHapticModifier: ViewModifier {
     let trigger: Bool
 
     /// <#Description#>
     /// - Returns: <#description#>
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .onChange(of: self.trigger) { _, _ in
                 HapticManager.shared.success()
@@ -325,4 +325,28 @@ extension View {
         }
     }
     #endif
+}
+
+// MARK: - Object Pooling
+
+/// Object pool for performance optimization
+@MainActor
+private var objectPool: [Any] = []
+private let maxPoolSize = 50
+
+/// Get an object from the pool or create new one
+    @MainActor
+    private func getPooledObject<T>() -> T? {
+    if let pooled = objectPool.popLast() as? T {
+        return pooled
+    }
+    return nil
+}
+
+/// Return an object to the pool
+    @MainActor
+    private func returnToPool(_ object: Any) {
+    if objectPool.count < maxPoolSize {
+        objectPool.append(object)
+    }
 }

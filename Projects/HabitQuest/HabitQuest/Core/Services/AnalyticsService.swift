@@ -2,330 +2,75 @@ import SwiftData
 import SwiftUI
 
 /// Comprehensive analytics service for tracking habit performance and user insights
+/// Now acts as an orchestrator for specialized analytics services
 @Observable
 final class AnalyticsService {
     private let modelContext: ModelContext
+    private let aggregatorService: AnalyticsAggregatorService
+    private let trendAnalysisService: TrendAnalysisService
+    private let categoryInsightsService: CategoryInsightsService
+    private let productivityMetricsService: ProductivityMetricsService
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
+        self.trendAnalysisService = TrendAnalysisService(modelContext: modelContext)
+        self.categoryInsightsService = CategoryInsightsService(modelContext: modelContext)
+        self.productivityMetricsService = ProductivityMetricsService(modelContext: modelContext)
+        self.aggregatorService = AnalyticsAggregatorService(
+            modelContext: modelContext,
+            trendAnalysisService: self.trendAnalysisService,
+            categoryInsightsService: self.categoryInsightsService,
+            productivityMetricsService: self.productivityMetricsService
+        )
     }
 
     // MARK: - Core Analytics Data
 
     /// Get comprehensive analytics data
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
     func getAnalytics() async -> HabitAnalytics {
-        let habits = await fetchAllHabits()
-        let logs = await fetchAllLogs()
-
-        return HabitAnalytics(
-            overallStats: self.calculateOverallStats(habits: habits, logs: logs),
-            streakAnalytics: self.calculateStreakAnalytics(habits: habits),
-            categoryBreakdown: self.calculateCategoryBreakdown(habits: habits),
-            moodCorrelation: self.calculateMoodCorrelation(logs: logs),
-            timePatterns: self.calculateTimePatterns(logs: logs),
-            weeklyProgress: self.calculateWeeklyProgress(logs: logs),
-            monthlyTrends: self.calculateMonthlyTrends(logs: logs),
-            habitPerformance: self.calculateHabitPerformance(habits: habits)
-        )
+        await self.aggregatorService.getAnalytics()
     }
 
     // MARK: - Specific Analytics Queries
 
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Get habit trends for specific habit
     func getHabitTrends(for habitId: UUID, days: Int = 30) async -> HabitTrendData {
-        let habit = await fetchHabit(id: habitId)
-        guard let habit else {
-            return HabitTrendData(habitId: habitId, completionRates: [], streaks: [], xpEarned: [])
-        }
-
-        let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
-        let recentLogs = habit.logs.filter { $0.completionDate >= cutoffDate }
-            .sorted { $0.completionDate < $1.completionDate }
-
-        return HabitTrendData(
-            habitId: habitId,
-            completionRates: self.calculateDailyCompletionRates(logs: recentLogs, days: days),
-            streaks: self.calculateDailyStreaks(logs: recentLogs),
-            xpEarned: self.calculateDailyXP(logs: recentLogs, days: days)
-        )
+        await self.trendAnalysisService.getHabitTrends(for: habitId, days: days)
     }
 
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Get insights for all habit categories
     func getCategoryInsights() async -> [CategoryInsight] {
-        let habits = await fetchAllHabits()
-        let categories = Dictionary(grouping: habits) { $0.category }
-
-        return categories.map { category, categoryHabits in
-            let allLogs = categoryHabits.flatMap(\.logs)
-            let completedLogs = allLogs.filter(\.isCompleted)
-
-            return CategoryInsight(
-                category: category,
-                totalHabits: categoryHabits.count,
-                completionRate: Double(completedLogs.count) / Double(max(allLogs.count, 1)),
-                averageStreak: categoryHabits.reduce(0) { $0 + $1.streak } / max(categoryHabits.count, 1),
-                totalXPEarned: completedLogs.reduce(0) { $0 + $1.xpEarned }
-            )
-        }
+        await self.categoryInsightsService.getCategoryInsights()
     }
 
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Get productivity metrics for a time period
     func getProductivityMetrics(for period: TimePeriod) async -> ProductivityMetrics {
-        let habits = await fetchAllHabits()
-        let startDate = period.startDate
-        let logs = habits.flatMap(\.logs).filter { $0.completionDate >= startDate }
-
-        let completedLogs = logs.filter(\.isCompleted)
-        let totalPossibleCompletions = habits.count * period.dayCount
-
-        return ProductivityMetrics(
-            period: period,
-            completionRate: Double(completedLogs.count) / Double(max(totalPossibleCompletions, 1)),
-            streakCount: self.calculateActiveStreaks(habits: habits),
-            xpEarned: completedLogs.reduce(0) { $0 + $1.xpEarned },
-            missedOpportunities: totalPossibleCompletions - completedLogs.count
-        )
+        await self.productivityMetricsService.getProductivityMetrics(for: period)
     }
 
-    // MARK: - Private Calculation Methods
-
-    private func fetchAllHabits() async -> [Habit] {
-        let descriptor = FetchDescriptor<Habit>()
-        return (try? self.modelContext.fetch(descriptor)) ?? []
+    /// Get detailed category performance
+    func getCategoryPerformance(category: HabitCategory) async -> CategoryPerformance {
+        await self.categoryInsightsService.getCategoryPerformance(category: category)
     }
 
-    private func fetchAllLogs() async -> [HabitLog] {
-        let descriptor = FetchDescriptor<HabitLog>()
-        return (try? self.modelContext.fetch(descriptor)) ?? []
+    /// Get category distribution
+    func getCategoryDistribution() async -> [HabitCategory: Int] {
+        await self.categoryInsightsService.getCategoryDistribution()
     }
 
-    private func fetchHabit(id: UUID) async -> Habit? {
-        let descriptor = FetchDescriptor<Habit>()
-        let habits = try? self.modelContext.fetch(descriptor)
-        return habits?.first { $0.id == id }
+    /// Calculate productivity score
+    func calculateProductivityScore() async -> ProductivityScore {
+        await self.productivityMetricsService.calculateProductivityScore()
     }
 
-    private func calculateOverallStats(habits: [Habit], logs: [HabitLog]) -> OverallStats {
-        let completedLogs = logs.filter(\.isCompleted)
-        let totalCompletions = completedLogs.count
-        let completionRate = Double(totalCompletions) / Double(max(logs.count, 1))
-
-        return OverallStats(
-            totalHabits: habits.count,
-            activeHabits: habits.filter(\.isActive).count,
-            totalCompletions: totalCompletions,
-            completionRate: completionRate,
-            totalXPEarned: completedLogs.reduce(0) { $0 + $1.xpEarned },
-            averageStreak: habits.reduce(0) { $0 + $1.streak } / max(habits.count, 1)
-        )
+    /// Get productivity insights
+    func getProductivityInsights() async -> ProductivityInsights {
+        await self.productivityMetricsService.getProductivityInsights()
     }
 
-    private func calculateStreakAnalytics(habits: [Habit]) -> AnalyticsStreakData {
-        let streaks = habits.map(\.streak)
-        return AnalyticsStreakData(
-            currentStreaks: streaks,
-            longestStreak: streaks.max() ?? 0,
-            averageStreak: streaks.reduce(0, +) / max(streaks.count, 1),
-            activeStreaks: streaks.count(where: { $0 > 0 })
-        )
-    }
-
-    private func calculateCategoryBreakdown(habits: [Habit]) -> [CategoryStats] {
-        let categories = Dictionary(grouping: habits) { $0.category }
-        return categories.map { category, categoryHabits in
-            let completedLogs = categoryHabits.flatMap(\.logs).filter(\.isCompleted)
-            return CategoryStats(
-                category: category,
-                habitCount: categoryHabits.count,
-                completionRate: Double(completedLogs.count) / Double(max(categoryHabits.count, 1)),
-                totalXP: completedLogs.reduce(0) { $0 + $1.xpEarned }
-            )
-        }
-    }
-
-    private func calculateMoodCorrelation(logs: [HabitLog]) -> MoodCorrelation {
-        let moodGroups = Dictionary(grouping: logs.filter { $0.mood != nil }) { $0.mood! }
-        let moodStats = moodGroups.mapValues { logs in
-            MoodStats(
-                mood: logs.first?.mood ?? .okay,
-                completionRate: Double(logs.filter(\.isCompleted).count) / Double(max(logs.count, 1)),
-                averageXP: logs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned } / max(
-                    logs.filter(\.isCompleted).count,
-                    1
-                )
-            )
-        }
-
-        return MoodCorrelation(
-            moodStats: Array(moodStats.values),
-            strongestCorrelation: moodStats.values.max { $0.completionRate < $1.completionRate }?.mood ?? .okay
-        )
-    }
-
-    private func calculateTimePatterns(logs: [HabitLog]) -> TimePatterns {
-        let hourGroups = Dictionary(grouping: logs) {
-            Calendar.current.component(.hour, from: $0.completionDate)
-        }
-
-        return TimePatterns(
-            peakHours: hourGroups.max { $0.value.count < $1.value.count }?.key ?? 12,
-            hourlyDistribution: hourGroups.mapValues { $0.count },
-            weekdayPatterns: self.calculateWeekdayPatterns(logs: logs)
-        )
-    }
-
-    private func calculateWeeklyProgress(logs: [HabitLog]) -> WeeklyProgress {
-        let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
-        let weekLogs = logs.filter { $0.completionDate >= weekAgo }
-        let completedThisWeek = weekLogs.filter(\.isCompleted).count
-
-        return WeeklyProgress(
-            completedHabits: completedThisWeek,
-            totalOpportunities: weekLogs.count,
-            xpEarned: weekLogs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned },
-            dailyBreakdown: self.calculateDailyBreakdown(logs: weekLogs)
-        )
-    }
-
-    private func calculateMonthlyTrends(logs: [HabitLog]) -> [MonthlyTrend] {
-        let monthGroups = Dictionary(grouping: logs) {
-            Calendar.current.component(.month, from: $0.completionDate)
-        }
-
-        return monthGroups.map { month, monthLogs in
-            MonthlyTrend(
-                month: month,
-                completions: monthLogs.filter(\.isCompleted).count,
-                xpEarned: monthLogs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned },
-                averageDaily: Double(monthLogs.count) / 30.0
-            )
-        }.sorted { $0.month < $1.month }
-    }
-
-    private func calculateHabitPerformance(habits: [Habit]) -> [HabitPerformance] {
-        habits.map { habit in
-            let completedLogs = habit.logs.filter(\.isCompleted)
-            let trends = self.calculateHabitTrends(logs: habit.logs)
-
-            return HabitPerformance(
-                habitId: habit.id,
-                habitName: habit.name,
-                completionRate: Double(completedLogs.count) / Double(max(habit.logs.count, 1)),
-                currentStreak: habit.streak,
-                xpEarned: completedLogs.reduce(0) { $0 + $1.xpEarned },
-                trend: trends
-            )
-        }
-    }
-
-    // MARK: - Helper Methods
-
-    private func calculateDailyCompletionRates(logs: [HabitLog], days: Int) -> [Double] {
-        var rates: [Double] = []
-        let calendar = Calendar.current
-
-        for day in 0 ..< days {
-            guard let date = calendar.date(byAdding: .day, value: -day, to: Date()) else { continue }
-            let dayLogs = logs.filter { calendar.isDate($0.completionDate, inSameDayAs: date) }
-            let completionRate = Double(dayLogs.filter(\.isCompleted).count) / Double(max(dayLogs.count, 1))
-            rates.append(completionRate)
-        }
-
-        return rates.reversed()
-    }
-
-    private func calculateDailyStreaks(logs: [HabitLog]) -> [Int] {
-        let sortedLogs = logs.sorted { $0.completionDate < $1.completionDate }
-        var streaks: [Int] = []
-        var currentStreak = 0
-
-        for log in sortedLogs {
-            if log.isCompleted {
-                currentStreak += 1
-            } else {
-                streaks.append(currentStreak)
-                currentStreak = 0
-            }
-        }
-
-        if currentStreak > 0 {
-            streaks.append(currentStreak)
-        }
-
-        return streaks
-    }
-
-    private func calculateDailyXP(logs: [HabitLog], days: Int) -> [Int] {
-        var xpData: [Int] = []
-        let calendar = Calendar.current
-
-        for day in 0 ..< days {
-            guard let date = calendar.date(byAdding: .day, value: -day, to: Date()) else { continue }
-            let dayLogs = logs.filter { calendar.isDate($0.completionDate, inSameDayAs: date) }
-            let dailyXP = dayLogs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned }
-            xpData.append(dailyXP)
-        }
-
-        return xpData.reversed()
-    }
-
-    private func calculateActiveStreaks(habits: [Habit]) -> Int {
-        habits.count(where: { $0.streak > 0 })
-    }
-
-    private func calculateWeekdayPatterns(logs: [HabitLog]) -> [Int: Int] {
-        let weekdayGroups = Dictionary(grouping: logs) {
-            Calendar.current.component(.weekday, from: $0.completionDate)
-        }
-        return weekdayGroups.mapValues { $0.count }
-    }
-
-    private func calculateDailyBreakdown(logs: [HabitLog]) -> [String: Int] {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "E"
-
-        let dayGroups = Dictionary(grouping: logs) {
-            dateFormatter.string(from: $0.completionDate)
-        }
-
-        return dayGroups.mapValues { $0.filter(\.isCompleted).count }
-    }
-
-    private func calculateHabitTrends(logs: [HabitLog]) -> HabitTrend {
-        let recentLogs = logs.suffix(30)
-        let olderLogs = logs.dropLast(30).suffix(30)
-
-        let recentRate = Double(recentLogs.filter(\.isCompleted).count) / Double(max(recentLogs.count, 1))
-        let olderRate = Double(olderLogs.filter(\.isCompleted).count) / Double(max(olderLogs.count, 1))
-
-        if recentRate > olderRate + 0.1 {
-            return .improving
-        } else if recentRate < olderRate - 0.1 {
-            return .declining
-        } else {
-            return .stable
-        }
+    /// Calculate productivity trends
+    func calculateProductivityTrends(days: Int = 30) async -> ProductivityTrends {
+        await self.productivityMetricsService.calculateProductivityTrends(days: days)
     }
 }
 
@@ -492,7 +237,7 @@ struct ProductivityMetrics {
     let missedOpportunities: Int
 }
 
-enum HabitTrend: String {
+public enum HabitTrend: String {
     case improving
     case stable
     case declining

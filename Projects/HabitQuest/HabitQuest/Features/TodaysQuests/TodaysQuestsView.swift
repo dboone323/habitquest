@@ -3,13 +3,13 @@ import SwiftUI
 
 /// View displaying all habits that are due today
 /// Users can see their daily/weekly quests and mark them as complete
-struct TodaysQuestsView: View {
+public struct TodaysQuestsView: View {
     @StateObject private var viewModel = TodaysQuestsViewModel()
     @Environment(\.modelContext) private var modelContext
     @State private var habitAnalytics: [UUID: StreakAnalytics] = [:]
     @State private var streakService: StreakService?
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             VStack {
                 if self.viewModel.todaysHabits.isEmpty {
@@ -83,7 +83,7 @@ struct TodaysQuestsView: View {
 
 /// Empty state when no quests are available
 private struct EmptyStateView: View {
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "star.circle")
                 .font(.system(size: 60))
@@ -108,7 +108,7 @@ private struct QuestListView: View {
     let habitAnalytics: [UUID: StreakAnalytics]
     let onComplete: (Habit) -> Void
 
-    var body: some View {
+    public var body: some View {
         List(self.habits, id: \.id) { habit in
             QuestRowView(
                 habit: habit,
@@ -125,7 +125,7 @@ private struct QuestRowView: View {
     let analytics: StreakAnalytics?
     let onComplete: (Habit) -> Void
 
-    var body: some View {
+    public var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(self.habit.name)
@@ -194,7 +194,7 @@ private struct AddQuestView: View {
     @State private var frequency = HabitFrequency.daily
     @State private var xpValue = 10
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             Form {
                 Section("Quest Details") {

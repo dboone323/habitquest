@@ -2,7 +2,7 @@ import XCTest
 
 @testable import PlannerApp
 
-class ContentViewTests: XCTestCase {
+public class ContentViewTests: XCTestCase {
     // MARK: - ContentView Tests
 
     func testContentViewInitialization() {

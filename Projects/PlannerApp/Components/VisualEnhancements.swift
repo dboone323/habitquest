@@ -68,7 +68,7 @@ struct GlassMorphismCard<Content: View>: View {
 
 // MARK: - Animated Progress Ring
 
-struct AnimatedProgressRing: View {
+public struct AnimatedProgressRing: View {
     let progress: Double
     let title: String
     @EnvironmentObject var themeManager: ThemeManager
@@ -78,7 +78,7 @@ struct AnimatedProgressRing: View {
     var ringWidth: CGFloat = 12
     var size: CGFloat = 100
 
-    var body: some View {
+    public var body: some View {
         ZStack {
             // Background ring
             Circle()
@@ -130,11 +130,11 @@ struct AnimatedProgressRing: View {
 
 // MARK: - Progress Change Modifier
 
-struct ProgressChangeModifier: ViewModifier {
+public struct ProgressChangeModifier: ViewModifier {
     let progress: Double
     @Binding var animatedProgress: Double
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         if #available(macOS 14.0, iOS 17.0, *) {
             content.onChange(of: progress) { _, newValue in
                 withAnimation(.easeInOut(duration: 1.0)) {
@@ -149,7 +149,7 @@ struct ProgressChangeModifier: ViewModifier {
 
 // MARK: - Floating Action Button
 
-struct FloatingActionButton: View {
+public struct FloatingActionButton: View {
     let icon: String
     let action: () -> Void
     @EnvironmentObject var themeManager: ThemeManager
@@ -157,7 +157,7 @@ struct FloatingActionButton: View {
     @State private var isPressed = false
     @State private var rotationAngle: Double = 0
 
-    var body: some View {
+    public var body: some View {
         Button(action: {
             #if os(iOS)
             let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
@@ -243,7 +243,7 @@ struct FlipCard<Front: View, Back: View>: View {
 
 // MARK: - Particle System for Celebrations
 
-struct ParticleSystem: View {
+public struct ParticleSystem: View {
     @State private var particles: [Particle] = []
     @State private var isAnimating = false
 
@@ -257,7 +257,7 @@ struct ParticleSystem: View {
         var opacity: Double
     }
 
-    var body: some View {
+    public var body: some View {
         GeometryReader { _ in
             ZStack {
                 ForEach(self.particles) { particle in
@@ -316,11 +316,11 @@ struct ParticleSystem: View {
 
 // MARK: - Shimmer Loading Effect
 
-struct ShimmerView: View {
+public struct ShimmerView: View {
     @State private var shimmerOffset: CGFloat = -200
     @EnvironmentObject var themeManager: ThemeManager
 
-    var body: some View {
+    public var body: some View {
         RoundedRectangle(cornerRadius: 12)
             .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
             .overlay(
@@ -434,11 +434,11 @@ struct BreathingView<Content: View>: View {
 
 // MARK: - Enhanced Visual Components Preview
 
-struct VisualEnhancementsPreview: View {
+public struct VisualEnhancementsPreview: View {
     @StateObject private var themeManager = ThemeManager()
     @State private var showParticles = false
 
-    var body: some View {
+    public var body: some View {
         ScrollView {
             VStack(spacing: 30) {
                 // Glass Morphism Card

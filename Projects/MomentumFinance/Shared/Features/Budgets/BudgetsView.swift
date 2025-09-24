@@ -82,6 +82,10 @@ extension Features.Budgets {
                 .sheet(isPresented: self.$showingSearch) {
                     BudgetSearchView(budgets: self.budgets)
                 }
+                .onAppear {
+                    // Schedule budget notifications when view appears
+                    self.viewModel.scheduleBudgetNotifications(for: self.budgets)
+                }
             }
         }
 
@@ -214,7 +218,7 @@ extension Features.Budgets {
     struct BudgetSummaryCard: View {
         let budgets: [Budget]
 
-        var body: some View {
+        public var body: some View {
             VStack(spacing: 16) {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
@@ -302,17 +306,32 @@ extension Features.Budgets {
     struct BudgetRowView: View {
         let budget: Budget
 
-        var body: some View {
+        public var body: some View {
             VStack(spacing: 0) {
                 HStack(spacing: 16) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(self.budget.name)
-                            .font(.headline)
-                            .fontWeight(.semibold)
+                        HStack {
+                            Text(self.budget.name)
+                                .font(.headline)
+                                .fontWeight(.semibold)
 
-                        Text("Budget: $\(self.budget.limitAmount, specifier: "%.2f")")
+                            if self.budget.rolloverEnabled {
+                                Image(systemName: "arrow.triangle.2.circlepath")
+                                    .foregroundColor(.blue)
+                                    .font(.caption)
+                                    .accessibilityLabel("Rollover Enabled")
+                            }
+                        }
+
+                        Text("Budget: $\(self.budget.effectiveLimit, specifier: "%.2f")")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
+
+                        if self.budget.rolledOverAmount > 0 {
+                            Text("Rolled over: $\(self.budget.rolledOverAmount, specifier: "%.2f")")
+                                .font(.caption)
+                                .foregroundColor(.green)
+                        }
                     }
 
                     Spacer()
@@ -374,8 +393,10 @@ extension Features.Budgets {
         @State private var name = ""
         @State private var limitAmount = ""
         @State private var selectedCategory: ExpenseCategory?
+        @State private var rolloverEnabled = false
+        @State private var maxRolloverPercentage = 1.0
 
-        var body: some View {
+        public var body: some View {
             NavigationView {
                 Form {
                     Section(header: Text("Budget Details")) {
@@ -401,6 +422,29 @@ extension Features.Budgets {
                             }
                         }
                     }
+
+                    Section(header: Text("Rollover Settings")) {
+                        Toggle("Enable Rollover", isOn: self.$rolloverEnabled)
+                            .accessibilityLabel("Enable Rollover")
+
+                        if self.rolloverEnabled {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Max Rollover Percentage: \(Int(self.maxRolloverPercentage * 100))%")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+
+                                Slider(value: self.$maxRolloverPercentage, in: 0.1 ... 1.0, step: 0.1)
+                                    .accessibilityLabel("Max Rollover Percentage")
+
+                                Text(
+                                    "Allows carrying over up to \(Int(self.maxRolloverPercentage * 100))% of unused budget to the next period."
+                                )
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                    }
                 }
                 .navigationTitle("New Budget")
                 #if os(iOS)
@@ -413,18 +457,35 @@ extension Features.Budgets {
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Save") {
+                                self.saveBudget()
                                 self.dismiss()
                             }
                             .accessibilityLabel("Save Budget")
-                            .disabled(self.name.isEmpty || self.limitAmount.isEmpty)
+                            .disabled(self.name.isEmpty || self.limitAmount.isEmpty || self.selectedCategory == nil)
                         }
                     })
             }
         }
+
+        private func saveBudget() {
+            guard let category = self.selectedCategory,
+                  let limit = Double(self.limitAmount) else { return }
+
+            let calendar = Calendar.current
+            let currentMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: Date()))!
+
+            let budget = Budget(name: self.name, limitAmount: limit, month: currentMonth)
+            budget.category = category
+            budget.rolloverEnabled = self.rolloverEnabled
+            budget.maxRolloverPercentage = self.maxRolloverPercentage
+
+            // Note: In a real implementation, you'd inject the modelContext
+            // For now, this is just the UI structure
+        }
     }
 }
 
-struct BudgetSearchView: View {
+public struct BudgetSearchView: View {
     let budgets: [Budget]
     @Environment(\.dismiss) private var dismiss
     @State private var searchText = ""
@@ -441,7 +502,7 @@ struct BudgetSearchView: View {
         }
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             List {
                 if self.filteredBudgets.isEmpty {

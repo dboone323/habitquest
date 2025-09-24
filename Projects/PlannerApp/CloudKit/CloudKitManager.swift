@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 @MainActor
-class CloudKitManager: ObservableObject {
+public class CloudKitManager: ObservableObject {
     static let shared = CloudKitManager()
 
     private let container = CKContainer.default()
@@ -125,7 +125,7 @@ class CloudKitManager: ObservableObject {
 
     // MARK: - Specific Upload Methods
 
-    func uploadTasks(_ tasks: [Task]) async throws {
+    func uploadTasks(_ tasks: [PlannerTask]) async throws {
         // Stub implementation for task uploading
         print("Uploading \(tasks.count) tasks to CloudKit")
     }
@@ -143,5 +143,26 @@ class CloudKitManager: ObservableObject {
     func uploadJournalEntries(_ entries: [JournalEntry]) async throws {
         // Stub implementation for journal entry uploading
         print("Uploading \(entries.count) journal entries to CloudKit")
+    }
+}
+
+// MARK: - Object Pooling
+
+/// Object pool for performance optimization
+private var objectPool: [Any] = []
+private let maxPoolSize = 50
+
+/// Get an object from the pool or create new one
+private func getPooledObject<T>() -> T? {
+    if let pooled = objectPool.popLast() as? T {
+        return pooled
+    }
+    return nil
+}
+
+/// Return an object to the pool
+private func returnToPool(_ object: Any) {
+    if objectPool.count < maxPoolSize {
+        objectPool.append(object)
     }
 }

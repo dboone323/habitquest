@@ -9,7 +9,7 @@ import SwiftUI
 //  Enhanced: 9/12/25 - Improved architecture with better separation of concerns
 //
 
-struct ContentView: View {
+public struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     #if canImport(SwiftData)
     @Query private var items: [Item]
@@ -17,7 +17,7 @@ struct ContentView: View {
     private var items: [Item] = []
     #endif
 
-    var body: some View {
+    public var body: some View {
         NavigationSplitView {
             // MARK: - Sidebar with Enhanced Navigation
 
@@ -56,8 +56,8 @@ struct ContentView: View {
 
 // MARK: - View Components (Extracted for better architecture)
 
-struct HeaderView: View {
-    var body: some View {
+public struct HeaderView: View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "sparkles")
@@ -83,12 +83,12 @@ struct HeaderView: View {
     }
 }
 
-struct ItemListView: View {
+public struct ItemListView: View {
     let items: [Item]
     let onDelete: (IndexSet) -> Void
     let onAdd: () -> Void
 
-    var body: some View {
+    public var body: some View {
         List {
             ForEach(self.items) { item in
                 NavigationLink {
@@ -114,10 +114,10 @@ struct ItemListView: View {
     }
 }
 
-struct ItemRowView: View {
+public struct ItemRowView: View {
     let item: Item
 
-    var body: some View {
+    public var body: some View {
         HStack {
             // Icon based on time of day
             Image(systemName: self.timeBasedIcon)
@@ -164,10 +164,10 @@ struct ItemRowView: View {
     }
 }
 
-struct ItemDetailView: View {
+public struct ItemDetailView: View {
     let item: Item
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 20) {
             // Header
             VStack(spacing: 8) {
@@ -209,11 +209,11 @@ struct ItemDetailView: View {
     }
 }
 
-struct DetailRow: View {
+public struct DetailRow: View {
     let title: String
     let value: String
 
-    var body: some View {
+    public var body: some View {
         HStack {
             Text(self.title)
                 .font(.caption)
@@ -228,10 +228,10 @@ struct DetailRow: View {
     }
 }
 
-struct FooterStatsView: View {
+public struct FooterStatsView: View {
     let itemCount: Int
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 4) {
             Divider()
 
@@ -259,8 +259,8 @@ struct FooterStatsView: View {
     }
 }
 
-struct DetailView: View {
-    var body: some View {
+public struct DetailView: View {
+    public var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "sparkles")
                 .font(.system(size: 60))

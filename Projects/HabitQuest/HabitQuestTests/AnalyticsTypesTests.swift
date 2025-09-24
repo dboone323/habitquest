@@ -1,17 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-class AnalyticsTypesTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here
-    }
-
-    override func tearDown() {
-        // Put teardown code here
-        super.tearDown()
-    }
-
+public class AnalyticsTypesTests: XCTestCase {
     // MARK: - structHabitPatterns{ Tests
 
     func testHabitPatternsInitialization() {

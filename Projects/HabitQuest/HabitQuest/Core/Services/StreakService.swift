@@ -228,8 +228,8 @@ class StreakService {
 // MARK: - Supporting Data Structures
 
 /// Represents a single day in streak visualization
-struct StreakDayData: Identifiable {
-    let id = UUID()
+public struct StreakDayData: Identifiable {
+    public let id = UUID()
     let date: Date
     let isCompleted: Bool
     let intensity: Double // 0.0 to 1.0 for heat map intensity

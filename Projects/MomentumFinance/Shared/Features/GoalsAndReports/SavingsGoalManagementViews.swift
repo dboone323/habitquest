@@ -7,7 +7,7 @@ import AppKit
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
-struct AddSavingsGoalView: View {
+public struct AddSavingsGoalView: View {
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.modelContext)
@@ -24,7 +24,7 @@ struct AddSavingsGoalView: View {
             && Double(self.targetAmountString) != nil
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("Goal Details")) {
@@ -113,7 +113,7 @@ struct AddSavingsGoalView: View {
     }
 }
 
-struct SavingsGoalDetailView: View {
+public struct SavingsGoalDetailView: View {
     let goal: SavingsGoal
     @Environment(\.dismiss)
     private var dismiss
@@ -123,7 +123,7 @@ struct SavingsGoalDetailView: View {
     @State private var showingAddFunds = false
     @State private var amountToAdd = ""
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             VStack(spacing: 20) {
                 // Goal Header

@@ -30,8 +30,8 @@ enum AppSettingKeys {
     static let autoDeleteDays = "autoDeleteDays" // Days after completion to delete
     static let defaultView = "defaultView" // Store identifier for the default tab
 
-    // Journal Security
-    static let journalBiometricsEnabled = "journalBiometricsEnabled"
+    // Journal Security - REMOVED: Biometric authentication has been disabled
+    // static let journalBiometricsEnabled = "journalBiometricsEnabled"
 
     // CloudKit & Sync Settings
     static let autoSyncEnabled = "autoSyncEnabled"

@@ -11,7 +11,7 @@ import AppKit
 #elseif canImport(AppKit)
 #endif
 
-struct ReportsSection: View {
+public struct ReportsSection: View {
     let transactions: [FinancialTransaction]
     let budgets: [Budget]
     let categories: [ExpenseCategory]
@@ -25,7 +25,7 @@ struct ReportsSection: View {
         case thisYear = "This Year"
     }
 
-    var body: some View {
+    public var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 // Timeframe Picker
@@ -104,7 +104,7 @@ struct ReportsSection: View {
     }
 }
 
-struct FinancialSummaryCard: View {
+public struct FinancialSummaryCard: View {
     let transactions: [FinancialTransaction]
     let timeframe: ReportsSection.TimeFrame
 
@@ -131,7 +131,7 @@ struct FinancialSummaryCard: View {
         self.totalIncome - self.totalExpenses
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 16) {
             Text("Financial Summary - \(self.timeframe.rawValue)")
                 .font(.headline)
@@ -180,7 +180,7 @@ struct FinancialSummaryCard: View {
     }
 }
 
-struct SpendingByCategoryCard: View {
+public struct SpendingByCategoryCard: View {
     let transactions: [FinancialTransaction]
     let categories: [ExpenseCategory]
 
@@ -213,7 +213,7 @@ struct SpendingByCategoryCard: View {
         self.categorySpending.reduce(0) { $0 + $1.1 }
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Spending by Category")
                 .font(.headline)
@@ -258,7 +258,7 @@ struct SpendingByCategoryCard: View {
     }
 }
 
-struct BudgetPerformanceCard: View {
+public struct BudgetPerformanceCard: View {
     let budgets: [Budget]
 
     // Cross-platform color support
@@ -280,7 +280,7 @@ struct BudgetPerformanceCard: View {
         self.budgets.filter(\.isOverBudget)
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Budget Performance")
                 .font(.headline)
@@ -342,7 +342,7 @@ struct BudgetPerformanceCard: View {
     }
 }
 
-struct RecentTransactionsCard: View {
+public struct RecentTransactionsCard: View {
     let transactions: [FinancialTransaction]
 
     // Cross-platform color support
@@ -356,7 +356,7 @@ struct RecentTransactionsCard: View {
         #endif
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Recent Transactions")
                 .font(.headline)

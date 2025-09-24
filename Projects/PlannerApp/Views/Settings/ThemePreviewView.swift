@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ThemePreviewView: View {
+public struct ThemePreviewView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @Environment(\.presentationMode) var presentationMode
     @State private var selectedTheme: Theme = .defaultTheme
@@ -25,7 +25,7 @@ struct ThemePreviewView: View {
         "Learn Swift programming"
     ]
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
@@ -176,12 +176,12 @@ struct ThemePreviewView: View {
     }
 }
 
-struct ThemePreviewCard: View {
+public struct ThemePreviewCard: View {
     let theme: Theme
     let isSelected: Bool
     let onTap: () -> Void
 
-    var body: some View {
+    public var body: some View {
         Button(action: self.onTap) {
             VStack(spacing: 12) {
                 // Theme color swatches

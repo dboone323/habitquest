@@ -4,10 +4,10 @@ import UniformTypeIdentifiers
 
 /// View for managing data export and import functionality
 /// Allows users to backup their progress and restore from backups
-struct DataManagementView: View {
+public struct DataManagementView: View {
     @Environment(\.modelContext) private var modelContext
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             List {
                 Section("Backup Your Progress") {
@@ -67,14 +67,14 @@ struct DataManagementView: View {
     }
 }
 
-struct AlertModifier: ViewModifier {
-    func body(content: Content) -> some View {
+public struct AlertModifier: ViewModifier {
+    public func body(content: Content) -> some View {
         content
     }
 }
 
-struct FileHandlerModifier: ViewModifier {
-    func body(content: Content) -> some View {
+public struct FileHandlerModifier: ViewModifier {
+    public func body(content: Content) -> some View {
         content
     }
 }
@@ -95,8 +95,8 @@ private struct DataInfoRow: View {
 }
 
 /// Document type for file export
-struct HabitQuestBackupDocument: FileDocument {
-    nonisolated static var readableContentTypes: [UTType] { [.json] }
+public struct HabitQuestBackupDocument: FileDocument {
+    nonisolated public static var readableContentTypes: [UTType] { [.json] }
 
     var data: Data
 
@@ -104,7 +104,7 @@ struct HabitQuestBackupDocument: FileDocument {
         self.data = data
     }
 
-    nonisolated init(configuration: ReadConfiguration) throws {
+    nonisolated public init(configuration: ReadConfiguration) throws {
         guard let data = configuration.file.regularFileContents else {
             throw CocoaError(.fileReadCorruptFile)
         }
@@ -117,7 +117,7 @@ struct HabitQuestBackupDocument: FileDocument {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    nonisolated func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
+    nonisolated public func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
         FileWrapper(regularFileWithContents: self.data)
     }
 }

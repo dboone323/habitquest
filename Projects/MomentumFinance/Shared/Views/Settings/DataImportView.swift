@@ -6,7 +6,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 /// Data import view for CSV files
-struct DataImportView: View {
+public struct DataImportView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
 
@@ -18,7 +18,7 @@ struct DataImportView: View {
     @State private var showingResult = false
     @State private var importError: String?
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             VStack(spacing: 20) {
                 DataImportHeaderComponent()

@@ -1,17 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-class StreakMilestoneTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here
-    }
-
-    override func tearDown() {
-        // Put teardown code here
-        super.tearDown()
-    }
-
+public class StreakMilestoneTests: XCTestCase {
     // MARK: - structStreakMilestone:Identifiable,@uncheckedSendable{ Tests
 
     func testStreakMilestoneInitialization() {

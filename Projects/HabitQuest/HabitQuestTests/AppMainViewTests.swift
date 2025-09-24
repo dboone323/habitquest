@@ -1,17 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-class AppMainViewTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here
-    }
-
-    override func tearDown() {
-        // Put teardown code here
-        super.tearDown()
-    }
-
+public class AppMainViewTests: XCTestCase {
     // MARK: - structAppMainView:View{ Tests
 
     func testAppMainViewInitialization() {

@@ -155,3 +155,37 @@ public struct ImportResult: Codable {
         self.warnings = warnings
     }
 }
+
+// MARK: - CSV Column Mapping
+
+/// CSV column mapping configuration
+public struct CSVColumnMapping: Sendable {
+    public let dateColumn: String
+    public let amountColumn: String
+    public let descriptionColumn: String
+    public let categoryColumn: String?
+    public let accountColumn: String?
+
+    public init(
+        dateColumn: String,
+        amountColumn: String,
+        descriptionColumn: String,
+        categoryColumn: String? = nil,
+        accountColumn: String? = nil
+    ) {
+        self.dateColumn = dateColumn
+        self.amountColumn = amountColumn
+        self.descriptionColumn = descriptionColumn
+        self.categoryColumn = categoryColumn
+        self.accountColumn = accountColumn
+    }
+}
+
+// MARK: - CSV Column Mapping Extensions
+
+extension CSVColumnMapping {
+    var notesIndex: Int? {
+        // Return a default notes column index or nil
+        nil
+    }
+}

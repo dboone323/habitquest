@@ -13,7 +13,7 @@ import AppKit
 import UIKit
 #endif
 
-struct MainTabView_Enhanced: View {
+public struct MainTabView_Enhanced: View {
     @EnvironmentObject var themeManager: ThemeManager
     @Binding var selectedTabTag: String
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -57,7 +57,7 @@ struct MainTabView_Enhanced: View {
         ]
     }
 
-    var body: some View {
+    public var body: some View {
         #if os(macOS)
         self.macOSLayout
         #elseif os(iOS)
@@ -190,7 +190,7 @@ struct MainTabView_Enhanced: View {
     private func contentForTab(_ tag: String) -> some View {
         switch tag {
         case TabTags.dashboard:
-            DashboardView()
+            DashboardView(selectedTabTag: self.$selectedTabTag)
         case TabTags.tasks:
             TaskManagerView()
         case TabTags.calendar:
@@ -202,7 +202,7 @@ struct MainTabView_Enhanced: View {
         case TabTags.settings:
             SettingsView()
         default:
-            DashboardView()
+            DashboardView(selectedTabTag: self.$selectedTabTag)
         }
     }
 

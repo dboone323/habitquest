@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct FileSelectionComponent: View {
+public struct FileSelectionComponent: View {
     @Binding var showingFilePicker: Bool
     let onSelectFile: () -> Void
 

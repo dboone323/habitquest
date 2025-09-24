@@ -2,8 +2,10 @@ import _Concurrency // Explicitly import _Concurrency
 import Foundation
 import SwiftUI
 
-struct DashboardView: View {
+public struct DashboardView: View {
     @EnvironmentObject var themeManager: ThemeManager
+    // Binding to control which tab is selected in the parent view
+    @Binding var selectedTabTag: String
     @StateObject private var viewModel = DashboardViewModel()
     @AppStorage(AppSettingKeys.userName) private var userName: String = ""
     @AppStorage(AppSettingKeys.use24HourTime) private var use24HourTime: Bool = false
@@ -40,7 +42,7 @@ struct DashboardView: View {
         return formatter
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVStack(spacing: 20) {
@@ -172,8 +174,8 @@ struct DashboardView: View {
                             Spacer()
 
                             Button(action: {
-                                /// - TODO: Navigate to calendar
-                                print("View Calendar tapped")
+                                // Navigate to calendar tab
+                                selectedTabTag = "Calendar"
                             }) {
                                 Text("View Calendar")
                                     .accessibilityLabel("Button")
@@ -357,154 +359,7 @@ struct DashboardView: View {
     }
 }
 
-// MARK: - Supporting Views
-
-struct QuickStatCard: View {
-    let title: String
-    let value: String
-    let subtitle: String
-    let icon: String
-    let color: Color
-
-    @EnvironmentObject var themeManager: ThemeManager
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: self.icon)
-                    .foregroundColor(self.color)
-                    .font(.title3)
-
-                Spacer()
-            }
-
-            Text(self.value)
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
-
-            Text(self.title)
-                .font(.caption)
-                .fontWeight(.medium)
-                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
-
-            Text(self.subtitle)
-                .font(.caption2)
-                .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
-                .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
-        )
-    }
-}
-
-struct QuickActionCard: View {
-    let title: String
-    let icon: String
-    let color: Color
-    let action: () -> Void
-
-    @EnvironmentObject var themeManager: ThemeManager
-
-    var body: some View {
-        Button(action: self.action) {
-            VStack(spacing: 12) {
-                Image(systemName: self.icon)
-                    .font(.title2)
-                    .foregroundColor(self.color)
-
-                Text(self.title)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
-                    .multilineTextAlignment(.center)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 20)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
-                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
-            )
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-}
-
-struct UpcomingItemView: View {
-    let item: UpcomingItem
-    @EnvironmentObject var themeManager: ThemeManager
-
-    var body: some View {
-        HStack(spacing: 12) {
-            VStack(spacing: 4) {
-                Text(self.dayFormatter.string(from: self.item.date))
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
-
-                Text(self.dayNumberFormatter.string(from: self.item.date))
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
-            }
-            .frame(width: 40)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(self.item.title)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
-
-                if let subtitle = item.subtitle {
-                    Text(subtitle)
-                        .font(.caption)
-                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
-                }
-
-                Text(self.timeFormatter.string(from: self.item.date))
-                    .font(.caption2)
-                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
-            }
-
-            Spacer()
-
-            Image(systemName: self.item.icon)
-                .foregroundColor(self.item.color)
-                .font(.title3)
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
-                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
-        )
-    }
-
-    private var dayFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE"
-        return formatter
-    }
-
-    private var dayNumberFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d"
-        return formatter
-    }
-
-    private var timeFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        return formatter
-    }
-}
-
 #Preview {
-    DashboardView()
+    DashboardView(selectedTabTag: .constant("Dashboard"))
         .environmentObject(ThemeManager())
 }

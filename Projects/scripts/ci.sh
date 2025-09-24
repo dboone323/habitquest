@@ -56,10 +56,12 @@ if [ "${SKIP_XCODE:-0}" != "1" ]; then
 select_sim() {
   local candidates=(
     "${IOS_DEST_NAME:-}"
-  # Prefer iPhone 16 family first to keep runs consistent
-  "iPhone 16 Pro Max" "iPhone 16 Pro" "iPhone 16 Plus" "iPhone 16"
-  # Fall back to newer devices if 16 isn't available
-  "iPhone 17 Pro Max" "iPhone 17 Pro" "iPhone 17"
+    # Use the specific Testing simulator (iPhone 17 with iOS 26) as preferred
+    "Testing"
+    # Fall back to other iPhone 17 devices if Testing isn't available
+    "iPhone 17 Pro Max" "iPhone 17 Pro" "iPhone 17"
+    # Fall back to iPhone 16 family
+    "iPhone 16 Pro Max" "iPhone 16 Pro" "iPhone 16 Plus" "iPhone 16"
   )
   for name in "${candidates[@]}"; do
     [ -z "$name" ] && continue
@@ -92,8 +94,19 @@ detect_platform() {
         ios)
           echo "Building $scheme for iOS Simulator..."
           xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug -destination 'generic/platform=iOS Simulator' | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat)
-          if [ -n "$SIM_NAME" ]; then
-            echo "Testing $scheme on $SIM_NAME..."
+          # Use the specific Testing simulator (iPhone 17, iOS 26.0) for tests
+          TESTING_SIM_ID="43C262CD-FEC5-4CEB-8632-48B9AB5CF5EF"
+          if xcrun simctl list devices | grep -q "$TESTING_SIM_ID"; then
+            echo "Testing $scheme on Testing simulator (iPhone 17, iOS 26.0)..."
+            if xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug -destination "platform=iOS Simulator,id=${TESTING_SIM_ID}" test 2>&1 | tee "/tmp/${scheme}_ios_test.log" | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat); then
+              if grep -q "Test run with 0 tests in 0 suites" "/tmp/${scheme}_ios_test.log"; then
+                echo "WARNING: No tests discovered for $scheme (iOS)."
+              fi
+            else
+              echo "WARNING: Test run failed for $scheme on Testing simulator (continuing)."
+            fi
+          elif [ -n "$SIM_NAME" ]; then
+            echo "Testing simulator not available, falling back to $SIM_NAME..."
             if xcodebuild -project "$proj_file" -scheme "$scheme" -configuration Debug -destination "platform=iOS Simulator,name=${SIM_NAME}" test 2>&1 | tee "/tmp/${scheme}_ios_test.log" | (command -v xcpretty >/dev/null 2>&1 && xcpretty || cat); then
               if grep -q "Test run with 0 tests in 0 suites" "/tmp/${scheme}_ios_test.log"; then
                 echo "WARNING: No tests discovered for $scheme (iOS)."

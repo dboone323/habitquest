@@ -3,7 +3,7 @@ import Foundation
 // PlannerApp/Views/Goals/AddGoalView.swift
 import SwiftUI
 
-struct AddGoalView: View {
+public struct AddGoalView: View {
     // Access shared ThemeManager and dismiss action
     @EnvironmentObject var themeManager: ThemeManager
     @Environment(\.dismiss) var dismiss
@@ -103,7 +103,7 @@ struct AddGoalView: View {
 }
 
 // --- Preview Provider ---
-struct AddGoalView_Previews: PreviewProvider {
+public struct AddGoalView_Previews: PreviewProvider {
     static var previews: some View {
         AddGoalView(goals: Binding.constant([]))
             .environmentObject(ThemeManager())

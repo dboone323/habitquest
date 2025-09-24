@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-struct IssueRow: View {
+public struct IssueRow: View {
     let issue: CodeIssue
 
-    var body: some View {
+    public var body: some View {
         HStack(alignment: .top, spacing: 8) {
-            Image(systemName: iconName)
-                .foregroundColor(color)
+            Image(systemName: self.iconName)
+                .foregroundColor(self.color)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(issue.description)
+                Text(self.issue.description)
                     .font(.body)
 
                 HStack {
@@ -28,15 +28,15 @@ struct IssueRow: View {
 
                     Text("•")
                         .foregroundColor(.secondary)
-                    Text(issue.category.rawValue.capitalized)
+                    Text(self.issue.category.rawValue.capitalized)
                         .font(.caption)
                         .foregroundColor(.secondary)
 
                     Text("•")
                         .foregroundColor(.secondary)
-                    Text(issue.severity.rawValue.capitalized)
+                    Text(self.issue.severity.rawValue.capitalized)
                         .font(.caption)
-                        .foregroundColor(severityColor)
+                        .foregroundColor(self.severityColor)
                 }
             }
         }
@@ -44,29 +44,29 @@ struct IssueRow: View {
     }
 
     private var iconName: String {
-        switch issue.severity {
-        case .low: return "info.circle.fill"
-        case .medium: return "exclamationmark.triangle.fill"
-        case .high: return "exclamationmark.triangle.fill"
-        case .critical: return "xmark.circle.fill"
+        switch self.issue.severity {
+        case .low: "info.circle.fill"
+        case .medium: "exclamationmark.triangle.fill"
+        case .high: "exclamationmark.triangle.fill"
+        case .critical: "xmark.circle.fill"
         }
     }
 
     private var color: Color {
-        switch issue.severity {
-        case .low: return .blue
-        case .medium: return .orange
-        case .high: return .red
-        case .critical: return .red
+        switch self.issue.severity {
+        case .low: .blue
+        case .medium: .orange
+        case .high: .red
+        case .critical: .red
         }
     }
 
     private var severityColor: Color {
-        switch issue.severity {
-        case .low: return .blue
-        case .medium: return .orange
-        case .high: return .red
-        case .critical: return .red
+        switch self.issue.severity {
+        case .low: .blue
+        case .medium: .orange
+        case .high: .red
+        case .critical: .red
         }
     }
 }

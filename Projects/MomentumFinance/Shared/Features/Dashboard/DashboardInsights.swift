@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Dashboard Insights
 
-struct DashboardInsights: View {
+public struct DashboardInsights: View {
     let insights: [String]
     let onDetailsTapped: () -> Void
 
@@ -48,7 +48,7 @@ struct DashboardInsights: View {
     }
 }
 
-struct InsightItem: View {
+public struct InsightItem: View {
     let color: Color
     let text: String
 

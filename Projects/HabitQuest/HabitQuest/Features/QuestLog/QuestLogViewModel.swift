@@ -4,7 +4,7 @@ import SwiftUI
 
 /// ViewModel for QuestLogView handling all habit management operations
 @MainActor
-class QuestLogViewModel: ObservableObject {
+public class QuestLogViewModel: ObservableObject {
     @Published var allHabits: [Habit] = []
     @Published var showingAddQuest = false
     @Published var editingHabit: Habit?

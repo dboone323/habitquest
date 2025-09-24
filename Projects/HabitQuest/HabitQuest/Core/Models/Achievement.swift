@@ -99,7 +99,7 @@ final class Achievement {
 }
 
 /// Categories for organizing achievements
-enum AchievementCategory: String, CaseIterable, Codable {
+public enum AchievementCategory: String, CaseIterable, Codable {
     case streak
     case completion
     case level
@@ -128,7 +128,7 @@ enum AchievementCategory: String, CaseIterable, Codable {
 }
 
 /// Types of achievement requirements
-enum AchievementRequirement: @preconcurrency Codable, @unchecked Sendable {
+public enum AchievementRequirement: @preconcurrency Codable, @unchecked Sendable {
     case streakDays(Int) // Achieve X consecutive days
     case totalCompletions(Int) // Complete habits X times total
     case reachLevel(Int) // Reach level X

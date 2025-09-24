@@ -5,194 +5,61 @@ import SwiftData
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
-/// Protocol for data generators
+// NOTE: This file has been refactored into modular generators.
+// See Shared/Models/Generators/ for individual generator classes.
+// Use SampleDataGenerator for coordinated data generation.
+
+/// Legacy data generator protocol for backward compatibility
 @MainActor
-protocol DataGenerator {
+protocol LegacyDataGenerator {
     var modelContext: ModelContext { get }
     func generate()
 }
 
-/// Categories data generator
-@MainActor
-class CategoriesDataGenerator: DataGenerator {
-    let modelContext: ModelContext
+/// Convenience extension for easy sample data generation
+public extension ModelContext {
+    /// Generates comprehensive sample data for development and testing
+    @MainActor
+    func generateSampleData() {
+        // Create generators and generate data
+        let categoriesGen = CategoriesGenerator(modelContext: self)
+        categoriesGen.generate()
 
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
+        let accountsGen = AccountsGenerator(modelContext: self)
+        accountsGen.generate()
+
+        let transactionsGen = TransactionsGenerator(modelContext: self)
+        transactionsGen.generate()
+
+        let budgetsGen = BudgetsGenerator(modelContext: self)
+        budgetsGen.generate()
+
+        let goalsGen = SavingsGoalsGenerator(modelContext: self)
+        goalsGen.generate()
     }
 
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func generate() {
-        let categories = [
-            (name: "Housing", icon: "house.fill"),
-            (name: "Transportation", icon: "car.fill"),
-            (name: "Food & Dining", icon: "fork.knife"),
-            (name: "Utilities", icon: "bolt.fill"),
-            (name: "Entertainment", icon: "tv.fill"),
-            (name: "Shopping", icon: "bag.fill"),
-            (name: "Health & Fitness", icon: "heart.fill"),
-            (name: "Travel", icon: "airplane"),
-            (name: "Education", icon: "book.fill"),
-            (name: "Income", icon: "dollarsign.circle.fill")
-        ]
+    /// Checks if the context already has sample data
+    @MainActor
+    func hasSampleData() -> Bool {
+        // Check if any data exists
+        let categoryCount = (try? self.fetchCount(FetchDescriptor<ExpenseCategory>())) ?? 0
+        let accountCount = (try? self.fetchCount(FetchDescriptor<FinancialAccount>())) ?? 0
+        let transactionCount = (try? self.fetchCount(FetchDescriptor<FinancialTransaction>())) ?? 0
 
-        for category in categories {
-            let newCategory = ExpenseCategory(name: category.name, iconName: category.icon)
-            self.modelContext.insert(newCategory)
-        }
-
-        try? self.modelContext.save()
-    }
-}
-
-/// Accounts data generator
-@MainActor
-class AccountsDataGenerator: DataGenerator {
-    let modelContext: ModelContext
-
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
+        return categoryCount > 0 || accountCount > 0 || transactionCount > 0
     }
 
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func generate() {
-        let accounts = [
-            (name: "Checking Account", icon: "creditcard.fill", balance: 2500.0),
-            (name: "Savings Account", icon: "building.columns.fill", balance: 15000.0),
-            (name: "Credit Card", icon: "creditcard", balance: -850.0),
-            (name: "Investment Account", icon: "chart.line.uptrend.xyaxis", balance: 25000.0),
-            (name: "Emergency Fund", icon: "shield.fill", balance: 5000.0)
-        ]
+    /// Clears all data from the context
+    @MainActor
+    func clearAllData() throws {
+        // Delete all entities
+        try self.delete(model: FinancialTransaction.self)
+        try self.delete(model: FinancialAccount.self)
+        try self.delete(model: ExpenseCategory.self)
+        try self.delete(model: Budget.self)
+        try self.delete(model: SavingsGoal.self)
+        try self.delete(model: Subscription.self)
 
-        for account in accounts {
-            let newAccount = FinancialAccount(name: account.name, balance: account.balance, iconName: account.icon)
-            self.modelContext.insert(newAccount)
-        }
-
-        try? self.modelContext.save()
-    }
-}
-
-/// Budgets data generator
-@MainActor
-class BudgetsDataGenerator: DataGenerator {
-    let modelContext: ModelContext
-
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-    }
-
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func generate() {
-        guard let categories = try? modelContext.fetch(FetchDescriptor<ExpenseCategory>()) else { return }
-
-        var categoryDict: [String: ExpenseCategory] = [:]
-        for category in categories {
-            categoryDict[category.name] = category
-        }
-
-        // Current month budgets
-        let currentMonthBudgets = [
-            (category: "Housing", limit: 1300.0),
-            (category: "Food", limit: 500.0),
-            (category: "Transportation", limit: 200.0),
-            (category: "Utilities", limit: 250.0),
-            (category: "Entertainment", limit: 150.0)
-        ]
-
-        // Get first day of current month
-        let calendar = Calendar.current
-        let now = Date()
-        let components = calendar.dateComponents([.year, .month], from: now)
-        guard let firstDayOfMonth = calendar.date(from: components) else {
-            os_log("Failed to create first day of month", log: .default, type: .error)
-            return
-        }
-
-        // Create budgets for current month
-        for budgetInfo in currentMonthBudgets {
-            if let category = categoryDict[budgetInfo.category] {
-                let budget = Budget(
-                    name: "\(category.name) Budget",
-                    limitAmount: budgetInfo.limit,
-                    month: firstDayOfMonth,
-                )
-                budget.category = category
-                self.modelContext.insert(budget)
-            }
-        }
-
-        // Previous month budgets (for comparison)
-        if let previousMonth = calendar.date(byAdding: .month, value: -1, to: firstDayOfMonth) {
-            for budgetInfo in currentMonthBudgets {
-                if let category = categoryDict[budgetInfo.category] {
-                    let budget = Budget(
-                        name: "\(category.name) Budget",
-                        limitAmount: budgetInfo.limit,
-                        month: previousMonth,
-                    )
-                    budget.category = category
-                    self.modelContext.insert(budget)
-                }
-            }
-        }
-
-        try? self.modelContext.save()
-    }
-}
-
-/// Savings goals data generator
-@MainActor
-class SavingsGoalsDataGenerator: DataGenerator {
-    let modelContext: ModelContext
-
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-    }
-
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func generate() {
-        let calendar = Calendar.current
-        let savingsGoals = [
-            (
-                name: "Emergency Fund",
-                target: 10000.0,
-                current: 3500.0,
-                targetDate: calendar.date(byAdding: .month, value: 12, to: Date())
-            ),
-            (
-                name: "Vacation Fund",
-                target: 5000.0,
-                current: 1200.0,
-                targetDate: calendar.date(byAdding: .month, value: 8, to: Date())
-            ),
-            (
-                name: "New Car",
-                target: 25000.0,
-                current: 8500.0,
-                targetDate: calendar.date(byAdding: .month, value: 24, to: Date())
-            ),
-            (
-                name: "Home Down Payment",
-                target: 50000.0,
-                current: 15000.0,
-                targetDate: calendar.date(byAdding: .month, value: 36, to: Date())
-            )
-        ]
-
-        for goal in savingsGoals {
-            let newGoal = SavingsGoal(name: goal.name, targetAmount: goal.target, currentAmount: goal.current)
-            if let targetDate = goal.targetDate {
-                newGoal.targetDate = targetDate
-            }
-
-            self.modelContext.insert(newGoal)
-        }
-
-        try? self.modelContext.save()
+        try self.save()
     }
 }

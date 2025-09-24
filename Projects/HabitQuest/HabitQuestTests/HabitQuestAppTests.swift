@@ -1,17 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-class HabitQuestAppTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here
-    }
-
-    override func tearDown() {
-        // Put teardown code here
-        super.tearDown()
-    }
-
+public class HabitQuestAppTests: XCTestCase {
     // MARK: - structHabitQuestApp:App{ Tests
 
     func testHabitQuestAppInitialization() {

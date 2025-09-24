@@ -11,12 +11,11 @@ import SwiftData
 class SampleDataGenerator {
     let modelContext: ModelContext
 
-    private lazy var categoriesGenerator = CategoriesDataGenerator(modelContext: modelContext)
-    private lazy var accountsGenerator = AccountsDataGenerator(modelContext: modelContext)
-    private lazy var budgetsGenerator = BudgetsDataGenerator(modelContext: modelContext)
-    private lazy var savingsGoalsGenerator = SavingsGoalsDataGenerator(modelContext: modelContext)
-    private lazy var transactionsGenerator = TransactionsDataGenerator(modelContext: modelContext)
-    private lazy var subscriptionsGenerator = SubscriptionsDataGenerator(modelContext: modelContext)
+    private lazy var categoriesGenerator = CategoriesGenerator(modelContext: modelContext)
+    private lazy var accountsGenerator = AccountsGenerator(modelContext: modelContext)
+    private lazy var budgetsGenerator = BudgetsGenerator(modelContext: modelContext)
+    private lazy var savingsGoalsGenerator = SavingsGoalsGenerator(modelContext: modelContext)
+    private lazy var transactionsGenerator = TransactionsGenerator(modelContext: modelContext)
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -34,7 +33,6 @@ class SampleDataGenerator {
         self.generateBudgets()
         self.generateSavingsGoals()
         self.generateTransactions()
-        self.generateSubscriptions()
     }
 
     /// Generate expense categories
@@ -70,13 +68,6 @@ class SampleDataGenerator {
     /// - Returns: <#description#>
     func generateTransactions() {
         self.transactionsGenerator.generate()
-    }
-
-    /// Generate subscriptions
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func generateSubscriptions() {
-        self.subscriptionsGenerator.generate()
     }
 
     /// Reset all data in the model context

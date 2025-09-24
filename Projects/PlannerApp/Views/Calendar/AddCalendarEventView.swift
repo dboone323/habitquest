@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-struct AddCalendarEventView: View {
+public struct AddCalendarEventView: View {
     @Environment(\.dismiss) var dismiss // Use dismiss environment
     @Binding var events: [CalendarEvent] // Assumes using model from PlannerApp/Models/
 
@@ -15,7 +15,7 @@ struct AddCalendarEventView: View {
         !self.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 0) {
             // Header with buttons for better macOS compatibility
             HStack {
@@ -113,7 +113,6 @@ struct AddCalendarEventView: View {
         )
         self.events.append(newEvent)
 
-        // Save to persistent storage via data manager
         CalendarDataManager.shared.save(events: self.events)
     }
 }

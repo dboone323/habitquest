@@ -12,7 +12,7 @@ import SwiftData
 /// ViewModel managing today's quest display and completion logic
 /// Handles filtering habits due today and managing completion flow
 @MainActor
-class TodaysQuestsViewModel: ObservableObject {
+public class TodaysQuestsViewModel: ObservableObject {
     @Published var todaysHabits: [Habit] = []
     @Published var showingAddQuest = false
     @Published var showingCompletionAlert = false

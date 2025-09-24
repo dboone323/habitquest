@@ -4,7 +4,7 @@ import SwiftUI
 
 /// ViewModel for ProfileView handling player profile data and statistics
 @MainActor
-class ProfileViewModel: ObservableObject {
+public class ProfileViewModel: ObservableObject {
     @Published var level: Int = 1
     @Published var currentXP: Int = 0
     @Published var xpForNextLevel: Int = 100
@@ -24,15 +24,13 @@ class ProfileViewModel: ObservableObject {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
     func setModelContext(_ context: ModelContext) {
         self.modelContext = context
-        self.analyticsService = AnalyticsService(modelContext: context)
+        // self.analyticsService = AnalyticsService(modelContext: context) // Temporarily commented out
         self.loadProfile()
         self.loadStatistics()
         self.loadAchievements()
-        self.loadAnalytics()
+        // self.loadAnalytics() // Temporarily commented out for testing
     }
 
     /// Refresh all profile data

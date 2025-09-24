@@ -41,7 +41,7 @@ struct PlatformAdaptiveNavigation<Content: View>: View {
     }
 }
 
-struct SidebarView: View {
+public struct SidebarView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State private var selectedTab: Tab = .dashboard
 
@@ -65,7 +65,7 @@ struct SidebarView: View {
         }
     }
 
-    var body: some View {
+    public var body: some View {
         #if os(macOS)
         List(Tab.allCases, id: \.self, selection: self.$selectedTab) { tab in
             NavigationLink(value: tab) {
@@ -91,7 +91,7 @@ struct SidebarView: View {
 
 // MARK: - Platform-Specific Toolbar
 
-struct PlatformToolbar: ViewModifier {
+public struct PlatformToolbar: ViewModifier {
     let title: String
     let primaryActions: [ToolbarAction]
     let secondaryActions: [ToolbarAction]
@@ -110,7 +110,7 @@ struct PlatformToolbar: ViewModifier {
         }
     }
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .navigationTitle(self.title)
             .toolbar {
@@ -183,7 +183,7 @@ struct PlatformContextMenu<MenuContent: View>: ViewModifier {
         self.menuContent = menuContent()
     }
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         #if os(macOS)
         content
             .contextMenu {
@@ -230,7 +230,7 @@ struct AdaptiveGrid<Content: View>: View {
         #endif
     }
 
-    var body: some View {
+    public var body: some View {
         LazyVGrid(columns: self.columns, spacing: 16) {
             self.content
         }
@@ -248,7 +248,7 @@ struct PlatformSheet<SheetContent: View>: ViewModifier {
         self.sheetContent = content()
     }
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         #if os(macOS)
         content
             .sheet(isPresented: self.$isPresented) {
@@ -277,11 +277,11 @@ extension View {
 
 // MARK: - Example Usage
 
-struct ExamplePlatformView: View {
+public struct ExamplePlatformView: View {
     @State private var showingAddItem = false
     @EnvironmentObject var themeManager: ThemeManager
 
-    var body: some View {
+    public var body: some View {
         PlatformAdaptiveNavigation {
             ScrollView {
                 AdaptiveGrid {

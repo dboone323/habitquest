@@ -5,7 +5,7 @@ import SwiftData
 import SwiftUI
 
 /// Compact widget showing key financial insights for the dashboard
-struct InsightsWidget: View {
+public struct InsightsWidget: View {
     @StateObject private var intelligenceService = FinancialIntelligenceService.shared
     @Environment(\.modelContext) private var modelContext
 
@@ -136,7 +136,7 @@ struct InsightsWidget: View {
 
 // MARK: - Compact Insight Row
 
-struct CompactInsightRow: View {
+public struct CompactInsightRow: View {
     let insight: FinancialInsight
     @State private var showDetail = false
 

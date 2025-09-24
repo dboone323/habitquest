@@ -7,7 +7,7 @@ import SwiftUI
 // Include Theme from the same Styling directory
 // Include AppSettingKeys from Utilities directory
 
-class ThemeManager: ObservableObject {
+public class ThemeManager: ObservableObject {
     // Published property holding the currently active theme. Views observe this.
     // Initialize by finding the theme matching the name currently stored in UserDefaults.
     @Published var currentTheme: Theme = .availableThemes.first {
@@ -53,5 +53,26 @@ class ThemeManager: ObservableObject {
     func setTheme(_ theme: Theme) {
         self.currentThemeName = theme.name
         // The didSet observer will trigger updateCurrentTheme automatically
+    }
+}
+
+// MARK: - Object Pooling
+
+/// Object pool for performance optimization
+private var objectPool: [Any] = []
+private let maxPoolSize = 50
+
+/// Get an object from the pool or create new one
+private func getPooledObject<T>() -> T? {
+    if let pooled = objectPool.popLast() as? T {
+        return pooled
+    }
+    return nil
+}
+
+/// Return an object to the pool
+private func returnToPool(_ object: Any) {
+    if objectPool.count < maxPoolSize {
+        objectPool.append(object)
     }
 }

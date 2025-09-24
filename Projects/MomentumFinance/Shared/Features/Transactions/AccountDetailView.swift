@@ -4,7 +4,7 @@
 import Charts
 import SwiftUI
 
-struct AccountDetailView: View {
+public struct AccountDetailView: View {
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.modelContext)
@@ -63,7 +63,7 @@ struct AccountDetailView: View {
         return self.transactions.filter { $0.date >= cutoffDate }
     }
 
-    var body: some View {
+    public var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 // Account Summary Card
@@ -267,12 +267,12 @@ struct AccountDetailView: View {
     }
 }
 
-struct StatView: View {
+public struct StatView: View {
     let title: String
     let value: String
     let color: Color
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 4) {
             Text(self.title)
                 .font(.caption)
@@ -287,7 +287,7 @@ struct StatView: View {
     }
 }
 
-struct ActivityChartView: View {
+public struct ActivityChartView: View {
     let transactions: [FinancialTransaction]
 
     struct DailyTransactionData: Identifiable {
@@ -341,7 +341,7 @@ struct ActivityChartView: View {
         return result
     }
 
-    var body: some View {
+    public var body: some View {
         Chart {
             ForEach(self.chartData) { data in
                 LineMark(

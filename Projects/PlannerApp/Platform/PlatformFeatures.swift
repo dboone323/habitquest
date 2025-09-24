@@ -19,7 +19,7 @@ import AppKit
 #if os(iOS)
 // Widget support for iOS
 struct PlannerWidget: View {
-    let tasks: [TaskModel]
+    let tasks: [PlannerTask]
     let goals: [Goal]
 
     var body: some View {
@@ -181,8 +181,8 @@ struct ScribbleTextField: View {
 
 // Drag and Drop support
 struct DragDropTaskView: View {
-    let task: TaskModel
-    let onDrop: (TaskModel) -> Void
+    let task: PlannerTask
+    let onDrop: (PlannerTask) -> Void
 
     var body: some View {
         Text(self.task.title)
@@ -195,7 +195,7 @@ struct DragDropTaskView: View {
                     .background(.regularMaterial)
                     .cornerRadius(8)
             }
-            .dropDestination(for: TaskModel.self) { items, _ in
+            .dropDestination(for: PlannerTask.self) { items, _ in
                 if let droppedTask = items.first {
                     self.onDrop(droppedTask)
                     return true

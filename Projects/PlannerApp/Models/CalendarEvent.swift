@@ -1,41 +1,12 @@
-// MARK: - Data Manager
+// MARK: - Calendar Event Model
 
 import CloudKit
 import Foundation
 
-/// Manages storage and retrieval of `CalendarEvent` objects in memory.
-class CalendarDataManager {
-    /// Shared singleton instance.
-    static let shared = CalendarDataManager()
-
-    /// In-memory storage for calendar events.
-    var events: [CalendarEvent] = []
-
-    /// Removes all events from memory.
-    func clearAllEvents() {
-        self.events.removeAll()
-    }
-
-    /// Loads all events from memory.
-    /// - Returns: Array of `CalendarEvent` objects.
-    func load() -> [CalendarEvent] {
-        self.events
-    }
-
-    /// Saves the provided events to memory.
-    /// - Parameter events: Array of `CalendarEvent` objects to save.
-    func save(events: [CalendarEvent]) {
-        self.events = events
-    }
-
-    /// Private initializer to enforce singleton usage.
-    private init() {}
-}
-
 /// Represents a calendar event for PlannerApp, supporting CloudKit sync and Codable serialization.
-struct CalendarEvent: Identifiable, Codable {
+public struct CalendarEvent: Identifiable, Codable {
     /// Unique identifier for the calendar event.
-    let id: UUID
+    public let id: UUID
 
     /// Title or description of the event.
     var title: String

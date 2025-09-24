@@ -15,10 +15,10 @@ import Foundation
 
 // Typealias to prevent conflict with Task model
 typealias AsyncTask = _Concurrency.Task
-typealias PlannerTask = Task
+// typealias PlannerTask = Task
 
 @MainActor
-class EnhancedCloudKitManager: ObservableObject {
+public class EnhancedCloudKitManager: ObservableObject {
     static let shared = EnhancedCloudKitManager()
 
     @Published var isSignedInToiCloud = false
@@ -797,7 +797,7 @@ class EnhancedCloudKitManager: ObservableObject {
         }
     }
 
-    func uploadTasks(_ tasks: [Task]) async throws {
+    func uploadTasks(_ tasks: [PlannerTask]) async throws {
         // Stub implementation for task uploading
         print("Uploading \(tasks.count) tasks to CloudKit")
     }
@@ -854,7 +854,7 @@ class EnhancedCloudKitManager: ObservableObject {
 
 // MARK: - Enhanced Sync Status View
 
-struct EnhancedSyncStatusView: View {
+public struct EnhancedSyncStatusView: View {
     @ObservedObject var cloudKit = EnhancedCloudKitManager.shared
     @EnvironmentObject var themeManager: ThemeManager
 
@@ -866,7 +866,7 @@ struct EnhancedSyncStatusView: View {
         self.compact = compact
     }
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: 8) {
             self.syncIndicator
 
@@ -969,7 +969,7 @@ struct EnhancedSyncStatusView: View {
 
 extension EnhancedCloudKitManager {
     /// Upload multiple tasks to CloudKit in efficient batches
-    func uploadTasksInBatches(_ tasks: [Task]) async throws {
+    func uploadTasksInBatches(_ tasks: [PlannerTask]) async throws {
         let batchSize = 100
         for batch in stride(from: 0, to: tasks.count, by: batchSize) {
             let endIndex = min(batch + batchSize, tasks.count)
@@ -1116,5 +1116,26 @@ extension EnhancedCloudKitManager {
     func removeDevice(_ deviceID: String) async throws {
         // In a real implementation, you would remove the device record from CloudKit
         print("Removing device: \(deviceID)")
+    }
+}
+
+// MARK: - Object Pooling
+
+/// Object pool for performance optimization
+private var objectPool: [Any] = []
+private let maxPoolSize = 50
+
+/// Get an object from the pool or create new one
+private func getPooledObject<T>() -> T? {
+    if let pooled = objectPool.popLast() as? T {
+        return pooled
+    }
+    return nil
+}
+
+/// Return an object to the pool
+private func returnToPool(_ object: Any) {
+    if objectPool.count < maxPoolSize {
+        objectPool.append(object)
     }
 }

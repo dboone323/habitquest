@@ -3,7 +3,7 @@ import CloudKit
 import Foundation
 import SwiftUI
 
-struct CloudKitOnboardingView: View {
+public struct CloudKitOnboardingView: View {
     @StateObject private var cloudKit = EnhancedCloudKitManager.shared // Changed to EnhancedCloudKitManager
     @Environment(\.dismiss) private var dismiss
     @State private var isRequestingPermission = false
@@ -11,7 +11,7 @@ struct CloudKitOnboardingView: View {
 
     @AppStorage("hasCompletedCloudKitOnboarding") private var hasCompletedOnboarding = false
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
                 // Header image

@@ -50,12 +50,12 @@ struct TestResult {
 }
 
 /// Live analytics test runner that can be accessed from within the app
-struct AnalyticsTestView: View {
+public struct AnalyticsTestView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var testResults: TestResults?
     @State private var isRunning = false
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             VStack(spacing: 20) {
                 if let results = testResults {
@@ -234,10 +234,10 @@ struct AnalyticsTestView: View {
 }
 
 /// Display test results in a clean UI
-struct TestResultsView: View {
+public struct TestResultsView: View {
     let results: TestResults
 
-    var body: some View {
+    public var body: some View {
         ScrollView {
             VStack(spacing: 16) {
                 // Summary Card
@@ -276,10 +276,10 @@ struct TestResultsView: View {
 }
 
 /// Individual test result row
-struct TestResultRow: View {
+public struct TestResultRow: View {
     let test: TestResult
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: self.test.passed ? "checkmark.circle.fill" : "xmark.circle.fill")
@@ -313,12 +313,12 @@ struct TestResultRow: View {
 }
 
 /// Stat item component
-struct StatItem: View {
+public struct StatItem: View {
     let title: String
     let value: String
     let color: Color
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 4) {
             Text(self.value)
                 .font(.title2)

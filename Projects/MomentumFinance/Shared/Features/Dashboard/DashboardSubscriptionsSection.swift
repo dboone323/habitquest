@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct DashboardSubscriptionsSection: View {
+public struct DashboardSubscriptionsSection: View {
     let subscriptions: [Subscription]
     let onSubscriptionTapped: (Subscription) -> Void
     let onViewAllTapped: () -> Void

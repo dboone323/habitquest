@@ -86,6 +86,14 @@ final class SubscriptionsViewModel {
         try? modelContext.save()
     }
 
+    /// Schedule renewal notifications for subscriptions
+    /// <#Description#>
+    /// - Returns: <#description#>
+    func scheduleSubscriptionNotifications(for subscriptions: [Subscription]) {
+        // Temporarily disabled due to compilation issues
+        // NotificationManager.shared.scheduleSubscriptionNotifications(for: subscriptions)
+    }
+
     /// Get subscriptions grouped by frequency
     /// <#Description#>
     /// - Returns: <#description#>

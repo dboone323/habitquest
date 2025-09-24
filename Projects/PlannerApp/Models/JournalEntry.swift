@@ -1,39 +1,10 @@
-// MARK: - Data Manager
+// MARK: - Journal Entry Model
 
 import CloudKit
 import Foundation
 
-/// Manages storage and retrieval of `JournalEntry` objects in memory.
-class JournalDataManager {
-    /// Shared singleton instance.
-    static let shared = JournalDataManager()
-
-    /// In-memory storage for journal entries.
-    var entries: [JournalEntry] = []
-
-    /// Removes all journal entries from memory.
-    func clearAllEntries() {
-        self.entries.removeAll()
-    }
-
-    /// Loads all journal entries from memory.
-    /// - Returns: Array of `JournalEntry` objects.
-    func load() -> [JournalEntry] {
-        self.entries
-    }
-
-    /// Saves the provided journal entries to memory.
-    /// - Parameter entries: Array of `JournalEntry` objects to save.
-    func save(entries: [JournalEntry]) {
-        self.entries = entries
-    }
-
-    /// Private initializer to enforce singleton usage.
-    private init() {}
-}
-
-struct JournalEntry: Identifiable, Codable {
-    let id: UUID
+public struct JournalEntry: Identifiable, Codable {
+    public let id: UUID
     var title: String
     var body: String
     var date: Date

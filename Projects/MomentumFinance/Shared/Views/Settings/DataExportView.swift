@@ -7,7 +7,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 /// Comprehensive data export view with multiple format options
-struct DataExportView: View {
+public struct DataExportView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
 
@@ -26,7 +26,7 @@ struct DataExportView: View {
     @State private var showingShareSheet = false
     @State private var exportError: String?
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             Form {
                 self.formatSection
@@ -285,15 +285,14 @@ struct ShareSheet: UIViewControllerRepresentable {
 
     /// <#Description#>
     /// - Returns: <#description#>
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context)
-    {}
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 #else
 // macOS version of ShareSheet
 struct ShareSheet: View {
     let activityItems: [Any]
 
-    var body: some View {
+    public var body: some View {
         VStack {
             Text("Export Complete")
                 .font(.headline)
@@ -319,6 +318,6 @@ struct ShareSheet: View {
     DataExportView()
         .modelContainer(for: [
             FinancialTransaction.self, FinancialAccount.self, Budget.self, Subscription.self,
-            SavingsGoal.self,
+            SavingsGoal.self
         ])
 }

@@ -9,7 +9,7 @@ import UserNotifications
 import AppKit
 #endif
 
-struct SettingsView: View {
+public struct SettingsView: View {
     @EnvironmentObject var themeManager: ThemeManager
 
     // State properties with AppStorage keys
@@ -24,7 +24,7 @@ struct SettingsView: View {
     @State private var showingNotificationAlert = false
     @State private var showingThemePreview = false
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             Form {
                 // Profile Section
@@ -138,11 +138,11 @@ struct SettingsView: View {
 
 // MARK: - Theme Preview Sheet
 
-struct ThemePreviewSheet: View {
+public struct ThemePreviewSheet: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var themeManager: ThemeManager
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(
@@ -174,11 +174,11 @@ struct ThemePreviewSheet: View {
 
 // MARK: - Theme Card
 
-struct ThemeCard: View {
+public struct ThemeCard: View {
     let theme: Theme
     @EnvironmentObject var themeManager: ThemeManager
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 12) {
             // Theme preview
             RoundedRectangle(cornerRadius: 12)
@@ -230,8 +230,8 @@ struct ThemeCard: View {
     }
 }
 
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
+public struct SettingsView_Previews: PreviewProvider {
+    public static var previews: some View {
         SettingsView()
             .environmentObject(ThemeManager())
     }
@@ -239,10 +239,10 @@ struct SettingsView_Previews: PreviewProvider {
 
 // MARK: - Notification Toggle Modifier
 
-struct NotificationToggleModifier: ViewModifier {
+public struct NotificationToggleModifier: ViewModifier {
     @Binding var notificationsEnabled: Bool
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         if #available(macOS 14.0, iOS 17.0, *) {
             content.onChange(of: notificationsEnabled) { _, newValue in
                 if newValue {

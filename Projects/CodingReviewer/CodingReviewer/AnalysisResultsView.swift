@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-struct AnalysisResultsView: View {
+public struct AnalysisResultsView: View {
     let result: CodeAnalysisResult
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            ForEach(result.issues) { issue in
+            ForEach(self.result.issues) { issue in
                 IssueRow(issue: issue)
             }
 
-            if result.issues.isEmpty {
+            if self.result.issues.isEmpty {
                 Text("No issues found")
                     .foregroundColor(.secondary)
                     .padding()

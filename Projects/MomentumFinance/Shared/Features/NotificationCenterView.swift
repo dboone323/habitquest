@@ -12,7 +12,7 @@ import SwiftUI
 
 /// Centralized notification center for viewing and managing smart alerts
 @MainActor
-struct NotificationCenterView: View {
+public struct NotificationCenterView: View {
     @Environment(\.dismiss)
     private var dismiss
     @StateObject private var notificationManager = NotificationManager.shared
@@ -96,7 +96,7 @@ struct NotificationCenterView: View {
 
 // MARK: - Empty Notifications View
 
-struct EmptyNotificationsView: View {
+public struct EmptyNotificationsView: View {
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "bell.slash")
@@ -119,7 +119,7 @@ struct EmptyNotificationsView: View {
 
 // MARK: - Scheduled Notification Row
 
-struct ScheduledNotificationRow: View {
+public struct ScheduledNotificationRow: View {
     let notification: ScheduledNotification
     let onDismiss: () -> Void
 

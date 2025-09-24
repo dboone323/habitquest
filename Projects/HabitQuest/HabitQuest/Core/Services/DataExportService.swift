@@ -5,7 +5,7 @@ import SwiftData
 
 /// Service for exporting and importing HabitQuest user data
 /// Handles backup, restore, and data portability features
-struct DataExportService: Sendable {
+public struct DataExportService: Sendable {
     private static let logger = Logger(category: Logger.Category.dataModel)
 
     /// Structure for exported data
@@ -279,14 +279,14 @@ struct DataExportService: Sendable {
 }
 
 /// Errors that can occur during data export/import
-enum DataExportError: LocalizedError, @unchecked Sendable {
+public enum DataExportError: LocalizedError, @unchecked Sendable {
     case noProfileFound
     case noDataToExport(String)
     case importFailed(String)
     case encodingFailed(Error)
     case decodingFailed(Error)
 
-    nonisolated var errorDescription: String? {
+    nonisolated public var errorDescription: String? {
         switch self {
         case .noProfileFound:
             "No player profile found to export"

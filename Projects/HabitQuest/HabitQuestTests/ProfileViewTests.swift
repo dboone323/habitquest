@@ -1,17 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-class ProfileViewTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here
-    }
-
-    override func tearDown() {
-        // Put teardown code here
-        super.tearDown()
-    }
-
+public class ProfileViewTests: XCTestCase {
     // MARK: - structProfileView:View{ Tests
 
     func testProfileViewInitialization() {

@@ -1,17 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-class GameRulesTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here
-    }
-
-    override func tearDown() {
-        // Put teardown code here
-        super.tearDown()
-    }
-
+public class GameRulesTests: XCTestCase {
     // MARK: - enumGameRules{ Tests
 
     func testGameRulesInitialization() {

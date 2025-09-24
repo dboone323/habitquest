@@ -7,7 +7,6 @@ import Foundation
 // This file contains stub implementations for data managers referenced in CloudKitMigrationHelper
 
 import CloudKit
-import Foundation
 
 // DataManagers.swift is now empty. Data manager classes have been split into separate files for better type resolution and Xcode
 // compatibility.

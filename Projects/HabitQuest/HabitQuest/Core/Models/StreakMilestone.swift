@@ -1,8 +1,8 @@
 import Foundation
 
 /// Represents a streak milestone achievement
-struct StreakMilestone: Identifiable, @unchecked Sendable {
-    let id: UUID
+public struct StreakMilestone: Identifiable, @unchecked Sendable {
+    public let id: UUID
     let streakCount: Int
     let title: String
     let description: String
@@ -125,7 +125,7 @@ struct StreakMilestone: Identifiable, @unchecked Sendable {
 // MARK: - Comparable
 
 extension StreakMilestone: Comparable {
-    static func < (lhs: StreakMilestone, rhs: StreakMilestone) -> Bool {
+    public static func < (lhs: StreakMilestone, rhs: StreakMilestone) -> Bool {
         lhs.streakCount < rhs.streakCount
     }
 }

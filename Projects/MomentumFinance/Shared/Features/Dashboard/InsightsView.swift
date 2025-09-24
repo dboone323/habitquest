@@ -8,7 +8,7 @@ import SwiftUI
 
 // Import the canonical financial insight models
 /// View that displays financial insights and recommendations
-struct InsightsView: View {
+public struct InsightsView: View {
     @StateObject private var intelligenceService = FinancialIntelligenceService.shared
     @Environment(\.modelContext) private var modelContext
 

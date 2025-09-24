@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct AboutSection: View {
+public struct AboutSection: View {
     var body: some View {
         Section(header: Text("About")) {
             HStack {

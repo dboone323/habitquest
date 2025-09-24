@@ -2,7 +2,7 @@ import XCTest
 
 @testable import AvoidObstaclesGame
 
-class GameDifficultyTests: XCTestCase {
+public class GameDifficultyTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here
@@ -18,7 +18,7 @@ class GameDifficultyTests: XCTestCase {
     func testGameDifficultyInitialization() {
         // Test basic initialization with parameters
         let difficulty = GameDifficulty(
-            spawnInterval: 1.0, obstacleSpeed: 3.0, scoreMultiplier: 1.5
+            spawnInterval: 1.0, obstacleSpeed: 3.0, scoreMultiplier: 1.5, powerUpSpawnChance: 0.1
         )
         XCTAssertNotNil(difficulty, "GameDifficulty should initialize properly")
         XCTAssertEqual(
@@ -30,12 +30,15 @@ class GameDifficultyTests: XCTestCase {
         XCTAssertEqual(
             difficulty.scoreMultiplier, 1.5, "GameDifficulty should have correct score multiplier"
         )
+        XCTAssertEqual(
+            difficulty.powerUpSpawnChance, 0.1, "GameDifficulty should have correct power-up spawn chance"
+        )
     }
 
     func testGameDifficultyProperties() {
         // Test property access and validation
         let difficulty = GameDifficulty(
-            spawnInterval: 0.8, obstacleSpeed: 2.5, scoreMultiplier: 2.0
+            spawnInterval: 0.8, obstacleSpeed: 2.5, scoreMultiplier: 2.0, powerUpSpawnChance: 0.15
         )
         XCTAssertEqual(
             difficulty.spawnInterval, 0.8, "GameDifficulty should have correct spawn interval"
@@ -46,12 +49,15 @@ class GameDifficultyTests: XCTestCase {
         XCTAssertEqual(
             difficulty.scoreMultiplier, 2.0, "GameDifficulty should have correct score multiplier"
         )
+        XCTAssertEqual(
+            difficulty.powerUpSpawnChance, 0.15, "GameDifficulty should have correct power-up spawn chance"
+        )
     }
 
     func testGameDifficultyMethods() {
         // Test static method functionality
         let easyDifficulty = GameDifficulty.getDifficulty(for: 5)
-        let mediumDifficulty = GameDifficulty.getDifficulty(for: 20)
+        _ = GameDifficulty.getDifficulty(for: 20)
         let hardDifficulty = GameDifficulty.getDifficulty(for: 75)
 
         XCTAssertGreaterThan(

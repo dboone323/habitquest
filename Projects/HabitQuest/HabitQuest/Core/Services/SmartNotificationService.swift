@@ -3,400 +3,110 @@ import SwiftData
 @preconcurrency import UserNotifications
 
 /// Intelligent notification service with ML-driven optimal timing
+/// Now acts as an orchestrator for specialized notification services
 @Observable @MainActor
 final class SmartNotificationService {
     private let modelContext: ModelContext
     private let analyticsEngine: AdvancedAnalyticsEngine
 
-    private var notificationCenter: UNUserNotificationCenter {
-        UNUserNotificationCenter.current()
-    }
+    // Specialized services
+    private let schedulerService: NotificationSchedulerService
+    private let contentService: ContentGenerationService
+    private let adaptationService: BehavioralAdaptationService
+    private let contextService: ContextAwarenessService
 
     init(modelContext: ModelContext, analyticsEngine: AdvancedAnalyticsEngine) {
         self.modelContext = modelContext
         self.analyticsEngine = analyticsEngine
+
+        // Initialize specialized services
+        self.contentService = ContentGenerationService()
+        self.schedulerService = NotificationSchedulerService(
+            modelContext: modelContext,
+            analyticsEngine: analyticsEngine
+        )
+        self.adaptationService = BehavioralAdaptationService(modelContext: modelContext)
+        self.contextService = ContextAwarenessService(
+            modelContext: modelContext,
+            contentGenerationService: self.contentService
+        )
     }
 
     // MARK: - Smart Scheduling
 
     /// Schedule AI-optimized notifications for all habits
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
     func scheduleSmartNotifications() async {
-        let habits = await fetchActiveHabits()
-
-        for habit in habits {
-            await self.scheduleOptimalNotification(for: habit)
-        }
+        await self.schedulerService.scheduleSmartNotifications()
     }
 
     /// Schedule notification at optimal time based on user behavior
-    private func scheduleOptimalNotification(for habit: Habit) async {
-        let scheduling = await analyticsEngine.generateOptimalScheduling(for: habit)
-        let prediction = await analyticsEngine.predictStreakSuccess(for: habit)
-
-        let content = self.generateSmartContent(
-            for: habit,
-            scheduling: scheduling,
-            prediction: prediction
-        )
-
-        let trigger = self.createOptimalTrigger(
-            for: habit,
-            recommendedHour: scheduling.optimalTime,
-            successRate: scheduling.successRateAtTime
-        )
-
-        let request = UNNotificationRequest(
-            identifier: "habit_\(habit.id.uuidString)",
-            content: content,
-            trigger: trigger
-        )
-
-        do {
-            try await self.notificationCenter.add(request)
-        } catch {
-            print("Failed to schedule notification for \(habit.name): \(error)")
-        }
-    }
-
-    // MARK: - Adaptive Content Generation
-
-    private func generateSmartContent(
-        for habit: Habit,
-        scheduling: SchedulingRecommendation,
-        prediction: StreakPrediction
-    ) -> UNMutableNotificationContent {
-        let content = UNMutableNotificationContent()
-
-        // Personalized title based on streak status
-        content.title = self.generatePersonalizedTitle(for: habit, prediction: prediction)
-
-        // Context-aware body message
-        content.body = self.generateContextualMessage(
-            for: habit,
-            scheduling: scheduling,
-            prediction: prediction
-        )
-
-        // Dynamic notification priority
-        content.interruptionLevel = self.determineInterruptionLevel(
-            habit: habit,
-            successRate: scheduling.successRateAtTime
-        )
-
-        // Custom sound based on habit category
-        content.sound = self.selectOptimalSound(for: habit.category)
-
-        // Rich actions for quick interaction
-        content.categoryIdentifier = "HABIT_REMINDER"
-
-        // Add custom data for analytics
-        content.userInfo = [
-            "habitId": habit.id.uuidString,
-            "optimalTime": scheduling.optimalTime,
-            "successProbability": prediction.probability,
-            "schedulingVersion": "smart_v2"
-        ]
-
-        return content
-    }
-
-    private func generatePersonalizedTitle(for habit: Habit, prediction: StreakPrediction) -> String {
-        let streak = habit.streak
-
-        switch (streak, prediction.probability) {
-        case let (streakCount, probabilityValue) where streakCount >= 21 && probabilityValue > 80:
-            return "🔥 Keep the \(streakCount)-day streak alive!"
-        case let (streakCount, probabilityValue) where streakCount >= 7 && probabilityValue > 70:
-            return "💪 \(streakCount) days strong - don't break it now!"
-        case let (streakCount, _) where streakCount >= 3:
-            return "⭐ \(streakCount)-day streak in progress"
-        case let (_, probabilityValue) where probabilityValue < 40:
-            return "🎯 Small step, big impact"
-        default:
-            return "✨ Time for \(habit.name)"
-        }
-    }
-
-    private func generateContextualMessage(
-        for _: Habit,
-        scheduling: SchedulingRecommendation,
-        prediction: StreakPrediction
-    ) -> String {
-        let timeContext = self.generateTimeContext(hour: scheduling.optimalTime)
-        let motivationalMessage = self.selectMotivationalMessage(prediction: prediction)
-
-        return "\(timeContext) \(motivationalMessage) \(prediction.recommendedAction)"
-    }
-
-    private func generateTimeContext(hour: Int) -> String {
-        switch hour {
-        case 6 ... 9:
-            "Perfect morning energy!"
-        case 10 ... 12:
-            "Mid-morning focus time."
-        case 13 ... 17:
-            "Afternoon momentum boost."
-        case 18 ... 21:
-            "Evening wind-down ritual."
-        default:
-            "Your optimal time."
-        }
-    }
-
-    private func selectMotivationalMessage(prediction: StreakPrediction) -> String {
-        switch prediction.probability {
-        case 80 ... 100:
-            "You're crushing it!"
-        case 60 ... 79:
-            "Great momentum building."
-        case 40 ... 59:
-            "Consistency is key."
-        case 20 ... 39:
-            "Every small step counts."
-        default:
-            "Fresh start, new opportunity."
-        }
-    }
-
-    // MARK: - Dynamic Timing
-
-    private func createOptimalTrigger(
-        for habit: Habit,
-        recommendedHour: Int,
-        successRate: Double
-    ) -> UNNotificationTrigger {
-        var dateComponents = DateComponents()
-        dateComponents.hour = recommendedHour
-
-        // Add variance based on success rate (lower success = earlier reminder)
-        if successRate < 0.5 {
-            dateComponents.minute = 0 // Early reminder
-        } else {
-            dateComponents.minute = 15 // Standard time
-        }
-
-        // Adjust for habit frequency
-        switch habit.frequency {
-        case .daily:
-            return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-        case .weekly:
-            dateComponents.weekday = self.findOptimalWeekday(for: habit)
-            return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-        case .custom:
-            return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-        }
-    }
-
-    private func determineInterruptionLevel(habit: Habit, successRate: Double) -> UNNotificationInterruptionLevel {
-        // High-priority for struggling streaks, low for established ones
-        if habit.streak > 7, successRate > 0.7 {
-            .passive
-        } else if successRate < 0.3 {
-            .timeSensitive
-        } else {
-            .active
-        }
-    }
-
-    private func selectOptimalSound(for category: HabitCategory) -> UNNotificationSound {
-        switch category {
-        case .health, .fitness:
-            UNNotificationSound(named: UNNotificationSoundName("energetic_chime.wav"))
-        case .learning, .productivity:
-            UNNotificationSound(named: UNNotificationSoundName("focused_bell.wav"))
-        case .mindfulness, .social:
-            UNNotificationSound(named: UNNotificationSoundName("gentle_tone.wav"))
-        default:
-            .default
-        }
+    func scheduleOptimalNotification(for habit: Habit) async {
+        await self.schedulerService.scheduleOptimalNotification(for: habit)
     }
 
     // MARK: - Behavioral Adaptation
 
     /// Learn from user interaction patterns and adjust timing
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
     func adaptToUserBehavior(habitId: UUID, interactionType: NotificationInteraction) async {
-        let habit = await fetchHabit(id: habitId)
-        guard let habit else { return }
-
-        // Log interaction for machine learning
-        await self.logNotificationInteraction(
-            habit: habit,
-            interaction: interactionType,
-            timestamp: Date()
-        )
-
-        // Adjust future notifications based on response
-        if case .dismissed = interactionType {
-            await self.adjustNotificationTiming(for: habit, direction: .later)
-        } else if case .completed = interactionType {
-            await self.reinforceCurrentTiming(for: habit)
-        }
+        await self.adaptationService.adaptToUserBehavior(habitId: habitId, interactionType: interactionType)
     }
 
     /// Dynamically adjust notification frequency based on success patterns
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
     func optimizeNotificationFrequency() async {
-        let habits = await fetchActiveHabits()
+        await self.adaptationService.optimizeNotificationFrequency()
+    }
 
-        for habit in habits {
-            let recentSuccess = await calculateRecentSuccessRate(habit: habit)
+    /// Analyze user response patterns to determine optimal notification strategies
+    func analyzeUserResponsePatterns(habitId: UUID) async -> UserResponseAnalysis {
+        await self.adaptationService.analyzeUserResponsePatterns(habitId: habitId)
+    }
 
-            if recentSuccess > 0.8 {
-                // Reduce frequency for well-established habits
-                await self.adjustNotificationFrequency(for: habit, factor: 0.7)
-            } else if recentSuccess < 0.3 {
-                // Increase support for struggling habits
-                await self.adjustNotificationFrequency(for: habit, factor: 1.3)
-            }
-        }
+    /// Get behavioral insights for notification optimization
+    func getBehavioralInsights(habitId: UUID) async -> NotificationBehavioralInsights {
+        await self.adaptationService.getBehavioralInsights(habitId: habitId)
     }
 
     // MARK: - Context-Aware Features
 
     /// Schedule motivational notifications for streak milestones
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
     func scheduleStreakMilestoneNotifications(for habit: Habit) async {
-        // Get the next milestone for this habit's current streak
-        guard let nextMilestone = StreakMilestone.nextMilestone(for: habit.streak) else { return }
-
-        let content = UNMutableNotificationContent()
-        content.title = "🎯 Milestone Approaching!"
-        content.body = "You're \(nextMilestone.streakCount - habit.streak) days away from \(nextMilestone.title)!"
-        content.sound = .default
-
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3600, repeats: false)
-
-        let request = UNNotificationRequest(
-            identifier: "milestone_\(habit.id.uuidString)_\(nextMilestone.streakCount)",
-            content: content,
-            trigger: trigger
-        )
-
-        try? await self.notificationCenter.add(request)
+        await self.contextService.scheduleStreakMilestoneNotifications(for: habit)
     }
 
     /// Send recovery notifications for broken streaks
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
     func scheduleRecoveryNotification(for habit: Habit) async {
-        let content = UNMutableNotificationContent()
-        content.title = "🌱 Fresh Start"
-        content.body = "Yesterday is gone, today is a new opportunity to build \(habit.name) back up!"
-        content.sound = self.selectOptimalSound(for: habit.category)
-        content.interruptionLevel = .passive
+        await self.contextService.scheduleRecoveryNotification(for: habit)
+    }
 
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 86400, repeats: false) // 24 hours
+    /// Schedule celebration notifications for achieved milestones
+    func scheduleMilestoneCelebrationNotification(for habit: Habit, milestone: StreakMilestone) async {
+        await self.contextService.scheduleMilestoneCelebrationNotification(for: habit, milestone: milestone)
+    }
 
-        let request = UNNotificationRequest(
-            identifier: "recovery_\(habit.id.uuidString)",
-            content: content,
-            trigger: trigger
-        )
+    /// Schedule contextual reminders based on time and location patterns
+    func scheduleContextualReminders() async {
+        await self.contextService.scheduleContextualReminders()
+    }
 
-        try? await self.notificationCenter.add(request)
+    /// Analyze user context and schedule appropriate notifications
+    func analyzeAndScheduleContextualNotifications() async {
+        await self.contextService.analyzeAndScheduleContextualNotifications()
+    }
+
+    /// Get context-aware insights for a habit
+    func getContextualInsights(for habitId: UUID) async -> ContextualInsights {
+        await self.contextService.getContextualInsights(for: habitId)
     }
 
     // MARK: - Utility Methods
 
-    private func fetchActiveHabits() async -> [Habit] {
-        let descriptor = FetchDescriptor<Habit>()
-        let allHabits = (try? self.modelContext.fetch(descriptor)) ?? []
-        return allHabits.filter(\.isActive)
+    /// Cancel all notifications for a specific habit
+    func cancelNotifications(for habitId: UUID) async {
+        await self.schedulerService.cancelNotifications(for: habitId)
     }
 
-    private func fetchHabit(id: UUID) async -> Habit? {
-        let descriptor = FetchDescriptor<Habit>()
-        let allHabits = (try? self.modelContext.fetch(descriptor)) ?? []
-        return allHabits.first { $0.id == id }
-    }
-
-    private func findOptimalWeekday(for habit: Habit) -> Int {
-        // Analyze completion patterns to find best weekday
-        let weekdayCompletions = Dictionary(grouping: habit.logs.filter(\.isCompleted)) { log in
-            Calendar.current.component(.weekday, from: log.completionDate)
-        }
-
-        let bestWeekday = weekdayCompletions.max { $0.value.count < $1.value.count }?.key ?? 2
-        return bestWeekday
-    }
-
-    private func calculateRecentSuccessRate(habit: Habit) async -> Double {
-        let recentLogs = habit.logs.suffix(7)
-        guard !recentLogs.isEmpty else { return 0.5 }
-
-        let successCount = recentLogs.filter(\.isCompleted).count
-        return Double(successCount) / Double(recentLogs.count)
-    }
-
-    private func logNotificationInteraction(
-        habit _: Habit,
-        interaction _: NotificationInteraction,
-        timestamp _: Date
-    ) async {
-        // Store interaction data for ML learning
-        // Implementation would save to analytics database
-    }
-
-    private func adjustNotificationTiming(for _: Habit, direction _: TimingAdjustment) async {
-        // Implement smart timing adjustment logic
-    }
-
-    private func reinforceCurrentTiming(for _: Habit) async {
-        // Strengthen current timing preference
-    }
-
-    private func adjustNotificationFrequency(for _: Habit, factor _: Double) async {
-        // Modify notification frequency based on success patterns
-    }
-}
-
-// MARK: - Supporting Types
-
-enum NotificationInteraction {
-    case completed(atDate: Date)
-    case dismissed
-    case ignored
-    case snoozed(for: TimeInterval)
-}
-
-enum TimingAdjustment {
-    case earlier
-    case later
-}
-
-extension UNNotificationInterruptionLevel {
-    static func from(priority: Double) -> UNNotificationInterruptionLevel {
-        switch priority {
-        case 0.8 ... 1.0: .critical
-        case 0.6 ..< 0.8: .timeSensitive
-        case 0.3 ..< 0.6: .active
-        default: .passive
-        }
+    /// Cancel all pending notifications
+    func cancelAllNotifications() async {
+        await self.schedulerService.cancelAllNotifications()
     }
 }

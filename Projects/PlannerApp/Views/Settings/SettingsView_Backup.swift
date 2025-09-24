@@ -9,7 +9,7 @@ import UserNotifications
 import AppKit
 #endif
 
-struct SettingsView: View {
+public struct SettingsView: View {
     @EnvironmentObject var themeManager: ThemeManager
 
     // State properties with AppStorage keys
@@ -25,9 +25,6 @@ struct SettingsView: View {
     @State private var showingThemePreview = false
 
     var body: some View {
-        import SwiftUI
-
-        // Backup placeholder kept minimal to avoid compilation issues.
         struct SettingsView_Backup: View {
             var body: some View {
                 Text("Settings Backup")

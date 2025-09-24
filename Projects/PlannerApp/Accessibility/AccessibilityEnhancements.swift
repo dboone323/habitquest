@@ -17,7 +17,7 @@ import Cocoa
 // MARK: - Accessibility Manager
 
 @MainActor
-class AccessibilityManager: ObservableObject {
+public class AccessibilityManager: ObservableObject {
     @Published var isVoiceOverEnabled = false
     @Published var prefersDynamicType = false
     @Published var prefersReducedMotion = false
@@ -79,7 +79,7 @@ class AccessibilityManager: ObservableObject {
 
 // MARK: - Accessible Components
 
-struct AccessibleButton: View {
+public struct AccessibleButton: View {
     let title: String
     let action: () -> Void
     @EnvironmentObject var accessibilityManager: AccessibilityManager
@@ -88,7 +88,7 @@ struct AccessibleButton: View {
     var hint: String?
     var isEnabled: Bool = true
 
-    var body: some View {
+    public var body: some View {
         Button(action: self.action) {
             Text(self.title)
                 .font(.system(size: self.dynamicFontSize, weight: .medium))
@@ -166,7 +166,7 @@ struct AccessibleListRow<Content: View>: View {
         self.content = content()
     }
 
-    var body: some View {
+    public var body: some View {
         self.content
             .frame(minHeight: self.minimumRowHeight)
             .accessibilityElement(children: .combine)
@@ -192,10 +192,10 @@ struct AccessibleListRow<Content: View>: View {
 
 // MARK: - High Contrast Theme Modifier
 
-struct HighContrastModifier: ViewModifier {
+public struct HighContrastModifier: ViewModifier {
     @EnvironmentObject var accessibilityManager: AccessibilityManager
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .environment(\.colorScheme, self.accessibilityManager.prefersHighContrast ? .dark : .light)
             .foregroundColor(
@@ -212,11 +212,11 @@ extension View {
 
 // MARK: - Reduced Motion Modifier
 
-struct ReducedMotionModifier: ViewModifier {
+public struct ReducedMotionModifier: ViewModifier {
     @EnvironmentObject var accessibilityManager: AccessibilityManager
     let animation: Animation
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .animation(
                 self.accessibilityManager.prefersReducedMotion ? .none : self.animation,
@@ -250,7 +250,7 @@ struct FocusableView<Content: View>: View {
         self.content = content()
     }
 
-    var body: some View {
+    public var body: some View {
         self.content
             .focused(self.$isFocused)
             .accessibilityLabel(self.accessibilityLabel)
@@ -260,10 +260,10 @@ struct FocusableView<Content: View>: View {
 
 // MARK: - Focus Change Modifier
 
-struct FocusChangeModifier: ViewModifier {
+public struct FocusChangeModifier: ViewModifier {
     let onFocusChange: ((Bool) -> Void)?
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         if #available(macOS 14.0, iOS 17.0, *) {
             content
         } else {
@@ -318,14 +318,14 @@ enum ScreenReaderAnnouncement {
 
 // MARK: - Dynamic Type Support
 
-struct DynamicTypeText: View {
+public struct DynamicTypeText: View {
     let text: String
     let style: Font.TextStyle
     @EnvironmentObject var accessibilityManager: AccessibilityManager
 
     var maxFontSize: CGFloat = 28
 
-    var body: some View {
+    public var body: some View {
         Text(self.text)
             .font(.system(self.style, design: .default))
             .lineLimit(self.accessibilityManager.prefersDynamicType ? nil : 2)
@@ -336,11 +336,11 @@ struct DynamicTypeText: View {
 
 // MARK: - Accessible Progress Indicator
 
-struct AccessibleProgressView: View {
+public struct AccessibleProgressView: View {
     let progress: Double // 0.0 to 1.0
     let label: String
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 DynamicTypeText(text: self.label, style: .body)
@@ -358,11 +358,11 @@ struct AccessibleProgressView: View {
 
 // MARK: - Example Usage View
 
-struct AccessibilityDemoView: View {
+public struct AccessibilityDemoView: View {
     @StateObject private var accessibilityManager = AccessibilityManager()
     @State private var progress: Double = 0.7
 
-    var body: some View {
+    public var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 DynamicTypeText(text: "Accessibility Demo", style: .title)

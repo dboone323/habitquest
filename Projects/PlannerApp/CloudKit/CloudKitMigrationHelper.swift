@@ -62,7 +62,7 @@ class CloudKitMigrationHelper {
 
     private func migrateTasksToCloudKit() async throws {
         // Simplified implementation with empty array
-        let tasks: [Task] = [] // Use direct Task type
+        let tasks: [PlannerTask] = [] // Use direct PlannerTask type
 
         print("Migrating tasks to CloudKit - stub implementation")
 

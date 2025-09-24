@@ -9,7 +9,7 @@
 // (Optional but good practice: Define a common error type)
 import Foundation
 
-enum DataManagerError: Error {
+public enum DataManagerError: Error {
     case encodingFailed(Error?)
     case decodingFailed(Error?)
     case loadFailed(Error?)

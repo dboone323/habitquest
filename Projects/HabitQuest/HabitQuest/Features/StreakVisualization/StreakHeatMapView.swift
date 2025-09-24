@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 /// GitHub-style contribution heat map for habit streaks
-struct StreakHeatMapView: View {
+public struct StreakHeatMapView: View {
     let habit: Habit
     let analytics: StreakAnalytics
     let timeRange: TimeRange
@@ -35,7 +35,7 @@ struct StreakHeatMapView: View {
         }
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             self.headerSection
             self.heatMapGrid
@@ -293,12 +293,12 @@ struct StreakPrediction {
     let recommendedAction: String
 }
 
-struct MetricCard: View {
+public struct MetricCard: View {
     let title: String
     let value: String
     let color: Color
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 4) {
             Text(self.value)
                 .font(.title3)
@@ -316,10 +316,10 @@ struct MetricCard: View {
     }
 }
 
-struct PredictionCard: View {
+public struct PredictionCard: View {
     let prediction: StreakPrediction
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "brain.head.profile")

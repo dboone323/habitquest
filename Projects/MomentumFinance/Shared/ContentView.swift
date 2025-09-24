@@ -6,17 +6,17 @@ import SwiftData
 import SwiftUI
 
 // Temporary placeholder views until namespace issues are resolved
-struct DashboardView: View {
-    var body: some View {
+public struct DashboardView: View {
+    public var body: some View {
         Features.Dashboard.DashboardView()
     }
 }
 
-struct ContentView: View {
+public struct ContentView: View {
     @StateObject private var navigationCoordinator = NavigationCoordinator.shared
     @State private var isGlobalSearchPresented = false
 
-    var body: some View {
+    public var body: some View {
         TabView(
             selection: Binding(
                 get: { self.navigationCoordinator.selectedTab },

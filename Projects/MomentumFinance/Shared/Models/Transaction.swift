@@ -5,9 +5,9 @@ import CoreData
 import SwiftUI
 
 /// Represents a simple transaction record for legacy or compatibility use.
-struct Transaction: Identifiable, Codable {
+public struct Transaction: Identifiable, Codable {
     /// Unique identifier for the transaction.
-    var id: UUID
+    public var id: UUID
     /// The amount of the transaction.
     var amount: Double
     /// The date the transaction occurred.

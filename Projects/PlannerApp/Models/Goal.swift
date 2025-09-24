@@ -4,7 +4,7 @@ import CloudKit
 import Foundation
 
 /// Represents the priority of a goal (low, medium, high).
-enum GoalPriority: String, CaseIterable, Codable {
+public enum GoalPriority: String, CaseIterable, Codable {
     /// Low priority goal.
     case low
     /// Medium priority goal.
@@ -20,12 +20,21 @@ enum GoalPriority: String, CaseIterable, Codable {
         case .high: "High"
         }
     }
+
+    /// Sort order for priority (higher values = higher priority).
+    var sortOrder: Int {
+        switch self {
+        case .low: 1
+        case .medium: 2
+        case .high: 3
+        }
+    }
 }
 
 /// Represents a user goal in the PlannerApp (e.g., "Run a marathon").
-struct Goal: Identifiable, Codable {
+public struct Goal: Identifiable, Codable {
     /// Unique identifier for the goal.
-    let id: UUID
+    public let id: UUID
     /// The title or summary of the goal.
     var title: String
     /// Detailed description of the goal.

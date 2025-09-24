@@ -19,16 +19,6 @@ find . -name "*.swift" -type f -exec sed -i.bak '
 find . -name "*.swift.bak" -delete
 echo "✅ Array operations optimized"
 
-# Convert TODO comments to structured documentation
-echo "🔧 Converting TODO comments to structured documentation..."
-find . -name "*.swift" -type f -exec sed -i.bak '
-    s/\/\/ TODO:/\/\/\/ - TODO:/g
-    s/\/\/ FIXME:/\/\/\/ - FIXME:/g
-    s/\/\/ HACK:/\/\/\/ - Note:/g
-' {} \;
-find . -name "*.swift.bak" -delete
-echo "✅ Documentation comments structured"
-
 # Add basic accessibility labels
 echo "🔧 Adding basic accessibility labels..."
 find . -name "*.swift" -type f -exec sed -i.bak '

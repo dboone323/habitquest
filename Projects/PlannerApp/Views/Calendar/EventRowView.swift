@@ -1,7 +1,7 @@
 // PlannerApp/Views/Calendar/EventRowView.swift
 import SwiftUI
 
-struct EventRowView: View {
+public struct EventRowView: View {
     @EnvironmentObject var themeManager: ThemeManager
     let event: CalendarEvent
 
@@ -16,7 +16,7 @@ struct EventRowView: View {
         return formatter
     }
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: 12) {
             // Time indicator
             VStack(alignment: .center, spacing: 2) {
