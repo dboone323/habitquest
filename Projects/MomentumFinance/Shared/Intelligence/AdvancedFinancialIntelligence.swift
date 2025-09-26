@@ -105,7 +105,8 @@ public class AdvancedFinancialIntelligence: ObservableObject {
     // MARK: - Private Analysis Methods
 
     private func analyzeSpendingPatterns(_ transactions: [Transaction]) async
-        -> [EnhancedFinancialInsight] {
+        -> [EnhancedFinancialInsight]
+    {
         var insights: [EnhancedFinancialInsight] = []
 
         // Analyze spending velocity
@@ -328,7 +329,8 @@ public class AdvancedFinancialIntelligence: ObservableObject {
     }
 
     private func prioritizeInsights(_ insights: [EnhancedFinancialInsight])
-        -> [EnhancedFinancialInsight] {
+        -> [EnhancedFinancialInsight]
+    {
         insights.sorted { first, second in
             // Priority by severity first, then by impact score
             if first.priority != second.priority {

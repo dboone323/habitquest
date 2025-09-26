@@ -104,7 +104,6 @@ This directory contains comprehensive UI tests for the MomentumFinance applicati
 ### Xcode Configuration
 
 1. **Add UI Test Target** (if not already present):
-
    - Open MomentumFinance.xcodeproj in Xcode
    - Select the project in the Project Navigator
    - Click the "+" button at the bottom of the targets list
@@ -113,7 +112,6 @@ This directory contains comprehensive UI tests for the MomentumFinance applicati
    - Select the MomentumFinance app as the target to test
 
 2. **Configure Test Target**:
-
    - Select the MomentumFinanceUITests target
    - Go to "Build Phases" tab
    - Ensure "MomentumFinance" is in "Target Dependencies"
@@ -192,19 +190,16 @@ For consistent testing, consider setting up test data:
 ### Common Issues
 
 1. **XCTest Module Not Found**
-
    - Ensure UI test target is properly configured
    - Check that Xcode version supports UI testing
    - Verify target dependencies are set correctly
 
 2. **Elements Not Found**
-
    - Add accessibility identifiers to UI elements
    - Check that UI hierarchy matches test expectations
    - Use Xcode's Accessibility Inspector to verify identifiers
 
 3. **Tests Flaking**
-
    - Add appropriate wait conditions
    - Use `XCTWaiter` for asynchronous operations
    - Test on stable simulator versions
@@ -217,7 +212,6 @@ For consistent testing, consider setting up test data:
 ### Debug Tips
 
 1. **Enable UI Test Recording**:
-
    - In test method, add `let app = XCUIApplication()`
    - Use Xcode's UI test recording feature to generate test code
 

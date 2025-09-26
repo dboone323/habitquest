@@ -54,7 +54,7 @@ run_safe_cleanup() {
       log "❌ Cleanup completed with warnings/errors"
     fi
   else
-    log "❌ Cleanup script not found or not executable: $CLEANUP_SCRIPT"
+    log "❌ Cleanup script not found or not executable${ $CLEANUP_SCRI}PT"
     return 1
   fi
 

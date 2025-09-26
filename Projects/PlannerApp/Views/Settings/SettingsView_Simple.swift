@@ -5,7 +5,7 @@ import LocalAuthentication
 import SwiftUI
 import UserNotifications
 #if os(macOS)
-import AppKit
+    import AppKit
 #endif
 import Foundation
 
@@ -56,7 +56,7 @@ public struct SettingsView: View {
     ]
 
     var sortedReminderKeys: [String] {
-        self.reminderTimeOptions.keys.sorted { self.reminderTimeOptions[$0]! < self.reminderTimeOptions[$1]! }
+        reminderTimeOptions.keys.sorted { reminderTimeOptions[$0]! < reminderTimeOptions[$1]! }
     }
 
     let defaultViewOptions = ["Dashboard", "Tasks", "Calendar", "Goals", "Journal"]
@@ -75,153 +75,153 @@ public struct SettingsView: View {
                 Section("Profile") {
                     HStack {
                         Text("Name")
-                            .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
-                        TextField("Enter your name", text: self.$userName).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
+                            .foregroundColor(themeManager.currentTheme.secondaryTextColor)
+                        TextField("Enter your name", text: $userName).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
                             .multilineTextAlignment(.trailing)
-                            .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                            .foregroundColor(themeManager.currentTheme.primaryTextColor)
                     }
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // --- Appearance Section ---
                 Section("Appearance") {
-                    Picker("Theme", selection: self.$selectedThemeName) {
+                    Picker("Theme", selection: $selectedThemeName) {
                         ForEach(ThemeManager.availableThemeNames, id: \.self) { name in
                             Text(name).tag(name)
                         }
                     }
 
-                    Button(action: { self.showingThemePreview = true }).accessibilityLabel("Button").accessibilityLabel("Button") {
+                    Button(action: { showingThemePreview = true }).accessibilityLabel("Button").accessibilityLabel("Button") {
                         HStack {
                             Text("Theme Preview")
-                                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                                .foregroundColor(themeManager.currentTheme.primaryTextColor)
                             Spacer()
                             Circle()
-                                .fill(self.themeManager.currentTheme.primaryAccentColor)
+                                .fill(themeManager.currentTheme.primaryAccentColor)
                                 .frame(width: 20, height: 20)
                             Image(systemName: "chevron.right")
-                                .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                                .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                         }
                     }
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // --- Dashboard Section ---
                 Section("Dashboard") {
-                    Stepper("Items per section: \\(dashboardItemLimit)", value: self.$dashboardItemLimit, in: 1 ... 10)
+                    Stepper("Items per section: \\(dashboardItemLimit)", value: $dashboardItemLimit, in: 1 ... 10)
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // --- Notifications Section ---
                 Section("Notifications") {
-                    Toggle("Enable Reminders", isOn: self.$notificationsEnabled)
-                        .onChange(of: self.notificationsEnabled) { _, newValue in
-                            self.handleNotificationToggle(enabled: newValue)
+                    Toggle("Enable Reminders", isOn: $notificationsEnabled)
+                        .onChange(of: notificationsEnabled) { _, newValue in
+                            handleNotificationToggle(enabled: newValue)
                         }
                         .alert(
                             "Notification Permissions",
-                            isPresented: self.$showingNotificationAlert,
-                            actions: self.notificationAlertActions
+                            isPresented: $showingNotificationAlert,
+                            actions: notificationAlertActions
                         )
 
-                    Picker("Default Reminder", selection: self.$defaultReminderTime) {
-                        ForEach(self.sortedReminderKeys, id: \.self) { key in
-                            Text(key).tag(self.reminderTimeOptions[key]!)
+                    Picker("Default Reminder", selection: $defaultReminderTime) {
+                        ForEach(sortedReminderKeys, id: \.self) { key in
+                            Text(key).tag(reminderTimeOptions[key]!)
                         }
                     }
-                    .disabled(!self.notificationsEnabled)
+                    .disabled(!notificationsEnabled)
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // --- Date & Time Section ---
                 Section("Date & Time") {
-                    Picker("First Day of Week", selection: self.$firstDayOfWeek) {
+                    Picker("First Day of Week", selection: $firstDayOfWeek) {
                         Text("System Default").tag(Calendar.current.firstWeekday)
                         Text("Sunday").tag(1)
                         Text("Monday").tag(2)
                     }
 
-                    Toggle("Use 24-Hour Time", isOn: self.$use24HourTime)
+                    Toggle("Use 24-Hour Time", isOn: $use24HourTime)
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // --- App Behavior Section ---
                 Section("App Behavior") {
-                    Picker("Default View on Launch", selection: self.$defaultView) {
-                        ForEach(self.defaultViewOptions, id: \.self) { viewName in
+                    Picker("Default View on Launch", selection: $defaultView) {
+                        ForEach(defaultViewOptions, id: \.self) { viewName in
                             Text(viewName).tag(viewName)
                         }
                     }
 
-                    Toggle("Auto-Delete Completed Tasks", isOn: self.$autoDeleteCompleted)
+                    Toggle("Auto-Delete Completed Tasks", isOn: $autoDeleteCompleted)
 
-                    if self.autoDeleteCompleted {
-                        Stepper("Delete after: \\(autoDeleteDays) days", value: self.$autoDeleteDays, in: 1 ... 90)
+                    if autoDeleteCompleted {
+                        Stepper("Delete after: \\(autoDeleteDays) days", value: $autoDeleteDays, in: 1 ... 90)
                     }
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // --- Security Section ---
                 Section("Security") {
-                    if self.canUseBiometrics {
-                        Toggle("Protect Journal with Biometrics", isOn: self.$journalBiometricsEnabled)
+                    if canUseBiometrics {
+                        Toggle("Protect Journal with Biometrics", isOn: $journalBiometricsEnabled)
                     } else {
                         Text("Biometric authentication not available on this device.")
-                            .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                            .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                     }
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // --- Sync & Cloud Section ---
                 Section("Sync & Cloud") {
-                    Button(action: { self.showingCloudKitSheet = true }).accessibilityLabel("Button").accessibilityLabel("Button") {
+                    Button(action: { showingCloudKitSheet = true }).accessibilityLabel("Button").accessibilityLabel("Button") {
                         HStack {
                             Image(systemName: "icloud")
                                 .foregroundColor(.blue)
                             Text("iCloud Sync")
-                                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                                .foregroundColor(themeManager.currentTheme.primaryTextColor)
                             Spacer()
                             Image(systemName: "chevron.right")
-                                .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                                .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                         }
                     }
 
-                    Toggle("Auto Sync", isOn: self.$autoSyncEnabled)
+                    Toggle("Auto Sync", isOn: $autoSyncEnabled)
 
-                    Picker("Sync Frequency", selection: self.$syncFrequency) {
+                    Picker("Sync Frequency", selection: $syncFrequency) {
                         Text("Every 15 minutes").tag("15min")
                         Text("Hourly").tag("hourly")
                         Text("Daily").tag("daily")
                         Text("Manual only").tag("manual")
                     }
-                    .disabled(!self.autoSyncEnabled)
+                    .disabled(!autoSyncEnabled)
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // --- Enhanced Features Section ---
                 Section("Enhanced Features") {
-                    Toggle("Haptic Feedback", isOn: self.$enableHapticFeedback)
-                    Toggle("Enable Analytics", isOn: self.$enableAnalytics)
+                    Toggle("Haptic Feedback", isOn: $enableHapticFeedback)
+                    Toggle("Enable Analytics", isOn: $enableAnalytics)
 
-                    if self.enableAnalytics {
+                    if enableAnalytics {
                         Text("Help improve PlannerApp by sharing anonymous usage data.")
                             .font(.caption)
-                            .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                            .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                     }
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // --- Data Management Section ---
                 Section("Data Management") {
-                    Button("Export Data", action: self.exportData).accessibilityLabel("Button").accessibilityLabel("Button")
-                        .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
+                    Button("Export Data", action: exportData).accessibilityLabel("Button").accessibilityLabel("Button")
+                        .foregroundColor(themeManager.currentTheme.primaryAccentColor)
 
-                    Button("Clear Old Completed Tasks...", action: { self.showingClearDataConfirmation = true })
+                    Button("Clear Old Completed Tasks...", action: { showingClearDataConfirmation = true })
                         .accessibilityLabel("Button")
                         .accessibilityLabel("Button")
-                        .foregroundColor(self.themeManager.currentTheme.destructiveColor)
-                        .alert("Confirm Deletion", isPresented: self.$showingClearDataConfirmation) {
-                            Button("Delete", role: .destructive, action: self.performClearOldData).accessibilityLabel("Button")
+                        .foregroundColor(themeManager.currentTheme.destructiveColor)
+                        .alert("Confirm Deletion", isPresented: $showingClearDataConfirmation) {
+                            Button("Delete", role: .destructive, action: performClearOldData).accessibilityLabel("Button")
                                 .accessibilityLabel("Button")
                             Button("Cancel", role: .cancel).accessibilityLabel("Button").accessibilityLabel("Button") {}
                         } message: {
@@ -230,27 +230,27 @@ public struct SettingsView: View {
                             )
                         }
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // --- About Section ---
                 Section("About") {
                     HStack {
                         Text("App Version")
-                            .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                            .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                         Spacer()
                         Text(Bundle.main.appVersion ?? "N/A")
-                            .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                            .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                     }
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
             }
             .navigationTitle("Settings")
-            .background(self.themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
+            .background(themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
             .scrollContentBackground(.hidden)
-            .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
-            .accentColor(self.themeManager.currentTheme.primaryAccentColor)
+            .foregroundColor(themeManager.currentTheme.primaryTextColor)
+            .accentColor(themeManager.currentTheme.primaryAccentColor)
             // Simplified sheet presentations
-            .sheet(isPresented: self.$showingCloudKitSheet) {
+            .sheet(isPresented: $showingCloudKitSheet) {
                 // Placeholder for CloudKit sync view
                 VStack {
                     Text("CloudKit Sync")
@@ -259,13 +259,13 @@ public struct SettingsView: View {
                     Text("CloudKit integration coming soon...")
                         .foregroundColor(.secondary)
                     Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
-                        self.showingCloudKitSheet = false
+                        showingCloudKitSheet = false
                     }
                     .padding()
                 }
                 .frame(minWidth: 400, minHeight: 300)
             }
-            .sheet(isPresented: self.$showingThemePreview) {
+            .sheet(isPresented: $showingThemePreview) {
                 // Placeholder for theme preview
                 VStack {
                     Text("Theme Preview")
@@ -274,27 +274,27 @@ public struct SettingsView: View {
                     Text("Theme preview coming soon...")
                         .foregroundColor(.secondary)
                     Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
-                        self.showingThemePreview = false
+                        showingThemePreview = false
                     }
                     .padding()
                 }
                 .frame(minWidth: 400, minHeight: 300)
             }
         }
-        .accentColor(self.themeManager.currentTheme.primaryAccentColor)
+        .accentColor(themeManager.currentTheme.primaryAccentColor)
     }
 
     // --- Action Handlers ---
     func handleNotificationToggle(enabled: Bool) {
         if enabled {
-            self.requestNotificationPermission()
+            requestNotificationPermission()
         }
         print("Notification toggle changed: \\(enabled)")
     }
 
     @ViewBuilder
     func notificationAlertActions() -> some View {
-        Button("Open Settings", action: self.openAppSettings).accessibilityLabel("Button").accessibilityLabel("Button")
+        Button("Open Settings", action: openAppSettings).accessibilityLabel("Button").accessibilityLabel("Button")
         Button("Cancel", role: .cancel).accessibilityLabel("Button").accessibilityLabel("Button") {}
     }
 
@@ -302,12 +302,12 @@ public struct SettingsView: View {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, _ in
             DispatchQueue.main.async {
                 if !granted {
-                    self.showingNotificationAlert = true
-                    self.notificationsEnabled = false
+                    showingNotificationAlert = true
+                    notificationsEnabled = false
                 }
                 if let error {
                     print("Notification permission error: \\(error.localizedDescription)")
-                    self.notificationsEnabled = false
+                    notificationsEnabled = false
                 }
             }
         }
@@ -333,8 +333,8 @@ public struct SettingsView: View {
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("PlannerExport.csv")
         do {
             try data.write(to: tempURL, options: .atomic)
-            self.exportURL = tempURL
-            self.showingExportShareSheet = true
+            exportURL = tempURL
+            showingExportShareSheet = true
             print("Export file created at: \\(tempURL)")
         } catch {
             print("Failed to write export file: \\(error)")

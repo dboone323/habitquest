@@ -38,7 +38,8 @@ public final class SwiftDataEntityManager: EntityManager {
     }
 
     public func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping)
-        async throws -> FinancialAccount? {
+        async throws -> FinancialAccount?
+    {
         // Extract account name from CSV fields
         guard let accountColumnIndex = getColumnIndex(for: columnMapping.accountColumn, in: fields) else {
             return nil

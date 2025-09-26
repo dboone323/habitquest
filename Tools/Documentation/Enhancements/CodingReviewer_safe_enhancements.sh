@@ -5,8 +5,8 @@ echo "🤖 Applying safe enhancements..."
 
 # 1. Format code consistently
 if command -v swiftformat &>/dev/null; then
-  echo "🔧 Applying SwiftFormat..."
-  swiftformat . --config ".swiftformat" 2>/dev/null || echo "✅ SwiftFormat applied"
+	echo "🔧 Applying SwiftFormat..."
+	swiftformat . --config ".swiftformat" 2>/dev/null || echo "✅ SwiftFormat applied"
 fi
 
 # 2. Remove trailing whitespace

@@ -24,23 +24,23 @@ public struct TestResultsView: View {
                         Text("Generated Tests")
                             .font(.headline)
                         Spacer()
-                        Text(self.presenter.coverageDisplay)
+                        Text(presenter.coverageDisplay)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
 
-                    Text(self.presenter.frameworkLabel)
+                    Text(presenter.frameworkLabel)
                         .font(.caption)
                         .foregroundColor(.secondary)
 
-                    Text(self.presenter.languageLabel)
+                    Text(presenter.languageLabel)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
 
                 Divider()
 
-                Text(self.presenter.codeSnippet)
+                Text(presenter.codeSnippet)
                     .font(.system(.body, design: .monospaced))
                     .padding()
                     .background(Color.gray.opacity(0.1))
@@ -59,18 +59,18 @@ struct TestResultsPresenter {
     }
 
     var coverageDisplay: String {
-        "Est. Coverage: \(Int(self.result.estimatedCoverage))%"
+        "Est. Coverage: \(Int(result.estimatedCoverage))%"
     }
 
     var frameworkLabel: String {
-        "Framework: \(self.result.testFramework)"
+        "Framework: \(result.testFramework)"
     }
 
     var languageLabel: String {
-        "Language: \(self.result.language)"
+        "Language: \(result.language)"
     }
 
     var codeSnippet: String {
-        self.result.testCode
+        result.testCode
     }
 }

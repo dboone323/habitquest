@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class StreakMilestoneTests: XCTestCase {
+final class StreakMilestoneTests: XCTestCase {
     // MARK: - structStreakMilestone:Identifiable,@uncheckedSendable{ Tests
 
     func testStreakMilestoneInitialization() {

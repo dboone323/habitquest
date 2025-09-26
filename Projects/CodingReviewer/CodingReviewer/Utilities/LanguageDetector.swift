@@ -10,7 +10,7 @@ import Foundation
 struct LanguageDetector {
     func detectLanguage(from url: URL?) -> String {
         guard let url else { return "Swift" }
-        return self.detectLanguage(forExtension: url.pathExtension.lowercased())
+        return detectLanguage(forExtension: url.pathExtension.lowercased())
     }
 
     func detectLanguage(forExtension pathExtension: String) -> String {

@@ -4,7 +4,7 @@ echo "🛠 Fixing SwiftData model dependencies..."
 
 # Create symbolic links from the root MomentumFinance folder to the Shared/Models folder
 echo "Creating model links..."
-cd /Users/danielstevens/Desktop/MomentumFinaceApp
+cd /Users/danielstevens/Desktop/MomentumFinaceApp || exit
 
 # Remove the duplicate files from MomentumFinance folder
 rm -f MomentumFinance/Budget.swift MomentumFinance/ExpenseCategory.swift

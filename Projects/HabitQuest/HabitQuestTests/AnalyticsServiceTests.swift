@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class AnalyticsServiceTests: XCTestCase {
+final class AnalyticsServiceTests: XCTestCase {
     // MARK: - enumTimePeriod{ Tests
 
     func testTimePeriodInitialization() {

@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class SharedAnalyticsComponentsTests: XCTestCase {
+final class SharedAnalyticsComponentsTests: XCTestCase {
     // MARK: - structAnalyticsCard:View{ Tests
 
     func testAnalyticsCardInitialization() {

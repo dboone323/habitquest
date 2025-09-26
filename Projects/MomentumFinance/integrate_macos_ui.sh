@@ -18,25 +18,25 @@ echo ""
 
 # Check if Xcode is running
 if pgrep -x "Xcode" >/dev/null; then
-  echo -e "${RED}Xcode appears to be running. Please close Xcode and try again.${NC}"
-  exit 1
+	echo -e "${RED}Xcode appears to be running. Please close Xcode and try again.${NC}"
+	exit 1
 fi
 
 # Ask for confirmation
 read -p "Do you want to continue with the integration? (y/n) " -n 1 -r
 echo ""
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-  echo -e "${YELLOW}Integration cancelled.${NC}"
-  exit 0
+if [[ ! ${REPLY} =~ ^[Yy]$ ]]; then
+	echo -e "${YELLOW}Integration cancelled.${NC}"
+	exit 0
 fi
 
 # Make a backup of critical files
 echo -e "${BLUE}Creating backups...${NC}"
 BACKUP_DIR="MacOS_UI_Backup_$(date +%Y%m%d_%H%M%S)"
-mkdir -p "$BACKUP_DIR"
-cp MomentumFinance/MomentumFinanceApp.swift "$BACKUP_DIR/"
-cp Shared/ContentView.swift "$BACKUP_DIR/"
-echo -e "${GREEN}Backups created in $BACKUP_DIR${NC}"
+mkdir -p "${BACKUP_DIR}"
+cp MomentumFinance/MomentumFinanceApp.swift "${BACKUP_DIR}/"
+cp Shared/ContentView.swift "${BACKUP_DIR}/"
+echo -e "${GREEN}Backups created in ${BACKUP_DIR}${NC}"
 
 # Update app entry point
 echo -e "${BLUE}Updating app entry point...${NC}"
@@ -48,70 +48,70 @@ echo -e "${BLUE}Adding macOS UI files to Xcode project...${NC}"
 
 # Function to check if a file is already in the project
 is_file_in_project() {
-  grep -q "path = \"$1\"" MomentumFinance.xcodeproj/project.pbxproj
-  return $?
+	grep -q "path = \"$1\"" MomentumFinance.xcodeproj/project.pbxproj
+	return $?
 }
 
 # Add files to the project
 add_file_to_project() {
-  local file_path=$1
-  local file_name=$(basename "$file_path")
+	local file_path=$1
+	local file_name=$(basename "${file_path}")
 
-  if is_file_in_project "$file_path"; then
-    echo -e "${YELLOW}File $file_name is already in project${NC}"
-    return 0
-  fi
+	if is_file_in_project "${file_path}"; then
+		echo -e "${YELLOW}File ${file_name} is already in project${NC}"
+		return 0
+	fi
 
-  # Get the macOS group UUID from the project file
-  MAC_OS_GROUP_UUID=$(grep -A 3 "path = macOS;" MomentumFinance.xcodeproj/project.pbxproj | grep "name = macOS;" | cut -d' ' -f1 | sed 's/;//g')
+	# Get the macOS group UUID from the project file
+	MAC_OS_GROUP_UUID=$(grep -A 3 "path = macOS;" MomentumFinance.xcodeproj/project.pbxproj | grep "name = macOS;" | cut -d' ' -f1 | sed 's/;//g')
 
-  if [ -z "$MAC_OS_GROUP_UUID" ]; then
-    echo -e "${RED}Couldn't find macOS group in project. Manual addition required.${NC}"
-    return 1
-  fi
+	if [[ -z "${MAC_OS_GROUP_UUID}" ]]; then
+		echo -e "${RED}Couldn't find macOS group in project. Manual addition required.${NC}"
+		return 1
+	fi
 
-  # Generate a UUID for the file
-  FILE_UUID=$(uuidgen)
-  FILE_REF_UUID=$(uuidgen)
+	# Generate a UUID for the file
+	FILE_UUID=$(uuidgen)
+	FILE_REF_UUID=$(uuidgen)
 
-  # Add file reference
-  sed -i '' "/* Begin PBXFileReference section */,/* End PBXFileReference section */" -e "s/\/\* End PBXFileReference section \*\//\t\t$FILE_UUID \/* $file_name \*\/ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = \"$file_path\"; sourceTree = \"<group>\"; };\n\t\t\/\* End PBXFileReference section \*\//" MomentumFinance.xcodeproj/project.pbxproj
+	# Add file reference
+	sed -i '' "/* Begin PBXFileReference section */,/* End PBXFileReference section */" -e "s/\/\* End PBXFileReference section \*\//\t\t${FILE_UUID} \/* ${file_name} \*\/ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = \"${file_path}\"; sourceTree = \"<group>\"; };\n\t\t\/\* End PBXFileReference section \*\//" MomentumFinance.xcodeproj/project.pbxproj
 
-  # Add file to macOS group
-  sed -i '' "/$MAC_OS_GROUP_UUID \/* macOS \*\/ = {/,/};/s/\t\t\t\);\n/\t\t\t\t$FILE_UUID \/* $file_name \*\/,\n\t\t\t);\n/" MomentumFinance.xcodeproj/project.pbxproj
+	# Add file to macOS group
+	sed -i '' "/${MAC_OS_GROUP_UUID} \/* macOS \*\/ = {/,/};/s/\t\t\t\);\n/\t\t\t\t${FILE_UUID} \/* ${file_name} \*\/,\n\t\t\t);\n/" MomentumFinance.xcodeproj/project.pbxproj
 
-  # Add build file
-  sed -i '' "/* Begin PBXBuildFile section */,/* End PBXBuildFile section */" -e "s/\/\* End PBXBuildFile section \*\//\t\t$FILE_REF_UUID \/* $file_name in Sources \*\/ = {isa = PBXBuildFile; fileRef = $FILE_UUID \/* $file_name \*\/; };\n\t\t\/\* End PBXBuildFile section \*\//" MomentumFinance.xcodeproj/project.pbxproj
+	# Add build file
+	sed -i '' "/* Begin PBXBuildFile section */,/* End PBXBuildFile section */" -e "s/\/\* End PBXBuildFile section \*\//\t\t${FILE_REF_UUID} \/* ${file_name} in Sources \*\/ = {isa = PBXBuildFile; fileRef = ${FILE_UUID} \/* ${file_name} \*\/; };\n\t\t\/\* End PBXBuildFile section \*\//" MomentumFinance.xcodeproj/project.pbxproj
 
-  # Add file to build phase
-  BUILD_PHASE_UUID=$(grep -A 3 "isa = PBXSourcesBuildPhase;" MomentumFinance.xcodeproj/project.pbxproj | grep -m 1 "files = (" | head -1 | awk '{print $1}')
+	# Add file to build phase
+	BUILD_PHASE_UUID=$(grep -A 3 "isa = PBXSourcesBuildPhase;" MomentumFinance.xcodeproj/project.pbxproj | grep -m 1 "files = (" | head -1 | awk '{print $1}')
 
-  if [ -z "$BUILD_PHASE_UUID" ]; then
-    echo -e "${RED}Couldn't find build phase in project. Manual addition required.${NC}"
-    return 1
-  fi
+	if [[ -z "${BUILD_PHASE_UUID}" ]]; then
+		echo -e "${RED}Couldn't find build phase in project. Manual addition required.${NC}"
+		return 1
+	fi
 
-  # Add file to build phase files array
-  sed -i '' "/$BUILD_PHASE_UUID \/* Sources \*\/ = {/,/files = (/s/files = (/files = (\n\t\t\t\t$FILE_REF_UUID \/* $file_name in Sources \*\/,/" MomentumFinance.xcodeproj/project.pbxproj
+	# Add file to build phase files array
+	sed -i '' "/${BUILD_PHASE_UUID} \/* Sources \*\/ = {/,/files = (/s/files = (/files = (\n\t\t\t\t${FILE_REF_UUID} \/* ${file_name} in Sources \*\/,/" MomentumFinance.xcodeproj/project.pbxproj
 
-  echo -e "${GREEN}Added $file_name to project${NC}"
-  return 0
+	echo -e "${GREEN}Added ${file_name} to project${NC}"
+	return 0
 }
 
 # Add all macOS UI files to project
 MACOS_UI_FILES=(
-  "macOS/EnhancedContentView_macOS.swift"
-  "macOS/KeyboardShortcutManager.swift"
-  "macOS/DragAndDropSupport.swift"
-  "macOS/EnhancedAccountDetailView.swift"
-  "macOS/EnhancedBudgetDetailView.swift"
-  "macOS/EnhancedDetailViews.swift"
-  "macOS/EnhancedSubscriptionDetailView.swift"
-  "macOS/MacOSUIIntegration.swift"
+	"macOS/EnhancedContentView_macOS.swift"
+	"macOS/KeyboardShortcutManager.swift"
+	"macOS/DragAndDropSupport.swift"
+	"macOS/EnhancedAccountDetailView.swift"
+	"macOS/EnhancedBudgetDetailView.swift"
+	"macOS/EnhancedDetailViews.swift"
+	"macOS/EnhancedSubscriptionDetailView.swift"
+	"macOS/MacOSUIIntegration.swift"
 )
 
 for file in "${MACOS_UI_FILES[@]}"; do
-  add_file_to_project "$file"
+	add_file_to_project "${file}"
 done
 
 # Update Development Tracker with progress
@@ -123,7 +123,7 @@ MARKER="### 🚀 PHASE 7: NEXT DEVELOPMENT ENHANCEMENTS"
 
 # Create the update content
 read -r -d '' UPDATE_CONTENT <<EOM
-### 📝 RECENT UPDATES ($DATE_TODAY)
+### 📝 RECENT UPDATE${ ($DATE_TO}DAY)
 
 #### **macOS UI Enhancement Complete**
 - ✅ **Three-Column Navigation**: Implemented professional macOS UI with sidebar, list, and detail views
@@ -149,16 +149,16 @@ read -r -d '' UPDATE_CONTENT <<EOM
 EOM
 
 # Update the development tracker file
-if grep -q "$MARKER" DEVELOPMENT_TRACKER.md; then
-  sed -i '' "/$MARKER/i\\
-$UPDATE_CONTENT\\
+if grep -q "${MARKER}" DEVELOPMENT_TRACKER.md; then
+	sed -i '' "/${MARKER}/i\\
+${UPDATE_CONTENT}\\
 
 " DEVELOPMENT_TRACKER.md
-  echo -e "${GREEN}Development tracker updated${NC}"
+	echo -e "${GREEN}Development tracker updated${NC}"
 else
-  echo -e "${YELLOW}Couldn't find marker in DEVELOPMENT_TRACKER.md.${NC}"
-  echo -e "${YELLOW}Please manually add the following update:${NC}"
-  echo "$UPDATE_CONTENT"
+	echo -e "${YELLOW}Couldn't find marker in DEVELOPMENT_TRACKER.md.${NC}"
+	echo -e "${YELLOW}Please manually add the following update:${NC}"
+	echo "${UPDATE_CONTENT}"
 fi
 
 echo ""

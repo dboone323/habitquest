@@ -1,105 +1,128 @@
 # AI Code Review for PlannerApp
+
 Generated: Wed Sep 24 20:04:50 CDT 2025
 
-
 ## DashboardViewModel.swift
+
 # Code Review: DashboardViewModel.swift
 
 ## 1. Code Quality Issues
 
 ### Public Access Control Overuse
+
 ```swift
 public struct DashboardActivity: Identifiable {
     public let id = UUID()
     // All properties should have access control specified
 }
 ```
+
 **Issue:** Mixed access control - `public` on some elements but missing on others
 **Fix:** Add explicit access control to all properties (either `public`, `internal`, or `private`)
 
 ### Inconsistent Property Naming
+
 ```swift
 @Published var todaysEvents: [CalendarEvent] = []
 @Published var upcomingItems: [UpcomingItem] = []
 ```
+
 **Issue:** Inconsistent naming (`todaysEvents` vs `upcomingItems` - pluralization inconsistency)
 **Fix:** Standardize naming convention (e.g., `todayEvents` or `todaysEvents` consistently)
 
 ### Missing Initialization Logic
+
 **Issue:** No `init()` method showing how data is populated
 **Fix:** Add initialization method or document data loading strategy
 
 ## 2. Performance Problems
 
 ### Potential Data Duplication
+
 ```swift
 @Published var todaysEvents: [CalendarEvent] = []
 @Published var allEvents: [CalendarEvent] = []
 ```
+
 **Issue:** Maintaining both filtered and full collections could cause memory bloat
 **Fix:** Consider computing filtered arrays on demand rather than storing both
 
 ### UUID Generation Overhead
+
 ```swift
 public let id = UUID()
 ```
+
 **Issue:** Generating UUIDs for every instance can be expensive for large collections
 **Fix:** Consider using more efficient identifiers or lazy initialization
 
 ## 3. Security Vulnerabilities
 
 ### No Data Validation
+
 **Issue:** No validation shown for incoming data that might populate these arrays
 **Fix:** Add input validation for any data being added to the collections
 
 ### @AppStorage Usage (Not Shown But Imported)
+
 **Issue:** `SwiftUI` import suggests @AppStorage usage which may store sensitive data
 **Fix:** Ensure sensitive data is properly encrypted if stored in UserDefaults
 
 ## 4. Swift Best Practices Violations
 
 ### Missing Error Handling
+
 **Issue:** No error handling mechanisms shown for data loading operations
 **Fix:** Add proper error handling using Swift's Result type or throwing functions
 
 ### Weak Type Safety
+
 ```swift
 let color: Color
 let icon: String
 ```
+
 **Issue:** String-based icons are error-prone
 **Fix:** Use enum-based icon system or asset catalog validation
 
 ### Inefficient Published Properties
+
 ```swift
 @Published var allGoals: [Goal] = []
 @Published var allEvents: [CalendarEvent] = []
 // Multiple @Published properties may cause excessive view updates
 ```
+
 **Fix:** Consider using @Published only for top-level data and computed properties for derivatives
 
 ## 5. Architectural Concerns
 
 ### Violation of Single Responsibility Principle
+
 **Issue:** ViewModel handles multiple concerns (dashboard data, quick stats, full data storage)
 **Fix:** Split into separate ViewModels or use dedicated data managers
 
 ### Tight Coupling with Data Models
+
 ```swift
 @Published var allGoals: [Goal] = []
 @Published var allEvents: [CalendarEvent] = []
 ```
+
 **Issue:** ViewModel directly stores and manages all data models
 **Fix:** Use repository pattern or separate data management layer
 
 ### Missing Dependency Injection
+
 **Issue:** No clear way to inject dependencies for testing
 **Fix:** Add initializer that accepts data providers or services
 
 ## 6. Documentation Needs
 
 ### Missing Purpose Documentation
+
 **Fix:** Add class-level documentation explaining the ViewModel's role:
+
 ```swift
 /// Manages dashboard data including today's events, tasks, goals, and recent activities
 /// Coordinates between data persistence layer and dashboard view
@@ -107,7 +130,9 @@ public class DashboardViewModel: ObservableObject {
 ```
 
 ### Parameter Documentation
+
 **Fix:** Add documentation for struct properties:
+
 ```swift
 public struct DashboardActivity: Identifiable {
     /// Unique identifier for the activity
@@ -121,12 +146,14 @@ public struct DashboardActivity: Identifiable {
 ```
 
 ### Method Documentation Missing
+
 **Issue:** No methods shown, but any methods should be documented
 **Fix:** Add proper documentation for all public methods
 
 ## Specific Actionable Recommendations
 
 1. **Add Explicit Access Control:**
+
 ```swift
 public struct DashboardActivity: Identifiable {
     public let id = UUID()
@@ -139,6 +166,7 @@ public struct DashboardActivity: Identifiable {
 ```
 
 2. **Implement Proper Initialization:**
+
 ```swift
 public init(dataService: DataServiceProtocol = DataService.shared) {
     // Load initial data
@@ -146,6 +174,7 @@ public init(dataService: DataServiceProtocol = DataService.shared) {
 ```
 
 3. **Use Lazy Initialization for UUIDs:**
+
 ```swift
 public struct DashboardActivity: Identifiable {
     public lazy var id = UUID()
@@ -154,6 +183,7 @@ public struct DashboardActivity: Identifiable {
 ```
 
 4. **Add Input Validation:**
+
 ```swift
 private func validateEvents(_ events: [CalendarEvent]) throws {
     // Validation logic
@@ -161,6 +191,7 @@ private func validateEvents(_ events: [CalendarEvent]) throws {
 ```
 
 5. **Consider Using Enum for Icons:**
+
 ```swift
 public enum SystemIcon: String {
     case calendar = "calendar"
@@ -170,6 +201,7 @@ public enum SystemIcon: String {
 ```
 
 6. **Implement Repository Pattern:**
+
 ```swift
 // Move these to separate repository
 @Published var allGoals: [Goal] = []
@@ -177,6 +209,7 @@ public enum SystemIcon: String {
 ```
 
 7. **Add Comprehensive Documentation:**
+
 ```swift
 /// Fetches and updates dashboard data from persistent stores
 /// - Throws: DataLoadingError if fetching fails
@@ -188,6 +221,7 @@ public func refreshDashboardData() async throws {
 The ViewModel shows good use of Combine and ObservableObject patterns but needs better architecture separation, more consistent naming, and proper documentation to be production-ready.
 
 ## fixes_dashboard_items.swift
+
 I'll analyze your Swift code file. However, I notice that you mentioned "fixes_dashboard_items.swift" but didn't provide the actual code content. Let me provide you with a comprehensive code review framework and common issues to look for in Swift dashboard-related code.
 
 ## Code Review Checklist for Swift Dashboard Items
@@ -195,6 +229,7 @@ I'll analyze your Swift code file. However, I notice that you mentioned "fixes_d
 ### 1. Code Quality Issues (Look for these patterns)
 
 **Common Problems:**
+
 ```swift
 // ❌ Poor pattern - force unwrapping without safety
 let item = dashboardItems[index]!
@@ -215,6 +250,7 @@ class DashboardView { /* UI components */ }
 ### 2. Performance Problems
 
 **Memory Management:**
+
 ```swift
 // ❌ Retain cycles in closures
 networkService.fetchData { [weak self] result in
@@ -231,6 +267,7 @@ let activeTitles = dashboardItems.lazy.filter { $0.isActive }.map { $0.title }
 ### 3. Security Vulnerabilities
 
 **Data Protection:**
+
 ```swift
 // ❌ Storing sensitive data in UserDefaults
 UserDefaults.standard.set(apiKey, forKey: "dashboard_api_key")
@@ -254,6 +291,7 @@ func updateItem(with data: [String: Any]) throws {
 ### 4. Swift Best Practices Violations
 
 **Modern Swift Features:**
+
 ```swift
 // ❌ Old-style patterns
 for var i = 0; i < items.count; i++ {
@@ -277,6 +315,7 @@ extension Notification.Name {
 ### 5. Architectural Concerns
 
 **Recommended Structure:**
+
 ```swift
 // ❌ Tight coupling
 class DashboardViewController {
@@ -288,7 +327,7 @@ class DashboardViewController {
 class DashboardViewController {
     let networkService: NetworkServiceProtocol
     let database: DatabaseProtocol
-    
+
     init(networkService: NetworkServiceProtocol, database: DatabaseProtocol) {
         self.networkService = networkService
         self.database = database
@@ -299,6 +338,7 @@ class DashboardViewController {
 ### 6. Documentation Needs
 
 **Good Documentation Practice:**
+
 ```swift
 // ❌ Missing documentation
 func refreshData() {
@@ -318,6 +358,7 @@ func refreshData(force: Bool = false, completion: @escaping (Result<[DashboardIt
 ## Actionable Recommendations
 
 1. **Implement a Safe Array Extension:**
+
 ```swift
 extension Collection {
     subscript(safe index: Index) -> Element? {
@@ -327,11 +368,13 @@ extension Collection {
 ```
 
 2. **Use Result Type for Async Operations:**
+
 ```swift
 func fetchDashboardItems(completion: @escaping (Result<[DashboardItem], NetworkError>) -> Void)
 ```
 
 3. **Add Unit Tests for Critical Functions:**
+
 ```swift
 class DashboardViewModelTests: XCTestCase {
     func testItemFiltering() {
@@ -341,12 +384,13 @@ class DashboardViewModelTests: XCTestCase {
 ```
 
 4. **Implement Proper Error Handling:**
+
 ```swift
 enum DashboardError: Error, LocalizedError {
     case networkError(underlying: Error)
     case parsingError
     case invalidData
-    
+
     var errorDescription: String? {
         switch self {
         case .networkError(let error):
@@ -360,11 +404,13 @@ enum DashboardError: Error, LocalizedError {
 To provide a more specific review, please share the actual code content from your `fixes_dashboard_items.swift` file, and I'll give you detailed, line-by-line feedback tailored to your implementation.
 
 ## PlannerAppUITestsLaunchTests.swift
+
 Here's a comprehensive code review of your Swift UI test file:
 
 ## 1. Code Quality Issues ⚠️
 
 **Missing Error Handling:**
+
 ```swift
 // Current code doesn't handle potential launch failures
 app.launch()
@@ -379,6 +425,7 @@ do {
 ```
 
 **Hardcoded Attachment Name:**
+
 ```swift
 // Consider using a constant for reusable values
 private enum Constants {
@@ -392,6 +439,7 @@ attachment.name = Constants.launchScreenAttachmentName
 ## 2. Performance Problems 🚀
 
 **No Launch Arguments/Environment Setup:**
+
 ```swift
 // Missing performance optimization - disable animations for faster tests
 func testLaunch() throws {
@@ -405,6 +453,7 @@ func testLaunch() throws {
 ## 3. Security Vulnerabilities 🔒
 
 **No Test Data Cleanup:**
+
 ```swift
 // Add cleanup method to ensure test data doesn't persist
 override func tearDownWithError() throws {
@@ -417,6 +466,7 @@ override func tearDownWithError() throws {
 ## 4. Swift Best Practices Violations 📝
 
 **Missing Access Control:**
+
 ```swift
 // Add proper access control
 @MainActor
@@ -424,6 +474,7 @@ private func testLaunch() throws { // Mark as private if appropriate
 ```
 
 **Inconsistent Error Handling:**
+
 ```swift
 // setUpWithError should handle potential errors
 override func setUpWithError() throws {
@@ -435,6 +486,7 @@ override func setUpWithError() throws {
 ## 5. Architectural Concerns 🏗️
 
 **Single Responsibility Violation:**
+
 ```swift
 // The test does both launching and screenshotting - consider separating
 func testLaunchPerformance() throws {
@@ -453,6 +505,7 @@ func testLaunchScreenAppearance() throws {
 ```
 
 **Missing Test Structure:**
+
 ```swift
 // Add proper test lifecycle methods
 override func setUp() {
@@ -469,6 +522,7 @@ override func tearDown() {
 ## 6. Documentation Needs 📚
 
 **Missing Purpose Documentation:**
+
 ```swift
 /// Tests the application launch process and verifies the initial screen appears correctly
 /// - Important: This test captures a screenshot for visual regression testing
@@ -478,6 +532,7 @@ func testLaunch() throws {
 ```
 
 **Add TODO Comments:**
+
 ```swift
 // TODO: Add assertions for specific UI elements after launch
 // TODO: Implement network mocking for launch dependencies
@@ -498,50 +553,50 @@ import XCTest
 
 /// Tests application launch behavior and initial UI state
 final class PlannerAppUITestsLaunchTests: XCTestCase {
-    
+
     // MARK: - Configuration
-    
+
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }
-    
+
     // MARK: - Lifecycle
-    
+
     override func setUpWithError() throws {
         continueAfterFailure = false
         try super.setUpWithError()
     }
-    
+
     override func tearDownWithError() throws {
         XCUIApplication().terminate()
         try super.tearDownWithError()
     }
-    
+
     // MARK: - Tests
-    
+
     /// Tests successful application launch and captures launch screen screenshot
     @MainActor
     func testLaunch() throws {
         let app = XCUIApplication()
         app.launchArguments.append("--UITests")
         app.launchEnvironment["ANIMATIONS_DISABLED"] = "1"
-        
+
         // Insert steps here to perform after app launch but before taking a screenshot,
         // such as logging into a test account or navigating somewhere in the app
-        
+
         // Assert that app launched successfully
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
-        
+
         // Capture screenshot for visual regression testing
         let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = "Launch Screen"
         attachment.lifetime = .keepAlways
         add(attachment)
-        
+
         // TODO: Add specific UI element assertions
         // XCTAssertTrue(app.staticTexts["Welcome"].exists)
     }
-    
+
     /// Performance test for application launch time
     func testLaunchPerformance() throws {
         measure {
@@ -553,6 +608,7 @@ final class PlannerAppUITestsLaunchTests: XCTestCase {
 ```
 
 ## Key Action Items:
+
 1. ✅ Add error handling for app launch
 2. ✅ Implement proper test cleanup in tearDown
 3. ✅ Add performance optimizations (disable animations)
@@ -562,17 +618,19 @@ final class PlannerAppUITestsLaunchTests: XCTestCase {
 7. ✅ Add access control and Swift convention compliance
 
 ## PlannerAppUITests.swift
+
 # Code Review: PlannerAppUITests.swift
 
 ## 1. Code Quality Issues
 
 **Missing Test Functionality:**
+
 ```swift
 // Current testExample() is empty - it launches the app but performs no assertions
 func testExample() throws {
     let app = XCUIApplication()
     app.launch()
-    
+
     // Add actual UI tests here
     // Example: XCTAssertTrue(app.staticTexts["Welcome"].exists)
 }
@@ -581,6 +639,7 @@ func testExample() throws {
 **Recommendation:** Add meaningful UI test scenarios that verify specific application behaviors.
 
 **Redundant setUpWithError/tearDownWithError:**
+
 ```swift
 // These empty overrides can be removed if not needed
 override func setUpWithError() throws {
@@ -597,6 +656,7 @@ override func tearDownWithError() throws {
 ## 2. Performance Problems
 
 **Repeated Application Launch:**
+
 ```swift
 // testLaunchPerformance launches app multiple times for measurement
 // Consider if this is necessary or if a single launch test suffices
@@ -612,6 +672,7 @@ func testLaunchPerformance() throws {
 ## 3. Security Vulnerabilities
 
 **No App Security Testing:**
+
 ```swift
 // Missing tests for security-sensitive UI elements:
 // - Authentication flows
@@ -621,6 +682,7 @@ func testLaunchPerformance() throws {
 ```
 
 **Recommendation:** Add tests for:
+
 - Authentication UI flows
 - Secure text field behaviors
 - Permission request handling
@@ -629,6 +691,7 @@ func testLaunchPerformance() throws {
 ## 4. Swift Best Practices Violations
 
 **Missing Accessibility Identifiers:**
+
 ```swift
 // Tests should use accessibility identifiers rather than static text
 // Current tests don't demonstrate this practice
@@ -640,6 +703,7 @@ func testLaunchPerformance() throws {
 ```
 
 **Inconsistent Actor Usage:**
+
 ```swift
 @MainActor // This is appropriate for UI tests
 func testExample() throws {
@@ -652,6 +716,7 @@ func testExample() throws {
 ## 5. Architectural Concerns
 
 **Lack of Test Structure:**
+
 ```swift
 // Missing Page Object Pattern implementation
 // Consider creating page objects for different screens
@@ -665,12 +730,14 @@ func testExample() throws {
 ```
 
 **No Test Data Management:**
+
 ```swift
 // Missing setup for test data or mock services
 // Consider adding test-specific launch arguments
 ```
 
 **Recommendation:** Implement:
+
 - Page Object pattern for maintainable tests
 - Test data setup methods
 - Environment-specific configurations
@@ -678,6 +745,7 @@ func testExample() throws {
 ## 6. Documentation Needs
 
 **Missing Test Purpose Documentation:**
+
 ```swift
 // Add documentation explaining what each test verifies
 func testExample() throws {
@@ -687,6 +755,7 @@ func testExample() throws {
 ```
 
 **Lack of Setup Documentation:**
+
 ```swift
 override func setUpWithError() throws {
     // Document why continueAfterFailure = false
@@ -697,11 +766,12 @@ override func setUpWithError() throws {
 ## Actionable Recommendations
 
 1. **Add Meaningful Tests:**
+
 ```swift
 func testAppLaunchShowsWelcomeScreen() throws {
     let app = XCUIApplication()
     app.launch()
-    
+
     // Verify initial screen elements
     XCTAssertTrue(app.staticTexts["welcome_title"].exists)
     XCTAssertTrue(app.buttons["get_started_button"].exists)
@@ -709,26 +779,28 @@ func testAppLaunchShowsWelcomeScreen() throws {
 ```
 
 2. **Implement Page Objects:**
+
 ```swift
 class WelcomeScreen {
     private let app: XCUIApplication
-    
+
     init(app: XCUIApplication) {
         self.app = app
     }
-    
+
     var title: XCUIElement { app.staticTexts["welcome_title"] }
     var getStartedButton: XCUIElement { app.buttons["get_started_button"] }
 }
 ```
 
 3. **Add Security Tests:**
+
 ```swift
 func testLoginScreenSecureEntry() throws {
     let app = XCUIApplication()
     app.launchArguments.append("--uitesting")
     app.launch()
-    
+
     let passwordField = app.secureTextFields["password_field"]
     XCTAssertTrue(passwordField.exists)
     XCTAssertTrue(passwordField.isSecureTextEntry)
@@ -736,9 +808,10 @@ func testLoginScreenSecureEntry() throws {
 ```
 
 4. **Improve Documentation:**
+
 ```swift
 /// UI Tests for PlannerApp
-/// 
+///
 /// Tests cover:
 /// - Application launch performance
 /// - Initial screen presentation
@@ -750,12 +823,13 @@ final class PlannerAppUITests: XCTestCase {
 ```
 
 5. **Add Test Helpers:**
+
 ```swift
 extension XCUIApplication {
     func tapButton(withIdentifier identifier: String) {
         buttons[identifier].tap()
     }
-    
+
     func enterText(_ text: String, intoFieldWithIdentifier identifier: String) {
         textFields[identifier].tap()
         textFields[identifier].typeText(text)
@@ -766,35 +840,43 @@ extension XCUIApplication {
 These improvements will make your UI tests more maintainable, comprehensive, and valuable for catching regression issues.
 
 ## PerformanceManager.swift
+
 # PerformanceManager.swift Code Review
 
 ## 1. Code Quality Issues
 
 ### ❌ Incomplete Implementation
+
 ```swift
 private init() {
     self.frameTimes = Array(repeating: 0, count: self.maxFrameHistory)
 }
 ```
+
 The initializer is incomplete - it doesn't initialize all properties. `recordedFrameCount` and other timestamp properties should be initialized.
 
 ### ❌ Missing Access Control
+
 ```swift
 private var machInfoCache = mach_task_basic_info()
 ```
+
 This property should be marked as `private` since it's only used internally.
 
 ### ❌ Unused Properties
+
 ```swift
 private let fpsSampleSize = 10
 private let fpsThreshold: Double = 30
 private let memoryThreshold: Double = 500
 ```
+
 These constants are defined but never used in the visible code. Either implement their usage or remove them.
 
 ## 2. Performance Problems
 
 ### ⚠️ Concurrent Queue Overuse
+
 ```swift
 private let frameQueue = DispatchQueue(
     label: "com.quantumworkspace.performance.frames",
@@ -802,66 +884,83 @@ private let frameQueue = DispatchQueue(
     attributes: .concurrent
 )
 ```
+
 Using concurrent queues for simple read/write operations can cause unnecessary overhead. Consider using serial queues with barrier flags for thread safety.
 
 ### ⚠️ Potential Cache Coherence Issues
+
 The caching mechanism with timestamps (`lastFPSUpdate`, `memoryUsageTimestamp`) may cause frequent cache misses if accessed from multiple threads simultaneously.
 
 ## 3. Security Vulnerabilities
 
 ### ✅ No Apparent Security Issues
+
 No obvious security vulnerabilities found in the current code snippet.
 
 ## 4. Swift Best Practices Violations
 
 ### ❌ Missing Error Handling
+
 No error handling for potential failures in memory measurement operations.
 
 ### ❌ Incomplete Documentation
+
 ```swift
 /// Record a frame time for FPS calculation using a circular buffer
 ```
+
 The comment is incomplete. All public methods should have proper documentation.
 
 ### ❌ Property Initialization Order
+
 Properties should be initialized in declaration order or with proper dependency handling.
 
 ### ❌ Missing Final Class Benefits
+
 While the class is marked `final`, consider making properties `let` where possible for immutability benefits.
 
 ## 5. Architectural Concerns
 
 ### ⚠️ Singleton Pattern Limitations
+
 ```swift
 public static let shared = PerformanceManager()
 ```
+
 Singleton pattern can make testing difficult. Consider dependency injection for better testability.
 
 ### ⚠️ Tight Coupling
+
 The class handles multiple responsibilities (FPS tracking, memory monitoring, caching). Consider separating concerns into different classes.
 
 ### ⚠️ Hard-coded Configuration
+
 ```swift
 private let maxFrameHistory = 120
 private let fpsCacheInterval: CFTimeInterval = 0.1
 ```
+
 Configuration values are hard-coded. Consider making them configurable or using a configuration struct.
 
 ## 6. Documentation Needs
 
 ### ❌ Incomplete API Documentation
+
 Missing documentation for:
+
 - Public methods and properties
 - Thread safety guarantees
 - Performance characteristics
 - Usage examples
 
 ### ❌ Missing Parameter Documentation
+
 Any public methods should document their parameters and return values.
 
 ## Actionable Recommendations
 
 ### 1. Complete the Implementation
+
 ```swift
 private init() {
     self.frameTimes = Array(repeating: 0, count: maxFrameHistory)
@@ -873,6 +972,7 @@ private init() {
 ```
 
 ### 2. Improve Thread Safety Approach
+
 ```swift
 // Instead of concurrent queues, use:
 private let frameQueue = DispatchQueue(label: "com.quantumworkspace.performance.frames", qos: .userInteractive)
@@ -887,6 +987,7 @@ private func updateFrameTimes(_ newValue: [CFTimeInterval]) {
 ```
 
 ### 3. Add Proper Documentation
+
 ```swift
 /// Monitors application performance metrics including FPS and memory usage
 /// - Thread Safety: All methods are thread-safe using serial queues
@@ -894,7 +995,7 @@ private func updateFrameTimes(_ newValue: [CFTimeInterval]) {
 public final class PerformanceManager {
     /// Shared singleton instance for global performance monitoring
     public static let shared = PerformanceManager()
-    
+
     /// Records a frame duration for FPS calculation
     /// - Parameter frameTime: The duration of the frame in seconds
     /// - Note: Uses circular buffer storage for efficient history tracking
@@ -905,13 +1006,14 @@ public final class PerformanceManager {
 ```
 
 ### 4. Consider Architectural Improvements
+
 ```swift
 // Extract configuration
 public struct PerformanceConfig {
     let maxFrameHistory: Int
     let cacheIntervals: (fps: CFTimeInterval, metrics: CFTimeInterval)
     let thresholds: (fps: Double, memory: Double)
-    
+
     static let `default` = PerformanceConfig(
         maxFrameHistory: 120,
         cacheIntervals: (0.1, 0.5),
@@ -926,6 +1028,7 @@ public init(config: PerformanceConfig = .default) {
 ```
 
 ### 5. Add Testing Support
+
 ```swift
 #if DEBUG
 public var isTesting = false
@@ -935,6 +1038,7 @@ public var isTesting = false
 ```
 
 ### 6. Implement Proper Error Handling
+
 ```swift
 private func measureMemoryUsage() throws -> Double {
     // Add error handling for mach_task_basic_info calls
@@ -942,18 +1046,22 @@ private func measureMemoryUsage() throws -> Double {
 ```
 
 ## Summary
+
 The code shows good intentions with thread safety and performance considerations, but it's incomplete and lacks proper Swift conventions. Focus on completing the implementation, improving documentation, and considering architectural changes for better testability and maintainability.
 
 ## CloudKitManager_Simplified.swift
+
 # Code Review: CloudKitManager_Simplified.swift
 
 ## 1. Code Quality Issues
 
 ### **Critical Issues:**
+
 - **Incomplete Function**: The `checkAccountStatus()` function is incomplete and cuts off abruptly after the `DispatchQueue.main.async` call, leaving it non-functional.
 - **Missing Error Handling**: The account status methods ignore the `error` parameter, which could provide valuable debugging information.
 
 ### **Minor Issues:**
+
 - **Inconsistent Naming**: `checkiCloudStatus()` uses lowercase "i" while `checkAccountStatus()` uses uppercase "A" - follow Swift naming conventions consistently.
 - **Weak Self Capture**: The `[weak self]` capture is used but not consistently throughout the class.
 
@@ -970,13 +1078,14 @@ The code shows good intentions with thread safety and performance considerations
 ## 4. Swift Best Practices Violations
 
 ### **Concurrency Issues:**
+
 ```swift
 // Violation: Mixing async/await with completion handlers inconsistently
 func checkAccountStatus() async {
     await MainActor.run {
         self.syncStatus = .syncing(.inProgress(0))
     }
-    
+
     // This should use async/await pattern consistently
     self.container.accountStatus { [weak self] status, _ in
         // ...
@@ -985,10 +1094,12 @@ func checkAccountStatus() async {
 ```
 
 ### **Naming Conventions:**
+
 - `checkiCloudStatus()` should be `checkICloudStatus()` for proper camelCase
 - Missing access control modifiers (many properties/functions should be `private`)
 
 ### **Memory Management:**
+
 - Inconsistent use of `[weak self]` in closures
 
 ## 5. Architectural Concerns
@@ -1007,12 +1118,13 @@ func checkAccountStatus() async {
 ## **Actionable Recommendations**
 
 ### **1. Fix Incomplete Function:**
+
 ```swift
 func checkAccountStatus() async throws {
     await MainActor.run {
         self.syncStatus = .syncing(.inProgress(0))
     }
-    
+
     return try await withCheckedThrowingContinuation { continuation in
         self.container.accountStatus { status, error in
             DispatchQueue.main.async {
@@ -1020,7 +1132,7 @@ func checkAccountStatus() async throws {
                     continuation.resume(throwing: error)
                     return
                 }
-                
+
                 switch status {
                 case .available:
                     self.isSignedInToiCloud = true
@@ -1035,6 +1147,7 @@ func checkAccountStatus() async throws {
 ```
 
 ### **2. Improve Error Handling:**
+
 ```swift
 func checkICloudStatus() {
     self.container.accountStatus { [weak self] status, error in
@@ -1045,7 +1158,7 @@ func checkICloudStatus() {
                 self?.isSignedInToiCloud = false
                 return
             }
-            
+
             switch status {
             case .available:
                 self?.isSignedInToiCloud = true
@@ -1058,6 +1171,7 @@ func checkICloudStatus() {
 ```
 
 ### **3. Add Proper Access Control:**
+
 ```swift
 private let container = CKContainer.default()
 private let database: CKDatabase
@@ -1067,6 +1181,7 @@ private func checkICloudStatus() { ... }
 ```
 
 ### **4. Add Documentation:**
+
 ```swift
 /// Checks and updates the iCloud account status
 /// - Throws: CloudKitError if account status cannot be determined
@@ -1076,11 +1191,13 @@ func checkAccountStatus() async throws {
 ```
 
 ### **5. Consider Architectural Improvements:**
+
 - Create a protocol for CloudKit operations to enable testing
 - Separate authentication and sync operations into different classes
 - Add proper error types and propagation
 
 ### **6. Add Comprehensive Testing:**
+
 Create unit tests that mock `CKContainer` to test various account status scenarios and error conditions.
 
 ## **Final Assessment**
@@ -1088,6 +1205,7 @@ Create unit tests that mock `CKContainer` to test various account status scenari
 This code shows a basic CloudKit integration setup but requires significant improvements in error handling, completeness, documentation, and architectural design. The most critical issue is the incomplete `checkAccountStatus()` function that must be fixed immediately.
 
 **Priority Fixes:**
+
 1. Complete the `checkAccountStatus()` function
 2. Add proper error handling throughout
 3. Implement consistent async/await patterns
@@ -1096,11 +1214,13 @@ This code shows a basic CloudKit integration setup but requires significant impr
 Would you like me to provide a complete refactored version of this class?
 
 ## CloudKitOnboardingView.swift
+
 # Code Review: CloudKitOnboardingView.swift
 
 ## 1. Code Quality Issues
 
 **⚠️ Incomplete Code Structure**
+
 ```swift
 // The file appears to be truncated - missing the rest of the benefitRow function
 // and the closing parts of the view structure
@@ -1111,9 +1231,11 @@ self.benefitRow(
 **Action:** Complete the implementation by adding the missing parts of the view structure.
 
 **⚠️ Force Unwrapping Issue**
+
 ```swift
 @StateObject private var cloudKit = EnhancedCloudKitManager.shared
 ```
+
 If `EnhancedCloudKitManager.shared` could potentially be nil, this could cause a crash.
 
 **Action:** Use optional binding or ensure the shared instance is properly initialized.
@@ -1125,9 +1247,11 @@ If `EnhancedCloudKitManager.shared` could potentially be nil, this could cause a
 ## 3. Security Vulnerabilities
 
 **⚠️ CloudKit Permission Handling**
+
 ```swift
 @State private var isRequestingPermission = false
 ```
+
 Ensure proper error handling and user communication when requesting CloudKit permissions.
 
 **Action:** Implement comprehensive error handling for CloudKit permission requests and failures.
@@ -1135,20 +1259,25 @@ Ensure proper error handling and user communication when requesting CloudKit per
 ## 4. Swift Best Practices Violations
 
 **⚠️ Access Control Inconsistency**
+
 ```swift
 public struct CloudKitOnboardingView: View {
 ```
+
 The `public` modifier suggests this is part of a framework, but other elements don't follow this pattern.
 
 **Action:** Either make all relevant types public or remove the public modifier if not needed.
 
 **⚠️ Magic Strings**
+
 ```swift
-@AppStorage("hasCompletedCloudKitOnboarding") 
+@AppStorage("hasCompletedCloudKitOnboarding")
 ```
+
 Using string literals for keys is error-prone.
 
 **Action:** Create a constants enum:
+
 ```swift
 enum AppStorageKeys {
     static let hasCompletedCloudKitOnboarding = "hasCompletedCloudKitOnboarding"
@@ -1158,12 +1287,15 @@ enum AppStorageKeys {
 ## 5. Architectural Concerns
 
 **⚠️ Tight Coupling**
+
 ```swift
 @StateObject private var cloudKit = EnhancedCloudKitManager.shared
 ```
+
 Direct dependency on a singleton makes testing difficult.
 
 **Action:** Use dependency injection:
+
 ```swift
 @StateObject private var cloudKit: EnhancedCloudKitManager
 
@@ -1183,6 +1315,7 @@ No visible error handling pattern for CloudKit operations.
 No comments explaining the purpose, parameters, or usage of the view.
 
 **Action:** Add documentation:
+
 ```swift
 /// A view that guides users through CloudKit setup and permission granting
 /// - Provides educational content about iCloud benefits
@@ -1198,13 +1331,14 @@ Complex logic sections should have explanatory comments.
 ## Additional Recommendations
 
 **1. Extract View Components**
+
 ```swift
 // Instead of benefitRow method, create a dedicated view
 struct BenefitRow: View {
     let icon: String
     let title: String
     let description: String
-    
+
     var body: some View {
         // implementation
     }
@@ -1216,6 +1350,7 @@ Wrap all user-facing strings in `LocalizedStringKey` or use a localization syste
 
 **3. Preview Provider**
 Add a preview provider for development:
+
 ```swift
 #Preview {
     CloudKitOnboardingView()
@@ -1224,6 +1359,7 @@ Add a preview provider for development:
 
 **4. Accessibility**
 Add accessibility modifiers:
+
 ```swift
 Image(systemName: "icloud")
     .font(.system(size: 80))
@@ -1242,13 +1378,13 @@ public struct CloudKitOnboardingView: View {
     @State private var showingMergeOptions = false
     @State private var error: Error?
 
-    @AppStorage(AppStorageKeys.hasCompletedCloudKitOnboarding) 
+    @AppStorage(AppStorageKeys.hasCompletedCloudKitOnboarding)
     private var hasCompletedOnboarding = false
 
     public init(cloudKitManager: EnhancedCloudKitManager = .shared) {
         _cloudKitManager = StateObject(wrappedValue: cloudKitManager)
     }
-    
+
     public var body: some View {
         NavigationStack {
             // ... rest of implementation with proper error handling
@@ -1260,17 +1396,20 @@ public struct CloudKitOnboardingView: View {
 The code shows good potential but needs completion, better architecture for testability, and more robust error handling.
 
 ## CloudKitSyncView.swift
+
 I'll perform a comprehensive code review of your CloudKitSyncView.swift file. Since you haven't provided the actual code, I'll outline the key areas to examine and provide actionable feedback based on common patterns in CloudKit/SwiftUI implementations.
 
 ## 1. Code Quality Issues (Common in CloudKit Views)
 
 **Potential Issues to Check:**
+
 - ✅ **State Management**: Ensure proper use of `@State`, `@StateObject`, or `@ObservedObject`
 - ✅ **Error Handling**: Look for proper error handling in CloudKit operations
 - ✅ **Optional Unwrapping**: Check for forced unwrapping (`!`) without proper safety
 - ✅ **Memory Leaks**: Verify no strong reference cycles in async closures
 
 **Actionable Fixes:**
+
 ```swift
 // Instead of:
 @State private var records: [CKRecord] = []
@@ -1279,20 +1418,22 @@ I'll perform a comprehensive code review of your CloudKitSyncView.swift file. Si
 @State private var records: [CKRecord]? = nil // Optional for loading states
 
 // Instead of forced unwrapping:
-guard let container = CKContainer(identifier: "iCloud.com.yourapp") else { 
+guard let container = CKContainer(identifier: "iCloud.com.yourapp") else {
     // Handle error
-    return 
+    return
 }
 ```
 
 ## 2. Performance Problems
 
 **Common Performance Pitfalls:**
+
 - ❌ **Blocking Main Thread**: CloudKit operations on main thread
 - ❌ **Excessive Fetching**: Loading all records instead of pagination
 - ❌ **Inefficient Queries**: Not using proper predicates or sort descriptors
 
 **Optimization Suggestions:**
+
 ```swift
 // Use async/await instead of completion handlers
 func fetchRecords() async {
@@ -1319,11 +1460,13 @@ func fetchRecords() async {
 ## 3. Security Vulnerabilities
 
 **Security Concerns:**
+
 - 🔒 **Data Validation**: Ensure all CloudKit data is validated before use
 - 🔒 **User Permissions**: Proper handling of CloudKit availability checks
 - 🔒 **Error Exposure**: Don't expose sensitive error details to users
 
 **Security Enhancements:**
+
 ```swift
 // Always check CloudKit availability
 CKContainer.default().accountStatus { status, error in
@@ -1346,11 +1489,13 @@ func sanitizeInput(_ input: String) -> String {
 ## 4. Swift Best Practices Violations
 
 **Best Practices to Implement:**
+
 - ✅ **Use ViewModel**: Separate business logic from view
 - ✅ **Protocol Conformance**: Adopt `ObservableObject` properly
 - ✅ **Error Enum**: Use custom error types instead of strings
 
 **Improved Structure:**
+
 ```swift
 // Create a proper ViewModel
 @MainActor
@@ -1358,12 +1503,12 @@ class CloudKitSyncViewModel: ObservableObject {
     @Published var records: [CKRecord] = []
     @Published var isLoading = false
     @Published var error: SyncError?
-    
+
     enum SyncError: LocalizedError {
         case noAccount, networkError, permissionDenied
         // Implement error descriptions
     }
-    
+
     func loadRecords() async {
         // Implementation
     }
@@ -1379,11 +1524,13 @@ struct CloudKitSyncView: View {
 ## 5. Architectural Concerns
 
 **Architectural Improvements:**
+
 - 🏗️ **Dependency Injection**: Don't hardcode CloudKit containers
 - 🏗️ **Protocol Abstraction**: Abstract CloudKit operations for testability
 - 🏗️ **Separation of Concerns**: Keep view, business logic, and data access separate
 
 **Better Architecture:**
+
 ```swift
 // Protocol for testability
 protocol CloudKitServiceProtocol {
@@ -1394,11 +1541,11 @@ protocol CloudKitServiceProtocol {
 // Concrete implementation
 class CloudKitService: CloudKitServiceProtocol {
     private let database: CKDatabase
-    
+
     init(database: CKDatabase = CKContainer.default().privateCloudDatabase) {
         self.database = database
     }
-    
+
     func fetchRecords() async throws -> [CKRecord] {
         // Implementation
     }
@@ -1408,22 +1555,24 @@ class CloudKitService: CloudKitServiceProtocol {
 ## 6. Documentation Needs
 
 **Required Documentation:**
+
 - 📝 **Public API Documentation**: Document all public methods and properties
 - 📝 **Error Cases**: Document possible errors and recovery strategies
 - 📝 **Usage Examples**: Provide examples for complex functionality
 
 **Documentation Example:**
+
 ```swift
 /// A view that displays and manages CloudKit synchronization
 ///
 /// - Important: Requires iCloud entitlement and CloudKit capability
 /// - Warning: Network operations may fail silently without proper error handling
 struct CloudKitSyncView: View {
-    
+
     /// CloudKit service instance for data operations
     /// - Note: Injected for testability, uses default container in production
     private let cloudKitService: CloudKitServiceProtocol
-    
+
     /// Initializes the view with optional CloudKit service
     /// - Parameter cloudKitService: Service for CloudKit operations, defaults to production service
     init(cloudKitService: CloudKitServiceProtocol = CloudKitService()) {
@@ -1452,11 +1601,13 @@ struct CloudKitSyncView: View {
 Would you like me to provide more specific feedback if you share the actual code content? I can then analyze your exact implementation and provide tailored recommendations.
 
 ## EnhancedCloudKitManager.swift
+
 # Code Review for EnhancedCloudKitManager.swift
 
 ## 1. Code Quality Issues
 
 ### Incomplete Enum Definition
+
 ```swift
 enum SyncStatus: Equatable {
     case idle
@@ -1474,17 +1625,22 @@ enum SyncStatus: Equatable {
     }
 }
 ```
+
 **Fix:** Complete the equality implementation or remove the custom `==` function since Swift can auto-synthesize it for enums without associated values.
 
 ### Unused Imports
+
 ```swift
 import Network // For NWPathMonitor
 import SwiftUI
 ```
+
 **Fix:** Remove unused imports. `Network` is commented but not used, and `SwiftUI` import might not be needed in a manager class.
 
 ### Incomplete Class Definition
+
 The class appears to be cut off mid-implementation. Missing:
+
 - Initializer
 - Property initialization
 - Method implementations
@@ -1493,20 +1649,24 @@ The class appears to be cut off mid-implementation. Missing:
 ## 2. Performance Problems
 
 ### MainActor Usage
+
 ```swift
 @MainActor
 public class EnhancedCloudKitManager: ObservableObject {
 ```
+
 **Concern:** While appropriate for UI updates, this could cause performance bottlenecks if heavy CloudKit operations are performed on the main thread.
 
 **Fix:** Use `@MainActor` only for properties that need UI updates, and perform actual CloudKit operations on background queues.
 
 ### Potential Background Task Issues
+
 ```swift
 #if os(iOS)
 private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 #endif
 ```
+
 **Concern:** No implementation shown for proper background task management.
 
 **Fix:** Ensure proper begin/end background task calls with error handling.
@@ -1514,11 +1674,13 @@ private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 ## 3. Security Vulnerabilities
 
 ### No Error Handling Visibility
+
 ```swift
 @Published var errorMessage: String?
 @Published var currentError: CloudKitError?
 @Published var showErrorAlert = false
 ```
+
 **Concern:** No visible mechanism for secure error logging or handling sensitive CloudKit errors.
 
 **Fix:** Implement proper error sanitization to avoid exposing sensitive information in error messages.
@@ -1526,26 +1688,32 @@ private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 ## 4. Swift Best Practices Violations
 
 ### Typealias Naming
+
 ```swift
 typealias AsyncTask = _Concurrency.Task
 // typealias PlannerTask = Task
 ```
+
 **Issue:** Using underscore imports (`_Concurrency`) is not recommended. The commented line suggests naming conflicts.
 
 **Fix:** Use proper import statements and consider namespacing your models instead of typealiasing system types.
 
 ### Property Visibility
+
 ```swift
 let database: CKDatabase // Changed to internal so extensions can access
 ```
+
 **Issue:** Internal exposure might be too broad for a singleton pattern.
 
 **Fix:** Consider keeping it private and providing controlled access through methods, or use a more specific access level.
 
 ### Combine Subscription Management
+
 ```swift
 private var subscriptions = Set<AnyCancellable>()
 ```
+
 **Issue:** No visible cleanup mechanism for subscriptions.
 
 **Fix:** Implement proper cancellation in deinit or provide a method to cancel all subscriptions.
@@ -1553,15 +1721,19 @@ private var subscriptions = Set<AnyCancellable>()
 ## 5. Architectural Concerns
 
 ### Singleton Pattern
+
 ```swift
 static let shared = EnhancedCloudKitManager()
 ```
+
 **Concern:** Singleton can make testing difficult and create tight coupling.
 
 **Fix:** Consider dependency injection instead of singleton, or at least make the class `open` for testing with a configurable container.
 
 ### Mixing Responsibilities
+
 The class appears to handle:
+
 - CloudKit operations
 - Network monitoring (commented)
 - Error handling
@@ -1569,15 +1741,18 @@ The class appears to handle:
 - Conflict resolution
 
 **Fix:** Consider separating into:
+
 - `CloudKitService` (pure CloudKit operations)
 - `SyncCoordinator` (orchestrates sync operations)
 - `NetworkMonitor` (separate class)
 - `ErrorHandler` (separate service)
 
 ### Missing Dependency Injection
+
 ```swift
 private let container: CKContainer
 ```
+
 **Concern:** Hard dependency on CloudKit container makes testing difficult.
 
 **Fix:** Allow injecting a mock container for testing purposes.
@@ -1585,7 +1760,9 @@ private let container: CKContainer
 ## 6. Documentation Needs
 
 ### Missing Documentation
-**Add:** 
+
+**Add:**
+
 - Class purpose and responsibilities
 - Method documentation for public APIs
 - Error handling documentation
@@ -1593,14 +1770,17 @@ private let container: CKContainer
 - Thread safety notes
 
 ### Incomplete Comments
+
 ```swift
 // Enhanced CloudKit integration with better sync, conflict resolution, and status reporting
 ```
+
 **Fix:** Expand to document what "better" means and specific features provided.
 
 ## Specific Actionable Recommendations
 
 1. **Complete the SyncStatus enum:**
+
 ```swift
 static func == (lhs: SyncStatus, rhs: SyncStatus) -> Bool {
     switch (lhs, rhs) {
@@ -1617,6 +1797,7 @@ static func == (lhs: SyncStatus, rhs: SyncStatus) -> Bool {
 ```
 
 2. **Add proper initializer:**
+
 ```swift
 private init(container: CKContainer = .default()) {
     self.container = container
@@ -1626,6 +1807,7 @@ private init(container: CKContainer = .default()) {
 ```
 
 3. **Implement proper background task management:**
+
 ```swift
 #if os(iOS)
 private func beginBackgroundTask() {
@@ -1644,6 +1826,7 @@ private func endBackgroundTask() {
 ```
 
 4. **Add testing support:**
+
 ```swift
 convenience init(forTestingWith container: CKContainer) {
     self.init(container: container)
@@ -1651,6 +1834,7 @@ convenience init(forTestingWith container: CKContainer) {
 ```
 
 5. **Implement proper error handling:**
+
 ```swift
 private func handleError(_ error: Error) {
     let cloudKitError = CloudKitError(from: error)
@@ -1664,40 +1848,49 @@ private func handleError(_ error: Error) {
 The code appears to be a good start but is incomplete and needs architectural refinement for production use.
 
 ## CloudKitManager.swift
+
 # CloudKitManager.swift - Code Review
 
 ## 1. Code Quality Issues
 
 ### ❌ **Missing Error Handling**
+
 ```swift
 container.accountStatus { [weak self] status, _ in
     // Error parameter is ignored
 }
 ```
+
 **Fix:** Handle the error parameter to provide meaningful feedback to users.
 
 ### ❌ **Incomplete Implementation**
+
 The class is marked as `@MainActor` but doesn't properly handle async operations. The `checkiCloudStatus` method uses `DispatchQueue.main.async` instead of proper MainActor coordination.
 
 **Fix:** Use `Task { @MainActor in }` or make the method async and properly handle actor isolation.
 
 ### ❌ **Weak Self Pattern Misuse**
+
 ```swift
 [weak self] status, _ in
 ```
+
 The weak self capture is unnecessary since CloudKit callbacks don't create retain cycles in this context.
 
 ## 2. Performance Problems
 
 ### ⚠️ **Synchronous Initialization**
+
 ```swift
 private init() {
     self.checkiCloudStatus() // Blocks initialization
 }
 ```
+
 **Fix:** Make initialization async or defer status checking until needed.
 
 ### ⚠️ **No Caching Mechanism**
+
 Repeated CloudKit status checks could be expensive. No caching of the account status.
 
 **Fix:** Implement a reasonable caching strategy with expiration.
@@ -1705,6 +1898,7 @@ Repeated CloudKit status checks could be expensive. No caching of the account st
 ## 3. Security Vulnerabilities
 
 ### 🔒 **No Error Logging/Sanitization**
+
 While no critical security issues, error messages should be sanitized before presentation to avoid leaking system information.
 
 **Fix:** Create a safe error presentation layer.
@@ -1712,20 +1906,24 @@ While no critical security issues, error messages should be sanitized before pre
 ## 4. Swift Best Practices Violations
 
 ### 🚫 **Incorrect Actor Usage**
+
 ```swift
 @MainActor
 public class CloudKitManager: ObservableObject {
     // But uses DispatchQueue.main.async inside
 }
 ```
+
 **Fix:** Remove `DispatchQueue.main.async` and rely on MainActor, or remove `@MainActor` and use proper queue dispatching.
 
 ### 🚫 **Public Class with Internal Logic**
+
 The class is `public` but appears to be designed for internal app use only.
 
 **Fix:** Make it `internal` unless specifically designed for framework use.
 
 ### 🚫 **Force Unwrapping Pattern**
+
 The `lazy var database` could potentially fail if CloudKit is unavailable.
 
 **Fix:** Use optional handling or proper error propagation.
@@ -1733,19 +1931,23 @@ The `lazy var database` could potentially fail if CloudKit is unavailable.
 ## 5. Architectural Concerns
 
 ### 🏗️ **Singleton Overuse**
+
 ```swift
 static let shared = CloudKitManager()
 ```
+
 Singleton pattern may not be appropriate for all CloudKit operations, especially if multiple databases are needed.
 
 **Fix:** Consider dependency injection instead of singleton pattern.
 
 ### 🏗️ **Tight Coupling**
+
 The manager handles both status checking and database operations, violating single responsibility principle.
 
 **Fix:** Split into `CloudKitStatusManager` and `CloudKitDatabaseManager`.
 
 ### 🏗️ **No Protocol Abstraction**
+
 Hard dependency on CloudKit makes testing difficult.
 
 **Fix:** Create protocols for database operations to enable mocking.
@@ -1753,7 +1955,9 @@ Hard dependency on CloudKit makes testing difficult.
 ## 6. Documentation Needs
 
 ### 📝 **Missing Documentation**
+
 No documentation for:
+
 - Method purposes and parameters
 - SyncStatus cases meaning
 - Error handling strategies
@@ -1764,6 +1968,7 @@ No documentation for:
 ## **Actionable Recommendations**
 
 ### 1. Refactor Error Handling
+
 ```swift
 func checkiCloudStatus() async {
     do {
@@ -1780,6 +1985,7 @@ func checkiCloudStatus() async {
 ```
 
 ### 2. Fix Actor Isolation
+
 ```swift
 @MainActor
 public class CloudKitManager: ObservableObject {
@@ -1789,6 +1995,7 @@ public class CloudKitManager: ObservableObject {
 ```
 
 ### 3. Improve Architecture
+
 ```swift
 protocol CloudKitDatabaseProtocol {
     func fetchRecords() async throws -> [CKRecord]
@@ -1801,6 +2008,7 @@ class CloudKitManager: CloudKitDatabaseProtocol {
 ```
 
 ### 4. Add Comprehensive Documentation
+
 ```swift
 /// Manages CloudKit operations and iCloud status
 /// - Warning: All methods must be called from main thread
@@ -1818,11 +2026,13 @@ public class CloudKitManager: ObservableObject {
 ```
 
 ### 5. Implement Proper Testing Structure
+
 Create mock implementations for testing without CloudKit dependency.
 
 ## **Final Assessment**
 
 This implementation shows basic CloudKit integration but lacks:
+
 - Proper error handling
 - Thread safety guarantees
 - Testability

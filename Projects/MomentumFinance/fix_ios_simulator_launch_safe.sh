@@ -12,8 +12,8 @@ killall SimulatorTrampoline 2>/dev/null || true
 # 2. Reset the specific simulator
 echo "2. Resetting iPhone 16 Pro Max simulator..."
 DEVICE_ID="15AB3298-270F-449B-B0BA-DCB97024C8C6"
-xcrun simctl shutdown "$DEVICE_ID" 2>/dev/null || true
-xcrun simctl erase "$DEVICE_ID"
+xcrun simctl shutdown "${DEVICE_ID}" 2>/dev/null || true
+xcrun simctl erase "${DEVICE_ID}"
 
 # 3. Clean build artifacts (but not DerivedData to preserve build)
 echo "3. Cleaning simulator caches..."
@@ -27,7 +27,7 @@ echo "Consider trying iPhone 15 Pro or iPhone 14 Pro instead"
 
 # 5. Boot the simulator
 echo "5. Booting simulator..."
-xcrun simctl boot "$DEVICE_ID" 2>/dev/null || true
+xcrun simctl boot "${DEVICE_ID}" 2>/dev/null || true
 sleep 3
 
 # 6. Open Simulator app

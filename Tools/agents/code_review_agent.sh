@@ -182,7 +182,7 @@ Format your response with clear sections and actionable recommendations."
   local review_result
   review_result=$(curl -s -X POST "${OLLAMA_ENDPOINT}/api/generate" \
     -H "Content-Type: application/json" \
-    -d "{\"model\": \"codellama:latest\", \"prompt\": \"$review_prompt\", \"stream\": false}" | jq -r '.response' 2>/dev/null)
+    -d "{\"model\": \"codellama:latest\", \"prompt\": \"${review_prompt}\", \"stream\": false}" | jq -r '.response' 2>/dev/null)
 
   if [[ $? -eq 0 && -n ${review_result} ]]; then
     # Save review results
@@ -241,7 +241,7 @@ Format as actionable code changes that can be directly applied."
   local fix_result
   fix_result=$(curl -s -X POST "${OLLAMA_ENDPOINT}/api/generate" \
     -H "Content-Type: application/json" \
-    -d "{\"model\": \"codellama:latest\", \"prompt\": \"$fix_prompt\", \"stream\": false}" | jq -r '.response' 2>/dev/null)
+    -d "{\"model\": \"codellama:latest\", \"prompt\": \"${fix_prompt}\", \"stream\": false}" | jq -r '.response' 2>/dev/null)
 
   if [[ $? -eq 0 && -n ${fix_result} ]]; then
     local timestamp
@@ -318,7 +318,7 @@ Provide a comprehensive quality assessment including:
   local quality_result
   quality_result=$(curl -s -X POST "${OLLAMA_ENDPOINT}/api/generate" \
     -H "Content-Type: application/json" \
-    -d "{\"model\": \"codellama:latest\", \"prompt\": \"$quality_prompt\", \"stream\": false}" | jq -r '.response' 2>/dev/null)
+    -d "{\"model\": \"codellama:latest\", \"prompt\": \"${quality_prompt}\", \"stream\": false}" | jq -r '.response' 2>/dev/null)
 
   if [[ $? -eq 0 && -n ${quality_result} ]]; then
     local timestamp

@@ -22,36 +22,36 @@ public struct ProgressUpdateSheet: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
-                    self.goalInfoHeader
-                    self.currentProgressSection
-                    self.progressSliderSection
-                    self.quickProgressButtonsSection
+                    goalInfoHeader
+                    currentProgressSection
+                    progressSliderSection
+                    quickProgressButtonsSection
 
                     Spacer()
 
-                    self.actionButtonsSection
+                    actionButtonsSection
                 }
                 .padding(.vertical)
             }
-            .background(self.themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
+            .background(themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
             .navigationTitle("Update Goal")
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        self.cancelButton
+                        cancelButton
                     }
                 }
-                .alert("Complete Goal?", isPresented: self.$showCompletionAlert) {
+                .alert("Complete Goal?", isPresented: $showCompletionAlert) {
                     Button("Just Update Progress", role: .cancel) {
-                        self.onProgressUpdate(self.progress)
-                        self.dismiss()
+                        onProgressUpdate(progress)
+                        dismiss()
                     }
                     Button("Complete Goal") {
-                        self.onProgressUpdate(1.0)
-                        self.onCompletionToggle()
-                        self.dismiss()
+                        onProgressUpdate(1.0)
+                        onCompletionToggle()
+                        dismiss()
                     }
                 } message: {
                     Text("You've set the progress to 100%. Would you like to mark this goal as completed?")
@@ -61,30 +61,30 @@ public struct ProgressUpdateSheet: View {
 
     private var goalInfoHeader: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(self.goal.title)
+            Text(goal.title)
                 .font(.title2)
                 .fontWeight(.bold)
-                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                .foregroundColor(themeManager.currentTheme.primaryTextColor)
 
-            Text(self.goal.description)
+            Text(goal.description)
                 .font(.body)
-                .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                 .lineLimit(3)
 
             HStack {
-                Text("Target: \(self.goal.targetDate.formatted(date: .abbreviated, time: .omitted))")
+                Text("Target: \(goal.targetDate.formatted(date: .abbreviated, time: .omitted))")
                 Spacer()
-                Text(self.goal.priority.displayName)
+                Text(goal.priority.displayName)
                     .font(.caption)
                     .fontWeight(.medium)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(self.priorityColor.opacity(0.2))
-                    .foregroundColor(self.priorityColor)
+                    .background(priorityColor.opacity(0.2))
+                    .foregroundColor(priorityColor)
                     .clipShape(Capsule())
             }
             .font(.subheadline)
-            .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+            .foregroundColor(themeManager.currentTheme.secondaryTextColor)
         }
         .padding(.horizontal)
     }
@@ -94,24 +94,24 @@ public struct ProgressUpdateSheet: View {
             HStack {
                 Text("Current Progress")
                     .font(.headline)
-                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
                 Spacer()
-                Text("\(Int(self.progress * 100))%")
+                Text("\(Int(progress * 100))%")
                     .font(.title3)
                     .fontWeight(.bold)
-                    .foregroundColor(self.progressColor)
+                    .foregroundColor(progressColor)
             }
 
             // Progress bar
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(self.themeManager.currentTheme.secondaryBackgroundColor.opacity(0.3))
+                        .fill(themeManager.currentTheme.secondaryBackgroundColor.opacity(0.3))
                         .frame(height: 12)
 
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(self.progressColor)
-                        .frame(width: geometry.size.width * self.progress, height: 12)
+                        .fill(progressColor)
+                        .frame(width: geometry.size.width * progress, height: 12)
                 }
             }
             .frame(height: 12)
@@ -123,10 +123,10 @@ public struct ProgressUpdateSheet: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Update Progress")
                 .font(.headline)
-                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                .foregroundColor(themeManager.currentTheme.primaryTextColor)
 
-            Slider(value: self.$progress, in: 0 ... 1, step: 0.05)
-                .tint(self.progressColor)
+            Slider(value: $progress, in: 0 ... 1, step: 0.05)
+                .tint(progressColor)
 
             HStack {
                 Text("0%")
@@ -136,7 +136,7 @@ public struct ProgressUpdateSheet: View {
                 Text("100%")
             }
             .font(.caption)
-            .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+            .foregroundColor(themeManager.currentTheme.secondaryTextColor)
         }
         .padding(.horizontal)
     }
@@ -145,12 +145,12 @@ public struct ProgressUpdateSheet: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Quick Updates")
                 .font(.headline)
-                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                .foregroundColor(themeManager.currentTheme.primaryTextColor)
 
             HStack(spacing: 12) {
                 ForEach([0.25, 0.5, 0.75, 1.0], id: \.self) { value in
                     Button {
-                        self.progress = value
+                        progress = value
                     } label: {
                         Text("\(Int(value * 100))%")
                             .font(.subheadline)
@@ -159,20 +159,20 @@ public struct ProgressUpdateSheet: View {
                             .padding(.vertical, 12)
                             .background(
                                 RoundedRectangle(cornerRadius: 8)
-                                    .fill(self.progress >= value ?
-                                        self.themeManager.currentTheme.primaryAccentColor.opacity(0.2) :
-                                        self.themeManager.currentTheme.secondaryBackgroundColor
+                                    .fill(progress >= value ?
+                                        themeManager.currentTheme.primaryAccentColor.opacity(0.2) :
+                                        themeManager.currentTheme.secondaryBackgroundColor
                                     )
                             )
-                            .foregroundColor(self.progress >= value ?
-                                self.themeManager.currentTheme.primaryAccentColor :
-                                self.themeManager.currentTheme.primaryTextColor
+                            .foregroundColor(progress >= value ?
+                                themeManager.currentTheme.primaryAccentColor :
+                                themeManager.currentTheme.primaryTextColor
                             )
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(
-                                        self.progress >= value ?
-                                            self.themeManager.currentTheme.primaryAccentColor.opacity(0.5) :
+                                        progress >= value ?
+                                            themeManager.currentTheme.primaryAccentColor.opacity(0.5) :
                                             Color.clear,
                                         lineWidth: 1
                                     )
@@ -188,11 +188,11 @@ public struct ProgressUpdateSheet: View {
     private var actionButtonsSection: some View {
         VStack(spacing: 12) {
             Button {
-                if self.progress >= 1.0, !self.goal.isCompleted {
-                    self.showCompletionAlert = true
+                if progress >= 1.0, !goal.isCompleted {
+                    showCompletionAlert = true
                 } else {
-                    self.onProgressUpdate(self.progress)
-                    self.dismiss()
+                    onProgressUpdate(progress)
+                    dismiss()
                 }
             } label: {
                 Text("Update Progress")
@@ -202,15 +202,15 @@ public struct ProgressUpdateSheet: View {
                     .padding(.vertical, 16)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(self.themeManager.currentTheme.primaryAccentColor)
+                            .fill(themeManager.currentTheme.primaryAccentColor)
                     )
                     .foregroundColor(.white)
             }
             .buttonStyle(.plain)
 
-            if !self.goal.isCompleted {
+            if !goal.isCompleted {
                 Button {
-                    self.onCompletionToggle()
+                    onCompletionToggle()
                 } label: {
                     Text("Mark as Completed")
                         .font(.headline)
@@ -219,9 +219,9 @@ public struct ProgressUpdateSheet: View {
                         .padding(.vertical, 16)
                         .background(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(self.themeManager.currentTheme.primaryAccentColor, lineWidth: 2)
+                                .stroke(themeManager.currentTheme.primaryAccentColor, lineWidth: 2)
                         )
-                        .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
+                        .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                 }
                 .buttonStyle(.plain)
             }
@@ -231,25 +231,25 @@ public struct ProgressUpdateSheet: View {
 
     private var cancelButton: some View {
         Button("Cancel") {
-            self.dismiss()
+            dismiss()
         }
-        .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
+        .foregroundColor(themeManager.currentTheme.primaryAccentColor)
     }
 
     private var progressColor: Color {
-        if self.progress >= 1.0 {
+        if progress >= 1.0 {
             .green
-        } else if self.progress >= 0.8 {
+        } else if progress >= 0.8 {
             Color.green.opacity(0.8)
-        } else if self.progress >= 0.5 {
+        } else if progress >= 0.5 {
             .yellow
         } else {
-            self.themeManager.currentTheme.primaryAccentColor
+            themeManager.currentTheme.primaryAccentColor
         }
     }
 
     private var priorityColor: Color {
-        switch self.goal.priority {
+        switch goal.priority {
         case .high: .red
         case .medium: .orange
         case .low: .green

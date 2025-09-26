@@ -15,18 +15,18 @@ NC='\033[0m' # No Color
 log_message() {
   local level="$1"
   local message="$2"
-  echo "[$(date)] [$level] $message" >>"$LOG_FILE"
-  echo -e "${BLUE}[$(date)]${NC} [$level] $message"
+  echo "[$(date)] [${level}] ${message}" >>"${LOG_FILE}"
+  echo -e "${BLUE}[$(date)]${NC} [${level}] ${message}"
 }
 
 # Check if dashboard is already running
 is_dashboard_running() {
-  if [[ -f $DASHBOARD_PID_FILE ]]; then
-    local pid=$(cat "$DASHBOARD_PID_FILE")
-    if kill -0 "$pid" 2>/dev/null; then
+  if [[ -f ${DASHBOARD_PID_FILE} ]]; then
+    local pid=$(cat "${DASHBOARD_PID_FILE}")
+    if kill -0 "${pid}" 2>/dev/null; then
       return 0 # Running
     else
-      rm -f "$DASHBOARD_PID_FILE"
+      rm -f "${DASHBOARD_PID_FILE}"
       return 1 # Not running
     fi
   fi
@@ -43,16 +43,16 @@ start_dashboard() {
   log_message "INFO" "Starting Unified Dashboard Agent..."
 
   # Start the dashboard agent in background
-  nohup "$DASHBOARD_AGENT" >>"$LOG_FILE" 2>&1 &
+  nohup "${DASHBOARD_AGENT}" >>"${LOG_FILE}" 2>&1 &
   local agent_pid=$!
 
   # Wait a moment for the agent to start
   sleep 2
 
   # Check if agent is still running
-  if kill -0 "$agent_pid" 2>/dev/null; then
-    echo $agent_pid >"/Users/danielstevens/Desktop/Quantum-workspace/Tools/Automation/agents/dashboard_agent.pid"
-    log_message "INFO" "Dashboard agent started with PID $agent_pid"
+  if kill -0 "${agent_pid}" 2>/dev/null; then
+    echo "${agent_pid}" >"/Users/danielstevens/Desktop/Quantum-workspace/Tools/Automation/agents/dashboard_agent.pid"
+    log_message "INFO" "Dashboard agent started with PID ${agent_pid}"
     echo -e "${GREEN}✅ Dashboard agent started successfully!${NC}"
     echo -e "${BLUE}🌐 Dashboard will be available at: http://localhost:8080${NC}"
     echo -e "${YELLOW}📊 Dashboard updates every 30 seconds${NC}"
@@ -74,24 +74,24 @@ stop_dashboard() {
   log_message "INFO" "Stopping dashboard..."
 
   # Stop the dashboard server
-  if [[ -f $DASHBOARD_PID_FILE ]]; then
-    local server_pid=$(cat "$DASHBOARD_PID_FILE")
-    if kill -0 "$server_pid" 2>/dev/null; then
-      kill "$server_pid"
-      log_message "INFO" "Dashboard server stopped (PID $server_pid)"
+  if [[ -f ${DASHBOARD_PID_FILE} ]]; then
+    local server_pid=$(cat "${DASHBOARD_PID_FILE}")
+    if kill -0 "${server_pid}" 2>/dev/null; then
+      kill "${server_pid}"
+      log_message "INFO" "Dashboard server stopped (PID ${server_pid})"
     fi
-    rm -f "$DASHBOARD_PID_FILE"
+    rm -f "${DASHBOARD_PID_FILE}"
   fi
 
   # Stop the dashboard agent
   local agent_pid_file="/Users/danielstevens/Desktop/Quantum-workspace/Tools/Automation/agents/dashboard_agent.pid"
-  if [[ -f $agent_pid_file ]]; then
-    local agent_pid=$(cat "$agent_pid_file")
-    if kill -0 "$agent_pid" 2>/dev/null; then
-      kill "$agent_pid"
-      log_message "INFO" "Dashboard agent stopped (PID $agent_pid)"
+  if [[ -f ${agent_pid_file} ]]; then
+    local agent_pid=$(cat "${agent_pid_file}")
+    if kill -0 "${agent_pid}" 2>/dev/null; then
+      kill "${agent_pid}"
+      log_message "INFO" "Dashboard agent stopped (PID ${agent_pid})"
     fi
-    rm -f "$agent_pid_file"
+    rm -f "${agent_pid_file}"
   fi
 
   echo -e "${GREEN}✅ Dashboard stopped successfully${NC}"
@@ -108,16 +108,16 @@ restart_dashboard() {
 # Show dashboard status
 show_status() {
   if is_dashboard_running; then
-    local pid=$(cat "$DASHBOARD_PID_FILE")
+    local pid=$(cat "${DASHBOARD_PID_FILE}")
     echo -e "${GREEN}✅ Dashboard is running${NC}"
     echo -e "${BLUE}🌐 Dashboard URL: http://localhost:8080${NC}"
-    echo -e "${BLUE}🔢 Server PID: $pid${NC}"
+    echo -e "${BLUE}🔢 Server PI${: $}pid${NC}"
 
     # Show agent status
     local agent_pid_file="/Users/danielstevens/Desktop/Quantum-workspace/Tools/Automation/agents/dashboard_agent.pid"
-    if [[ -f $agent_pid_file ]]; then
-      local agent_pid=$(cat "$agent_pid_file")
-      echo -e "${BLUE}🤖 Agent PID: $agent_pid${NC}"
+    if [[ -f ${agent_pid_file} ]]; then
+      local agent_pid=$(cat "${agent_pid_file}")
+      echo -e "${BLUE}🤖 Agent PI$$${: $}age}nt_}pid${NC}"
     fi
   else
     echo -e "${RED}❌ Dashboard is not running${NC}"

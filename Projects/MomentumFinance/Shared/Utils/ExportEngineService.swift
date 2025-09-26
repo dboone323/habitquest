@@ -166,50 +166,50 @@ final class ExportEngineService {
     private func generatePDFData(settings: ExportSettings) async throws -> Data {
         // Keep platform-safe PDF generation. For brevity we call through to a basic renderer
         #if os(iOS)
-        // iOS PDF rendering omitted in this simplified engine to avoid UIKit dependency in tests
-        throw ExportError.pdfGenerationFailed
+            // iOS PDF rendering omitted in this simplified engine to avoid UIKit dependency in tests
+            throw ExportError.pdfGenerationFailed
         #else
-        let pdfData = NSMutableData()
-        let pdfInfo = [kCGPDFContextCreator: "Momentum Finance"] as CFDictionary
-        guard let dataConsumer = CGDataConsumer(data: pdfData as CFMutableData),
-              let pdfContext = CGContext(consumer: dataConsumer, mediaBox: nil, pdfInfo)
-        else { throw ExportError.pdfGenerationFailed }
+            let pdfData = NSMutableData()
+            let pdfInfo = [kCGPDFContextCreator: "Momentum Finance"] as CFDictionary
+            guard let dataConsumer = CGDataConsumer(data: pdfData as CFMutableData),
+                  let pdfContext = CGContext(consumer: dataConsumer, mediaBox: nil, pdfInfo)
+            else { throw ExportError.pdfGenerationFailed }
 
-        let pageRect = CGRect(x: 0, y: 0, width: 612, height: 792)
-        pdfContext.beginPDFPage(nil)
+            let pageRect = CGRect(x: 0, y: 0, width: 612, height: 792)
+            pdfContext.beginPDFPage(nil)
 
-        NSGraphicsContext.saveGraphicsState()
-        let nsContext = NSGraphicsContext(cgContext: pdfContext, flipped: false)
-        NSGraphicsContext.current = nsContext
+            NSGraphicsContext.saveGraphicsState()
+            let nsContext = NSGraphicsContext(cgContext: pdfContext, flipped: false)
+            NSGraphicsContext.current = nsContext
 
-        // Title
-        let titleAttributes: [NSAttributedString.Key: Any] = [
-            .font: NSFont.boldSystemFont(ofSize: 24),
-            .foregroundColor: NSColor.black,
-        ]
-        let title = "Momentum Finance Report"
-        title.draw(at: CGPoint(x: 50, y: pageRect.height - 50), withAttributes: titleAttributes)
+            // Title
+            let titleAttributes: [NSAttributedString.Key: Any] = [
+                .font: NSFont.boldSystemFont(ofSize: 24),
+                .foregroundColor: NSColor.black,
+            ]
+            let title = "Momentum Finance Report"
+            title.draw(at: CGPoint(x: 50, y: pageRect.height - 50), withAttributes: titleAttributes)
 
-        let dateFormatter = DateFormatter(); dateFormatter.dateStyle = .long
-        let dateRange = "Period: \(dateFormatter.string(from: settings.startDate)) - \(dateFormatter.string(from: settings.endDate))"
-        let dateAttributes: [NSAttributedString.Key: Any] = [
-            .font: NSFont.systemFont(ofSize: 14),
-            .foregroundColor: NSColor.gray,
-        ]
-        dateRange.draw(at: CGPoint(x: 50, y: pageRect.height - 80), withAttributes: dateAttributes)
+            let dateFormatter = DateFormatter(); dateFormatter.dateStyle = .long
+            let dateRange = "Period: \(dateFormatter.string(from: settings.startDate)) - \(dateFormatter.string(from: settings.endDate))"
+            let dateAttributes: [NSAttributedString.Key: Any] = [
+                .font: NSFont.systemFont(ofSize: 14),
+                .foregroundColor: NSColor.gray,
+            ]
+            dateRange.draw(at: CGPoint(x: 50, y: pageRect.height - 80), withAttributes: dateAttributes)
 
-        var yPosition = pageRect.height - 120
-        if settings.includeTransactions {
-            yPosition = try self.drawTransactionsSummary(context: pdfContext, yPosition: yPosition, settings: settings)
-        }
-        if settings.includeAccounts {
-            yPosition = try self.drawAccountsSummary(context: pdfContext, yPosition: yPosition, settings: settings)
-        }
+            var yPosition = pageRect.height - 120
+            if settings.includeTransactions {
+                yPosition = try self.drawTransactionsSummary(context: pdfContext, yPosition: yPosition, settings: settings)
+            }
+            if settings.includeAccounts {
+                yPosition = try self.drawAccountsSummary(context: pdfContext, yPosition: yPosition, settings: settings)
+            }
 
-        pdfContext.endPDFPage()
-        NSGraphicsContext.restoreGraphicsState()
+            pdfContext.endPDFPage()
+            NSGraphicsContext.restoreGraphicsState()
 
-        return pdfData as Data
+            return pdfData as Data
         #endif
     }
 

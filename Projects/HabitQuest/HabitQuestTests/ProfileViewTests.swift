@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class ProfileViewTests: XCTestCase {
+final class ProfileViewTests: XCTestCase {
     // MARK: - structProfileView:View{ Tests
 
     func testProfileViewInitialization() {

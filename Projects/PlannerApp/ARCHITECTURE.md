@@ -795,19 +795,16 @@ struct AccessibleTaskRow: View {
 ### Roadmap
 
 1. **AI Integration**
-
    - Smart task prioritization based on user behavior
    - Automatic goal progress tracking
    - Predictive deadline suggestions
 
 2. **Advanced Collaboration**
-
    - Shared goals and projects
    - Team task assignments
    - Real-time collaboration features
 
 3. **Analytics and Insights**
-
    - Productivity analytics dashboard
    - Goal achievement patterns
    - Time tracking integration

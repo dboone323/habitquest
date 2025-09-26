@@ -37,7 +37,8 @@ struct DocumentationGenerator {
                    trimmed.hasPrefix("private func ") ||
                    trimmed.hasPrefix("public func ") ||
                    trimmed.hasPrefix("internal func ") ||
-                   trimmed.hasPrefix("static func ") {
+                   trimmed.hasPrefix("static func ")
+                {
                     inFunction = true
                     currentFunction = [trimmed]
                     braceCount = 0

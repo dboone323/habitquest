@@ -45,17 +45,17 @@ public extension Features {
             @Environment(\.dismiss) private var dismiss
 
             #if canImport(SwiftData)
-            private var accounts: [FinancialAccount] = []
-            private var transactions: [FinancialTransaction] = []
-            private var subscriptions: [Subscription] = []
-            private var budgets: [Budget] = []
-            private var goals: [SavingsGoal] = []
+                private var accounts: [FinancialAccount] = []
+                private var transactions: [FinancialTransaction] = []
+                private var subscriptions: [Subscription] = []
+                private var budgets: [Budget] = []
+                private var goals: [SavingsGoal] = []
             #else
-            private var accounts: [FinancialAccount] = []
-            private var transactions: [FinancialTransaction] = []
-            private var subscriptions: [Subscription] = []
-            private var budgets: [Budget] = []
-            private var goals: [SavingsGoal] = []
+                private var accounts: [FinancialAccount] = []
+                private var transactions: [FinancialTransaction] = []
+                private var subscriptions: [Subscription] = []
+                private var budgets: [Budget] = []
+                private var goals: [SavingsGoal] = []
             #endif
 
             @State private var searchText = ""
@@ -177,15 +177,15 @@ public extension Features {
                             }
                         })
                     #else
-                        .toolbar(content: {
-                            ToolbarItem(placement: .automatic) {
-                                Button("Done") {
-                                    NavigationCoordinator.shared.deactivateSearch()
-                                    self.dismiss()
+                            .toolbar(content: {
+                                ToolbarItem(placement: .automatic) {
+                                    Button("Done") {
+                                        NavigationCoordinator.shared.deactivateSearch()
+                                        self.dismiss()
+                                    }
+                                    .accessibilityLabel("Done")
                                 }
-                                .accessibilityLabel("Done")
-                            }
-                        })
+                            })
                     #endif
                 }
                 .onAppear {

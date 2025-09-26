@@ -17,14 +17,14 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
     @Published public var aiSuggestions: [AISuggestion] = []
 
     public init() {
-        self.logger.info("AI-Enhanced Code Analysis Service initialized")
+        logger.info("AI-Enhanced Code Analysis Service initialized")
     }
 
     // MARK: - AI-Powered Code Analysis
 
     public func analyzeCodeWithAI(_ code: String, language: String = "swift", context: String? = nil) async throws -> AICodeAnalysisResult {
-        self.isAnalyzing = true
-        self.currentAnalysisTask = "Analyzing code with AI models..."
+        isAnalyzing = true
+        currentAnalysisTask = "Analyzing code with AI models..."
 
         defer {
             Task { @MainActor in
@@ -86,7 +86,7 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
             ))
         }
 
-        self.logger.info("AI code analysis completed with \(result.recommendations.count) recommendations")
+        logger.info("AI code analysis completed with \(result.recommendations.count) recommendations")
         return result
     }
 
@@ -97,7 +97,7 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
         language: String = "swift",
         style: CodeStyle = .production
     ) async throws -> AICodeGenerationResult {
-        self.currentAnalysisTask = "Generating code with AI..."
+        currentAnalysisTask = "Generating code with AI..."
 
         let codeGenPrompt = """
         Generate high-quality \(language) code for the following requirement:
@@ -145,7 +145,7 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
             ))
         }
 
-        self.logger.info("AI code generation completed for prompt: \(prompt.prefix(50))...")
+        logger.info("AI code generation completed for prompt: \(prompt.prefix(50))...")
         return result
     }
 
@@ -156,7 +156,7 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
         refactoringGoal: RefactoringGoal,
         language: String = "swift"
     ) async throws -> AIRefactoringResult {
-        self.currentAnalysisTask = "Refactoring code with AI..."
+        currentAnalysisTask = "Refactoring code with AI..."
 
         let refactoringPrompt = """
         Refactor this \(language) code to achieve: \(refactoringGoal.description)
@@ -210,7 +210,7 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
             ))
         }
 
-        self.logger.info("AI code refactoring completed for goal: \(refactoringGoal.description)")
+        logger.info("AI code refactoring completed for goal: \(refactoringGoal.description)")
         return result
     }
 
@@ -220,7 +220,7 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
         _ code: String,
         documentationType: DocumentationType = .comprehensive
     ) async throws -> AIDocumentationResult {
-        self.currentAnalysisTask = "Generating documentation with AI..."
+        currentAnalysisTask = "Generating documentation with AI..."
 
         let docPrompt = """
         Generate \(documentationType.description) documentation for this Swift code:
@@ -263,14 +263,14 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
             ))
         }
 
-        self.logger.info("AI documentation generation completed")
+        logger.info("AI documentation generation completed")
         return result
     }
 
     // MARK: - AI-Powered Test Generation
 
     public func generateTestsWithAI(_ code: String, testType: TestType = .unit) async throws -> AITestGenerationResult {
-        self.currentAnalysisTask = "Generating tests with AI..."
+        currentAnalysisTask = "Generating tests with AI..."
 
         let testPrompt = """
         Generate \(testType.description) tests for this Swift code:
@@ -313,19 +313,19 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
             ))
         }
 
-        self.logger.info("AI test generation completed with estimated coverage: \(result.estimatedCoverage)%")
+        logger.info("AI test generation completed with estimated coverage: \(result.estimatedCoverage)%")
         return result
     }
 
     // MARK: - AI-Powered Code Review
 
     public func performAICodeReview(_ files: [String], reviewType: ReviewType = .comprehensive) async throws -> AICodeReviewResult {
-        self.currentAnalysisTask = "Performing AI code review..."
+        currentAnalysisTask = "Performing AI code review..."
 
         var fileAnalyses: [FileReviewAnalysis] = []
 
         for filePath in files.prefix(10) { // Limit to avoid overwhelming the AI
-            if self.fileManager.fileExists(atPath: filePath) {
+            if fileManager.fileExists(atPath: filePath) {
                 do {
                     let content = try String(contentsOfFile: filePath, encoding: .utf8)
                     let fileName = URL(fileURLWithPath: filePath).lastPathComponent
@@ -360,13 +360,13 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
                         fileName: fileName,
                         filePath: filePath,
                         reviewComments: reviewResponse,
-                        qualityRating: self.extractQualityRating(from: reviewResponse),
-                        topImprovements: self.extractTopImprovements(from: reviewResponse),
+                        qualityRating: extractQualityRating(from: reviewResponse),
+                        topImprovements: extractTopImprovements(from: reviewResponse),
                         reviewTimestamp: Date()
                     ))
 
                 } catch {
-                    self.logger.error("Failed to review file \(filePath): \(error.localizedDescription)")
+                    logger.error("Failed to review file \(filePath): \(error.localizedDescription)")
                 }
             }
         }
@@ -413,7 +413,7 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
             ))
         }
 
-        self.logger.info("AI code review completed for \(files.count) files")
+        logger.info("AI code review completed for \(files.count) files")
         return result
     }
 

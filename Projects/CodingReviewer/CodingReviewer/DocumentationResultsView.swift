@@ -19,14 +19,14 @@ public struct DocumentationResultsView: View {
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text(self.presenter.documentation)
+                Text(presenter.documentation)
                     .font(.system(.body, design: .monospaced))
                     .padding()
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(8)
 
                 HStack {
-                    Text(self.presenter.languageLabel)
+                    Text(presenter.languageLabel)
                         .font(.caption)
                         .foregroundColor(.secondary)
 
@@ -51,14 +51,14 @@ struct DocumentationResultsPresenter {
     }
 
     var documentation: String {
-        self.result.documentation
+        result.documentation
     }
 
     var languageLabel: String {
-        "Language: \(self.result.language)"
+        "Language: \(result.language)"
     }
 
     var examplesBadge: String? {
-        self.result.includesExamples ? "Includes examples" : nil
+        result.includesExamples ? "Includes examples" : nil
     }
 }

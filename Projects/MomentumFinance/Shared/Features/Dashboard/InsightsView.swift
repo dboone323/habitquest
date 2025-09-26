@@ -19,21 +19,47 @@ public struct InsightsView: View {
     var body: some View {
         Group {
             #if os(macOS)
-            NavigationStack {
-                VStack(spacing: 0) {
-                    // Filter Bar
-                    InsightsFilterBar(
-                        filterPriority: self.$filterPriority,
-                        filterType: self.$filterType
-                    )
+                NavigationStack {
+                    VStack(spacing: 0) {
+                        // Filter Bar
+                        InsightsFilterBar(
+                            filterPriority: self.$filterPriority,
+                            filterType: self.$filterType
+                        )
 
-                    // Insights Content
-                    self.insightsContent
+                        // Insights Content
+                        self.insightsContent
+                    }
+                    .navigationTitle("Financial Insights")
+                    .toolbar {
+                        ToolbarItem(placement: .navigation) {
+                            Button("Refresh").accessibilityLabel("Button").accessibilityLabel("Button") {
+                                Task {
+                                    await self.intelligenceService.analyzeFinancialData(
+                                        modelContext: self.modelContext
+                                    )
+                                }
+                            }
+                            .disabled(self.intelligenceService.isAnalyzing)
+                        }
+                    }
                 }
-                .navigationTitle("Financial Insights")
-                .toolbar {
-                    ToolbarItem(placement: .navigation) {
-                        Button("Refresh").accessibilityLabel("Button").accessibilityLabel("Button") {
+            #else
+                NavigationView {
+                    VStack(spacing: 0) {
+                        // Filter Bar
+                        InsightsFilterBar(
+                            filterPriority: self.$filterPriority,
+                            filterType: self.$filterType
+                        )
+
+                        // Insights Content
+                        self.insightsContent
+                    }
+                    .navigationTitle("Financial Insights")
+                    .navigationBarItems(
+                        trailing:
+                        Button("Refresh").accessibilityLabel("Button") {
                             Task {
                                 await self.intelligenceService.analyzeFinancialData(
                                     modelContext: self.modelContext
@@ -41,35 +67,9 @@ public struct InsightsView: View {
                             }
                         }
                         .disabled(self.intelligenceService.isAnalyzing)
-                    }
-                }
-            }
-            #else
-            NavigationView {
-                VStack(spacing: 0) {
-                    // Filter Bar
-                    InsightsFilterBar(
-                        filterPriority: self.$filterPriority,
-                        filterType: self.$filterType
+                        .accessibilityLabel("Button")
                     )
-
-                    // Insights Content
-                    self.insightsContent
                 }
-                .navigationTitle("Financial Insights")
-                .navigationBarItems(
-                    trailing:
-                    Button("Refresh").accessibilityLabel("Button") {
-                        Task {
-                            await self.intelligenceService.analyzeFinancialData(
-                                modelContext: self.modelContext
-                            )
-                        }
-                    }
-                    .disabled(self.intelligenceService.isAnalyzing)
-                    .accessibilityLabel("Button")
-                )
-            }
             #endif
         }
         .sheet(item: self.$selectedInsight) { insight in

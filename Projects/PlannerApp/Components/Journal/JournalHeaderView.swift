@@ -15,7 +15,7 @@ public struct JournalHeaderView: View {
             .accessibilityLabel("Button")
 
             Button {
-                self.showAddEntry.toggle()
+                showAddEntry.toggle()
             } label: {
                 Image(systemName: "plus")
             }

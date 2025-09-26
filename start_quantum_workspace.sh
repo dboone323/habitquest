@@ -3,8 +3,8 @@
 # Ensures all agents, MCP, and automation components are running properly
 
 WORKSPACE_DIR="/Users/danielstevens/Desktop/Quantum-workspace"
-TOOLS_DIR="$WORKSPACE_DIR/Tools"
-AUTOMATION_DIR="$TOOLS_DIR/Automation"
+TOOLS_DIR="${WORKSPACE_DIR}/Tools"
+AUTOMATION_DIR="${TOOLS_DIR}/Automation"
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -34,14 +34,14 @@ check_process() {
   local process_name="$1"
   local port="$2"
 
-  if [[ -n "$port" ]]; then
-    if lsof -i :"$port" >/dev/null 2>&1; then
+  if [[ -n "${port}" ]]; then
+    if lsof -i :"${port}" >/dev/null 2>&1; then
       return 0
     else
       return 1
     fi
   else
-    if pgrep -f "$process_name" >/dev/null 2>&1; then
+    if pgrep -f "${process_name}" >/dev/null 2>&1; then
       return 0
     else
       return 1
@@ -58,7 +58,7 @@ start_mcp_server() {
     return 0
   fi
 
-  cd "$AUTOMATION_DIR" || return 1
+  cd "${AUTOMATION_DIR}" || return 1
   nohup python3 mcp_server.py >mcp_server.log 2>&1 &
   sleep 3
 
@@ -80,7 +80,7 @@ start_mcp_dashboard() {
     return 0
   fi
 
-  cd "$AUTOMATION_DIR" || return 1
+  cd "${AUTOMATION_DIR}" || return 1
   nohup python3 mcp_dashboard_flask.py >mcp_dashboard.log 2>&1 &
   sleep 3
 
@@ -102,7 +102,7 @@ start_web_dashboard() {
     return 0
   fi
 
-  cd "$AUTOMATION_DIR" || return 1
+  cd "${AUTOMATION_DIR}" || return 1
   MCP_WEB_PORT=8081 nohup python3 mcp_web_dashboard.py >web_dashboard.log 2>&1 &
   sleep 3
 
@@ -129,7 +129,7 @@ start_agent_supervisor() {
   cd "${AUTOMATION_DIR}/agents" || return 1
   nohup bash agent_supervisor.sh >/dev/null 2>&1 &
   local supervisor_pid=$!
-  echo $supervisor_pid >"${AUTOMATION_DIR}/agents/agent_supervisor.pid"
+  echo "$supervisor_pid" >"${AUTOMATION_DIR}/agents/agent_supervisor.pid"
   cd - >/dev/null || return 1
 
   # Wait a moment for agents to start
@@ -139,11 +139,11 @@ start_agent_supervisor() {
   local agent_count
   agent_count=$(pgrep -f "agent_(build|debug|codegen)" | wc -l)
 
-  if [[ $agent_count -ge 3 ]]; then
-    log_success "Agent Supervisor started successfully ($agent_count agents running)"
+  if [[ ${agent_count} -ge 3 ]]; then
+    log_success "Agent Supervisor started successfully (${agent_count} agents running)"
     return 0
   else
-    log_error "Failed to start Agent Supervisor (only $agent_count agents running)"
+    log_error "Failed to start Agent Supervisor (only ${agent_count} agents running)"
     return 1
   fi
 }
@@ -154,7 +154,7 @@ test_mcp_connectivity() {
 
   local response
   response=$(curl -s http://127.0.0.1:5005/status 2>/dev/null)
-  if curl -s http://127.0.0.1:5005/status >/dev/null 2>&1 && [[ "$response" == *"\"ok\": true"* ]]; then
+  if curl -s http://127.0.0.1:5005/status >/dev/null 2>&1 && [[ "${response}" == *"\"ok\": true"* ]]; then
     log_success "MCP Server connectivity test passed"
     return 0
   else
@@ -173,13 +173,13 @@ test_dashboard_connectivity() {
   local web_dashboard
   web_dashboard=$(curl -s http://127.0.0.1:8081/ 2>/dev/null | grep -c "html")
 
-  if [[ $mcp_dashboard -gt 0 ]]; then
+  if [[ ${mcp_dashboard} -gt 0 ]]; then
     log_success "MCP Dashboard connectivity test passed"
   else
     log_warning "MCP Dashboard connectivity test failed"
   fi
 
-  if [[ $web_dashboard -gt 0 ]]; then
+  if [[ ${web_dashboard} -gt 0 ]]; then
     log_success "Web Dashboard connectivity test passed"
   else
     log_warning "Web Dashboard connectivity test failed"
@@ -198,7 +198,7 @@ run_full_test() {
 
   if curl -s -X POST http://127.0.0.1:5005/run \
     -H "Content-Type: application/json" \
-    -d '{"agent": "test", "command": "status", "project": "", "execute": true}' >/dev/null 2>&1 && [[ "$test_result" == *"\"ok\": true"* ]]; then
+    -d '{"agent": "test", "command": "status", "project": "", "execute": true}' >/dev/null 2>&1 && [[ "${test_result}" == *"\"ok\": true"* ]]; then
     log_success "Full system test passed"
     return 0
   else
@@ -237,10 +237,10 @@ show_status() {
   # Agent count
   local agent_count
   agent_count=$(pgrep -f "agent_(build|debug|codegen)" | wc -l)
-  if [[ $agent_count -ge 3 ]]; then
-    echo -e "✅ Agents:            ${GREEN}Running${NC} ($agent_count active)"
+  if [[ ${agent_count} -ge 3 ]]; then
+    echo -e "✅ Agents:            ${GREEN}Running${NC}${($agent_cou}nt active)"
   else
-    echo -e "❌ Agents:            ${RED}Not Running${NC} (only $agent_count active)"
+    echo -e "❌ Agents:            ${RED}Not Running${NC} (onl${ $agent_cou}nt active)"
   fi
 
   echo ""
@@ -273,7 +273,7 @@ main() {
   # Show final status
   show_status
 
-  if [[ $errors -eq 0 ]]; then
+  if [[ ${errors} -eq 0 ]]; then
     log_success "Quantum Workspace startup completed successfully!"
     echo ""
     log_info "🎉 All systems are GO! Your AI agents, MCP, and automation are working together."
@@ -284,15 +284,15 @@ main() {
     echo "  3. Run: ./Tools/Automation/master_automation.sh status"
     echo "  4. Test agents: curl http://127.0.0.1:5005/status"
   else
-    log_error "Quantum Workspace startup completed with $errors errors."
+    log_error "Quantum Workspace startup completed with ${errors} errors."
     echo ""
     log_info "Troubleshooting:"
-    echo "  1. Check logs in $AUTOMATION_DIR/*.log"
+    echo "  1. Check logs in ${AUTOMATION_DIR}/*.log"
     echo "  2. Run: ./Tools/Automation/master_automation.sh status"
     echo "  3. Restart with: bash $0"
   fi
 
-  return $errors
+  return "$errors"
 }
 
 # Run main function

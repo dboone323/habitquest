@@ -40,15 +40,15 @@ public struct DataExportView: View {
             #endif
                 .toolbar {
                     #if os(iOS)
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") { self.dismiss() }
-                            .accessibilityLabel("Cancel Button")
-                    }
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("Cancel") { self.dismiss() }
+                                .accessibilityLabel("Cancel Button")
+                        }
                     #else
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") { self.dismiss() }
-                            .accessibilityLabel("Cancel Button")
-                    }
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") { self.dismiss() }
+                                .accessibilityLabel("Cancel Button")
+                        }
                     #endif
                 }
                 .sheet(isPresented: self.$showingShareSheet) {
@@ -78,7 +78,7 @@ public struct DataExportView: View {
             .pickerStyle(.segmented)
             .onChange(of: self.exportFormat) { _, _ in
                 #if os(iOS)
-                HapticManager.shared.selection()
+                    HapticManager.shared.selection()
                 #endif
             }
 
@@ -99,7 +99,7 @@ public struct DataExportView: View {
             }
             .onChange(of: self.dateRange) { _, _ in
                 #if os(iOS)
-                HapticManager.shared.selection()
+                    HapticManager.shared.selection()
                 #endif
             }
 
@@ -123,35 +123,35 @@ public struct DataExportView: View {
             Toggle("Transactions", isOn: self.$includeTransactions)
                 .onChange(of: self.includeTransactions) { _, _ in
                     #if os(iOS)
-                    HapticManager.shared.lightImpact()
+                        HapticManager.shared.lightImpact()
                     #endif
                 }
 
             Toggle("Accounts", isOn: self.$includeAccounts)
                 .onChange(of: self.includeAccounts) { _, _ in
                     #if os(iOS)
-                    HapticManager.shared.lightImpact()
+                        HapticManager.shared.lightImpact()
                     #endif
                 }
 
             Toggle("Budgets", isOn: self.$includeBudgets)
                 .onChange(of: self.includeBudgets) { _, _ in
                     #if os(iOS)
-                    HapticManager.shared.lightImpact()
+                        HapticManager.shared.lightImpact()
                     #endif
                 }
 
             Toggle("Subscriptions", isOn: self.$includeSubscriptions)
                 .onChange(of: self.includeSubscriptions) { _, _ in
                     #if os(iOS)
-                    HapticManager.shared.lightImpact()
+                        HapticManager.shared.lightImpact()
                     #endif
                 }
 
             Toggle("Savings Goals", isOn: self.$includeGoals)
                 .onChange(of: self.includeGoals) { _, _ in
                     #if os(iOS)
-                    HapticManager.shared.lightImpact()
+                        HapticManager.shared.lightImpact()
                     #endif
                 }
         } header: {
@@ -233,7 +233,7 @@ public struct DataExportView: View {
     private func exportData() async {
         self.isExporting = true
         #if os(iOS)
-        HapticManager.shared.mediumImpact()
+            HapticManager.shared.mediumImpact()
         #endif
 
         do {
@@ -254,12 +254,12 @@ public struct DataExportView: View {
             self.exportedFileURL = fileURL
             self.showingShareSheet = true
             #if os(iOS)
-            HapticManager.shared.success()
+                HapticManager.shared.success()
             #endif
         } catch {
             self.exportError = error.localizedDescription
             #if os(iOS)
-            HapticManager.shared.error()
+                HapticManager.shared.error()
             #endif
         }
 
@@ -270,48 +270,48 @@ public struct DataExportView: View {
 // MARK: - ShareSheet
 
 #if os(iOS)
-struct ShareSheet: UIViewControllerRepresentable {
-    let activityItems: [Any]
+    struct ShareSheet: UIViewControllerRepresentable {
+        let activityItems: [Any]
 
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func makeUIViewController(context _: Context) -> UIActivityViewController {
-        let controller = UIActivityViewController(
-            activityItems: activityItems,
-            applicationActivities: nil,
-        )
-        return controller
-    }
-
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func updateUIViewController(_: UIActivityViewController, context _: Context) {}
-}
-#else
-// macOS version of ShareSheet
-struct ShareSheet: View {
-    let activityItems: [Any]
-
-    var body: some View {
-        VStack {
-            Text("Export Complete")
-                .font(.headline)
-
-            if let url = activityItems.first as? URL {
-                Text("File saved at: \(url.path)")
-                    .font(.subheadline)
-
-                Button("Show in Finder") {
-                    NSWorkspace.shared.selectFile(url.path, inFileViewerRootedAtPath: "")
-                }
-                .accessibilityLabel("Show In Finder Button")
-                .padding(.top)
-            }
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func makeUIViewController(context _: Context) -> UIActivityViewController {
+            let controller = UIActivityViewController(
+                activityItems: activityItems,
+                applicationActivities: nil,
+            )
+            return controller
         }
-        .padding()
-        .frame(width: 400, height: 200)
+
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func updateUIViewController(_: UIActivityViewController, context _: Context) {}
     }
-}
+#else
+    // macOS version of ShareSheet
+    struct ShareSheet: View {
+        let activityItems: [Any]
+
+        var body: some View {
+            VStack {
+                Text("Export Complete")
+                    .font(.headline)
+
+                if let url = activityItems.first as? URL {
+                    Text("File saved at: \(url.path)")
+                        .font(.subheadline)
+
+                    Button("Show in Finder") {
+                        NSWorkspace.shared.selectFile(url.path, inFileViewerRootedAtPath: "")
+                    }
+                    .accessibilityLabel("Show In Finder Button")
+                    .padding(.top)
+                }
+            }
+            .padding()
+            .frame(width: 400, height: 200)
+        }
+    }
 #endif
 
 #Preview {

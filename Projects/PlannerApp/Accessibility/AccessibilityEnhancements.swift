@@ -8,10 +8,10 @@
 import SwiftUI
 
 #if os(iOS)
-import UIKit
+    import UIKit
 #elseif os(macOS)
-import AppKit
-import Cocoa
+    import AppKit
+    import Cocoa
 #endif
 
 // MARK: - Accessibility Manager
@@ -24,31 +24,31 @@ public class AccessibilityManager: ObservableObject {
     @Published var prefersHighContrast = false
 
     init() {
-        self.updateAccessibilitySettings()
+        updateAccessibilitySettings()
 
         #if os(iOS)
-        // Listen for accessibility changes on iOS
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.accessibilitySettingsChanged),
-            name: UIAccessibility.voiceOverStatusDidChangeNotification,
-            object: nil
-        )
+            // Listen for accessibility changes on iOS
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(accessibilitySettingsChanged),
+                name: UIAccessibility.voiceOverStatusDidChangeNotification,
+                object: nil
+            )
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.accessibilitySettingsChanged),
-            name: UIContentSizeCategory.didChangeNotification,
-            object: nil
-        )
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(accessibilitySettingsChanged),
+                name: UIContentSizeCategory.didChangeNotification,
+                object: nil
+            )
         #elseif os(macOS)
-        // For macOS, we use different notification mechanisms
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.accessibilitySettingsChanged),
-            name: NSWorkspace.accessibilityDisplayOptionsDidChangeNotification,
-            object: nil
-        )
+            // For macOS, we use different notification mechanisms
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(accessibilitySettingsChanged),
+                name: NSWorkspace.accessibilityDisplayOptionsDidChangeNotification,
+                object: nil
+            )
         #endif
     }
 
@@ -60,19 +60,19 @@ public class AccessibilityManager: ObservableObject {
 
     private func updateAccessibilitySettings() {
         #if os(iOS)
-        self.isVoiceOverEnabled = UIAccessibility.isVoiceOverRunning
-        self.prefersDynamicType =
-            UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
-        self.prefersReducedMotion = UIAccessibility.isReduceMotionEnabled
-        self.prefersHighContrast = UIAccessibility.isDarkerSystemColorsEnabled
+            isVoiceOverEnabled = UIAccessibility.isVoiceOverRunning
+            prefersDynamicType =
+                UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+            prefersReducedMotion = UIAccessibility.isReduceMotionEnabled
+            prefersHighContrast = UIAccessibility.isDarkerSystemColorsEnabled
         #elseif os(macOS)
-        // Use macOS equivalents
-        self.isVoiceOverEnabled = NSWorkspace.shared.isVoiceOverEnabled
-        self.prefersReducedMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
-        self.prefersHighContrast = NSWorkspace.shared.accessibilityDisplayShouldIncreaseContrast
-        self.prefersDynamicType = UserDefaults.standard.bool(
-            forKey: "AppleAccessibilityDynamicTypeEnabled"
-        )
+            // Use macOS equivalents
+            isVoiceOverEnabled = NSWorkspace.shared.isVoiceOverEnabled
+            prefersReducedMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+            prefersHighContrast = NSWorkspace.shared.accessibilityDisplayShouldIncreaseContrast
+            prefersDynamicType = UserDefaults.standard.bool(
+                forKey: "AppleAccessibilityDynamicTypeEnabled"
+            )
         #endif
     }
 }
@@ -89,27 +89,27 @@ public struct AccessibleButton: View {
     var isEnabled: Bool = true
 
     public var body: some View {
-        Button(action: self.action) {
-            Text(self.title)
-                .font(.system(size: self.dynamicFontSize, weight: .medium))
-                .foregroundColor(self.textColor)
-                .frame(minHeight: self.minimumTouchTarget)
+        Button(action: action) {
+            Text(title)
+                .font(.system(size: dynamicFontSize, weight: .medium))
+                .foregroundColor(textColor)
+                .frame(minHeight: minimumTouchTarget)
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, 16)
         }
         .accessibilityLabel("Button")
-        .background(self.backgroundColor)
+        .background(backgroundColor)
         .cornerRadius(12)
-        .disabled(!self.isEnabled)
-        .opacity(self.isEnabled ? 1.0 : 0.6)
-        .accessibilityLabel(self.title)
-        .accessibilityHint(self.hint ?? "")
-        .accessibilityAddTraits(self.isEnabled ? .isButton : .isButton)
+        .disabled(!isEnabled)
+        .opacity(isEnabled ? 1.0 : 0.6)
+        .accessibilityLabel(title)
+        .accessibilityHint(hint ?? "")
+        .accessibilityAddTraits(isEnabled ? .isButton : .isButton)
     }
 
     private var dynamicFontSize: CGFloat {
         let baseSize: CGFloat = 16
-        if self.accessibilityManager.prefersDynamicType {
+        if accessibilityManager.prefersDynamicType {
             return min(baseSize * 1.5, 24) // Cap at reasonable maximum
         }
         return baseSize
@@ -120,19 +120,19 @@ public struct AccessibleButton: View {
     }
 
     private var backgroundColor: Color {
-        let baseColor = self.role == .destructive ? Color.red : Color.blue
+        let baseColor = role == .destructive ? Color.red : Color.blue
 
-        if self.accessibilityManager.prefersHighContrast {
+        if accessibilityManager.prefersHighContrast {
             return baseColor.opacity(0.9)
         }
         return baseColor
     }
 
     private var textColor: Color {
-        if self.accessibilityManager.prefersHighContrast {
+        if accessibilityManager.prefersHighContrast {
             return Color.white
         }
-        return self.role == .destructive ? Color.white : Color.white
+        return role == .destructive ? Color.white : Color.white
     }
 }
 
@@ -167,15 +167,15 @@ struct AccessibleListRow<Content: View>: View {
     }
 
     var body: some View {
-        self.content
-            .frame(minHeight: self.minimumRowHeight)
+        content
+            .frame(minHeight: minimumRowHeight)
             .accessibilityElement(children: .combine)
-            .accessibilityLabel(self.accessibilityLabel ?? "")
-            .accessibilityValue(self.accessibilityValue ?? "")
-            .accessibilityHint(self.accessibilityHint ?? "")
+            .accessibilityLabel(accessibilityLabel ?? "")
+            .accessibilityValue(accessibilityValue ?? "")
+            .accessibilityHint(accessibilityHint ?? "")
             .accessibilityActions {
-                ForEach(self.accessibilityActions.indices, id: \.self) { index in
-                    let actionInfo = self.accessibilityActions[index]
+                ForEach(accessibilityActions.indices, id: \.self) { index in
+                    let actionInfo = accessibilityActions[index]
                     Button(actionInfo.name, action: actionInfo.action)
                         .accessibilityLabel("Button")
                 }
@@ -183,7 +183,7 @@ struct AccessibleListRow<Content: View>: View {
     }
 
     private var minimumRowHeight: CGFloat {
-        if self.accessibilityManager.prefersDynamicType {
+        if accessibilityManager.prefersDynamicType {
             return 60
         }
         return 44
@@ -197,9 +197,9 @@ public struct HighContrastModifier: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .environment(\.colorScheme, self.accessibilityManager.prefersHighContrast ? .dark : .light)
+            .environment(\.colorScheme, accessibilityManager.prefersHighContrast ? .dark : .light)
             .foregroundColor(
-                self.accessibilityManager.prefersHighContrast ? Color.white : Color.primary
+                accessibilityManager.prefersHighContrast ? Color.white : Color.primary
             )
     }
 }
@@ -219,7 +219,7 @@ public struct ReducedMotionModifier: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .animation(
-                self.accessibilityManager.prefersReducedMotion ? .none : self.animation,
+                accessibilityManager.prefersReducedMotion ? .none : animation,
                 value: UUID()
             )
     }
@@ -251,10 +251,10 @@ struct FocusableView<Content: View>: View {
     }
 
     var body: some View {
-        self.content
-            .focused(self.$isFocused)
-            .accessibilityLabel(self.accessibilityLabel)
-            .modifier(FocusChangeModifier(onFocusChange: self.onFocusChange))
+        content
+            .focused($isFocused)
+            .accessibilityLabel(accessibilityLabel)
+            .modifier(FocusChangeModifier(onFocusChange: onFocusChange))
     }
 }
 
@@ -278,15 +278,15 @@ enum ScreenReaderAnnouncement {
     static func announce(_ message: String) {
         DispatchQueue.main.async {
             #if os(iOS)
-            UIAccessibility.post(notification: .announcement, argument: message)
+                UIAccessibility.post(notification: .announcement, argument: message)
             #elseif os(macOS)
-            // Using the correct method without an argument parameter
-            let userInfo: [NSAccessibility.NotificationUserInfoKey: Any] = [
-                NSAccessibility.NotificationUserInfoKey.announcement: message,
-            ]
-            NSAccessibility.post(
-                element: NSApp as Any, notification: .announcementRequested, userInfo: userInfo
-            )
+                // Using the correct method without an argument parameter
+                let userInfo: [NSAccessibility.NotificationUserInfoKey: Any] = [
+                    NSAccessibility.NotificationUserInfoKey.announcement: message,
+                ]
+                NSAccessibility.post(
+                    element: NSApp as Any, notification: .announcementRequested, userInfo: userInfo
+                )
             #endif
         }
     }
@@ -294,10 +294,10 @@ enum ScreenReaderAnnouncement {
     static func announcePageChange(_ pageName: String) {
         DispatchQueue.main.async {
             #if os(iOS)
-            UIAccessibility.post(notification: .screenChanged, argument: pageName)
+                UIAccessibility.post(notification: .screenChanged, argument: pageName)
             #elseif os(macOS)
-            // Using a simpler approach for macOS - remove the extra argument parameter
-            NSAccessibility.post(element: NSApp as Any, notification: .selectedTextChanged)
+                // Using a simpler approach for macOS - remove the extra argument parameter
+                NSAccessibility.post(element: NSApp as Any, notification: .selectedTextChanged)
             #endif
         }
     }
@@ -305,12 +305,12 @@ enum ScreenReaderAnnouncement {
     static func announceLayoutChange() {
         DispatchQueue.main.async {
             #if os(iOS)
-            UIAccessibility.post(notification: .layoutChanged, argument: "")
+                UIAccessibility.post(notification: .layoutChanged, argument: "")
             #elseif os(macOS)
-            // Make sure we're using the correct API without an argument parameter
-            NSAccessibility.post(
-                element: NSApp as Any, notification: .layoutChanged, userInfo: nil
-            )
+                // Make sure we're using the correct API without an argument parameter
+                NSAccessibility.post(
+                    element: NSApp as Any, notification: .layoutChanged, userInfo: nil
+                )
             #endif
         }
     }
@@ -326,9 +326,9 @@ public struct DynamicTypeText: View {
     var maxFontSize: CGFloat = 28
 
     public var body: some View {
-        Text(self.text)
-            .font(.system(self.style, design: .default))
-            .lineLimit(self.accessibilityManager.prefersDynamicType ? nil : 2)
+        Text(text)
+            .font(.system(style, design: .default))
+            .lineLimit(accessibilityManager.prefersDynamicType ? nil : 2)
             .minimumScaleFactor(0.8)
             .allowsTightening(true)
     }
@@ -343,15 +343,15 @@ public struct AccessibleProgressView: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                DynamicTypeText(text: self.label, style: .body)
+                DynamicTypeText(text: label, style: .body)
                 Spacer()
-                DynamicTypeText(text: "\(Int(self.progress * 100))%", style: .caption)
+                DynamicTypeText(text: "\(Int(progress * 100))%", style: .caption)
             }
 
-            ProgressView(value: self.progress)
+            ProgressView(value: progress)
                 .progressViewStyle(LinearProgressViewStyle(tint: .blue))
-                .accessibilityLabel("\(self.label) progress")
-                .accessibilityValue("\(Int(self.progress * 100)) percent complete")
+                .accessibilityLabel("\(label) progress")
+                .accessibilityValue("\(Int(progress * 100)) percent complete")
         }
     }
 }
@@ -396,14 +396,14 @@ public struct AccessibilityDemoView: View {
                     hint: "Opens the add task screen"
                 )
 
-                AccessibleProgressView(progress: self.progress, label: "Goal Progress")
+                AccessibleProgressView(progress: progress, label: "Goal Progress")
 
                 Group {
                     HStack {
                         DynamicTypeText(text: "VoiceOver:", style: .caption)
                         Spacer()
                         DynamicTypeText(
-                            text: self.accessibilityManager.isVoiceOverEnabled ? "On" : "Off",
+                            text: accessibilityManager.isVoiceOverEnabled ? "On" : "Off",
                             style: .caption
                         )
                     }
@@ -412,7 +412,7 @@ public struct AccessibilityDemoView: View {
                         DynamicTypeText(text: "Dynamic Type:", style: .caption)
                         Spacer()
                         DynamicTypeText(
-                            text: self.accessibilityManager.prefersDynamicType ? "Large" : "Standard",
+                            text: accessibilityManager.prefersDynamicType ? "Large" : "Standard",
                             style: .caption
                         )
                     }
@@ -421,7 +421,7 @@ public struct AccessibilityDemoView: View {
                         DynamicTypeText(text: "Reduced Motion:", style: .caption)
                         Spacer()
                         DynamicTypeText(
-                            text: self.accessibilityManager.prefersReducedMotion ? "On" : "Off",
+                            text: accessibilityManager.prefersReducedMotion ? "On" : "Off",
                             style: .caption
                         )
                     }
@@ -434,7 +434,7 @@ public struct AccessibilityDemoView: View {
         }
         .highContrastAdaptive()
         .respectsReducedMotion(.easeInOut(duration: 0.3))
-        .environmentObject(self.accessibilityManager)
+        .environmentObject(accessibilityManager)
         .onAppear {
             ScreenReaderAnnouncement.announcePageChange("Accessibility Demo")
         }

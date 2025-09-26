@@ -87,26 +87,27 @@ public struct ImportDataView: View {
 
     private func selectFile() {
         #if os(iOS)
-        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.commaSeparatedText])
-        picker.allowsMultipleSelection = false
-        picker.delegate = DocumentPickerDelegate { url in
-            self.selectedFileURL = url
-        }
+            let picker = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.commaSeparatedText])
+            picker.allowsMultipleSelection = false
+            picker.delegate = DocumentPickerDelegate { url in
+                self.selectedFileURL = url
+            }
 
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first,
-           let rootVC = window.rootViewController {
-            rootVC.present(picker, animated: true)
-        }
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first,
+               let rootVC = window.rootViewController
+            {
+                rootVC.present(picker, animated: true)
+            }
         #else
-        let panel = NSOpenPanel()
-        panel.allowedContentTypes = [UTType.commaSeparatedText]
-        panel.allowsMultipleSelection = false
-        panel.canChooseDirectories = false
+            let panel = NSOpenPanel()
+            panel.allowedContentTypes = [UTType.commaSeparatedText]
+            panel.allowsMultipleSelection = false
+            panel.canChooseDirectories = false
 
-        if panel.runModal() == .OK, let url = panel.url {
-            self.selectedFileURL = url
-        }
+            if panel.runModal() == .OK, let url = panel.url {
+                self.selectedFileURL = url
+            }
         #endif
     }
 
@@ -138,17 +139,17 @@ public struct ImportDataView: View {
 }
 
 #if os(iOS)
-class DocumentPickerDelegate: NSObject, UIDocumentPickerDelegate {
-    let completion: (URL) -> Void
+    class DocumentPickerDelegate: NSObject, UIDocumentPickerDelegate {
+        let completion: (URL) -> Void
 
-    init(completion: @escaping (URL) -> Void) {
-        self.completion = completion
-    }
+        init(completion: @escaping (URL) -> Void) {
+            self.completion = completion
+        }
 
-    func documentPicker(_: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        if let url = urls.first {
-            self.completion(url)
+        func documentPicker(_: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            if let url = urls.first {
+                self.completion(url)
+            }
         }
     }
-}
 #endif

@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class QuestLogViewModelTests: XCTestCase {
+final class QuestLogViewModelTests: XCTestCase {
     // MARK: - classQuestLogViewModel:ObservableObject{ Tests
 
     func testQuestLogViewModelInitialization() {

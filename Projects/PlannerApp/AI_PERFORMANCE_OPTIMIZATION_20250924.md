@@ -1,40 +1,49 @@
 # Performance Optimization Report for PlannerApp
+
 Generated: Wed Sep 24 20:05:56 CDT 2025
 
-
 ## Dependencies.swift
+
 ## Performance Analysis of Dependencies.swift
 
 ### 1. Algorithm Complexity Issues
+
 **No significant algorithmic complexity issues found.** The code uses straightforward operations with O(1) complexity.
 
 ### 2. Memory Usage Problems
 
 #### Issue: Date Formatter Recreation
+
 The `ISO8601DateFormatter` is created once and cached properly, but `Date()` is created on every log call.
 
 #### Issue: String Interpolation Overhead
+
 The formatted message creation involves multiple string interpolations that could be optimized.
 
 ### 3. Unnecessary Computations
 
 #### Issue: Timestamp Generation on Every Log
+
 `Date()` is created even when logging might be filtered by level.
 
 #### Issue: Redundant String Operations
+
 Multiple string interpolations in `formattedMessage` create temporary string objects.
 
 ### 4. Collection Operation Optimizations
+
 **No collection operations to optimize in this code.**
 
 ### 5. Threading Opportunities
 
 #### Issue: Synchronous Logging Blocking
+
 `logSync` uses `sync` which can block the calling thread unnecessarily.
 
 ### 6. Caching Possibilities
 
 #### Issue: LogLevel String Conversion
+
 The `uppercasedValue` property could benefit from caching since log levels are finite.
 
 ## Specific Optimization Suggestions
@@ -60,11 +69,11 @@ public final class Logger {
         // Round to nearest millisecond to increase cache hit rate
         let roundedTime = round(now.timeIntervalSince1970 * 1000) / 1000
         let cacheKey = "\(roundedTime)" as NSString
-        
+
         if let cached = cacheQueue.sync(execute: { timestampCache.object(forKey: cacheKey) }) {
             return cached as String
         }
-        
+
         let formatted = Self.isoFormatter.string(from: now)
         cacheQueue.async {
             self.timestampCache.setObject(formatted as NSString, forKey: cacheKey)
@@ -89,13 +98,13 @@ public final class Logger {
 ```swift
 public final class Logger {
     // ... existing code ...
-    
+
     private let minimumLogLevel: LogLevel = .info // Make configurable
-    
+
     public func log(_ message: String, level: LogLevel = .info) {
         // Early exit if log level is below minimum
         guard shouldLog(level: level) else { return }
-        
+
         self.queue.async {
             self.outputHandler(self.formattedMessage(message, level: level))
         }
@@ -103,7 +112,7 @@ public final class Logger {
 
     public func logSync(_ message: String, level: LogLevel = .info) {
         guard shouldLog(level: level) else { return }
-        
+
         self.queue.sync {
             self.outputHandler(self.formattedMessage(message, level: level))
         }
@@ -128,7 +137,7 @@ public enum LogLevel: String {
 
     private static let levelStrings: [LogLevel: String] = [
         .debug: "DEBUG",
-        .info: "INFO", 
+        .info: "INFO",
         .warning: "WARNING",
         .error: "ERROR"
     ]
@@ -147,7 +156,7 @@ public final class Logger {
 
     public func logSync(_ message: String, level: LogLevel = .info) {
         guard shouldLog(level: level) else { return }
-        
+
         // For critical logs, consider immediate execution on calling thread
         // to avoid queue overhead when thread safety isn't required
         if level == .error {
@@ -155,7 +164,7 @@ public final class Logger {
             outputHandler(formatted)
             return
         }
-        
+
         self.queue.sync {
             self.outputHandler(self.formattedMessage(message, level: level))
         }
@@ -168,7 +177,7 @@ public final class Logger {
 ```swift
 public final class Logger {
     // ... existing code ...
-    
+
     private var batchMessages: [String] = []
     private let batchThreshold = 10
     private let batchTimer: DispatchSourceTimer?
@@ -189,7 +198,7 @@ public final class Logger {
             messagesToProcess = batchMessages
             batchMessages.removeAll(keepingCapacity: true)
         }
-        
+
         for message in messagesToProcess {
             outputHandler(message)
         }
@@ -198,11 +207,11 @@ public final class Logger {
     // New batch logging method
     public func logBatch(_ messages: [String], level: LogLevel = .info) {
         guard shouldLog(level: level) else { return }
-        
+
         queue.async {
             let formattedMessages = messages.map { self.formattedMessage($0, level: level) }
             self.batchMessages.append(contentsOf: formattedMessages)
-            
+
             if self.batchMessages.count >= self.batchThreshold {
                 self.processBatch()
             }
@@ -217,11 +226,11 @@ public final class Logger {
 public final class Logger {
     // Use lazy initialization for components that might not be used
     private lazy var queue = DispatchQueue(
-        label: "com.quantumworkspace.logger", 
+        label: "com.quantumworkspace.logger",
         qos: .utility,
         attributes: []
     )
-    
+
     // ... rest of implementation ...
 }
 ```
@@ -239,6 +248,7 @@ public final class Logger {
 These optimizations reduce CPU overhead, memory allocations, and improve overall logging performance, especially in high-frequency scenarios.
 
 ## PerformanceManager.swift
+
 # Performance Analysis of `PerformanceManager.swift`
 
 This class is designed to monitor application performance metrics such as FPS and memory usage, with caching and thread safety. Here's a detailed analysis for optimization opportunities:
@@ -248,18 +258,22 @@ This class is designed to monitor application performance metrics such as FPS an
 ## 1. **Algorithm Complexity Issues**
 
 ### Issue: Circular Buffer Implementation
+
 The circular buffer used for frame times is efficient (O(1) insertion), but the FPS calculation logic could be optimized.
 
 ### Optimization:
+
 Avoid redundant index calculations in `calculateCurrentFPSLocked()`.
 
 #### Before:
+
 ```swift
 let lastIndex = (self.frameWriteIndex - 1 + self.maxFrameHistory) % self.maxFrameHistory
 let firstIndex = (lastIndex - (availableFrames - 1) + self.maxFrameHistory) % self.maxFrameHistory
 ```
 
 #### After:
+
 ```swift
 let lastIndex = (self.frameWriteIndex - 1 + self.maxFrameHistory) % self.maxFrameHistory
 let firstIndex = (lastIndex - availableFrames + 1 + self.maxFrameHistory) % self.maxFrameHistory
@@ -272,17 +286,21 @@ let firstIndex = (lastIndex - availableFrames + 1 + self.maxFrameHistory) % self
 ## 2. **Memory Usage Problems**
 
 ### Issue: Retaining Mach Info Struct
+
 The `machInfoCache` is reused but not necessary to cache at instance level.
 
 ### Optimization:
+
 Avoid retaining `machInfoCache` as a property; allocate on stack.
 
 #### Before:
+
 ```swift
 private var machInfoCache = mach_task_basic_info()
 ```
 
 #### After:
+
 ```swift
 private func calculateMemoryUsageLocked() -> Double {
     var info = mach_task_basic_info()
@@ -306,17 +324,21 @@ private func calculateMemoryUsageLocked() -> Double {
 ## 3. **Unnecessary Computations**
 
 ### Issue: Double Calculation of FPS in `isPerformanceDegraded()`
+
 `isPerformanceDegraded()` calls `calculateFPSForDegradedCheck()`, which internally calls `calculateCurrentFPSLocked()`—potentially duplicating work if `cachedFPS` is already fresh.
 
 ### Optimization:
+
 Use `cachedFPS` directly if it's fresh.
 
 #### Before:
+
 ```swift
 let fps = self.calculateFPSForDegradedCheck()
 ```
 
 #### After:
+
 ```swift
 let fps: Double = {
     let now = CACurrentMediaTime()
@@ -338,12 +360,15 @@ let fps: Double = {
 ## 4. **Collection Operation Optimizations**
 
 ### Issue: Frame Time Array Initialization
+
 Initializing `frameTimes` with `Array(repeating: 0, count:)` is fine, but consider preallocating or using a more efficient structure.
 
 ### Optimization:
+
 Ensure the array is preallocated and not resized.
 
 #### Already Done:
+
 ```swift
 self.frameTimes = Array(repeating: 0, count: self.maxFrameHistory)
 ```
@@ -355,12 +380,15 @@ self.frameTimes = Array(repeating: 0, count: self.maxFrameHistory)
 ## 5. **Threading Opportunities**
 
 ### Issue: Redundant Queue Usage
+
 The `isPerformanceDegraded(completion:)` method dispatches to a global queue, but `isPerformanceDegraded()` already uses `metricsQueue.sync`.
 
 ### Optimization:
+
 Avoid unnecessary dispatch if already on a background queue.
 
 #### Before:
+
 ```swift
 public func isPerformanceDegraded(completion: @escaping (Bool) -> Void) {
     DispatchQueue.global(qos: .utility).async {
@@ -373,6 +401,7 @@ public func isPerformanceDegraded(completion: @escaping (Bool) -> Void) {
 ```
 
 #### After:
+
 ```swift
 public func isPerformanceDegraded(completion: @escaping (Bool) -> Void) {
     self.metricsQueue.async {
@@ -391,17 +420,21 @@ public func isPerformanceDegraded(completion: @escaping (Bool) -> Void) {
 ## 6. **Caching Possibilities**
 
 ### Issue: Redundant Cache Invalidation
+
 In `recordFrame()`, `lastFPSUpdate` is set to 0 to force recalculation, but this is not thread-safe.
 
 ### Optimization:
+
 Use atomic updates or a flag instead of resetting the timestamp.
 
 #### Before:
+
 ```swift
 self.lastFPSUpdate = 0 // force recalculation on next read
 ```
 
 #### After:
+
 ```swift
 self.lastFPSUpdate = -self.fpsCacheInterval // force recalculation
 ```
@@ -412,19 +445,20 @@ self.lastFPSUpdate = -self.fpsCacheInterval // force recalculation
 
 ## Summary of Key Optimizations
 
-| Area | Optimization | Benefit |
-|------|--------------|---------|
-| **Algorithm** | Simplify circular buffer index math | Cleaner code |
-| **Memory** | Stack-allocate `mach_task_basic_info` | Reduced memory footprint |
-| **Computation** | Avoid redundant FPS calculation | CPU efficiency |
-| **Threading** | Reuse existing queues | Reduced overhead |
-| **Caching** | Safer cache invalidation | Thread safety |
+| Area            | Optimization                          | Benefit                  |
+| --------------- | ------------------------------------- | ------------------------ |
+| **Algorithm**   | Simplify circular buffer index math   | Cleaner code             |
+| **Memory**      | Stack-allocate `mach_task_basic_info` | Reduced memory footprint |
+| **Computation** | Avoid redundant FPS calculation       | CPU efficiency           |
+| **Threading**   | Reuse existing queues                 | Reduced overhead         |
+| **Caching**     | Safer cache invalidation              | Thread safety            |
 
 ---
 
 ## Final Optimized Snippets
 
 ### `calculateCurrentFPSLocked()`:
+
 ```swift
 private func calculateCurrentFPSLocked() -> Double {
     let availableFrames = min(self.recordedFrameCount, self.fpsSampleSize)
@@ -444,6 +478,7 @@ private func calculateCurrentFPSLocked() -> Double {
 ```
 
 ### `calculateMemoryUsageLocked()`:
+
 ```swift
 private func calculateMemoryUsageLocked() -> Double {
     var info = mach_task_basic_info()
@@ -461,6 +496,7 @@ private func calculateMemoryUsageLocked() -> Double {
 ```
 
 ### `isPerformanceDegraded(completion:)`:
+
 ```swift
 public func isPerformanceDegraded(completion: @escaping (Bool) -> Void) {
     self.metricsQueue.async {
@@ -475,11 +511,13 @@ public func isPerformanceDegraded(completion: @escaping (Bool) -> Void) {
 These changes enhance performance, reduce memory overhead, and improve thread safety.
 
 ## run_tests.swift
+
 Looking at this Swift test code, I'll analyze it for performance optimizations across the requested categories:
 
 ## 1. Algorithm Complexity Issues
 
 ### Date Calculations in Loops
+
 ```swift
 // Current approach - O(n) date calculations
 for taskIndex in 1 ... 100 {
@@ -491,7 +529,7 @@ for taskIndex in 1 ... 100 {
 let baseDate = Date()
 for taskIndex in 1 ... 100 {
     let task = PlannerTask(
-        title: "Task \(taskIndex)", 
+        title: "Task \(taskIndex)",
         priority: .medium,
         createdAt: baseDate,
         modifiedAt: baseDate
@@ -503,6 +541,7 @@ for taskIndex in 1 ... 100 {
 ## 2. Memory Usage Problems
 
 ### Inefficient Array Building in Performance Tests
+
 ```swift
 // Current approach - Inefficient array building
 var items: [String] = []
@@ -520,6 +559,7 @@ let items = (1...1000).map { "Item \($0)" }
 ```
 
 ### Dictionary Operations
+
 ```swift
 // Current approach - Creates unnecessary intermediate arrays
 let tasks: [[String: Any]] = []
@@ -532,6 +572,7 @@ let completedTasks = tasks.lazy.filter { $0["completed"] as? Bool == true }
 ## 3. Unnecessary Computations
 
 ### Redundant Date Creation
+
 ```swift
 // Current approach - Creates new Date() instances unnecessarily
 func runTest(_ name: String, test: () throws -> Void) {
@@ -567,6 +608,7 @@ func runTest(_ name: String, test: () throws -> Void) {
 ## 4. Collection Operation Optimizations
 
 ### Large Array Filtering
+
 ```swift
 // Current approach - O(n) filter operation
 runTest("testLargeDataSets") {
@@ -586,6 +628,7 @@ runTest("testLargeDataSets") {
 ```
 
 ### String Operations
+
 ```swift
 // Current approach - Multiple string operations
 runTest("testTaskDisplayFormatting") {
@@ -608,6 +651,7 @@ runTest("testTaskDisplayFormatting") {
 ## 5. Threading Opportunities
 
 ### Parallel Test Execution
+
 ```swift
 // Current approach - Sequential test execution
 // All tests run one after another
@@ -618,7 +662,7 @@ import Dispatch
 func runParallelTests(_ tests: [(String, () throws -> Void)]) {
     let group = DispatchGroup()
     let queue = DispatchQueue(label: "test-queue", attributes: .concurrent)
-    
+
     for (name, test) in tests {
         group.enter()
         queue.async {
@@ -626,7 +670,7 @@ func runParallelTests(_ tests: [(String, () throws -> Void)]) {
             runTest(name, test: test)
         }
     }
-    
+
     group.wait()
 }
 
@@ -641,19 +685,20 @@ let modelTests = [
 ```
 
 ### Concurrent Data Operations
+
 ```swift
 // Current DataManager approach - Synchronous operations
 class TaskDataManager {
     static let shared = TaskDataManager()
     private var tasks: [PlannerTask] = []
     private let queue = DispatchQueue(label: "TaskDataManager", attributes: .concurrent)
-    
+
     func load() -> [PlannerTask] {
         return queue.sync {
             self.tasks
         }
     }
-    
+
     func save(tasks: [PlannerTask]) {
         queue.async(flags: .barrier) {
             self.tasks = tasks
@@ -665,6 +710,7 @@ class TaskDataManager {
 ## 6. Caching Possibilities
 
 ### Enum Display Names Caching
+
 ```swift
 // Current approach - Computed property every time
 public enum TaskPriority: String, CaseIterable, Codable {
@@ -673,7 +719,7 @@ public enum TaskPriority: String, CaseIterable, Codable {
     var displayName: String {
         switch self {
         case .low: "Low"
-        case .medium: "Medium" 
+        case .medium: "Medium"
         case .high: "High"
         }
     }
@@ -688,7 +734,7 @@ public enum TaskPriority: String, CaseIterable, Codable {
         .medium: "Medium",
         .high: "High"
     ]
-    
+
     var displayName: String {
         return Self.displayNames[self] ?? self.rawValue.capitalized
     }
@@ -696,13 +742,14 @@ public enum TaskPriority: String, CaseIterable, Codable {
 ```
 
 ### Date Calculation Caching
+
 ```swift
 // Current approach - Recalculating dates
 runTest("testDateCalculations") {
     let today = Date()
     let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
     let nextWeek = Calendar.current.date(byAdding: .day, value: 7, to: today)!
-    
+
     assert(tomorrow > today)
     assert(nextWeek > tomorrow)
 }
@@ -714,7 +761,7 @@ runTest("testDateCalculations") {
     let today = Date()
     let tomorrow = cachedCalendar.date(byAdding: .day, value: 1, to: today)!
     let nextWeek = cachedCalendar.date(byAdding: .day, value: 7, to: today)!
-    
+
     assert(tomorrow > today)
     assert(nextWeek > tomorrow)
 }
@@ -723,6 +770,7 @@ runTest("testDateCalculations") {
 ## Additional Optimizations
 
 ### Performance Testing Improvements
+
 ```swift
 // Current timing approach
 let startTime = Date()
@@ -737,6 +785,7 @@ let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
 ```
 
 ### Memory-Efficient Test Data Generation
+
 ```swift
 // For large dataset tests, use generators instead of materialized arrays
 func generateTestTasks(count: Int) -> AnySequence<PlannerTask> {
@@ -753,9 +802,9 @@ func generateTestTasks(count: Int) -> AnySequence<PlannerTask> {
 // Usage in performance tests
 runTest("testTaskCreationPerformance") {
     let startTime = CFAbsoluteTimeGetCurrent()
-    
+
     let tasks = Array(generateTestTasks(count: 100)) // Only materialize when needed
-    
+
     let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
     assert(tasks.count == 100)
     assert(timeElapsed < 1.0, "Creating 100 tasks should take less than 1 second")

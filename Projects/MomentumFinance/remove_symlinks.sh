@@ -9,35 +9,35 @@ echo
 echo "Checking for symlinks to remove..."
 
 # MomentumFinance directory symlinks
-if [ -L "MomentumFinance/MomentumFinanceApp.swift" ]; then
-  echo "Removing: MomentumFinance/MomentumFinanceApp.swift"
-  rm -f MomentumFinance/MomentumFinanceApp.swift
+if [[ -L "MomentumFinance/MomentumFinanceApp.swift" ]]; then
+	echo "Removing: MomentumFinance/MomentumFinanceApp.swift"
+	rm -f MomentumFinance/MomentumFinanceApp.swift
 fi
 
-if [ -L "MomentumFinance/ContentView.swift" ]; then
-  echo "Removing: MomentumFinance/ContentView.swift"
-  rm -f MomentumFinance/ContentView.swift
+if [[ -L "MomentumFinance/ContentView.swift" ]]; then
+	echo "Removing: MomentumFinance/ContentView.swift"
+	rm -f MomentumFinance/ContentView.swift
 fi
 
 # Shared directory symlinks
-if [ -L "Shared/DataExportView.swift" ]; then
-  echo "Removing: Shared/DataExportView.swift"
-  rm -f Shared/DataExportView.swift
+if [[ -L "Shared/DataExportView.swift" ]]; then
+	echo "Removing: Shared/DataExportView.swift"
+	rm -f Shared/DataExportView.swift
 fi
 
-if [ -L "Shared/DataImportView.swift" ]; then
-  echo "Removing: Shared/DataImportView.swift"
-  rm -f Shared/DataImportView.swift
+if [[ -L "Shared/DataImportView.swift" ]]; then
+	echo "Removing: Shared/DataImportView.swift"
+	rm -f Shared/DataImportView.swift
 fi
 
-if [ -L "Shared/HapticManager.swift" ]; then
-  echo "Removing: Shared/HapticManager.swift"
-  rm -f Shared/HapticManager.swift
+if [[ -L "Shared/HapticManager.swift" ]]; then
+	echo "Removing: Shared/HapticManager.swift"
+	rm -f Shared/HapticManager.swift
 fi
 
-if [ -L "Shared/SettingsView.swift" ]; then
-  echo "Removing: Shared/SettingsView.swift"
-  rm -f Shared/SettingsView.swift
+if [[ -L "Shared/SettingsView.swift" ]]; then
+	echo "Removing: Shared/SettingsView.swift"
+	rm -f Shared/SettingsView.swift
 fi
 
 echo

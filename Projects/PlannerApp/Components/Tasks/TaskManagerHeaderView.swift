@@ -3,7 +3,7 @@ import Foundation
 import SwiftUI
 
 #if os(iOS)
-import UIKit
+    import UIKit
 #endif
 
 public struct TaskManagerHeaderView: View {
@@ -14,22 +14,22 @@ public struct TaskManagerHeaderView: View {
         HStack {
             Button("Done") {
                 #if os(iOS)
-                HapticManager.lightImpact()
+                    HapticManager.lightImpact()
                 #endif
-                self.dismiss()
+                dismiss()
             }
             .accessibilityLabel("Button")
             #if os(iOS)
                 .buttonStyle(.iOSSecondary)
             #endif
-                .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
+                .foregroundColor(themeManager.currentTheme.primaryAccentColor)
 
             Spacer()
 
             Text("Task Manager")
                 .font(.title3)
                 .fontWeight(.semibold)
-                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                .foregroundColor(themeManager.currentTheme.primaryTextColor)
 
             Spacer()
 
@@ -46,6 +46,6 @@ public struct TaskManagerHeaderView: View {
             #endif
         }
         .padding()
-        .background(self.themeManager.currentTheme.secondaryBackgroundColor)
+        .background(themeManager.currentTheme.secondaryBackgroundColor)
     }
 }

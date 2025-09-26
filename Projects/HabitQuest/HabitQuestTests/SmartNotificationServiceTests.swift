@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class SmartNotificationServiceTests: XCTestCase {
+final class SmartNotificationServiceTests: XCTestCase {
     // MARK: - enumNotificationInteraction{ Tests
 
     func testNotificationInteractionInitialization() {

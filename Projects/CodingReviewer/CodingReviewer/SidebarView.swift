@@ -31,20 +31,20 @@ public struct SidebarView: View {
     public var body: some View {
         List {
             Section("Files") {
-                Button(action: self.presenter.openFileAction(binding: self.$showFilePicker)) {
+                Button(action: presenter.openFileAction(binding: $showFilePicker)) {
                     Label("Open File", systemImage: "doc")
                 }
                 .buttonStyle(.borderless)
 
-                if self.selectedFileURL != nil {
-                    Text(self.selectedFileURL!.lastPathComponent)
+                if selectedFileURL != nil {
+                    Text(selectedFileURL!.lastPathComponent)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
 
             Section("Analysis Type") {
-                Picker("Type", selection: self.$selectedAnalysisType) {
+                Picker("Type", selection: $selectedAnalysisType) {
                     ForEach(AnalysisType.allCases, id: \.self) { type in
                         Text(type.rawValue).tag(type)
                     }
@@ -53,24 +53,24 @@ public struct SidebarView: View {
             }
 
             Section("Tools") {
-                Button(action: self.presenter.setViewAction(binding: self.$currentView, target: .analysis)) {
+                Button(action: presenter.setViewAction(binding: $currentView, target: .analysis)) {
                     Label("Code Analysis", systemImage: "magnifyingglass")
                 }
                 .buttonStyle(.borderless)
 
-                Button(action: self.presenter.setViewAction(binding: self.$currentView, target: .documentation)) {
+                Button(action: presenter.setViewAction(binding: $currentView, target: .documentation)) {
                     Label("Documentation", systemImage: "doc.text")
                 }
                 .buttonStyle(.borderless)
 
-                Button(action: self.presenter.setViewAction(binding: self.$currentView, target: .tests)) {
+                Button(action: presenter.setViewAction(binding: $currentView, target: .tests)) {
                     Label("Generate Tests", systemImage: "testtube.2")
                 }
                 .buttonStyle(.borderless)
             }
 
             Section("Settings") {
-                Button(action: self.presenter.preferencesAction()) {
+                Button(action: presenter.preferencesAction()) {
                     Label("Preferences", systemImage: "gear")
                 }
                 .buttonStyle(.borderless)

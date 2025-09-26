@@ -4,7 +4,7 @@
 set -euo pipefail
 
 PROJECT_PATH="$1"
-cd "$PROJECT_PATH"
+cd "${PROJECT_PATH}"
 
 echo "🤖 Applying safe enhancements..."
 

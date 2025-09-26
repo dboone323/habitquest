@@ -372,7 +372,6 @@ MomentumFinanceApp/
    ```
 
 2. **Follow MVVM pattern**
-
    - Views handle UI presentation
    - ViewModels contain business logic
    - Models represent data structures

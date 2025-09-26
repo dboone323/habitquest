@@ -4,9 +4,9 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-cd "$REPO_ROOT"
+cd "${REPO_ROOT}"
 
 echo "🔧 Validating Trunk Integration Setup"
 echo "======================================"
@@ -29,10 +29,10 @@ config_files=(
 )
 
 for config in "${config_files[@]}"; do
-  if [[ -f $config ]]; then
-    echo "✅ $config found"
+  if [[ -f ${config} ]]; then
+    echo "�${ $conf}ig found"
   else
-    echo "❌ $config missing"
+    echo "�${ $conf}ig missing"
     exit 1
   fi
 done
@@ -63,10 +63,10 @@ md_count=$(find . -name "*.md" -not -path "./.git/*" | wc -l)
 echo ""
 echo "📊 Repository Statistics"
 echo "======================="
-echo "Swift files:  $swift_count"
-echo "Shell files:  $shell_count"
-echo "Python files: $python_count"
-echo "Markdown files: $md_count"
+echo "Swift files:  ${swift_count}"
+echo "Shell files:  ${shell_count}"
+echo "Python files: ${python_count}"
+echo "Markdown files: ${md_count}"
 
 echo ""
 echo "✅ Trunk integration setup validation complete!"

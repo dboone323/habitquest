@@ -8,9 +8,9 @@
 import SwiftUI
 
 #if os(macOS)
-import AppKit
+    import AppKit
 #else
-import UIKit
+    import UIKit
 #endif
 
 public struct MainTabViewEnhanced: View {
@@ -59,138 +59,138 @@ public struct MainTabViewEnhanced: View {
 
     public var body: some View {
         #if os(macOS)
-        self.macOSLayout
+            macOSLayout
         #elseif os(iOS)
-        if UIDevice.current.userInterfaceIdiom == .pad, self.horizontalSizeClass == .regular {
-            self.iPadLayout
-        } else {
-            self.iPhoneLayout
-        }
+            if UIDevice.current.userInterfaceIdiom == .pad, horizontalSizeClass == .regular {
+                iPadLayout
+            } else {
+                iPhoneLayout
+            }
         #endif
     }
 
     // MARK: - macOS Layout
 
     #if os(macOS)
-    private var macOSLayout: some View {
-        NavigationSplitView {
-            self.macSidebar
-        } detail: {
-            self.macDetail
-        }
-        .navigationSplitViewStyle(.balanced)
-        .background(self.themeManager.currentTheme.primaryBackgroundColor)
-    }
-
-    private var macSidebar: some View {
-        List(TabConfiguration.allTabs, id: \.tag, selection: self.$selectedTabTag) { tab in
-            Label(tab.title, systemImage: tab.icon)
-                .foregroundColor(
-                    self.selectedTabTag == tab.tag
-                        ? self.themeManager.currentTheme.primaryAccentColor
-                        : self.themeManager.currentTheme.primaryTextColor
-                )
-                .tag(tab.tag)
-        }
-        .listStyle(SidebarListStyle())
-        .frame(minWidth: 200, idealWidth: 250)
-        .background(self.themeManager.currentTheme.secondaryBackgroundColor)
-        .toolbar(content: {
-            ToolbarItem(placement: .primaryAction) {
-                Button(action: self.toggleSidebar) {
-                    Image(systemName: "sidebar.left")
-                }
-                .accessibilityLabel("Toggle Sidebar")
-                .help("Toggle Sidebar")
+        private var macOSLayout: some View {
+            NavigationSplitView {
+                macSidebar
+            } detail: {
+                macDetail
             }
-        })
-    }
+            .navigationSplitViewStyle(.balanced)
+            .background(themeManager.currentTheme.primaryBackgroundColor)
+        }
 
-    private var macDetail: some View {
-        self.contentForSelectedTab
-            .frame(minWidth: 600)
+        private var macSidebar: some View {
+            List(TabConfiguration.allTabs, id: \.tag, selection: $selectedTabTag) { tab in
+                Label(tab.title, systemImage: tab.icon)
+                    .foregroundColor(
+                        selectedTabTag == tab.tag
+                            ? themeManager.currentTheme.primaryAccentColor
+                            : themeManager.currentTheme.primaryTextColor
+                    )
+                    .tag(tab.tag)
+            }
+            .listStyle(SidebarListStyle())
+            .frame(minWidth: 200, idealWidth: 250)
+            .background(themeManager.currentTheme.secondaryBackgroundColor)
             .toolbar(content: {
-                ToolbarItemGroup(placement: .primaryAction) {
-                    self.macOSToolbarButtons
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: toggleSidebar) {
+                        Image(systemName: "sidebar.left")
+                    }
+                    .accessibilityLabel("Toggle Sidebar")
+                    .help("Toggle Sidebar")
                 }
             })
-    }
+        }
+
+        private var macDetail: some View {
+            contentForSelectedTab
+                .frame(minWidth: 600)
+                .toolbar(content: {
+                    ToolbarItemGroup(placement: .primaryAction) {
+                        macOSToolbarButtons
+                    }
+                })
+        }
     #endif
 
     // MARK: - iPad Layout
 
     #if os(iOS)
-    private var iPadLayout: some View {
-        NavigationSplitView {
-            List {
-                ForEach(TabConfiguration.allTabs, id: \.tag) { tab in
-                    HStack {
-                        Image(systemName: tab.icon)
-                            .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
-                            .frame(width: 24)
+        private var iPadLayout: some View {
+            NavigationSplitView {
+                List {
+                    ForEach(TabConfiguration.allTabs, id: \.tag) { tab in
+                        HStack {
+                            Image(systemName: tab.icon)
+                                .foregroundColor(themeManager.currentTheme.primaryAccentColor)
+                                .frame(width: 24)
 
-                        Text(tab.title)
-                            .font(.body)
-                            .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                            Text(tab.title)
+                                .font(.body)
+                                .foregroundColor(themeManager.currentTheme.primaryTextColor)
 
-                        Spacer()
-                    }
-                    .padding(.vertical, 4)
-                    .background(
-                        self.selectedTabTag == tab.tag
-                            ? self.themeManager.currentTheme.primaryAccentColor.opacity(0.1)
-                            : Color.clear
-                    )
-                    .cornerRadius(8)
-                    .onTapGesture {
-                        self.selectedTabTag = tab.tag
+                            Spacer()
+                        }
+                        .padding(.vertical, 4)
+                        .background(
+                            selectedTabTag == tab.tag
+                                ? themeManager.currentTheme.primaryAccentColor.opacity(0.1)
+                                : Color.clear
+                        )
+                        .cornerRadius(8)
+                        .onTapGesture {
+                            selectedTabTag = tab.tag
+                        }
                     }
                 }
-            }
-            .listStyle(SidebarListStyle())
-            .frame(minWidth: 280, idealWidth: 320)
-            .background(self.themeManager.currentTheme.primaryBackgroundColor)
-        } detail: {
-            NavigationStack {
-                self.contentForSelectedTab
+                .listStyle(SidebarListStyle())
+                .frame(minWidth: 280, idealWidth: 320)
+                .background(themeManager.currentTheme.primaryBackgroundColor)
+            } detail: {
+                NavigationStack {
+                    contentForSelectedTab
+                }
             }
         }
-    }
     #endif
 
     // MARK: - iPhone Layout (Traditional TabView)
 
     #if os(iOS)
-    private var iPhoneLayout: some View {
-        TabView(selection: self.$selectedTabTag) {
-            ForEach(TabConfiguration.allTabs, id: \.tag) { tab in
-                self.contentForTab(tab.tag)
-                    .tabItem {
-                        Label(tab.title, systemImage: tab.icon)
-                    }
-                    .tag(tab.tag)
+        private var iPhoneLayout: some View {
+            TabView(selection: $selectedTabTag) {
+                ForEach(TabConfiguration.allTabs, id: \.tag) { tab in
+                    contentForTab(tab.tag)
+                        .tabItem {
+                            Label(tab.title, systemImage: tab.icon)
+                        }
+                        .tag(tab.tag)
+                }
             }
+            .accentColor(themeManager.currentTheme.primaryAccentColor)
+            .environment(
+                \.colorScheme,
+                themeManager.currentTheme.primaryBackgroundColor.isDark() ? .dark : .light
+            )
         }
-        .accentColor(self.themeManager.currentTheme.primaryAccentColor)
-        .environment(
-            \.colorScheme,
-            self.themeManager.currentTheme.primaryBackgroundColor.isDark() ? .dark : .light
-        )
-    }
     #endif
 
     // MARK: - Content Views
 
     @ViewBuilder
     private var contentForSelectedTab: some View {
-        self.contentForTab(self.selectedTabTag)
+        contentForTab(selectedTabTag)
     }
 
     @ViewBuilder
     private func contentForTab(_ tag: String) -> some View {
         switch tag {
         case TabTags.dashboard:
-            DashboardView(selectedTabTag: self.$selectedTabTag)
+            DashboardView(selectedTabTag: $selectedTabTag)
         case TabTags.tasks:
             TaskManagerView()
         case TabTags.calendar:
@@ -202,62 +202,62 @@ public struct MainTabViewEnhanced: View {
         case TabTags.settings:
             SettingsView()
         default:
-            DashboardView(selectedTabTag: self.$selectedTabTag)
+            DashboardView(selectedTabTag: $selectedTabTag)
         }
     }
 
     // MARK: - Toolbar Buttons
 
     #if os(macOS)
-    @ViewBuilder
-    private var macOSToolbarButtons: some View {
-        Button(action: self.addNewItem) {
-            Image(systemName: "plus")
-        }
-        .accessibilityLabel("Add New Item")
-        .help("Add New Item")
+        @ViewBuilder
+        private var macOSToolbarButtons: some View {
+            Button(action: addNewItem) {
+                Image(systemName: "plus")
+            }
+            .accessibilityLabel("Add New Item")
+            .help("Add New Item")
 
-        Button(action: self.searchAction) {
-            Image(systemName: "magnifyingglass")
-        }
-        .accessibilityLabel("Search")
-        .help("Search")
-        .keyboardShortcut("f", modifiers: .command)
+            Button(action: searchAction) {
+                Image(systemName: "magnifyingglass")
+            }
+            .accessibilityLabel("Search")
+            .help("Search")
+            .keyboardShortcut("f", modifiers: .command)
 
-        Button(action: self.syncAction) {
-            Image(systemName: "arrow.clockwise")
+            Button(action: syncAction) {
+                Image(systemName: "arrow.clockwise")
+            }
+            .accessibilityLabel("Sync")
+            .help("Sync")
+            .keyboardShortcut("r", modifiers: .command)
         }
-        .accessibilityLabel("Sync")
-        .help("Sync")
-        .keyboardShortcut("r", modifiers: .command)
-    }
     #endif
 
     #if os(iOS)
-    @ViewBuilder
-    private var iPadToolbarButtons: some View {
-        Button(action: self.addNewItem) {
-            Image(systemName: "plus")
-        }
-        .accessibilityLabel("Add New Item")
+        @ViewBuilder
+        private var iPadToolbarButtons: some View {
+            Button(action: addNewItem) {
+                Image(systemName: "plus")
+            }
+            .accessibilityLabel("Add New Item")
 
-        Button(action: self.searchAction) {
-            Image(systemName: "magnifyingglass")
-        }
-        .accessibilityLabel("Search")
+            Button(action: searchAction) {
+                Image(systemName: "magnifyingglass")
+            }
+            .accessibilityLabel("Search")
 
-        Button(action: self.syncAction) {
-            Image(systemName: "arrow.clockwise")
+            Button(action: syncAction) {
+                Image(systemName: "arrow.clockwise")
+            }
+            .accessibilityLabel("Sync")
         }
-        .accessibilityLabel("Sync")
-    }
     #endif
 
     // MARK: - Actions
 
     private func addNewItem() {
         // Add new item based on current tab
-        print("Add new item for tab: \(self.selectedTabTag)")
+        print("Add new item for tab: \(selectedTabTag)")
     }
 
     private func searchAction() {
@@ -271,11 +271,11 @@ public struct MainTabViewEnhanced: View {
     }
 
     #if os(macOS)
-    private func toggleSidebar() {
-        NSApp.keyWindow?.firstResponder?.tryToPerform(
-            #selector(NSSplitViewController.toggleSidebar(_:)), with: nil
-        )
-    }
+        private func toggleSidebar() {
+            NSApp.keyWindow?.firstResponder?.tryToPerform(
+                #selector(NSSplitViewController.toggleSidebar(_:)), with: nil
+            )
+        }
     #endif
 }
 

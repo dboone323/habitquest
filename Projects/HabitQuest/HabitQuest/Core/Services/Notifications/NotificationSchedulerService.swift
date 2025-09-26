@@ -22,7 +22,7 @@ final class NotificationSchedulerService {
         let habits = await fetchActiveHabits()
 
         for habit in habits {
-            await self.scheduleOptimalNotification(for: habit)
+            await scheduleOptimalNotification(for: habit)
         }
     }
 
@@ -31,13 +31,13 @@ final class NotificationSchedulerService {
         let scheduling = await analyticsEngine.generateOptimalScheduling(for: habit)
         let prediction = await analyticsEngine.predictStreakSuccess(for: habit)
 
-        let content = self.generateSmartContent(
+        let content = generateSmartContent(
             for: habit,
             scheduling: scheduling,
             prediction: prediction
         )
 
-        let trigger = self.createOptimalTrigger(
+        let trigger = createOptimalTrigger(
             for: habit,
             recommendedHour: scheduling.optimalTime,
             successRate: scheduling.successRateAtTime
@@ -50,7 +50,7 @@ final class NotificationSchedulerService {
         )
 
         do {
-            try await self.notificationCenter.add(request)
+            try await notificationCenter.add(request)
         } catch {
             print("Failed to schedule notification for \(habit.name): \(error)")
         }
@@ -59,12 +59,12 @@ final class NotificationSchedulerService {
     /// Cancel all notifications for a specific habit
     func cancelNotifications(for habitId: UUID) async {
         let identifiers = ["habit_\(habitId.uuidString)"]
-        self.notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers)
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers)
     }
 
     /// Cancel all pending notifications
     func cancelAllNotifications() async {
-        self.notificationCenter.removeAllPendingNotificationRequests()
+        notificationCenter.removeAllPendingNotificationRequests()
     }
 
     // MARK: - Private Methods
@@ -77,23 +77,23 @@ final class NotificationSchedulerService {
         let content = UNMutableNotificationContent()
 
         // Personalized title based on streak status
-        content.title = self.generatePersonalizedTitle(for: habit, prediction: prediction)
+        content.title = generatePersonalizedTitle(for: habit, prediction: prediction)
 
         // Context-aware body message
-        content.body = self.generateContextualMessage(
+        content.body = generateContextualMessage(
             for: habit,
             scheduling: scheduling,
             prediction: prediction
         )
 
         // Dynamic notification priority
-        content.interruptionLevel = self.determineInterruptionLevel(
+        content.interruptionLevel = determineInterruptionLevel(
             habit: habit,
             successRate: scheduling.successRateAtTime
         )
 
         // Custom sound based on habit category
-        content.sound = self.selectOptimalSound(for: habit.category)
+        content.sound = selectOptimalSound(for: habit.category)
 
         // Rich actions for quick interaction
         content.categoryIdentifier = "HABIT_REMINDER"
@@ -113,13 +113,13 @@ final class NotificationSchedulerService {
         let streak = habit.streak
 
         switch (streak, prediction.probability) {
-        case let (streakCount, probabilityValue) where streakCount >= 21 && probabilityValue > 80:
+        case (let streakCount, let probabilityValue) where streakCount >= 21 && probabilityValue > 80:
             return "🔥 Keep the \(streakCount)-day streak alive!"
-        case let (streakCount, probabilityValue) where streakCount >= 7 && probabilityValue > 70:
+        case (let streakCount, let probabilityValue) where streakCount >= 7 && probabilityValue > 70:
             return "💪 \(streakCount) days strong - don't break it now!"
-        case let (streakCount, _) where streakCount >= 3:
+        case (let streakCount, _) where streakCount >= 3:
             return "⭐ \(streakCount)-day streak in progress"
-        case let (_, probabilityValue) where probabilityValue < 40:
+        case (_, let probabilityValue) where probabilityValue < 40:
             return "🎯 Small step, big impact"
         default:
             return "✨ Time for \(habit.name)"
@@ -131,8 +131,8 @@ final class NotificationSchedulerService {
         scheduling: SchedulingRecommendation,
         prediction: StreakPrediction
     ) -> String {
-        let timeContext = self.generateTimeContext(hour: scheduling.optimalTime)
-        let motivationalMessage = self.selectMotivationalMessage(prediction: prediction)
+        let timeContext = generateTimeContext(hour: scheduling.optimalTime)
+        let motivationalMessage = selectMotivationalMessage(prediction: prediction)
 
         return "\(timeContext) \(motivationalMessage) \(prediction.recommendedAction)"
     }
@@ -187,7 +187,7 @@ final class NotificationSchedulerService {
         case .daily:
             return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         case .weekly:
-            dateComponents.weekday = self.findOptimalWeekday(for: habit)
+            dateComponents.weekday = findOptimalWeekday(for: habit)
             return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         case .custom:
             return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
@@ -220,7 +220,7 @@ final class NotificationSchedulerService {
 
     private func fetchActiveHabits() async -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
-        let allHabits = (try? self.modelContext.fetch(descriptor)) ?? []
+        let allHabits = (try? modelContext.fetch(descriptor)) ?? []
         return allHabits.filter(\.isActive)
     }
 

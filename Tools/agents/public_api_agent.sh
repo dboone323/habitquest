@@ -36,28 +36,28 @@ MAX_CACHE_SIZE=100  # Maximum cached responses
 
 # Initialize files
 mkdir -p "$(dirname "$0")/communication" "$(dirname "$0")/api_cache"
-touch "$NOTIFICATION_FILE"
-touch "$COMPLETED_FILE"
+touch "${NOTIFICATION_FILE}"
+touch "${COMPLETED_FILE}"
 
-if [[ ! -f $API_CACHE_FILE ]]; then
-  echo '{"cache": {}, "metadata": {"created": "", "last_cleanup": ""}}' >"$API_CACHE_FILE"
+if [[ ! -f ${API_CACHE_FILE} ]]; then
+  echo '{"cache": {}, "metadata": {"created": "", "last_cleanup": ""}}' >"${API_CACHE_FILE}"
 fi
 
-if [[ ! -f $RATE_LIMIT_FILE ]]; then
-  echo '{"limits": {}}' >"$RATE_LIMIT_FILE"
+if [[ ! -f ${RATE_LIMIT_FILE} ]]; then
+  echo '{"limits": {}}' >"${RATE_LIMIT_FILE}"
 fi
 
 log_message() {
   local level="$1"
   local message="$2"
-  echo "[$(date)] [$level] $message" >>"$LOG_FILE"
+  echo "[$(date)] [${level}] ${message}" >>"${LOG_FILE}"
 }
 
 # Notify orchestrator of task completion
 notify_completion() {
   local task_id="$1"
   local success="$2"
-  echo "$(date +%s)|$task_id|$success" >>"$COMPLETED_FILE"
+  echo "$(date +%s)|${task_id}|${success}" >>"${COMPLETED_FILE}"
 }
 
 # Make API request with rate limiting and caching
@@ -67,26 +67,26 @@ make_api_request() {
   local method="${3:-GET}"
   local data="${4-}"
 
-  local api_base="${PUBLIC_APIS[$api_name]}"
-  if [[ -z $api_base ]]; then
-    log_message "ERROR" "Unknown API: $api_name"
+  local api_base="${PUBLIC_APIS[${api_name}]}"
+  if [[ -z ${api_base} ]]; then
+    log_message "ERROR" "Unknown API: ${api_name}"
     return 1
   fi
 
-  local full_url="$api_base$endpoint"
-  local cache_key=$(echo "$method|$full_url|$data" | md5)
+  local full_url="${api_base}${endpoint}"
+  local cache_key=$(echo "${method}|${full_url}|${data}" | md5)
 
   # Check cache first
-  local cached_response=$(get_cached_response "$cache_key")
-  if [[ -n $cached_response ]]; then
-    log_message "INFO" "Cache hit for $api_name: $endpoint"
-    echo "$cached_response"
+  local cached_response=$(get_cached_response "${cache_key}")
+  if [[ -n ${cached_response} ]]; then
+    log_message "INFO" "Cache hit for ${api_name}: ${endpoint}"
+    echo "${cached_response}"
     return 0
   fi
 
   # Check rate limits
-  if ! check_rate_limit "$api_name"; then
-    log_message "WARNING" "Rate limit exceeded for $api_name"
+  if ! check_rate_limit "${api_name}"; then
+    log_message "WARNING" "Rate limit exceeded for ${api_name}"
     return 1
   fi
 
@@ -94,36 +94,36 @@ make_api_request() {
   local response
   local http_code
 
-  case "$method" in
+  case "${method}" in
   "GET")
-    response=$(curl -s -w "HTTPSTATUS:%{http_code}" "$full_url" 2>/dev/null)
+    response=$(curl -s -w "HTTPSTATUS:%{http_code}" "${full_url}" 2>/dev/null)
     ;;
   "POST")
-    response=$(curl -s -w "HTTPSTATUS:%{http_code}" -X POST -H "Content-Type: application/json" -d "$data" "$full_url" 2>/dev/null)
+    response=$(curl -s -w "HTTPSTATUS:%{http_code}" -X POST -H "Content-Type: application/json" -d "${data}" "${full_url}" 2>/dev/null)
     ;;
   *)
-    log_message "ERROR" "Unsupported HTTP method: $method"
+    log_message "ERROR" "Unsupported HTTP method: ${method}"
     return 1
     ;;
   esac
 
   # Extract HTTP status code
-  http_code=$(echo "$response" | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
-  response=$(echo "$response" | sed -e 's/HTTPSTATUS:.*//g')
+  http_code=$(echo "${response}" | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
+  response=$(echo "${response}" | sed -e 's/HTTPSTATUS:.*//g')
 
   # Check for successful response
-  if [[ $http_code -ge 200 && $http_code -lt 300 ]]; then
+  if [[ ${http_code} -ge 200 && ${http_code} -lt 300 ]]; then
     # Cache successful response
-    cache_response "$cache_key" "$response"
+    cache_response "${cache_key}" "${response}"
 
     # Update rate limit tracking
-    update_rate_limit "$api_name"
+    update_rate_limit "${api_name}"
 
-    log_message "INFO" "API request successful: $api_name $endpoint (HTTP $http_code)"
-    echo "$response"
+    log_message "INFO" "API request successful: ${api_name} ${endpoint} (HTTP ${http_code})"
+    echo "${response}"
     return 0
   else
-    log_message "ERROR" "API request failed: $api_name $endpoint (HTTP $http_code)"
+    log_message "ERROR" "API request failed: ${api_name} ${endpoint} (HTTP ${http_code})"
     return 1
   fi
 }
@@ -132,18 +132,18 @@ make_api_request() {
 check_rate_limit() {
   local api_name="$1"
 
-  local limit_config="${RATE_LIMITS[$api_name]}"
-  if [[ -z $limit_config ]]; then
+  local limit_config="${RATE_LIMITS[${api_name}]}"
+  if [[ -z ${limit_config} ]]; then
     return 0 # No rate limit configured
   fi
 
-  local requests_per_window=$(echo "$limit_config" | cut -d'|' -f1)
-  local window_seconds=$(echo "$limit_config" | cut -d'|' -f2)
+  local requests_per_window=$(echo "${limit_config}" | cut -d'|' -f1)
+  local window_seconds=$(echo "${limit_config}" | cut -d'|' -f2)
 
   # Get current usage
-  local current_usage=$(get_current_usage "$api_name" "$window_seconds")
+  local current_usage=$(get_current_usage "${api_name}" "${window_seconds}")
 
-  if [[ $current_usage -ge $requests_per_window ]]; then
+  if [[ ${current_usage} -ge ${requests_per_window} ]]; then
     return 1 # Rate limit exceeded
   fi
 
@@ -157,7 +157,7 @@ get_current_usage() {
   local cutoff_time=$(($(date +%s) - window_seconds))
 
   if command -v jq &>/dev/null; then
-    jq -r ".limits.\"$api_name\" // [] | map(select(.timestamp > $cutoff_time)) | length" "$RATE_LIMIT_FILE" 2>/dev/null || echo "0"
+    jq -r ".limits.\"${api_name}\" // [] | map(select(.timestamp > ${cutoff_time})) | length" "${RATE_LIMIT_FILE}" 2>/dev/null || echo "0"
   else
     echo "0"
   fi
@@ -170,9 +170,9 @@ update_rate_limit() {
 
   if command -v jq &>/dev/null; then
     # Add new request to tracking
-    jq --arg api_name "$api_name" --arg timestamp "$timestamp" \
+    jq --arg api_name "${api_name}" --arg timestamp "${timestamp}" \
       '.limits[$api_name] = (.limits[$api_name] // [] | . + [{"timestamp": ($timestamp | tonumber)}])' \
-      "$RATE_LIMIT_FILE" >"$RATE_LIMIT_FILE.tmp" && mv "$RATE_LIMIT_FILE.tmp" "$RATE_LIMIT_FILE"
+      "${RATE_LIMIT_FILE}" >"${RATE_LIMIT_FILE}.tmp" && mv "${RATE_LIMIT_FILE}.tmp" "${RATE_LIMIT_FILE}"
   fi
 }
 
@@ -181,18 +181,18 @@ get_cached_response() {
   local cache_key="$1"
 
   if command -v jq &>/dev/null; then
-    local cached_data=$(jq -r ".cache.\"$cache_key\" // empty" "$API_CACHE_FILE")
-    if [[ -n $cached_data && $cached_data != "null" ]]; then
-      local cache_time=$(echo "$cached_data" | jq -r '.timestamp // 0')
+    local cached_data=$(jq -r ".cache.\"${cache_key}\" // empty" "${API_CACHE_FILE}")
+    if [[ -n ${cached_data} && ${cached_data} != "null" ]]; then
+      local cache_time=$(echo "${cached_data}" | jq -r '.timestamp // 0')
       local current_time=$(date +%s)
 
       # Check if cache is still valid
-      if [[ $((current_time - cache_time)) -lt $CACHE_DURATION ]]; then
-        echo "$cached_data" | jq -r '.response // empty'
+      if [[ $((current_time - cache_time)) -lt ${CACHE_DURATION} ]]; then
+        echo "${cached_data}" | jq -r '.response // empty'
         return 0
       else
         # Remove expired cache entry
-        jq "del(.cache.\"$cache_key\")" "$API_CACHE_FILE" >"$API_CACHE_FILE.tmp" && mv "$API_CACHE_FILE.tmp" "$API_CACHE_FILE"
+        jq "del(.cache.\"${cache_key}\")" "${API_CACHE_FILE}" >"${API_CACHE_FILE}.tmp" && mv "${API_CACHE_FILE}.tmp" "${API_CACHE_FILE}"
       fi
     fi
   fi
@@ -211,11 +211,11 @@ cache_response() {
     cleanup_cache
 
     # Add new cache entry
-    jq --arg cache_key "$cache_key" --arg response "$response" --arg timestamp "$timestamp" \
+    jq --arg cache_key "${cache_key}" --arg response "${response}" --arg timestamp "${timestamp}" \
       '.cache[$cache_key] = {"response": $response, "timestamp": ($timestamp | tonumber)}' \
-      "$API_CACHE_FILE" >"$API_CACHE_FILE.tmp" && mv "$API_CACHE_FILE.tmp" "$API_CACHE_FILE"
+      "${API_CACHE_FILE}" >"${API_CACHE_FILE}.tmp" && mv "${API_CACHE_FILE}.tmp" "${API_CACHE_FILE}"
 
-    log_message "INFO" "Cached response for key: $cache_key"
+    log_message "INFO" "Cached response for key: ${cache_key}"
   fi
 }
 
@@ -225,15 +225,15 @@ cleanup_cache() {
   local cutoff_time=$((current_time - CACHE_DURATION))
 
   if command -v jq &>/dev/null; then
-    local cache_size=$(jq '.cache | length' "$API_CACHE_FILE")
+    local cache_size=$(jq '.cache | length' "${API_CACHE_FILE}")
 
-    if [[ $cache_size -gt $MAX_CACHE_SIZE ]]; then
+    if [[ ${cache_size} -gt ${MAX_CACHE_SIZE} ]]; then
       # Remove expired entries and keep only recent ones
-      jq --arg cutoff_time "$cutoff_time" \
+      jq --arg cutoff_time "${cutoff_time}" \
         '.cache = (.cache | to_entries | map(select(.value.timestamp > ($cutoff_time | tonumber))) | from_entries)' \
-        "$API_CACHE_FILE" >"$API_CACHE_FILE.tmp" && mv "$API_CACHE_FILE.tmp" "$API_CACHE_FILE"
+        "${API_CACHE_FILE}" >"${API_CACHE_FILE}.tmp" && mv "${API_CACHE_FILE}.tmp" "${API_CACHE_FILE}"
 
-      log_message "INFO" "Cleaned up cache (was $cache_size entries)"
+      log_message "INFO" "Cleaned up cache (was ${cache_size} entries)"
     fi
   fi
 }
@@ -244,7 +244,7 @@ github_api_call() {
   local method="${2:-GET}"
   local data="${3-}"
 
-  make_api_request "github_api" "$endpoint" "$method" "$data"
+  make_api_request "github_api" "${endpoint}" "${method}" "${data}"
 }
 
 # Get latest Swift version information
@@ -252,12 +252,12 @@ get_swift_version_info() {
   log_message "INFO" "Fetching Swift version information..."
 
   local response=$(github_api_call "/repos/apple/swift/releases/latest")
-  if [[ $? -eq 0 && -n $response ]]; then
-    local version=$(echo "$response" | jq -r '.tag_name // empty' 2>/dev/null | sed 's/swift-//')
-    local release_notes=$(echo "$response" | jq -r '.body // empty' 2>/dev/null | head -5)
+  if [[ $? -eq 0 && -n ${response} ]]; then
+    local version=$(echo "${response}" | jq -r '.tag_name // empty' 2>/dev/null | sed 's/swift-//')
+    local release_notes=$(echo "${response}" | jq -r '.body // empty' 2>/dev/null | head -5)
 
-    if [[ -n $version ]]; then
-      echo "{\"version\": \"$version\", \"release_notes\": \"$release_notes\"}"
+    if [[ -n ${version} ]]; then
+      echo "{\"version\": \"${version}\", \"release_notes\": \"${release_notes}\"}"
       return 0
     fi
   fi
@@ -269,31 +269,31 @@ get_swift_version_info() {
 get_ios_docs() {
   local topic="$1"
 
-  log_message "INFO" "Fetching iOS documentation for: $topic"
+  log_message "INFO" "Fetching iOS documentation for: ${topic}"
 
   # This is a simplified example - in reality, you'd need to parse Apple's documentation API
-  local docs_url="${PUBLIC_APIS[ios_dev_docs]}/$topic"
+  local docs_url="${PUBLIC_APIS[ios_dev_docs]}/${topic}"
 
-  make_api_request "ios_dev_docs" "/$topic"
+  make_api_request "ios_dev_docs" "/${topic}"
 }
 
 # Get CocoaPods specifications
 get_cocoapods_specs() {
   local pod_name="$1"
 
-  log_message "INFO" "Fetching CocoaPods specs for: $pod_name"
+  log_message "INFO" "Fetching CocoaPods specs for: ${pod_name}"
 
-  make_api_request "cocoapods_specs" "/Specs/0/3/5/$pod_name.json"
+  make_api_request "cocoapods_specs" "/Specs/0/3/5/${pod_name}.json"
 }
 
 # Get Swift Package Index information
 get_swift_package_info() {
   local package_name="$1"
 
-  log_message "INFO" "Fetching Swift Package Index info for: $package_name"
+  log_message "INFO" "Fetching Swift Package Index info for: ${package_name}"
 
   # Note: This would need actual API endpoints from Swift Package Index
-  make_api_request "swift_package_index" "/api/packages/$package_name"
+  make_api_request "swift_package_index" "/api/packages/${package_name}"
 }
 
 # Batch API requests to optimize rate limit usage
@@ -306,7 +306,7 @@ batch_api_requests() {
   local failed=0
 
   while IFS='|' read -r api_name endpoint method data; do
-    if make_api_request "$api_name" "$endpoint" "$method" "$data"; then
+    if make_api_request "${api_name}" "${endpoint}" "${method}" "${data}"; then
       ((processed++))
     else
       ((failed++))
@@ -314,17 +314,17 @@ batch_api_requests() {
 
     # Small delay between requests to be respectful
     sleep 0.1
-  done <"$requests_file"
+  done <"${requests_file}"
 
-  log_message "INFO" "Batch processing complete: $processed successful, $failed failed"
+  log_message "INFO" "Batch processing complete: ${processed} successful, ${failed} failed"
 
-  echo "{\"processed\": $processed, \"failed\": $failed}"
+  echo "{\"processed\": ${processed}, \"failed\": ${failed}}"
 }
 
 # Generate API usage report
 generate_api_report() {
   local report_file="$(dirname "$0")/api_reports/api_usage_$(date +%Y%m%d_%H%M%S).md"
-  mkdir -p "$(dirname "$report_file")"
+  mkdir -p "$(dirname "${report_file}")"
 
   {
     echo "# API Usage Report"
@@ -336,69 +336,69 @@ generate_api_report() {
     echo "|-----|---------------|-------|--------|--------|"
 
     for api_name in "${!RATE_LIMITS[@]}"; do
-      local limit_config="${RATE_LIMITS[$api_name]}"
-      local requests_per_window=$(echo "$limit_config" | cut -d'|' -f1)
-      local window_seconds=$(echo "$limit_config" | cut -d'|' -f2)
+      local limit_config="${RATE_LIMITS[${api_name}]}"
+      local requests_per_window=$(echo "${limit_config}" | cut -d'|' -f1)
+      local window_seconds=$(echo "${limit_config}" | cut -d'|' -f2)
 
-      local current_usage=$(get_current_usage "$api_name" "$window_seconds")
+      local current_usage=$(get_current_usage "${api_name}" "${window_seconds}")
       local status="✅ OK"
 
-      if [[ $current_usage -ge $requests_per_window ]]; then
+      if [[ ${current_usage} -ge ${requests_per_window} ]]; then
         status="❌ Limited"
-      elif [[ $current_usage -gt $((requests_per_window * 80 / 100)) ]]; then
+      elif [[ ${current_usage} -gt $((requests_per_window * 80 / 100)) ]]; then
         status="⚠️  Near Limit"
       fi
 
-      echo "| $api_name | $current_usage | $requests_per_window | ${window_seconds}s | $status |"
+      echo "| ${api_name} | ${current_usage} | ${requests_per_window} | ${window_seconds}s | ${status} |"
     done
     echo ""
 
     echo "## Cache Statistics"
     if command -v jq &>/dev/null; then
-      local cache_entries=$(jq '.cache | length' "$API_CACHE_FILE")
-      local cache_size=$(stat -f%z "$API_CACHE_FILE" 2>/dev/null || echo "0")
-      echo "- **Cached Responses**: $cache_entries"
-      echo "- **Cache File Size**: $cache_size bytes"
-      echo "- **Cache Duration**: $CACHE_DURATION seconds"
+      local cache_entries=$(jq '.cache | length' "${API_CACHE_FILE}")
+      local cache_size=$(stat -f%z "${API_CACHE_FILE}" 2>/dev/null || echo "0")
+      echo "- **Cached Responses**: ${cache_entries}"
+      echo "- **Cache File Size**: ${cache_size} bytes"
+      echo "- **Cache Duration**: ${CACHE_DURATION} seconds"
     fi
     echo ""
 
     echo "## Recent API Calls"
-    tail -10 "$LOG_FILE" | grep "API request" | while read -r line; do
-      echo "- $line"
+    tail -10 "${LOG_FILE}" | grep "API request" | while read -r line; do
+      echo "- ${line}"
     done
 
-  } >"$report_file"
+  } >"${report_file}"
 
-  log_message "INFO" "API usage report generated: $report_file"
+  log_message "INFO" "API usage report generated: ${report_file}"
 }
 
 # Process notifications from orchestrator
 process_notifications() {
-  if [[ -f $NOTIFICATION_FILE ]]; then
+  if [[ -f ${NOTIFICATION_FILE} ]]; then
     while IFS='|' read -r timestamp notification_type task_id; do
-      case "$notification_type" in
+      case "${notification_type}" in
       "api_request")
-        log_message "INFO" "Processing API request: $task_id"
+        log_message "INFO" "Processing API request: ${task_id}"
         # Parse and execute API request
         ;;
       "batch_requests")
-        log_message "INFO" "Processing batch requests: $task_id"
+        log_message "INFO" "Processing batch requests: ${task_id}"
         # Process batch file
         ;;
       "clear_cache")
         log_message "INFO" "Clearing API cache"
-        echo '{"cache": {}, "metadata": {"created": "", "last_cleanup": ""}}' >"$API_CACHE_FILE"
+        echo '{"cache": {}, "metadata": {"created": "", "last_cleanup": ""}}' >"${API_CACHE_FILE}"
         ;;
       "get_report")
         log_message "INFO" "Generating API report"
         generate_api_report
         ;;
       esac
-    done <"$NOTIFICATION_FILE"
+    done <"${NOTIFICATION_FILE}"
 
     # Clear processed notifications
-    >"$NOTIFICATION_FILE"
+    >"${NOTIFICATION_FILE}"
   fi
 }
 
@@ -420,10 +420,10 @@ while true; do
 
   # Check for rate limit resets (simplified)
   local current_hour=$(date +%H)
-  if [[ $current_hour -eq 0 ]]; then
+  if [[ ${current_hour} -eq 0 ]]; then
     # Reset hourly rate limits at midnight
     if command -v jq &>/dev/null; then
-      jq '.limits = {}' "$RATE_LIMIT_FILE" >"$RATE_LIMIT_FILE.tmp" && mv "$RATE_LIMIT_FILE.tmp" "$RATE_LIMIT_FILE"
+      jq '.limits = {}' "${RATE_LIMIT_FILE}" >"${RATE_LIMIT_FILE}.tmp" && mv "${RATE_LIMIT_FILE}.tmp" "${RATE_LIMIT_FILE}"
       log_message "INFO" "Reset hourly rate limits"
     fi
   fi

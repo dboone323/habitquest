@@ -33,33 +33,33 @@ echo "🔍 Checking for iPhone 16 simulator..."
 DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone 16 (" | grep -i "18.1" | head -1 | sed -E 's/.*\(([0-9A-Z-]+)\).*/\1/')
 DEVICE_NAME="iPhone 16"
 
-if [ -z "$DEVICE_ID" ]; then
-  # Try iPhone 16 Pro as a fallback
-  echo "Looking for iPhone 16 Pro simulator..."
-  DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone 16 Pro (" | grep -i "18.1" | head -1 | sed -E 's/.*\(([0-9A-Z-]+)\).*/\1/')
-  DEVICE_NAME="iPhone 16 Pro"
+if [[ -z "${DEVICE_ID}" ]]; then
+	# Try iPhone 16 Pro as a fallback
+	echo "Looking for iPhone 16 Pro simulator..."
+	DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone 16 Pro (" | grep -i "18.1" | head -1 | sed -E 's/.*\(([0-9A-Z-]+)\).*/\1/')
+	DEVICE_NAME="iPhone 16 Pro"
 fi
 
-if [ -z "$DEVICE_ID" ]; then
-  # Last resort: any iPhone simulator
-  echo "Looking for any iPhone simulator..."
-  DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | sed -E 's/.*\(([0-9A-Z-]+)\).*/\1/')
-  DEVICE_NAME=$(xcrun simctl list devices available | grep "iPhone" | head -1 | sed -E 's/.*iPhone ([^(]+).*/iPhone \1/' | xargs)
+if [[ -z "${DEVICE_ID}" ]]; then
+	# Last resort: any iPhone simulator
+	echo "Looking for any iPhone simulator..."
+	DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | sed -E 's/.*\(([0-9A-Z-]+)\).*/\1/')
+	DEVICE_NAME=$(xcrun simctl list devices available | grep "iPhone" | head -1 | sed -E 's/.*iPhone ([^(]+).*/iPhone \1/' | xargs)
 fi
 
-if [ -z "$DEVICE_ID" ]; then
-  echo -e "${RED}❌ Could not find any iPhone simulator${NC}"
-  echo "Available simulators:"
-  xcrun simctl list devices available
-  exit 1
+if [[ -z "${DEVICE_ID}" ]]; then
+	echo -e "${RED}❌ Could not find any iPhone simulator${NC}"
+	echo "Available simulators:"
+	xcrun simctl list devices available
+	exit 1
 fi
 
-echo -e "${GREEN}✅ Selected: $DEVICE_NAME${NC}"
-echo "Device ID: $DEVICE_ID"
+echo -e "${GREEN}✅ Selected${ $DEVICE_NA}ME${NC}"
+echo "Device ID: ${DEVICE_ID}"
 
 # Boot the simulator
 echo "⚡ Booting simulator..."
-xcrun simctl boot "$DEVICE_ID" 2>/dev/null || echo "Simulator already booted"
+xcrun simctl boot "${DEVICE_ID}" 2>/dev/null || echo "Simulator already booted"
 
 # Open the simulator app
 echo "📲 Opening simulator..."
@@ -72,28 +72,28 @@ sleep 5
 # Build the app using Xcode
 echo "🔨 Building app with Xcode..."
 xcodebuild -project MomentumFinance.xcodeproj \
-  -scheme MomentumFinance \
-  -destination "platform=iOS Simulator,id=$DEVICE_ID" \
-  -derivedDataPath ./DerivedData \
-  clean build
+	-scheme MomentumFinance \
+	-destination "platform=iOS Simulator,id=${DEVICE_ID}" \
+	-derivedDataPath ./DerivedData \
+	clean build
 
-if [ $? -eq 0 ]; then
-  echo -e "${GREEN}✅ Build successful!${NC}"
+if [[ $? -eq 0 ]]; then
+	echo -e "${GREEN}✅ Build successful!${NC}"
 
-  # Get the app bundle identifier
-  APP_BUNDLE_ID="com.momentumfinance.MomentumFinance"
-  APP_PATH="./DerivedData/Build/Products/Debug-iphonesimulator/MomentumFinance.app"
+	# Get the app bundle identifier
+	APP_BUNDLE_ID="com.momentumfinance.MomentumFinance"
+	APP_PATH="./DerivedData/Build/Products/Debug-iphonesimulator/MomentumFinance.app"
 
-  # Install the app
-  echo "📦 Installing app on simulator..."
-  xcrun simctl install "$DEVICE_ID" "$APP_PATH"
+	# Install the app
+	echo "📦 Installing app on simulator..."
+	xcrun simctl install "${DEVICE_ID}" "${APP_PATH}"
 
-  # Launch the app
-  echo "🚀 Launching app..."
-  xcrun simctl launch "$DEVICE_ID" "$APP_BUNDLE_ID"
+	# Launch the app
+	echo "🚀 Launching app..."
+	xcrun simctl launch "${DEVICE_ID}" "${APP_BUNDLE_ID}"
 
-  echo -e "${GREEN}✨ MomentumFinance launched successfully on $DEVICE_NAME!${NC}"
+	echo -e "${GREEN}✨ MomentumFinance launched successfully o${ $DEVICE_NA}ME!${NC}"
 else
-  echo -e "${RED}❌ Build failed${NC}"
-  exit 1
+	echo -e "${RED}❌ Build failed${NC}"
+	exit 1
 fi

@@ -53,54 +53,54 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
 
     override init(size: CGSize) {
         // Initialize all service managers
-        self.playerManager = PlayerManager(scene: SKScene())
-        self.obstacleManager = ObstacleManager(scene: SKScene())
-        self.uiManager = UIManager(scene: SKScene())
-        self.physicsManager = PhysicsManager(scene: SKScene())
-        self.effectsManager = EffectsManager(scene: SKScene())
+        playerManager = PlayerManager(scene: SKScene())
+        obstacleManager = ObstacleManager(scene: SKScene())
+        uiManager = UIManager(scene: SKScene())
+        physicsManager = PhysicsManager(scene: SKScene())
+        effectsManager = EffectsManager(scene: SKScene())
 
         super.init(size: size)
 
         // Setup service relationships
-        self.setupServiceDelegates()
+        setupServiceDelegates()
     }
 
     required init?(coder aDecoder: NSCoder) {
         // Initialize all service managers
-        self.playerManager = PlayerManager(scene: SKScene())
-        self.obstacleManager = ObstacleManager(scene: SKScene())
-        self.uiManager = UIManager(scene: SKScene())
-        self.physicsManager = PhysicsManager(scene: SKScene())
-        self.effectsManager = EffectsManager(scene: SKScene())
+        playerManager = PlayerManager(scene: SKScene())
+        obstacleManager = ObstacleManager(scene: SKScene())
+        uiManager = UIManager(scene: SKScene())
+        physicsManager = PhysicsManager(scene: SKScene())
+        effectsManager = EffectsManager(scene: SKScene())
 
         super.init(coder: aDecoder)
 
         // Setup service relationships
-        self.setupServiceDelegates()
+        setupServiceDelegates()
     }
 
     /// Sets up delegates between services
     private func setupServiceDelegates() {
         // Game state delegates
-        self.gameStateManager.delegate = self
+        gameStateManager.delegate = self
 
         // Player manager delegates
-        self.playerManager.delegate = self
+        playerManager.delegate = self
 
         // Obstacle manager delegates
-        self.obstacleManager.delegate = self
+        obstacleManager.delegate = self
 
         // UI manager delegates
-        self.uiManager.delegate = self
+        uiManager.delegate = self
 
         // Physics manager delegates
-        self.physicsManager.delegate = self
+        physicsManager.delegate = self
 
         // Achievement manager delegates
-        self.achievementManager.delegate = self
+        achievementManager.delegate = self
 
         // Performance manager delegates
-        self.performanceManager.delegate = self
+        performanceManager.delegate = self
     }
 
     // MARK: - Scene Lifecycle
@@ -108,13 +108,13 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     /// Called when the scene is first presented by the view.
     override public func didMove(to _: SKView) {
         // Setup the scene
-        self.setupScene()
+        setupScene()
 
         // Start background music
-        self.audioManager.startBackgroundMusic()
+        audioManager.startBackgroundMusic()
 
         // Start the game
-        self.startGame()
+        startGame()
     }
 
     /// Sets up the basic scene configuration
@@ -123,19 +123,19 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
 
         // Setup background
-        self.setupBackground()
+        setupBackground()
 
         // Setup UI
-        self.uiManager.setupUI()
+        uiManager.setupUI()
 
         // Setup player
-        self.playerManager.createPlayer(at: CGPoint(x: size.width / 2, y: 100))
+        playerManager.createPlayer(at: CGPoint(x: size.width / 2, y: 100))
 
         // Enable tilt controls if available
-        self.enableTiltControlsIfAvailable()
+        enableTiltControlsIfAvailable()
 
         // Setup effects
-        self.effectsManager.createExplosion(at: .zero) // Preload explosion effect
+        effectsManager.createExplosion(at: .zero) // Preload explosion effect
     }
 
     /// Sets up the animated background
@@ -170,50 +170,50 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         // Check if tilt controls should be enabled (could be from user settings)
         let tiltEnabled = UserDefaults.standard.bool(forKey: "tiltControlsEnabled")
         if tiltEnabled {
-            self.playerManager.enableTiltControls(sensitivity: 0.7)
+            playerManager.enableTiltControls(sensitivity: 0.7)
         }
     }
 
     /// Starts a new game
     private func startGame() {
-        self.gameStateManager.startGame()
-        self.currentGameStats = GameStats()
+        gameStateManager.startGame()
+        currentGameStats = GameStats()
     }
 
     // MARK: - Game Flow
 
     /// Handles game over
     private func handleGameOver() {
-        self.gameStateManager.endGame()
+        gameStateManager.endGame()
 
         // Update achievements
-        self.achievementManager.updateProgress(for: .gameCompleted, value: Int(self.gameStateManager.survivalTime))
+        achievementManager.updateProgress(for: .gameCompleted, value: Int(gameStateManager.survivalTime))
 
         // Show game over screen
-        let isNewHighScore = HighScoreManager.shared.addScore(self.gameStateManager.score)
-        self.uiManager.showGameOverScreen(finalScore: self.gameStateManager.score, isNewHighScore: isNewHighScore)
+        let isNewHighScore = HighScoreManager.shared.addScore(gameStateManager.score)
+        uiManager.showGameOverScreen(finalScore: gameStateManager.score, isNewHighScore: isNewHighScore)
 
         // Stop spawning obstacles
-        self.obstacleManager.stopSpawning()
+        obstacleManager.stopSpawning()
 
         // Play game over sound
-        self.audioManager.playGameOverSound()
+        audioManager.playGameOverSound()
     }
 
     /// Restarts the game
     private func restartGame() {
         // Hide game over screen
-        self.uiManager.hideGameOverScreen()
+        uiManager.hideGameOverScreen()
 
         // Reset player
-        self.playerManager.reset()
-        self.playerManager.setPosition(CGPoint(x: size.width / 2, y: 100))
+        playerManager.reset()
+        playerManager.setPosition(CGPoint(x: size.width / 2, y: 100))
 
         // Clear obstacles
-        self.obstacleManager.removeAllObstacles()
+        obstacleManager.removeAllObstacles()
 
         // Start new game
-        self.startGame()
+        startGame()
     }
 
     // MARK: - Touch Handling
@@ -223,27 +223,27 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
 
-        if self.gameStateManager.isGameOver() {
+        if gameStateManager.isGameOver() {
             // Handle restart
-            self.uiManager.handleTouch(at: location)
+            uiManager.handleTouch(at: location)
         } else {
             // Handle player movement
-            self.playerManager.moveTo(location)
+            playerManager.moveTo(location)
         }
     }
 
     /// Handles touch movement for player control
     override public func touchesMoved(_ touches: Set<UITouch>, with _: UIEvent?) {
-        guard !self.gameStateManager.isGameOver(), let touch = touches.first else { return }
+        guard !gameStateManager.isGameOver(), let touch = touches.first else { return }
         let location = touch.location(in: self)
-        self.playerManager.moveTo(location)
+        playerManager.moveTo(location)
     }
 
     // MARK: - Physics Contact Delegate
 
     /// Handles physics collisions
     public func didBegin(_ contact: SKPhysicsContact) {
-        self.physicsManager.didBegin(contact)
+        physicsManager.didBegin(contact)
     }
 
     // MARK: - Update Loop
@@ -251,35 +251,35 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     /// Main game update loop
     override public func update(_ currentTime: TimeInterval) {
         // Initialize last update time
-        if self.lastUpdateTime == 0 {
-            self.lastUpdateTime = currentTime
+        if lastUpdateTime == 0 {
+            lastUpdateTime = currentTime
         }
 
-        let deltaTime = currentTime - self.lastUpdateTime
-        self.lastUpdateTime = currentTime
+        let deltaTime = currentTime - lastUpdateTime
+        lastUpdateTime = currentTime
 
         // Update game state if playing
-        if self.gameStateManager.isGameActive() {
-            self.updateGameplay(deltaTime)
+        if gameStateManager.isGameActive() {
+            updateGameplay(deltaTime)
         }
 
         // Update obstacle manager
-        self.obstacleManager.updateObstacles()
+        obstacleManager.updateObstacles()
 
         // Update effects
-        self.effectsManager.updateBackgroundEffects(for: self.gameStateManager.getCurrentDifficulty())
+        effectsManager.updateBackgroundEffects(for: gameStateManager.getCurrentDifficulty())
     }
 
     /// Updates gameplay logic
     private func updateGameplay(_ deltaTime: TimeInterval) {
         // Update score based on time
-        let scoreIncrement = Int(deltaTime * Double(self.gameStateManager.getCurrentDifficulty().scoreMultiplier))
+        let scoreIncrement = Int(deltaTime * Double(gameStateManager.getCurrentDifficulty().scoreMultiplier))
         if scoreIncrement > 0 {
-            self.gameStateManager.addScore(scoreIncrement)
+            gameStateManager.addScore(scoreIncrement)
         }
 
         // Update survival time
-        self.currentGameStats.survivalTime += deltaTime
+        currentGameStats.survivalTime += deltaTime
     }
 }
 
@@ -289,32 +289,32 @@ extension GameScene: GameStateDelegate {
     func gameStateDidChange(from _: GameState, to newState: GameState) {
         switch newState {
         case .playing:
-            self.obstacleManager.startSpawning(with: self.gameStateManager.getCurrentDifficulty())
+            obstacleManager.startSpawning(with: gameStateManager.getCurrentDifficulty())
         case .gameOver:
-            self.handleGameOver()
+            handleGameOver()
         default:
             break
         }
     }
 
     func scoreDidChange(to newScore: Int) {
-        self.uiManager.updateScore(newScore)
-        self.currentGameStats.finalScore = newScore
-        self.achievementManager.updateProgress(for: .scoreReached(score: newScore))
+        uiManager.updateScore(newScore)
+        currentGameStats.finalScore = newScore
+        achievementManager.updateProgress(for: .scoreReached(score: newScore))
     }
 
     func difficultyDidIncrease(to level: Int) {
-        self.uiManager.updateDifficultyLevel(level)
-        self.uiManager.showLevelUpEffect()
-        self.effectsManager.createLevelUpCelebration()
-        self.audioManager.playLevelUpSound()
-        self.achievementManager.updateProgress(for: .difficultyReached(level: level))
+        uiManager.updateDifficultyLevel(level)
+        uiManager.showLevelUpEffect()
+        effectsManager.createLevelUpCelebration()
+        audioManager.playLevelUpSound()
+        achievementManager.updateProgress(for: .difficultyReached(level: level))
     }
 
     func gameDidEnd(withScore finalScore: Int, survivalTime: TimeInterval) {
-        self.currentGameStats.finalScore = finalScore
-        self.currentGameStats.survivalTime = survivalTime
-        self.currentGameStats.maxDifficultyReached = self.gameStateManager.getCurrentDifficultyLevel()
+        currentGameStats.finalScore = finalScore
+        currentGameStats.survivalTime = survivalTime
+        currentGameStats.maxDifficultyReached = gameStateManager.getCurrentDifficultyLevel()
     }
 }
 
@@ -325,9 +325,9 @@ extension GameScene: PlayerDelegate {
 
     func playerDidCollide(with _: SKNode) {
         // Handle collision through physics manager
-        self.handleGameOver()
-        self.effectsManager.createExplosion(at: self.playerManager.position)
-        self.audioManager.playCollisionSound()
+        handleGameOver()
+        effectsManager.createExplosion(at: playerManager.position)
+        audioManager.playCollisionSound()
     }
 }
 
@@ -343,20 +343,20 @@ extension GameScene: ObstacleDelegate {
 
 extension GameScene: UIManagerDelegate {
     func restartButtonTapped() {
-        self.restartGame()
+        restartGame()
     }
 }
 
 extension GameScene: PhysicsManagerDelegate {
     func playerDidCollideWithObstacle(_: SKNode, obstacle: SKNode) {
-        self.playerManager.handleCollision(with: obstacle)
+        playerManager.handleCollision(with: obstacle)
     }
 
     func playerDidCollideWithPowerUp(_: SKNode, powerUp: SKNode) {
         // Handle power-up collection
         powerUp.removeFromParent()
-        self.effectsManager.createPowerUpCollectionEffect(at: powerUp.position)
-        self.audioManager.playPowerUpSound()
+        effectsManager.createPowerUpCollectionEffect(at: powerUp.position)
+        audioManager.playPowerUpSound()
 
         // Determine power-up type from color (this is a simple approach)
         let powerUpType: PowerUpType = if let sprite = powerUp as? SKSpriteNode {
@@ -371,16 +371,16 @@ extension GameScene: PhysicsManagerDelegate {
             .shield // Default fallback
         }
 
-        self.playerManager.applyPowerUpEffect(powerUpType)
+        playerManager.applyPowerUpEffect(powerUpType)
 
-        self.achievementManager.updateProgress(for: .powerUpCollected)
+        achievementManager.updateProgress(for: .powerUpCollected)
     }
 }
 
 extension GameScene: AchievementDelegate {
     func achievementUnlocked(_ achievement: Achievement) {
         // Show achievement notification
-        self.uiManager.showScorePopup(score: achievement.points, at: CGPoint(x: size.width / 2, y: size.height / 2))
+        uiManager.showScorePopup(score: achievement.points, at: CGPoint(x: size.width / 2, y: size.height / 2))
     }
 
     func achievementProgressUpdated(_: Achievement, progress _: Float) {
@@ -393,10 +393,10 @@ extension GameScene: PerformanceDelegate {
         switch warning {
         case .highMemoryUsage, .memoryPressure:
             // Reduce obstacle count or effects
-            self.obstacleManager.removeAllObstacles()
+            obstacleManager.removeAllObstacles()
         case .lowFrameRate:
             // Reduce visual effects
-            self.effectsManager.cleanupUnusedEffects()
+            effectsManager.cleanupUnusedEffects()
         default:
             break
         }

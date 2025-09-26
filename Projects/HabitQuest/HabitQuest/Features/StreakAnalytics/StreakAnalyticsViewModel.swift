@@ -47,16 +47,16 @@ final class StreakAnalyticsViewModel: ObservableObject {
 
     func setupService(modelContext: ModelContext) {
         self.modelContext = modelContext
-        self.streakService = StreakService(modelContext: modelContext)
+        streakService = StreakService(modelContext: modelContext)
     }
 
     func loadAnalytics() async {
-        self.isLoading = true
-        self.errorMessage = nil
+        isLoading = true
+        errorMessage = nil
         defer { isLoading = false }
 
         guard let modelContext, let service = streakService else {
-            self.errorMessage = "Failed to initialize services"
+            errorMessage = "Failed to initialize services"
             return
         }
 
@@ -66,14 +66,14 @@ final class StreakAnalyticsViewModel: ObservableObject {
             let habits = try modelContext.fetch(habitDescriptor)
 
             let analytics = await generateAnalyticsData(habits: habits, service: service)
-            self.analyticsData = analytics
+            analyticsData = analytics
         } catch {
-            self.errorMessage = "Failed to load analytics: \(error.localizedDescription)"
+            errorMessage = "Failed to load analytics: \(error.localizedDescription)"
         }
     }
 
     func refreshAnalytics() async {
-        await self.loadAnalytics()
+        await loadAnalytics()
     }
 
     func exportAnalytics() async {
@@ -88,7 +88,8 @@ final class StreakAnalyticsViewModel: ObservableObject {
     }
 
     private func generateAnalyticsData(habits: [Habit], service: StreakService) async
-        -> StreakAnalyticsData {
+        -> StreakAnalyticsData
+    {
         var streakAnalytics: [StreakAnalytics] = []
         var topPerformers: [TopPerformer] = []
 
@@ -114,12 +115,12 @@ final class StreakAnalyticsViewModel: ObservableObject {
         return await StreakAnalyticsData(
             totalActiveStreaks: streakAnalytics.count(where: { $0.currentStreak > 0 }),
             longestOverallStreak: streakAnalytics.map(\.longestStreak).max() ?? 0,
-            averageConsistency: self.calculateAverageConsistency(streakAnalytics),
-            milestonesAchieved: self.countRecentMilestones(streakAnalytics),
-            streakDistribution: self.generateStreakDistribution(streakAnalytics),
+            averageConsistency: calculateAverageConsistency(streakAnalytics),
+            milestonesAchieved: countRecentMilestones(streakAnalytics),
+            streakDistribution: generateStreakDistribution(streakAnalytics),
             topPerformingHabits: topPerformers,
-            consistencyInsights: self.generateConsistencyInsights(streakAnalytics),
-            weeklyPatterns: self.generateWeeklyPatterns(habits: habits, service: service)
+            consistencyInsights: generateConsistencyInsights(streakAnalytics),
+            weeklyPatterns: generateWeeklyPatterns(habits: habits, service: service)
         )
     }
 
@@ -134,7 +135,8 @@ final class StreakAnalyticsViewModel: ObservableObject {
     }
 
     private func generateStreakDistribution(_ analytics: [StreakAnalytics])
-        -> [StreakDistributionData] {
+        -> [StreakDistributionData]
+    {
         let streaks = analytics.map(\.currentStreak)
         let ranges = [
             (0 ... 2, "Getting Started"),
@@ -181,7 +183,8 @@ final class StreakAnalyticsViewModel: ObservableObject {
     }
 
     private func generateWeeklyPatterns(habits _: [Habit], service _: StreakService) async
-        -> [WeeklyPattern] {
+        -> [WeeklyPattern]
+    {
         // Simplified weekly pattern generation
         let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         return daysOfWeek.map { day in

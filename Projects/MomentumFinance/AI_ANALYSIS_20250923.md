@@ -194,13 +194,11 @@ func testAccountDetailViewSnapshot() {
 ## Priority Action Items
 
 1. **Immediate (1-2 weeks)**:
-
    - Reorganize project structure
    - Implement consistent naming conventions
    - Set up proper dependency injection
 
 2. **Short-term (1-2 months)**:
-
    - Refactor to MVVM architecture
    - Implement comprehensive testing strategy
    - Optimize performance bottlenecks

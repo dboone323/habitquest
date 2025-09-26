@@ -105,7 +105,8 @@ final class ThemeManager {
     /// <#Description#>
     /// - Returns: <#description#>
     func font(_ style: TextStyle, weight: Font.Weight = .regular, design _: Font.Design = .default)
-        -> Font {
+        -> Font
+    {
         let baseFont = style.font
 
         // Apply weight modifier
@@ -116,16 +117,17 @@ final class ThemeManager {
     /// <#Description#>
     /// - Returns: <#description#>
     func dynamicFont(size: CGFloat, weight: Font.Weight = .regular, design: Font.Design = .default)
-        -> Font {
+        -> Font
+    {
         Font.system(size: size, weight: weight, design: design)
     }
 
     /// Scale factor for dynamic type based on system settings
     var fontScaleFactor: CGFloat {
         #if os(iOS)
-        return UIFontMetrics.default.scaledValue(for: 1.0)
+            return UIFontMetrics.default.scaledValue(for: 1.0)
         #else
-        return 1.0 // Default for macOS
+            return 1.0 // Default for macOS
         #endif
     }
 

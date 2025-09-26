@@ -13,11 +13,11 @@ final class SecurityAnalysisServiceTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.securityAnalyzer = SecurityAnalysisService()
+        securityAnalyzer = SecurityAnalysisService()
     }
 
     override func tearDown() {
-        self.securityAnalyzer = nil
+        securityAnalyzer = nil
         super.tearDown()
     }
 
@@ -32,7 +32,7 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for security issues
-        let issues = self.securityAnalyzer.detectSecurityIssues(code: code, language: "JavaScript")
+        let issues = securityAnalyzer.detectSecurityIssues(code: code, language: "JavaScript")
 
         // Then eval issue should be detected
         XCTAssertEqual(issues.count, 1)
@@ -50,7 +50,7 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for security issues
-        let issues = self.securityAnalyzer.detectSecurityIssues(code: code, language: "JavaScript")
+        let issues = securityAnalyzer.detectSecurityIssues(code: code, language: "JavaScript")
 
         // Then innerHTML issue should be detected
         XCTAssertEqual(issues.count, 1)
@@ -69,7 +69,7 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for security issues
-        let issues = self.securityAnalyzer.detectSecurityIssues(code: code, language: "JavaScript")
+        let issues = securityAnalyzer.detectSecurityIssues(code: code, language: "JavaScript")
 
         // Then both issues should be detected
         XCTAssertEqual(issues.count, 2)
@@ -96,7 +96,7 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for security issues
-        let issues = self.securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
+        let issues = securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
 
         // Then UserDefaults password issue should be detected
         XCTAssertEqual(issues.count, 1)
@@ -117,7 +117,7 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for security issues
-        let issues = self.securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
+        let issues = securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
 
         // Then no issues should be detected
         XCTAssertTrue(issues.isEmpty)
@@ -134,7 +134,7 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for security issues
-        let issues = self.securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
+        let issues = securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
 
         // Then no issues should be detected (using Keychain is secure)
         XCTAssertTrue(issues.isEmpty)
@@ -151,7 +151,7 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing as Swift
-        let issues = self.securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
+        let issues = securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
 
         // Then no issues should be detected
         XCTAssertTrue(issues.isEmpty)
@@ -168,7 +168,7 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing as JavaScript
-        let issues = self.securityAnalyzer.detectSecurityIssues(code: code, language: "JavaScript")
+        let issues = securityAnalyzer.detectSecurityIssues(code: code, language: "JavaScript")
 
         // Then no issues should be detected
         XCTAssertTrue(issues.isEmpty)
@@ -181,7 +181,7 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         let code = ""
 
         // When analyzing for security issues
-        let issues = self.securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
+        let issues = securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
 
         // Then no issues should be found
         XCTAssertTrue(issues.isEmpty)
@@ -192,7 +192,7 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         let code = "   \n\t   \n  "
 
         // When analyzing for security issues
-        let issues = self.securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
+        let issues = securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
 
         // Then no issues should be found
         XCTAssertTrue(issues.isEmpty)
@@ -206,10 +206,10 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         let code4 = "INNERHTML = content" // uppercase
 
         // When analyzing for security issues
-        let issues1 = self.securityAnalyzer.detectSecurityIssues(code: code1, language: "JavaScript")
-        let issues2 = self.securityAnalyzer.detectSecurityIssues(code: code2, language: "JavaScript")
-        let issues3 = self.securityAnalyzer.detectSecurityIssues(code: code3, language: "JavaScript")
-        let issues4 = self.securityAnalyzer.detectSecurityIssues(code: code4, language: "JavaScript")
+        let issues1 = securityAnalyzer.detectSecurityIssues(code: code1, language: "JavaScript")
+        let issues2 = securityAnalyzer.detectSecurityIssues(code: code2, language: "JavaScript")
+        let issues3 = securityAnalyzer.detectSecurityIssues(code: code3, language: "JavaScript")
+        let issues4 = securityAnalyzer.detectSecurityIssues(code: code4, language: "JavaScript")
 
         // Then issues should be detected regardless of case
         XCTAssertEqual(issues1.count, 1) // eval detected
@@ -243,7 +243,7 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for security issues
-        let issues = self.securityAnalyzer.detectSecurityIssues(code: code, language: "JavaScript")
+        let issues = securityAnalyzer.detectSecurityIssues(code: code, language: "JavaScript")
 
         // Then both eval and innerHTML issues should be detected
         XCTAssertEqual(issues.count, 2)
@@ -275,7 +275,7 @@ final class SecurityAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for security issues
-        let issues = self.securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
+        let issues = securityAnalyzer.detectSecurityIssues(code: code, language: "Swift")
 
         // Then password storage issues should be detected
         XCTAssertEqual(issues.count, 2) // Two instances of password + UserDefaults

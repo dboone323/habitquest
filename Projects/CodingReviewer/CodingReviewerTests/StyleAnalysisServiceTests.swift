@@ -13,11 +13,11 @@ final class StyleAnalysisServiceTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.styleAnalyzer = StyleAnalysisService()
+        styleAnalyzer = StyleAnalysisService()
     }
 
     override func tearDown() {
-        self.styleAnalyzer = nil
+        styleAnalyzer = nil
         super.tearDown()
     }
 
@@ -37,7 +37,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then no issues should be found
         XCTAssertTrue(issues.isEmpty)
@@ -55,7 +55,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then both long line and documentation issues should be detected
         XCTAssertEqual(issues.count, 2)
@@ -88,7 +88,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then all three issues should be detected: 2 long lines + 1 documentation
         XCTAssertEqual(issues.count, 3)
@@ -115,7 +115,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then only documentation issue should be found (113 chars is under limit)
         XCTAssertEqual(issues.count, 1)
@@ -139,7 +139,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then missing documentation issue should be detected
         XCTAssertEqual(issues.count, 1)
@@ -160,7 +160,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then no documentation issues should be found
         let docIssues = issues.filter { $0.description.contains("documentation") }
@@ -183,7 +183,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then both issues should be detected
         XCTAssertEqual(issues.count, 2)
@@ -207,7 +207,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "JavaScript")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "JavaScript")
 
         // Then no issues should be detected (style checks are Swift-only)
         XCTAssertTrue(issues.isEmpty)
@@ -220,7 +220,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         let code = ""
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then no issues should be found
         XCTAssertTrue(issues.isEmpty)
@@ -231,7 +231,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         let code = "\n\n\n"
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then no issues should be found
         XCTAssertTrue(issues.isEmpty)
@@ -242,7 +242,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         let code = String(repeating: "a", count: 125)
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then long line issue should be detected on line 1
         XCTAssertEqual(issues.count, 1)
@@ -261,7 +261,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then both long line and documentation issues should be detected
         XCTAssertEqual(issues.count, 2)
@@ -286,7 +286,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then no documentation issues should be found
         let docIssues = issues.filter { $0.description.contains("documentation") }
@@ -304,7 +304,7 @@ final class StyleAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for style issues
-        let issues = self.styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
+        let issues = styleAnalyzer.detectStyleIssues(code: code, language: "Swift")
 
         // Then no documentation issues should be found (no functions)
         let docIssues = issues.filter { $0.description.contains("documentation") }

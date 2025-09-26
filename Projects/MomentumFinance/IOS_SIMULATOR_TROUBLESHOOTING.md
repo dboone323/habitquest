@@ -97,7 +97,6 @@ Ensure Info.plist has:
 1. **Reset Simulator Content**:
    - Simulator → Device → Erase All Content and Settings
 2. **Re-download Simulator Runtime**:
-
    - Xcode → Settings → Platforms
    - Delete iOS Simulator
    - Re-download
@@ -111,7 +110,6 @@ Ensure Info.plist has:
 ### B. Build Configuration
 
 1. **Edit Scheme**:
-
    - Product → Scheme → Edit Scheme
    - Run → Info → Build Configuration: Debug
    - Run → Arguments → Environment Variables:

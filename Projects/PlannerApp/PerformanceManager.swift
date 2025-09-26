@@ -44,13 +44,13 @@ public final class PerformanceManager {
     private var machInfoCache = mach_task_basic_info()
 
     private init() {
-        self.frameTimes = Array(repeating: 0, count: self.maxFrameHistory)
+        frameTimes = Array(repeating: 0, count: maxFrameHistory)
     }
 
     /// Record a frame time for FPS calculation using a circular buffer
     public func recordFrame() {
         let currentTime = CACurrentMediaTime()
-        self.frameQueue.async(flags: .barrier) {
+        frameQueue.async(flags: .barrier) {
             self.frameTimes[self.frameWriteIndex] = currentTime
             self.frameWriteIndex = (self.frameWriteIndex + 1) % self.maxFrameHistory
             if self.recordedFrameCount < self.maxFrameHistory {
@@ -63,7 +63,7 @@ public final class PerformanceManager {
     /// Get the current FPS, using cached values when possible
     public func getCurrentFPS() -> Double {
         let now = CACurrentMediaTime()
-        return self.frameQueue.sync {
+        return frameQueue.sync {
             if now - self.lastFPSUpdate < self.fpsCacheInterval {
                 return self.cachedFPS
             }
@@ -77,7 +77,7 @@ public final class PerformanceManager {
 
     /// Fetch the current FPS asynchronously
     public func getCurrentFPS(completion: @escaping (Double) -> Void) {
-        self.frameQueue.async {
+        frameQueue.async {
             let now = CACurrentMediaTime()
             let fps: Double
 
@@ -98,14 +98,14 @@ public final class PerformanceManager {
     /// Get memory usage in MB with caching
     public func getMemoryUsage() -> Double {
         let now = CACurrentMediaTime()
-        return self.metricsQueue.sync {
+        return metricsQueue.sync {
             self.fetchMemoryUsageLocked(currentTime: now)
         }
     }
 
     /// Fetch memory usage asynchronously
     public func getMemoryUsage(completion: @escaping (Double) -> Void) {
-        self.metricsQueue.async {
+        metricsQueue.async {
             let usage = self.fetchMemoryUsageLocked(currentTime: CACurrentMediaTime())
             DispatchQueue.main.async {
                 completion(usage)
@@ -115,7 +115,7 @@ public final class PerformanceManager {
 
     /// Determine if performance is degraded based on FPS and memory thresholds
     public func isPerformanceDegraded() -> Bool {
-        self.metricsQueue.sync {
+        metricsQueue.sync {
             let now = CACurrentMediaTime()
             if now - self.performanceTimestamp < self.metricsCacheInterval {
                 return self.cachedPerformanceDegraded
@@ -147,11 +147,11 @@ public final class PerformanceManager {
         let availableFrames = min(recordedFrameCount, fpsSampleSize)
         guard availableFrames >= 2 else { return 0 }
 
-        let lastIndex = (frameWriteIndex - 1 + self.maxFrameHistory) % self.maxFrameHistory
-        let firstIndex = (lastIndex - (availableFrames - 1) + self.maxFrameHistory) % self.maxFrameHistory
+        let lastIndex = (frameWriteIndex - 1 + maxFrameHistory) % maxFrameHistory
+        let firstIndex = (lastIndex - (availableFrames - 1) + maxFrameHistory) % maxFrameHistory
 
-        let startTime = self.frameTimes[firstIndex]
-        let endTime = self.frameTimes[lastIndex]
+        let startTime = frameTimes[firstIndex]
+        let endTime = frameTimes[lastIndex]
 
         guard startTime > 0, endTime > startTime else { return 0 }
 
@@ -160,7 +160,7 @@ public final class PerformanceManager {
     }
 
     private func calculateFPSForDegradedCheck() -> Double {
-        self.frameQueue.sync {
+        frameQueue.sync {
             let now = CACurrentMediaTime()
             if now - self.lastFPSUpdate < self.fpsCacheInterval {
                 return self.cachedFPS
@@ -174,26 +174,26 @@ public final class PerformanceManager {
     }
 
     private func fetchMemoryUsageLocked(currentTime: CFTimeInterval) -> Double {
-        if currentTime - self.memoryUsageTimestamp < self.metricsCacheInterval {
-            return self.cachedMemoryUsage
+        if currentTime - memoryUsageTimestamp < metricsCacheInterval {
+            return cachedMemoryUsage
         }
 
-        let usage = self.calculateMemoryUsageLocked()
-        self.cachedMemoryUsage = usage
-        self.memoryUsageTimestamp = currentTime
+        let usage = calculateMemoryUsageLocked()
+        cachedMemoryUsage = usage
+        memoryUsageTimestamp = currentTime
         return usage
     }
 
     private func calculateMemoryUsageLocked() -> Double {
         var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
 
-        let result: kern_return_t = withUnsafeMutablePointer(to: &self.machInfoCache) {
+        let result: kern_return_t = withUnsafeMutablePointer(to: &machInfoCache) {
             $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) {
                 task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
             }
         }
 
         guard result == KERN_SUCCESS else { return 0 }
-        return Double(self.machInfoCache.resident_size) / (1024 * 1024)
+        return Double(machInfoCache.resident_size) / (1024 * 1024)
     }
 }

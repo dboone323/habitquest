@@ -6,8 +6,8 @@ echo "Setting up development tools for MomentumFinance..."
 
 # Check if npm is installed (needed for Prettier)
 if ! command -v npm &>/dev/null; then
-  echo "npm is not installed. Installing node and npm..."
-  brew install node
+	echo "npm is not installed. Installing node and npm..."
+	brew install node
 fi
 
 # Install Prettier and Swift plugin
@@ -15,9 +15,9 @@ echo "Installing Prettier for code formatting..."
 npm install --save-dev prettier prettier-plugin-swift
 
 # Create Prettier scripts in package.json if it doesn't exist
-if [ ! -f package.json ]; then
-  echo "Creating package.json with Prettier scripts..."
-  cat >package.json <<'EOF'
+if [[ ! -f package.json ]]; then
+	echo "Creating package.json with Prettier scripts..."
+	cat >package.json <<'EOF'
 {
   "name": "momentum-finance",
   "version": "1.0.0",
@@ -36,26 +36,26 @@ fi
 
 # Check if Docker is installed
 if ! command -v docker &>/dev/null; then
-  echo "Docker is not installed. Please install Docker Desktop from https://www.docker.com/products/docker-desktop"
+	echo "Docker is not installed. Please install Docker Desktop from https://www.docker.com/products/docker-desktop"
 else
-  echo "Docker is installed."
+	echo "Docker is installed."
 fi
 
 # Check if VS Code is installed
 if ! command -v code &>/dev/null; then
-  echo "VS Code is not installed. Please install VS Code from https://code.visualstudio.com/"
+	echo "VS Code is not installed. Please install VS Code from https://code.visualstudio.com/"
 else
-  echo "Installing recommended VS Code extensions..."
-  # Install GitLens
-  code --install-extension eamodio.gitlens
-  # Install Prettier extension
-  code --install-extension esbenp.prettier-vscode
-  # Install Docker extension
-  code --install-extension ms-azuretools.vscode-docker
-  # Install Swift extension
-  code --install-extension sswg.swift-lang
-  # Install SwiftLint
-  code --install-extension vknabel.vscode-swiftlint
+	echo "Installing recommended VS Code extensions..."
+	# Install GitLens
+	code --install-extension eamodio.gitlens
+	# Install Prettier extension
+	code --install-extension esbenp.prettier-vscode
+	# Install Docker extension
+	code --install-extension ms-azuretools.vscode-docker
+	# Install Swift extension
+	code --install-extension sswg.swift-lang
+	# Install SwiftLint
+	code --install-extension vknabel.vscode-swiftlint
 fi
 
 # Create VS Code settings file

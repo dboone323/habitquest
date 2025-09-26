@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class StreakServiceTests: XCTestCase {
+final class StreakServiceTests: XCTestCase {
     // MARK: - classStreakService{ Tests
 
     func testStreakServiceInitialization() {

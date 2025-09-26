@@ -25,7 +25,7 @@ final class ErrorHandler {
 
     private init() {
         #if DEBUG
-        Logger.logDebug("ErrorHandler initialized", category: Logger.ui)
+            Logger.logDebug("ErrorHandler initialized", category: Logger.ui)
         #endif
     }
 
@@ -154,9 +154,9 @@ final class ErrorHandler {
         // Example: Crashlytics.record(error: error)
 
         #if DEBUG
-        Logger.logDebug(
-            "Error would be reported to analytics: \(error.errorDescription ?? "Unknown")"
-        )
+            Logger.logDebug(
+                "Error would be reported to analytics: \(error.errorDescription ?? "Unknown")"
+            )
         #endif
     }
 }
@@ -342,7 +342,8 @@ public enum AppError: LocalizedError, Identifiable {
         if nsError.code == NSValidationErrorMinimum {
             return .validationError("\(context) \(nsError.localizedDescription)")
         } else if nsError.code == NSFileReadNoSuchFileError
-            || nsError.code == NSFileWriteOutOfSpaceError {
+            || nsError.code == NSFileWriteOutOfSpaceError
+        {
             return .fileSystemError("\(context) \(nsError.localizedDescription)")
         }
         return .dataError("\(context) \(nsError.localizedDescription)")

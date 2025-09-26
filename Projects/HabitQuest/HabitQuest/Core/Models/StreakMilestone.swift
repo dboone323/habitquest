@@ -10,7 +10,7 @@ public struct StreakMilestone: Identifiable, @unchecked Sendable {
     let celebrationLevel: CelebrationLevel
 
     init(streakCount: Int, title: String, description: String, emoji: String, celebrationLevel: CelebrationLevel) {
-        self.id = UUID()
+        id = UUID()
         self.streakCount = streakCount
         self.title = title
         self.description = description
@@ -101,21 +101,21 @@ public struct StreakMilestone: Identifiable, @unchecked Sendable {
 
     /// Get the milestone for a specific streak count
     static func milestone(for streakCount: Int) -> StreakMilestone? {
-        self.predefinedMilestones
+        predefinedMilestones
             .filter { $0.streakCount <= streakCount }
             .max(by: { $0.streakCount < $1.streakCount })
     }
 
     /// Get the next milestone to achieve
     static func nextMilestone(for streakCount: Int) -> StreakMilestone? {
-        self.predefinedMilestones
+        predefinedMilestones
             .first { $0.streakCount > streakCount }
     }
 
     /// Check if a streak count just achieved a new milestone
     static func isNewMilestone(streakCount: Int, previousCount: Int) -> Bool {
-        let currentMilestone = self.milestone(for: streakCount)
-        let previousMilestone = self.milestone(for: previousCount)
+        let currentMilestone = milestone(for: streakCount)
+        let previousMilestone = milestone(for: previousCount)
 
         return currentMilestone?.streakCount != previousMilestone?.streakCount &&
             currentMilestone?.streakCount == streakCount

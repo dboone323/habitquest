@@ -175,19 +175,16 @@ COOLDOWN_PERIOD = 300  # 5 minutes between attempts
 The system recognizes these failure types:
 
 1. **Syntax Errors**
-
    - Pattern: `SyntaxError|EOL while scanning`
    - Fix: Python syntax correction
    - Success Rate: 95%
 
 2. **Import Issues**
-
    - Pattern: `F401.*imported but unused|ModuleNotFoundError`
    - Fix: Import optimization
    - Success Rate: 90%
 
 3. **Missing Files**
-
    - Pattern: `No such file or directory|FileNotFoundError`
    - Fix: File creation with templates
    - Success Rate: 85%
@@ -277,19 +274,16 @@ graph TD
 ### Planned Features
 
 1. **Advanced Pattern Recognition**
-
    - Natural language processing for error analysis
    - Semantic code understanding
    - Multi-language support expansion
 
 2. **Predictive Maintenance**
-
    - Proactive issue identification
    - Preventive fix application
    - Code health trend analysis
 
 3. **Collaborative Intelligence**
-
    - Community pattern sharing
    - Best practice recommendations
    - Cross-organization learning
@@ -304,11 +298,9 @@ graph TD
 ### Common Issues
 
 1. **Python Command Not Found**
-
    - Solution: Use `python3` or configure Python environment
 
 2. **Permission Denied**
-
    - Solution: Ensure scripts have execute permissions
 
 3. **Pattern Recognition Failures**

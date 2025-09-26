@@ -7,14 +7,12 @@ Multiple GitHub workflow files across all projects were failing due to YAML synt
 ## Root Causes Found
 
 1. **YAML Syntax Errors**:
-
    - Incorrect indentation throughout workflow files
    - Missing document start markers (`---`)
    - Malformed bracket spacing `[ ]` vs `[]`
    - Duplicate key definitions
 
 2. **GitHub Actions Structure Issues**:
-
    - Wrong indentation for job properties (`runs-on`, `steps`)
    - Incorrect step formatting (uses, with, env properties)
    - Malformed on: trigger definitions (`on: true` instead of proper trigger arrays)

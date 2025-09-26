@@ -28,12 +28,12 @@ class PlayerManager {
 
     /// Player's current position
     var position: CGPoint {
-        self.player?.position ?? .zero
+        player?.position ?? .zero
     }
 
     /// Player's size
     var size: CGSize {
-        self.player?.size ?? .zero
+        player?.size ?? .zero
     }
 
     /// Reference to the game scene
@@ -75,18 +75,18 @@ class PlayerManager {
 
         // Add rounded corners for better appearance
         let cornerRadius = player.size.width / 8
-        let roundedPlayer = self.createRoundedPlayerNode(size: player.size, cornerRadius: cornerRadius)
+        let roundedPlayer = createRoundedPlayerNode(size: player.size, cornerRadius: cornerRadius)
         player.addChild(roundedPlayer)
 
         // Setup physics
-        self.setupPlayerPhysics(for: player)
+        setupPlayerPhysics(for: player)
 
         // Add visual effects
-        self.addGlowEffect(to: player)
-        self.addTrailEffect(to: player)
+        addGlowEffect(to: player)
+        addTrailEffect(to: player)
 
         // Add to scene
-        self.scene?.addChild(player)
+        scene?.addChild(player)
     }
 
     /// Creates a rounded rectangle player node
@@ -181,7 +181,7 @@ class PlayerManager {
 
         // Calculate distance and time for smooth movement
         let distance = abs(player.position.x - targetPoint.x)
-        let duration = min(TimeInterval(distance / self.movementSpeed), 0.1)
+        let duration = min(TimeInterval(distance / movementSpeed), 0.1)
 
         // Create smooth movement action
         let moveAction = SKAction.move(to: targetPoint, duration: duration)
@@ -190,14 +190,14 @@ class PlayerManager {
         player.run(moveAction, withKey: "playerMovement")
 
         // Notify delegate
-        self.delegate?.playerDidMove(to: targetPoint)
+        delegate?.playerDidMove(to: targetPoint)
     }
 
     /// Instantly moves the player to a position (for initialization)
     /// - Parameter position: The position to move to
     func setPosition(_ position: CGPoint) {
-        self.player?.position = position
-        self.delegate?.playerDidMove(to: position)
+        player?.position = position
+        delegate?.playerDidMove(to: position)
     }
 
     // MARK: - Collision Handling
@@ -215,51 +215,51 @@ class PlayerManager {
         player.run(flashAction)
 
         // Notify delegate
-        self.delegate?.playerDidCollide(with: obstacle)
+        delegate?.playerDidCollide(with: obstacle)
     }
 
     // MARK: - Visual States
 
     /// Sets the player to hidden state
     func hide() {
-        self.player?.isHidden = true
-        self.trailEffect?.isHidden = true
+        player?.isHidden = true
+        trailEffect?.isHidden = true
     }
 
     /// Sets the player to visible state
     func show() {
-        self.player?.isHidden = false
-        self.trailEffect?.isHidden = false
+        player?.isHidden = false
+        trailEffect?.isHidden = false
     }
 
     /// Resets the player to initial state
     func reset() {
-        self.player?.removeAllActions()
-        self.player?.run(SKAction.colorize(withColorBlendFactor: 0, duration: 0.1))
-        self.show()
+        player?.removeAllActions()
+        player?.run(SKAction.colorize(withColorBlendFactor: 0, duration: 0.1))
+        show()
     }
 
     /// Applies a power-up effect to the player
     /// - Parameter type: The type of power-up effect
     func applyPowerUpEffect(_ type: PowerUpType) {
-        guard self.player != nil else { return }
+        guard player != nil else { return }
 
         switch type {
         case .shield:
-            self.addShieldEffect()
+            addShieldEffect()
         case .speed:
-            self.addSpeedEffect()
+            addSpeedEffect()
         case .magnet:
-            self.addMagnetEffect()
+            addMagnetEffect()
         }
     }
 
     /// Removes power-up effects from the player
     func removePowerUpEffects() {
         // Remove shield, speed, and magnet effects
-        self.player?.childNode(withName: "shield")?.removeFromParent()
-        self.player?.childNode(withName: "speedEffect")?.removeFromParent()
-        self.player?.childNode(withName: "magnet")?.removeFromParent()
+        player?.childNode(withName: "shield")?.removeFromParent()
+        player?.childNode(withName: "speedEffect")?.removeFromParent()
+        player?.childNode(withName: "magnet")?.removeFromParent()
     }
 
     // MARK: - Power-up Effects
@@ -331,23 +331,23 @@ class PlayerManager {
     /// Enables tilt-based movement controls
     /// - Parameter sensitivity: Sensitivity multiplier for tilt controls (0.1 to 2.0)
     func enableTiltControls(sensitivity: CGFloat = 0.5) {
-        self.tiltSensitivity = max(0.1, min(sensitivity, 2.0))
-        self.tiltControlsEnabled = true
+        tiltSensitivity = max(0.1, min(sensitivity, 2.0))
+        tiltControlsEnabled = true
 
         // Start motion updates
-        if self.motionManager.isDeviceMotionAvailable {
-            self.motionManager.deviceMotionUpdateInterval = 1.0 / 60.0 // 60 FPS
-            self.motionManager.startDeviceMotionUpdates(to: OperationQueue.main) { [weak self] motion, error in
+        if motionManager.isDeviceMotionAvailable {
+            motionManager.deviceMotionUpdateInterval = 1.0 / 60.0 // 60 FPS
+            motionManager.startDeviceMotionUpdates(to: OperationQueue.main) { [weak self] motion, error in
                 guard let self, let motion, error == nil, tiltControlsEnabled else { return }
-                self.handleMotionUpdate(motion)
+                handleMotionUpdate(motion)
             }
         }
     }
 
     /// Disables tilt-based movement controls
     func disableTiltControls() {
-        self.tiltControlsEnabled = false
-        self.motionManager.stopDeviceMotionUpdates()
+        tiltControlsEnabled = false
+        motionManager.stopDeviceMotionUpdates()
     }
 
     /// Handles device motion updates for tilt controls
@@ -366,7 +366,7 @@ class PlayerManager {
         // Calculate target position based on tilt
         let screenCenterX = scene.size.width / 2
         let maxOffset = scene.size.width / 3 // Allow movement within 1/3 of screen width
-        let targetX = screenCenterX + (normalizedRoll * maxOffset * self.tiltSensitivity)
+        let targetX = screenCenterX + (normalizedRoll * maxOffset * tiltSensitivity)
 
         // Constrain to screen bounds
         let halfWidth = player.size.width / 2
@@ -382,7 +382,7 @@ class PlayerManager {
             moveAction.timingMode = .easeOut
             player.run(moveAction, withKey: "tiltMovement")
 
-            self.delegate?.playerDidMove(to: targetPosition)
+            delegate?.playerDidMove(to: targetPosition)
         }
     }
 

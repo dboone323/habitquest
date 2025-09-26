@@ -6,7 +6,7 @@ import SwiftUI
 import UserNotifications
 
 #if os(macOS)
-import AppKit
+    import AppKit
 #endif
 
 public struct SettingsView: View {
@@ -32,76 +32,76 @@ public struct SettingsView: View {
                     HStack {
                         Text("Name")
                         Spacer()
-                        TextField("Your Name", text: self.$userName).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
+                        TextField("Your Name", text: $userName).accessibilityLabel("Text Field").accessibilityLabel("Text Field")
                             .multilineTextAlignment(.trailing)
                     }
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // Appearance Section
                 Section("Appearance") {
-                    Picker("Theme", selection: self.$themeManager.currentThemeName) {
+                    Picker("Theme", selection: $themeManager.currentThemeName) {
                         ForEach(Theme.availableThemes, id: \.name) { theme in
                             Text(theme.name).tag(theme.name)
                         }
                     }
                     .pickerStyle(.menu)
-                    .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                    .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                     Button {
-                        self.showingThemePreview = true
+                        showingThemePreview = true
                     } label: {
                         HStack {
                             Text("Theme Preview")
-                                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                                .foregroundColor(themeManager.currentTheme.primaryTextColor)
                             Spacer()
                             Circle()
-                                .fill(self.themeManager.currentTheme.primaryAccentColor)
+                                .fill(themeManager.currentTheme.primaryAccentColor)
                                 .frame(width: 20, height: 20)
                             Image(systemName: "chevron.right")
-                                .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                                .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                         }
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("Theme Preview Button")
-                    .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                    .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
                 }
 
                 // Dashboard Section
                 Section("Dashboard") {
                     Stepper(
-                        "Items per section: \(self.dashboardItemLimit)", value: self.$dashboardItemLimit,
+                        "Items per section: \(dashboardItemLimit)", value: $dashboardItemLimit,
                         in: 1 ... 10
                     )
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // Notifications Section
                 Section("Notifications") {
-                    Toggle("Enable Notifications", isOn: self.$notificationsEnabled)
+                    Toggle("Enable Notifications", isOn: $notificationsEnabled)
                         .modifier(
-                            NotificationToggleModifier(notificationsEnabled: self.$notificationsEnabled)
+                            NotificationToggleModifier(notificationsEnabled: $notificationsEnabled)
                         )
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // General Settings Section
                 Section("General") {
-                    Toggle("24-Hour Time", isOn: self.$use24HourTime)
-                    Toggle("Auto-delete Completed Tasks", isOn: self.$autoDeleteCompleted)
-                    Toggle("Auto Sync", isOn: self.$autoSyncEnabled)
+                    Toggle("24-Hour Time", isOn: $use24HourTime)
+                    Toggle("Auto-delete Completed Tasks", isOn: $autoDeleteCompleted)
+                    Toggle("Auto Sync", isOn: $autoSyncEnabled)
                 }
-                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
             }
             .navigationTitle("Settings")
-            .background(self.themeManager.currentTheme.primaryBackgroundColor)
+            .background(themeManager.currentTheme.primaryBackgroundColor)
             .scrollContentBackground(.hidden)
-            .sheet(isPresented: self.$showingThemePreview) {
+            .sheet(isPresented: $showingThemePreview) {
                 ThemePreviewSheet()
-                    .environmentObject(self.themeManager)
+                    .environmentObject(themeManager)
             }
-            .alert("Notification Permissions", isPresented: self.$showingNotificationAlert) {
-                Button("Open Settings", action: self.openAppSettings).accessibilityLabel("Button")
+            .alert("Notification Permissions", isPresented: $showingNotificationAlert) {
+                Button("Open Settings", action: openAppSettings).accessibilityLabel("Button")
                     .accessibilityLabel("Open Settings Button")
                 Button("Cancel", role: .cancel, action: {}).accessibilityLabel("Button")
                     .accessibilityLabel("Cancel Button")
@@ -118,7 +118,7 @@ public struct SettingsView: View {
             granted, _ in
             DispatchQueue.main.async {
                 if !granted {
-                    self.showingNotificationAlert = true
+                    showingNotificationAlert = true
                 }
             }
         }
@@ -126,14 +126,14 @@ public struct SettingsView: View {
 
     private func openAppSettings() {
         #if os(macOS)
-        NSWorkspace.shared.open(
-            URL(
-                string:
-                "x-apple.systempreferences:com.apple.preference.security?Privacy_Notifications"
-            )!
-        )
+            NSWorkspace.shared.open(
+                URL(
+                    string:
+                    "x-apple.systempreferences:com.apple.preference.security?Privacy_Notifications"
+                )!
+            )
         #else
-        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         #endif
     }
 }
@@ -154,7 +154,7 @@ public struct ThemePreviewSheet: View {
                 ) {
                     ForEach(Theme.availableThemes, id: \.name) { theme in
                         ThemeCard(theme: theme)
-                            .environmentObject(self.themeManager)
+                            .environmentObject(themeManager)
                     }
                 }
                 .padding()
@@ -166,13 +166,13 @@ public struct ThemePreviewSheet: View {
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button("Done") {
-                            self.dismiss()
+                            dismiss()
                         }
                         .accessibilityLabel("Done Button")
                     }
                 }
         }
-        .background(self.themeManager.currentTheme.primaryBackgroundColor)
+        .background(themeManager.currentTheme.primaryBackgroundColor)
     }
 }
 
@@ -186,27 +186,27 @@ public struct ThemeCard: View {
         VStack(spacing: 12) {
             // Theme preview
             RoundedRectangle(cornerRadius: 12)
-                .fill(self.theme.primaryBackgroundColor)
+                .fill(theme.primaryBackgroundColor)
                 .overlay(
                     VStack(spacing: 8) {
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(self.theme.secondaryBackgroundColor)
+                            .fill(theme.secondaryBackgroundColor)
                             .frame(height: 40)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 6)
-                                    .fill(self.theme.primaryAccentColor)
+                                    .fill(theme.primaryAccentColor)
                                     .frame(width: 60, height: 20)
                             )
 
                         HStack(spacing: 4) {
                             Circle()
-                                .fill(self.theme.primaryAccentColor)
+                                .fill(theme.primaryAccentColor)
                                 .frame(width: 12, height: 12)
                             Circle()
-                                .fill(self.theme.secondaryTextColor)
+                                .fill(theme.secondaryTextColor)
                                 .frame(width: 12, height: 12)
                             Circle()
-                                .fill(self.theme.primaryTextColor.opacity(0.3))
+                                .fill(theme.primaryTextColor.opacity(0.3))
                                 .frame(width: 12, height: 12)
                         }
                     }
@@ -216,20 +216,20 @@ public struct ThemeCard: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(
-                            self.themeManager.currentTheme.name == self.theme.name
-                                ? self.theme.primaryAccentColor : Color.clear,
+                            themeManager.currentTheme.name == theme.name
+                                ? theme.primaryAccentColor : Color.clear,
                             lineWidth: 2
                         )
                 )
 
             // Theme name
-            Text(self.theme.name)
+            Text(theme.name)
                 .font(.caption)
                 .fontWeight(.medium)
-                .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                .foregroundColor(themeManager.currentTheme.primaryTextColor)
         }
         .onTapGesture {
-            self.themeManager.currentThemeName = self.theme.name
+            themeManager.currentThemeName = theme.name
         }
     }
 }

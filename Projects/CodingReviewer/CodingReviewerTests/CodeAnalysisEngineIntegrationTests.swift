@@ -13,11 +13,11 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.analysisEngine = CodeAnalysisEngine()
+        analysisEngine = CodeAnalysisEngine()
     }
 
     override func tearDown() {
-        self.analysisEngine = nil
+        analysisEngine = nil
         super.tearDown()
     }
 
@@ -48,7 +48,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         """
 
         // When performing full analysis
-        let result = self.analysisEngine.analyzeCode(
+        let result = analysisEngine.analyzeCode(
             code: code,
             language: "Swift",
             analysisTypes: [AnalysisType.bugs, AnalysisType.security, AnalysisType.performance, AnalysisType.style]
@@ -103,7 +103,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         """
 
         // When performing full analysis
-        let result = self.analysisEngine.analyzeCode(
+        let result = analysisEngine.analyzeCode(
             code: code,
             language: "JavaScript",
             analysisTypes: [AnalysisType.bugs, AnalysisType.security, AnalysisType.performance, AnalysisType.style]
@@ -140,7 +140,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         """
 
         // When analyzing only bugs
-        let bugOnlyResult = self.analysisEngine.analyzeCode(code: code, language: "JavaScript", analysisTypes: [AnalysisType.bugs])
+        let bugOnlyResult = analysisEngine.analyzeCode(code: code, language: "JavaScript", analysisTypes: [AnalysisType.bugs])
 
         // Then only bug issues should be found
         let bugIssues = bugOnlyResult.issues.filter { $0.category == IssueCategory.bug }
@@ -150,7 +150,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         XCTAssertTrue(securityIssues.isEmpty, "Should not find security issues when not requested")
 
         // When analyzing only security
-        let securityOnlyResult = self.analysisEngine.analyzeCode(code: code, language: "JavaScript", analysisTypes: [AnalysisType.security])
+        let securityOnlyResult = analysisEngine.analyzeCode(code: code, language: "JavaScript", analysisTypes: [AnalysisType.security])
 
         // Then only security issues should be found
         let securityIssuesOnly = securityOnlyResult.issues.filter { $0.category == IssueCategory.security }
@@ -165,7 +165,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         let code = "// TODO: Fix this"
 
         // When analyzing with empty analysis types
-        let result = self.analysisEngine.analyzeCode(code: code, language: "Swift", analysisTypes: [])
+        let result = analysisEngine.analyzeCode(code: code, language: "Swift", analysisTypes: [])
 
         // Then no issues should be found
         XCTAssertTrue(result.issues.isEmpty)
@@ -180,7 +180,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         let code = "// TODO: Fix this"
 
         // When analyzing
-        let result = self.analysisEngine.analyzeCode(code: code, language: "Swift", analysisTypes: [AnalysisType.bugs])
+        let result = analysisEngine.analyzeCode(code: code, language: "Swift", analysisTypes: [AnalysisType.bugs])
 
         // Then result should have proper structure
         XCTAssertFalse(result.issues.isEmpty)
@@ -199,7 +199,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         let code = "let x = value! // TODO: Fix force unwrap"
 
         // When analyzing
-        let result = self.analysisEngine.analyzeCode(code: code, language: "Swift", analysisTypes: [AnalysisType.bugs])
+        let result = analysisEngine.analyzeCode(code: code, language: "Swift", analysisTypes: [AnalysisType.bugs])
 
         // Then multiple issues should be detected for the same line
         XCTAssertGreaterThanOrEqual(result.issues.count, 1)
@@ -221,7 +221,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
                 language == "JavaScript" ? "// Pending: Test" :
                 language == "Python" ? "# Pending: Test" : "// Pending: Test"
 
-            let result = self.analysisEngine.analyzeCode(code: code, language: language, analysisTypes: [AnalysisType.bugs])
+            let result = analysisEngine.analyzeCode(code: code, language: language, analysisTypes: [AnalysisType.bugs])
 
             // Should not crash and should generate some result
             XCTAssertNotNil(result)
@@ -234,7 +234,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         let code = "// Some code"
 
         // When analyzing with unsupported language
-        let result = self.analysisEngine.analyzeCode(code: code, language: "UnsupportedLang", analysisTypes: [AnalysisType.bugs])
+        let result = analysisEngine.analyzeCode(code: code, language: "UnsupportedLang", analysisTypes: [AnalysisType.bugs])
 
         // Then should handle gracefully (may return empty results or basic analysis)
         XCTAssertNotNil(result)
@@ -253,7 +253,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         let code = codeParts.joined(separator: "\n")
 
         // When analyzing large file
-        let result = self.analysisEngine.analyzeCode(code: code, language: "Swift", analysisTypes: [AnalysisType.bugs])
+        let result = analysisEngine.analyzeCode(code: code, language: "Swift", analysisTypes: [AnalysisType.bugs])
 
         // Then should handle large files without crashing
         XCTAssertNotNil(result)
@@ -266,7 +266,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         let code = ""
 
         // When analyzing
-        let result = self.analysisEngine.analyzeCode(
+        let result = analysisEngine.analyzeCode(
             code: code,
             language: "Swift",
             analysisTypes: [AnalysisType.bugs, AnalysisType.security, AnalysisType.performance, AnalysisType.style]
@@ -283,7 +283,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         let code = "\n\n   \n\t\n"
 
         // When analyzing
-        let result = self.analysisEngine.analyzeCode(code: code, language: "Swift", analysisTypes: [AnalysisType.bugs])
+        let result = analysisEngine.analyzeCode(code: code, language: "Swift", analysisTypes: [AnalysisType.bugs])
 
         // Then should return empty results
         XCTAssertTrue(result.issues.isEmpty)
@@ -376,7 +376,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         let code = String(repeating: "a", count: 100_000) // Very long string
 
         // When analyzing
-        let result = self.analysisEngine.analyzeCode(
+        let result = analysisEngine.analyzeCode(
             code: code,
             language: "Swift",
             analysisTypes: [AnalysisType.bugs, AnalysisType.security, AnalysisType.performance, AnalysisType.style]
@@ -396,7 +396,7 @@ final class CodeAnalysisEngineIntegrationTests: XCTestCase {
         """
 
         // When analyzing with all types
-        let result = self.analysisEngine.analyzeCode(
+        let result = analysisEngine.analyzeCode(
             code: code,
             language: "Swift",
             analysisTypes: [AnalysisType.bugs, AnalysisType.security, AnalysisType.performance, AnalysisType.style]

@@ -19,12 +19,12 @@ public struct JournalView: View {
 
     // Filtered and sorted entries
     private var filteredEntries: [JournalEntry] {
-        let sorted = self.journalEntries.sorted(by: { $0.date > $1.date })
-        if self.searchText.isEmpty { return sorted }
+        let sorted = journalEntries.sorted(by: { $0.date > $1.date })
+        if searchText.isEmpty { return sorted }
         return sorted.filter {
-            $0.title.localizedCaseInsensitiveContains(self.searchText)
-                || $0.body.localizedCaseInsensitiveContains(self.searchText)
-                || $0.mood.contains(self.searchText)
+            $0.title.localizedCaseInsensitiveContains(searchText)
+                || $0.body.localizedCaseInsensitiveContains(searchText)
+                || $0.mood.contains(searchText)
         }
     }
 
@@ -35,19 +35,19 @@ public struct JournalView: View {
             // Directly show journal content, bypassing lock checks
             VStack(spacing: 0) {
                 JournalListView(
-                    filteredEntries: self.filteredEntries,
-                    searchText: self.searchText,
-                    journalEntries: self.journalEntries,
-                    onDeleteEntry: self.deleteEntry
+                    filteredEntries: filteredEntries,
+                    searchText: searchText,
+                    journalEntries: journalEntries,
+                    onDeleteEntry: deleteEntry
                 )
-                .searchable(text: self.$searchText, prompt: "Search Entries")
+                .searchable(text: $searchText, prompt: "Search Entries")
             }
-            .background(self.themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
+            .background(themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
             .navigationTitle("Journal")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        self.showAddEntry.toggle()
+                        showAddEntry.toggle()
                     } label: {
                         Image(systemName: "plus")
                     }
@@ -61,18 +61,18 @@ public struct JournalView: View {
                     .accessibilityLabel("Button")
                 }
             }
-            .sheet(isPresented: self.$showAddEntry) {
-                AddJournalEntryView(journalEntries: self.$journalEntries)
-                    .environmentObject(self.themeManager) // Pass ThemeManager
-                    .onDisappear(perform: self.saveEntries)
+            .sheet(isPresented: $showAddEntry) {
+                AddJournalEntryView(journalEntries: $journalEntries)
+                    .environmentObject(themeManager) // Pass ThemeManager
+                    .onDisappear(perform: saveEntries)
             }
             .onAppear {
                 print("[JournalView Simplified] onAppear.")
                 // Only load entries
-                self.loadEntries()
+                loadEntries()
             }
             // Apply theme accent color to toolbar items
-            .accentColor(self.themeManager.currentTheme.primaryAccentColor)
+            .accentColor(themeManager.currentTheme.primaryAccentColor)
             // Removed alert for authentication errors
         } // End NavigationStack
         // Removed .onChange(of: biometricsEnabled)
@@ -86,24 +86,24 @@ public struct JournalView: View {
     private func deleteEntry(at offsets: IndexSet) {
         print("[JournalView Simplified] deleteEntry called with offsets: \(offsets)")
         let idsToDelete = offsets.map { offset -> UUID in
-            return self.filteredEntries[offset].id
+            return filteredEntries[offset].id
         }
         print("[JournalView Simplified] IDs to delete: \(idsToDelete)")
-        self.journalEntries.removeAll { entry in
+        journalEntries.removeAll { entry in
             idsToDelete.contains(entry.id)
         }
-        self.saveEntries()
+        saveEntries()
     }
 
     private func loadEntries() {
         print("[JournalView Simplified] loadEntries called")
-        self.journalEntries = JournalDataManager.shared.load()
-        print("[JournalView Simplified] Loaded \(self.journalEntries.count) entries.")
+        journalEntries = JournalDataManager.shared.load()
+        print("[JournalView Simplified] Loaded \(journalEntries.count) entries.")
     }
 
     private func saveEntries() {
         print("[JournalView Simplified] saveEntries called")
-        JournalDataManager.shared.save(entries: self.journalEntries)
+        JournalDataManager.shared.save(entries: journalEntries)
     }
 }
 

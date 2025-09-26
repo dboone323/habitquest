@@ -17,24 +17,24 @@ struct NewReviewView: View {
         NavigationStack {
             Form {
                 Section(header: Text("Project Details")) {
-                    TextField("Project Name", text: self.$projectName)
-                    TextField("Repository URL", text: self.$repositoryURL)
-                    TextField("Branch", text: self.$branchName)
+                    TextField("Project Name", text: $projectName)
+                    TextField("Repository URL", text: $repositoryURL)
+                    TextField("Branch", text: $branchName)
                 }
 
                 Section {
                     Button("Create Review") {
                         // TODO: Implement review creation logic
-                        self.dismiss()
+                        dismiss()
                     }
-                    .disabled(self.projectName.isEmpty || self.repositoryURL.isEmpty)
+                    .disabled(projectName.isEmpty || repositoryURL.isEmpty)
                 }
             }
             .navigationTitle("New Code Review")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        self.dismiss()
+                        dismiss()
                     }
                 }
             }

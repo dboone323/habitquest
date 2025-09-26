@@ -3,10 +3,10 @@
 # Tracks security trends and generates reports
 
 WORKSPACE="/Users/danielstevens/Desktop/Quantum-workspace"
-METRICS_DIR="$WORKSPACE/Tools/Automation/metrics"
-HISTORY_DIR="$METRICS_DIR/history"
-REPORTS_DIR="$METRICS_DIR/reports"
-LOG_FILE="$WORKSPACE/Tools/Automation/logs/security_metrics.log"
+METRICS_DIR="${WORKSPACE}/Tools/Automation/metrics"
+HISTORY_DIR="${METRICS_DIR}/history"
+REPORTS_DIR="${METRICS_DIR}/reports"
+LOG_FILE="${WORKSPACE}/Tools/Automation/logs/security_metrics.log"
 
 # Colors for output
 BLUE='\033[0;34m'
@@ -17,12 +17,12 @@ NC='\033[0m'
 
 # Logging function
 log() {
-    echo "${BLUE}[$(date '+%Y-%m-%d %H:%M:%S')]${NC} $*" | tee -a "$LOG_FILE"
+    echo "${BLUE}[$(date '+%Y-%m-%d %H:%M:%S')]${NC} $*" | tee -a "${LOG_FILE}"
 }
 
 # Initialize directories
 init_directories() {
-    mkdir -p "$HISTORY_DIR" "$REPORTS_DIR"
+    mkdir -p "${HISTORY_DIR}" "${REPORTS_DIR}"
 }
 
 # Collect current security metrics
@@ -31,20 +31,20 @@ collect_metrics() {
 
     local timestamp
     timestamp=$(date '+%Y%m%d_%H%M%S')
-    local metrics_file="$HISTORY_DIR/security_metrics_$timestamp.json"
+    local metrics_file="${HISTORY_DIR}/security_metrics_${timestamp}.json"
 
     # Run security scan to get current data
-    cd "$WORKSPACE/Tools" || { log "Failed to change to Tools directory"; return 1; }
+    cd "${WORKSPACE}/Tools" || { log "Failed to change to Tools directory"; return 1; }
     ./security_monitor.sh scan > /dev/null 2>&1
 
     # Read current metrics
-    if [[ -f "$WORKSPACE/Tools/Automation/metrics/security_metrics.json" ]]; then
-        cp "$WORKSPACE/Tools/Automation/metrics/security_metrics.json" "$metrics_file"
+    if [[ -f "${WORKSPACE}/Tools/Automation/metrics/security_metrics.json" ]]; then
+        cp "${WORKSPACE}/Tools/Automation/metrics/security_metrics.json" "${metrics_file}"
 
         # Add additional metrics
-        jq ".timestamp = \"$timestamp\" | .collection_date = \"$(date '+%Y-%m-%d %H:%M:%S')\"" "$metrics_file" > "${metrics_file}.tmp" && mv "${metrics_file}.tmp" "$metrics_file"
+        jq ".timestamp = \"${timestamp}\" | .collection_date = \"$(date '+%Y-%m-%d %H:%M:%S')\"" "${metrics_file}" > "${metrics_file}.tmp" && mv "${metrics_file}.tmp" "${metrics_file}"
 
-        log "Metrics collected and stored: $metrics_file"
+        log "Metrics collected and stored: ${metrics_file}"
     else
         log "Warning: Could not find current metrics file"
     fi
@@ -56,13 +56,13 @@ analyze_trends() {
 
     local date_str
     date_str=$(date '+%Y%m%d')
-    local trend_report="$REPORTS_DIR/security_trends_${date_str}.json"
+    local trend_report="${REPORTS_DIR}/security_trends_${date_str}.json"
 
     # Get all historical metrics files
     local metrics_files=()
     while IFS= read -r file; do
-        metrics_files+=("$file")
-    done < <(ls -t "$HISTORY_DIR"/security_metrics_*.json 2>/dev/null | head -30)
+        metrics_files+=("${file}")
+    done < <(ls -t "${HISTORY_DIR}"/security_metrics_*.json 2>/dev/null | head -30)
 
     if [[ ${#metrics_files[@]} -lt 2 ]]; then
         log "Not enough historical data for trend analysis (need at least 2 data points)"
@@ -149,7 +149,7 @@ if len(data_points) >= 2:
             'worst_score': min(scores)
         }
 
-    with open('$trend_report', 'w') as f:
+    with open('${trend_report}', 'w') as f:
         json.dump(trend_analysis, f, indent=2)
 
     print(f'Trend analysis completed: {len(data_points)} data points analyzed')
@@ -157,8 +157,8 @@ else:
     print('Insufficient data for trend analysis')
 "
 
-    if [[ -f "$trend_report" ]]; then
-        log "Trend analysis completed: $trend_report"
+    if [[ -f "${trend_report}" ]]; then
+        log "Trend analysis completed: ${trend_report}"
     fi
 }
 
@@ -168,13 +168,13 @@ generate_report() {
 
     local timestamp_str
     timestamp_str=$(date '+%Y%m%d_%H%M%S')
-    local report_file="$REPORTS_DIR/security_metrics_report_${timestamp_str}.md"
+    local report_file="${REPORTS_DIR}/security_metrics_report_${timestamp_str}.md"
 
     # Get latest metrics
     local latest_metrics
-    latest_metrics=$(ls -t "$HISTORY_DIR"/security_metrics_*.json 2>/dev/null | head -1)
+    latest_metrics=$(ls -t "${HISTORY_DIR}"/security_metrics_*.json 2>/dev/null | head -1)
 
-    if [[ -z "$latest_metrics" ]]; then
+    if [[ -z "${latest_metrics}" ]]; then
         log "No metrics data available for report generation"
         return
     fi
@@ -182,9 +182,9 @@ generate_report() {
     # Get trend data
     local date_today
     date_today=$(date '+%Y%m%d')
-    local trend_data="$REPORTS_DIR/security_trends_${date_today}.json"
+    local trend_data="${REPORTS_DIR}/security_trends_${date_today}.json"
 
-    cat > "$report_file" << EOF
+    cat > "${report_file}" << EOF
 # Security Metrics Report
 Generated: $(date '+%Y-%m-%d %H:%M:%S')
 
@@ -193,7 +193,7 @@ Generated: $(date '+%Y-%m-%d %H:%M:%S')
 EOF
 
     # Add current metrics
-    if [[ -f "$latest_metrics" ]]; then
+    if [[ -f "${latest_metrics}" ]]; then
         jq -r '
             "## Overall Security Score: \(.security_score)%",
             "",
@@ -208,17 +208,17 @@ EOF
             "### Project Scores",
             "| Project | Score | Issues |",
             "|---------|-------|--------|"
-        ' "$latest_metrics" >> "$report_file"
+        ' "${latest_metrics}" >> "${report_file}"
 
         # Add project details
-        jq -r '.projects | to_entries[] | "| \(.key) | \(.value.score)% | \(.value.issues) |"' "$latest_metrics" >> "$report_file"
+        jq -r '.projects | to_entries[] | "| \(.key) | \(.value.score)% | \(.value.issues) |"' "${latest_metrics}" >> "${report_file}"
 
-        echo "" >> "$report_file"
+        echo "" >> "${report_file}"
     fi
 
     # Add trend analysis
-    if [[ -f "$trend_data" ]]; then
-        cat >> "$report_file" << EOF
+    if [[ -f "${trend_data}" ]]; then
+        cat >> "${report_file}" << EOF
 
 ## Security Trends
 
@@ -231,18 +231,18 @@ EOF
             "- Security Score: \(.overall_trend.security_score.current)% (change: \(.overall_trend.security_score.change)) - \(.overall_trend.security_score.direction)",
             "- Critical Vulnerabilities: \(.overall_trend.critical_vulnerabilities.current) (change: \(.overall_trend.critical_vulnerabilities.change))",
             ""
-        ' "$trend_data" >> "$report_file"
+        ' "${trend_data}" >> "${report_file}"
 
         # Add project trends
-        if jq -e '.project_trends | length > 0' "$trend_data" > /dev/null 2>&1; then
-            echo "### Project Trends" >> "$report_file"
-            jq -r '.project_trends | to_entries[] | "- \(.key): \(.value.current_score)% (change: \(.value.change)) - \(.value.direction)"' "$trend_data" >> "$report_file"
-            echo "" >> "$report_file"
+        if jq -e '.project_trends | length > 0' "${trend_data}" > /dev/null 2>&1; then
+            echo "### Project Trends" >> "${report_file}"
+            jq -r '.project_trends | to_entries[] | "- \(.key): \(.value.current_score)% (change: \(.value.change)) - \(.value.direction)"' "${trend_data}" >> "${report_file}"
+            echo "" >> "${report_file}"
         fi
 
         # Add statistics
-        if jq -e '.statistics' "$trend_data" > /dev/null 2>&1; then
-            cat >> "$report_file" << EOF
+        if jq -e '.statistics' "${trend_data}" > /dev/null 2>&1; then
+            cat >> "${report_file}" << EOF
 
 ### Statistics
 EOF
@@ -252,40 +252,40 @@ EOF
                 "- Score Volatility: \(.score_volatility | . * 100 | floor | . / 100)",
                 "- Best Score: \(.best_score)%",
                 "- Worst Score: \(.worst_score)%"
-            ' "$trend_data" >> "$report_file"
+            ' "${trend_data}" >> "${report_file}"
         fi
     fi
 
-    cat >> "$report_file" << EOF
+    cat >> "${report_file}" << EOF
 
 ## Recommendations
 
 EOF
 
     # Generate recommendations based on current status
-    if [[ -f "$latest_metrics" ]]; then
+    if [[ -f "${latest_metrics}" ]]; then
         local critical_count
-        critical_count=$(jq -r '.vulnerabilities.critical' "$latest_metrics")
+        critical_count=$(jq -r '.vulnerabilities.critical' "${latest_metrics}")
         local security_score
-        security_score=$(jq -r '.security_score' "$latest_metrics")
+        security_score=$(jq -r '.security_score' "${latest_metrics}")
 
-        if [[ $critical_count -gt 0 ]]; then
-            echo "- **CRITICAL**: Address $critical_count critical vulnerabilities immediately" >> "$report_file"
+        if [[ ${critical_count} -gt 0 ]]; then
+            echo "- **CRITICAL**: Address ${critical_count} critical vulnerabilities immediately" >> "${report_file}"
         fi
 
-        if [[ $security_score -lt 50 ]]; then
-            echo "- **HIGH PRIORITY**: Security score is critically low ($security_score%). Immediate remediation required." >> "$report_file"
-        elif [[ $security_score -lt 70 ]]; then
-            echo "- **MEDIUM PRIORITY**: Security score needs improvement ($security_score%)." >> "$report_file"
+        if [[ ${security_score} -lt 50 ]]; then
+            echo "- **HIGH PRIORITY**: Security score is critically low (${security_score}%). Immediate remediation required." >> "${report_file}"
+        elif [[ ${security_score} -lt 70 ]]; then
+            echo "- **MEDIUM PRIORITY**: Security score needs improvement (${security_score}%)." >> "${report_file}"
         else
-            echo "- Security score is acceptable ($security_score%). Continue monitoring." >> "$report_file"
+            echo "- Security score is acceptable (${security_score}%). Continue monitoring." >> "${report_file}"
         fi
 
         # Project-specific recommendations
-        jq -r '.projects | to_entries[] | select(.value.score < 70) | "- Review \(.key) project (score: \(.value.score)%)"' "$latest_metrics" >> "$report_file"
+        jq -r '.projects | to_entries[] | select(.value.score < 70) | "- Review \(.key) project (score: \(.value.score)%)"' "${latest_metrics}" >> "${report_file}"
     fi
 
-    log "Security metrics report generated: $report_file"
+    log "Security metrics report generated: ${report_file}"
 }
 
 # Clean up old metrics files (keep last 90 days)
@@ -293,9 +293,9 @@ cleanup_old_metrics() {
     log "Cleaning up old metrics files..."
 
     # Remove files older than 90 days
-    find "$HISTORY_DIR" -name "security_metrics_*.json" -mtime +90 -delete 2>/dev/null || true
-    find "$REPORTS_DIR" -name "*.md" -mtime +90 -delete 2>/dev/null || true
-    find "$REPORTS_DIR" -name "*.json" -mtime +90 -delete 2>/dev/null || true
+    find "${HISTORY_DIR}" -name "security_metrics_*.json" -mtime +90 -delete 2>/dev/null || true
+    find "${REPORTS_DIR}" -name "*.md" -mtime +90 -delete 2>/dev/null || true
+    find "${REPORTS_DIR}" -name "*.json" -mtime +90 -delete 2>/dev/null || true
 
     log "Cleanup completed"
 }

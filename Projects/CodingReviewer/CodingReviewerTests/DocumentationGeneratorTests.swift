@@ -13,11 +13,11 @@ final class DocumentationGeneratorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.docGenerator = DocumentationGenerator()
+        docGenerator = DocumentationGenerator()
     }
 
     override func tearDown() {
-        self.docGenerator = nil
+        docGenerator = nil
         super.tearDown()
     }
 
@@ -38,7 +38,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         """
 
         // When generating documentation with examples
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: true)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: true)
 
         // Then documentation should be generated
         XCTAssertFalse(documentation.isEmpty)
@@ -62,7 +62,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         """
 
         // When generating documentation without examples
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
 
         // Then documentation should be generated but without examples section
         XCTAssertFalse(documentation.isEmpty)
@@ -83,7 +83,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         """
 
         // When generating documentation
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: true)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: true)
 
         // Then documentation should be generated but without functions section
         XCTAssertFalse(documentation.isEmpty)
@@ -101,7 +101,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         """
 
         // When generating documentation
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "JavaScript", includeExamples: true)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "JavaScript", includeExamples: true)
 
         // Then documentation should be generated but without functions section (only Swift is supported)
         XCTAssertFalse(documentation.isEmpty)
@@ -117,7 +117,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         let code = ""
 
         // When generating documentation
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
 
         // Then basic documentation should still be generated
         XCTAssertFalse(documentation.isEmpty)
@@ -152,7 +152,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         """
 
         // When generating documentation
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
 
         // Then all functions should be extracted and documented
         XCTAssertTrue(documentation.contains("func add(_ a: Int, _ b: Int) -> Int"))
@@ -174,7 +174,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         """
 
         // When generating documentation
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
 
         // Then function should be extracted with original formatting
         XCTAssertTrue(documentation.contains("func   add   (   _ a : Int ,   _ b : Int   )   ->   Int"))
@@ -197,7 +197,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         """
 
         // When generating documentation
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
 
         // Then functions from all classes should be extracted
         XCTAssertTrue(documentation.contains("func add(_ a: Int, _ b: Int) -> Int"))
@@ -211,7 +211,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         let code = "let x = 1"
 
         // When generating documentation with examples
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: true)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: true)
 
         // Then examples section should contain proper code block
         XCTAssertTrue(documentation.contains("## Usage Examples"))
@@ -225,7 +225,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         let languages = ["Swift", "JavaScript", "Python", "Java"]
 
         for language in languages {
-            let documentation = self.docGenerator.generateBasicDocumentation(
+            let documentation = docGenerator.generateBasicDocumentation(
                 code: "test",
                 language: language,
                 includeExamples: true
@@ -242,7 +242,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         let code = "\n\n\n"
 
         // When generating documentation
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
 
         // Then basic documentation should be generated
         XCTAssertFalse(documentation.isEmpty)
@@ -263,7 +263,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         """
 
         // When generating documentation
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
 
         // Then all functions should be extracted
         XCTAssertTrue(documentation.contains("func globalAdd(_ a: Int, _ b: Int) -> Int"))
@@ -283,7 +283,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         """
 
         // When generating documentation
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
 
         // Then complex function should be extracted correctly
         XCTAssertTrue(documentation.contains("func complex<T: Equatable, U>"))
@@ -298,7 +298,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         let code = "class Test {}"
 
         // When generating documentation
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: true)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: true)
 
         // Then documentation should have proper structure
         let lines = documentation.components(separatedBy: .newlines)
@@ -313,7 +313,7 @@ final class DocumentationGeneratorTests: XCTestCase {
         let code = "let x = 1"
 
         // When generating documentation without examples
-        let documentation = self.docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
+        let documentation = docGenerator.generateBasicDocumentation(code: code, language: "Swift", includeExamples: false)
 
         // Then there should be no trailing whitespace issues
         XCTAssertFalse(documentation.hasSuffix("\n\n"))

@@ -101,13 +101,11 @@ Ensure all GitHub Actions workflows properly reference the main branch structure
 #### Recommended Branch Structure
 
 1. **`main`**: Default stable branch
-
    - Protected branch with required PR reviews
    - Target for all feature merges
    - Automated deployments and releases
 
 2. **Feature branches**: Short-lived development branches
-
    - Pattern: `feature/description` or `copilot/issue-number`
    - Merged via PR to main
    - Deleted after merge

@@ -8,16 +8,16 @@ echo ""
 # Check for force casts
 echo "🔍 FORCE CASTS (as!):"
 find Projects -name "*.swift" -exec grep -l "as!" {} \; | while read file; do
-    count=$(grep -c "as!" "$file")
-    echo "  $file: $count force casts"
+    count=$(grep -c "as!" "${file}")
+    echo "  ${file}: ${count} force casts"
 done
 echo ""
 
 # Check for string concatenation
 echo "🔗 STRING CONCATENATION (+=):"
 find Projects -name "*.swift" -exec grep -l "+=" {} \; | while read file; do
-    count=$(grep -c "+=" "$file")
-    echo "  $file: $count concatenations"
+    count=$(grep -c "+=" "${file}")
+    echo "  ${file}: ${count} concatenations"
 done
 echo ""
 

@@ -12,57 +12,57 @@ public struct TodaysQuestsView: View {
     public var body: some View {
         NavigationView {
             VStack {
-                if self.viewModel.todaysHabits.isEmpty {
+                if viewModel.todaysHabits.isEmpty {
                     EmptyStateView()
                 } else {
                     QuestListView(
-                        habits: self.viewModel.todaysHabits,
-                        habitAnalytics: self.habitAnalytics,
-                        onComplete: self.viewModel.completeHabit
+                        habits: viewModel.todaysHabits,
+                        habitAnalytics: habitAnalytics,
+                        onComplete: viewModel.completeHabit
                     )
                 }
             }
             .navigationTitle("Today's Quests")
             .toolbar {
                 #if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Add Quest") {
-                        self.viewModel.showingAddQuest = true
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Add Quest") {
+                            viewModel.showingAddQuest = true
+                        }
+                        .accessibilityLabel("Add Quest")
                     }
-                    .accessibilityLabel("Add Quest")
-                }
                 #else
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Add Quest") {
-                        self.viewModel.showingAddQuest = true
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Add Quest") {
+                            viewModel.showingAddQuest = true
+                        }
+                        .accessibilityLabel("Add Quest")
                     }
-                    .accessibilityLabel("Add Quest")
-                }
                 #endif
             }
-            .sheet(isPresented: self.$viewModel.showingAddQuest) {
+            .sheet(isPresented: $viewModel.showingAddQuest) {
                 AddQuestView { habit in
-                    self.viewModel.addNewHabit(habit)
+                    viewModel.addNewHabit(habit)
                 }
             }
-            .alert("Quest Completed!", isPresented: self.$viewModel.showingCompletionAlert) {
+            .alert("Quest Completed!", isPresented: $viewModel.showingCompletionAlert) {
                 Button("Awesome!") {}
                     .accessibilityLabel("Awesome")
             } message: {
-                Text(self.viewModel.completionMessage)
+                Text(viewModel.completionMessage)
             }
             .onAppear {
-                self.viewModel.setModelContext(self.modelContext)
-                self.setupStreakService()
+                viewModel.setModelContext(modelContext)
+                setupStreakService()
             }
             .task {
-                await self.loadHabitAnalytics()
+                await loadHabitAnalytics()
             }
         }
     }
 
     private func setupStreakService() {
-        self.streakService = StreakService(modelContext: self.modelContext)
+        streakService = StreakService(modelContext: modelContext)
     }
 
     private func loadHabitAnalytics() async {
@@ -70,13 +70,13 @@ public struct TodaysQuestsView: View {
 
         var analytics: [UUID: StreakAnalytics] = [:]
 
-        for habit in self.viewModel.todaysHabits {
+        for habit in viewModel.todaysHabits {
             let habitAnalytics = await streakService.getStreakAnalytics(for: habit)
             analytics[habit.id] = habitAnalytics
         }
 
         await MainActor.run {
-            self.habitAnalytics = analytics
+            habitAnalytics = analytics
         }
     }
 }
@@ -109,11 +109,11 @@ private struct QuestListView: View {
     let onComplete: (Habit) -> Void
 
     var body: some View {
-        List(self.habits, id: \.id) { habit in
+        List(habits, id: \.id) { habit in
             QuestRowView(
                 habit: habit,
-                analytics: self.habitAnalytics[habit.id],
-                onComplete: self.onComplete
+                analytics: habitAnalytics[habit.id],
+                onComplete: onComplete
             )
         }
     }
@@ -128,16 +128,16 @@ private struct QuestRowView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(self.habit.name)
+                Text(habit.name)
                     .font(.headline)
 
-                Text(self.habit.habitDescription)
+                Text(habit.habitDescription)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(2)
 
                 HStack {
-                    Text("\(self.habit.xpValue) XP")
+                    Text("\(habit.xpValue) XP")
                         .font(.caption)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 2)
@@ -147,7 +147,7 @@ private struct QuestRowView: View {
                     // Enhanced streak with analytics
                     if let analytics {
                         StreakVisualizationView(
-                            habit: self.habit,
+                            habit: habit,
                             analytics: analytics,
                             displayMode: .compact
                         )
@@ -156,15 +156,15 @@ private struct QuestRowView: View {
                         HStack(spacing: 2) {
                             Image(systemName: "flame.fill")
                                 .font(.caption)
-                                .foregroundColor(streakColor(for: self.habit.streak))
-                            Text("\(self.habit.streak)")
+                                .foregroundColor(streakColor(for: habit.streak))
+                            Text("\(habit.streak)")
                                 .font(.caption)
                                 .fontWeight(.semibold)
-                                .foregroundColor(streakColor(for: self.habit.streak))
+                                .foregroundColor(streakColor(for: habit.streak))
                         }
                         .padding(.horizontal, 6)
                         .padding(.vertical, 2)
-                        .background(streakColor(for: self.habit.streak).opacity(0.15))
+                        .background(streakColor(for: habit.streak).opacity(0.15))
                         .cornerRadius(4)
                     }
                 }
@@ -173,7 +173,7 @@ private struct QuestRowView: View {
             Spacer()
 
             Button {
-                self.onComplete(self.habit)
+                onComplete(habit)
             } label: {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.title2)
@@ -198,20 +198,20 @@ private struct AddQuestView: View {
         NavigationView {
             Form {
                 Section("Quest Details") {
-                    TextField("Quest Name", text: self.$name).accessibilityLabel("Text Field")
-                    TextField("Description", text: self.$description, axis: .vertical)
+                    TextField("Quest Name", text: $name).accessibilityLabel("Text Field")
+                    TextField("Description", text: $description, axis: .vertical)
                         .accessibilityLabel("Text Field")
                         .lineLimit(3 ... 6)
                 }
 
                 Section("Settings") {
-                    Picker("Frequency", selection: self.$frequency) {
+                    Picker("Frequency", selection: $frequency) {
                         ForEach(HabitFrequency.allCases, id: \.self) { freq in
                             Text(freq.displayName).tag(freq)
                         }
                     }
 
-                    Stepper("XP Value: \(self.xpValue)", value: self.$xpValue, in: 5 ... 50, step: 5)
+                    Stepper("XP Value: \(xpValue)", value: $xpValue, in: 5 ... 50, step: 5)
                 }
             }
             .navigationTitle("New Quest")
@@ -219,7 +219,7 @@ private struct AddQuestView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
-                        self.dismiss()
+                        dismiss()
                     }
                     .accessibilityLabel("Cancel")
                 }
@@ -232,11 +232,11 @@ private struct AddQuestView: View {
                             frequency: frequency,
                             xpValue: xpValue
                         )
-                        self.onAdd(habit)
-                        self.dismiss()
+                        onAdd(habit)
+                        dismiss()
                     }
                     .accessibilityLabel("Add")
-                    .disabled(self.name.isEmpty)
+                    .disabled(name.isEmpty)
                 }
             }
         }

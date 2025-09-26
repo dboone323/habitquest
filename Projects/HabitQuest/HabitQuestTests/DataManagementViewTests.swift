@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class DataManagementViewTests: XCTestCase {
+final class DataManagementViewTests: XCTestCase {
     // MARK: - structDataManagementView:View{ Tests
 
     func testDataManagementViewInitialization() {

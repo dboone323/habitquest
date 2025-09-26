@@ -58,22 +58,22 @@ class UIManager {
         self.scene = scene
 
         // Pre-create reusable actions
-        self.pulseAction = SKAction.sequence([
+        pulseAction = SKAction.sequence([
             SKAction.scale(to: 1.1, duration: 0.5),
             SKAction.scale(to: 1.0, duration: 0.5),
         ])
 
-        self.fadeInAction = SKAction.fadeIn(withDuration: 0.3)
-        self.fadeOutAction = SKAction.fadeOut(withDuration: 0.3)
+        fadeInAction = SKAction.fadeIn(withDuration: 0.3)
+        fadeOutAction = SKAction.fadeOut(withDuration: 0.3)
     }
 
     // MARK: - Setup
 
     /// Sets up all initial UI elements
     func setupUI() {
-        self.setupScoreLabel()
-        self.setupHighScoreLabel()
-        self.setupDifficultyLabel()
+        setupScoreLabel()
+        setupHighScoreLabel()
+        setupDifficultyLabel()
     }
 
     /// Sets up the score label
@@ -133,19 +133,19 @@ class UIManager {
     /// Updates the score display
     /// - Parameter score: New score value
     func updateScore(_ score: Int) {
-        self.scoreLabel?.text = "Score: \(score)"
+        scoreLabel?.text = "Score: \(score)"
     }
 
     /// Updates the high score display
     /// - Parameter highScore: New high score value
     func updateHighScore(_ highScore: Int) {
-        self.highScoreLabel?.text = "Best: \(highScore)"
+        highScoreLabel?.text = "Best: \(highScore)"
     }
 
     /// Updates the difficulty level display
     /// - Parameter level: New difficulty level
     func updateDifficultyLevel(_ level: Int) {
-        self.difficultyLabel?.text = "Level: \(level)"
+        difficultyLabel?.text = "Level: \(level)"
     }
 
     // MARK: - Game Over Screen
@@ -168,7 +168,7 @@ class UIManager {
         if let gameOverLabel {
             gameOverLabel.alpha = 0
             scene.addChild(gameOverLabel)
-            gameOverLabel.run(self.fadeInAction)
+            gameOverLabel.run(fadeInAction)
         }
 
         // Final score display
@@ -184,7 +184,7 @@ class UIManager {
             scene.addChild(finalScoreLabel)
             finalScoreLabel.run(SKAction.sequence([
                 SKAction.wait(forDuration: 0.2),
-                self.fadeInAction,
+                fadeInAction,
             ]))
         }
 
@@ -202,8 +202,8 @@ class UIManager {
                 scene.addChild(highScoreAchievedLabel)
                 highScoreAchievedLabel.run(SKAction.sequence([
                     SKAction.wait(forDuration: 0.4),
-                    self.fadeInAction,
-                    SKAction.repeatForever(self.pulseAction),
+                    fadeInAction,
+                    SKAction.repeatForever(pulseAction),
                 ]))
             }
         }
@@ -221,7 +221,7 @@ class UIManager {
             scene.addChild(restartLabel)
             restartLabel.run(SKAction.sequence([
                 SKAction.wait(forDuration: 0.6),
-                self.fadeInAction,
+                fadeInAction,
             ]))
         }
     }
@@ -230,13 +230,13 @@ class UIManager {
     func hideGameOverScreen() {
         let labels = [gameOverLabel, restartLabel, highScoreAchievedLabel, finalScoreLabel]
         for label in labels {
-            label?.run(SKAction.sequence([self.fadeOutAction, SKAction.removeFromParent()]))
+            label?.run(SKAction.sequence([fadeOutAction, SKAction.removeFromParent()]))
         }
 
-        self.gameOverLabel = nil
-        self.restartLabel = nil
-        self.highScoreAchievedLabel = nil
-        self.finalScoreLabel = nil
+        gameOverLabel = nil
+        restartLabel = nil
+        highScoreAchievedLabel = nil
+        finalScoreLabel = nil
     }
 
     // MARK: - Level Up Effects
@@ -257,11 +257,11 @@ class UIManager {
             scene.addChild(levelUpLabel)
 
             let animation = SKAction.sequence([
-                self.fadeInAction,
+                fadeInAction,
                 SKAction.scale(to: 1.2, duration: 0.3),
                 SKAction.scale(to: 1.0, duration: 0.3),
                 SKAction.wait(forDuration: 0.5),
-                self.fadeOutAction,
+                fadeOutAction,
                 SKAction.removeFromParent(),
             ])
 
@@ -307,7 +307,7 @@ class UIManager {
     func showStatistics(_ statistics: [String: Any]) {
         guard let scene else { return }
 
-        self.hideStatistics() // Clear any existing statistics
+        hideStatistics() // Clear any existing statistics
 
         let startY = scene.size.height * 0.7
         let spacing: CGFloat = 30
@@ -315,7 +315,7 @@ class UIManager {
 
         for (key, value) in statistics {
             let label = SKLabelNode(fontNamed: "Chalkduster")
-            label.text = "\(self.formatStatisticKey(key)): \(self.formatStatisticValue(value))"
+            label.text = "\(formatStatisticKey(key)): \(formatStatisticValue(value))"
             label.fontSize = 18
             label.fontColor = .white
             label.position = CGPoint(x: scene.size.width / 2, y: currentY)
@@ -331,8 +331,8 @@ class UIManager {
             scene.addChild(background)
             scene.addChild(label)
 
-            self.statisticsLabels.append(label)
-            self.statisticsLabels.append(background)
+            statisticsLabels.append(label)
+            statisticsLabels.append(background)
 
             currentY -= spacing
         }
@@ -340,10 +340,10 @@ class UIManager {
 
     /// Hides the statistics display
     func hideStatistics() {
-        for label in self.statisticsLabels {
-            label.run(SKAction.sequence([self.fadeOutAction, SKAction.removeFromParent()]))
+        for label in statisticsLabels {
+            label.run(SKAction.sequence([fadeOutAction, SKAction.removeFromParent()]))
         }
-        self.statisticsLabels.removeAll()
+        statisticsLabels.removeAll()
     }
 
     // MARK: - Touch Handling
@@ -353,8 +353,9 @@ class UIManager {
     func handleTouch(at location: CGPoint) {
         // Check if restart label was tapped
         if let restartLabel,
-           restartLabel.contains(location) {
-            self.delegate?.restartButtonTapped()
+           restartLabel.contains(location)
+        {
+            delegate?.restartButtonTapped()
         }
     }
 
@@ -403,29 +404,29 @@ class UIManager {
             fpsLabel,
             memoryLabel,
             qualityLabel,
-        ] + self.statisticsLabels
+        ] + statisticsLabels
 
         for label in allLabels {
             label?.removeFromParent()
         }
 
         // Clean up performance monitoring
-        self.stopPerformanceUpdates()
-        self.performanceOverlay?.removeFromParent()
+        stopPerformanceUpdates()
+        performanceOverlay?.removeFromParent()
 
-        self.scoreLabel = nil
-        self.highScoreLabel = nil
-        self.difficultyLabel = nil
-        self.gameOverLabel = nil
-        self.restartLabel = nil
-        self.highScoreAchievedLabel = nil
-        self.finalScoreLabel = nil
-        self.levelUpLabel = nil
-        self.performanceOverlay = nil
-        self.fpsLabel = nil
-        self.memoryLabel = nil
-        self.qualityLabel = nil
-        self.statisticsLabels.removeAll()
+        scoreLabel = nil
+        highScoreLabel = nil
+        difficultyLabel = nil
+        gameOverLabel = nil
+        restartLabel = nil
+        highScoreAchievedLabel = nil
+        finalScoreLabel = nil
+        levelUpLabel = nil
+        performanceOverlay = nil
+        fpsLabel = nil
+        memoryLabel = nil
+        qualityLabel = nil
+        statisticsLabels.removeAll()
     }
 
     // MARK: - Object Pooling
@@ -444,8 +445,8 @@ class UIManager {
 
     /// Return an object to the pool
     private func returnToPool(_ object: Any) {
-        if self.objectPool.count < self.maxPoolSize {
-            self.objectPool.append(object)
+        if objectPool.count < maxPoolSize {
+            objectPool.append(object)
         }
     }
 
@@ -454,20 +455,20 @@ class UIManager {
     /// Enables or disables performance monitoring overlay
     /// - Parameter enabled: Whether to show performance stats
     func setPerformanceMonitoring(enabled: Bool) {
-        self.performanceMonitoringEnabled = enabled
+        performanceMonitoringEnabled = enabled
 
         if enabled {
-            self.setupPerformanceOverlay()
-            self.startPerformanceUpdates()
+            setupPerformanceOverlay()
+            startPerformanceUpdates()
         } else {
-            self.hidePerformanceOverlay()
-            self.stopPerformanceUpdates()
+            hidePerformanceOverlay()
+            stopPerformanceUpdates()
         }
     }
 
     /// Toggles performance monitoring overlay
     func togglePerformanceMonitoring() {
-        self.setPerformanceMonitoring(enabled: !self.performanceMonitoringEnabled)
+        setPerformanceMonitoring(enabled: !performanceMonitoringEnabled)
     }
 
     /// Sets up the performance monitoring overlay
@@ -475,8 +476,8 @@ class UIManager {
         guard let scene else { return }
 
         // Create overlay container
-        self.performanceOverlay = SKNode()
-        self.performanceOverlay?.zPosition = 200 // Above everything else
+        performanceOverlay = SKNode()
+        performanceOverlay?.zPosition = 200 // Above everything else
 
         // FPS Label
         fpsLabel = SKLabelNode(fontNamed: "Menlo")
@@ -510,34 +511,34 @@ class UIManager {
         background.position = CGPoint(x: 60, y: scene.size.height - 50)
         background.zPosition = -1
 
-        self.performanceOverlay?.addChild(background)
-        if let fpsLabel { self.performanceOverlay?.addChild(fpsLabel) }
-        if let memoryLabel { self.performanceOverlay?.addChild(memoryLabel) }
-        if let qualityLabel { self.performanceOverlay?.addChild(qualityLabel) }
+        performanceOverlay?.addChild(background)
+        if let fpsLabel { performanceOverlay?.addChild(fpsLabel) }
+        if let memoryLabel { performanceOverlay?.addChild(memoryLabel) }
+        if let qualityLabel { performanceOverlay?.addChild(qualityLabel) }
 
-        scene.addChild(self.performanceOverlay!)
+        scene.addChild(performanceOverlay!)
     }
 
     /// Hides the performance monitoring overlay
     private func hidePerformanceOverlay() {
-        self.performanceOverlay?.removeFromParent()
-        self.performanceOverlay = nil
-        self.fpsLabel = nil
-        self.memoryLabel = nil
-        self.qualityLabel = nil
+        performanceOverlay?.removeFromParent()
+        performanceOverlay = nil
+        fpsLabel = nil
+        memoryLabel = nil
+        qualityLabel = nil
     }
 
     /// Starts periodic performance updates
     private func startPerformanceUpdates() {
-        self.performanceUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+        performanceUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
             self?.updatePerformanceDisplay()
         }
     }
 
     /// Stops performance updates
     private func stopPerformanceUpdates() {
-        self.performanceUpdateTimer?.invalidate()
-        self.performanceUpdateTimer = nil
+        performanceUpdateTimer?.invalidate()
+        performanceUpdateTimer = nil
     }
 
     /// Updates the performance display with current stats
@@ -545,25 +546,25 @@ class UIManager {
         let stats = PerformanceManager.shared.getPerformanceStats()
 
         // Update FPS
-        self.fpsLabel?.text = String(format: "FPS: %.1f", stats.averageFPS)
-        self.fpsLabel?.fontColor = stats.averageFPS >= 55 ? .green : (stats.averageFPS >= 30 ? .yellow : .red)
+        fpsLabel?.text = String(format: "FPS: %.1f", stats.averageFPS)
+        fpsLabel?.fontColor = stats.averageFPS >= 55 ? .green : (stats.averageFPS >= 30 ? .yellow : .red)
 
         // Update Memory
         let memoryMB = Double(stats.currentMemoryUsage) / (1024 * 1024)
-        self.memoryLabel?.text = String(format: "MEM: %.1f MB", memoryMB)
-        self.memoryLabel?.fontColor = memoryMB < 50 ? .cyan : (memoryMB < 100 ? .yellow : .red)
+        memoryLabel?.text = String(format: "MEM: %.1f MB", memoryMB)
+        memoryLabel?.fontColor = memoryMB < 50 ? .cyan : (memoryMB < 100 ? .yellow : .red)
 
         // Update Quality
         switch stats.currentQualityLevel {
         case .high:
-            self.qualityLabel?.text = "QUAL: HIGH"
-            self.qualityLabel?.fontColor = .green
+            qualityLabel?.text = "QUAL: HIGH"
+            qualityLabel?.fontColor = .green
         case .medium:
-            self.qualityLabel?.text = "QUAL: MED"
-            self.qualityLabel?.fontColor = .yellow
+            qualityLabel?.text = "QUAL: MED"
+            qualityLabel?.fontColor = .yellow
         case .low:
-            self.qualityLabel?.text = "QUAL: LOW"
-            self.qualityLabel?.fontColor = .red
+            qualityLabel?.text = "QUAL: LOW"
+            qualityLabel?.fontColor = .red
         }
     }
 

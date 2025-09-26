@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class ErrorHandlerTests: XCTestCase {
+final class ErrorHandlerTests: XCTestCase {
     // MARK: - structErrorHandler:Sendable{ Tests
 
     func testErrorHandlerInitialization() {

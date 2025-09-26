@@ -20,13 +20,13 @@ struct EnhancedPlatformNavigation<Content: View>: View {
 
     var body: some View {
         #if os(macOS)
-        self.macOSNavigation
+            macOSNavigation
         #elseif os(iOS)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            self.iPadNavigation
-        } else {
-            self.iPhoneNavigation
-        }
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                iPadNavigation
+            } else {
+                iPhoneNavigation
+            }
         #endif
     }
 
@@ -37,7 +37,7 @@ struct EnhancedPlatformNavigation<Content: View>: View {
             MacOSSidebarView()
                 .frame(minWidth: 200, idealWidth: 250)
         } detail: {
-            self.content
+            content
                 .frame(minWidth: 600, maxWidth: .infinity)
                 .toolbar {
                     ToolbarItemGroup(placement: .primaryAction) {
@@ -55,16 +55,16 @@ struct EnhancedPlatformNavigation<Content: View>: View {
             IPadSidebarView()
                 .frame(minWidth: 280, idealWidth: 320)
         } detail: {
-            self.content
+            content
                 .toolbar {
                     #if os(iOS)
-                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                        IPadToolbarButtons()
-                    }
+                        ToolbarItemGroup(placement: .navigationBarTrailing) {
+                            IPadToolbarButtons()
+                        }
                     #else
-                    ToolbarItemGroup {
-                        IPadToolbarButtons()
-                    }
+                        ToolbarItemGroup {
+                            IPadToolbarButtons()
+                        }
                     #endif
                 }
         }
@@ -74,16 +74,16 @@ struct EnhancedPlatformNavigation<Content: View>: View {
 
     private var iPhoneNavigation: some View {
         NavigationStack {
-            self.content
+            content
                 .toolbar {
                     #if os(iOS)
-                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                        IPhoneToolbarButtons()
-                    }
+                        ToolbarItemGroup(placement: .navigationBarTrailing) {
+                            IPhoneToolbarButtons()
+                        }
                     #else
-                    ToolbarItemGroup {
-                        IPhoneToolbarButtons()
-                    }
+                        ToolbarItemGroup {
+                            IPhoneToolbarButtons()
+                        }
                     #endif
                 }
         }
@@ -132,15 +132,15 @@ public struct MacOSSidebarView: View {
             NavigationLink(value: tab) {
                 Label(tab.rawValue, systemImage: tab.icon)
                     .foregroundColor(
-                        self.selectedTab == tab
-                            ? self.themeManager.currentTheme.primaryAccentColor
-                            : self.themeManager.currentTheme.primaryTextColor
+                        selectedTab == tab
+                            ? themeManager.currentTheme.primaryAccentColor
+                            : themeManager.currentTheme.primaryTextColor
                     )
             }
             .keyboardShortcut(tab.keyboardShortcut ?? KeyEquivalent(" "), modifiers: .command)
         }
         .listStyle(SidebarListStyle())
-        .background(self.themeManager.currentTheme.secondaryBackgroundColor)
+        .background(themeManager.currentTheme.secondaryBackgroundColor)
     }
 }
 
@@ -162,31 +162,31 @@ public struct IPadSidebarView: View {
     public var body: some View {
         List {
             Section("PlannerApp") {
-                ForEach(self.tabs, id: \.0) { tab in
+                ForEach(tabs, id: \.0) { tab in
                     HStack {
                         Image(systemName: tab.1)
-                            .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
+                            .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                             .frame(width: 24)
 
                         Text(tab.0)
                             .font(.body)
-                            .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                            .foregroundColor(themeManager.currentTheme.primaryTextColor)
 
                         Spacer()
                     }
                     .padding(.vertical, 4)
                     .background(
-                        self.selectedTab == tab.0
-                            ? self.themeManager.currentTheme.primaryAccentColor.opacity(0.1)
+                        selectedTab == tab.0
+                            ? themeManager.currentTheme.primaryAccentColor.opacity(0.1)
                             : Color.clear
                     )
                     .cornerRadius(8)
                     .onTapGesture {
-                        self.selectedTab = tab.0
+                        selectedTab = tab.0
                         // Add haptic feedback
                         #if os(iOS)
-                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                        impactFeedback.impactOccurred()
+                            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                            impactFeedback.impactOccurred()
                         #endif
                     }
                 }
@@ -221,7 +221,7 @@ public struct IPadSidebarView: View {
             }
         }
         .listStyle(SidebarListStyle())
-        .background(self.themeManager.currentTheme.primaryBackgroundColor)
+        .background(themeManager.currentTheme.primaryBackgroundColor)
     }
 }
 
@@ -316,24 +316,24 @@ public struct QuickActionButton: View {
     @EnvironmentObject var themeManager: ThemeManager
 
     public var body: some View {
-        Button(action: self.action, label: {
+        Button(action: action, label: {
             HStack {
-                Image(systemName: self.icon)
-                    .foregroundColor(self.color)
+                Image(systemName: icon)
+                    .foregroundColor(color)
                     .frame(width: 20)
 
-                Text(self.title)
+                Text(title)
                     .font(.body)
-                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
 
                 Spacer()
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 12)
-            .background(self.color.opacity(0.1))
+            .background(color.opacity(0.1))
             .cornerRadius(8)
         })
-        .accessibilityLabel("\(self.title) Button")
+        .accessibilityLabel("\(title) Button")
         .buttonStyle(PlainButtonStyle())
     }
 }
@@ -370,12 +370,12 @@ public struct ShortcutRow: View {
 
     public var body: some View {
         HStack {
-            Text(self.key)
+            Text(key)
                 .font(.system(.body, design: .monospaced))
                 .foregroundColor(.secondary)
                 .frame(width: 60, alignment: .leading)
 
-            Text(self.description)
+            Text(description)
                 .font(.body)
 
             Spacer()

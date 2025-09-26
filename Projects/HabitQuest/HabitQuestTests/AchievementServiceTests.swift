@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class AchievementServiceTests: XCTestCase {
+final class AchievementServiceTests: XCTestCase {
     // MARK: - enumAchievementService{ Tests
 
     func testAchievementServiceInitialization() {

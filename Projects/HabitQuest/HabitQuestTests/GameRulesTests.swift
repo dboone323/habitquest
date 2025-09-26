@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class GameRulesTests: XCTestCase {
+final class GameRulesTests: XCTestCase {
     // MARK: - enumGameRules{ Tests
 
     func testGameRulesInitialization() {

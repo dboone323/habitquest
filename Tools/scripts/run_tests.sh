@@ -10,13 +10,13 @@ ROOT=$(pwd)
 log() { echo "[tests] $*"; }
 
 for proj in "${PROJECTS[@]}"; do
-  if [ -d "Projects/$proj" ]; then
-    log "Project: $proj"
+  if [[ -d "Projects/${proj}" ]]; then
+    log "Project: ${proj}"
     # Swift tests: if a SwiftPM Package.swift exists
-    if [ -f "Projects/$proj/Package.swift" ]; then
-      (cd "Projects/$proj" && swift test --parallel)
+    if [[ -f "Projects/${proj}/Package.swift" ]]; then
+      (cd "Projects/${proj}" && swift test --parallel)
     else
-      log "No Package.swift in $proj (likely Xcode project). Skipping swift test placeholder."
+      log "No Package.swift in ${proj} (likely Xcode project). Skipping swift test placeholder."
     fi
   fi
 done

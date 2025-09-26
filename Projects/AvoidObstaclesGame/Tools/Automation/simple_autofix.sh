@@ -1,38 +1,21 @@
 #!/bin/bash
 
-# Simple Auto-Fix System without complex predictions
-# Just performs basic fixes without hanging
+set -euo pipefail
 
-set -eo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-PROJECT_PATH="${1:-$(pwd)}"
-cd "$PROJECT_PATH"
+find_repo_root() {
+	local dir="${SCRIPT_DIR}"
+	while [[ "${dir}" != "/" ]]; do
+		if [[ -d "${dir}/.git" ]]; then
+			echo "${dir}"
+			return 0
+		fi
+		dir="$(dirname "${dir}")"
+	done
+	echo "Unable to locate repository root from ${SCRIPT_DIR}" >&2
+	exit 1
+}
 
-echo "🔧 Simple Auto-Fix for $(basename "$PROJECT_PATH")"
-
-# Basic SwiftFormat
-if command -v swiftformat >/dev/null 2>&1; then
-  echo "🔄 Running SwiftFormat..."
-  swiftformat . || true
-  echo "✅ SwiftFormat completed"
-else
-  echo "⚠️ SwiftFormat not available"
-fi
-
-# Basic SwiftLint
-if command -v swiftlint >/dev/null 2>&1; then
-  echo "🔄 Running SwiftLint autocorrect..."
-  swiftlint lint --autocorrect || true
-  echo "✅ SwiftLint autocorrect completed"
-else
-  echo "⚠️ SwiftLint not available"
-fi
-
-# Clean build artifacts
-if [[ -d ".build" ]]; then
-  echo "🔄 Cleaning build artifacts..."
-  rm -rf .build || true
-  echo "✅ Build artifacts cleaned"
-fi
-
-echo "✅ Simple auto-fix completed successfully"
+REPO_ROOT="$(find_repo_root)"
+exec "${REPO_ROOT}/Tools/Automation/simple_autofix.sh" "$@"

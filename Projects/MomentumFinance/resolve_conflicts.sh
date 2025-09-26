@@ -4,7 +4,7 @@
 PROJECT_FILE="MomentumFinance.xcodeproj/project.pbxproj"
 
 # Create a temporary file for processing
-cp "$PROJECT_FILE" "${PROJECT_FILE}.tmp"
+cp "${PROJECT_FILE}" "${PROJECT_FILE}.tmp"
 
 # Process the file to remove conflict markers and branch content
 awk '
@@ -32,7 +32,7 @@ BEGIN { in_conflict = 0; keep_section = 0 }
         print $0
     }
 }
-' "${PROJECT_FILE}.tmp" >"$PROJECT_FILE"
+' "${PROJECT_FILE}.tmp" >"${PROJECT_FILE}"
 
 # Clean up
 rm "${PROJECT_FILE}.tmp"

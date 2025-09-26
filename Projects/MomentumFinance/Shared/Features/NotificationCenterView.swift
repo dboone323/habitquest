@@ -18,19 +18,19 @@ public struct NotificationCenterView: View {
     @StateObject private var notificationManager = NotificationManager.shared
 
     #if canImport(SwiftData)
-    #if canImport(SwiftData)
-    private var budgets: [Budget] = []
-    private var subscriptions: [Subscription] = []
-    private var accounts: [FinancialAccount] = []
+        #if canImport(SwiftData)
+            private var budgets: [Budget] = []
+            private var subscriptions: [Subscription] = []
+            private var accounts: [FinancialAccount] = []
+        #else
+            private var budgets: [Budget] = []
+            private var subscriptions: [Subscription] = []
+            private var accounts: [FinancialAccount] = []
+        #endif
     #else
-    private var budgets: [Budget] = []
-    private var subscriptions: [Subscription] = []
-    private var accounts: [FinancialAccount] = []
-    #endif
-    #else
-    private var budgets: [Budget] = []
-    private var subscriptions: [Subscription] = []
-    private var accounts: [FinancialAccount] = []
+        private var budgets: [Budget] = []
+        private var subscriptions: [Subscription] = []
+        private var accounts: [FinancialAccount] = []
     #endif
 
     var body: some View {

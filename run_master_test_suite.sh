@@ -106,7 +106,7 @@ run_build() {
   cd "$project_path"
 
   # Check if this is a SwiftPM project or Xcode project
-  if [ -f "Package.swift" ]; then
+  if [[ -f "Package.swift" ]]; then
     # SwiftPM project
     if swift build >build_output.tmp 2>&1; then
       log_message "SUCCESS" "$project_name ($platform) SwiftPM build successful"
@@ -124,7 +124,7 @@ run_build() {
     fi
   else
     # Xcode project - skip Swift build test as it's not applicable
-    log_message "INFO" "$project_name is an Xcode project, skipping SwiftPM build test"
+    log_message "INFO" "${project_name} is an Xcode project, skipping SwiftPM build test"
     return 0
   fi
 }
@@ -141,28 +141,28 @@ run_tests() {
   # Check if tests exist
   if [ -d "Tests" ] || find . -name "*Tests.swift" -type f | grep -q .; then
     # Check if this is a SwiftPM project
-    if [ -f "Package.swift" ]; then
+    if [[ -f "Package.swift" ]]; then
       # SwiftPM project - use swift test
       if swift test >test_output.tmp 2>&1; then
         log_message "SUCCESS" "$project_name SwiftPM tests passed"
         update_counters "PASSED"
-        cat test_output.tmp >>"$LOG_FILE"
+        cat test_output.tmp >>"${LOG_FILE}"
       else
-        log_message "ERROR" "$project_name SwiftPM tests failed"
+        log_message "ERROR" "${project_name} SwiftPM tests failed"
         TEST_FAILURES=$((TEST_FAILURES + 1))
         update_counters "FAILED"
-        cat test_output.tmp >>"$LOG_FILE"
+        cat test_output.tmp >>"${LOG_FILE}"
       fi
     else
       # Xcode project - check for test targets
       local xcode_project
       xcode_project=$(find . -name "*.xcodeproj" -type d | head -1)
-      if [ -n "$xcode_project" ]; then
+      if [[ -n "${xcode_project}" ]]; then
         local scheme_name
-        scheme_name=$(basename "$xcode_project" .xcodeproj)
+        scheme_name=$(basename "${xcode_project}" .xcodeproj)
         # Try to run Xcode tests (this may not work in all environments)
-        if xcodebuild -project "$xcode_project" -scheme "${scheme_name}Tests" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15' test >test_output.tmp 2>&1 2>/dev/null; then
-          log_message "SUCCESS" "$project_name Xcode tests passed"
+        if xcodebuild -project "${xcode_project}" -scheme "${scheme_name}Tests" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15' test >test_output.tmp 2>&1 2>/dev/null; then
+          log_message "SUCCESS" "${project_name} Xcode tests passed"
           update_counters "PASSED"
           cat test_output.tmp >>"$LOG_FILE"
         else
@@ -177,7 +177,7 @@ run_tests() {
       fi
     fi
   else
-    log_message "WARNING" "No tests found for $project_name"
+    log_message "WARNING" "No tests found for ${project_name}"
     update_counters "PASSED"
   fi
 
@@ -242,9 +242,9 @@ validate_shared_components() {
 
   # Test SharedKit build
   if run_build "$SHARED_DIR" "SharedKit" "Cross-Platform"; then
-    echo "- ✅ SharedKit Cross-Platform Build: **PASSED**" >>"$REPORT_FILE"
+    echo "- ✅ SharedKit Cross-Platform Build: **PASSED**" >${"$REPORT_FI}LE"
   else
-    echo "- ❌ SharedKit Cross-Platform Build: **FAILED**" >>"$REPORT_FILE"
+    echo "- ❌ SharedKit Cross-Platform Build: **FAILED**" >${"$REPORT_FI}LE"
   fi
 
   # Validate individual components exist
@@ -265,16 +265,16 @@ validate_shared_components() {
     "Sources/SharedKit/AppLogger.swift"
   )
 
-  echo "### Component File Validation:" >>"$REPORT_FILE"
+  echo "### Component File Validation:" >>"${REPORT_FILE}"
 
   for component in "${shared_components[@]}"; do
-    if [ -f "$SHARED_DIR/$component" ]; then
-      log_message "SUCCESS" "SharedKit component exists: $component"
-      echo "- ✅ $component" >>"$REPORT_FILE"
+    if [[ -f "${SHARED_DIR}/${component}" ]]; then
+      log_message "SUCCESS" "SharedKit component exists: ${component}"
+      echo "- �${ $compone}nt" >>"$REPORT_FILE"
       update_counters "PASSED"
     else
-      log_message "ERROR" "SharedKit component missing: $component"
-      echo "- ❌ $component" >>"$REPORT_FILE"
+      log_message "ERROR" "SharedKit component missing: ${component}"
+      echo "- �${ $compone}nt" >>"$REPORT_FILE"
       update_counters "FAILED"
     fi
   done
@@ -394,27 +394,27 @@ run_integration_tests() {
         echo "  - ⚠️ Warning: Only $file_size lines" >>"$REPORT_FILE"
       fi
     else
-      log_message "ERROR" "Test suite missing: $test_suite"
-      echo "- ❌ $(basename "$test_suite"): **MISSING**" >>"$REPORT_FILE"
+      log_message "ERROR" "Test suite missing: ${test_suite}"
+      echo "- ❌ $(basename${"$test_sui}te"): **MISSING**" >>"$REPORT_FILE"
       update_counters "FAILED"
     fi
   done
 
-  echo "" >>"$REPORT_FILE"
+  echo "" >>"${REPORT_FILE}"
 
   # Test compilation of advanced features
   log_message "TEST" "Validating advanced feature compilation"
-  echo "### Advanced Features Compilation" >>"$REPORT_FILE"
+  echo "### Advanced Features Compilation" >>"${REPORT_FILE}"
 
   if swift build >integration_build.tmp 2>&1; then
     log_message "SUCCESS" "All advanced features compile successfully"
-    echo "- ✅ Advanced Features Compilation: **PASSED**" >>"$REPORT_FILE"
+    echo "- ✅ Advanced Features Compilation: **PASSED**" >${"$REPORT_FI}LE"
     update_counters "PASSED"
   else
     log_message "ERROR" "Advanced features compilation failed"
-    echo "- ❌ Advanced Features Compilation: **FAILED**" >>"$REPORT_FILE"
+    echo "- ❌ Advanced Features Compilation: **FAILED**" >${"$REPORT_FI}LE"
     update_counters "FAILED"
-    cat integration_build.tmp >>"$LOG_FILE"
+    cat integration_build.tmp >>"${LOG_FILE}"
   fi
 
   rm -f integration_build.tmp
@@ -426,12 +426,12 @@ generate_final_report() {
   log_message "INFO" "=== PHASE 5: Test Results Analysis & Reporting ==="
 
   local success_rate=0
-  if [ $TOTAL_TESTS -gt 0 ]; then
+  if [[ "$TOTAL_TESTS" -gt 0 ]]; then
     success_rate=$((PASSED_TESTS * 100 / TOTAL_TESTS))
   fi
 
   # Update executive summary
-  cat >>"$REPORT_FILE" <<EOF
+  cat >>"${REPORT_FILE}" <<EOF
 
 **Total Tests Run**: $TOTAL_TESTS
 **Tests Passed**: $PASSED_TESTS

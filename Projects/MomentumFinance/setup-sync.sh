@@ -18,9 +18,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo -e "\n${YELLOW}Setting up Git aliases...${NC}"
 
 # Sync aliases
-git config alias.sync-cursor "!bash $SCRIPT_DIR/sync.sh"
-git config alias.quick-sync "!bash $SCRIPT_DIR/quick-sync.sh"
-git config alias.sync "!bash $SCRIPT_DIR/quick-sync.sh"
+git config alias.sync-cursor "!bash ${SCRIPT_DIR}/sync.sh"
+git config alias.quick-sync "!bash ${SCRIPT_DIR}/quick-sync.sh"
+git config alias.sync "!bash ${SCRIPT_DIR}/quick-sync.sh"
 
 # Status aliases
 git config alias.st "status -sb"
@@ -43,16 +43,16 @@ git config alias.save "stash push -m"
 git config alias.stashes "stash list"
 
 # Make scripts executable
-chmod +x "$SCRIPT_DIR/sync.sh"
-chmod +x "$SCRIPT_DIR/quick-sync.sh"
-chmod +x "$SCRIPT_DIR/build_xcode.sh"
+chmod +x "${SCRIPT_DIR}/sync.sh"
+chmod +x "${SCRIPT_DIR}/quick-sync.sh"
+chmod +x "${SCRIPT_DIR}/build_xcode.sh"
 
 echo -e "${GREEN}✅ Git aliases configured!${NC}"
 
 # Create a convenience script in user's bin directory
-if [[ -d "$HOME/bin" ]]; then
-  echo -e "\n${YELLOW}Installing sync command to ~/bin...${NC}"
-  cat >"$HOME/bin/mf-sync" <<'EOF'
+if [[ -d "${HOME}/bin" ]]; then
+	echo -e "\n${YELLOW}Installing sync command to ~/bin...${NC}"
+	cat >"${HOME}/bin/mf-sync" <<'EOF'
 #!/bin/bash
 # Momentum Finance sync shortcut
 
@@ -67,8 +67,8 @@ fi
 
 cd "$PROJECT_DIR" && ./quick-sync.sh
 EOF
-  chmod +x "$HOME/bin/mf-sync"
-  echo -e "${GREEN}✅ Installed mf-sync command${NC}"
+	chmod +x "${HOME}/bin/mf-sync"
+	echo -e "${GREEN}✅ Installed mf-sync command${NC}"
 fi
 
 echo -e "\n${GREEN}🎉 Setup complete!${NC}"
@@ -86,10 +86,10 @@ echo "    ./sync.sh        - Interactive sync tool"
 echo "    ./quick-sync.sh  - Quick sync (no prompts)"
 echo "    ./build_xcode.sh - Build with Xcode"
 
-if [[ -f "$HOME/bin/mf-sync" ]]; then
-  echo ""
-  echo "  ${YELLOW}Global command:${NC}"
-  echo "    mf-sync         - Sync from anywhere"
+if [[ -f "${HOME}/bin/mf-sync" ]]; then
+	echo ""
+	echo "  ${YELLOW}Global command:${NC}"
+	echo "    mf-sync         - Sync from anywhere"
 fi
 
 echo ""

@@ -41,47 +41,47 @@ public struct NotificationsView: View {
             #endif
                 .toolbar {
                     #if os(iOS)
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(
-                            "Clear All",
-                            action: {
-                                self.clearAllNotifications()
-                            }
-                        )
-                        .accessibilityLabel("Button")
-                        .foregroundColor(.red)
-                    }
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(
+                                "Clear All",
+                                action: {
+                                    self.clearAllNotifications()
+                                }
+                            )
+                            .accessibilityLabel("Button")
+                            .foregroundColor(.red)
+                        }
 
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(
-                            "Done",
-                            action: {
-                                self.dismiss()
-                            }
-                        )
-                        .accessibilityLabel("Button")
-                    }
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(
+                                "Done",
+                                action: {
+                                    self.dismiss()
+                                }
+                            )
+                            .accessibilityLabel("Button")
+                        }
                     #else
-                    ToolbarItem {
-                        Button(
-                            "Clear All",
-                            action: {
-                                self.clearAllNotifications()
-                            }
-                        )
-                        .accessibilityLabel("Button")
-                        .foregroundColor(.red)
-                    }
+                        ToolbarItem {
+                            Button(
+                                "Clear All",
+                                action: {
+                                    self.clearAllNotifications()
+                                }
+                            )
+                            .accessibilityLabel("Button")
+                            .foregroundColor(.red)
+                        }
 
-                    ToolbarItem {
-                        Button(
-                            "Done",
-                            action: {
-                                self.dismiss()
-                            }
-                        )
-                        .accessibilityLabel("Button")
-                    }
+                        ToolbarItem {
+                            Button(
+                                "Done",
+                                action: {
+                                    self.dismiss()
+                                }
+                            )
+                            .accessibilityLabel("Button")
+                        }
                     #endif
                 }
                 .task {

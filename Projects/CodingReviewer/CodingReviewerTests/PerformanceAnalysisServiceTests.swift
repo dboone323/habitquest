@@ -12,11 +12,11 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.performanceAnalyzer = PerformanceAnalysisService()
+        performanceAnalyzer = PerformanceAnalysisService()
     }
 
     override func tearDown() {
-        self.performanceAnalyzer = nil
+        performanceAnalyzer = nil
         super.tearDown()
     }
 
@@ -33,7 +33,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
 
         // Then no issues should be found
         XCTAssertTrue(issues.isEmpty)
@@ -54,7 +54,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
 
         // Then forEach+append issue should be detected
         XCTAssertEqual(issues.count, 1)
@@ -76,7 +76,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
 
         // Then no issues should be detected (forEach without append is OK)
         XCTAssertTrue(issues.isEmpty)
@@ -97,7 +97,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
 
         // Then no issues should be detected (regular for loop with append is OK)
         XCTAssertTrue(issues.isEmpty)
@@ -116,7 +116,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
 
         // Then multiple array operations issue should be detected
         XCTAssertEqual(issues.count, 1)
@@ -137,7 +137,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
 
         // Then no issues should be detected (filter alone is OK)
         XCTAssertTrue(issues.isEmpty)
@@ -154,7 +154,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
 
         // Then no issues should be detected (map alone is OK)
         XCTAssertTrue(issues.isEmpty)
@@ -181,7 +181,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
 
         // Then both issues should be detected
         XCTAssertEqual(issues.count, 2)
@@ -208,7 +208,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "JavaScript")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "JavaScript")
 
         // Then forEach+push issue should be detected
         XCTAssertEqual(issues.count, 1)
@@ -224,7 +224,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         let code = ""
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
 
         // Then no issues should be found
         XCTAssertTrue(issues.isEmpty)
@@ -235,7 +235,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         let code = "   \n\t   \n  "
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
 
         // Then no issues should be found
         XCTAssertTrue(issues.isEmpty)
@@ -249,10 +249,10 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         let code4 = "items.FILTER { $0 }.MAP { $0 }" // uppercase
 
         // When analyzing for performance issues
-        let issues1 = self.performanceAnalyzer.detectPerformanceIssues(in: code1, language: "Swift")
-        let issues2 = self.performanceAnalyzer.detectPerformanceIssues(in: code2, language: "Swift")
-        let issues3 = self.performanceAnalyzer.detectPerformanceIssues(in: code3, language: "Swift")
-        let issues4 = self.performanceAnalyzer.detectPerformanceIssues(in: code4, language: "Swift")
+        let issues1 = performanceAnalyzer.detectPerformanceIssues(in: code1, language: "Swift")
+        let issues2 = performanceAnalyzer.detectPerformanceIssues(in: code2, language: "Swift")
+        let issues3 = performanceAnalyzer.detectPerformanceIssues(in: code3, language: "Swift")
+        let issues4 = performanceAnalyzer.detectPerformanceIssues(in: code4, language: "Swift")
 
         // Then issues should be detected for lowercase but not uppercase
         XCTAssertEqual(issues1.count, 1) // forEach + append detected
@@ -301,7 +301,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
 
         // Then both performance issues should be detected
         XCTAssertEqual(issues.count, 2)
@@ -323,7 +323,7 @@ final class PerformanceAnalysisServiceTests: XCTestCase {
         """
 
         // When analyzing for performance issues
-        let issues = self.performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
+        let issues = performanceAnalyzer.detectPerformanceIssues(in: code, language: "Swift")
 
         // Then only one issue should be reported (not duplicated)
         XCTAssertEqual(issues.count, 1)

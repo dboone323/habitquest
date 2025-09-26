@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class LoggerTests: XCTestCase {
+final class LoggerTests: XCTestCase {
     // MARK: - structLogger{ Tests
 
     func testLoggerInitialization() {

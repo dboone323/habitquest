@@ -13,11 +13,11 @@ final class BugDetectionServiceTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.bugDetector = BugDetectionService()
+        bugDetector = BugDetectionService()
     }
 
     override func tearDown() {
-        self.bugDetector = nil
+        bugDetector = nil
         super.tearDown()
     }
 
@@ -34,7 +34,7 @@ final class BugDetectionServiceTests: XCTestCase {
         """
 
         // When analyzing for bugs
-        let issues = self.bugDetector.detectBasicBugs(code: code, language: "Swift")
+        let issues = bugDetector.detectBasicBugs(code: code, language: "Swift")
 
         // Then no issues should be found
         XCTAssertTrue(issues.isEmpty)
@@ -52,7 +52,7 @@ final class BugDetectionServiceTests: XCTestCase {
         """
 
         // When analyzing for bugs
-        let issues = self.bugDetector.detectBasicBugs(code: code, language: "Swift")
+        let issues = bugDetector.detectBasicBugs(code: code, language: "Swift")
 
         // Then TODO issue should be detected
         XCTAssertEqual(issues.count, 1)
@@ -73,7 +73,7 @@ final class BugDetectionServiceTests: XCTestCase {
         """
 
         // When analyzing for bugs
-        let issues = self.bugDetector.detectBasicBugs(code: code, language: "Swift")
+        let issues = bugDetector.detectBasicBugs(code: code, language: "Swift")
 
         // Then FIXME issue should be detected
         XCTAssertEqual(issues.count, 1)
@@ -94,7 +94,7 @@ final class BugDetectionServiceTests: XCTestCase {
         """
 
         // When analyzing for bugs
-        let issues = self.bugDetector.detectBasicBugs(code: code, language: "Swift")
+        let issues = bugDetector.detectBasicBugs(code: code, language: "Swift")
 
         // Then print statement issue should be detected
         XCTAssertEqual(issues.count, 1)
@@ -113,7 +113,7 @@ final class BugDetectionServiceTests: XCTestCase {
         """
 
         // When analyzing for bugs
-        let issues = self.bugDetector.detectBasicBugs(code: code, language: "JavaScript")
+        let issues = bugDetector.detectBasicBugs(code: code, language: "JavaScript")
 
         // Then no print statement issue should be detected (only checks Swift)
         XCTAssertTrue(issues.isEmpty)
@@ -130,7 +130,7 @@ final class BugDetectionServiceTests: XCTestCase {
         """
 
         // When analyzing for bugs
-        let issues = self.bugDetector.detectBasicBugs(code: code, language: "Swift")
+        let issues = bugDetector.detectBasicBugs(code: code, language: "Swift")
 
         // Then force unwrap issue should be detected
         XCTAssertEqual(issues.count, 1)
@@ -148,7 +148,7 @@ final class BugDetectionServiceTests: XCTestCase {
         """
 
         // When analyzing for bugs
-        let issues = self.bugDetector.detectBasicBugs(code: code, language: "JavaScript")
+        let issues = bugDetector.detectBasicBugs(code: code, language: "JavaScript")
 
         // Then no force unwrap issue should be detected (only checks Swift)
         XCTAssertTrue(issues.isEmpty)
@@ -167,7 +167,7 @@ final class BugDetectionServiceTests: XCTestCase {
         """
 
         // When analyzing for bugs
-        let issues = self.bugDetector.detectBasicBugs(code: code, language: "Swift")
+        let issues = bugDetector.detectBasicBugs(code: code, language: "Swift")
 
         // Then all issues should be detected
         XCTAssertEqual(issues.count, 3)
@@ -187,7 +187,7 @@ final class BugDetectionServiceTests: XCTestCase {
         let code = ""
 
         // When analyzing for bugs
-        let issues = self.bugDetector.detectBasicBugs(code: code, language: "Swift")
+        let issues = bugDetector.detectBasicBugs(code: code, language: "Swift")
 
         // Then no issues should be found
         XCTAssertTrue(issues.isEmpty)
@@ -198,7 +198,7 @@ final class BugDetectionServiceTests: XCTestCase {
         let code = "   \n\t   \n  "
 
         // When analyzing for bugs
-        let issues = self.bugDetector.detectBasicBugs(code: code, language: "Swift")
+        let issues = bugDetector.detectBasicBugs(code: code, language: "Swift")
 
         // Then no issues should be found
         XCTAssertTrue(issues.isEmpty)
@@ -214,7 +214,7 @@ final class BugDetectionServiceTests: XCTestCase {
         """
 
         // When analyzing for bugs
-        let issues = self.bugDetector.detectBasicBugs(code: code, language: "Swift")
+        let issues = bugDetector.detectBasicBugs(code: code, language: "Swift")
 
         // Then each issue should have a unique ID
         XCTAssertEqual(issues.count, 2)
@@ -229,7 +229,7 @@ final class BugDetectionServiceTests: XCTestCase {
         """
 
         // When analyzing for bugs
-        let issues = self.bugDetector.detectBasicBugs(code: code, language: "Swift")
+        let issues = bugDetector.detectBasicBugs(code: code, language: "Swift")
 
         // Then line numbers should be tracked
         XCTAssertEqual(issues.count, 2)

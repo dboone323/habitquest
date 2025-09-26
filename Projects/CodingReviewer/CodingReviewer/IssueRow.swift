@@ -9,15 +9,15 @@ import SwiftUI
 
 public struct IssueRow: View {
     let issue: CodeIssue
-    private var presenter: IssueRowPresenter { IssueRowPresenter(issue: self.issue) }
+    private var presenter: IssueRowPresenter { IssueRowPresenter(issue: issue) }
 
     public var body: some View {
         HStack(alignment: .top, spacing: 8) {
-            Image(systemName: self.presenter.iconName)
-                .foregroundColor(self.presenter.iconColor)
+            Image(systemName: presenter.iconName)
+                .foregroundColor(presenter.iconColor)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(self.issue.description)
+                Text(issue.description)
                     .font(.body)
 
                 HStack {
@@ -29,15 +29,15 @@ public struct IssueRow: View {
 
                     Text("•")
                         .foregroundColor(.secondary)
-                    Text(self.issue.category.rawValue.capitalized)
+                    Text(issue.category.rawValue.capitalized)
                         .font(.caption)
                         .foregroundColor(.secondary)
 
                     Text("•")
                         .foregroundColor(.secondary)
-                    Text(self.issue.severity.rawValue.capitalized)
+                    Text(issue.severity.rawValue.capitalized)
                         .font(.caption)
-                        .foregroundColor(self.presenter.severityColor)
+                        .foregroundColor(presenter.severityColor)
                 }
             }
         }
@@ -69,20 +69,20 @@ struct IssueRowPresenter {
     ]
 
     private var paletteForIssue: Palette {
-        Self.palette[self.issue.severity] ?? Self.palette[.low]!
+        Self.palette[issue.severity] ?? Self.palette[.low]!
     }
 
-    var iconName: String { self.paletteForIssue.iconName }
+    var iconName: String { paletteForIssue.iconName }
 
-    var iconColor: Color { self.paletteForIssue.iconColor }
+    var iconColor: Color { paletteForIssue.iconColor }
 
-    var severityColor: Color { self.paletteForIssue.severityColor }
+    var severityColor: Color { paletteForIssue.severityColor }
 
     var diagnostics: Diagnostics {
         Diagnostics(
-            iconName: self.paletteForIssue.iconName,
-            iconColorIdentifier: self.paletteForIssue.colorIdentifier,
-            severityColorIdentifier: self.paletteForIssue.colorIdentifier
+            iconName: paletteForIssue.iconName,
+            iconColorIdentifier: paletteForIssue.colorIdentifier,
+            severityColorIdentifier: paletteForIssue.colorIdentifier
         )
     }
 }

@@ -2,7 +2,8 @@
 import SwiftData
 import XCTest
 
-public class DataManagementViewModelTests: XCTestCase {
+@MainActor
+final class DataManagementViewModelTests: XCTestCase {
     var modelContainer: ModelContainer!
     var modelContext: ModelContext!
     var viewModel: DataManagementViewModel!
@@ -23,8 +24,8 @@ public class DataManagementViewModelTests: XCTestCase {
 
     override func tearDown() {
         self.viewModel = nil
-        self.modelContainer = nil
         self.modelContext = nil
+        self.modelContainer = nil
         super.tearDown()
     }
 
@@ -32,7 +33,11 @@ public class DataManagementViewModelTests: XCTestCase {
 
     @MainActor func testDataManagementViewModelInitialization() {
         // Test basic initialization
-        let viewModel = DataManagementViewModel()
+        self.viewModel = DataManagementViewModel()
+        guard let viewModel else {
+            XCTFail("Failed to create DataManagementViewModel")
+            return
+        }
 
         // Verify initial state
         XCTAssertFalse(viewModel.isExporting)

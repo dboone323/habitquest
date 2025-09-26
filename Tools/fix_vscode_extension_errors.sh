@@ -5,32 +5,32 @@ echo "🔧 Fixing VS Code Extension Errors..."
 
 # 1. Clear VS Code extension cache and logs
 echo "Clearing VS Code extension cache..."
-rm -rf "$HOME/.vscode-insiders/logs"
-rm -rf "$HOME/.vscode-insiders/CachedExtensions"
-rm -rf "$HOME/.vscode-insiders/CachedExtensionVSIXs"
+rm -rf "${HOME}/.vscode-insiders/logs"
+rm -rf "${HOME}/.vscode-insiders/CachedExtensions"
+rm -rf "${HOME}/.vscode-insiders/CachedExtensionVSIXs"
 
 # 2. Reset Continue extension data
 echo "Resetting Continue extension data..."
-rm -rf "$HOME/.continue"
-mkdir -p "$HOME/.continue"
+rm -rf "${HOME}/.continue"
+mkdir -p "${HOME}/.continue"
 
 # 3. Create missing settings for MCP and GitHub Copilot
 echo "Creating VS Code settings to resolve warnings..."
-VSCODE_SETTINGS_DIR="$HOME/Library/Application Support/Code - Insiders/User"
-mkdir -p "$VSCODE_SETTINGS_DIR"
+VSCODE_SETTINGS_DIR="${HOME}/Library/Application Support/Code - Insiders/User"
+mkdir -p "${VSCODE_SETTINGS_DIR}"
 
 # Update settings.json to include MCP and GitHub Copilot settings
-SETTINGS_FILE="$VSCODE_SETTINGS_DIR/settings.json"
+SETTINGS_FILE="${VSCODE_SETTINGS_DIR}/settings.json"
 
 # Create or update settings.json
-if [ -f "$SETTINGS_FILE" ]; then
+if [[ -f "${SETTINGS_FILE}" ]]; then
   # Backup existing settings
-  cp "$SETTINGS_FILE" "$SETTINGS_FILE.backup.$(date +%Y%m%d_%H%M%S)"
+  cp "${SETTINGS_FILE}" "${SETTINGS_FILE}.backup.$(date +%Y%m%d_%H%M%S)"
   echo "Backed up existing settings.json"
 fi
 
 # Create new settings with MCP and GitHub Copilot configurations
-cat >"$SETTINGS_FILE" <<'EOF'
+cat >"${SETTINGS_FILE}" <<'EOF'
 {
     "mcp": {
         "enabled": true,
@@ -67,7 +67,7 @@ echo "✅ Updated VS Code settings.json"
 # 4. Fix file system provider issues
 echo "Fixing filesystem provider issues..."
 # Clear workspace state that might have invalid paths
-rm -rf "$HOME/Library/Application Support/Code - Insiders/User/workspaceStorage"
+rm -rf "${HOME}/Library/Application Support/Code - Insiders/User/workspaceStorage"
 
 # 5. Restart VS Code extension host
 echo "Extension fixes applied. Please:"

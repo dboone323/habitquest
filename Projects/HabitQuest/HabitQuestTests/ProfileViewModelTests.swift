@@ -2,7 +2,7 @@
 import SwiftData
 import XCTest
 
-public class ProfileViewModelTests: XCTestCase {
+final class ProfileViewModelTests: XCTestCase {
     var modelContainer: ModelContainer!
     var modelContext: ModelContext!
     var viewModel: ProfileViewModel!

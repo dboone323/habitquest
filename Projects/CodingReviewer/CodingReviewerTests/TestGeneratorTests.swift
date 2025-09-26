@@ -13,11 +13,11 @@ final class TestGeneratorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.testGenerator = TestGenerator()
+        testGenerator = TestGenerator()
     }
 
     override func tearDown() {
-        self.testGenerator = nil
+        testGenerator = nil
         super.tearDown()
     }
 
@@ -34,7 +34,7 @@ final class TestGeneratorTests: XCTestCase {
         """
 
         // When generating basic tests
-        let testCode = self.testGenerator.generateBasicTests(code: code, language: "Swift", testFramework: "XCTest")
+        let testCode = testGenerator.generateBasicTests(code: code, language: "Swift", testFramework: "XCTest")
 
         // Then test code should be generated
         XCTAssertFalse(testCode.isEmpty)
@@ -54,7 +54,7 @@ final class TestGeneratorTests: XCTestCase {
         """
 
         // When generating tests for unsupported language
-        let testCode = self.testGenerator.generateBasicTests(code: code, language: "JavaScript", testFramework: "Jest")
+        let testCode = testGenerator.generateBasicTests(code: code, language: "JavaScript", testFramework: "Jest")
 
         // Then empty test code should be returned
         XCTAssertTrue(testCode.isEmpty)
@@ -71,7 +71,7 @@ final class TestGeneratorTests: XCTestCase {
         """
 
         // When generating tests for unsupported framework
-        let testCode = self.testGenerator.generateBasicTests(code: code, language: "Swift", testFramework: "Quick")
+        let testCode = testGenerator.generateBasicTests(code: code, language: "Swift", testFramework: "Quick")
 
         // Then empty test code should be returned
         XCTAssertTrue(testCode.isEmpty)
@@ -82,7 +82,7 @@ final class TestGeneratorTests: XCTestCase {
         let code = ""
 
         // When generating tests
-        let testCode = self.testGenerator.generateBasicTests(code: code, language: "Swift", testFramework: "XCTest")
+        let testCode = testGenerator.generateBasicTests(code: code, language: "Swift", testFramework: "XCTest")
 
         // Then test code should still be generated (template)
         XCTAssertFalse(testCode.isEmpty)
@@ -123,7 +123,7 @@ final class TestGeneratorTests: XCTestCase {
         """
 
         // When estimating coverage
-        let coverage = self.testGenerator.estimateTestCoverage(code: code, testCode: testCode)
+        let coverage = testGenerator.estimateTestCoverage(code: code, testCode: testCode)
 
         // Then coverage should be calculated
         XCTAssertGreaterThan(coverage, 0.0)
@@ -136,7 +136,7 @@ final class TestGeneratorTests: XCTestCase {
         let testCode = "import XCTest\nclass Test: XCTestCase {}"
 
         // When estimating coverage
-        let coverage = self.testGenerator.estimateTestCoverage(code: code, testCode: testCode)
+        let coverage = testGenerator.estimateTestCoverage(code: code, testCode: testCode)
 
         // Then coverage should be 85% (capped)
         XCTAssertEqual(coverage, 85.0)
@@ -148,7 +148,7 @@ final class TestGeneratorTests: XCTestCase {
         let testCode = ""
 
         // When estimating coverage
-        let coverage = self.testGenerator.estimateTestCoverage(code: code, testCode: testCode)
+        let coverage = testGenerator.estimateTestCoverage(code: code, testCode: testCode)
 
         // Then coverage should be 0%
         XCTAssertEqual(coverage, 0.0)
@@ -160,7 +160,7 @@ final class TestGeneratorTests: XCTestCase {
         let testCode = String(repeating: "line\n", count: 100)
 
         // When estimating coverage
-        let coverage = self.testGenerator.estimateTestCoverage(code: code, testCode: testCode)
+        let coverage = testGenerator.estimateTestCoverage(code: code, testCode: testCode)
 
         // Then coverage should be capped at 85%
         XCTAssertEqual(coverage, 85.0)
@@ -172,7 +172,7 @@ final class TestGeneratorTests: XCTestCase {
         let testCode = "test1\ntest2\ntest3"
 
         // When estimating coverage
-        let coverage = self.testGenerator.estimateTestCoverage(code: code, testCode: testCode)
+        let coverage = testGenerator.estimateTestCoverage(code: code, testCode: testCode)
 
         // Then coverage should be 100% (3/3 * 100, but capped at 85)
         XCTAssertEqual(coverage, 85.0)
@@ -184,7 +184,7 @@ final class TestGeneratorTests: XCTestCase {
         let testCode = "test1\ntest2\ntest3"
 
         // When estimating coverage
-        let coverage = self.testGenerator.estimateTestCoverage(code: code, testCode: testCode)
+        let coverage = testGenerator.estimateTestCoverage(code: code, testCode: testCode)
 
         // Then coverage should be 3% (3/100 * 100)
         XCTAssertEqual(coverage, 3.0)
@@ -203,8 +203,8 @@ final class TestGeneratorTests: XCTestCase {
         """
 
         // When generating tests and estimating coverage
-        let testCode = self.testGenerator.generateBasicTests(code: code, language: "Swift", testFramework: "XCTest")
-        let coverage = self.testGenerator.estimateTestCoverage(code: code, testCode: testCode)
+        let testCode = testGenerator.generateBasicTests(code: code, language: "Swift", testFramework: "XCTest")
+        let coverage = testGenerator.estimateTestCoverage(code: code, testCode: testCode)
 
         // Then both operations should succeed
         XCTAssertFalse(testCode.isEmpty)
@@ -220,7 +220,7 @@ final class TestGeneratorTests: XCTestCase {
         let testCode = "test"
 
         // When estimating coverage
-        let coverage = self.testGenerator.estimateTestCoverage(code: code, testCode: testCode)
+        let coverage = testGenerator.estimateTestCoverage(code: code, testCode: testCode)
 
         // Then coverage should be calculated based on line count
         XCTAssertEqual(coverage, 33.0) // 1/3 * 100 = 33.33, rounded to 33
@@ -232,7 +232,7 @@ final class TestGeneratorTests: XCTestCase {
         let testCode = "class TestCase: XCTestCase {}"
 
         // When estimating coverage
-        let coverage = self.testGenerator.estimateTestCoverage(code: code, testCode: testCode)
+        let coverage = testGenerator.estimateTestCoverage(code: code, testCode: testCode)
 
         // Then coverage should be 100% (capped at 85)
         XCTAssertEqual(coverage, 85.0)
@@ -245,7 +245,7 @@ final class TestGeneratorTests: XCTestCase {
         let code = "func test() {}"
 
         // When generating test code
-        let testCode = self.testGenerator.generateBasicTests(code: code, language: "Swift", testFramework: "XCTest")
+        let testCode = testGenerator.generateBasicTests(code: code, language: "Swift", testFramework: "XCTest")
 
         // Then it should contain essential test structure elements
         XCTAssertTrue(testCode.contains("import XCTest"))
@@ -261,7 +261,7 @@ final class TestGeneratorTests: XCTestCase {
         let code = "let x = 1"
 
         // When generating test code
-        let testCode = self.testGenerator.generateBasicTests(code: code, language: "Swift", testFramework: "XCTest")
+        let testCode = testGenerator.generateBasicTests(code: code, language: "Swift", testFramework: "XCTest")
 
         // Then the generated code should be valid Swift (basic check)
         XCTAssertTrue(testCode.hasPrefix("import XCTest"))

@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUI
 import XCTest
 
-public class ContentViewTests: XCTestCase {
+final class ContentViewTests: XCTestCase {
     var modelContainer: ModelContainer!
     var modelContext: ModelContext!
 

@@ -10,16 +10,16 @@ public struct TaskInputView: View {
 
     public var body: some View {
         HStack {
-            TextField("New Task", text: self.$newTaskTitle, onCommit: self.onAddTask)
-                .focused(self.isInputFieldFocused)
+            TextField("New Task", text: $newTaskTitle, onCommit: onAddTask)
+                .focused(isInputFieldFocused)
                 .padding()
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(8)
 
-            Button(action: self.onAddTask) {
+            Button(action: onAddTask) {
                 Image(systemName: "plus.circle.fill")
             }
-            .disabled(self.newTaskTitle.isEmpty)
+            .disabled(newTaskTitle.isEmpty)
         }
         .padding()
     }

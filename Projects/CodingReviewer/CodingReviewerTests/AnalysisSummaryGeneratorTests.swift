@@ -13,11 +13,11 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.summaryGenerator = AnalysisSummaryGenerator()
+        summaryGenerator = AnalysisSummaryGenerator()
     }
 
     override func tearDown() {
-        self.summaryGenerator = nil
+        summaryGenerator = nil
         super.tearDown()
     }
 
@@ -28,7 +28,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         let issues: [CodeIssue] = []
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then summary should indicate no issues found
         XCTAssertFalse(summary.isEmpty)
@@ -47,7 +47,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         let issues = [issue]
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(
+        let summary = summaryGenerator.generateAnalysisSummary(
             issues: issues,
             suggestions: ["Use optional binding instead"],
             analysisType: .bugs
@@ -70,7 +70,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         ]
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then summary should contain all issue types and severities
         XCTAssertTrue(summary.contains("Total Issues: 4"))
@@ -93,7 +93,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         ]
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then summary should group issues by file
         XCTAssertTrue(summary.contains("FileA.swift: 2 issues"))
@@ -113,7 +113,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         ]
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then severity counts should be correct
         XCTAssertTrue(summary.contains("Critical Priority: 2"))
@@ -133,7 +133,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         ]
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then type counts should be correct
         XCTAssertTrue(summary.contains("Bug Issues: 2"))
@@ -151,7 +151,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         ]
 
         // When generating summary for Swift
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then summary should mention Swift
         XCTAssertTrue(summary.contains("Swift code analysis"))
@@ -164,7 +164,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         ]
 
         // When generating summary for JavaScript
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then summary should mention JavaScript
         XCTAssertTrue(summary.contains("JavaScript code analysis"))
@@ -180,7 +180,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         ]
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(
+        let summary = summaryGenerator.generateAnalysisSummary(
             issues: issues,
             suggestions: ["Use optional binding", "Avoid eval for security"],
             analysisType: .comprehensive
@@ -210,7 +210,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         ]
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then summary should still include the issue but without suggestion section
         XCTAssertTrue(summary.contains("Long line"))
@@ -227,7 +227,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         ]
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then summary should handle long messages gracefully
         XCTAssertTrue(summary.contains(longMessage))
@@ -240,7 +240,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         ]
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then special characters should be preserved
         XCTAssertTrue(summary.contains("Issue with <>&\"'"))
@@ -259,7 +259,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         }
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then all files should be listed
         for issueIndex in 1 ... 10 {
@@ -276,7 +276,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         ]
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then summary should have proper structure
         XCTAssertTrue(summary.hasPrefix("# Code Analysis Summary"))
@@ -292,7 +292,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         ]
 
         // When generating summary
-        let summary = self.summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
+        let summary = summaryGenerator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)
 
         // Then there should be no empty sections
         let lines = summary.components(separatedBy: "\n")

@@ -32,21 +32,21 @@ class EffectsManager {
 
     init(scene: SKScene) {
         self.scene = scene
-        self.preloadEffects()
+        preloadEffects()
     }
 
     // MARK: - Effect Preloading
 
     /// Preloads particle effects for better performance
     private func preloadEffects() {
-        self.createExplosionEffect()
-        self.createTrailEffect()
-        self.createSparkleEffect()
+        createExplosionEffect()
+        createTrailEffect()
+        createSparkleEffect()
     }
 
     /// Creates the explosion particle effect
     private func createExplosionEffect() {
-        self.explosionEmitter = SKEmitterNode()
+        explosionEmitter = SKEmitterNode()
         guard let explosion = explosionEmitter else { return }
 
         // Create particle texture programmatically
@@ -87,7 +87,7 @@ class EffectsManager {
 
     /// Creates the trail particle effect
     private func createTrailEffect() {
-        self.trailEmitter = SKEmitterNode()
+        trailEmitter = SKEmitterNode()
         guard let trail = trailEmitter else { return }
 
         // Create particle texture
@@ -117,7 +117,7 @@ class EffectsManager {
 
     /// Creates the sparkle particle effect
     private func createSparkleEffect() {
-        self.sparkleEmitter = SKEmitterNode()
+        sparkleEmitter = SKEmitterNode()
         guard let sparkle = sparkleEmitter else { return }
 
         // Create particle texture
@@ -152,7 +152,7 @@ class EffectsManager {
     func createExplosion(at position: CGPoint) {
         guard let scene else { return }
 
-        let explosion = self.getExplosionFromPool()
+        let explosion = getExplosionFromPool()
         explosion.position = position
         scene.addChild(explosion)
 
@@ -173,7 +173,7 @@ class EffectsManager {
             return explosion
         } else {
             // Create new explosion
-            let explosion = self.explosionEmitter?.copy() as? SKEmitterNode ?? SKEmitterNode()
+            let explosion = explosionEmitter?.copy() as? SKEmitterNode ?? SKEmitterNode()
             return explosion
         }
     }
@@ -181,8 +181,8 @@ class EffectsManager {
     /// Returns an explosion effect to the pool
     private func returnExplosionToPool(_ explosion: SKEmitterNode) {
         explosion.removeFromParent()
-        if self.explosionPool.count < self.maxExplosionPoolSize {
-            self.explosionPool.append(explosion)
+        if explosionPool.count < maxExplosionPoolSize {
+            explosionPool.append(explosion)
         }
     }
 
@@ -235,11 +235,11 @@ class EffectsManager {
                 y: center.y + sin(angle) * distance
             )
 
-            self.createSparkleBurst(at: position)
+            createSparkleBurst(at: position)
         }
 
         // Screen flash
-        self.createScreenFlash(color: .yellow, duration: 0.2)
+        createScreenFlash(color: .yellow, duration: 0.2)
     }
 
     /// Creates a sparkle burst at a position
@@ -297,7 +297,7 @@ class EffectsManager {
         let speedMultiplier = difficulty.obstacleSpeed / 3.5
 
         // Update cloud movement speed
-        self.enumerateClouds { cloud in
+        enumerateClouds { cloud in
             if cloud.action(forKey: "move") != nil {
                 cloud.removeAction(forKey: "move")
 
@@ -314,7 +314,7 @@ class EffectsManager {
 
     /// Enumerates all cloud nodes in the scene
     private func enumerateClouds(action: @escaping (SKNode) -> Void) {
-        self.scene?.enumerateChildNodes(withName: "cloud") { node, _ in
+        scene?.enumerateChildNodes(withName: "cloud") { node, _ in
             action(node)
         }
     }
@@ -325,10 +325,10 @@ class EffectsManager {
     /// - Parameter position: Where the power-up was collected
     func createPowerUpCollectionEffect(at position: CGPoint) {
         // Sparkle burst
-        self.createSparkleBurst(at: position)
+        createSparkleBurst(at: position)
 
         // Screen flash
-        self.createScreenFlash(color: .green, duration: 0.15)
+        createScreenFlash(color: .green, duration: 0.15)
 
         // Sound effect would be triggered here (when audio is implemented)
     }
@@ -362,7 +362,7 @@ class EffectsManager {
     /// Cleans up unused effects
     func cleanupUnusedEffects() {
         // Return explosions to pool if they're done
-        self.scene?.enumerateChildNodes(withName: "explosion") { node, _ in
+        scene?.enumerateChildNodes(withName: "explosion") { node, _ in
             if let emitter = node as? SKEmitterNode, emitter.numParticlesToEmit == 0 {
                 self.returnExplosionToPool(emitter)
             }
@@ -388,11 +388,11 @@ class EffectsManager {
 
     /// Cleans up all effects and pools
     func cleanup() {
-        self.explosionPool.removeAll()
-        self.trailPool.removeAll()
-        self.explosionEmitter = nil
-        self.trailEmitter = nil
-        self.sparkleEmitter = nil
+        explosionPool.removeAll()
+        trailPool.removeAll()
+        explosionEmitter = nil
+        trailEmitter = nil
+        sparkleEmitter = nil
     }
 
     // MARK: - Async Effects

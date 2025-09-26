@@ -22,8 +22,8 @@ public struct CalendarView: View {
     // Computed property to group events by the start of their day
     private var groupedEvents: [Date: [CalendarEvent]] {
         var calendar = Calendar.current
-        calendar.firstWeekday = self.firstDayOfWeekSetting
-        return Dictionary(grouping: self.events.sorted(by: { $0.date < $1.date })) { event in
+        calendar.firstWeekday = firstDayOfWeekSetting
+        return Dictionary(grouping: events.sorted(by: { $0.date < $1.date })) { event in
             calendar.startOfDay(for: event.date)
         }
     }
@@ -31,15 +31,15 @@ public struct CalendarView: View {
     // Computed property to get dates with goals
     private var goalDates: Set<Date> {
         var calendar = Calendar.current
-        calendar.firstWeekday = self.firstDayOfWeekSetting
-        return Set(self.goals.map { calendar.startOfDay(for: $0.targetDate) })
+        calendar.firstWeekday = firstDayOfWeekSetting
+        return Set(goals.map { calendar.startOfDay(for: $0.targetDate) })
     }
 
     // Computed property to get dates with tasks
     private var taskDates: Set<Date> {
         var calendar = Calendar.current
-        calendar.firstWeekday = self.firstDayOfWeekSetting
-        return Set(self.tasks.compactMap { task in
+        calendar.firstWeekday = firstDayOfWeekSetting
+        return Set(tasks.compactMap { task in
             guard let dueDate = task.dueDate else { return nil }
             return calendar.startOfDay(for: dueDate)
         })
@@ -48,25 +48,25 @@ public struct CalendarView: View {
     // Computed property to get dates with events
     private var eventDates: Set<Date> {
         var calendar = Calendar.current
-        calendar.firstWeekday = self.firstDayOfWeekSetting
-        return Set(self.events.map { calendar.startOfDay(for: $0.date) })
+        calendar.firstWeekday = firstDayOfWeekSetting
+        return Set(events.map { calendar.startOfDay(for: $0.date) })
     }
 
     // Get items for selected date
     private var selectedDateItems: (events: [CalendarEvent], goals: [Goal], tasks: [Task]) {
         let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: self.selectedDate)
+        let startOfDay = calendar.startOfDay(for: selectedDate)
         let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) ?? startOfDay
 
-        let dayEvents = self.events.filter { event in
+        let dayEvents = events.filter { event in
             event.date >= startOfDay && event.date < endOfDay
         }
 
-        let dayGoals = self.goals.filter { goal in
+        let dayGoals = goals.filter { goal in
             calendar.startOfDay(for: goal.targetDate) == startOfDay
         }
 
-        let dayTasks = self.tasks.filter { task in
+        let dayTasks = tasks.filter { task in
             guard let dueDate = task.dueDate else { return false }
             return calendar.startOfDay(for: dueDate) == startOfDay
         }
@@ -79,7 +79,7 @@ public struct CalendarView: View {
         let formatter = DateFormatter()
         formatter.dateStyle = .none
         formatter.timeStyle = .short
-        formatter.locale = Locale(identifier: self.use24HourTime ? "en_GB" : "en_US")
+        formatter.locale = Locale(identifier: use24HourTime ? "en_GB" : "en_US")
         return formatter
     }
 
@@ -102,28 +102,28 @@ public struct CalendarView: View {
                 VStack(spacing: 16) {
                     // Calendar Header
                     HStack {
-                        Text(self.monthYearFormatter.string(from: self.selectedDate))
+                        Text(monthYearFormatter.string(from: selectedDate))
                             .font(.title2)
                             .fontWeight(.semibold)
-                            .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                            .foregroundColor(themeManager.currentTheme.primaryTextColor)
 
                         Spacer()
 
                         HStack(spacing: 12) {
                             Button {
-                                self.previousMonth()
+                                previousMonth()
                             } label: {
                                 Image(systemName: "chevron.left")
-                                    .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
+                                    .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                             }
                             .accessibilityLabel("Button")
                             .accessibilityLabel("Button")
 
                             Button {
-                                self.nextMonth()
+                                nextMonth()
                             } label: {
                                 Image(systemName: "chevron.right")
-                                    .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
+                                    .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                             }
                             .accessibilityLabel("Button")
                             .accessibilityLabel("Button")
@@ -133,31 +133,31 @@ public struct CalendarView: View {
 
                     // Calendar Grid
                     CalendarGrid(
-                        selectedDate: self.$selectedDate,
-                        eventDates: self.eventDates,
-                        goalDates: self.goalDates,
-                        taskDates: self.taskDates,
-                        firstDayOfWeek: self.firstDayOfWeekSetting
+                        selectedDate: $selectedDate,
+                        eventDates: eventDates,
+                        goalDates: goalDates,
+                        taskDates: taskDates,
+                        firstDayOfWeek: firstDayOfWeekSetting
                     )
-                    .environmentObject(self.themeManager)
+                    .environmentObject(themeManager)
                 }
                 .padding(.vertical, 16)
-                .background(self.themeManager.currentTheme.secondaryBackgroundColor)
+                .background(themeManager.currentTheme.secondaryBackgroundColor)
 
                 // Selected Date Details
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {
-                        Text(self.selectedDateFormatter.string(from: self.selectedDate))
+                        Text(selectedDateFormatter.string(from: selectedDate))
                             .font(.headline)
-                            .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                            .foregroundColor(themeManager.currentTheme.primaryTextColor)
 
                         Spacer()
 
                         Button {
-                            self.showAddEvent = true
+                            showAddEvent = true
                         } label: {
                             Image(systemName: "plus.circle.fill")
-                                .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
+                                .foregroundColor(themeManager.currentTheme.primaryAccentColor)
                                 .font(.title2)
                         }
                         .accessibilityLabel("Button")
@@ -168,14 +168,14 @@ public struct CalendarView: View {
 
                     ScrollView {
                         LazyVStack(spacing: 12) {
-                            let items = self.selectedDateItems
+                            let items = selectedDateItems
 
                             // Events Section
                             if !items.events.isEmpty {
                                 DateSectionView(title: "Events", color: .blue) {
                                     ForEach(items.events) { event in
                                         EventRowView(event: event)
-                                            .environmentObject(self.themeManager)
+                                            .environmentObject(themeManager)
                                     }
                                 }
                             }
@@ -185,7 +185,7 @@ public struct CalendarView: View {
                                 DateSectionView(title: "Goals", color: .green) {
                                     ForEach(items.goals) { goal in
                                         GoalRowView(goal: goal)
-                                            .environmentObject(self.themeManager)
+                                            .environmentObject(themeManager)
                                     }
                                 }
                             }
@@ -195,7 +195,7 @@ public struct CalendarView: View {
                                 DateSectionView(title: "Tasks", color: .orange) {
                                     ForEach(items.tasks) { task in
                                         TaskRowView(task: task)
-                                            .environmentObject(self.themeManager)
+                                            .environmentObject(themeManager)
                                     }
                                 }
                             }
@@ -205,15 +205,15 @@ public struct CalendarView: View {
                                 VStack(spacing: 12) {
                                     Image(systemName: "calendar")
                                         .font(.system(size: 40))
-                                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
 
                                     Text("No items for this date")
                                         .font(.subheadline)
-                                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
 
                                     Text("Tap + to add an event")
                                         .font(.caption)
-                                        .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                                 }
                                 .padding(.vertical, 40)
                             }
@@ -221,43 +221,43 @@ public struct CalendarView: View {
                         .padding(.horizontal, 20)
                     }
                 }
-                .background(self.themeManager.currentTheme.primaryBackgroundColor)
+                .background(themeManager.currentTheme.primaryBackgroundColor)
             }
-            .background(self.themeManager.currentTheme.primaryBackgroundColor)
+            .background(themeManager.currentTheme.primaryBackgroundColor)
             .navigationTitle("Calendar")
-            .sheet(isPresented: self.$showAddEvent) {
-                AddCalendarEventView(events: self.$events)
-                    .environmentObject(self.themeManager)
-                    .onDisappear(perform: self.saveEvents)
+            .sheet(isPresented: $showAddEvent) {
+                AddCalendarEventView(events: $events)
+                    .environmentObject(themeManager)
+                    .onDisappear(perform: saveEvents)
             }
-            .onAppear(perform: self.loadAllData)
-            .accentColor(self.themeManager.currentTheme.primaryAccentColor)
+            .onAppear(perform: loadAllData)
+            .accentColor(themeManager.currentTheme.primaryAccentColor)
         }
     }
 
     // MARK: - Calendar Navigation
 
     private func previousMonth() {
-        self.selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: self.selectedDate) ?? self.selectedDate
+        selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: selectedDate) ?? selectedDate
     }
 
     private func nextMonth() {
-        self.selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: self.selectedDate) ?? self.selectedDate
+        selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: selectedDate) ?? selectedDate
     }
 
     // MARK: - Data Functions
 
     private func loadAllData() {
-        self.events = CalendarDataManager.shared.load()
-        self.goals = GoalDataManager.shared.load()
-        self.tasks = TaskDataManager.shared.load()
-        print("Calendar data loaded. Events: \(self.events.count), Goals: \(self.goals.count), Tasks: \(self.tasks.count)")
+        events = CalendarDataManager.shared.load()
+        goals = GoalDataManager.shared.load()
+        tasks = TaskDataManager.shared.load()
+        print("Calendar data loaded. Events: \(events.count), Goals: \(goals.count), Tasks: \(tasks.count)")
     }
 
     private func saveEvents() {
-        CalendarDataManager.shared.save(events: self.events)
+        CalendarDataManager.shared.save(events: events)
         print("Calendar events saved.")
-        self.loadAllData()
+        loadAllData()
     }
 }
 

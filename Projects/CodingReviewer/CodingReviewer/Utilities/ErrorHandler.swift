@@ -53,18 +53,18 @@ public enum CodingReviewerErrorHandler {
         let fullContext = context.isEmpty ? "" : "[\(context)] "
 
         // Log the error
-        self.logger.error("\(fullContext)Error occurred: \(errorMessage)")
+        logger.error("\(fullContext)Error occurred: \(errorMessage)")
 
         // Additional logging for CodingReviewerError
         if let reviewerError = error as? CodingReviewerError {
-            self.logger.error("\(fullContext)CodingReviewer Error Type: \(reviewerError)")
+            logger.error("\(fullContext)CodingReviewer Error Type: \(reviewerError)")
         }
 
         // Handle user notification if needed
         if showToUser {
             // In a real app, this would trigger a user notification
             // For now, we'll just log it
-            self.logger.info("\(fullContext)User should be notified of error: \(errorMessage)")
+            logger.info("\(fullContext)User should be notified of error: \(errorMessage)")
         }
     }
 
@@ -77,7 +77,7 @@ public enum CodingReviewerErrorHandler {
         function: String = #function,
         line: Int = #line
     ) {
-        self.handle(error, showToUser: showToUser, context: context, file: file, function: function, line: line)
+        handle(error, showToUser: showToUser, context: context, file: file, function: function, line: line)
     }
 
     /// Validate file path

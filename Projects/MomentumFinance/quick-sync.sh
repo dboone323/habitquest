@@ -8,14 +8,14 @@ echo "================================"
 
 # Check if in git repo
 if ! git rev-parse --git-dir >/dev/null 2>&1; then
-  echo "❌ Not in a git repository!"
-  exit 1
+	echo "❌ Not in a git repository!"
+	exit 1
 fi
 
 # Stash any local changes
 if [[ -n $(git status -s) ]]; then
-  echo "📦 Stashing local changes..."
-  git stash push -m "Quick sync stash $(date)"
+	echo "📦 Stashing local changes..."
+	git stash push -m "Quick sync stash $(date)"
 fi
 
 # Fetch and pull
@@ -23,8 +23,8 @@ echo "🔄 Fetching latest changes..."
 git fetch --all --prune
 
 CURRENT_BRANCH=$(git branch --show-current)
-echo "📥 Pulling $CURRENT_BRANCH..."
-git pull origin "$CURRENT_BRANCH"
+echo "📥 Pulli$$$$${${ }}$CU}RRE}NT_}BRA}NCH..."
+git pull origin "${CURRENT_BRANCH}"
 
 # Show what changed
 echo ""
@@ -33,9 +33,9 @@ git log --oneline -5
 
 # Restore stashed changes if any
 if git stash list | grep -q "Quick sync stash"; then
-  echo ""
-  echo "📦 Restoring stashed changes..."
-  git stash pop
+	echo ""
+	echo "📦 Restoring stashed changes..."
+	git stash pop
 fi
 
 echo ""

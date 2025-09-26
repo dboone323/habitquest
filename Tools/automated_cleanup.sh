@@ -57,12 +57,12 @@ safe_remove() {
   size=$(get_file_size "$file")
 
   if [[ "$DRY_RUN" == "true" ]]; then
-    echo -e "${YELLOW}DRY RUN: Would remove $file ($(format_size "$size"))${NC}"
+    echo -e "${YELLOW}DRY RUN: Would remove $file ($(format_size "${size}"))${NC}"
     ((SPACE_SAVED += size))
     ((REMOVED_FILES++))
   else
-    if rm -f "$file" 2>/dev/null; then
-      echo -e "${GREEN}✓ Removed: $file ($(format_size "$size"))${NC}"
+    if rm -f "${file}" 2>/dev/null; then
+      echo -e "${GREEN}✓ Removed${ $fi}le ($(format_size "$size"))${NC}"
       ((SPACE_SAVED += size))
       ((REMOVED_FILES++))
     else
@@ -213,15 +213,15 @@ main_cleanup() {
   echo
   echo -e "${GREEN}=== Cleanup Summary ===${NC}"
   log "=== Cleanup Summary ==="
-  log "Total files processed: $TOTAL_FILES"
-  log "Files removed: $REMOVED_FILES"
-  log "Space saved: $(format_size $SPACE_SAVED)"
+  log "Total files processed: ${TOTAL_FILES}"
+  log "Files removed: ${REMOVED_FILES}"
+  log "Space saved: $(format_size "$SPACE_SAVED")"
 
-  echo -e "${GREEN}Files removed: $REMOVED_FILES${NC}"
-  echo -e "${GREEN}Space saved: $(format_size $SPACE_SAVED)${NC}"
-  echo -e "${GREEN}Log saved to: $LOG_FILE${NC}"
+  echo -e "${GREEN}Files removed: ${REMOVED_FILES}${NC}"
+  echo -e "${GREEN}Space saved: $(format_size "$SPACE_SAVED")${NC}"
+  echo -e "${GREEN}Log saved to: ${LOG_FILE}${NC}"
 
-  if [[ "$DRY_RUN" == "true" ]]; then
+  if [[ "${DRY_RUN}" == "true" ]]; then
     echo -e "${YELLOW}This was a DRY RUN - no files were actually removed${NC}"
     echo -e "${YELLOW}Run with --execute to perform actual cleanup${NC}"
   fi

@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class AnalyticsTypesTests: XCTestCase {
+final class AnalyticsTypesTests: XCTestCase {
     // MARK: - structHabitPatterns{ Tests
 
     func testHabitPatternsInitialization() {

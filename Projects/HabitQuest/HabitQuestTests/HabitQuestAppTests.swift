@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class HabitQuestAppTests: XCTestCase {
+final class HabitQuestAppTests: XCTestCase {
     // MARK: - structHabitQuestApp:App{ Tests
 
     func testHabitQuestAppInitialization() {

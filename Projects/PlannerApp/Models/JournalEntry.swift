@@ -28,13 +28,13 @@ public struct JournalEntry: Identifiable, Codable {
     /// Convert to CloudKit record for syncing
     func toCKRecord() -> CKRecord {
         let record = CKRecord(
-            recordType: "JournalEntry", recordID: CKRecord.ID(recordName: self.id.uuidString)
+            recordType: "JournalEntry", recordID: CKRecord.ID(recordName: id.uuidString)
         )
-        record["title"] = self.title
-        record["body"] = self.body
-        record["date"] = self.date
-        record["mood"] = self.mood
-        record["modifiedAt"] = self.modifiedAt
+        record["title"] = title
+        record["body"] = body
+        record["date"] = date
+        record["mood"] = mood
+        record["modifiedAt"] = modifiedAt
         return record
     }
 

@@ -3,11 +3,11 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 AGENT_NAME="UnifiedDashboard"
-LOG_FILE="$SCRIPT_DIR/working_dashboard.log"
-NOTIFICATION_FILE="$SCRIPT_DIR/communication/${AGENT_NAME}_notification.txt"
-COMPLETED_FILE="$SCRIPT_DIR/communication/${AGENT_NAME}_completed.txt"
-DASHBOARD_DATA_FILE="$SCRIPT_DIR/dashboard_data.json"
-DASHBOARD_HTML_FILE="$SCRIPT_DIR/dashboard.html"
+LOG_FILE="${SCRIPT_DIR}/working_dashboard.log"
+NOTIFICATION_FILE="${SCRIPT_DIR}/communication/${AGENT_NAME}_notification.txt"
+COMPLETED_FILE="${SCRIPT_DIR}/communication/${AGENT_NAME}_completed.txt"
+DASHBOARD_DATA_FILE="${SCRIPT_DIR}/dashboard_data.json"
+DASHBOARD_HTML_FILE="${SCRIPT_DIR}/dashboard.html"
 
 # Dashboard configuration
 DASHBOARD_PORT=8080
@@ -17,54 +17,54 @@ UPDATE_INTERVAL=30
 log_message() {
   local level="$1"
   local message="$2"
-  echo "[$(date)] [$level] $message" >>"$LOG_FILE"
+  echo "[$(date)] [${level}] ${message}" >>"${LOG_FILE}"
 }
 
 # Initialize files
-mkdir -p "$SCRIPT_DIR/communication"
-touch "$NOTIFICATION_FILE"
-touch "$COMPLETED_FILE"
+mkdir -p "${SCRIPT_DIR}/communication"
+touch "${NOTIFICATION_FILE}"
+touch "${COMPLETED_FILE}"
 
 # Create basic dashboard data
 create_dashboard_data() {
   local timestamp=$(date +%s)
 
-  cat >"$DASHBOARD_DATA_FILE" <<EOF
+  cat >"${DASHBOARD_DATA_FILE}" <<EOF
 {
   "agents": {
     "task_orchestrator_agent": {
       "status": "available",
-      "last_seen": "$timestamp",
+      "last_seen": "${timestamp}",
       "tasks_completed": 0,
       "description": "Central task coordination and agent health monitoring"
     },
     "pull_request_agent": {
       "status": "available",
-      "last_seen": "$timestamp",
+      "last_seen": "${timestamp}",
       "tasks_completed": 0,
       "description": "Automated PR creation and risk assessment"
     },
     "auto_update_agent": {
       "status": "available",
-      "last_seen": "$timestamp",
+      "last_seen": "${timestamp}",
       "tasks_completed": 0,
       "description": "Code enhancement and best practices updates"
     },
     "knowledge_base_agent": {
       "status": "available",
-      "last_seen": "$timestamp",
+      "last_seen": "${timestamp}",
       "tasks_completed": 0,
       "description": "Learning from operations and sharing insights"
     },
     "public_api_agent": {
       "status": "available",
-      "last_seen": "$timestamp",
+      "last_seen": "${timestamp}",
       "tasks_completed": 0,
       "description": "Rate-limited API management and caching"
     },
     "unified_dashboard_agent": {
       "status": "running",
-      "last_seen": "$timestamp",
+      "last_seen": "${timestamp}",
       "tasks_completed": 0,
       "description": "Real-time monitoring and visualization"
     }
@@ -82,14 +82,14 @@ create_dashboard_data() {
     "failed": [],
     "queued": []
   },
-  "last_update": $timestamp
+  "last_update": ${timestamp}
 }
 EOF
 }
 
 # Generate dashboard HTML
 generate_dashboard_html() {
-  cat >"$DASHBOARD_HTML_FILE" <<'EOF'
+  cat >"${DASHBOARD_HTML_FILE}" <<'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -574,19 +574,19 @@ generate_dashboard_html() {
 </html>
 EOF
 
-  log_message "INFO" "Generated dashboard HTML: $DASHBOARD_HTML_FILE"
+  log_message "INFO" "Generated dashboard HTML: ${DASHBOARD_HTML_FILE}"
 }
 
 # Start dashboard web server
 start_dashboard_server() {
-  log_message "INFO" "Starting dashboard web server on http://$DASHBOARD_HOST:$DASHBOARD_PORT"
+  log_message "INFO" "Starting dashboard web server on http://${DASHBOARD_HOST}:${DASHBOARD_PORT}"
 
   if command -v python3 &>/dev/null; then
-    cd "$SCRIPT_DIR"
-    python3 -m http.server $DASHBOARD_PORT >>"$LOG_FILE" 2>&1 &
+    cd "${SCRIPT_DIR}" || exit
+    python3 -m http.server "${DASHBOARD_PORT}" >>"${LOG_FILE}" 2>&1 &
     local server_pid=$!
-    echo $server_pid >"$SCRIPT_DIR/dashboard_server.pid"
-    log_message "INFO" "Dashboard server started with PID $server_pid"
+    echo "${server_pid}" >"${SCRIPT_DIR}/dashboard_server.pid"
+    log_message "INFO" "Dashboard server started with PID ${server_pid}"
   else
     log_message "ERROR" "Python3 not available for dashboard server"
     return 1
@@ -595,15 +595,15 @@ start_dashboard_server() {
 
 # Stop dashboard server
 stop_dashboard_server() {
-  local pid_file="$SCRIPT_DIR/dashboard_server.pid"
+  local pid_file="${SCRIPT_DIR}/dashboard_server.pid"
 
-  if [[ -f $pid_file ]]; then
-    local server_pid=$(cat "$pid_file")
-    if kill -0 "$server_pid" 2>/dev/null; then
-      kill "$server_pid"
-      log_message "INFO" "Dashboard server stopped (PID $server_pid)"
+  if [[ -f ${pid_file} ]]; then
+    local server_pid=$(cat "${pid_file}")
+    if kill -0 "${server_pid}" 2>/dev/null; then
+      kill "${server_pid}"
+      log_message "INFO" "Dashboard server stopped (PID ${server_pid})"
     fi
-    rm -f "$pid_file"
+    rm -f "${pid_file}"
   fi
 }
 
@@ -615,9 +615,9 @@ update_dashboard_data() {
 
 # Process notifications from orchestrator
 process_notifications() {
-  if [[ -f $NOTIFICATION_FILE ]]; then
+  if [[ -f ${NOTIFICATION_FILE} ]]; then
     while IFS='|' read -r timestamp notification_type task_id; do
-      case "$notification_type" in
+      case "${notification_type}" in
       "update_dashboard")
         log_message "INFO" "Manual dashboard update requested"
         update_dashboard_data
@@ -635,17 +635,17 @@ process_notifications() {
         stop_dashboard_server
         ;;
       esac
-    done <"$NOTIFICATION_FILE"
+    done <"${NOTIFICATION_FILE}"
 
     # Clear processed notifications
-    >"$NOTIFICATION_FILE"
+    >"${NOTIFICATION_FILE}"
   fi
 }
 
 # Generate dashboard reports
 generate_dashboard_report() {
-  local report_file="$SCRIPT_DIR/dashboard_reports/dashboard_report_$(date +%Y%m%d_%H%M%S).md"
-  mkdir -p "$SCRIPT_DIR/dashboard_reports"
+  local report_file="${SCRIPT_DIR}/dashboard_reports/dashboard_report_$(date +%Y%m%d_%H%M%S).md"
+  mkdir -p "${SCRIPT_DIR}/dashboard_reports"
 
   {
     echo "# Agent Dashboard Report"
@@ -655,7 +655,7 @@ generate_dashboard_report() {
     echo "## System Overview"
     echo "- **Total Agents**: 6 (Task Orchestrator, Pull Request, Auto-Update, Knowledge Base, Public API, Dashboard)"
     echo "- **System Health**: Operational"
-    echo "- **Dashboard Server**: Running on port $DASHBOARD_PORT"
+    echo "- **Dashboard Server**: Running on port ${DASHBOARD_PORT}"
     echo "- **Last Update**: $(date)"
     echo ""
 
@@ -671,9 +671,9 @@ generate_dashboard_report() {
     echo ""
 
     echo "## System Metrics"
-    echo "- **Update Interval**: $UPDATE_INTERVAL seconds"
+    echo "- **Update Interval**: ${UPDATE_INTERVAL} seconds"
     echo "- **Data Collection**: Active"
-    echo "- **Web Interface**: Available at http://localhost:$DASHBOARD_PORT"
+    echo "- **Web Interface**: Available at http://localhost:${DASHBOARD_PORT}"
     echo ""
 
     echo "## Recommendations"
@@ -681,9 +681,9 @@ generate_dashboard_report() {
     echo "- All core systems are functional"
     echo "- Regular monitoring recommended"
 
-  } >"$report_file"
+  } >"${report_file}"
 
-  log_message "INFO" "Dashboard report generated: $report_file"
+  log_message "INFO" "Dashboard report generated: ${report_file}"
 }
 
 # Main dashboard loop
@@ -704,9 +704,9 @@ while true; do
 
   # Generate periodic report (every hour)
   current_minute=$(date +%M)
-  if [[ $current_minute -eq 0 ]]; then
+  if [[ ${current_minute} -eq 0 ]]; then
     generate_dashboard_report
   fi
 
-  sleep $UPDATE_INTERVAL
+  sleep "${UPDATE_INTERVAL}"
 done

@@ -27,16 +27,16 @@ struct GlassMorphismCard<Content: View>: View {
     }
 
     var body: some View {
-        self.content
+        content
             .padding()
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: self.cornerRadius))
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: cornerRadius))
             .background(
-                RoundedRectangle(cornerRadius: self.cornerRadius)
+                RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(
                         LinearGradient(
                             gradient: Gradient(colors: [
-                                self.themeManager.currentTheme.primaryAccentColor.opacity(0.05),
-                                self.themeManager.currentTheme.secondaryAccentColor.opacity(0.02),
+                                themeManager.currentTheme.primaryAccentColor.opacity(0.05),
+                                themeManager.currentTheme.secondaryAccentColor.opacity(0.02),
                             ]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -44,7 +44,7 @@ struct GlassMorphismCard<Content: View>: View {
                     )
             )
             .overlay(
-                RoundedRectangle(cornerRadius: self.cornerRadius)
+                RoundedRectangle(cornerRadius: cornerRadius)
                     .stroke(
                         LinearGradient(
                             gradient: Gradient(colors: [
@@ -58,7 +58,7 @@ struct GlassMorphismCard<Content: View>: View {
                     )
             )
             .shadow(
-                color: self.themeManager.currentTheme.primaryAccentColor.opacity(self.shadowIntensity),
+                color: themeManager.currentTheme.primaryAccentColor.opacity(shadowIntensity),
                 radius: 20,
                 x: 0,
                 y: 10
@@ -83,48 +83,48 @@ public struct AnimatedProgressRing: View {
             // Background ring
             Circle()
                 .stroke(
-                    self.themeManager.currentTheme.secondaryAccentColor.opacity(0.3),
-                    lineWidth: self.ringWidth
+                    themeManager.currentTheme.secondaryAccentColor.opacity(0.3),
+                    lineWidth: ringWidth
                 )
-                .frame(width: self.size, height: self.size)
+                .frame(width: size, height: size)
 
             // Progress ring
             Circle()
-                .trim(from: 0, to: self.animatedProgress)
+                .trim(from: 0, to: animatedProgress)
                 .stroke(
                     LinearGradient(
                         gradient: Gradient(colors: [
-                            self.themeManager.currentTheme.primaryAccentColor,
-                            self.themeManager.currentTheme.secondaryAccentColor,
+                            themeManager.currentTheme.primaryAccentColor,
+                            themeManager.currentTheme.secondaryAccentColor,
                         ]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),
-                    style: StrokeStyle(lineWidth: self.ringWidth, lineCap: .round)
+                    style: StrokeStyle(lineWidth: ringWidth, lineCap: .round)
                 )
-                .frame(width: self.size, height: self.size)
+                .frame(width: size, height: size)
                 .rotationEffect(.degrees(-90))
-                .animation(.easeInOut(duration: 1.5), value: self.animatedProgress)
+                .animation(.easeInOut(duration: 1.5), value: animatedProgress)
 
             // Center content
             VStack(spacing: 4) {
-                Text("\(Int(self.animatedProgress * 100))%")
-                    .font(.system(size: self.size * 0.2, weight: .bold, design: .rounded))
-                    .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
+                Text("\(Int(animatedProgress * 100))%")
+                    .font(.system(size: size * 0.2, weight: .bold, design: .rounded))
+                    .foregroundColor(themeManager.currentTheme.primaryTextColor)
                     .contentTransition(.numericText())
 
-                Text(self.title)
-                    .font(.system(size: self.size * 0.1, weight: .medium))
-                    .foregroundColor(self.themeManager.currentTheme.secondaryTextColor)
+                Text(title)
+                    .font(.system(size: size * 0.1, weight: .medium))
+                    .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                     .multilineTextAlignment(.center)
             }
         }
         .onAppear {
             withAnimation(.easeInOut(duration: 1.5).delay(0.2)) {
-                self.animatedProgress = self.progress
+                animatedProgress = progress
             }
         }
-        .modifier(ProgressChangeModifier(progress: self.progress, animatedProgress: self.$animatedProgress))
+        .modifier(ProgressChangeModifier(progress: progress, animatedProgress: $animatedProgress))
     }
 }
 
@@ -160,17 +160,17 @@ public struct FloatingActionButton: View {
     public var body: some View {
         Button {
             #if os(iOS)
-            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-            impactFeedback.impactOccurred()
+                let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                impactFeedback.impactOccurred()
             #endif
 
             withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                self.rotationAngle += 180
+                rotationAngle += 180
             }
 
-            self.action()
+            action()
         } label: {
-            Image(systemName: self.icon)
+            Image(systemName: icon)
                 .font(.title2.weight(.semibold))
                 .foregroundColor(.white)
                 .frame(width: 56, height: 56)
@@ -179,8 +179,8 @@ public struct FloatingActionButton: View {
                         .fill(
                             LinearGradient(
                                 gradient: Gradient(colors: [
-                                    self.themeManager.currentTheme.primaryAccentColor,
-                                    self.themeManager.currentTheme.primaryAccentColor.opacity(0.8),
+                                    themeManager.currentTheme.primaryAccentColor,
+                                    themeManager.currentTheme.primaryAccentColor.opacity(0.8),
                                 ]),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -188,20 +188,20 @@ public struct FloatingActionButton: View {
                         )
                 )
                 .shadow(
-                    color: self.themeManager.currentTheme.primaryAccentColor.opacity(0.4),
-                    radius: self.isPressed ? 8 : 16,
+                    color: themeManager.currentTheme.primaryAccentColor.opacity(0.4),
+                    radius: isPressed ? 8 : 16,
                     x: 0,
-                    y: self.isPressed ? 4 : 8
+                    y: isPressed ? 4 : 8
                 )
         }
         .buttonStyle(PlainButtonStyle())
-        .scaleEffect(self.isPressed ? 0.9 : 1.0)
-        .rotationEffect(.degrees(self.rotationAngle))
+        .scaleEffect(isPressed ? 0.9 : 1.0)
+        .rotationEffect(.degrees(rotationAngle))
         .onLongPressGesture(
             minimumDuration: 0, maximumDistance: .infinity,
             pressing: { pressing in
                 withAnimation(.easeInOut(duration: 0.15)) {
-                    self.isPressed = pressing
+                    isPressed = pressing
                 }
             }, perform: {}
         )
@@ -224,18 +224,18 @@ struct FlipCard<Front: View, Back: View>: View {
 
     var body: some View {
         ZStack {
-            if self.flipDegrees < 90 {
-                self.front
+            if flipDegrees < 90 {
+                front
             } else {
-                self.back
+                back
                     .rotationEffect(.degrees(180))
             }
         }
-        .rotation3DEffect(.degrees(self.flipDegrees), axis: (x: 0, y: 1, z: 0))
+        .rotation3DEffect(.degrees(flipDegrees), axis: (x: 0, y: 1, z: 0))
         .onTapGesture {
             withAnimation(.easeInOut(duration: 0.6)) {
-                self.flipDegrees += 180
-                self.isFlipped.toggle()
+                flipDegrees += 180
+                isFlipped.toggle()
             }
         }
     }
@@ -260,7 +260,7 @@ public struct ParticleSystem: View {
     public var body: some View {
         GeometryReader { _ in
             ZStack {
-                ForEach(self.particles) { particle in
+                ForEach(particles) { particle in
                     Circle()
                         .fill(particle.color)
                         .frame(width: 8, height: 8)
@@ -271,15 +271,15 @@ public struct ParticleSystem: View {
             }
         }
         .onAppear {
-            if !self.isAnimating {
-                self.createParticles()
-                self.animateParticles()
+            if !isAnimating {
+                createParticles()
+                animateParticles()
             }
         }
     }
 
     private func createParticles() {
-        self.particles = (0 ..< 50).map { _ in
+        particles = (0 ..< 50).map { _ in
             Particle(
                 positionX: CGFloat.random(in: 50 ... 350),
                 positionY: 400,
@@ -296,20 +296,20 @@ public struct ParticleSystem: View {
     }
 
     private func animateParticles() {
-        self.isAnimating = true
+        isAnimating = true
 
         withAnimation(.linear(duration: 3.0)) {
-            for index in self.particles.indices {
-                self.particles[index].positionX += self.particles[index].velocity.dx * 0.01
-                self.particles[index].positionY += self.particles[index].velocity.dy * 0.01
-                self.particles[index].opacity = 0.0
-                self.particles[index].scale *= 0.1
+            for index in particles.indices {
+                particles[index].positionX += particles[index].velocity.dx * 0.01
+                particles[index].positionY += particles[index].velocity.dy * 0.01
+                particles[index].opacity = 0.0
+                particles[index].scale *= 0.1
             }
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-            self.particles.removeAll()
-            self.isAnimating = false
+            particles.removeAll()
+            isAnimating = false
         }
     }
 }
@@ -322,7 +322,7 @@ public struct ShimmerView: View {
 
     public var body: some View {
         RoundedRectangle(cornerRadius: 12)
-            .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
+            .fill(themeManager.currentTheme.secondaryBackgroundColor)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(
@@ -336,14 +336,14 @@ public struct ShimmerView: View {
                             endPoint: .trailing
                         )
                     )
-                    .offset(x: self.shimmerOffset)
+                    .offset(x: shimmerOffset)
                     .animation(
                         .linear(duration: 1.5).repeatForever(autoreverses: false),
-                        value: self.shimmerOffset
+                        value: shimmerOffset
                     )
             )
             .onAppear {
-                self.shimmerOffset = 200
+                shimmerOffset = 200
             }
     }
 }
@@ -362,37 +362,37 @@ struct Interactive3DCard<Content: View>: View {
     }
 
     var body: some View {
-        self.content
+        content
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(self.themeManager.currentTheme.secondaryBackgroundColor)
+                    .fill(themeManager.currentTheme.secondaryBackgroundColor)
                     .shadow(
                         color: .black.opacity(0.1),
-                        radius: 10 + abs(self.translation.height) * 0.1,
-                        x: self.translation.width * 0.1,
-                        y: 5 + self.translation.height * 0.1
+                        radius: 10 + abs(translation.height) * 0.1,
+                        x: translation.width * 0.1,
+                        y: 5 + translation.height * 0.1
                     )
             )
             .rotation3DEffect(
-                .degrees(self.rotation),
-                axis: (self.translation.height, -self.translation.width, 0.0)
+                .degrees(rotation),
+                axis: (translation.height, -translation.width, 0.0)
             )
-            .offset(self.translation)
+            .offset(translation)
             .gesture(
                 DragGesture()
                     .onChanged { value in
-                        self.translation = CGSize(
+                        translation = CGSize(
                             width: value.translation.width * 0.1,
                             height: value.translation.height * 0.1
                         )
-                        self.rotation =
-                            sqrt(pow(self.translation.width, 2) + pow(self.translation.height, 2)) * 0.5
+                        rotation =
+                            sqrt(pow(translation.width, 2) + pow(translation.height, 2)) * 0.5
                     }
                     .onEnded { _ in
                         withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                            self.translation = .zero
-                            self.rotation = 0
+                            translation = .zero
+                            rotation = 0
                         }
                     }
             )
@@ -419,14 +419,14 @@ struct BreathingView<Content: View>: View {
     }
 
     var body: some View {
-        self.content
-            .scaleEffect(self.scale)
+        content
+            .scaleEffect(scale)
             .onAppear {
                 withAnimation(
-                    .easeInOut(duration: self.duration)
+                    .easeInOut(duration: duration)
                         .repeatForever(autoreverses: true)
                 ) {
-                    self.scale = self.scaleRange.upperBound
+                    scale = scaleRange.upperBound
                 }
             }
     }
@@ -451,15 +451,15 @@ public struct VisualEnhancementsPreview: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .environmentObject(self.themeManager)
+                .environmentObject(themeManager)
 
                 // Animated Progress Ring
                 HStack(spacing: 30) {
                     AnimatedProgressRing(progress: 0.75, title: "Tasks")
-                        .environmentObject(self.themeManager)
+                        .environmentObject(themeManager)
 
                     AnimatedProgressRing(progress: 0.45, title: "Goals")
-                        .environmentObject(self.themeManager)
+                        .environmentObject(themeManager)
                 }
 
                 // Interactive 3D Card
@@ -473,7 +473,7 @@ public struct VisualEnhancementsPreview: View {
                     }
                     .frame(height: 100)
                 }
-                .environmentObject(self.themeManager)
+                .environmentObject(themeManager)
 
                 // Flip Card
                 FlipCard(
@@ -506,7 +506,7 @@ public struct VisualEnhancementsPreview: View {
 
                     ShimmerView()
                         .frame(height: 60)
-                        .environmentObject(self.themeManager)
+                        .environmentObject(themeManager)
                 }
 
                 // Breathing Animation
@@ -523,7 +523,7 @@ public struct VisualEnhancementsPreview: View {
 
                 // Celebration Button
                 Button {
-                    self.showParticles = true
+                    showParticles = true
                 } label: {
                     Text("Celebrate! 🎉")
                         .font(.title2.bold())
@@ -538,12 +538,12 @@ public struct VisualEnhancementsPreview: View {
         }
         .overlay(
             Group {
-                if self.showParticles {
+                if showParticles {
                     ParticleSystem()
                         .allowsHitTesting(false)
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                self.showParticles = false
+                                showParticles = false
                             }
                         }
                 }
@@ -561,7 +561,7 @@ public struct VisualEnhancementsPreview: View {
                         }
                     )
                     .accessibilityLabel("Add New Item")
-                    .environmentObject(self.themeManager)
+                    .environmentObject(themeManager)
                     .padding()
                 }
             }

@@ -30,11 +30,9 @@ Updated the `project.pbxproj` file to ensure proper source tree references.
    ```
 
 2. **Clean Build Folder**
-
    - In Xcode: Product → Clean Build Folder (⇧⌘K)
 
 3. **Check Build Phases**
-
    - Select the MomentumFinance target
    - Go to Build Phases tab
    - Expand "Compile Sources"
@@ -74,13 +72,11 @@ xcrun simctl launch "iPhone 16 Pro Max" "com.momentumfinance.MomentumFinance"
 ## If Executable Still Missing
 
 1. **Check Target Membership**
-
    - In Xcode, select each Swift file
    - In the File Inspector (right panel)
    - Ensure "Target Membership" has MomentumFinance checked
 
 2. **Verify Info.plist**
-
    - Ensure `CFBundleExecutable` is set to `$(EXECUTABLE_NAME)`
 
 3. **Check Build Settings**

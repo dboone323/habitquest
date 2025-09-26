@@ -184,21 +184,21 @@ enum AchievementService {
         logs: [HabitLog]
     ) -> Float {
         switch achievement.requirement {
-        case let .streakDays(targetDays):
+        case .streakDays(let targetDays):
             let maxStreak = habits.map(\.streak).max() ?? 0
             return min(Float(maxStreak) / Float(targetDays), 1.0)
 
-        case let .totalCompletions(targetCount):
+        case .totalCompletions(let targetCount):
             let totalCompletions = logs.count
             return min(Float(totalCompletions) / Float(targetCount), 1.0)
 
-        case let .reachLevel(targetLevel):
+        case .reachLevel(let targetLevel):
             return min(Float(player.level) / Float(targetLevel), 1.0)
 
         case .perfectWeek:
-            return self.calculatePerfectWeekProgress(habits: habits, logs: logs)
+            return calculatePerfectWeekProgress(habits: habits, logs: logs)
 
-        case let .habitVariety(targetCount):
+        case .habitVariety(let targetCount):
             let activeHabits = habits.filter { habit in
                 // Consider a habit active if it has been completed in the last 7 days
                 let logs = habit.logs
@@ -208,13 +208,13 @@ enum AchievementService {
             return min(Float(activeHabits.count) / Float(targetCount), 1.0)
 
         case .earlyBird:
-            return self.calculateTimeBasedProgress(logs: logs, beforeHour: 9, targetDays: 7)
+            return calculateTimeBasedProgress(logs: logs, beforeHour: 9, targetDays: 7)
 
         case .nightOwl:
-            return self.calculateTimeBasedProgress(logs: logs, afterHour: 21, targetDays: 7)
+            return calculateTimeBasedProgress(logs: logs, afterHour: 21, targetDays: 7)
 
         case .weekendWarrior:
-            return self.calculateWeekendWarriorProgress(logs: logs)
+            return calculateWeekendWarriorProgress(logs: logs)
         }
     }
 
@@ -229,10 +229,10 @@ enum AchievementService {
             for: player
         )
 
-        self.logger.info("Achievement '\(achievement.name)' unlocked! Awarded \(achievement.xpReward) XP")
+        logger.info("Achievement '\(achievement.name)' unlocked! Awarded \(achievement.xpReward) XP")
 
         if levelUpResult.leveledUp {
-            self.logger.info("Level up occurred from achievement XP! New level: \(levelUpResult.newLevel)")
+            logger.info("Level up occurred from achievement XP! New level: \(levelUpResult.newLevel)")
         }
     }
 

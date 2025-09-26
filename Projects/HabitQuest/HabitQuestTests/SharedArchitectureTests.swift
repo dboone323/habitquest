@@ -1,7 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
-public class SharedArchitectureTests: XCTestCase {
+final class SharedArchitectureTests: XCTestCase {
     // MARK: - enumAppError:LocalizedError{ Tests
 
     func testAppErrorInitialization() {

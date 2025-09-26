@@ -2,7 +2,7 @@ import XCTest
 
 @testable import AvoidObstaclesGame
 
-public class AppDelegateTests: XCTestCase {
+final class AppDelegateTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here

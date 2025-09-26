@@ -22,7 +22,7 @@ final class ContextAwarenessService {
         // Get the next milestone for this habit's current streak
         guard let nextMilestone = StreakMilestone.nextMilestone(for: habit.streak) else { return }
 
-        let content = self.contentGenerationService.generateMilestoneContent(for: habit, milestone: nextMilestone)
+        let content = contentGenerationService.generateMilestoneContent(for: habit, milestone: nextMilestone)
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3600, repeats: false)
 
@@ -33,7 +33,7 @@ final class ContextAwarenessService {
         )
 
         do {
-            try await self.notificationCenter.add(request)
+            try await notificationCenter.add(request)
         } catch {
             print("Failed to schedule milestone notification for \(habit.name): \(error)")
         }
@@ -41,7 +41,7 @@ final class ContextAwarenessService {
 
     /// Send recovery notifications for broken streaks
     func scheduleRecoveryNotification(for habit: Habit) async {
-        let content = self.contentGenerationService.generateRecoveryContent(for: habit)
+        let content = contentGenerationService.generateRecoveryContent(for: habit)
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 86400, repeats: false) // 24 hours
 
@@ -52,7 +52,7 @@ final class ContextAwarenessService {
         )
 
         do {
-            try await self.notificationCenter.add(request)
+            try await notificationCenter.add(request)
         } catch {
             print("Failed to schedule recovery notification for \(habit.name): \(error)")
         }
@@ -83,7 +83,7 @@ final class ContextAwarenessService {
         )
 
         do {
-            try await self.notificationCenter.add(request)
+            try await notificationCenter.add(request)
         } catch {
             print("Failed to schedule celebration notification for \(habit.name): \(error)")
         }
@@ -94,7 +94,7 @@ final class ContextAwarenessService {
         let habits = await fetchActiveHabits()
 
         for habit in habits {
-            await self.scheduleContextualReminder(for: habit)
+            await scheduleContextualReminder(for: habit)
         }
     }
 
@@ -107,11 +107,11 @@ final class ContextAwarenessService {
 
             switch context {
             case .streakAtRisk:
-                await self.scheduleRecoveryNotification(for: habit)
+                await scheduleRecoveryNotification(for: habit)
             case .milestoneApproaching:
-                await self.scheduleStreakMilestoneNotifications(for: habit)
+                await scheduleStreakMilestoneNotifications(for: habit)
             case .lowEngagement:
-                await self.scheduleMotivationalReminder(for: habit)
+                await scheduleMotivationalReminder(for: habit)
             case .optimalTime:
                 // Already handled by scheduler service
                 break
@@ -135,9 +135,9 @@ final class ContextAwarenessService {
         }
 
         let context = await analyzeHabitContext(habit: habit)
-        let riskLevel = self.calculateRiskLevel(habit: habit, context: context)
-        let opportunities = self.identifyOpportunities(habit: habit, context: context)
-        let recommendations = self.generateRecommendations(habit: habit, context: context)
+        let riskLevel = calculateRiskLevel(habit: habit, context: context)
+        let opportunities = identifyOpportunities(habit: habit, context: context)
+        let recommendations = generateRecommendations(habit: habit, context: context)
 
         return ContextualInsights(
             currentContext: context,
@@ -154,11 +154,11 @@ final class ContextAwarenessService {
 
         switch context {
         case .streakAtRisk:
-            await self.scheduleUrgentReminder(for: habit)
+            await scheduleUrgentReminder(for: habit)
         case .milestoneApproaching:
-            await self.scheduleStreakMilestoneNotifications(for: habit)
+            await scheduleStreakMilestoneNotifications(for: habit)
         case .lowEngagement:
-            await self.scheduleMotivationalReminder(for: habit)
+            await scheduleMotivationalReminder(for: habit)
         case .optimalTime, .normal:
             // No contextual reminder needed
             break
@@ -187,7 +187,7 @@ final class ContextAwarenessService {
         )
 
         do {
-            try await self.notificationCenter.add(request)
+            try await notificationCenter.add(request)
         } catch {
             print("Failed to schedule urgent reminder for \(habit.name): \(error)")
         }
@@ -215,7 +215,7 @@ final class ContextAwarenessService {
         )
 
         do {
-            try await self.notificationCenter.add(request)
+            try await notificationCenter.add(request)
         } catch {
             print("Failed to schedule motivational reminder for \(habit.name): \(error)")
         }
@@ -279,13 +279,13 @@ final class ContextAwarenessService {
 
     private func fetchActiveHabits() async -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
-        let allHabits = (try? self.modelContext.fetch(descriptor)) ?? []
+        let allHabits = (try? modelContext.fetch(descriptor)) ?? []
         return allHabits.filter(\.isActive)
     }
 
     private func fetchHabit(id: UUID) async -> Habit? {
         let descriptor = FetchDescriptor<Habit>()
-        let allHabits = (try? self.modelContext.fetch(descriptor)) ?? []
+        let allHabits = (try? modelContext.fetch(descriptor)) ?? []
         return allHabits.first { $0.id == id }
     }
 }

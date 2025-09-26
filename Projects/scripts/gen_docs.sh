@@ -16,15 +16,15 @@ hr() { printf '%*s\n' 80 "" | tr ' ' '-'; }
 cd "${ROOT_DIR}/.."
 
 count_matches() {
-  local pattern="$1"
-  # Use find with -name pattern; for glob-like patterns, prefer multiple invocations
-  find . -type f -name "$pattern" | wc -l | tr -d ' '
+	local pattern="$1"
+	# Use find with -name pattern; for glob-like patterns, prefer multiple invocations
+	find . -type f -name "${pattern}" | wc -l | tr -d ' '
 }
 
 list_paths_sample() {
-  local pattern="$1"
-  local limit="${2:-20}"
-  find . -type f -name "$pattern" | head -n "$limit"
+	local pattern="$1"
+	local limit="${2:-20}"
+	find . -type f -name "${pattern}" | head -n "${limit}"
 }
 
 # Counts
@@ -48,9 +48,9 @@ Generated: $(now)
 - Swift source files: ${swift_count}
 
 ## Snapshot/Backup Directories Detected
-$(if [ -n "${snapshots}" ]; then
-  echo "\n"
-  echo "${snapshots}" | sed 's/^/- /'
+$(if [[ -n "${snapshots}" ]]; then
+	echo "\n"
+	echo "${snapshots}" | sed 's/^/- /'
 else echo "\n- None"; fi)
 
 ## Samples

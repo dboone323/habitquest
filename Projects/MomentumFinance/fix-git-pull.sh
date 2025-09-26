@@ -25,11 +25,11 @@ echo -e "\n${BLUE}Now pulling the latest changes...${NC}"
 CURRENT_BRANCH=$(git branch --show-current)
 
 # Try to pull
-if git pull origin "$CURRENT_BRANCH"; then
-  echo -e "${GREEN}✅ Successfully pulled latest changes!${NC}"
+if git pull origin "${CURRENT_BRANCH}"; then
+	echo -e "${GREEN}✅ Successfully pulled latest changes!${NC}"
 else
-  echo -e "\n${YELLOW}If you still have issues, you may have local changes.${NC}"
-  echo "Try running: git stash && git pull && git stash pop"
+	echo -e "\n${YELLOW}If you still have issues, you may have local changes.${NC}"
+	echo "Try running: git stash && git pull && git stash pop"
 fi
 
 echo -e "\n${BLUE}Configuration applied:${NC}"

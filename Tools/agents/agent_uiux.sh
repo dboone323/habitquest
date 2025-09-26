@@ -15,15 +15,15 @@ PID=$$
 function update_status() {
   local status="$1"
   # Ensure status file exists and is valid JSON
-  if [ ! -s "$STATUS_FILE" ]; then
-    echo '{"agents":{"build_agent":{"status":"unknown","pid":null},"debug_agent":{"status":"unknown","pid":null},"codegen_agent":{"status":"unknown","pid":null},"uiux_agent":{"status":"unknown","pid":null}},"last_update":0}' >"$STATUS_FILE"
+  if [[ ! -s "${STATUS_FILE}" ]]; then
+    echo '{"agents":{"build_agent":{"status":"unknown","pid":null},"debug_agent":{"status":"unknown","pid":null},"codegen_agent":{"status":"unknown","pid":null},"uiux_agent":{"status":"unknown","pid":null}},"last_update":0}' >"${STATUS_FILE}"
   fi
-  jq ".agents.uiux_agent.status = \"$status\" | .agents.uiux_agent.pid = $PID | .last_update = $(date +%s)" "$STATUS_FILE" >"$STATUS_FILE.tmp"
-  if [ $? -eq 0 ] && [ -s "$STATUS_FILE.tmp" ]; then
-    mv "$STATUS_FILE.tmp" "$STATUS_FILE"
+  jq ".agents.uiux_agent.status = \"${status}\" | .agents.uiux_agent.pid = ${PID} | .last_update = $(date +%s)" "${STATUS_FILE}" >"${STATUS_FILE}.tmp"
+  if [[ $? -eq 0 ]] && [[ -s "${STATUS_FILE}.tmp" ]]; then
+    mv "${STATUS_FILE}.tmp" "${STATUS_FILE}"
   else
-    echo "[$(date)] $AGENT_NAME: Failed to update agent_status.json (jq or mv error)" >>"$LOG_FILE"
-    rm -f "$STATUS_FILE.tmp"
+    echo "[$(date)] ${AGENT_NAME}: Failed to update agent_status.json (jq or mv error)" >>"${LOG_FILE}"
+    rm -f "${STATUS_FILE}.tmp"
   fi
 }
 trap 'update_status stopped; exit 0' SIGTERM SIGINT
@@ -32,11 +32,11 @@ trap 'update_status stopped; exit 0' SIGTERM SIGINT
 get_project_from_task() {
   local task_data="$1"
   local project
-  project=$(echo "$task_data" | jq -r '.project // empty')
-  if [[ -z "$project" || "$project" == "null" ]]; then
-    project="$PROJECT"
+  project=$(echo "${task_data}" | jq -r '.project // empty')
+  if [[ -z "${project}" || "${project}" == "null" ]]; then
+    project="${PROJECT}"
   fi
-  echo "$project"
+  echo "${project}"
 }
 
 # Function to perform UI/UX enhancements
@@ -48,12 +48,12 @@ perform_ui_enhancements() {
 
   # Navigate to project directory
   local project_path="/Users/danielstevens/Desktop/Quantum-workspace/Projects/${project}"
-  if [[ ! -d "$project_path" ]]; then
+  if [[ ! -d "${project_path}" ]]; then
     echo "[$(date)] ${AGENT_NAME}: Project directory not found: ${project_path}" >>"${LOG_FILE}"
     return 1
   fi
 
-  cd "$project_path" || return 1
+  cd "${project_path}" || return 1
 
   # Create backup before making changes
   echo "[$(date)] ${AGENT_NAME}: Creating backup before UI/UX enhancements..." >>"${LOG_FILE}"
@@ -61,18 +61,18 @@ perform_ui_enhancements() {
 
   # Check if this is a drag-and-drop task
   local is_drag_drop
-  is_drag_drop=$(echo "$task_data" | jq -r '.todo // empty' | grep -i "drag\|drop" | wc -l)
+  is_drag_drop=$(echo "${task_data}" | jq -r '.todo // empty' | grep -i "drag\|drop" | wc -l)
 
-  if [[ "$is_drag_drop" -gt 0 ]]; then
+  if [[ "${is_drag_drop}" -gt 0 ]]; then
     echo "[$(date)] ${AGENT_NAME}: Detected drag-and-drop enhancement task..." >>"${LOG_FILE}"
 
     # Look for UI files that might need drag-and-drop functionality
     find . -name "*.swift" -o -name "*.storyboard" -o -name "*.xib" | while read -r file; do
-      if grep -q "TODO.*drag.*drop\|drag.*drop.*TODO" "$file" 2>/dev/null; then
+      if grep -q "TODO.*drag.*drop\|drag.*drop.*TODO" "${file}" 2>/dev/null; then
         echo "[$(date)] ${AGENT_NAME}: Found drag-drop TODO in ${file}" >>"${LOG_FILE}"
 
         # Basic drag-and-drop implementation suggestions
-        if [[ "$file" == *".swift" ]]; then
+        if [[ "${file}" == *".swift" ]]; then
           echo "[$(date)] ${AGENT_NAME}: Adding drag-and-drop implementation to ${file}" >>"${LOG_FILE}"
           # This would be where we add actual drag-and-drop code
           # For now, we'll log the enhancement
@@ -89,7 +89,7 @@ perform_ui_enhancements() {
     echo "[$(date)] ${AGENT_NAME}: Analyzing UI file: ${file}" >>"${LOG_FILE}"
 
     # Check for common UI improvement opportunities
-    if grep -q "TODO.*UI\|UI.*TODO" "$file" 2>/dev/null; then
+    if grep -q "TODO.*UI\|UI.*TODO" "${file}" 2>/dev/null; then
       echo "[$(date)] ${AGENT_NAME}: Found UI TODO in ${file}" >>"${LOG_FILE}"
     fi
   done
@@ -112,19 +112,19 @@ while true; do
     echo "[$(date)] ${AGENT_NAME}: Found UI/UX tasks to process..." >>"${LOG_FILE}"
 
     # Process each queued task
-    echo "$HAS_TASK" | jq -c '.' | while read -r task; do
-      project=$(get_project_from_task "$task")
-      task_id=$(echo "$task" | jq -r '.id')
+    echo "${HAS_TASK}" | jq -c '.' | while read -r task; do
+      project=$(get_project_from_task "${task}")
+      task_id=$(echo "${task}" | jq -r '.id')
 
       echo "[$(date)] ${AGENT_NAME}: Processing task ${task_id} for project ${project}..." >>"${LOG_FILE}"
 
       # Perform UI/UX enhancements
-      if perform_ui_enhancements "$project" "$task"; then
+      if perform_ui_enhancements "${project}" "${task}"; then
         echo "[$(date)] ${AGENT_NAME}: UI/UX enhancements completed successfully for ${project}" >>"${LOG_FILE}"
 
         # Update task status to completed
         jq "(.tasks[] | select(.id==\"${task_id}\") | .status) = \"completed\"" "${TASK_QUEUE}" >"${TASK_QUEUE}.tmp" 2>/dev/null
-        if [ $? -eq 0 ] && [ -s "${TASK_QUEUE}.tmp" ]; then
+        if [[ $? -eq 0 ]] && [[ -s "${TASK_QUEUE}.tmp" ]]; then
           mv "${TASK_QUEUE}.tmp" "${TASK_QUEUE}"
           echo "[$(date)] ${AGENT_NAME}: Task ${task_id} marked as completed" >>"${LOG_FILE}"
         fi

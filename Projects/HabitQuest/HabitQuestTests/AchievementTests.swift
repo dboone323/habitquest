@@ -2,7 +2,7 @@ import XCTest
 
 @testable import HabitQuest
 
-public class AchievementTests: XCTestCase {
+final class AchievementTests: XCTestCase {
     // MARK: - enumAchievementCategory Tests
 
     func testAchievementCategoryInitialization() {

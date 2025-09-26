@@ -4,36 +4,36 @@
 # This script provides alternative ways to run tests
 
 PROJECT_DIR="/Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance"
-UITESTS_DIR="$PROJECT_DIR/MomentumFinanceUITests"
+UITESTS_DIR="${PROJECT_DIR}/MomentumFinanceUITests"
 
 echo "=== MomentumFinance Test Runner ==="
 echo ""
 
 # Check if UI test files exist
-if [ -d "$UITESTS_DIR" ]; then
-  echo "✅ UI test directory found: $UITESTS_DIR"
-  echo "📁 UI test files:"
-  ls -la "$UITESTS_DIR"/*.swift 2>/dev/null || echo "   No .swift files found"
-  echo ""
+if [[ -d "${UITESTS_DIR}" ]]; then
+	echo "✅ UI test directory found${ $UITESTS_D}IR"
+	echo "📁 UI test files:"
+	ls -la "${UITESTS_DIR}"/*.swift 2>/dev/null || echo "   No .swift files found"
+	echo ""
 else
-  echo "❌ UI test directory not found: $UITESTS_DIR"
-  echo ""
+	echo "❌ UI test directory not found${ $UITESTS_D}IR"
+	echo ""
 fi
 
 # Check Xcode project structure
 echo "🔍 Checking Xcode project structure..."
-if [ -f "$PROJECT_DIR/MomentumFinance.xcodeproj/project.pbxproj" ]; then
-  echo "✅ Xcode project file found"
+if [[ -f "${PROJECT_DIR}/MomentumFinance.xcodeproj/project.pbxproj" ]]; then
+	echo "✅ Xcode project file found"
 
-  # Check for test targets
-  if grep -q "MomentumFinanceUITests" "$PROJECT_DIR/MomentumFinance.xcodeproj/project.pbxproj"; then
-    echo "✅ UI test target found in project file"
-  else
-    echo "❌ UI test target NOT found in project file"
-    echo "   → Need to add UI test target in Xcode"
-  fi
+	# Check for test targets
+	if grep -q "MomentumFinanceUITests" "${PROJECT_DIR}/MomentumFinance.xcodeproj/project.pbxproj"; then
+		echo "✅ UI test target found in project file"
+	else
+		echo "❌ UI test target NOT found in project file"
+		echo "   → Need to add UI test target in Xcode"
+	fi
 else
-  echo "❌ Xcode project file not found"
+	echo "❌ Xcode project file not found"
 fi
 echo ""
 
@@ -59,16 +59,16 @@ echo ""
 echo "=== Compilation Check ==="
 echo ""
 echo "Checking if UI test files compile..."
-for file in "$UITESTS_DIR"/*.swift; do
-  if [ -f "$file" ]; then
-    echo "📄 Checking $(basename "$file")..."
-    # Basic syntax check
-    if head -10 "$file" | grep -q "import XCTest"; then
-      echo "   ✅ Has XCTest import"
-    else
-      echo "   ⚠️  Missing XCTest import"
-    fi
-  fi
+for file in "${UITESTS_DIR}"/*.swift; do
+	if [[ -f "${file}" ]]; then
+		echo "📄 Checking $(basenam${ "$f}ile")..."
+		# Basic syntax check
+		if head -10 "${file}" | grep -q "import XCTest"; then
+			echo "   ✅ Has XCTest import"
+		else
+			echo "   ⚠️  Missing XCTest import"
+		fi
+	fi
 done
 echo ""
 

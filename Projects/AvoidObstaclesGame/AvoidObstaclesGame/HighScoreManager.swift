@@ -24,7 +24,7 @@ class HighScoreManager {
     /// Retrieves all high scores sorted from highest to lowest.
     /// - Returns: An array of high scores in descending order.
     func getHighScores() -> [Int] {
-        let scores = UserDefaults.standard.array(forKey: self.highScoresKey) as? [Int] ?? []
+        let scores = UserDefaults.standard.array(forKey: highScoresKey) as? [Int] ?? []
         return scores.sorted(by: >)
     }
 
@@ -41,16 +41,16 @@ class HighScoreManager {
     /// - Parameter score: The score to add.
     /// - Returns: True if the score is in the top 10 after adding, false otherwise.
     func addScore(_ score: Int) -> Bool {
-        var scores = self.getHighScores()
+        var scores = getHighScores()
         scores.append(score)
         scores.sort(by: >)
 
         // Keep only top 10 scores
-        if scores.count > self.maxScores {
-            scores = Array(scores.prefix(self.maxScores))
+        if scores.count > maxScores {
+            scores = Array(scores.prefix(maxScores))
         }
 
-        UserDefaults.standard.set(scores, forKey: self.highScoresKey)
+        UserDefaults.standard.set(scores, forKey: highScoresKey)
         UserDefaults.standard.synchronize()
 
         // Return true if this score is in the top 10
@@ -82,7 +82,7 @@ class HighScoreManager {
     /// Retrieves the highest score from the high scores list.
     /// - Returns: The highest score, or 0 if no scores exist.
     func getHighestScore() -> Int {
-        self.getHighScores().first ?? 0
+        getHighScores().first ?? 0
     }
 
     /// Retrieves the highest score from the high scores list (async version).
@@ -96,8 +96,8 @@ class HighScoreManager {
     /// - Parameter score: The score to check.
     /// - Returns: True if the score would be in the top 10, false otherwise.
     func isHighScore(_ score: Int) -> Bool {
-        let scores = self.getHighScores()
-        return scores.count < self.maxScores || score > (scores.last ?? 0)
+        let scores = getHighScores()
+        return scores.count < maxScores || score > (scores.last ?? 0)
     }
 
     /// Checks if a given score would qualify as a high score without adding it (async version).
@@ -105,12 +105,12 @@ class HighScoreManager {
     /// - Returns: True if the score would be in the top 10, false otherwise.
     func isHighScoreAsync(_ score: Int) async -> Bool {
         let scores = await getHighScoresAsync()
-        return scores.count < self.maxScores || score > (scores.last ?? 0)
+        return scores.count < maxScores || score > (scores.last ?? 0)
     }
 
     /// Clears all high scores from persistent storage. Useful for testing or resetting.
     func clearHighScores() {
-        UserDefaults.standard.removeObject(forKey: self.highScoresKey)
+        UserDefaults.standard.removeObject(forKey: highScoresKey)
         UserDefaults.standard.synchronize()
     }
 

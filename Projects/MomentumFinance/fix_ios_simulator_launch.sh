@@ -11,8 +11,8 @@ killall SimulatorTrampoline 2>/dev/null || true
 # 2. Reset the specific simulator
 echo "2. Resetting iPhone 16 Pro Max simulator..."
 DEVICE_ID="15AB3298-270F-449B-B0BA-DCB97024C8C6"
-xcrun simctl shutdown "$DEVICE_ID" 2>/dev/null || true
-xcrun simctl erase "$DEVICE_ID"
+xcrun simctl shutdown "${DEVICE_ID}" 2>/dev/null || true
+xcrun simctl erase "${DEVICE_ID}"
 
 # 3. Clean build artifacts
 echo "3. Cleaning build artifacts..."
@@ -21,15 +21,15 @@ rm -rf ~/Library/Developer/Xcode/DerivedData/MomentumFinance-*
 # 4. Reset all simulators (optional - more thorough)
 echo "4. Would you like to reset ALL simulators? (y/n)"
 read -r response
-if [[ "$response" =~ ^[Yy]$ ]]; then
-  xcrun simctl shutdown all
-  xcrun simctl erase all
-  echo "   All simulators reset"
+if [[ ${response} =~ ^[Yy]$ ]]; then
+	xcrun simctl shutdown all
+	xcrun simctl erase all
+	echo "   All simulators reset"
 fi
 
 # 5. Boot the simulator
 echo "5. Booting simulator..."
-xcrun simctl boot "$DEVICE_ID"
+xcrun simctl boot "${DEVICE_ID}"
 sleep 5
 
 # 6. Open Simulator app

@@ -128,21 +128,21 @@ public struct ContentView: View {
 }
 
 #if os(iOS)
-extension View {
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func iOSOptimizations() -> some View {
-        tint(.blue)
+    extension View {
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func iOSOptimizations() -> some View {
+            tint(.blue)
+        }
     }
-}
 
 #elseif os(macOS)
-extension View {
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func macOSOptimizations() -> some View {
-        preferredColorScheme(.light)
-            .tint(.indigo)
+    extension View {
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func macOSOptimizations() -> some View {
+            preferredColorScheme(.light)
+                .tint(.indigo)
+        }
     }
-}
 #endif

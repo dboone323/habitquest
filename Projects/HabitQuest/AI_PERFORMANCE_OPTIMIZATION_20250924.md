@@ -1,13 +1,15 @@
 # Performance Optimization Report for HabitQuest
+
 Generated: Wed Sep 24 18:56:43 CDT 2025
 
-
 ## Dependencies.swift
+
 # Performance Analysis of Dependencies.swift
 
 ## 1. Algorithm Complexity Issues
 
 ### Issue: Repeated Date Formatting
+
 The `formattedMessage` method creates a timestamp for every log entry using `Date()` and `ISO8601DateFormatter.string(from:)`. While not algorithmically complex, this operation is performed synchronously on the logger's queue for every log call.
 
 **Optimization:** Cache the date formatter or consider using a more performant timestamp generation method.
@@ -30,6 +32,7 @@ private static let isoFormatter: ISO8601DateFormatter = {
 ## 2. Memory Usage Problems
 
 ### Issue: Unnecessary String Interpolation
+
 In `formattedMessage`, multiple string interpolations occur which can create temporary string objects.
 
 **Optimization:** Use more efficient string building approaches.
@@ -52,6 +55,7 @@ private func formattedMessage(_ message: String, level: LogLevel) -> String {
 ## 3. Unnecessary Computations
 
 ### Issue: Redundant Property Access
+
 Accessing `self.outputHandler` and `self.formattedMessage` within the queue block when these could be captured earlier.
 
 **Optimization:** Capture values before dispatching to the queue.
@@ -75,6 +79,7 @@ public func log(_ message: String, level: LogLevel = .info) {
 ```
 
 ### Issue: LogLevel.uppercasedValue Switch Statement
+
 The `uppercasedValue` property uses a switch statement that's evaluated every time it's accessed.
 
 **Optimization:** Pre-compute and store the uppercase values.
@@ -106,13 +111,13 @@ public enum LogLevel: String {
         case .error: return "ERROR"
         }
     }
-    
+
     // Or even better, precompute:
     private static let debugUpper = "DEBUG"
     private static let infoUpper = "INFO"
     private static let warningUpper = "WARNING"
     private static let errorUpper = "ERROR"
-    
+
     public var uppercasedValue: String {
         switch self {
         case .debug: return Self.debugUpper
@@ -131,6 +136,7 @@ No significant collection operations found in this code that require optimizatio
 ## 5. Threading Opportunities
 
 ### Issue: Blocking Synchronous Logging
+
 The `logSync` method blocks the calling thread until the log operation completes.
 
 **Optimization:** Consider if synchronous logging is truly necessary, and if so, document when it should be used.
@@ -157,9 +163,11 @@ public func logSync(_ message: String, level: LogLevel = .info) {
 ## 6. Caching Possibilities
 
 ### Issue: Date Formatter Reuse
+
 While the `isoFormatter` is already cached as a static property, we can ensure it's being used optimally.
 
 ### Issue: LogLevel String Values
+
 The uppercase string representations of log levels are computed each time they're accessed.
 
 **Optimization:** Cache these values as static properties.
@@ -186,6 +194,7 @@ public enum LogLevel: String {
 ```
 
 ### Issue: Timestamp Generation
+
 If high-frequency logging is expected, consider caching the timestamp or using a more efficient timestamp generation method.
 
 **Optimization:** For very high-frequency logging, consider alternative timestamp methods.
@@ -210,6 +219,7 @@ private func fastTimestamp() -> String {
 The code is already quite well-structured for performance, with the main improvements being around reducing redundant computations and optimizing thread usage patterns.
 
 ## PerformanceManager.swift
+
 ## Performance Analysis of PerformanceManager.swift
 
 ### 1. Algorithm Complexity Issues
@@ -218,22 +228,23 @@ The code is already quite well-structured for performance, with the main improve
 The method calls `self.frameQueue.sync` even when cached values could be used, creating unnecessary thread hops.
 
 **Optimization**:
+
 ```swift
 private func calculateFPSForDegradedCheck() -> Double {
     let now = CACurrentMediaTime()
-    
+
     // Check cache first without locking
     if now - self.lastFPSUpdate < self.fpsCacheInterval {
         return self.cachedFPS
     }
-    
+
     // Only lock when calculation is needed
     return self.frameQueue.sync {
         // Double-check pattern to avoid race conditions
         if now - self.lastFPSUpdate < self.fpsCacheInterval {
             return self.cachedFPS
         }
-        
+
         let fps = self.calculateCurrentFPSLocked()
         self.cachedFPS = fps
         self.lastFPSUpdate = now
@@ -248,6 +259,7 @@ private func calculateFPSForDegradedCheck() -> Double {
 The `machInfoCache` is allocated once but never reset, and the `frameTimes` array is pre-allocated with maximum size.
 
 **Optimization**:
+
 ```swift
 // Replace static allocation with stack allocation for better memory management
 private func calculateMemoryUsageLocked() -> Double {
@@ -271,6 +283,7 @@ private func calculateMemoryUsageLocked() -> Double {
 Several methods call `CACurrentMediaTime()` multiple times within the same scope.
 
 **Optimization**:
+
 ```swift
 public func recordFrame() {
     let currentTime = CACurrentMediaTime()
@@ -292,6 +305,7 @@ public func recordFrame() {
 The circular buffer implementation could be more efficient.
 
 **Optimization**:
+
 ```swift
 // Use ContiguousArray for better performance with numeric data
 private var frameTimes: ContiguousArray<CFTimeInterval>
@@ -316,6 +330,7 @@ private func getPreviousIndex(_ index: Int) -> Int {
 Multiple queues are used unnecessarily, and some operations could be optimized.
 
 **Optimization**:
+
 ```swift
 // Consolidate queues for better resource utilization
 private let performanceQueue = DispatchQueue(
@@ -342,12 +357,13 @@ public func isPerformanceDegraded(completion: @escaping (Bool) -> Void) {
 Cache timestamps are checked multiple times unnecessarily.
 
 **Optimization**:
+
 ```swift
 // Add a cache entry struct for better organization
 private struct CacheEntry<T> {
     let value: T
     let timestamp: CFTimeInterval
-    
+
     var isValid: Bool {
         CACurrentMediaTime() - timestamp < 0.5 // Use appropriate cache duration
     }
@@ -362,12 +378,12 @@ public func getCurrentFPS() -> Double {
     if let cache = fpsCache, cache.isValid {
         return cache.value
     }
-    
+
     let now = CACurrentMediaTime()
     let fps = self.frameQueue.sync {
         self.calculateCurrentFPSLocked()
     }
-    
+
     self.fpsCache = CacheEntry(value: fps, timestamp: now)
     return fps
 }
@@ -396,7 +412,7 @@ private let frameQueue = DispatchQueue(
 ```swift
 private func calculateCurrentFPSLocked() -> Double {
     guard self.recordedFrameCount.load(ordering: .relaxed) >= 2 else { return 0 }
-    
+
     let availableFrames = min(self.recordedFrameCount.load(ordering: .relaxed), self.fpsSampleSize)
     guard availableFrames >= 2 else { return 0 }
 

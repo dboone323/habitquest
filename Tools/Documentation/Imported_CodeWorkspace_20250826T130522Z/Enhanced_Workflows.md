@@ -9,18 +9,15 @@ This document outlines the comprehensive development workflows implemented for t
 ### ✅ Successfully Installed Tools
 
 1. **SwiftFormat** (v0.57.2)
-
    - Automatic code formatting
    - Configuration: `.swiftformat` in root directory
    - Usage: `./master_automation.sh format [project]`
 
 2. **Fastlane** (v2.228.0)
-
    - iOS deployment automation
    - Usage: `./master_automation.sh fastlane <project>`
 
 3. **CocoaPods** (v1.16.2)
-
    - Dependency management
    - Usage: `./master_automation.sh pods <project>`
 
@@ -234,7 +231,6 @@ Original commit message
    ```
 
 3. **During Development**:
-
    - Use `./master_automation.sh format <project>` frequently
    - Run `./master_automation.sh lint <project>` for quick checks
 

@@ -20,14 +20,14 @@ public class CloudKitManager: ObservableObject {
     @Published var syncStatus: SyncStatus = .idle
 
     private init() {
-        self.database = self.container.privateCloudDatabase
-        self.checkiCloudStatus()
+        database = container.privateCloudDatabase
+        checkiCloudStatus()
     }
 
     // MARK: - iCloud Status
 
     func checkiCloudStatus() {
-        self.container.accountStatus { [weak self] status, _ in
+        container.accountStatus { [weak self] status, _ in
             DispatchQueue.main.async {
                 switch status {
                 case .available:
@@ -46,7 +46,7 @@ public class CloudKitManager: ObservableObject {
             self.syncStatus = .syncing(.inProgress(0))
         }
 
-        self.container.accountStatus { [weak self] status, _ in
+        container.accountStatus { [weak self] status, _ in
             DispatchQueue.main.async {
                 switch status {
                 case .available:
@@ -66,7 +66,7 @@ public class CloudKitManager: ObservableObject {
     // MARK: - Sync Operations
 
     func syncAllData() async {
-        guard self.isSignedInToiCloud else {
+        guard isSignedInToiCloud else {
             await MainActor.run {
                 self.syncStatus = .syncing(.error)
             }
@@ -79,22 +79,22 @@ public class CloudKitManager: ObservableObject {
 
         do {
             // Sync all data types
-            try await self.syncTasks()
+            try await syncTasks()
             await MainActor.run {
                 self.syncStatus = .syncing(.inProgress(0.25))
             }
 
-            try await self.syncGoals()
+            try await syncGoals()
             await MainActor.run {
                 self.syncStatus = .syncing(.inProgress(0.5))
             }
 
-            try await self.syncJournalEntries()
+            try await syncJournalEntries()
             await MainActor.run {
                 self.syncStatus = .syncing(.inProgress(0.75))
             }
 
-            try await self.syncCalendarEvents()
+            try await syncCalendarEvents()
             await MainActor.run {
                 self.syncStatus = .syncing(.success)
             }
@@ -104,7 +104,7 @@ public class CloudKitManager: ObservableObject {
             }
         }
 
-        self.scheduleNextSync()
+        scheduleNextSync()
     }
 
     private func scheduleNextSync() {
@@ -128,7 +128,7 @@ public class CloudKitManager: ObservableObject {
         // Upload local tasks to CloudKit
         for task in localTasks {
             let record = task.toCKRecord()
-            try await self.database.save(record)
+            try await database.save(record)
         }
 
         // Fetch remote tasks and merge
@@ -156,7 +156,7 @@ public class CloudKitManager: ObservableObject {
         // Upload local goals to CloudKit
         for goal in localGoals {
             let record = goal.toCKRecord()
-            try await self.database.save(record)
+            try await database.save(record)
         }
 
         // Fetch remote goals and merge
@@ -185,7 +185,7 @@ public class CloudKitManager: ObservableObject {
         // Upload local entries to CloudKit
         for entry in localEntries {
             let record = entry.toCKRecord()
-            try await self.database.save(record)
+            try await database.save(record)
         }
 
         // Fetch remote entries and merge
@@ -213,7 +213,7 @@ public class CloudKitManager: ObservableObject {
         // Upload local events to CloudKit
         for event in localEvents {
             let record = event.toCKRecord()
-            try await self.database.save(record)
+            try await database.save(record)
         }
 
         // Fetch remote events and merge
@@ -236,7 +236,7 @@ public class CloudKitManager: ObservableObject {
     func requestPermissions() {
         // Note: userDiscoverability is deprecated in macOS 14.0
         // This is a placeholder for when permissions are needed
-        self.checkiCloudStatus()
+        checkiCloudStatus()
     }
 }
 

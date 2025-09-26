@@ -32,7 +32,7 @@ public struct WelcomeView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 
-            Button(action: self.presenter.openFileAction(binding: self.$showFilePicker)) {
+            Button(action: presenter.openFileAction(binding: $showFilePicker)) {
                 Label("Open Code File", systemImage: "doc.badge.plus")
                     .font(.headline)
                     .padding()

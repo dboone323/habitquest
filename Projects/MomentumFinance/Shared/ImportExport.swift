@@ -89,7 +89,8 @@ public protocol EntityManager {
 public class DefaultEntityManager: EntityManager {
     public init() {}
     public func getOrCreateAccount(from _: [String], columnMapping _: CSVColumnMapping)
-        async throws -> FinancialAccount {
+        async throws -> FinancialAccount
+    {
         FinancialAccount(name: "Imported Account", balance: 0, iconName: "creditcard")
     }
 

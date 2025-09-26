@@ -41,41 +41,41 @@ final class JournalDataManager: JournalDataManaging {
     /// - Parameter entries: Array of `JournalEntry` objects to save.
     func save(entries: [JournalEntry]) {
         if let encoded = try? JSONEncoder().encode(entries) {
-            self.userDefaults.set(encoded, forKey: self.entriesKey)
+            userDefaults.set(encoded, forKey: entriesKey)
         }
     }
 
     /// Adds a new journal entry to the stored entries.
     /// - Parameter entry: The `JournalEntry` to add.
     func add(_ entry: JournalEntry) {
-        var currentEntries = self.load()
+        var currentEntries = load()
         currentEntries.append(entry)
-        self.save(entries: currentEntries)
+        save(entries: currentEntries)
     }
 
     /// Updates an existing journal entry.
     /// - Parameter entry: The `JournalEntry` to update.
     func update(_ entry: JournalEntry) {
-        var currentEntries = self.load()
+        var currentEntries = load()
         if let index = currentEntries.firstIndex(where: { $0.id == entry.id }) {
             currentEntries[index] = entry
-            self.save(entries: currentEntries)
+            save(entries: currentEntries)
         }
     }
 
     /// Deletes a journal entry from storage.
     /// - Parameter entry: The `JournalEntry` to delete.
     func delete(_ entry: JournalEntry) {
-        var currentEntries = self.load()
+        var currentEntries = load()
         currentEntries.removeAll { $0.id == entry.id }
-        self.save(entries: currentEntries)
+        save(entries: currentEntries)
     }
 
     /// Finds a journal entry by its ID.
     /// - Parameter id: The UUID of the entry to find.
     /// - Returns: The `JournalEntry` if found, otherwise nil.
     func find(by id: UUID) -> JournalEntry? {
-        let entries = self.load()
+        let entries = load()
         return entries.first { $0.id == id }
     }
 
@@ -87,7 +87,7 @@ final class JournalDataManager: JournalDataManaging {
         let targetDate = calendar.startOfDay(for: date)
         let nextDay = calendar.date(byAdding: .day, value: 1, to: targetDate)!
 
-        return self.load().filter { entry in
+        return load().filter { entry in
             let entryDate = calendar.startOfDay(for: entry.date)
             return entryDate >= targetDate && entryDate < nextDay
         }.sorted { $0.date > $1.date } // Most recent first
@@ -99,7 +99,7 @@ final class JournalDataManager: JournalDataManaging {
     ///   - endDate: The end of the date range.
     /// - Returns: Array of entries within the date range.
     func entries(between startDate: Date, and endDate: Date) -> [JournalEntry] {
-        self.load().filter { entry in
+        load().filter { entry in
             entry.date >= startDate && entry.date <= endDate
         }.sorted { $0.date > $1.date }
     }
@@ -108,41 +108,41 @@ final class JournalDataManager: JournalDataManaging {
     /// - Parameter count: Number of recent entries to return.
     /// - Returns: Array of recent entries.
     func recentEntries(count: Int = 10) -> [JournalEntry] {
-        self.load().sorted { $0.date > $1.date }.prefix(count).map(\.self)
+        load().sorted { $0.date > $1.date }.prefix(count).map(\.self)
     }
 
     /// Gets journal entries with a specific mood.
     /// - Parameter mood: The mood to filter by.
     /// - Returns: Array of entries with the specified mood.
     func entries(withMood mood: String) -> [JournalEntry] {
-        self.load().filter { $0.mood == mood }.sorted { $0.date > $1.date }
+        load().filter { $0.mood == mood }.sorted { $0.date > $1.date }
     }
 
     /// Gets all unique moods from journal entries.
     /// - Returns: Array of unique mood strings.
     func uniqueMoods() -> [String] {
-        let moods = self.load().map(\.mood)
+        let moods = load().map(\.mood)
         return Array(Set(moods)).sorted()
     }
 
     /// Gets journal entries sorted by date.
     /// - Returns: Array of entries sorted by date (most recent first).
     func entriesSortedByDate() -> [JournalEntry] {
-        self.load().sorted { $0.date > $1.date }
+        load().sorted { $0.date > $1.date }
     }
 
     /// Clears all journal entries from storage.
     func clearAllEntries() {
-        self.userDefaults.removeObject(forKey: self.entriesKey)
+        userDefaults.removeObject(forKey: entriesKey)
     }
 
     /// Gets statistics about journal entries.
     /// - Returns: Dictionary with journal statistics.
     func getJournalStatistics() -> [String: Any] {
-        let entries = self.load()
+        let entries = load()
         let total = entries.count
         let thisWeek = self.entries(between: Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date(), and: Date()).count
-        let moods = self.uniqueMoods()
+        let moods = uniqueMoods()
 
         return [
             "total": total,

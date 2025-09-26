@@ -5,7 +5,6 @@ Since Swift is not available to generate the project automatically, follow these
 ## Option 1: Create New Xcode Project (Recommended)
 
 1. **Create a new Xcode project:**
-
    - File → New → Project
    - Choose "App" template
    - Product Name: MomentumFinance
@@ -15,13 +14,11 @@ Since Swift is not available to generate the project automatically, follow these
    - Include Tests: NO
 
 2. **Delete default files:**
-
    - Delete the default ContentView.swift
    - Delete the default MomentumFinanceApp.swift
    - Keep Assets.xcassets
 
 3. **Add Shared folder:**
-
    - Right-click on project → Add Files to "MomentumFinance"
    - Select the entire "Shared" folder
    - Options:
@@ -37,12 +34,10 @@ Since Swift is not available to generate the project automatically, follow these
 ## Option 2: Fix Current Project
 
 1. **Remove all file references:**
-
    - Select all Swift files in project navigator
    - Press Delete → Remove References
 
 2. **Re-add Shared folder:**
-
    - Right-click on project root
    - Add Files to "MomentumFinance"
    - Navigate to and select the "Shared" folder

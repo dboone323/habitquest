@@ -7,22 +7,22 @@ set -euo pipefail
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_ROOT="/Users/danielstevens/Desktop/Quantum-workspace"
-AGENTS_DIR="$SCRIPT_DIR"
-LOG_DIR="$AGENTS_DIR/logs"
-BACKUP_DIR="$AGENTS_DIR/backups"
-METRICS_DIR="$AGENTS_DIR/metrics"
+AGENTS_DIR="${SCRIPT_DIR}"
+LOG_DIR="${AGENTS_DIR}/logs"
+BACKUP_DIR="${AGENTS_DIR}/backups"
+METRICS_DIR="${AGENTS_DIR}/metrics"
 
 # Create directories
-mkdir -p "$LOG_DIR" "$BACKUP_DIR" "$METRICS_DIR"
+mkdir -p "${LOG_DIR}" "${BACKUP_DIR}" "${METRICS_DIR}"
 
 # Configuration files
-AGENT_CONFIG="$AGENTS_DIR/agent_config.json"
-PERFORMANCE_METRICS="$METRICS_DIR/performance_metrics.json"
-BACKUP_POLICY="$AGENTS_DIR/backup_policy.json"
+AGENT_CONFIG="${AGENTS_DIR}/agent_config.json"
+PERFORMANCE_METRICS="${METRICS_DIR}/performance_metrics.json"
+BACKUP_POLICY="${AGENTS_DIR}/backup_policy.json"
 
 # Initialize configuration if not exists
-if [[ ! -f "$AGENT_CONFIG" ]]; then
-  cat >"$AGENT_CONFIG" <<'EOF'
+if [[ ! -f "${AGENT_CONFIG}" ]]; then
+  cat >"${AGENT_CONFIG}" <<'EOF'
 {
     "agents": {
         "build_agent": {
@@ -68,8 +68,8 @@ if [[ ! -f "$AGENT_CONFIG" ]]; then
 EOF
 fi
 
-if [[ ! -f "$BACKUP_POLICY" ]]; then
-  cat >"$BACKUP_POLICY" <<'EOF'
+if [[ ! -f "${BACKUP_POLICY}" ]]; then
+  cat >"${BACKUP_POLICY}" <<'EOF'
 {
     "policies": {
         "smart_backup": {
@@ -104,8 +104,8 @@ EOF
 fi
 
 # Initialize performance metrics
-if [[ ! -f "$PERFORMANCE_METRICS" ]]; then
-  cat >"$PERFORMANCE_METRICS" <<'EOF'
+if [[ ! -f "${PERFORMANCE_METRICS}" ]]; then
+  cat >"${PERFORMANCE_METRICS}" <<'EOF'
 {
     "timestamp": "",
     "agents": {},
@@ -130,30 +130,30 @@ smart_backup() {
   local project="${2:-}"
   local backup_type="${3:-smart}"
 
-  echo "[$(date)] Smart Agent Manager: Starting $backup_type backup for $agent_name"
+  echo "[$(date)] Smart Agent Manager: Starting ${backup_type} backup for ${agent_name}"
 
   # Check if backup is needed
-  if should_backup "$agent_name" "$backup_type"; then
+  if should_backup "${agent_name}" "${backup_type}"; then
     # Clean old backups first
-    cleanup_old_backups "$agent_name"
+    cleanup_old_backups "${agent_name}"
 
     # Create backup
     local timestamp
     timestamp=$(date +%Y%m%d_%H%M%S)
     local backup_name="${agent_name}_${backup_type}_${timestamp}"
 
-    if [[ -n "$project" ]]; then
-      backup_project "$project" "$backup_name"
+    if [[ -n "${project}" ]]; then
+      backup_project "${project}" "${backup_name}"
     else
-      backup_agent_state "$agent_name" "$backup_name"
+      backup_agent_state "${agent_name}" "${backup_name}"
     fi
 
     # Update metrics
     update_backup_metrics
 
-    echo "[$(date)] Smart Agent Manager: $backup_type backup completed for $agent_name"
+    echo "[$(date)] Smart Agent Manager: ${backup_type} backup completed for ${agent_name}"
   else
-    echo "[$(date)] Smart Agent Manager: Skipping backup for $agent_name (not needed)"
+    echo "[$(date)] Smart Agent Manager: Skipping backup for ${agent_name} (not needed)"
   fi
 }
 
@@ -164,32 +164,32 @@ should_backup() {
 
   # Get agent config
   local max_backups
-  max_backups=$(jq -r ".agents.${agent_name}.max_backups" "$AGENT_CONFIG" 2>/dev/null || echo "5")
+  max_backups=$(jq -r ".agents.${agent_name}.max_backups" "${AGENT_CONFIG}" 2>/dev/null || echo "5")
   local backup_interval
-  backup_interval=$(jq -r ".agents.${agent_name}.backup_interval" "$AGENT_CONFIG" 2>/dev/null || echo "3600")
+  backup_interval=$(jq -r ".agents.${agent_name}.backup_interval" "${AGENT_CONFIG}" 2>/dev/null || echo "3600")
 
   # Count existing backups
   local backup_count
-  backup_count=$(find "$BACKUP_DIR" -name "${agent_name}_*" -type d 2>/dev/null | wc -l)
+  backup_count=$(find "${BACKUP_DIR}" -name "${agent_name}_*" -type d 2>/dev/null | wc -l)
 
   # Check if we're at the limit
-  if [[ $backup_count -ge $max_backups ]]; then
-    echo "[$(date)] Smart Agent Manager: Backup limit reached for $agent_name ($backup_count >= $max_backups)"
+  if [[ ${backup_count} -ge ${max_backups} ]]; then
+    echo "[$(date)] Smart Agent Manager: Backup limit reached for ${agent_name} (${backup_count} >= ${max_backups})"
     return 1
   fi
 
   # Check time since last backup
   local last_backup
-  last_backup=$(find "$BACKUP_DIR" -name "${agent_name}_*" -type d 2>/dev/null | sort | tail -1)
-  if [[ -n "$last_backup" ]]; then
+  last_backup=$(find "${BACKUP_DIR}" -name "${agent_name}_*" -type d 2>/dev/null | sort | tail -1)
+  if [[ -n "${last_backup}" ]]; then
     local last_backup_time
-    last_backup_time=$(stat -f%B "$last_backup" 2>/dev/null || echo "0")
+    last_backup_time=$(stat -f%B "${last_backup}" 2>/dev/null || echo "0")
     local current_time
     current_time=$(date +%s)
     local time_diff=$((current_time - last_backup_time))
 
-    if [[ $time_diff -lt $backup_interval ]]; then
-      echo "[$(date)] Smart Agent Manager: Too soon for backup of $agent_name (${time_diff}s < ${backup_interval}s)"
+    if [[ ${time_diff} -lt ${backup_interval} ]]; then
+      echo "[$(date)] Smart Agent Manager: Too soon for backup of ${agent_name} (${time_diff}s < ${backup_interval}s)"
       return 1
     fi
   fi
@@ -201,24 +201,24 @@ should_backup() {
 cleanup_old_backups() {
   local agent_name="$1"
   local max_backups
-  max_backups=$(jq -r ".agents.${agent_name}.max_backups" "$AGENT_CONFIG" 2>/dev/null || echo "5")
+  max_backups=$(jq -r ".agents.${agent_name}.max_backups" "${AGENT_CONFIG}" 2>/dev/null || echo "5")
   local retention_days
-  retention_days=$(jq -r ".global_settings.backup_retention_days" "$AGENT_CONFIG" 2>/dev/null || echo "7")
+  retention_days=$(jq -r ".global_settings.backup_retention_days" "${AGENT_CONFIG}" 2>/dev/null || echo "7")
 
-  echo "[$(date)] Smart Agent Manager: Cleaning up old backups for $agent_name"
+  echo "[$(date)] Smart Agent Manager: Cleaning up old backups for ${agent_name}"
 
   # Remove backups older than retention period
-  find "$BACKUP_DIR" -name "${agent_name}_*" -type d -mtime +$retention_days -exec rm -rf {} \; 2>/dev/null || true
+  find "${BACKUP_DIR}" -name "${agent_name}_*" -type d -mtime +"$retention_days" -exec rm -rf {} \; 2>/dev/null || true
 
   # Keep only the most recent backups
   local backup_dirs
-  mapfile -t backup_dirs < <(find "$BACKUP_DIR" -name "${agent_name}_*" -type d -print0 2>/dev/null | xargs -0 ls -td 2>/dev/null || true)
+  mapfile -t backup_dirs < <(find "${BACKUP_DIR}" -name "${agent_name}_*" -type d -print0 2>/dev/null | xargs -0 ls -td 2>/dev/null || true)
 
-  if [[ ${#backup_dirs[@]} -gt $max_backups ]]; then
+  if [[ ${#backup_dirs[@]} -gt ${max_backups} ]]; then
     local to_remove=$((${#backup_dirs[@]} - max_backups))
     for ((i = to_remove; i < ${#backup_dirs[@]}; i++)); do
-      echo "[$(date)] Smart Agent Manager: Removing old backup: ${backup_dirs[$i]}"
-      rm -rf "${backup_dirs[$i]}" 2>/dev/null || true
+      echo "[$(date)] Smart Agent Manager: Removing old backup: ${backup_dirs[${i}]}"
+      rm -rf "${backup_dirs[${i}]}" 2>/dev/null || true
     done
   fi
 }
@@ -227,35 +227,35 @@ cleanup_old_backups() {
 backup_project() {
   local project="$1"
   local backup_name="$2"
-  local project_path="$WORKSPACE_ROOT/Projects/$project"
+  local project_path="${WORKSPACE_ROOT}/Projects/${project}"
 
-  if [[ ! -d "$project_path" ]]; then
-    echo "[$(date)] Smart Agent Manager: Project $project not found at $project_path"
+  if [[ ! -d "${project_path}" ]]; then
+    echo "[$(date)] Smart Agent Manager: Project ${project} not found at ${project_path}"
     return 1
   fi
 
-  local backup_path="$BACKUP_DIR/$backup_name"
-  mkdir -p "$backup_path"
+  local backup_path="${BACKUP_DIR}/${backup_name}"
+  mkdir -p "${backup_path}"
 
-  echo "[$(date)] Smart Agent Manager: Creating compressed backup of $project"
+  echo "[$(date)] Smart Agent Manager: Creating compressed backup of ${project}"
 
   # Create compressed archive
-  cd "$WORKSPACE_ROOT/Projects"
-  tar -czf "$backup_path/${project}.tar.gz" "$project" 2>/dev/null
+  cd "${WORKSPACE_ROOT}/Projects"
+  tar -czf "${backup_path}/${project}.tar.gz" "${project}" 2>/dev/null
 
   # Create metadata
-  cat >"$backup_path/metadata.json" <<EOF
+  cat >"${backup_path}/metadata.json" <<EOF
 {
-    "project": "$project",
+    "project": "${project}",
     "timestamp": "$(date -Iseconds)",
     "type": "compressed",
-    "original_size": "$(du -sh "$project_path" | cut -f1)",
-    "compressed_size": "$(du -sh "$backup_path/${project}.tar.gz" | cut -f1)",
+    "original_size": "$(du -sh "${project_path}" | cut -f1)",
+    "compressed_size": "$(du -sh "${backup_path}/${project}.tar.gz" | cut -f1)",
     "created_by": "smart_agent_manager"
 }
 EOF
 
-  echo "[$(date)] Smart Agent Manager: Backup created: $backup_path"
+  echo "[$(date)] Smart Agent Manager: Backup created: ${backup_path}"
 }
 
 # Backup agent state (logs, configs, etc.)
@@ -263,93 +263,93 @@ backup_agent_state() {
   local agent_name="$1"
   local backup_name="$2"
 
-  local backup_path="$BACKUP_DIR/$backup_name"
-  mkdir -p "$backup_path"
+  local backup_path="${BACKUP_DIR}/${backup_name}"
+  mkdir -p "${backup_path}"
 
-  echo "[$(date)] Smart Agent Manager: Creating agent state backup for $agent_name"
+  echo "[$(date)] Smart Agent Manager: Creating agent state backup for ${agent_name}"
 
   # Backup agent logs and configs
-  if [[ -d "$AGENTS_DIR" ]]; then
-    cp -r "$AGENTS_DIR"/*.log "$backup_path/" 2>/dev/null || true
-    cp -r "$AGENTS_DIR"/*.json "$backup_path/" 2>/dev/null || true
-    cp -r "$AGENTS_DIR"/*.sh "$backup_path/" 2>/dev/null || true
+  if [[ -d "${AGENTS_DIR}" ]]; then
+    cp -r "${AGENTS_DIR}"/*.log "${backup_path}/" 2>/dev/null || true
+    cp -r "${AGENTS_DIR}"/*.json "${backup_path}/" 2>/dev/null || true
+    cp -r "${AGENTS_DIR}"/*.sh "${backup_path}/" 2>/dev/null || true
   fi
 
   # Create metadata
-  cat >"$backup_path/metadata.json" <<EOF
+  cat >"${backup_path}/metadata.json" <<EOF
 {
-    "agent": "$agent_name",
+    "agent": "${agent_name}",
     "timestamp": "$(date -Iseconds)",
     "type": "agent_state",
-    "files_backed_up": $(find "$backup_path" -type f | wc -l),
+    "files_backed_up": $(find "${backup_path}" -type f | wc -l),
     "created_by": "smart_agent_manager"
 }
 EOF
 
-  echo "[$(date)] Smart Agent Manager: Agent state backup created: $backup_path"
+  echo "[$(date)] Smart Agent Manager: Agent state backup created: ${backup_path}"
 }
 
 # Update backup metrics
 update_backup_metrics() {
   local total_size
-  total_size=$(du -sm "$BACKUP_DIR" 2>/dev/null | cut -f1 || echo "0")
+  total_size=$(du -sm "${BACKUP_DIR}" 2>/dev/null | cut -f1 || echo "0")
   local total_count
-  total_count=$(find "$BACKUP_DIR" -mindepth 1 -type d 2>/dev/null | wc -l || echo "0")
+  total_count=$(find "${BACKUP_DIR}" -mindepth 1 -type d 2>/dev/null | wc -l || echo "0")
   local oldest_backup
-  oldest_backup=$(find "$BACKUP_DIR" -mindepth 1 -type d -print0 2>/dev/null | xargs -0 ls -td 2>/dev/null | tail -1 || echo "")
+  oldest_backup=$(find "${BACKUP_DIR}" -mindepth 1 -type d -print0 2>/dev/null | xargs -0 ls -td 2>/dev/null | tail -1 || echo "")
   local newest_backup
-  newest_backup=$(find "$BACKUP_DIR" -mindepth 1 -type d -print0 2>/dev/null | xargs -0 ls -t 2>/dev/null | head -1 || echo "")
+  newest_backup=$(find "${BACKUP_DIR}" -mindepth 1 -type d -print0 2>/dev/null | xargs -0 ls -t 2>/dev/null | head -1 || echo "")
 
-  jq --arg total_size "$total_size" \
-    --arg total_count "$total_count" \
-    --arg oldest_backup "$oldest_backup" \
-    --arg newest_backup "$newest_backup" \
+  jq --arg total_size "${total_size}" \
+    --arg total_count "${total_count}" \
+    --arg oldest_backup "${oldest_backup}" \
+    --arg newest_backup "${newest_backup}" \
     --arg timestamp "$(date -Iseconds)" \
     '.timestamp = $timestamp | .backups.total_size_mb = ($total_size | tonumber) | .backups.total_count = ($total_count | tonumber) | .backups.oldest_backup = $oldest_backup | .backups.newest_backup = $newest_backup' \
-    "$PERFORMANCE_METRICS" >"$PERFORMANCE_METRICS.tmp" && mv "$PERFORMANCE_METRICS.tmp" "$PERFORMANCE_METRICS"
+    "${PERFORMANCE_METRICS}" >"${PERFORMANCE_METRICS}.tmp" && mv "${PERFORMANCE_METRICS}.tmp" "${PERFORMANCE_METRICS}"
 }
 
 # Monitor agent health
 monitor_agent_health() {
   local agent_name="$1"
   local agent_script
-  agent_script=$(jq -r ".agents.${agent_name}.script" "$AGENT_CONFIG" 2>/dev/null || echo "")
+  agent_script=$(jq -r ".agents.${agent_name}.script" "${AGENT_CONFIG}" 2>/dev/null || echo "")
 
-  if [[ -z "$agent_script" ]]; then
-    echo "[$(date)] Smart Agent Manager: Agent $agent_name not configured"
+  if [[ -z "${agent_script}" ]]; then
+    echo "[$(date)] Smart Agent Manager: Agent ${agent_name} not configured"
     return 1
   fi
 
   # Check if agent is running
-  local pid_file="$AGENTS_DIR/${agent_script}.pid"
-  if [[ -f "$pid_file" ]]; then
+  local pid_file="${AGENTS_DIR}/${agent_script}.pid"
+  if [[ -f "${pid_file}" ]]; then
     local pid
-    pid=$(cat "$pid_file" 2>/dev/null || echo "")
-    if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
-      echo "[$(date)] Smart Agent Manager: Agent $agent_name is running (PID: $pid)"
+    pid=$(cat "${pid_file}" 2>/dev/null || echo "")
+    if [[ -n "${pid}" ]] && kill -0 "${pid}" 2>/dev/null; then
+      echo "[$(date)] Smart Agent Manager: Agent ${agent_name} is running (PID: ${pid})"
       return 0
     else
-      echo "[$(date)] Smart Agent Manager: Agent $agent_name PID file exists but process not running"
-      rm -f "$pid_file" 2>/dev/null || true
+      echo "[$(date)] Smart Agent Manager: Agent ${agent_name} PID file exists but process not running"
+      rm -f "${pid_file}" 2>/dev/null || true
     fi
   fi
 
   # Check log file for recent activity
-  local log_file="$AGENTS_DIR/${agent_script%.sh}.log"
-  if [[ -f "$log_file" ]]; then
+  local log_file="${AGENTS_DIR}/${agent_script%.sh}.log"
+  if [[ -f "${log_file}" ]]; then
     local last_activity
-    last_activity=$(stat -f%B "$log_file" 2>/dev/null || echo "0")
+    last_activity=$(stat -f%B "${log_file}" 2>/dev/null || echo "0")
     local current_time
     current_time=$(date +%s)
     local time_diff=$((current_time - last_activity))
 
-    if [[ $time_diff -gt 3600 ]]; then
-      echo "[$(date)] Smart Agent Manager: Agent $agent_name has been inactive for ${time_diff}s"
+    if [[ ${time_diff} -gt 3600 ]]; then
+      echo "[$(date)] Smart Agent Manager: Agent ${agent_name} has been inactive for ${time_diff}s"
       return 1
     fi
   fi
 
-  echo "[$(date)] Smart Agent Manager: Agent $agent_name status unknown"
+  echo "[$(date)] Smart Agent Manager: Agent ${agent_name} status unknown"
   return 1
 }
 
@@ -365,13 +365,13 @@ get_system_metrics() {
 
   # Disk usage (%)
   local disk_usage
-  disk_usage=$(df "$WORKSPACE_ROOT" | tail -1 | awk '{print $5}' | sed 's/%//' 2>/dev/null || echo "0")
+  disk_usage=$(df "${WORKSPACE_ROOT}" | tail -1 | awk '{print $5}' | sed 's/%//' 2>/dev/null || echo "0")
 
-  jq --arg cpu_usage "$cpu_usage" \
-    --arg memory_usage "$memory_usage" \
-    --arg disk_usage "$disk_usage" \
+  jq --arg cpu_usage "${cpu_usage}" \
+    --arg memory_usage "${memory_usage}" \
+    --arg disk_usage "${disk_usage}" \
     '.system.cpu_usage = ($cpu_usage | tonumber) | .system.memory_usage = ($memory_usage | tonumber) | .system.disk_usage = ($disk_usage | tonumber)' \
-    "$PERFORMANCE_METRICS" >"$PERFORMANCE_METRICS.tmp" && mv "$PERFORMANCE_METRICS.tmp" "$PERFORMANCE_METRICS"
+    "${PERFORMANCE_METRICS}" >"${PERFORMANCE_METRICS}.tmp" && mv "${PERFORMANCE_METRICS}.tmp" "${PERFORMANCE_METRICS}"
 }
 
 # Main command handler
@@ -386,34 +386,34 @@ case "${1:-help}" in
   ;;
 "cleanup")
   echo "[$(date)] Smart Agent Manager: Running backup cleanup"
-  for agent in $(jq -r '.agents | keys[]' "$AGENT_CONFIG" 2>/dev/null); do
-    cleanup_old_backups "$agent"
+  for agent in $(jq -r '.agents | keys[]' "${AGENT_CONFIG}" 2>/dev/null); do
+    cleanup_old_backups "${agent}"
   done
   update_backup_metrics
   ;;
 "metrics")
   get_system_metrics
-  cat "$PERFORMANCE_METRICS"
+  cat "${PERFORMANCE_METRICS}"
   ;;
 "status")
   echo "=== Smart Agent Management System Status ==="
-  echo "Configuration: $AGENT_CONFIG"
-  echo "Backup Directory: $BACKUP_DIR"
-  echo "Log Directory: $LOG_DIR"
-  echo "Metrics File: $PERFORMANCE_METRICS"
+  echo "Configuration: ${AGENT_CONFIG}"
+  echo "Backup Directory: ${BACKUP_DIR}"
+  echo "Log Directory: ${LOG_DIR}"
+  echo "Metrics File: ${PERFORMANCE_METRICS}"
   echo ""
   echo "=== Agent Status ==="
-  for agent in $(jq -r '.agents | keys[]' "$AGENT_CONFIG" 2>/dev/null); do
-    if monitor_agent_health "$agent" >/dev/null 2>&1; then
-      echo "âœ… $agent: Running"
+  for agent in $(jq -r '.agents | keys[]' "${AGENT_CONFIG}" 2>/dev/null); do
+    if monitor_agent_health "${agent}" >/dev/null 2>&1; then
+      echo "âœ${ $age}nt: Running"
     else
-      echo "âŒ $agent: Not running or unhealthy"
+      echo "â${ $age}nt: Not running or unhealthy"
     fi
   done
   echo ""
   echo "=== Backup Status ==="
   update_backup_metrics
-  jq -r '.backups | "Total backups: \(.total_count)", "Total size: \(.total_size_mb) MB", "Oldest: \(.oldest_backup)", "Newest: \(.newest_backup)"' "$PERFORMANCE_METRICS" 2>/dev/null || echo "Unable to read backup metrics"
+  jq -r '.backups | "Total backups: \(.total_count)", "Total size: \(.total_size_mb) MB", "Oldest: \(.oldest_backup)", "Newest: \(.newest_backup)"' "${PERFORMANCE_METRICS}" 2>/dev/null || echo "Unable to read backup metrics"
   ;;
 "help" | *)
   echo "Smart Agent Management System"

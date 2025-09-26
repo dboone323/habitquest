@@ -6,13 +6,13 @@ import SwiftUI
 struct TestResults {
     private(set) var tests: [TestResult] = []
 
-    var passedCount: Int { self.tests.filter(\.passed).count }
-    var failedCount: Int { self.tests.count(where: { !$0.passed }) }
-    var totalCount: Int { self.tests.count }
-    var allPassed: Bool { self.failedCount == 0 }
+    var passedCount: Int { tests.filter(\.passed).count }
+    var failedCount: Int { tests.count(where: { !$0.passed }) }
+    var totalCount: Int { tests.count }
+    var allPassed: Bool { failedCount == 0 }
 
     mutating func addResult(name: String, passed: Bool, error: String? = nil, note: String? = nil) {
-        self.tests.append(TestResult(name: name, passed: passed, error: error, note: note))
+        tests.append(TestResult(name: name, passed: passed, error: error, note: note))
     }
 
     /// <#Description#>
@@ -25,7 +25,7 @@ struct TestResults {
         print("\n📊 Analytics Test Results:")
         print("─────────────────────────")
 
-        for test in self.tests {
+        for test in tests {
             let status = test.passed ? "✅" : "❌"
             print("\(status) \(test.name)")
             if let error = test.error {
@@ -37,8 +37,8 @@ struct TestResults {
         }
 
         print("─────────────────────────")
-        print("Total: \(self.totalCount) | Passed: \(self.passedCount) | Failed: \(self.failedCount)")
-        print(self.allPassed ? "🎉 All tests passed!" : "⚠️  Some tests failed")
+        print("Total: \(totalCount) | Passed: \(passedCount) | Failed: \(failedCount)")
+        print(allPassed ? "🎉 All tests passed!" : "⚠️  Some tests failed")
     }
 }
 
@@ -80,15 +80,15 @@ public struct AnalyticsTestView: View {
 
                 Spacer()
 
-                Button(action: self.runTests) {
+                Button(action: runTests) {
                     HStack {
-                        if self.isRunning {
+                        if isRunning {
                             ProgressView()
                                 .scaleEffect(0.8)
                         } else {
                             Image(systemName: "play.circle.fill")
                         }
-                        Text(self.isRunning ? "Running Tests..." : "Run Analytics Tests")
+                        Text(isRunning ? "Running Tests..." : "Run Analytics Tests")
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -97,7 +97,7 @@ public struct AnalyticsTestView: View {
                     .cornerRadius(12)
                 }
                 .accessibilityLabel("Button")
-                .disabled(self.isRunning)
+                .disabled(isRunning)
                 .padding(.horizontal)
             }
             .navigationTitle("Analytics Tests")
@@ -106,14 +106,14 @@ public struct AnalyticsTestView: View {
     }
 
     private func runTests() {
-        self.isRunning = true
+        isRunning = true
 
         Task {
             let results = await runAnalyticsTests(with: modelContext)
 
             await MainActor.run {
-                self.testResults = results
-                self.isRunning = false
+                testResults = results
+                isRunning = false
                 results.printSummary()
             }
         }
@@ -122,7 +122,7 @@ public struct AnalyticsTestView: View {
     /// Simple analytics test runner for the live app
     private func runAnalyticsTests(with modelContext: ModelContext) async -> TestResults {
         // First, ensure we have some test data
-        await self.createSampleDataIfNeeded(with: modelContext)
+        await createSampleDataIfNeeded(with: modelContext)
 
         let analyticsService = AnalyticsService(modelContext: modelContext)
         var results = TestResults()
@@ -249,16 +249,16 @@ public struct TestResultsView: View {
                             .font(.headline)
                         Spacer()
                         Image(
-                            systemName: self.results.allPassed
+                            systemName: results.allPassed
                                 ? "checkmark.circle.fill" : "exclamationmark.triangle.fill"
                         )
-                        .foregroundColor(self.results.allPassed ? .green : .orange)
+                        .foregroundColor(results.allPassed ? .green : .orange)
                     }
 
                     HStack(spacing: 20) {
-                        StatItem(title: "Total", value: "\(self.results.totalCount)", color: .blue)
-                        StatItem(title: "Passed", value: "\(self.results.passedCount)", color: .green)
-                        StatItem(title: "Failed", value: "\(self.results.failedCount)", color: .red)
+                        StatItem(title: "Total", value: "\(results.totalCount)", color: .blue)
+                        StatItem(title: "Passed", value: "\(results.passedCount)", color: .green)
+                        StatItem(title: "Failed", value: "\(results.failedCount)", color: .red)
                     }
                 }
                 .padding()
@@ -267,7 +267,7 @@ public struct TestResultsView: View {
 
                 // Individual Test Results
                 LazyVStack(spacing: 8) {
-                    ForEach(Array(self.results.tests.enumerated()), id: \.offset) { _, test in
+                    ForEach(Array(results.tests.enumerated()), id: \.offset) { _, test in
                         TestResultRow(test: test)
                     }
                 }
@@ -284,10 +284,10 @@ public struct TestResultRow: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Image(systemName: self.test.passed ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .foregroundColor(self.test.passed ? .green : .red)
+                Image(systemName: test.passed ? "checkmark.circle.fill" : "xmark.circle.fill")
+                    .foregroundColor(test.passed ? .green : .red)
 
-                Text(self.test.name)
+                Text(test.name)
                     .font(.subheadline)
                     .fontWeight(.medium)
 
@@ -322,12 +322,12 @@ public struct StatItem: View {
 
     public var body: some View {
         VStack(spacing: 4) {
-            Text(self.value)
+            Text(value)
                 .font(.title2)
                 .fontWeight(.bold)
-                .foregroundColor(self.color)
+                .foregroundColor(color)
 
-            Text(self.title)
+            Text(title)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }

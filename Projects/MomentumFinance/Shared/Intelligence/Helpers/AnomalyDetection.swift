@@ -74,7 +74,8 @@ func fi_detectRecentFrequencyAnomalies(_ transactions: [FinancialTransaction], d
     let averageCount = Double(transactionCounts.reduce(0, +)) / Double(transactionCounts.count)
 
     if let highestDay = last7Days.max(by: { $0.value.count < $1.value.count }),
-       Double(highestDay.value.count) > averageCount * 2 {
+       Double(highestDay.value.count) > averageCount * 2
+    {
         let transactionCount = highestDay.value.count
         let percentageMore = Int((Double(transactionCount) / averageCount - 1) * 100)
         let formattedDate = highestDay.key.formatted(date: .abbreviated, time: .omitted)

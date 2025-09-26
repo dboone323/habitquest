@@ -3,10 +3,10 @@
 # Real-time security status and alerting system
 
 WORKSPACE="/Users/danielstevens/Desktop/Quantum-workspace"
-DASHBOARD_FILE="$WORKSPACE/Tools/security_monitor_dashboard.html"
-LOG_FILE="$WORKSPACE/Tools/Automation/logs/security_monitor.log"
-ALERT_FILE="$WORKSPACE/Tools/Automation/logs/security_alerts.log"
-METRICS_FILE="$WORKSPACE/Tools/Automation/metrics/security_metrics.json"
+DASHBOARD_FILE="${WORKSPACE}/Tools/security_monitor_dashboard.html"
+LOG_FILE="${WORKSPACE}/Tools/Automation/logs/security_monitor.log"
+ALERT_FILE="${WORKSPACE}/Tools/Automation/logs/security_alerts.log"
+METRICS_FILE="${WORKSPACE}/Tools/Automation/metrics/security_metrics.json"
 
 # Colors for output
 RED='\033[0;31m'
@@ -17,21 +17,21 @@ NC='\033[0m' # No Color
 
 # Logging function
 log() {
-    echo "${BLUE}[$(date '+%Y-%m-%d %H:%M:%S')]${NC} $*" | tee -a "$LOG_FILE"
+    echo "${BLUE}[$(date '+%Y-%m-%d %H:%M:%S')]${NC} $*" | tee -a "${LOG_FILE}"
 }
 
 # Alert function
 alert() {
     local severity="$1"
     local message="$2"
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [$severity] $message" >> "$ALERT_FILE"
-    log "ALERT [$severity]: $message"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [${severity}] ${message}" >> "${ALERT_FILE}"
+    log "ALERT [${severity}]: ${message}"
 }
 
 # Initialize metrics file
 init_metrics() {
-    if [[ ! -f "$METRICS_FILE" ]]; then
-        cat > "$METRICS_FILE" << EOF
+    if [[ ! -f "${METRICS_FILE}" ]]; then
+        cat > "${METRICS_FILE}" << EOF
 {
   "last_scan": "$(date '+%Y-%m-%d %H:%M:%S')",
   "vulnerabilities": {
@@ -69,40 +69,40 @@ perform_security_scan() {
 
     # Scan each project
     for project in "CodingReviewer" "MomentumFinance" "HabitQuest" "PlannerApp" "AvoidObstaclesGame"; do
-        if [[ -d "$WORKSPACE/Projects/$project" ]]; then
-            log "Scanning $project..."
+        if [[ -d "${WORKSPACE}/Projects/${project}" ]]; then
+            log "Scanning ${project}..."
 
-            cd "$WORKSPACE/Projects/$project" || continue
+            cd "${WORKSPACE}/Projects/${project}" || continue
 
             # Check for hardcoded secrets
             local secrets_found
             secrets_found=$(find . -name "*.swift" -exec grep -l "password\|secret\|key.*=.*\"" {} \; 2>/dev/null | wc -l)
-            if [[ $secrets_found -gt 0 ]]; then
-                alert "CRITICAL" "Hardcoded secrets found in $project ($secrets_found files)"
+            if [[ ${secrets_found} -gt 0 ]]; then
+                alert "CRITICAL" "Hardcoded secrets found in ${project} (${secrets_found} files)"
                 ((critical_issues += secrets_found))
             fi
 
             # Check for SQL injection risks
             local sql_injection
             sql_injection=$(find . -name "*.swift" -exec grep -l "SELECT.*+.*\|INSERT.*+.*\|UPDATE.*+.*" {} \; 2>/dev/null | wc -l)
-            if [[ $sql_injection -gt 0 ]]; then
-                alert "HIGH" "SQL injection risks found in $project ($sql_injection files)"
+            if [[ ${sql_injection} -gt 0 ]]; then
+                alert "HIGH" "SQL injection risks found in ${project} (${sql_injection} files)"
                 ((high_issues += sql_injection))
             fi
 
             # Check for weak cryptography
             local weak_crypto
             weak_crypto=$(find . -name "*.swift" -exec grep -l "MD5\|SHA1\|DES\|RC4" {} \; 2>/dev/null | wc -l)
-            if [[ $weak_crypto -gt 0 ]]; then
-                alert "HIGH" "Weak cryptography found in $project ($weak_crypto files)"
+            if [[ ${weak_crypto} -gt 0 ]]; then
+                alert "HIGH" "Weak cryptography found in ${project} (${weak_crypto} files)"
                 ((high_issues += weak_crypto))
             fi
 
             # Check for unsafe HTTP URLs
             local unsafe_urls
             unsafe_urls=$(find . -name "*.swift" -exec grep -l "http://" {} \; 2>/dev/null | wc -l)
-            if [[ $unsafe_urls -gt 0 ]]; then
-                alert "MEDIUM" "Unsafe HTTP URLs found in $project ($unsafe_urls files)"
+            if [[ ${unsafe_urls} -gt 0 ]]; then
+                alert "MEDIUM" "Unsafe HTTP URLs found in ${project} (${unsafe_urls} files)"
                 ((medium_issues += unsafe_urls))
             fi
 
@@ -112,34 +112,34 @@ perform_security_scan() {
             local swift_files
             swift_files=$(find . -name "*.swift" | wc -l)
 
-            if [[ $input_validation -lt $((swift_files / 2)) ]]; then
-                alert "MEDIUM" "Insufficient input validation in $project"
+            if [[ ${input_validation} -lt $((swift_files / 2)) ]]; then
+                alert "MEDIUM" "Insufficient input validation in ${project}"
                 ((medium_issues++))
             fi
 
             # Calculate project security score
             local project_score=$((100 - (critical_issues * 20) - (high_issues * 10) - (medium_issues * 5)))
-            if [[ $project_score -lt 0 ]]; then
+            if [[ ${project_score} -lt 0 ]]; then
                 project_score=0
             fi
 
             # Update metrics for this project
-            jq ".projects.\"$project\".score = $project_score | .projects.\"$project\".issues = $((critical_issues + high_issues + medium_issues))" "$METRICS_FILE" > "${METRICS_FILE}.tmp" && mv "${METRICS_FILE}.tmp" "$METRICS_FILE"
+            jq ".projects.\"${project}\".score = ${project_score} | .projects.\"${project}\".issues = $((critical_issues + high_issues + medium_issues))" "${METRICS_FILE}" > "${METRICS_FILE}.tmp" && mv "${METRICS_FILE}.tmp" "${METRICS_FILE}"
 
-            log "$project security score: $project_score% ($((critical_issues + high_issues + medium_issues)) issues)"
+            log "${project} security score: ${project_score}% ($((critical_issues + high_issues + medium_issues)) issues)"
         fi
     done
 
     # Update overall metrics
     local overall_score=$((100 - (critical_issues * 20) - (high_issues * 10) - (medium_issues * 5)))
-    if [[ $overall_score -lt 0 ]]; then
+    if [[ ${overall_score} -lt 0 ]]; then
         overall_score=0
     fi
 
-    jq ".last_scan = \"$(date '+%Y-%m-%d %H:%M:%S')\" | .vulnerabilities.critical = $critical_issues | .vulnerabilities.high = $high_issues | .vulnerabilities.medium = $medium_issues | .vulnerabilities.low = $low_issues | .security_score = $overall_score" "$METRICS_FILE" > "${METRICS_FILE}.tmp" && mv "${METRICS_FILE}.tmp" "$METRICS_FILE"
+    jq ".last_scan = \"$(date '+%Y-%m-%d %H:%M:%S')\" | .vulnerabilities.critical = ${critical_issues} | .vulnerabilities.high = ${high_issues} | .vulnerabilities.medium = ${medium_issues} | .vulnerabilities.low = ${low_issues} | .security_score = ${overall_score}" "${METRICS_FILE}" > "${METRICS_FILE}.tmp" && mv "${METRICS_FILE}.tmp" "${METRICS_FILE}"
 
     local total_vulnerabilities=$((critical_issues + high_issues + medium_issues + low_issues))
-    log "Security scan completed. Total vulnerabilities: $total_vulnerabilities"
+    log "Security scan completed. Total vulnerabilities: ${total_vulnerabilities}"
 }
 
 # Generate HTML dashboard
@@ -148,31 +148,31 @@ generate_dashboard() {
 
     # Read current metrics
     local security_score
-    security_score=$(jq -r '.security_score' "$METRICS_FILE")
+    security_score=$(jq -r '.security_score' "${METRICS_FILE}")
     local last_scan
-    last_scan=$(jq -r '.last_scan' "$METRICS_FILE")
+    last_scan=$(jq -r '.last_scan' "${METRICS_FILE}")
     local critical_count
-    critical_count=$(jq -r '.vulnerabilities.critical' "$METRICS_FILE")
+    critical_count=$(jq -r '.vulnerabilities.critical' "${METRICS_FILE}")
     local high_count
-    high_count=$(jq -r '.vulnerabilities.high' "$METRICS_FILE")
+    high_count=$(jq -r '.vulnerabilities.high' "${METRICS_FILE}")
     local medium_count
-    medium_count=$(jq -r '.vulnerabilities.medium' "$METRICS_FILE")
+    medium_count=$(jq -r '.vulnerabilities.medium' "${METRICS_FILE}")
 
     # Determine status color
     local status_color="#28a745" # green
     local status_text="SECURE"
-    if [[ $critical_count -gt 0 ]]; then
+    if [[ ${critical_count} -gt 0 ]]; then
         status_color="#dc3545" # red
         status_text="CRITICAL"
-    elif [[ $high_count -gt 0 ]]; then
+    elif [[ ${high_count} -gt 0 ]]; then
         status_color="#fd7e14" # orange
         status_text="WARNING"
-    elif [[ $medium_count -gt 0 ]]; then
+    elif [[ ${medium_count} -gt 0 ]]; then
         status_color="#ffc107" # yellow
         status_text="CAUTION"
     fi
 
-    cat > "$DASHBOARD_FILE" << EOF
+    cat > "${DASHBOARD_FILE}" << EOF
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -248,21 +248,21 @@ EOF
     # Add project cards
     for project in "CodingReviewer" "MomentumFinance" "HabitQuest" "PlannerApp" "AvoidObstaclesGame"; do
         local project_score
-        project_score=$(jq -r ".projects.\"$project\".score" "$METRICS_FILE")
+        project_score=$(jq -r ".projects.\"${project}\".score" "${METRICS_FILE}")
         local project_issues
-        project_issues=$(jq -r ".projects.\"$project\".issues" "$METRICS_FILE")
+        project_issues=$(jq -r ".projects.\"${project}\".issues" "${METRICS_FILE}")
 
         # Determine project status color
         local project_color="#28a745"
-        if [[ $project_issues -gt 5 ]]; then
+        if [[ ${project_issues} -gt 5 ]]; then
             project_color="#dc3545"
-        elif [[ $project_issues -gt 2 ]]; then
+        elif [[ ${project_issues} -gt 2 ]]; then
             project_color="#fd7e14"
-        elif [[ $project_issues -gt 0 ]]; then
+        elif [[ ${project_issues} -gt 0 ]]; then
             project_color="#ffc107"
         fi
 
-        cat >> "$DASHBOARD_FILE" << EOF
+        cat >> "${DASHBOARD_FILE}" << EOF
             <div class="project-card">
                 <h3>${project}</h3>
                 <div class="project-score" style="color: ${project_color};">${project_score}%</div>
@@ -271,7 +271,7 @@ EOF
 EOF
     done
 
-    cat >> "$DASHBOARD_FILE" << EOF
+    cat >> "${DASHBOARD_FILE}" << EOF
         </div>
 
         <div class="alerts">
@@ -279,21 +279,21 @@ EOF
 EOF
 
     # Add recent alerts (last 10)
-    if [[ -f "$ALERT_FILE" ]]; then
-        tail -10 "$ALERT_FILE" | while IFS= read -r line; do
-            if [[ $line =~ \[CRITICAL\] ]]; then
-                echo "<div class=\"alert alert-critical\">$line</div>" >> "$DASHBOARD_FILE"
-            elif [[ $line =~ \[HIGH\] ]]; then
-                echo "<div class=\"alert alert-high\">$line</div>" >> "$DASHBOARD_FILE"
-            elif [[ $line =~ \[MEDIUM\] ]]; then
-                echo "<div class=\"alert alert-medium\">$line</div>" >> "$DASHBOARD_FILE"
+    if [[ -f "${ALERT_FILE}" ]]; then
+        tail -10 "${ALERT_FILE}" | while IFS= read -r line; do
+            if [[ ${line} =~ \[CRITICAL\] ]]; then
+                echo "<div class=\"alert alert-critical\">${line}</div>" >> "${DASHBOARD_FILE}"
+            elif [[ ${line} =~ \[HIGH\] ]]; then
+                echo "<div class=\"alert alert-high\">${line}</div>" >> "${DASHBOARD_FILE}"
+            elif [[ ${line} =~ \[MEDIUM\] ]]; then
+                echo "<div class=\"alert alert-medium\">${line}</div>" >> "${DASHBOARD_FILE}"
             else
-                echo "<div class=\"alert\">$line</div>" >> "$DASHBOARD_FILE"
+                echo "<div class=\"alert\">${line}</div>" >> "${DASHBOARD_FILE}"
             fi
         done
     fi
 
-    cat >> "$DASHBOARD_FILE" << EOF
+    cat >> "${DASHBOARD_FILE}" << EOF
         </div>
 
         <div style="text-align: center;">
@@ -315,7 +315,7 @@ EOF
 </html>
 EOF
 
-    log "Security dashboard generated at $DASHBOARD_FILE"
+    log "Security dashboard generated at ${DASHBOARD_FILE}"
 }
 
 # Continuous monitoring function
@@ -328,9 +328,9 @@ start_monitoring() {
 
         # Check for critical alerts and send notifications if needed
         local critical_count
-        critical_count=$(jq -r '.vulnerabilities.critical' "$METRICS_FILE")
+        critical_count=$(jq -r '.vulnerabilities.critical' "${METRICS_FILE}")
 
-        if [[ $critical_count -gt 0 ]]; then
+        if [[ ${critical_count} -gt 0 ]]; then
             log "CRITICAL security issues detected! Sending alert..."
             # Here you could integrate with notification systems
             # For now, just log it
@@ -355,11 +355,11 @@ case "${1:-}" in
         ;;
     "status")
         echo "Security Monitor Status:"
-        echo "Last scan: $(jq -r '.last_scan' "$METRICS_FILE")"
-        echo "Security score: $(jq -r '.security_score' "$METRICS_FILE")%"
-        echo "Critical issues: $(jq -r '.vulnerabilities.critical' "$METRICS_FILE")"
-        echo "High risk issues: $(jq -r '.vulnerabilities.high' "$METRICS_FILE")"
-        echo "Medium risk issues: $(jq -r '.vulnerabilities.medium' "$METRICS_FILE")"
+        echo "Last scan: $(jq -r '.last_scan' "${METRICS_FILE}")"
+        echo "Security score: $(jq -r '.security_score' "${METRICS_FILE}")%"
+        echo "Critical issues: $(jq -r '.vulnerabilities.critical' "${METRICS_FILE}")"
+        echo "High risk issues: $(jq -r '.vulnerabilities.high' "${METRICS_FILE}")"
+        echo "Medium risk issues: $(jq -r '.vulnerabilities.medium' "${METRICS_FILE}")"
         ;;
     *)
         echo "Usage: $0 {scan|monitor|dashboard|status}"

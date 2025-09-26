@@ -54,15 +54,15 @@ delegate_todo() {
 
   # Determine project from file path
   local project=""
-  if [[ "$file" == AvoidObstaclesGame/* ]]; then
+  if [[ "${file}" == AvoidObstaclesGame/* ]]; then
     project="AvoidObstaclesGame"
-  elif [[ "$file" == CodingReviewer/* ]]; then
+  elif [[ "${file}" == CodingReviewer/* ]]; then
     project="CodingReviewer"
-  elif [[ "$file" == HabitQuest/* ]]; then
+  elif [[ "${file}" == HabitQuest/* ]]; then
     project="HabitQuest"
-  elif [[ "$file" == MomentumFinance/* ]]; then
+  elif [[ "${file}" == MomentumFinance/* ]]; then
     project="MomentumFinance"
-  elif [[ "$file" == PlannerApp/* ]]; then
+  elif [[ "${file}" == PlannerApp/* ]]; then
     project="PlannerApp"
   fi
 
@@ -70,19 +70,19 @@ delegate_todo() {
   local agent=""
   local command=""
 
-  if [[ "$todo_text" == *"collision"* || "$todo_text" == *"performance"* ]]; then
+  if [[ "${todo_text}" == *"collision"* || "${todo_text}" == *"performance"* ]]; then
     agent="debug"
     command="optimize-performance"
-  elif [[ "$todo_text" == *"code review"* || "$todo_text" == *"language"* ]]; then
+  elif [[ "${todo_text}" == *"code review"* || "${todo_text}" == *"language"* ]]; then
     agent="codegen"
     command="enhance-review-engine"
-  elif [[ "$todo_text" == *"streak"* || "$todo_text" == *"feature"* ]]; then
+  elif [[ "${todo_text}" == *"streak"* || "${todo_text}" == *"feature"* ]]; then
     agent="codegen"
     command="implement-feature"
-  elif [[ "$todo_text" == *"API"* || "$todo_text" == *"integrate"* ]]; then
+  elif [[ "${todo_text}" == *"API"* || "${todo_text}" == *"integrate"* ]]; then
     agent="build"
     command="integrate-api"
-  elif [[ "$todo_text" == *"drag"* || "$todo_text" == *"UI"* ]]; then
+  elif [[ "${todo_text}" == *"drag"* || "${todo_text}" == *"UI"* ]]; then
     agent="uiux"
     command="enhance-ui"
   else
@@ -110,7 +110,7 @@ submit_task() {
     -H "Content-Type: application/json" \
     -d "{\"agent\": \"${agent}\", \"command\": \"${command}\", \"project\": \"${project}\", \"file\": \"${file}\", \"line\": \"${line}\", \"todo\": \"${todo_text}\", \"execute\": true}")
 
-  if [[ $? -eq 0 ]] && [[ "$response" == *"\"ok\": true"* ]]; then
+  if [[ $? -eq 0 ]] && [[ "${response}" == *"\"ok\": true"* ]]; then
     log "Successfully delegated TODO to ${agent} agent"
     return 0
   else
@@ -126,8 +126,8 @@ check_todo_completion() {
   local todo_text="$3"
 
   # Check if the TODO comment still exists in the file
-  if [[ -f "$file" ]]; then
-    if grep -n "TODO.*${todo_text}" "$file" >/dev/null 2>&1; then
+  if [[ -f "${file}" ]]; then
+    if grep -n "TODO.*${todo_text}" "${file}" >/dev/null 2>&1; then
       return 1 # TODO still exists
     else
       return 0 # TODO completed
@@ -153,8 +153,8 @@ while true; do
   fi
 
   # Process each TODO
-  echo "$todos" | while IFS='|' read -r index file line text; do
-    if [[ "$index" == "ERROR:"* ]]; then
+  echo "${todos}" | while IFS='|' read -r index file line text; do
+    if [[ "${index}" == "ERROR:"* ]]; then
       log "JSON parsing error: ${index}"
       continue
     fi
@@ -168,7 +168,7 @@ while true; do
     fi
 
     # Check if TODO has been completed
-    if check_todo_completion "$file" "$line" "$text"; then
+    if check_todo_completion "${file}" "${line}" "${text}"; then
       log "TODO ${index} appears to be completed, removing marker"
       rm -f "${AGENTS_DIR}/todo_${index}.processing"
       continue
@@ -178,11 +178,11 @@ while true; do
     touch "${AGENTS_DIR}/todo_${index}.processing"
 
     # Delegate to appropriate agent
-    delegation=$(delegate_todo "$file" "$line" "$text")
+    delegation=$(delegate_todo "${file}" "${line}" "${text}")
 
-    if [[ -n "$delegation" ]]; then
-      IFS='|' read -r agent command project todo_file todo_line todo_text <<<"$delegation"
-      submit_task "$agent" "$command" "$project" "$todo_file" "$todo_line" "$todo_text"
+    if [[ -n "${delegation}" ]]; then
+      IFS='|' read -r agent command project todo_file todo_line todo_text <<<"${delegation}"
+      submit_task "${agent}" "${command}" "${project}" "${todo_file}" "${todo_line}" "${todo_text}"
     else
       log "Could not determine delegation for TODO: ${text}"
     fi

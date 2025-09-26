@@ -59,7 +59,7 @@ public struct DataExportService: Sendable {
     /// - Returns: JSON data ready for sharing/backup
     @MainActor
     static func exportUserData(from modelContext: ModelContext) throws -> Data {
-        self.logger.info("Starting data export...")
+        logger.info("Starting data export...")
 
         // Fetch player profile
         let profileDescriptor = FetchDescriptor<PlayerProfile>()
@@ -137,7 +137,7 @@ public struct DataExportService: Sendable {
         )
 
         let jsonData = try JSONEncoder().encode(exportData)
-        self.logger.info("Data export completed. Size: \(jsonData.count) bytes")
+        logger.info("Data export completed. Size: \(jsonData.count) bytes")
 
         return jsonData
     }
@@ -149,17 +149,17 @@ public struct DataExportService: Sendable {
     ///   - replaceExisting: Whether to replace existing data or merge
     @MainActor
     static func importUserData(from data: Data, into modelContext: ModelContext, replaceExisting: Bool = false) throws {
-        self.logger.info("Starting data import...")
+        logger.info("Starting data import...")
 
         let decoder = JSONDecoder()
         let importData = try decoder.decode(ExportedData.self, from: data)
 
         // Validate import data
-        try self.validateImportData(importData)
+        try validateImportData(importData)
 
         if replaceExisting {
             // Clear existing data
-            try self.clearAllData(from: modelContext)
+            try clearAllData(from: modelContext)
         }
 
         // Import player profile
@@ -225,7 +225,7 @@ public struct DataExportService: Sendable {
         }
 
         try modelContext.save()
-        self.logger.info("Data import completed successfully")
+        logger.info("Data import completed successfully")
     }
 
     /// Generate a formatted filename for export
@@ -240,7 +240,7 @@ public struct DataExportService: Sendable {
     private static func validateImportData(_ data: ExportedData) throws {
         // Check for required data
         if data.habits.isEmpty {
-            self.logger.warning("Import data contains no habits")
+            logger.warning("Import data contains no habits")
         }
 
         // Validate habit-log relationships
@@ -248,10 +248,10 @@ public struct DataExportService: Sendable {
         let invalidLogs = data.habitLogs.filter { !habitIds.contains($0.habitId) }
 
         if !invalidLogs.isEmpty {
-            self.logger.warning("Found \(invalidLogs.count) habit logs with invalid habit references")
+            logger.warning("Found \(invalidLogs.count) habit logs with invalid habit references")
         }
 
-        self.logger.info("Import data validation completed")
+        logger.info("Import data validation completed")
     }
 
     /// Clear all existing data from the model context
@@ -274,7 +274,7 @@ public struct DataExportService: Sendable {
         achievements.forEach { modelContext.delete($0) }
 
         try modelContext.save()
-        self.logger.info("Cleared all existing data")
+        logger.info("Cleared all existing data")
     }
 }
 
@@ -290,13 +290,13 @@ public enum DataExportError: LocalizedError, @unchecked Sendable {
         switch self {
         case .noProfileFound:
             "No player profile found to export"
-        case let .noDataToExport(message):
+        case .noDataToExport(let message):
             "No data to export: \(message)"
-        case let .importFailed(message):
+        case .importFailed(let message):
             "Import failed: \(message)"
-        case let .encodingFailed(error):
+        case .encodingFailed(let error):
             "Failed to encode data: \(error.localizedDescription)"
-        case let .decodingFailed(error):
+        case .decodingFailed(let error):
             "Failed to decode data: \(error.localizedDescription)"
         }
     }

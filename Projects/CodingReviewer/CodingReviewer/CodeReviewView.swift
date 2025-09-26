@@ -24,26 +24,26 @@ public struct CodeReviewView: View {
         VStack(spacing: 0) {
             // Header
             HStack {
-                Text(self.fileURL.lastPathComponent)
+                Text(fileURL.lastPathComponent)
                     .font(.headline)
                 Spacer()
 
-                switch self.currentView {
+                switch currentView {
                 case .analysis:
-                    Button(action: { Task { await self.onAnalyze() } }) {
+                    Button(action: { Task { await onAnalyze() } }) {
                         Label("Analyze", systemImage: "play.fill")
                     }
-                    .disabled(self.isAnalyzing || self.codeContent.isEmpty)
+                    .disabled(isAnalyzing || codeContent.isEmpty)
                 case .documentation:
-                    Button(action: { Task { await self.onGenerateDocumentation() } }) {
+                    Button(action: { Task { await onGenerateDocumentation() } }) {
                         Label("Generate Docs", systemImage: "doc.text")
                     }
-                    .disabled(self.isAnalyzing || self.codeContent.isEmpty)
+                    .disabled(isAnalyzing || codeContent.isEmpty)
                 case .tests:
-                    Button(action: { Task { await self.onGenerateTests() } }) {
+                    Button(action: { Task { await onGenerateTests() } }) {
                         Label("Generate Tests", systemImage: "testtube.2")
                     }
-                    .disabled(self.isAnalyzing || self.codeContent.isEmpty)
+                    .disabled(isAnalyzing || codeContent.isEmpty)
                 }
             }
             .padding()
@@ -54,7 +54,7 @@ public struct CodeReviewView: View {
             HSplitView {
                 // Code editor
                 ScrollView {
-                    TextEditor(text: self.$codeContent)
+                    TextEditor(text: $codeContent)
                         .font(.system(.body, design: .monospaced))
                         .padding()
                 }
@@ -62,11 +62,11 @@ public struct CodeReviewView: View {
 
                 // Results panel
                 ResultsPanel(
-                    currentView: self.currentView,
-                    analysisResult: self.analysisResult,
-                    documentationResult: self.documentationResult,
-                    testResult: self.testResult,
-                    isAnalyzing: self.isAnalyzing
+                    currentView: currentView,
+                    analysisResult: analysisResult,
+                    documentationResult: documentationResult,
+                    testResult: testResult,
+                    isAnalyzing: isAnalyzing
                 )
                 .frame(minWidth: 300)
             }
@@ -82,17 +82,17 @@ public struct ResultsPanel: View {
     let isAnalyzing: Bool
 
     private var presenter: ResultsPanelPresenter {
-        ResultsPanelPresenter(currentView: self.currentView, isAnalyzing: self.isAnalyzing)
+        ResultsPanelPresenter(currentView: currentView, isAnalyzing: isAnalyzing)
     }
 
     public var body: some View {
         VStack(spacing: 0) {
             // Results header
             HStack {
-                Text(self.presenter.title)
+                Text(presenter.title)
                     .font(.headline)
                 Spacer()
-                if self.isAnalyzing {
+                if isAnalyzing {
                     ProgressView()
                         .scaleEffect(0.7)
                 }
@@ -104,7 +104,7 @@ public struct ResultsPanel: View {
             // Results content
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    switch self.currentView {
+                    switch currentView {
                     case .analysis:
                         if let result = analysisResult {
                             AnalysisResultsView(result: result)
@@ -142,7 +142,7 @@ struct ResultsPanelPresenter {
     let isAnalyzing: Bool
 
     var title: String {
-        switch self.currentView {
+        switch currentView {
         case .analysis: "Analysis Results"
         case .documentation: "Documentation"
         case .tests: "Generated Tests"
@@ -150,9 +150,9 @@ struct ResultsPanelPresenter {
     }
 
     func emptyStateMessage(hasResult: Bool) -> String? {
-        guard !hasResult, !self.isAnalyzing else { return nil }
+        guard !hasResult, !isAnalyzing else { return nil }
 
-        switch self.currentView {
+        switch currentView {
         case .analysis:
             return "Click Analyze to start code analysis"
         case .documentation:

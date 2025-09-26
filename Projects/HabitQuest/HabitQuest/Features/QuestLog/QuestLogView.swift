@@ -10,48 +10,48 @@ public struct QuestLogView: View {
     public var body: some View {
         NavigationView {
             VStack {
-                if self.viewModel.allHabits.isEmpty {
+                if viewModel.allHabits.isEmpty {
                     EmptyQuestLogView()
                 } else {
                     QuestListView(
-                        habits: self.viewModel.allHabits,
-                        onDelete: self.viewModel.deleteHabit,
-                        onEdit: self.viewModel.editHabit
+                        habits: viewModel.allHabits,
+                        onDelete: viewModel.deleteHabit,
+                        onEdit: viewModel.editHabit
                     )
                 }
             }
             .navigationTitle("Quest Log")
             .toolbar(content: {
                 #if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Filter") {
-                        self.viewModel.showingAddQuest = true
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Filter") {
+                            viewModel.showingAddQuest = true
+                        }
+                        .accessibilityLabel("Filter Button")
                     }
-                    .accessibilityLabel("Filter Button")
-                }
                 #else
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Filter") {
-                        self.viewModel.showingFilterOptions = true
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Filter") {
+                            viewModel.showingFilterOptions = true
+                        }
+                        .accessibilityLabel("Filter Button")
                     }
-                    .accessibilityLabel("Filter Button")
-                }
                 #endif
             })
-            .sheet(isPresented: self.$viewModel.showingAddQuest) {
+            .sheet(isPresented: $viewModel.showingAddQuest) {
                 AddEditQuestView(
                     habit: nil,
-                    onSave: self.viewModel.addHabit
+                    onSave: viewModel.addHabit
                 )
             }
-            .sheet(item: self.$viewModel.editingHabit) { habit in
+            .sheet(item: $viewModel.editingHabit) { habit in
                 AddEditQuestView(
                     habit: habit,
-                    onSave: self.viewModel.updateHabit
+                    onSave: viewModel.updateHabit
                 )
             }
             .onAppear {
-                self.viewModel.setModelContext(self.modelContext)
+                viewModel.setModelContext(modelContext)
             }
         }
     }
@@ -86,15 +86,15 @@ private struct QuestListView: View {
 
     var body: some View {
         List {
-            ForEach(self.habits, id: \.id) { habit in
+            ForEach(habits, id: \.id) { habit in
                 QuestLogRowView(
                     habit: habit,
-                    onEdit: self.onEdit
+                    onEdit: onEdit
                 )
             }
             .onDelete { indexSet in
                 for index in indexSet {
-                    self.onDelete(self.habits[index])
+                    onDelete(habits[index])
                 }
             }
         }
@@ -109,10 +109,10 @@ private struct QuestLogRowView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 6) {
-                Text(self.habit.name)
+                Text(habit.name)
                     .font(.headline)
 
-                Text(self.habit.habitDescription)
+                Text(habit.habitDescription)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(2)
@@ -120,25 +120,25 @@ private struct QuestLogRowView: View {
                 HStack(spacing: 12) {
                     QuestStatChip(
                         icon: "star.fill",
-                        text: "\(self.habit.xpValue) XP",
+                        text: "\(habit.xpValue) XP",
                         color: .blue
                     )
 
                     QuestStatChip(
                         icon: "flame.fill",
-                        text: "\(self.habit.streak)",
+                        text: "\(habit.streak)",
                         color: .orange
                     )
 
                     QuestStatChip(
                         icon: "calendar",
-                        text: self.habit.frequency.displayName,
+                        text: habit.frequency.displayName,
                         color: .green
                     )
 
                     QuestStatChip(
                         icon: "checkmark.circle",
-                        text: "\(self.habit.logs.count)",
+                        text: "\(habit.logs.count)",
                         color: .purple
                     )
                 }
@@ -147,7 +147,7 @@ private struct QuestLogRowView: View {
             Spacer()
 
             Button {
-                self.onEdit(self.habit)
+                onEdit(habit)
             } label: {
                 Image(systemName: "pencil")
                     .foregroundColor(.secondary)
@@ -165,15 +165,15 @@ private struct QuestStatChip: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            Image(systemName: self.icon)
+            Image(systemName: icon)
                 .font(.caption)
-            Text(self.text)
+            Text(text)
                 .font(.caption)
         }
-        .foregroundColor(self.color)
+        .foregroundColor(color)
         .padding(.horizontal, 6)
         .padding(.vertical, 2)
-        .background(self.color.opacity(0.15))
+        .background(color.opacity(0.15))
         .cornerRadius(4)
     }
 }
@@ -200,30 +200,30 @@ private struct AddEditQuestView: View {
     }
 
     var isEditing: Bool {
-        self.habit != nil
+        habit != nil
     }
 
     var body: some View {
         NavigationView {
             Form {
                 Section("Quest Details") {
-                    TextField("Quest Name", text: self.$name).accessibilityLabel("Text Field")
-                    TextField("Description", text: self.$description, axis: .vertical)
+                    TextField("Quest Name", text: $name).accessibilityLabel("Text Field")
+                    TextField("Description", text: $description, axis: .vertical)
                         .accessibilityLabel("Text Field")
                         .lineLimit(3 ... 6)
                 }
 
                 Section("Quest Settings") {
-                    Picker("Frequency", selection: self.$frequency) {
+                    Picker("Frequency", selection: $frequency) {
                         ForEach(HabitFrequency.allCases, id: \.self) { freq in
                             Text(freq.displayName).tag(freq)
                         }
                     }
 
-                    Stepper("XP Reward: \(self.xpValue)", value: self.$xpValue, in: 5 ... 100, step: 5)
+                    Stepper("XP Reward: \(xpValue)", value: $xpValue, in: 5 ... 100, step: 5)
                 }
 
-                if self.isEditing, let habit {
+                if isEditing, let habit {
                     Section("Quest Stats") {
                         HStack {
                             Text("Current Streak")
@@ -248,22 +248,22 @@ private struct AddEditQuestView: View {
                     }
                 }
             }
-            .navigationTitle(self.isEditing ? "Edit Quest" : "New Quest")
+            .navigationTitle(isEditing ? "Edit Quest" : "New Quest")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
-                        self.dismiss()
+                        dismiss()
                     }
                     .accessibilityLabel("Cancel")
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(self.isEditing ? "Save" : "Add") {
-                        self.saveQuest()
+                    Button(isEditing ? "Save" : "Add") {
+                        saveQuest()
                     }
-                    .accessibilityLabel(self.isEditing ? "Save" : "Add")
-                    .disabled(self.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .accessibilityLabel(isEditing ? "Save" : "Add")
+                    .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
         }
@@ -272,11 +272,11 @@ private struct AddEditQuestView: View {
     private func saveQuest() {
         if let existingHabit = habit {
             // Update existing habit
-            existingHabit.name = self.name
-            existingHabit.habitDescription = self.description
-            existingHabit.frequency = self.frequency
-            existingHabit.xpValue = self.xpValue
-            self.onSave(existingHabit)
+            existingHabit.name = name
+            existingHabit.habitDescription = description
+            existingHabit.frequency = frequency
+            existingHabit.xpValue = xpValue
+            onSave(existingHabit)
         } else {
             // Create new habit
             let newHabit = Habit(
@@ -285,10 +285,10 @@ private struct AddEditQuestView: View {
                 frequency: frequency,
                 xpValue: xpValue
             )
-            self.onSave(newHabit)
+            onSave(newHabit)
         }
 
-        self.dismiss()
+        dismiss()
     }
 }
 

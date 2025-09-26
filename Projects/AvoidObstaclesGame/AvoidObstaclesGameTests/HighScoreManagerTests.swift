@@ -2,7 +2,7 @@ import XCTest
 
 @testable import AvoidObstaclesGame
 
-public class HighScoreManagerTests: XCTestCase {
+final class HighScoreManagerTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here

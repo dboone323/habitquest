@@ -13,23 +13,23 @@ final class ContentGenerationService {
         let content = UNMutableNotificationContent()
 
         // Personalized title based on streak status
-        content.title = self.generatePersonalizedTitle(for: habit, prediction: prediction)
+        content.title = generatePersonalizedTitle(for: habit, prediction: prediction)
 
         // Context-aware body message
-        content.body = self.generateContextualMessage(
+        content.body = generateContextualMessage(
             for: habit,
             scheduling: scheduling,
             prediction: prediction
         )
 
         // Dynamic notification priority
-        content.interruptionLevel = self.determineInterruptionLevel(
+        content.interruptionLevel = determineInterruptionLevel(
             habit: habit,
             successRate: scheduling.successRateAtTime
         )
 
         // Custom sound based on habit category
-        content.sound = self.selectOptimalSound(for: habit.category)
+        content.sound = selectOptimalSound(for: habit.category)
 
         // Rich actions for quick interaction
         content.categoryIdentifier = "HABIT_REMINDER"
@@ -50,7 +50,7 @@ final class ContentGenerationService {
         let content = UNMutableNotificationContent()
         content.title = "🎯 Milestone Approaching!"
         content.body = "You're \(milestone.streakCount - habit.streak) days away from \(milestone.title)!"
-        content.sound = self.selectOptimalSound(for: habit.category)
+        content.sound = selectOptimalSound(for: habit.category)
         content.categoryIdentifier = "MILESTONE_REMINDER"
 
         content.userInfo = [
@@ -67,7 +67,7 @@ final class ContentGenerationService {
         let content = UNMutableNotificationContent()
         content.title = "🌱 Fresh Start"
         content.body = "Yesterday is gone, today is a new opportunity to build \(habit.name) back up!"
-        content.sound = self.selectOptimalSound(for: habit.category)
+        content.sound = selectOptimalSound(for: habit.category)
         content.interruptionLevel = .passive
         content.categoryIdentifier = "RECOVERY_REMINDER"
 
@@ -85,13 +85,13 @@ final class ContentGenerationService {
         let streak = habit.streak
 
         switch (streak, prediction.probability) {
-        case let (streakCount, probabilityValue) where streakCount >= 21 && probabilityValue > 80:
+        case (let streakCount, let probabilityValue) where streakCount >= 21 && probabilityValue > 80:
             return "🔥 Keep the \(streakCount)-day streak alive!"
-        case let (streakCount, probabilityValue) where streakCount >= 7 && probabilityValue > 70:
+        case (let streakCount, let probabilityValue) where streakCount >= 7 && probabilityValue > 70:
             return "💪 \(streakCount) days strong - don't break it now!"
-        case let (streakCount, _) where streakCount >= 3:
+        case (let streakCount, _) where streakCount >= 3:
             return "⭐ \(streakCount)-day streak in progress"
-        case let (_, probabilityValue) where probabilityValue < 40:
+        case (_, let probabilityValue) where probabilityValue < 40:
             return "🎯 Small step, big impact"
         default:
             return "✨ Time for \(habit.name)"
@@ -103,8 +103,8 @@ final class ContentGenerationService {
         scheduling: SchedulingRecommendation,
         prediction: StreakPrediction
     ) -> String {
-        let timeContext = self.generateTimeContext(hour: scheduling.optimalTime)
-        let motivationalMessage = self.selectMotivationalMessage(prediction: prediction)
+        let timeContext = generateTimeContext(hour: scheduling.optimalTime)
+        let motivationalMessage = selectMotivationalMessage(prediction: prediction)
 
         return "\(timeContext) \(motivationalMessage) \(prediction.recommendedAction)"
     }

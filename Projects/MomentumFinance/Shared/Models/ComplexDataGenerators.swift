@@ -218,7 +218,8 @@ public class SubscriptionsDataGenerator: DataGenerator {
     /// - Parameter creditCard: The user's credit card account.
     /// - Returns: An array of entertainment `SubscriptionData`.
     private func createEntertainmentSubscriptions(creditCard: FinancialAccount)
-        -> [SubscriptionData] {
+        -> [SubscriptionData]
+    {
         let calendar = Calendar.current
         let today = Date()
 
@@ -311,7 +312,8 @@ public class SubscriptionsDataGenerator: DataGenerator {
     /// - Parameter checkingAccount: The user's checking account.
     /// - Returns: An array of personal `SubscriptionData`.
     private func createPersonalSubscriptions(checkingAccount: FinancialAccount)
-        -> [SubscriptionData] {
+        -> [SubscriptionData]
+    {
         let calendar = Calendar.current
         let today = Date()
 
@@ -338,7 +340,8 @@ public class SubscriptionsDataGenerator: DataGenerator {
     /// - Parameter checkingAccount: The user's checking account.
     /// - Returns: An array of transportation `SubscriptionData`.
     private func createTransportationSubscriptions(checkingAccount: FinancialAccount)
-        -> [SubscriptionData] {
+        -> [SubscriptionData]
+    {
         let calendar = Calendar.current
         let today = Date()
 
