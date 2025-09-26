@@ -51,7 +51,7 @@ extension Features.Subscriptions {
             return self.subscriptions.first { $0.persistentModelID == self.subscriptionId }
         }
 
-        public var body: some View {
+        var body: some View {
             ScrollView {
                 if let subscription = resolvedSubscription {
                     VStack(spacing: 24) {

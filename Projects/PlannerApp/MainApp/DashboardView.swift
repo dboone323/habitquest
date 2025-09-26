@@ -173,10 +173,10 @@ public struct DashboardView: View {
 
                             Spacer()
 
-                            Button(action: {
+                            Button {
                                 // Navigate to calendar tab
-                                selectedTabTag = "Calendar"
-                            }) {
+                                self.selectedTabTag = "Calendar"
+                            } label: {
                                 Text("View Calendar")
                                     .accessibilityLabel("Button")
                             }
@@ -185,8 +185,7 @@ public struct DashboardView: View {
                         }
 
                         LazyVStack(spacing: 12) {
-                            ForEach(self.viewModel.upcomingItems.prefix(self.dashboardItemLimit), id: \.id) {
-                                item in
+                            ForEach(self.viewModel.upcomingItems.prefix(self.dashboardItemLimit), id: \.id) { item in
                                 UpcomingItemView(item: item)
                             }
 

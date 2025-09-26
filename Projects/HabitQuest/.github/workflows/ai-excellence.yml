@@ -1,15 +1,15 @@
 name: "AI Excellence - Neural Development System"
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
     inputs:
       ai_mode:
-        description: 'AI Excellence Mode'
+        description: "AI Excellence Mode"
         required: true
-        default: 'full_analysis'
+        default: "full_analysis"
 
 jobs:
   ai-neural-analysis:

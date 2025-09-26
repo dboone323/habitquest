@@ -15,7 +15,7 @@ extension NavigationCoordinator {
     /// <#Description#>
     /// - Returns: <#description#>
     func navigateToDetail(item: ListableItem?) {
-        self.selectedListItem = item
+        selectedListItem = item
 
         // Also update the appropriate navigation path for cross-platform compatibility
         // This ensures that when switching back to iOS, we maintain proper navigation state

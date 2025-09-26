@@ -13,7 +13,7 @@ import AppKit
 import UIKit
 #endif
 
-public struct MainTabView_Enhanced: View {
+public struct MainTabViewEnhanced: View {
     @EnvironmentObject var themeManager: ThemeManager
     @Binding var selectedTabTag: String
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -53,7 +53,7 @@ public struct MainTabView_Enhanced: View {
             ),
             TabConfiguration(
                 tag: TabTags.settings, title: "Settings", icon: "gear", keyboardShortcut: ","
-            )
+            ),
         ]
     }
 
@@ -280,6 +280,6 @@ public struct MainTabView_Enhanced: View {
 }
 
 #Preview {
-    MainTabView_Enhanced(selectedTabTag: .constant("Dashboard"))
+    MainTabViewEnhanced(selectedTabTag: .constant("Dashboard"))
         .environmentObject(ThemeManager())
 }

@@ -16,13 +16,13 @@ public struct ThemePreviewView: View {
         "Complete project proposal",
         "Review quarterly reports",
         "Schedule team meeting",
-        "Update documentation"
+        "Update documentation",
     ]
 
     let sampleGoals = [
         "Read 12 books this year",
         "Exercise 3x per week",
-        "Learn Swift programming"
+        "Learn Swift programming",
     ]
 
     public var body: some View {
@@ -42,19 +42,19 @@ public struct ThemePreviewView: View {
             #endif
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button(action: {
+                        Button {
                             self.presentationMode.wrappedValue.dismiss()
-                        }) {
+                        } label: {
                             Text("Cancel")
                                 .accessibilityLabel("Button")
                         }
                     }
 
                     ToolbarItem(placement: .confirmationAction) {
-                        Button(action: {
+                        Button {
                             self.themeManager.setTheme(self.selectedTheme)
                             self.presentationMode.wrappedValue.dismiss()
-                        }) {
+                        } label: {
                             Text("Apply")
                                 .fontWeight(.semibold)
                                 .accessibilityLabel("Button")

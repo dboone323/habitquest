@@ -5,6 +5,7 @@ Working JWT Auth for Phase 3 Testing
 
 import hashlib
 import os
+import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional
 
@@ -13,7 +14,30 @@ import jwt
 
 class JWTAuthManager:
     def __init__(self, secret_key: str = None):
-        self.secret_key = secret_key or os.getenv("JWT_SECRET", "dev_secret_key_123")
+        # Use provided key, environment variable, or load from secure config
+        if secret_key:
+            self.secret_key = secret_key
+        elif os.getenv("JWT_SECRET"):
+            self.secret_key = os.getenv("JWT_SECRET")
+        else:
+            # Try to load from secure config
+            try:
+                import subprocess
+                result = subprocess.run([
+                    "/Users/danielstevens/Desktop/Quantum-workspace/Tools/secure_config.sh",
+                    "get", "JWT_SECRET"
+                ], capture_output=True, text=True, cwd="/Users/danielstevens/Desktop/Quantum-workspace/Tools")
+                if result.returncode == 0 and result.stdout.strip():
+                    self.secret_key = result.stdout.strip()
+                else:
+                    # Fallback to secure random key
+                    import secrets
+                    self.secret_key = secrets.token_hex(32)
+            except:
+                # Final fallback
+                import secrets
+                self.secret_key = secrets.token_hex(32)
+
         self.algorithm = "HS256"
         self.token_expiry = timedelta(hours=24)
 

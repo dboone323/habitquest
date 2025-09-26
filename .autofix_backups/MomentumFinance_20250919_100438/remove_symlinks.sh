@@ -10,34 +10,34 @@ echo "Checking for symlinks to remove..."
 
 # MomentumFinance directory symlinks
 if [ -L "MomentumFinance/MomentumFinanceApp.swift" ]; then
-    echo "Removing: MomentumFinance/MomentumFinanceApp.swift"
-    rm -f MomentumFinance/MomentumFinanceApp.swift
+  echo "Removing: MomentumFinance/MomentumFinanceApp.swift"
+  rm -f MomentumFinance/MomentumFinanceApp.swift
 fi
 
 if [ -L "MomentumFinance/ContentView.swift" ]; then
-    echo "Removing: MomentumFinance/ContentView.swift"
-    rm -f MomentumFinance/ContentView.swift
+  echo "Removing: MomentumFinance/ContentView.swift"
+  rm -f MomentumFinance/ContentView.swift
 fi
 
 # Shared directory symlinks
 if [ -L "Shared/DataExportView.swift" ]; then
-    echo "Removing: Shared/DataExportView.swift"
-    rm -f Shared/DataExportView.swift
+  echo "Removing: Shared/DataExportView.swift"
+  rm -f Shared/DataExportView.swift
 fi
 
 if [ -L "Shared/DataImportView.swift" ]; then
-    echo "Removing: Shared/DataImportView.swift"
-    rm -f Shared/DataImportView.swift
+  echo "Removing: Shared/DataImportView.swift"
+  rm -f Shared/DataImportView.swift
 fi
 
 if [ -L "Shared/HapticManager.swift" ]; then
-    echo "Removing: Shared/HapticManager.swift"
-    rm -f Shared/HapticManager.swift
+  echo "Removing: Shared/HapticManager.swift"
+  rm -f Shared/HapticManager.swift
 fi
 
 if [ -L "Shared/SettingsView.swift" ]; then
-    echo "Removing: Shared/SettingsView.swift"
-    rm -f Shared/SettingsView.swift
+  echo "Removing: Shared/SettingsView.swift"
+  rm -f Shared/SettingsView.swift
 fi
 
 echo

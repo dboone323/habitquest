@@ -51,7 +51,7 @@ public struct FileSelectionComponent: View {
     }
 
     public init(showingFilePicker: Binding<Bool>, onFileSelected: @escaping () -> Void) {
-        self._showingFilePicker = showingFilePicker
+        _showingFilePicker = showingFilePicker
         self.onFileSelected = onFileSelected
     }
 }

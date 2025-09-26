@@ -11,37 +11,37 @@ public func formatCurrency(_ amount: Double) -> String {
 
 // MARK: - Financial Intelligence Functions
 
-func fi_generateForecasts(transactions: [Any], accounts: [Any]) -> [FinancialInsight] {
+func fi_generateForecasts(transactions _: [Any], accounts _: [Any]) -> [FinancialInsight] {
     // Placeholder implementation
     []
 }
 
-func fi_analyzeSpendingPatterns(transactions: [Any], categories: [Any]) -> [FinancialInsight] {
+func fi_analyzeSpendingPatterns(transactions _: [Any], categories _: [Any]) -> [FinancialInsight] {
     // Placeholder implementation
     []
 }
 
-func fi_detectAnomalies(transactions: [Any]) -> [FinancialInsight] {
+func fi_detectAnomalies(transactions _: [Any]) -> [FinancialInsight] {
     // Placeholder implementation
     []
 }
 
-func fi_analyzeBudgets(transactions: [Any], budgets: [Any]) -> [FinancialInsight] {
+func fi_analyzeBudgets(transactions _: [Any], budgets _: [Any]) -> [FinancialInsight] {
     // Placeholder implementation
     []
 }
 
-func fi_suggestIdleCashInsights(transactions: [Any], accounts: [Any]) -> [FinancialInsight] {
+func fi_suggestIdleCashInsights(transactions _: [Any], accounts _: [Any]) -> [FinancialInsight] {
     // Placeholder implementation
     []
 }
 
-func fi_suggestCreditUtilizationInsights(accounts: [Any]) -> [FinancialInsight] {
+func fi_suggestCreditUtilizationInsights(accounts _: [Any]) -> [FinancialInsight] {
     // Placeholder implementation
     []
 }
 
-func fi_suggestDuplicatePaymentInsights(transactions: [Any]) -> [FinancialInsight] {
+func fi_suggestDuplicatePaymentInsights(transactions _: [Any]) -> [FinancialInsight] {
     // Placeholder implementation
     []
 }

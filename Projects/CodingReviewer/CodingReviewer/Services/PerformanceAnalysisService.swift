@@ -22,12 +22,12 @@ struct PerformanceAnalysisService {
         if language == "Swift" {
             // Swift performance patterns - case sensitive
             let multilinePatterns = [
-                ("(?s)forEach.*append", "forEach with append", IssueSeverity.medium)
+                ("(?s)forEach.*append", "forEach with append", IssueSeverity.medium),
             ]
 
             let linePatterns = [
                 ("filter.*map", "filter followed by map", IssueSeverity.low),
-                ("map.*filter", "map followed by filter", IssueSeverity.low)
+                ("map.*filter", "map followed by filter", IssueSeverity.low),
             ]
 
             // Check multiline patterns on entire code
@@ -91,7 +91,7 @@ struct PerformanceAnalysisService {
         } else if language == "JavaScript" {
             // JavaScript performance patterns - check entire code for multiline patterns
             let patterns = [
-                ("forEach.*push", "forEach with push", IssueSeverity.medium)
+                ("forEach.*push", "forEach with push", IssueSeverity.medium),
             ]
 
             // Check entire code for multiline patterns

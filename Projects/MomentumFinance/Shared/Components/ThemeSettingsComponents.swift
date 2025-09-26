@@ -61,9 +61,9 @@ public struct ThemeSettingsSheet: View {
         selectedThemeMode: Binding<ThemeMode>, sliderValue: Binding<Double>,
         showSheet: Binding<Bool>, theme: Any? = nil
     ) {
-        self._selectedThemeMode = selectedThemeMode
-        self._sliderValue = sliderValue
-        self._showSheet = showSheet
+        _selectedThemeMode = selectedThemeMode
+        _sliderValue = sliderValue
+        _showSheet = showSheet
         self.theme = theme
     }
 

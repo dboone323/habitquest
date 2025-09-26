@@ -15,7 +15,7 @@ public struct ProgressUpdateSheet: View {
         self.goal = goal
         self.onProgressUpdate = onProgressUpdate
         self.onCompletionToggle = onCompletionToggle
-        self._progress = State(initialValue: goal.progress)
+        _progress = State(initialValue: goal.progress)
     }
 
     public var body: some View {
@@ -149,7 +149,9 @@ public struct ProgressUpdateSheet: View {
 
             HStack(spacing: 12) {
                 ForEach([0.25, 0.5, 0.75, 1.0], id: \.self) { value in
-                    Button(action: { self.progress = value }) {
+                    Button {
+                        self.progress = value
+                    } label: {
                         Text("\(Int(value * 100))%")
                             .font(.subheadline)
                             .fontWeight(.medium)
@@ -185,14 +187,14 @@ public struct ProgressUpdateSheet: View {
 
     private var actionButtonsSection: some View {
         VStack(spacing: 12) {
-            Button(action: {
+            Button {
                 if self.progress >= 1.0, !self.goal.isCompleted {
                     self.showCompletionAlert = true
                 } else {
                     self.onProgressUpdate(self.progress)
                     self.dismiss()
                 }
-            }) {
+            } label: {
                 Text("Update Progress")
                     .font(.headline)
                     .fontWeight(.semibold)
@@ -207,7 +209,9 @@ public struct ProgressUpdateSheet: View {
             .buttonStyle(.plain)
 
             if !self.goal.isCompleted {
-                Button(action: self.onCompletionToggle) {
+                Button {
+                    self.onCompletionToggle()
+                } label: {
                     Text("Mark as Completed")
                         .font(.headline)
                         .fontWeight(.semibold)

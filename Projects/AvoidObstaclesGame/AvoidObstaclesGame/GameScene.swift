@@ -106,7 +106,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Scene Lifecycle
 
     /// Called when the scene is first presented by the view.
-    public override func didMove(to _: SKView) {
+    override public func didMove(to _: SKView) {
         // Setup the scene
         self.setupScene()
 
@@ -219,7 +219,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Touch Handling
 
     /// Handles touch input
-    public override func touchesBegan(_ touches: Set<UITouch>, with _: UIEvent?) {
+    override public func touchesBegan(_ touches: Set<UITouch>, with _: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
 
@@ -233,7 +233,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     /// Handles touch movement for player control
-    public override func touchesMoved(_ touches: Set<UITouch>, with _: UIEvent?) {
+    override public func touchesMoved(_ touches: Set<UITouch>, with _: UIEvent?) {
         guard !self.gameStateManager.isGameOver(), let touch = touches.first else { return }
         let location = touch.location(in: self)
         self.playerManager.moveTo(location)
@@ -249,7 +249,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Update Loop
 
     /// Main game update loop
-    public override func update(_ currentTime: TimeInterval) {
+    override public func update(_ currentTime: TimeInterval) {
         // Initialize last update time
         if self.lastUpdateTime == 0 {
             self.lastUpdateTime = currentTime

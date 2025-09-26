@@ -112,7 +112,7 @@ enum ColorDefinitions {
     static var categoryColors: [Color] {
         [
             "4285F4", "EA4335", "FBBC05", "34A853", "AA46BE", "26C6DA", "FB8C00", "8D6E63",
-            "D81B60", "5C6BC0", "607D8B", "C5E1A5"
+            "D81B60", "5C6BC0", "607D8B", "C5E1A5",
         ].map { Color(hex: $0) }
     }
 }

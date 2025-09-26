@@ -20,19 +20,19 @@ public struct ThemeDemoView: View {
     private let accounts = [
         ("Checking", "banknote", 1250.50),
         ("Savings", "dollarsign.circle", 4320.75),
-        ("Investment", "chart.line.uptrend.xyaxis", 8640.25)
+        ("Investment", "chart.line.uptrend.xyaxis", 8640.25),
     ]
 
     private let budgets = [
         ("Groceries", 420.0, 500.0),
         ("Dining Out", 280.0, 300.0),
-        ("Entertainment", 150.0, 100.0)
+        ("Entertainment", 150.0, 100.0),
     ]
 
     private let subscriptions = [
         ("Netflix", "play.tv", "2025-06-15", 15.99),
         ("Spotify", "music.note", "2025-06-22", 9.99),
-        ("iCloud+", "cloud", "2025-07-01", 2.99)
+        ("iCloud+", "cloud", "2025-07-01", 2.99),
     ]
 
     var body: some View {

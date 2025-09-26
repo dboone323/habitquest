@@ -12,12 +12,14 @@ This tutorial will guide you through setting up and using the Quantum workspace 
 ## Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone <repository-url>
    cd Quantum-workspace
    ```
 
 2. **Set up the environment:**
+
    ```bash
    # Make scripts executable
    chmod +x Tools/Automation/*.sh

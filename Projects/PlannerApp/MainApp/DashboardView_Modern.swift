@@ -170,7 +170,7 @@ public struct DashboardView: View {
                             Spacer()
 
                             Button("View All").accessibilityLabel("Button").accessibilityLabel("Button") {
-                                /// - TODO: Navigate to activities view
+                                /// - Pending: Navigate to activities view
                                 print("View All tapped")
                             }
                             .font(.caption)
@@ -213,7 +213,7 @@ public struct DashboardView: View {
                             Spacer()
 
                             Button("View Calendar").accessibilityLabel("Button").accessibilityLabel("Button") {
-                                /// - TODO: Navigate to calendar
+                                /// - Pending: Navigate to calendar
                                 print("View Calendar tapped")
                             }
                             .font(.caption)

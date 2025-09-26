@@ -147,7 +147,7 @@ extension Features.GoalsAndReports {
                                         isSelected
                                             ? LinearGradient(
                                                 gradient: Gradient(colors: [
-                                                    .blue, .blue.opacity(0.8)
+                                                    .blue, .blue.opacity(0.8),
                                                 ]),
                                                 startPoint: .leading,
                                                 endPoint: .trailing,

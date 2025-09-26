@@ -7,8 +7,7 @@ import SwiftUI
 extension ContentView {
     /// macOS-specific view modifiers and optimizations
     var macOSOptimizations: some View {
-        self
-            .frame(minWidth: 800, minHeight: 600)
+        frame(minWidth: 800, minHeight: 600)
             .preferredColorScheme(.automatic)
             .tint(.blue)
     }
@@ -45,8 +44,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func macOSKeyboardShortcuts() -> some View {
-        self
-            .keyboardShortcut("n", modifiers: .command)
+        keyboardShortcut("n", modifiers: .command)
             .keyboardShortcut("w", modifiers: .command)
     }
 
@@ -54,8 +52,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func macOSSheetPresentation() -> some View {
-        self
-            .frame(width: 600, height: 400)
+        frame(width: 600, height: 400)
     }
 }
 

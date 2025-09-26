@@ -83,7 +83,7 @@ public struct TodaysQuestsView: View {
 
 /// Empty state when no quests are available
 private struct EmptyStateView: View {
-    public var body: some View {
+    var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "star.circle")
                 .font(.system(size: 60))
@@ -108,7 +108,7 @@ private struct QuestListView: View {
     let habitAnalytics: [UUID: StreakAnalytics]
     let onComplete: (Habit) -> Void
 
-    public var body: some View {
+    var body: some View {
         List(self.habits, id: \.id) { habit in
             QuestRowView(
                 habit: habit,
@@ -125,7 +125,7 @@ private struct QuestRowView: View {
     let analytics: StreakAnalytics?
     let onComplete: (Habit) -> Void
 
-    public var body: some View {
+    var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(self.habit.name)
@@ -194,7 +194,7 @@ private struct AddQuestView: View {
     @State private var frequency = HabitFrequency.daily
     @State private var xpValue = 10
 
-    public var body: some View {
+    var body: some View {
         NavigationView {
             Form {
                 Section("Quest Details") {

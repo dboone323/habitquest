@@ -8,7 +8,7 @@ public struct ThemeSelectorCard: View {
     public let theme: Any?
 
     public init(selectedThemeMode: Binding<ThemeMode>, theme: Any? = nil) {
-        self._selectedThemeMode = selectedThemeMode
+        _selectedThemeMode = selectedThemeMode
         self.theme = theme
     }
 
@@ -53,7 +53,7 @@ public struct ThemeSelectorCard: View {
     }
 
     public init(selectedThemeMode: Binding<ThemeMode>) {
-        self._selectedThemeMode = selectedThemeMode
+        _selectedThemeMode = selectedThemeMode
         self.theme = nil
     }
 }
@@ -105,7 +105,7 @@ public struct ThemeFinancialSummaryCard: View {
         .cornerRadius(12)
     }
 
-    public init(theme: Any = ()) {
+    public init(theme _: Any = ()) {
         // Accept any theme parameter for compatibility but use static colors
     }
 }
@@ -159,7 +159,7 @@ public struct ThemeAccountsList: View {
         .padding(.vertical, 4)
     }
 
-    public init(theme: Any = ()) {
+    public init(theme _: Any = ()) {
         // Accept any theme parameter for compatibility but use static colors
     }
 }

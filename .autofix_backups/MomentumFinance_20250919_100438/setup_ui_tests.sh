@@ -10,7 +10,7 @@ echo "Adding UI Test target to MomentumFinance project..."
 
 # Create Info.plist for UI tests if it doesn't exist
 if [ ! -f "$UITESTS_DIR/Info.plist" ]; then
-    cat > "$UITESTS_DIR/Info.plist" << 'EOF'
+  cat >"$UITESTS_DIR/Info.plist" <<'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -34,7 +34,7 @@ if [ ! -f "$UITESTS_DIR/Info.plist" ]; then
 </dict>
 </plist>
 EOF
-    echo "Created Info.plist for UI tests"
+  echo "Created Info.plist for UI tests"
 fi
 
 echo "UI Test target setup complete!"

@@ -31,28 +31,28 @@ sleep 3
 # Build and install the app
 echo "🔨 Building app for simulator..."
 xcodebuild -project MomentumFinance.xcodeproj \
-           -scheme MomentumFinance \
-           -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION" \
-           -derivedDataPath ./DerivedData \
-           clean build install
+  -scheme MomentumFinance \
+  -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION" \
+  -derivedDataPath ./DerivedData \
+  clean build install
 
 if [ $? -eq 0 ]; then
-    echo "✅ Build successful!"
-    
-    # Get the app bundle identifier
-    APP_BUNDLE_ID="com.momentumfinance.MomentumFinance"
-    
-    # Install and launch the app
-    echo "📦 Installing app on simulator..."
-    xcrun simctl install "$DEVICE_ID" "./DerivedData/Build/Products/Debug-iphonesimulator/MomentumFinance.app"
-    
-    echo "🚀 Launching app..."
-    xcrun simctl launch "$DEVICE_ID" "$APP_BUNDLE_ID"
-    
-    echo "✨ MomentumFinance launched successfully on iPhone 16!"
-    echo "🎯 Configuration: iPhone 16 (iOS 18.1) - Latest device target achieved!"
-    
+  echo "✅ Build successful!"
+
+  # Get the app bundle identifier
+  APP_BUNDLE_ID="com.momentumfinance.MomentumFinance"
+
+  # Install and launch the app
+  echo "📦 Installing app on simulator..."
+  xcrun simctl install "$DEVICE_ID" "./DerivedData/Build/Products/Debug-iphonesimulator/MomentumFinance.app"
+
+  echo "🚀 Launching app..."
+  xcrun simctl launch "$DEVICE_ID" "$APP_BUNDLE_ID"
+
+  echo "✨ MomentumFinance launched successfully on iPhone 16!"
+  echo "🎯 Configuration: iPhone 16 (iOS 18.1) - Latest device target achieved!"
+
 else
-    echo "❌ Build failed. Please check the error messages above."
-    exit 1
+  echo "❌ Build failed. Please check the error messages above."
+  exit 1
 fi

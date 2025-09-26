@@ -82,7 +82,7 @@ extension Theme {
         midnightDark,
         highContrast,
         minimalGray,
-        rosePink
+        rosePink,
     ]
 }
 

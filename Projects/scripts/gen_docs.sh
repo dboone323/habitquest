@@ -22,7 +22,8 @@ count_matches() {
 }
 
 list_paths_sample() {
-  local pattern="$1"; local limit="${2:-20}"
+  local pattern="$1"
+  local limit="${2:-20}"
   find . -type f -name "$pattern" | head -n "$limit"
 }
 
@@ -47,7 +48,10 @@ Generated: $(now)
 - Swift source files: ${swift_count}
 
 ## Snapshot/Backup Directories Detected
-$(if [ -n "${snapshots}" ]; then echo "\n"; echo "${snapshots}" | sed 's/^/- /'; else echo "\n- None"; fi)
+$(if [ -n "${snapshots}" ]; then
+  echo "\n"
+  echo "${snapshots}" | sed 's/^/- /'
+else echo "\n- None"; fi)
 
 ## Samples
 ### cspell.json sample paths

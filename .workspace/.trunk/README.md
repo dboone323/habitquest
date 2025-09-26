@@ -15,6 +15,7 @@ This document explains the Trunk integration setup for the unified workspace.
 ## Supported Languages & Tools
 
 ### Languages Covered
+
 - **Swift**: 904+ files (SwiftFormat + SwiftLint)
 - **Shell**: 923+ scripts (ShellCheck + shfmt)
 - **Python**: 224+ files (Black, isort, ruff, bandit)
@@ -22,6 +23,7 @@ This document explains the Trunk integration setup for the unified workspace.
 - **YAML**: All workflow and config files (yamllint)
 
 ### Linters Enabled
+
 - `actionlint` - GitHub Actions workflows
 - `bandit` - Python security linting
 - `black` - Python code formatting
@@ -81,7 +83,7 @@ curl -fsSL https://trunk.io/releases/trunk | bash
 # Run checks
 trunk check
 
-# Format files  
+# Format files
 trunk fmt
 
 # Check specific files

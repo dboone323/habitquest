@@ -57,7 +57,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
             savingsInsights,
             budgetInsights,
             riskInsights,
-            predictiveInsights
+            predictiveInsights,
         ].flatMap(\.self)
 
         // AI-powered insight ranking and prioritization
@@ -122,7 +122,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
                     actionRecommendations: [
                         "Review recent transactions",
                         "Set stricter budget limits",
-                        "Enable spending alerts"
+                        "Enable spending alerts",
                     ],
                     impactScore: 8.5
                 )
@@ -172,7 +172,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
                     actionRecommendations: [
                         "Review subscription usage",
                         "Cancel unused subscriptions",
-                        "Set usage reminders"
+                        "Set usage reminders",
                     ],
                     potentialSavings: potentialSavings * 12, // Annual savings
                     impactScore: 7.2
@@ -195,7 +195,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
                     actionRecommendations: [
                         "Research high-yield savings accounts",
                         "Compare interest rates",
-                        "Consider CDs for longer terms"
+                        "Consider CDs for longer terms",
                     ],
                     potentialSavings: cashBalance * 0.045, // Potential annual earnings
                     impactScore: 6.8
@@ -229,7 +229,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
                         actionRecommendations: [
                             "Reduce spending in this category",
                             "Consider increasing budget if necessary",
-                            "Review recent transactions"
+                            "Review recent transactions",
                         ],
                         impactScore: percentageUsed > 100 ? 9.5 : 8.0
                     )
@@ -264,7 +264,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
                     actionRecommendations: [
                         "Set up automatic savings transfers",
                         "Reduce discretionary spending temporarily",
-                        "Consider side income opportunities"
+                        "Consider side income opportunities",
                     ],
                     impactScore: monthsCovered < 1 ? 9.8 : 7.5
                 )
@@ -276,7 +276,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
 
     private func generatePredictions(
         _ transactions: [Transaction],
-        _ accounts: [Account]
+        _: [Account]
     ) async -> [EnhancedFinancialInsight] {
         var insights: [EnhancedFinancialInsight] = []
 
@@ -298,7 +298,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
                     actionRecommendations: [
                         "Review upcoming expenses",
                         "Consider increasing income",
-                        "Reduce non-essential spending"
+                        "Reduce non-essential spending",
                     ],
                     impactScore: 8.2
                 )
@@ -338,39 +338,39 @@ public class AdvancedFinancialIntelligence: ObservableObject {
         }
     }
 
-    private func calculateSpendingVelocity(_ transactions: [Transaction]) -> SpendingVelocity {
+    private func calculateSpendingVelocity(_: [Transaction]) -> SpendingVelocity {
         // Implementation for spending velocity calculation
         SpendingVelocity(percentageIncrease: 15.0) // Placeholder
     }
 
-    private func analyzeCategoryTrends(_ transactions: [Transaction]) -> [CategoryTrend] {
+    private func analyzeCategoryTrends(_: [Transaction]) -> [CategoryTrend] {
         // Implementation for category trend analysis
         [] // Placeholder
     }
 
-    private func identifySubscriptions(_ transactions: [Transaction]) -> [Subscription] {
+    private func identifySubscriptions(_: [Transaction]) -> [Subscription] {
         // Implementation for subscription identification
         [] // Placeholder
     }
 
-    private func findUnusedSubscriptions(_ subscriptions: [Subscription]) -> [Subscription] {
+    private func findUnusedSubscriptions(_: [Subscription]) -> [Subscription] {
         // Implementation for finding unused subscriptions
         [] // Placeholder
     }
 
-    private func calculateSpentAmount(_ transactions: [Transaction], for budget: Budget) -> Double {
+    private func calculateSpentAmount(_: [Transaction], for _: Budget) -> Double {
         // Implementation for calculating spent amount against budget
         0.0 // Placeholder
     }
 
-    private func calculateMonthlyExpenses(_ transactions: [Transaction]) -> Double {
+    private func calculateMonthlyExpenses(_: [Transaction]) -> Double {
         // Implementation for calculating monthly expenses
         5000.0 // Placeholder
     }
 
     private func generateRiskAssessment(
-        _ transactions: [Transaction],
-        _ accounts: [Account]
+        _: [Transaction],
+        _: [Account]
     ) async -> RiskAssessment {
         RiskAssessment(
             overallRiskLevel: .moderate,
@@ -382,8 +382,8 @@ public class AdvancedFinancialIntelligence: ObservableObject {
     }
 
     private func generatePredictiveAnalytics(
-        _ transactions: [Transaction],
-        _ accounts: [Account]
+        _: [Transaction],
+        _: [Account]
     ) async -> PredictiveAnalytics {
         PredictiveAnalytics(
             nextMonthSpending: 4200,
@@ -589,22 +589,22 @@ public enum TimeHorizon {
 
 private class FinancialAnalyticsEngine {
     func generateInvestmentRecommendations(
-        riskTolerance: RiskTolerance,
-        timeHorizon: TimeHorizon,
-        currentPortfolio: [Investment]
+        riskTolerance _: RiskTolerance,
+        timeHorizon _: TimeHorizon,
+        currentPortfolio _: [Investment]
     ) -> [InvestmentRecommendation] {
         // Implementation would go here
         []
     }
 
-    func detectAnomalies(in transactions: [Transaction]) -> [TransactionAnomaly] {
+    func detectAnomalies(in _: [Transaction]) -> [TransactionAnomaly] {
         // Implementation would go here
         []
     }
 }
 
 private class PredictionEngine {
-    func predictCashFlow(transactions: [Transaction], monthsAhead: Int) -> [CashFlowPrediction] {
+    func predictCashFlow(transactions _: [Transaction], monthsAhead _: Int) -> [CashFlowPrediction] {
         // Implementation would go here
         []
     }

@@ -37,8 +37,8 @@ extension Features.Subscriptions {
 
         public init(subscriptions: [Subscription], selectedFilter: Binding<SubscriptionFilter>, showingAddSubscription: Binding<Bool>) {
             self.subscriptions = subscriptions
-            self._selectedFilter = selectedFilter
-            self._showingAddSubscription = showingAddSubscription
+            _selectedFilter = selectedFilter
+            _showingAddSubscription = showingAddSubscription
         }
 
         public var body: some View {

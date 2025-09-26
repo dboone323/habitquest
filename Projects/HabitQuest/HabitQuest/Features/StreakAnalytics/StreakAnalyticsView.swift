@@ -20,7 +20,7 @@ public struct StreakAnalyticsView: View {
                         self.loadingView
                     } else if let data = viewModel.analyticsData {
                         self.timeframePicker
-                        StreakAnalyticsOverviewView(data: data, timeframe: viewModel.selectedTimeframe)
+                        StreakAnalyticsOverviewView(data: data, timeframe: self.viewModel.selectedTimeframe)
                         StreakAnalyticsDistributionView(data: data.streakDistribution)
                         StreakAnalyticsTopPerformersView(topPerformers: data.topPerformingHabits)
                         StreakAnalyticsInsightsView(insights: data.consistencyInsights)

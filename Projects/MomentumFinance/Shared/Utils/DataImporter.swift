@@ -103,7 +103,7 @@ actor DataImporter {
     private func parseTransaction(
         fields: [String],
         columnMapping: CSVColumnMapping,
-        rowIndex: Int,
+        rowIndex _: Int,
         entityManager: EntityManager
     ) async throws -> FinancialTransaction {
         // Validate required fields

@@ -218,7 +218,7 @@ public struct NotificationsView: View {
 
         // Remove from system
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [
-            notification.id
+            notification.id,
         ])
     }
 

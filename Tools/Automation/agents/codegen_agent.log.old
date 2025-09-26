@@ -17187,11 +17187,11 @@ Current thread 0xCurrent thread 0x000000020a998800000000020a998800 (most recent 
 [1;37m⚛️  QUANTUM:[0m Quantum systems initialized successfully
 [1;37m⚛️  QUANTUM:[0m Training ML models with historical data...
 [1;37m⚛️  QUANTUM:[0m Training ML models with historical data...
-Fatal Python error: init_sys_streams: can't initialize sys standard streamsFatal Python error: 
+Fatal Python error: init_sys_streams: can't initialize sys standard streamsFatal Python error:
 init_sys_streamsPython runtime state: : core initializedcan't initialize sys standard streams
 
 Python runtime state: OSErrorcore initialized
-: OSError[Errno 9] Bad file descriptor: 
+: OSError[Errno 9] Bad file descriptor:
 [Errno 9] Bad file descriptor
 
 Current thread 0x

@@ -32,7 +32,7 @@ public final class SwiftDataEntityManager: EntityManager {
         try self.modelContext.save()
     }
 
-    public func fetch<T>(_ type: T.Type) async throws -> [T] {
+    public func fetch<T>(_: T.Type) async throws -> [T] {
         let descriptor = FetchDescriptor<T>()
         return try self.modelContext.fetch(descriptor)
     }
@@ -105,7 +105,7 @@ public final class SwiftDataEntityManager: EntityManager {
         return newCategory
     }
 
-    private func getColumnIndex(for columnName: String?, in fields: [String]) -> Int? {
+    private func getColumnIndex(for columnName: String?, in _: [String]) -> Int? {
         guard let columnName else { return nil }
         // This is a simplified implementation - in a real app you'd have proper CSV parsing
         return 0 // Placeholder
@@ -130,7 +130,7 @@ public final class SwiftDataEntityManager: EntityManager {
             "Health": "heart.fill",
             "Travel": "airplane",
             "Education": "book.fill",
-            "Income": "dollarsign.circle.fill"
+            "Income": "dollarsign.circle.fill",
         ]
         return iconMap[categoryName] ?? "circle"
     }
@@ -194,7 +194,7 @@ public final class SwiftDataExportEngineService: Sendable {
     }
 
     private func createCSVString(from transactions: [FinancialTransaction]) -> String {
-        var csvString = "Date,Title,Amount,Type,Category,Account,Notes\n"
+        var csvLines = ["Date,Title,Amount,Type,Category,Account,Notes"]
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
@@ -208,10 +208,10 @@ public final class SwiftDataExportEngineService: Sendable {
             let account = transaction.account?.name ?? ""
             let notes = transaction.notes?.replacingOccurrences(of: ",", with: ";") ?? ""
 
-            csvString += "\(date),\(title),\(amount),\(type),\(category),\(account),\(notes)\n"
+            csvLines.append("\(date),\(title),\(amount),\(type),\(category),\(account),\(notes)")
         }
 
-        return csvString
+        return csvLines.joined(separator: "\n")
     }
 }
 

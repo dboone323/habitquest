@@ -47,7 +47,7 @@ public class HapticManager: ObservableObject {
     #else
     /// <#Description#>
     /// - Returns: <#description#>
-    func impact(_ style: Any) {
+    func impact(_: Any) {
         // No haptic feedback on macOS
     }
     #endif
@@ -288,7 +288,7 @@ extension View {
     #else
     /// <#Description#>
     /// - Returns: <#description#>
-    func hapticFeedback(_ style: Any, trigger: Bool) -> some View {
+    func hapticFeedback(_: Any, trigger: Bool) -> some View {
         modifier(HapticFeedbackModifier(trigger: trigger))
     }
     #endif
@@ -319,7 +319,7 @@ extension View {
     #else
     /// <#Description#>
     /// - Returns: <#description#>
-    func hapticTap(_ style: Any = Any.self) -> some View {
+    func hapticTap(_: Any = Any.self) -> some View {
         onTapGesture {
             // No haptic feedback on macOS
         }
@@ -335,8 +335,8 @@ private var objectPool: [Any] = []
 private let maxPoolSize = 50
 
 /// Get an object from the pool or create new one
-    @MainActor
-    private func getPooledObject<T>() -> T? {
+@MainActor
+private func getPooledObject<T>() -> T? {
     if let pooled = objectPool.popLast() as? T {
         return pooled
     }
@@ -344,8 +344,8 @@ private let maxPoolSize = 50
 }
 
 /// Return an object to the pool
-    @MainActor
-    private func returnToPool(_ object: Any) {
+@MainActor
+private func returnToPool(_ object: Any) {
     if objectPool.count < maxPoolSize {
         objectPool.append(object)
     }

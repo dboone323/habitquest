@@ -83,7 +83,7 @@ extension Features.Subscriptions {
                 LazyVGrid(
                     columns: [
                         GridItem(.flexible()),
-                        GridItem(.flexible())
+                        GridItem(.flexible()),
                     ], spacing: 12
                 ) {
                     // Monthly Total

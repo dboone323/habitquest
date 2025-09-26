@@ -242,7 +242,7 @@ final class BudgetsViewModel {
     /// Schedule all budget-related notifications
     /// <#Description#>
     /// - Returns: <#description#>
-    func scheduleBudgetNotifications(for budgets: [Budget]) {
+    func scheduleBudgetNotifications(for _: [Budget]) {
         // Temporarily disabled due to compilation issues
         // NotificationManager.shared.schedulebudgetWarningNotifications(for: budgets)
         // NotificationManager.shared.scheduleRolloverNotifications(for: budgets)

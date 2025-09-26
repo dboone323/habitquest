@@ -275,7 +275,7 @@ struct ShareSheet: UIViewControllerRepresentable {
 
     /// <#Description#>
     /// - Returns: <#description#>
-    func makeUIViewController(context: Context) -> UIActivityViewController {
+    func makeUIViewController(context _: Context) -> UIActivityViewController {
         let controller = UIActivityViewController(
             activityItems: activityItems,
             applicationActivities: nil,
@@ -285,14 +285,14 @@ struct ShareSheet: UIViewControllerRepresentable {
 
     /// <#Description#>
     /// - Returns: <#description#>
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+    func updateUIViewController(_: UIActivityViewController, context _: Context) {}
 }
 #else
 // macOS version of ShareSheet
 struct ShareSheet: View {
     let activityItems: [Any]
 
-    public var body: some View {
+    var body: some View {
         VStack {
             Text("Export Complete")
                 .font(.headline)
@@ -318,6 +318,6 @@ struct ShareSheet: View {
     DataExportView()
         .modelContainer(for: [
             FinancialTransaction.self, FinancialAccount.self, Budget.self, Subscription.self,
-            SavingsGoal.self
+            SavingsGoal.self,
         ])
 }

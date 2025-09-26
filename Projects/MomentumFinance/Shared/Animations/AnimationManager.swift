@@ -103,8 +103,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func cardEntrance(delay: Double = 0) -> some View {
-        self
-            .scaleEffect(0.95)
+        scaleEffect(0.95)
             .opacity(0)
             .onAppear {
                 withAnimation(AnimationManager.cardEntry(delay: delay)) {
@@ -117,8 +116,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func buttonPressAnimation() -> some View {
-        self
-            .scaleEffect(1.0)
+        scaleEffect(1.0)
             .animation(AnimationManager.buttonPress, value: false)
     }
 
@@ -126,8 +124,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func loadingAnimation() -> some View {
-        self
-            .opacity(0.6)
+        opacity(0.6)
             .animation(AnimationManager.loading, value: true)
     }
 
@@ -135,8 +132,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func successFeedback() -> some View {
-        self
-            .scaleEffect(1.0)
+        scaleEffect(1.0)
             .animation(AnimationManager.success, value: false)
     }
 
@@ -144,16 +140,14 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func errorFeedback() -> some View {
-        self
-            .animation(AnimationManager.error, value: false)
+        animation(AnimationManager.error, value: false)
     }
 
     /// Applies bounce animation for interactive elements
     /// <#Description#>
     /// - Returns: <#description#>
     func bounceAnimation(trigger: Bool) -> some View {
-        self
-            .scaleEffect(trigger ? 1.1 : 1.0)
+        scaleEffect(trigger ? 1.1 : 1.0)
             .animation(AnimationManager.Springs.bouncy, value: trigger)
     }
 
@@ -161,20 +155,18 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func slideIn(from edge: Edge, delay: Double = 0) -> some View {
-        self
-            .transition(.asymmetric(
-                insertion: .move(edge: edge).combined(with: .opacity),
-                removal: .move(edge: edge.opposite).combined(with: .opacity),
-            ))
-            .animation(AnimationManager.Springs.smooth.delay(delay), value: true)
+        transition(.asymmetric(
+            insertion: .move(edge: edge).combined(with: .opacity),
+            removal: .move(edge: edge.opposite).combined(with: .opacity),
+        ))
+        .animation(AnimationManager.Springs.smooth.delay(delay), value: true)
     }
 
     /// Applies fade-in animation
     /// <#Description#>
     /// - Returns: <#description#>
     func fadeIn(delay: Double = 0) -> some View {
-        self
-            .opacity(0)
+        opacity(0)
             .onAppear {
                 withAnimation(AnimationManager.Easing.easeIn.delay(delay)) {
                     // Animation will be handled by the view state
@@ -186,27 +178,26 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func shimmerLoading() -> some View {
-        self
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                Color.clear,
-                                Color.white.opacity(0.4),
-                                Color.clear
-                            ]),
-                            startPoint: .leading,
-                            endPoint: .trailing,
-                        ),
-                    )
-                    .offset(x: -100)
-                    .animation(
-                        Animation.linear(duration: 1.5).repeatForever(autoreverses: false),
-                        value: true,
+        overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color.clear,
+                            Color.white.opacity(0.4),
+                            Color.clear,
+                        ]),
+                        startPoint: .leading,
+                        endPoint: .trailing,
                     ),
-            )
-            .clipped()
+                )
+                .offset(x: -100)
+                .animation(
+                    Animation.linear(duration: 1.5).repeatForever(autoreverses: false),
+                    value: true,
+                ),
+        )
+        .clipped()
     }
 }
 

@@ -48,7 +48,7 @@ final class SavingsGoalsGenerator: DataGenerator {
                 current: 2000.0,
                 targetDate: calendar.date(byAdding: .year, value: 2, to: Date()),
                 notes: "Extra contribution to retirement account"
-            )
+            ),
         ]
 
         for goal in savingsGoals {

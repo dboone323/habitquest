@@ -319,7 +319,7 @@ class TouchBarProvider: NSViewController {
             .addGoal,
             .search,
             .flexibleSpace,
-            .calendar
+            .calendar,
         ]
 
         return touchBar
@@ -475,7 +475,7 @@ protocol PlatformFeatureProvider {
 }
 
 // Platform-specific implementations
-class iOSFeatureProvider: PlatformFeatureProvider {
+class IOSFeatureProvider: PlatformFeatureProvider {
     func setupPlatformFeatures() {
         #if os(iOS)
         ShortcutsIntentHandler.setupShortcuts()
@@ -492,7 +492,14 @@ class iOSFeatureProvider: PlatformFeatureProvider {
         let activityViewController = UIActivityViewController(
             activityItems: [content], applicationActivities: nil
         )
-        // Present share sheet
+        if let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }),
+            let rootViewController = windowScene.windows
+            .first(where: { $0.isKeyWindow })?
+            .rootViewController {
+            rootViewController.present(activityViewController, animated: true)
+        }
         #endif
     }
 
@@ -505,7 +512,7 @@ class iOSFeatureProvider: PlatformFeatureProvider {
     }
 }
 
-class macOSFeatureProvider: PlatformFeatureProvider {
+class MacOSFeatureProvider: PlatformFeatureProvider {
     func setupPlatformFeatures() {
         #if os(macOS)
         // Setup menu bar, touch bar, etc.

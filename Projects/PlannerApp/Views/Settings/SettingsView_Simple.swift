@@ -52,7 +52,7 @@ public struct SettingsView: View {
     let reminderTimeOptions: [String: Double] = [
         "None": 0, "At time of event": 1, "5 minutes before": 300,
         "15 minutes before": 900, "30 minutes before": 1800, "1 hour before": 3600,
-        "1 day before": 86400
+        "1 day before": 86400,
     ]
 
     var sortedReminderKeys: [String] {

@@ -189,7 +189,7 @@ public struct BudgetNotificationScheduler {
         content.userInfo = [
             "type": "budget_warning",
             "budgetId": "\(budget.persistentModelID)",
-            "percentage": percentage
+            "percentage": percentage,
         ]
 
         // Schedule immediately for current warnings
@@ -265,7 +265,7 @@ public struct BudgetNotificationScheduler {
         content.userInfo = [
             "type": "rollover_opportunity",
             "budgetId": "\(budget.persistentModelID)",
-            "rolloverAmount": rolloverAmount
+            "rolloverAmount": rolloverAmount,
         ]
 
         // Schedule immediately for current opportunities
@@ -339,7 +339,7 @@ public struct BudgetNotificationScheduler {
         content.userInfo = [
             "type": "spending_prediction",
             "budgetId": "\(budget.persistentModelID)",
-            "predictedAmount": predictedAmount
+            "predictedAmount": predictedAmount,
         ]
 
         // Schedule immediately
@@ -377,7 +377,7 @@ public struct BudgetNotificationScheduler {
         content.categoryIdentifier = "BUDGET_WARNING"
         content.userInfo = [
             "type": "spending_spike",
-            "budgetId": "\(budget.persistentModelID)"
+            "budgetId": "\(budget.persistentModelID)",
         ]
 
         // Schedule immediately
@@ -522,7 +522,7 @@ public struct SubscriptionNotificationScheduler {
         content.categoryIdentifier = "SUBSCRIPTION_REMINDER"
         content.userInfo = [
             "type": "subscription_reminder",
-            "subscriptionId": "\(subscription.persistentModelID)"
+            "subscriptionId": "\(subscription.persistentModelID)",
         ]
 
         let triggerComponents = Calendar.current.dateComponents(
@@ -597,7 +597,7 @@ public struct GoalNotificationScheduler {
         content.userInfo = [
             "type": "goal_progress",
             "goalId": "\(goal.persistentModelID)",
-            "progress": progressPercentage
+            "progress": progressPercentage,
         ]
 
         // Schedule for next week

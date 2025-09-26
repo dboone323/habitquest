@@ -8,7 +8,7 @@
 @testable import CodingReviewer
 import XCTest
 
-public class StyleAnalysisServiceTests: XCTestCase {
+final class StyleAnalysisServiceTests: XCTestCase {
     var styleAnalyzer: StyleAnalysisService!
 
     override func setUp() {

@@ -3,7 +3,7 @@ import Foundation
 // MARK: - Financial Forecasting
 
 /// Generate financial forecasts based on historical data
-func fi_generateFinancialForecasts(transactions: [FinancialTransaction], accounts: [FinancialAccount]) -> [FinancialInsight] {
+func fi_generateFinancialForecasts(transactions: [FinancialTransaction], accounts _: [FinancialAccount]) -> [FinancialInsight] {
     var insights: [FinancialInsight] = []
 
     let calendar = Calendar.current
@@ -26,8 +26,10 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
 
     if recentMonthlyIncomes.count >= 3 {
         let avgMonthlyIncome = recentMonthlyIncomes.reduce(0, +) / Double(recentMonthlyIncomes.count)
-        let forecastDescription = "Based on recent trends, your estimated monthly income is \(fi_formatCurrency(avgMonthlyIncome)). "
-            + "This forecast helps with budgeting and financial planning."
+        let forecastDescription = [
+            "Based on recent trends, your estimated monthly income is \(fi_formatCurrency(avgMonthlyIncome)).",
+            "This forecast helps with budgeting and financial planning.",
+        ].joined(separator: " ")
 
         let insight = FinancialInsight(
             title: "Income Forecast",
@@ -37,7 +39,7 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
             visualizationType: VisualizationType.lineChart,
             data: [
                 ("Estimated Monthly Income", avgMonthlyIncome),
-                ("Data Points", Double(recentMonthlyIncomes.count))
+                ("Data Points", Double(recentMonthlyIncomes.count)),
             ]
         )
         insights.append(insight)
@@ -60,8 +62,10 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
 
     if recentMonthlyExpenses.count >= 3 {
         let avgMonthlyExpenses = recentMonthlyExpenses.reduce(0, +) / Double(recentMonthlyExpenses.count)
-        let forecastDescription = "Your estimated monthly expenses are \(fi_formatCurrency(avgMonthlyExpenses)). "
-            + "Use this to plan your budget and savings goals."
+        let forecastDescription = [
+            "Your estimated monthly expenses are \(fi_formatCurrency(avgMonthlyExpenses)).",
+            "Use this to plan your budget and savings goals.",
+        ].joined(separator: " ")
 
         let insight = FinancialInsight(
             title: "Expense Forecast",
@@ -71,7 +75,7 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
             visualizationType: VisualizationType.lineChart,
             data: [
                 ("Estimated Monthly Expenses", avgMonthlyExpenses),
-                ("Data Points", Double(recentMonthlyExpenses.count))
+                ("Data Points", Double(recentMonthlyExpenses.count)),
             ]
         )
         insights.append(insight)
@@ -87,12 +91,16 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
         var priority: InsightPriority
 
         if netCashFlow > 0 {
-            flowDescription = "Your projected monthly cash flow is positive at \(fi_formatCurrency(netCashFlow)). "
-                + "Consider increasing your savings or investments."
+            flowDescription = [
+                "Your projected monthly cash flow is positive at \(fi_formatCurrency(netCashFlow)).",
+                "Consider increasing your savings or investments.",
+            ].joined(separator: " ")
             priority = InsightPriority.low
         } else {
-            flowDescription = "Your projected monthly cash flow is negative at \(fi_formatCurrency(netCashFlow)). "
-                + "Review your expenses to improve your financial position."
+            flowDescription = [
+                "Your projected monthly cash flow is negative at \(fi_formatCurrency(netCashFlow)).",
+                "Review your expenses to improve your financial position.",
+            ].joined(separator: " ")
             priority = InsightPriority.high
         }
 
@@ -105,7 +113,7 @@ func fi_generateFinancialForecasts(transactions: [FinancialTransaction], account
             data: [
                 ("Projected Income", avgIncome),
                 ("Projected Expenses", avgExpenses),
-                ("Net Cash Flow", netCashFlow)
+                ("Net Cash Flow", netCashFlow),
             ]
         )
         insights.append(insight)

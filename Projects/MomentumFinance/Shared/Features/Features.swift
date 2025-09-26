@@ -71,7 +71,7 @@ public extension Features {
                 let container = try! ModelContainer(
                     for: FinancialAccount.self, FinancialTransaction.self
                 )
-                self._searchEngine = StateObject(
+                _searchEngine = StateObject(
                     wrappedValue: SearchEngineService(modelContext: ModelContext(container))
                 )
             }

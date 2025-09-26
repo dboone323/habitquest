@@ -1,22 +1,27 @@
 # Performance Optimization Report for MomentumFinance
+
 Generated: Tue Sep 23 20:22:07 CDT 2025
 
-
 ## Dependencies.swift
+
 Looking at this Swift dependency injection code, here's my performance analysis:
 
 ## Performance Issues Identified
 
 ### 1. **Unnecessary Computations**
+
 The `log` method recalculates timestamp formatting on every call, even when logging might be disabled for certain levels.
 
 ### 2. **String Operations**
+
 Repeated string interpolation in log messages creates unnecessary intermediate string objects.
 
 ### 3. **Memory Usage**
+
 The `Dependencies` struct is copied entirely when passed around due to value semantics.
 
 ### 4. **Limited Threading Opportunities**
+
 The logger lacks thread safety for concurrent access.
 
 ## Optimization Suggestions
@@ -26,7 +31,7 @@ The logger lacks thread safety for concurrent access.
 ```swift
 public class Logger {
     public static let shared = Logger()
-    
+
     // Add log level configuration
     private let minimumLogLevel: LogLevel = .info
     private let dateFormatter: ISO8601DateFormatter = {
@@ -34,18 +39,18 @@ public class Logger {
         formatter.formatOptions = [.withInternetDateTime]
         return formatter
     }()
-    
+
     private init() {}
-    
+
     public func log(_ message: String, level: LogLevel = .info) {
         // Early exit if below minimum log level
         guard shouldLog(level: level) else { return }
-        
+
         // Reuse formatter instead of Date().ISO8601Format()
         let timestamp = dateFormatter.string(from: Date())
         print("[\(timestamp)] [\(level.rawValue.uppercased())] \(message)")
     }
-    
+
     private func shouldLog(level: LogLevel) -> Bool {
         // Simple priority-based filtering
         switch (minimumLogLevel, level) {
@@ -56,7 +61,7 @@ public class Logger {
         default: return level.rawValue >= minimumLogLevel.rawValue
         }
     }
-    
+
     // ... other methods remain the same
 }
 ```
@@ -68,7 +73,7 @@ public class Logger {
 public final class Dependencies {  // Changed to class to avoid copying
     public let performanceManager: PerformanceManager
     public let logger: Logger
-    
+
     public init(
         performanceManager: PerformanceManager = .shared,
         logger: Logger = .shared
@@ -76,7 +81,7 @@ public final class Dependencies {  // Changed to class to avoid copying
         self.performanceManager = performanceManager
         self.logger = logger
     }
-    
+
     /// Default shared dependencies
     public static let `default` = Dependencies()
 }
@@ -87,11 +92,11 @@ public final class Dependencies {  // Changed to class to avoid copying
 ```swift
 public class Logger {
     public static let shared = Logger()
-    
+
     private let queue = DispatchQueue(label: "logger.queue", qos: .utility)
     private let minimumLogLevel: LogLevel
     private let dateFormatter: ISO8601DateFormatter
-    
+
     private init(minimumLogLevel: LogLevel = .info) {
         self.minimumLogLevel = minimumLogLevel
         self.dateFormatter = {
@@ -100,27 +105,27 @@ public class Logger {
             return formatter
         }()
     }
-    
+
     public func log(_ message: String, level: LogLevel = .info) {
         guard shouldLog(level: level) else { return }
-        
+
         // Async logging to prevent blocking main thread
         queue.async {
             let timestamp = self.dateFormatter.string(from: Date())
             print("[\(timestamp)] [\(level.rawValue.uppercased())] \(message)")
         }
     }
-    
+
     // Synchronous version for critical logs
     public func logSync(_ message: String, level: LogLevel = .info) {
         guard shouldLog(level: level) else { return }
-        
+
         queue.sync {
             let timestamp = self.dateFormatter.string(from: Date())
             print("[\(timestamp)] [\(level.rawValue.uppercased())] \(message)")
         }
     }
-    
+
     private func shouldLog(level: LogLevel) -> Bool {
         return level.priority >= minimumLogLevel.priority
     }
@@ -143,31 +148,31 @@ public extension LogLevel {
 ```swift
 public class Logger {
     // ... existing properties ...
-    
+
     private var logBuffer: [String] = []
     private let maxBufferSize = 100
     private let flushInterval: TimeInterval = 1.0
-    
+
     public func log(_ message: String, level: LogLevel = .info) {
         guard shouldLog(level: level) else { return }
-        
+
         queue.async {
             let timestamp = self.dateFormatter.string(from: Date())
             let logEntry = "[\(timestamp)] [\(level.rawValue.uppercased())] \(message)"
-            
+
             self.logBuffer.append(logEntry)
-            
+
             // Flush if buffer is full or time-based flush
             if self.logBuffer.count >= self.maxBufferSize {
                 self.flushBuffer()
             }
         }
     }
-    
+
     private func flushBuffer() {
         let entries = logBuffer
         logBuffer.removeAll()
-        
+
         for entry in entries {
             print(entry)
         }
@@ -187,6 +192,7 @@ public class Logger {
 These optimizations would be most beneficial in high-frequency logging scenarios while maintaining the same API surface.
 
 ## MissingTypes.swift
+
 Looking at this Swift code, I can identify several areas for performance optimization. Here's my analysis:
 
 ## 1. Algorithm Complexity Issues
@@ -279,7 +285,7 @@ public enum InsightType: String, Sendable, CaseIterable {
         case .positiveSpendingTrend: "Positive Spending Trend"
         }
     }
-    
+
     // Still use dictionary for icon lookup for better performance
     private static let iconMap: [InsightType: String] = [
         .spendingPattern: "chart.line.uptrend.xyaxis",
@@ -290,7 +296,7 @@ public enum InsightType: String, Sendable, CaseIterable {
         .budgetRecommendation: "lightbulb",
         .positiveSpendingTrend: "arrow.down.circle"
     ]
-    
+
     public var icon: String {
         Self.iconMap[self] ?? "questionmark"
     }
@@ -306,7 +312,7 @@ public enum InsightType: String, Sendable, CaseIterable {
 ```swift
 public enum InsightType: String, Sendable, CaseIterable {
     // ... cases
-    
+
     private static let iconMap: [InsightType: String] = {
         // This closure ensures thread-safe initialization
         [
@@ -319,7 +325,7 @@ public enum InsightType: String, Sendable, CaseIterable {
             .positiveSpendingTrend: "arrow.down.circle"
         ]
     }()
-    
+
     private static let displayNameMap: [InsightType: String] = {
         [
             .spendingPattern: "Spending Pattern",
@@ -343,27 +349,27 @@ public enum InsightType: String, Sendable, CaseIterable {
 ```swift
 public enum InsightType: String, Sendable, CaseIterable {
     // ... cases and static properties
-    
+
     private static let iconCache = NSCache<NSString, NSString>()
     private static let displayNameCache = NSCache<NSString, NSString>()
-    
+
     public var displayName: String {
         let key = NSString(string: self.rawValue)
         if let cached = Self.displayNameCache.object(forKey: key) {
             return cached as String
         }
-        
+
         let value = Self.displayNameMap[self] ?? "Unknown"
         Self.displayNameCache.setObject(NSString(string: value), forKey: key)
         return value
     }
-    
+
     public var icon: String {
         let key = NSString(string: self.rawValue)
         if let cached = Self.iconCache.object(forKey: key) {
             return cached as String
         }
-        
+
         let value = Self.iconMap[self] ?? "questionmark"
         Self.iconCache.setObject(NSString(string: value), forKey: key)
         return value
@@ -374,18 +380,19 @@ public enum InsightType: String, Sendable, CaseIterable {
 ## Additional Optimizations
 
 ### 1. Compiler Optimizations
+
 ```swift
 public enum InsightType: String, Sendable, CaseIterable {
     // Use @frozen for better optimization in release builds
     @frozen
     case spendingPattern = "spendingPattern"
     // ... other cases
-    
+
     @inlinable
     public var displayName: String {
         // ... implementation
     }
-    
+
     @inlinable
     public var icon: String {
         // ... implementation
@@ -394,12 +401,13 @@ public enum InsightType: String, Sendable, CaseIterable {
 ```
 
 ### 2. Memory Layout Optimization
+
 ```swift
 // Ensure optimal memory layout
 @frozen
 public enum InsightType: String, Sendable, CaseIterable, Hashable {
     // Cases are already optimally ordered
-    case spendingPattern, anomaly, budgetAlert, forecast, 
+    case spendingPattern, anomaly, budgetAlert, forecast,
          optimization, budgetRecommendation, positiveSpendingTrend
 }
 ```
@@ -416,6 +424,7 @@ public enum InsightType: String, Sendable, CaseIterable, Hashable {
 These optimizations will significantly improve performance, especially in scenarios where these properties are accessed frequently, such as in UI rendering loops.
 
 ## PerformanceManager.swift
+
 Here's a detailed performance analysis and optimization suggestions for the `PerformanceManager.swift` code:
 
 ---
@@ -423,6 +432,7 @@ Here's a detailed performance analysis and optimization suggestions for the `Per
 ## 🔍 **1. Algorithm Complexity Issues**
 
 ### ❌ **Issue: `removeFirst()` on Array**
+
 In `recordFrame()`, calling `self.frameTimes.removeFirst()` is **O(n)** because it shifts all remaining elements to fill the gap.
 
 ```swift
@@ -432,6 +442,7 @@ if self.frameTimes.count > self.maxFrameHistory {
 ```
 
 ### ✅ **Optimization: Use a Circular Buffer**
+
 Use a fixed-size array with an index tracker to avoid shifting elements.
 
 ```swift
@@ -452,6 +463,7 @@ public func recordFrame() {
 ## 🔍 **2. Memory Usage Problems**
 
 ### ❌ **Issue: Frequent `suffix(_:)` call**
+
 In `getCurrentFPS()`, calling `self.frameTimes.suffix(10)` creates a new array every time, which causes **unnecessary allocations**.
 
 ```swift
@@ -459,6 +471,7 @@ let recentFrames = self.frameTimes.suffix(10)
 ```
 
 ### ✅ **Optimization: Direct Index Access**
+
 Access the last 10 elements directly using indices to avoid allocation.
 
 ```swift
@@ -487,9 +500,11 @@ return timeDiff > 0 ? frameCount / timeDiff : 0
 ## 🔍 **3. Unnecessary Computations**
 
 ### ❌ **Issue: Redundant FPS/Memory Calculation**
+
 In `isPerformanceDegraded()`, both `getCurrentFPS()` and `getMemoryUsage()` are called unconditionally.
 
 ### ✅ **Optimization: Short-circuit Evaluation**
+
 Avoid computing memory usage if FPS is already above threshold.
 
 ```swift
@@ -507,9 +522,11 @@ public func isPerformanceDegraded() -> Bool {
 ## 🔍 **4. Collection Operation Optimizations**
 
 ### ❌ **Issue: Repeated Access to `frameTimes.count`**
+
 In `getCurrentFPS()`, accessing `count` multiple times is not expensive, but can be cached.
 
 ### ✅ **Optimization: Cache `count`**
+
 Already addressed above, but generally caching values used multiple times is a good habit.
 
 ---
@@ -517,9 +534,11 @@ Already addressed above, but generally caching values used multiple times is a g
 ## 🔍 **5. Threading Opportunities**
 
 ### ❌ **Issue: No Thread Safety**
+
 If `recordFrame()` is called from the main thread and `getCurrentFPS()` from a background thread (or vice versa), there’s a **race condition** on `frameTimes`.
 
 ### ✅ **Optimization: Add Serial Queue for Synchronization**
+
 Protect access to `frameTimes` using a serial dispatch queue.
 
 ```swift
@@ -558,9 +577,11 @@ public func getCurrentFPS() -> Double {
 ## 🔍 **6. Caching Possibilities**
 
 ### ❌ **Issue: Repeated `getMemoryUsage()` calls**
+
 If `isPerformanceDegraded()` is called frequently, memory usage is recalculated every time.
 
 ### ✅ **Optimization: Cache Memory Usage**
+
 Cache the result and update periodically or on demand.
 
 ```swift
@@ -599,13 +620,13 @@ private func fetchMemoryUsage() -> Double {
 
 ## ✅ **Summary of Optimizations**
 
-| Area | Optimization | Benefit |
-|------|--------------|---------|
-| Frame recording | Circular buffer | O(1) insertion |
-| FPS calculation | Avoid allocations | Lower memory churn |
-| Memory usage | Caching | Reduce system calls |
-| Threading | Serial queue | Thread safety |
-| Logic | Short-circuit evaluation | Fewer computations |
+| Area            | Optimization             | Benefit             |
+| --------------- | ------------------------ | ------------------- |
+| Frame recording | Circular buffer          | O(1) insertion      |
+| FPS calculation | Avoid allocations        | Lower memory churn  |
+| Memory usage    | Caching                  | Reduce system calls |
+| Threading       | Serial queue             | Thread safety       |
+| Logic           | Short-circuit evaluation | Fewer computations  |
 
 ---
 
@@ -647,25 +668,30 @@ public func getCurrentFPS() -> Double {
 Let me know if you'd like a fully refactored version of the file!
 
 ## regenerate_project.swift
+
 Looking at this Swift script, I can identify several performance optimization opportunities. Here's my analysis:
 
 ## Performance Issues Identified
 
 ### 1. **Memory Usage Problems**
+
 - The entire `pbxprojContent` string is loaded into memory as a large literal
 - No streaming or chunked writing approach for large files
 
 ### 2. **Unnecessary Computations**
+
 - String interpolation in file path is unnecessary and potentially error-prone
 - Hardcoded project structure could be generated dynamically
 
 ### 3. **Algorithm Complexity Issues**
+
 - Linear search through file system would be more scalable than hardcoded values
 - No validation or error handling for missing files
 
 ## Specific Optimization Suggestions
 
 ### 1. **Use Proper String Concatenation for File Path**
+
 ```swift
 // Instead of potentially problematic interpolation:
 let projectPath = "\(projectDir)/MomentumFinance.xcodeproj/project.pbxproj"
@@ -677,6 +703,7 @@ let projectURL = URL(fileURLWithPath: projectDir)
 ```
 
 ### 2. **Dynamic File Discovery Instead of Hardcoding**
+
 ```swift
 import Foundation
 
@@ -684,23 +711,24 @@ func discoverSourceFiles(in directory: String) -> [String] {
     let fileManager = FileManager.default
     let sourceExtensions = ["swift"]
     var sourceFiles: [String] = []
-    
+
     guard let enumerator = fileManager.enumerator(atPath: directory) else {
         return sourceFiles
     }
-    
+
     for case let file as String in enumerator {
         let fileExtension = URL(fileURLWithPath: file).pathExtension
         if sourceExtensions.contains(fileExtension) {
             sourceFiles.append(file)
         }
     }
-    
+
     return sourceFiles
 }
 ```
 
 ### 3. **Use Streaming Write for Large Content**
+
 ```swift
 // Instead of loading entire content into memory:
 func writeProjectFile(content: String, to path: String) throws {
@@ -712,24 +740,25 @@ func writeProjectFileStreaming(content: String, to url: URL) throws {
     let data = content.data(using: .utf8)!
     let fileHandle = try FileHandle(forWritingTo: url)
     defer { try? fileHandle.close() }
-    
+
     try fileHandle.seekToEnd()
     try fileHandle.write(contentsOf: data)
 }
 ```
 
 ### 4. **Add Error Handling and Validation**
+
 ```swift
 func regenerateProject() throws {
     let projectURL = URL(fileURLWithPath: projectDir)
         .appendingPathComponent("MomentumFinance.xcodeproj")
         .appendingPathComponent("project.pbxproj")
-    
+
     // Validate project directory exists
     guard FileManager.default.fileExists(atPath: projectDir) else {
         throw NSError(domain: "ProjectError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Project directory not found"])
     }
-    
+
     // Write file with proper error handling
     do {
         try pbxprojContent.write(to: projectURL, atomically: true, encoding: .utf8)
@@ -741,6 +770,7 @@ func regenerateProject() throws {
 ```
 
 ### 5. **Optimized Version with Caching**
+
 ```swift
 #!/usr/bin/env swift
 
@@ -753,45 +783,45 @@ class ProjectRegenerator {
     private let projectDir: String
     private let projectName: String
     private var uuidCache: [String: String] = [:]
-    
+
     init(projectDir: String, projectName: String) {
         self.projectDir = projectDir
         self.projectName = projectName
     }
-    
+
     // Cache UUID generation to avoid repeated computation
     private func generateUUID(for fileName: String) -> String {
         if let cached = uuidCache[fileName] {
             return cached
         }
-        
+
         let uuid = UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(16) + "00123456"
         uuidCache[fileName] = String(uuid)
         return String(uuid)
     }
-    
+
     // Generate project content dynamically
     func generateProjectContent() -> String {
         let sourceFiles = discoverSourceFiles()
         let pbxprojTemplate = generatePBXProjTemplate(sourceFiles: sourceFiles)
         return pbxprojTemplate
     }
-    
+
     private func discoverSourceFiles() -> [String] {
         let sourceDir = "\(projectDir)/\(projectName)"
         guard let files = try? FileManager.default.contentsOfDirectory(atPath: sourceDir) else {
             return []
         }
-        
+
         return files.filter { $0.hasSuffix(".swift") || $0.hasSuffix(".xcassets") }
     }
-    
+
     private func generatePBXProjTemplate(sourceFiles: [String]) -> String {
         // This would generate the template dynamically based on actual files
         // Implementation would be more complex but more maintainable
         return generateStaticContent() // placeholder for current content
     }
-    
+
     private func generateStaticContent() -> String {
         // Your current pbxprojContent string
         return """
@@ -802,14 +832,14 @@ class ProjectRegenerator {
         }
         """
     }
-    
+
     func regenerate() throws {
         let projectURL = URL(fileURLWithPath: projectDir)
             .appendingPathComponent("\(projectName).xcodeproj")
             .appendingPathComponent("project.pbxproj")
-        
+
         let content = generateProjectContent()
-        
+
         // Use atomic write with proper error handling
         try content.write(to: projectURL, atomically: true, encoding: .utf8)
         print("✅ Regenerated Xcode project with all model files included!")
@@ -826,6 +856,7 @@ do {
 ```
 
 ### 6. **Threading Opportunity for File Operations**
+
 ```swift
 func regenerateAsync() async throws {
     return try await withCheckedThrowingContinuation { continuation in
@@ -835,7 +866,7 @@ func regenerateAsync() async throws {
                 let projectURL = URL(fileURLWithPath: self.projectDir)
                     .appendingPathComponent("\(self.projectName).xcodeproj")
                     .appendingPathComponent("project.pbxproj")
-                
+
                 try content.write(to: projectURL, atomically: true, encoding: .utf8)
                 continuation.resume(returning: ())
             } catch {
@@ -858,11 +889,13 @@ func regenerateAsync() async throws {
 The original script is relatively simple and performs adequately for small projects, but these optimizations make it more robust and scalable for larger codebases.
 
 ## run_tests.swift
+
 # Performance Analysis of Swift Test Code
 
 ## 1. Algorithm Complexity Issues
 
 ### High Complexity in Date Filtering
+
 The `totalSpent(for date:)` method in `ExpenseCategory` has O(n) complexity for each call, where n is the number of transactions.
 
 ```swift
@@ -886,7 +919,7 @@ func totalSpent(for date: Date) -> Double {
 struct ExpenseCategory {
     // ... existing properties ...
     private var transactionsByMonth: [String: [FinancialTransaction]] = [:]
-    
+
     mutating func addTransaction(_ transaction: FinancialTransaction) {
         let key = self.monthYearKey(for: transaction.date)
         if transactionsByMonth[key] == nil {
@@ -895,14 +928,14 @@ struct ExpenseCategory {
         transactionsByMonth[key]?.append(transaction)
         transactions.append(transaction)
     }
-    
+
     private func monthYearKey(for date: Date) -> String {
         let calendar = Calendar.current
         let month = calendar.component(.month, from: date)
         let year = calendar.component(.year, from: date)
         return "\(year)-\(month)"
     }
-    
+
     func totalSpent(for date: Date) -> Double {
         let key = self.monthYearKey(for: date)
         return transactionsByMonth[key]?.reduce(0) { $0 + $1.amount } ?? 0
@@ -913,6 +946,7 @@ struct ExpenseCategory {
 ## 2. Memory Usage Problems
 
 ### DateFormatter Creation
+
 Creating new `DateFormatter` instances repeatedly in `formattedDate` property:
 
 ```swift
@@ -928,13 +962,13 @@ var formattedDate: String {
 ```swift
 struct FinancialTransaction {
     // ... existing properties ...
-    
+
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         return formatter
     }()
-    
+
     var formattedDate: String {
         return Self.dateFormatter.string(from: self.date)
     }
@@ -944,6 +978,7 @@ struct FinancialTransaction {
 ## 3. Unnecessary Computations
 
 ### Redundant Enum Definitions
+
 Duplicate `TransactionType` and `TransactionType2` enums:
 
 ```swift
@@ -959,6 +994,7 @@ struct FinancialTransaction {
 ```
 
 ### Repeated Calendar Creation
+
 Creating `Calendar.current` multiple times:
 
 ```swift
@@ -973,6 +1009,7 @@ private static let sharedCalendar = Calendar.current
 ## 4. Collection Operation Optimizations
 
 ### Inefficient Filtering in Tests
+
 Multiple tests use inefficient filtering patterns:
 
 ```swift
@@ -992,6 +1029,7 @@ let incomeTransactions = transactions.lazy.filter {
 ```
 
 ### Reduce Operations
+
 Optimize chained operations:
 
 ```swift
@@ -1008,6 +1046,7 @@ let totalIncome = [income1, income2].map(\.amount).reduce(0, +)
 ## 5. Threading Opportunities
 
 ### Performance Tests Could Use Concurrent Execution
+
 Performance tests could run concurrently to better simulate real usage:
 
 ```swift
@@ -1020,11 +1059,11 @@ runTest("testBulkOperationsPerformance") {
 runTest("testBulkOperationsPerformance") {
     let group = DispatchGroup()
     let queue = DispatchQueue.global(qos: .userInitiated)
-    
+
     var accounts: [FinancialAccount] = []
     var transactions: [FinancialTransaction] = []
     var categories: [ExpenseCategory] = []
-    
+
     queue.async(group: group) {
         // Create accounts concurrently
         accounts = (1...100).map { i in
@@ -1036,7 +1075,7 @@ runTest("testBulkOperationsPerformance") {
             )
         }
     }
-    
+
     queue.async(group: group) {
         // Create transactions concurrently
         transactions = (1...500).map { i in
@@ -1048,7 +1087,7 @@ runTest("testBulkOperationsPerformance") {
             )
         }
     }
-    
+
     queue.async(group: group) {
         // Create categories concurrently
         categories = (1...50).map { i in
@@ -1060,9 +1099,9 @@ runTest("testBulkOperationsPerformance") {
             )
         }
     }
-    
+
     group.wait()  // Wait for all operations to complete
-    
+
     // Assertions...
 }
 ```
@@ -1070,6 +1109,7 @@ runTest("testBulkOperationsPerformance") {
 ## 6. Caching Possibilities
 
 ### Formatted Amount Caching
+
 The `formattedAmount` property is computed every time it's accessed:
 
 ```swift
@@ -1086,18 +1126,18 @@ var formattedAmount: String {
 struct FinancialTransaction {
     // ... existing properties ...
     private var _formattedAmount: String?
-    
+
     var formattedAmount: String {
         if let cached = _formattedAmount {
             return cached
         }
-        
+
         let prefix = self.transactionType == .income ? "+" : "-"
         let formatted = "\(prefix)$\(String(format: "%.2f", abs(self.amount)))"
         _formattedAmount = formatted
         return formatted
     }
-    
+
     // Clear cache when amount changes
     mutating func updateAmount(_ newAmount: Double) {
         self.amount = newAmount
@@ -1107,6 +1147,7 @@ struct FinancialTransaction {
 ```
 
 ### Balance Calculation Caching
+
 For accounts with many transactions, cache the balance:
 
 ```swift
@@ -1114,7 +1155,7 @@ struct FinancialAccount {
     // ... existing properties ...
     private var _cachedBalance: Double?
     private var balanceNeedsRecalculation = true
-    
+
     var balance: Double {
         get {
             if balanceNeedsRecalculation || _cachedBalance == nil {
@@ -1129,7 +1170,7 @@ struct FinancialAccount {
             balanceNeedsRecalculation = false
         }
     }
-    
+
     mutating func updateBalance(for transaction: FinancialTransaction) {
         switch transaction.transactionType {
         case .income:
@@ -1139,7 +1180,7 @@ struct FinancialAccount {
         }
         balanceNeedsRecalculation = false
     }
-    
+
     private func calculateBalance() -> Double {
         // Implementation for full recalculation if needed
         return _cachedBalance ?? 0.0
@@ -1150,6 +1191,7 @@ struct FinancialAccount {
 ## Additional Optimizations
 
 ### Use Struct of Arrays Pattern
+
 For large datasets, consider SoA instead of AoS:
 
 ```swift
@@ -1162,7 +1204,7 @@ struct TransactionData {
     var amounts: [Double] = []
     var dates: [Date] = []
     var types: [TransactionType2] = []
-    
+
     mutating func append(_ transaction: FinancialTransaction) {
         titles.append(transaction.title)
         amounts.append(transaction.amount)
@@ -1173,6 +1215,7 @@ struct TransactionData {
 ```
 
 ### Pre-allocate Collections
+
 When size is known, pre-allocate arrays:
 
 ```swift

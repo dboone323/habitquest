@@ -22,9 +22,9 @@ rm -rf ~/Library/Developer/Xcode/DerivedData/MomentumFinance-*
 echo "4. Would you like to reset ALL simulators? (y/n)"
 read -r response
 if [[ "$response" =~ ^[Yy]$ ]]; then
-    xcrun simctl shutdown all
-    xcrun simctl erase all
-    echo "   All simulators reset"
+  xcrun simctl shutdown all
+  xcrun simctl erase all
+  echo "   All simulators reset"
 fi
 
 # 5. Boot the simulator

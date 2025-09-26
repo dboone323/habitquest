@@ -31,7 +31,7 @@ final class FinancialMLModels {
             "mediumTransactionCount": mediumTransactions.count,
             "largeTransactionCount": largeTransactions.count,
             "averageTransactionSize": totalSpent / Double(expenses.count),
-            "transactionFrequency": Double(expenses.count) / 30.0 // per day
+            "transactionFrequency": Double(expenses.count) / 30.0, // per day
         ]
     }
 

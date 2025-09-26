@@ -1,15 +1,15 @@
 #!/bin/bash
 # Convert Xcode project from newer format (Xcode 16+) to older format (Xcode 15 compatible)
 
-set -e  # Exit on any error
+set -e # Exit on any error
 
 echo "🔧 Converting Xcode project to be compatible with older Xcode versions..."
 
 PROJECT_FILE="HabitQuest.xcodeproj/project.pbxproj"
 
 if [ ! -f "$PROJECT_FILE" ]; then
-    echo "❌ Project file not found: $PROJECT_FILE"
-    exit 1
+  echo "❌ Project file not found: $PROJECT_FILE"
+  exit 1
 fi
 
 echo "📋 Current project analysis:"
@@ -18,8 +18,8 @@ echo "Synchronized groups found: $(grep -c 'PBXFileSystemSynchronized' "$PROJECT
 
 # Check if conversion is actually needed
 if ! grep -q "PBXFileSystemSynchronized" "$PROJECT_FILE"; then
-    echo "✅ Project already compatible - no FileSystemSynchronized groups found"
-    exit 0
+  echo "✅ Project already compatible - no FileSystemSynchronized groups found"
+  exit 0
 fi
 
 # Backup original
@@ -35,38 +35,38 @@ echo "🔄 Removing Xcode 16+ incompatible features..."
 temp_file=$(mktemp)
 
 # Remove the entire PBXFileSystemSynchronizedRootGroup section
-sed '/Begin PBXFileSystemSynchronizedRootGroup section/,/End PBXFileSystemSynchronizedRootGroup section/d' "$PROJECT_FILE" > "$temp_file"
+sed '/Begin PBXFileSystemSynchronizedRootGroup section/,/End PBXFileSystemSynchronizedRootGroup section/d' "$PROJECT_FILE" >"$temp_file"
 
 # Remove any remaining references to PBXFileSystemSynchronized
-sed '/PBXFileSystemSynchronized/d' "$temp_file" > "${temp_file}.clean"
+sed '/PBXFileSystemSynchronized/d' "$temp_file" >"${temp_file}.clean"
 mv "${temp_file}.clean" "$temp_file"
 
 # Change object version from 77 to 56 for Xcode 15 compatibility if present
-sed 's/objectVersion = 77;/objectVersion = 56;/g' "$temp_file" > "${temp_file}.final"
+sed 's/objectVersion = 77;/objectVersion = 56;/g' "$temp_file" >"${temp_file}.final"
 mv "${temp_file}.final" "$temp_file"
 
 # Validate that we haven't broken the plist structure
 if plutil -lint "$temp_file" >/dev/null 2>&1; then
-    echo "✅ Converted project file validates successfully"
-    mv "$temp_file" "$PROJECT_FILE"
-    
-    echo "📋 Updated project format:"
-    echo "Object version: $(grep 'objectVersion' "$PROJECT_FILE" || echo 'not found')"
-    echo "Synchronized groups: $(grep -c 'PBXFileSystemSynchronized' "$PROJECT_FILE" || echo '0')"
-    echo "🎯 Project is now compatible with Xcode 15.4 (CI environment)"
-    
-    # Verify schemes still exist
-    if xcodebuild -list >/dev/null 2>&1; then
-        echo "✅ Project schemes are accessible after conversion"
-    else
-        echo "⚠️  Warning: Project schemes may need verification"
-    fi
+  echo "✅ Converted project file validates successfully"
+  mv "$temp_file" "$PROJECT_FILE"
+
+  echo "📋 Updated project format:"
+  echo "Object version: $(grep 'objectVersion' "$PROJECT_FILE" || echo 'not found')"
+  echo "Synchronized groups: $(grep -c 'PBXFileSystemSynchronized' "$PROJECT_FILE" || echo '0')"
+  echo "🎯 Project is now compatible with Xcode 15.4 (CI environment)"
+
+  # Verify schemes still exist
+  if xcodebuild -list >/dev/null 2>&1; then
+    echo "✅ Project schemes are accessible after conversion"
+  else
+    echo "⚠️  Warning: Project schemes may need verification"
+  fi
 else
-    echo "❌ Converted project file failed validation"
-    echo "🔄 Restoring original project..."
-    mv "$PROJECT_FILE.xcode16_backup" "$PROJECT_FILE"
-    rm -f "$temp_file"
-    exit 1
+  echo "❌ Converted project file failed validation"
+  echo "🔄 Restoring original project..."
+  mv "$PROJECT_FILE.xcode16_backup" "$PROJECT_FILE"
+  rm -f "$temp_file"
+  exit 1
 fi
 
 # Clean up

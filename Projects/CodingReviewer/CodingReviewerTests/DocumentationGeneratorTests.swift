@@ -8,7 +8,7 @@
 @testable import CodingReviewer
 import XCTest
 
-public class DocumentationGeneratorTests: XCTestCase {
+final class DocumentationGeneratorTests: XCTestCase {
     var docGenerator: DocumentationGenerator!
 
     override func setUp() {

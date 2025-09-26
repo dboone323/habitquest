@@ -49,28 +49,28 @@ xcodebuild -project MomentumFinance.xcodeproj -scheme MomentumFinance -destinati
 
 if [ $? -eq 0 ]; then
   echo -e "${GREEN}✅ Build successful!${NC}"
-  
+
   # Find the app bundle
   APP_PATH=$(find "$BUILD_DIR" -name "*.app" -type d | head -1)
-  
+
   if [ -z "$APP_PATH" ]; then
     echo -e "${RED}❌ Could not find the built app.${NC}"
     exit 1
   fi
-  
+
   echo "Found app at: $APP_PATH"
-  
+
   # Install the app
   echo "Installing app to simulator..."
   xcrun simctl install "$DEVICE_ID" "$APP_PATH"
-  
+
   if [ $? -eq 0 ]; then
     echo "App installed successfully!"
-    
+
     # Launch the app
     echo "Launching app..."
     xcrun simctl launch "$DEVICE_ID" "com.momentumfinance.MomentumFinance"
-    
+
     echo -e "${GREEN}✨ MomentumFinance launched in $DEVICE_NAME simulator!${NC}"
   else
     echo -e "${RED}❌ Failed to install the app.${NC}"

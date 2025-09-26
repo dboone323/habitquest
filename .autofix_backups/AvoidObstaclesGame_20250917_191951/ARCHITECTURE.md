@@ -77,6 +77,7 @@ class GameViewController: UIViewController {
 ### Physics System Architecture
 
 #### Collision Detection Framework
+
 ```swift
 // Physics categories for collision detection
 enum PhysicsCategory {
@@ -124,6 +125,7 @@ class PhysicsWorldManager {
 ```
 
 #### Collision Response System
+
 ```swift
 // Contact delegate implementation in GameScene
 extension GameScene: SKPhysicsContactDelegate {
@@ -822,16 +824,19 @@ class PerformanceTests: XCTestCase {
 ### Roadmap
 
 1. **Multiplayer Integration**
+
    - Real-time competitive gameplay
    - Leaderboards and tournaments
    - Social sharing features
 
 2. **Power-ups and Special Items**
+
    - Shield protection system
    - Speed boosts and time dilation
    - Magnet for score collection
 
 3. **Advanced Graphics**
+
    - Particle system enhancements
    - Dynamic lighting effects
    - 3D obstacle models
@@ -850,6 +855,6 @@ class PerformanceTests: XCTestCase {
 
 ---
 
-*Architecture Documentation Last Updated: September 12, 2025*
-*AvoidObstaclesGame Version: 1.0*
-*Platform: iOS 13.0+, SpriteKit Framework*
+_Architecture Documentation Last Updated: September 12, 2025_
+_AvoidObstaclesGame Version: 1.0_
+_Platform: iOS 13.0+, SpriteKit Framework_

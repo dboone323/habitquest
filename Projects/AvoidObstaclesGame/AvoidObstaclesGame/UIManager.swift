@@ -318,7 +318,6 @@ class UIManager {
             label.text = "\(self.formatStatisticKey(key)): \(self.formatStatisticValue(value))"
             label.fontSize = 18
             label.fontColor = .white
-            label.horizontalAlignmentMode = .center
             label.position = CGPoint(x: scene.size.width / 2, y: currentY)
             label.zPosition = 150
 
@@ -403,7 +402,7 @@ class UIManager {
             levelUpLabel,
             fpsLabel,
             memoryLabel,
-            qualityLabel
+            qualityLabel,
         ] + self.statisticsLabels
 
         for label in allLabels {
@@ -566,5 +565,23 @@ class UIManager {
             self.qualityLabel?.text = "QUAL: LOW"
             self.qualityLabel?.fontColor = .red
         }
+    }
+
+    // MARK: - Async UI Updates
+
+    /// Updates the high score display asynchronously
+    /// - Parameter highScore: New high score value
+    func updateHighScoreAsync(_ highScore: Int) async {
+        await Task.detached {
+            self.updateHighScore(highScore)
+        }.value
+    }
+
+    /// Shows game statistics overlay asynchronously
+    /// - Parameter statistics: Dictionary of statistics to display
+    func showStatisticsAsync(_ statistics: [String: Any]) async {
+        await Task.detached {
+            self.showStatistics(statistics)
+        }.value
     }
 }

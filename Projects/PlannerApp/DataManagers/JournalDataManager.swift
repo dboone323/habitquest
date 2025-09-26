@@ -148,7 +148,7 @@ final class JournalDataManager: JournalDataManaging {
             "total": total,
             "thisWeek": thisWeek,
             "uniqueMoods": moods.count,
-            "moods": moods
+            "moods": moods,
         ]
     }
 }

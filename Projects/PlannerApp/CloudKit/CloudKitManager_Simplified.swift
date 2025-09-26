@@ -119,7 +119,7 @@ public class CloudKitManager: ObservableObject {
     // MARK: - Placeholder Methods for Future Implementation
 
     func syncTasks() async throws {
-        /// - TODO: Implement task synchronization
+        /// - Pending: Implement task synchronization
         print("Task sync - placeholder implementation")
 
         // Fetch local tasks
@@ -147,7 +147,7 @@ public class CloudKitManager: ObservableObject {
     }
 
     func syncGoals() async throws {
-        /// - TODO: Implement goal synchronization
+        /// - Pending: Implement goal synchronization
         print("Goal sync - placeholder implementation")
 
         // Fetch local goals
@@ -176,7 +176,7 @@ public class CloudKitManager: ObservableObject {
     }
 
     func syncJournalEntries() async throws {
-        /// - TODO: Implement journal entry synchronization
+        /// - Pending: Implement journal entry synchronization
         print("Journal entry sync - placeholder implementation")
 
         // Fetch local journal entries
@@ -204,7 +204,7 @@ public class CloudKitManager: ObservableObject {
     }
 
     func syncCalendarEvents() async throws {
-        /// - TODO: Implement calendar event synchronization
+        /// - Pending: Implement calendar event synchronization
         print("Calendar event sync - placeholder implementation")
 
         // Fetch local calendar events

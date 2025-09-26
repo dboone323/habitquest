@@ -98,7 +98,7 @@ public struct ColorDefinitions: Sendable {
         Color.red, // bills
         Color.mint, // income
         Color.teal, // savings
-        Color.gray // other
+        Color.gray, // other
     ]
 
     // Additional methods for complex color system
@@ -117,7 +117,7 @@ public struct ColorDefinitions: Sendable {
         }
     }
 
-    public static func accent(_ type: AccentType, _ mode: ThemeMode) -> Color {
+    public static func accent(_ type: AccentType, _: ThemeMode) -> Color {
         switch type {
         case .primary:
             Color.blue
@@ -126,7 +126,7 @@ public struct ColorDefinitions: Sendable {
         }
     }
 
-    public static func financial(_ type: FinancialType, _ mode: ThemeMode) -> Color {
+    public static func financial(_ type: FinancialType, _: ThemeMode) -> Color {
         switch type {
         case .income:
             Color.green
@@ -141,7 +141,7 @@ public struct ColorDefinitions: Sendable {
         }
     }
 
-    public static func budget(_ type: BudgetType, _ mode: ThemeMode) -> Color {
+    public static func budget(_ type: BudgetType, _: ThemeMode) -> Color {
         switch type {
         case .under:
             Color.green

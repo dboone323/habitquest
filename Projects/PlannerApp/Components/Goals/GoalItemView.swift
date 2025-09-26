@@ -112,7 +112,9 @@ public struct GoalItemView: View {
                     // Quick action buttons
                     HStack(spacing: 8) {
                         // Progress update button
-                        Button(action: { self.showProgressSheet = true }) {
+                        Button {
+                            self.showProgressSheet = true
+                        } label: {
                             Image(systemName: "gauge")
                                 .font(.system(size: 14))
                                 .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
@@ -120,7 +122,9 @@ public struct GoalItemView: View {
                         .buttonStyle(.plain)
 
                         // Completion toggle button
-                        Button(action: { self.onCompletionToggle(self.goal.id) }) {
+                        Button {
+                            self.onCompletionToggle(self.goal.id)
+                        } label: {
                             Image(systemName: self.goal.isCompleted ? "checkmark.circle.fill" : "circle")
                                 .font(.system(size: 16))
                                 .foregroundColor(self.goal.isCompleted ? .green : self.themeManager.currentTheme.secondaryTextColor)

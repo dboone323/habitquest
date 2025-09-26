@@ -156,7 +156,7 @@ public struct IPadSidebarView: View {
         ("Goals", "target"),
         ("Calendar", "calendar"),
         ("Journal", "book"),
-        ("Settings", "gear")
+        ("Settings", "gear"),
     ]
 
     public var body: some View {
@@ -232,17 +232,19 @@ public struct MacOSToolbarButtons: View {
 
     public var body: some View {
         HStack {
-            Button(action: {}) {
-                Label("Search", systemImage: "magnifyingglass")
-            }
-            .accessibilityLabel("Search Button")
-            .keyboardShortcut("f", modifiers: .command)
+            Button {}
+                label: {
+                    Label("Search", systemImage: "magnifyingglass")
+                }
+                .accessibilityLabel("Search Button")
+                .keyboardShortcut("f", modifiers: .command)
 
-            Button(action: {}) {
-                Label("Add Item", systemImage: "plus")
-            }
-            .accessibilityLabel("Add Item Button")
-            .keyboardShortcut("n", modifiers: .command)
+            Button {}
+                label: {
+                    Label("Add Item", systemImage: "plus")
+                }
+                .accessibilityLabel("Add Item Button")
+                .keyboardShortcut("n", modifiers: .command)
 
             Menu {
                 Button("Export Data", action: {}).accessibilityLabel("Export Data Button")
@@ -260,15 +262,17 @@ public struct MacOSToolbarButtons: View {
 public struct IPadToolbarButtons: View {
     public var body: some View {
         HStack {
-            Button(action: {}) {
-                Image(systemName: "magnifyingglass")
-            }
-            .accessibilityLabel("Search Button")
+            Button {}
+                label: {
+                    Image(systemName: "magnifyingglass")
+                }
+                .accessibilityLabel("Search Button")
 
-            Button(action: {}) {
-                Image(systemName: "plus")
-            }
-            .accessibilityLabel("Add Button")
+            Button {}
+                label: {
+                    Image(systemName: "plus")
+                }
+                .accessibilityLabel("Add Button")
 
             Menu {
                 Button("Search", action: {}).accessibilityLabel("Search Menu Button")
@@ -284,10 +288,11 @@ public struct IPadToolbarButtons: View {
 public struct IPhoneToolbarButtons: View {
     public var body: some View {
         HStack {
-            Button(action: {}) {
-                Image(systemName: "plus")
-            }
-            .accessibilityLabel("Add Button")
+            Button {}
+                label: {
+                    Image(systemName: "plus")
+                }
+                .accessibilityLabel("Add Button")
 
             Menu {
                 Button("Search", action: {}).accessibilityLabel("Search Menu Button")
@@ -311,7 +316,7 @@ public struct QuickActionButton: View {
     @EnvironmentObject var themeManager: ThemeManager
 
     public var body: some View {
-        Button(action: self.action) {
+        Button(action: self.action, label: {
             HStack {
                 Image(systemName: self.icon)
                     .foregroundColor(self.color)
@@ -327,7 +332,7 @@ public struct QuickActionButton: View {
             .padding(.horizontal, 12)
             .background(self.color.opacity(0.1))
             .cornerRadius(8)
-        }
+        })
         .accessibilityLabel("\(self.title) Button")
         .buttonStyle(PlainButtonStyle())
     }

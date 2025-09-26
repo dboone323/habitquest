@@ -12,7 +12,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 # Get the script directory
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Setup git aliases for easier sync
 echo -e "\n${YELLOW}Setting up Git aliases...${NC}"
@@ -51,8 +51,8 @@ echo -e "${GREEN}✅ Git aliases configured!${NC}"
 
 # Create a convenience script in user's bin directory
 if [[ -d "$HOME/bin" ]]; then
-    echo -e "\n${YELLOW}Installing sync command to ~/bin...${NC}"
-    cat > "$HOME/bin/mf-sync" << 'EOF'
+  echo -e "\n${YELLOW}Installing sync command to ~/bin...${NC}"
+  cat >"$HOME/bin/mf-sync" <<'EOF'
 #!/bin/bash
 # Momentum Finance sync shortcut
 
@@ -67,8 +67,8 @@ fi
 
 cd "$PROJECT_DIR" && ./quick-sync.sh
 EOF
-    chmod +x "$HOME/bin/mf-sync"
-    echo -e "${GREEN}✅ Installed mf-sync command${NC}"
+  chmod +x "$HOME/bin/mf-sync"
+  echo -e "${GREEN}✅ Installed mf-sync command${NC}"
 fi
 
 echo -e "\n${GREEN}🎉 Setup complete!${NC}"
@@ -87,9 +87,9 @@ echo "    ./quick-sync.sh  - Quick sync (no prompts)"
 echo "    ./build_xcode.sh - Build with Xcode"
 
 if [[ -f "$HOME/bin/mf-sync" ]]; then
-    echo ""
-    echo "  ${YELLOW}Global command:${NC}"
-    echo "    mf-sync         - Sync from anywhere"
+  echo ""
+  echo "  ${YELLOW}Global command:${NC}"
+  echo "    mf-sync         - Sync from anywhere"
 fi
 
 echo ""

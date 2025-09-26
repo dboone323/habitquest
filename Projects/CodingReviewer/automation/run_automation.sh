@@ -10,23 +10,23 @@ echo "🤖 Running Quantum Automation for CodingReviewer"
 
 # Run AI enhancement analysis
 if [[ -f "$AUTOMATION_DIR/ai_enhancement_system.sh" ]]; then
-    echo "🔍 Running AI enhancement analysis..."
-    bash "$AUTOMATION_DIR/ai_enhancement_system.sh" analyze "CodingReviewer"
+  echo "🔍 Running AI enhancement analysis..."
+  bash "$AUTOMATION_DIR/ai_enhancement_system.sh" analyze "CodingReviewer"
 fi
 
 # Run simple auto-fix
 if [[ -f "$AUTOMATION_DIR/simple_autofix.sh" ]]; then
-    echo "🔧 Running simple auto-fix..."
-    bash "$AUTOMATION_DIR/simple_autofix.sh" "$PROJECT_PATH"
+  echo "🔧 Running simple auto-fix..."
+  bash "$AUTOMATION_DIR/simple_autofix.sh" "$PROJECT_PATH"
 elif [[ -f "$AUTOMATION_DIR/intelligent_autofix.sh" ]]; then
-    echo "🔧 Running intelligent auto-fix..."
-    bash "$AUTOMATION_DIR/intelligent_autofix.sh" fix "CodingReviewer"
+  echo "🔧 Running intelligent auto-fix..."
+  bash "$AUTOMATION_DIR/intelligent_autofix.sh" fix "CodingReviewer"
 fi
 
 # Run MCP workflow checks
 if [[ -f "$AUTOMATION_DIR/mcp_workflow.sh" ]]; then
-    echo "🔄 Running MCP workflow checks..."
-    bash "$AUTOMATION_DIR/mcp_workflow.sh" status
+  echo "🔄 Running MCP workflow checks..."
+  bash "$AUTOMATION_DIR/mcp_workflow.sh" status
 fi
 
 echo "✅ Quantum automation completed for CodingReviewer"

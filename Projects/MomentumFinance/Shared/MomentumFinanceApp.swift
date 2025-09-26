@@ -148,7 +148,7 @@ public struct MomentumFinanceApp: App {
             ModelReferences.subscriptions,
             ModelReferences.budgets,
             ModelReferences.categories,
-            ModelReferences.goals
+            ModelReferences.goals,
         ])
 
         print("MomentumFinanceApp: Schema created")

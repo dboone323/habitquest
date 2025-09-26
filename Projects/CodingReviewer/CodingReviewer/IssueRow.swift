@@ -9,11 +9,12 @@ import SwiftUI
 
 public struct IssueRow: View {
     let issue: CodeIssue
+    private var presenter: IssueRowPresenter { IssueRowPresenter(issue: self.issue) }
 
     public var body: some View {
         HStack(alignment: .top, spacing: 8) {
-            Image(systemName: self.iconName)
-                .foregroundColor(self.color)
+            Image(systemName: self.presenter.iconName)
+                .foregroundColor(self.presenter.iconColor)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(self.issue.description)
@@ -36,37 +37,52 @@ public struct IssueRow: View {
                         .foregroundColor(.secondary)
                     Text(self.issue.severity.rawValue.capitalized)
                         .font(.caption)
-                        .foregroundColor(self.severityColor)
+                        .foregroundColor(self.presenter.severityColor)
                 }
             }
         }
         .padding(.vertical, 4)
     }
+}
 
-    private var iconName: String {
-        switch self.issue.severity {
-        case .low: "info.circle.fill"
-        case .medium: "exclamationmark.triangle.fill"
-        case .high: "exclamationmark.triangle.fill"
-        case .critical: "xmark.circle.fill"
-        }
+struct IssueRowPresenter {
+    struct Diagnostics {
+        let iconName: String
+        let iconColorIdentifier: String
+        let severityColorIdentifier: String
     }
 
-    private var color: Color {
-        switch self.issue.severity {
-        case .low: .blue
-        case .medium: .orange
-        case .high: .red
-        case .critical: .red
-        }
+    let issue: CodeIssue
+
+    private struct Palette {
+        let iconName: String
+        let iconColor: Color
+        let severityColor: Color
+        let colorIdentifier: String
     }
 
-    private var severityColor: Color {
-        switch self.issue.severity {
-        case .low: .blue
-        case .medium: .orange
-        case .high: .red
-        case .critical: .red
-        }
+    private static let palette: [IssueSeverity: Palette] = [
+        .low: Palette(iconName: "info.circle.fill", iconColor: .blue, severityColor: .blue, colorIdentifier: "blue"),
+        .medium: Palette(iconName: "exclamationmark.triangle.fill", iconColor: .orange, severityColor: .orange, colorIdentifier: "orange"),
+        .high: Palette(iconName: "exclamationmark.triangle.fill", iconColor: .red, severityColor: .red, colorIdentifier: "red"),
+        .critical: Palette(iconName: "xmark.circle.fill", iconColor: .red, severityColor: .red, colorIdentifier: "red"),
+    ]
+
+    private var paletteForIssue: Palette {
+        Self.palette[self.issue.severity] ?? Self.palette[.low]!
+    }
+
+    var iconName: String { self.paletteForIssue.iconName }
+
+    var iconColor: Color { self.paletteForIssue.iconColor }
+
+    var severityColor: Color { self.paletteForIssue.severityColor }
+
+    var diagnostics: Diagnostics {
+        Diagnostics(
+            iconName: self.paletteForIssue.iconName,
+            iconColorIdentifier: self.paletteForIssue.colorIdentifier,
+            severityColorIdentifier: self.paletteForIssue.colorIdentifier
+        )
     }
 }

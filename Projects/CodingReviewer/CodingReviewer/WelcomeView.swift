@@ -9,6 +9,12 @@ import SwiftUI
 
 public struct WelcomeView: View {
     @Binding var showFilePicker: Bool
+    private let presenter: WelcomeViewPresenter
+
+    init(showFilePicker: Binding<Bool>, presenter: WelcomeViewPresenter = WelcomeViewPresenter()) {
+        _showFilePicker = showFilePicker
+        self.presenter = presenter
+    }
 
     public var body: some View {
         VStack(spacing: 20) {
@@ -26,7 +32,7 @@ public struct WelcomeView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 
-            Button(action: { self.showFilePicker = true }) {
+            Button(action: self.presenter.openFileAction(binding: self.$showFilePicker)) {
                 Label("Open Code File", systemImage: "doc.badge.plus")
                     .font(.headline)
                     .padding()
@@ -37,5 +43,13 @@ public struct WelcomeView: View {
             .buttonStyle(.borderless)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+struct WelcomeViewPresenter {
+    func openFileAction(binding: Binding<Bool>) -> () -> Void {
+        {
+            binding.wrappedValue = true
+        }
     }
 }

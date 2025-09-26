@@ -129,7 +129,7 @@ final class GoalDataManager: GoalDataManaging {
             "completed": completed,
             "incomplete": total - completed,
             "overdue": overdue,
-            "dueThisWeek": dueThisWeek
+            "dueThisWeek": dueThisWeek,
         ]
     }
 }

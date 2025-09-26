@@ -60,13 +60,13 @@ SwiftCompile normal arm64 Compiling\ BugDetectionServiceTests.swift /Users/danie
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Quantum-workspace/Projects/CodingReviewer/CodingReviewerTests/BugDetectionServiceTests.swift (in target 'CodingReviewerTests' from project 'CodingReviewer')
     cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/CodingReviewer
-    
+
 
 SwiftEmitModule normal arm64 Emitting\ module\ for\ CodingReviewerTests (in target 'CodingReviewerTests' from project 'CodingReviewer')
 
 EmitSwiftModule normal arm64 (in target 'CodingReviewerTests' from project 'CodingReviewer')
     cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/CodingReviewer
-    
+
 
 SwiftDriverJobDiscovery normal arm64 Emitting module for CodingReviewerTests (in target 'CodingReviewerTests' from project 'CodingReviewer')
 
@@ -100,33 +100,33 @@ ExtractAppIntentsMetadata (in target 'CodingReviewerTests' from project 'CodingR
 
 CodeSign /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Products/Debug/CodingReviewer.app/Contents/PlugIns/CodingReviewerTests.xctest (in target 'CodingReviewerTests' from project 'CodingReviewer')
     cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/CodingReviewer
-    
+
     Signing Identity:     "Apple Development: dboone9@msn.com (72RDLR687H)"
-    
+
     /usr/bin/codesign --force --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 --timestamp\=none --generate-entitlement-der /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Products/Debug/CodingReviewer.app/Contents/PlugIns/CodingReviewerTests.xctest
 /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Products/Debug/CodingReviewer.app/Contents/PlugIns/CodingReviewerTests.xctest: replacing existing signature
 
 CodeSign /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Products/Debug/CodingReviewer.app/Contents/MacOS/CodingReviewer.debug.dylib (in target 'CodingReviewer' from project 'CodingReviewer')
     cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/CodingReviewer
-    
+
     Signing Identity:     "Apple Development: dboone9@msn.com (72RDLR687H)"
-    
+
     /usr/bin/codesign --force --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 --timestamp\=none --generate-entitlement-der /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Products/Debug/CodingReviewer.app/Contents/MacOS/CodingReviewer.debug.dylib
 /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Products/Debug/CodingReviewer.app/Contents/MacOS/CodingReviewer.debug.dylib: replacing existing signature
 
 CodeSign /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Products/Debug/CodingReviewer.app/Contents/MacOS/__preview.dylib (in target 'CodingReviewer' from project 'CodingReviewer')
     cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/CodingReviewer
-    
+
     Signing Identity:     "Apple Development: dboone9@msn.com (72RDLR687H)"
-    
+
     /usr/bin/codesign --force --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 --timestamp\=none --generate-entitlement-der /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Products/Debug/CodingReviewer.app/Contents/MacOS/__preview.dylib
 /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Products/Debug/CodingReviewer.app/Contents/MacOS/__preview.dylib: replacing existing signature
 
 CodeSign /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Products/Debug/CodingReviewer.app (in target 'CodingReviewer' from project 'CodingReviewer')
     cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/CodingReviewer
-    
+
     Signing Identity:     "Apple Development: dboone9@msn.com (72RDLR687H)"
-    
+
     /usr/bin/codesign --force --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 --entitlements /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Intermediates.noindex/CodingReviewer.build/Debug/CodingReviewer.build/CodingReviewer.app.xcent --timestamp\=none --generate-entitlement-der /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Products/Debug/CodingReviewer.app
 /Users/danielstevens/Library/Developer/Xcode/DerivedData/CodingReviewer-hhylqejaxbyeaufxhfyymtnijijz/Build/Products/Debug/CodingReviewer.app: replacing existing signature
 

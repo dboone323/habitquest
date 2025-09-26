@@ -86,7 +86,7 @@ final class TransactionsGenerator: DataGenerator {
             ("Movie Theater", 28.00, "Entertainment"),
             ("Hardware Store", 156.75, "Shopping"),
             ("Car Insurance", 145.00, "Transportation"),
-            ("Doctor Visit", 120.00, "Health & Fitness")
+            ("Doctor Visit", 120.00, "Health & Fitness"),
         ]
 
         for (title, amount, categoryName) in expenseData {

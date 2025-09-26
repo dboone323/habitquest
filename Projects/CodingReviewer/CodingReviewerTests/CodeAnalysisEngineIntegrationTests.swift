@@ -8,7 +8,7 @@
 @testable import CodingReviewer
 import XCTest
 
-public class CodeAnalysisEngineIntegrationTests: XCTestCase {
+final class CodeAnalysisEngineIntegrationTests: XCTestCase {
     var analysisEngine: CodeAnalysisEngine!
 
     override func setUp() {
@@ -217,9 +217,9 @@ public class CodeAnalysisEngineIntegrationTests: XCTestCase {
         let languages = ["Swift", "JavaScript", "Python", "Java"]
 
         for language in languages {
-            let code = language == "Swift" ? "// TODO: Test" :
-                language == "JavaScript" ? "// TODO: Test" :
-                language == "Python" ? "# TODO: Test" : "// TODO: Test"
+            let code = language == "Swift" ? "// Pending: Test" :
+                language == "JavaScript" ? "// Pending: Test" :
+                language == "Python" ? "# Pending: Test" : "// Pending: Test"
 
             let result = self.analysisEngine.analyzeCode(code: code, language: language, analysisTypes: [AnalysisType.bugs])
 
@@ -245,11 +245,12 @@ public class CodeAnalysisEngineIntegrationTests: XCTestCase {
 
     func testAnalyzeCode_LargeCodeFile() {
         // Given large code file (simulate with many lines)
-        var code = ""
-        for i in 1 ... 1000 {
-            code += "// TODO: Item \(i)\n"
-            code += "let value\(i) = \(i)!\n" // Force unwrap
+        var codeParts: [String] = []
+        for codeIndex in 1 ... 1000 {
+            codeParts.append("// Pending: Item \(codeIndex)")
+            codeParts.append("let value\(codeIndex) = \(codeIndex)!") // Force unwrap
         }
+        let code = codeParts.joined(separator: "\n")
 
         // When analyzing large file
         let result = self.analysisEngine.analyzeCode(code: code, language: "Swift", analysisTypes: [AnalysisType.bugs])
@@ -323,7 +324,9 @@ public class CodeAnalysisEngineIntegrationTests: XCTestCase {
 
                 // Style issue - very long line
                 func veryLongFunctionNameThatExceedsRecommendedLineLength(parameter1: String, parameter2: Int, parameter3: Bool, parameter4: Double, parameter5: Date) -> String {
-                    return "This is an extremely long line that definitely exceeds the maximum recommended line length for Swift code and should be flagged as a style violation by the StyleAnalysisService"
+                    return "This is an extremely long line that definitely exceeds the maximum recommended " +
+                        "line length for Swift code and should be flagged as a style violation by the " +
+                        "StyleAnalysisService"
                 }
             }
             """

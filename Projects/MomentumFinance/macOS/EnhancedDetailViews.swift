@@ -515,7 +515,7 @@ extension Features.Transactions {
                             Picker("Type", selection: Binding(
                                 get: { self.editedTransaction?.amount ?? transaction.amount >= 0 },
                                 set: { isIncome in
-                                    if let amount = self.editedTransaction?.amount {
+                                    if let amount = editedTransaction?.amount {
                                         self.editedTransaction?.amount = isIncome ? abs(amount) : -abs(amount)
                                     }
                                 },

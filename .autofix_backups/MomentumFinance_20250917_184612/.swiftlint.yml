@@ -143,14 +143,14 @@ large_tuple:
   error: 4
 
 # Custom reporter (use xcode for better integration)
-reporter: "xcode"
+reporter: 'xcode'
 
 # File header template
 file_header:
   required_pattern: |
-                    \/\/ filepath: .*
-                    \/\/ Momentum Finance - Personal Finance App
-                    \/\/ Copyright © \d{4} Momentum Finance\. All rights reserved\.
+    \/\/ filepath: .*
+    \/\/ Momentum Finance - Personal Finance App
+    \/\/ Copyright © \d{4} Momentum Finance\. All rights reserved\.
 
 # Custom rules
 custom_rules:
@@ -165,30 +165,30 @@ custom_rules:
   # Enforce MVVM pattern for ViewModels
   viewmodel_observable:
     included: ".*ViewModels/.*\\.swift"
-    name: "ViewModel Observable"
+    name: 'ViewModel Observable'
     regex: "@MainActor\\s+class.*ViewModel.*ObservableObject"
-    message: "ViewModels should be @MainActor and conform to ObservableObject"
+    message: 'ViewModels should be @MainActor and conform to ObservableObject'
     severity: warning
 
   # Discourage force unwrapping in production code
   no_force_unwrapping:
-    name: "Force Unwrapping"
+    name: 'Force Unwrapping'
     regex: "\\!(?![\\s]*\\/\\/)"
-    message: "Avoid force unwrapping - use optional binding or guard statements"
+    message: 'Avoid force unwrapping - use optional binding or guard statements'
     severity: warning
 
   # Encourage proper error handling
   todo_fixme:
-    name: "TODO and FIXME"
-    regex: "(TODO|FIXME)"
-    message: "TODO and FIXME should be resolved before release"
+    name: 'TODO and FIXME'
+    regex: '(TODO|FIXME)'
+    message: 'TODO and FIXME should be resolved before release'
     severity: warning
-    
+
   # Ensure proper logging usage
   print_usage:
-    name: "Print Usage"
+    name: 'Print Usage'
     regex: "print\\("
-    message: "Use Logger instead of print() for better debugging"
+    message: 'Use Logger instead of print() for better debugging'
     severity: warning
 
 # Analyzer rules

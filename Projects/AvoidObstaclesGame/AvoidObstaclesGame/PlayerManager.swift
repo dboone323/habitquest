@@ -242,7 +242,7 @@ class PlayerManager {
     /// Applies a power-up effect to the player
     /// - Parameter type: The type of power-up effect
     func applyPowerUpEffect(_ type: PowerUpType) {
-        guard let player else { return }
+        guard self.player != nil else { return }
 
         switch type {
         case .shield:
@@ -384,6 +384,91 @@ class PlayerManager {
 
             self.delegate?.playerDidMove(to: targetPosition)
         }
+    }
+
+    // MARK: - Async Player Management
+
+    /// Creates and configures the player node asynchronously
+    /// - Parameter position: Initial position for the player
+    func createPlayerAsync(at position: CGPoint) async {
+        await Task.detached {
+            self.createPlayer(at: position)
+        }.value
+    }
+
+    /// Moves the player to a target position with smooth animation asynchronously
+    /// - Parameter targetPosition: The target position to move to
+    func moveToAsync(_ targetPosition: CGPoint) async {
+        await Task.detached {
+            self.moveTo(targetPosition)
+        }.value
+    }
+
+    /// Instantly moves the player to a position asynchronously (for initialization)
+    /// - Parameter position: The position to move to
+    func setPositionAsync(_ position: CGPoint) async {
+        await Task.detached {
+            self.setPosition(position)
+        }.value
+    }
+
+    /// Handles collision with an obstacle asynchronously
+    /// - Parameter obstacle: The obstacle node that was hit
+    func handleCollisionAsync(with obstacle: SKNode) async {
+        await Task.detached {
+            self.handleCollision(with: obstacle)
+        }.value
+    }
+
+    /// Sets the player to hidden state asynchronously
+    func hideAsync() async {
+        await Task.detached {
+            self.hide()
+        }.value
+    }
+
+    /// Sets the player to visible state asynchronously
+    func showAsync() async {
+        await Task.detached {
+            self.show()
+        }.value
+    }
+
+    /// Resets the player to initial state asynchronously
+    func resetAsync() async {
+        await Task.detached {
+            self.reset()
+        }.value
+    }
+
+    /// Applies a power-up effect to the player asynchronously
+    /// - Parameter type: The type of power-up effect
+    func applyPowerUpEffectAsync(_ type: PowerUpType) async {
+        await Task.detached {
+            self.applyPowerUpEffect(type)
+        }.value
+    }
+
+    /// Removes power-up effects from the player asynchronously
+    func removePowerUpEffectsAsync() async {
+        await Task.detached {
+            self.removePowerUpEffects()
+        }.value
+    }
+
+    /// Enables tilt-based movement controls asynchronously
+    /// - Parameter sensitivity: Sensitivity multiplier for tilt controls (0.1 to 2.0)
+    func enableTiltControlsAsync(sensitivity: CGFloat = 0.5) async {
+        await Task.detached {
+            self.enableTiltControls(sensitivity: sensitivity)
+        }.value
+    }
+
+    /// Disables tilt-based movement controls asynchronously
+    func disableTiltControlsAsync() async {
+        await Task.detached {
+            self.disableTiltControls()
+        }.value
     }
 }
 

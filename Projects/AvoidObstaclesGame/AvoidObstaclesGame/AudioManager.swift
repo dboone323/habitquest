@@ -314,27 +314,27 @@ public class AudioManager: NSObject {
     func triggerHapticFeedback(style: HapticStyle = .medium) {
         #if os(iOS)
         if #available(iOS 10.0, *) {
-            let generator: UIFeedbackGenerator
             switch style {
             case .light:
-                generator = UIImpactFeedbackGenerator(style: .light)
+                let generator = UIImpactFeedbackGenerator(style: .light)
+                generator.prepare()
+                generator.impactOccurred()
             case .medium:
-                generator = UIImpactFeedbackGenerator(style: .medium)
+                let generator = UIImpactFeedbackGenerator(style: .medium)
+                generator.prepare()
+                generator.impactOccurred()
             case .heavy:
-                generator = UIImpactFeedbackGenerator(style: .heavy)
+                let generator = UIImpactFeedbackGenerator(style: .heavy)
+                generator.prepare()
+                generator.impactOccurred()
             case .success:
-                generator = UINotificationFeedbackGenerator()
-                (generator as! UINotificationFeedbackGenerator).notificationOccurred(.success)
-                return
+                let generator = UINotificationFeedbackGenerator()
+                generator.prepare()
+                generator.notificationOccurred(.success)
             case .error:
-                generator = UINotificationFeedbackGenerator()
-                (generator as! UINotificationFeedbackGenerator).notificationOccurred(.error)
-                return
-            }
-
-            generator.prepare()
-            if let impactGenerator = generator as? UIImpactFeedbackGenerator {
-                impactGenerator.impactOccurred()
+                let generator = UINotificationFeedbackGenerator()
+                generator.prepare()
+                generator.notificationOccurred(.error)
             }
         }
         #endif
@@ -392,5 +392,165 @@ private func getPooledObject<T>() -> T? {
 private func returnToPool(_ object: Any) {
     if objectPool.count < maxPoolSize {
         objectPool.append(object)
+    }
+}
+
+// MARK: - Async Audio Operations
+
+extension AudioManager {
+    /// Plays a sound effect asynchronously
+    /// - Parameter name: The name of the sound effect to play
+    func playSoundEffectAsync(_ name: String) async {
+        await Task.detached {
+            self.playSoundEffect(name)
+        }.value
+    }
+
+    /// Plays a collision sound effect asynchronously
+    func playCollisionSoundAsync() async {
+        await Task.detached {
+            self.playCollisionSound()
+        }.value
+    }
+
+    /// Plays a score sound effect asynchronously
+    func playScoreSoundAsync() async {
+        await Task.detached {
+            self.playScoreSound()
+        }.value
+    }
+
+    /// Plays a game over sound effect asynchronously
+    func playGameOverSoundAsync() async {
+        await Task.detached {
+            self.playGameOverSound()
+        }.value
+    }
+
+    /// Plays a level up sound effect asynchronously
+    func playLevelUpSoundAsync() async {
+        await Task.detached {
+            self.playLevelUpSound()
+        }.value
+    }
+
+    /// Plays a power-up collection sound effect asynchronously
+    func playPowerUpSoundAsync() async {
+        await Task.detached {
+            self.playPowerUpSound()
+        }.value
+    }
+
+    /// Plays a shield activation sound effect asynchronously
+    func playShieldSoundAsync() async {
+        await Task.detached {
+            self.playShieldSound()
+        }.value
+    }
+
+    /// Plays an explosion sound effect asynchronously
+    func playExplosionSoundAsync() async {
+        await Task.detached {
+            self.playExplosionSound()
+        }.value
+    }
+
+    /// Starts playing background music asynchronously
+    func startBackgroundMusicAsync() async {
+        await Task.detached {
+            self.startBackgroundMusic()
+        }.value
+    }
+
+    /// Stops playing background music asynchronously
+    func stopBackgroundMusicAsync() async {
+        await Task.detached {
+            self.stopBackgroundMusic()
+        }.value
+    }
+
+    /// Pauses background music asynchronously
+    func pauseBackgroundMusicAsync() async {
+        await Task.detached {
+            self.pauseBackgroundMusic()
+        }.value
+    }
+
+    /// Resumes background music asynchronously
+    func resumeBackgroundMusicAsync() async {
+        await Task.detached {
+            self.resumeBackgroundMusic()
+        }.value
+    }
+
+    /// Enables or disables all audio asynchronously
+    /// - Parameter enabled: Whether audio should be enabled
+    func setAudioEnabledAsync(_ enabled: Bool) async {
+        await Task.detached {
+            self.setAudioEnabled(enabled)
+        }.value
+    }
+
+    /// Enables or disables background music asynchronously
+    /// - Parameter enabled: Whether music should be enabled
+    func setMusicEnabledAsync(_ enabled: Bool) async {
+        await Task.detached {
+            self.setMusicEnabled(enabled)
+        }.value
+    }
+
+    /// Sets the sound effects volume asynchronously
+    /// - Parameter volume: Volume level (0.0 to 1.0)
+    func setSoundEffectsVolumeAsync(_ volume: Float) async {
+        await Task.detached {
+            self.setSoundEffectsVolume(volume)
+        }.value
+    }
+
+    /// Sets the music volume asynchronously
+    /// - Parameter volume: Volume level (0.0 to 1.0)
+    func setMusicVolumeAsync(_ volume: Float) async {
+        await Task.detached {
+            self.setMusicVolume(volume)
+        }.value
+    }
+
+    /// Gets current audio settings asynchronously
+    /// - Returns: Dictionary of current settings
+    func getAudioSettingsAsync() async -> [String: Any] {
+        await Task.detached {
+            self.getAudioSettings()
+        }.value
+    }
+
+    /// Generates a procedural collision sound based on intensity asynchronously
+    /// - Parameter intensity: Collision intensity (0.0 to 1.0)
+    func playProceduralCollisionSoundAsync(intensity: Float) async {
+        await Task.detached {
+            self.playProceduralCollisionSound(intensity: intensity)
+        }.value
+    }
+
+    /// Generates a procedural score sound based on points asynchronously
+    /// - Parameter points: Number of points scored
+    func playProceduralScoreSoundAsync(points: Int) async {
+        await Task.detached {
+            self.playProceduralScoreSound(points: points)
+        }.value
+    }
+
+    /// Triggers haptic feedback for supported devices asynchronously
+    /// - Parameter style: The style of haptic feedback
+    func triggerHapticFeedbackAsync(style: HapticStyle = .medium) async {
+        await Task.detached {
+            self.triggerHapticFeedback(style: style)
+        }.value
+    }
+
+    /// Cleans up audio resources asynchronously
+    func cleanupAsync() async {
+        await Task.detached {
+            self.cleanup()
+        }.value
     }
 }

@@ -12,12 +12,12 @@ public struct TaskManagerHeaderView: View {
 
     public var body: some View {
         HStack {
-            Button("Done", action: {
+            Button("Done") {
                 #if os(iOS)
                 HapticManager.lightImpact()
                 #endif
                 self.dismiss()
-            })
+            }
             .accessibilityLabel("Button")
             #if os(iOS)
                 .buttonStyle(.iOSSecondary)
@@ -34,12 +34,13 @@ public struct TaskManagerHeaderView: View {
             Spacer()
 
             // Invisible button for balance
-            Button(action: {}) {
-                Text("")
-            }
-            .accessibilityLabel("Button")
-            .disabled(true)
-            .opacity(0)
+            Button {}
+                label: {
+                    Text("")
+                }
+                .accessibilityLabel("Button")
+                .disabled(true)
+                .opacity(0)
             #if os(iOS)
                 .frame(minWidth: 60, minHeight: 44)
             #endif

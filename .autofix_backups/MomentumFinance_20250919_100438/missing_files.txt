@@ -68,4 +68,3 @@ Shared/Utils/HapticManager.swift
 Shared/Views/Settings/DataExportView.swift
 Shared/Views/Settings/DataImportView.swift
 Shared/Views/Settings/SettingsView.swift
-

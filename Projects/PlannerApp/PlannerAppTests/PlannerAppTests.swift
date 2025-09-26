@@ -11,6 +11,8 @@ import XCTest
 
 @testable import PlannerApp
 
+// swiftlint:disable type_body_length
+
 final class PlannerAppTests: XCTestCase {
     var modelContainer: ModelContainer!
     var modelContext: ModelContext!
@@ -363,8 +365,8 @@ final class PlannerAppTests: XCTestCase {
 
         // Add multiple tasks
         var tasks: [Task] = []
-        for i in 1 ... 10 {
-            let task = Task(title: "Task \(i)", description: "Task \(i)", isCompleted: false)
+        for index in 1 ... 10 {
+            let task = Task(title: "Task \(index)", description: "Task \(index)", isCompleted: false)
             tasks.append(task)
         }
         TaskDataManager.shared.save(tasks: tasks)
@@ -550,9 +552,9 @@ final class PlannerAppTests: XCTestCase {
         let startTime = Date()
 
         // Simulate creating multiple tasks
-        for i in 1 ... 100 {
-            let taskData: [String: Any] = ["id": i, "title": "Task \(i)"]
-            XCTAssertEqual((taskData["id"] as? Int), i)
+        for identifier in 1 ... 100 {
+            let taskData: [String: Any] = ["id": identifier, "title": "Task \(identifier)"]
+            XCTAssertEqual((taskData["id"] as? Int), identifier)
         }
 
         let endTime = Date()
@@ -566,8 +568,8 @@ final class PlannerAppTests: XCTestCase {
         let startTime = Date()
 
         // Simulate search through multiple items
-        for i in 1 ... 1000 {
-            let item = "Item \(i)"
+        for itemIndex in 1 ... 1000 {
+            let item = "Item \(itemIndex)"
             XCTAssertTrue(item.contains("Item"))
         }
 
@@ -583,8 +585,8 @@ final class PlannerAppTests: XCTestCase {
 
         // Simulate bulk task operations
         var tasks: [[String: Any]] = []
-        for i in 1 ... 500 {
-            let task: [String: Any] = ["id": i, "title": "Bulk Task \(i)", "completed": i % 2 == 0]
+        for taskIndex in 1 ... 500 {
+            let task: [String: Any] = ["id": taskIndex, "title": "Bulk Task \(taskIndex)", "completed": taskIndex % 2 == 0]
             tasks.append(task)
         }
 
@@ -785,3 +787,5 @@ final class PlannerAppTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 }
+
+// swiftlint:enable type_body_length

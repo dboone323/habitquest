@@ -340,8 +340,8 @@ public struct SearchAndFilterSection: View {
         selectedFilter: Binding<TransactionFilter>,
         showingSearch: Binding<Bool>
     ) {
-        self._searchText = searchText
-        self._selectedFilter = selectedFilter
-        self._showingSearch = showingSearch
+        _searchText = searchText
+        _selectedFilter = selectedFilter
+        _showingSearch = showingSearch
     }
 }

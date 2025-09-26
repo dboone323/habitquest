@@ -18,6 +18,7 @@ public struct ContentView: View {
 
     // Service layer
     private let codeReviewService = CodeReviewService()
+    private let languageDetector = LanguageDetector()
 
     @State private var selectedFileURL: URL?
     @State private var codeContent: String = ""
@@ -103,7 +104,7 @@ public struct ContentView: View {
         defer { isAnalyzing = false }
 
         do {
-            let language = self.detectLanguage(from: self.selectedFileURL)
+            let language = self.languageDetector.detectLanguage(from: self.selectedFileURL)
             let result = try await codeReviewService.analyzeCode(
                 self.codeContent,
                 language: language,
@@ -124,7 +125,7 @@ public struct ContentView: View {
         defer { isAnalyzing = false }
 
         do {
-            let language = self.detectLanguage(from: self.selectedFileURL)
+            let language = self.languageDetector.detectLanguage(from: self.selectedFileURL)
             let result = try await codeReviewService.generateDocumentation(self.codeContent, language: language, includeExamples: true)
             self.documentationResult = result
             self.logger.info("Documentation generation completed successfully")
@@ -141,34 +142,13 @@ public struct ContentView: View {
         defer { isAnalyzing = false }
 
         do {
-            let language = self.detectLanguage(from: self.selectedFileURL)
+            let language = self.languageDetector.detectLanguage(from: self.selectedFileURL)
             let result = try await codeReviewService.generateTests(self.codeContent, language: language, testFramework: "XCTest")
             self.testResult = result
             self.logger.info("Test generation completed successfully")
         } catch {
             self.logger.error("Test generation failed: \(error.localizedDescription)")
             // TODO: Handle error properly
-        }
-    }
-
-    private func detectLanguage(from url: URL?) -> String {
-        guard let url else { return "Swift" }
-
-        let pathExtension = url.pathExtension.lowercased()
-        switch pathExtension {
-        case "swift": return "Swift"
-        case "py": return "Python"
-        case "js", "ts": return "JavaScript"
-        case "java": return "Java"
-        case "cpp", "cc", "cxx": return "C++"
-        case "c": return "C"
-        case "h": return "C/C++ Header"
-        case "m": return "Objective-C"
-        case "rb": return "Ruby"
-        case "php": return "PHP"
-        case "go": return "Go"
-        case "rs": return "Rust"
-        default: return "Swift" // Default to Swift
         }
     }
 }

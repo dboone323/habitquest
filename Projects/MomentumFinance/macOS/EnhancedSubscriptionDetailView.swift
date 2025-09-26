@@ -4,6 +4,7 @@
 import Charts
 import SwiftData
 import SwiftUI
+import Shared
 
 #if os(macOS)
 extension Features.Subscriptions {
@@ -22,6 +23,8 @@ extension Features.Subscriptions {
         @State private var showingDeleteConfirmation = false
         @State private var showingCancelFlow = false
         @State private var showingShoppingAlternatives = false
+        @State private var validationErrors: [String: String] = [:]
+        @State private var showingValidationAlert = false
 
         private var subscription: Subscription? {
             self.subscriptions.first(where: { $0.id == self.subscriptionId })
@@ -51,7 +54,7 @@ extension Features.Subscriptions {
             case twoYears = "2 Years"
             case allTime = "All Time"
 
-            var id: String { self.rawValue }
+            var id: String { rawValue }
         }
 
         var body: some View {

@@ -272,7 +272,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func keyboardShortcut(_ key: String, modifiers: EventModifiers, action: @escaping () -> Void) -> some View {
-        self.onExitCommand(perform: nil)
+        onExitCommand(perform: nil)
             .background(KeyboardShortcutHandler(key: key, modifiers: modifiers, action: action))
     }
 }
@@ -285,7 +285,7 @@ struct KeyboardShortcutHandler: NSViewRepresentable {
 
     /// <#Description#>
     /// - Returns: <#description#>
-    func makeNSView(context: Context) -> NSView {
+    func makeNSView(context _: Context) -> NSView {
         let view = KeyView()
         view.key = self.key
         view.modifiers = self.modifiers
@@ -295,7 +295,7 @@ struct KeyboardShortcutHandler: NSViewRepresentable {
 
     /// <#Description#>
     /// - Returns: <#description#>
-    func updateNSView(_ nsView: NSView, context: Context) {
+    func updateNSView(_ nsView: NSView, context _: Context) {
         guard let view = nsView as? KeyView else { return }
         view.key = self.key
         view.modifiers = self.modifiers

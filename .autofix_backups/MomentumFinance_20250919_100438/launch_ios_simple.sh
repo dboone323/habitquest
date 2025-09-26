@@ -43,47 +43,47 @@ sleep 3
 # Build the app using Xcode with simplified approach
 echo "🔨 Building app with Xcode..."
 xcodebuild -project MomentumFinance.xcodeproj \
-           -scheme MomentumFinance \
-           -destination "platform=iOS Simulator,id=$DEVICE_ID" \
-           build
+  -scheme MomentumFinance \
+  -destination "platform=iOS Simulator,id=$DEVICE_ID" \
+  build
 
 BUILD_SUCCESS=$?
 
 if [ $BUILD_SUCCESS -eq 0 ]; then
-    echo -e "${GREEN}✅ Build successful!${NC}"
-    
-    # Get the app bundle identifier and path
-    APP_BUNDLE_ID="com.momentumfinance.MomentumFinance"
-    APP_PATH=$(find . -name "MomentumFinance.app" -path "*/Build/Products/Debug-iphonesimulator/*" | head -1)
-    
-    if [ -z "$APP_PATH" ]; then
-        echo -e "${YELLOW}⚠️  App bundle not found in expected location, searching...${NC}"
-        APP_PATH=$(find . -name "MomentumFinance.app" | head -1)
-    fi
-    
-    if [ ! -z "$APP_PATH" ]; then
-        # Install the app
-        echo "📦 Installing app: $APP_PATH"
-        xcrun simctl install "$DEVICE_ID" "$APP_PATH"
-        
-        # Launch the app
-        echo "🚀 Launching app..."
-        xcrun simctl launch "$DEVICE_ID" "$APP_BUNDLE_ID"
-        
-        echo -e "${GREEN}✨ MomentumFinance launched successfully on $DEVICE_NAME!${NC}"
-        echo "🎯 iOS Configuration: $DEVICE_NAME (iOS $IOS_VERSION)"
-    else
-        echo -e "${RED}❌ Could not find app bundle after build${NC}"
-        exit 1
-    fi
-    
-else
-    echo -e "${RED}❌ Build failed${NC}"
-    echo "Let's try a simpler approach without Xcode project..."
-    
-    # Alternative: Just open the simulator and let user manually install
-    echo "🔄 Opening simulator for manual testing..."
-    echo "You can drag and drop the app bundle or use other installation methods."
-    
+  echo -e "${GREEN}✅ Build successful!${NC}"
+
+  # Get the app bundle identifier and path
+  APP_BUNDLE_ID="com.momentumfinance.MomentumFinance"
+  APP_PATH=$(find . -name "MomentumFinance.app" -path "*/Build/Products/Debug-iphonesimulator/*" | head -1)
+
+  if [ -z "$APP_PATH" ]; then
+    echo -e "${YELLOW}⚠️  App bundle not found in expected location, searching...${NC}"
+    APP_PATH=$(find . -name "MomentumFinance.app" | head -1)
+  fi
+
+  if [ ! -z "$APP_PATH" ]; then
+    # Install the app
+    echo "📦 Installing app: $APP_PATH"
+    xcrun simctl install "$DEVICE_ID" "$APP_PATH"
+
+    # Launch the app
+    echo "🚀 Launching app..."
+    xcrun simctl launch "$DEVICE_ID" "$APP_BUNDLE_ID"
+
+    echo -e "${GREEN}✨ MomentumFinance launched successfully on $DEVICE_NAME!${NC}"
+    echo "🎯 iOS Configuration: $DEVICE_NAME (iOS $IOS_VERSION)"
+  else
+    echo -e "${RED}❌ Could not find app bundle after build${NC}"
     exit 1
+  fi
+
+else
+  echo -e "${RED}❌ Build failed${NC}"
+  echo "Let's try a simpler approach without Xcode project..."
+
+  # Alternative: Just open the simulator and let user manually install
+  echo "🔄 Opening simulator for manual testing..."
+  echo "You can drag and drop the app bundle or use other installation methods."
+
+  exit 1
 fi

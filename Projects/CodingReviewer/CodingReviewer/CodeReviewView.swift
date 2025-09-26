@@ -81,11 +81,15 @@ public struct ResultsPanel: View {
     let testResult: TestGenerationResult?
     let isAnalyzing: Bool
 
+    private var presenter: ResultsPanelPresenter {
+        ResultsPanelPresenter(currentView: self.currentView, isAnalyzing: self.isAnalyzing)
+    }
+
     public var body: some View {
         VStack(spacing: 0) {
             // Results header
             HStack {
-                Text(self.resultsTitle)
+                Text(self.presenter.title)
                     .font(.headline)
                 Spacer()
                 if self.isAnalyzing {
@@ -104,24 +108,24 @@ public struct ResultsPanel: View {
                     case .analysis:
                         if let result = analysisResult {
                             AnalysisResultsView(result: result)
-                        } else if !self.isAnalyzing {
-                            Text("Click Analyze to start code analysis")
+                        } else if let message = presenter.emptyStateMessage(hasResult: analysisResult != nil) {
+                            Text(message)
                                 .foregroundColor(.secondary)
                                 .padding()
                         }
                     case .documentation:
                         if let result = documentationResult {
                             DocumentationResultsView(result: result)
-                        } else if !self.isAnalyzing {
-                            Text("Click Generate Docs to create documentation")
+                        } else if let message = presenter.emptyStateMessage(hasResult: documentationResult != nil) {
+                            Text(message)
                                 .foregroundColor(.secondary)
                                 .padding()
                         }
                     case .tests:
                         if let result = testResult {
                             TestResultsView(result: result)
-                        } else if !self.isAnalyzing {
-                            Text("Click Generate Tests to create unit tests")
+                        } else if let message = presenter.emptyStateMessage(hasResult: testResult != nil) {
+                            Text(message)
                                 .foregroundColor(.secondary)
                                 .padding()
                         }
@@ -131,12 +135,30 @@ public struct ResultsPanel: View {
             }
         }
     }
+}
 
-    private var resultsTitle: String {
+struct ResultsPanelPresenter {
+    let currentView: ContentViewType
+    let isAnalyzing: Bool
+
+    var title: String {
         switch self.currentView {
         case .analysis: "Analysis Results"
         case .documentation: "Documentation"
         case .tests: "Generated Tests"
+        }
+    }
+
+    func emptyStateMessage(hasResult: Bool) -> String? {
+        guard !hasResult, !self.isAnalyzing else { return nil }
+
+        switch self.currentView {
+        case .analysis:
+            return "Click Analyze to start code analysis"
+        case .documentation:
+            return "Click Generate Docs to create documentation"
+        case .tests:
+            return "Click Generate Tests to create unit tests"
         }
     }
 }

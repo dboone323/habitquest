@@ -42,9 +42,9 @@ public extension ModelContext {
     @MainActor
     func hasSampleData() -> Bool {
         // Check if any data exists
-        let categoryCount = (try? self.fetchCount(FetchDescriptor<ExpenseCategory>())) ?? 0
-        let accountCount = (try? self.fetchCount(FetchDescriptor<FinancialAccount>())) ?? 0
-        let transactionCount = (try? self.fetchCount(FetchDescriptor<FinancialTransaction>())) ?? 0
+        let categoryCount = (try? fetchCount(FetchDescriptor<ExpenseCategory>())) ?? 0
+        let accountCount = (try? fetchCount(FetchDescriptor<FinancialAccount>())) ?? 0
+        let transactionCount = (try? fetchCount(FetchDescriptor<FinancialTransaction>())) ?? 0
 
         return categoryCount > 0 || accountCount > 0 || transactionCount > 0
     }
@@ -53,13 +53,13 @@ public extension ModelContext {
     @MainActor
     func clearAllData() throws {
         // Delete all entities
-        try self.delete(model: FinancialTransaction.self)
-        try self.delete(model: FinancialAccount.self)
-        try self.delete(model: ExpenseCategory.self)
-        try self.delete(model: Budget.self)
-        try self.delete(model: SavingsGoal.self)
-        try self.delete(model: Subscription.self)
+        try delete(model: FinancialTransaction.self)
+        try delete(model: FinancialAccount.self)
+        try delete(model: ExpenseCategory.self)
+        try delete(model: Budget.self)
+        try delete(model: SavingsGoal.self)
+        try delete(model: Subscription.self)
 
-        try self.save()
+        try save()
     }
 }

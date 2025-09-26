@@ -367,7 +367,7 @@ public enum AppError: LocalizedError, Identifiable {
             ("Goal", .goalError(description)),
             ("Sync", .syncError(description)),
             ("File", .fileSystemError(description)),
-            ("Storage", .fileSystemError(description))
+            ("Storage", .fileSystemError(description)),
         ]
 
         for (keyword, errorType) in errorMappings where errorName.contains(keyword) {
@@ -394,7 +394,7 @@ public struct ErrorAlert: ViewModifier {
         )
     }
 
-    private func alertActions(_ error: Error) -> some View {
+    private func alertActions(_: Error) -> some View {
         ForEach(self.errorHandler.recoveryOptions) { option in
             Button(action: {
                 option.action()

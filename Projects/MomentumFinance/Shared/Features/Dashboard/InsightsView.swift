@@ -130,7 +130,7 @@ public struct InsightsView: View {
                 FinancialAccount.self,
                 FinancialTransaction.self,
                 Budget.self,
-                ExpenseCategory.self
+                ExpenseCategory.self,
             ], inMemory: true
         )
 }

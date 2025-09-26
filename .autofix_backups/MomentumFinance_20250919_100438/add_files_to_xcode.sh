@@ -9,10 +9,10 @@ cp "$PROJECT_FILE" "$PROJECT_FILE.backup_$(date +%s)"
 
 # Files to add
 FILES=(
-    "SubscriptionManagementViews.swift"
-    "SubscriptionSummaryViews.swift" 
-    "SubscriptionRowViews.swift"
-    "EnhancedGoalsSectionViews.swift"
+  "SubscriptionManagementViews.swift"
+  "SubscriptionSummaryViews.swift"
+  "SubscriptionRowViews.swift"
+  "EnhancedGoalsSectionViews.swift"
 )
 
 # Generate unique IDs for files
@@ -35,7 +35,7 @@ sed -i '' '/6B1A2B880C0D1E9100123456.*SettingsView.swift in Sources/a\
 		'"$ENHANCED_BUILD_ID"' /* EnhancedGoalsSectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = '"$ENHANCED_ID"' /* EnhancedGoalsSectionViews.swift */; };
 ' "$PROJECT_FILE"
 
-# Add PBXFileReference entries  
+# Add PBXFileReference entries
 sed -i '' '/6B1A2B872C0D1E9100123456.*SettingsView.swift/a\
 		'"$MANAGEMENT_ID"' /* SubscriptionManagementViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManagementViews.swift; sourceTree = "<group>"; };\
 		'"$SUMMARY_ID"' /* SubscriptionSummaryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionSummaryViews.swift; sourceTree = "<group>"; };\
@@ -50,7 +50,7 @@ sed -i '' '/6B1A2B772C0D1E9100123456.*SubscriptionDetailView.swift/a\
 				'"$ROW_ID"' /* SubscriptionRowViews.swift */,
 ' "$PROJECT_FILE"
 
-# Add enhanced goals file to GoalsAndReports group  
+# Add enhanced goals file to GoalsAndReports group
 sed -i '' '/6B1A2B852C0D1E9100123456.*GoalUtilityViews.swift/a\
 				'"$ENHANCED_ID"' /* EnhancedGoalsSectionViews.swift */,
 ' "$PROJECT_FILE"

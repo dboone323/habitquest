@@ -115,17 +115,11 @@
 		};
 		68581ECA2E0F1EA800E5AADA /* HabitQuestTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				Info.plist,
-			);
 			path = HabitQuestTests;
 			sourceTree = "<group>";
 		};
 		68581ED42E0F1EA800E5AADA /* HabitQuestUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				Info.plist,
-			);
 			path = HabitQuestUITests;
 			sourceTree = "<group>";
 		};

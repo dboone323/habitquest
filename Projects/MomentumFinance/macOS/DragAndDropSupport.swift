@@ -222,7 +222,7 @@ struct DraggableFinanceItemModifier<Item: DraggableFinanceItem>: ViewModifier {
                     UTType.financeTransaction,
                     UTType.financeBudget,
                     UTType.financeSubscription,
-                    UTType.financeGoal
+                    UTType.financeGoal,
                 ],
                 isTargeted: nil
             ) { _, _ in

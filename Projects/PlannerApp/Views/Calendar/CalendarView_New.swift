@@ -1,29 +1,5 @@
 import SwiftUI
 
-public struct CalendarView_New: View {
-    var body: some View {
-        Text("Calendar View")
-    }
-}
-
-public struct CalendarView_New_Previews: PreviewProvider {
-    static var previews: some View {
-        CalendarView_New()
-    }
-}
-
-public struct CalendarView_New: View {
-    var body: some View {
-        Text("Calendar View")
-    }
-}
-
-public struct CalendarView_New_Previews: PreviewProvider {
-    static var previews: some View {
-        CalendarView_New()
-    }
-}
-
 // filepath: /Users/danielstevens/Desktop/PlannerApp/Views/Calendar/CalendarView.swift
 // PlannerApp/Views/Calendar/CalendarView.swift
 
@@ -134,15 +110,23 @@ public struct CalendarView: View {
                         Spacer()
 
                         HStack(spacing: 12) {
-                            Button(action: self.previousMonth).accessibilityLabel("Button").accessibilityLabel("Button") {
+                            Button {
+                                self.previousMonth()
+                            } label: {
                                 Image(systemName: "chevron.left")
                                     .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
                             }
+                            .accessibilityLabel("Button")
+                            .accessibilityLabel("Button")
 
-                            Button(action: self.nextMonth).accessibilityLabel("Button").accessibilityLabel("Button") {
+                            Button {
+                                self.nextMonth()
+                            } label: {
                                 Image(systemName: "chevron.right")
                                     .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
                             }
+                            .accessibilityLabel("Button")
+                            .accessibilityLabel("Button")
                         }
                     }
                     .padding(.horizontal, 20)
@@ -169,11 +153,15 @@ public struct CalendarView: View {
 
                         Spacer()
 
-                        Button(action: { self.showAddEvent = true }).accessibilityLabel("Button").accessibilityLabel("Button") {
+                        Button {
+                            self.showAddEvent = true
+                        } label: {
                             Image(systemName: "plus.circle.fill")
                                 .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
                                 .font(.title2)
                         }
+                        .accessibilityLabel("Button")
+                        .accessibilityLabel("Button")
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 16)

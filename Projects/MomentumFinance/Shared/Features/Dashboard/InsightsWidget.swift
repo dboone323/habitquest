@@ -192,7 +192,7 @@ public struct CompactInsightRow: View {
             FinancialAccount.self,
             FinancialTransaction.self,
             Budget.self,
-            ExpenseCategory.self
+            ExpenseCategory.self,
         ], inMemory: true
     )
 }

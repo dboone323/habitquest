@@ -142,7 +142,7 @@ public enum ColorDefinitions {
         Color(hex: "#BB8FCE"), // Purple
         Color(hex: "#85C1E9"), // Sky Blue
         Color(hex: "#F8C471"), // Orange
-        Color(hex: "#82E0AA") // Light Green
+        Color(hex: "#82E0AA"), // Light Green
     ]
 }
 

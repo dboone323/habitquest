@@ -191,7 +191,7 @@ public struct Theme: Identifiable, Equatable { // Added Equatable for comparison
         sunsetOrange,
         midnightDark,
         minimalGray,
-        rosePink
+        rosePink,
     ]
 
     // MARK: - Enhanced Modern Themes (defined in ModernThemes.swift)

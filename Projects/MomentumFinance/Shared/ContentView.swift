@@ -132,8 +132,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func iOSOptimizations() -> some View {
-        self
-            .tint(.blue)
+        tint(.blue)
     }
 }
 
@@ -142,8 +141,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func macOSOptimizations() -> some View {
-        self
-            .preferredColorScheme(.light)
+        preferredColorScheme(.light)
             .tint(.indigo)
     }
 }

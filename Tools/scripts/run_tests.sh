@@ -7,7 +7,7 @@ set -euo pipefail
 PROJECTS=(AvoidObstaclesGame HabitQuest MomentumFinance PlannerApp CodingReviewer)
 ROOT=$(pwd)
 
-log(){ echo "[tests] $*"; }
+log() { echo "[tests] $*"; }
 
 for proj in "${PROJECTS[@]}"; do
   if [ -d "Projects/$proj" ]; then

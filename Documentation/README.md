@@ -15,14 +15,17 @@ This workspace provides a complete development environment with automated tools 
 ## 📖 Guides
 
 ### Development
+
 - **[Developer Tools Guide](./Guides/DEVELOPER_TOOLS.md)** - Complete tool reference
 - **[CI/CD Guide](./Guides/CI_CD_GUIDE.md)** - Pipeline configuration and management
 - **[Architecture Guide](./Guides/ARCHITECTURE.md)** - System design and patterns
 
 ### Projects
+
 - **"** - [API Reference](./API/"_API.md)
 - **AvoidObstaclesGame** - [API Reference](./API/AvoidObstaclesGame_API.md)
 - **CodingReviewer** - [API Reference](./API/CodingReviewer_API.md)
+- **Config** - [API Reference](./API/Config_API.md)
 - **HabitQuest** - [API Reference](./API/HabitQuest_API.md)
 - **MomentumFinance** - [API Reference](./API/MomentumFinance_API.md)
 - **PlannerApp** - [API Reference](./API/PlannerApp_API.md)
@@ -32,6 +35,7 @@ This workspace provides a complete development environment with automated tools 
 ## 🛠️ Automation System
 
 ### Core Components
+
 - **Master Automation Controller** - Central command interface
 - **Intelligent Auto-Fix** - Automatic code issue resolution
 - **Performance Monitoring** - Build and system performance tracking
@@ -39,6 +43,7 @@ This workspace provides a complete development environment with automated tools 
 - **Email Alerting** - Critical event notifications
 
 ### Key Scripts
+
 - `master_automation.sh` - Main automation interface
 - `intelligent_autofix.sh` - Code quality and fixing
 - `performance_monitor.sh` - Performance monitoring
@@ -48,13 +53,16 @@ This workspace provides a complete development environment with automated tools 
 ## 🔧 Configuration
 
 ### Main Configuration Files
+
 - `Tools/Automation/config/automation_config.yaml` - Core automation settings
 - `Tools/Automation/config/error_recovery.yaml` - Error handling configuration
 - `Tools/Automation/config/alerting.yaml` - Email alert settings
 - `Tools/Automation/config/integration_testing.yaml` - Testing configuration
 
 ### Project-Specific Settings
+
 Each project contains its own configuration for:
+
 - Build settings and targets
 - Test configurations
 - Deployment settings
@@ -63,12 +71,14 @@ Each project contains its own configuration for:
 ## 📊 Monitoring & Analytics
 
 ### Dashboards
+
 - **Unified Dashboard** - System-wide status overview
 - **Performance Reports** - Build time and resource usage
 - **Test Results** - Automated test execution reports
 - **Security Reports** - Vulnerability scanning results
 
 ### Logs
+
 - `Tools/Automation/logs/` - Automation system logs
 - `.autofix.log` - Auto-fix operation logs
 - `.alerts.log` - Alert system logs
@@ -76,12 +86,14 @@ Each project contains its own configuration for:
 ## 🚨 Troubleshooting
 
 ### Common Issues
+
 1. **Build Failures** - Check Xcode version and code signing
 2. **Test Failures** - Verify test environment and dependencies
 3. **Automation Errors** - Review logs and system status
 4. **Performance Issues** - Check resource usage and optimization settings
 
 ### Getting Help
+
 1. Check system status: `./Tools/Automation/master_automation.sh status`
 2. Review logs in `Tools/Automation/logs/`
 3. Run diagnostics: `./Tools/Automation/master_automation.sh validate <project>`
@@ -90,6 +102,7 @@ Each project contains its own configuration for:
 ## 📈 Best Practices
 
 ### Development Workflow
+
 1. Always run quality checks before committing
 2. Use automation scripts instead of manual commands
 3. Keep tools and dependencies updated
@@ -97,6 +110,7 @@ Each project contains its own configuration for:
 5. Monitor system performance regularly
 
 ### Code Quality
+
 - Follow Swift style guidelines
 - Write comprehensive tests
 - Document public APIs
@@ -104,6 +118,7 @@ Each project contains its own configuration for:
 - Keep dependencies minimal and updated
 
 ### Automation
+
 - Configure alerts for critical events
 - Set up branch protection rules
 - Monitor CI/CD pipeline health
@@ -113,7 +128,9 @@ Each project contains its own configuration for:
 ## 🔄 Continuous Integration
 
 ### GitHub Actions
+
 The workspace includes comprehensive CI/CD pipelines with:
+
 - Automated building and testing
 - Code quality checks
 - Security scanning
@@ -121,6 +138,7 @@ The workspace includes comprehensive CI/CD pipelines with:
 - Performance monitoring
 
 ### Quality Gates
+
 - Code formatting compliance
 - Test coverage requirements
 - Security scan results
@@ -130,6 +148,7 @@ The workspace includes comprehensive CI/CD pipelines with:
 ## 🤝 Contributing
 
 ### Development Setup
+
 1. Fork the repository
 2. Clone your fork
 3. Set up the development environment
@@ -139,6 +158,7 @@ The workspace includes comprehensive CI/CD pipelines with:
 7. Submit a pull request
 
 ### Code Standards
+
 - Follow existing code style
 - Add tests for new features
 - Update documentation
@@ -154,5 +174,5 @@ The workspace includes comprehensive CI/CD pipelines with:
 
 ---
 
-*Generated automatically on: $(date)*
-*Quantum Workspace Automation System v2.0*
+_Generated automatically on: $(date)_
+_Quantum Workspace Automation System v2.0_

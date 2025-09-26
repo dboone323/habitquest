@@ -59,7 +59,7 @@ public struct QuestLogView: View {
 
 /// Empty state when no quests exist
 private struct EmptyQuestLogView: View {
-    public var body: some View {
+    var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "book.closed")
                 .font(.system(size: 60))
@@ -84,7 +84,7 @@ private struct QuestListView: View {
     let onDelete: (Habit) -> Void
     let onEdit: (Habit) -> Void
 
-    public var body: some View {
+    var body: some View {
         List {
             ForEach(self.habits, id: \.id) { habit in
                 QuestLogRowView(
@@ -106,7 +106,7 @@ private struct QuestLogRowView: View {
     let habit: Habit
     let onEdit: (Habit) -> Void
 
-    public var body: some View {
+    var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 6) {
                 Text(self.habit.name)
@@ -163,7 +163,7 @@ private struct QuestStatChip: View {
     let text: String
     let color: Color
 
-    public var body: some View {
+    var body: some View {
         HStack(spacing: 4) {
             Image(systemName: self.icon)
                 .font(.caption)
@@ -203,7 +203,7 @@ private struct AddEditQuestView: View {
         self.habit != nil
     }
 
-    public var body: some View {
+    var body: some View {
         NavigationView {
             Form {
                 Section("Quest Details") {

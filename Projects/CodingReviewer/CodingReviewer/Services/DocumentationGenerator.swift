@@ -16,9 +16,9 @@ struct DocumentationGenerator {
     ///   - includeExamples: Whether to include usage examples
     /// - Returns: Generated documentation as a string
     func generateBasicDocumentation(code: String, language: String, includeExamples: Bool) -> String {
-        var documentation = "# Code Documentation\n\n"
+        var documentationParts = ["# Code Documentation\n\n"]
 
-        documentation += "Generated documentation for \(language) code.\n\n"
+        documentationParts.append("Generated documentation for \(language) code.\n\n")
 
         // Extract function signatures (improved implementation)
         if language == "Swift" {
@@ -32,19 +32,24 @@ struct DocumentationGenerator {
                 let trimmed = line.trimmingCharacters(in: .whitespaces)
 
                 // Check if this line starts a function
-                if !inFunction, trimmed.hasPrefix("func ") ||
-                    trimmed.hasPrefix("private func ") ||
-                    trimmed.hasPrefix("public func ") ||
-                    trimmed.hasPrefix("internal func ") ||
-                    trimmed.hasPrefix("static func ") {
+                if !inFunction,
+                   trimmed.hasPrefix("func ") ||
+                   trimmed.hasPrefix("private func ") ||
+                   trimmed.hasPrefix("public func ") ||
+                   trimmed.hasPrefix("internal func ") ||
+                   trimmed.hasPrefix("static func ") {
                     inFunction = true
                     currentFunction = [trimmed]
                     braceCount = 0
 
                     // Count braces in the current line
                     for char in trimmed {
-                        if char == "{" { braceCount += 1 }
-                        if char == "}" { braceCount -= 1 }
+                        if char == "{" {
+                            braceCount += 1
+                        }
+                        if char == "}" {
+                            braceCount -= 1
+                        }
                     }
 
                     // If function is complete on this line, save it
@@ -58,8 +63,12 @@ struct DocumentationGenerator {
 
                     // Count braces in the current line
                     for char in trimmed {
-                        if char == "{" { braceCount += 1 }
-                        if char == "}" { braceCount -= 1 }
+                        if char == "{" {
+                            braceCount += 1
+                        }
+                        if char == "}" {
+                            braceCount -= 1
+                        }
                     }
 
                     // If braces balance and we have a closing brace, function is complete
@@ -72,19 +81,20 @@ struct DocumentationGenerator {
             }
 
             if !functions.isEmpty {
-                documentation += "## Functions\n\n"
+                documentationParts.append("## Functions\n\n")
                 for function in functions {
-                    documentation += "- `\(function)`\n"
+                    documentationParts.append("- `\(function)`\n")
                 }
-                documentation += "\n"
+                documentationParts.append("\n")
             }
         }
 
         if includeExamples {
-            documentation += "## Usage Examples\n\n"
-            documentation += "```\(language.lowercased())\n// Example usage\n```\n\n"
+            documentationParts.append("## Usage Examples\n\n")
+            documentationParts.append("```\(language.lowercased())\n// Example usage\n```\n\n")
         }
 
+        let documentation = documentationParts.joined()
         // Remove trailing whitespace but keep one newline at the end
         return documentation.trimmingCharacters(in: .whitespacesAndNewlines) + "\n"
     }

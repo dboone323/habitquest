@@ -206,7 +206,7 @@ extension Features.GoalsAndReports {
                                                 isSelected
                                                     ? LinearGradient(
                                                         gradient: Gradient(colors: [
-                                                            .blue, .blue.opacity(0.8)
+                                                            .blue, .blue.opacity(0.8),
                                                         ]),
                                                         startPoint: .leading,
                                                         endPoint: .trailing,
@@ -233,7 +233,7 @@ extension Features.GoalsAndReports {
                 .background(
                     LinearGradient(
                         gradient: Gradient(colors: [
-                            self.backgroundColor, self.secondaryBackgroundColor
+                            self.backgroundColor, self.secondaryBackgroundColor,
                         ]),
                         startPoint: .top,
                         endPoint: .bottom,
@@ -311,6 +311,6 @@ extension Features.GoalsAndReports {
 #Preview {
     Features.GoalsAndReports.GoalsAndReportsView()
         .modelContainer(for: [
-            SavingsGoal.self, FinancialTransaction.self, Budget.self, ExpenseCategory.self
+            SavingsGoal.self, FinancialTransaction.self, Budget.self, ExpenseCategory.self,
         ])
 }

@@ -23,8 +23,9 @@ if [[ "$#" -gt 0 ]]; then
   for f in "$@"; do
     # Only Swift files, skip archived/merge backups/imports/tests
     case "$f" in
-      *Tools/Automation/*|*Archive/*|*Imported/*|*_merge_backups/*|*Tests/*)
-        continue ;;
+    *Tools/Automation/* | *Archive/* | *Imported/* | *_merge_backups/* | *Tests/*)
+      continue
+      ;;
     esac
     [[ "$f" == *.swift ]] || continue
     files+=("$f")
@@ -39,8 +40,9 @@ else
   files=()
   for f in "${tracked_swift[@]}"; do
     case "$f" in
-      *Tools/Automation/*|*Archive/*|*Imported/*|*_merge_backups/*|*/*Tests/*|*/*Tests.swift)
-        continue ;;
+    *Tools/Automation/* | *Archive/* | *Imported/* | *_merge_backups/* | */*Tests/* | */*Tests.swift)
+      continue
+      ;;
     esac
     files+=("$f")
   done

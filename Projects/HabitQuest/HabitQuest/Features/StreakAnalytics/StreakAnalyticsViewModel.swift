@@ -1,11 +1,11 @@
+import Combine
 import SwiftData
 import SwiftUI
-import Combine
 
 /// ViewModel for StreakAnalyticsView handling business logic and data management
 @MainActor
 final class StreakAnalyticsViewModel: ObservableObject {
-    public let objectWillChange = ObservableObjectPublisher()
+    let objectWillChange = ObservableObjectPublisher()
 
     @Published var showingExportSheet = false
     @Published var isLoading = false
@@ -51,12 +51,12 @@ final class StreakAnalyticsViewModel: ObservableObject {
     }
 
     func loadAnalytics() async {
-        isLoading = true
-        errorMessage = nil
+        self.isLoading = true
+        self.errorMessage = nil
         defer { isLoading = false }
 
         guard let modelContext, let service = streakService else {
-            errorMessage = "Failed to initialize services"
+            self.errorMessage = "Failed to initialize services"
             return
         }
 
@@ -66,9 +66,9 @@ final class StreakAnalyticsViewModel: ObservableObject {
             let habits = try modelContext.fetch(habitDescriptor)
 
             let analytics = await generateAnalyticsData(habits: habits, service: service)
-            analyticsData = analytics
+            self.analyticsData = analytics
         } catch {
-            errorMessage = "Failed to load analytics: \(error.localizedDescription)"
+            self.errorMessage = "Failed to load analytics: \(error.localizedDescription)"
         }
     }
 
@@ -141,7 +141,7 @@ final class StreakAnalyticsViewModel: ObservableObject {
             (3 ... 6, "Building"),
             (7 ... 29, "Strong"),
             (30 ... 99, "Impressive"),
-            (100 ... Int.max, "Legendary")
+            (100 ... Int.max, "Legendary"),
         ]
 
         return ranges.map { range, label in

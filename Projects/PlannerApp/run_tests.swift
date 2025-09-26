@@ -516,8 +516,8 @@ runTest("testTaskCreationPerformance") {
     let startTime = Date()
 
     var tasks: [PlannerTask] = []
-    for i in 1 ... 100 {
-        let task = PlannerTask(title: "Task \(i)", priority: .medium)
+    for taskIndex in 1 ... 100 {
+        let task = PlannerTask(title: "Task \(taskIndex)", priority: .medium)
         tasks.append(task)
     }
 
@@ -546,8 +546,8 @@ runTest("testBulkOperationsPerformance") {
     let startTime = Date()
 
     var tasks: [[String: Any]] = []
-    for i in 1 ... 500 {
-        let task: [String: Any] = ["id": i, "title": "Bulk Task \(i)", "completed": i % 2 == 0]
+    for taskIndex in 1 ... 500 {
+        let task: [String: Any] = ["id": taskIndex, "title": "Bulk Task \(taskIndex)", "completed": taskIndex % 2 == 0]
         tasks.append(task)
     }
 

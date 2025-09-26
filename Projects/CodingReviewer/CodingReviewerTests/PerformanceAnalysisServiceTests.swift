@@ -7,7 +7,7 @@
 @testable import CodingReviewer
 import XCTest
 
-public class PerformanceAnalysisServiceTests: XCTestCase {
+final class PerformanceAnalysisServiceTests: XCTestCase {
     var performanceAnalyzer: PerformanceAnalysisService!
 
     override func setUp() {

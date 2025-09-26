@@ -183,7 +183,7 @@ extension Features.GoalsAndReports {
                     .fill(
                         LinearGradient(
                             gradient: Gradient(colors: [
-                                Color.blue.opacity(0.05), Color.blue.opacity(0.1)
+                                Color.blue.opacity(0.05), Color.blue.opacity(0.1),
                             ]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing,

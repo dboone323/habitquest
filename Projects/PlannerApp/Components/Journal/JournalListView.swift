@@ -35,7 +35,7 @@ public struct JournalListView: View {
 public struct JournalListView_Previews: PreviewProvider {
     public static var previews: some View {
         let sampleEntries = [
-            JournalEntry(title: "Sample Entry", body: "This is a test entry", date: Date(), mood: "😊")
+            JournalEntry(title: "Sample Entry", body: "This is a test entry", date: Date(), mood: "😊"),
         ]
         JournalListView(
             filteredEntries: sampleEntries,

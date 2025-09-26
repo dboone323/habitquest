@@ -133,22 +133,22 @@ final class GoalsAndReportsViewModel {
     ) -> SpendingReport {
         let periodTransactions = transactions.filter { period.contains($0.date) }
 
-        let income =
-            periodTransactions
-                .filter { $0.transactionType == .income }
-                .reduce(0.0) { $0 + $1.amount }
+        // Calculate totals in a single pass
+        var income = 0.0
+        var expenses = 0.0
+        var categorySpending: [String: Double] = [:]
 
-        let expenses =
-            periodTransactions
-                .filter { $0.transactionType == .expense }
-                .reduce(0.0) { $0 + $1.amount }
-
-        let categorySpending = Dictionary(
-            grouping: periodTransactions.filter { $0.transactionType == .expense },
-        ) { transaction in
-            transaction.category?.name ?? "Uncategorized"
-        }.mapValues { transactions in
-            transactions.reduce(0.0) { $0 + $1.amount }
+        for transaction in periodTransactions {
+            switch transaction.transactionType {
+            case .income:
+                income += transaction.amount
+            case .expense:
+                expenses += transaction.amount
+                let categoryName = transaction.category?.name ?? "Uncategorized"
+                categorySpending[categoryName, default: 0] += transaction.amount
+            case .transfer:
+                continue
+            }
         }
 
         return SpendingReport(
@@ -168,38 +168,36 @@ final class GoalsAndReportsViewModel {
     ) -> [MonthlySpendingData] {
         let calendar = Calendar.current
         let now = Date()
-        var trend: [MonthlySpendingData] = []
 
-        for i in 0 ..< months {
+        // Pre-group transactions by month for better performance
+        let monthlyGroups = Dictionary(grouping: transactions) { transaction in
+            calendar.date(from: calendar.dateComponents([.year, .month], from: transaction.date))
+        }
+
+        return (0 ..< months).compactMap { i in
             guard let monthDate = calendar.date(byAdding: .month, value: -i, to: now),
-                  let monthInterval = calendar.dateInterval(of: .month, for: monthDate)
+                  let monthKey = calendar.date(from: calendar.dateComponents([.year, .month], from: monthDate))
             else {
-                continue
+                return nil
             }
 
-            let monthTransactions = transactions.filter { monthInterval.contains($0.date) }
+            let monthTransactions = monthlyGroups[monthKey] ?? []
 
-            let income =
-                monthTransactions
-                    .filter { $0.transactionType == .income }
-                    .reduce(0.0) { $0 + $1.amount }
+            let income = monthTransactions
+                .filter { $0.transactionType == .income }
+                .reduce(0.0) { $0 + $1.amount }
 
-            let expenses =
-                monthTransactions
-                    .filter { $0.transactionType == .expense }
-                    .reduce(0.0) { $0 + $1.amount }
+            let expenses = monthTransactions
+                .filter { $0.transactionType == .expense }
+                .reduce(0.0) { $0 + $1.amount }
 
-            let monthData = MonthlySpendingData(
+            return MonthlySpendingData(
                 month: monthDate,
                 income: income,
                 expenses: expenses,
                 netIncome: income - expenses,
             )
-
-            trend.insert(monthData, at: 0)
-        }
-
-        return trend
+        }.reversed()
     }
 
     /// Get category spending comparison

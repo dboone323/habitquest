@@ -1,16 +1,16 @@
 name: CI
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 env:
   DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
   # When true, minimize notifications and treat non-critical failures as non-fatal
   QUIET_MODE: ${{ env.QUIET_MODE || 'true' }}
   # GitHub username or team to request review and assign when QUIET_MODE is enabled
-  REVIEW_REQUESTEE: 'dboone323'
+  REVIEW_REQUESTEE: "dboone323"
 
 jobs:
   test:
@@ -20,7 +20,7 @@ jobs:
       - name: Set up Swift
         uses: swift-actions/setup-swift@v2
         with:
-          swift-version: '6.0'
+          swift-version: "6.0"
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
       - name: Cache Swift Package Manager

@@ -274,7 +274,7 @@ class ObstacleManager {
 
     /// Updates obstacle positions and handles off-screen removal
     func updateObstacles() {
-        guard let scene else { return }
+        guard self.scene != nil else { return }
 
         for obstacle in self.activeObstacles {
             // Remove obstacles that have fallen off screen
@@ -342,6 +342,68 @@ class ObstacleManager {
         powerUp.run(SKAction.repeatForever(pulse))
 
         return powerUp
+    }
+
+    // MARK: - Async Obstacle Management
+
+    /// Returns an obstacle to the pool for reuse asynchronously
+    /// - Parameter obstacle: The obstacle to recycle
+    func recycleObstacleAsync(_ obstacle: SKSpriteNode) async {
+        await Task.detached {
+            self.recycleObstacle(obstacle)
+        }.value
+    }
+
+    /// Starts spawning obstacles based on difficulty asynchronously
+    /// - Parameter difficulty: Current game difficulty settings
+    func startSpawningAsync(with difficulty: GameDifficulty) async {
+        await Task.detached {
+            self.startSpawning(with: difficulty)
+        }.value
+    }
+
+    /// Stops spawning obstacles asynchronously
+    func stopSpawningAsync() async {
+        await Task.detached {
+            self.stopSpawning()
+        }.value
+    }
+
+    /// Gets the count of active obstacles asynchronously
+    /// - Returns: Number of active obstacles
+    func activeObstacleCountAsync() async -> Int {
+        await Task.detached {
+            self.activeObstacleCount()
+        }.value
+    }
+
+    /// Removes all active obstacles asynchronously
+    func removeAllObstaclesAsync() async {
+        await Task.detached {
+            self.removeAllObstacles()
+        }.value
+    }
+
+    /// Updates obstacle positions and handles off-screen removal asynchronously
+    func updateObstaclesAsync() async {
+        await Task.detached {
+            self.updateObstacles()
+        }.value
+    }
+
+    /// Gets all active obstacles asynchronously
+    /// - Returns: Array of active obstacle nodes
+    func getActiveObstaclesAsync() async -> [SKSpriteNode] {
+        await Task.detached {
+            self.getActiveObstacles()
+        }.value
+    }
+
+    /// Spawns a power-up at a random position asynchronously
+    func spawnPowerUpAsync() async {
+        await Task.detached {
+            self.spawnPowerUp()
+        }.value
     }
 }
 

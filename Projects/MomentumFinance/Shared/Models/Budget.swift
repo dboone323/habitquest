@@ -122,8 +122,8 @@ public final class Budget {
         let rolloverAmount = self.calculateRolloverAmount()
 
         let nextBudget = Budget(
-            name: self.name,
-            limitAmount: self.limitAmount,
+            name: name,
+            limitAmount: limitAmount,
             month: nextMonth
         )
         nextBudget.category = self.category

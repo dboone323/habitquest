@@ -10,20 +10,20 @@ echo "🤖 Running Quantum Automation for HabitQuest"
 
 # Run AI enhancement analysis
 if [[ -f "$AUTOMATION_DIR/ai_enhancement_system.sh" ]]; then
-    echo "🔍 Running AI enhancement analysis..."
-    bash "$AUTOMATION_DIR/ai_enhancement_system.sh" analyze "HabitQuest"
+  echo "🔍 Running AI enhancement analysis..."
+  bash "$AUTOMATION_DIR/ai_enhancement_system.sh" analyze "HabitQuest"
 fi
 
 # Run intelligent auto-fix
 if [[ -f "$AUTOMATION_DIR/intelligent_autofix.sh" ]]; then
-    echo "🔧 Running intelligent auto-fix..."
-    bash "$AUTOMATION_DIR/intelligent_autofix.sh" fix "HabitQuest"
+  echo "🔧 Running intelligent auto-fix..."
+  bash "$AUTOMATION_DIR/intelligent_autofix.sh" fix "HabitQuest"
 fi
 
 # Run MCP workflow checks
 if [[ -f "$AUTOMATION_DIR/mcp_workflow.sh" ]]; then
-    echo "🔄 Running MCP workflow checks..."
-    bash "$AUTOMATION_DIR/mcp_workflow.sh" check "HabitQuest"
+  echo "🔄 Running MCP workflow checks..."
+  bash "$AUTOMATION_DIR/mcp_workflow.sh" check "HabitQuest"
 fi
 
 echo "✅ Quantum automation completed for HabitQuest"

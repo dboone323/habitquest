@@ -183,7 +183,7 @@ struct PlatformContextMenu<MenuContent: View>: ViewModifier {
         self.menuContent = menuContent()
     }
 
-    public func body(content: Content) -> some View {
+    func body(content: Content) -> some View {
         #if os(macOS)
         content
             .contextMenu {
@@ -230,7 +230,7 @@ struct AdaptiveGrid<Content: View>: View {
         #endif
     }
 
-    public var body: some View {
+    var body: some View {
         LazyVGrid(columns: self.columns, spacing: 16) {
             self.content
         }
@@ -248,7 +248,7 @@ struct PlatformSheet<SheetContent: View>: ViewModifier {
         self.sheetContent = content()
     }
 
-    public func body(content: Content) -> some View {
+    func body(content: Content) -> some View {
         #if os(macOS)
         content
             .sheet(isPresented: self.$isPresented) {
@@ -306,11 +306,11 @@ public struct ExamplePlatformView: View {
                 primaryActions: [
                     .init(title: "Add Item", icon: "plus") {
                         self.showingAddItem = true
-                    }
+                    },
                 ],
                 secondaryActions: [
                     .init(title: "Sort", icon: "arrow.up.arrow.down") {},
-                    .init(title: "Filter", icon: "line.3.horizontal.decrease.circle") {}
+                    .init(title: "Filter", icon: "line.3.horizontal.decrease.circle") {},
                 ]
             )
             .platformSheet(isPresented: self.$showingAddItem) {

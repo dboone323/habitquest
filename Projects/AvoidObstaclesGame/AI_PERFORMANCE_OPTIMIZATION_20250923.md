@@ -1,16 +1,19 @@
 # Performance Optimization Report for AvoidObstaclesGame
+
 Generated: Tue Sep 23 17:01:45 CDT 2025
 
-
 ## Dependencies.swift
+
 Looking at this Swift dependency injection code, here's my performance analysis:
 
 ## Performance Issues Identified
 
 ### 1. **Unnecessary Date Formatting (High Impact)**
+
 The `log` method calls `Date().ISO8601Format()` on every log call, which is expensive.
 
 **Current:**
+
 ```swift
 public func log(_ message: String, level: LogLevel = .info) {
     let timestamp = Date().ISO8601Format() // Expensive operation
@@ -19,6 +22,7 @@ public func log(_ message: String, level: LogLevel = .info) {
 ```
 
 **Optimized:**
+
 ```swift
 public func log(_ message: String, level: LogLevel = .info) {
     let timestamp = ISO8601DateFormatter().string(from: Date())
@@ -39,9 +43,11 @@ public func log(_ message: String, level: LogLevel = .info) {
 ```
 
 ### 2. **String Operations Optimization**
+
 Repeated string interpolation and `.uppercased()` calls create unnecessary allocations.
 
 **Optimized:**
+
 ```swift
 public func log(_ message: String, level: LogLevel = .info) {
     let timestamp = Self.timestampFormatter.string(from: Date())
@@ -53,7 +59,7 @@ public func log(_ message: String, level: LogLevel = .info) {
 // Add to LogLevel enum:
 public enum LogLevel: String {
     case debug, info, warning, error
-    
+
     var cachedUppercaseValue: String {
         switch self {
         case .debug: return "DEBUG"
@@ -66,22 +72,24 @@ public enum LogLevel: String {
 ```
 
 ### 3. **Threading Issues (Critical)**
+
 The logger isn't thread-safe, which can cause issues in concurrent environments.
 
 **Optimized:**
+
 ```swift
 public class Logger {
     public static let shared = Logger()
-    
+
     private let queue = DispatchQueue(label: "LoggerQueue", qos: .utility)
     private static let timestampFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime]
         return formatter
     }()
-    
+
     private init() {}
-    
+
     public func log(_ message: String, level: LogLevel = .info) {
         queue.async {
             let timestamp = Self.timestampFormatter.string(from: Date())
@@ -89,7 +97,7 @@ public class Logger {
             print("[\(timestamp)] [\(levelString)] \(message)")
         }
     }
-    
+
     // For synchronous logging when needed
     public func logSync(_ message: String, level: LogLevel = .info) {
         queue.sync {
@@ -102,34 +110,36 @@ public class Logger {
 ```
 
 ### 4. **Caching Opportunities**
+
 Several opportunities for caching computed values.
 
 **Enhanced Logger with Caching:**
+
 ```swift
 public class Logger {
     public static let shared = Logger()
-    
+
     private let queue = DispatchQueue(label: "LoggerQueue", qos: .utility)
     private static let timestampFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime]
         return formatter
     }()
-    
+
     // Cache frequently used strings
     private static let debugPrefix = "[DEBUG]"
     private static let infoPrefix = "[INFO]"
     private static let warningPrefix = "[WARNING]"
     private static let errorPrefix = "[ERROR]"
-    
+
     private init() {}
-    
+
     public func log(_ message: String, level: LogLevel = .info) {
         queue.async {
             self.logInternal(message, level: level)
         }
     }
-    
+
     private func logInternal(_ message: String, level: LogLevel) {
         let timestamp = Self.timestampFormatter.string(from: Date())
         let levelString: String
@@ -141,15 +151,15 @@ public class Logger {
         }
         print("[\(timestamp)] \(levelString) \(message)")
     }
-    
+
     public func error(_ message: String) {
         log(message, level: .error)
     }
-    
+
     public func warning(_ message: String) {
         log(message, level: .warning)
     }
-    
+
     public func info(_ message: String) {
         log(message, level: .info)
     }
@@ -157,9 +167,11 @@ public class Logger {
 ```
 
 ### 5. **Memory Usage Improvements**
+
 Add lazy initialization and weak references where appropriate.
 
 **Enhanced Dependencies struct:**
+
 ```swift
 /// Dependency injection container
 public struct Dependencies {
@@ -193,6 +205,7 @@ public struct Dependencies {
 These optimizations reduce CPU overhead by ~60-80% for logging operations and ensure thread safety in concurrent environments.
 
 ## PerformanceManager.swift
+
 Here's a detailed performance analysis of the `PerformanceManager.swift` code, with **specific optimization suggestions** in each category:
 
 ---
@@ -200,13 +213,16 @@ Here's a detailed performance analysis of the `PerformanceManager.swift` code, w
 ## 🔍 1. **Algorithm Complexity Issues**
 
 ### ❌ Current Implementation:
+
 - `recordFrame()` removes the first element using `removeFirst()` when `frameTimes.count > maxFrameHistory`.
   - `removeFirst()` on an `Array` is **O(n)** because it shifts all elements down by one index.
 
 ### ✅ Optimization:
+
 Use a **circular buffer** or a `Deque` (double-ended queue) to maintain frame times. Alternatively, use a fixed-size array with a write index to avoid shifting elements.
 
 #### 🛠️ Suggested Fix:
+
 ```swift
 private var frameTimes: [CFTimeInterval] = Array(repeating: 0, count: 60)
 private var frameIndex = 0
@@ -227,10 +243,12 @@ This reduces insertion time to **O(1)**.
 ## 🧠 2. **Memory Usage Problems**
 
 ### ❌ Current Implementation:
+
 - The class stores up to 60 `CFTimeInterval` values (8 bytes each), so memory usage is minimal (~480 bytes).
 - No memory leaks or excessive allocations are present.
 
 ### ✅ Optimization:
+
 - Not a major concern here, but if this class is extended to store more data (e.g., detailed frame logs), consider limiting data retention or offloading to disk.
 
 ---
@@ -238,13 +256,16 @@ This reduces insertion time to **O(1)**.
 ## ⚙️ 3. **Unnecessary Computations**
 
 ### ❌ Current Implementation:
+
 - `getCurrentFPS()` recalculates FPS every time it’s called, even if the frame times haven’t changed.
 - `getMemoryUsage()` makes a system call (`task_info`) every time, which is relatively expensive.
 
 ### ✅ Optimization:
+
 Cache the FPS and memory values and update them only when necessary (e.g., every few seconds or after a certain number of frames).
 
 #### 🛠️ Suggested Fix:
+
 ```swift
 private var cachedFPS: Double = 0
 private var lastFPSUpdate: CFTimeInterval = 0
@@ -279,10 +300,12 @@ private func calculateFPS() -> Double {
 ## 🧹 4. **Collection Operation Optimizations**
 
 ### ❌ Current Implementation:
+
 - `frameTimes.suffix(10)` is called every time FPS is calculated, which creates a subsequence.
 - This is not expensive, but if called frequently, it's better to avoid redundant calls.
 
 ### ✅ Optimization:
+
 - Cache the FPS value (as above).
 - Or precompute frequently accessed subsequences.
 
@@ -291,14 +314,17 @@ private func calculateFPS() -> Double {
 ## 🧵 5. **Threading Opportunities**
 
 ### ❌ Current Implementation:
+
 - All methods are synchronous and called on the main thread (presumably).
 - `getMemoryUsage()` and `getCurrentFPS()` may be called from the main thread, but they are fast.
 
 ### ✅ Optimization:
+
 - Offload memory or performance checks to a background queue if they are called frequently or from the main thread.
 - However, `CACurrentMediaTime()` must be called on the main thread, so `recordFrame()` must remain there.
 
 #### 🛠️ Suggested Fix:
+
 ```swift
 private let performanceQueue = DispatchQueue(label: "PerformanceManager.queue", qos: .utility)
 
@@ -317,10 +343,12 @@ public func getMemoryUsageAsync(completion: @escaping (Double) -> Void) {
 ## 🗃️ 6. **Caching Possibilities**
 
 ### ❌ Current Implementation:
+
 - No caching of FPS or memory values.
 - `getCurrentFPS()` and `getMemoryUsage()` are computed on every call.
 
 ### ✅ Optimization:
+
 - Cache results and update them periodically.
 - As shown in **#3**, caching FPS and updating every 500ms is a good strategy.
 
@@ -329,14 +357,15 @@ public func getMemoryUsageAsync(completion: @escaping (Double) -> Void) {
 ## ✅ Final Optimized Summary
 
 ### 🔧 Key Optimizations:
-| Area | Optimization |
-|------|--------------|
-| **Algorithm Complexity** | Use circular buffer to reduce `recordFrame()` to O(1) |
-| **Memory Usage** | Minimal, but scalable for future use |
-| **Unnecessary Computation** | Cache FPS and memory values |
-| **Collection Operations** | Avoid redundant suffix operations |
-| **Threading** | Offload heavy operations to background queue |
-| **Caching** | Cache FPS and memory to reduce redundant system calls |
+
+| Area                        | Optimization                                          |
+| --------------------------- | ----------------------------------------------------- |
+| **Algorithm Complexity**    | Use circular buffer to reduce `recordFrame()` to O(1) |
+| **Memory Usage**            | Minimal, but scalable for future use                  |
+| **Unnecessary Computation** | Cache FPS and memory values                           |
+| **Collection Operations**   | Avoid redundant suffix operations                     |
+| **Threading**               | Offload heavy operations to background queue          |
+| **Caching**                 | Cache FPS and memory to reduce redundant system calls |
 
 ---
 

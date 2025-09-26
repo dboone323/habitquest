@@ -8,7 +8,7 @@
 @testable import CodingReviewer
 import XCTest
 
-public class BugDetectionServiceTests: XCTestCase {
+final class BugDetectionServiceTests: XCTestCase {
     var bugDetector: BugDetectionService!
 
     override func setUp() {

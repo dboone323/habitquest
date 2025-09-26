@@ -67,6 +67,7 @@ MomentumFinance/
 ### 1. Presentation Layer (SwiftUI Views)
 
 #### Cross-Platform Views
+
 ```swift
 // Main application structure
 struct MomentumFinanceApp: App {
@@ -99,12 +100,14 @@ struct ContentView: View {
 ```
 
 #### Platform-Specific Adaptations
+
 - **iOS**: Tab-based navigation, optimized for touch
 - **macOS**: Sidebar navigation, keyboard shortcuts, menu integration
 
 ### 2. Business Logic Layer
 
 #### Financial Intelligence Engine
+
 ```swift
 @MainActor
 public class AdvancedFinancialIntelligence: ObservableObject {
@@ -138,6 +141,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
 #### AI-Powered Analysis Features
 
 **🤖 Predictive Analytics**
+
 ```swift
 class PredictiveFinancialEngine {
     /// Generate 12-month financial forecasts
@@ -160,6 +164,7 @@ class PredictiveFinancialEngine {
 ```
 
 **🔍 Anomaly Detection**
+
 ```swift
 class AnomalyDetectionEngine {
     /// Real-time fraud and anomaly detection
@@ -189,6 +194,7 @@ class AnomalyDetectionEngine {
 ### 3. Data Layer (SwiftData Integration)
 
 #### Core Financial Models
+
 ```swift
 @Model
 class Transaction {
@@ -284,6 +290,7 @@ class Budget {
 ```
 
 #### Data Service Architecture
+
 ```swift
 class FinancialDataManager: ObservableObject {
     static let shared = FinancialDataManager()
@@ -331,6 +338,7 @@ class FinancialDataManager: ObservableObject {
 ### Quantum-Enhanced Financial Analysis
 
 #### Performance Benchmarks
+
 ```swift
 class QuantumFinancialProcessor {
     /// Ultra-fast financial analysis processing
@@ -363,6 +371,7 @@ class QuantumFinancialProcessor {
 ```
 
 ### Smart Recommendation System
+
 ```swift
 class SmartRecommendationEngine {
     /// Generate personalized financial recommendations
@@ -400,6 +409,7 @@ class SmartRecommendationEngine {
 ### Component-Based Design System
 
 #### Financial Dashboard Components
+
 ```swift
 struct FinancialDashboard: View {
     @EnvironmentObject private var dataManager: FinancialDataManager
@@ -436,6 +446,7 @@ struct FinancialDashboard: View {
 ```
 
 #### Advanced Chart Components
+
 ```swift
 struct AdvancedFinancialChart: View {
     let data: [ChartDataPoint]
@@ -480,6 +491,7 @@ struct AdvancedFinancialChart: View {
 ### Theme and Design System
 
 #### Financial Color Palette
+
 ```swift
 extension Color {
     // Primary brand colors
@@ -501,6 +513,7 @@ extension Color {
 ```
 
 #### Typography System
+
 ```swift
 extension Font {
     // Financial display fonts
@@ -521,6 +534,7 @@ extension Font {
 ### Optimization Strategies
 
 #### Data Loading and Caching
+
 ```swift
 class FinancialDataCache {
     private var transactionCache: [String: [Transaction]] = [:]
@@ -542,6 +556,7 @@ class FinancialDataCache {
 ```
 
 #### Lazy Loading Implementation
+
 ```swift
 struct TransactionListView: View {
     @State private var transactions: [Transaction] = []
@@ -583,19 +598,20 @@ struct TransactionListView: View {
 
 ### Performance Benchmarks
 
-| Feature | Processing Time | Memory Usage | Improvement |
-|---------|----------------|--------------|-------------|
-| Transaction Analysis | 0.5s (10K records) | 45MB | **79% faster** |
-| AI Categorization | 0.1s per transaction | 15MB | **85% faster** |
-| Dashboard Refresh | 1.2s | 30MB | **65% faster** |
-| Chart Rendering | 0.3s | 20MB | **70% faster** |
-| Anomaly Detection | 2.1s (50K records) | 60MB | **82% faster** |
+| Feature              | Processing Time      | Memory Usage | Improvement    |
+| -------------------- | -------------------- | ------------ | -------------- |
+| Transaction Analysis | 0.5s (10K records)   | 45MB         | **79% faster** |
+| AI Categorization    | 0.1s per transaction | 15MB         | **85% faster** |
+| Dashboard Refresh    | 1.2s                 | 30MB         | **65% faster** |
+| Chart Rendering      | 0.3s                 | 20MB         | **70% faster** |
+| Anomaly Detection    | 2.1s (50K records)   | 60MB         | **82% faster** |
 
 ## Security Architecture
 
 ### Data Protection Strategy
 
 #### Financial Data Encryption
+
 ```swift
 class FinancialDataSecurity {
     private let keychain = Keychain(service: "com.momentumfinance.security")
@@ -616,6 +632,7 @@ class FinancialDataSecurity {
 ```
 
 #### Privacy Protection
+
 - **Local Data Only**: All financial data remains on device
 - **SwiftData Encryption**: Automatic encryption at rest
 - **Network Security**: TLS 1.3 for any external communications
@@ -624,6 +641,7 @@ class FinancialDataSecurity {
 ## Cross-Platform Architecture
 
 ### Shared Business Logic
+
 ```swift
 // Shared across iOS and macOS
 class FinancialCalculations {
@@ -645,6 +663,7 @@ class FinancialCalculations {
 ```
 
 ### Platform-Specific Adaptations
+
 ```swift
 #if os(iOS)
 struct iOSSpecificView: View {
@@ -692,6 +711,7 @@ struct macOSSpecificView: View {
 ### Comprehensive Testing Strategy
 
 #### Unit Testing
+
 ```swift
 class FinancialIntelligenceTests: XCTestCase {
     var intelligence: AdvancedFinancialIntelligence!
@@ -731,6 +751,7 @@ class FinancialIntelligenceTests: XCTestCase {
 ```
 
 #### Integration Testing
+
 ```swift
 class FinancialDataFlowTests: XCTestCase {
     func testEndToEndTransactionFlow() async {
@@ -754,16 +775,19 @@ class FinancialDataFlowTests: XCTestCase {
 ### AI Enhancement Roadmap
 
 1. **Machine Learning Pipeline**
+
    - Custom Core ML models for financial prediction
    - On-device training with user data
    - Federated learning for anonymized insights
 
 2. **Advanced Analytics**
+
    - Real-time spending alerts
    - Investment portfolio optimization
    - Tax optimization recommendations
 
 3. **Integration Capabilities**
+
    - Bank API integrations
    - Credit score monitoring
    - Investment platform connections
@@ -782,6 +806,6 @@ class FinancialDataFlowTests: XCTestCase {
 
 ---
 
-*Architecture Documentation Last Updated: September 12, 2025*
-*MomentumFinance Version: 2.0 (AI-Enhanced)*
-*Platforms: iOS 17.0+, macOS 14.0+, SwiftUI 5.0+*
+_Architecture Documentation Last Updated: September 12, 2025_
+_MomentumFinance Version: 2.0 (AI-Enhanced)_
+_Platforms: iOS 17.0+, macOS 14.0+, SwiftUI 5.0+_

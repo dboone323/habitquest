@@ -45,7 +45,7 @@ func fi_detectCategoryOutliers(_ transactions: [FinancialTransaction]) -> [Finan
                 data: [
                     ("Average", mean),
                     ("This Transaction", transactionAmount),
-                    ("Typical Range", mean + stdDev)
+                    ("Typical Range", mean + stdDev),
                 ]
             )
             insights.append(insight)

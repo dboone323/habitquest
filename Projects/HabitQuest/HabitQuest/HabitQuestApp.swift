@@ -1,12 +1,6 @@
 import SwiftData
 import SwiftUI
 
-// Import model classes
-import class HabitQuest.Achievement
-import class HabitQuest.Habit
-import class HabitQuest.HabitLog
-import class HabitQuest.PlayerProfile
-
 //
 //  HabitQuestApp.swift
 //  HabitQuest
@@ -26,7 +20,7 @@ public struct HabitQuestApp: App {
             Habit.self,
             HabitLog.self,
             PlayerProfile.self,
-            Achievement.self
+            Achievement.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

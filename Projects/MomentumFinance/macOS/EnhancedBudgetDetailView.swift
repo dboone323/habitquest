@@ -45,7 +45,7 @@ extension Features.Budgets {
             case yearToDate = "Year to Date"
             case custom = "Custom Range"
 
-            var id: String { self.rawValue }
+            var id: String { rawValue }
         }
 
         var body: some View {
@@ -587,7 +587,7 @@ extension Features.Budgets {
                 (day: "15", amount: 120.00),
                 (day: "20", amount: 87.25),
                 (day: "25", amount: 25.50),
-                (day: "30", amount: 15.20)
+                (day: "30", amount: 15.20),
             ]
 
             var body: some View {
@@ -657,7 +657,7 @@ extension Features.Budgets {
                 (month: "Mar", amount: 295.75),
                 (month: "Apr", amount: 420.00),
                 (month: "May", amount: 387.25),
-                (month: "Jun", amount: 345.50)
+                (month: "Jun", amount: 345.50),
             ]
 
             var body: some View {

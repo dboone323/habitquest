@@ -41,7 +41,7 @@ func fi_suggestIdleCashInsights(transactions: [FinancialTransaction], accounts: 
                 data: [
                     ("Current Balance", account.balance),
                     ("Recommended Buffer", recommendedBuffer),
-                    ("Excess Cash", excessCash)
+                    ("Excess Cash", excessCash),
                 ]
             )
             insights.append(insight)
@@ -76,7 +76,7 @@ func fi_suggestCreditUtilizationInsights(accounts: [FinancialAccount]) -> [Finan
                 data: [
                     ("Balance", balance),
                     ("Credit Limit", creditLimit),
-                    ("Utilization", utilization)
+                    ("Utilization", utilization),
                 ]
             )
             insights.append(insight)

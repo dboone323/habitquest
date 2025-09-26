@@ -151,7 +151,7 @@ extension Features.Dashboard {
                     }
                     .task {
                         // Process overdue subscriptions asynchronously
-                        // await self.viewModel.processOverdueSubscriptions(self.subscriptions)
+                        await self.processOverdueSubscriptions(self.subscriptions)
                     }
                     .navigationDestination(for: DashboardDestination.self) { destination in
                         switch destination {
@@ -229,6 +229,21 @@ extension Features.Dashboard {
                 self.budgets = try self.modelContext.fetch(budgetDescriptor)
             } catch {
                 print("Error loading dashboard data: \(error)")
+            }
+        }
+
+        private func processOverdueSubscriptions(_ subscriptions: [Subscription]) async {
+            let overdueSubscriptions = subscriptions.filter { subscription in
+                subscription.isActive && subscription.nextDueDate <= Date()
+            }
+
+            for subscription in overdueSubscriptions {
+                subscription.processPayment(modelContext: self.modelContext)
+                do {
+                    try self.modelContext.save()
+                } catch {
+                    print("Failed to process subscription payment: \(error)")
+                }
             }
         }
     }

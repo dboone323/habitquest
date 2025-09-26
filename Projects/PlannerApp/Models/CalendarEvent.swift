@@ -65,7 +65,7 @@ public struct CalendarEvent: Identifiable, Codable {
             throw NSError(
                 domain: "CalendarEventConversionError", code: 1,
                 userInfo: [
-                    NSLocalizedDescriptionKey: "Failed to convert CloudKit record to CalendarEvent"
+                    NSLocalizedDescriptionKey: "Failed to convert CloudKit record to CalendarEvent",
                 ]
             )
         }

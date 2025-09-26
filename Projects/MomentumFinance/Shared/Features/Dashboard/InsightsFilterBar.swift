@@ -5,8 +5,8 @@ public struct InsightsFilterBar: View {
     @Binding var filterType: InsightType?
 
     public init(filterPriority: Binding<InsightPriority?>, filterType: Binding<InsightType?>) {
-        self._filterPriority = filterPriority
-        self._filterType = filterType
+        _filterPriority = filterPriority
+        _filterType = filterType
     }
 
     public var body: some View {

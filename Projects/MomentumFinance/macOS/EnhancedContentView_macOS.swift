@@ -203,8 +203,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func macOSKeyboardShortcuts() -> some View {
-        self
-            .keyboardShortcut("n", modifiers: .command)
+        keyboardShortcut("n", modifiers: .command)
             .keyboardShortcut("w", modifiers: .command)
     }
 
@@ -212,8 +211,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func macOSOptimizations() -> some View {
-        self
-            .preferredColorScheme(.light)
+        preferredColorScheme(.light)
             .tint(.indigo)
     }
 }

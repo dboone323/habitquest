@@ -48,7 +48,9 @@ public struct SettingsView: View {
                     .pickerStyle(.menu)
                     .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
 
-                    Button(action: { self.showingThemePreview = true }) {
+                    Button {
+                        self.showingThemePreview = true
+                    } label: {
                         HStack {
                             Text("Theme Preview")
                                 .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
@@ -147,7 +149,7 @@ public struct ThemePreviewSheet: View {
             ScrollView {
                 LazyVGrid(
                     columns: [
-                        GridItem(.adaptive(minimum: 150))
+                        GridItem(.adaptive(minimum: 150)),
                     ], spacing: 16
                 ) {
                     ForEach(Theme.availableThemes, id: \.name) { theme in
@@ -163,8 +165,10 @@ public struct ThemePreviewSheet: View {
             #endif
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
-                        Button("Done", action: { self.dismiss() })
-                            .accessibilityLabel("Done Button")
+                        Button("Done") {
+                            self.dismiss()
+                        }
+                        .accessibilityLabel("Done Button")
                     }
                 }
         }

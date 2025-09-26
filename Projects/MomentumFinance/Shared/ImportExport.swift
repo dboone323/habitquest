@@ -88,13 +88,13 @@ public protocol EntityManager {
 
 public class DefaultEntityManager: EntityManager {
     public init() {}
-    public func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping)
+    public func getOrCreateAccount(from _: [String], columnMapping _: CSVColumnMapping)
         async throws -> FinancialAccount {
         FinancialAccount(name: "Imported Account", balance: 0, iconName: "creditcard")
     }
 
     public func getOrCreateCategory(
-        from fields: [String], columnMapping: CSVColumnMapping, transactionType: TransactionType
+        from _: [String], columnMapping _: CSVColumnMapping, transactionType _: TransactionType
     ) async throws -> ExpenseCategory {
         ExpenseCategory(name: "Imported Category", iconName: "tag")
     }
@@ -178,7 +178,7 @@ public class DataExporter {
         let fileURL = tempDir.appendingPathComponent(fileName)
 
         var rows = ["date,title,amount,type,notes,category,account"]
-        let context = ModelContext(self.modelContainer)
+        let context = ModelContext(modelContainer)
         let fetch = FetchDescriptor<FinancialTransaction>()
         let transactions = (try? context.fetch(fetch)) ?? []
         let filtered = transactions.filter {
@@ -244,7 +244,7 @@ public class DataImporter {
                 )
                 transaction.account = account
                 transaction.category = category
-                let context = ModelContext(self.modelContainer)
+                let context = ModelContext(modelContainer)
                 context.insert(transaction)
                 try context.save()
                 imported += 1

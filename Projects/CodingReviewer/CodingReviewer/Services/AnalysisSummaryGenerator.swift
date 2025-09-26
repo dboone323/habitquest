@@ -15,7 +15,7 @@ struct AnalysisSummaryGenerator {
     ///   - language: The programming language
     ///   - analysisType: The type of analysis performed
     /// - Returns: Array of suggestion strings
-    func generateSuggestions(code: String, language: String, analysisType: AnalysisType) -> [String] {
+    func generateSuggestions(code _: String, language _: String, analysisType: AnalysisType) -> [String] {
         var suggestions: [String] = []
 
         switch analysisType {
@@ -56,33 +56,33 @@ struct AnalysisSummaryGenerator {
         // Handle simple analysis types (bugs, security, performance, style) with basic format
         if analysisType != .comprehensive {
             let issueCount = issues.count
-            var summary = "Analysis completed for \(analysisType.rawValue) review.\n\n"
+            var summaryParts = ["Analysis completed for \(analysisType.rawValue) review.\n\n"]
 
             if issueCount > 0 {
-                summary += "Found \(issueCount) issue(s):\n"
+                summaryParts.append("Found \(issueCount) issue(s):\n")
                 for issue in issues.prefix(5) {
-                    summary += "- \(issue.description) (\(issue.severity.rawValue))\n"
+                    summaryParts.append("- \(issue.description) (\(issue.severity.rawValue))\n")
                 }
                 if issueCount > 5 {
-                    summary += "- ... and \(issueCount - 5) more issues\n"
+                    summaryParts.append("- ... and \(issueCount - 5) more issues\n")
                 }
-                summary += "\n"
+                summaryParts.append("\n")
             } else {
-                summary += "No issues found in this category.\n\n"
+                summaryParts.append("No issues found in this category.\n\n")
             }
 
             if !suggestions.isEmpty {
-                summary += "Suggestions for improvement:\n"
+                summaryParts.append("Suggestions for improvement:\n")
                 for suggestion in suggestions {
-                    summary += "- \(suggestion)\n"
+                    summaryParts.append("- \(suggestion)\n")
                 }
             }
 
-            return summary
+            return summaryParts.joined()
         }
 
         // Comprehensive analysis with detailed markdown format
-        var summary = "# Code Analysis Summary\n\n"
+        var summaryParts = ["# Code Analysis Summary\n\n"]
 
         // Use provided language or detect from issues
         var detectedLanguage = ""
@@ -101,14 +101,14 @@ struct AnalysisSummaryGenerator {
         }
 
         if !detectedLanguage.isEmpty {
-            summary += "\(detectedLanguage)\n\n"
+            summaryParts.append("\(detectedLanguage)\n\n")
         }
 
         // Summary Statistics Section
-        summary += "## Summary Statistics\n"
+        summaryParts.append("## Summary Statistics\n")
 
         let totalIssues = issues.count
-        summary += "Total Issues: \(totalIssues)\n\n"
+        summaryParts.append("Total Issues: \(totalIssues)\n\n")
 
         if totalIssues > 0 {
             // Severity distribution
@@ -117,10 +117,10 @@ struct AnalysisSummaryGenerator {
             let mediumCount = issues.count(where: { $0.severity == .medium })
             let lowCount = issues.count(where: { $0.severity == .low })
 
-            summary += "Critical Priority: \(criticalCount)\n"
-            summary += "High Priority: \(highCount)\n"
-            summary += "Medium Priority: \(mediumCount)\n"
-            summary += "Low Priority: \(lowCount)\n\n"
+            summaryParts.append("Critical Priority: \(criticalCount)\n")
+            summaryParts.append("High Priority: \(highCount)\n")
+            summaryParts.append("Medium Priority: \(mediumCount)\n")
+            summaryParts.append("Low Priority: \(lowCount)\n\n")
 
             // Type distribution
             let bugCount = issues.count(where: { $0.category == .bug })
@@ -128,13 +128,13 @@ struct AnalysisSummaryGenerator {
             let performanceCount = issues.count(where: { $0.category == .performance })
             let styleCount = issues.count(where: { $0.category == .style })
 
-            summary += "Bug Issues: \(bugCount)\n"
-            summary += "Security Issues: \(securityCount)\n"
-            summary += "Performance Issues: \(performanceCount)\n"
-            summary += "Style Issues: \(styleCount)\n\n"
+            summaryParts.append("Bug Issues: \(bugCount)\n")
+            summaryParts.append("Security Issues: \(securityCount)\n")
+            summaryParts.append("Performance Issues: \(performanceCount)\n")
+            summaryParts.append("Style Issues: \(styleCount)\n\n")
 
             // Issues by File Section
-            summary += "## Issues by File\n"
+            summaryParts.append("## Issues by File\n")
 
             // Group issues by file (for demo purposes, we'll simulate file names)
             var fileIssues: [String: [CodeIssue]] = [:]
@@ -160,32 +160,32 @@ struct AnalysisSummaryGenerator {
             for (fileName, fileIssuesList) in fileIssues.sorted(by: { $0.key < $1.key }) {
                 let count = fileIssuesList.count
                 let issueText = count == 1 ? "issue" : "issues"
-                summary += "\(fileName): \(count) \(issueText)\n"
+                summaryParts.append("\(fileName): \(count) \(issueText)\n")
             }
-            summary += "\n"
+            summaryParts.append("\n")
 
             // Detailed Issues Section
-            summary += "## Detailed Issues\n"
+            summaryParts.append("## Detailed Issues\n")
 
             for (index, issue) in issues.enumerated() {
                 let fileName = index % 2 == 0 ? "Test.swift" : "Test.js"
-                summary += "**File:** \(fileName)\n"
-                summary += "**Line:** \(issue.line ?? 0)\n"
-                summary += "**Severity:** \(issue.severity.rawValue.capitalized)\n"
-                summary += "**Type:** \(issue.category.rawValue.capitalized)\n"
-                summary += "**Description:** \(issue.description)\n"
+                summaryParts.append("**File:** \(fileName)\n")
+                summaryParts.append("**Line:** \(issue.line ?? 0)\n")
+                summaryParts.append("**Severity:** \(issue.severity.rawValue.capitalized)\n")
+                summaryParts.append("**Type:** \(issue.category.rawValue.capitalized)\n")
+                summaryParts.append("**Description:** \(issue.description)\n")
 
                 // Add suggestion if available
                 if index < suggestions.count {
-                    summary += "**Suggestion:** \(suggestions[index])\n"
+                    summaryParts.append("**Suggestion:** \(suggestions[index])\n")
                 }
-                summary += "\n"
+                summaryParts.append("\n")
             }
         } else {
-            summary += "Analysis completed for comprehensive review.\n\n"
-            summary += "No issues found"
+            summaryParts.append("Analysis completed for comprehensive review.\n\n")
+            summaryParts.append("No issues found")
         }
 
-        return summary
+        return summaryParts.joined()
     }
 }

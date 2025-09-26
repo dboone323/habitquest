@@ -151,7 +151,7 @@ public struct DashboardSubscriptionsSection: View {
         Subscription(
             name: "Apple iCloud", amount: 2.99, billingCycle: .monthly,
             nextDueDate: Date().addingTimeInterval(86400 * 14)
-        )
+        ),
     ]
 
     DashboardSubscriptionsSection(

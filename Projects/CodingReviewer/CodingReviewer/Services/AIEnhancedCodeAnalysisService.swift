@@ -419,7 +419,7 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
 
     // MARK: - Private Helpers
 
-    private func callOllamaModel(model: String, prompt: String, temperature: Double = 0.5) async throws -> String {
+    private func callOllamaModel(model: String, prompt: String, temperature _: Double = 0.5) async throws -> String {
         // This would use the actual OllamaClient - for now, simulating the call
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/opt/homebrew/bin/ollama")
@@ -447,7 +447,7 @@ public class AIEnhancedCodeAnalysisService: ObservableObject {
         return response.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    private func generateCodeSuggestions(_ code: String, language: String, analysis: String) async throws -> [CodeImprovement] {
+    private func generateCodeSuggestions(_: String, language _: String, analysis: String) async throws -> [CodeImprovement] {
         let suggestionsPrompt = """
         Based on this code analysis, generate specific code improvement suggestions:
 

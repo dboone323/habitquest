@@ -298,7 +298,7 @@ class EffectsManager {
 
         // Update cloud movement speed
         self.enumerateClouds { cloud in
-            if let moveAction = cloud.action(forKey: "move") {
+            if cloud.action(forKey: "move") != nil {
                 cloud.removeAction(forKey: "move")
 
                 let newDuration = 20.0 / speedMultiplier // Slower clouds at higher difficulty
@@ -393,5 +393,97 @@ class EffectsManager {
         self.explosionEmitter = nil
         self.trailEmitter = nil
         self.sparkleEmitter = nil
+    }
+
+    // MARK: - Async Effects
+
+    /// Creates an explosion effect at the specified position asynchronously
+    /// - Parameter position: Where to create the explosion
+    func createExplosionAsync(at position: CGPoint) async {
+        await Task.detached {
+            self.createExplosion(at: position)
+        }.value
+    }
+
+    /// Creates a trail effect attached to a node asynchronously
+    /// - Parameter node: The node to attach the trail to
+    /// - Returns: The trail emitter node
+    func createTrailAsync(for node: SKNode) async -> SKEmitterNode? {
+        await Task.detached {
+            self.createTrail(for: node)
+        }.value
+    }
+
+    /// Creates a screen flash effect asynchronously
+    /// - Parameter color: The color of the flash
+    /// - Parameter duration: How long the flash lasts
+    func createScreenFlashAsync(color: UIColor = .white, duration: TimeInterval = 0.1) async {
+        await Task.detached {
+            self.createScreenFlash(color: color, duration: duration)
+        }.value
+    }
+
+    /// Creates a level up celebration effect asynchronously
+    func createLevelUpCelebrationAsync() async {
+        await Task.detached {
+            self.createLevelUpCelebration()
+        }.value
+    }
+
+    /// Creates a sparkle burst at a position asynchronously
+    /// - Parameter position: Where to create the sparkle burst
+    func createSparkleBurstAsync(at position: CGPoint) async {
+        await Task.detached {
+            self.createSparkleBurst(at: position)
+        }.value
+    }
+
+    /// Creates a floating score popup asynchronously
+    /// - Parameters:
+    ///   - score: The score value to display
+    ///   - position: Where to show the popup
+    ///   - color: The color of the text
+    func createScorePopupAsync(score: Int, at position: CGPoint, color: UIColor = .yellow) async {
+        await Task.detached {
+            self.createScorePopup(score: score, at: position, color: color)
+        }.value
+    }
+
+    /// Updates background effects based on game state asynchronously
+    /// - Parameter difficulty: Current game difficulty
+    func updateBackgroundEffectsAsync(for difficulty: GameDifficulty) async {
+        await Task.detached {
+            self.updateBackgroundEffects(for: difficulty)
+        }.value
+    }
+
+    /// Creates a power-up collection effect asynchronously
+    /// - Parameter position: Where the power-up was collected
+    func createPowerUpCollectionEffectAsync(at position: CGPoint) async {
+        await Task.detached {
+            self.createPowerUpCollectionEffect(at: position)
+        }.value
+    }
+
+    /// Creates a shield activation effect asynchronously
+    /// - Parameter position: Where the shield is activated
+    func createShieldActivationEffectAsync(at position: CGPoint) async {
+        await Task.detached {
+            self.createShieldActivationEffect(at: position)
+        }.value
+    }
+
+    /// Cleans up unused effects asynchronously
+    func cleanupUnusedEffectsAsync() async {
+        await Task.detached {
+            self.cleanupUnusedEffects()
+        }.value
+    }
+
+    /// Cleans up all effects and pools asynchronously
+    func cleanupAsync() async {
+        await Task.detached {
+            self.cleanup()
+        }.value
     }
 }

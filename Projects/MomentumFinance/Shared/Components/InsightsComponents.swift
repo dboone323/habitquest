@@ -129,8 +129,8 @@ public struct InsightsFilterBar: View {
     }
 
     public init(filterPriority: Binding<InsightPriority?>, filterType: Binding<InsightType?>) {
-        self._filterPriority = filterPriority
-        self._filterType = filterType
+        _filterPriority = filterPriority
+        _filterType = filterType
     }
 }
 

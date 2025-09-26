@@ -14,7 +14,7 @@ import UIKit
 public class GameViewController: UIViewController {
     /// Called after the controller's view is loaded into memory.
     /// Sets up and presents the main game scene.
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
 
         // Configure the view as an SKView and present the game scene.
@@ -38,7 +38,7 @@ public class GameViewController: UIViewController {
 
     /// Specifies the supported interface orientations for the game.
     /// - Returns: The allowed interface orientations depending on device type.
-    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
             .allButUpsideDown
         } else {
@@ -47,7 +47,7 @@ public class GameViewController: UIViewController {
     }
 
     /// Hides the status bar for a more immersive game experience.
-    public override var prefersStatusBarHidden: Bool {
+    override public var prefersStatusBarHidden: Bool {
         true
     }
 }

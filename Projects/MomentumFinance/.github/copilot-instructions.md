@@ -7,6 +7,7 @@ This is a comprehensive personal finance application built with SwiftUI and Swif
 ## Architecture Guidelines
 
 ### MVVM Pattern Implementation
+
 ```swift
 // Standard ViewModel structure
 @MainActor
@@ -28,6 +29,7 @@ final class TransactionsViewModel {
 ```
 
 ### SwiftData Model Patterns
+
 ```swift
 @Model
 final class FinancialTransaction {
@@ -47,6 +49,7 @@ final class FinancialTransaction {
 ```
 
 ### Feature Module Organization
+
 ```
 Shared/Features/Transactions/
 ├── TransactionsView.swift          # Main view
@@ -59,6 +62,7 @@ Shared/Features/Transactions/
 ## Development Workflows
 
 ### Universal Development Script
+
 ```bash
 # Build project (auto-detects Swift/XCode/Node/Python)
 ./dev.sh build
@@ -74,6 +78,7 @@ Shared/Features/Transactions/
 ```
 
 ### Master Automation System
+
 ```bash
 # From workspace root - run automation for all projects
 ./Tools/Automation/master_automation.sh all
@@ -88,7 +93,9 @@ Shared/Features/Transactions/
 ## Code Conventions & Patterns
 
 ### Commit Message Standards
+
 **Conventional Commits (enforced via commitlint):**
+
 ```bash
 # Valid formats
 feat: add new transaction filtering feature
@@ -104,6 +111,7 @@ test: add unit tests for expense categorization
 ```
 
 ### Naming Conventions
+
 ```swift
 // View extensions
 extension Features.Transactions {
@@ -121,6 +129,7 @@ final class FinancialTransaction { /* ... */ }
 ```
 
 ### Error Handling Patterns
+
 ```swift
 func performAsyncOperation() async throws -> Result {
     do {
@@ -136,6 +145,7 @@ func performAsyncOperation() async throws -> Result {
 ## AI Integration Patterns
 
 ### Financial Intelligence Engine
+
 ```swift
 @MainActor
 class AdvancedFinancialIntelligence: ObservableObject {
@@ -156,6 +166,7 @@ class AdvancedFinancialIntelligence: ObservableObject {
 ## Testing Patterns
 
 ### Unit Test Structure
+
 ```swift
 class TransactionsViewModelTests: XCTestCase {
     var viewModel: TransactionsViewModel!
@@ -183,6 +194,7 @@ class TransactionsViewModelTests: XCTestCase {
 ## Data Flow Patterns
 
 ### SwiftData Context Management
+
 ```swift
 struct RootView: View {
     @Environment(\.modelContext) private var modelContext
@@ -198,6 +210,7 @@ struct RootView: View {
 ```
 
 ### Observable State Management
+
 ```swift
 @MainActor
 @Observable
@@ -224,6 +237,7 @@ final class DashboardViewModel {
 ## UI/UX Patterns
 
 ### SwiftUI Navigation
+
 ```swift
 struct ContentView: View {
     @State private var selectedTab = 0
@@ -243,6 +257,7 @@ struct ContentView: View {
 ```
 
 ### Responsive Layout Patterns
+
 ```swift
 struct AdaptiveGrid<Content: View>: View {
     let content: () -> Content
@@ -271,6 +286,7 @@ struct AdaptiveGrid<Content: View>: View {
 ## Performance Optimization Patterns
 
 ### Lazy Loading
+
 ```swift
 struct TransactionListView: View {
     @State private var transactions: [Transaction] = []
@@ -309,6 +325,7 @@ struct TransactionListView: View {
 ## Key Project Patterns
 
 ### Financial Calculation Methods
+
 ```swift
 extension TransactionsViewModel {
     func spendingByCategory(_ transactions: [FinancialTransaction]) -> [String: Double] {
@@ -328,6 +345,7 @@ extension TransactionsViewModel {
 ```
 
 ### Cross-Platform Adaptations
+
 ```swift
 struct AdaptiveTransactionView: View {
     var body: some View {
@@ -343,6 +361,7 @@ struct AdaptiveTransactionView: View {
 ## Quality Assurance
 
 ### Pre-commit Hooks
+
 ```yaml
 repos:
   - repo: https://github.com/realm/SwiftLint
@@ -358,6 +377,7 @@ repos:
 ```
 
 ### CI Pipeline
+
 ```yaml
 name: CI
 on: [push, pull_request]
@@ -391,6 +411,6 @@ jobs:
 
 ---
 
-*Momentum Finance AI Guidelines - Updated: September 15, 2025*
-*Framework: SwiftUI 5.0, SwiftData, iOS 17+/macOS 14+*
-*Architecture: MVVM, Modular Design, Cross-Platform*
+_Momentum Finance AI Guidelines - Updated: September 15, 2025_
+_Framework: SwiftUI 5.0, SwiftData, iOS 17+/macOS 14+_
+_Architecture: MVVM, Modular Design, Cross-Platform_

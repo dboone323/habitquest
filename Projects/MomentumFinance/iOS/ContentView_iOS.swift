@@ -7,8 +7,7 @@ import SwiftUI
 extension ContentView {
     /// iOS-specific view modifiers and optimizations
     var iOSOptimizations: some View {
-        self
-            .preferredColorScheme(.automatic)
+        preferredColorScheme(.automatic)
             .tint(.blue)
     }
 }
@@ -23,7 +22,7 @@ enum iOSSpecificViews {
         appearance.backgroundColor = UIColor.systemBackground
         appearance.titleTextAttributes = [
             .foregroundColor: UIColor.label,
-            .font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+            .font: UIFont.systemFont(ofSize: 18, weight: .semibold),
         ]
 
         UINavigationBar.appearance().standardAppearance = appearance
@@ -48,8 +47,7 @@ extension View {
     /// <#Description#>
     /// - Returns: <#description#>
     func iOSKeyboardHandling() -> some View {
-        self
-            .ignoresSafeArea(.keyboard, edges: .bottom)
+        ignoresSafeArea(.keyboard, edges: .bottom)
             .onTapGesture {
                 UIApplication.shared.sendAction(
                     #selector(UIResponder.resignFirstResponder),

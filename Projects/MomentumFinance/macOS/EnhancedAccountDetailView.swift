@@ -4,6 +4,7 @@
 import Charts
 import SwiftData
 import SwiftUI
+import Shared
 
 #if os(macOS)
 /// Enhanced account detail view optimized for macOS screen real estate
@@ -19,6 +20,8 @@ struct EnhancedAccountDetailView: View {
     @State private var selectedTimeFrame: TimeFrame = .last30Days
     @State private var showingDeleteConfirmation = false
     @State private var showingExportOptions = false
+    @State private var validationErrors: [String: String] = [:]
+    @State private var showingValidationAlert = false
 
     private var account: FinancialAccount? {
         self.accounts.first(where: { $0.id == self.accountId })
@@ -39,7 +42,7 @@ struct EnhancedAccountDetailView: View {
         case lastYear = "Last Year"
         case allTime = "All Time"
 
-        var id: String { self.rawValue }
+        var id: String { rawValue }
     }
 
     var body: some View {
@@ -109,6 +112,11 @@ struct EnhancedAccountDetailView: View {
             }
         } message: {
             Text("Are you sure you want to delete this account? This will also delete all associated transactions and cannot be undone.")
+        }
+        .alert("Validation Error", isPresented: self.$showingValidationAlert) {
+            Button("OK").accessibilityLabel("Button").accessibilityLabel("Button") {}
+        } message: {
+            Text("Please fix the validation errors before saving.")
         }
         .sheet(isPresented: self.$showingExportOptions) {
             ExportOptionsView(account: self.account, transactions: self.filteredTransactions)
@@ -321,11 +329,22 @@ struct EnhancedAccountDetailView: View {
                     Text("Name:")
                         .gridColumnAlignment(.trailing)
 
-                    TextField("Account name", text: Binding(
-                        get: { self.editedAccount?.name ?? account.name },
-                        set: { self.editedAccount?.name = $0 },
-                    ))
-                    .textFieldStyle(.roundedBorder)
+                    VStack(alignment: .leading) {
+                        TextField("Account name", text: Binding(
+                            get: { self.editedAccount?.name ?? account.name },
+                            set: { newValue in
+                                self.editedAccount?.name = newValue
+                                self.validateAccountName(newValue)
+                            },
+                        ))
+                        .textFieldStyle(.roundedBorder)
+
+                        if let error = self.validationErrors["name"] {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
+                    }
                 }
 
                 // Type field
@@ -376,11 +395,22 @@ struct EnhancedAccountDetailView: View {
                     Text("Institution:")
                         .gridColumnAlignment(.trailing)
 
-                    TextField("Bank or financial institution", text: Binding(
-                        get: { self.editedAccount?.institution ?? account.institution ?? "" },
-                        set: { self.editedAccount?.institution = $0 },
-                    ))
-                    .textFieldStyle(.roundedBorder)
+                    VStack(alignment: .leading) {
+                        TextField("Bank or financial institution", text: Binding(
+                            get: { self.editedAccount?.institution ?? account.institution ?? "" },
+                            set: { newValue in
+                                self.editedAccount?.institution = newValue
+                                self.validateInstitution(newValue)
+                            },
+                        ))
+                        .textFieldStyle(.roundedBorder)
+
+                        if let error = self.validationErrors["institution"] {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
+                    }
                 }
 
                 // Account number field
@@ -388,11 +418,22 @@ struct EnhancedAccountDetailView: View {
                     Text("Account Number:")
                         .gridColumnAlignment(.trailing)
 
-                    TextField("Account number", text: Binding(
-                        get: { self.editedAccount?.accountNumber ?? account.accountNumber ?? "" },
-                        set: { self.editedAccount?.accountNumber = $0 },
-                    ))
-                    .textFieldStyle(.roundedBorder)
+                    VStack(alignment: .leading) {
+                        TextField("Account number", text: Binding(
+                            get: { self.editedAccount?.accountNumber ?? account.accountNumber ?? "" },
+                            set: { newValue in
+                                self.editedAccount?.accountNumber = newValue
+                                self.validateAccountNumber(newValue)
+                            },
+                        ))
+                        .textFieldStyle(.roundedBorder)
+
+                        if let error = self.validationErrors["accountNumber"] {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
+                    }
                 }
 
                 // Interest rate field (for savings or credit)
@@ -468,13 +509,23 @@ struct EnhancedAccountDetailView: View {
 
             TextEditor(text: Binding(
                 get: { self.editedAccount?.notes ?? account.notes ?? "" },
-                set: { self.editedAccount?.notes = $0 },
+                set: { newValue in
+                    self.editedAccount?.notes = newValue
+                    self.validateNotes(newValue)
+                },
             ))
             .font(.body)
             .frame(minHeight: 100)
             .padding(4)
             .background(Color(.textBackgroundColor))
             .cornerRadius(4)
+
+            if let error = self.validationErrors["notes"] {
+                Text(error)
+                    .font(.caption)
+                    .foregroundColor(.red)
+                    .padding(.top, 4)
+            }
 
             HStack {
                 Spacer()
@@ -490,10 +541,15 @@ struct EnhancedAccountDetailView: View {
                 .keyboardShortcut(.escape, modifiers: [])
 
                 Button("Save").accessibilityLabel("Button").accessibilityLabel("Button") {
-                    self.saveChanges()
+                    if self.isValidForm() {
+                        self.saveChanges()
+                    } else {
+                        self.showingValidationAlert = true
+                    }
                 }
                 .buttonStyle(.borderedProminent)
                 .keyboardShortcut(.return, modifiers: .command)
+                .disabled(!self.isValidForm())
             }
             .padding(.top)
         }
@@ -881,18 +937,14 @@ struct EnhancedAccountDetailView: View {
                     GridRow {
                         DetailField(
                             label: "Utilization",
-                            value: self.account.creditLimit != nil && self.account.creditLimit! > 0 ?
-                                "\(Int((abs(self.account.balance) / (self.account.creditLimit ?? 1)) * 100))%" :
-                                "N/A",
+                            value: "\(((self.account.creditLimit ?? 0) - abs(self.account.balance)) / (self.account.creditLimit ?? 1) * 100, specifier: "%.2f")%"
                         )
-
-                        DetailField(
-                            label: "Statement Balance",
-                            value: abs(self.account.balance).formatted(.currency(code: self.account.currencyCode)),
-                        )
+                        .gridCellColumns(2)
                     }
                 }
                 .padding()
+                .background(Color(.windowBackgroundColor).opacity(0.3))
+                .cornerRadius(8)
 
                 // Credit utilization chart
                 if let creditLimit = account.creditLimit, creditLimit > 0 {
@@ -1201,6 +1253,48 @@ struct EnhancedAccountDetailView: View {
 
     private func printAccountSummary() {
         // Implementation for printing
+    }
+
+    // MARK: - Validation Methods
+
+    private func validateAccountName(_ name: String) {
+        do {
+            try InputValidator.validateTextInput(name, maxLength: 100)
+            self.validationErrors.removeValue(forKey: "name")
+        } catch {
+            self.validationErrors["name"] = error.localizedDescription
+        }
+    }
+
+    private func validateInstitution(_ institution: String) {
+        do {
+            try InputValidator.validateTextInput(institution, maxLength: 100)
+            self.validationErrors.removeValue(forKey: "institution")
+        } catch {
+            self.validationErrors["institution"] = error.localizedDescription
+        }
+    }
+
+    private func validateAccountNumber(_ number: String) {
+        do {
+            try InputValidator.validateTextInput(number, maxLength: 50)
+            self.validationErrors.removeValue(forKey: "accountNumber")
+        } catch {
+            self.validationErrors["accountNumber"] = error.localizedDescription
+        }
+    }
+
+    private func validateNotes(_ notes: String) {
+        do {
+            try InputValidator.validateTextInput(notes, maxLength: 1000)
+            self.validationErrors.removeValue(forKey: "notes")
+        } catch {
+            self.validationErrors["notes"] = error.localizedDescription
+        }
+    }
+
+    private func isValidForm() -> Bool {
+        return self.validationErrors.isEmpty
     }
 }
 

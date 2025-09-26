@@ -47,7 +47,8 @@
         "github.copilot.chat.codesearch.enabled": true,
         "github.copilot.chat.languageContext.fix.typescript.enabled": true,
         "chat.mcp.autostart": "newAndOutdated",
-        "chat.agent.maxRequests": 1000
+        "chat.agent.maxRequests": 1000,
+        "chatgpt.commentCodeLensEnabled": false
     },
     "extensions": {
         "recommendations": [

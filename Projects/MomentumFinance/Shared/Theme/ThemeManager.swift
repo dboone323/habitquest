@@ -104,7 +104,7 @@ final class ThemeManager {
     /// Get a dynamic font with specified style
     /// <#Description#>
     /// - Returns: <#description#>
-    func font(_ style: TextStyle, weight: Font.Weight = .regular, design: Font.Design = .default)
+    func font(_ style: TextStyle, weight: Font.Weight = .regular, design _: Font.Design = .default)
         -> Font {
         let baseFont = style.font
 

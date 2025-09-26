@@ -287,6 +287,142 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
     func cleanup() {
         self.physicsWorld?.contactDelegate = nil
     }
+
+    // MARK: - Async Physics Operations
+
+    /// Creates a physics body for the player asynchronously
+    /// - Parameter size: Size of the player
+    /// - Returns: Configured physics body
+    func createPlayerPhysicsBodyAsync(size: CGSize) async -> SKPhysicsBody {
+        await Task.detached {
+            self.createPlayerPhysicsBody(size: size)
+        }.value
+    }
+
+    /// Creates a physics body for an obstacle asynchronously
+    /// - Parameter size: Size of the obstacle
+    /// - Returns: Configured physics body
+    func createObstaclePhysicsBodyAsync(size: CGSize) async -> SKPhysicsBody {
+        await Task.detached {
+            self.createObstaclePhysicsBody(size: size)
+        }.value
+    }
+
+    /// Creates a physics body for a power-up asynchronously
+    /// - Parameter size: Size of the power-up
+    /// - Returns: Configured physics body
+    func createPowerUpPhysicsBodyAsync(size: CGSize) async -> SKPhysicsBody {
+        await Task.detached {
+            self.createPowerUpPhysicsBody(size: size)
+        }.value
+    }
+
+    /// Applies an impulse to a physics body asynchronously
+    /// - Parameters:
+    ///   - body: The physics body to apply impulse to
+    ///   - impulse: The impulse vector
+    func applyImpulseAsync(to body: SKPhysicsBody, impulse: CGVector) async {
+        await Task.detached {
+            self.applyImpulse(to: body, impulse: impulse)
+        }.value
+    }
+
+    /// Applies a force to a physics body asynchronously
+    /// - Parameters:
+    ///   - body: The physics body to apply force to
+    ///   - force: The force vector
+    func applyForceAsync(to body: SKPhysicsBody, force: CGVector) async {
+        await Task.detached {
+            self.applyForce(to: body, force: force)
+        }.value
+    }
+
+    /// Sets the velocity of a physics body asynchronously
+    /// - Parameters:
+    ///   - body: The physics body to modify
+    ///   - velocity: The new velocity
+    func setVelocityAsync(of body: SKPhysicsBody, to velocity: CGVector) async {
+        await Task.detached {
+            self.setVelocity(of: body, to: velocity)
+        }.value
+    }
+
+    /// Gets the velocity of a physics body asynchronously
+    /// - Parameter body: The physics body to query
+    /// - Returns: Current velocity
+    func getVelocityAsync(of body: SKPhysicsBody) async -> CGVector {
+        await Task.detached {
+            self.getVelocity(of: body)
+        }.value
+    }
+
+    /// Performs a ray cast from a point in a direction asynchronously
+    /// - Parameters:
+    ///   - startPoint: Starting point of the ray
+    ///   - endPoint: Ending point of the ray
+    /// - Returns: Array of physics bodies hit by the ray
+    func rayCastAsync(from startPoint: CGPoint, to endPoint: CGPoint) async -> [SKPhysicsBody] {
+        await Task.detached {
+            self.rayCast(from: startPoint, to: endPoint)
+        }.value
+    }
+
+    /// Performs a point query to find bodies at a specific point asynchronously
+    /// - Parameter point: The point to query
+    /// - Returns: Array of physics bodies at the point
+    func bodiesAsync(at point: CGPoint) async -> [SKPhysicsBody] {
+        await Task.detached {
+            self.bodies(at: point)
+        }.value
+    }
+
+    /// Performs an area query to find bodies within a rectangle asynchronously
+    /// - Parameter rect: The rectangle to query
+    /// - Returns: Array of physics bodies in the rectangle
+    func bodiesAsync(in rect: CGRect) async -> [SKPhysicsBody] {
+        await Task.detached {
+            self.bodies(in: rect)
+        }.value
+    }
+
+    /// Enables or disables physics debugging visualization asynchronously
+    /// - Parameter enabled: Whether to show physics bodies
+    func setDebugVisualizationAsync(enabled: Bool) async {
+        await Task.detached {
+            self.setDebugVisualization(enabled: enabled)
+        }.value
+    }
+
+    /// Enables or disables FPS display asynchronously
+    /// - Parameter enabled: Whether to show FPS
+    func setFPSDisplayAsync(enabled: Bool) async {
+        await Task.detached {
+            self.setFPSDisplay(enabled: enabled)
+        }.value
+    }
+
+    /// Enables or disables node count display asynchronously
+    /// - Parameter enabled: Whether to show node count
+    func setNodeCountDisplayAsync(enabled: Bool) async {
+        await Task.detached {
+            self.setNodeCountDisplay(enabled: enabled)
+        }.value
+    }
+
+    /// Updates physics simulation quality asynchronously
+    /// - Parameter quality: The desired quality level
+    func setSimulationQualityAsync(_ quality: PhysicsQuality) async {
+        await Task.detached {
+            self.setSimulationQuality(quality)
+        }.value
+    }
+
+    /// Cleans up physics-related resources asynchronously
+    func cleanupAsync() async {
+        await Task.detached {
+            self.cleanup()
+        }.value
+    }
 }
 
 /// Physics simulation quality levels

@@ -49,7 +49,7 @@ public struct JournalEntry: Identifiable, Codable {
             throw NSError(
                 domain: "JournalEntryConversionError", code: 1,
                 userInfo: [
-                    NSLocalizedDescriptionKey: "Failed to convert CloudKit record to JournalEntry"
+                    NSLocalizedDescriptionKey: "Failed to convert CloudKit record to JournalEntry",
                 ]
             )
         }

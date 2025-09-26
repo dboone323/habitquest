@@ -112,20 +112,20 @@ public struct CalendarView: View {
                         Spacer()
 
                         HStack(spacing: 12) {
-                            Button(action: self.previousMonth) {
+                            Button(action: self.previousMonth, label: {
                                 Image(systemName: "chevron.left")
                                     .foregroundColor(
                                         self.themeManager.currentTheme.primaryAccentColor
                                     )
-                            }
+                            })
                             .accessibilityLabel("Button")
 
-                            Button(action: self.nextMonth) {
+                            Button(action: self.nextMonth, label: {
                                 Image(systemName: "chevron.right")
                                     .foregroundColor(
                                         self.themeManager.currentTheme.primaryAccentColor
                                     )
-                            }
+                            })
                             .accessibilityLabel("Button")
                         }
                     }
@@ -153,7 +153,9 @@ public struct CalendarView: View {
 
                         Spacer()
 
-                        Button(action: { self.showAddEvent = true }) {
+                        Button {
+                            self.showAddEvent = true
+                        } label: {
                             Image(systemName: "plus.circle.fill")
                                 .foregroundColor(self.themeManager.currentTheme.primaryAccentColor)
                                 .font(.title2)

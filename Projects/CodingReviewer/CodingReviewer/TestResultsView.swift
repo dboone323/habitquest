@@ -9,6 +9,12 @@ import SwiftUI
 
 public struct TestResultsView: View {
     let result: TestGenerationResult
+    private let presenter: TestResultsPresenter
+
+    init(result: TestGenerationResult, presenter: TestResultsPresenter? = nil) {
+        self.result = result
+        self.presenter = presenter ?? TestResultsPresenter(result: result)
+    }
 
     public var body: some View {
         ScrollView {
@@ -18,23 +24,23 @@ public struct TestResultsView: View {
                         Text("Generated Tests")
                             .font(.headline)
                         Spacer()
-                        Text("Est. Coverage: \(Int(self.result.estimatedCoverage))%")
+                        Text(self.presenter.coverageDisplay)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
 
-                    Text("Framework: \(self.result.testFramework)")
+                    Text(self.presenter.frameworkLabel)
                         .font(.caption)
                         .foregroundColor(.secondary)
 
-                    Text("Language: \(self.result.language)")
+                    Text(self.presenter.languageLabel)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
 
                 Divider()
 
-                Text(self.result.testCode)
+                Text(self.presenter.codeSnippet)
                     .font(.system(.body, design: .monospaced))
                     .padding()
                     .background(Color.gray.opacity(0.1))
@@ -42,5 +48,29 @@ public struct TestResultsView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
+    }
+}
+
+struct TestResultsPresenter {
+    private let result: TestGenerationResult
+
+    init(result: TestGenerationResult) {
+        self.result = result
+    }
+
+    var coverageDisplay: String {
+        "Est. Coverage: \(Int(self.result.estimatedCoverage))%"
+    }
+
+    var frameworkLabel: String {
+        "Framework: \(self.result.testFramework)"
+    }
+
+    var languageLabel: String {
+        "Language: \(self.result.language)"
+    }
+
+    var codeSnippet: String {
+        self.result.testCode
     }
 }

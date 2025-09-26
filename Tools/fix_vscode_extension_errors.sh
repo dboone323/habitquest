@@ -24,13 +24,13 @@ SETTINGS_FILE="$VSCODE_SETTINGS_DIR/settings.json"
 
 # Create or update settings.json
 if [ -f "$SETTINGS_FILE" ]; then
-    # Backup existing settings
-    cp "$SETTINGS_FILE" "$SETTINGS_FILE.backup.$(date +%Y%m%d_%H%M%S)"
-    echo "Backed up existing settings.json"
+  # Backup existing settings
+  cp "$SETTINGS_FILE" "$SETTINGS_FILE.backup.$(date +%Y%m%d_%H%M%S)"
+  echo "Backed up existing settings.json"
 fi
 
 # Create new settings with MCP and GitHub Copilot configurations
-cat > "$SETTINGS_FILE" << 'EOF'
+cat >"$SETTINGS_FILE" <<'EOF'
 {
     "mcp": {
         "enabled": true,

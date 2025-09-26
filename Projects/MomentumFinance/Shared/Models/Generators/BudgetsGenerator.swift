@@ -27,7 +27,7 @@ final class BudgetsGenerator: DataGenerator {
             (category: "Utilities", limit: 250.0),
             (category: "Entertainment", limit: 150.0),
             (category: "Shopping", limit: 300.0),
-            (category: "Health & Fitness", limit: 100.0)
+            (category: "Health & Fitness", limit: 100.0),
         ]
 
         // Get first day of current month

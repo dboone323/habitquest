@@ -7,7 +7,12 @@
   "scripts": {
     "cz": "cz",
     "release:dry": "semantic-release --dry-run --no-ci",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "test": "./run_master_test_suite.sh",
+    "test:ci": "./run_master_test_suite.sh",
+    "test:automation": "cd Tools/Automation && python -m pytest tests/ -v",
+    "lint": "swiftlint lint --config Tools/Config/UNIFIED_SWIFTLINT_ROOT.yml --path Projects/",
+    "format": "swiftformat Projects/ --config Tools/Config/UNIFIED_SWIFTFORMAT_ROOT"
   },
   "description": "Welcome to your unified development environment! This structure maximizes code reuse, streamlines automation, and accelerates development across all your iOS projects.",
   "main": "release.config.js",

@@ -86,6 +86,7 @@ struct ContentView: View {
 ### Component-Based Architecture
 
 #### 1. HeaderView Component
+
 ```swift
 struct HeaderView: View {
     var body: some View {
@@ -113,6 +114,7 @@ struct HeaderView: View {
 ```
 
 #### 2. ItemListView Component
+
 ```swift
 struct ItemListView: View {
     let items: [Item]
@@ -133,6 +135,7 @@ struct ItemListView: View {
 ```
 
 #### 3. FooterStatsView Component
+
 ```swift
 struct FooterStatsView: View {
     let totalItems: Int
@@ -245,6 +248,7 @@ class DataService: ObservableObject {
 ### Design System
 
 #### Color Palette
+
 ```swift
 extension Color {
     static let habitPrimary = Color("HabitPrimary")
@@ -256,6 +260,7 @@ extension Color {
 ```
 
 #### Typography
+
 ```swift
 extension Font {
     static let habitTitle = Font.largeTitle.weight(.bold)
@@ -482,6 +487,6 @@ struct AccessibleHabitRow: View {
 
 ---
 
-*Architecture Documentation Last Updated: September 12, 2025*
-*HabitQuest Version: 1.0*
-*iOS Framework: iOS 17.0+, SwiftUI 5.0+*
+_Architecture Documentation Last Updated: September 12, 2025_
+_HabitQuest Version: 1.0_
+_iOS Framework: iOS 17.0+, SwiftUI 5.0+_

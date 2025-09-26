@@ -25,38 +25,38 @@ final class ExportEngineService {
     // MARK: - CSV
 
     private func exportToCSV(settings: ExportSettings) async throws -> URL {
-        var csvContent = ""
+        var csvParts: [String] = []
 
         if settings.includeTransactions {
-            csvContent += try await self.generateTransactionsCSV(settings: settings)
-            csvContent += "\n\n"
+            try await csvParts.append(self.generateTransactionsCSV(settings: settings))
+            csvParts.append("\n\n")
         }
         if settings.includeAccounts {
-            csvContent += try await self.generateAccountsCSV(settings: settings)
-            csvContent += "\n\n"
+            try await csvParts.append(self.generateAccountsCSV(settings: settings))
+            csvParts.append("\n\n")
         }
         if settings.includeBudgets {
-            csvContent += try await self.generateBudgetsCSV(settings: settings)
-            csvContent += "\n\n"
+            try await csvParts.append(self.generateBudgetsCSV(settings: settings))
+            csvParts.append("\n\n")
         }
         if settings.includeSubscriptions {
-            csvContent += try await self.generateSubscriptionsCSV(settings: settings)
-            csvContent += "\n\n"
+            try await csvParts.append(self.generateSubscriptionsCSV(settings: settings))
+            csvParts.append("\n\n")
         }
         if settings.includeGoals {
-            csvContent += try await self.generateGoalsCSV(settings: settings)
+            try await csvParts.append(self.generateGoalsCSV(settings: settings))
         }
 
+        let csvContent = csvParts.joined()
         return try self.saveToFile(content: csvContent, filename: ExportConstants.csvFilename)
     }
 
     private func generateTransactionsCSV(settings: ExportSettings) async throws -> String {
         let transactions = try fetchTransactions(from: settings.startDate, to: settings.endDate)
 
-        var csv = "TRANSACTIONS\n"
-        csv += "Date,Title,Amount,Type,Category,Account,Notes\n"
-
         let formatter = DateFormatter(); formatter.dateFormat = "yyyy-MM-dd"
+
+        var csvLines = ["TRANSACTIONS", "Date,Title,Amount,Type,Category,Account,Notes"]
 
         for transaction in transactions {
             let date = formatter.string(from: transaction.date)
@@ -67,19 +67,18 @@ final class ExportEngineService {
             let account = self.escapeCSVField(transaction.account?.name ?? "")
             let notes = self.escapeCSVField(transaction.notes ?? "")
 
-            csv += "\(date),\(title),\(amount),\(type),\(category),\(account),\(notes)\n"
+            csvLines.append("\(date),\(title),\(amount),\(type),\(category),\(account),\(notes)")
         }
 
-        return csv
+        return csvLines.joined(separator: "\n") + "\n"
     }
 
-    private func generateAccountsCSV(settings: ExportSettings) async throws -> String {
+    private func generateAccountsCSV(settings _: ExportSettings) async throws -> String {
         let accounts = try fetchAccounts()
 
-        var csv = "ACCOUNTS\n"
-        csv += "Name,Balance,Type,Currency,Created Date\n"
-
         let formatter = DateFormatter(); formatter.dateFormat = "yyyy-MM-dd"
+
+        var csvLines = ["ACCOUNTS", "Name,Balance,Type,Currency,Created Date"]
 
         for account in accounts {
             let name = self.escapeCSVField(account.name)
@@ -88,19 +87,18 @@ final class ExportEngineService {
             let currency = account.currencyCode
             let created = formatter.string(from: account.createdDate)
 
-            csv += "\(name),\(balance),\(type),\(currency),\(created)\n"
+            csvLines.append("\(name),\(balance),\(type),\(currency),\(created)")
         }
 
-        return csv
+        return csvLines.joined(separator: "\n") + "\n"
     }
 
-    private func generateBudgetsCSV(settings: ExportSettings) async throws -> String {
+    private func generateBudgetsCSV(settings _: ExportSettings) async throws -> String {
         let budgets = try fetchBudgets()
 
-        var csv = "BUDGETS\n"
-        csv += "Name,Limit Amount,Spent Amount,Category,Month,Created Date\n"
-
         let formatter = DateFormatter(); formatter.dateFormat = "yyyy-MM-dd"
+
+        var csvLines = ["BUDGETS", "Name,Limit Amount,Spent Amount,Category,Month,Created Date"]
 
         for budget in budgets {
             let name = self.escapeCSVField(budget.name)
@@ -110,19 +108,18 @@ final class ExportEngineService {
             let month = formatter.string(from: budget.month)
             let created = formatter.string(from: budget.createdDate)
 
-            csv += "\(name),\(limit),\(spent),\(category),\(month),\(created)\n"
+            csvLines.append("\(name),\(limit),\(spent),\(category),\(month),\(created)")
         }
 
-        return csv
+        return csvLines.joined(separator: "\n") + "\n"
     }
 
-    private func generateSubscriptionsCSV(settings: ExportSettings) async throws -> String {
+    private func generateSubscriptionsCSV(settings _: ExportSettings) async throws -> String {
         let subscriptions = try fetchSubscriptions()
 
-        var csv = "SUBSCRIPTIONS\n"
-        csv += "Name,Amount,Billing Cycle,Next Due Date,Category,Account,Is Active\n"
-
         let formatter = DateFormatter(); formatter.dateFormat = "yyyy-MM-dd"
+
+        var csvLines = ["SUBSCRIPTIONS", "Name,Amount,Billing Cycle,Next Due Date,Category,Account,Is Active"]
 
         for subscription in subscriptions {
             let name = self.escapeCSVField(subscription.name)
@@ -133,19 +130,18 @@ final class ExportEngineService {
             let account = self.escapeCSVField(subscription.account?.name ?? "")
             let isActive = subscription.isActive ? "Yes" : "No"
 
-            csv += "\(name),\(amount),\(cycle),\(nextDue),\(category),\(account),\(isActive)\n"
+            csvLines.append("\(name),\(amount),\(cycle),\(nextDue),\(category),\(account),\(isActive)")
         }
 
-        return csv
+        return csvLines.joined(separator: "\n") + "\n"
     }
 
-    private func generateGoalsCSV(settings: ExportSettings) async throws -> String {
+    private func generateGoalsCSV(settings _: ExportSettings) async throws -> String {
         let goals = try fetchGoals()
 
-        var csv = "SAVINGS GOALS\n"
-        csv += "Name,Target Amount,Current Amount,Target Date,Progress\n"
-
         let formatter = DateFormatter(); formatter.dateFormat = "yyyy-MM-dd"
+
+        var csvLines = ["SAVINGS GOALS", "Name,Target Amount,Current Amount,Target Date,Progress"]
 
         for goal in goals {
             let name = self.escapeCSVField(goal.name)
@@ -154,10 +150,10 @@ final class ExportEngineService {
             let targetDate = goal.targetDate.map { formatter.string(from: $0) } ?? ""
             let progress = String(format: "%.1f%%", goal.progressPercentage * 100)
 
-            csv += "\(name),\(target),\(current),\(targetDate),\(progress)\n"
+            csvLines.append("\(name),\(target),\(current),\(targetDate),\(progress)")
         }
 
-        return csv
+        return csvLines.joined(separator: "\n") + "\n"
     }
 
     // MARK: - PDF
@@ -189,7 +185,7 @@ final class ExportEngineService {
         // Title
         let titleAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.boldSystemFont(ofSize: 24),
-            .foregroundColor: NSColor.black
+            .foregroundColor: NSColor.black,
         ]
         let title = "Momentum Finance Report"
         title.draw(at: CGPoint(x: 50, y: pageRect.height - 50), withAttributes: titleAttributes)
@@ -198,7 +194,7 @@ final class ExportEngineService {
         let dateRange = "Period: \(dateFormatter.string(from: settings.startDate)) - \(dateFormatter.string(from: settings.endDate))"
         let dateAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.systemFont(ofSize: 14),
-            .foregroundColor: NSColor.gray
+            .foregroundColor: NSColor.gray,
         ]
         dateRange.draw(at: CGPoint(x: 50, y: pageRect.height - 80), withAttributes: dateAttributes)
 
@@ -217,16 +213,16 @@ final class ExportEngineService {
         #endif
     }
 
-    private func drawTransactionsSummary(context: CGContext, yPosition: Double, settings: ExportSettings) throws -> Double {
+    private func drawTransactionsSummary(context _: CGContext, yPosition: Double, settings: ExportSettings) throws -> Double {
         let transactions = try fetchTransactions(from: settings.startDate, to: settings.endDate)
 
         let headerAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.boldSystemFont(ofSize: 18),
-            .foregroundColor: NSColor.black
+            .foregroundColor: NSColor.black,
         ]
         let textAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.systemFont(ofSize: 12),
-            .foregroundColor: NSColor.black
+            .foregroundColor: NSColor.black,
         ]
 
         "Transactions Summary".draw(at: CGPoint(x: 50, y: yPosition), withAttributes: headerAttributes)
@@ -252,16 +248,16 @@ final class ExportEngineService {
         return currentY
     }
 
-    private func drawAccountsSummary(context: CGContext, yPosition: Double, settings: ExportSettings) throws -> Double {
+    private func drawAccountsSummary(context _: CGContext, yPosition: Double, settings _: ExportSettings) throws -> Double {
         let accounts = try fetchAccounts()
 
         let headerAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.boldSystemFont(ofSize: 18),
-            .foregroundColor: NSColor.black
+            .foregroundColor: NSColor.black,
         ]
         let textAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.systemFont(ofSize: 12),
-            .foregroundColor: NSColor.black
+            .foregroundColor: NSColor.black,
         ]
 
         "Accounts Summary".draw(at: CGPoint(x: 50, y: yPosition), withAttributes: headerAttributes)
@@ -287,7 +283,7 @@ final class ExportEngineService {
             "startDate": ISO8601DateFormatter().string(from: settings.startDate),
             "endDate": ISO8601DateFormatter().string(from: settings.endDate),
             "app": "Momentum Finance",
-            "version": "1.0.0"
+            "version": "1.0.0",
         ]
 
         if settings.includeTransactions {
@@ -365,7 +361,7 @@ final class ExportEngineService {
                 "type": transaction.transactionType.rawValue,
                 "category": transaction.category?.name ?? "",
                 "account": transaction.account?.name ?? "",
-                "notes": transaction.notes ?? ""
+                "notes": transaction.notes ?? "",
             ]
         }
     }
@@ -381,7 +377,7 @@ final class ExportEngineService {
                 "balance": account.balance,
                 "type": account.accountType.rawValue,
                 "currencyCode": account.currencyCode,
-                "createdDate": formatter.string(from: account.createdDate)
+                "createdDate": formatter.string(from: account.createdDate),
             ]
         }
     }
@@ -398,7 +394,7 @@ final class ExportEngineService {
                 "spentAmount": budget.spentAmount,
                 "category": budget.category?.name ?? "",
                 "month": formatter.string(from: budget.month),
-                "createdDate": formatter.string(from: budget.createdDate)
+                "createdDate": formatter.string(from: budget.createdDate),
             ]
         }
     }
@@ -416,7 +412,7 @@ final class ExportEngineService {
                 "nextDueDate": formatter.string(from: subscription.nextDueDate),
                 "category": subscription.category?.name ?? "",
                 "account": subscription.account?.name ?? "",
-                "isActive": subscription.isActive
+                "isActive": subscription.isActive,
             ]
         }
     }
@@ -431,7 +427,7 @@ final class ExportEngineService {
                 "name": goal.name,
                 "targetAmount": goal.targetAmount,
                 "currentAmount": goal.currentAmount,
-                "progressPercentage": goal.progressPercentage
+                "progressPercentage": goal.progressPercentage,
             ]
 
             if let targetDate = goal.targetDate {

@@ -15,7 +15,7 @@ struct TestGenerator {
     ///   - language: The programming language of the code
     ///   - testFramework: The test framework to use
     /// - Returns: Generated test code as a string
-    func generateBasicTests(code: String, language: String, testFramework: String) -> String {
+    func generateBasicTests(code _: String, language: String, testFramework: String) -> String {
         var testCode = ""
 
         if language == "Swift", testFramework == "XCTest" {

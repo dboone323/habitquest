@@ -166,7 +166,7 @@ struct AccessibleListRow<Content: View>: View {
         self.content = content()
     }
 
-    public var body: some View {
+    var body: some View {
         self.content
             .frame(minHeight: self.minimumRowHeight)
             .accessibilityElement(children: .combine)
@@ -250,7 +250,7 @@ struct FocusableView<Content: View>: View {
         self.content = content()
     }
 
-    public var body: some View {
+    var body: some View {
         self.content
             .focused(self.$isFocused)
             .accessibilityLabel(self.accessibilityLabel)
@@ -282,7 +282,7 @@ enum ScreenReaderAnnouncement {
             #elseif os(macOS)
             // Using the correct method without an argument parameter
             let userInfo: [NSAccessibility.NotificationUserInfoKey: Any] = [
-                NSAccessibility.NotificationUserInfoKey.announcement: message
+                NSAccessibility.NotificationUserInfoKey.announcement: message,
             ]
             NSAccessibility.post(
                 element: NSApp as Any, notification: .announcementRequested, userInfo: userInfo
@@ -377,7 +377,7 @@ public struct AccessibilityDemoView: View {
                         },
                         .init(name: "Delete") {
                             ScreenReaderAnnouncement.announce("Task deleted")
-                        }
+                        },
                     ]
                 ) {
                     HStack {

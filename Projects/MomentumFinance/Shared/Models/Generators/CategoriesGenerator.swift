@@ -29,7 +29,7 @@ final class CategoriesGenerator: DataGenerator {
             (name: "Health & Fitness", icon: "heart.fill"),
             (name: "Travel", icon: "airplane"),
             (name: "Education", icon: "book.fill"),
-            (name: "Income", icon: "dollarsign.circle.fill")
+            (name: "Income", icon: "dollarsign.circle.fill"),
         ]
 
         for category in categories {

@@ -66,7 +66,7 @@ final class TransactionPatternAnalyzer {
             visualizationType: .barChart,
             data: [
                 ("Highest Spending Day", Double(maxWeekday)),
-                ("Average Daily Spending", spendingByWeekday.values.reduce(0, +) / Double(spendingByWeekday.count))
+                ("Average Daily Spending", spendingByWeekday.values.reduce(0, +) / Double(spendingByWeekday.count)),
             ]
         )
     }
@@ -94,7 +94,7 @@ final class TransactionPatternAnalyzer {
             visualizationType: .lineChart,
             data: [
                 ("Peak Spending Day", Double(maxDay)),
-                ("Monthly Pattern Detected", 1.0)
+                ("Monthly Pattern Detected", 1.0),
             ]
         )
     }
@@ -124,7 +124,7 @@ final class TransactionPatternAnalyzer {
                 data: [
                     ("Transaction Amount", abs(anomaly.amount)),
                     ("Average Amount", average),
-                    ("Deviation", abs(anomaly.amount) - average)
+                    ("Deviation", abs(anomaly.amount) - average),
                 ]
             )
             insights.append(insight)

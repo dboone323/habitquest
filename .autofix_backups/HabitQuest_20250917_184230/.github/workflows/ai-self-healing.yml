@@ -1,19 +1,19 @@
 name: "AI Self-Healing Workflow"
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
     inputs:
       max_retries:
-        description: 'Maximum auto-retry attempts'
+        description: "Maximum auto-retry attempts"
         required: false
-        default: '5'
+        default: "5"
       enable_auto_fix:
-        description: 'Enable AI auto-fix'
+        description: "Enable AI auto-fix"
         required: false
-        default: 'true'
+        default: "true"
 
 permissions:
   contents: write
@@ -24,7 +24,7 @@ env:
   ENABLE_AI_RECOVERY: ${{ github.event.inputs.enable_auto_fix || 'true' }}
   MAX_RETRIES: ${{ github.event.inputs.max_retries || '5' }}
   # When true, Copilot agent will attempt dry-run fixes before human-facing recovery steps
-  QUIET_MODE: 'true'
+  QUIET_MODE: "true"
 
 jobs:
   ai-quality-check:
@@ -43,7 +43,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -95,7 +95,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install recovery dependencies
         run: |
@@ -155,7 +155,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -208,13 +208,15 @@ jobs:
             echo "Status: Recovery attempted - result: ${{ needs.ai-recovery.outputs.recovery-success }}" >> $GITHUB_STEP_SUMMARY
           fi
 
-  echo "✅ **Verification**: ${{ needs.verification.result }}" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ needs.verification.result }}" == "success" ]; then
+  echo "✅ **Verification**:
+    ${{ needs.verification.result }}" >> $GITHUB_STEP_SUMMARY
+    if [ "${{ needs.verification.result }}" == "success" ]; then
   echo "🎉 **Result**: Self-healing successful!" >> $GITHUB_STEP_SUMMARY
-          else
-  echo "⚠️ **Result**: Manual intervention may be required" >> $GITHUB_STEP_SUMMARY
-          fi
-          fi
-          echo "" >> $GITHUB_STEP_SUMMARY
+    else
+  echo "⚠️ **Result**:
+    Manual intervention may be required" >> $GITHUB_STEP_SUMMARY
+    fi
+    fi
+    echo "" >> $GITHUB_STEP_SUMMARY
   echo "📈 **AI Learning**: Patterns updated and stored" >> $GITHUB_STEP_SUMMARY
   echo "🔄 **Next Run**: Will continue learning and improving" >> $GITHUB_STEP_SUMMARY

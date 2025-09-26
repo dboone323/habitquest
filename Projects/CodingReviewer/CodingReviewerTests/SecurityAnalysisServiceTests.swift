@@ -8,7 +8,7 @@
 @testable import CodingReviewer
 import XCTest
 
-public class SecurityAnalysisServiceTests: XCTestCase {
+final class SecurityAnalysisServiceTests: XCTestCase {
     var securityAnalyzer: SecurityAnalysisService!
 
     override func setUp() {

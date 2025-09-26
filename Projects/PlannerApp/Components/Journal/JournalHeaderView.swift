@@ -7,9 +7,9 @@ public struct JournalHeaderView: View {
     public var body: some View {
         HStack {
             Spacer()
-            Button(action: {
+            Button {
                 // Custom edit implementation for macOS
-            }) {
+            } label: {
                 Text("Edit")
             }
             .accessibilityLabel("Button")

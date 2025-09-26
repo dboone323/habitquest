@@ -14,11 +14,13 @@ This directory contains comprehensive UI tests for the MomentumFinance applicati
 ## Test Coverage
 
 ### App Launch & Navigation
+
 - ✅ App launches successfully
 - ✅ Main navigation tabs work correctly
 - ✅ Tab-based navigation between sections
 
 ### Transaction Management
+
 - ✅ Create income and expense transactions
 - ✅ Edit existing transactions
 - ✅ Delete transactions (single and bulk)
@@ -29,6 +31,7 @@ This directory contains comprehensive UI tests for the MomentumFinance applicati
 - ✅ Input validation and error handling
 
 ### Account Management
+
 - ✅ Create checking and savings accounts
 - ✅ Display account balances with currency formatting
 - ✅ Edit account details
@@ -39,6 +42,7 @@ This directory contains comprehensive UI tests for the MomentumFinance applicati
 - ✅ Account validation
 
 ### Budget Management
+
 - ✅ Create monthly and category budgets
 - ✅ Display budget progress indicators
 - ✅ Track budget vs actual spending
@@ -50,34 +54,41 @@ This directory contains comprehensive UI tests for the MomentumFinance applicati
 - ✅ Budget validation
 
 ### Reports & Analytics
+
 - ✅ Reports view accessibility
 - ✅ Chart display for financial data
 - ✅ Date range selection
 - ✅ Export functionality (PDF/CSV)
 
 ### Settings & Preferences
+
 - ✅ Settings access
 - ✅ Currency selection
 - ✅ App preferences
 
 ### Search & Filter
+
 - ✅ Global search functionality
 - ✅ Advanced filtering options
 
 ### Data Export
+
 - ✅ Export transactions and reports
 - ✅ Multiple export formats
 
 ### Performance
+
 - ✅ App launch performance
 - ✅ List scrolling performance
 - ✅ Bulk operations performance
 
 ### Accessibility
+
 - ✅ Proper accessibility labels
 - ✅ Screen reader compatibility
 
 ### Error Handling
+
 - ✅ Invalid input validation
 - ✅ Required field validation
 - ✅ Network error handling
@@ -85,6 +96,7 @@ This directory contains comprehensive UI tests for the MomentumFinance applicati
 ## Setup Instructions
 
 ### Prerequisites
+
 1. Xcode 15.0 or later
 2. iOS Simulator or physical iOS device
 3. MomentumFinance app target properly configured
@@ -92,6 +104,7 @@ This directory contains comprehensive UI tests for the MomentumFinance applicati
 ### Xcode Configuration
 
 1. **Add UI Test Target** (if not already present):
+
    - Open MomentumFinance.xcodeproj in Xcode
    - Select the project in the Project Navigator
    - Click the "+" button at the bottom of the targets list
@@ -100,6 +113,7 @@ This directory contains comprehensive UI tests for the MomentumFinance applicati
    - Select the MomentumFinance app as the target to test
 
 2. **Configure Test Target**:
+
    - Select the MomentumFinanceUITests target
    - Go to "Build Phases" tab
    - Ensure "MomentumFinance" is in "Target Dependencies"
@@ -118,6 +132,7 @@ This directory contains comprehensive UI tests for the MomentumFinance applicati
 ### Running Tests
 
 #### Run All UI Tests
+
 ```bash
 # From terminal
 xcodebuild test -project MomentumFinance.xcodeproj -scheme MomentumFinance -destination "platform=iOS Simulator,name=iPhone 15"
@@ -127,11 +142,13 @@ xcodebuild test -project MomentumFinance.xcodeproj -scheme MomentumFinance -dest
 ```
 
 #### Run Specific Test Class
+
 ```bash
 xcodebuild test -project MomentumFinance.xcodeproj -scheme MomentumFinance -destination "platform=iOS Simulator,name=iPhone 15" -only-testing:MomentumFinanceUITests/TransactionUITests
 ```
 
 #### Run Individual Test
+
 ```bash
 xcodebuild test -project MomentumFinance.xcodeproj -scheme MomentumFinance -destination "platform=iOS Simulator,name=iPhone 15" -only-testing:MomentumFinanceUITests/TransactionUITests/testCreateIncomeTransaction
 ```
@@ -147,21 +164,25 @@ For consistent testing, consider setting up test data:
 ## Best Practices
 
 ### Test Organization
+
 - Group related tests in separate files
 - Use descriptive test method names
 - Add comments explaining complex test scenarios
 
 ### Element Identification
+
 - Use accessibility identifiers for reliable element location
 - Prefer semantic queries over positional queries
 - Handle dynamic content gracefully
 
 ### Test Stability
+
 - Use appropriate wait times for UI elements
 - Handle asynchronous operations properly
 - Test on multiple device sizes and orientations
 
 ### Performance Testing
+
 - Use `measure` blocks for performance tests
 - Test on actual devices for accurate metrics
 - Monitor memory usage during long-running tests
@@ -171,16 +192,19 @@ For consistent testing, consider setting up test data:
 ### Common Issues
 
 1. **XCTest Module Not Found**
+
    - Ensure UI test target is properly configured
    - Check that Xcode version supports UI testing
    - Verify target dependencies are set correctly
 
 2. **Elements Not Found**
+
    - Add accessibility identifiers to UI elements
    - Check that UI hierarchy matches test expectations
    - Use Xcode's Accessibility Inspector to verify identifiers
 
 3. **Tests Flaking**
+
    - Add appropriate wait conditions
    - Use `XCTWaiter` for asynchronous operations
    - Test on stable simulator versions
@@ -193,10 +217,12 @@ For consistent testing, consider setting up test data:
 ### Debug Tips
 
 1. **Enable UI Test Recording**:
+
    - In test method, add `let app = XCUIApplication()`
    - Use Xcode's UI test recording feature to generate test code
 
 2. **Inspect App State**:
+
    ```swift
    print(app.debugDescription) // Print UI hierarchy
    ```
@@ -235,16 +261,19 @@ Add to your CI pipeline:
 ## Maintenance
 
 ### Regular Updates
+
 - Update tests when UI changes
 - Review and update accessibility identifiers
 - Keep test data current
 
 ### Test Coverage Analysis
+
 - Use Xcode's code coverage reports
 - Identify untested UI paths
 - Add tests for new features
 
 ### Performance Baselines
+
 - Establish performance baselines
 - Monitor for regressions
 - Update baselines as app evolves

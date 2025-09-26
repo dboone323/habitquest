@@ -66,7 +66,7 @@ func fi_findBudgetRecommendations(transactions: [FinancialTransaction], budgets:
                 visualizationType: nil,
                 data: [
                     ("Average Spending", averageSpend),
-                    ("Recommended Budget", recommendedBudget)
+                    ("Recommended Budget", recommendedBudget),
                 ]
             )
             insights.append(insight)
@@ -88,7 +88,7 @@ func fi_findBudgetRecommendations(transactions: [FinancialTransaction], budgets:
                 data: [
                     ("Current Budget", currentBudgetAmount),
                     ("Average Spending", averageSpend),
-                    ("Recommended Budget", recommendedBudget)
+                    ("Recommended Budget", recommendedBudget),
                 ]
             )
             insights.append(insight)

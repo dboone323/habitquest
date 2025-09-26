@@ -2,9 +2,9 @@ name: Unified CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-test:
@@ -13,7 +13,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project: [AvoidObstaclesGame, HabitQuest, MomentumFinance, PlannerApp, CodingReviewer]
+        project:
+          [
+            AvoidObstaclesGame,
+            HabitQuest,
+            MomentumFinance,
+            PlannerApp,
+            CodingReviewer,
+          ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,7 +29,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Cache pip
         uses: actions/cache@v3
@@ -34,8 +41,8 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install Node dev deps (root)
         if: hashFiles('package.json') != ''
@@ -140,7 +147,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - name: Install deps
         run: npm ci
       - name: Release

@@ -58,6 +58,7 @@ The CI/CD pipeline runs on:
 ### Build Status
 
 Check build status in:
+
 - GitHub Actions tab
 - Pull request checks
 - Branch protection status
@@ -65,6 +66,7 @@ Check build status in:
 ### Test Results
 
 View test results in:
+
 - GitHub Actions logs
 - Test summary reports
 - Coverage reports (when enabled)
@@ -74,11 +76,13 @@ View test results in:
 ### Common Issues
 
 1. **Build Failures**
+
    - Check Xcode version compatibility
    - Verify code signing certificates
    - Review build logs for specific errors
 
 2. **Test Failures**
+
    - Run tests locally first
    - Check test environment setup
    - Review test logs for failures

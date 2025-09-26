@@ -89,7 +89,7 @@ final class SubscriptionsViewModel {
     /// Schedule renewal notifications for subscriptions
     /// <#Description#>
     /// - Returns: <#description#>
-    func scheduleSubscriptionNotifications(for subscriptions: [Subscription]) {
+    func scheduleSubscriptionNotifications(for _: [Subscription]) {
         // Temporarily disabled due to compilation issues
         // NotificationManager.shared.scheduleSubscriptionNotifications(for: subscriptions)
     }

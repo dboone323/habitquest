@@ -5,6 +5,7 @@ This directory contains practical code examples for common development tasks in 
 ## 📱 iOS/macOS Development Examples
 
 ### Basic App Structure
+
 ```swift
 import SwiftUI
 
@@ -26,6 +27,7 @@ struct ContentView: View {
 ```
 
 ### SwiftUI View with State Management
+
 ```swift
 struct TaskListView: View {
     @StateObject private var viewModel = TaskListViewModel()
@@ -65,6 +67,7 @@ class TaskListViewModel: ObservableObject {
 ```
 
 ### SwiftData Integration
+
 ```swift
 import SwiftData
 
@@ -96,6 +99,7 @@ struct PersistenceController {
 ## 🧪 Testing Examples
 
 ### Unit Test Example
+
 ```swift
 import XCTest
 @testable import MyApp
@@ -136,6 +140,7 @@ class TaskListViewModelTests: XCTestCase {
 ```
 
 ### UI Test Example
+
 ```swift
 import XCTest
 
@@ -178,6 +183,7 @@ class MyAppUITests: XCTestCase {
 ## 🔧 Automation Script Examples
 
 ### Basic Automation Script
+
 ```bash
 #!/bin/bash
 
@@ -199,6 +205,7 @@ echo "✅ Automation completed for $PROJECT_NAME"
 ```
 
 ### Advanced Automation with Error Handling
+
 ```bash
 #!/bin/bash
 
@@ -237,6 +244,7 @@ fi
 ## 📋 Configuration Examples
 
 ### SwiftFormat Configuration (.swiftformat)
+
 ```yaml
 # SwiftFormat configuration
 --indent 4
@@ -252,6 +260,7 @@ fi
 ```
 
 ### SwiftLint Configuration (.swiftlint.yml)
+
 ```yaml
 disabled_rules:
   - trailing_whitespace
@@ -277,6 +286,7 @@ indentation: 4
 ## 🚀 Deployment Examples
 
 ### Fastlane Fastfile
+
 ```ruby
 # Fastfile
 default_platform(:ios)
@@ -308,38 +318,39 @@ end
 ```
 
 ### GitHub Actions Workflow
+
 ```yaml
 name: CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-test:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: '14.0'
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "14.0"
 
-    - name: Build
-      run: xcodebuild -scheme MyApp -configuration Release
+      - name: Build
+        run: xcodebuild -scheme MyApp -configuration Release
 
-    - name: Run tests
-      run: xcodebuild test -scheme MyApp -destination 'platform=iOS Simulator,name=iPhone 13'
+      - name: Run tests
+        run: xcodebuild test -scheme MyApp -destination 'platform=iOS Simulator,name=iPhone 13'
 
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-artifacts
-        path: build/
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: build/
 ```
 
 ## 📚 Additional Resources
@@ -352,4 +363,4 @@ jobs:
 
 ---
 
-*Examples are automatically generated and may need adaptation for your specific use case.*
+_Examples are automatically generated and may need adaptation for your specific use case._

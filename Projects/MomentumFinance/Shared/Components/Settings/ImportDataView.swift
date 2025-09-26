@@ -145,7 +145,7 @@ class DocumentPickerDelegate: NSObject, UIDocumentPickerDelegate {
         self.completion = completion
     }
 
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+    func documentPicker(_: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         if let url = urls.first {
             self.completion(url)
         }

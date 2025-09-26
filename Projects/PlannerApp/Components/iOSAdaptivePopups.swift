@@ -122,7 +122,7 @@ enum HapticManager {
 
 // MARK: - iOS-Optimized Form Field
 
-struct iOSFormField<Content: View>: View {
+struct IOSFormField<Content: View>: View {
     let label: String
     let content: Content
 
@@ -170,7 +170,7 @@ struct iOSFormField<Content: View>: View {
 
 // MARK: - iOS Button Styles
 
-struct iOSPrimaryButton: ButtonStyle {
+struct IOSPrimaryButton: ButtonStyle {
     let isDestructive: Bool
 
     init(isDestructive: Bool = false) {
@@ -188,7 +188,7 @@ struct iOSPrimaryButton: ButtonStyle {
     }
 }
 
-struct iOSSecondaryButton: ButtonStyle {
+struct IOSSecondaryButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.body)
@@ -200,11 +200,11 @@ struct iOSSecondaryButton: ButtonStyle {
     }
 }
 
-extension ButtonStyle where Self == iOSPrimaryButton {
-    static var iOSPrimary: iOSPrimaryButton { iOSPrimaryButton() }
-    static var iOSDestructive: iOSPrimaryButton { iOSPrimaryButton(isDestructive: true) }
+extension ButtonStyle where Self == IOSPrimaryButton {
+    static var iOSPrimary: IOSPrimaryButton { IOSPrimaryButton() }
+    static var iOSDestructive: IOSPrimaryButton { IOSPrimaryButton(isDestructive: true) }
 }
 
-extension ButtonStyle where Self == iOSSecondaryButton {
-    static var iOSSecondary: iOSSecondaryButton { iOSSecondaryButton() }
+extension ButtonStyle where Self == IOSSecondaryButton {
+    static var iOSSecondary: IOSSecondaryButton { IOSSecondaryButton() }
 }

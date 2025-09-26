@@ -18,7 +18,7 @@ final class HabitSuggestionService {
             self.generateCategoryBasedSuggestions(profile: userProfile),
             self.generateTimeBasedSuggestions(profile: userProfile),
             self.generateComplementarySuggestions(existing: existingHabits),
-            self.generateTrendingSuggestions()
+            self.generateTrendingSuggestions(),
         ].flatMap(\.self)
     }
 
@@ -157,7 +157,7 @@ final class HabitSuggestionService {
                 difficulty: .medium,
                 reasoning: "Highly popular for personal and professional growth",
                 expectedSuccess: 0.8
-            )
+            ),
         ]
     }
 

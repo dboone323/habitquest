@@ -3,13 +3,16 @@
 Generated: 2025-09-10 01:53:40 +0000
 
 ## Summary Metrics
+
 - cspell.json files: 25
-- Shell scripts (*.sh): 893
+- Shell scripts (\*.sh): 893
 - Xcode projects/workspaces: 38
 - Swift source files: 622
 
 ## Snapshot/Backup Directories Detected
+
 \n
+
 - Tools/Automation/Archive/20250909T192435/Automation/IMPORTS/Tools_snapshot_20250826T130522Z
 - Tools/Automation/Archive/20250909T192435/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/agents
 - Tools/Automation/Archive/20250909T192435/Tools/Automation/Archive/20250909T192339/Automation/IMPORTS/Tools_snapshot_20250826T130522Z
@@ -35,77 +38,77 @@ Generated: 2025-09-10 01:53:40 +0000
 - Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/.github_workflows_temp
 - Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/IMPORTS
 - Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/PR_NOTES
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/agents
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/agents/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/agents/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/agents/plugins
 - Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/ci
 - Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/logs
 - Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/logs/force_snapshot_20250826T125929Z
 - Tools/Automation/Archive/20250909T192435/Tools/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/logs/force_snapshot_20250826T130109Z
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj/project.xcworkspace
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj/project.xcworkspace/xcuserdata
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj/project.xcworkspace/xcuserdata/danielstevens.xcuserdatad
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj/xcuserdata
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj/xcuserdata/danielstevens.xcuserdatad
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj/xcuserdata/danielstevens.xcuserdatad/xcschemes
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame/Assets.xcassets
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame/Assets.xcassets/AccentColor.colorset
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame/Assets.xcassets/AppIcon.appiconset
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame/Base.lproj
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGameTests
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGameUITests
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/Tools
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/Tools/Automation
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/CodingReviewer
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/CodingReviewer/CodingReviewer
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/CodingReviewer/CodingReviewer/Base.lproj
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/CodingReviewer/CodingReviewer/Temp
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/CodingReviewer/CodingReviewer/Tools
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/CodingReviewer/CodingReviewer/Tools/Automation
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/CodingReviewer/Tools
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/CodingReviewer/Tools/Automation
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Accessibility
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/CloudKit
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Components
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/DataManagers
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/MainApp
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Models
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/project.xcworkspace
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/project.xcworkspace/xcshareddata
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/project.xcworkspace/xcuserdata
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/project.xcworkspace/xcuserdata/danielstevens.xcuserdatad
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/xcshareddata
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/xcshareddata/xcschemes
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/xcuserdata
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/xcuserdata/danielstevens.xcuserdatad
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/xcuserdata/danielstevens.xcuserdatad/xcschemes
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp/Assets.xcassets
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp/Assets.xcassets/AccentColor.colorset
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp/Assets.xcassets/AppIcon.appiconset
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerAppTests
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerAppUITests
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Platform
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Styling
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Tools
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Tools/Automation
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Utilities
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/ViewModels
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Views
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Views/Calendar
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Views/Goals
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Views/Journal
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Views/Settings
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/Views/Tasks
-- Tools/Automation/Archive/20250909T192435/Tools/Automation/_merge_backups/20250826T184414Z/conflicts/PlannerApp/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj/project.xcworkspace
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj/project.xcworkspace/xcuserdata
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj/project.xcworkspace/xcuserdata/danielstevens.xcuserdatad
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj/xcuserdata
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj/xcuserdata/danielstevens.xcuserdatad
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame.xcodeproj/xcuserdata/danielstevens.xcuserdatad/xcschemes
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame/Assets.xcassets
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame/Assets.xcassets/AccentColor.colorset
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame/Assets.xcassets/AppIcon.appiconset
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGame/Base.lproj
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGameTests
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/AvoidObstaclesGameUITests
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/Tools
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/AvoidObstaclesGame/Tools/Automation
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/CodingReviewer
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/CodingReviewer/CodingReviewer
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/CodingReviewer/CodingReviewer/Base.lproj
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/CodingReviewer/CodingReviewer/Temp
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/CodingReviewer/CodingReviewer/Tools
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/CodingReviewer/CodingReviewer/Tools/Automation
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/CodingReviewer/Tools
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/CodingReviewer/Tools/Automation
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Accessibility
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/CloudKit
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Components
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/DataManagers
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/MainApp
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Models
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/project.xcworkspace
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/project.xcworkspace/xcshareddata
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/project.xcworkspace/xcuserdata
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/project.xcworkspace/xcuserdata/danielstevens.xcuserdatad
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/xcshareddata
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/xcshareddata/xcschemes
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/xcuserdata
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/xcuserdata/danielstevens.xcuserdatad
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp.xcodeproj/xcuserdata/danielstevens.xcuserdatad/xcschemes
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp/Assets.xcassets
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp/Assets.xcassets/AccentColor.colorset
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerApp/Assets.xcassets/AppIcon.appiconset
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerAppTests
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/PlannerAppUITests
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Platform
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Styling
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Tools
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Tools/Automation
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Utilities
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/ViewModels
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Views
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Views/Calendar
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Views/Goals
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Views/Journal
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Views/Settings
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/Views/Tasks
+- Tools/Automation/Archive/20250909T192435/Tools/Automation/\_merge_backups/20250826T184414Z/conflicts/PlannerApp/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Shared_snapshot-20250826T130522Z
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Shared_snapshot-20250826T130522Z/Testing
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Shared_snapshot-20250826T130522Z/Utilities
@@ -122,9 +125,9 @@ Generated: 2025-09-10 01:53:40 +0000
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/.github_workflows_temp
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/IMPORTS
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/PR_NOTES
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/agents
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/agents/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/agents/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/agents/backups
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/agents/backups/CodingReviewer_20250821_081938
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/agents/backups/CodingReviewer_20250821_081938/CodingReviewer
@@ -1131,9 +1134,9 @@ Generated: 2025-09-10 01:53:40 +0000
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/logs/force_snapshot_20250826T125929Z
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/IMPORTS/Tools_snapshot_20250826T130522Z/logs/force_snapshot_20250826T130109Z
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/PR_NOTES
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/agents
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/agents/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/agents/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/agents/backups
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/agents/backups/CodingReviewer_20250821_081938
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Automation/agents/backups/CodingReviewer_20250821_081938/CodingReviewer
@@ -3287,7 +3290,7 @@ Generated: 2025-09-10 01:53:40 +0000
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Projects/PlannerApp/Views/Journal
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Projects/PlannerApp/Views/Settings
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Projects/PlannerApp/Views/Tasks
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Projects/PlannerApp/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Projects/PlannerApp/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Shared
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Shared/Testing
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Shared/Utilities
@@ -3295,9 +3298,9 @@ Generated: 2025-09-10 01:53:40 +0000
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/.trunk
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/.trunk/configs
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Automation
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Automation/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Automation/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Automation/agents
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Automation/agents/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Automation/agents/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Automation/agents/plugins
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/AvoidObstaclesGame
@@ -3447,23 +3450,23 @@ Generated: 2025-09-10 01:53:40 +0000
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/HabitQuestTests
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/Tools
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/Tools/Automation
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/Tools/Automation/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/Tools/Automation/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/Tools/Automation/logs
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation 2
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation 2/config
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation 2/reports
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation 2/src
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation 2/src/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation 2/src/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation 2/tests
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation 2/tests/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation 2/tests/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation/config
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation/reports
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation/src
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation/src/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation/src/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation/tests
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation/tests/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/automation/tests/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/build
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/build/Logs
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/HabitQuest/build/Logs/Build
@@ -7685,19 +7688,19 @@ Generated: 2025-09-10 01:53:40 +0000
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/Shared/Views/Settings/Components
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/Tests
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/Tests/MomentumFinanceTests
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/Tests/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/Tests/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/Tools
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/Tools/Automation
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/Tools/Automation/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/Tools/Automation/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/XcodeWrapper
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/automation
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/automation/config
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/automation/reports
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/automation/src
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/automation/src/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/automation/src/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/automation/tests
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/automation/tests/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/automation/tests/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/build
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/build/MomentumFinance.build
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/MomentumFinance/build/MomentumFinance.build/Release-iphoneos
@@ -7752,7 +7755,7 @@ Generated: 2025-09-10 01:53:40 +0000
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/PlannerApp/Views/Journal
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/PlannerApp/Views/Settings
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/PlannerApp/Views/Tasks
-- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/PlannerApp/__pycache__
+- Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/PlannerApp/**pycache**
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/Tools
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/Tools/.github
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/Tools/Projects/Tools/.github/workflows
@@ -7763,7 +7766,9 @@ Generated: 2025-09-10 01:53:40 +0000
 - Tools/Automation/Archive/20250909T192435/Tools/Imported/Tools_snapshot_20250826T130522Z/logs/force_snapshot_20250826T130522Z
 
 ## Samples
+
 ### cspell.json sample paths
+
 - ./Tools/Automation/Archive/20250909T192435/cspell.json
 - ./Tools/Automation/Archive/20250909T192435/Documentation/cspell.json
 - ./Tools/Automation/Archive/20250909T192435/Documentation/Imported_CodeWorkspace_20250826T130522Z/cspell.json
@@ -7791,6 +7796,7 @@ Generated: 2025-09-10 01:53:40 +0000
 - ./Shared/cspell.json
 
 ### Shell scripts sample paths
+
 - ./Documentation/Imported_CodeWorkspace_20250826T130522Z/Enhancements/CodingReviewer_auto_enhancements.sh
 - ./Documentation/Imported_CodeWorkspace_20250826T130522Z/Enhancements/HabitQuest_auto_enhancements.sh
 - ./Documentation/Imported_CodeWorkspace_20250826T130522Z/Enhancements/MomentumFinance_safe_enhancements.sh
@@ -7816,4 +7822,3 @@ Generated: 2025-09-10 01:53:40 +0000
 - ./Tools/Projects/CodingReviewer/Tools/Automation/mcp_workflow.sh
 - ./Tools/Projects/CodingReviewer/.dependency_management/development_aliases.sh
 - ./Tools/Projects/CodingReviewer/CodingReviewer/Tools/Automation/mcp_workflow.sh
-

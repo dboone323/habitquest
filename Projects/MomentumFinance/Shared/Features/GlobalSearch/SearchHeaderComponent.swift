@@ -6,8 +6,8 @@ public struct SearchHeaderComponent: View {
     var onSearchChanged: (() -> Void)?
 
     public init(searchText: Binding<String>, selectedFilter: Binding<SearchFilter>, onSearchChanged: (() -> Void)? = nil) {
-        self._searchText = searchText
-        self._selectedFilter = selectedFilter
+        _searchText = searchText
+        _selectedFilter = selectedFilter
         self.onSearchChanged = onSearchChanged
     }
 

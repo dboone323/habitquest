@@ -218,7 +218,7 @@ extension Features.Budgets {
     struct BudgetSummaryCard: View {
         let budgets: [Budget]
 
-        public var body: some View {
+        var body: some View {
             VStack(spacing: 16) {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
@@ -306,7 +306,7 @@ extension Features.Budgets {
     struct BudgetRowView: View {
         let budget: Budget
 
-        public var body: some View {
+        var body: some View {
             VStack(spacing: 0) {
                 HStack(spacing: 16) {
                     VStack(alignment: .leading, spacing: 4) {
@@ -396,7 +396,7 @@ extension Features.Budgets {
         @State private var rolloverEnabled = false
         @State private var maxRolloverPercentage = 1.0
 
-        public var body: some View {
+        var body: some View {
             NavigationView {
                 Form {
                     Section(header: Text("Budget Details")) {
@@ -468,13 +468,13 @@ extension Features.Budgets {
         }
 
         private func saveBudget() {
-            guard let category = self.selectedCategory,
-                  let limit = Double(self.limitAmount) else { return }
+            guard let category = selectedCategory,
+                  let limit = Double(limitAmount) else { return }
 
             let calendar = Calendar.current
             let currentMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: Date()))!
 
-            let budget = Budget(name: self.name, limitAmount: limit, month: currentMonth)
+            let budget = Budget(name: name, limitAmount: limit, month: currentMonth)
             budget.category = category
             budget.rolloverEnabled = self.rolloverEnabled
             budget.maxRolloverPercentage = self.maxRolloverPercentage

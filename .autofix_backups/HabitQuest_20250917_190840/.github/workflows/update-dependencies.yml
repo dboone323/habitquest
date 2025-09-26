@@ -3,7 +3,7 @@ name: "Update Dependencies"
 
 on:
   schedule:
-    - cron: '0 7 * * 0' # weekly on Sunday at 07:00 UTC
+    - cron: "0 7 * * 0" # weekly on Sunday at 07:00 UTC
   workflow_dispatch: {}
 
 jobs:
@@ -45,8 +45,8 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'chore: update Swift package dependencies'
-          title: 'Update Swift Package Dependencies'
+          commit-message: "chore: update Swift package dependencies"
+          title: "Update Swift Package Dependencies"
           body: |
             ## Automated Dependency Update
 

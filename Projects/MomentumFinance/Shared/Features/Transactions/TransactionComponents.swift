@@ -259,9 +259,9 @@ public struct SearchAndFilterSection: View {
         searchText: Binding<String>, selectedFilter: Binding<TransactionFilter>,
         showingSearch: Binding<Bool>
     ) {
-        self._searchText = searchText
-        self._selectedFilter = selectedFilter
-        self._showingSearch = showingSearch
+        _searchText = searchText
+        _selectedFilter = selectedFilter
+        _showingSearch = showingSearch
     }
 
     public var body: some View {

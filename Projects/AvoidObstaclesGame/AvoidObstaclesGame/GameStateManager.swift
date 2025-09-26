@@ -170,6 +170,19 @@ class GameStateManager {
         ]
     }
 
+    /// Gets game statistics (async version)
+    /// - Returns: Dictionary of statistics
+    func getStatisticsAsync() async -> [String: Any] {
+        let highestScore = await HighScoreManager.shared.getHighestScoreAsync()
+        return [
+            "gamesPlayed": self.gamesPlayed,
+            "totalScore": self.totalScore,
+            "averageScore": self.gamesPlayed > 0 ? Double(self.totalScore) / Double(self.gamesPlayed) : 0,
+            "bestSurvivalTime": self.bestSurvivalTime,
+            "highestScore": highestScore,
+        ]
+    }
+
     /// Resets all statistics
     func resetStatistics() {
         self.gamesPlayed = 0
@@ -177,6 +190,17 @@ class GameStateManager {
         self.bestSurvivalTime = 0
         UserDefaults.standard.removeObject(forKey: "gameStatistics")
         UserDefaults.standard.synchronize()
+    }
+
+    /// Resets all statistics (async version)
+    func resetStatisticsAsync() async {
+        await Task.detached {
+            self.gamesPlayed = 0
+            self.totalScore = 0
+            self.bestSurvivalTime = 0
+            UserDefaults.standard.removeObject(forKey: "gameStatistics")
+            UserDefaults.standard.synchronize()
+        }.value
     }
 
     // MARK: - Persistence
@@ -188,12 +212,31 @@ class GameStateManager {
         self.bestSurvivalTime = defaults.double(forKey: "bestSurvivalTime")
     }
 
+    private func loadStatisticsAsync() async {
+        await Task.detached {
+            let defaults = UserDefaults.standard
+            self.gamesPlayed = defaults.integer(forKey: "gamesPlayed")
+            self.totalScore = defaults.integer(forKey: "totalScore")
+            self.bestSurvivalTime = defaults.double(forKey: "bestSurvivalTime")
+        }.value
+    }
+
     private func saveStatistics() {
         let defaults = UserDefaults.standard
         defaults.set(self.gamesPlayed, forKey: "gamesPlayed")
         defaults.set(self.totalScore, forKey: "totalScore")
         defaults.set(self.bestSurvivalTime, forKey: "bestSurvivalTime")
         defaults.synchronize()
+    }
+
+    private func saveStatisticsAsync() async {
+        await Task.detached {
+            let defaults = UserDefaults.standard
+            defaults.set(self.gamesPlayed, forKey: "gamesPlayed")
+            defaults.set(self.totalScore, forKey: "totalScore")
+            defaults.set(self.bestSurvivalTime, forKey: "bestSurvivalTime")
+            defaults.synchronize()
+        }.value
     }
 
     // MARK: - State Queries

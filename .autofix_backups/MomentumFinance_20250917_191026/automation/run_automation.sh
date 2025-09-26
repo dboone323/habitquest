@@ -10,20 +10,20 @@ echo "🤖 Running Quantum Automation for MomentumFinance"
 
 # Run AI enhancement analysis
 if [[ -f "$AUTOMATION_DIR/ai_enhancement_system.sh" ]]; then
-    echo "🔍 Running AI enhancement analysis..."
-    bash "$AUTOMATION_DIR/ai_enhancement_system.sh" analyze "MomentumFinance"
+  echo "🔍 Running AI enhancement analysis..."
+  bash "$AUTOMATION_DIR/ai_enhancement_system.sh" analyze "MomentumFinance"
 fi
 
 # Run intelligent auto-fix
 if [[ -f "$AUTOMATION_DIR/intelligent_autofix.sh" ]]; then
-    echo "🔧 Running intelligent auto-fix..."
-    bash "$AUTOMATION_DIR/intelligent_autofix.sh" fix "MomentumFinance"
+  echo "🔧 Running intelligent auto-fix..."
+  bash "$AUTOMATION_DIR/intelligent_autofix.sh" fix "MomentumFinance"
 fi
 
 # Run MCP workflow checks
 if [[ -f "$AUTOMATION_DIR/mcp_workflow.sh" ]]; then
-    echo "🔄 Running MCP workflow checks..."
-    bash "$AUTOMATION_DIR/mcp_workflow.sh" check "MomentumFinance"
+  echo "🔄 Running MCP workflow checks..."
+  bash "$AUTOMATION_DIR/mcp_workflow.sh" check "MomentumFinance"
 fi
 
 echo "✅ Quantum automation completed for MomentumFinance"

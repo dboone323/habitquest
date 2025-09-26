@@ -132,7 +132,7 @@ func fi_analyzeSpendingPatterns(
 }
 
 func fi_checkBudgetExceeded(
-    budget: Budget, totalSpent: Double, categoryId: String
+    budget: Budget, totalSpent: Double, categoryId _: String
 ) -> FinancialInsight? {
     guard totalSpent >= budget.limitAmount else { return nil }
 
@@ -150,7 +150,7 @@ func fi_checkBudgetExceeded(
         visualizationType: .progressBar,
         data: [
             ("Budget", budget.limitAmount), ("Spent", totalSpent),
-            ("Overspent", overspent)
+            ("Overspent", overspent),
         ]
     )
 }
@@ -198,7 +198,7 @@ func fi_checkBudgetAtRisk(context: BudgetAnalysisContext) -> FinancialInsight? {
         visualizationType: .progressBar,
         data: [
             ("Budget", context.budget.limitAmount), ("Spent", context.totalSpent),
-            ("Projected", projectedTotal)
+            ("Projected", projectedTotal),
         ]
     )
 }
@@ -223,7 +223,7 @@ func fi_checkBudgetUnderutilized(
         visualizationType: .progressBar,
         data: [
             ("Budget", budget.limitAmount), ("Spent", totalSpent),
-            ("Remaining", budget.limitAmount - totalSpent)
+            ("Remaining", budget.limitAmount - totalSpent),
         ]
     )
 }

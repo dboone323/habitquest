@@ -19,7 +19,7 @@ public struct CodingReviewer: App {
         WindowGroup {
             ContentView()
                 .frame(minWidth: 800, minHeight: 600)
-                .sheet(isPresented: $showNewReviewSheet) {
+                .sheet(isPresented: self.$showNewReviewSheet) {
                     NewReviewView()
                 }
         }
@@ -29,21 +29,21 @@ public struct CodingReviewer: App {
             // Add standard menu commands
             CommandGroup(replacing: .newItem) {
                 Button("New Review") {
-                    showNewReviewSheet = true
+                    self.showNewReviewSheet = true
                 }
                 .keyboardShortcut("n", modifiers: .command)
             }
 
             CommandGroup(replacing: .saveItem) {
                 Button("Save Review") {
-                    saveCurrentReview()
+                    self.saveCurrentReview()
                 }
                 .keyboardShortcut("s", modifiers: .command)
             }
 
             CommandGroup(replacing: CommandGroupPlacement.appInfo) {
                 Button("About CodingReviewer") {
-                    showAboutWindow = true
+                    self.showAboutWindow = true
                 }
             }
         }
@@ -62,7 +62,7 @@ public struct CodingReviewer: App {
     }
 
     private func saveCurrentReview() {
-        logger.info("Save review action triggered")
+        self.logger.info("Save review action triggered")
         // TODO: Implement actual save functionality
         // This would typically save the current review state to disk or database
     }

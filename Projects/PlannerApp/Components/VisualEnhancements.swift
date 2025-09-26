@@ -36,7 +36,7 @@ struct GlassMorphismCard<Content: View>: View {
                         LinearGradient(
                             gradient: Gradient(colors: [
                                 self.themeManager.currentTheme.primaryAccentColor.opacity(0.05),
-                                self.themeManager.currentTheme.secondaryAccentColor.opacity(0.02)
+                                self.themeManager.currentTheme.secondaryAccentColor.opacity(0.02),
                             ]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -49,7 +49,7 @@ struct GlassMorphismCard<Content: View>: View {
                         LinearGradient(
                             gradient: Gradient(colors: [
                                 Color.white.opacity(0.6),
-                                Color.white.opacity(0.1)
+                                Color.white.opacity(0.1),
                             ]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -95,7 +95,7 @@ public struct AnimatedProgressRing: View {
                     LinearGradient(
                         gradient: Gradient(colors: [
                             self.themeManager.currentTheme.primaryAccentColor,
-                            self.themeManager.currentTheme.secondaryAccentColor
+                            self.themeManager.currentTheme.secondaryAccentColor,
                         ]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
@@ -158,7 +158,7 @@ public struct FloatingActionButton: View {
     @State private var rotationAngle: Double = 0
 
     public var body: some View {
-        Button(action: {
+        Button {
             #if os(iOS)
             let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
             impactFeedback.impactOccurred()
@@ -169,7 +169,7 @@ public struct FloatingActionButton: View {
             }
 
             self.action()
-        }) {
+        } label: {
             Image(systemName: self.icon)
                 .font(.title2.weight(.semibold))
                 .foregroundColor(.white)
@@ -180,7 +180,7 @@ public struct FloatingActionButton: View {
                             LinearGradient(
                                 gradient: Gradient(colors: [
                                     self.themeManager.currentTheme.primaryAccentColor,
-                                    self.themeManager.currentTheme.primaryAccentColor.opacity(0.8)
+                                    self.themeManager.currentTheme.primaryAccentColor.opacity(0.8),
                                 ]),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -249,8 +249,8 @@ public struct ParticleSystem: View {
 
     struct Particle: Identifiable {
         let id = UUID()
-        var x: CGFloat
-        var y: CGFloat
+        var positionX: CGFloat
+        var positionY: CGFloat
         var velocity: CGVector
         var color: Color
         var scale: CGFloat
@@ -266,7 +266,7 @@ public struct ParticleSystem: View {
                         .frame(width: 8, height: 8)
                         .scaleEffect(particle.scale)
                         .opacity(particle.opacity)
-                        .position(x: particle.x, y: particle.y)
+                        .position(x: particle.positionX, y: particle.positionY)
                 }
             }
         }
@@ -281,8 +281,8 @@ public struct ParticleSystem: View {
     private func createParticles() {
         self.particles = (0 ..< 50).map { _ in
             Particle(
-                x: CGFloat.random(in: 50 ... 350),
-                y: 400,
+                positionX: CGFloat.random(in: 50 ... 350),
+                positionY: 400,
                 velocity: CGVector(
                     dx: CGFloat.random(in: -200 ... 200),
                     dy: CGFloat.random(in: -400 ... -200)
@@ -299,11 +299,11 @@ public struct ParticleSystem: View {
         self.isAnimating = true
 
         withAnimation(.linear(duration: 3.0)) {
-            for i in self.particles.indices {
-                self.particles[i].x += self.particles[i].velocity.dx * 0.01
-                self.particles[i].y += self.particles[i].velocity.dy * 0.01
-                self.particles[i].opacity = 0.0
-                self.particles[i].scale *= 0.1
+            for index in self.particles.indices {
+                self.particles[index].positionX += self.particles[index].velocity.dx * 0.01
+                self.particles[index].positionY += self.particles[index].velocity.dy * 0.01
+                self.particles[index].opacity = 0.0
+                self.particles[index].scale *= 0.1
             }
         }
 
@@ -330,7 +330,7 @@ public struct ShimmerView: View {
                             gradient: Gradient(colors: [
                                 Color.clear,
                                 Color.white.opacity(0.4),
-                                Color.clear
+                                Color.clear,
                             ]),
                             startPoint: .leading,
                             endPoint: .trailing
@@ -522,9 +522,9 @@ public struct VisualEnhancementsPreview: View {
                 }
 
                 // Celebration Button
-                Button(action: {
+                Button {
                     self.showParticles = true
-                }) {
+                } label: {
                     Text("Celebrate! 🎉")
                         .font(.title2.bold())
                         .foregroundColor(.white)

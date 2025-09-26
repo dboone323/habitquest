@@ -34,16 +34,16 @@ added_count = 0
 swift_files.each do |file_path|
   # Skip if already in project
   next if project.files.find { |f| f.path == file_path }
-  
+
   # Add file reference
   file_ref = project.new_file(file_path)
-  
+
   # Add to main group
   main_group.children << file_ref
-  
+
   # Add to target
   target.add_file_references([file_ref])
-  
+
   added_count += 1
   puts "✅ Added: #{file_path}"
 end

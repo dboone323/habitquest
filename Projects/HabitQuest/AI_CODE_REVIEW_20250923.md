@@ -1,50 +1,56 @@
 # AI Code Review for HabitQuest
+
 Generated: Tue Sep 23 20:00:00 CDT 2025
 
-
 ## PerformanceManager.swift
+
 # PerformanceManager.swift - Code Review
 
 ## 1. Code Quality Issues
 
 ### **Critical Issue: Incomplete Function Implementation**
+
 ```swift
 let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {
     $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
         task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
 // Missing: return statement and closing braces
 ```
+
 **Fix:** Complete the memory usage function:
+
 ```swift
 public func getMemoryUsage() -> Double? {
     var info = mach_task_basic_info()
     var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
-    
+
     let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {
         $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
             task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
         }
     }
-    
+
     guard kerr == KERN_SUCCESS else { return nil }
     return Double(info.resident_size) / (1024 * 1024) // Convert to MB
 }
 ```
 
 ### **Thread Safety Issues**
+
 The class is not thread-safe. Multiple threads calling `recordFrame()` simultaneously could cause data races.
 
 **Fix:** Add thread synchronization:
+
 ```swift
 private let lock = NSLock()
 
 public func recordFrame() {
     lock.lock()
     defer { lock.unlock() }
-    
+
     let currentTime = CACurrentMediaTime()
     frameTimes.append(currentTime)
-    
+
     if frameTimes.count > maxFrameHistory {
         frameTimes.removeFirst()
     }
@@ -54,22 +60,25 @@ public func recordFrame() {
 ## 2. Performance Problems
 
 ### **Inefficient Array Operations**
+
 ```swift
 // Using .suffix(10) creates a new array
 let recentFrames = self.frameTimes.suffix(10)
 ```
+
 **Fix:** Use array indices directly:
+
 ```swift
 public func getCurrentFPS() -> Double {
     lock.lock()
     defer { lock.unlock() }
-    
+
     guard frameTimes.count >= 2 else { return 0 }
-    
+
     let startIndex = max(0, frameTimes.count - 10)
     let timeDiff = frameTimes.last! - frameTimes[startIndex]
     let frameCount = Double(frameTimes.count - startIndex - 1)
-    
+
     return frameCount / timeDiff
 }
 ```
@@ -77,6 +86,7 @@ public func getCurrentFPS() -> Double {
 ## 3. Security Vulnerabilities
 
 ### **Memory Safety**
+
 The incomplete `getMemoryUsage()` function is a security risk as it leaves unsafe pointers unmanaged.
 
 **Fix:** Complete the function with proper error handling as shown above.
@@ -84,12 +94,14 @@ The incomplete `getMemoryUsage()` function is a security risk as it leaves unsaf
 ## 4. Swift Best Practices Violations
 
 ### **Naming Convention**
+
 ```swift
 // Use camelCase for constants
 private let maxFrameHistory = 60 // Should be maxFrameHistory
 ```
 
 ### **Force Unwrapping**
+
 ```swift
 guard let first = recentFrames.first, let last = recentFrames.last else {
     return 0
@@ -98,6 +110,7 @@ guard let first = recentFrames.first, let last = recentFrames.last else {
 ```
 
 ### **Access Control**
+
 ```swift
 // Make properties private
 private(set) var frameTimes: [CFTimeInterval] = []
@@ -106,9 +119,11 @@ private(set) var frameTimes: [CFTimeInterval] = []
 ## 5. Architectural Concerns
 
 ### **Singleton Pattern Limitations**
+
 The singleton pattern makes testing difficult and can lead to hidden dependencies.
 
 **Consider:** Using dependency injection instead:
+
 ```swift
 protocol PerformanceMonitoring {
     func recordFrame()
@@ -122,7 +137,9 @@ public class PerformanceManager: PerformanceMonitoring {
 ```
 
 ### **Limited Metrics**
+
 Only FPS and memory are tracked. Consider adding:
+
 - CPU usage
 - Disk I/O
 - Network performance
@@ -130,6 +147,7 @@ Only FPS and memory are tracked. Consider adding:
 ## 6. Documentation Needs
 
 ### **Add Parameter and Return Value Documentation**
+
 ```swift
 /// Records the current frame time for FPS calculation
 /// - Note: Should be called once per frame
@@ -143,14 +161,15 @@ public func getCurrentFPS() -> Double {
 ```
 
 ### **Add Usage Examples**
-```swift
+
+````swift
 /// Example usage:
 /// ```
 /// // In your rendering loop:
 /// PerformanceManager.shared.recordFrame()
 /// let fps = PerformanceManager.shared.getCurrentFPS()
 /// ```
-```
+````
 
 ## Recommended Complete Implementation
 
@@ -166,59 +185,59 @@ import QuartzCore
 /// Monitors application performance metrics
 public final class PerformanceManager {
     public static let shared = PerformanceManager()
-    
+
     private var frameTimes: [CFTimeInterval] = []
     private let maxFrameHistory = 60
     private let lock = NSLock()
-    
+
     private init() {}
-    
+
     /// Records the current frame time for FPS calculation
     /// - Note: Should be called once per frame
     public func recordFrame() {
         lock.lock()
         defer { lock.unlock() }
-        
+
         let currentTime = CACurrentMediaTime()
         frameTimes.append(currentTime)
-        
+
         if frameTimes.count > maxFrameHistory {
             frameTimes.removeFirst()
         }
     }
-    
+
     /// Returns the current frames per second based on recent frame times
     /// - Returns: Current FPS as Double, or 0 if insufficient data
     public func getCurrentFPS() -> Double {
         lock.lock()
         defer { lock.unlock() }
-        
+
         guard frameTimes.count >= 2 else { return 0 }
-        
+
         let startIndex = max(0, frameTimes.count - 10)
         let timeDiff = frameTimes.last! - frameTimes[startIndex]
         let frameCount = Double(frameTimes.count - startIndex - 1)
-        
+
         guard timeDiff > 0 else { return 0 }
         return frameCount / timeDiff
     }
-    
+
     /// Returns current memory usage in megabytes
     /// - Returns: Memory usage in MB, or nil if measurement fails
     public func getMemoryUsage() -> Double? {
         var info = mach_task_basic_info()
         var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
-        
+
         let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {
             $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
                 task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
             }
         }
-        
+
         guard kerr == KERN_SUCCESS else { return nil }
         return Double(info.resident_size) / (1024 * 1024)
     }
-    
+
     /// Clears all recorded performance data
     public func reset() {
         lock.lock()
@@ -237,6 +256,7 @@ public final class PerformanceManager {
 5. **Add support for** performance alert thresholds and notifications
 
 ## HabitQuestUITests.swift
+
 I'll analyze the `HabitQuestUITests.swift` file. Since you didn't provide the actual code content, I'll provide a comprehensive review framework and common issues to look for in UI test files.
 
 ## Code Review Analysis Framework for UI Tests
@@ -244,6 +264,7 @@ I'll analyze the `HabitQuestUITests.swift` file. Since you didn't provide the ac
 ### 1. Code Quality Issues (Common in UI Tests)
 
 **Look for these patterns:**
+
 ```swift
 // ❌ Poor quality examples:
 func testExample() {
@@ -261,6 +282,7 @@ func testLoginFlow() {
 ```
 
 **Actionable Feedback:**
+
 - Replace magic strings with centralized accessibility identifiers
 - Ensure proper setup/teardown in `setUp()` and `tearDown()` methods
 - Check for proper use of `XCUIElementQuery` instead of hardcoded indices
@@ -268,6 +290,7 @@ func testLoginFlow() {
 ### 2. Performance Problems
 
 **Common performance issues:**
+
 ```swift
 // ❌ Performance issues:
 func testSlowPerformance() {
@@ -288,6 +311,7 @@ func testOptimizedPerformance() {
 ```
 
 **Actionable Feedback:**
+
 - Replace `sleep()` with `waitForExistence(timeout:)`
 - Use specific element queries instead of broad `.any` queries
 - Implement proper waiting mechanisms using expectations
@@ -295,6 +319,7 @@ func testOptimizedPerformance() {
 ### 3. Security Vulnerabilities
 
 **Security concerns in UI tests:**
+
 ```swift
 // ❌ Security risks:
 func testWithSensitiveData() {
@@ -312,6 +337,7 @@ func testWithTestData() {
 ```
 
 **Actionable Feedback:**
+
 - Never hardcode real credentials - use test accounts
 - Store sensitive test data in secure configuration files
 - Use environment variables for different environments
@@ -319,17 +345,18 @@ func testWithTestData() {
 ### 4. Swift Best Practices Violations
 
 **Common violations:**
+
 ```swift
 // ❌ Bad practices:
 class HabitQuestUITests: XCTestCase {
     var app: XCUIApplication!
-    
+
     override func setUp() {
         super.setUp()
         app = XCUIApplication()
         continueAfterFailure = true // ❌ Should be false
     }
-    
+
     func testEverything() { // ❌ Too broad test
         // 100 lines of test code
     }
@@ -338,19 +365,19 @@ class HabitQuestUITests: XCTestCase {
 // ✅ Best practices:
 class HabitQuestUITests: XCTestCase {
     private var app: XCUIApplication!
-    
+
     override func setUp() {
         super.setUp()
         continueAfterFailure = false // ✅ Stop on first failure
         app = XCUIApplication()
         app.launch()
     }
-    
+
     override func tearDown() {
         app.terminate()
         super.tearDown()
     }
-    
+
     func testSpecificUserJourney() { // ✅ Focused test
         // Test one specific flow
     }
@@ -358,6 +385,7 @@ class HabitQuestUITests: XCTestCase {
 ```
 
 **Actionable Feedback:**
+
 - Set `continueAfterFailure = false`
 - Make properties `private` when possible
 - Follow Single Responsibility Principle for test methods
@@ -366,6 +394,7 @@ class HabitQuestUITests: XCTestCase {
 ### 5. Architectural Concerns
 
 **Architectural issues:**
+
 ```swift
 // ❌ Poor architecture:
 class HabitQuestUITests: XCTestCase {
@@ -381,16 +410,16 @@ class HabitQuestUITests: XCTestCase {
 // Page Object Pattern implementation
 class LoginPage {
     private let app: XCUIApplication
-    
+
     init(app: XCUIApplication) {
         self.app = app
     }
-    
+
     func enterEmail(_ email: String) -> Self {
         app.textFields[AccessibilityIdentifiers.emailField].typeText(email)
         return self
     }
-    
+
     func tapLogin() -> HomePage {
         app.buttons[AccessibilityIdentifiers.loginButton].tap()
         return HomePage(app: app)
@@ -399,6 +428,7 @@ class LoginPage {
 ```
 
 **Actionable Feedback:**
+
 - Implement Page Object Pattern for maintainable tests
 - Create helper methods for common actions
 - Use inheritance or composition for shared test logic
@@ -407,6 +437,7 @@ class LoginPage {
 ### 6. Documentation Needs
 
 **Documentation requirements:**
+
 ```swift
 // ❌ Poor documentation:
 func testSomething() {
@@ -420,18 +451,19 @@ func testSomething() {
 func testUserRegistrationFlow() {
     // Arrange
     let registrationPage = RegistrationPage(app: app)
-    
+
     // Act
     let dashboardPage = registrationPage
         .enterUserDetails(testUser)
         .submitRegistration()
-    
+
     // Assert
     XCTAssertTrue(dashboardPage.isDisplayed, "Dashboard should be visible after registration")
 }
 ```
 
 **Actionable Feedback:**
+
 - Add doc comments for complex test scenarios
 - Document preconditions and assumptions
 - Use clear test method names that describe the behavior
@@ -454,41 +486,51 @@ Since I can't see your actual code, here are specific things to check:
 Would you like to share the actual code content so I can provide more specific feedback?
 
 ## Dependencies.swift
+
 # Code Review: Dependencies.swift
 
 ## 1. Code Quality Issues
 
 ### Incomplete Enum Definition
+
 ```swift
 public enum LogLevel: String {
     case debug, info, warning, error
 ```
+
 **Issue**: Missing closing brace for the `LogLevel` enum
 **Fix**: Add `}` to complete the enum definition
 
 ### Missing ISO8601Format() Implementation
+
 ```swift
 let timestamp = Date().ISO8601Format()
 ```
+
 **Issue**: `ISO8601Format()` is not a standard Date method in Swift
 **Fix**: Use proper ISO8601 formatting:
+
 ```swift
 let formatter = ISO8601DateFormatter()
 let timestamp = formatter.string(from: Date())
 ```
 
 ### Limited Logging Flexibility
+
 **Issue**: Logger only supports printing to console, no file or remote logging capabilities
 **Fix**: Consider making Logger protocol-based and providing multiple implementations
 
 ## 2. Performance Problems
 
 ### Date Formatter Creation
+
 ```swift
 let timestamp = Date().ISO8601Format()
 ```
+
 **Issue**: Creating a new formatter for every log call is inefficient
 **Fix**: Use a static formatter:
+
 ```swift
 private static let formatter: ISO8601DateFormatter = {
     let formatter = ISO8601DateFormatter()
@@ -500,8 +542,10 @@ private static let formatter: ISO8601DateFormatter = {
 ## 3. Security Vulnerabilities
 
 ### Logging Sensitive Data
+
 **Issue**: No mechanism to prevent logging of sensitive information
 **Fix**: Add redaction capabilities:
+
 ```swift
 public func log(_ message: String, level: LogLevel = .info, redactSensitive: Bool = false) {
     let processedMessage = redactSensitive ? redactSensitiveData(message) : message
@@ -512,12 +556,15 @@ public func log(_ message: String, level: LogLevel = .info, redactSensitive: Boo
 ## 4. Swift Best Practices Violations
 
 ### Singleton Pattern Implementation
+
 ```swift
 public static let shared = Logger()
 private init() {}
 ```
+
 **Issue**: Singleton pattern without thread safety
 **Fix**: Make initialization thread-safe:
+
 ```swift
 public static let shared = Logger()
 private init() {
@@ -526,26 +573,32 @@ private init() {
 ```
 
 ### Missing Access Control
+
 **Issue**: No explicit access control for some members
 **Fix**: Add explicit access modifiers:
+
 ```swift
 private static let formatter = ISO8601DateFormatter()
 ```
 
 ### Incomplete Error Handling
+
 **Issue**: No error handling for logging operations that might fail
 **Fix**: Consider making logging methods throwable or using Result types
 
 ## 5. Architectural Concerns
 
 ### Tight Coupling
+
 ```swift
 public struct Dependencies {
     public let performanceManager: PerformanceManager
     public let logger: Logger
 ```
+
 **Issue**: Concrete dependencies instead of protocols, making testing difficult
 **Fix**: Use protocol-oriented approach:
+
 ```swift
 public protocol LoggerProtocol {
     func log(_ message: String, level: LogLevel)
@@ -560,16 +613,18 @@ public struct Dependencies {
 ```
 
 ### Limited Extensibility
+
 **Issue**: Container is not easily extensible for new dependencies
 **Fix**: Consider a more flexible container pattern:
+
 ```swift
 public class DependencyContainer {
     private var dependencies: [String: Any] = [:]
-    
+
     public func register<T>(_ dependency: T, for type: T.Type) {
         dependencies[String(describing: type)] = dependency
     }
-    
+
     public func resolve<T>(_ type: T.Type) -> T {
         guard let dependency = dependencies[String(describing: type)] as? T else {
             fatalError("Dependency \(type) not registered")
@@ -582,18 +637,20 @@ public class DependencyContainer {
 ## 6. Documentation Needs
 
 ### Missing Documentation
+
 **Issue**: No documentation for public API
 **Fix**: Add comprehensive documentation:
+
 ```swift
 /// Dependency injection container for managing application dependencies
 /// - Provides default shared instances and allows for custom dependency injection
 public struct Dependencies {
     /// Performance management dependency
     public let performanceManager: PerformanceManager
-    
+
     /// Logging dependency for application logging
     public let logger: Logger
-    
+
     /// Initializes dependencies with optional custom instances
     /// - Parameters:
     ///   - performanceManager: Performance manager instance (defaults to shared)
@@ -609,6 +666,7 @@ public struct Dependencies {
 ```
 
 ### LogLevel Documentation
+
 ```swift
 /// Log levels for categorizing log messages
 public enum LogLevel: String {
@@ -659,7 +717,7 @@ public enum LogLevel: String, CaseIterable {
     case warning
     /// Error messages for critical issues
     case error
-    
+
     var emoji: String {
         switch self {
         case .debug: return "🐛"
@@ -676,17 +734,17 @@ public enum LogLevel: String, CaseIterable {
 public final class Logger: LoggerProtocol {
     /// Shared singleton instance
     public static let shared = Logger()
-    
+
     private static let dateFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return formatter
     }()
-    
+
     private let queue = DispatchQueue(label: "com.yourapp.logger", qos: .utility)
-    
+
     private init() {}
-    
+
     /// Logs a message with specified level
     /// - Parameters:
     ///   - message: The message to log
@@ -697,19 +755,19 @@ public final class Logger: LoggerProtocol {
             print("\(level.emoji) [\(timestamp)] [\(level.rawValue.uppercased())] \(message)")
         }
     }
-    
+
     public func error(_ message: String) {
         log(message, level: .error)
     }
-    
+
     public func warning(_ message: String) {
         log(message, level: .warning)
     }
-    
+
     public func info(_ message: String) {
         log(message, level: .info)
     }
-    
+
     public func debug(_ message: String) {
         #if DEBUG
         log(message, level: .debug)
@@ -723,10 +781,10 @@ public final class Logger: LoggerProtocol {
 public struct Dependencies {
     /// Performance management dependency
     public let performanceManager: PerformanceManagerProtocol
-    
+
     /// Logging dependency for application logging
     public let logger: LoggerProtocol
-    
+
     /// Initializes dependencies with optional custom instances
     /// - Parameters:
     ///   - performanceManager: Performance manager instance
@@ -738,7 +796,7 @@ public struct Dependencies {
         self.performanceManager = performanceManager
         self.logger = logger
     }
-    
+
     /// Default shared dependencies
     public static var `default`: Dependencies {
         // You might want to use actual implementations here
@@ -760,35 +818,38 @@ public class PerformanceManager: PerformanceManagerProtocol {
 This refactored code addresses all the identified issues while maintaining backward compatibility and improving testability, performance, and extensibility.
 
 ## ContentViewTestsTests.swift
+
 # Code Review: ContentViewTestsTests.swift
 
 ## 1. Code Quality Issues
 
 **Major Issues:**
+
 - **Class naming conflict**: `ContentViewTestsTests` suggests testing the test class itself rather than the actual `ContentView`. This is a naming anti-pattern.
 - **Empty setup/teardown**: Methods contain only comments without actual functionality, violating the principle of not including unused code.
 - **Placeholder test**: `testExample()` provides no real value and should be replaced with actual tests.
 
 **Actionable Fixes:**
+
 ```swift
 // Rename class to test the actual ContentView
 class ContentViewTests: XCTestCase {
-    
+
     private var contentView: ContentView!
     private var mockViewModel: MockContentViewModel!
-    
+
     override func setUp() {
         super.setUp()
         mockViewModel = MockContentViewModel()
         contentView = ContentView(viewModel: mockViewModel)
     }
-    
+
     override func tearDown() {
         contentView = nil
         mockViewModel = nil
         super.tearDown()
     }
-    
+
     // Remove placeholder test and add real tests
     func testContentViewInitialState() {
         XCTAssertNotNil(contentView.body)
@@ -799,10 +860,12 @@ class ContentViewTests: XCTestCase {
 ## 2. Performance Problems
 
 **Issues:**
+
 - No performance tests included for UI rendering or view model operations
 - No measurement of view initialization time
 
 **Actionable Fixes:**
+
 ```swift
 func testContentViewPerformance() {
     measure {
@@ -815,16 +878,18 @@ func testContentViewPerformance() {
 ## 3. Security Vulnerabilities
 
 **Issues:**
+
 - No tests for authentication state handling
 - Missing tests for sensitive data display/obfuscation
 - No validation tests for user input sanitization
 
 **Actionable Fixes:**
+
 ```swift
 func testSensitiveDataObfuscation() {
     mockViewModel.setSensitiveData("secret-token")
     let body = contentView.body
-    
+
     // Verify sensitive data is properly hidden in UI
     // This depends on your ContentView implementation
 }
@@ -837,24 +902,26 @@ func testAuthenticationStateChanges() {
 ## 4. Swift Best Practices Violations
 
 **Major Violations:**
+
 - **Missing access control**: No access modifiers for class or methods
 - **No error handling tests**: Missing tests for error states and recovery
 - **No @MainActor attribution**: UI tests should run on main thread
 
 **Actionable Fixes:**
+
 ```swift
 @MainActor
 final class ContentViewTests: XCTestCase {
-    
+
     private var contentView: ContentView!
     private var mockViewModel: MockContentViewModel!
-    
+
     override func setUp() {
         super.setUp()
         mockViewModel = MockContentViewModel()
         contentView = ContentView(viewModel: mockViewModel)
     }
-    
+
     func testErrorStateDisplay() {
         mockViewModel.simulateError(.networkError)
         // Test error UI is properly displayed
@@ -865,11 +932,13 @@ final class ContentViewTests: XCTestCase {
 ## 5. Architectural Concerns
 
 **Issues:**
+
 - **No dependency injection**: Tests should use mock dependencies
 - **No protocol-based testing**: Missing abstraction for testability
 - **Tight coupling**: Assuming direct ContentView testing without proper architecture
 
 **Actionable Fixes:**
+
 ```swift
 // Define protocol for testability
 protocol ContentViewModelProtocol: ObservableObject {
@@ -881,7 +950,7 @@ protocol ContentViewModelProtocol: ObservableObject {
 final class MockContentViewModel: ContentViewModelProtocol {
     var items: [String] = ["Test Item 1", "Test Item 2"]
     var shouldThrowError = false
-    
+
     func loadData() async throws {
         if shouldThrowError {
             throw MockError.testError
@@ -894,11 +963,13 @@ final class MockContentViewModel: ContentViewModelProtocol {
 ## 6. Documentation Needs
 
 **Missing Documentation:**
+
 - No test purpose documentation
 - Missing Arrange-Act-Assert comments
 - No documentation for complex test scenarios
 
 **Actionable Fixes:**
+
 ```swift
 /**
  Tests that the ContentView properly displays loading state
@@ -907,10 +978,10 @@ final class MockContentViewModel: ContentViewModelProtocol {
 func testContentViewLoadingState() {
     // Arrange
     mockViewModel.isLoading = true
-    
+
     // Act
     let body = contentView.body
-    
+
     // Assert
     // Verify loading indicator is present
     // This will depend on your actual ContentView implementation
@@ -930,33 +1001,33 @@ import XCTest
 
 @MainActor
 final class ContentViewTests: XCTestCase {
-    
+
     // MARK: - Properties
-    
+
     private var sut: ContentView!
     private var mockViewModel: MockContentViewModel!
-    
+
     // MARK: - Lifecycle
-    
+
     override func setUp() {
         super.setUp()
         mockViewModel = MockContentViewModel()
         sut = ContentView(viewModel: mockViewModel)
     }
-    
+
     override func tearDown() {
         sut = nil
         mockViewModel = nil
         super.tearDown()
     }
-    
+
     // MARK: - Tests
-    
+
     /// Tests that the view properly initializes and renders
     func testViewInitialization() {
         XCTAssertNotNil(sut.body, "ContentView should render successfully")
     }
-    
+
     /// Tests performance of view rendering
     func testViewRenderingPerformance() {
         measure {
@@ -964,27 +1035,27 @@ final class ContentViewTests: XCTestCase {
             _ = view.body
         }
     }
-    
+
     /// Tests error state presentation
     func testErrorStatePresentation() {
         // Given
         mockViewModel.shouldThrowError = true
-        
+
         // When
         let body = sut.body
-        
+
         // Then
         // Verify error UI is presented (implementation specific)
     }
-    
+
     /// Tests loading state presentation
     func testLoadingStatePresentation() {
         // Given
         mockViewModel.isLoading = true
-        
+
         // When
         let body = sut.body
-        
+
         // Then
         // Verify loading indicator is shown
     }
@@ -1000,7 +1071,7 @@ private final class MockContentViewModel: ContentViewModelProtocol {
     var items: [String] = ["Test Item 1", "Test Item 2"]
     var isLoading = false
     var shouldThrowError = false
-    
+
     func loadData() async throws {
         if shouldThrowError {
             throw MockError.testError
@@ -1014,6 +1085,7 @@ private final class MockContentViewModel: ContentViewModelProtocol {
 ```
 
 ## Key Recommendations:
+
 1. **Rename the test class** to `ContentViewTests`
 2. **Remove placeholder test** and add meaningful test cases
 3. **Implement proper dependency injection** with mock objects
@@ -1025,16 +1097,19 @@ private final class MockContentViewModel: ContentViewModelProtocol {
 9. **Test error states and edge cases** beyond happy path scenarios
 
 ## ContentGenerationServiceTests.swift
+
 # Code Review: ContentGenerationServiceTests.swift
 
 ## 1. Code Quality Issues
 
 **Critical Issues:**
+
 - **Missing actual test cases**: The file contains only a placeholder test (`testExample`) with no real test logic
 - **No test target setup**: The `@testable import HabitQuest` suggests this tests a module, but no setup for the actual service being tested
 - **Empty setup/teardown methods**: These should either contain actual setup/cleanup or be removed
 
 **Actionable Fixes:**
+
 ```swift
 // Replace empty setup/teardown with meaningful implementation or remove them
 override func setUp() {
@@ -1051,10 +1126,12 @@ override func tearDown() {
 ## 2. Performance Problems
 
 **Issues:**
+
 - **No performance tests**: Missing `measure` blocks for performance testing of content generation
 - **No async testing**: Content generation likely involves async operations, but no `XCTestExpectation` usage
 
 **Actionable Fixes:**
+
 ```swift
 func testContentGenerationPerformance() {
     measure {
@@ -1064,9 +1141,9 @@ func testContentGenerationPerformance() {
 
 func testAsyncContentGeneration() {
     let expectation = XCTestExpectation(description: "Async content generation")
-    
+
     // Test async operations with expectation.fulfill()
-    
+
     wait(for: [expectation], timeout: 5.0)
 }
 ```
@@ -1074,10 +1151,12 @@ func testAsyncContentGeneration() {
 ## 3. Security Vulnerabilities
 
 **Issues:**
+
 - **No security testing**: Missing tests for sensitive data handling, input validation, or security boundaries
 - **No injection attack tests**: Content generation services often process user input that could be malicious
 
 **Actionable Fixes:**
+
 ```swift
 func testMaliciousInputHandling() {
     // Test with potentially dangerous inputs (SQL injection, XSS, etc.)
@@ -1093,11 +1172,13 @@ func testSensitiveDataProtection() {
 ## 4. Swift Best Practices Violations
 
 **Issues:**
+
 - **Missing access control**: Test properties should be private
 - **No error handling tests**: Missing tests for error conditions
 - **Poor test naming**: `testExample` doesn't follow descriptive naming conventions
 
 **Actionable Fixes:**
+
 ```swift
 // Use descriptive test names
 func testContentGeneration_WithValidInput_ReturnsExpectedContent() {
@@ -1115,21 +1196,23 @@ private var contentService: ContentGenerationService!
 ## 5. Architectural Concerns
 
 **Issues:**
+
 - **No dependency injection testing**: Missing tests for how service handles different dependencies
 - **No protocol testing**: If ContentGenerationService conforms to a protocol, missing protocol requirement tests
 - **No modular testing**: Tests should be organized by functionality
 
 **Actionable Fixes:**
+
 ```swift
 // Organize tests into logical groups
 class ContentGenerationServiceTests: XCTestCase {
-    
+
     // MARK: - Basic Functionality
     func testBasicContentGeneration() { /* ... */ }
-    
+
     // MARK: - Error Handling
     func testErrorCases() { /* ... */ }
-    
+
     // MARK: - Performance
     func testPerformance() { /* ... */ }
 }
@@ -1145,11 +1228,13 @@ func testWithMockDependencies() {
 ## 6. Documentation Needs
 
 **Issues:**
+
 - **Missing test documentation**: No comments explaining what each test verifies
 - **No TODO implementation**: The TODO comment remains without specific tasks
 - **Missing test plan**: No overview of what aspects need testing
 
 **Actionable Fixes:**
+
 ```swift
 /**
  Tests for ContentGenerationService covering:
@@ -1160,7 +1245,7 @@ func testWithMockDependencies() {
  - Dependency interactions
 */
 class ContentGenerationServiceTests: XCTestCase {
-    
+
     /// Tests that valid input produces expected content structure
     func testValidInputProducesExpectedContent() {
         // Implementation with detailed comments
@@ -1171,7 +1256,7 @@ class ContentGenerationServiceTests: XCTestCase {
 /*
  Test cases to implement:
  1. testEmptyInputHandling()
- 2. testVeryLongInputHandling() 
+ 2. testVeryLongInputHandling()
  3. testSpecialCharacterHandling()
  4. testNetworkDependencyBehavior()
  5. testErrorPropagation()
@@ -1186,28 +1271,28 @@ class ContentGenerationServiceTests: XCTestCase {
 import XCTest
 
 class ContentGenerationServiceTests: XCTestCase {
-    
+
     private var contentService: ContentGenerationService!
     private var mockDependency: MockContentDependency!
-    
+
     override func setUp() {
         super.setUp()
         mockDependency = MockContentDependency()
         contentService = ContentGenerationService(dependency: mockDependency)
     }
-    
+
     override func tearDown() {
         contentService = nil
         mockDependency = nil
         super.tearDown()
     }
-    
+
     // MARK: - Basic Functionality Tests
-    
+
     func testContentGeneration_WithValidInput_ReturnsNonEmptyContent() {
         let input = "Test input"
         let expectation = XCTestExpectation(description: "Content generation completes")
-        
+
         contentService.generateContent(from: input) { result in
             switch result {
             case .success(let content):
@@ -1217,26 +1302,26 @@ class ContentGenerationServiceTests: XCTestCase {
             }
             expectation.fulfill()
         }
-        
+
         wait(for: [expectation], timeout: 5.0)
     }
-    
+
     // MARK: - Error Handling Tests
-    
+
     func testContentGeneration_WithEmptyInput_ThrowsAppropriateError() {
         // Implementation
     }
-    
+
     // MARK: - Performance Tests
-    
+
     func testContentGenerationPerformance() {
         measure {
             // Performance test implementation
         }
     }
-    
+
     // MARK: - Security Tests
-    
+
     func testMaliciousInput_SanitizesContent() {
         // Security test implementation
     }
@@ -1244,6 +1329,7 @@ class ContentGenerationServiceTests: XCTestCase {
 ```
 
 **Priority Recommendations:**
+
 1. **Immediate**: Add actual test implementations for core functionality
 2. **High Priority**: Implement error handling and async operation tests
 3. **Medium Priority**: Add performance and security tests
@@ -1252,28 +1338,31 @@ class ContentGenerationServiceTests: XCTestCase {
 The current test file serves only as a template and provides no actual test coverage for the ContentGenerationService.
 
 ## DependenciesTests.swift
+
 # Code Review: DependenciesTests.swift
 
 ## 1. Code Quality Issues
 
 **Critical Issues:**
+
 - **Empty test methods**: `setUp()` and `tearDown()` are empty but still implemented
 - **Meaningless test**: `testExample()` doesn't test any actual functionality
 - **Missing test coverage**: No actual tests for the Dependencies system
 
 **Recommendations:**
+
 ```swift
 // Remove empty lifecycle methods if not needed
 class DependenciesTests: XCTestCase {
     // Remove setUp() and tearDown() if they remain empty
-    
+
     func testDependencyRegistration() {
         // Test that dependencies can be registered
         let container = DependencyContainer()
         container.register(NetworkService.self) { RealNetworkService() }
         XCTAssertNotNil(container.resolve(NetworkService.self))
     }
-    
+
     func testDependencyResolution() {
         // Test that resolved dependencies are of correct type
         let container = DependencyContainer()
@@ -1287,10 +1376,12 @@ class DependenciesTests: XCTestCase {
 ## 2. Performance Problems
 
 **Issues:**
+
 - No performance tests for dependency resolution (critical for DI containers)
 - No measurement of dependency graph initialization time
 
 **Recommendations:**
+
 ```swift
 func testDependencyResolutionPerformance() {
     measure {
@@ -1310,16 +1401,18 @@ func testDependencyResolutionPerformance() {
 ## 3. Security Vulnerabilities
 
 **Potential Issues:**
+
 - No tests for secure dependency injection (preventing malicious overrides)
 - Missing tests for authentication/authorization service dependencies
 
 **Recommendations:**
+
 ```swift
 func testSecureDependencyOverridePrevention() {
     // Test that critical services cannot be overridden in production
     let container = DependencyContainer()
     container.register(SecurityService.self) { ProductionSecurityService() }
-    
+
     // Attempt to override should fail in production mode
     XCTAssertThrowsError(
         container.register(SecurityService.self) { MockSecurityService() },
@@ -1331,33 +1424,35 @@ func testSecureDependencyOverridePrevention() {
 ## 4. Swift Best Practices Violations
 
 **Issues:**
+
 - Missing `final` class declaration for test class
 - No proper test naming conventions
 - Missing accessibility modifiers
 - No use of Swift's testing features like `XCTUnwrap`, `XCTAssertThrowsError`
 
 **Recommendations:**
+
 ```swift
 final class DependenciesTests: XCTestCase { // Make class final
-    
+
     private var dependencyContainer: DependencyContainer!
-    
+
     override func setUp() {
         super.setUp()
         dependencyContainer = DependencyContainer()
     }
-    
+
     override func tearDown() {
         dependencyContainer = nil
         super.tearDown()
     }
-    
+
     func testRegistration_resolvesSameInstanceForSingleton() {
         dependencyContainer.registerSingleton(DatabaseService.self) { RealDatabaseService() }
-        
+
         let first = dependencyContainer.resolve(DatabaseService.self)
         let second = dependencyContainer.resolve(DatabaseService.self)
-        
+
         XCTAssertIdentical(first, second, "Singleton should return same instance")
     }
 }
@@ -1366,21 +1461,23 @@ final class DependenciesTests: XCTestCase { // Make class final
 ## 5. Architectural Concerns
 
 **Critical Issues:**
+
 - No tests for different dependency scopes (singleton vs transient)
 - Missing tests for circular dependency detection
 - No tests for optional dependencies or default implementations
 
 **Recommendations:**
+
 ```swift
 func testCircularDependencyDetection() {
     dependencyContainer.register(ServiceA.self) { resolver in
         ServiceA(serviceB: resolver.resolve(ServiceB.self)!)
     }
-    
+
     dependencyContainer.register(ServiceB.self) { resolver in
         ServiceB(serviceA: resolver.resolve(ServiceA.self)!)
     }
-    
+
     XCTAssertThrowsError(
         try dependencyContainer.resolve(ServiceA.self),
         "Should detect circular dependencies"
@@ -1389,7 +1486,7 @@ func testCircularDependencyDetection() {
 
 func testOptionalDependencyResolution() {
     dependencyContainer.register(Optional<LoggerService>.self) { _ in nil }
-    
+
     let logger = dependencyContainer.resolve(Optional<LoggerService>.self)
     XCTAssertNil(logger, "Should resolve optional dependencies correctly")
 }
@@ -1398,27 +1495,29 @@ func testOptionalDependencyResolution() {
 ## 6. Documentation Needs
 
 **Issues:**
+
 - Missing test purpose documentation
 - No documentation for test scenarios
 - Lack of comments explaining complex test setups
 
 **Recommendations:**
+
 ```swift
 /**
  Tests the dependency injection container's ability to handle different lifecycle scopes
  - Important: These tests verify that singleton instances are properly shared and transient instances are unique
  */
 final class DependencyScopeTests: XCTestCase {
-    
+
     /// Tests that singleton registration returns the same instance across multiple resolutions
     func testSingletonScope_returnsSameInstance() {
         // Arrange
         container.registerSingleton(SharedService.self) { SharedService() }
-        
+
         // Act
         let firstInstance = container.resolve(SharedService.self)
         let secondInstance = container.resolve(SharedService.self)
-        
+
         // Assert
         XCTAssertIdentical(firstInstance, secondInstance)
     }
@@ -1428,51 +1527,55 @@ final class DependencyScopeTests: XCTestCase {
 ## Action Plan
 
 1. **Immediate Actions**:
+
    - Remove empty `setUp()` and `tearDown()` methods
    - Replace `testExample()` with meaningful tests
    - Add `final` keyword to class declaration
 
 2. **Short-term Improvements**:
+
    - Implement basic dependency registration and resolution tests
    - Add tests for different dependency scopes
    - Include error case testing
 
 3. **Long-term Enhancements**:
+
    - Add performance tests for dependency resolution
    - Implement security-related dependency tests
    - Create comprehensive test documentation
 
 4. **Suggested Test Structure**:
+
 ```swift
 final class DependenciesTests: XCTestCase {
     private var container: DependencyContainer!
-    
+
     override func setUp() {
         super.setUp()
         container = DependencyContainer()
     }
-    
+
     override func tearDown() {
         container = nil
         super.tearDown()
     }
-    
+
     // MARK: - Registration Tests
     func testRegister_resolvesCorrectType() { /* ... */ }
     func testRegister_throwsForDuplicateRegistration() { /* ... */ }
-    
+
     // MARK: - Resolution Tests
     func testResolve_returnsInstanceForRegisteredService() { /* ... */ }
     func testResolve_returnsNilForUnregisteredService() { /* ... */ }
-    
+
     // MARK: - Scope Tests
     func testSingleton_returnsSameInstance() { /* ... */ }
     func testTransient_returnsNewInstance() { /* ... */ }
-    
+
     // MARK: - Error Cases
     func testCircularDependency_throwsError() { /* ... */ }
     func testOptionalDependency_resolvesCorrectly() { /* ... */ }
-    
+
     // MARK: - Performance
     func testPerformance_massiveDependencyResolution() { /* ... */ }
 }
@@ -1481,15 +1584,18 @@ final class DependenciesTests: XCTestCase {
 This test suite should comprehensively validate your dependency injection system while following Swift best practices and ensuring code quality.
 
 ## AnalyticsAggregatorServiceTests.swift
+
 # Code Review for AnalyticsAggregatorServiceTests.swift
 
 ## 1. Code Quality Issues
 
 **Critical Issues:**
+
 - **Missing actual test content**: The file contains only an example test (`testExample`) with no real test cases for `AnalyticsAggregatorService`
 - **Empty setup/teardown methods**: These methods are implemented but contain no code, which is unnecessary clutter
 
 **Recommendations:**
+
 ```swift
 // Remove empty methods or add meaningful content
 override func setUp() {
@@ -1506,23 +1612,27 @@ override func tearDown() {
 ## 2. Performance Problems
 
 **No immediate performance concerns** since this is a test file, but consider:
+
 - **Test isolation**: Ensure tests don't share state that could cause performance issues
 - **Async test handling**: If testing async operations, use proper expectations
 
 ## 3. Security Vulnerabilities
 
 **No direct security vulnerabilities** in test code, but ensure:
+
 - **Test data sanitization**: If using real data in tests, ensure it's properly sanitized
 - **No hardcoded secrets**: Avoid putting actual API keys or secrets in test code
 
 ## 4. Swift Best Practices Violations
 
 **Significant Issues:**
+
 - **Missing test naming convention**: Tests should follow `testMethodName_Scenario_ExpectedResult` pattern
 - **No test coverage**: Critical service like analytics should have comprehensive tests
 - **TODO comment**: Should be addressed or converted to proper test planning
 
 **Recommended Improvements:**
+
 ```swift
 // Replace with meaningful test names
 func testAggregateData_WithValidInput_ReturnsCorrectAggregation() {
@@ -1537,17 +1647,19 @@ func testTrackEvent_WithNilEvent_HandlesGracefully() {
 ## 5. Architectural Concerns
 
 **Critical Architectural Issues:**
+
 - **No dependency injection testing**: Analytics services often depend on multiple components
 - **No mock objects**: Missing patterns for mocking network calls, database, etc.
 - **No test categories**: Missing unit vs integration test separation
 
 **Recommended Structure:**
+
 ```swift
 class AnalyticsAggregatorServiceTests: XCTestCase {
     var analyticsService: AnalyticsAggregatorService!
     var mockNetworkService: MockNetworkService!
     var mockStorage: MockAnalyticsStorage!
-    
+
     override func setUp() {
         super.setUp()
         mockNetworkService = MockNetworkService()
@@ -1557,7 +1669,7 @@ class AnalyticsAggregatorServiceTests: XCTestCase {
             storage: mockStorage
         )
     }
-    
+
     // Add tests for different scenarios
 }
 ```
@@ -1565,11 +1677,13 @@ class AnalyticsAggregatorServiceTests: XCTestCase {
 ## 6. Documentation Needs
 
 **Severe Documentation Gaps:**
+
 - **No test purpose documentation**: Each test should explain what it verifies
 - **Missing test plan**: No comments outlining the test strategy
 - **No parameter documentation**: If testing with various inputs, document expected behaviors
 
 **Recommended Documentation:**
+
 ```swift
 /// Tests that the aggregator correctly handles empty data sets
 /// - Verifies: Service doesn't crash and returns appropriate empty result
@@ -1587,16 +1701,19 @@ func testTrackEvent_NetworkFailure_ImplementsRetryLogic() {
 ## Actionable Recommendations
 
 1. **Immediate Actions:**
+
    - Remove empty `setUp()` and `tearDown()` methods or add meaningful content
    - Replace `testExample` with actual test cases for AnalyticsAggregatorService
    - Implement proper test naming conventions
 
 2. **Short-term Priorities:**
+
    - Create mock objects for dependencies
    - Add tests for core functionality (data aggregation, event tracking)
    - Add error handling test cases
 
 3. **Medium-term Enhancements:**
+
    - Implement performance tests for large data aggregation
    - Add integration tests with real dependencies
    - Create test data factories for complex scenarios
@@ -1609,47 +1726,48 @@ func testTrackEvent_NetworkFailure_ImplementsRetryLogic() {
    - Performance under load
 
 **Sample Improved Test Structure:**
+
 ```swift
 class AnalyticsAggregatorServiceTests: XCTestCase {
     var sut: AnalyticsAggregatorService!
     var mockDependencies: MockDependencyContainer!
-    
+
     override func setUp() {
         super.setUp()
         mockDependencies = MockDependencyContainer()
         sut = AnalyticsAggregatorService(dependencies: mockDependencies)
     }
-    
+
     override func tearDown() {
         sut = nil
         mockDependencies = nil
         super.tearDown()
     }
-    
+
     // MARK: - Data Aggregation Tests
-    
+
     func testAggregateData_WithMixedEvents_ReturnsCorrectSummary() {
         // Arrange
         let testEvents = createTestEvents()
-        
+
         // Act
         let result = sut.aggregateData(events: testEvents)
-        
+
         // Assert
         XCTAssertEqual(result.totalEvents, 5)
         XCTAssertEqual(result.successRate, 0.8)
     }
-    
+
     // MARK: - Error Handling Tests
-    
+
     func testTrackEvent_WithInvalidParameters_ThrowsAppropriateError() {
         // Arrange
         let invalidEvent = AnalyticsEvent(name: "", properties: nil)
-        
+
         // Act & Assert
         XCTAssertThrowsError(try sut.trackEvent(invalidEvent))
     }
-    
+
     // Additional tests for network, storage, performance, etc.
 }
 ```
@@ -1657,16 +1775,19 @@ class AnalyticsAggregatorServiceTests: XCTestCase {
 The current test file represents a missed opportunity to ensure the reliability of a critical analytics service. Implementing comprehensive tests will prevent regressions and ensure data integrity.
 
 ## StreakAnalyticsOverviewViewTests.swift
+
 # Code Review for StreakAnalyticsOverviewViewTests.swift
 
 ## 1. Code Quality Issues
 
 **Critical Issues:**
+
 - **Empty test implementation**: The `testExample()` method contains only a trivial assertion that always passes
 - **Missing actual tests**: No tests for `StreakAnalyticsOverviewView` functionality
 - **Unused setup/teardown**: Empty `setUp()` and `tearDown()` methods with no purpose
 
 **Actionable Fixes:**
+
 ```swift
 // Remove empty setup/teardown if not needed
 override func setUp() {
@@ -1695,15 +1816,17 @@ func testViewModelBinding() {
 ## 2. Performance Problems
 
 **Issues:**
+
 - No performance tests included
 - No async/await testing patterns for potential async operations
 
 **Actionable Fixes:**
+
 ```swift
 func testPerformanceOfDataRendering() {
     let view = StreakAnalyticsOverviewView()
     let largeDataset = generateLargeTestDataset()
-    
+
     measure {
         view.renderData(largeDataset)
     }
@@ -1719,15 +1842,17 @@ func testAsyncDataLoading() async {
 ## 3. Security Vulnerabilities
 
 **Issues:**
+
 - No tests for input validation (if the view handles user input)
 - No tests for data sanitization
 
 **Actionable Fixes:**
+
 ```swift
 func testMaliciousInputHandling() {
     let view = StreakAnalyticsOverviewView()
     let maliciousInput = "<script>alert('xss')</script>"
-    
+
     // Test that input is properly sanitized
     view.handleUserInput(maliciousInput)
     XCTAssertFalse(view.displayedContent.contains("<script>"))
@@ -1736,7 +1861,7 @@ func testMaliciousInputHandling() {
 func testDataValidation() {
     let viewModel = StreakAnalyticsViewModel()
     let invalidData = ["invalid": "data"]
-    
+
     // Should handle invalid data gracefully
     XCTAssertNoThrow(try viewModel.processData(invalidData))
 }
@@ -1745,33 +1870,35 @@ func testDataValidation() {
 ## 4. Swift Best Practices Violations
 
 **Issues:**
+
 - Missing access control specifications
 - No use of XCTest's newer features (XCTExpect, etc.)
 - No error handling tests
 
 **Actionable Fixes:**
+
 ```swift
 class StreakAnalyticsOverviewViewTests: XCTestCase {
     // MARK: - Properties
     private var sut: StreakAnalyticsOverviewView!
     private var mockViewModel: MockStreakAnalyticsViewModel!
-    
+
     override func setUp() {
         super.setUp()
         mockViewModel = MockStreakAnalyticsViewModel()
         sut = StreakAnalyticsOverviewView(viewModel: mockViewModel)
     }
-    
+
     override func tearDown() {
         sut = nil
         mockViewModel = nil
         super.tearDown()
     }
-    
+
     func testErrorStatePresentation() {
         mockViewModel.shouldFail = true
         sut.loadData()
-        
+
         XCTAssertTrue(sut.isShowingError)
         XCTAssertNotNil(sut.errorMessage)
     }
@@ -1781,35 +1908,37 @@ class StreakAnalyticsOverviewViewTests: XCTestCase {
 ## 5. Architectural Concerns
 
 **Issues:**
+
 - No dependency injection testing
 - No tests for view-model communication
 - No tests for lifecycle methods
 
 **Actionable Fixes:**
+
 ```swift
 func testDependencyInjection() {
     let mockService = MockAnalyticsService()
     let viewModel = StreakAnalyticsViewModel(service: mockService)
     let view = StreakAnalyticsOverviewView(viewModel: viewModel)
-    
+
     XCTAssertIdentical(view.viewModel.service as? MockAnalyticsService, mockService)
 }
 
 func testViewLifecycle() {
     sut.viewDidLoad()
     XCTAssertTrue(mockViewModel.didCallLoadData)
-    
+
     sut.viewWillDisappear(false)
     XCTAssertTrue(mockViewModel.didCallCleanup)
 }
 
 func testViewModelUpdatePropagation() {
     let expectation = expectation(description: "View updates on model change")
-    
+
     mockViewModel.onUpdate = {
         expectation.fulfill()
     }
-    
+
     mockViewModel.updateData()
     waitForExpectations(timeout: 1.0)
 }
@@ -1818,11 +1947,13 @@ func testViewModelUpdatePropagation() {
 ## 6. Documentation Needs
 
 **Issues:**
+
 - Missing test purpose documentation
 - No test categories or organization
 - No documentation for complex test scenarios
 
 **Actionable Fixes:**
+
 ```swift
 // MARK: - Initialization Tests
 /// Tests related to view initialization and basic setup
@@ -1867,75 +1998,75 @@ class UserInteractionTests: XCTestCase {
 import XCTest
 
 class StreakAnalyticsOverviewViewTests: XCTestCase {
-    
+
     // MARK: - Test Lifecycle
     private var sut: StreakAnalyticsOverviewView!
     private var mockViewModel: MockStreakAnalyticsViewModel!
-    
+
     override func setUp() {
         super.setUp()
         mockViewModel = MockStreakAnalyticsViewModel()
         sut = StreakAnalyticsOverviewView(viewModel: mockViewModel)
     }
-    
+
     override func tearDown() {
         sut = nil
         mockViewModel = nil
         super.tearDown()
     }
-    
+
     // MARK: - Initialization Tests
     func testInitialization_WithViewModel() {
         XCTAssertNotNil(sut)
         XCTAssertNotNil(sut.viewModel)
     }
-    
+
     func testInitialization_WithoutViewModel() {
         let view = StreakAnalyticsOverviewView()
         XCTAssertNotNil(view)
     }
-    
+
     // MARK: - Data Presentation Tests
     func testCurrentStreakDisplay() {
         mockViewModel.currentStreak = 7
         sut.viewDidLoad()
-        
+
         XCTAssertEqual(sut.streakLabel.text, "7 days")
     }
-    
+
     func testLongestStreakDisplay() {
         mockViewModel.longestStreak = 30
         sut.viewDidLoad()
-        
+
         XCTAssertEqual(sut.longestStreakLabel.text, "30 days")
     }
-    
+
     // MARK: - Performance Tests
     func testPerformance_DataRendering() {
         let largeDataset = generateLargeStreakData()
-        
+
         measure {
             sut.renderData(largeDataset)
         }
     }
-    
+
     // MARK: - Error Handling Tests
     func testErrorState_WhenDataLoadFails() {
         mockViewModel.shouldFail = true
         sut.loadData()
-        
+
         XCTAssertTrue(sut.errorView.isHidden == false)
         XCTAssertNotNil(sut.errorMessageLabel.text)
     }
-    
+
     // MARK: - Accessibility Tests
     func testAccessibility_AllElementsHaveLabels() {
         XCTAssertTrue(sut.isAccessibilityElement)
         XCTAssertNotNil(sut.accessibilityLabel)
-        
+
         for subview in sut.allSubviews {
             if subview is UILabel || subview is UIButton {
-                XCTAssertNotNil(subview.accessibilityLabel, 
+                XCTAssertNotNil(subview.accessibilityLabel,
                                "\(type(of: subview)) missing accessibility label")
             }
         }
@@ -1948,7 +2079,7 @@ private class MockStreakAnalyticsViewModel: StreakAnalyticsViewModelProtocol {
     var longestStreak: Int = 0
     var shouldFail = false
     var onUpdate: (() -> Void)?
-    
+
     func loadData() async throws {
         if shouldFail {
             throw NSError(domain: "Test", code: 1, userInfo: nil)
@@ -1966,6 +2097,7 @@ extension UIView {
 ```
 
 **Priority Recommendations:**
+
 1. **Immediate**: Remove the trivial test and add at least one meaningful test
 2. **High Priority**: Add tests for core functionality and error states
 3. **Medium Priority**: Implement performance and accessibility tests
@@ -1974,16 +2106,19 @@ extension UIView {
 The current test file provides no value and should be either properly implemented or removed to avoid false confidence in test coverage.
 
 ## TrendAnalysisServiceTests.swift
+
 # Code Review: TrendAnalysisServiceTests.swift
 
 ## 1. Code Quality Issues
 
 **Critical Issues:**
+
 - **Empty test structure**: The file contains only a placeholder test (`testExample`) and no actual tests for `TrendAnalysisService`
 - **Missing test coverage**: No tests for actual functionality of the service being tested
 - **Unused setup/teardown**: Empty `setUp()` and `tearDown()` methods that serve no purpose
 
 **Actionable Fixes:**
+
 ```swift
 // Remove empty setup/teardown if not needed
 override func setUp() {
@@ -2000,15 +2135,17 @@ override func tearDown() {
 ## 2. Performance Problems
 
 **Issues:**
+
 - No performance tests included for trend analysis algorithms
 - No measurement of computational complexity for analysis operations
 
 **Actionable Fixes:**
+
 ```swift
 func testPerformanceOfTrendCalculation() {
     let largeDataset = generateLargeTestDataset() // 10,000+ records
     let service = TrendAnalysisService()
-    
+
     measure {
         let trends = service.calculateTrends(for: largeDataset)
         XCTAssertFalse(trends.isEmpty)
@@ -2019,17 +2156,19 @@ func testPerformanceOfTrendCalculation() {
 ## 3. Security Vulnerabilities
 
 **Issues:**
+
 - No tests for data validation (if service handles user input)
 - No tests for edge cases with malformed or malicious data
 
 **Actionable Fixes:**
+
 ```swift
 func testMalformedDataHandling() {
     let service = TrendAnalysisService()
-    
+
     // Test with invalid data formats
     XCTAssertThrowsError(try service.analyze(invalidData))
-    
+
     // Test with extreme values that could cause overflow
     let extremeData = createExtremeValueDataset()
     let result = service.analyze(extremeData)
@@ -2040,11 +2179,13 @@ func testMalformedDataHandling() {
 ## 4. Swift Best Practices Violations
 
 **Issues:**
+
 - **Naming convention**: Test method names should follow `testMethodName_Scenario_ExpectedResult` pattern
 - **Missing accessibility modifiers**: Test properties should be private when possible
 - **No error handling tests**
 
 **Actionable Fixes:**
+
 ```swift
 // Follow consistent naming pattern
 func testCalculateTrends_WithValidData_ReturnsNonEmptyResults() {
@@ -2063,22 +2204,24 @@ func testCalculateTrends_WithInvalidData_ThrowsError() {
 ## 5. Architectural Concerns
 
 **Issues:**
+
 - **No dependency injection**: Tests should mock dependencies rather than using real implementations
 - **No test doubles**: Missing mocks/spies for dependencies
 - **Tight coupling**: Tests may become brittle if they depend on concrete implementations
 
 **Actionable Fixes:**
+
 ```swift
 class TrendAnalysisServiceTests: XCTestCase {
     private var service: TrendAnalysisService!
     private var mockDataProvider: MockDataProvider!
-    
+
     override func setUp() {
         super.setUp()
         mockDataProvider = MockDataProvider()
         service = TrendAnalysisService(dataProvider: mockDataProvider)
     }
-    
+
     override func tearDown() {
         service = nil
         mockDataProvider = nil
@@ -2089,7 +2232,7 @@ class TrendAnalysisServiceTests: XCTestCase {
 // Create test doubles
 class MockDataProvider: DataProviding {
     var providedData: [DataPoint] = []
-    
+
     func fetchData() async throws -> [DataPoint] {
         return providedData
     }
@@ -2099,20 +2242,22 @@ class MockDataProvider: DataProviding {
 ## 6. Documentation Needs
 
 **Issues:**
+
 - **Missing test documentation**: No comments explaining what each test verifies
 - **No Arrange-Act-Assert comments**: Tests should clearly separate these phases
 - **Missing edge case documentation**
 
 **Actionable Fixes:**
+
 ```swift
 func testCalculateWeeklyTrend_WithConsistentIncrease_ReturnsPositiveTrend() {
     // Arrange
     let testData = createConsistentIncreasingData()
     mockDataProvider.providedData = testData
-    
+
     // Act
     let trend = service.calculateWeeklyTrend()
-    
+
     // Assert
     XCTAssertEqual(trend.direction, .increasing)
     XCTAssertGreaterThan(trend.magnitude, 0)
@@ -2130,7 +2275,7 @@ func testStatisticalSignificanceCalculation()
 func testSeasonalityDetection()
 func testAnomalyDetection()
 
-// Edge case tests  
+// Edge case tests
 func testEmptyDatasetHandling()
 func testSingleDataPointHandling()
 func testExtremeValueHandling()
@@ -2153,68 +2298,68 @@ func testRealTimeTrendUpdates()
 import XCTest
 
 final class TrendAnalysisServiceTests: XCTestCase {
-    
+
     // MARK: - Properties
-    
+
     private var sut: TrendAnalysisService!
     private var mockDataProvider: MockDataProvider!
-    
+
     // MARK: - Lifecycle
-    
+
     override func setUp() {
         super.setUp()
         mockDataProvider = MockDataProvider()
         sut = TrendAnalysisService(dataProvider: mockDataProvider)
     }
-    
+
     override func tearDown() {
         sut = nil
         mockDataProvider = nil
         super.tearDown()
     }
-    
+
     // MARK: - Core Functionality Tests
-    
+
     func testCalculateTrends_WithValidData_ReturnsNonEmptyResults() {
         // Arrange
         mockDataProvider.providedData = SampleData.validTrendData
-        
+
         // Act
         let trends = sut.calculateTrends()
-        
+
         // Assert
         XCTAssertFalse(trends.isEmpty, "Should return trends for valid data")
     }
-    
+
     func testCalculateTrends_WithEmptyData_ReturnsEmptyResults() {
         // Arrange
         mockDataProvider.providedData = []
-        
+
         // Act
         let trends = sut.calculateTrends()
-        
+
         // Assert
         XCTAssertTrue(trends.isEmpty, "Should return empty trends for empty data")
     }
-    
+
     // MARK: - Performance Tests
-    
+
     func testPerformance_LargeDatasetAnalysis() {
         // Arrange
         mockDataProvider.providedData = generateLargeDataset(count: 10000)
-        
+
         // Act & Assert
         measure {
             _ = sut.calculateTrends()
         }
     }
-    
+
     // MARK: - Error Handling Tests
-    
+
     func testCalculateTrends_WithCorruptedData_ThrowsAppropriateError() {
         // Arrange
         mockDataProvider.shouldThrowError = true
-        
+
         // Act & Assert
         XCTAssertThrowsError(try sut.calculateTrends()) { error in
             XCTAssertTrue(error is DataCorruptionError)
@@ -2227,7 +2372,7 @@ final class TrendAnalysisServiceTests: XCTestCase {
 private class MockDataProvider: DataProviding {
     var providedData: [DataPoint] = []
     var shouldThrowError = false
-    
+
     func fetchData() async throws -> [DataPoint] {
         if shouldThrowError {
             throw DataCorruptionError(message: "Test error")
@@ -2242,7 +2387,7 @@ private enum SampleData {
     static let validTrendData: [DataPoint] = [
         // Sample data points for testing
     ]
-    
+
     static func generateLargeDataset(count: Int) -> [DataPoint] {
         // Generate large dataset for performance testing
         return (0..<count).map { _ in DataPoint.random() }
@@ -2251,6 +2396,7 @@ private enum SampleData {
 ```
 
 **Key Improvements:**
+
 1. **Complete test coverage** for core functionality
 2. **Proper test structure** with Arrange-Act-Assert pattern
 3. **Dependency injection** for testability
@@ -2264,15 +2410,18 @@ private enum SampleData {
 This structure provides a solid foundation for testing the `TrendAnalysisService` with comprehensive coverage and maintainable code.
 
 ## StreakAnalyticsViewTestsTests.swift
+
 # Code Review for StreakAnalyticsViewTestsTests.swift
 
 ## 1. Code Quality Issues
 
 **Critical Issues:**
+
 - **Naming convention violation**: The class name `StreakAnalyticsViewTestsTests` suggests a test class testing another test class, which is incorrect. It should be `StreakAnalyticsViewTests`.
 - **Empty setup/teardown methods**: These methods are implemented but empty, which adds unnecessary code.
 
 **Recommendations:**
+
 ```swift
 class StreakAnalyticsViewTests: XCTestCase {
     // Remove empty setUp() and tearDown() if not needed
@@ -2283,10 +2432,12 @@ class StreakAnalyticsViewTests: XCTestCase {
 ## 2. Performance Problems
 
 **Issues:**
+
 - **Missing performance testing**: No performance tests using `measure` blocks for analytics calculations
 - **No async operation testing**: Analytics often involve async data processing
 
 **Recommendations:**
+
 ```swift
 func testAnalyticsPerformance() {
     measure {
@@ -2303,10 +2454,12 @@ func testAsyncAnalyticsProcessing() {
 ## 3. Security Vulnerabilities
 
 **Issues:**
+
 - **No data validation testing**: Missing tests for edge cases and malicious input
 - **No privacy compliance testing**: Analytics often handle user data that requires privacy testing
 
 **Recommendations:**
+
 ```swift
 func testMaliciousInputHandling() {
     // Test with extreme values, negative numbers, etc.
@@ -2320,11 +2473,13 @@ func testPrivacyCompliance() {
 ## 4. Swift Best Practices Violations
 
 **Critical Issues:**
+
 - **Missing test structure**: No proper Arrange-Act-Assert pattern
 - **No test-specific imports**: Missing `@testable import` for the module being tested
 - **Placeholder test**: `testExample()` provides no real value
 
 **Recommendations:**
+
 ```swift
 @testable import HabitQuest
 import XCTest
@@ -2332,20 +2487,20 @@ import XCTest
 class StreakAnalyticsViewTests: XCTestCase {
     private var analyticsView: StreakAnalyticsView!
     private var mockDataProvider: MockStreakDataProvider!
-    
+
     override func setUp() {
         super.setUp()
         mockDataProvider = MockStreakDataProvider()
         analyticsView = StreakAnalyticsView(dataProvider: mockDataProvider)
     }
-    
+
     func testCurrentStreakCalculation() {
         // Arrange
         mockDataProvider.stubCompletionDates([Date(), Date().addingTimeInterval(-86400)])
-        
+
         // Act
         let streak = analyticsView.calculateCurrentStreak()
-        
+
         // Assert
         XCTAssertEqual(streak, 2, "Should calculate correct streak length")
     }
@@ -2355,11 +2510,13 @@ class StreakAnalyticsViewTests: XCTestCase {
 ## 5. Architectural Concerns
 
 **Issues:**
+
 - **No dependency injection testing**: Missing tests for different data providers
 - **No state management testing**: Analytics views often have complex state
 - **Missing protocol testing**: No interface contract validation
 
 **Recommendations:**
+
 ```swift
 protocol StreakDataProvider {
     func getCompletionDates() -> [Date]
@@ -2379,10 +2536,12 @@ func testViewStateTransitions() {
 ## 6. Documentation Needs
 
 **Critical Issues:**
+
 - **Missing test purpose documentation**: No comments explaining what each test validates
 - **No edge case documentation**: Missing documentation for boundary conditions
 
 **Recommendations:**
+
 ```swift
 /// Tests that streak calculation handles empty completion dates correctly
 func testEmptyCompletionDates() {
@@ -2423,32 +2582,32 @@ import XCTest
 class StreakAnalyticsViewTests: XCTestCase {
     private var analyticsView: StreakAnalyticsView!
     private var mockDataProvider: MockStreakDataProvider!
-    
+
     override func setUp() {
         super.setUp()
         mockDataProvider = MockStreakDataProvider()
         analyticsView = StreakAnalyticsView(dataProvider: mockDataProvider)
     }
-    
+
     override func tearDown() {
         analyticsView = nil
         mockDataProvider = nil
         super.tearDown()
     }
-    
+
     /// Tests that current streak is correctly calculated for consecutive days
     func testCurrentStreakWithConsecutiveDays() {
         // Arrange
         let dates = generateConsecutiveDates(count: 5)
         mockDataProvider.stubCompletionDates(dates)
-        
+
         // Act
         let streak = analyticsView.calculateCurrentStreak()
-        
+
         // Assert
         XCTAssertEqual(streak, 5, "Should calculate 5-day streak for consecutive dates")
     }
-    
+
     /// Tests performance of streak calculation with large dataset
     func testStreakCalculationPerformance() {
         measure {
@@ -2457,7 +2616,7 @@ class StreakAnalyticsViewTests: XCTestCase {
             _ = analyticsView.calculateCurrentStreak()
         }
     }
-    
+
     // Additional test methods for other functionality...
 }
 ```

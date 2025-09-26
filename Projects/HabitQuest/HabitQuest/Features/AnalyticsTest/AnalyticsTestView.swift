@@ -193,7 +193,7 @@ public struct AnalyticsTestView: View {
                 xpValue: 10,
                 category: .mindfulness,
                 difficulty: .easy
-            )
+            ),
         ]
 
         // Add habits to context
@@ -205,27 +205,29 @@ public struct AnalyticsTestView: View {
         let calendar = Calendar.current
         let today = Date()
 
-        for dayOffset in 0 ..< 7 {
-            guard let logDate = calendar.date(byAdding: .day, value: -dayOffset, to: today) else {
+        // Pre-calculate completion patterns to avoid nested loops
+        let completionPatterns: [(habit: Habit, dayOffset: Int, shouldComplete: Bool)] = sampleHabits.flatMap { habit in
+            (0 ..< 7).map { dayOffset in
+                let shouldComplete = (dayOffset % 2 == 0) || (habit.category == .mindfulness && dayOffset < 3)
+                return (habit: habit, dayOffset: dayOffset, shouldComplete: shouldComplete)
+            }
+        }
+
+        for pattern in completionPatterns {
+            guard let logDate = calendar.date(byAdding: .day, value: -pattern.dayOffset, to: today),
+                  pattern.shouldComplete
+            else {
                 continue
             }
 
-            for habit in sampleHabits {
-                // Create logs with varying completion rates
-                let shouldComplete =
-                    (dayOffset % 2 == 0) || (habit.category == .mindfulness && dayOffset < 3)
-
-                if shouldComplete {
-                    let log = HabitLog(
-                        habit: habit,
-                        completionDate: logDate,
-                        isCompleted: true,
-                        notes: "Test completion",
-                        mood: .good
-                    )
-                    modelContext.insert(log)
-                }
-            }
+            let log = HabitLog(
+                habit: pattern.habit,
+                completionDate: logDate,
+                isCompleted: true,
+                notes: "Test completion",
+                mood: .good
+            )
+            modelContext.insert(log)
         }
 
         // Save the context

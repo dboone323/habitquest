@@ -21,7 +21,7 @@ enum DataParser {
             "dd-MM-yyyy",
             "yyyy.MM.dd",
             "MM.dd.yyyy",
-            "dd.MM.yyyy"
+            "dd.MM.yyyy",
         ]
 
         for format in formatters {

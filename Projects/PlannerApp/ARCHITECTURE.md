@@ -80,6 +80,7 @@ class DashboardViewModel: ObservableObject {
 ### Data Models with CloudKit Integration
 
 #### Task Model
+
 ```swift
 struct Task: Identifiable, Codable, Transferable {
     let id: UUID
@@ -117,6 +118,7 @@ struct Task: Identifiable, Codable, Transferable {
 ```
 
 #### Goal Model with Progress Tracking
+
 ```swift
 struct Goal: Identifiable, Codable {
     let id: UUID
@@ -144,6 +146,7 @@ struct Goal: Identifiable, Codable {
 ```
 
 ### Priority System
+
 ```swift
 enum TaskPriority: String, CaseIterable, Codable {
     case low
@@ -181,6 +184,7 @@ enum TaskPriority: String, CaseIterable, Codable {
 ### Data Management Layer
 
 #### Centralized Data Managers
+
 ```swift
 // Abstract base for all data managers
 protocol DataManagerProtocol {
@@ -242,6 +246,7 @@ class TaskDataManager: DataManagerProtocol, ObservableObject {
 ### CloudKit Integration Architecture
 
 #### Synchronization Strategy
+
 ```swift
 class CloudKitSyncManager: ObservableObject {
     private let container = CKContainer.default()
@@ -334,6 +339,7 @@ enum SyncStatus: Equatable {
 ### Dashboard System
 
 #### Modern Dashboard Implementation
+
 ```swift
 struct DashboardView: View {
     @StateObject private var viewModel = DashboardViewModel()
@@ -395,6 +401,7 @@ struct DashboardView: View {
 ```
 
 #### Quick Stats Component
+
 ```swift
 struct QuickStatsSection: View {
     let viewModel: DashboardViewModel
@@ -451,6 +458,7 @@ struct QuickStatsSection: View {
 ### Task Management Interface
 
 #### Task List with Advanced Features
+
 ```swift
 struct TaskListView: View {
     @StateObject private var taskManager = TaskDataManager.shared
@@ -657,6 +665,7 @@ struct SettingsView: View {
 ### Data Loading Optimization
 
 #### Lazy Loading Strategy
+
 ```swift
 class OptimizedDataManager {
     private var cachedData: [String: Any] = [:]
@@ -687,6 +696,7 @@ class OptimizedDataManager {
 ```
 
 #### Pagination Implementation
+
 ```swift
 struct PaginatedListView<T: Identifiable>: View {
     let items: [T]
@@ -785,16 +795,19 @@ struct AccessibleTaskRow: View {
 ### Roadmap
 
 1. **AI Integration**
+
    - Smart task prioritization based on user behavior
    - Automatic goal progress tracking
    - Predictive deadline suggestions
 
 2. **Advanced Collaboration**
+
    - Shared goals and projects
    - Team task assignments
    - Real-time collaboration features
 
 3. **Analytics and Insights**
+
    - Productivity analytics dashboard
    - Goal achievement patterns
    - Time tracking integration
@@ -813,6 +826,6 @@ struct AccessibleTaskRow: View {
 
 ---
 
-*Architecture Documentation Last Updated: September 12, 2025*
-*PlannerApp Version: 1.0*
-*Platforms: iOS 17.0+, macOS 14.0+, watchOS 10.0+*
+_Architecture Documentation Last Updated: September 12, 2025_
+_PlannerApp Version: 1.0_
+_Platforms: iOS 17.0+, macOS 14.0+, watchOS 10.0+_

@@ -18,7 +18,7 @@ final class AccountsGenerator: DataGenerator {
             (name: "Credit Card", icon: "creditcard", balance: -850.0, type: AccountType.credit),
             (name: "Investment Account", icon: "chart.line.uptrend.xyaxis", balance: 25000.0, type: AccountType.investment),
             (name: "Emergency Fund", icon: "shield.fill", balance: 5000.0, type: AccountType.savings),
-            (name: "Cash", icon: "banknote", balance: 150.0, type: AccountType.cash)
+            (name: "Cash", icon: "banknote", balance: 150.0, type: AccountType.cash),
         ]
 
         for account in accounts {

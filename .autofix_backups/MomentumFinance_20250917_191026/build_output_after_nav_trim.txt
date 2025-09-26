@@ -138,13 +138,13 @@ ValidateDevelopmentAssets /Users/danielstevens/Library/Developer/Xcode/DerivedDa
 
 ProcessProductPackaging "" /Users/danielstevens/Library/Developer/Xcode/DerivedData/MomentumFinance-cmsfllzhwdpxjwdirechlnxpgioq/Build/Intermediates.noindex/MomentumFinance.build/Debug-iphonesimulator/MomentumFinance.build/MomentumFinance.app-Simulated.xcent (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
     Entitlements:
-    
+
     {
     "application-identifier" = "3N5528D82R.com.momentumfinance.MomentumFinance";
 }
-    
+
     builtin-productPackagingUtility -entitlements -format xml -o /Users/danielstevens/Library/Developer/Xcode/DerivedData/MomentumFinance-cmsfllzhwdpxjwdirechlnxpgioq/Build/Intermediates.noindex/MomentumFinance.build/Debug-iphonesimulator/MomentumFinance.build/MomentumFinance.app-Simulated.xcent
 
 ProcessProductPackagingDER /Users/danielstevens/Library/Developer/Xcode/DerivedData/MomentumFinance-cmsfllzhwdpxjwdirechlnxpgioq/Build/Intermediates.noindex/MomentumFinance.build/Debug-iphonesimulator/MomentumFinance.build/MomentumFinance.app-Simulated.xcent /Users/danielstevens/Library/Developer/Xcode/DerivedData/MomentumFinance-cmsfllzhwdpxjwdirechlnxpgioq/Build/Intermediates.noindex/MomentumFinance.build/Debug-iphonesimulator/MomentumFinance.build/MomentumFinance.app-Simulated.xcent.der (in target 'MomentumFinance' from project 'MomentumFinance')
@@ -167,140 +167,140 @@ SwiftCompile normal arm64 Compiling\ EnhancedGoalsSectionViews.swift,\ SavingsGo
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/EnhancedGoalsSectionViews.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/SavingsGoalManagementViews.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionDetailView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataImporter.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/NotificationCenterView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataProviders.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GlobalSearchView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionsView_New.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/EnhancedReportsSectionViews.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/InsightsSummaryWidget.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 Compiling\ ThemeSettingsView.swift,\ ReportsViews.swift,\ ErrorHandler.swift,\ DashboardViewModel.swift,\ SubscriptionsViewModel.swift,\ TransactionListView.swift,\ TransactionDetailView.swift,\ TransactionEmptyStateView.swift,\ TransactionStatsCard.swift,\ SearchAndFilterSection.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ThemeSettingsView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/ReportsViews.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/ErrorHandler.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/DashboardViewModel.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionsViewModel.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionListView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionDetailView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionEmptyStateView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionStatsCard.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/SearchAndFilterSection.swift (in target 'MomentumFinance' from project 'MomentumFinance')
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ThemeSettingsView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/ReportsViews.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/ErrorHandler.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/DashboardViewModel.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionsViewModel.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionListView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionDetailView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionEmptyStateView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionStatsCard.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/SearchAndFilterSection.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftEmitModule normal arm64 Emitting\ module\ for\ MomentumFinance (in target 'MomentumFinance' from project 'MomentumFinance')
 
 EmitSwiftModule normal arm64 (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 Compiling\ BudgetsViewModel.swift,\ NavigationCoordinator_Enhanced.swift,\ ThemeManager.swift,\ EnhancedDashboardView.swift,\ InsightsView.swift,\ MacOSNavigationTypes.swift,\ ContentView.swift,\ SampleData.swift,\ TransactionsViewModel.swift,\ BudgetsView.swift,\ MomentumFinanceApp.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Budgets/BudgetsViewModel.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Enhanced.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ThemeManager.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/EnhancedDashboardView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/InsightsView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/MacOSNavigationTypes.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/ContentView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleData.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionsViewModel.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Budgets/BudgetsView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/MomentumFinanceApp.swift (in target 'MomentumFinance' from project 'MomentumFinance')
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Budgets/BudgetsViewModel.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator_Enhanced.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ThemeManager.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/EnhancedDashboardView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/InsightsView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/MacOSNavigationTypes.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/ContentView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleData.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionsViewModel.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Budgets/BudgetsView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/MomentumFinanceApp.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 Compiling\ ThemeEnums.swift,\ FinancialIntelligenceService.Spending.swift,\ FinancialIntelligenceService.Forecasting.swift,\ FinancialIntelligenceService.Anomaly.swift,\ FinancialIntelligenceService.Budgets.swift,\ FinancialIntelligenceService.Optimizations.swift,\ FinancialMLModels.swift,\ AnomalyDetection.swift,\ OptimizationSuggestions.swift,\ SearchEngineService.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ColorComponents/ThemeEnums.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Spending.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Forecasting.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Anomaly.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Budgets.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Optimizations.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialMLModels.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/AnomalyDetection.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/OptimizationSuggestions.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GlobalSearch/Components/SearchEngineService.swift (in target 'MomentumFinance' from project 'MomentumFinance')
 Failed frontend command:
@@ -308,11 +308,11 @@ Failed frontend command:
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ColorComponents/ThemeEnums.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Spending.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Spending.swift:12:30: error: value of type 'Calendar' has no member 'startOfMonth'
         let month = calendar.startOfMonth(for: txn.date)
                     ~~~~~~~~ ^~~~~~~~~~~~
@@ -418,7 +418,7 @@ SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFin
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Forecasting.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Forecasting.swift:15:28: error: cannot find 'fi_monthlyNetCashFlow' in scope
         let monthlyPairs = fi_monthlyNetCashFlow(transactions)
                            ^~~~~~~~~~~~~~~~~~~~~
@@ -478,19 +478,19 @@ SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFin
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Anomaly.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Budgets.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceService.Optimizations.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialMLModels.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Components/FinancialMLModels.swift:13:15: error: invalid redeclaration of 'FinancialMLModels'
 public struct FinancialMLModels {
               ^
@@ -506,7 +506,7 @@ public class FinancialMLModels {
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/AnomalyDetection.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/AnomalyDetection.swift:31:35: error: cannot find 'fi_formatCurrency' in scope
             let formattedAmount = fi_formatCurrency(transactionAmount, code: "USD")
                                   ^~~~~~~~~~~~~~~~~
@@ -549,11 +549,11 @@ SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFin
 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/AnomalyDetection.swift:146:56: error: missing argument label 'transactions:' in call
         insights += fi_suggestDuplicatePaymentInsights(transactions)
                                                        ^
-                                                       transactions: 
+                                                       transactions:
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/OptimizationSuggestions.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Intelligence/Helpers/OptimizationSuggestions.swift:19:22: error: value of type 'Calendar' has no member 'startOfMonth'
             calendar.startOfMonth(for: transaction.date)
             ~~~~~~~~ ^~~~~~~~~~~~
@@ -578,225 +578,224 @@ SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFin
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GlobalSearch/Components/SearchEngineService.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 Compiling\ ThemeDemoView.swift,\ HapticManager.swift,\ DataExportView.swift,\ Logger.swift,\ GoalsAndReportsView.swift,\ TransactionsView.swift,\ FinancialTransaction.swift,\ Category.swift,\ ComplexDataGenerators.swift,\ SubscriptionSummaryViews.swift,\ ThemeComponents.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ThemeDemoView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/HapticManager.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Views/Settings/DataExportView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/Logger.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalsAndReportsView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionsView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialTransaction.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Category.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ComplexDataGenerators.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionSummaryViews.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ThemeComponents.swift (in target 'MomentumFinance' from project 'MomentumFinance')
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ThemeDemoView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/HapticManager.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Views/Settings/DataExportView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/Logger.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalsAndReportsView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/TransactionsView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialTransaction.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Category.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ComplexDataGenerators.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionSummaryViews.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ThemeComponents.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 Compiling\ SettingsTypes.swift,\ ThemeSelectorCard.swift,\ ThemeFinancialSummaryCard.swift,\ ThemeAccountsList.swift,\ ThemeBudgetProgress.swift,\ ThemeSubscriptionsList.swift,\ ThemeTypographyShowcase.swift,\ ThemeButtonStylesShowcase.swift,\ ThemeSettingsSheet.swift,\ AddTransactionView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Views/Settings/Components/SettingsTypes.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeSelectorCard.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeFinancialSummaryCard.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeAccountsList.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeBudgetProgress.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeSubscriptionsList.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeTypographyShowcase.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeButtonStylesShowcase.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeSettingsSheet.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/AddTransactionView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Views/Settings/Components/SettingsTypes.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeSelectorCard.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeFinancialSummaryCard.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeAccountsList.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeBudgetProgress.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeSubscriptionsList.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeTypographyShowcase.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeButtonStylesShowcase.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/Components/ThemeSettingsSheet.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/AddTransactionView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 Compiling\ AnimationManager.swift,\ SubscriptionRowViews.swift,\ SettingsView.swift,\ CategoryTransactionsView.swift,\ SubscriptionsView.swift,\ DataExporter.swift,\ DataImportView.swift,\ ColorTheme.swift,\ ExpenseCategory.swift,\ SubscriptionManagementViews.swift,\ FinancialAccount.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Animations/AnimationManager.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionRowViews.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Views/Settings/SettingsView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/CategoryTransactionsView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionsView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Views/Settings/DataImportView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ColorTheme.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ExpenseCategory.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionManagementViews.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialAccount.swift (in target 'MomentumFinance' from project 'MomentumFinance')
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Animations/AnimationManager.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionRowViews.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Views/Settings/SettingsView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/CategoryTransactionsView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionsView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/DataExporter.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Views/Settings/DataImportView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ColorTheme.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/ExpenseCategory.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Subscriptions/SubscriptionManagementViews.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/FinancialAccount.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 Compiling\ AccountsListView.swift,\ NotificationsView.swift,\ GoalsAndReportsView_New.swift,\ Subscription.swift,\ GoalsAndReportsViewModel.swift,\ InsightsWidget.swift,\ SavingsGoalViews.swift,\ SimpleDashboardView.swift,\ ThemePersistence.swift,\ Budget.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/AccountsListView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/NotificationsView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalsAndReportsView_New.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Subscription.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalsAndReportsViewModel.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/InsightsWidget.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/SavingsGoalViews.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/SimpleDashboardView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ThemePersistence.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Budget.swift (in target 'MomentumFinance' from project 'MomentumFinance')
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/AccountsListView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/NotificationsView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalsAndReportsView_New.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Subscription.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalsAndReportsViewModel.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/InsightsWidget.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/SavingsGoalViews.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/SimpleDashboardView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Theme/ThemePersistence.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Budget.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 Compiling\ SearchHeaderComponent.swift,\ SearchResultsComponent.swift,\ SearchTypes.swift,\ SearchEmptyStateComponent.swift,\ NotificationPermissionManager.swift,\ SubscriptionNotificationScheduler.swift,\ GoalNotificationScheduler.swift,\ NavigationTypes.swift,\ BudgetNotificationScheduler.swift,\ NotificationTypes.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GlobalSearch/Components/SearchHeaderComponent.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GlobalSearch/Components/SearchResultsComponent.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GlobalSearch/Components/SearchTypes.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GlobalSearch/Components/SearchEmptyStateComponent.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationPermissionManager.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/SubscriptionNotificationScheduler.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/GoalNotificationScheduler.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationTypes.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/BudgetNotificationScheduler.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationTypes.swift (in target 'MomentumFinance' from project 'MomentumFinance')
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GlobalSearch/Components/SearchHeaderComponent.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GlobalSearch/Components/SearchResultsComponent.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GlobalSearch/Components/SearchTypes.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GlobalSearch/Components/SearchEmptyStateComponent.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationPermissionManager.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/SubscriptionNotificationScheduler.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/GoalNotificationScheduler.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/Components/NavigationTypes.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/BudgetNotificationScheduler.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationComponents/NotificationTypes.swift (in target 'MomentumFinance' from project 'MomentumFinance')
     cd /Users/danielstevens/Desktop/Code/Projects/MomentumFinance
-    
+
 
 SwiftCompile normal arm64 Compiling\ Transaction.swift,\ NotificationManager.swift,\ SavingsGoal.swift,\ GoalUtilityViews.swift,\ SampleDataGenerators.swift,\ NavigationCoordinator.swift,\ ExportTypes.swift,\ AnimatedComponents.swift,\ Features.swift,\ AccountDetailView.swift,\ DashboardView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/Transaction.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utilities/NotificationManager.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SavingsGoal.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/GoalsAndReports/GoalUtilityViews.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Models/SampleDataGenerators.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Utils/ExportTypes.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Animations/AnimatedComponents.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Features.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Transactions/AccountDetailView.swift /Users/danielstevens/Desktop/Code/Projects/MomentumFinance/Shared/Features/Dashboard/DashboardView.swift (in target 'MomentumFinance' from project 'MomentumFinance')
-

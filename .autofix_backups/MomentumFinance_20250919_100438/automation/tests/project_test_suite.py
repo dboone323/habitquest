@@ -519,7 +519,7 @@ class ProjectTestSuite:
         <p class="timestamp">Generated: {self.results['timestamp']}</p>
         <p>Project: {self.results['project_path']}</p>
     </div>
-    
+
     <div class="summary">
         <div class="metric">
             <h3>Total Tests</h3>
@@ -538,7 +538,7 @@ class ProjectTestSuite:
             <div class="value" style="color: {'#28a745' if summary['success_rate'] >= 80 else '#dc3545' if summary['success_rate'] < 60 else '#ffc107'};">{summary['success_rate']:.1f}%</div>
         </div>
     </div>
-    
+
     <h2>📋 Test Details</h2>
     {self._generate_test_details_html()}
 </body>

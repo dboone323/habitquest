@@ -4,16 +4,16 @@ on:
   workflow_call:
     inputs:
       project_path:
-        description: 'Relative path to project inside the repository (e.g. Projects/PlannerApp)'
+        description: "Relative path to project inside the repository (e.g. Projects/PlannerApp)"
         required: true
         type: string
       enable_auto_fix:
-        description: 'Allow automated fixes (use with caution)'
+        description: "Allow automated fixes (use with caution)"
         required: false
         type: boolean
         default: false
       dry_run:
-        description: 'Run recovery in dry-run mode'
+        description: "Run recovery in dry-run mode"
         required: false
         type: boolean
         default: true
@@ -29,7 +29,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Run AI workflow recovery (safely)
         shell: bash
