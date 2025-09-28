@@ -69,6 +69,7 @@ build/
 .env
 .env.local
 .env.*.local
+.secure/.env.secure
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
