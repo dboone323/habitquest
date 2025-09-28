@@ -1,6 +1,9 @@
 import Combine
 import Foundation
 import SwiftUI
+#if canImport(SwiftData)
+import SwiftData
+#endif
 
 //
 //  AdvancedFinancialIntelligence.swift
@@ -28,12 +31,31 @@ public class AdvancedFinancialIntelligence: ObservableObject {
     private let predictionEngine = PredictionEngine()
     private let riskEngine = RiskAssessmentEngine()
     private var cancellables = Set<AnyCancellable>()
+#if canImport(SwiftData)
+    private let dataProvider: AdvancedFinancialDataProvider?
+    private let autoAnalysisErrorHandler: (Error) -> Void
+#endif
 
     // MARK: - Initialization
 
+#if canImport(SwiftData)
+    public init(
+        dataProvider: AdvancedFinancialDataProvider? = nil,
+        onAutoAnalysisError: @escaping (Error) -> Void = { error in
+            #if DEBUG
+            print("AdvancedFinancialIntelligence auto-analysis error:", error)
+            #endif
+        }
+    ) {
+        self.dataProvider = dataProvider
+        self.autoAnalysisErrorHandler = onAutoAnalysisError
+        self.setupAutoAnalysis()
+    }
+#else
     public init() {
         self.setupAutoAnalysis()
     }
+#endif
 
     // MARK: - Public Methods
 
@@ -312,6 +334,9 @@ public class AdvancedFinancialIntelligence: ObservableObject {
     // MARK: - Helper Methods
 
     private func setupAutoAnalysis() {
+#if canImport(SwiftData)
+        guard self.dataProvider != nil else { return }
+#endif
         // Setup automatic analysis every 24 hours
         Timer.publish(every: 86400, on: .main, in: .common)
             .autoconnect()
@@ -324,8 +349,33 @@ public class AdvancedFinancialIntelligence: ObservableObject {
     }
 
     private func performAutoAnalysis() async {
-        // This would integrate with the actual data service
-        // For now, we'll leave it as a placeholder
+#if canImport(SwiftData)
+        guard let dataProvider else { return }
+        if self.isAnalyzing { return }
+
+        do {
+            let snapshot = try await dataProvider.makeSnapshot()
+            let payload = self.makeAutoAnalysisPayload(from: snapshot)
+
+            if payload.transactions.isEmpty, payload.accounts.isEmpty, payload.budgets.isEmpty {
+                self.insights = []
+                self.riskAssessment = nil
+                self.predictiveAnalytics = nil
+                self.lastAnalysisDate = Date()
+                return
+            }
+
+            await self.generateInsights(
+                from: payload.transactions,
+                accounts: payload.accounts,
+                budgets: payload.budgets
+            )
+        } catch {
+            self.autoAnalysisErrorHandler(error)
+        }
+#else
+        // Auto-analysis requires SwiftData-backed storage; no-op when unavailable.
+#endif
     }
 
     private func prioritizeInsights(_ insights: [EnhancedFinancialInsight])
@@ -340,232 +390,153 @@ public class AdvancedFinancialIntelligence: ObservableObject {
         }
     }
 
-    private func calculateSpendingVelocity(_: [Transaction]) -> SpendingVelocity {
-        // Implementation for spending velocity calculation
-        SpendingVelocity(percentageIncrease: 15.0) // Placeholder
+    private func calculateSpendingVelocity(_ transactions: [Transaction]) -> SpendingVelocity {
+        let increase = FinancialAnalyticsSharedCore.spendingVelocityIncrease(in: transactions)
+        return SpendingVelocity(percentageIncrease: increase)
     }
 
-    private func analyzeCategoryTrends(_: [Transaction]) -> [CategoryTrend] {
-        // Implementation for category trend analysis
-        [] // Placeholder
+    private func analyzeCategoryTrends(_ transactions: [Transaction]) -> [CategoryTrend] {
+        FinancialAnalyticsSharedCore.categoryTrends(in: transactions).map { summary in
+            let absolutePercent = abs(summary.percentChange * 100)
+            let isSignificant = absolutePercent >= 25 || abs(summary.changeAmount) >= 100
+
+            let description: String
+            let priority: InsightPriority
+            let recommendations: [String]
+
+            if summary.changeAmount >= 0 {
+                description =
+                    "Spending in \(summary.category) increased by about \(Int(absolutePercent))% compared to the previous month."
+                priority = summary.percentChange >= 0.5 ? .high : .medium
+                recommendations = [
+                    "Review recent purchases",
+                    "Tighten the budget for \(summary.category.lowercased())",
+                    "Set a spending alert for this category",
+                ]
+            } else {
+                description =
+                    "Spending in \(summary.category) decreased by about \(Int(absolutePercent))% compared to the previous month."
+                priority = .low
+                recommendations = [
+                    "Reallocate the savings toward goals",
+                    "Celebrate the improvement to reinforce the habit",
+                ]
+            }
+
+            let confidence = min(0.95, 0.65 + Double(min(summary.transactionCount, 6)) * 0.05)
+            let impact = min(10, max(3, absolutePercent / 10 + abs(summary.changeAmount) / 500))
+
+            return CategoryTrend(
+                category: summary.category,
+                categoryId: summary.category,
+                isSignificant: isSignificant,
+                description: description,
+                priority: priority,
+                confidence: confidence,
+                recommendations: recommendations,
+                impactScore: impact
+            )
+        }
     }
 
-    private func identifySubscriptions(_: [Transaction]) -> [Subscription] {
-        // Implementation for subscription identification
-        [] // Placeholder
+    private func identifySubscriptions(_ transactions: [Transaction]) -> [Subscription] {
+        FinancialAnalyticsSharedCore.detectSubscriptions(in: transactions).map {
+            Subscription(name: $0.name, monthlyAmount: $0.averageAmount, lastUsed: $0.lastUsed)
+        }
     }
 
-    private func findUnusedSubscriptions(_: [Subscription]) -> [Subscription] {
-        // Implementation for finding unused subscriptions
-        [] // Placeholder
+    private func findUnusedSubscriptions(_ subscriptions: [Subscription]) -> [Subscription] {
+        guard !subscriptions.isEmpty else { return [] }
+
+        let summaries = subscriptions.enumerated().map { index, subscription in
+            FinancialAnalyticsSharedCore.SubscriptionSummary(
+                identifier: subscription.name.lowercased() + "-\(index)",
+                name: subscription.name,
+                averageAmount: subscription.monthlyAmount,
+                lastUsed: subscription.lastUsed
+            )
+        }
+
+        let unusedSummaries = FinancialAnalyticsSharedCore.unusedSubscriptions(summaries)
+        let identifiers = Set(unusedSummaries.map { $0.name })
+
+        return subscriptions.filter { identifiers.contains($0.name) }
     }
 
-    private func calculateSpentAmount(_: [Transaction], for _: Budget) -> Double {
-        // Implementation for calculating spent amount against budget
-        0.0 // Placeholder
+    private func calculateSpentAmount(_ transactions: [Transaction], for budget: AIBudget) -> Double {
+        FinancialAnalyticsSharedCore.spentAmount(transactions: transactions, budget: budget)
     }
 
-    private func calculateMonthlyExpenses(_: [Transaction]) -> Double {
-        // Implementation for calculating monthly expenses
-        5000.0 // Placeholder
+    private func calculateMonthlyExpenses(_ transactions: [Transaction]) -> Double {
+        FinancialAnalyticsSharedCore.monthlyExpenses(transactions: transactions)
     }
 
     private func generateRiskAssessment(
-        _: [Transaction],
-        _: [Account]
+        _ transactions: [Transaction],
+        _ accounts: [Account]
     ) async -> RiskAssessment {
-        RiskAssessment(
-            overallRiskLevel: .moderate,
-            emergencyFundRisk: .high,
-            debtRisk: .low,
+        let monthlyExpenses = self.calculateMonthlyExpenses(transactions)
+        guard monthlyExpenses > 0 else {
+            return RiskAssessment(
+                overallRiskLevel: .low,
+                emergencyFundRisk: .low,
+                debtRisk: .low,
+                investmentRisk: .low,
+                cashFlowRisk: .low
+            )
+        }
+
+        let coverage = FinancialAnalyticsSharedCore.emergencyCoverage(
+            accounts: accounts,
+            monthlyExpenses: monthlyExpenses
+        )
+
+        let emergencyRisk: RiskLevel
+        let overallRisk: RiskLevel
+
+        switch coverage {
+        case ..<1:
+            emergencyRisk = .critical
+            overallRisk = .high
+        case 1 ..< 3:
+            emergencyRisk = .high
+            overallRisk = .medium
+        default:
+            emergencyRisk = .medium
+            overallRisk = .low
+        }
+
+        return RiskAssessment(
+            overallRiskLevel: overallRisk,
+            emergencyFundRisk: emergencyRisk,
+            debtRisk: .medium,
             investmentRisk: .moderate,
-            cashFlowRisk: .medium
+            cashFlowRisk: coverage < 3 ? .medium : .low
         )
     }
 
     private func generatePredictiveAnalytics(
-        _: [Transaction],
-        _: [Account]
+        _ transactions: [Transaction],
+        _ accounts: [Account]
     ) async -> PredictiveAnalytics {
-        PredictiveAnalytics(
-            nextMonthSpending: 4200,
-            nextMonthIncome: 6500,
-            savingsProjection: 2300,
-            budgetVarianceProjection: 0.85
+        let calendar = Calendar.current
+        let now = Date()
+        let start = calendar.date(byAdding: .day, value: -30, to: now) ?? now
+
+        let window = transactions.filter { $0.date >= start }
+        let income = window.filter { $0.amount > 0 }.reduce(0) { $0 + $1.amount }
+        let expenses = window.filter { $0.amount < 0 }.reduce(0) { $0 + abs($1.amount) }
+        let netCashFlow = income - expenses
+
+        let savingsProjection = max(0, netCashFlow * 0.6)
+        let budgetVarianceProjection = expenses > 0 ? min(1, income / max(expenses, 1)) : 1
+
+        return PredictiveAnalytics(
+            nextMonthSpending: max(expenses, 0),
+            nextMonthIncome: max(income, 0),
+            savingsProjection: savingsProjection,
+            budgetVarianceProjection: budgetVarianceProjection
         )
-    }
-
-    // End of AdvancedFinancialIntelligence class and related types
-
-    // MARK: - Enhanced Financial Insight Model
-
-    public struct EnhancedFinancialInsight: Identifiable, Hashable {
-        public let id = UUID()
-        public let title: String
-        public let description: String
-        public let priority: InsightPriority
-        public let type: InsightType
-        public let confidence: Double
-        public let relatedAccountId: String?
-        public let relatedTransactionId: String?
-        public let relatedCategoryId: String?
-        public let relatedBudgetId: String?
-        public let actionRecommendations: [String]
-        public let potentialSavings: Double?
-        public let impactScore: Double // 0-10 scale
-        public let createdAt: Date
-
-        public init(
-            title: String,
-            description: String,
-            priority: InsightPriority,
-            type: InsightType,
-            confidence: Double = 0.8,
-            relatedAccountId: String? = nil,
-            relatedTransactionId: String? = nil,
-            relatedCategoryId: String? = nil,
-            relatedBudgetId: String? = nil,
-            actionRecommendations: [String] = [],
-            potentialSavings: Double? = nil,
-            impactScore: Double = 5.0
-        ) {
-            self.title = title
-            self.description = description
-            self.priority = priority
-            self.type = type
-            self.confidence = confidence
-            self.relatedAccountId = relatedAccountId
-            self.relatedTransactionId = relatedTransactionId
-            self.relatedCategoryId = relatedCategoryId
-            self.relatedBudgetId = relatedBudgetId
-            self.actionRecommendations = actionRecommendations
-            self.potentialSavings = potentialSavings
-            self.impactScore = impactScore
-            self.createdAt = Date()
-        }
-    }
-
-    // MARK: - Supporting Types
-
-    public enum InsightPriority: Int, CaseIterable, Hashable {
-        case low = 1
-        case medium = 2
-        case high = 3
-        case critical = 4
-    }
-
-    public enum InsightType: Hashable {
-        case spendingAlert
-        case savingsOpportunity
-        case budgetAlert
-        case categoryInsight
-        case riskAlert
-        case prediction
-        case recommendation
-    }
-
-    public struct RiskAssessment {
-        let overallRiskLevel: RiskLevel
-        let emergencyFundRisk: RiskLevel
-        let debtRisk: RiskLevel
-        let investmentRisk: RiskLevel
-        let cashFlowRisk: RiskLevel
-    }
-
-    public enum RiskLevel {
-        case low, medium, moderate, high, critical
-    }
-
-    public struct PredictiveAnalytics {
-        let nextMonthSpending: Double
-        let nextMonthIncome: Double
-        let savingsProjection: Double
-        let budgetVarianceProjection: Double // 0-1 scale
-    }
-
-    public struct SpendingVelocity {
-        let percentageIncrease: Double
-    }
-
-    public struct CategoryTrend {
-        let category: String
-        let categoryId: String
-        let isSignificant: Bool
-        let description: String
-        let priority: InsightPriority
-        let confidence: Double
-        let recommendations: [String]
-        let impactScore: Double
-    }
-
-    public struct Subscription {
-        let name: String
-        let monthlyAmount: Double
-        let lastUsed: Date?
-    }
-
-    public struct InvestmentRecommendation {
-        let type: String
-        let allocation: Double
-        let riskLevel: RiskLevel
-        let expectedReturn: Double
-    }
-
-    public struct CashFlowPrediction {
-        let month: Date
-        let predictedIncome: Double
-        let predictedExpenses: Double
-        let netCashFlow: Double
-    }
-
-    public struct TransactionAnomaly {
-        let transaction: Transaction
-        let anomalyType: AnomalyType
-        let confidence: Double
-    }
-
-    public enum AnomalyType {
-        case unusualAmount
-        case unusualMerchant
-        case unusualLocation
-        case unusualTime
-        case possibleFraud
-    }
-
-    // MARK: - Placeholder Types (these should exist in your actual models)
-
-    public struct Transaction {
-        let id: String
-        let amount: Double
-        let date: Date
-        let category: String
-        let merchant: String?
-    }
-
-    public struct Account {
-        let id: String
-        let name: String
-        let type: AccountType
-        let balance: Double
-    }
-
-    public enum AccountType {
-        case checking, savings, investment, credit
-    }
-
-    public struct Budget {
-        let id: String
-        let category: String
-        let amount: Double
-        let period: BudgetPeriod
-    }
-
-    /// Lightweight struct for AI budget analysis (not the main Budget model).
-    public struct AIBudget {
-        let id: String
-        let category: String
-        let amount: Double
-        let period: BudgetPeriod
     }
 }
 
@@ -614,4 +585,258 @@ private class PredictionEngine {
 
 private class RiskAssessmentEngine {
     // Implementation would go here
+}
+
+#if canImport(SwiftData)
+public struct AdvancedFinancialDomainSnapshot {
+    public let transactions: [FinancialTransaction]
+    public let accounts: [FinancialAccount]
+    public let budgets: [Budget]
+
+    public init(
+        transactions: [FinancialTransaction],
+        accounts: [FinancialAccount],
+        budgets: [Budget]
+    ) {
+        self.transactions = transactions
+        self.accounts = accounts
+        self.budgets = budgets
+    }
+}
+
+@MainActor
+public protocol AdvancedFinancialDataProvider: AnyObject {
+    func makeSnapshot() async throws -> AdvancedFinancialDomainSnapshot
+}
+
+@MainActor
+public final class SwiftDataAdvancedFinancialDataProvider: AdvancedFinancialDataProvider {
+    private let modelContext: ModelContext
+
+    public init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
+
+    public func makeSnapshot() async throws -> AdvancedFinancialDomainSnapshot {
+        let transactions = try self.modelContext.fetch(FetchDescriptor<FinancialTransaction>())
+        let accounts = try self.modelContext.fetch(FetchDescriptor<FinancialAccount>())
+        let budgets = try self.modelContext.fetch(FetchDescriptor<Budget>())
+
+        return AdvancedFinancialDomainSnapshot(
+            transactions: transactions,
+            accounts: accounts,
+            budgets: budgets
+        )
+    }
+}
+#endif
+
+// End of AdvancedFinancialIntelligence class and related types
+
+// MARK: - Enhanced Financial Insight Model
+
+public struct EnhancedFinancialInsight: Identifiable, Hashable {
+    public let id = UUID()
+    public let title: String
+    public let description: String
+    public let priority: InsightPriority
+    public let type: InsightType
+    public let confidence: Double
+    public let relatedAccountId: String?
+    public let relatedTransactionId: String?
+    public let relatedCategoryId: String?
+    public let relatedBudgetId: String?
+    public let actionRecommendations: [String]
+    public let potentialSavings: Double?
+    public let impactScore: Double // 0-10 scale
+    public let createdAt: Date
+
+    public init(
+        title: String,
+        description: String,
+        priority: InsightPriority,
+        type: InsightType,
+        confidence: Double = 0.8,
+        relatedAccountId: String? = nil,
+        relatedTransactionId: String? = nil,
+        relatedCategoryId: String? = nil,
+        relatedBudgetId: String? = nil,
+        actionRecommendations: [String] = [],
+        potentialSavings: Double? = nil,
+        impactScore: Double = 5.0
+    ) {
+        self.title = title
+        self.description = description
+        self.priority = priority
+        self.type = type
+        self.confidence = confidence
+        self.relatedAccountId = relatedAccountId
+        self.relatedTransactionId = relatedTransactionId
+        self.relatedCategoryId = relatedCategoryId
+        self.relatedBudgetId = relatedBudgetId
+        self.actionRecommendations = actionRecommendations
+        self.potentialSavings = potentialSavings
+        self.impactScore = impactScore
+        self.createdAt = Date()
+    }
+}
+
+// MARK: - Supporting Types
+
+public enum InsightPriority: Int, CaseIterable, Hashable {
+    case low = 1
+    case medium = 2
+    case high = 3
+    case critical = 4
+}
+
+public enum InsightType: Hashable {
+    case spendingAlert
+    case savingsOpportunity
+    case budgetAlert
+    case categoryInsight
+    case riskAlert
+    case prediction
+    case recommendation
+}
+
+public struct RiskAssessment {
+    let overallRiskLevel: RiskLevel
+    let emergencyFundRisk: RiskLevel
+    let debtRisk: RiskLevel
+    let investmentRisk: RiskLevel
+    let cashFlowRisk: RiskLevel
+}
+
+public enum RiskLevel {
+    case low, medium, moderate, high, critical
+}
+
+public struct PredictiveAnalytics {
+    let nextMonthSpending: Double
+    let nextMonthIncome: Double
+    let savingsProjection: Double
+    let budgetVarianceProjection: Double // 0-1 scale
+}
+
+public struct SpendingVelocity {
+    let percentageIncrease: Double
+}
+
+public struct CategoryTrend {
+    let category: String
+    let categoryId: String
+    let isSignificant: Bool
+    let description: String
+    let priority: InsightPriority
+    let confidence: Double
+    let recommendations: [String]
+    let impactScore: Double
+}
+
+public struct Subscription {
+    let name: String
+    let monthlyAmount: Double
+    let lastUsed: Date?
+}
+
+public struct InvestmentRecommendation {
+    let type: String
+    let allocation: Double
+    let riskLevel: RiskLevel
+    let expectedReturn: Double
+}
+
+public struct CashFlowPrediction {
+    let month: Date
+    let predictedIncome: Double
+    let predictedExpenses: Double
+    let netCashFlow: Double
+}
+
+public struct TransactionAnomaly {
+    let transaction: Transaction
+    let anomalyType: AnomalyType
+    let confidence: Double
+}
+
+public enum AnomalyType {
+    case unusualAmount
+    case unusualMerchant
+    case unusualLocation
+    case unusualTime
+    case possibleFraud
+}
+
+// MARK: - Placeholder Types (these should exist in your actual models)
+
+public struct Transaction {
+    let id: String
+    let amount: Double
+    let date: Date
+    let category: String
+    let merchant: String?
+}
+
+public struct Account {
+    let id: String
+    let name: String
+    let type: AccountType
+    let balance: Double
+}
+
+public enum AccountType {
+    case checking, savings, investment, credit
+}
+
+public struct Budget {
+    let id: String
+    let category: String
+    let amount: Double
+    let period: BudgetPeriod
+}
+
+/// Lightweight struct for AI budget analysis (not the main Budget model).
+public struct AIBudget {
+    let id: String
+    let category: String
+    let amount: Double
+    let period: BudgetPeriod
+}
+
+extension AdvancedFinancialIntelligence.Transaction: FinancialAnalyticsTransactionConvertible {
+    var faAmount: Double { self.amount }
+    var faDate: Date { self.date }
+    var faCategory: String { self.category }
+    var faMerchant: String? { self.merchant }
+}
+
+extension AdvancedFinancialIntelligence.Account: FinancialAnalyticsAccountConvertible {
+    var faType: FinancialAnalyticsAccountKind {
+        switch self.type {
+        case .checking:
+            return .checking
+        case .savings:
+            return .savings
+        case .investment:
+            return .investment
+        case .credit:
+            return .credit
+        }
+    }
+
+    var faBalance: Double { self.balance }
+}
+
+extension AdvancedFinancialIntelligence.AIBudget: FinancialAnalyticsBudgetConvertible {
+    var faCategory: String { self.category }
+    var faAmount: Double { self.amount }
+    var faPeriod: FinancialAnalyticsBudgetPeriod {
+        switch self.period {
+        case .monthly:
+            return .monthly
+        case .yearly:
+            return .yearly
+        }
+    }
 }
