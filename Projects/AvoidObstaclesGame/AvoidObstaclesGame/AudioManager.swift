@@ -57,9 +57,9 @@ public class AudioManager: NSObject {
 
     override private init() {
         super.init()
-        setupAudioSession()
-        loadSoundEffects()
-        setDefaultSettings()
+        self.setupAudioSession()
+        self.loadSoundEffects()
+        self.setDefaultSettings()
     }
 
     // MARK: - Audio Session Setup
@@ -67,8 +67,8 @@ public class AudioManager: NSObject {
     /// Sets up the audio session for the app
     private func setupAudioSession() {
         do {
-            try audioSession.setCategory(.ambient, mode: .default, options: [.mixWithOthers])
-            try audioSession.setActive(true)
+            try self.audioSession.setCategory(.ambient, mode: .default, options: [.mixWithOthers])
+            try self.audioSession.setActive(true)
         } catch {
             print("Failed to setup audio session: \(error)")
         }
@@ -77,16 +77,16 @@ public class AudioManager: NSObject {
     /// Sets default audio settings if not already set
     private func setDefaultSettings() {
         if UserDefaults.standard.object(forKey: "audioEnabled") == nil {
-            isAudioEnabled = true
+            self.isAudioEnabled = true
         }
         if UserDefaults.standard.object(forKey: "musicEnabled") == nil {
-            isMusicEnabled = true
+            self.isMusicEnabled = true
         }
         if UserDefaults.standard.object(forKey: "soundEffectsVolume") == nil {
-            soundEffectsVolume = 0.7
+            self.soundEffectsVolume = 0.7
         }
         if UserDefaults.standard.object(forKey: "musicVolume") == nil {
-            musicVolume = 0.5
+            self.musicVolume = 0.5
         }
     }
 
@@ -105,7 +105,7 @@ public class AudioManager: NSObject {
         ]
 
         for soundName in soundEffectNames {
-            loadSoundEffect(named: soundName)
+            self.loadSoundEffect(named: soundName)
         }
     }
 
@@ -122,8 +122,8 @@ public class AudioManager: NSObject {
         do {
             let player = try AVAudioPlayer(contentsOf: url)
             player.prepareToPlay()
-            player.volume = soundEffectsVolume
-            soundEffects[name] = player
+            player.volume = self.soundEffectsVolume
+            self.soundEffects[name] = player
         } catch {
             print("Could not load sound effect \(name): \(error)")
         }
@@ -132,84 +132,84 @@ public class AudioManager: NSObject {
     /// Plays a sound effect
     /// - Parameter name: The name of the sound effect to play
     func playSoundEffect(_ name: String) {
-        guard isAudioEnabled, let player = soundEffects[name] else { return }
+        guard self.isAudioEnabled, let player = soundEffects[name] else { return }
 
         // Reset to beginning for repeated plays
         player.currentTime = 0
-        player.volume = soundEffectsVolume
+        player.volume = self.soundEffectsVolume
         player.play()
     }
 
     /// Plays a collision sound effect
     func playCollisionSound() {
-        playSoundEffect("collision")
+        self.playSoundEffect("collision")
     }
 
     /// Plays a score sound effect
     func playScoreSound() {
-        playSoundEffect("score")
+        self.playSoundEffect("score")
     }
 
     /// Plays a game over sound effect
     func playGameOverSound() {
-        playSoundEffect("gameOver")
+        self.playSoundEffect("gameOver")
     }
 
     /// Plays a level up sound effect
     func playLevelUpSound() {
-        playSoundEffect("levelUp")
+        self.playSoundEffect("levelUp")
     }
 
     /// Plays a power-up collection sound effect
     func playPowerUpSound() {
-        playSoundEffect("powerUp")
+        self.playSoundEffect("powerUp")
     }
 
     /// Plays a shield activation sound effect
     func playShieldSound() {
-        playSoundEffect("shield")
+        self.playSoundEffect("shield")
     }
 
     /// Plays an explosion sound effect
     func playExplosionSound() {
-        playSoundEffect("explosion")
+        self.playSoundEffect("explosion")
     }
 
     // MARK: - Background Music
 
     /// Starts playing background music
     func startBackgroundMusic() {
-        guard isMusicEnabled else { return }
+        guard self.isMusicEnabled else { return }
 
-        if backgroundMusicPlayer == nil {
-            playNextTrack()
-        } else if !backgroundMusicPlayer!.isPlaying {
-            backgroundMusicPlayer?.play()
+        if self.backgroundMusicPlayer == nil {
+            self.playNextTrack()
+        } else if !self.backgroundMusicPlayer!.isPlaying {
+            self.backgroundMusicPlayer?.play()
         }
     }
 
     /// Stops playing background music
     func stopBackgroundMusic() {
-        backgroundMusicPlayer?.stop()
-        backgroundMusicPlayer = nil
+        self.backgroundMusicPlayer?.stop()
+        self.backgroundMusicPlayer = nil
     }
 
     /// Pauses background music
     func pauseBackgroundMusic() {
-        backgroundMusicPlayer?.pause()
+        self.backgroundMusicPlayer?.pause()
     }
 
     /// Resumes background music
     func resumeBackgroundMusic() {
-        guard isMusicEnabled else { return }
-        backgroundMusicPlayer?.play()
+        guard self.isMusicEnabled else { return }
+        self.backgroundMusicPlayer?.play()
     }
 
     /// Plays the next track in the playlist
     private func playNextTrack() {
-        guard isMusicEnabled, !backgroundMusicTracks.isEmpty else { return }
+        guard self.isMusicEnabled, !self.backgroundMusicTracks.isEmpty else { return }
 
-        let trackName = backgroundMusicTracks[currentTrackIndex]
+        let trackName = self.backgroundMusicTracks[self.currentTrackIndex]
         guard let url = Bundle.main.url(forResource: trackName, withExtension: "mp3") ??
             Bundle.main.url(forResource: trackName, withExtension: "wav")
         else {
@@ -218,13 +218,13 @@ public class AudioManager: NSObject {
         }
 
         do {
-            backgroundMusicPlayer = try AVAudioPlayer(contentsOf: url)
-            backgroundMusicPlayer?.volume = musicVolume
-            backgroundMusicPlayer?.numberOfLoops = 0 // Play once, then move to next
-            backgroundMusicPlayer?.delegate = self
-            backgroundMusicPlayer?.play()
+            self.backgroundMusicPlayer = try AVAudioPlayer(contentsOf: url)
+            self.backgroundMusicPlayer?.volume = self.musicVolume
+            self.backgroundMusicPlayer?.numberOfLoops = 0 // Play once, then move to next
+            self.backgroundMusicPlayer?.delegate = self
+            self.backgroundMusicPlayer?.play()
 
-            currentTrackIndex = (currentTrackIndex + 1) % backgroundMusicTracks.count
+            self.currentTrackIndex = (self.currentTrackIndex + 1) % self.backgroundMusicTracks.count
         } catch {
             print("Could not load background music \(trackName): \(error)")
         }
@@ -235,49 +235,49 @@ public class AudioManager: NSObject {
     /// Enables or disables all audio
     /// - Parameter enabled: Whether audio should be enabled
     func setAudioEnabled(_ enabled: Bool) {
-        isAudioEnabled = enabled
+        self.isAudioEnabled = enabled
         if !enabled {
-            stopBackgroundMusic()
-        } else if isMusicEnabled {
-            startBackgroundMusic()
+            self.stopBackgroundMusic()
+        } else if self.isMusicEnabled {
+            self.startBackgroundMusic()
         }
     }
 
     /// Enables or disables background music
     /// - Parameter enabled: Whether music should be enabled
     func setMusicEnabled(_ enabled: Bool) {
-        isMusicEnabled = enabled
+        self.isMusicEnabled = enabled
         if enabled {
-            startBackgroundMusic()
+            self.startBackgroundMusic()
         } else {
-            stopBackgroundMusic()
+            self.stopBackgroundMusic()
         }
     }
 
     /// Sets the sound effects volume
     /// - Parameter volume: Volume level (0.0 to 1.0)
     func setSoundEffectsVolume(_ volume: Float) {
-        soundEffectsVolume = max(0, min(1, volume))
-        for player in soundEffects.values {
-            player.volume = soundEffectsVolume
+        self.soundEffectsVolume = max(0, min(1, volume))
+        for player in self.soundEffects.values {
+            player.volume = self.soundEffectsVolume
         }
     }
 
     /// Sets the music volume
     /// - Parameter volume: Volume level (0.0 to 1.0)
     func setMusicVolume(_ volume: Float) {
-        musicVolume = max(0, min(1, volume))
-        backgroundMusicPlayer?.volume = musicVolume
+        self.musicVolume = max(0, min(1, volume))
+        self.backgroundMusicPlayer?.volume = self.musicVolume
     }
 
     /// Gets current audio settings
     /// - Returns: Dictionary of current settings
     func getAudioSettings() -> [String: Any] {
         [
-            "audioEnabled": isAudioEnabled,
-            "musicEnabled": isMusicEnabled,
-            "soundEffectsVolume": soundEffectsVolume,
-            "musicVolume": musicVolume,
+            "audioEnabled": self.isAudioEnabled,
+            "musicEnabled": self.isMusicEnabled,
+            "soundEffectsVolume": self.soundEffectsVolume,
+            "musicVolume": self.musicVolume,
         ]
     }
 
@@ -286,24 +286,24 @@ public class AudioManager: NSObject {
     /// Generates a procedural collision sound based on intensity
     /// - Parameter intensity: Collision intensity (0.0 to 1.0)
     func playProceduralCollisionSound(intensity _: Float) {
-        guard isAudioEnabled else { return }
+        guard self.isAudioEnabled else { return }
 
         // For now, just play the regular collision sound
         // In a full implementation, this would generate different sounds based on intensity
-        playCollisionSound()
+        self.playCollisionSound()
     }
 
     /// Generates a procedural score sound based on points
     /// - Parameter points: Number of points scored
     func playProceduralScoreSound(points: Int) {
-        guard isAudioEnabled else { return }
+        guard self.isAudioEnabled else { return }
 
         // Play different sounds based on score amount
         if points >= 100 {
             // Special high-score sound
-            playSoundEffect("score")
+            self.playSoundEffect("score")
         } else {
-            playSoundEffect("score")
+            self.playSoundEffect("score")
         }
     }
 
@@ -313,30 +313,30 @@ public class AudioManager: NSObject {
     /// - Parameter style: The style of haptic feedback
     func triggerHapticFeedback(style: HapticStyle = .medium) {
         #if os(iOS)
-            if #available(iOS 10.0, *) {
-                switch style {
-                case .light:
-                    let generator = UIImpactFeedbackGenerator(style: .light)
-                    generator.prepare()
-                    generator.impactOccurred()
-                case .medium:
-                    let generator = UIImpactFeedbackGenerator(style: .medium)
-                    generator.prepare()
-                    generator.impactOccurred()
-                case .heavy:
-                    let generator = UIImpactFeedbackGenerator(style: .heavy)
-                    generator.prepare()
-                    generator.impactOccurred()
-                case .success:
-                    let generator = UINotificationFeedbackGenerator()
-                    generator.prepare()
-                    generator.notificationOccurred(.success)
-                case .error:
-                    let generator = UINotificationFeedbackGenerator()
-                    generator.prepare()
-                    generator.notificationOccurred(.error)
-                }
+        if #available(iOS 10.0, *) {
+            switch style {
+            case .light:
+                let generator = UIImpactFeedbackGenerator(style: .light)
+                generator.prepare()
+                generator.impactOccurred()
+            case .medium:
+                let generator = UIImpactFeedbackGenerator(style: .medium)
+                generator.prepare()
+                generator.impactOccurred()
+            case .heavy:
+                let generator = UIImpactFeedbackGenerator(style: .heavy)
+                generator.prepare()
+                generator.impactOccurred()
+            case .success:
+                let generator = UINotificationFeedbackGenerator()
+                generator.prepare()
+                generator.notificationOccurred(.success)
+            case .error:
+                let generator = UINotificationFeedbackGenerator()
+                generator.prepare()
+                generator.notificationOccurred(.error)
             }
+        }
         #endif
     }
 
@@ -344,10 +344,10 @@ public class AudioManager: NSObject {
 
     /// Cleans up audio resources
     func cleanup() {
-        stopBackgroundMusic()
-        soundEffects.removeAll()
+        self.stopBackgroundMusic()
+        self.soundEffects.removeAll()
         do {
-            try audioSession.setActive(false)
+            try self.audioSession.setActive(false)
         } catch {
             print("Failed to deactivate audio session: \(error)")
         }
@@ -358,9 +358,9 @@ public class AudioManager: NSObject {
 
 extension AudioManager: AVAudioPlayerDelegate {
     public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        if player === backgroundMusicPlayer, flag {
+        if player === self.backgroundMusicPlayer, flag {
             // Play next track when current one finishes
-            playNextTrack()
+            self.playNextTrack()
         }
     }
 }

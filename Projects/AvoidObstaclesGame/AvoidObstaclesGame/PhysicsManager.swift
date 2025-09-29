@@ -32,8 +32,8 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
     init(scene: SKScene) {
         super.init()
         self.scene = scene
-        physicsWorld = scene.physicsWorld
-        setupPhysicsWorld()
+        self.physicsWorld = scene.physicsWorld
+        self.setupPhysicsWorld()
     }
 
     // MARK: - Physics World Setup
@@ -120,7 +120,7 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
         }
 
         // Handle different collision types
-        handleCollision(firstBody: firstBody, secondBody: secondBody)
+        self.handleCollision(firstBody: firstBody, secondBody: secondBody)
     }
 
     /// Processes collision based on body categories
@@ -131,17 +131,15 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
         case PhysicsCategory.player | PhysicsCategory.obstacle:
             // Player collided with obstacle
             if let playerNode = getNode(from: firstBody, secondBody),
-               let obstacleNode = getNode(from: secondBody, firstBody)
-            {
-                delegate?.playerDidCollideWithObstacle(playerNode, obstacle: obstacleNode)
+               let obstacleNode = getNode(from: secondBody, firstBody) {
+                self.delegate?.playerDidCollideWithObstacle(playerNode, obstacle: obstacleNode)
             }
 
         case PhysicsCategory.player | PhysicsCategory.powerUp:
             // Player collided with power-up
             if let playerNode = getNode(from: firstBody, secondBody),
-               let powerUpNode = getNode(from: secondBody, firstBody)
-            {
-                delegate?.playerDidCollideWithPowerUp(playerNode, powerUp: powerUpNode)
+               let powerUpNode = getNode(from: secondBody, firstBody) {
+                self.delegate?.playerDidCollideWithPowerUp(playerNode, powerUp: powerUpNode)
             }
 
         default:
@@ -287,7 +285,7 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
 
     /// Cleans up physics-related resources
     func cleanup() {
-        physicsWorld?.contactDelegate = nil
+        self.physicsWorld?.contactDelegate = nil
     }
 
     // MARK: - Async Physics Operations

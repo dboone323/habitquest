@@ -5,7 +5,6 @@ set -euo pipefail
 # Adapts per project. Extend with actual commands.
 
 PROJECTS=(AvoidObstaclesGame HabitQuest MomentumFinance PlannerApp CodingReviewer)
-ROOT=$(pwd)
 
 log() { echo "[tests] $*"; }
 

@@ -3,6 +3,7 @@ import json
 import os
 import socketserver
 import subprocess
+import sys
 from datetime import datetime
 
 PORT = 8090
@@ -49,8 +50,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                             block_list = [
                                 x.strip() for x in line.split("=", 1)[1].split(",")
                             ]
-            except Exception:
-                pass
+            except (IOError, OSError, ValueError) as e:
+                # Log policy file read/parse errors but continue with empty lists (deny by default)
+                print(f"Warning: Failed to read policy file {POLICY_CONF}: {e}", file=sys.stderr)
             if plugin in block_list:
                 self.send_response(403)
                 self.end_headers()

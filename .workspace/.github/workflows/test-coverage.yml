@@ -2,9 +2,9 @@ name: Test Coverage & Quality Gates
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test-coverage:
@@ -13,7 +13,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project: [AvoidObstaclesGame, HabitQuest, MomentumFinance, PlannerApp, CodingReviewer]
+        project:
+          [
+            AvoidObstaclesGame,
+            HabitQuest,
+            MomentumFinance,
+            PlannerApp,
+            CodingReviewer,
+          ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,10 +29,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Cache Swift Package Manager
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.swiftpm
@@ -51,7 +58,7 @@ jobs:
 
       - name: Upload Coverage Reports
         if: always()
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           file: ./Projects/${{ matrix.project }}/coverage.lcov
           flags: ${{ matrix.project }}
@@ -67,7 +74,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install Quality Tools
         run: |
@@ -120,7 +127,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Run Master Test Suite
         run: |

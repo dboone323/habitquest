@@ -210,7 +210,7 @@ final class BehavioralAdaptationService {
 
 // MARK: - Supporting Types
 
-enum NotificationInteraction {
+enum NotificationInteraction: String, Codable, CaseIterable, Sendable {
     case dismissed
     case completed
     case ignored

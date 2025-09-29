@@ -15,11 +15,11 @@ PID=$$
 function update_status() {
   local status="$1"
   # Ensure status file exists and is valid JSON
-  if [[ ! -s "${STATUS_FILE}" ]]; then
+  if [[ ! -s ${STATUS_FILE} ]]; then
     echo '{"agents":{"build_agent":{"status":"unknown","pid":null},"debug_agent":{"status":"unknown","pid":null},"codegen_agent":{"status":"unknown","pid":null},"uiux_agent":{"status":"unknown","pid":null}},"last_update":0}' >"${STATUS_FILE}"
   fi
   jq ".agents.uiux_agent.status = \"${status}\" | .agents.uiux_agent.pid = ${PID} | .last_update = $(date +%s)" "${STATUS_FILE}" >"${STATUS_FILE}.tmp"
-  if [[ $? -eq 0 ]] && [[ -s "${STATUS_FILE}.tmp" ]]; then
+  if command -v jq &>/dev/null && [[ -s "${STATUS_FILE}.tmp" ]]; then
     mv "${STATUS_FILE}.tmp" "${STATUS_FILE}"
   else
     echo "[$(date)] ${AGENT_NAME}: Failed to update agent_status.json (jq or mv error)" >>"${LOG_FILE}"
@@ -33,7 +33,7 @@ get_project_from_task() {
   local task_data="$1"
   local project
   project=$(echo "${task_data}" | jq -r '.project // empty')
-  if [[ -z "${project}" || "${project}" == "null" ]]; then
+  if [[ -z ${project} || ${project} == "null" ]]; then
     project="${PROJECT}"
   fi
   echo "${project}"
@@ -48,7 +48,7 @@ perform_ui_enhancements() {
 
   # Navigate to project directory
   local project_path="/Users/danielstevens/Desktop/Quantum-workspace/Projects/${project}"
-  if [[ ! -d "${project_path}" ]]; then
+  if [[ ! -d ${project_path} ]]; then
     echo "[$(date)] ${AGENT_NAME}: Project directory not found: ${project_path}" >>"${LOG_FILE}"
     return 1
   fi
@@ -61,9 +61,9 @@ perform_ui_enhancements() {
 
   # Check if this is a drag-and-drop task
   local is_drag_drop
-  is_drag_drop=$(echo "${task_data}" | jq -r '.todo // empty' | grep -i "drag\|drop" | wc -l)
+  is_drag_drop=$(echo "${task_data}" | jq -r '.todo // empty' | grep -c -i "drag\|drop")
 
-  if [[ "${is_drag_drop}" -gt 0 ]]; then
+  if [[ ${is_drag_drop} -gt 0 ]]; then
     echo "[$(date)] ${AGENT_NAME}: Detected drag-and-drop enhancement task..." >>"${LOG_FILE}"
 
     # Look for UI files that might need drag-and-drop functionality
@@ -72,7 +72,7 @@ perform_ui_enhancements() {
         echo "[$(date)] ${AGENT_NAME}: Found drag-drop TODO in ${file}" >>"${LOG_FILE}"
 
         # Basic drag-and-drop implementation suggestions
-        if [[ "${file}" == *".swift" ]]; then
+        if [[ ${file} == *".swift" ]]; then
           echo "[$(date)] ${AGENT_NAME}: Adding drag-and-drop implementation to ${file}" >>"${LOG_FILE}"
           # This would be where we add actual drag-and-drop code
           # For now, we'll log the enhancement
@@ -108,11 +108,15 @@ while true; do
   # Check for queued UI/UX tasks
   HAS_TASK=$(jq '.tasks[] | select(.assigned_agent=="agent_uiux.sh" and .status=="queued")' "${TASK_QUEUE}" 2>/dev/null)
 
-  if [[ -n "${HAS_TASK}" ]]; then
+  if [[ -n ${HAS_TASK} ]]; then
     echo "[$(date)] ${AGENT_NAME}: Found UI/UX tasks to process..." >>"${LOG_FILE}"
 
+    # Collect tasks to process (avoid subshell variable modification)
+    TASKS_TO_PROCESS=$(echo "${HAS_TASK}" | jq -c '.')
+    TASK_SUCCESS_COUNT=0
+
     # Process each queued task
-    echo "${HAS_TASK}" | jq -c '.' | while read -r task; do
+    echo "${TASKS_TO_PROCESS}" | while read -r task; do
       project=$(get_project_from_task "${task}")
       task_id=$(echo "${task}" | jq -r '.id')
 
@@ -124,13 +128,10 @@ while true; do
 
         # Update task status to completed
         jq "(.tasks[] | select(.id==\"${task_id}\") | .status) = \"completed\"" "${TASK_QUEUE}" >"${TASK_QUEUE}.tmp" 2>/dev/null
-        if [[ $? -eq 0 ]] && [[ -s "${TASK_QUEUE}.tmp" ]]; then
+        if command -v jq &>/dev/null && [[ -s "${TASK_QUEUE}.tmp" ]]; then
           mv "${TASK_QUEUE}.tmp" "${TASK_QUEUE}"
           echo "[$(date)] ${AGENT_NAME}: Task ${task_id} marked as completed" >>"${LOG_FILE}"
         fi
-
-        SLEEP_INTERVAL=$((SLEEP_INTERVAL + 120))
-        if [[ ${SLEEP_INTERVAL} -gt ${MAX_INTERVAL} ]]; then SLEEP_INTERVAL=${MAX_INTERVAL}; fi
       else
         echo "[$(date)] ${AGENT_NAME}: UI/UX enhancements failed for ${project}" >>"${LOG_FILE}"
 
@@ -138,11 +139,18 @@ while true; do
         if tail -20 "${LOG_FILE}" | grep -q 'error\|failed'; then
           echo "[$(date)] ${AGENT_NAME}: Error detected, attempting rollback..." >>"${LOG_FILE}"
           /Users/danielstevens/Desktop/Quantum-workspace/Tools/Automation/agents/backup_manager.sh restore "${project}" >>"${LOG_FILE}" 2>&1
-          SLEEP_INTERVAL=$((SLEEP_INTERVAL / 2))
-          if [[ ${SLEEP_INTERVAL} -lt ${MIN_INTERVAL} ]]; then SLEEP_INTERVAL=${MIN_INTERVAL}; fi
         fi
       fi
     done
+
+    # Update sleep interval based on task processing results
+    if [[ ${TASK_SUCCESS_COUNT} -gt 0 ]]; then
+      SLEEP_INTERVAL=$((SLEEP_INTERVAL + 120))
+      if [[ ${SLEEP_INTERVAL} -gt ${MAX_INTERVAL} ]]; then SLEEP_INTERVAL=${MAX_INTERVAL}; fi
+    else
+      SLEEP_INTERVAL=$((SLEEP_INTERVAL / 2))
+      if [[ ${SLEEP_INTERVAL} -lt ${MIN_INTERVAL} ]]; then SLEEP_INTERVAL=${MIN_INTERVAL}; fi
+    fi
   else
     update_status idle
     echo "[$(date)] ${AGENT_NAME}: No UI/UX tasks found. Sleeping as idle." >>"${LOG_FILE}"
@@ -152,4 +160,3 @@ while true; do
   echo "[$(date)] ${AGENT_NAME}: Sleeping for ${SLEEP_INTERVAL} seconds..." >>"${LOG_FILE}"
   sleep "${SLEEP_INTERVAL}"
 done
-name="filePath" <parameter >/Users/danielstevens/Desktop/Quantum-workspace/Tools/Automation/agents/agent_uiux.sh

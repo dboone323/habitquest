@@ -32,7 +32,7 @@ enum FinancialAnalyticsBudgetPeriod {
     case yearly
 }
 
-struct FinancialAnalyticsSharedCore {
+enum FinancialAnalyticsSharedCore {
     struct CategoryTrendSummary {
         let category: String
         let currentSpend: Double
@@ -49,8 +49,8 @@ struct FinancialAnalyticsSharedCore {
         let lastUsed: Date?
     }
 
-    static func spendingVelocityIncrease<T: FinancialAnalyticsTransactionConvertible>(
-        in transactions: [T],
+    static func spendingVelocityIncrease(
+        in transactions: [some FinancialAnalyticsTransactionConvertible],
         now: Date = Date(),
         calendar: Calendar = .current
     ) -> Double {
@@ -99,7 +99,7 @@ struct FinancialAnalyticsSharedCore {
                 .filter { $0.faDate < currentStart && $0.faDate >= previousStart }
                 .reduce(0) { $0 + abs($1.faAmount) }
 
-            if currentSpend == 0 && previousSpend == 0 {
+            if currentSpend == 0, previousSpend == 0 {
                 return nil
             }
 
@@ -119,8 +119,8 @@ struct FinancialAnalyticsSharedCore {
         }
     }
 
-    static func detectSubscriptions<T: FinancialAnalyticsTransactionConvertible>(
-        in transactions: [T],
+    static func detectSubscriptions(
+        in transactions: [some FinancialAnalyticsTransactionConvertible],
         calendar: Calendar = .current
     ) -> [SubscriptionSummary] {
         let expenses = transactions.filter { $0.faAmount < 0 }
@@ -133,7 +133,7 @@ struct FinancialAnalyticsSharedCore {
             let intervals = zip(sorted.dropFirst(), sorted).map { $0.faDate.timeIntervalSince($1.faDate) }
             let averageIntervalDays = intervals.isEmpty
                 ? 0
-                : intervals.reduce(0, +) / Double(intervals.count) / 86_400
+                : intervals.reduce(0, +) / Double(intervals.count) / 86400
 
             let amounts = sorted.map { abs($0.faAmount) }
             guard let maxAmount = amounts.max(), let minAmount = amounts.min() else { return nil }
@@ -144,7 +144,7 @@ struct FinancialAnalyticsSharedCore {
                 || sorted.count >= 3
             let amountsConsistent = amountVariance <= max(5, averageAmount * 0.15)
 
-            guard looksRecurring && amountsConsistent else { return nil }
+            guard looksRecurring, amountsConsistent else { return nil }
 
             return SubscriptionSummary(
                 identifier: identifier,
@@ -155,7 +155,11 @@ struct FinancialAnalyticsSharedCore {
         }
     }
 
-    static func unusedSubscriptions(_ subscriptions: [SubscriptionSummary], now: Date = Date(), calendar: Calendar = .current) -> [SubscriptionSummary] {
+    static func unusedSubscriptions(
+        _ subscriptions: [SubscriptionSummary],
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> [SubscriptionSummary] {
         let threshold = calendar.date(byAdding: .day, value: -45, to: now) ?? now
         return subscriptions.filter { summary in
             guard let lastUsed = summary.lastUsed else { return true }
@@ -163,22 +167,20 @@ struct FinancialAnalyticsSharedCore {
         }
     }
 
-    static func spentAmount<T: FinancialAnalyticsTransactionConvertible, B: FinancialAnalyticsBudgetConvertible>(
-        transactions: [T],
-        budget: B,
+    static func spentAmount(
+        transactions: [some FinancialAnalyticsTransactionConvertible],
+        budget: some FinancialAnalyticsBudgetConvertible,
         now: Date = Date(),
         calendar: Calendar = .current
     ) -> Double {
-        let lookbackDays: Int = {
-            switch budget.faPeriod {
-            case .monthly:
-                return 30
-            case .quarterly:
-                return 90
-            case .yearly:
-                return 365
-            }
-        }()
+        let lookbackDays = switch budget.faPeriod {
+        case .monthly:
+            30
+        case .quarterly:
+            90
+        case .yearly:
+            365
+        }
 
         let periodStart = calendar.date(byAdding: .day, value: -lookbackDays, to: now) ?? now
 
@@ -187,8 +189,8 @@ struct FinancialAnalyticsSharedCore {
             .reduce(0) { $0 + abs($1.faAmount) }
     }
 
-    static func monthlyExpenses<T: FinancialAnalyticsTransactionConvertible>(
-        transactions: [T],
+    static func monthlyExpenses(
+        transactions: [some FinancialAnalyticsTransactionConvertible],
         now: Date = Date(),
         calendar: Calendar = .current
     ) -> Double {
@@ -199,37 +201,36 @@ struct FinancialAnalyticsSharedCore {
         return max(total, 1)
     }
 
-    static func liquidBalance<A: FinancialAnalyticsAccountConvertible>(accounts: [A]) -> Double {
+    static func liquidBalance(accounts: [some FinancialAnalyticsAccountConvertible]) -> Double {
         accounts.reduce(0) { partialResult, account in
             switch account.faType {
             case .checking, .savings:
-                return partialResult + account.faBalance
+                partialResult + account.faBalance
             default:
-                return partialResult
+                partialResult
             }
         }
     }
 
-    static func emergencyCoverage<A: FinancialAnalyticsAccountConvertible>(
-        accounts: [A],
+    static func emergencyCoverage(
+        accounts: [some FinancialAnalyticsAccountConvertible],
         monthlyExpenses: Double
     ) -> Double {
         guard monthlyExpenses > 0 else { return Double.infinity }
         let savings = accounts.reduce(0) { total, account in
-            let isSavings: Bool
-            switch account.faType {
+            let isSavings = switch account.faType {
             case .savings:
-                isSavings = true
+                true
             default:
-                isSavings = false
+                false
             }
             return isSavings ? total + account.faBalance : total
         }
         return savings / monthlyExpenses
     }
 
-    static func cashFlowWindow<T: FinancialAnalyticsTransactionConvertible>(
-        transactions: [T],
+    static func cashFlowWindow(
+        transactions: [some FinancialAnalyticsTransactionConvertible],
         windowDays: Int = 30,
         now: Date = Date(),
         calendar: Calendar = .current

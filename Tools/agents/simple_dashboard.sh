@@ -14,7 +14,7 @@ UPDATE_INTERVAL=30
 log_message() {
   local level="$1"
   local message="$2"
-  echo "[$(date)] [${level}] ${message}" >>"${LOG_FILE}"
+  echo "[$(date)] [${AGENT_NAME}] [${level}] ${message}" >>"${LOG_FILE}"
 }
 
 # Create basic dashboard data
@@ -188,7 +188,7 @@ EOF
 start_server() {
   log_message "INFO" "Starting dashboard server on port ${DASHBOARD_PORT}"
 
-  cd "${SCRIPT_DIR}" || exit
+  cd "${SCRIPT_DIR}" || exit 1
   python3 -m http.server "${DASHBOARD_PORT}" >>"${LOG_FILE}" 2>&1 &
   server_pid=$!
   echo "${server_pid}" >"${SCRIPT_DIR}/simple_server.pid"
@@ -198,7 +198,8 @@ start_server() {
 # Stop server
 stop_server() {
   if [[ -f "${SCRIPT_DIR}/simple_server.pid" ]]; then
-    local pid=$(cat "${SCRIPT_DIR}/simple_server.pid")
+    local pid
+    pid=$(<"${SCRIPT_DIR}/simple_server.pid")
     kill "${pid}" 2>/dev/null
     rm -f "${SCRIPT_DIR}/simple_server.pid"
     log_message "INFO" "Server stopped"
@@ -218,7 +219,8 @@ start_server
 # Keep running and update data periodically
 while true; do
   # Update timestamp in data
-  sed -i '' 's/"last_update": [0-9]*/"last_update": '$(date +%s)'/' "${DASHBOARD_DATA_FILE}"
+  current_timestamp=$(date +%s)
+  sed -i '' -e "s/\"last_update\": [0-9]*/\"last_update\": ${current_timestamp}/" "${DASHBOARD_DATA_FILE}"
 
   sleep "${UPDATE_INTERVAL}"
 done

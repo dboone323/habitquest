@@ -24,8 +24,10 @@ process_task() {
 
   # Get task details
   if command -v jq &>/dev/null; then
-    local task_desc=$(jq -r ".tasks[] | select(.id == \"${task_id}\") | .description" "${TASK_QUEUE_FILE}")
-    local task_type=$(jq -r ".tasks[] | select(.id == \"${task_id}\") | .type" "${TASK_QUEUE_FILE}")
+    local task_desc
+    task_desc=$(jq -r ".tasks[] | select(.id == \"${task_id}\") | .description" "${TASK_QUEUE_FILE}")
+    local task_type
+    task_type=$(jq -r ".tasks[] | select(.id == \"${task_id}\") | .type" "${TASK_QUEUE_FILE}")
     echo "[$(date)] ${AGENT_NAME}: Task description: ${task_desc}" >>"${LOG_FILE}"
     echo "[$(date)] ${AGENT_NAME}: Task type: ${task_type}" >>"${LOG_FILE}"
 
@@ -197,10 +199,12 @@ run_traditional_documentation_analysis() {
     local return_docs
     return_docs=$(find . -name "*.swift" -exec grep -l "/// - Returns" {} \; | wc -l)
 
-    echo "[$(date)] ${AGENT_NAME}: Class/struct docs: ${class_docs}" >>"${LOG_FILE}"
-    echo "[$(date)] ${AGENT_NAME}: Function docs: ${func_docs}" >>"${LOG_FILE}"
-    echo "[$(date)] ${AGENT_NAME}: Parameter docs: ${param_docs}" >>"${LOG_FILE}"
-    echo "[$(date)] ${AGENT_NAME}: Return docs: ${return_docs}" >>"${LOG_FILE}"
+    {
+      echo "[$(date)] ${AGENT_NAME}: Class/struct docs: ${class_docs}"
+      echo "[$(date)] ${AGENT_NAME}: Function docs: ${func_docs}"
+      echo "[$(date)] ${AGENT_NAME}: Parameter docs: ${param_docs}"
+      echo "[$(date)] ${AGENT_NAME}: Return docs: ${return_docs}"
+    } >>"${LOG_FILE}"
 
     # Check for undocumented public functions
     local public_funcs
@@ -209,9 +213,11 @@ run_traditional_documentation_analysis() {
     documented_public_funcs=$(find . -name "*.swift" -exec grep -A 1 "public func" {} \; | grep -c "///")
     local undocumented_public=$((public_funcs - documented_public_funcs))
 
-    echo "[$(date)] ${AGENT_NAME}: Public functions: ${public_funcs}" >>"${LOG_FILE}"
-    echo "[$(date)] ${AGENT_NAME}: Documented public functions: ${documented_public_funcs}" >>"${LOG_FILE}"
-    echo "[$(date)] ${AGENT_NAME}: Undocumented public functions: ${undocumented_public}" >>"${LOG_FILE}"
+    {
+      echo "[$(date)] ${AGENT_NAME}: Public functions: ${public_funcs}"
+      echo "[$(date)] ${AGENT_NAME}: Documented public functions: ${documented_public_funcs}"
+      echo "[$(date)] ${AGENT_NAME}: Undocumented public functions: ${undocumented_public}"
+    } >>"${LOG_FILE}"
 
     # Calculate documentation quality score
     local quality_score=$((100 - (undocumented_public * 5)))

@@ -34,15 +34,15 @@ class GameStateManager {
     /// Current game state
     private(set) var currentState: GameState = .waitingToStart {
         didSet {
-            delegate?.gameStateDidChange(from: oldValue, to: currentState)
+            self.delegate?.gameStateDidChange(from: oldValue, to: self.currentState)
         }
     }
 
     /// Current score
     private(set) var score: Int = 0 {
         didSet {
-            delegate?.scoreDidChange(to: score)
-            updateDifficultyIfNeeded()
+            self.delegate?.scoreDidChange(to: self.score)
+            self.updateDifficultyIfNeeded()
         }
     }
 
@@ -66,53 +66,53 @@ class GameStateManager {
     // MARK: - Initialization
 
     init() {
-        loadStatistics()
+        self.loadStatistics()
     }
 
     // MARK: - Game Lifecycle
 
     /// Starts a new game
     func startGame() {
-        currentState = .playing
-        score = 0
-        currentDifficultyLevel = 1
-        currentDifficulty = GameDifficulty.getDifficulty(for: 0)
-        gameStartTime = Date()
-        survivalTime = 0
-        gamesPlayed += 1
-        saveStatistics()
+        self.currentState = .playing
+        self.score = 0
+        self.currentDifficultyLevel = 1
+        self.currentDifficulty = GameDifficulty.getDifficulty(for: 0)
+        self.gameStartTime = Date()
+        self.survivalTime = 0
+        self.gamesPlayed += 1
+        self.saveStatistics()
     }
 
     /// Ends the current game
     func endGame() {
-        currentState = .gameOver
-        survivalTime = gameStartTime.map { Date().timeIntervalSince($0) } ?? 0
-        totalScore += score
+        self.currentState = .gameOver
+        self.survivalTime = self.gameStartTime.map { Date().timeIntervalSince($0) } ?? 0
+        self.totalScore += self.score
 
-        if survivalTime > bestSurvivalTime {
-            bestSurvivalTime = survivalTime
+        if self.survivalTime > self.bestSurvivalTime {
+            self.bestSurvivalTime = self.survivalTime
         }
 
-        saveStatistics()
-        delegate?.gameDidEnd(withScore: score, survivalTime: survivalTime)
+        self.saveStatistics()
+        self.delegate?.gameDidEnd(withScore: self.score, survivalTime: self.survivalTime)
     }
 
     /// Pauses the game
     func pauseGame() {
-        guard currentState == .playing else { return }
-        currentState = .paused
+        guard self.currentState == .playing else { return }
+        self.currentState = .paused
     }
 
     /// Resumes the game
     func resumeGame() {
-        guard currentState == .paused else { return }
-        currentState = .playing
+        guard self.currentState == .paused else { return }
+        self.currentState = .playing
     }
 
     /// Restarts the game
     func restartGame() {
-        endGame()
-        startGame()
+        self.endGame()
+        self.startGame()
     }
 
     // MARK: - Score Management
@@ -120,40 +120,40 @@ class GameStateManager {
     /// Adds points to the score
     /// - Parameter points: Number of points to add
     func addScore(_ points: Int) {
-        guard currentState == .playing else { return }
-        score += points
+        guard self.currentState == .playing else { return }
+        self.score += points
     }
 
     /// Gets the current score
     /// - Returns: Current score value
     func getCurrentScore() -> Int {
-        score
+        self.score
     }
 
     // MARK: - Difficulty Management
 
     /// Updates difficulty based on current score
     private func updateDifficultyIfNeeded() {
-        let newDifficulty = GameDifficulty.getDifficulty(for: score)
-        let newLevel = GameDifficulty.getDifficultyLevel(for: score)
+        let newDifficulty = GameDifficulty.getDifficulty(for: self.score)
+        let newLevel = GameDifficulty.getDifficultyLevel(for: self.score)
 
-        if newLevel > currentDifficultyLevel {
-            currentDifficultyLevel = newLevel
-            currentDifficulty = newDifficulty
-            delegate?.difficultyDidIncrease(to: newLevel)
+        if newLevel > self.currentDifficultyLevel {
+            self.currentDifficultyLevel = newLevel
+            self.currentDifficulty = newDifficulty
+            self.delegate?.difficultyDidIncrease(to: newLevel)
         }
     }
 
     /// Gets current difficulty settings
     /// - Returns: Current GameDifficulty
     func getCurrentDifficulty() -> GameDifficulty {
-        currentDifficulty
+        self.currentDifficulty
     }
 
     /// Gets current difficulty level
     /// - Returns: Current difficulty level
     func getCurrentDifficultyLevel() -> Int {
-        currentDifficultyLevel
+        self.currentDifficultyLevel
     }
 
     // MARK: - Statistics
@@ -162,10 +162,10 @@ class GameStateManager {
     /// - Returns: Dictionary of statistics
     func getStatistics() -> [String: Any] {
         [
-            "gamesPlayed": gamesPlayed,
-            "totalScore": totalScore,
-            "averageScore": gamesPlayed > 0 ? Double(totalScore) / Double(gamesPlayed) : 0,
-            "bestSurvivalTime": bestSurvivalTime,
+            "gamesPlayed": self.gamesPlayed,
+            "totalScore": self.totalScore,
+            "averageScore": self.gamesPlayed > 0 ? Double(self.totalScore) / Double(self.gamesPlayed) : 0,
+            "bestSurvivalTime": self.bestSurvivalTime,
             "highestScore": HighScoreManager.shared.getHighestScore(),
         ]
     }
@@ -175,19 +175,19 @@ class GameStateManager {
     func getStatisticsAsync() async -> [String: Any] {
         let highestScore = await HighScoreManager.shared.getHighestScoreAsync()
         return [
-            "gamesPlayed": gamesPlayed,
-            "totalScore": totalScore,
-            "averageScore": gamesPlayed > 0 ? Double(totalScore) / Double(gamesPlayed) : 0,
-            "bestSurvivalTime": bestSurvivalTime,
+            "gamesPlayed": self.gamesPlayed,
+            "totalScore": self.totalScore,
+            "averageScore": self.gamesPlayed > 0 ? Double(self.totalScore) / Double(self.gamesPlayed) : 0,
+            "bestSurvivalTime": self.bestSurvivalTime,
             "highestScore": highestScore,
         ]
     }
 
     /// Resets all statistics
     func resetStatistics() {
-        gamesPlayed = 0
-        totalScore = 0
-        bestSurvivalTime = 0
+        self.gamesPlayed = 0
+        self.totalScore = 0
+        self.bestSurvivalTime = 0
         UserDefaults.standard.removeObject(forKey: "gameStatistics")
         UserDefaults.standard.synchronize()
     }
@@ -207,9 +207,9 @@ class GameStateManager {
 
     private func loadStatistics() {
         let defaults = UserDefaults.standard
-        gamesPlayed = defaults.integer(forKey: "gamesPlayed")
-        totalScore = defaults.integer(forKey: "totalScore")
-        bestSurvivalTime = defaults.double(forKey: "bestSurvivalTime")
+        self.gamesPlayed = defaults.integer(forKey: "gamesPlayed")
+        self.totalScore = defaults.integer(forKey: "totalScore")
+        self.bestSurvivalTime = defaults.double(forKey: "bestSurvivalTime")
     }
 
     private func loadStatisticsAsync() async {
@@ -223,9 +223,9 @@ class GameStateManager {
 
     private func saveStatistics() {
         let defaults = UserDefaults.standard
-        defaults.set(gamesPlayed, forKey: "gamesPlayed")
-        defaults.set(totalScore, forKey: "totalScore")
-        defaults.set(bestSurvivalTime, forKey: "bestSurvivalTime")
+        defaults.set(self.gamesPlayed, forKey: "gamesPlayed")
+        defaults.set(self.totalScore, forKey: "totalScore")
+        defaults.set(self.bestSurvivalTime, forKey: "bestSurvivalTime")
         defaults.synchronize()
     }
 
@@ -244,19 +244,19 @@ class GameStateManager {
     /// Checks if the game is currently active
     /// - Returns: True if game is playing
     func isGameActive() -> Bool {
-        currentState == .playing
+        self.currentState == .playing
     }
 
     /// Checks if the game is over
     /// - Returns: True if game is over
     func isGameOver() -> Bool {
-        currentState == .gameOver
+        self.currentState == .gameOver
     }
 
     /// Checks if the game is paused
     /// - Returns: True if game is paused
     func isGamePaused() -> Bool {
-        currentState == .paused
+        self.currentState == .paused
     }
 }
 

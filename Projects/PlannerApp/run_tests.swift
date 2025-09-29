@@ -67,11 +67,11 @@ class TaskDataManager {
     var tasks: [PlannerTask] = []
 
     func clearAllTasks() {
-        tasks.removeAll()
+        self.tasks.removeAll()
     }
 
     func load() -> [PlannerTask] {
-        tasks
+        self.tasks
     }
 
     func save(tasks: [PlannerTask]) {
@@ -147,11 +147,11 @@ class JournalDataManager {
     var entries: [JournalEntry] = []
 
     func clearAllEntries() {
-        entries.removeAll()
+        self.entries.removeAll()
     }
 
     func load() -> [JournalEntry] {
-        entries
+        self.entries
     }
 
     func save(entries: [JournalEntry]) {

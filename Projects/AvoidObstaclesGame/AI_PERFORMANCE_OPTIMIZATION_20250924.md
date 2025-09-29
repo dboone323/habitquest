@@ -1,8 +1,9 @@
 # Performance Optimization Report for AvoidObstaclesGame
+
 Generated: Wed Sep 24 20:29:21 CDT 2025
 
-
 ## Dependencies.swift
+
 Here's a detailed performance analysis of your Swift code with specific optimization suggestions:
 
 ---
@@ -10,12 +11,15 @@ Here's a detailed performance analysis of your Swift code with specific optimiza
 ## 🔍 **1. Algorithm Complexity Issues**
 
 ### ⚠️ Issue:
+
 The logger uses `ISO8601DateFormatter` on every log call, which is relatively expensive.
 
 ### ✅ Optimization:
+
 Cache the formatted timestamp or reuse the formatter efficiently.
 
 **Before:**
+
 ```swift
 private func formattedMessage(_ message: String, level: LogLevel) -> String {
     let timestamp = Self.isoFormatter.string(from: Date())
@@ -24,6 +28,7 @@ private func formattedMessage(_ message: String, level: LogLevel) -> String {
 ```
 
 **After:**
+
 ```swift
 private func formattedMessage(_ message: String, level: LogLevel) -> String {
     let timestamp = Self.isoFormatter.string(from: Date())
@@ -38,13 +43,16 @@ private func formattedMessage(_ message: String, level: LogLevel) -> String {
 ## 🧠 **2. Memory Usage Problems**
 
 ### ⚠️ Issue:
+
 Logger stores an `outputHandler` closure that is escaped and retained. If many handlers are set and reset, it may lead to unnecessary retain cycles or memory overhead.
 
 ### ✅ Optimization:
+
 Ensure `outputHandler` is not capturing context unintentionally.
 
 **Fix:**
 Use `@Sendable` and ensure no strong references in custom handlers:
+
 ```swift
 func setOutputHandler(_ handler: @escaping @Sendable (String) -> Void) {
     self.queue.sync {
@@ -60,12 +68,15 @@ Also, consider using a weak reference pattern if you're passing in closures from
 ## ⏱️ **3. Unnecessary Computations**
 
 ### ⚠️ Issue:
+
 `level.uppercasedValue` calls `.uppercased()` every time a log is made.
 
 ### ✅ Optimization:
+
 Precompute uppercase values at compile time.
 
 **Before:**
+
 ```swift
 var uppercasedValue: String {
     switch self {
@@ -85,12 +96,15 @@ var uppercasedValue: String {
 ## 🧵 **4. Collection Operation Optimizations**
 
 ### ⚠️ Issue:
+
 No explicit use of collections in this file, but logging could benefit from batch processing or buffering for high-frequency logs.
 
 ### ✅ Optimization:
+
 If logs are frequent, buffer them and flush periodically instead of dispatching one-by-one.
 
 **Example (conceptual):**
+
 ```swift
 private var logBuffer: [String] = []
 private let maxBufferSize = 100
@@ -119,14 +133,17 @@ private func flushLogs() {
 ## 🧵 **5. Threading Opportunities**
 
 ### ⚠️ Issue:
+
 All logging is done asynchronously on a serial queue. While this avoids blocking the main thread, there's potential for more parallelism or batching.
 
 ### ✅ Optimization:
+
 Use concurrent queues or batch writes for better throughput under load.
 
 Alternatively, consider using `os_log` for system-level logging with less overhead.
 
 **Example:**
+
 ```swift
 import os.log
 
@@ -138,6 +155,7 @@ func log(_ message: String, level: LogLevel = .info) {
 ```
 
 Where:
+
 ```swift
 extension LogLevel {
     var osLogType: OSLogType {
@@ -158,12 +176,15 @@ This reduces overhead significantly compared to manual GCD queues.
 ## 📦 **6. Caching Possibilities**
 
 ### ⚠️ Issue:
+
 `ISO8601DateFormatter` is already cached, which is good.
 
 ### ✅ Optimization:
+
 If logs happen very frequently (e.g., hundreds per second), consider caching the last formatted timestamp to avoid repeated calls.
 
 **Example:**
+
 ```swift
 private static var lastTimestamp: (date: Date, formatted: String)?
 
@@ -188,34 +209,38 @@ This avoids redundant formatting within short intervals.
 ## 🧹 **Minor Code Improvements**
 
 ### 1. **Avoid redundant `.shared` usage in default initializer**
+
 You already define `Dependencies.default`, so prefer using that rather than initializing manually.
 
 ### 2. **Use `@MainActor` or structured concurrency where appropriate**
+
 If integrating into a modern Swift app, consider adopting Swift Concurrency (`async/await`) for cleaner async logging.
 
 ---
 
 ## ✅ Summary of Key Optimizations
 
-| Area | Before | After |
-|------|--------|-------|
-| Timestamp formatting | Called every time | Reused or cached |
-| Logging dispatch | Async on serial queue | Batched or os_log |
-| Uppercase conversion | Per log | Precomputed |
-| Memory safety | Closure retention risk | Ensure `@Sendable` and no strong refs |
-| High-frequency logging | One log per dispatch | Buffered writes |
-| System logging | Manual GCD | os_log for better performance |
+| Area                   | Before                 | After                                 |
+| ---------------------- | ---------------------- | ------------------------------------- |
+| Timestamp formatting   | Called every time      | Reused or cached                      |
+| Logging dispatch       | Async on serial queue  | Batched or os_log                     |
+| Uppercase conversion   | Per log                | Precomputed                           |
+| Memory safety          | Closure retention risk | Ensure `@Sendable` and no strong refs |
+| High-frequency logging | One log per dispatch   | Buffered writes                       |
+| System logging         | Manual GCD             | os_log for better performance         |
 
 ---
 
 ## 💡 Bonus: Use `os_log` for Production Logging
 
 For production apps, `os_log` offers:
+
 - Lower overhead
 - Better integration with Console.app
 - Structured logging support
 
 Replace `Logger` with:
+
 ```swift
 import os.log
 
@@ -233,6 +258,7 @@ extension Logger {
 Let me know if you'd like help refactoring the full `Logger` class using these suggestions!
 
 ## PerformanceManager.swift
+
 ## Performance Analysis of PerformanceManager.swift
 
 ### 1. Algorithm Complexity Issues
@@ -259,7 +285,7 @@ public func recordFrame() {
         if self.recordedFrameCount > 0 {
             let previousTime = self.frameTimes[(self.frameWriteIndex - 1 + self.maxFrameHistory) % self.maxFrameHistory]
             let interval = currentTime - previousTime
-            
+
             // Update running sum
             let currentIndex = self.intervalWriteIndex
             if self.recordedIntervals >= self.fpsSampleSize {
@@ -268,13 +294,13 @@ public func recordFrame() {
             } else {
                 self.recordedIntervals += 1
             }
-            
+
             // Add new interval
             self.frameIntervals[currentIndex] = interval
             self.frameIntervalSum += interval
             self.intervalWriteIndex = (self.intervalWriteIndex + 1) % self.fpsSampleSize
         }
-        
+
         self.frameTimes[self.frameWriteIndex] = currentTime
         self.frameWriteIndex = (self.frameWriteIndex + 1) % self.maxFrameHistory
         if self.recordedFrameCount < self.maxFrameHistory {
@@ -355,7 +381,7 @@ private init() {
         buffer.initialize(from: repeatElement(0.0, count: self.maxFrameHistory))
         initializedCount = self.maxFrameHistory
     }
-    
+
     // Add for the optimized interval tracking
     self.frameIntervals = [Double](repeating: 0.0, count: self.fpsSampleSize)
 }
@@ -404,7 +430,7 @@ private struct CacheEntry<T> {
     let value: T
     let timestamp: CFTimeInterval
     let ttl: CFTimeInterval
-    
+
     var isExpired: Bool {
         CACurrentMediaTime() - timestamp >= ttl
     }
@@ -418,7 +444,7 @@ public func getCurrentFPS() -> Double {
         if let cache = self.fpsCache, !cache.isExpired {
             return cache.value
         }
-        
+
         let fps = self.calculateCurrentFPSLocked()
         self.fpsCache = CacheEntry(value: fps, timestamp: CACurrentMediaTime(), ttl: self.fpsCacheInterval)
         return fps
@@ -427,7 +453,7 @@ public func getCurrentFPS() -> Double {
 
 // Similar optimization for memory usage cache
 private func fetchMemoryUsageLocked(currentTime: CFTimeInterval) -> Double {
-    if let cache = self.memoryCache, 
+    if let cache = self.memoryCache,
        currentTime - cache.timestamp < self.metricsCacheInterval {
         return cache.value
     }

@@ -319,8 +319,7 @@ public struct SearchAndFilterSection: View {
     }
 
     private func filterChip(_ title: String, _ isSelected: Bool, _ filter: TransactionFilter)
-        -> some View
-    {
+        -> some View {
         Button(action: {
             self.selectedFilter = filter
         }) {

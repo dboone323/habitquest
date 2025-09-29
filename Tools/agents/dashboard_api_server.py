@@ -6,11 +6,9 @@ Serves live dashboard data for the development workspace monitor
 
 import http.server
 import json
-import os
 import socketserver
 import subprocess
 import time
-from datetime import datetime
 from pathlib import Path
 
 PORT = 8003
@@ -60,7 +58,7 @@ class DashboardAPIHandler(http.server.SimpleHTTPRequestHandler):
         # Load existing data files
         agent_status = self.load_json_file(AGENT_STATUS_FILE)
         task_queue = self.load_json_file(TASK_QUEUE_FILE)
-        dashboard_data = self.load_json_file(DASHBOARD_DATA_FILE)
+        self.load_json_file(DASHBOARD_DATA_FILE)
 
         # Get system metrics
         system_metrics = self.get_system_metrics()
@@ -182,7 +180,7 @@ class DashboardAPIHandler(http.server.SimpleHTTPRequestHandler):
             "security_agent",
             "pull_request_agent",
             "auto_update_agent",
-            "knowledge_base_agent"
+            "knowledge_base_agent",
         ]
         status_agents = agent_status.get("agents", {})
         for agent_name in known_agents:

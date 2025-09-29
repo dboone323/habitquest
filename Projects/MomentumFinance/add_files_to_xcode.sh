@@ -9,10 +9,10 @@ cp "${PROJECT_FILE}" "${PROJECT_FILE}.backup_$(date +%s)"
 
 # Files to add
 FILES=(
-	"SubscriptionManagementViews.swift"
-	"SubscriptionSummaryViews.swift"
-	"SubscriptionRowViews.swift"
-	"EnhancedGoalsSectionViews.swift"
+  "SubscriptionManagementViews.swift"
+  "SubscriptionSummaryViews.swift"
+  "SubscriptionRowViews.swift"
+  "EnhancedGoalsSectionViews.swift"
 )
 
 # Generate unique IDs for files

@@ -41,41 +41,41 @@ final class GoalDataManager: GoalDataManaging {
     /// - Parameter goals: Array of `Goal` objects to save.
     func save(goals: [Goal]) {
         if let encoded = try? JSONEncoder().encode(goals) {
-            userDefaults.set(encoded, forKey: goalsKey)
+            self.userDefaults.set(encoded, forKey: self.goalsKey)
         }
     }
 
     /// Adds a new goal to the stored goals.
     /// - Parameter goal: The `Goal` to add.
     func add(_ goal: Goal) {
-        var currentGoals = load()
+        var currentGoals = self.load()
         currentGoals.append(goal)
-        save(goals: currentGoals)
+        self.save(goals: currentGoals)
     }
 
     /// Updates an existing goal.
     /// - Parameter goal: The `Goal` to update.
     func update(_ goal: Goal) {
-        var currentGoals = load()
+        var currentGoals = self.load()
         if let index = currentGoals.firstIndex(where: { $0.id == goal.id }) {
             currentGoals[index] = goal
-            save(goals: currentGoals)
+            self.save(goals: currentGoals)
         }
     }
 
     /// Deletes a goal from storage.
     /// - Parameter goal: The `Goal` to delete.
     func delete(_ goal: Goal) {
-        var currentGoals = load()
+        var currentGoals = self.load()
         currentGoals.removeAll { $0.id == goal.id }
-        save(goals: currentGoals)
+        self.save(goals: currentGoals)
     }
 
     /// Finds a goal by its ID.
     /// - Parameter id: The UUID of the goal to find.
     /// - Returns: The `Goal` if found, otherwise nil.
     func find(by id: UUID) -> Goal? {
-        let goals = load()
+        let goals = self.load()
         return goals.first { $0.id == id }
     }
 
@@ -83,7 +83,7 @@ final class GoalDataManager: GoalDataManaging {
     /// - Parameter completed: Whether to get completed or incomplete goals.
     /// - Returns: Array of filtered goals.
     func goals(filteredByCompletion completed: Bool) -> [Goal] {
-        load().filter { $0.isCompleted == completed }
+        self.load().filter { $0.isCompleted == completed }
     }
 
     /// Gets goals due within a specified number of days.
@@ -91,13 +91,13 @@ final class GoalDataManager: GoalDataManaging {
     /// - Returns: Array of goals due within the specified period.
     func goalsDue(within days: Int) -> [Goal] {
         let futureDate = Calendar.current.date(byAdding: .day, value: days, to: Date()) ?? Date()
-        return load().filter { $0.targetDate <= futureDate && !$0.isCompleted }
+        return self.load().filter { $0.targetDate <= futureDate && !$0.isCompleted }
     }
 
     /// Gets goals sorted by priority.
     /// - Returns: Array of goals sorted by priority (high to low).
     func goalsSortedByPriority() -> [Goal] {
-        load().sorted { (goal1: Goal, goal2: Goal) -> Bool in
+        self.load().sorted { (goal1: Goal, goal2: Goal) -> Bool in
             goal1.priority.sortOrder > goal2.priority.sortOrder
         }
     }
@@ -105,24 +105,24 @@ final class GoalDataManager: GoalDataManaging {
     /// Gets goals sorted by target date.
     /// - Returns: Array of goals sorted by target date (soonest first).
     func goalsSortedByDate() -> [Goal] {
-        load().sorted { (goal1: Goal, goal2: Goal) -> Bool in
+        self.load().sorted { (goal1: Goal, goal2: Goal) -> Bool in
             goal1.targetDate < goal2.targetDate
         }
     }
 
     /// Clears all goals from storage.
     func clearAllGoals() {
-        userDefaults.removeObject(forKey: goalsKey)
+        self.userDefaults.removeObject(forKey: self.goalsKey)
     }
 
     /// Gets statistics about goals.
     /// - Returns: Dictionary with goal statistics.
     func getGoalStatistics() -> [String: Int] {
-        let goals = load()
+        let goals = self.load()
         let total = goals.count
         let completed = goals.count(where: { $0.isCompleted })
         let overdue = goals.count(where: { $0.targetDate < Date() && !$0.isCompleted })
-        let dueThisWeek = goalsDue(within: 7).count
+        let dueThisWeek = self.goalsDue(within: 7).count
 
         return [
             "total": total,

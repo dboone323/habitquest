@@ -15,10 +15,10 @@ final class HabitSuggestionService {
         let userProfile = await analyzeUserProfile(from: existingHabits)
 
         return [
-            generateCategoryBasedSuggestions(profile: userProfile),
-            generateTimeBasedSuggestions(profile: userProfile),
-            generateComplementarySuggestions(existing: existingHabits),
-            generateTrendingSuggestions(),
+            self.generateCategoryBasedSuggestions(profile: userProfile),
+            self.generateTimeBasedSuggestions(profile: userProfile),
+            self.generateComplementarySuggestions(existing: existingHabits),
+            self.generateTrendingSuggestions(),
         ].flatMap(\.self)
     }
 
@@ -228,7 +228,7 @@ final class HabitSuggestionService {
 
     private func fetchAllHabits() async -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
-        return (try? modelContext.fetch(descriptor)) ?? []
+        return (try? self.modelContext.fetch(descriptor)) ?? []
     }
 
     private func analyzeUserProfile(from habits: [Habit]) async -> UserProfile {
@@ -256,7 +256,7 @@ final class HabitSuggestionService {
 
     private func createCategorySuggestion(for category: HabitCategory, profile: UserProfile) -> HabitSuggestion? {
         // Only suggest if user has shown interest in related categories
-        let relatedCategories = getRelatedCategories(for: category)
+        let relatedCategories = self.getRelatedCategories(for: category)
         let hasRelatedHabits = profile.preferredCategories.contains { relatedCategories.contains($0) }
 
         guard hasRelatedHabits || profile.existingHabits.count >= 3 else { return nil }

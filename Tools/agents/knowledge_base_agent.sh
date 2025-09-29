@@ -1,14 +1,18 @@
 #!/bin/bash
 # Knowledge Base Agent: Maintains and shares best practices across all agents
 
-AGENT_NAME="KnowledgeBaseAgent"
+AGENT_NAME="knowledge_base_agent.sh"
 LOG_FILE="$(dirname "$0")/knowledge_base_agent.log"
 NOTIFICATION_FILE="$(dirname "$0")/communication/${AGENT_NAME}_notification.txt"
 COMPLETED_FILE="$(dirname "$0")/communication/${AGENT_NAME}_completed.txt"
 KNOWLEDGE_BASE_FILE="$(dirname "$0")/knowledge_base.json"
 LEARNING_HISTORY_FILE="$(dirname "$0")/learning_history.json"
+AGENT_STATUS_FILE="$(dirname "$0")/agent_status.json"
+TASK_QUEUE="$(dirname "$0")/task_queue.json"
+PID=$$
 
 # Knowledge categories
+# shellcheck disable=SC2034
 declare -a KNOWLEDGE_CATEGORIES=(
   "swift_best_practices"
   "ios_development"
@@ -21,6 +25,7 @@ declare -a KNOWLEDGE_CATEGORIES=(
 )
 
 # Learning sources
+# shellcheck disable=SC2034
 declare -a LEARNING_SOURCES=(
   "agent_logs"
   "project_analysis"
@@ -56,15 +61,68 @@ if [[ ! -f ${LEARNING_HISTORY_FILE} ]]; then
 fi
 
 log_message() {
-  local level="$1"
-  local message="$2"
+  local level
+  level="$1"
+  local message
+  message="$2"
   echo "[$(date)] [${level}] ${message}" >>"${LOG_FILE}"
+}
+
+function update_status() {
+  local status="$1"
+  local timestamp
+  timestamp=$(date +%s)
+
+  # Simple file locking with retry (macOS compatible)
+  local lockfile="${AGENT_STATUS_FILE}.lock"
+  local max_attempts=5
+  local attempt=0
+
+  while [[ ${attempt} -lt ${max_attempts} ]]; do
+    if [[ ! -f ${lockfile} ]] || [[ $(($(date +%s) - $(stat -f %m "${lockfile}" 2>/dev/null || echo 0))) -gt 30 ]]; then
+      # Create lock file with current timestamp
+      echo "$$" >"${lockfile}"
+
+      # Ensure status file exists and is valid JSON
+      if [[ ! -s ${AGENT_STATUS_FILE} ]]; then
+        echo '{"agents":{},"last_update":0}' >"${AGENT_STATUS_FILE}"
+      fi
+
+      # Use jq with proper escaping to avoid JSON parsing errors
+      if command -v jq &>/dev/null; then
+        jq --arg agent "${AGENT_NAME}" --arg status "${status}" --arg pid "${PID}" --arg timestamp "${timestamp}" \
+          '.agents[$agent] = {"status": $status, "pid": ($pid | tonumber), "last_seen": ($timestamp | tonumber)}' \
+          "${AGENT_STATUS_FILE}" >"${AGENT_STATUS_FILE}.tmp"
+
+        if [[ $? -eq 0 ]] && [[ -s "${AGENT_STATUS_FILE}.tmp" ]]; then
+          mv "${AGENT_STATUS_FILE}.tmp" "${AGENT_STATUS_FILE}"
+          rm -f "${lockfile}"
+          return 0
+        else
+          log_message "ERROR" "Failed to update agent_status.json (jq or mv error)"
+          rm -f "${AGENT_STATUS_FILE}.tmp"
+        fi
+      fi
+
+      # Release lock
+      rm -f "${lockfile}"
+      return 0
+    else
+      # Lock file exists and is recent, wait and retry
+      sleep 1
+      ((attempt++))
+    fi
+  done
+
+  log_message "ERROR" "Could not acquire lock for status update after ${max_attempts} attempts"
 }
 
 # Notify orchestrator of task completion
 notify_completion() {
-  local task_id="$1"
-  local success="$2"
+  local task_id
+  task_id="$1"
+  local success
+  success="$2"
   echo "$(date +%s)|${task_id}|${success}" >>"${COMPLETED_FILE}"
 }
 
@@ -72,33 +130,43 @@ notify_completion() {
 learn_from_agent_logs() {
   log_message "INFO" "Learning from agent logs..."
 
-  local insights_found=0
+  local insights_found
+  insights_found=0
+
+  local log_dir
+  log_dir="$(dirname "$0")"
 
   # Analyze all agent logs
-  for log_file in "$(dirname "$0")"/*.log; do
-    if [[ -f ${log_file} && ${log_file} != "${LOG_FILE}" ]]; then
-      local agent_name=$(basename "${log_file}" .log)
+  for log_file in "${log_dir}"/*.log; do
+    if [[ ! -f ${log_file} || ${log_file} == "${LOG_FILE}" ]]; then
+      continue
+    fi
 
-      # Extract error patterns
-      local error_patterns=$(grep -i "error\|failed\|exception" "${log_file}" | tail -10)
-      if [[ -n ${error_patterns} ]]; then
-        extract_error_patterns "${agent_name}" "${error_patterns}"
-        ((insights_found++))
-      fi
+    local agent_name
+    agent_name=$(basename "${log_file}" .log)
 
-      # Extract success patterns
-      local success_patterns=$(grep -i "success\|completed\|✅"${"$log_fi}le" | tail -10)
-      if [[ -n ${success_patterns} ]]; then
-        extract_success_patterns "${agent_name}" "${success_patterns}"
-        ((insights_found++))
-      fi
+    # Extract error patterns
+    local error_patterns
+    error_patterns=$(grep -i "error\|failed\|exception" "${log_file}" | tail -10)
+    if [[ -n ${error_patterns} ]]; then
+      extract_error_patterns "${agent_name}" "${error_patterns}"
+      ((insights_found++))
+    fi
 
-      # Extract performance insights
-      local perf_patterns=$(grep -i "performance\|duration\|optimization" "${log_file}" | tail -5)
-      if [[ -n ${perf_patterns} ]]; then
-        extract_performance_insights "${agent_name}" "${perf_patterns}"
-        ((insights_found++))
-      fi
+    # Extract success patterns
+    local success_patterns
+    success_patterns=$(grep -i "success\|completed\|✅" "${log_file}" | tail -10)
+    if [[ -n ${success_patterns} ]]; then
+      extract_success_patterns "${agent_name}" "${success_patterns}"
+      ((insights_found++))
+    fi
+
+    # Extract performance insights
+    local perf_patterns
+    perf_patterns=$(grep -i "performance\|duration\|optimization" "${log_file}" | tail -5)
+    if [[ -n ${perf_patterns} ]]; then
+      extract_performance_insights "${agent_name}" "${perf_patterns}"
+      ((insights_found++))
     fi
   done
 
@@ -107,8 +175,10 @@ learn_from_agent_logs() {
 
 # Extract error patterns and create prevention strategies
 extract_error_patterns() {
-  local agent_name="$1"
-  local error_patterns="$2"
+  local agent_name
+  agent_name="$1"
+  local error_patterns
+  error_patterns="$2"
 
   # Analyze common error types
   if echo "${error_patterns}" | grep -qi "timeout\|connection"; then
@@ -126,8 +196,10 @@ extract_error_patterns() {
 
 # Extract success patterns and create best practices
 extract_success_patterns() {
-  local agent_name="$1"
-  local success_patterns="$2"
+  local agent_name
+  agent_name="$1"
+  local success_patterns
+  success_patterns="$2"
 
   # Analyze successful strategies
   if echo "${success_patterns}" | grep -qi "parallel\|concurrent"; then
@@ -141,11 +213,14 @@ extract_success_patterns() {
 
 # Extract performance insights
 extract_performance_insights() {
-  local agent_name="$1"
-  local perf_patterns="$2"
+  local agent_name
+  agent_name="$1"
+  local perf_patterns
+  perf_patterns="$2"
 
   # Analyze performance data
-  local avg_duration=$(echo "${perf_patterns}" | grep -o '[0-9]\+\.[0-9]\+s\|[0-9]\+s' | sed 's/s//' | awk '{sum+=$1; count++} END {if(count>0) print sum/count; else print 0}')
+  local avg_duration
+  avg_duration=$(echo "${perf_patterns}" | grep -o '[0-9]\+\.[0-9]\+s\|[0-9]\+s' | sed 's/s//' | awk '{sum+=$1; count++} END {if(count>0) print sum/count; else print 0}')
 
   if [[ $(echo "${avg_duration} > 300" | bc -l 2>/dev/null) -eq 1 ]]; then
     add_knowledge_entry "performance_optimization" "long_running_tasks" "Optimize tasks taking longer than 5 minutes" "high"
@@ -157,8 +232,10 @@ learn_from_project_analysis() {
   log_message "INFO" "Learning from project analysis..."
 
   # Analyze project structure and patterns
-  local project_count=$(find "/Users/danielstevens/Desktop/Code/Projects" -maxdepth 1 -type d | wc -l)
-  local swift_files=$(find "/Users/danielstevens/Desktop/Code/Projects" -name "*.swift" | wc -l)
+  local project_count
+  project_count=$(find "/Users/danielstevens/Desktop/Quantum-workspace/Projects" -maxdepth 1 -type d | wc -l)
+  local swift_files
+  swift_files=$(find "/Users/danielstevens/Desktop/Quantum-workspace/Projects" -name "*.swift" | wc -l)
 
   # Extract architectural patterns
   if [[ ${project_count} -gt 5 ]]; then
@@ -166,9 +243,12 @@ learn_from_project_analysis() {
   fi
 
   # Analyze code quality patterns
-  local avg_files_per_project=$((swift_files / project_count))
-  if [[ ${avg_files_per_project} -gt 50 ]]; then
-    add_knowledge_entry "architecture_patterns" "large_codebase" "Implement modular architecture for large codebases" "high"
+  if [[ ${project_count} -gt 0 ]]; then
+    local avg_files_per_project
+    avg_files_per_project=$((swift_files / project_count))
+    if [[ ${avg_files_per_project} -gt 50 ]]; then
+      add_knowledge_entry "architecture_patterns" "large_codebase" "Implement modular architecture for large codebases" "high"
+    fi
   fi
 }
 
@@ -177,7 +257,8 @@ learn_from_external_sources() {
   log_message "INFO" "Learning from external sources..."
 
   # Check for Swift evolution proposals (simplified)
-  local swift_version=$(swift --version 2>/dev/null | grep -o 'Swift version [0-9]\+\.[0-9]\+' | head -1)
+  local swift_version
+  swift_version=$(swift --version 2>/dev/null | grep -o 'Swift version [0-9]\+\.[0-9]\+' | head -1)
   if [[ -n ${swift_version} ]]; then
     add_knowledge_entry "swift_best_practices" "swift_version" "Current Swift version: ${swift_version} - stay updated with latest features" "low"
   fi
@@ -193,15 +274,21 @@ learn_from_external_sources() {
 
 # Add knowledge entry to database
 add_knowledge_entry() {
-  local category="$1"
-  local key="$2"
-  local value="$3"
-  local priority="$4"
-  local entry_id="${category}_${key}_$(date +%s)"
+  local category
+  category="$1"
+  local key
+  key="$2"
+  local value
+  value="$3"
+  local priority
+  priority="$4"
+  local entry_id
+  entry_id="${category}_${key}_$(date +%s)"
 
   if command -v jq &>/dev/null; then
     # Check if entry already exists
-    local existing=$(jq -r ".categories.\"${category}\".\"${key}\" // empty" "${KNOWLEDGE_BASE_FILE}")
+    local existing
+    existing=$(jq -r ".categories.\"${category}\".\"${key}\" // empty" "${KNOWLEDGE_BASE_FILE}")
 
     if [[ -z ${existing} ]]; then
       # Add new entry
@@ -223,13 +310,22 @@ add_knowledge_entry() {
 share_knowledge() {
   log_message "INFO" "Sharing knowledge with other agents..."
 
-  local shared_count=0
+  local shared_count
+
+  shared_count=0
 
   # Create knowledge summary for each agent
   for agent_script in "$(dirname "$0")"/agent_*.sh; do
     if [[ -f ${agent_script} ]]; then
-      local agent_name=$(basename "${agent_script}" .sh)
-      local agent_capabilities="${AGENT_CAPABILITIES[${agent_script}]}"
+      local agent_name
+      agent_name=$(basename "${agent_script}" .sh)
+      local agent_capabilities
+      # shellcheck disable=SC2153
+      if declare -p AGENT_CAPABILITIES >/dev/null 2>&1; then
+        agent_capabilities="${AGENT_CAPABILITIES[${agent_script}]}"
+      else
+        agent_capabilities="general"
+      fi
 
       # Generate personalized knowledge for this agent
       generate_agent_knowledge "${agent_name}" "${agent_capabilities}"
@@ -240,7 +336,8 @@ share_knowledge() {
   # Share with specialized agents
   for agent_script in "$(dirname "$0")"/{pull_request,auto_update}_agent.sh; do
     if [[ -f ${agent_script} ]]; then
-      local agent_name=$(basename "${agent_script}" .sh)
+      local agent_name
+      agent_name=$(basename "${agent_script}" .sh)
       generate_agent_knowledge "${agent_name}" "specialized"
       ((shared_count++))
     fi
@@ -251,10 +348,14 @@ share_knowledge() {
 
 # Generate personalized knowledge for specific agent
 generate_agent_knowledge() {
-  local agent_name="$1"
-  local capabilities="$2"
+  local agent_name
+  agent_name="$1"
+  local capabilities
+  capabilities="$2"
 
-  local knowledge_file="$(dirname "$0")/knowledge_exports/${agent_name}_knowledge.json"
+  local knowledge_file
+
+  knowledge_file="$(dirname "$0")/knowledge_exports/${agent_name}_knowledge.json"
 
   if command -v jq &>/dev/null; then
     # Extract relevant knowledge based on agent capabilities
@@ -277,14 +378,18 @@ analyze_learning_effectiveness() {
   fi
 
   # Calculate knowledge growth
-  local total_entries=$(jq '.categories | map(length) | add' "${KNOWLEDGE_BASE_FILE}")
-  local high_priority_entries=$(jq '.categories | map(to_entries[] | select(.value.priority == "high")) | flatten | length' "${KNOWLEDGE_BASE_FILE}")
+  local total_entries
+  total_entries=$(jq '.categories | map(length) | add' "${KNOWLEDGE_BASE_FILE}")
+  local high_priority_entries
+  high_priority_entries=$(jq '.categories | map(to_entries[] | select(.value.priority == "high")) | flatten | length' "${KNOWLEDGE_BASE_FILE}")
 
   # Analyze usage patterns
-  local most_used=$(jq -r '.categories | to_entries[] | .value | to_entries[] | select(.value.usage_count > 0) | "\(.key): \(.value.usage_count)"' "${KNOWLEDGE_BASE_FILE}" | sort -t: -k2 -nr | head -5)
+  local most_used
+  most_used=$(jq -r '.categories | to_entries[] | .value | to_entries[] | select(.value.usage_count > 0) | "\(.key): \(.value.usage_count)"' "${KNOWLEDGE_BASE_FILE}" | sort -t: -k2 -nr | head -5)
 
   # Generate learning insights
-  local insight="Knowledge base contains ${total_entries} entries with ${high_priority_entries} high-priority items"
+  local insight
+  insight="Knowledge base contains ${total_entries} entries with ${high_priority_entries} high-priority items"
 
   if [[ -n ${most_used} ]]; then
     insight="${insight}. Most used practices: ${most_used}"
@@ -298,18 +403,22 @@ analyze_learning_effectiveness() {
 
 # Record learning session
 record_learning_session() {
-  local session_type="$1"
-  local insights="$2"
+  local session_type
+  session_type="$1"
+  local insights
+  insights="$2"
 
   if command -v jq &>/dev/null; then
-    local session_data="{\"type\": \"${session_type}\", \"insights\": \"${insights}\", \"timestamp\": $(date +%s)}"
+    local session_data
+    session_data="{\"type\": \"${session_type}\", \"insights\": \"${insights}\", \"timestamp\": $(date +%s)}"
     jq --argjson session "${session_data}" '.learning_sessions += [$session]' "${LEARNING_HISTORY_FILE}" >"${LEARNING_HISTORY_FILE}.tmp" && mv "${LEARNING_HISTORY_FILE}.tmp" "${LEARNING_HISTORY_FILE}"
   fi
 }
 
 # Generate knowledge base report
 generate_knowledge_report() {
-  local report_file="$(dirname "$0")/knowledge_reports/knowledge_report_$(date +%Y%m%d_%H%M%S).md"
+  local report_file
+  report_file="$(dirname "$0")/knowledge_reports/knowledge_report_$(date +%Y%m%d_%H%M%S).md"
   mkdir -p "$(dirname "${report_file}")"
 
   {
@@ -318,8 +427,10 @@ generate_knowledge_report() {
     echo ""
 
     if command -v jq &>/dev/null; then
-      local total_entries=$(jq '.categories | map(length) | add' "${KNOWLEDGE_BASE_FILE}")
-      local categories_count=$(jq '.categories | length' "${KNOWLEDGE_BASE_FILE}")
+      local total_entries
+      total_entries=$(jq '.categories | map(length) | add' "${KNOWLEDGE_BASE_FILE}")
+      local categories_count
+      categories_count=$(jq '.categories | length' "${KNOWLEDGE_BASE_FILE}")
 
       echo "## Knowledge Base Overview"
       echo "- Total Knowledge Entries: ${total_entries}"
@@ -340,7 +451,19 @@ generate_knowledge_report() {
       echo ""
 
       echo "## Recent Learning Sessions"
-      jq -r '.learning_sessions[-3:][] | "- **\(.type)** (\(strftime("%Y-%m-%d %H:%M") as $date | $date)): \(.insights)"' "${LEARNING_HISTORY_FILE}" 2>/dev/null || echo "No recent learning sessions"
+      # Get recent sessions and format timestamps
+      if command -v jq &>/dev/null && [[ -s ${LEARNING_HISTORY_FILE} ]]; then
+        jq -r '.learning_sessions[-3:][] | "\(.timestamp)|\(.type)|\(.insights)"' "${LEARNING_HISTORY_FILE}" 2>/dev/null | while IFS='|' read -r ts type insights; do
+          if [[ -n ${ts} && ${ts} =~ ^[0-9]+$ ]]; then
+            formatted_date=$(date -r "${ts}" +"%Y-%m-%d %H:%M" 2>/dev/null || echo "Unknown")
+            echo "- **${type}** (${formatted_date}): ${insights}"
+          else
+            echo "- **${type}**: ${insights}"
+          fi
+        done
+      else
+        echo "No recent learning sessions"
+      fi
     fi
 
   } >"${report_file}"
@@ -351,7 +474,8 @@ generate_knowledge_report() {
 # Update knowledge base metadata
 update_metadata() {
   if command -v jq &>/dev/null; then
-    local total_entries=$(jq '.categories | map(length) | add' "${KNOWLEDGE_BASE_FILE}")
+    local total_entries
+    total_entries=$(jq '.categories | map(length) | add' "${KNOWLEDGE_BASE_FILE}")
     jq --arg total_entries "${total_entries}" '.metadata.last_updated = now | .metadata.total_entries = ($total_entries | tonumber)' "${KNOWLEDGE_BASE_FILE}" >"${KNOWLEDGE_BASE_FILE}.tmp" && mv "${KNOWLEDGE_BASE_FILE}.tmp" "${KNOWLEDGE_BASE_FILE}"
   fi
 }
@@ -359,7 +483,7 @@ update_metadata() {
 # Process notifications from orchestrator
 process_notifications() {
   if [[ -f ${NOTIFICATION_FILE} ]]; then
-    while IFS='|' read -r timestamp notification_type task_id; do
+    while IFS='|' read -r _timestamp notification_type task_id; do
       case "${notification_type}" in
       "new_task")
         log_message "INFO" "Received new task: ${task_id}"
@@ -379,14 +503,16 @@ process_notifications() {
     done <"${NOTIFICATION_FILE}"
 
     # Clear processed notifications
-    >"${NOTIFICATION_FILE}"
+    : >"${NOTIFICATION_FILE}"
   fi
 }
 
 # Main learning and knowledge sharing loop
 log_message "INFO" "Knowledge Base Agent starting..."
+trap 'update_status stopped; exit 0' SIGTERM SIGINT
 
 while true; do
+  update_status "running"
   # Process notifications from orchestrator
   process_notifications
 
@@ -405,10 +531,11 @@ while true; do
   update_metadata
 
   # Generate periodic report (every 2 hours)
-  local current_minute=$(date +%M)
+  current_minute=$(date +%M)
   if [[ $((current_minute % 120)) -eq 0 ]]; then
     generate_knowledge_report
   fi
 
+  update_status "idle"
   sleep 1800 # Learn and share every 30 minutes
 done

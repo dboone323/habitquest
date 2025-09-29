@@ -68,7 +68,8 @@ setup_homebrew() {
 
     # Add Homebrew to PATH for Apple Silicon Macs
     if [[ $(uname -m) == "arm64" ]]; then
-      echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>~/.zshrc
+      # shellcheck disable=SC2016
+      printf '%s\n' 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>~/.zshrc
       eval "$(/opt/homebrew/bin/brew shellenv)"
     fi
 
@@ -144,6 +145,7 @@ setup_python() {
 
   # Activate and install requirements
   print_info "Installing Python requirements..."
+  # shellcheck source=/dev/null
   source "${venv_dir}/bin/activate"
 
   if [[ -f "${WORKSPACE_DIR}/Tools/Automation/requirements.txt" ]]; then
@@ -163,7 +165,9 @@ setup_nodejs() {
 
   # Setup NVM
   export NVM_DIR="${HOME}/.nvm"
+  # shellcheck source=/dev/null
   [[ -s "${NVM_DIR}/nvm.sh" ]] && \. "${NVM_DIR}/nvm.sh"
+  # shellcheck source=/dev/null
   [[ -s "${NVM_DIR}/bash_completion" ]] && \. "${NVM_DIR}/bash_completion"
 
   # Install nvm (Node Version Manager)
@@ -173,7 +177,9 @@ setup_nodejs() {
 
     # Source nvm again after installation
     export NVM_DIR="${HOME}/.nvm"
+    # shellcheck source=/dev/null
     [[ -s "${NVM_DIR}/nvm.sh" ]] && \. "${NVM_DIR}/nvm.sh"
+    # shellcheck source=/dev/null
     [[ -s "${NVM_DIR}/bash_completion" ]] && \. "${NVM_DIR}/bash_completion"
 
     print_success "NVM installed"

@@ -7,7 +7,7 @@
 
 # Configuration
 WORKSPACE_ROOT="/Users/danielstevens/Desktop/Quantum-workspace"
-LOG_FILE="$WORKSPACE_ROOT/cleanup_log_$(date +%Y%m%d_%H%M%S).txt"
+LOG_FILE="${WORKSPACE_ROOT}/cleanup_log_$(date +%Y%m%d_%H%M%S).txt"
 DRY_RUN=false
 
 # Colors for output
@@ -19,7 +19,7 @@ NC='\033[0m' # No Color
 
 # Logging function
 log() {
-  echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
+  echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "${LOG_FILE}"
 }
 
 # Progress tracking
@@ -29,7 +29,7 @@ SPACE_SAVED=0
 
 # Function to get file size in bytes
 get_file_size() {
-  if [[ -f "$1" ]]; then
+  if [[ -f $1 ]]; then
     stat -f%z "$1" 2>/dev/null || echo "0"
   else
     echo "0"
@@ -54,20 +54,20 @@ format_size() {
 safe_remove() {
   local file="$1"
   local size
-  size=$(get_file_size "$file")
+  size=$(get_file_size "${file}")
 
-  if [[ "$DRY_RUN" == "true" ]]; then
-    echo -e "${YELLOW}DRY RUN: Would remove $file ($(format_size "${size}"))${NC}"
+  if [[ ${DRY_RUN} == "true" ]]; then
+    echo -e "${YELLOW}DRY RUN: Would remove ${file} ($(format_size "${size}"))${NC}"
     ((SPACE_SAVED += size))
     ((REMOVED_FILES++))
   else
     if rm -f "${file}" 2>/dev/null; then
-      echo -e "${GREEN}✓ Removed${ $fi}le ($(format_size "$size"))${NC}"
+      echo -e "${GREEN}✓ Removed ${file} ($(format_size "${size}"))${NC}"
       ((SPACE_SAVED += size))
       ((REMOVED_FILES++))
     else
-      echo -e "${RED}✗ Failed to remove: $file${NC}"
-      log "Failed to remove: $file"
+      echo -e "${RED}✗ Failed to remove ${file}${NC}"
+      log "Failed to remove: ${file}"
     fi
   fi
 }
@@ -78,23 +78,23 @@ clean_timestamped_files() {
   local keep_count="${2:-5}"
   local description="$3"
 
-  log "Cleaning $description files (keeping $keep_count most recent)..."
+  log "Cleaning ${description} files (keeping ${keep_count} most recent)..."
 
   # Find files matching pattern, sort by modification time (newest first)
   local files=()
   while IFS= read -r file; do
-    [[ -n "$file" ]] && files+=("$file")
-  done < <(find "$WORKSPACE_ROOT" -name "$pattern" -type f -print0 2>/dev/null | xargs -0 ls -t 2>/dev/null)
+    [[ -n ${file} ]] && files+=("${file}")
+  done < <(find "${WORKSPACE_ROOT}" -name "${pattern}" -type f -print0 2>/dev/null | xargs -0 ls -t 2>/dev/null)
 
-  if [[ ${#files[@]} -gt $keep_count ]]; then
+  if [[ ${#files[@]} -gt ${keep_count} ]]; then
     local to_remove=$((${#files[@]} - keep_count))
-    log "Found ${#files[@]} files, will remove $to_remove oldest"
+    log "Found ${#files[@]} files, will remove ${to_remove} oldest"
 
     for ((i = keep_count; i < ${#files[@]}; i++)); do
-      safe_remove "${files[$i]}"
+      safe_remove "${files[${i}]}"
     done
   else
-    log "Found ${#files[@]} files (≤ $keep_count), keeping all"
+    log "Found ${#files[@]} files (< ${keep_count}), keeping all"
   fi
 }
 
@@ -103,16 +103,16 @@ clean_duplicate_pattern() {
   local pattern="$1"
   local description="$2"
 
-  log "Cleaning $description files..."
+  log "Cleaning ${description} files..."
 
   local files=()
   while IFS= read -r -d '' file; do
-    files+=("$file")
-  done < <(find "$WORKSPACE_ROOT" -name "$pattern" -type f -print0 2>/dev/null)
+    files+=("${file}")
+  done < <(find "${WORKSPACE_ROOT}" -name "${pattern}" -type f -print0 2>/dev/null)
 
   for file in "${files[@]}"; do
     # Skip if file doesn't exist
-    [[ ! -f "$file" ]] && continue
+    [[ ! -f ${file} ]] && continue
 
     # Check if this is a duplicate by looking for similar files
     local base_name="${file%.*}"
@@ -120,33 +120,33 @@ clean_duplicate_pattern() {
 
     # Look for similar files without the pattern suffix
     local similar_files=()
-    if [[ "$pattern" == *"_old"* ]]; then
+    if [[ ${pattern} == *"_old"* ]]; then
       while IFS= read -r -d '' similar_file; do
-        similar_files+=("$similar_file")
-      done < <(find "$(dirname "$file")" -name "${base_name%_old}.$extension" -print0 2>/dev/null)
-    elif [[ "$pattern" == *"_backup"* ]]; then
+        similar_files+=("${similar_file}")
+      done < <(find "$(dirname "${file}")" -name "${base_name%_old}.${extension}" -print0 2>/dev/null)
+    elif [[ ${pattern} == *"_backup"* ]]; then
       while IFS= read -r -d '' similar_file; do
-        similar_files+=("$similar_file")
-      done < <(find "$(dirname "$file")" -name "${base_name%_backup}.$extension" -print0 2>/dev/null)
-    elif [[ "$pattern" == *"_duplicate"* ]]; then
+        similar_files+=("${similar_file}")
+      done < <(find "$(dirname "${file}")" -name "${base_name%_backup}.${extension}" -print0 2>/dev/null)
+    elif [[ ${pattern} == *"_duplicate"* ]]; then
       while IFS= read -r -d '' similar_file; do
-        similar_files+=("$similar_file")
-      done < <(find "$(dirname "$file")" -name "${base_name%_duplicate}.$extension" -print0 2>/dev/null)
+        similar_files+=("${similar_file}")
+      done < <(find "$(dirname "${file}")" -name "${base_name%_duplicate}.${extension}" -print0 2>/dev/null)
     fi
 
     # If we found a similar file, check which one is newer
     if [[ ${#similar_files[@]} -gt 0 ]]; then
       local similar_file="${similar_files[0]}"
-      if [[ "$file" -ot "$similar_file" ]]; then
+      if [[ ${file} -ot ${similar_file} ]]; then
         # Original file is newer, remove the duplicate
-        safe_remove "$file"
+        safe_remove "${file}"
       else
-        log "Keeping newer duplicate: $file"
+        log "Keeping newer duplicate: ${file}"
       fi
     else
       # No similar file found, might be safe to remove if it's clearly a duplicate
-      if [[ "$file" == *"_old"* ]] || [[ "$file" == *"_backup"* ]] || [[ "$file" == *"_duplicate"* ]]; then
-        safe_remove "$file"
+      if [[ ${file} == *"_old"* ]] || [[ ${file} == *"_backup"* ]] || [[ ${file} == *"_duplicate"* ]]; then
+        safe_remove "${file}"
       fi
     fi
   done
@@ -155,17 +155,17 @@ clean_duplicate_pattern() {
 # Main cleanup function
 main_cleanup() {
   echo -e "${BLUE}🚀 Starting Automated Duplicate File Cleanup${NC}"
-  echo -e "${BLUE}Workspace: $WORKSPACE_ROOT${NC}"
-  echo -e "${BLUE}Log file: $LOG_FILE${NC}"
+  echo -e "${BLUE}Workspace: ${WORKSPACE_ROOT}${NC}"
+  echo -e "${BLUE}Log file: ${LOG_FILE}${NC}"
   echo
 
   log "=== Automated Duplicate File Cleanup Started ==="
-  log "Workspace: $WORKSPACE_ROOT"
-  log "Dry run: $DRY_RUN"
+  log "Workspace: ${WORKSPACE_ROOT}"
+  log "Dry run: ${DRY_RUN}"
 
   # Count total files before cleanup
-  TOTAL_FILES=$(find "$WORKSPACE_ROOT" -type f 2>/dev/null | wc -l)
-  log "Total files before cleanup: $TOTAL_FILES"
+  TOTAL_FILES=$(find "${WORKSPACE_ROOT}" -type f 2>/dev/null | wc -l)
+  log "Total files before cleanup: ${TOTAL_FILES}"
 
   # 1. Clean timestamped status files (keep only 10 most recent)
   clean_timestamped_files "*orchestrator_status_*.md" 10 "orchestrator status"
@@ -190,21 +190,21 @@ main_cleanup() {
   log "Cleaning enhanced/updated files..."
   local enhanced_files=()
   while IFS= read -r -d '' file; do
-    enhanced_files+=("$file")
-  done < <(find "$WORKSPACE_ROOT" -name "*_enhanced*" -type f -print0 2>/dev/null)
+    enhanced_files+=("${file}")
+  done < <(find "${WORKSPACE_ROOT}" -name "*_enhanced*" -type f -print0 2>/dev/null)
   for file in "${enhanced_files[@]}"; do
     local base_name="${file%_enhanced*}"
     local extension="${file##*.}"
     local original_file="${base_name}.${extension}"
 
-    if [[ -f "$original_file" ]]; then
+    if [[ -f ${original_file} ]]; then
       # Compare modification times
-      if [[ "$file" -nt "$original_file" ]]; then
+      if [[ ${file} -nt ${original_file} ]]; then
         # Enhanced file is newer, remove original
-        safe_remove "$original_file"
+        safe_remove "${original_file}"
       else
         # Original is newer, remove enhanced
-        safe_remove "$file"
+        safe_remove "${file}"
       fi
     fi
   done
@@ -215,13 +215,13 @@ main_cleanup() {
   log "=== Cleanup Summary ==="
   log "Total files processed: ${TOTAL_FILES}"
   log "Files removed: ${REMOVED_FILES}"
-  log "Space saved: $(format_size "$SPACE_SAVED")"
+  log "Space saved: $(format_size "${SPACE_SAVED}")"
 
   echo -e "${GREEN}Files removed: ${REMOVED_FILES}${NC}"
-  echo -e "${GREEN}Space saved: $(format_size "$SPACE_SAVED")${NC}"
+  echo -e "${GREEN}Space saved: $(format_size "${SPACE_SAVED}")${NC}"
   echo -e "${GREEN}Log saved to: ${LOG_FILE}${NC}"
 
-  if [[ "${DRY_RUN}" == "true" ]]; then
+  if [[ ${DRY_RUN} == "true" ]]; then
     echo -e "${YELLOW}This was a DRY RUN - no files were actually removed${NC}"
     echo -e "${YELLOW}Run with --execute to perform actual cleanup${NC}"
   fi

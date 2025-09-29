@@ -86,9 +86,9 @@ private struct DataInfoRow: View {
 
     var body: some View {
         HStack {
-            Text(title)
+            Text(self.title)
             Spacer()
-            Text(value)
+            Text(self.value)
                 .foregroundColor(.secondary)
         }
     }
@@ -118,7 +118,7 @@ public struct HabitQuestBackupDocument: FileDocument {
     /// <#Description#>
     /// - Returns: <#description#>
     public nonisolated func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
-        FileWrapper(regularFileWithContents: data)
+        FileWrapper(regularFileWithContents: self.data)
     }
 }
 

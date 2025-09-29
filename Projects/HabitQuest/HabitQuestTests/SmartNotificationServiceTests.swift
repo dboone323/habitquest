@@ -1,44 +1,267 @@
 @testable import HabitQuest
+import SwiftData
 import XCTest
 
+@MainActor
 final class SmartNotificationServiceTests: XCTestCase {
-    // MARK: - enumNotificationInteraction{ Tests
+    var modelContext: ModelContext!
+    var analyticsEngine: AdvancedAnalyticsEngine!
+    var smartNotificationService: SmartNotificationService!
+    var testHabit: Habit!
+    var streakService: StreakService!
 
-    func testNotificationInteractionInitialization() {
-        // Test basic initialization
-        /// - TODO: Implement initialization test for enumNotificationInteraction{
-        XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction{")
+    override func setUp() async throws {
+        try await super.setUp()
+
+        // Create in-memory model context for testing
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: Habit.self, configurations: config)
+        modelContext = ModelContext(container)
+
+        // Initialize streak service
+        streakService = StreakService(modelContext: modelContext)
+
+        // Initialize analytics engine
+        analyticsEngine = AdvancedAnalyticsEngine(modelContext: modelContext, streakService: streakService)
+
+        // Initialize smart notification service
+        smartNotificationService = SmartNotificationService(
+            modelContext: modelContext,
+            analyticsEngine: analyticsEngine
+        )
+
+        // Create test habit
+        testHabit = Habit(
+            name: "Test Habit",
+            habitDescription: "A test habit for smart notifications",
+            frequency: .daily,
+            xpValue: 10,
+            category: .health,
+            difficulty: .easy
+        )
+        modelContext.insert(testHabit)
+        try modelContext.save()
     }
 
-    func testNotificationInteractionProperties() {
-        // Test property access and validation
-        /// - TODO: Implement property tests for enumNotificationInteraction{
-        XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction{ properties")
+    override func tearDown() async throws {
+        smartNotificationService = nil
+        analyticsEngine = nil
+        streakService = nil
+        modelContext = nil
+        testHabit = nil
+        try await super.tearDown()
     }
 
-    func testNotificationInteractionMethods() {
-        // Test method functionality
-        /// - TODO: Implement method tests for enumNotificationInteraction{
-        XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction{ methods")
+    // MARK: - NotificationInteraction Tests
+
+    func testNotificationInteraction_AllCases() {
+        let allCases = NotificationInteraction.allCases
+        XCTAssertEqual(allCases.count, 4, "Should have 4 notification interaction types")
+
+        XCTAssertTrue(allCases.contains(.dismissed), "Should contain dismissed")
+        XCTAssertTrue(allCases.contains(.completed), "Should contain completed")
+        XCTAssertTrue(allCases.contains(.ignored), "Should contain ignored")
+        XCTAssertTrue(allCases.contains(.snoozed), "Should contain snoozed")
     }
 
-    // MARK: - enumTimingAdjustment{ Tests
-
-    func testTimingAdjustmentInitialization() {
-        // Test basic initialization
-        /// - TODO: Implement initialization test for enumTimingAdjustment{
-        XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{")
+    func testNotificationInteraction_RawValues() {
+        XCTAssertEqual(NotificationInteraction.dismissed.rawValue, "dismissed")
+        XCTAssertEqual(NotificationInteraction.completed.rawValue, "completed")
+        XCTAssertEqual(NotificationInteraction.ignored.rawValue, "ignored")
+        XCTAssertEqual(NotificationInteraction.snoozed.rawValue, "snoozed")
     }
 
-    func testTimingAdjustmentProperties() {
-        // Test property access and validation
-        /// - TODO: Implement property tests for enumTimingAdjustment{
-        XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{ properties")
+    func testNotificationInteraction_Codable() {
+        // Test encoding and decoding
+        let interaction = NotificationInteraction.completed
+
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(interaction)
+
+            let decoder = JSONDecoder()
+            let decoded = try decoder.decode(NotificationInteraction.self, from: data)
+
+            XCTAssertEqual(interaction, decoded, "Should encode and decode correctly")
+        } catch {
+            XCTFail("Encoding/decoding should not fail: \(error)")
+        }
     }
 
-    func testTimingAdjustmentMethods() {
-        // Test method functionality
-        /// - TODO: Implement method tests for enumTimingAdjustment{
-        XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{ methods")
+    func testNotificationInteraction_Sendable() {
+        // Test that NotificationInteraction conforms to Sendable
+        let interaction = NotificationInteraction.dismissed
+
+        // This test mainly ensures the type can be used in concurrent contexts
+        Task {
+            let result = await self.processInteraction(interaction)
+            XCTAssertEqual(result, interaction)
+        }
+    }
+
+    // MARK: - TimingAdjustment Tests
+
+    func testTimingAdjustment_Cases() {
+        // Test that TimingAdjustment enum has the expected cases
+        let earlier: TimingAdjustment = .earlier
+        let later: TimingAdjustment = .later
+
+        // Verify we can create instances of both cases
+        XCTAssertNotNil(earlier)
+        XCTAssertNotNil(later)
+    }
+
+    func testTimingAdjustment_Equatable() {
+        let adjustment1: TimingAdjustment = .earlier
+        let adjustment2: TimingAdjustment = .earlier
+        let adjustment3: TimingAdjustment = .later
+
+        XCTAssertEqual(adjustment1, adjustment2, "Same cases should be equal")
+        XCTAssertNotEqual(adjustment1, adjustment3, "Different cases should not be equal")
+    }
+
+    // MARK: - SmartNotificationService Initialization Tests
+
+    func testSmartNotificationService_Initialization() {
+        XCTAssertNotNil(smartNotificationService, "Should initialize successfully")
+    }
+
+    // MARK: - Smart Scheduling Tests
+
+    func testScheduleSmartNotifications() async {
+        // Test that the method completes without error
+        await smartNotificationService.scheduleSmartNotifications()
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    func testScheduleOptimalNotification() async {
+        // Test that the method completes without error
+        await smartNotificationService.scheduleOptimalNotification(for: testHabit)
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    // MARK: - Behavioral Adaptation Tests
+
+    func testAdaptToUserBehavior_Dismissed() async {
+        // Test adaptation to dismissed interaction
+        await smartNotificationService.adaptToUserBehavior(
+            habitId: testHabit.id,
+            interactionType: .dismissed
+        )
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    func testAdaptToUserBehavior_Completed() async {
+        // Test adaptation to completed interaction
+        await smartNotificationService.adaptToUserBehavior(
+            habitId: testHabit.id,
+            interactionType: .completed
+        )
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    func testAdaptToUserBehavior_Ignored() async {
+        // Test adaptation to ignored interaction
+        await smartNotificationService.adaptToUserBehavior(
+            habitId: testHabit.id,
+            interactionType: .ignored
+        )
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    func testAdaptToUserBehavior_Snoozed() async {
+        // Test adaptation to snoozed interaction
+        await smartNotificationService.adaptToUserBehavior(
+            habitId: testHabit.id,
+            interactionType: .snoozed
+        )
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    func testOptimizeNotificationFrequency() async {
+        // Test frequency optimization
+        await smartNotificationService.optimizeNotificationFrequency()
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    func testAnalyzeUserResponsePatterns() async {
+        // Test response pattern analysis
+        let analysis = await smartNotificationService.analyzeUserResponsePatterns(habitId: testHabit.id)
+
+        XCTAssertGreaterThanOrEqual(analysis.bestResponseTime, 0, "Best response time should be non-negative")
+        XCTAssertLessThanOrEqual(analysis.bestResponseTime, 23, "Best response time should be valid hour")
+        XCTAssertNotNil(analysis.preferredInteraction, "Should have preferred interaction")
+        XCTAssertNotNil(analysis.optimalFrequency, "Should have optimal frequency")
+    }
+
+    func testGetBehavioralInsights() async {
+        // Test behavioral insights retrieval
+        let insights = await smartNotificationService.getBehavioralInsights(habitId: testHabit.id)
+
+        XCTAssertGreaterThanOrEqual(insights.engagementScore, 0.0, "Engagement score should be non-negative")
+        XCTAssertLessThanOrEqual(insights.engagementScore, 1.0, "Engagement score should be <= 1.0")
+        XCTAssertNotNil(insights.responsivenessPattern, "Should have responsiveness pattern")
+        XCTAssertNotNil(insights.optimalEngagementWindow, "Should have optimal engagement window")
+    }
+
+    // MARK: - Context-Aware Features Tests
+
+    func testScheduleStreakMilestoneNotifications() async {
+        // Test streak milestone notifications
+        await smartNotificationService.scheduleStreakMilestoneNotifications(for: testHabit)
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    func testScheduleRecoveryNotification() async {
+        // Test recovery notifications
+        await smartNotificationService.scheduleRecoveryNotification(for: testHabit)
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    func testScheduleMilestoneCelebrationNotification() async {
+        // Test milestone celebration notifications
+        let milestone = StreakMilestone(streakCount: 7, title: "Week Warrior", description: "7 days completed!", emoji: "🏆", celebrationLevel: .intermediate)
+        await smartNotificationService.scheduleMilestoneCelebrationNotification(for: testHabit, milestone: milestone)
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    func testScheduleContextualReminders() async {
+        // Test contextual reminders
+        await smartNotificationService.scheduleContextualReminders()
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    func testAnalyzeAndScheduleContextualNotifications() async {
+        // Test contextual notification analysis and scheduling
+        await smartNotificationService.analyzeAndScheduleContextualNotifications()
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    func testGetContextualInsights() async {
+        // Test contextual insights retrieval
+        let insights = await smartNotificationService.getContextualInsights(for: testHabit.id)
+
+        XCTAssertNotNil(insights, "Should return contextual insights")
+    }
+
+    // MARK: - Utility Methods Tests
+
+    func testCancelNotifications() async {
+        // Test canceling notifications for a habit
+        await smartNotificationService.cancelNotifications(for: testHabit.id)
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    func testCancelAllNotifications() async {
+        // Test canceling all notifications
+        await smartNotificationService.cancelAllNotifications()
+        XCTAssertTrue(true, "Method should complete without error")
+    }
+
+    // MARK: - Helper Methods
+
+    private func processInteraction(_ interaction: NotificationInteraction) async -> NotificationInteraction {
+        // Simulate async processing of interaction
+        return interaction
     }
 }

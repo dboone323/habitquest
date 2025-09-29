@@ -123,10 +123,28 @@ Provide optimized configurations with explanations for each change."
 # Update agent status to available when starting
 update_status() {
   local status="$1"
-  if command -v jq &>/dev/null; then
-    jq ".agents[\"${AGENT_NAME}\"].status = \"${status}\" | .agents[\"${AGENT_NAME}\"].last_seen = $(date +%s)" "${AGENT_STATUS_FILE}" >"${AGENT_STATUS_FILE}.tmp" && mv "${AGENT_STATUS_FILE}.tmp" "${AGENT_STATUS_FILE}"
+  local timestamp=$(date +%s)
+
+  # Ensure status file exists and is valid JSON
+  if [[ ! -f ${AGENT_STATUS_FILE} ]]; then
+    echo '{"agents":{},"last_update":0}' >"${AGENT_STATUS_FILE}"
   fi
-  log "Status updated to ${status}"
+
+  # Use jq with proper escaping to avoid JSON parsing errors
+  if command -v jq &>/dev/null; then
+    jq --arg agent "${AGENT_NAME}" --arg status "${status}" --arg timestamp "${timestamp}" \
+      '.agents[$agent] = {"status": $status, "last_seen": ($timestamp | tonumber)}' \
+      "${AGENT_STATUS_FILE}" >"${AGENT_STATUS_FILE}.tmp"
+
+    if [[ $? -eq 0 ]] && [[ -s "${AGENT_STATUS_FILE}.tmp" ]]; then
+      mv "${AGENT_STATUS_FILE}.tmp" "${AGENT_STATUS_FILE}"
+    else
+      log "Failed to update agent_status.json (jq or mv error)"
+      rm -f "${AGENT_STATUS_FILE}.tmp"
+    fi
+  else
+    log "jq not available, using fallback status update"
+  fi
 }
 
 # Process a specific task

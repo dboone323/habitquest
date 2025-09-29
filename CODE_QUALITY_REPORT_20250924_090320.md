@@ -7,4 +7,3 @@
 ## Executive Summary
 
 ### AvoidObstaclesGame Code Quality Analysis
-

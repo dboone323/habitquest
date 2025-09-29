@@ -27,7 +27,8 @@ touch "${COMPLETED_FILE}"
 
 # Create basic dashboard data
 create_dashboard_data() {
-  local timestamp=$(date +%s)
+  local timestamp
+  timestamp=$(date +%s)
 
   cat >"${DASHBOARD_DATA_FILE}" <<EOF
 {
@@ -73,7 +74,7 @@ create_dashboard_data() {
     "cpu_usage": "$(top -l 1 | grep "CPU usage" | awk '{print $3}' | tr -d '%' 2>/dev/null || echo "25")%",
     "memory_usage": "$(top -l 1 | grep "PhysMem" | awk '{print $2}' 2>/dev/null || echo "2.1GB")",
     "disk_usage": "$(df -h . | tail -1 | awk '{print $5}' 2>/dev/null || echo "45%")",
-    "network_connections": "$(netstat -an 2>/dev/null | grep ESTABLISHED | wc -l | tr -d ' ' 2>/dev/null || echo "12")",
+    "network_connections": "$(netstat -an 2>/dev/null | grep -c ESTABLISHED 2>/dev/null || echo "12")",
     "process_count": "$(ps aux | wc -l | tr -d ' ' 2>/dev/null || echo "89")"
   },
   "tasks": {
@@ -598,7 +599,8 @@ stop_dashboard_server() {
   local pid_file="${SCRIPT_DIR}/dashboard_server.pid"
 
   if [[ -f ${pid_file} ]]; then
-    local server_pid=$(cat "${pid_file}")
+    local server_pid
+    server_pid=$(<"${pid_file}")
     if kill -0 "${server_pid}" 2>/dev/null; then
       kill "${server_pid}"
       log_message "INFO" "Dashboard server stopped (PID ${server_pid})"
@@ -616,7 +618,7 @@ update_dashboard_data() {
 # Process notifications from orchestrator
 process_notifications() {
   if [[ -f ${NOTIFICATION_FILE} ]]; then
-    while IFS='|' read -r timestamp notification_type task_id; do
+    while IFS='|' read -r _ notification_type _; do
       case "${notification_type}" in
       "update_dashboard")
         log_message "INFO" "Manual dashboard update requested"
@@ -638,13 +640,14 @@ process_notifications() {
     done <"${NOTIFICATION_FILE}"
 
     # Clear processed notifications
-    >"${NOTIFICATION_FILE}"
+    : >"${NOTIFICATION_FILE}"
   fi
 }
 
 # Generate dashboard reports
 generate_dashboard_report() {
-  local report_file="${SCRIPT_DIR}/dashboard_reports/dashboard_report_$(date +%Y%m%d_%H%M%S).md"
+  local report_file
+  report_file="${SCRIPT_DIR}/dashboard_reports/dashboard_report_$(date +%Y%m%d_%H%M%S).md"
   mkdir -p "${SCRIPT_DIR}/dashboard_reports"
 
   {

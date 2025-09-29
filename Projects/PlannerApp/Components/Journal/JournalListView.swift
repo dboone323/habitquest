@@ -9,25 +9,25 @@ public struct JournalListView: View {
 
     public var body: some View {
         List {
-            if journalEntries.isEmpty {
+            if self.journalEntries.isEmpty {
                 JournalEmptyStateView(message: "No journal entries yet. Tap '+' to add one.")
-            } else if filteredEntries.isEmpty, !searchText.isEmpty {
-                JournalEmptyStateView(message: "No results found for \"\(searchText)\"")
+            } else if self.filteredEntries.isEmpty, !self.searchText.isEmpty {
+                JournalEmptyStateView(message: "No results found for \"\(self.searchText)\"")
             } else {
-                ForEach(filteredEntries) { entry in
+                ForEach(self.filteredEntries) { entry in
                     NavigationLink {
                         JournalDetailView(entry: entry)
-                            .environmentObject(themeManager)
+                            .environmentObject(self.themeManager)
                     } label: {
                         JournalRow(entry: entry)
-                            .environmentObject(themeManager)
+                            .environmentObject(self.themeManager)
                     }
                 }
-                .onDelete(perform: onDeleteEntry)
-                .listRowBackground(themeManager.currentTheme.secondaryBackgroundColor)
+                .onDelete(perform: self.onDeleteEntry)
+                .listRowBackground(self.themeManager.currentTheme.secondaryBackgroundColor)
             }
         }
-        .background(themeManager.currentTheme.primaryBackgroundColor)
+        .background(self.themeManager.currentTheme.primaryBackgroundColor)
         .scrollContentBackground(.hidden)
     }
 }

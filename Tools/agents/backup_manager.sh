@@ -28,9 +28,24 @@ backup)
 restore)
   project="$2"
   user=$(whoami)
-  latest=$(ls -td "${BACKUP_DIR}"/"${project}"_* 2>/dev/null | head -1)
+  latest=""
+  latest_mtime=0
+  while IFS= read -r -d '' dir; do
+    if [[ -d ${dir} ]]; then
+      if stat -f "%m" "${dir}" >/dev/null 2>&1; then
+        mtime=$(stat -f "%m" "${dir}")
+      else
+        mtime=$(stat -c "%Y" "${dir}" 2>/dev/null || echo 0)
+      fi
+      if [[ -n ${mtime} && ${mtime} -gt ${latest_mtime} ]]; then
+        latest_mtime=${mtime}
+        latest="${dir}"
+      fi
+    fi
+  done < <(find "${BACKUP_DIR}" -maxdepth 1 -type d -name "${project}_*" -print0 2>/dev/null)
+
   if [[ -n ${latest} ]]; then
-    rm -rf "${PROJECTS_DIR}/${project}"
+    rm -rf "${PROJECTS_DIR:?}/${project}"
     cp -r "${latest}" "${PROJECTS_DIR}/${project}"
     echo "Restored ${project} from ${latest}"
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] user=${user} action=restore project=${project} src=${latest} result=success" >>"${AUDIT_LOG}"

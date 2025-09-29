@@ -93,7 +93,7 @@ class StreakService {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    func getStreakData(for habit: Habit, days: Int = 30) async -> [StreakDayData] {
+    func getStreakData(for habit: Habit, days: Int = 29) async -> [StreakDayData] {
         let calendar = Calendar.current
         let today = Date()
         let startDate = calendar.date(byAdding: .day, value: -days, to: today) ?? today
@@ -264,9 +264,7 @@ struct StreakAnalytics {
         let daysToNext = nextMilestone.streakCount - self.currentStreak
 
         if daysToNext == 1 {
-            return "Just 1 more day to reach \(nextMilestone.title)!"
-        } else if daysToNext <= 7 {
-            return "\(daysToNext) days to \(nextMilestone.title)!"
+            return "1 days to \(nextMilestone.title)!"
         } else {
             return "Working towards \(nextMilestone.title)"
         }
