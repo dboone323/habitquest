@@ -9,7 +9,8 @@ TASK_QUEUE_FILE="/Users/danielstevens/Desktop/Quantum-workspace/Tools/Automation
 
 # Update agent status to available when starting
 update_status() {
-  local status="$1"
+  local status
+  status="$1"
   if command -v jq &>/dev/null; then
     jq ".agents[\"${AGENT_NAME}\"].status = \"${status}\" | .agents[\"${AGENT_NAME}\"].last_seen = $(date +%s)" "${AGENT_STATUS_FILE}" >"${AGENT_STATUS_FILE}.tmp" && mv "${AGENT_STATUS_FILE}.tmp" "${AGENT_STATUS_FILE}"
   fi
@@ -18,13 +19,16 @@ update_status() {
 
 # Process a specific task
 process_task() {
-  local task_id="$1"
+  local task_id
+  task_id="$1"
   echo "[$(date)] ${AGENT_NAME}: Processing task ${task_id}" >>"${LOG_FILE}"
 
   # Get task details
   if command -v jq &>/dev/null; then
-    local task_desc=$(jq -r ".tasks[] | select(.id == \"${task_id}\") | .description" "${TASK_QUEUE_FILE}")
-    local task_type=$(jq -r ".tasks[] | select(.id == \"${task_id}\") | .type" "${TASK_QUEUE_FILE}")
+    local task_desc
+    task_desc=$(jq -r ".tasks[] | select(.id == \"${task_id}\") | .description" "${TASK_QUEUE_FILE}")
+    local task_type
+    task_type=$(jq -r ".tasks[] | select(.id == \"${task_id}\") | .type" "${TASK_QUEUE_FILE}")
     echo "[$(date)] ${AGENT_NAME}: Task description: ${task_desc}" >>"${LOG_FILE}"
     echo "[$(date)] ${AGENT_NAME}: Task type: ${task_type}" >>"${LOG_FILE}"
 
@@ -46,20 +50,73 @@ process_task() {
 
 # Update task status
 update_task_status() {
-  local task_id="$1"
-  local status="$2"
+  local task_id
+  task_id="$1"
+  local status
+  status="$2"
   if command -v jq &>/dev/null; then
     jq "(.tasks[] | select(.id == \"${task_id}\") | .status) = \"${status}\"" "${TASK_QUEUE_FILE}" >"${TASK_QUEUE_FILE}.tmp" && mv "${TASK_QUEUE_FILE}.tmp" "${TASK_QUEUE_FILE}"
   fi
 }
 
+count_matching_files() {
+  local pattern
+  pattern="$1"
+  shift
+  local files=("$@")
+  local count=0
+
+  for file in "${files[@]}"; do
+    if [[ -f ${file} ]] && grep -qE "${pattern}" "${file}" 2>/dev/null; then
+      ((count++))
+    fi
+  done
+
+  echo "${count}"
+}
+
+count_pattern_occurrences() {
+  local pattern
+  pattern="$1"
+  shift
+  local files=("$@")
+  local total=0
+
+  for file in "${files[@]}"; do
+    if [[ -f ${file} ]]; then
+      local occurrences
+      occurrences=$(grep -cE "${pattern}" "${file}" 2>/dev/null || true)
+      total=$((total + occurrences))
+    fi
+  done
+
+  echo "${total}"
+}
+
+count_large_objects() {
+  local files=("$@")
+  local count=0
+
+  for file in "${files[@]}"; do
+    if [[ -f ${file} ]] &&
+      grep -qE 'class[[:space:]].*{' "${file}" 2>/dev/null &&
+      grep -qE 'var.*:.*(Array|Dictionary)' "${file}" 2>/dev/null; then
+      ((count++))
+    fi
+  done
+
+  echo "${count}"
+}
+
 # Performance analysis function
 run_performance_analysis() {
-  local task_desc="$1"
+  local task_desc
+  task_desc="$1"
   echo "[$(date)] ${AGENT_NAME}: Running performance analysis for: ${task_desc}" >>"${LOG_FILE}"
 
   # Extract project name from task description
-  local projects=("CodingReviewer" "MomentumFinance" "HabitQuest" "PlannerApp" "AvoidObstaclesGame")
+  local projects
+  projects=("CodingReviewer" "MomentumFinance" "HabitQuest" "PlannerApp" "AvoidObstaclesGame")
 
   for project in "${projects[@]}"; do
     if [[ -d "/Users/danielstevens/Desktop/Quantum-workspace/Projects/${project}" ]]; then
@@ -69,42 +126,59 @@ run_performance_analysis() {
       # Performance metrics
       echo "[$(date)] ${AGENT_NAME}: Calculating performance metrics for ${project}..." >>"${LOG_FILE}"
 
-      # Count Swift files
-      local swift_files=$(find . -name "*.swift" | wc -l)
-      echo "[$(date)] ${AGENT_NAME}: Total Swift files: ${swift_files}" >>"${LOG_FILE}"
+      local swift_files_list=()
+      while IFS='' read -r -d '' swift_file; do
+        swift_files_list+=("${swift_file}")
+      done < <(find . -name "*.swift" -print0 2>/dev/null)
 
-      # Analyze performance issues
-      echo "[$(date)] ${AGENT_NAME}: Analyzing performance bottlenecks..." >>"${LOG_FILE}"
+      local swift_files
+      swift_files=${#swift_files_list[@]}
 
-      # Check for performance anti-patterns
-      local force_casts=$(find . -name "*.swift" -exec grep -l "as!" {} \; | wc -l)
-      local array_operations=$(find . -name "*.swift" -exec grep -l "append\|insert\|remove" {} \; | wc -l)
-      local string_concat=$(find . -name "*.swift" -exec grep -l "+=" {} \; | wc -l)
-      local nested_loops=$(find . -name "*.swift" -exec grep -A 5 -B 5 "for.*in" {} \; | grep -c "for.*in")
-      local large_objects=$(find . -name "*.swift" -exec grep -l "class.*{" {} \; | xargs grep -l "var.*:.*Array\|var.*:.*Dictionary" | wc -l)
+      {
+        echo "[$(date)] ${AGENT_NAME}: Total Swift files: ${swift_files}"
+        echo "[$(date)] ${AGENT_NAME}: Analyzing performance bottlenecks..."
+      } >>"${LOG_FILE}"
 
-      echo "[$(date)] ${AGENT_NAME}: Force casts found in ${force_casts} files" >>"${LOG_FILE}"
-      echo "[$(date)] ${AGENT_NAME}: Array operations found in ${array_operations} files" >>"${LOG_FILE}"
-      echo "[$(date)] ${AGENT_NAME}: String concatenation found in ${string_concat} files" >>"${LOG_FILE}"
-      echo "[$(date)] ${AGENT_NAME}: Nested loops found in ${nested_loops} files" >>"${LOG_FILE}"
-      echo "[$(date)] ${AGENT_NAME}: Large objects found in ${large_objects} files" >>"${LOG_FILE}"
+      local force_casts
+      force_casts=$(count_matching_files 'as!' "${swift_files_list[@]}")
+      local array_operations
+      array_operations=$(count_matching_files 'append|insert|remove' "${swift_files_list[@]}")
+      local string_concat
+      string_concat=$(count_matching_files '\\+=' "${swift_files_list[@]}")
+      local nested_loops
+      nested_loops=$(count_pattern_occurrences 'for[[:space:]].*in' "${swift_files_list[@]}")
+      local large_objects
+      large_objects=$(count_large_objects "${swift_files_list[@]}")
 
-      # Check for memory management issues
-      local retain_cycles=$(find . -name "*.swift" -exec grep -l "\[weak self\]\|\[unowned self\]" {} \; | wc -l)
-      local strong_refs=$(find . -name "*.swift" -exec grep -l "self\." {} \; | wc -l)
-      local memory_issues=$((strong_refs - retain_cycles))
+      {
+        echo "[$(date)] ${AGENT_NAME}: Force casts found in ${force_casts} files"
+        echo "[$(date)] ${AGENT_NAME}: Array operations found in ${array_operations} files"
+        echo "[$(date)] ${AGENT_NAME}: String concatenation found in ${string_concat} files"
+        echo "[$(date)] ${AGENT_NAME}: Nested loops found in ${nested_loops} occurrences"
+        echo "[$(date)] ${AGENT_NAME}: Large objects found in ${large_objects} files"
+      } >>"${LOG_FILE}"
 
-      echo "[$(date)] ${AGENT_NAME}: Potential retain cycles: ${memory_issues}" >>"${LOG_FILE}"
+      local retain_cycles
+      retain_cycles=$(count_matching_files '\\[weak self\\]|\\[unowned self\\]' "${swift_files_list[@]}")
+      local strong_refs
+      strong_refs=$(count_matching_files 'self\\.' "${swift_files_list[@]}")
+      local memory_issues
+      memory_issues=$((strong_refs - retain_cycles))
 
-      # Check for async/await usage
-      local async_funcs=$(find . -name "*.swift" -exec grep -l "async func" {} \; | wc -l)
-      local await_calls=$(find . -name "*.swift" -exec grep -l "await" {} \; | wc -l)
+      local async_funcs
+      async_funcs=$(count_matching_files 'async func' "${swift_files_list[@]}")
+      local await_calls
+      await_calls=$(count_matching_files 'await' "${swift_files_list[@]}")
 
-      echo "[$(date)] ${AGENT_NAME}: Async functions: ${async_funcs}" >>"${LOG_FILE}"
-      echo "[$(date)] ${AGENT_NAME}: Await calls: ${await_calls}" >>"${LOG_FILE}"
+      {
+        echo "[$(date)] ${AGENT_NAME}: Potential retain cycles: ${memory_issues}"
+        echo "[$(date)] ${AGENT_NAME}: Async functions: ${async_funcs}"
+        echo "[$(date)] ${AGENT_NAME}: Await calls: ${await_calls}"
+      } >>"${LOG_FILE}"
 
       # Calculate performance score (simple heuristic)
-      local perf_score=$((100 - (force_casts * 5) - (string_concat * 3) - (nested_loops * 2) - (memory_issues * 4)))
+      local perf_score
+      perf_score=$((100 - (force_casts * 5) - (string_concat * 3) - (nested_loops * 2) - (memory_issues * 4)))
       if [[ ${perf_score} -lt 0 ]]; then
         perf_score=0
       fi
@@ -153,11 +227,11 @@ processed_tasks=()
 while true; do
   # Check for new task notifications
   if [[ -f ${NOTIFICATION_FILE} ]]; then
-    while IFS='|' read -r timestamp action task_id; do
+    while IFS='|' read -r _timestamp action task_id; do
       # Check if task has already been processed
       already_processed=false
       for processed_id in "${processed_tasks[@]}"; do
-        if [[ "${processed_id}" == "${task_id}" ]]; then
+        if [[ ${processed_id} == "${task_id}" ]]; then
           already_processed=true
           break
         fi

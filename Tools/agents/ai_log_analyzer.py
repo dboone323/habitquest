@@ -51,9 +51,11 @@ with open(REPORT_FILE, "w") as f:
 # Audit log
 with open(AUDIT_LOG, "a") as f:
     f.write(
-        f"[{now}] user=ai_log_analyzer action=analyze_logs result=success findings={len(recommendations)} suggestions={len(suggested_actions)}\n"
+        f"[{now}] user=ai_log_analyzer action=analyze_logs result=success "
+        f"findings={len(recommendations)} suggestions={len(suggested_actions)}\n"
     )
 
 print(
-    f"AI Log Analysis complete. Findings: {len(recommendations)}. Suggestions: {len(suggested_actions)}. See {REPORT_FILE}."
+    f"AI Log Analysis complete. Findings: {len(recommendations)}. "
+    f"Suggestions: {len(suggested_actions)}. See {REPORT_FILE}."
 )

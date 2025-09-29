@@ -38,7 +38,7 @@ extension AdvancedFinancialIntelligence {
             guard
                 transaction.amount < 0,
                 transaction.category.trimmingCharacters(in: .whitespacesAndNewlines)
-                    .lowercased() == normalizedCategory,
+                .lowercased() == normalizedCategory,
                 periodBounds?.contains(transaction.date) ?? true
             else {
                 return runningTotal

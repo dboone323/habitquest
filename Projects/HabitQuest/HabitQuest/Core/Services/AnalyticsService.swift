@@ -76,10 +76,10 @@ final class AnalyticsService {
 
 // MARK: - Supporting Types
 
-enum TimePeriod {
+public enum TimePeriod {
     case week, month, quarter, year
 
-    var startDate: Date {
+    public var startDate: Date {
         let calendar = Calendar.current
         switch self {
         case .week:
@@ -93,7 +93,7 @@ enum TimePeriod {
         }
     }
 
-    var dayCount: Int {
+    public var dayCount: Int {
         switch self {
         case .week: 7
         case .month: 30
@@ -103,17 +103,17 @@ enum TimePeriod {
     }
 }
 
-struct HabitAnalytics {
-    let overallStats: OverallStats
-    let streakAnalytics: AnalyticsStreakData
-    let categoryBreakdown: [CategoryStats]
-    let moodCorrelation: MoodCorrelation
-    let timePatterns: TimePatterns
-    let weeklyProgress: WeeklyProgress
-    let monthlyTrends: [MonthlyTrend]
-    let habitPerformance: [HabitPerformance]
+public struct HabitAnalytics {
+    public let overallStats: OverallStats
+    public let streakAnalytics: AnalyticsStreakData
+    public let categoryBreakdown: [CategoryStats]
+    public let moodCorrelation: MoodCorrelation
+    public let timePatterns: TimePatterns
+    public let weeklyProgress: WeeklyProgress
+    public let monthlyTrends: [MonthlyTrend]
+    public let habitPerformance: [HabitPerformance]
 
-    static var empty: HabitAnalytics {
+    public static var empty: HabitAnalytics {
         HabitAnalytics(
             overallStats: OverallStats(
                 totalHabits: 0,
@@ -151,93 +151,93 @@ struct HabitAnalytics {
     }
 }
 
-struct OverallStats {
-    let totalHabits: Int
-    let activeHabits: Int
-    let totalCompletions: Int
-    let completionRate: Double
-    let totalXPEarned: Int
-    let averageStreak: Int
+public struct OverallStats {
+    public let totalHabits: Int
+    public let activeHabits: Int
+    public let totalCompletions: Int
+    public let completionRate: Double
+    public let totalXPEarned: Int
+    public let averageStreak: Int
 }
 
-struct AnalyticsStreakData {
-    let currentStreaks: [Int]
-    let longestStreak: Int
-    let averageStreak: Int
-    let activeStreaks: Int
+public struct AnalyticsStreakData {
+    public let currentStreaks: [Int]
+    public let longestStreak: Int
+    public let averageStreak: Int
+    public let activeStreaks: Int
 }
 
-struct CategoryStats {
-    let category: HabitCategory
-    let habitCount: Int
-    let completionRate: Double
-    let totalXP: Int
+public struct CategoryStats {
+    public let category: HabitCategory
+    public let habitCount: Int
+    public let completionRate: Double
+    public let totalXP: Int
 }
 
-struct MoodCorrelation {
-    let moodStats: [MoodStats]
-    let strongestCorrelation: MoodRating
+public struct MoodCorrelation {
+    public let moodStats: [MoodStats]
+    public let strongestCorrelation: MoodRating
 }
 
-struct MoodStats {
-    let mood: MoodRating
-    let completionRate: Double
-    let averageXP: Int
+public struct MoodStats {
+    public let mood: MoodRating
+    public let completionRate: Double
+    public let averageXP: Int
 }
 
-struct TimePatterns {
-    let peakHours: Int
-    let hourlyDistribution: [Int: Int]
-    let weekdayPatterns: [Int: Int]
+public struct TimePatterns {
+    public let peakHours: Int
+    public let hourlyDistribution: [Int: Int]
+    public let weekdayPatterns: [Int: Int]
 }
 
-struct WeeklyProgress {
-    let completedHabits: Int
-    let totalOpportunities: Int
-    let xpEarned: Int
-    let dailyBreakdown: [String: Int]
+public struct WeeklyProgress {
+    public let completedHabits: Int
+    public let totalOpportunities: Int
+    public let xpEarned: Int
+    public let dailyBreakdown: [String: Int]
 }
 
-struct MonthlyTrend {
-    let month: Int
-    let completions: Int
-    let xpEarned: Int
-    let averageDaily: Double
+public struct MonthlyTrend {
+    public let month: Int
+    public let completions: Int
+    public let xpEarned: Int
+    public let averageDaily: Double
 }
 
-struct HabitPerformance {
-    let habitId: UUID
-    let habitName: String
-    let completionRate: Double
-    let currentStreak: Int
-    let xpEarned: Int
-    let trend: HabitTrend
+public struct HabitPerformance {
+    public let habitId: UUID
+    public let habitName: String
+    public let completionRate: Double
+    public let currentStreak: Int
+    public let xpEarned: Int
+    public let trend: HabitTrend
 }
 
-struct HabitTrendData {
-    let habitId: UUID
-    let completionRates: [Double]
-    let streaks: [Int]
-    let xpEarned: [Int]
+public struct HabitTrendData {
+    public let habitId: UUID
+    public let completionRates: [Double]
+    public let streaks: [Int]
+    public let xpEarned: [Int]
 }
 
-struct CategoryInsight {
-    let category: HabitCategory
-    let totalHabits: Int
-    let completionRate: Double
-    let averageStreak: Int
-    let totalXPEarned: Int
+public struct CategoryInsight {
+    public let category: HabitCategory
+    public let totalHabits: Int
+    public let completionRate: Double
+    public let averageStreak: Int
+    public let totalXPEarned: Int
 }
 
-struct ProductivityMetrics {
-    let period: TimePeriod
-    let completionRate: Double
-    let streakCount: Int
-    let xpEarned: Int
-    let missedOpportunities: Int
+public struct ProductivityMetrics {
+    public let period: TimePeriod
+    public let completionRate: Double
+    public let streakCount: Int
+    public let xpEarned: Int
+    public let missedOpportunities: Int
 }
 
-public enum HabitTrend: String {
+public enum HabitTrend: String, Codable {
     case improving
     case stable
     case declining

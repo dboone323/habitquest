@@ -1,16 +1,9 @@
 name: ci-cd-backup
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
-
-name: ci-cd-backup
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   backup:
@@ -27,4 +20,3 @@ jobs:
         with:
           name: backup-reports
           path: artifacts
-  name: CI/CD Pipeline

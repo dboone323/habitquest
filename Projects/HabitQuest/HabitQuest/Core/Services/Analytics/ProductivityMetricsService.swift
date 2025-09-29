@@ -1,6 +1,11 @@
 import SwiftData
 import SwiftUI
 
+// Import model types
+import class HabitQuest.Habit
+import enum HabitQuest.HabitCategory
+import class HabitQuest.HabitLog
+
 /// Service responsible for productivity metrics and performance analysis
 final class ProductivityMetricsService {
     private let modelContext: ModelContext
@@ -298,54 +303,54 @@ final class ProductivityMetricsService {
 
 // MARK: - Supporting Types
 
-struct ProductivityScore {
-    let overallScore: Double
-    let completionRate: Double
-    let streakHealth: Double
-    let diversityScore: Double
-    let momentumScore: Double
-    let recommendations: [String]
+public struct ProductivityScore {
+    public let overallScore: Double
+    public let completionRate: Double
+    public let streakHealth: Double
+    public let diversityScore: Double
+    public let momentumScore: Double
+    public let recommendations: [String]
 }
 
-struct ProductivityInsights {
-    let currentScore: ProductivityScore
-    let weeklyCompletionRate: Double
-    let activeStreaks: Int
-    let xpEarnedThisWeek: Int
-    let topPerformingCategories: [HabitCategory]
-    let improvementAreas: [ProductivityArea]
-    let nextMilestones: [ProductivityMilestone]
+public struct ProductivityInsights {
+    public let currentScore: ProductivityScore
+    public let weeklyCompletionRate: Double
+    public let activeStreaks: Int
+    public let xpEarnedThisWeek: Int
+    public let topPerformingCategories: [HabitCategory]
+    public let improvementAreas: [ProductivityArea]
+    public let nextMilestones: [ProductivityMilestone]
 }
 
-struct ProductivityTrends {
-    let dailyScores: [Double]
-    let trend: ProductivityTrend
-    let averageScore: Double
-    let bestDay: Double
-    let consistencyScore: Double
+public struct ProductivityTrends {
+    public let dailyScores: [Double]
+    public let trend: ProductivityTrend
+    public let averageScore: Double
+    public let bestDay: Double
+    public let consistencyScore: Double
 }
 
-enum ProductivityTrend {
+public enum ProductivityTrend {
     case improving
     case stable
     case declining
 }
 
-enum ProductivityArea {
+public enum ProductivityArea {
     case consistency
     case streaks
     case diversity
     case momentum
 }
 
-struct ProductivityMilestone {
-    let type: MilestoneType
-    let currentValue: Int
-    let targetValue: Int
-    let description: String
+public struct ProductivityMilestone {
+    public let type: MilestoneType
+    public let currentValue: Int
+    public let targetValue: Int
+    public let description: String
 }
 
-enum MilestoneType {
+public enum MilestoneType {
     case totalCompletions
     case longestStreak
 }

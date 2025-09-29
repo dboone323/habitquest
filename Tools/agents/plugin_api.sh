@@ -9,7 +9,11 @@ POLICY_CONF="$(dirname "$0")/policy.conf"
 case "$1" in
 list)
   echo "Available plugins:"
-  ls "${PLUGINS_DIR}" | grep -E '\.sh$' | sed 's/\.sh$//'
+  for plugin_path in "${PLUGINS_DIR}"/*.sh; do
+    [[ -f ${plugin_path} ]] || continue
+    plugin_name=$(basename "${plugin_path}" .sh)
+    echo "${plugin_name}"
+  done
   user=$(whoami)
   echo "[$(date +'%Y-%m-%d %H:%M:%S')] user=${user} action=list_plugins result=success" >>"${AUDIT_LOG}"
   ;;

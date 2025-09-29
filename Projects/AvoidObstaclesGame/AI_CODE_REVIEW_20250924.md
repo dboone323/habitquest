@@ -1,18 +1,21 @@
 # AI Code Review for AvoidObstaclesGame
+
 Generated: Wed Sep 24 20:28:35 CDT 2025
 
-
 ## PerformanceManager.swift
+
 # PerformanceManager.swift Code Review
 
 ## 1. Code Quality Issues
 
 **Critical Issues:**
+
 - **Incomplete Implementation**: The class ends abruptly after the `init()` method. Several public methods and the core functionality appear to be missing.
 - **Unused Properties**: `fpsSampleSize`, `fpsThreshold`, `memoryThreshold`, and `machInfoCache` are declared but never used in the visible code.
 - **Concurrent Queue Misuse**: Using `.concurrent` queues with simple array operations can lead to race conditions without proper synchronization.
 
 **Specific Recommendations:**
+
 ```swift
 // Replace concurrent queues with serial queues for frame operations
 private let frameQueue = DispatchQueue(
@@ -33,16 +36,18 @@ private func addFrameTime(_ time: CFTimeInterval) {
 ## 2. Performance Problems
 
 **Critical Issues:**
+
 - **Excessive Caching**: Multiple cache properties without clear invalidation strategies.
 - **Potential Thread Contention**: Concurrent queues for simple array operations may cause unnecessary overhead.
 
 **Specific Recommendations:**
+
 ```swift
 // Simplify caching strategy - consider computed properties instead
 public var currentFPS: Double {
     frameQueue.sync {
         guard recordedFrameCount > 1 else { return 0 }
-        
+
         let validFrames = frameTimes.prefix(recordedFrameCount)
         let totalTime = validFrames.reduce(0, +)
         return totalTime > 0 ? Double(recordedFrameCount) / totalTime : 0
@@ -55,16 +60,19 @@ public var currentFPS: Double {
 ## 3. Security Vulnerabilities
 
 **No Critical Security Issues Found**, but:
+
 - **Information Exposure**: Performance data might contain sensitive timing information about user interactions.
 - Consider adding opt-in/opt-out mechanisms for performance tracking.
 
 ## 4. Swift Best Practices Violations
 
 **Critical Issues:**
+
 - **Missing Access Control**: Properties should have explicit access levels.
 - **Incomplete Error Handling**: No error handling for potential failures.
 
 **Specific Recommendations:**
+
 ```swift
 // Add proper access control
 private(set) var frameTimes: [CFTimeInterval]
@@ -78,11 +86,13 @@ private var lastFPSUpdate: CFTimeInterval?
 ## 5. Architectural Concerns
 
 **Critical Issues:**
+
 - **Singleton Overuse**: Singleton pattern may not be appropriate for all use cases.
 - **Tight Coupling**: Direct dependency on QuartzCore and low-level system APIs.
 - **Missing Abstraction**: No protocol definition for testability.
 
 **Specific Recommendations:**
+
 ```swift
 // Define a protocol for testability
 protocol PerformanceMonitoring {
@@ -105,10 +115,12 @@ public static func create(config: PerformanceConfig = .default) -> PerformanceMa
 ## 6. Documentation Needs
 
 **Critical Issues:**
+
 - **Incomplete Documentation**: Missing documentation for public methods and properties.
 - **No Usage Examples**: No examples showing how to use the class.
 
 **Specific Recommendations:**
+
 ```swift
 /// Records a frame render time for FPS calculation
 /// - Parameter time: The time taken to render the frame in seconds
@@ -128,33 +140,37 @@ public var currentFPS: Double {
 ## Additional Critical Recommendations
 
 1. **Complete the Implementation**: Add missing methods for:
+
    - Memory usage calculation
    - Performance state monitoring
    - Cache invalidation
 
 2. **Add Unit Tests**: Create tests for:
+
    - Circular buffer behavior
    - FPS calculation accuracy
    - Thread safety
 
 3. **Implement Proper Memory Usage Calculation**:
+
 ```swift
 private func updateMemoryUsage() -> Double {
     var info = mach_task_basic_info()
     var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
-    
+
     let kerr = withUnsafeMutablePointer(to: &info) { infoPtr in
         infoPtr.withMemoryRebound(to: integer_t.self, capacity: Int(count)) { intPtr in
             task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), intPtr, &count)
         }
     }
-    
+
     guard kerr == KERN_SUCCESS else { return 0 }
     return Double(info.resident_size) / 1024 / 1024 // Convert to MB
 }
 ```
 
 4. **Consider Using CADisplayLink** for automatic frame timing on iOS:
+
 ```swift
 #if canImport(UIKit)
 import UIKit
@@ -163,6 +179,7 @@ private var displayLink: CADisplayLink?
 ```
 
 5. **Add Configuration Support**:
+
 ```swift
 public struct PerformanceConfig {
     let maxFrameHistory: Int
@@ -175,17 +192,19 @@ public struct PerformanceConfig {
 The implementation requires significant completion and restructuring to be production-ready. The current state shows good intentions but lacks critical functionality and proper Swift conventions.
 
 ## PerformanceManager.swift
+
 # PerformanceManager.swift Code Review
 
 ## 1. Code Quality Issues
 
 ### Incomplete Enum Definition
+
 ```swift
 enum DeviceCapability {
     case high
     case medium
     case low
-    
+
     var maxObstacles: Int {
         switch self {
         case .high: 15
@@ -193,7 +212,7 @@ enum DeviceCapability {
         case .low: 6
         }
     }
-    
+
     var particleLimit: Int {
         switch self {
         case .high: 100
@@ -201,7 +220,7 @@ enum DeviceCapability {
         case .low: 25
         }
     }
-    
+
     var textureQuality: TextureQuality {
         switch self {
         case .high: .high
@@ -210,9 +229,11 @@ enum DeviceCapability {
     }
 }
 ```
+
 **Action:** Complete the `textureQuality` property implementation by adding missing cases.
 
 ### Missing Imports
+
 ```swift
 // Add if TextureQuality is defined elsewhere
 // import YourCustomModule
@@ -221,35 +242,41 @@ enum DeviceCapability {
 ## 2. Performance Problems
 
 ### Missing Frame Rate Monitoring Implementation
+
 The protocol mentions frame rate monitoring but no implementation is shown. Consider:
+
 ```swift
 class PerformanceManager {
     private var displayLink: CADisplayLink?
     private var lastTimestamp: CFTimeInterval = 0
     private var frameCount: Int = 0
-    
+
     func startFrameRateMonitoring(targetFPS: Int = 60) {
         displayLink = CADisplayLink(target: self, selector: #selector(updateFrameRate))
         displayLink?.add(to: .main, forMode: .common)
     }
-    
+
     @objc private func updateFrameRate(displayLink: CADisplayLink) {
         // Implement frame rate calculation logic
     }
 }
 ```
+
 **Action:** Add proper frame rate monitoring using `CADisplayLink`.
 
 ## 3. Security Vulnerabilities
 
 ### No Apparent Security Issues
+
 The current code snippet doesn't show security vulnerabilities, but ensure:
+
 - No sensitive device information is logged or transmitted
 - Performance data collection complies with privacy regulations if stored/transmitted
 
 ## 4. Swift Best Practices Violations
 
 ### Protocol Naming Convention
+
 ```swift
 protocol PerformanceDelegate: AnyObject {
     // Consider more specific naming
@@ -258,6 +285,7 @@ protocol PerformanceDelegate: AnyObject {
 ```
 
 ### Missing Access Control
+
 ```swift
 // Add proper access control
 public enum PerformanceWarning {  // or internal/fileprivate
@@ -269,6 +297,7 @@ public enum PerformanceWarning {  // or internal/fileprivate
 ```
 
 ### Use Strongly Typed Values
+
 ```swift
 // Consider using Measurement API for memory values
 import Foundation
@@ -282,19 +311,21 @@ struct MemoryUsage {
 ## 5. Architectural Concerns
 
 ### Singleton Pattern Consideration
+
 ```swift
 // PerformanceManager should likely be a singleton
 final class PerformanceManager {
     static let shared = PerformanceManager()
     private init() {}
-    
+
     weak var delegate: PerformanceDelegate?
-    
+
     // Implementation...
 }
 ```
 
 ### Dependency Injection Support
+
 ```swift
 // Consider making the manager injectable
 protocol PerformanceManaging {
@@ -309,6 +340,7 @@ class PerformanceManager: PerformanceManaging {
 ```
 
 ### Memory Management
+
 ```swift
 // Ensure proper weak references to prevent retain cycles
 weak var delegate: PerformanceDelegate?
@@ -317,13 +349,14 @@ weak var delegate: PerformanceDelegate?
 ## 6. Documentation Needs
 
 ### Add Documentation Comments
+
 ```swift
 /// Manages performance monitoring and optimization for the application
 /// - Warning: This class should be initialized early in the application lifecycle
 final class PerformanceManager {
     /// The delegate that receives performance-related events
     weak var delegate: PerformanceDelegate?
-    
+
     /// Starts monitoring performance metrics
     /// - Parameter frequency: The update frequency in seconds
     func startMonitoring(frequency: TimeInterval = 1.0) {
@@ -333,17 +366,18 @@ final class PerformanceManager {
 ```
 
 ### Enum Case Documentation
+
 ```swift
 enum PerformanceWarning {
     /// Triggered when memory usage exceeds safe thresholds
     case highMemoryUsage(usageInMB: Double)
-    
+
     /// Triggered when frame rate drops below target
     case lowFrameRate(actualFPS: Int, targetFPS: Int)
-    
+
     /// Triggered when CPU usage exceeds thresholds
     case highCPUUsage(percentage: Double)
-    
+
     /// Triggered when system reports memory pressure
     case memoryPressure(level: MemoryPressureLevel)
 }
@@ -359,39 +393,39 @@ import QuartzCore
 final class PerformanceManager {
     static let shared = PerformanceManager()
     private init() {}
-    
+
     weak var delegate: PerformanceDelegate?
     private var monitoringTimer: Timer?
     private var displayLink: CADisplayLink?
-    
+
     // Configuration
     private let memoryWarningThreshold: Double = 200 // MB
     private let targetFPS = 60
-    
+
     func startMonitoring() {
         startMemoryMonitoring()
         startFrameRateMonitoring()
     }
-    
+
     private func startMemoryMonitoring() {
         monitoringTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.checkMemoryUsage()
         }
     }
-    
+
     private func checkMemoryUsage() {
         // Implement memory usage check
     }
-    
+
     private func startFrameRateMonitoring() {
         displayLink = CADisplayLink(target: self, selector: #selector(updateFrameRate))
         displayLink?.add(to: .main, forMode: .common)
     }
-    
+
     @objc private func updateFrameRate(displayLink: CADisplayLink) {
         // Implement frame rate calculation
     }
-    
+
     static func determineDeviceCapability() -> DeviceCapability {
         // Implement device capability detection logic
         return .high // Placeholder
@@ -413,15 +447,18 @@ final class PerformanceManager {
 The foundation is good, but needs implementation details and Swift best practices adherence.
 
 ## PhysicsManager.swift
+
 # PhysicsManager.swift Code Review
 
 ## 1. Code Quality Issues
 
 ### **Critical Issues**
+
 - **Incomplete implementation**: The class ends abruptly after `physicsWorld.speed = 1.0` without closing braces or implementing required methods
 - **Missing SKPhysicsContactDelegate implementation**: The class claims to conform to `SKPhysicsContactDelegate` but doesn't implement `didBegin(_ contact:)`
 
 ### **Other Issues**
+
 - **Unsafe unwrapping**: `guard let physicsWorld else { return }` uses force unwrapping without proper error handling
 - **Weak reference management**: Both `physicsWorld` and `scene` are weak references but initialized from a strong reference, potentially causing unexpected nil values
 
@@ -438,45 +475,54 @@ The foundation is good, but needs implementation details and Swift best practice
 ## 4. Swift Best Practices Violations
 
 ### **Access Control**
+
 - `delegate` should be `private(set) public var` if external access is needed
 - Missing `private` access control for methods that should not be public
 
 ### **Initialization**
+
 - Constructor should validate parameters: `init(scene: SKScene?)` or add proper validation
 - Missing convenience initializers or factory methods for different configurations
 
 ### **Protocol Conformance**
+
 - Missing `#warning` or `TODO` for unimplemented protocol requirements
 - Should use extension for protocol conformance: `extension PhysicsManager: SKPhysicsContactDelegate`
 
 ## 5. Architectural Concerns
 
 ### **Dependency Management**
+
 - **Tight coupling**: Direct dependency on `SKScene` limits testability
 - **No abstraction**: Should depend on a protocol rather than concrete `SKScene` type
 
 ### **Responsibility Separation**
+
 - **Potential God object**: The manager handles setup, configuration, and collision detection - consider splitting responsibilities
 - **Event handling**: Delegate pattern is good, but consider using Combine or other reactive patterns for modern Swift
 
 ### **Memory Management**
+
 - **Retain cycle risk**: No clear cleanup mechanism for the delegate relationship
 - **Weak reference strategy**: Weak references to both scene and physicsWorld may cause unexpected behavior
 
 ## 6. Documentation Needs
 
 ### **Missing Documentation**
+
 - No documentation for the `init(scene:)` method
 - No documentation for public properties
 - Missing parameter documentation for delegate methods
 
 ### **Incomplete Documentation**
+
 - Protocol documentation should specify when each method is called
 - Should document thread safety considerations (physics callbacks happen on main thread)
 
 ## **Actionable Recommendations**
 
 ### **Immediate Fixes (Critical)**
+
 ```swift
 // Add missing protocol implementation
 public func didBegin(_ contact: SKPhysicsContact) {
@@ -488,6 +534,7 @@ public func didBegin(_ contact: SKPhysicsContact) {
 ```
 
 ### **Code Quality Improvements**
+
 ```swift
 // Replace with safer optional handling
 private func setupPhysicsWorld() {
@@ -503,6 +550,7 @@ private(set) weak var delegate: PhysicsManagerDelegate?
 ```
 
 ### **Architectural Improvements**
+
 ```swift
 // Create protocol for testability
 protocol PhysicsWorldProvider {
@@ -518,6 +566,7 @@ init(physicsWorldProvider: PhysicsWorldProvider) {
 ```
 
 ### **Performance Optimizations**
+
 ```swift
 // Define optimized collision categories
 struct PhysicsCategory {
@@ -533,12 +582,13 @@ struct PhysicsCategory {
 ```
 
 ### **Documentation Improvements**
+
 ```swift
 /// Manages physics world and collision detection
 /// - Note: All physics callbacks occur on the main thread
 /// - Warning: Ensure delegate is set before any physics interactions occur
 public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
-    
+
     /// Delegate for physics-related events
     /// - Important: Set this property before starting physics simulations
     weak var delegate: PhysicsManagerDelegate?
@@ -546,6 +596,7 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
 ```
 
 ### **Additional Recommendations**
+
 1. **Add unit tests** for collision detection logic
 2. **Implement cleanup method** to nil out delegates and references
 3. **Consider using enum** for collision results instead of multiple delegate methods
@@ -555,14 +606,17 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
 The code shows good foundation with proper protocol usage, but needs completion and refinement to meet production quality standards.
 
 ## ObstacleManager.swift
+
 # Code Review: ObstacleManager.swift
 
 ## Overview
+
 The code shows good structure with object pooling for performance, but has several issues that need addressing.
 
 ## 1. Code Quality Issues
 
 ### 🔴 **Critical Issues**
+
 ```swift
 // Missing closing brace for the class
 init(scene: SKScene) {
@@ -572,6 +626,7 @@ init(scene: SKScene) {
 ```
 
 ### 🟡 **Moderate Issues**
+
 ```swift
 // No error handling for scene being nil
 private weak var scene: SKScene? // Could become nil unexpectedly
@@ -586,6 +641,7 @@ private var activeObstacles: Set<SKSpriteNode> = [] // Not thread-safe
 ## 2. Performance Problems
 
 ### 🟡 **Potential Issues**
+
 ```swift
 // Array-based pool might be inefficient for large sizes
 private var obstaclePool: [SKSpriteNode] = [] // Consider Queue for FIFO
@@ -600,6 +656,7 @@ preloadObstaclePool() // Could cause initial performance spike
 ## 3. Security Vulnerabilities
 
 ### 🔴 **Critical Issues**
+
 ```swift
 // No input validation for delegate callbacks
 func obstacleDidSpawn(_ obstacle: SKSpriteNode) // Could be called with malicious nodes
@@ -611,6 +668,7 @@ func obstacleDidSpawn(_ obstacle: SKSpriteNode) // Could be called with maliciou
 ## 4. Swift Best Practices Violations
 
 ### 🟡 **Moderate Issues**
+
 ```swift
 // Use of stringly-typed keys
 private let spawnActionKey = "spawnObstacleAction" // Use enum or struct
@@ -625,6 +683,7 @@ private let maxPoolSize = 50 // Should be static let
 ```
 
 ### 🟢 **Minor Issues**
+
 ```swift
 // Use of UIKit when not needed
 import UIKit // SpriteKit might be sufficient
@@ -636,6 +695,7 @@ import UIKit // SpriteKit might be sufficient
 ## 5. Architectural Concerns
 
 ### 🔴 **Critical Issues**
+
 ```swift
 // Tight coupling with SKSpriteNode
 class ObstacleManager { // Should use protocol for testability
@@ -648,6 +708,7 @@ private let obstacleTypes: [ObstacleType] = [.normal, .fast, .large, .small]
 ```
 
 ### 🟡 **Moderate Issues**
+
 ```swift
 // No strategy pattern for spawning algorithms
 // Hardcoded spawning logic
@@ -659,6 +720,7 @@ private let obstacleTypes: [ObstacleType] = [.normal, .fast, .large, .small]
 ## 6. Documentation Needs
 
 ### 🔴 **Critical Issues**
+
 ```swift
 // Missing documentation for public interface
 weak var delegate: ObstacleDelegate? // No doc comment
@@ -667,6 +729,7 @@ weak var delegate: ObstacleDelegate? // No doc comment
 ```
 
 ### 🟡 **Moderate Issues**
+
 ```swift
 // Incomplete documentation for methods
 // No parameter documentation
@@ -678,6 +741,7 @@ private let obstacleTypes: [ObstacleType] // No explanation of differences
 ## Actionable Recommendations
 
 ### 1. **Immediate Fixes**
+
 ```swift
 // Add missing closing brace and complete the class
 }
@@ -687,6 +751,7 @@ private(set) var obstaclePool: [SKSpriteNode] = []
 ```
 
 ### 2. **Architecture Improvements**
+
 ```swift
 // Use protocol for obstacles
 protocol Obstacle {
@@ -702,6 +767,7 @@ class ObstacleManager<ObstacleType: Obstacle> {
 ```
 
 ### 3. **Thread Safety**
+
 ```swift
 // Add serial queue for thread safety
 private let accessQueue = DispatchQueue(label: "com.yourapp.obstaclemanager.queue")
@@ -714,6 +780,7 @@ func getObstacle() -> SKSpriteNode {
 ```
 
 ### 4. **Error Handling**
+
 ```swift
 // Add proper error handling
 enum ObstacleError: Error {
@@ -728,6 +795,7 @@ func spawnObstacle() throws -> SKSpriteNode {
 ```
 
 ### 5. **Documentation**
+
 ```swift
 /// Manages obstacle lifecycle with object pooling
 /// - Thread Safety: Not thread-safe. Access from main thread only.
@@ -740,6 +808,7 @@ class ObstacleManager {
 ```
 
 ### 6. **Performance Optimization**
+
 ```swift
 // Use more efficient data structure
 private var obstaclePool: Deque<SKSpriteNode> = Deque()
@@ -760,13 +829,13 @@ class ObstacleManager {
     private let scene: SKScene // Use strong reference if appropriate
     private let factory: ObstacleFactory
     private let pool: ObjectPool<SKSpriteNode>
-    
+
     init(scene: SKScene, factory: ObstacleFactory) {
         self.scene = scene
         self.factory = factory
         self.pool = ObjectPool(maxSize: 50, create: factory.createObstacle)
     }
-    
+
     // Add proper methods with error handling
 }
 ```
@@ -774,11 +843,13 @@ class ObstacleManager {
 **Priority**: High - The missing closing brace and architectural issues need immediate attention. The thread safety and documentation issues should be addressed before production deployment.
 
 ## GameViewController.swift
+
 # Code Review: GameViewController.swift
 
 ## 1. Code Quality Issues
 
 ### ✅ **Good Practices**
+
 - Clean, well-structured code
 - Proper use of optional binding (`if let`)
 - Appropriate access control (`public` where needed)
@@ -786,6 +857,7 @@ class ObstacleManager {
 ### ❌ **Issues Found**
 
 **Missing Implementation:**
+
 ```swift
 // The prefersStatusBarHidden property is incomplete
 override public var prefersStatusBarHidden: Bool {
@@ -795,6 +867,7 @@ override public var prefersStatusBarHidden: Bool {
 ```
 
 **Force Unwrapping Risk:**
+
 ```swift
 // While view is safely unwrapped, bounds.size could cause issues on some devices
 let scene = GameScene(size: view.bounds.size)
@@ -804,12 +877,14 @@ let scene = GameScene(size: view.bounds.size)
 ## 2. Performance Problems
 
 ### ✅ **Good Practices**
+
 - `ignoresSiblingOrder = true` improves rendering performance
 - Proper scene scaling mode (.aspectFill)
 
 ### ❌ **Issues Found**
 
 **No Memory Management:**
+
 ```swift
 // Missing deinit or cleanup code for scene transitions
 // Add memory management considerations:
@@ -821,6 +896,7 @@ deinit {
 ```
 
 **No Performance Optimization Hooks:**
+
 ```swift
 // Consider adding performance monitoring in debug builds
 #if DEBUG
@@ -832,11 +908,13 @@ view.showsNodeCount = true
 ## 3. Security Vulnerabilities
 
 ### ✅ **Good Practices**
+
 - No obvious security vulnerabilities in this view controller
 
 ### ❌ **Issues Found**
 
 **No Input Validation:**
+
 ```swift
 // While not critical here, consider validating scene size
 // to prevent potential crashes on unusual screen sizes
@@ -852,6 +930,7 @@ guard size.width > 0 && size.height > 0 else {
 ### ❌ **Issues Found**
 
 **Incomplete Property Implementation:**
+
 ```swift
 // Fix the incomplete property
 override public var prefersStatusBarHidden: Bool {
@@ -860,6 +939,7 @@ override public var prefersStatusBarHidden: Bool {
 ```
 
 **Missing Error Handling:**
+
 ```swift
 // Consider adding error handling for scene creation
 do {
@@ -877,6 +957,7 @@ do {
 ### ❌ **Issues Found**
 
 **Tight Coupling:**
+
 ```swift
 // Direct dependency on GameScene - consider using dependency injection
 // or a factory pattern for better testability
@@ -888,6 +969,7 @@ protocol SceneFactory {
 ```
 
 **No Unit Test Support:**
+
 ```swift
 // The class is not designed for testability
 // Consider making the SKView dependency injectable
@@ -898,6 +980,7 @@ protocol SceneFactory {
 ### ❌ **Issues Found**
 
 **Incomplete Documentation:**
+
 ```swift
 /// Add documentation for the incomplete property
 override public var prefersStatusBarHidden: Bool {
@@ -907,6 +990,7 @@ override public var prefersStatusBarHidden: Bool {
 ```
 
 **Missing Parameter Documentation:**
+
 ```swift
 // Add documentation for the orientation method
 /// - Returns: The supported interface orientations based on device type
@@ -916,6 +1000,7 @@ override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
 ## **Actionable Recommendations**
 
 1. **Fix the incomplete property:**
+
 ```swift
 override public var prefersStatusBarHidden: Bool {
     return true
@@ -923,6 +1008,7 @@ override public var prefersStatusBarHidden: Bool {
 ```
 
 2. **Add error handling and validation:**
+
 ```swift
 let size = view.bounds.size
 guard size.width > 100 && size.height > 100 else {
@@ -932,15 +1018,17 @@ guard size.width > 100 && size.height > 100 else {
 ```
 
 3. **Improve testability with dependency injection:**
+
 ```swift
 class GameViewController: UIViewController {
     var sceneFactory: SceneFactory = DefaultSceneFactory()
-    
+
     // Use factory to create scene instead of direct instantiation
 }
 ```
 
 4. **Add memory management:**
+
 ```swift
 deinit {
     (view as? SKView)?.presentScene(nil)
@@ -948,6 +1036,7 @@ deinit {
 ```
 
 5. **Add debug utilities:**
+
 ```swift
 #if DEBUG
 view.showsFPS = true
@@ -956,6 +1045,7 @@ view.showsNodeCount = true
 ```
 
 6. **Complete documentation:**
+
 ```swift
 /// Hides the status bar for immersive gameplay
 /// - Returns: Always returns true to hide status bar
@@ -971,16 +1061,19 @@ This is generally well-written code with good structure. The main critical issue
 **Priority Fix:** Complete the `prefersStatusBarHidden` property implementation immediately as it will cause compilation errors.
 
 ## EffectsManager.swift
+
 # Code Review for EffectsManager.swift
 
 ## 1. Code Quality Issues
 
 **Critical Issues:**
+
 - **Incomplete Implementation**: The `createExplosionEffect()` method only creates an empty `SKEmitterNode()` without any actual particle configuration. This appears to be a stub that was never completed.
 - **Missing Error Handling**: No fallback mechanisms when particle effects fail to load or initialize.
 - **Inconsistent Naming**: `createExplosionEffect()` vs `createTrailEffect()` vs `createSparkleEffect()` - but only explosion is implemented.
 
 **Specific Recommendations:**
+
 ```swift
 // Complete the particle effect implementations:
 private func createExplosionEffect() {
@@ -996,10 +1089,12 @@ private func createExplosionEffect() {
 ## 2. Performance Problems
 
 **Critical Issues:**
+
 - **Pool Implementation Missing**: The pool arrays (`explosionPool`, `trailPool`) are declared but never populated or used.
 - **No Pool Management**: The `maxExplosionPoolSize` and `maxTrailPoolSize` constants are defined but no logic exists to enforce these limits.
 
 **Specific Recommendations:**
+
 ```swift
 // Implement proper pool management:
 private func populatePools() {
@@ -1009,7 +1104,7 @@ private func populatePools() {
             explosionPool.append(emitter)
         }
     }
-    
+
     // Similar implementation for trail pool
 }
 
@@ -1025,25 +1120,28 @@ private func getExplosionFromPool() -> SKEmitterNode? {
 ## 3. Security Vulnerabilities
 
 **No Critical Security Issues Found**, but consider:
+
 - **Input Validation**: Future public methods should validate position parameters to prevent out-of-bounds rendering attempts.
 
 ## 4. Swift Best Practices Violations
 
 **Critical Issues:**
+
 - **Force Unwrapping**: `guard let explosion = explosionEmitter else { return }` is unnecessary since you just created it above.
 - **Missing Access Control**: No methods to actually use the effects (no public interface).
 - **Weak Reference Not Utilized**: The weak `scene` reference is appropriate but should be checked before use.
 
 **Specific Recommendations:**
+
 ```swift
 // Add proper access control and safe usage:
 public func createExplosion(at position: CGPoint) {
     guard let scene = scene else { return }
     guard let explosion = getExplosionFromPool() else { return }
-    
+
     explosion.position = position
     scene.addChild(explosion)
-    
+
     // Auto-remove after completion
     let wait = SKAction.wait(forDuration: explosion.particleLifetime + explosion.particleLifetimeRange)
     let remove = SKAction.removeFromParent()
@@ -1054,11 +1152,13 @@ public func createExplosion(at position: CGPoint) {
 ## 5. Architectural Concerns
 
 **Critical Issues:**
+
 - **Incomplete Class**: The class is essentially non-functional as it lacks any public interface.
 - **Tight Coupling**: Direct dependency on `SKScene` without abstraction.
 - **Missing Dependency Injection**: Hard dependency on a specific scene instance.
 
 **Specific Recommendations:**
+
 ```swift
 // Consider protocol-based architecture:
 protocol EffectsManagerProtocol {
@@ -1076,20 +1176,22 @@ class EffectsManager: EffectsManagerProtocol {
 ## 6. Documentation Needs
 
 **Critical Issues:**
+
 - **Incomplete Documentation**: Only basic class documentation exists.
 - **Missing Method Documentation**: No documentation for the purpose of each effect type.
 
 **Specific Recommendations:**
+
 ```swift
 /// Manages visual effects and animations using pooled emitters for performance
 class EffectsManager {
     // MARK: - Properties
-    
+
     /// Reference to the game scene where effects will be displayed
     private weak var scene: SKScene?
-    
+
     // MARK: - Public Methods
-    
+
     /// Creates an explosion effect at the specified position
     /// - Parameter position: The CGPoint where the explosion should originate
     func createExplosion(at position: CGPoint) {
@@ -1107,6 +1209,7 @@ This file appears to be an incomplete stub with critical functionality missing. 
 3. **No public API** - Cannot be used by other parts of the game
 
 **Action Plan:**
+
 1. Complete the particle effect loading with actual .sks files or programmatic configuration
 2. Implement the pooling system with proper management
 3. Add public methods for creating effects
@@ -1117,23 +1220,29 @@ This file appears to be an incomplete stub with critical functionality missing. 
 **Priority: High** - This class is currently non-functional and needs complete implementation before it can be used.
 
 ## GameStateManager.swift
+
 # Code Review for GameStateManager.swift
 
 ## 1. Code Quality Issues
 
 ### Incomplete Class Implementation
+
 ```swift
 // The class is incomplete - missing closing brace and potentially other properties/methods
 class GameStateManager {
     // ... properties defined but no methods shown
 ```
+
 **Action:** Complete the class implementation with proper closing braces and all necessary methods.
 
 ### Missing Initialization
+
 ```swift
 // No initializer provided for proper setup
 ```
+
 **Action:** Add an initializer to properly set up the initial state:
+
 ```swift
 init() {
     resetGame()
@@ -1143,6 +1252,7 @@ init() {
 ## 2. Performance Problems
 
 ### Potential Over-Notification
+
 ```swift
 private(set) var score: Int = 0 {
     didSet {
@@ -1151,7 +1261,9 @@ private(set) var score: Int = 0 {
     }
 }
 ```
+
 **Action:** Consider debouncing or batching difficulty updates if score changes frequently:
+
 ```swift
 private(set) var score: Int = 0 {
     didSet {
@@ -1167,30 +1279,38 @@ private(set) var score: Int = 0 {
 ## 3. Security Vulnerabilities
 
 ### No Obvious Security Issues
+
 The current code doesn't handle sensitive data, so no immediate security concerns.
 
 ## 4. Swift Best Practices Violations
 
 ### Missing Access Control
+
 ```swift
 // No access control specified for delegate
 weak var delegate: GameStateDelegate?
 ```
+
 **Action:** Add proper access control:
+
 ```swift
 public weak var delegate: GameStateDelegate?
 ```
 
 ### Incomplete Property Definitions
+
 ```swift
 // The class cuts off mid-property definition
 private(set) var currentDifficultyLevel: Int = 1
 ```
+
 **Action:** Complete all property definitions and ensure proper access control.
 
 ### Missing Error Handling
+
 No error handling mechanisms for invalid state transitions.
 **Action:** Add state validation:
+
 ```swift
 func changeState(to newState: GameState) {
     guard isValidTransition(from: currentState, to: newState) else {
@@ -1209,10 +1329,13 @@ private func isValidTransition(from oldState: GameState, to newState: GameState)
 ## 5. Architectural Concerns
 
 ### Tight Coupling with Delegate
+
 ```swift
 // The delegate pattern is good, but consider multiple observers
 ```
+
 **Action:** Consider using NotificationCenter for multiple observers or Combine framework for reactive programming:
+
 ```swift
 import Combine
 
@@ -1224,8 +1347,10 @@ class GameStateManager {
 ```
 
 ### Missing State Management Methods
+
 No methods to control state transitions (start, pause, resume, end game).
 **Action:** Add public methods:
+
 ```swift
 func startGame() {
     guard currentState == .waitingToStart else { return }
@@ -1251,10 +1376,13 @@ func endGame() {
 ## 6. Documentation Needs
 
 ### Missing Method Documentation
+
 ```swift
 // No documentation for the updateDifficultyIfNeeded method (implied but not shown)
 ```
+
 **Action:** Add comprehensive documentation:
+
 ```swift
 /// Updates the game difficulty based on the current score
 /// - Note: Difficulty increases every 100 points by default
@@ -1264,6 +1392,7 @@ private func updateDifficultyIfNeeded() {
 ```
 
 ### Incomplete Enum Documentation
+
 ```swift
 /// Represents the current state of the game
 enum GameState {
@@ -1273,7 +1402,9 @@ enum GameState {
     case gameOver
 }
 ```
+
 **Action:** Add documentation for each case:
+
 ```swift
 enum GameState {
     /// Game is ready to start but not yet active
@@ -1288,20 +1419,21 @@ enum GameState {
 ```
 
 ### Protocol Documentation Enhancement
+
 ```swift
 // Add more detailed protocol documentation
 protocol GameStateDelegate: AnyObject {
     /// Called when the game state changes
     func gameStateDidChange(from oldState: GameState, to newState: GameState)
-    
+
     /// Called when the score updates
     /// - Parameter newScore: The updated score value
     func scoreDidChange(to newScore: Int)
-    
+
     /// Called when difficulty level increases
     /// - Parameter level: The new difficulty level
     func difficultyDidIncrease(to level: Int)
-    
+
     /// Called when the game ends
     /// - Parameters:
     ///   - finalScore: The final score achieved
@@ -1313,6 +1445,7 @@ protocol GameStateDelegate: AnyObject {
 ## Additional Recommendations
 
 ### Add Time Tracking
+
 ```swift
 private var gameStartTime: Date?
 private(set) var survivalTime: TimeInterval = 0
@@ -1328,6 +1461,7 @@ private func calculateSurvivalTime() -> TimeInterval {
 ```
 
 ### Add Reset Functionality
+
 ```swift
 func resetGame() {
     score = 0
@@ -1339,6 +1473,7 @@ func resetGame() {
 ```
 
 ### Consider Thread Safety
+
 ```swift
 // Add thread safety for state changes
 private let stateQueue = DispatchQueue(label: "com.yourapp.gamestate.queue")
@@ -1352,6 +1487,7 @@ func changeState(to newState: GameState) {
 ```
 
 ### Implement Difficulty Progression Logic
+
 ```swift
 private func updateDifficultyIfNeeded() {
     let newLevel = calculateDifficultyLevel()
@@ -1370,11 +1506,13 @@ private func calculateDifficultyLevel() -> Int {
 The code shows good foundation with proper protocol usage and state management pattern, but needs completion and refinement for production readiness.
 
 ## AudioManager.swift
+
 # Code Review for AudioManager.swift
 
 ## 1. Code Quality Issues
 
 **🔴 Critical Issues:**
+
 ```swift
 // ❌ Missing access control for properties
 private var soundEffectsPlayer: AVAudioPlayer?  // Should be private
@@ -1385,12 +1523,14 @@ private let audioSession = AVAudioSession.sharedInstance()
 ```
 
 **🟡 Moderate Issues:**
+
 ```swift
 // ❌ Hardcoded UserDefaults keys - prone to typos and difficult to maintain
 UserDefaults.standard.bool(forKey: "audioEnabled")
 ```
 
 **Recommended Fix:**
+
 ```swift
 private enum UserDefaultsKeys {
     static let audioEnabled = "audioEnabled"
@@ -1408,12 +1548,14 @@ private var isAudioEnabled: Bool {
 ## 2. Performance Problems
 
 **🔴 Critical Issues:**
+
 ```swift
 // ❌ Pre-loading ALL sound effects into memory - could cause memory issues
 private var soundEffects: [String: AVAudioPlayer] = [:]
 ```
 
 **Recommended Fix:**
+
 ```swift
 // Use a more memory-efficient approach - load on demand with caching
 private var soundEffectsCache: [String: AVAudioPlayer] = [:]
@@ -1427,6 +1569,7 @@ private let cacheLimit = 10  // Limit cache size
 ## 4. Swift Best Practices Violations
 
 **🔴 Critical Issues:**
+
 ```swift
 // ❌ Missing initializer - singleton should be properly initialized
 static let shared = AudioManager()  // No custom init() method
@@ -1435,6 +1578,7 @@ static let shared = AudioManager()  // No custom init() method
 ```
 
 **🟡 Moderate Issues:**
+
 ```swift
 // ❌ Inconsistent naming - some properties use "soundEffects", others "soundEffectsPlayer"
 private var soundEffectsPlayer: AVAudioPlayer?
@@ -1444,20 +1588,21 @@ private var soundEffects: [String: AVAudioPlayer] = [:]
 ```
 
 **Recommended Fix:**
+
 ```swift
 public class AudioManager: NSObject {
     static let shared = AudioManager()
-    
+
     private override init() {
         super.init()
         setupAudioSession()
         setupAudioEngine()
     }
-    
+
     deinit {
         tearDownAudio()
     }
-    
+
     private func setupAudioSession() {
         do {
             try audioSession.setCategory(.ambient, mode: .default)
@@ -1472,6 +1617,7 @@ public class AudioManager: NSObject {
 ## 5. Architectural Concerns
 
 **🔴 Critical Issues:**
+
 ```swift
 // ❌ Mixing different audio paradigms - AVAudioEngine + AVAudioPlayer
 private let audioEngine = AVAudioEngine()  // Unused in current implementation
@@ -1481,12 +1627,14 @@ private var soundEffectsPlayer: AVAudioPlayer?  // Using simple players
 ```
 
 **🟡 Moderate Issues:**
+
 ```swift
 // ❌ Missing protocol abstraction - difficult to test
 // ❌ No dependency injection - hardcoded singleton pattern
 ```
 
 **Recommended Fix:**
+
 ```swift
 // Create a protocol for audio services
 protocol AudioService {
@@ -1500,7 +1648,7 @@ protocol AudioService {
 public class AudioManager: NSObject, AudioService {
     private let userDefaults: UserDefaults
     private let fileManager: FileManager
-    
+
     init(userDefaults: UserDefaults = .standard, fileManager: FileManager = .default) {
         self.userDefaults = userDefaults
         self.fileManager = fileManager
@@ -1512,22 +1660,24 @@ public class AudioManager: NSObject, AudioService {
 ## 6. Documentation Needs
 
 **🔴 Critical Issues:**
+
 ```swift
 // ❌ Missing documentation for public interface
 // ❌ No documentation for error cases and exceptions
 ```
 
 **Recommended Fix:**
+
 ```swift
 /// Manages all audio-related functionality including sound effects and background music
 /// - Note: This class is thread-safe and should be accessed through the shared instance
 /// - Important: Call `setup()` before using any audio functionality
 public class AudioManager: NSObject {
-    
+
     /// Shared singleton instance for audio management
     /// - Returns: The shared AudioManager instance
     static let shared = AudioManager()
-    
+
     /// Plays a sound effect with the specified name
     /// - Parameter name: The name of the sound effect file (without extension)
     /// - Throws: `AudioError.fileNotFound` if the sound file doesn't exist
@@ -1541,6 +1691,7 @@ public class AudioManager: NSObject {
 ## Additional Recommendations
 
 **Memory Management:**
+
 ```swift
 // Add memory management for audio players
 private func cleanupUnusedSoundEffects() {
@@ -1549,6 +1700,7 @@ private func cleanupUnusedSoundEffects() {
 ```
 
 **Error Handling:**
+
 ```swift
 // Define custom error types
 enum AudioError: Error {
@@ -1560,6 +1712,7 @@ enum AudioError: Error {
 ```
 
 **Testing Support:**
+
 ```swift
 // Add testing support
 #if DEBUG
@@ -1580,30 +1733,37 @@ var isTesting = false
 The current implementation has several critical issues that could lead to memory problems, crashes, and difficult-to-maintain code. The recommendations above would make the AudioManager more robust, testable, and maintainable.
 
 ## PhysicsCategory.swift
+
 ## Code Review: PhysicsCategory.swift
 
 ### 1. Code Quality Issues
+
 - **Missing category naming convention**: The categories use binary literals but lack explicit decimal comments for clarity
 - **No category for boundaries/ground**: The comment mentions "ground: 0b1000" but it's not implemented
 - **Missing collision handling structure**: No guidance on how these categories should interact
 
 ### 2. Performance Problems
+
 ✅ **No performance issues found** - The implementation uses static constants which are compile-time optimized in Swift.
 
-### 3. Security Vulnerabilities  
+### 3. Security Vulnerabilities
+
 ✅ **No security vulnerabilities** - This is a physics category definition file with no external input or sensitive operations.
 
 ### 4. Swift Best Practices Violations
+
 - **Missing access control**: All constants are implicitly `internal` - consider making them `public` if this is part of a framework
 - **No namespacing**: Consider nesting in a parent enum if this grows beyond simple categories
 - **Missing raw value representation**: Could benefit from `RawRepresentable` protocol for easier debugging
 
 ### 5. Architectural Concerns
+
 - **No collision matrix definition**: The categories exist but there's no guidance on which categories should collide with which others
 - **Scalability limitations**: Using individual bits limits to 32 categories - consider if this is sufficient for future needs
 - **Missing error handling**: No mechanism to detect duplicate or conflicting category assignments
 
 ### 6. Documentation Needs
+
 - **Missing usage examples**: No examples showing how to assign these categories to physics bodies
 - **No collision behavior documentation**: Should document expected interactions between categories
 - **Incomplete comments**: The "Add more categories" comment should include guidance on proper bit shifting
@@ -1611,6 +1771,7 @@ The current implementation has several critical issues that could lead to memory
 ### Actionable Recommendations
 
 **1. Add proper access control:**
+
 ```swift
 public enum PhysicsCategory {
     public static let none: UInt32 = 0
@@ -1620,6 +1781,7 @@ public enum PhysicsCategory {
 ```
 
 **2. Implement collision matrix (recommended addition):**
+
 ```swift
 // Add this struct to define collision behavior
 struct CollisionMatrix {
@@ -1630,6 +1792,7 @@ struct CollisionMatrix {
 ```
 
 **3. Improve documentation:**
+
 ```swift
 /// Physics categories using bitmask system for collision detection
 /// Usage: physicsBody.categoryBitMask = PhysicsCategory.player
@@ -1641,26 +1804,28 @@ public enum PhysicsCategory {
     static let player: UInt32 = 0b1      // 1 << 0
     /// Obstacle category (bit 1)
     static let obstacle: UInt32 = 0b10   // 1 << 1
-    /// Power-up category (bit 2) 
+    /// Power-up category (bit 2)
     static let powerUp: UInt32 = 0b100   // 1 << 2
     /// Ground/wall category (bit 3) - for boundary detection
     static let boundary: UInt32 = 0b1000 // 1 << 3
-    
+
     // Add new categories using: 1 << [next available bit position]
     // Maximum 32 unique categories due to UInt32 limitation
 }
 ```
 
 **4. Add bit shifting pattern for clarity:**
+
 ```swift
 // Replace binary literals with shift pattern for better readability
 static let player: UInt32 = 1 << 0    // Bit 0
-static let obstacle: UInt32 = 1 << 1  // Bit 1  
+static let obstacle: UInt32 = 1 << 1  // Bit 1
 static let powerUp: UInt32 = 1 << 2   // Bit 2
 static let boundary: UInt32 = 1 << 3  // Bit 3
 ```
 
 **5. Consider future-proofing with protocol:**
+
 ```swift
 // Optional: Create protocol for category management
 protocol Categorizable {
@@ -1673,42 +1838,47 @@ protocol Categorizable {
 The current implementation is functionally correct but lacks architectural completeness and proper documentation for team use. The recommendations focus on making the code more maintainable and self-documenting.
 
 ## HighScoreManager.swift
+
 # Code Review: HighScoreManager.swift
 
 ## 1. Code Quality Issues
 
 **Critical Issue:**
+
 ```swift
 // Incomplete implementation in addScore(_:) method
 func addScore(_ score: Int) -> Bool {
     var scores = getHighScores()
     scores.append(score)
     scores.sort(by: >)
-    
+
     // Keep only top 10 scores
     if scores.count > maxScores {
         scores = Array(scores.prefix(maxScores))
     // Missing closing brace and return statement
     // Method doesn't complete
 ```
+
 **Fix:** Complete the method with proper closing and return logic:
+
 ```swift
 func addScore(_ score: Int) -> Bool {
     var scores = getHighScores()
     scores.append(score)
     scores.sort(by: >)
-    
+
     // Keep only top 10 scores
     if scores.count > maxScores {
         scores = Array(scores.prefix(maxScores))
     }
-    
+
     UserDefaults.standard.set(scores, forKey: highScoresKey)
     return scores.contains(score)
 }
 ```
 
 **Redundant Sorting:**
+
 ```swift
 // getHighScores() already sorts, then addScore sorts again
 func addScore(_ score: Int) -> Bool {
@@ -1716,11 +1886,13 @@ func addScore(_ score: Int) -> Bool {
     scores.append(score)
     scores.sort(by: >)  // Sorting again
 ```
+
 **Fix:** Optimize by inserting in correct position:
+
 ```swift
 func addScore(_ score: Int) -> Bool {
     var scores = getHighScores()
-    
+
     // Insert score in correct position to maintain order
     if let index = scores.firstIndex(where: { $0 < score }) {
         scores.insert(score, at: index)
@@ -1729,12 +1901,12 @@ func addScore(_ score: Int) -> Bool {
     } else {
         return false  // Score not high enough
     }
-    
+
     // Trim to maxScores
     if scores.count > maxScores {
         scores = Array(scores.prefix(maxScores))
     }
-    
+
     UserDefaults.standard.set(scores, forKey: highScoresKey)
     return true
 }
@@ -1743,6 +1915,7 @@ func addScore(_ score: Int) -> Bool {
 ## 2. Performance Problems
 
 **Unnecessary Async Method:**
+
 ```swift
 func getHighScoresAsync() async -> [Int] {
     await Task.detached {
@@ -1751,9 +1924,11 @@ func getHighScoresAsync() async -> [Int] {
     }.value
 }
 ```
+
 **Issue:** UserDefaults is already thread-safe and lightweight. This async overhead is unnecessary.
 
 **Fix:** Remove or reconsider the need for async version:
+
 ```swift
 // Either remove entirely, or if async is truly needed:
 func getHighScoresAsync() async -> [Int] {
@@ -1770,12 +1945,14 @@ func getHighScoresAsync() async -> [Int] {
 ## 4. Swift Best Practices Violations
 
 **Inconsistent Error Handling:**
+
 ```swift
 // No error handling for UserDefaults operations
 UserDefaults.standard.array(forKey: highScoresKey) // Could fail silently
 ```
 
 **Fix:** Add proper error handling:
+
 ```swift
 func getHighScores() -> [Int] {
     do {
@@ -1791,6 +1968,7 @@ func getHighScores() -> [Int] {
 ```
 
 **Missing Access Control:**
+
 ```swift
 private let highScoresKey = "AvoidObstaclesHighScores"  // Good
 private let maxScores = 10  // Good
@@ -1800,11 +1978,14 @@ private let maxScores = 10  // Good
 ## 5. Architectural Concerns
 
 **Singleton Pattern:**
+
 ```swift
 static let shared = HighScoreManager()
 private init() {}
 ```
+
 **Consideration:** While appropriate for this use case, consider dependency injection for testability:
+
 ```swift
 // Consider protocol for better testability
 protocol HighScoreManaging {
@@ -1821,14 +2002,15 @@ class HighScoreManager: HighScoreManaging {
 **Issue:** Tight coupling to UserDefaults makes testing difficult.
 
 **Fix:** Consider dependency injection:
+
 ```swift
 class HighScoreManager {
     private let storage: UserDefaults
-    
+
     init(storage: UserDefaults = .standard) {
         self.storage = storage
     }
-    
+
     func getHighScores() -> [Int] {
         return storage.array(forKey: highScoresKey) as? [Int] ?? []
     }
@@ -1838,15 +2020,18 @@ class HighScoreManager {
 ## 6. Documentation Needs
 
 **Missing Parameter Documentation:**
+
 ```swift
 /// Adds a new score to the high scores list.
 /// - Parameter score: The score to add.
 /// - Returns: True if the score is in the top 10 after adding, false otherwise.
 func addScore(_ score: Int) -> Bool {
 ```
+
 **Good:** Documentation is clear and complete.
 
 **Consider Adding:**
+
 ```swift
 /// - Note: Scores are persisted using UserDefaults and are shared across app sessions
 /// - Warning: Clearing app data will remove all high scores
@@ -1869,58 +2054,58 @@ import Foundation
 class HighScoreManager {
     /// Shared singleton instance for global access.
     static let shared = HighScoreManager()
-    
+
     /// UserDefaults key for storing high scores.
     private static let highScoresKey = "AvoidObstaclesHighScores"
     /// Maximum number of high scores to keep.
     private static let maxScores = 10
-    
+
     private let storage: UserDefaults
-    
+
     /// Initializer with configurable storage for testing
     init(storage: UserDefaults = .standard) {
         self.storage = storage
     }
-    
+
     /// Private initializer to enforce singleton usage.
     private convenience init() {
         self.init(storage: .standard)
     }
-    
+
     /// Retrieves all high scores sorted from highest to lowest.
     /// - Returns: An array of high scores in descending order.
     func getHighScores() -> [Int] {
         return storage.array(forKey: Self.highScoresKey) as? [Int] ?? []
             .sorted(by: >)
     }
-    
+
     /// Adds a new score to the high scores list.
     /// - Parameter score: The score to add.
     /// - Returns: True if the score was added to the top scores, false otherwise.
     func addScore(_ score: Int) -> Bool {
         var scores = getHighScores()
-        
+
         // Check if score qualifies for top scores
         guard scores.count < Self.maxScores || score > scores.last! else {
             return false
         }
-        
+
         // Insert in correct position
         if let index = scores.firstIndex(where: { $0 < score }) {
             scores.insert(score, at: index)
         } else {
             scores.append(score)
         }
-        
+
         // Trim to max scores
         if scores.count > Self.maxScores {
             scores = Array(scores.prefix(Self.maxScores))
         }
-        
+
         storage.set(scores, forKey: Self.highScoresKey)
         return true
     }
-    
+
     /// Clears all high scores from storage.
     func clearScores() {
         storage.removeObject(forKey: Self.highScoresKey)

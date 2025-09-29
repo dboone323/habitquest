@@ -44,12 +44,12 @@ public struct CalendarEvent: Identifiable, Codable {
     /// - Returns: A `CKRecord` representing this event.
     func toCKRecord() -> CKRecord {
         let record = CKRecord(
-            recordType: "CalendarEvent", recordID: CKRecord.ID(recordName: id.uuidString)
+            recordType: "CalendarEvent", recordID: CKRecord.ID(recordName: self.id.uuidString)
         )
-        record["title"] = title
-        record["date"] = date
-        record["createdAt"] = createdAt
-        record["modifiedAt"] = modifiedAt
+        record["title"] = self.title
+        record["date"] = self.date
+        record["createdAt"] = self.createdAt
+        record["modifiedAt"] = self.modifiedAt
         return record
     }
 

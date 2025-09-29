@@ -1,336 +1,315 @@
 #!/bin/bash
+set -euo pipefail
+
 # Security Metrics Collection and Analysis
 # Tracks security trends and generates reports
 
-WORKSPACE="/Users/danielstevens/Desktop/Quantum-workspace"
-METRICS_DIR="${WORKSPACE}/Tools/Automation/metrics"
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+WORKSPACE_ROOT=$(cd "${SCRIPT_DIR}/.." && pwd)
+METRICS_DIR="${WORKSPACE_ROOT}/Tools/Automation/metrics"
 HISTORY_DIR="${METRICS_DIR}/history"
 REPORTS_DIR="${METRICS_DIR}/reports"
-LOG_FILE="${WORKSPACE}/Tools/Automation/logs/security_metrics.log"
+LOG_FILE="${WORKSPACE_ROOT}/Tools/Automation/logs/security_metrics.log"
+CURRENT_METRICS="${METRICS_DIR}/security_metrics.json"
 
-# Colors for output
-BLUE='\033[0;34m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-NC='\033[0m'
+mkdir -p "${HISTORY_DIR}" "${REPORTS_DIR}" "$(dirname "${LOG_FILE}")"
 
-# Logging function
-log() {
-    echo "${BLUE}[$(date '+%Y-%m-%d %H:%M:%S')]${NC} $*" | tee -a "${LOG_FILE}"
+if [[ -t 1 ]]; then
+  BLUE='\033[0;34m'
+  NC='\033[0m'
+else
+  BLUE=''
+  NC=''
+fi
+
+log_info() {
+  printf '%s[%s] %s%s\n' "${BLUE}" "$(date '+%Y-%m-%d %H:%M:%S')" "$1" "${NC}" | tee -a "${LOG_FILE}"
 }
 
-# Initialize directories
-init_directories() {
-    mkdir -p "${HISTORY_DIR}" "${REPORTS_DIR}"
+latest_metric_file() {
+  python3 - "${HISTORY_DIR}" <<'PY' || true
+import os
+import sys
+from pathlib import Path
+
+history_dir = Path(sys.argv[1])
+files = sorted(history_dir.glob('security_metrics_*.json'), key=os.path.getmtime, reverse=True)
+if files:
+    print(files[0])
+PY
 }
 
-# Collect current security metrics
 collect_metrics() {
-    log "Collecting current security metrics..."
+  log_info "Collecting current security metrics"
 
-    local timestamp
-    timestamp=$(date '+%Y%m%d_%H%M%S')
-    local metrics_file="${HISTORY_DIR}/security_metrics_${timestamp}.json"
-
-    # Run security scan to get current data
-    cd "${WORKSPACE}/Tools" || { log "Failed to change to Tools directory"; return 1; }
-    ./security_monitor.sh scan > /dev/null 2>&1
-
-    # Read current metrics
-    if [[ -f "${WORKSPACE}/Tools/Automation/metrics/security_metrics.json" ]]; then
-        cp "${WORKSPACE}/Tools/Automation/metrics/security_metrics.json" "${metrics_file}"
-
-        # Add additional metrics
-        jq ".timestamp = \"${timestamp}\" | .collection_date = \"$(date '+%Y-%m-%d %H:%M:%S')\"" "${metrics_file}" > "${metrics_file}.tmp" && mv "${metrics_file}.tmp" "${metrics_file}"
-
-        log "Metrics collected and stored: ${metrics_file}"
-    else
-        log "Warning: Could not find current metrics file"
+  if [[ ! -f "${SCRIPT_DIR}/security_monitor.sh" ]]; then
+    log_info "security_monitor.sh not found; skipping scan"
+  else
+    if ! (cd "${SCRIPT_DIR}" && ./security_monitor.sh scan >/dev/null 2>&1); then
+      log_info "security_monitor.sh scan failed; continuing"
     fi
+  fi
+
+  if [[ ! -f ${CURRENT_METRICS} ]]; then
+    log_info "Current metrics file not found at ${CURRENT_METRICS}"
+    return 1
+  fi
+
+  local timestamp
+  timestamp=$(date '+%Y%m%d_%H%M%S')
+  local dest="${HISTORY_DIR}/security_metrics_${timestamp}.json"
+
+  jq --arg ts "${timestamp}" \
+    --arg collected "$(date '+%Y-%m-%d %H:%M:%S')" \
+    '.timestamp = $ts | .collection_date = $collected' \
+    "${CURRENT_METRICS}" >"${dest}"
+
+  log_info "Stored metrics snapshot at ${dest}"
 }
 
-# Analyze security trends
 analyze_trends() {
-    log "Analyzing security trends..."
+  log_info "Analyzing security trends"
 
-    local date_str
-    date_str=$(date '+%Y%m%d')
-    local trend_report="${REPORTS_DIR}/security_trends_${date_str}.json"
+  local trend_report
+  trend_report="${REPORTS_DIR}/security_trends_$(date '+%Y%m%d').json"
 
-    # Get all historical metrics files
-    local metrics_files=()
-    while IFS= read -r file; do
-        metrics_files+=("${file}")
-    done < <(ls -t "${HISTORY_DIR}"/security_metrics_*.json 2>/dev/null | head -30)
-
-    if [[ ${#metrics_files[@]} -lt 2 ]]; then
-        log "Not enough historical data for trend analysis (need at least 2 data points)"
-        return
-    fi
-
-    # Analyze trends
-    python3 -c "
+  python3 - "${HISTORY_DIR}" "${trend_report}" <<'PY' || exit 1
 import json
 import os
-from datetime import datetime
 import statistics
+import sys
+from pathlib import Path
 
-metrics_files = [
-$(printf "'%s',\n" "${metrics_files[@]}")
-]
+history_dir = Path(sys.argv[1])
+output_path = Path(sys.argv[2])
+
+files = sorted(history_dir.glob('security_metrics_*.json'), key=os.path.getmtime, reverse=True)
+files = files[:30]
+
+if len(files) < 2:
+    print('Insufficient data for trend analysis')
+    sys.exit(0)
 
 data_points = []
-for file_path in metrics_files:
+for file in files:
     try:
-        with open(file_path.strip(',').strip(), 'r') as f:
-            data = json.load(f)
-            data_points.append({
-                'timestamp': data.get('timestamp', ''),
-                'date': data.get('collection_date', ''),
-                'security_score': data.get('security_score', 0),
-                'critical': data.get('vulnerabilities', {}).get('critical', 0),
-                'high': data.get('vulnerabilities', {}).get('high', 0),
-                'medium': data.get('vulnerabilities', {}).get('medium', 0),
-                'projects': data.get('projects', {})
-            })
-    except Exception as e:
-        pass
+        with file.open('r', encoding='utf-8') as handle:
+            data = json.load(handle)
+    except (json.JSONDecodeError, OSError):
+        continue
+    data_points.append(
+        {
+            "timestamp": data.get("timestamp", ""),
+            "date": data.get("collection_date", ""),
+            "security_score": data.get("security_score", 0),
+            "vulnerabilities": data.get("vulnerabilities", {}),
+            "projects": data.get("projects", {}),
+        }
+    )
 
-# Calculate trends
-if len(data_points) >= 2:
-    scores = [p['security_score'] for p in data_points]
-    critical_counts = [p['critical'] for p in data_points]
+if len(data_points) < 2:
+    print('Insufficient clean data for trend analysis')
+    sys.exit(0)
 
-    trend_analysis = {
-        'period': {
-            'start': data_points[-1]['date'],
-            'end': data_points[0]['date'],
-            'data_points': len(data_points)
+scores = [point["security_score"] for point in data_points]
+critical_counts = [point["vulnerabilities"].get("critical", 0) for point in data_points]
+
+trend = {
+    "period": {
+        "start": data_points[-1]["date"],
+        "end": data_points[0]["date"],
+        "data_points": len(data_points),
+    },
+    "overall_trend": {
+        "security_score": {
+            "current": scores[0],
+            "previous": scores[1],
+            "change": scores[0] - scores[1],
+            "direction": "improving" if scores[0] > scores[1] else "declining" if scores[0] < scores[1] else "stable",
         },
-        'overall_trend': {
-            'security_score': {
-                'current': scores[0],
-                'previous': scores[1] if len(scores) > 1 else scores[0],
-                'change': scores[0] - (scores[1] if len(scores) > 1 else scores[0]),
-                'direction': 'improving' if scores[0] > scores[1] else 'declining' if len(scores) > 1 else 'stable'
-            },
-            'critical_vulnerabilities': {
-                'current': critical_counts[0],
-                'previous': critical_counts[1] if len(critical_counts) > 1 else critical_counts[0],
-                'change': critical_counts[0] - (critical_counts[1] if len(critical_counts) > 1 else critical_counts[0])
-            }
+        "critical_vulnerabilities": {
+            "current": critical_counts[0],
+            "previous": critical_counts[1],
+            "change": critical_counts[0] - critical_counts[1],
         },
-        'project_trends': {}
+    },
+    "project_trends": {},
+}
+
+latest_projects = data_points[0]["projects"] or {}
+for project, values in latest_projects.items():
+    project_scores = [point["projects"].get(project, {}).get("score") for point in data_points]
+    project_scores = [score for score in project_scores if score is not None]
+    if len(project_scores) < 2:
+        continue
+    trend["project_trends"][project] = {
+        "current_score": project_scores[0],
+        "previous_score": project_scores[1],
+        "change": project_scores[0] - project_scores[1],
+        "direction": "improving" if project_scores[0] > project_scores[1] else "declining",
     }
 
-    # Analyze project-specific trends
-    if data_points[0]['projects']:
-        for project_name in data_points[0]['projects'].keys():
-            project_scores = []
-            for point in data_points:
-                if project_name in point['projects']:
-                    project_scores.append(point['projects'][project_name]['score'])
+if len(scores) > 1:
+    trend["statistics"] = {
+        "average_score": statistics.mean(scores),
+        "score_volatility": statistics.stdev(scores) if len(scores) > 1 else 0,
+        "best_score": max(scores),
+        "worst_score": min(scores),
+    }
 
-            if len(project_scores) >= 2:
-                trend_analysis['project_trends'][project_name] = {
-                    'current_score': project_scores[0],
-                    'previous_score': project_scores[1],
-                    'change': project_scores[0] - project_scores[1],
-                    'direction': 'improving' if project_scores[0] > project_scores[1] else 'declining'
-                }
+output_path.parent.mkdir(parents=True, exist_ok=True)
+with output_path.open('w', encoding='utf-8') as handle:
+    json.dump(trend, handle, indent=2)
 
-    # Calculate averages and volatility
-    if len(scores) > 1:
-        trend_analysis['statistics'] = {
-            'average_score': statistics.mean(scores),
-            'score_volatility': statistics.stdev(scores) if len(scores) > 1 else 0,
-            'best_score': max(scores),
-            'worst_score': min(scores)
-        }
+print(f'Trend analysis written to {output_path}')
+PY
 
-    with open('${trend_report}', 'w') as f:
-        json.dump(trend_analysis, f, indent=2)
-
-    print(f'Trend analysis completed: {len(data_points)} data points analyzed')
-else:
-    print('Insufficient data for trend analysis')
-"
-
-    if [[ -f "${trend_report}" ]]; then
-        log "Trend analysis completed: ${trend_report}"
-    fi
+  log_info "Trend analysis complete"
 }
 
-# Generate security metrics report
 generate_report() {
-    log "Generating security metrics report..."
+  log_info "Generating security metrics report"
 
-    local timestamp_str
-    timestamp_str=$(date '+%Y%m%d_%H%M%S')
-    local report_file="${REPORTS_DIR}/security_metrics_report_${timestamp_str}.md"
+  local latest
+  latest=$(latest_metric_file)
+  if [[ -z ${latest} ]]; then
+    log_info "No metrics snapshots available"
+    return 1
+  fi
 
-    # Get latest metrics
-    local latest_metrics
-    latest_metrics=$(ls -t "${HISTORY_DIR}"/security_metrics_*.json 2>/dev/null | head -1)
+  local report
+  report="${REPORTS_DIR}/security_metrics_report_$(date '+%Y%m%d_%H%M%S').md"
+  local trend_file
+  trend_file="${REPORTS_DIR}/security_trends_$(date '+%Y%m%d').json"
 
-    if [[ -z "${latest_metrics}" ]]; then
-        log "No metrics data available for report generation"
-        return
-    fi
+  {
+    printf '# Security Metrics Report\nGenerated: %s\n\n' "$(date '+%Y-%m-%d %H:%M:%S')"
+    printf '## Current Security Status\n\n'
+  } >"${report}"
 
-    # Get trend data
-    local date_today
-    date_today=$(date '+%Y%m%d')
-    local trend_data="${REPORTS_DIR}/security_trends_${date_today}.json"
+  {
+    jq -r '
+      "## Overall Security Score: \(.security_score)%",
+      "",
+      "### Vulnerability Summary",
+      "| Severity | Count |",
+      "|----------|-------|",
+      "| Critical | \(.vulnerabilities.critical) |",
+      "| High     | \(.vulnerabilities.high) |",
+      "| Medium   | \(.vulnerabilities.medium) |",
+      "| Low      | \(.vulnerabilities.low) |",
+      "",
+      "### Project Scores",
+      "| Project | Score | Issues |",
+      "|---------|-------|--------|"
+    ' "${latest}"
+    jq -r '.projects | to_entries[] | "| \(.key) | \(.value.score)% | \(.value.issues) |"' "${latest}"
+    printf '\n'
+  } >>"${report}"
 
-    cat > "${report_file}" << EOF
-# Security Metrics Report
-Generated: $(date '+%Y-%m-%d %H:%M:%S')
+  if [[ -f ${trend_file} ]]; then
+    {
+      printf '## Security Trends\n\n'
+      jq -r '
+        "Period: \(.period.start) to \(.period.end) (\(.period.data_points) data points)",
+        "",
+        "### Overall Trend",
+        "- Security Score: \(.overall_trend.security_score.current)% (change: \(.overall_trend.security_score.change)) - \(.overall_trend.security_score.direction)",
+        "- Critical Vulnerabilities: \(.overall_trend.critical_vulnerabilities.current) (change: \(.overall_trend.critical_vulnerabilities.change))",
+        ""
+      ' "${trend_file}"
 
-## Current Security Status
-
-EOF
-
-    # Add current metrics
-    if [[ -f "${latest_metrics}" ]]; then
+      if jq -e '.project_trends | length > 0' "${trend_file}" >/dev/null 2>&1; then
         jq -r '
-            "## Overall Security Score: \(.security_score)%",
-            "",
-            "### Vulnerability Summary",
-            "| Severity | Count |",
-            "|----------|-------|",
-            "| Critical | \(.vulnerabilities.critical) |",
-            "| High     | \(.vulnerabilities.high) |",
-            "| Medium   | \(.vulnerabilities.medium) |",
-            "| Low      | \(.vulnerabilities.low) |",
-            "",
-            "### Project Scores",
-            "| Project | Score | Issues |",
-            "|---------|-------|--------|"
-        ' "${latest_metrics}" >> "${report_file}"
+          "### Project Trends",
+          (.project_trends | to_entries[] | "- \(.key): \(.value.current_score)% (change: \(.value.change)) - \(.value.direction)")
+        ' "${trend_file}"
+        printf '\n'
+      fi
 
-        # Add project details
-        jq -r '.projects | to_entries[] | "| \(.key) | \(.value.score)% | \(.value.issues) |"' "${latest_metrics}" >> "${report_file}"
-
-        echo "" >> "${report_file}"
-    fi
-
-    # Add trend analysis
-    if [[ -f "${trend_data}" ]]; then
-        cat >> "${report_file}" << EOF
-
-## Security Trends
-
-EOF
-
+      if jq -e '.statistics' "${trend_file}" >/dev/null 2>&1; then
         jq -r '
-            "Period: \(.period.start) to \(.period.end) (\(.period.data_points) data points)",
-            "",
-            "### Overall Trend",
-            "- Security Score: \(.overall_trend.security_score.current)% (change: \(.overall_trend.security_score.change)) - \(.overall_trend.security_score.direction)",
-            "- Critical Vulnerabilities: \(.overall_trend.critical_vulnerabilities.current) (change: \(.overall_trend.critical_vulnerabilities.change))",
-            ""
-        ' "${trend_data}" >> "${report_file}"
+          "### Statistics",
+          (.statistics |
+            "- Average Score: \(.average_score | floor)%",
+            "- Score Volatility: \(.score_volatility)",
+            "- Best Score: \(.best_score)%",
+            "- Worst Score: \(.worst_score)%"
+          )
+        ' "${trend_file}"
+        printf '\n'
+      fi
+    } >>"${report}"
+  fi
 
-        # Add project trends
-        if jq -e '.project_trends | length > 0' "${trend_data}" > /dev/null 2>&1; then
-            echo "### Project Trends" >> "${report_file}"
-            jq -r '.project_trends | to_entries[] | "- \(.key): \(.value.current_score)% (change: \(.value.change)) - \(.value.direction)"' "${trend_data}" >> "${report_file}"
-            echo "" >> "${report_file}"
-        fi
+  {
+    printf '## Recommendations\n\n'
+    local critical_count security_score
+    critical_count=$(jq -r '.vulnerabilities.critical' "${latest}")
+    security_score=$(jq -r '.security_score' "${latest}")
 
-        # Add statistics
-        if jq -e '.statistics' "${trend_data}" > /dev/null 2>&1; then
-            cat >> "${report_file}" << EOF
-
-### Statistics
-EOF
-            jq -r '
-                .statistics |
-                "- Average Score: \(.average_score | floor)%",
-                "- Score Volatility: \(.score_volatility | . * 100 | floor | . / 100)",
-                "- Best Score: \(.best_score)%",
-                "- Worst Score: \(.worst_score)%"
-            ' "${trend_data}" >> "${report_file}"
-        fi
+    if ((critical_count > 0)); then
+      printf '- **CRITICAL**: Address %s critical vulnerabilities immediately\n' "${critical_count}"
     fi
 
-    cat >> "${report_file}" << EOF
-
-## Recommendations
-
-EOF
-
-    # Generate recommendations based on current status
-    if [[ -f "${latest_metrics}" ]]; then
-        local critical_count
-        critical_count=$(jq -r '.vulnerabilities.critical' "${latest_metrics}")
-        local security_score
-        security_score=$(jq -r '.security_score' "${latest_metrics}")
-
-        if [[ ${critical_count} -gt 0 ]]; then
-            echo "- **CRITICAL**: Address ${critical_count} critical vulnerabilities immediately" >> "${report_file}"
-        fi
-
-        if [[ ${security_score} -lt 50 ]]; then
-            echo "- **HIGH PRIORITY**: Security score is critically low (${security_score}%). Immediate remediation required." >> "${report_file}"
-        elif [[ ${security_score} -lt 70 ]]; then
-            echo "- **MEDIUM PRIORITY**: Security score needs improvement (${security_score}%)." >> "${report_file}"
-        else
-            echo "- Security score is acceptable (${security_score}%). Continue monitoring." >> "${report_file}"
-        fi
-
-        # Project-specific recommendations
-        jq -r '.projects | to_entries[] | select(.value.score < 70) | "- Review \(.key) project (score: \(.value.score)%)"' "${latest_metrics}" >> "${report_file}"
+    if ((security_score < 50)); then
+      printf '- **HIGH PRIORITY**: Security score is critically low (%s%%). Immediate remediation required.\n' "${security_score}"
+    elif ((security_score < 70)); then
+      printf '- **MEDIUM PRIORITY**: Security score needs improvement (%s%%).\n' "${security_score}"
+    else
+      printf '- Security score is acceptable (%s%%). Continue monitoring.\n' "${security_score}"
     fi
 
-    log "Security metrics report generated: ${report_file}"
+    jq -r '.projects | to_entries[] | select(.value.score < 70) | "- Review \(.key) project (score: \(.value.score)%)"' "${latest}"
+  } >>"${report}"
+
+  log_info "Report generated at ${report}"
 }
 
-# Clean up old metrics files (keep last 90 days)
 cleanup_old_metrics() {
-    log "Cleaning up old metrics files..."
-
-    # Remove files older than 90 days
-    find "${HISTORY_DIR}" -name "security_metrics_*.json" -mtime +90 -delete 2>/dev/null || true
-    find "${REPORTS_DIR}" -name "*.md" -mtime +90 -delete 2>/dev/null || true
-    find "${REPORTS_DIR}" -name "*.json" -mtime +90 -delete 2>/dev/null || true
-
-    log "Cleanup completed"
+  log_info "Cleaning up metrics older than 90 days"
+  find "${HISTORY_DIR}" -type f -name 'security_metrics_*.json' -mtime +90 -delete 2>/dev/null || true
+  find "${REPORTS_DIR}" -type f \( -name '*.md' -o -name '*.json' \) -mtime +90 -delete 2>/dev/null || true
 }
 
-# Main execution
-case "${1:-}" in
-    "collect")
-        init_directories
-        collect_metrics
-        ;;
-    "analyze")
-        init_directories
-        analyze_trends
-        ;;
-    "report")
-        init_directories
-        generate_report
-        ;;
-    "full")
-        init_directories
-        collect_metrics
-        analyze_trends
-        generate_report
-        cleanup_old_metrics
-        ;;
-    "cleanup")
-        cleanup_old_metrics
-        ;;
-    *)
-        echo "Usage: $0 {collect|analyze|report|full|cleanup}"
-        echo "  collect  - Collect current security metrics"
-        echo "  analyze  - Analyze security trends"
-        echo "  report   - Generate security metrics report"
-        echo "  full     - Run complete metrics collection and analysis"
-        echo "  cleanup  - Clean up old metrics files"
-        exit 1
-        ;;
-esac
+main() {
+  local command=${1:-help}
+  case "${command}" in
+  collect)
+    collect_metrics
+    ;;
+  analyze)
+    analyze_trends
+    ;;
+  report)
+    generate_report
+    ;;
+  full)
+    collect_metrics
+    analyze_trends
+    generate_report
+    cleanup_old_metrics
+    ;;
+  cleanup)
+    cleanup_old_metrics
+    ;;
+  help | "" | -h | --help)
+    cat <<'EOF'
+Usage: security_metrics.sh <command>
+
+Commands:
+  collect   Capture a new metrics snapshot
+  analyze   Build security trend data
+  report    Generate the latest Markdown report
+  full      Run collect, analyze, report, then cleanup
+  cleanup   Remove reports and metrics older than 90 days
+EOF
+    ;;
+  *)
+    printf 'Unknown command: %s\n' "${command}" >&2
+    return 1
+    ;;
+  esac
+}
+
+main "$@"

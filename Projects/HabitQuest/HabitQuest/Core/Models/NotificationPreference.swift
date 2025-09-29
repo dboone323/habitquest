@@ -32,7 +32,14 @@ final class NotificationPreference {
 final class NotificationInteractionLog {
     var id: UUID
     var habitId: UUID
-    var interaction: NotificationInteraction
+    var interactionRawValue: String
+
+    @Transient
+    var interaction: NotificationInteraction {
+        get { NotificationInteraction(rawValue: self.interactionRawValue) ?? .ignored }
+        set { self.interactionRawValue = newValue.rawValue }
+    }
+
     var timestamp: Date
     var scheduledHour: Int
     var responseDelay: TimeInterval?
@@ -46,7 +53,7 @@ final class NotificationInteractionLog {
     ) {
         self.id = UUID()
         self.habitId = habitId
-        self.interaction = interaction
+        self.interactionRawValue = interaction.rawValue
         self.timestamp = timestamp
         self.scheduledHour = scheduledHour
         self.responseDelay = responseDelay

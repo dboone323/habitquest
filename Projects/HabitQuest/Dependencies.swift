@@ -42,40 +42,40 @@ public final class Logger {
     private init() {}
 
     public func log(_ message: String, level: LogLevel = .info) {
-        queue.async {
+        self.queue.async {
             self.outputHandler(self.formattedMessage(message, level: level))
         }
     }
 
     public func logSync(_ message: String, level: LogLevel = .info) {
-        queue.sync {
+        self.queue.sync {
             self.outputHandler(self.formattedMessage(message, level: level))
         }
     }
 
     @inlinable
     public func error(_ message: String) {
-        log(message, level: .error)
+        self.log(message, level: .error)
     }
 
     @inlinable
     public func warning(_ message: String) {
-        log(message, level: .warning)
+        self.log(message, level: .warning)
     }
 
     @inlinable
     public func info(_ message: String) {
-        log(message, level: .info)
+        self.log(message, level: .info)
     }
 
     public func setOutputHandler(_ handler: @escaping @Sendable (String) -> Void) {
-        queue.sync {
+        self.queue.sync {
             self.outputHandler = handler
         }
     }
 
     public func resetOutputHandler() {
-        setOutputHandler(Logger.defaultOutputHandler)
+        self.setOutputHandler(Logger.defaultOutputHandler)
     }
 
     private func formattedMessage(_ message: String, level: LogLevel) -> String {

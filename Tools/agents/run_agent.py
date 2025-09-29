@@ -45,7 +45,8 @@ def write_pid(pidfile):
     try:
         with open(pidfile, "w") as f:
             f.write(str(os.getpid()))
-    except Exception:
+    except (IOError, OSError):
+        # PID file write failure is not critical
         pass
 
 
@@ -71,19 +72,16 @@ def _with_file_lock(path, func, *a, **kw):
     locker = None
     try:
         import portalocker
-
         locker = "portalocker"
-    except Exception:
+    except ImportError:
         try:
             import fcntl
-
             locker = "fcntl"
-        except Exception:
+        except ImportError:
             try:
                 import msvcrt
-
                 locker = "msvcrt"
-            except Exception:
+            except ImportError:
                 locker = None
 
     if locker == "portalocker":
@@ -123,13 +121,24 @@ def _with_file_lock(path, func, *a, **kw):
 
         fd = open(path, "a+")
         try:
-            msvcrt.locking(fd.fileno(), msvcrt.LK_LOCK, 1)
-            return func(*a, **kw)
+            # Check if msvcrt has the required locking attributes
+            if (
+                hasattr(msvcrt, "locking")
+                and hasattr(msvcrt, "LK_LOCK")
+                and hasattr(msvcrt, "LK_UN")
+            ):
+                msvcrt.locking(fd.fileno(), msvcrt.LK_LOCK, 1)
+                try:
+                    return func(*a, **kw)
+                finally:
+                    try:
+                        msvcrt.locking(fd.fileno(), msvcrt.LK_UN, 1)
+                    except Exception:
+                        pass
+            else:
+                # Fallback: no locking available on this Windows system
+                return func(*a, **kw)
         finally:
-            try:
-                msvcrt.locking(fd.fileno(), msvcrt.LK_UN, 1)
-            except Exception:
-                pass
             try:
                 fd.close()
             except Exception:
@@ -230,13 +239,15 @@ def main():
                 sa = srv.socket.getsockname()
                 print(f"health listening on {sa}")
                 srv.serve_forever()
-            except Exception:
+            except (OSError, KeyboardInterrupt):
+                # Health server failure is not critical
                 pass
 
         import threading
 
         threading.Thread(target=run_health, daemon=True).start()
-    except Exception:
+    except ImportError:
+        # HTTP server not available, skip health endpoint
         pass
 
     # try registering a few times
@@ -276,7 +287,7 @@ def main():
                                     marker
                                 ):
                                     # create backup file and marker under a file lock; best-effort
-                                    def _do_backup():
+                                    def _do_backup(target=target, marker=marker):
                                         bak = perform_backup(target)
                                         try:
                                             _atomic_write(marker, str(bak or ""))
@@ -306,7 +317,7 @@ def main():
                                     and not os.path.exists(marker)
                                 ):
 
-                                    def _do_backup_marker():
+                                    def _do_backup_marker(target=target, marker=marker):
                                         bak = perform_backup(target)
                                         try:
                                             _atomic_write(marker, str(bak or ""))
@@ -364,8 +375,9 @@ def main():
 
                             except Exception as e:
                                 print(f"execute request failed: {e}")
-                except Exception:
-                    pass
+                except (requests.RequestException, ValueError, KeyError) as e:
+                    # Network or parsing errors in task polling are not critical
+                    print(f"task polling failed: {e}")
 
             time.sleep(args.interval)
     except KeyboardInterrupt:

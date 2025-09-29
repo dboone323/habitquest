@@ -16,7 +16,7 @@ PID=$$
 function update_status() {
   local status="$1"
   # Ensure status file exists and is valid JSON
-  if [[ ! -s "${STATUS_FILE}" ]]; then
+  if [[ ! -s ${STATUS_FILE} ]]; then
     echo '{"agents":{"build_agent":{"status":"unknown","pid":null},"debug_agent":{"status":"unknown","pid":null},"codegen_agent":{"status":"unknown","pid":null},"uiux_agent":{"status":"unknown","pid":null},"testing_agent":{"status":"unknown","pid":null},"security_agent":{"status":"unknown","pid":null}},"last_update":0}' >"${STATUS_FILE}"
   fi
   jq ".agents.testing_agent.status = \"${status}\" | .agents.testing_agent.pid = ${PID} | .last_update = $(date +%s)" "${STATUS_FILE}" >"${STATUS_FILE}.tmp"
@@ -46,7 +46,7 @@ generate_unit_tests() {
   local class_names
   class_names=$(grep -E "^(class|struct|enum)" "${class_file}" | sed 's/.*\(class\|struct\|enum\) \([^{]*\).*/\2/' | tr -d ' ')
 
-  if [[ -z "${class_names}" ]]; then
+  if [[ -z ${class_names} ]]; then
     echo "[$(date)] ${AGENT_NAME}: No testable classes found in ${class_file}" >>"${LOG_FILE}"
     return 1
   fi
@@ -153,7 +153,7 @@ analyze_coverage() {
 
     # Check for coverage files
     local coverage_dir="${project_path}/build"
-    if [[ -d "${coverage_dir}" ]]; then
+    if [[ -d ${coverage_dir} ]]; then
       find "${coverage_dir}" -name "*.profdata" | head -1 | while read -r profdata; do
         echo "[$(date)] ${AGENT_NAME}: Found coverage data: ${profdata}" >>"${LOG_FILE}"
       done
@@ -172,7 +172,7 @@ find_untested_code() {
   local project_path="${PROJECTS_DIR}/${project}"
   local source_dir="${project_path}/${project}"
 
-  if [[ ! -d "${source_dir}" ]]; then
+  if [[ ! -d ${source_dir} ]]; then
     echo "[$(date)] ${AGENT_NAME}: Source directory not found: ${source_dir}" >>"${LOG_FILE}"
     return 1
   fi
@@ -181,7 +181,7 @@ find_untested_code() {
   find "${source_dir}" -name "*.swift" | while read -r swift_file; do
     local test_file
     test_file="${project_path}/${project}Tests/$(basename "${swift_file}" .swift)Tests.swift"
-    if [[ ! -f "${test_file}" ]]; then
+    if [[ ! -f ${test_file} ]]; then
       echo "[$(date)] ${AGENT_NAME}: ⚠️  Untested file: ${swift_file}" >>"${LOG_FILE}"
     fi
   done
@@ -197,13 +197,13 @@ perform_testing() {
   echo "[$(date)] ${AGENT_NAME}: Starting comprehensive testing for ${project}..." >>"${LOG_FILE}"
 
   # Use task_data for additional context if needed
-  if [[ -n "${task_data}" ]]; then
+  if [[ -n ${task_data} ]]; then
     echo "[$(date)] ${AGENT_NAME}: Task context: ${task_data}" >>"${LOG_FILE}"
   fi
 
   # Navigate to project directory
   local project_path="${PROJECTS_DIR}/${project}"
-  if [[ ! -d "${project_path}" ]]; then
+  if [[ ! -d ${project_path} ]]; then
     echo "[$(date)] ${AGENT_NAME}: Project directory not found: ${project_path}" >>"${LOG_FILE}"
     return 1
   fi
@@ -219,11 +219,11 @@ perform_testing() {
 
   # Generate tests for untested classes
   local source_dir="${project_path}/${project}"
-  if [[ -d "${source_dir}" ]]; then
+  if [[ -d ${source_dir} ]]; then
     find "${source_dir}" -name "*.swift" | while read -r swift_file; do
       local test_file
       test_file="${project_path}/${project}Tests/$(basename "${swift_file}" .swift)Tests.swift"
-      if [[ ! -f "${test_file}" ]]; then
+      if [[ ! -f ${test_file} ]]; then
         generate_unit_tests "${project}" "${swift_file}"
       fi
     done
@@ -245,7 +245,7 @@ while true; do
   # Check for queued testing tasks
   HAS_TASK=$(jq '.tasks[] | select(.assigned_agent=="agent_testing.sh" and .status=="queued")' "${TASK_QUEUE}" 2>/dev/null)
 
-  if [[ -n "${HAS_TASK}" ]]; then
+  if [[ -n ${HAS_TASK} ]]; then
     echo "[$(date)] ${AGENT_NAME}: Found testing tasks to process..." >>"${LOG_FILE}"
 
     # Process each queued task
@@ -253,10 +253,10 @@ while true; do
       project=$(echo "${task}" | jq -r '.project // empty')
       task_id=$(echo "${task}" | jq -r '.id')
 
-      if [[ -z "${project}" ]]; then
+      if [[ -z ${project} ]]; then
         # If no specific project, test all projects
         for proj_dir in "${PROJECTS_DIR}"/*/; do
-          if [[ -d "${proj_dir}" ]]; then
+          if [[ -d ${proj_dir} ]]; then
             proj_name=$(basename "${proj_dir}")
             echo "[$(date)] ${AGENT_NAME}: Testing project ${proj_name}..." >>"${LOG_FILE}"
             perform_testing "${proj_name}" "${task}"

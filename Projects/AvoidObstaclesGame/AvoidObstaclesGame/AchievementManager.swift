@@ -39,7 +39,7 @@ public struct Achievement: Codable, Identifiable {
 
     /// Progress towards completion (0.0 to 1.0)
     var progress: Float {
-        min(Float(currentValue) / Float(targetValue), 1.0)
+        min(Float(self.currentValue) / Float(self.targetValue), 1.0)
     }
 
     /// Creates an achievement with default values
@@ -87,8 +87,8 @@ class AchievementManager {
     // MARK: - Initialization
 
     private init() {
-        setupAchievements()
-        loadProgress()
+        self.setupAchievements()
+        self.loadProgress()
     }
 
     // MARK: - Achievement Setup
@@ -248,7 +248,7 @@ class AchievementManager {
         ]
 
         for achievement in allAchievements {
-            achievements[achievement.id] = achievement
+            self.achievements[achievement.id] = achievement
         }
     }
 
@@ -260,27 +260,27 @@ class AchievementManager {
     func updateProgress(for event: AchievementEvent, value: Int = 1) {
         switch event {
         case .gameCompleted:
-            updateAchievement("first_game", increment: 1)
-            checkTimeBasedAchievements(survivalTime: Double(value))
+            self.updateAchievement("first_game", increment: 1)
+            self.checkTimeBasedAchievements(survivalTime: Double(value))
 
         case let .scoreReached(score):
-            updateScoreBasedAchievements(score: score)
+            self.updateScoreBasedAchievements(score: score)
 
         case let .difficultyReached(level):
-            updateDifficultyAchievements(level: level)
+            self.updateDifficultyAchievements(level: level)
 
         case .powerUpCollected:
-            updateAchievement("power_up_collector", increment: 1)
+            self.updateAchievement("power_up_collector", increment: 1)
 
         case .shieldUsed:
-            updateAchievement("shield_master", increment: 1)
+            self.updateAchievement("shield_master", increment: 1)
 
         case let .perfectScore(score):
-            updateStreakAchievements(score: score)
+            self.updateStreakAchievements(score: score)
 
         case let .comebackScore(score):
             if score >= 200 {
-                unlockAchievement("comeback_kid")
+                self.unlockAchievement("comeback_kid")
             }
         }
     }
@@ -290,7 +290,7 @@ class AchievementManager {
         let scoreAchievements = ["score_100", "score_500", "score_1000", "score_2500"]
         for achievementId in scoreAchievements {
             if let target = achievements[achievementId]?.targetValue, score >= target {
-                unlockAchievement(achievementId)
+                self.unlockAchievement(achievementId)
             }
         }
     }
@@ -306,7 +306,7 @@ class AchievementManager {
 
         for (achievementId, targetTime) in timeAchievements {
             if survivalTime >= targetTime {
-                unlockAchievement(achievementId)
+                self.unlockAchievement(achievementId)
             }
         }
     }
@@ -321,7 +321,7 @@ class AchievementManager {
 
         for (achievementId, targetLevel) in difficultyAchievements {
             if level >= targetLevel {
-                unlockAchievement(achievementId)
+                self.unlockAchievement(achievementId)
             }
         }
     }
@@ -335,7 +335,7 @@ class AchievementManager {
 
         for (achievementId, targetScore) in streakAchievements {
             if score >= targetScore {
-                unlockAchievement(achievementId)
+                self.unlockAchievement(achievementId)
             }
         }
     }
@@ -347,11 +347,11 @@ class AchievementManager {
         achievement.currentValue += increment
 
         if achievement.currentValue >= achievement.targetValue {
-            unlockAchievement(id)
+            self.unlockAchievement(id)
         } else {
-            achievements[id] = achievement
-            delegate?.achievementProgressUpdated(achievement, progress: achievement.progress)
-            saveProgress()
+            self.achievements[id] = achievement
+            self.delegate?.achievementProgressUpdated(achievement, progress: achievement.progress)
+            self.saveProgress()
         }
     }
 
@@ -361,15 +361,15 @@ class AchievementManager {
 
         achievement.isUnlocked = true
         achievement.unlockedDate = Date()
-        achievements[id] = achievement
+        self.achievements[id] = achievement
 
-        totalPoints += achievement.points
+        self.totalPoints += achievement.points
 
         // Save progress
-        saveProgress()
+        self.saveProgress()
 
         // Notify delegate
-        delegate?.achievementUnlocked(achievement)
+        self.delegate?.achievementUnlocked(achievement)
 
         // Play achievement sound
         AudioManager.shared.playLevelUpSound()
@@ -390,8 +390,8 @@ class AchievementManager {
                 if var achievement = achievements[id] {
                     achievement.isUnlocked = true
                     achievement.unlockedDate = defaults.object(forKey: "achievement_\(id)_date") as? Date
-                    achievements[id] = achievement
-                    totalPoints += achievement.points
+                    self.achievements[id] = achievement
+                    self.totalPoints += achievement.points
                 }
             }
         }
@@ -401,7 +401,7 @@ class AchievementManager {
             for (id, value) in progressData {
                 if var achievement = achievements[id], !achievement.isUnlocked {
                     achievement.currentValue = value
-                    achievements[id] = achievement
+                    self.achievements[id] = achievement
                 }
             }
         }
@@ -412,11 +412,11 @@ class AchievementManager {
         let defaults = UserDefaults.standard
 
         // Save unlocked achievements
-        let unlockedIds = achievements.values.filter(\.isUnlocked).map(\.id)
-        defaults.set(unlockedIds, forKey: unlockedAchievementsKey)
+        let unlockedIds = self.achievements.values.filter(\.isUnlocked).map(\.id)
+        defaults.set(unlockedIds, forKey: self.unlockedAchievementsKey)
 
         // Save unlock dates
-        for achievement in achievements.values where achievement.isUnlocked {
+        for achievement in self.achievements.values where achievement.isUnlocked {
             if let date = achievement.unlockedDate {
                 defaults.set(date, forKey: "achievement_\(achievement.id)_date")
             }
@@ -424,10 +424,10 @@ class AchievementManager {
 
         // Save progress for incomplete achievements
         var progressData: [String: Int] = [:]
-        for achievement in achievements.values where !achievement.isUnlocked && achievement.currentValue > 0 {
+        for achievement in self.achievements.values where !achievement.isUnlocked && achievement.currentValue > 0 {
             progressData[achievement.id] = achievement.currentValue
         }
-        defaults.set(progressData, forKey: achievementProgressKey)
+        defaults.set(progressData, forKey: self.achievementProgressKey)
 
         defaults.synchronize()
     }
@@ -437,47 +437,47 @@ class AchievementManager {
     /// Gets all achievements
     /// - Returns: Array of all achievements
     func getAllAchievements() -> [Achievement] {
-        Array(achievements.values).sorted { $0.points < $1.points }
+        Array(self.achievements.values).sorted { $0.points < $1.points }
     }
 
     /// Gets only unlocked achievements
     /// - Returns: Array of unlocked achievements
     func getUnlockedAchievements() -> [Achievement] {
-        achievements.values.filter(\.isUnlocked).sorted { $0.unlockedDate ?? Date() > $1.unlockedDate ?? Date() }
+        self.achievements.values.filter(\.isUnlocked).sorted { $0.unlockedDate ?? Date() > $1.unlockedDate ?? Date() }
     }
 
     /// Gets achievements that are in progress
     /// - Returns: Array of achievements with progress > 0 and < 100%
     func getInProgressAchievements() -> [Achievement] {
-        achievements.values.filter { !$0.isUnlocked && $0.currentValue > 0 }
+        self.achievements.values.filter { !$0.isUnlocked && $0.currentValue > 0 }
     }
 
     /// Gets locked achievements
     /// - Returns: Array of locked achievements
     func getLockedAchievements() -> [Achievement] {
-        achievements.values.filter { !$0.isUnlocked && $0.currentValue == 0 }
+        self.achievements.values.filter { !$0.isUnlocked && $0.currentValue == 0 }
     }
 
     /// Checks if an achievement is unlocked
     /// - Parameter id: The achievement ID
     /// - Returns: True if unlocked
     func isAchievementUnlocked(_ id: String) -> Bool {
-        achievements[id]?.isUnlocked ?? false
+        self.achievements[id]?.isUnlocked ?? false
     }
 
     /// Gets achievement statistics
     /// - Returns: Dictionary of statistics
     func getAchievementStatistics() -> [String: Any] {
-        let totalAchievements = achievements.count
-        let unlockedCount = achievements.values.count(where: { $0.isUnlocked })
+        let totalAchievements = self.achievements.count
+        let unlockedCount = self.achievements.values.count(where: { $0.isUnlocked })
         let completionRate = totalAchievements > 0 ? Double(unlockedCount) / Double(totalAchievements) : 0
 
         return [
             "totalAchievements": totalAchievements,
             "unlockedAchievements": unlockedCount,
             "completionRate": completionRate,
-            "totalPoints": totalPoints,
-            "recentUnlocks": getRecentUnlocks(count: 5),
+            "totalPoints": self.totalPoints,
+            "recentUnlocks": self.getRecentUnlocks(count: 5),
         ]
     }
 
@@ -485,24 +485,24 @@ class AchievementManager {
     /// - Parameter count: Number of recent achievements to return
     /// - Returns: Array of recently unlocked achievements
     func getRecentUnlocks(count: Int = 5) -> [Achievement] {
-        getUnlockedAchievements().prefix(count).map(\.self)
+        self.getUnlockedAchievements().prefix(count).map(\.self)
     }
 
     // MARK: - Reset
 
     /// Resets all achievements (for testing or user request)
     func resetAllAchievements() {
-        for key in achievements.keys {
+        for key in self.achievements.keys {
             if var achievement = achievements[key] {
                 achievement.isUnlocked = false
                 achievement.currentValue = 0
                 achievement.unlockedDate = nil
-                achievements[key] = achievement
+                self.achievements[key] = achievement
             }
         }
 
-        totalPoints = 0
-        saveProgress()
+        self.totalPoints = 0
+        self.saveProgress()
     }
 
     // MARK: - Async Achievement Queries

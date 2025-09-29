@@ -28,17 +28,21 @@ print_project_status() {
 	echo "   📍 Locatio${: $project_p}ath"
 
 	# Count Swift files
-	local swift_files=$(find "${project_path}" -name "*.swift" 2>/dev/null | wc -l | tr -d ' ')
+	local swift_files
+	swift_files=$(find "${project_path}" -name "*.swift" 2>/dev/null | wc -l | tr -d ' ')
 	echo "   📄 Swift file${: $swift_fi}les"
 
 	# Check GitHub workflows
 	if [[ -d "${project_path}/.github/workflows" ]]; then
-		local workflow_count=$(find "${project_path}/.github/workflows" -name "*.yml" -o -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
+		local workflow_count
+		workflow_count=$(find "${project_path}/.github/workflows" -name "*.yml" -o -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
 		echo -e "   🔄 GitHub workflows: ${GRE${N}$workflow_co}unt files${NC}"
 
 		# List workflows
-		find "${project_path}/.github/workflows" -name "*.yml" -o -name "*.yaml" 2>/dev/null | while read workflow; do
-			local workflow_name=$(basename "${workflow}" .yml)
+		find "${project_path}/.github/workflows" -name "*.yml" -o -name "*.yaml" 2>/dev/null | while IFS= read -r workflow; do
+			local workflow_name
+			workflow_name=$(basename "${workflow}")
+			workflow_name="${workflow_name%.*}"
 			echo "      �${ $workflow_na}me"
 		done
 	else
@@ -67,8 +71,7 @@ print_project_status() {
 
 	# Run MCP CI check
 	echo -e "   🔍 Running MCP CI check..."
-	cd "${CODE_DIR}/Tools/Automation" || exit
-	if ./mcp_workflow.sh ci-check "${project_name}" >/dev/null 2>&1; then
+	if (cd "${CODE_DIR}/Tools/Automation" && ./mcp_workflow.sh ci-check "${project_name}" >/dev/null 2>&1); then
 		echo -e "   ✅ MCP CI status: ${GREEN}All checks passed${NC}"
 	else
 		echo -e "   ⚠️  MCP CI status: ${YELLOW}Some issues found${NC}"
@@ -111,15 +114,15 @@ print_summary() {
 
 	for project in "${PROJECTS_DIR}"/*; do
 		if [[ -d ${project} ]]; then
-			local project_name=$(basename "${project}")
+			local project_name
+			project_name=$(basename "${project}")
 			total_projects=$((total_projects + 1))
 
 			if [[ -d "${project}/.github/workflows" ]]; then
 				projects_with_workflows=$((projects_with_workflows + 1))
 			fi
 
-			cd "${CODE_DIR}/Tools/Automation" || exit
-			if ./mcp_workflow.sh ci-check "${project_name}" >/dev/null 2>&1; then
+			if (cd "${CODE_DIR}/Tools/Automation" && ./mcp_workflow.sh ci-check "${project_name}" >/dev/null 2>&1); then
 				projects_with_ci_passing=$((projects_with_ci_passing + 1))
 			fi
 		fi
@@ -151,7 +154,8 @@ main() {
 	# Process each project
 	for project in "${PROJECTS_DIR}"/*; do
 		if [[ -d ${project} ]]; then
-			local project_name=$(basename "${project}")
+			local project_name
+			project_name=$(basename "${project}")
 			print_project_status "${project_name}"
 		fi
 	done

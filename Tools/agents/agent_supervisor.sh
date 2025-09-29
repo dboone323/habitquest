@@ -1,125 +1,229 @@
 #!/usr/bin/env bash
-# Agent Supervisor: Starts and monitors all agents
+# Agent Supervisor: Master controller that ensures all agents stay running and coordinated
+# This is the main entry point for the autonomous agent system
 
-AGENTS_DIR="/Users/danielstevens/Desktop/Quantum-workspace/Tools/Automation/agents"
-LOG_FILE="${AGENTS_DIR}/supervisor.log"
+set -euo pipefail
 
-# Ensure running in bash
-if [[ -z ${BASH_VERSION} ]]; then
-  echo "This script must be run with bash."
-  exec bash "$0" "$@"
-  exit 1
-fi
+AGENT_NAME="AgentSupervisor"
+WORKSPACE_ROOT="/Users/danielstevens/Desktop/Quantum-workspace"
+AGENTS_DIR="$(dirname "$0")"
+LOG_FILE="${AGENTS_DIR}/agent_supervisor.log"
+STATUS_FILE="${AGENTS_DIR}/agent_status.json"
+PID_FILE="${AGENTS_DIR}/agent_supervisor.pid"
+MCP_URL="http://127.0.0.1:5005"
+PID=$$
 
-declare -A AGENT_PIDS
-declare -A AGENT_LOGS
-AGENT_LOGS[agent_build.sh]="${AGENTS_DIR}/build_agent.log"
-AGENT_LOGS[agent_debug.sh]="${AGENTS_DIR}/debug_agent.log"
-AGENT_LOGS[agent_codegen.sh]="${AGENTS_DIR}/codegen_agent.log"
-AGENT_LOGS[agent_todo.sh]="${AGENTS_DIR}/todo_agent.log"
-AGENT_LOGS[uiux_agent.sh]="${AGENTS_DIR}/uiux_agent.log"
-AGENT_LOGS[apple_pro_agent.sh]="${AGENTS_DIR}/apple_pro_agent.log"
-AGENT_LOGS[collab_agent.sh]="${AGENTS_DIR}/collab_agent.log"
-AGENT_LOGS[updater_agent.sh]="${AGENTS_DIR}/updater_agent.log"
-AGENT_LOGS[search_agent.sh]="${AGENTS_DIR}/search_agent.log"
+# Essential agents that must always be running
+ESSENTIAL_AGENTS=(
+  "agent_build.sh"
+  "agent_debug.sh"
+  "agent_codegen.sh"
+  "agent_todo.sh"
+  "task_orchestrator.sh"
+)
 
-# Restart throttling and limit
-declare -A AGENT_RESTART_COUNT
-declare -A AGENT_LAST_RESTART
-RESTART_LIMIT=5
-RESTART_WINDOW=600  # 10 minutes
-RESTART_THROTTLE=60 # 1 minute between restarts
+# Optional agents that can be started on demand
+OPTIONAL_AGENTS=(
+  "uiux_agent.sh"
+  "apple_pro_agent.sh"
+  "collab_agent.sh"
+  "updater_agent.sh"
+  "search_agent.sh"
+  "pull_request_agent.sh"
+  "auto_update_agent.sh"
+  "knowledge_base_agent.sh"
+)
 
-# Log rotation function (keep logs <10MB)
-rotate_log() {
-  local log_file="$1"
-  local max_size=10485760 # 10MB
-  if [[ -f ${log_file} ]]; then
-    local size
-    size=$(stat -f%z "${log_file}")
-    if ((size > max_size)); then
-      mv "${log_file}" "${log_file}.old"
-      echo "[$(date)] Log rotated: ${log_file}" >"${log_file}"
-    fi
-  fi
+# Write PID file
+echo "${PID}" >"${PID_FILE}"
+
+# Trap signals for clean shutdown
+trap 'shutdown_all_agents; exit 0' SIGTERM SIGINT
+
+# Logging function
+log() {
+  local level="$1"
+  local message="$2"
+  local timestamp
+  timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+  echo "[${timestamp}] [${AGENT_NAME}] [${level}] ${message}" | tee -a "${LOG_FILE}"
 }
 
-start_agent() {
-  local agent_script="$1"
-  nohup bash "${AGENTS_DIR}/${agent_script}" >>"${LOG_FILE}" 2>&1 &
-  AGENT_PIDS["${agent_script}"]=$!
-  echo "${agent_script} started with PID ${AGENT_PIDS["${agent_script}"]}" >>"${LOG_FILE}"
-}
+# Shutdown all agents gracefully
+shutdown_all_agents() {
+  log "INFO" "Shutting down all agents..."
 
-restart_agent() {
-  local agent_script="$1"
-  local pid=${AGENT_PIDS["${agent_script}"]}
-  if [[ -n ${pid} ]]; then
-    kill "${pid}" 2>/dev/null
-    echo "${agent_script} (PID ${pid}) killed for restart." >>"${LOG_FILE}"
-  fi
-  # Throttle and limit restarts
-  local now
-  now=$(date +%s)
-  local last_restart=${AGENT_LAST_RESTART["${agent_script}"]:-0}
-  local count=${AGENT_RESTART_COUNT["${agent_script}"]:-0}
-  if ((now - last_restart < RESTART_THROTTLE)); then
-    echo "[$(date)] Supervisor: Throttling restart of ${agent_script} (too soon)." >>"${LOG_FILE}"
-    return
-  fi
-  if ((count >= RESTART_LIMIT)); then
-    if ((now - last_restart < RESTART_WINDOW)); then
-      echo "[$(date)] Supervisor: Restart limit reached for ${agent_script}. Not restarting." >>"${LOG_FILE}"
-      return
-    else
-      AGENT_RESTART_COUNT["${agent_script}"]=0
-    fi
-  fi
-  start_agent "${agent_script}"
-  echo "${agent_script} restarted." >>"${LOG_FILE}"
-}
+  # Stop all agents by sending SIGTERM to their PIDs
+  for agent in "${ESSENTIAL_AGENTS[@]}" "${OPTIONAL_AGENTS[@]}"; do
+    local pid_file="${AGENTS_DIR}/${agent}.pid"
+    if [[ -f ${pid_file} ]]; then
+      local agent_pid
+      agent_pid=$(cat "${pid_file}")
+      if kill -0 "${agent_pid}" 2>/dev/null; then
+        log "INFO" "Stopping ${agent} (PID: ${agent_pid})"
+        kill -TERM "${agent_pid}" 2>/dev/null || true
 
-echo "[$(date)] Supervisor: Starting all agents..." >>"${LOG_FILE}"
-start_agent agent_build.sh
-start_agent agent_debug.sh
-start_agent agent_codegen.sh
-start_agent agent_todo.sh
-echo "[$(date)] Supervisor: All agents running." >>"${LOG_FILE}"
+        # Wait up to 10 seconds for graceful shutdown
+        local wait_count=0
+        while kill -0 "${agent_pid}" 2>/dev/null && [[ ${wait_count} -lt 10 ]]; do
+          sleep 1
+          ((wait_count++))
+        done
 
-# Supervisor main loop: monitor logs and restart agents on error/rollback
-while true; do
-  for agent in "agent_build.sh" "agent_debug.sh" "agent_codegen.sh" "agent_todo.sh" "uiux_agent.sh" "apple_pro_agent.sh" "collab_agent.sh" "updater_agent.sh" "search_agent.sh"; do
-    log_file="${AGENT_LOGS["${agent}"]}"
-    rotate_log "${log_file}"
-    if [[ -f ${log_file} ]]; then
-      # Check for error or rollback in last 40 lines
-      if tail -40 "${log_file}" | grep -q -E 'ROLLBACK|error|❌'; then
-        echo "[$(date)] Supervisor: Detected error/rollback in ${agent}. Restarting..." >>"${LOG_FILE}"
-        restart_agent "${agent}"
+        # Force kill if still running
+        if kill -0 "${agent_pid}" 2>/dev/null; then
+          log "WARN" "Force killing ${agent} (PID: ${agent_pid})"
+          kill -KILL "${agent_pid}" 2>/dev/null || true
+        fi
       fi
-      # Log backup/restore events for observability
-      if tail -40 "${log_file}" | grep -q 'multi-level backup'; then
-        echo "[$(date)] Supervisor: Backup event detected in ${agent}." >>"${LOG_FILE}"
-      fi
-      if tail -40 "${log_file}" | grep -q 'restoring last backup'; then
-        echo "[$(date)] Supervisor: Restore event detected in ${agent}." >>"${LOG_FILE}"
-      fi
+      rm -f "${pid_file}"
     fi
   done
-  rotate_log "${LOG_FILE}"
 
-  # Periodically run AI log analyzer and report findings
-  now_epoch=$(date +%s)
-  if [[ $((now_epoch % 300)) -lt 5 ]]; then # every ~5 minutes
-    ANALYZER="$(dirname "$0")/ai_log_analyzer.py"
-    if [[ -x ${ANALYZER} || -f ${ANALYZER} ]]; then
-      python3 "${ANALYZER}" >>"${LOG_FILE}" 2>&1
-      if [[ -f "$(dirname "$0")/ai_log_analysis.txt" ]]; then
-        tail -20 "$(dirname "$0")/ai_log_analysis.txt" | while read -r line; do
-          echo "[$(date)] Supervisor: AI Log Analyzer: ${line}" >>"${LOG_FILE}"
-        done
-      fi
+  # Stop MCP server
+  local mcp_pid_file="${AGENTS_DIR}/mcp_server.pid"
+  if [[ -f ${mcp_pid_file} ]]; then
+    local mcp_pid
+    mcp_pid=$(cat "${mcp_pid_file}")
+    if kill -0 "${mcp_pid}" 2>/dev/null; then
+      log "INFO" "Stopping MCP server (PID: ${mcp_pid})"
+      kill -TERM "${mcp_pid}" 2>/dev/null || true
+      sleep 2
+      kill -KILL "${mcp_pid}" 2>/dev/null || true
     fi
+    rm -f "${mcp_pid_file}"
   fi
-  sleep 120 # Check every 2 minutes
-done
+
+  # Clean up supervisor PID file
+  rm -f "${PID_FILE}"
+
+  log "INFO" "Agent supervisor shutdown complete"
+}
+
+# Check if an agent is running
+is_agent_running() {
+  local agent="$1"
+  local pid_file="${AGENTS_DIR}/${agent}.pid"
+
+  if [[ ! -f ${pid_file} ]]; then
+    return 1
+  fi
+
+  local agent_pid
+  agent_pid=$(cat "${pid_file}" 2>/dev/null)
+
+  if [[ -z ${agent_pid} ]]; then
+    return 1
+  fi
+
+  # Check if process is actually running
+  if kill -0 "${agent_pid}" 2>/dev/null; then
+    return 0
+  else
+    # Clean up stale PID file
+    rm -f "${pid_file}"
+    return 1
+  fi
+}
+
+# Start an agent
+start_agent() {
+  local agent="$1"
+  local agent_path="${AGENTS_DIR}/${agent}"
+  local log_file="${AGENTS_DIR}/${agent}.log"
+  local pid_file="${AGENTS_DIR}/${agent}.pid"
+
+  if [[ ! -f ${agent_path} ]]; then
+    log "ERROR" "Agent script not found: ${agent_path}"
+    return 1
+  fi
+
+  if [[ ! -x ${agent_path} ]]; then
+    log "WARN" "Making agent script executable: ${agent_path}"
+    chmod +x "${agent_path}"
+  fi
+
+  log "INFO" "Starting agent: ${agent}"
+
+  # Start agent in background
+  nohup bash "${agent_path}" >>"${log_file}" 2>&1 &
+  local agent_pid=$!
+
+  # Write PID file
+  echo "${agent_pid}" >"${pid_file}"
+
+  # Wait a moment to see if it started successfully
+  sleep 2
+
+  if kill -0 "${agent_pid}" 2>/dev/null; then
+    log "INFO" "Successfully started ${agent} (PID: ${agent_pid})"
+    return 0
+  else
+    log "ERROR" "Failed to start ${agent}"
+    rm -f "${pid_file}"
+    return 1
+  fi
+}
+
+# Main execution with autonomous monitoring
+main() {
+  local command="${1:-monitor}"
+
+  case "${command}" in
+  "start")
+    log "INFO" "Starting all essential agents..."
+    for agent in "${ESSENTIAL_AGENTS[@]}"; do
+      if ! is_agent_running "${agent}"; then
+        start_agent "${agent}"
+      fi
+    done
+    ;;
+
+  "stop")
+    log "INFO" "Stopping all agents..."
+    shutdown_all_agents
+    ;;
+
+  "status")
+    log "INFO" "=== AGENT STATUS ==="
+    for agent in "${ESSENTIAL_AGENTS[@]}"; do
+      if is_agent_running "${agent}"; then
+        local pid_file="${AGENTS_DIR}/${agent}.pid"
+        local agent_pid
+        agent_pid=$(cat "${pid_file}" 2>/dev/null)
+        log "INFO" "${agent}: RUNNING (PID: ${agent_pid})"
+      else
+        log "INFO" "${agent}: STOPPED"
+      fi
+    done
+    ;;
+
+  "monitor" | *)
+    log "INFO" "Starting Agent Supervisor in monitoring mode"
+    log "INFO" "PID: ${PID}"
+
+    # Initial startup of essential agents
+    for agent in "${ESSENTIAL_AGENTS[@]}"; do
+      if ! is_agent_running "${agent}"; then
+        start_agent "${agent}"
+      fi
+    done
+
+    # Continuous monitoring loop
+    while true; do
+      # Check essential agents
+      for agent in "${ESSENTIAL_AGENTS[@]}"; do
+        if ! is_agent_running "${agent}"; then
+          log "WARN" "Essential agent ${agent} is not running, starting it"
+          start_agent "${agent}"
+        fi
+      done
+
+      sleep 30 # Check every 30 seconds
+    done
+    ;;
+  esac
+}
+
+# Execute main function with all arguments
+main "$@"

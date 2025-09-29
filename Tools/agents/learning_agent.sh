@@ -1,8 +1,5 @@
 #!/bin/bash
-# Learning Ag	local task_desc
-task_desc=$(jq -r ".tasks[] | select(.id == \"${task_id}\") | .description" "${TASK_QUEUE_FILE}")
-local task_type
-task_type=$(jq -r ".tasks[] | select(.id == \"${task_id}\") | .type" "${TASK_QUEUE_FILE}")t: Analyzes code patterns and learns from best practices across projects
+# Learning Agent: Analyzes code patterns and learns from best practices across projects
 
 AGENT_NAME="learning_agent.sh"
 LOG_FILE="/Users/danielstevens/Desktop/Quantum-workspace/Tools/Automation/agents/learning_agent.log"
@@ -111,7 +108,7 @@ while true; do
     done <"${NOTIFICATION_FILE}"
 
     # Clear processed notifications to prevent re-processing
-    true >"${NOTIFICATION_FILE}"
+    : >"${NOTIFICATION_FILE}"
   fi
 
   # Update last seen timestamp

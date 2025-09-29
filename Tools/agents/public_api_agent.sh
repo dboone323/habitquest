@@ -74,10 +74,12 @@ make_api_request() {
   fi
 
   local full_url="${api_base}${endpoint}"
-  local cache_key=$(echo "${method}|${full_url}|${data}" | md5)
+  local cache_key
+  cache_key=$(echo "${method}|${full_url}|${data}" | md5)
 
   # Check cache first
-  local cached_response=$(get_cached_response "${cache_key}")
+  local cached_response
+  cached_response=$(get_cached_response "${cache_key}")
   if [[ -n ${cached_response} ]]; then
     log_message "INFO" "Cache hit for ${api_name}: ${endpoint}"
     echo "${cached_response}"
@@ -108,8 +110,9 @@ make_api_request() {
   esac
 
   # Extract HTTP status code
-  http_code=$(echo "${response}" | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
-  response=$(echo "${response}" | sed -e 's/HTTPSTATUS:.*//g')
+  http_code="${response##*HTTPSTATUS:}"
+  http_code=${http_code//$'\n'/}
+  response="${response%HTTPSTATUS:*}"
 
   # Check for successful response
   if [[ ${http_code} -ge 200 && ${http_code} -lt 300 ]]; then
@@ -137,11 +140,14 @@ check_rate_limit() {
     return 0 # No rate limit configured
   fi
 
-  local requests_per_window=$(echo "${limit_config}" | cut -d'|' -f1)
-  local window_seconds=$(echo "${limit_config}" | cut -d'|' -f2)
+  local requests_per_window
+  requests_per_window=$(echo "${limit_config}" | cut -d'|' -f1)
+  local window_seconds
+  window_seconds=$(echo "${limit_config}" | cut -d'|' -f2)
 
   # Get current usage
-  local current_usage=$(get_current_usage "${api_name}" "${window_seconds}")
+  local current_usage
+  current_usage=$(get_current_usage "${api_name}" "${window_seconds}")
 
   if [[ ${current_usage} -ge ${requests_per_window} ]]; then
     return 1 # Rate limit exceeded
@@ -154,7 +160,8 @@ check_rate_limit() {
 get_current_usage() {
   local api_name="$1"
   local window_seconds="$2"
-  local cutoff_time=$(($(date +%s) - window_seconds))
+  local cutoff_time
+  cutoff_time=$(($(date +%s) - window_seconds))
 
   if command -v jq &>/dev/null; then
     jq -r ".limits.\"${api_name}\" // [] | map(select(.timestamp > ${cutoff_time})) | length" "${RATE_LIMIT_FILE}" 2>/dev/null || echo "0"
@@ -166,7 +173,8 @@ get_current_usage() {
 # Update rate limit tracking
 update_rate_limit() {
   local api_name="$1"
-  local timestamp=$(date +%s)
+  local timestamp
+  timestamp=$(date +%s)
 
   if command -v jq &>/dev/null; then
     # Add new request to tracking
@@ -181,10 +189,13 @@ get_cached_response() {
   local cache_key="$1"
 
   if command -v jq &>/dev/null; then
-    local cached_data=$(jq -r ".cache.\"${cache_key}\" // empty" "${API_CACHE_FILE}")
+    local cached_data
+    cached_data=$(jq -r ".cache.\"${cache_key}\" // empty" "${API_CACHE_FILE}")
     if [[ -n ${cached_data} && ${cached_data} != "null" ]]; then
-      local cache_time=$(echo "${cached_data}" | jq -r '.timestamp // 0')
-      local current_time=$(date +%s)
+      local cache_time
+      cache_time=$(echo "${cached_data}" | jq -r '.timestamp // 0')
+      local current_time
+      current_time=$(date +%s)
 
       # Check if cache is still valid
       if [[ $((current_time - cache_time)) -lt ${CACHE_DURATION} ]]; then
@@ -204,7 +215,8 @@ get_cached_response() {
 cache_response() {
   local cache_key="$1"
   local response="$2"
-  local timestamp=$(date +%s)
+  local timestamp
+  timestamp=$(date +%s)
 
   if command -v jq &>/dev/null; then
     # Clean up old cache entries if needed
@@ -221,11 +233,14 @@ cache_response() {
 
 # Clean up expired cache entries
 cleanup_cache() {
-  local current_time=$(date +%s)
-  local cutoff_time=$((current_time - CACHE_DURATION))
+  local current_time
+  current_time=$(date +%s)
+  local cutoff_time
+  cutoff_time=$((current_time - CACHE_DURATION))
 
   if command -v jq &>/dev/null; then
-    local cache_size=$(jq '.cache | length' "${API_CACHE_FILE}")
+    local cache_size
+    cache_size=$(jq '.cache | length' "${API_CACHE_FILE}")
 
     if [[ ${cache_size} -gt ${MAX_CACHE_SIZE} ]]; then
       # Remove expired entries and keep only recent ones
@@ -251,15 +266,23 @@ github_api_call() {
 get_swift_version_info() {
   log_message "INFO" "Fetching Swift version information..."
 
-  local response=$(github_api_call "/repos/apple/swift/releases/latest")
-  if [[ $? -eq 0 && -n ${response} ]]; then
-    local version=$(echo "${response}" | jq -r '.tag_name // empty' 2>/dev/null | sed 's/swift-//')
-    local release_notes=$(echo "${response}" | jq -r '.body // empty' 2>/dev/null | head -5)
+  local response
+  if ! response=$(github_api_call "/repos/apple/swift/releases/latest"); then
+    return 1
+  fi
 
-    if [[ -n ${version} ]]; then
-      echo "{\"version\": \"${version}\", \"release_notes\": \"${release_notes}\"}"
-      return 0
-    fi
+  if [[ -z ${response} ]]; then
+    return 1
+  fi
+
+  local version
+  version=$(echo "${response}" | jq -r '.tag_name // empty' 2>/dev/null | sed 's/swift-//')
+  local release_notes
+  release_notes=$(echo "${response}" | jq -r '.body // empty' 2>/dev/null | head -5)
+
+  if [[ -n ${version} ]]; then
+    echo "{\"version\": \"${version}\", \"release_notes\": \"${release_notes}\"}"
+    return 0
   fi
 
   return 1
@@ -272,7 +295,6 @@ get_ios_docs() {
   log_message "INFO" "Fetching iOS documentation for: ${topic}"
 
   # This is a simplified example - in reality, you'd need to parse Apple's documentation API
-  local docs_url="${PUBLIC_APIS[ios_dev_docs]}/${topic}"
 
   make_api_request "ios_dev_docs" "/${topic}"
 }
@@ -323,8 +345,12 @@ batch_api_requests() {
 
 # Generate API usage report
 generate_api_report() {
-  local report_file="$(dirname "$0")/api_reports/api_usage_$(date +%Y%m%d_%H%M%S).md"
-  mkdir -p "$(dirname "${report_file}")"
+  local report_dir
+  report_dir="$(dirname "$0")/api_reports"
+  mkdir -p "${report_dir}"
+
+  local report_file
+  report_file="${report_dir}/api_usage_$(date +%Y%m%d_%H%M%S).md"
 
   {
     echo "# API Usage Report"
@@ -337,10 +363,13 @@ generate_api_report() {
 
     for api_name in "${!RATE_LIMITS[@]}"; do
       local limit_config="${RATE_LIMITS[${api_name}]}"
-      local requests_per_window=$(echo "${limit_config}" | cut -d'|' -f1)
-      local window_seconds=$(echo "${limit_config}" | cut -d'|' -f2)
+      local requests_per_window
+      requests_per_window=$(echo "${limit_config}" | cut -d'|' -f1)
+      local window_seconds
+      window_seconds=$(echo "${limit_config}" | cut -d'|' -f2)
 
-      local current_usage=$(get_current_usage "${api_name}" "${window_seconds}")
+      local current_usage
+      current_usage=$(get_current_usage "${api_name}" "${window_seconds}")
       local status="✅ OK"
 
       if [[ ${current_usage} -ge ${requests_per_window} ]]; then
@@ -355,8 +384,10 @@ generate_api_report() {
 
     echo "## Cache Statistics"
     if command -v jq &>/dev/null; then
-      local cache_entries=$(jq '.cache | length' "${API_CACHE_FILE}")
-      local cache_size=$(stat -f%z "${API_CACHE_FILE}" 2>/dev/null || echo "0")
+      local cache_entries
+      cache_entries=$(jq '.cache | length' "${API_CACHE_FILE}")
+      local cache_size
+      cache_size=$(stat -f%z "${API_CACHE_FILE}" 2>/dev/null || echo "0")
       echo "- **Cached Responses**: ${cache_entries}"
       echo "- **Cache File Size**: ${cache_size} bytes"
       echo "- **Cache Duration**: ${CACHE_DURATION} seconds"
@@ -376,7 +407,7 @@ generate_api_report() {
 # Process notifications from orchestrator
 process_notifications() {
   if [[ -f ${NOTIFICATION_FILE} ]]; then
-    while IFS='|' read -r timestamp notification_type task_id; do
+    while IFS='|' read -r _timestamp notification_type task_id; do
       case "${notification_type}" in
       "api_request")
         log_message "INFO" "Processing API request: ${task_id}"
@@ -398,7 +429,7 @@ process_notifications() {
     done <"${NOTIFICATION_FILE}"
 
     # Clear processed notifications
-    >"${NOTIFICATION_FILE}"
+    : >"${NOTIFICATION_FILE}"
   fi
 }
 
@@ -413,13 +444,13 @@ while true; do
   cleanup_cache
 
   # Generate periodic API report (every 30 minutes)
-  local current_minute=$(date +%M)
+  current_minute=$(date +%M)
   if [[ $((current_minute % 30)) -eq 0 ]]; then
     generate_api_report
   fi
 
   # Check for rate limit resets (simplified)
-  local current_hour=$(date +%H)
+  current_hour=$(date +%H)
   if [[ ${current_hour} -eq 0 ]]; then
     # Reset hourly rate limits at midnight
     if command -v jq &>/dev/null; then

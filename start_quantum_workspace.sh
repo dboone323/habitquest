@@ -34,7 +34,7 @@ check_process() {
   local process_name="$1"
   local port="$2"
 
-  if [[ -n "${port}" ]]; then
+  if [[ -n ${port} ]]; then
     if lsof -i :"${port}" >/dev/null 2>&1; then
       return 0
     else
@@ -154,7 +154,7 @@ test_mcp_connectivity() {
 
   local response
   response=$(curl -s http://127.0.0.1:5005/status 2>/dev/null)
-  if curl -s http://127.0.0.1:5005/status >/dev/null 2>&1 && [[ "${response}" == *"\"ok\": true"* ]]; then
+  if curl -s http://127.0.0.1:5005/status >/dev/null 2>&1 && [[ ${response} == *"\"ok\": true"* ]]; then
     log_success "MCP Server connectivity test passed"
     return 0
   else
@@ -198,7 +198,7 @@ run_full_test() {
 
   if curl -s -X POST http://127.0.0.1:5005/run \
     -H "Content-Type: application/json" \
-    -d '{"agent": "test", "command": "status", "project": "", "execute": true}' >/dev/null 2>&1 && [[ "${test_result}" == *"\"ok\": true"* ]]; then
+    -d '{"agent": "test", "command": "status", "project": "", "execute": true}' >/dev/null 2>&1 && [[ ${test_result} == *"\"ok\": true"* ]]; then
     log_success "Full system test passed"
     return 0
   else
@@ -238,9 +238,9 @@ show_status() {
   local agent_count
   agent_count=$(pgrep -f "agent_(build|debug|codegen)" | wc -l)
   if [[ ${agent_count} -ge 3 ]]; then
-    echo -e "✅ Agents:            ${GREEN}Running${NC}${($agent_cou}nt active)"
+    echo -e "✅ Agents:            ${GREEN}Running${NC} (${agent_count} active)"
   else
-    echo -e "❌ Agents:            ${RED}Not Running${NC} (onl${ $agent_cou}nt active)"
+    echo -e "❌ Agents:            ${RED}Not Running${NC} (only ${agent_count} active)"
   fi
 
   echo ""

@@ -47,7 +47,7 @@ class ObstacleManager {
 
     init(scene: SKScene) {
         self.scene = scene
-        preloadObstaclePool()
+        self.preloadObstaclePool()
     }
 
     // MARK: - Object Pooling
@@ -55,8 +55,8 @@ class ObstacleManager {
     /// Preloads the obstacle pool with initial obstacles
     private func preloadObstaclePool() {
         for _ in 0 ..< 10 {
-            let obstacle = createNewObstacle(ofType: .normal)
-            obstaclePool.append(obstacle)
+            let obstacle = self.createNewObstacle(ofType: .normal)
+            self.obstaclePool.append(obstacle)
         }
     }
 
@@ -66,21 +66,21 @@ class ObstacleManager {
     private func getObstacle(ofType type: ObstacleType) -> SKSpriteNode {
         // Try to get from pool first
         if let recycledObstacle = obstaclePool.popLast() {
-            resetObstacle(recycledObstacle, toType: type)
+            self.resetObstacle(recycledObstacle, toType: type)
             return recycledObstacle
         }
 
         // Create new obstacle if pool is empty
-        return createNewObstacle(ofType: type)
+        return self.createNewObstacle(ofType: type)
     }
 
     /// Returns an obstacle to the pool for reuse
     /// - Parameter obstacle: The obstacle to recycle
     func recycleObstacle(_ obstacle: SKSpriteNode) {
-        guard activeObstacles.contains(obstacle) else { return }
+        guard self.activeObstacles.contains(obstacle) else { return }
 
         // Remove from active set
-        activeObstacles.remove(obstacle)
+        self.activeObstacles.remove(obstacle)
 
         // Reset obstacle state
         obstacle.removeFromParent()
@@ -91,11 +91,11 @@ class ObstacleManager {
         obstacle.physicsBody?.angularVelocity = 0
 
         // Return to pool if not full
-        if obstaclePool.count < maxPoolSize {
-            obstaclePool.append(obstacle)
+        if self.obstaclePool.count < self.maxPoolSize {
+            self.obstaclePool.append(obstacle)
         }
 
-        delegate?.obstacleDidRecycle(obstacle)
+        self.delegate?.obstacleDidRecycle(obstacle)
     }
 
     /// Creates a new obstacle of the specified type
@@ -107,10 +107,10 @@ class ObstacleManager {
         obstacle.name = "obstacle"
 
         // Add visual enhancements
-        addObstacleVisualEffects(to: obstacle, config: config)
+        self.addObstacleVisualEffects(to: obstacle, config: config)
 
         // Setup physics
-        setupObstaclePhysics(for: obstacle, config: config)
+        self.setupObstaclePhysics(for: obstacle, config: config)
 
         return obstacle
     }
@@ -129,11 +129,11 @@ class ObstacleManager {
 
         // Update physics body
         obstacle.physicsBody = SKPhysicsBody(rectangleOf: config.size)
-        setupObstaclePhysics(for: obstacle, config: config)
+        self.setupObstaclePhysics(for: obstacle, config: config)
 
         // Clear and re-add visual effects
         obstacle.removeAllChildren()
-        addObstacleVisualEffects(to: obstacle, config: config)
+        self.addObstacleVisualEffects(to: obstacle, config: config)
     }
 
     /// Adds visual effects to an obstacle
@@ -183,9 +183,9 @@ class ObstacleManager {
     /// Starts spawning obstacles based on difficulty
     /// - Parameter difficulty: Current game difficulty settings
     func startSpawning(with difficulty: GameDifficulty) {
-        guard !isSpawning, let scene else { return }
+        guard !self.isSpawning, let scene else { return }
 
-        isSpawning = true
+        self.isSpawning = true
 
         let spawnAction = SKAction.run { [weak self] in
             self?.spawnObstacle(with: difficulty)
@@ -195,13 +195,13 @@ class ObstacleManager {
         let sequenceAction = SKAction.sequence([spawnAction, waitAction])
         let repeatForeverAction = SKAction.repeatForever(sequenceAction)
 
-        scene.run(repeatForeverAction, withKey: spawnActionKey)
+        scene.run(repeatForeverAction, withKey: self.spawnActionKey)
     }
 
     /// Stops spawning obstacles
     func stopSpawning() {
-        scene?.removeAction(forKey: spawnActionKey)
-        isSpawning = false
+        self.scene?.removeAction(forKey: self.spawnActionKey)
+        self.isSpawning = false
     }
 
     /// Spawns a single obstacle or power-up
@@ -213,13 +213,13 @@ class ObstacleManager {
         let shouldSpawnPowerUp = Double.random(in: 0 ... 1) < difficulty.powerUpSpawnChance
 
         if shouldSpawnPowerUp {
-            spawnPowerUp()
+            self.spawnPowerUp()
             return
         }
 
         // Select obstacle type based on difficulty
-        let obstacleType = selectObstacleType(for: difficulty)
-        let obstacle = getObstacle(ofType: obstacleType)
+        let obstacleType = self.selectObstacleType(for: difficulty)
+        let obstacle = self.getObstacle(ofType: obstacleType)
 
         // Random horizontal position
         let randomX = CGFloat.random(in: obstacle.size.width / 2 ... (scene.size.width - obstacle.size.width / 2))
@@ -227,7 +227,7 @@ class ObstacleManager {
 
         // Add to scene and active set
         scene.addChild(obstacle)
-        activeObstacles.insert(obstacle)
+        self.activeObstacles.insert(obstacle)
 
         // Animate falling
         let fallDuration = obstacleType.configuration.fallSpeed / difficulty.obstacleSpeed
@@ -238,7 +238,7 @@ class ObstacleManager {
 
         obstacle.run(SKAction.sequence([moveAction, removeAction]))
 
-        delegate?.obstacleDidSpawn(obstacle)
+        self.delegate?.obstacleDidSpawn(obstacle)
     }
 
     /// Selects an obstacle type based on difficulty
@@ -262,24 +262,24 @@ class ObstacleManager {
     /// Gets the count of active obstacles
     /// - Returns: Number of active obstacles
     func activeObstacleCount() -> Int {
-        activeObstacles.count
+        self.activeObstacles.count
     }
 
     /// Removes all active obstacles
     func removeAllObstacles() {
-        for obstacle in activeObstacles {
-            recycleObstacle(obstacle)
+        for obstacle in self.activeObstacles {
+            self.recycleObstacle(obstacle)
         }
     }
 
     /// Updates obstacle positions and handles off-screen removal
     func updateObstacles() {
-        guard scene != nil else { return }
+        guard self.scene != nil else { return }
 
-        for obstacle in activeObstacles {
+        for obstacle in self.activeObstacles {
             // Remove obstacles that have fallen off screen
             if obstacle.position.y < -obstacle.size.height {
-                recycleObstacle(obstacle)
+                self.recycleObstacle(obstacle)
             }
         }
     }
@@ -287,7 +287,7 @@ class ObstacleManager {
     /// Gets all active obstacles
     /// - Returns: Array of active obstacle nodes
     func getActiveObstacles() -> [SKSpriteNode] {
-        Array(activeObstacles)
+        Array(self.activeObstacles)
     }
 
     // MARK: - Power-ups
@@ -297,7 +297,7 @@ class ObstacleManager {
         guard let scene else { return }
 
         let powerUpType = PowerUpType.allCases.randomElement() ?? .shield
-        let powerUp = createPowerUp(ofType: powerUpType)
+        let powerUp = self.createPowerUp(ofType: powerUpType)
 
         // Random position across the screen width
         let randomX = CGFloat.random(in: powerUp.size.width / 2 ... (scene.size.width - powerUp.size.width / 2))

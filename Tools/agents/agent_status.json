@@ -1,33 +1,37 @@
 {
   "agents": {
-    "build_agent": {
-      "status": "running",
-      "pid": 454
-    },
-    "debug_agent": {
-      "status": "running",
-      "pid": 455
-    },
-    "codegen_agent": {
-      "status": "running",
-      "pid": 25815
-    },
-    "uiux_agent": {
-      "status": "running",
-      "pid": 34122
-    },
-    "testing_agent": {
-      "status": "stopped",
-      "pid": 68832
-    },
-    "security_agent": {
-      "status": "stopped",
-      "pid": 90524
-    },
-    "performance_monitor": {
+    "pull_request_agent.sh": {
       "status": "idle",
-      "pid": 31493
+      "pid": 64503,
+      "last_seen": 1759170161
+    },
+    "search_agent.sh": {
+      "status": "idle",
+      "pid": 64430,
+      "last_seen": 1759170161
+    },
+    "collab_agent.sh": {
+      "status": "running",
+      "pid": 11974,
+      "last_seen": 1759170161
+    },
+    "apple_pro_agent.sh": {
+      "status": "idle",
+      "pid": 63035,
+      "last_seen": 1759170161
+    },
+    "auto_update_agent.sh": {
+      "status": "running",
+      "pid": 64702,
+      "last_seen": 1759170161
     }
   },
-  "last_update": 1757980506
+  "last_update": 0
+}
+ "status": "running",
+      "pid": 11810,
+      "last_seen": 1759170161
+    }
+  },
+  "last_update": 0
 }

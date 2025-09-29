@@ -1,12 +1,15 @@
 #!/bin/bash
 # Pull Request Agent: Creates, reviews, and auto-merges low-risk pull requests
 
-AGENT_NAME="PullRequestAgent"
+AGENT_NAME="pull_request_agent.sh"
 LOG_FILE="$(dirname "$0")/pull_request_agent.log"
 NOTIFICATION_FILE="$(dirname "$0")/communication/${AGENT_NAME}_notification.txt"
 COMPLETED_FILE="$(dirname "$0")/communication/${AGENT_NAME}_completed.txt"
 PR_QUEUE_FILE="$(dirname "$0")/pr_queue.json"
 RISK_ASSESSMENT_FILE="$(dirname "$0")/risk_assessment.json"
+STATUS_FILE="$(dirname "$0")/agent_status.json"
+TASK_QUEUE="$(dirname "$0")/task_queue.json"
+PID=$$
 
 # Risk assessment thresholds
 LOW_RISK_THRESHOLD=20
@@ -30,6 +33,31 @@ log_message() {
   local level="$1"
   local message="$2"
   echo "[$(date)] [${level}] ${message}" >>"${LOG_FILE}"
+}
+
+function update_status() {
+  local status="$1"
+  local timestamp
+  timestamp=$(date +%s)
+
+  # Ensure status file exists and is valid JSON
+  if [[ ! -s ${STATUS_FILE} ]]; then
+    echo '{"agents":{},"last_update":0}' >"${STATUS_FILE}"
+  fi
+
+  # Use jq with proper escaping to avoid JSON parsing errors
+  if command -v jq &>/dev/null; then
+    jq --arg agent "${AGENT_NAME}" --arg status "${status}" --arg pid "${PID}" --arg timestamp "${timestamp}" \
+      '.agents[$agent] = {"status": $status, "pid": ($pid | tonumber), "last_seen": ($timestamp | tonumber)}' \
+      "${STATUS_FILE}" >"${STATUS_FILE}.tmp"
+
+    if [[ $? -eq 0 ]] && [[ -s "${STATUS_FILE}.tmp" ]]; then
+      mv "${STATUS_FILE}.tmp" "${STATUS_FILE}"
+    else
+      log_message "ERROR" "Failed to update agent_status.json (jq or mv error)"
+      rm -f "${STATUS_FILE}.tmp"
+    fi
+  fi
 }
 
 # Notify orchestrator of task completion
@@ -62,11 +90,13 @@ assess_risk() {
   fi
 
   # Check file types changed
-  local critical_files=$(echo "${changed_files}" | grep -c "Podfile\|Package.swift\|.xcodeproj\|security\|config")
+  local critical_files
+  critical_files=$(echo "${changed_files}" | grep -c "Podfile\|Package.swift\|.xcodeproj\|security\|config")
   risk_score=$((risk_score + (critical_files * 15)))
 
   # Check number of files changed
-  local file_count=$(echo "${changed_files}" | wc -l)
+  local file_count
+  file_count=$(echo "${changed_files}" | wc -l)
   if [[ ${file_count} -gt 10 ]]; then
     risk_score=$((risk_score + 20))
   elif [[ ${file_count} -gt 5 ]]; then
@@ -74,7 +104,8 @@ assess_risk() {
   fi
 
   # Check for test files (lower risk if tests are included)
-  local test_files=$(echo "${changed_files}" | grep -c "Test\|test")
+  local test_files
+  test_files=$(echo "${changed_files}" | grep -c "Test\|test")
   if [[ ${test_files} -gt 0 ]]; then
     risk_score=$((risk_score - 10))
   fi
@@ -109,22 +140,44 @@ create_pull_request() {
   local title="$2"
   local description="$3"
   local base_branch="${4:-main}"
-  local pr_id=$(date +%s%N | cut -b1-13)
+  local pr_id
+  pr_id=$(date +%s%N | cut -b1-13)
 
   log_message "INFO" "Creating PR: ${title}"
 
   # Get changed files
-  local changed_files=$(git diff --name-only "${base_branch}" "${branch_name}" 2>/dev/null || echo "")
+  local changed_files
+  changed_files=$(git diff --name-only "${base_branch}" "${branch_name}" 2>/dev/null || echo "")
 
   # Assess risk
-  local risk_score=$(assess_risk "${title}" "${description}" "${changed_files}")
-  local risk_level=$(get_risk_level "${risk_score}")
+  local risk_score
+  risk_score=$(assess_risk "${title}" "${description}" "${changed_files}")
+  local risk_level
+  risk_level=$(get_risk_level "${risk_score}")
 
-  # Create PR object
-  local pr_data="{\"id\": \"${pr_id}\", \"title\": \"${title}\", \"description\": \"${description}\", \"branch\": \"${branch_name}\", \"base\": \"${base_branch}\", \"risk_score\": ${risk_score}, \"risk_level\": \"${risk_level}\", \"status\": \"created\", \"created\": $(date +%s), \"changed_files\": \"${changed_files}\"}"
+  local created_ts
+  created_ts=$(date +%s)
+
+  local pr_data
+  if command -v jq &>/dev/null; then
+    pr_data=$(jq -n \
+      --arg id "${pr_id}" \
+      --arg title "${title}" \
+      --arg description "${description}" \
+      --arg branch "${branch_name}" \
+      --arg base "${base_branch}" \
+      --arg risk_level "${risk_level}" \
+      --arg changed_files "${changed_files}" \
+      --arg status "created" \
+      --argjson risk_score "${risk_score}" \
+      --argjson created "${created_ts}" \
+      '{id:$id,title:$title,description:$description,branch:$branch,base:$base,risk_score:$risk_score,risk_level:$risk_level,status:$status,created:$created,changed_files:$changed_files}')
+  else
+    pr_data=""
+  fi
 
   # Add to queue
-  if command -v jq &>/dev/null; then
+  if command -v jq &>/dev/null && [[ -n ${pr_data} ]]; then
     jq --argjson pr "${pr_data}" '.prs += [$pr]' "${PR_QUEUE_FILE}" >"${PR_QUEUE_FILE}.tmp" && mv "${PR_QUEUE_FILE}.tmp" "${PR_QUEUE_FILE}"
   fi
 
@@ -155,48 +208,59 @@ review_pull_request() {
     return 1
   fi
 
-  local risk_level=$(echo "${pr_data}" | jq -r '.risk_level')
-  local risk_score=$(echo "${pr_data}" | jq -r '.risk_score')
-  local branch=$(echo "${pr_data}" | jq -r '.branch')
-  local base=$(echo "${pr_data}" | jq -r '.base')
+  local risk_level
+  risk_level=$(echo "${pr_data}" | jq -r '.risk_level')
+  local risk_score
+  risk_score=$(echo "${pr_data}" | jq -r '.risk_score')
+  local branch
+  branch=$(echo "${pr_data}" | jq -r '.branch')
+  local base
+  base=$(echo "${pr_data}" | jq -r '.base')
 
   # Perform automated checks
-  local checks_passed=true
-  local review_comments=""
+  local checks_passed="true"
+  local -a review_lines=()
 
   # Check 1: Build status
   if ! check_build_status "${branch}"; then
-    checks_passed=false
-    review_comments="${review_comments}\n- ❌ Build failing"
+    checks_passed="false"
+    review_lines+=("- [FAIL] Build failing")
   else
-    review_comments="${review_comments}\n- ✅ Build passing"
+    review_lines+=("- [OK] Build passing")
   fi
 
   # Check 2: Tests
   if ! check_test_status "${branch}"; then
-    checks_passed=false
-    review_comments="${review_comments}\n- ❌ Tests failing"
+    checks_passed="false"
+    review_lines+=("- [FAIL] Tests failing")
   else
-    review_comments="${review_comments}\n- ✅ Tests passing"
+    review_lines+=("- [OK] Tests passing")
   fi
 
   # Check 3: Code quality
-  local quality_issues=$(check_code_quality "${branch}")
+  local quality_issues
+  quality_issues=$(check_code_quality "${branch}")
   if [[ ${quality_issues} -gt 0 ]]; then
-    review_comments="${review_comments}\n- ⚠�${�${ $quality_}is}sues code quality issues"
+    review_lines+=("- [WARN] Code quality issues detected")
     if [[ ${quality_issues} -gt 5 ]]; then
-      checks_passed=false
+      checks_passed="false"
     fi
   else
-    review_comments="${review_comments}\n- ✅ Code quality checks passed"
+    review_lines+=("- [OK] Code quality checks passed")
   fi
 
   # Check 4: Security scan
   if ! check_security "${branch}"; then
-    checks_passed=false
-    review_comments="${review_comments}\n- ❌ Security issues found"
+    checks_passed="false"
+    review_lines+=("- [FAIL] Security issues found")
   else
-    review_comments="${review_comments}\n- ✅ Security scan passed"
+    review_lines+=("- [OK] Security scan passed")
+  fi
+
+  local review_comments=""
+  if ((${#review_lines[@]} > 0)); then
+    printf -v review_comments '%s\n' "${review_lines[@]}"
+    review_comments=${review_comments%$'\n'}
   fi
 
   # Decision logic
@@ -231,9 +295,11 @@ check_build_status() {
   git checkout "${branch}" 2>/dev/null
 
   # For Xcode projects
-  if find . -name "*.xcodeproj" | head -1 >/dev/null; then
-    local project_file=$(find . -name "*.xcodeproj" | head -1)
-    local scheme=$(xcodebuild -list -project "${project_file}" 2>/dev/null | grep "Schemes:" -A 5 | tail -5 | head -1 | xargs)
+  local project_file
+  project_file=$(find . -name "*.xcodeproj" | head -1)
+  if [[ -n ${project_file} ]]; then
+    local scheme
+    scheme=$(xcodebuild -list -project "${project_file}" 2>/dev/null | grep "Schemes:" -A 5 | tail -5 | head -1 | xargs)
 
     if [[ -n ${scheme} ]]; then
       if xcodebuild -project "${project_file}" -scheme "${scheme}" -sdk iphonesimulator -configuration Debug build 2>/dev/null; then
@@ -270,9 +336,11 @@ check_test_status() {
   fi
 
   # For Xcode projects
-  if find . -name "*.xcodeproj" | head -1 >/dev/null; then
-    local project_file=$(find . -name "*.xcodeproj" | head -1)
-    local scheme=$(xcodebuild -list -project "${project_file}" 2>/dev/null | grep "Schemes:" -A 5 | tail -5 | head -1 | xargs)
+  local project_file
+  project_file=$(find . -name "*.xcodeproj" | head -1)
+  if [[ -n ${project_file} ]]; then
+    local scheme
+    scheme=$(xcodebuild -list -project "${project_file}" 2>/dev/null | grep "Schemes:" -A 5 | tail -5 | head -1 | xargs)
 
     if [[ -n ${scheme} ]]; then
       if xcodebuild -project "${project_file}" -scheme "${scheme}" -sdk iphonesimulator -configuration Debug test 2>/dev/null; then
@@ -295,9 +363,12 @@ check_code_quality() {
 
   # SwiftLint check
   if command -v swiftlint &>/dev/null; then
-    local lint_output=$(swiftlint 2>&1)
-    local lint_warnings=$(echo "${lint_output}" | grep -c "warning")
-    local lint_errors=$(echo "${lint_output}" | grep -c "error")
+    local lint_output
+    lint_output=$(swiftlint 2>&1)
+    local lint_warnings
+    lint_warnings=$(echo "${lint_output}" | grep -c "warning")
+    local lint_errors
+    lint_errors=$(echo "${lint_output}" | grep -c "error")
     issues=$((issues + lint_warnings + lint_errors))
 
     if [[ ${issues} -gt 0 ]]; then
@@ -332,7 +403,8 @@ check_security() {
   fi
 
   # Check for insecure file permissions
-  local insecure_files=$(find . -name "*.pem" -o -name "*.key" -o -name "*.p12" 2>/dev/null | xargs ls -la 2>/dev/null | grep -v "r--------" | wc -l)
+  local insecure_files
+  insecure_files=$(find . -type f \( -name "*.pem" -o -name "*.key" -o -name "*.p12" \) -perm /0077 -print 2>/dev/null | wc -l | tr -d ' ')
   if [[ ${insecure_files} -gt 0 ]]; then
     security_issues=$((security_issues + 1))
     log_message "WARNING" "Insecure file permissions found"
@@ -348,17 +420,29 @@ merge_pull_request() {
   log_message "INFO" "Auto-merging PR: ${pr_id}"
 
   # Get PR data
-  local pr_data
+  local pr_data=""
+  local branch=""
+  local base=""
+  local pr_title=""
   if command -v jq &>/dev/null; then
-    pr_data=$(jq -r ".prs[] | select(.id == \"${pr_id}\")" "${PR_QUEUE_FILE}")
+    pr_data=$(jq -r --arg pr_id "${pr_id}" '.prs[] | select(.id == $pr_id)' "${PR_QUEUE_FILE}")
+    branch=$(echo "${pr_data}" | jq -r '.branch // empty')
+    base=$(echo "${pr_data}" | jq -r '.base // empty')
+    pr_title=$(echo "${pr_data}" | jq -r '.title // ""')
   fi
 
-  local branch=$(echo "${pr_data}" | jq -r '.branch')
-  local base=$(echo "${pr_data}" | jq -r '.base')
+  if [[ -z ${branch} || -z ${base} ]]; then
+    log_message "ERROR" "Missing branch or base for PR ${pr_id}"
+    update_pr_status "${pr_id}" "merge_failed" "missing_branch"
+    return 1
+  fi
 
   # Switch to base branch and merge
   git checkout "${base}" 2>/dev/null
-  if git merge "${branch}" --no-ff -m "Auto-merge: $(echo "${pr_data}" | jq -r '.title') (PR #${pr_id})" 2>/dev/null; then
+  local merge_message
+  merge_message=$(printf "Auto-merge: %s (PR #%s)" "${pr_title}" "${pr_id}")
+
+  if git merge "${branch}" --no-ff -m "${merge_message}" 2>/dev/null; then
     log_message "INFO" "Successfully merged PR ${pr_id}"
     update_pr_status "${pr_id}" "merged" "success"
 
@@ -393,7 +477,12 @@ generate_review_report() {
   local decision="$2"
   local comments="$3"
 
-  local report_file="$(dirname "$0")/review_reports/pr_review_${pr_id}_$(date +%Y%m%d_%H%M%S).md"
+  local report_dir
+  report_dir="$(dirname "$0")/review_reports"
+  local timestamp
+  timestamp=$(date +%Y%m%d_%H%M%S)
+  local report_file
+  report_file="${report_dir}/pr_review_${pr_id}_${timestamp}.md"
 
   {
     echo "# Pull Request Review Report"
@@ -408,10 +497,14 @@ generate_review_report() {
 
     # Get PR data for risk info
     if command -v jq &>/dev/null; then
-      local pr_data=$(jq -r ".prs[] | select(.id == \"${pr_id}\")" "${PR_QUEUE_FILE}")
-      local risk_score=$(echo "${pr_data}" | jq -r '.risk_score')
-      local risk_level=$(echo "${pr_data}" | jq -r '.risk_level')
-      local changed_files=$(echo "${pr_data}" | jq -r '.changed_files')
+      local pr_data
+      pr_data=$(jq -r ".prs[] | select(.id == \"${pr_id}\")" "${PR_QUEUE_FILE}")
+      local risk_score
+      risk_score=$(echo "${pr_data}" | jq -r '.risk_score')
+      local risk_level
+      risk_level=$(echo "${pr_data}" | jq -r '.risk_level')
+      local changed_files
+      changed_files=$(echo "${pr_data}" | jq -r '.changed_files')
 
       echo "- Risk Score: ${risk_score}/100"
       echo "- Risk Level: ${risk_level}"
@@ -426,7 +519,7 @@ generate_review_report() {
 # Process notifications from orchestrator
 process_notifications() {
   if [[ -f ${NOTIFICATION_FILE} ]]; then
-    while IFS='|' read -r timestamp notification_type task_id; do
+    while IFS='|' read -r _timestamp notification_type task_id; do
       case "${notification_type}" in
       "new_task")
         log_message "INFO" "Received new task: ${task_id}"
@@ -440,31 +533,34 @@ process_notifications() {
     done <"${NOTIFICATION_FILE}"
 
     # Clear processed notifications
-    >"${NOTIFICATION_FILE}"
+    : >"${NOTIFICATION_FILE}"
   fi
 }
 
 # Main agent loop
 log_message "INFO" "Pull Request Agent starting..."
+trap 'update_status stopped; exit 0' SIGTERM SIGINT
 
 while true; do
+  update_status "running"
   # Process notifications from orchestrator
   process_notifications
 
   # Check for pending PRs to review
   if command -v jq &>/dev/null; then
-    local pending_prs=$(jq -r '.prs[] | select(.status == "created") | .id' "${PR_QUEUE_FILE}")
+    mapfile -t pending_prs < <(jq -r '.prs[] | select(.status == "created") | .id' "${PR_QUEUE_FILE}")
 
-    for pr_id in ${pending_prs}; do
+    for pr_id in "${pending_prs[@]}"; do
       review_pull_request "${pr_id}"
     done
   fi
 
   # Generate periodic status report (every 10 minutes)
-  local current_minute=$(date +%M)
+  current_minute=$(date +%M)
   if [[ $((current_minute % 10)) -eq 0 ]]; then
     generate_status_report
   fi
 
+  update_status "idle"
   sleep 60 # Check every minute
 done

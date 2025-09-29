@@ -41,41 +41,41 @@ final class CalendarDataManager: CalendarDataManaging {
     /// - Parameter events: Array of `CalendarEvent` objects to save.
     func save(events: [CalendarEvent]) {
         if let encoded = try? JSONEncoder().encode(events) {
-            userDefaults.set(encoded, forKey: eventsKey)
+            self.userDefaults.set(encoded, forKey: self.eventsKey)
         }
     }
 
     /// Adds a new calendar event to the stored events.
     /// - Parameter event: The `CalendarEvent` to add.
     func add(_ event: CalendarEvent) {
-        var currentEvents = load()
+        var currentEvents = self.load()
         currentEvents.append(event)
-        save(events: currentEvents)
+        self.save(events: currentEvents)
     }
 
     /// Updates an existing calendar event.
     /// - Parameter event: The `CalendarEvent` to update.
     func update(_ event: CalendarEvent) {
-        var currentEvents = load()
+        var currentEvents = self.load()
         if let index = currentEvents.firstIndex(where: { $0.id == event.id }) {
             currentEvents[index] = event
-            save(events: currentEvents)
+            self.save(events: currentEvents)
         }
     }
 
     /// Deletes a calendar event from storage.
     /// - Parameter event: The `CalendarEvent` to delete.
     func delete(_ event: CalendarEvent) {
-        var currentEvents = load()
+        var currentEvents = self.load()
         currentEvents.removeAll { $0.id == event.id }
-        save(events: currentEvents)
+        self.save(events: currentEvents)
     }
 
     /// Finds a calendar event by its ID.
     /// - Parameter id: The UUID of the event to find.
     /// - Returns: The `CalendarEvent` if found, otherwise nil.
     func find(by id: UUID) -> CalendarEvent? {
-        let events = load()
+        let events = self.load()
         return events.first { $0.id == id }
     }
 
@@ -87,7 +87,7 @@ final class CalendarDataManager: CalendarDataManaging {
         let targetDate = calendar.startOfDay(for: date)
         let nextDay = calendar.date(byAdding: .day, value: 1, to: targetDate)!
 
-        return load().filter { event in
+        return self.load().filter { event in
             let eventDate = calendar.startOfDay(for: event.date)
             return eventDate >= targetDate && eventDate < nextDay
         }.sorted { $0.date < $1.date }
@@ -99,7 +99,7 @@ final class CalendarDataManager: CalendarDataManaging {
     ///   - endDate: The end of the date range.
     /// - Returns: Array of events within the date range.
     func events(between startDate: Date, and endDate: Date) -> [CalendarEvent] {
-        load().filter { event in
+        self.load().filter { event in
             event.date >= startDate && event.date <= endDate
         }.sorted { $0.date < $1.date }
     }
@@ -109,28 +109,28 @@ final class CalendarDataManager: CalendarDataManaging {
     /// - Returns: Array of upcoming events.
     func upcomingEvents(within days: Int) -> [CalendarEvent] {
         let futureDate = Calendar.current.date(byAdding: .day, value: days, to: Date()) ?? Date()
-        return load().filter { $0.date > Date() && $0.date <= futureDate }
+        return self.load().filter { $0.date > Date() && $0.date <= futureDate }
             .sorted { $0.date < $1.date }
     }
 
     /// Gets events sorted by date.
     /// - Returns: Array of events sorted by date (soonest first).
     func eventsSortedByDate() -> [CalendarEvent] {
-        load().sorted { $0.date < $1.date }
+        self.load().sorted { $0.date < $1.date }
     }
 
     /// Clears all events from storage.
     func clearAllEvents() {
-        userDefaults.removeObject(forKey: eventsKey)
+        self.userDefaults.removeObject(forKey: self.eventsKey)
     }
 
     /// Gets statistics about calendar events.
     /// - Returns: Dictionary with event statistics.
     func getEventStatistics() -> [String: Int] {
-        let events = load()
+        let events = self.load()
         let total = events.count
         let today = self.events(for: Date()).count
-        let thisWeek = upcomingEvents(within: 7).count
+        let thisWeek = self.upcomingEvents(within: 7).count
 
         return [
             "total": total,

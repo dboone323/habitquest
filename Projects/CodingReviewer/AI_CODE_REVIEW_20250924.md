@@ -531,6 +531,7 @@ The current file violates fundamental best practices by existing in this state. 
 2.  **Investigate the Generation Process:** If you are using an AI tool to generate tests, diagnose the "timeout" issue. Do not commit the results of a failed process.
 
 3.  **Implement Proper UI Tests Manually:**
+
     - **Create a new `XCTestCase` subclass** (e.g., `LoginUITests`).
     - **Use Setup/Teardown:**
 
@@ -602,6 +603,7 @@ The comment indicates the tests were AI-generated and not yet reviewed. While AI
 Most likely, the generated tests are a series of `XCTestCase` methods without a clear structure like the "Given-When-Then" pattern. This reduces readability and maintainability.
 
 - **Actionable Feedback:**
+
   - **Structure tests clearly.** Organize each test method into distinct sections.
 
     ```swift
@@ -629,6 +631,7 @@ Most likely, the generated tests are a series of `XCTestCase` methods without a 
 If the AI generated code that creates heavy objects (like the `DebugEngine` itself) repeatedly in each test instead of in `setUp()`, it could lead to performance degradation in the test suite.
 
 - **Actionable Feedback:**
+
   - **Use `setUp()` efficiently.** Move the initialization of the System Under Test (SUT) and its dependencies to the `setUp()` method to avoid redundant creation. Reset the state in `tearDown()` to ensure test isolation.
 
     ```swift
@@ -820,22 +823,26 @@ final class DebugIntegrationTests: XCTestCase {
 ## 🔧 Specific Action Items
 
 1. **Add Missing Structure**
+
    - Import XCTest and your module
    - Create proper XCTestCase subclass
    - Implement setup/teardown methods
 
 2. **Implement Actual Tests**
+
    - Success case tests
    - Failure case tests
    - Edge case tests
    - Performance tests
 
 3. **Add Async Support**
+
    - Use `async` test methods
    - Proper timeout handling
    - Async setup/teardown
 
 4. **Improve Documentation**
+
    - Add test purpose comments
    - Document preconditions and expected outcomes
    - Include error case documentation

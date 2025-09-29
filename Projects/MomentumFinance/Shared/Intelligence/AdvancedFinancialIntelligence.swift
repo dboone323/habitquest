@@ -31,14 +31,14 @@ public class AdvancedFinancialIntelligence: ObservableObject {
     private let predictionEngine = PredictionEngine()
     private let riskEngine = RiskAssessmentEngine()
     private var cancellables = Set<AnyCancellable>()
-#if canImport(SwiftData)
+    #if canImport(SwiftData)
     private let dataProvider: AdvancedFinancialDataProvider?
     private let autoAnalysisErrorHandler: (Error) -> Void
-#endif
+    #endif
 
     // MARK: - Initialization
 
-#if canImport(SwiftData)
+    #if canImport(SwiftData)
     public init(
         dataProvider: AdvancedFinancialDataProvider? = nil,
         onAutoAnalysisError: @escaping (Error) -> Void = { error in
@@ -51,11 +51,11 @@ public class AdvancedFinancialIntelligence: ObservableObject {
         self.autoAnalysisErrorHandler = onAutoAnalysisError
         self.setupAutoAnalysis()
     }
-#else
+    #else
     public init() {
         self.setupAutoAnalysis()
     }
-#endif
+    #endif
 
     // MARK: - Public Methods
 
@@ -127,8 +127,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
     // MARK: - Private Analysis Methods
 
     private func analyzeSpendingPatterns(_ transactions: [Transaction]) async
-        -> [EnhancedFinancialInsight]
-    {
+        -> [EnhancedFinancialInsight] {
         var insights: [EnhancedFinancialInsight] = []
 
         // Analyze spending velocity
@@ -334,9 +333,9 @@ public class AdvancedFinancialIntelligence: ObservableObject {
     // MARK: - Helper Methods
 
     private func setupAutoAnalysis() {
-#if canImport(SwiftData)
+        #if canImport(SwiftData)
         guard self.dataProvider != nil else { return }
-#endif
+        #endif
         // Setup automatic analysis every 24 hours
         Timer.publish(every: 86400, on: .main, in: .common)
             .autoconnect()
@@ -349,7 +348,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
     }
 
     private func performAutoAnalysis() async {
-#if canImport(SwiftData)
+        #if canImport(SwiftData)
         guard let dataProvider else { return }
         if self.isAnalyzing { return }
 
@@ -373,14 +372,13 @@ public class AdvancedFinancialIntelligence: ObservableObject {
         } catch {
             self.autoAnalysisErrorHandler(error)
         }
-#else
+        #else
         // Auto-analysis requires SwiftData-backed storage; no-op when unavailable.
-#endif
+        #endif
     }
 
     private func prioritizeInsights(_ insights: [EnhancedFinancialInsight])
-        -> [EnhancedFinancialInsight]
-    {
+        -> [EnhancedFinancialInsight] {
         insights.sorted { first, second in
             // Priority by severity first, then by impact score
             if first.priority != second.priority {
@@ -458,7 +456,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
         }
 
         let unusedSummaries = FinancialAnalyticsSharedCore.unusedSubscriptions(summaries)
-        let identifiers = Set(unusedSummaries.map { $0.name })
+        let identifiers = Set(unusedSummaries.map(\.name))
 
         return subscriptions.filter { identifiers.contains($0.name) }
     }
@@ -815,13 +813,13 @@ extension AdvancedFinancialIntelligence.Account: FinancialAnalyticsAccountConver
     var faType: FinancialAnalyticsAccountKind {
         switch self.type {
         case .checking:
-            return .checking
+            .checking
         case .savings:
-            return .savings
+            .savings
         case .investment:
-            return .investment
+            .investment
         case .credit:
-            return .credit
+            .credit
         }
     }
 
@@ -834,9 +832,9 @@ extension AdvancedFinancialIntelligence.AIBudget: FinancialAnalyticsBudgetConver
     var faPeriod: FinancialAnalyticsBudgetPeriod {
         switch self.period {
         case .monthly:
-            return .monthly
+            .monthly
         case .yearly:
-            return .yearly
+            .yearly
         }
     }
 }

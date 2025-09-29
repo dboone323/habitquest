@@ -1,73 +1,106 @@
 #!/bin/bash
-# Trunk Integration Validation Script
-
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+# Validate presence of Trunk configuration files and related assets.
+
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+REPO_ROOT=$(cd "${SCRIPT_DIR}/.." && pwd)
 
 cd "${REPO_ROOT}"
 
-echo "🔧 Validating Trunk Integration Setup"
-echo "======================================"
+info() {
+  printf '[INFO] %s\n' "$1"
+}
 
-# Check if trunk.yaml exists at root
+ok() {
+  printf '[ OK ] %s\n' "$1"
+}
+
+warn() {
+  printf '[WARN] %s\n' "$1"
+}
+
+fail() {
+  printf '[FAIL] %s\n' "$1"
+}
+
+section() {
+  printf '\n%s\n' "$1"
+  printf '%0.s-' $(seq 1 ${#1})
+  printf '\n'
+}
+
+section "Validating Trunk integration setup"
+
 if [[ -f ".trunk/trunk.yaml" ]]; then
-  echo "✅ Root .trunk/trunk.yaml found"
+  ok "Found .trunk/trunk.yaml"
 else
-  echo "❌ Root .trunk/trunk.yaml missing"
+  fail "Missing .trunk/trunk.yaml"
   exit 1
 fi
 
-# Check if config files exist
-config_files=(
-  ".trunk/configs/.isort.cfg"
-  ".trunk/configs/.markdownlint.yaml"
-  ".trunk/configs/.shellcheckrc"
-  ".trunk/configs/.yamllint.yaml"
-  ".trunk/configs/ruff.toml"
-)
-
-for config in "${config_files[@]}"; do
-  if [[ -f ${config} ]]; then
-    echo "�${ $conf}ig found"
+missing_configs=0
+while IFS= read -r config_path; do
+  if [[ -f ${config_path} ]]; then
+    ok "Found ${config_path}"
   else
-    echo "�${ $conf}ig missing"
+    fail "Missing ${config_path}"
+    missing_configs=$((missing_configs + 1))
+  fi
+done <<'EOF'
+.trunk/configs/.isort.cfg
+.trunk/configs/.markdownlint.yaml
+.trunk/configs/.shellcheckrc
+.trunk/configs/.yamllint.yaml
+.trunk/configs/ruff.toml
+EOF
+
+if ((missing_configs > 0)); then
+  fail "Configuration files missing (${missing_configs})."
+  exit 1
+fi
+
+info "Validating trunk.yaml syntax"
+if command -v python3 >/dev/null 2>&1; then
+  if python3 - <<'PY'; then
+import sys
+from pathlib import Path
+
+try:
+    import yaml
+except ImportError:
+    sys.exit("PyYAML is required to validate .trunk/trunk.yaml")
+
+path = Path('.trunk/trunk.yaml')
+with path.open('r', encoding='utf-8') as handle:
+    yaml.safe_load(handle)
+PY
+    ok "trunk.yaml parsed successfully"
+  else
+    fail "trunk.yaml failed to parse"
     exit 1
   fi
-done
-
-# Validate YAML syntax
-echo "🔍 Validating YAML syntax..."
-if python3 -c "import yaml; yaml.safe_load(open('.trunk/trunk.yaml'))" 2>/dev/null; then
-  echo "✅ trunk.yaml has valid YAML syntax"
 else
-  echo "❌ trunk.yaml has invalid YAML syntax"
-  exit 1
+  warn "python3 not available; skipping YAML validation"
 fi
 
-# Check GitHub workflow
 if [[ -f ".github/workflows/trunk.yml" ]]; then
-  echo "✅ GitHub Actions trunk workflow found"
+  ok "Found .github/workflows/trunk.yml"
 else
-  echo "❌ GitHub Actions trunk workflow missing"
+  fail "Missing .github/workflows/trunk.yml"
   exit 1
 fi
 
-# Count lintable files
-swift_count=$(find . -name "*.swift" -not -path "./.git/*" | wc -l)
-shell_count=$(find . -name "*.sh" -not -path "./.git/*" | wc -l)
-python_count=$(find . -name "*.py" -not -path "./.git/*" | wc -l)
-md_count=$(find . -name "*.md" -not -path "./.git/*" | wc -l)
+section "Repository statistics"
 
-echo ""
-echo "📊 Repository Statistics"
-echo "======================="
-echo "Swift files:  ${swift_count}"
-echo "Shell files:  ${shell_count}"
-echo "Python files: ${python_count}"
-echo "Markdown files: ${md_count}"
+count_files() {
+  local pattern=$1
+  find . -type f -name "${pattern}" -not -path '*/.git/*' | wc -l | tr -d ' '
+}
 
-echo ""
-echo "✅ Trunk integration setup validation complete!"
-echo "🚀 Ready for merge queue integration"
+printf 'Swift files:    %s\n' "$(count_files '*.swift')"
+printf 'Shell files:    %s\n' "$(count_files '*.sh')"
+printf 'Python files:   %s\n' "$(count_files '*.py')"
+printf 'Markdown files: %s\n' "$(count_files '*.md')"
+
+printf '\n[ OK ] Trunk integration setup validation complete\n'

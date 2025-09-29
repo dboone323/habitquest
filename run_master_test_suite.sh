@@ -24,14 +24,12 @@ TEST_FAILURES=0
 
 # Directories
 WORKSPACE_ROOT="/Users/danielstevens/Desktop/Quantum-workspace"
-PROJECTS_DIR="$WORKSPACE_ROOT/Projects"
-SHARED_DIR="$WORKSPACE_ROOT/Shared"
-TOOLS_DIR="$WORKSPACE_ROOT/Tools"
-DOCS_DIR="$WORKSPACE_ROOT/Documentation"
+PROJECTS_DIR="${WORKSPACE_ROOT}/Projects"
+SHARED_DIR="${WORKSPACE_ROOT}/Shared"
 
 # Log file
-LOG_FILE="$WORKSPACE_ROOT/test_results_$(date +%Y%m%d_%H%M%S).log"
-REPORT_FILE="$WORKSPACE_ROOT/COMPREHENSIVE_TEST_REPORT_$(date +%Y%m%d_%H%M%S).md"
+LOG_FILE="${WORKSPACE_ROOT}/test_results_$(date +%Y%m%d_%H%M%S).log"
+REPORT_FILE="${WORKSPACE_ROOT}/COMPREHENSIVE_TEST_REPORT_$(date +%Y%m%d_%H%M%S).md"
 
 # Projects to test
 PROJECTS=("HabitQuest" "MomentumFinance" "PlannerApp" "AvoidObstaclesGame" "CodingReviewer")
@@ -39,26 +37,26 @@ PROJECTS=("HabitQuest" "MomentumFinance" "PlannerApp" "AvoidObstaclesGame" "Codi
 echo -e "${BLUE}🚀 QUANTUM WORKSPACE COMPREHENSIVE TEST SUITE${NC}"
 echo -e "${BLUE}==============================================${NC}"
 echo -e "${CYAN}Date: $(date)${NC}"
-echo -e "${CYAN}Workspace: $WORKSPACE_ROOT${NC}"
-echo -e "${CYAN}Log File: $LOG_FILE${NC}"
-echo -e "${CYAN}Report File: $REPORT_FILE${NC}"
+echo -e "${CYAN}Workspace: ${WORKSPACE_ROOT}${NC}"
+echo -e "${CYAN}Log File: ${LOG_FILE}${NC}"
+echo -e "${CYAN}Report File: ${REPORT_FILE}${NC}"
 echo ""
 
 # Initialize log file
-cat >"$LOG_FILE" <<EOF
+cat >"${LOG_FILE}" <<EOF
 Quantum Workspace Comprehensive Test Suite
 ==========================================
 Date: $(date)
-Workspace: $WORKSPACE_ROOT
+Workspace: ${WORKSPACE_ROOT}
 
 EOF
 
 # Initialize report file
-cat >"$REPORT_FILE" <<EOF
+cat >"${REPORT_FILE}" <<EOF
 # Quantum Workspace Comprehensive Test Report
 
 **Date**: $(date)
-**Workspace**: $WORKSPACE_ROOT
+**Workspace**: ${WORKSPACE_ROOT}
 **Test Suite Version**: Phase 4 Complete
 
 ## Executive Summary
@@ -69,17 +67,18 @@ EOF
 log_message() {
   local level=$1
   local message=$2
-  local timestamp=$(date '+%H:%M:%S')
+  local timestamp
+  timestamp=$(date '+%H:%M:%S')
 
-  echo "[$timestamp] [$level] $message" | tee -a "$LOG_FILE"
+  echo "[${timestamp}] [${level}] ${message}" | tee -a "${LOG_FILE}"
 
-  case $level in
-  "ERROR") echo -e "${RED}❌ $message${NC}" ;;
-  "SUCCESS") echo -e "${GREEN}✅ $message${NC}" ;;
-  "WARNING") echo -e "${YELLOW}⚠️  $message${NC}" ;;
-  "INFO") echo -e "${CYAN}ℹ️  $message${NC}" ;;
-  "BUILD") echo -e "${PURPLE}🔨 $message${NC}" ;;
-  "TEST") echo -e "${BLUE}🧪 $message${NC}" ;;
+  case ${level} in
+  "ERROR") echo -e "${RED}❌ ${message}${NC}" ;;
+  "SUCCESS") echo -e "${GREEN}✅ ${message}${NC}" ;;
+  "WARNING") echo -e "${YELLOW}⚠️  ${message}${NC}" ;;
+  "INFO") echo -e "${CYAN}ℹ️  ${message}${NC}" ;;
+  "BUILD") echo -e "${PURPLE}🔨 ${message}${NC}" ;;
+  "TEST") echo -e "${BLUE}🧪 ${message}${NC}" ;;
   esac
 }
 
@@ -88,7 +87,7 @@ update_counters() {
   local status=$1
   TOTAL_TESTS=$((TOTAL_TESTS + 1))
 
-  if [ "$status" = "PASSED" ]; then
+  if [[ ${status} == "PASSED" ]]; then
     PASSED_TESTS=$((PASSED_TESTS + 1))
   else
     FAILED_TESTS=$((FAILED_TESTS + 1))
@@ -101,24 +100,24 @@ run_build() {
   local project_name=$2
   local platform=${3:-"default"}
 
-  log_message "BUILD" "Building $project_name ($platform)"
+  log_message "BUILD" "Building ${project_name} (${platform})"
 
-  cd "$project_path"
+  cd "${project_path}"
 
   # Check if this is a SwiftPM project or Xcode project
   if [[ -f "Package.swift" ]]; then
     # SwiftPM project
     if swift build >build_output.tmp 2>&1; then
-      log_message "SUCCESS" "$project_name ($platform) SwiftPM build successful"
+      log_message "SUCCESS" "${project_name} (${platform}) SwiftPM build successful"
       update_counters "PASSED"
-      cat build_output.tmp >>"$LOG_FILE"
+      cat build_output.tmp >>"${LOG_FILE}"
       rm -f build_output.tmp
       return 0
     else
-      log_message "ERROR" "$project_name ($platform) SwiftPM build failed"
+      log_message "ERROR" "${project_name} (${platform}) SwiftPM build failed"
       BUILD_FAILURES=$((BUILD_FAILURES + 1))
       update_counters "FAILED"
-      cat build_output.tmp >>"$LOG_FILE"
+      cat build_output.tmp >>"${LOG_FILE}"
       rm -f build_output.tmp
       return 1
     fi
@@ -134,17 +133,17 @@ run_tests() {
   local project_path=$1
   local project_name=$2
 
-  log_message "TEST" "Running tests for $project_name"
+  log_message "TEST" "Running tests for ${project_name}"
 
-  cd "$project_path"
+  cd "${project_path}"
 
   # Check if tests exist
-  if [ -d "Tests" ] || find . -name "*Tests.swift" -type f | grep -q .; then
+  if [[ -d "Tests" ]] || find . -name "*Tests.swift" -type f | grep -q .; then
     # Check if this is a SwiftPM project
     if [[ -f "Package.swift" ]]; then
       # SwiftPM project - use swift test
       if swift test >test_output.tmp 2>&1; then
-        log_message "SUCCESS" "$project_name SwiftPM tests passed"
+        log_message "SUCCESS" "${project_name} SwiftPM tests passed"
         update_counters "PASSED"
         cat test_output.tmp >>"${LOG_FILE}"
       else
@@ -157,22 +156,22 @@ run_tests() {
       # Xcode project - check for test targets
       local xcode_project
       xcode_project=$(find . -name "*.xcodeproj" -type d | head -1)
-      if [[ -n "${xcode_project}" ]]; then
+      if [[ -n ${xcode_project} ]]; then
         local scheme_name
         scheme_name=$(basename "${xcode_project}" .xcodeproj)
         # Try to run Xcode tests (this may not work in all environments)
         if xcodebuild -project "${xcode_project}" -scheme "${scheme_name}Tests" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15' test >test_output.tmp 2>&1 2>/dev/null; then
           log_message "SUCCESS" "${project_name} Xcode tests passed"
           update_counters "PASSED"
-          cat test_output.tmp >>"$LOG_FILE"
+          cat test_output.tmp >>"${LOG_FILE}"
         else
-          log_message "WARNING" "$project_name Xcode tests not configured or failed (expected in some environments)"
+          log_message "WARNING" "${project_name} Xcode tests not configured or failed (expected in some environments)"
           # Don't count as failure since Xcode tests may not be set up
           update_counters "PASSED"
-          echo "Xcode tests not available or failed" >>"$LOG_FILE"
+          echo "Xcode tests not available or failed" >>"${LOG_FILE}"
         fi
       else
-        log_message "WARNING" "No test framework available for $project_name"
+        log_message "WARNING" "No test framework available for ${project_name}"
         update_counters "PASSED"
       fi
     fi
@@ -190,46 +189,46 @@ run_xcode_build() {
   local project_name=$2
   local platform=$3
 
-  log_message "BUILD" "Building $project_name for $platform with Xcode"
+  log_message "BUILD" "Building ${project_name} for ${platform} with Xcode"
 
-  cd "$project_path"
+  cd "${project_path}"
 
   # Find .xcodeproj file
   local xcode_project
   xcode_project=$(find . -name "*.xcodeproj" -type d | head -1)
 
-  if [ -n "$xcode_project" ]; then
+  if [[ -n ${xcode_project} ]]; then
     local scheme_name
-    scheme_name=$(basename "$xcode_project" .xcodeproj)
+    scheme_name=$(basename "${xcode_project}" .xcodeproj)
 
-    case $platform in
+    case ${platform} in
     "iOS")
       # Use iOS 26.0 simulator that we know is available
-      if xcodebuild -project "$xcode_project" -scheme "$scheme_name" -sdk iphoneos -configuration Debug -destination 'platform=iOS Simulator,id=43C262CD-FEC5-4CEB-8632-48B9AB5CF5EF' -allowProvisioningUpdates >xcode_build.tmp 2>&1; then
-        log_message "SUCCESS" "$project_name iOS build successful"
+      if xcodebuild -project "${xcode_project}" -scheme "${scheme_name}" -sdk iphoneos -configuration Debug -destination 'platform=iOS Simulator,id=43C262CD-FEC5-4CEB-8632-48B9AB5CF5EF' -allowProvisioningUpdates >xcode_build.tmp 2>&1; then
+        log_message "SUCCESS" "${project_name} iOS build successful"
         update_counters "PASSED"
       else
-        log_message "ERROR" "$project_name iOS build failed"
+        log_message "ERROR" "${project_name} iOS build failed"
         BUILD_FAILURES=$((BUILD_FAILURES + 1))
         update_counters "FAILED"
       fi
       ;;
     "macOS")
-      if xcodebuild -project "$xcode_project" -scheme "$scheme_name" -sdk macosx -configuration Debug -allowProvisioningUpdates >xcode_build.tmp 2>&1; then
-        log_message "SUCCESS" "$project_name macOS build successful"
+      if xcodebuild -project "${xcode_project}" -scheme "${scheme_name}" -sdk macosx -configuration Debug -allowProvisioningUpdates >xcode_build.tmp 2>&1; then
+        log_message "SUCCESS" "${project_name} macOS build successful"
         update_counters "PASSED"
       else
-        log_message "ERROR" "$project_name macOS build failed"
+        log_message "ERROR" "${project_name} macOS build failed"
         BUILD_FAILURES=$((BUILD_FAILURES + 1))
         update_counters "FAILED"
       fi
       ;;
     esac
 
-    cat xcode_build.tmp >>"$LOG_FILE"
+    cat xcode_build.tmp >>"${LOG_FILE}"
     rm -f xcode_build.tmp
   else
-    log_message "WARNING" "No Xcode project found for $project_name"
+    log_message "WARNING" "No Xcode project found for ${project_name}"
   fi
 }
 
@@ -237,14 +236,14 @@ run_xcode_build() {
 validate_shared_components() {
   log_message "INFO" "=== PHASE 1: SharedKit Components Validation ==="
 
-  echo "## 1. SharedKit Components Validation" >>"$REPORT_FILE"
-  echo "" >>"$REPORT_FILE"
+  echo "## 1. SharedKit Components Validation" >>"${REPORT_FILE}"
+  echo "" >>"${REPORT_FILE}"
 
   # Test SharedKit build
-  if run_build "$SHARED_DIR" "SharedKit" "Cross-Platform"; then
-    echo "- ✅ SharedKit Cross-Platform Build: **PASSED**" >${"$REPORT_FI}LE"
+  if run_build "${SHARED_DIR}" "SharedKit" "Cross-Platform"; then
+    echo "- ✅ SharedKit Cross-Platform Build: **PASSED**" >>"${REPORT_FILE}"
   else
-    echo "- ❌ SharedKit Cross-Platform Build: **FAILED**" >${"$REPORT_FI}LE"
+    echo "- ❌ SharedKit Cross-Platform Build: **FAILED**" >>"${REPORT_FILE}"
   fi
 
   # Validate individual components exist
@@ -270,56 +269,57 @@ validate_shared_components() {
   for component in "${shared_components[@]}"; do
     if [[ -f "${SHARED_DIR}/${component}" ]]; then
       log_message "SUCCESS" "SharedKit component exists: ${component}"
-      echo "- �${ $compone}nt" >>"$REPORT_FILE"
+      echo "- ✅ ${component}" >>"${REPORT_FILE}"
       update_counters "PASSED"
     else
       log_message "ERROR" "SharedKit component missing: ${component}"
-      echo "- �${ $compone}nt" >>"$REPORT_FILE"
+      echo "- ❌ ${component}" >>"${REPORT_FILE}"
       update_counters "FAILED"
     fi
   done
 
-  echo "" >>"$REPORT_FILE"
+  echo "" >>"${REPORT_FILE}"
 }
 
 # Function to validate iOS projects
 validate_ios_projects() {
   log_message "INFO" "=== PHASE 2: iOS Projects Build & Test ==="
 
-  echo "## 2. iOS Projects Build & Test" >>"$REPORT_FILE"
-  echo "" >>"$REPORT_FILE"
+  echo "## 2. iOS Projects Build & Test" >>"${REPORT_FILE}"
+  echo "" >>"${REPORT_FILE}"
 
   for project in "${PROJECTS[@]}"; do
-    local project_path="$PROJECTS_DIR/$project"
+    local project_path="${PROJECTS_DIR}/${project}"
 
-    if [ -d "$project_path" ]; then
-      log_message "INFO" "Testing iOS project: $project"
-      echo "### $project (iOS)" >>"$REPORT_FILE"
+    if [[ -d ${project_path} ]]; then
+      log_message "INFO" "Testing iOS project: ${project}"
+      echo "### ${project} (iOS)" >>"${REPORT_FILE}"
 
       # Swift build test
-      if run_build "$project_path" "$project" "iOS-Swift"; then
-        echo "- ✅ Swift Build: **PASSED**" >>"$REPORT_FILE"
+      if run_build "${project_path}" "${project}" "iOS-Swift"; then
+        echo "- ✅ Swift Build: **PASSED**" >>"${REPORT_FILE}"
       else
-        echo "- ❌ Swift Build: **FAILED**" >>"$REPORT_FILE"
+        echo "- ❌ Swift Build: **FAILED**" >>"${REPORT_FILE}"
       fi
 
       # Xcode build test
-      run_xcode_build "$project_path" "$project" "iOS"
-      if [ $? -eq 0 ]; then
-        echo "- ✅ Xcode iOS Build: **PASSED**" >>"$REPORT_FILE"
+      if run_xcode_build "${project_path}" "${project}" "iOS"; then
+        echo "- ✅ Xcode iOS Build: **PASSED**" >>"${REPORT_FILE}"
       else
-        echo "- ❌ Xcode iOS Build: **FAILED**" >>"$REPORT_FILE"
+        echo "- ❌ Xcode iOS Build: **FAILED**" >>"${REPORT_FILE}"
       fi
 
       # Run project tests
-      run_tests "$project_path" "$project"
+      run_tests "${project_path}" "${project}"
 
-      echo "" >>"$REPORT_FILE"
+      echo "" >>"${REPORT_FILE}"
     else
-      log_message "WARNING" "Project directory not found: $project"
-      echo "### $project (iOS)" >>"$REPORT_FILE"
-      echo "- ⚠️ Project directory not found" >>"$REPORT_FILE"
-      echo "" >>"$REPORT_FILE"
+      log_message "WARNING" "Project directory not found: ${project}"
+      {
+        echo "### ${project} (iOS)"
+        echo "- ⚠️ Project directory not found"
+        echo ""
+      } >>"${REPORT_FILE}"
     fi
   done
 }
@@ -328,30 +328,31 @@ validate_ios_projects() {
 validate_macos_projects() {
   log_message "INFO" "=== PHASE 3: macOS Projects Build & Test ==="
 
-  echo "## 3. macOS Projects Build & Test" >>"$REPORT_FILE"
-  echo "" >>"$REPORT_FILE"
+  echo "## 3. macOS Projects Build & Test" >>"${REPORT_FILE}"
+  echo "" >>"${REPORT_FILE}"
 
   for project in "${PROJECTS[@]}"; do
-    local project_path="$PROJECTS_DIR/$project"
+    local project_path="${PROJECTS_DIR}/${project}"
 
-    if [ -d "$project_path" ]; then
-      log_message "INFO" "Testing macOS project: $project"
-      echo "### $project (macOS)" >>"$REPORT_FILE"
+    if [[ -d ${project_path} ]]; then
+      log_message "INFO" "Testing macOS project: ${project}"
+      echo "### ${project} (macOS)" >>"${REPORT_FILE}"
 
       # Xcode macOS build test
-      run_xcode_build "$project_path" "$project" "macOS"
-      if [ $? -eq 0 ]; then
-        echo "- ✅ Xcode macOS Build: **PASSED**" >>"$REPORT_FILE"
+      if run_xcode_build "${project_path}" "${project}" "macOS"; then
+        echo "- ✅ Xcode macOS Build: **PASSED**" >>"${REPORT_FILE}"
       else
-        echo "- ❌ Xcode macOS Build: **FAILED**" >>"$REPORT_FILE"
+        echo "- ❌ Xcode macOS Build: **FAILED**" >>"${REPORT_FILE}"
       fi
 
-      echo "" >>"$REPORT_FILE"
+      echo "" >>"${REPORT_FILE}"
     else
-      log_message "WARNING" "Project directory not found: $project"
-      echo "### $project (macOS)" >>"$REPORT_FILE"
-      echo "- ⚠️ Project directory not found" >>"$REPORT_FILE"
-      echo "" >>"$REPORT_FILE"
+      log_message "WARNING" "Project directory not found: ${project}"
+      {
+        echo "### ${project} (macOS)"
+        echo "- ⚠️ Project directory not found"
+        echo ""
+      } >>"${REPORT_FILE}"
     fi
   done
 }
@@ -360,14 +361,14 @@ validate_macos_projects() {
 run_integration_tests() {
   log_message "INFO" "=== PHASE 4: Cross-Platform Integration Testing ==="
 
-  echo "## 4. Cross-Platform Integration Testing" >>"$REPORT_FILE"
-  echo "" >>"$REPORT_FILE"
+  echo "## 4. Cross-Platform Integration Testing" >>"${REPORT_FILE}"
+  echo "" >>"${REPORT_FILE}"
 
   # Test our Phase 4 testing suites
-  cd "$SHARED_DIR"
+  cd "${SHARED_DIR}"
 
   log_message "TEST" "Running Integration Test Validation"
-  echo "### Integration Test Suites Validation" >>"$REPORT_FILE"
+  echo "### Integration Test Suites Validation" >>"${REPORT_FILE}"
 
   # Validate that our test files compile and are accessible
   local test_suites=(
@@ -379,23 +380,24 @@ run_integration_tests() {
   )
 
   for test_suite in "${test_suites[@]}"; do
-    if [ -f "$test_suite" ]; then
-      log_message "SUCCESS" "Test suite available: $test_suite"
-      echo "- ✅ $(basename "$test_suite"): **AVAILABLE**" >>"$REPORT_FILE"
+    if [[ -f ${test_suite} ]]; then
+      log_message "SUCCESS" "Test suite available: ${test_suite}"
+      echo "- ✅ $(basename "${test_suite}"): **AVAILABLE**" >>"${REPORT_FILE}"
       update_counters "PASSED"
 
       # Check file size to ensure it's not empty
-      local file_size=$(wc -l <"$test_suite")
-      if [ "$file_size" -gt 100 ]; then
-        log_message "SUCCESS" "Test suite substantial: $test_suite ($file_size lines)"
-        echo "  - Lines of code: $file_size" >>"$REPORT_FILE"
+      local file_size
+      file_size=$(wc -l <"${test_suite}")
+      if [[ ${file_size} -gt 100 ]]; then
+        log_message "SUCCESS" "Test suite substantial: ${test_suite} (${file_size} lines)"
+        echo "  - Lines of code: ${file_size}" >>"${REPORT_FILE}"
       else
-        log_message "WARNING" "Test suite may be incomplete: $test_suite ($file_size lines)"
-        echo "  - ⚠️ Warning: Only $file_size lines" >>"$REPORT_FILE"
+        log_message "WARNING" "Test suite may be incomplete: ${test_suite} (${file_size} lines)"
+        echo "  - ⚠️ Warning: Only ${file_size} lines" >>"${REPORT_FILE}"
       fi
     else
       log_message "ERROR" "Test suite missing: ${test_suite}"
-      echo "- ❌ $(basename${"$test_sui}te"): **MISSING**" >>"$REPORT_FILE"
+      echo "- ❌ $(basename "${test_suite}"): **MISSING**" >>"${REPORT_FILE}"
       update_counters "FAILED"
     fi
   done
@@ -408,17 +410,17 @@ run_integration_tests() {
 
   if swift build >integration_build.tmp 2>&1; then
     log_message "SUCCESS" "All advanced features compile successfully"
-    echo "- ✅ Advanced Features Compilation: **PASSED**" >${"$REPORT_FI}LE"
+    echo "- ✅ Advanced Features Compilation: **PASSED**" >>"${REPORT_FILE}"
     update_counters "PASSED"
   else
     log_message "ERROR" "Advanced features compilation failed"
-    echo "- ❌ Advanced Features Compilation: **FAILED**" >${"$REPORT_FI}LE"
+    echo "- ❌ Advanced Features Compilation: **FAILED**" >>"${REPORT_FILE}"
     update_counters "FAILED"
     cat integration_build.tmp >>"${LOG_FILE}"
   fi
 
   rm -f integration_build.tmp
-  echo "" >>"$REPORT_FILE"
+  echo "" >>"${REPORT_FILE}"
 }
 
 # Function to generate final report
@@ -426,48 +428,48 @@ generate_final_report() {
   log_message "INFO" "=== PHASE 5: Test Results Analysis & Reporting ==="
 
   local success_rate=0
-  if [[ "$TOTAL_TESTS" -gt 0 ]]; then
+  if [[ ${TOTAL_TESTS} -gt 0 ]]; then
     success_rate=$((PASSED_TESTS * 100 / TOTAL_TESTS))
   fi
 
   # Update executive summary
   cat >>"${REPORT_FILE}" <<EOF
 
-**Total Tests Run**: $TOTAL_TESTS
-**Tests Passed**: $PASSED_TESTS
-**Tests Failed**: $FAILED_TESTS
-**Success Rate**: $success_rate%
-**Build Failures**: $BUILD_FAILURES
-**Test Failures**: $TEST_FAILURES
+**Total Tests Run**: ${TOTAL_TESTS}
+**Tests Passed**: ${PASSED_TESTS}
+**Tests Failed**: ${FAILED_TESTS}
+**Success Rate**: ${success_rate}%
+**Build Failures**: ${BUILD_FAILURES}
+**Test Failures**: ${TEST_FAILURES}
 
 ## Test Results Summary
 
 ### 📊 Overall Statistics
-- **Success Rate**: $success_rate% ($PASSED_TESTS/$TOTAL_TESTS)
-- **Build Status**: $(if [ $BUILD_FAILURES -eq 0 ]; then echo "✅ ALL BUILDS SUCCESSFUL"; else echo "❌ $BUILD_FAILURES BUILD FAILURES"; fi)
-- **Test Status**: $(if [ $TEST_FAILURES -eq 0 ]; then echo "✅ ALL TESTS PASSED"; else echo "❌ $TEST_FAILURES TEST FAILURES"; fi)
+- **Success Rate**: ${success_rate}% (${PASSED_TESTS}/${TOTAL_TESTS})
+- **Build Status**: $(if [[ ${BUILD_FAILURES} -eq 0 ]]; then echo "✅ ALL BUILDS SUCCESSFUL"; else echo "❌ ${BUILD_FAILURES} BUILD FAILURES"; fi)
+- **Test Status**: $(if [[ ${TEST_FAILURES} -eq 0 ]]; then echo "✅ ALL TESTS PASSED"; else echo "❌ ${TEST_FAILURES} TEST FAILURES"; fi)
 
 ### 🎯 Quality Gate Assessment
-$(if [ $success_rate -ge 90 ]; then echo "🟢 **EXCELLENT** - Production Ready"; elif [ $success_rate -ge 75 ]; then echo "🟡 **GOOD** - Minor Issues"; else echo "🔴 **NEEDS IMPROVEMENT** - Major Issues"; fi)
+$(if [[ ${success_rate} -ge 90 ]]; then echo "🟢 **EXCELLENT** - Production Ready"; elif [[ ${success_rate} -ge 75 ]]; then echo "🟡 **GOOD** - Minor Issues"; else echo "🔴 **NEEDS IMPROVEMENT** - Major Issues"; fi)
 
 ### 📝 Recommendations
-$(if [ $BUILD_FAILURES -eq 0 ] && [ $TEST_FAILURES -eq 0 ]; then
+$(if [[ ${BUILD_FAILURES} -eq 0 ]] && [[ ${TEST_FAILURES} -eq 0 ]]; then
     echo "✅ **All systems operational** - Ready for production deployment"
     echo "✅ **No critical issues found** - Proceed with confidence"
     echo "✅ **Cross-platform compatibility validated** - Full device support confirmed"
   else
     echo "⚠️ **Review failed components** - Address build/test failures before deployment"
-    echo "🔍 **Check logs for details** - See $LOG_FILE for detailed error information"
+    echo "🔍 **Check logs for details** - See ${LOG_FILE} for detailed error information"
     echo "🛠️ **Fix and retest** - Resolve issues and run validation again"
   fi)
 
 ---
 
 ## Detailed Log Information
-For complete build and test output, see: \`$(basename "$LOG_FILE")\`
+For complete build and test output, see: \`$(basename "${LOG_FILE}")\`
 
 **Test Suite Completed**: $(date)
-**Workspace**: $WORKSPACE_ROOT
+**Workspace**: ${WORKSPACE_ROOT}
 **Generated by**: Quantum Workspace Master Test Suite v4.0
 EOF
 
@@ -476,28 +478,28 @@ EOF
   log_message "INFO" "=========================================="
   log_message "INFO" "QUANTUM WORKSPACE TEST SUITE COMPLETE"
   log_message "INFO" "=========================================="
-  log_message "INFO" "Total Tests: $TOTAL_TESTS"
-  log_message "INFO" "Passed: $PASSED_TESTS"
-  log_message "INFO" "Failed: $FAILED_TESTS"
-  log_message "INFO" "Success Rate: $success_rate%"
-  log_message "INFO" "Build Failures: $BUILD_FAILURES"
-  log_message "INFO" "Test Failures: $TEST_FAILURES"
+  log_message "INFO" "Total Tests: ${TOTAL_TESTS}"
+  log_message "INFO" "Passed: ${PASSED_TESTS}"
+  log_message "INFO" "Failed: ${FAILED_TESTS}"
+  log_message "INFO" "Success Rate: ${success_rate}%"
+  log_message "INFO" "Build Failures: ${BUILD_FAILURES}"
+  log_message "INFO" "Test Failures: ${TEST_FAILURES}"
 
-  if [ $success_rate -ge 90 ]; then
+  if [[ ${success_rate} -ge 90 ]]; then
     log_message "SUCCESS" "🎉 EXCELLENT RESULTS - PRODUCTION READY!"
-  elif [ $success_rate -ge 75 ]; then
+  elif [[ ${success_rate} -ge 75 ]]; then
     log_message "WARNING" "GOOD RESULTS - MINOR ISSUES TO RESOLVE"
   else
     log_message "ERROR" "NEEDS IMPROVEMENT - MAJOR ISSUES FOUND"
   fi
 
-  log_message "INFO" "Detailed Report: $REPORT_FILE"
-  log_message "INFO" "Complete Log: $LOG_FILE"
+  log_message "INFO" "Detailed Report: ${REPORT_FILE}"
+  log_message "INFO" "Complete Log: ${LOG_FILE}"
 }
 
 # Main execution flow
 main() {
-  cd "$WORKSPACE_ROOT"
+  cd "${WORKSPACE_ROOT}"
 
   # Phase 1: SharedKit Components Validation
   validate_shared_components
@@ -519,7 +521,7 @@ main() {
 main
 
 # Set exit code based on results
-if [ $BUILD_FAILURES -eq 0 ] && [ $TEST_FAILURES -eq 0 ]; then
+if [[ ${BUILD_FAILURES} -eq 0 ]] && [[ ${TEST_FAILURES} -eq 0 ]]; then
   exit 0
 else
   exit 1

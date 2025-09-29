@@ -145,12 +145,14 @@ run_security_analysis() {
       local input_validation
       input_validation=$(find . -name "*.swift" -exec grep -l "guard.*let\|if.*nil" {} \; | wc -l)
 
-      echo "[$(date)] ${AGENT_NAME}: Hard-coded secrets found in ${hard_coded_secrets} files" >>"${LOG_FILE}"
-      echo "[$(date)] ${AGENT_NAME}: SQL injection risks found in ${sql_injection} files" >>"${LOG_FILE}"
-      echo "[$(date)] ${AGENT_NAME}: Weak cryptography found in ${weak_crypto} files" >>"${LOG_FILE}"
-      echo "[$(date)] ${AGENT_NAME}: Unsafe URLs found in ${unsafe_urls} files" >>"${LOG_FILE}"
-      echo "[$(date)] ${AGENT_NAME}: Data exposure risks found in ${exposed_data} files" >>"${LOG_FILE}"
-      echo "[$(date)] ${AGENT_NAME}: Input validation found in ${input_validation} files" >>"${LOG_FILE}"
+      {
+        echo "[$(date)] ${AGENT_NAME}: Hard-coded secrets found in ${hard_coded_secrets} files"
+        echo "[$(date)] ${AGENT_NAME}: SQL injection risks found in ${sql_injection} files"
+        echo "[$(date)] ${AGENT_NAME}: Weak cryptography found in ${weak_crypto} files"
+        echo "[$(date)] ${AGENT_NAME}: Unsafe URLs found in ${unsafe_urls} files"
+        echo "[$(date)] ${AGENT_NAME}: Data exposure risks found in ${exposed_data} files"
+        echo "[$(date)] ${AGENT_NAME}: Input validation found in ${input_validation} files"
+      } >>"${LOG_FILE}"
 
       # Check for authentication and authorization
       local auth_usage
@@ -158,8 +160,10 @@ run_security_analysis() {
       local permission_checks
       permission_checks=$(find . -name "*.swift" -exec grep -l "canRead\|canWrite\|hasPermission" {} \; | wc -l)
 
-      echo "[$(date)] ${AGENT_NAME}: Authentication usage: ${auth_usage} files" >>"${LOG_FILE}"
-      echo "[$(date)] ${AGENT_NAME}: Permission checks: ${permission_checks} files" >>"${LOG_FILE}"
+      {
+        echo "[$(date)] ${AGENT_NAME}: Authentication usage: ${auth_usage} files"
+        echo "[$(date)] ${AGENT_NAME}: Permission checks: ${permission_checks} files"
+      } >>"${LOG_FILE}"
 
       # Calculate security score (simple heuristic)
       local security_score=$((100 - (hard_coded_secrets * 20) - (sql_injection * 15) - (weak_crypto * 10) - (unsafe_urls * 5)))

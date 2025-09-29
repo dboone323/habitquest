@@ -8,16 +8,11 @@ NOTIFICATION_FILE="${WORKSPACE}/Tools/Automation/agents/communication/${AGENT_NA
 AGENT_STATUS_FILE="${WORKSPACE}/Tools/Automation/agents/agent_status.json"
 TASK_QUEUE_FILE="${WORKSPACE}/Tools/Automation/agents/task_queue.json"
 REPORTS_DIR="${WORKSPACE}/Tools/Automation/reports"
+STATE_DIR="${WORKSPACE}/Tools/Automation/agents/state/${AGENT_NAME%.*}"
 
 # Create reports directory
 mkdir -p "${REPORTS_DIR}"
-
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+mkdir -p "${STATE_DIR}"
 
 # Logging function
 log() {
@@ -236,14 +231,14 @@ log "${AGENT_NAME}: Starting enhanced quality assurance agent..."
 update_status "available"
 
 # Track processed tasks to avoid duplicates
-processed_tasks_file="${AGENT_DIR}/processed_tasks.txt"
+processed_tasks_file="${STATE_DIR}/processed_tasks.txt"
 touch "${processed_tasks_file}"
 
 while true; do
   # Check for new task notifications
   if [[ -f ${NOTIFICATION_FILE} ]]; then
     while IFS='|' read -r _timestamp action task_id; do
-      if [[ ${action} == "execute_task" && -z $(grep "^${task_id}$" "${processed_tasks_file}") ]]; then
+      if [[ ${action} == "execute_task" ]] && ! grep -q "^${task_id}$" "${processed_tasks_file}"; then
         update_status "busy"
         process_task "${task_id}"
         update_status "available"

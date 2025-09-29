@@ -153,7 +153,7 @@ collect_system_metrics() {
 
   # Network activity
   local network_activity
-  network_activity=$(netstat -i | grep -E "(en|utun)" | wc -l)
+  network_activity=$(netstat -i | awk '/(en|utun)/ {count++} END {print count+0}')
 
   # Process count
   local process_count

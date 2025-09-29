@@ -15,19 +15,19 @@ public struct StreakAnalyticsView: View {
             ScrollView {
                 LazyVStack(spacing: 20) {
                     if let errorMessage = viewModel.errorMessage {
-                        errorView(message: errorMessage)
-                    } else if viewModel.isLoading {
-                        loadingView
+                        self.errorView(message: errorMessage)
+                    } else if self.viewModel.isLoading {
+                        self.loadingView
                     } else if let data = viewModel.analyticsData {
-                        timeframePicker
-                        StreakAnalyticsOverviewView(data: data, timeframe: viewModel.selectedTimeframe)
+                        self.timeframePicker
+                        StreakAnalyticsOverviewView(data: data, timeframe: self.viewModel.selectedTimeframe)
                         StreakAnalyticsDistributionView(data: data.streakDistribution)
                         StreakAnalyticsTopPerformersView(topPerformers: data.topPerformingHabits)
                         StreakAnalyticsInsightsView(insights: data.consistencyInsights)
                         StreakAnalyticsWeeklyView(patterns: data.weeklyPatterns)
-                        lastUpdatedView
+                        self.lastUpdatedView
                     } else {
-                        emptyStateView
+                        self.emptyStateView
                     }
                 }
                 .padding()
@@ -36,34 +36,34 @@ public struct StreakAnalyticsView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    if viewModel.analyticsData != nil {
+                    if self.viewModel.analyticsData != nil {
                         Menu {
                             Button("Export Data", systemImage: "square.and.arrow.up") {
-                                Task { await viewModel.exportAnalytics() }
+                                Task { await self.viewModel.exportAnalytics() }
                             }
                             .accessibilityLabel("Export Data")
 
                             Button("Share Report", systemImage: "square.and.arrow.up.fill") {
-                                viewModel.shareAnalyticsReport()
+                                self.viewModel.shareAnalyticsReport()
                             }
                             .accessibilityLabel("Share Report")
 
                             Divider()
 
                             Button("Refresh", systemImage: "arrow.clockwise") {
-                                Task { await viewModel.refreshAnalytics() }
+                                Task { await self.viewModel.refreshAnalytics() }
                             }
                             .accessibilityLabel("Refresh")
                         } label: {
                             Image(systemName: "ellipsis.circle")
                         }
-                        .disabled(viewModel.isLoading)
+                        .disabled(self.viewModel.isLoading)
                     } else {
                         Button("Refresh") {
-                            Task { await viewModel.refreshAnalytics() }
+                            Task { await self.viewModel.refreshAnalytics() }
                         }
                         .accessibilityLabel("Refresh")
-                        .disabled(viewModel.isLoading)
+                        .disabled(self.viewModel.isLoading)
                     }
                 }
             }
@@ -117,14 +117,14 @@ public struct StreakAnalyticsView: View {
     }
 
     private var timeframePicker: some View {
-        Picker("Timeframe", selection: $viewModel.selectedTimeframe) {
+        Picker("Timeframe", selection: self.$viewModel.selectedTimeframe) {
             ForEach(StreakAnalyticsViewModel.Timeframe.allCases, id: \.self) { timeframe in
                 Text(timeframe.rawValue).tag(timeframe)
             }
         }
         .pickerStyle(.segmented)
-        .onChange(of: viewModel.selectedTimeframe) { _, _ in
-            Task { await viewModel.loadAnalytics() }
+        .onChange(of: self.viewModel.selectedTimeframe) { _, _ in
+            Task { await self.viewModel.loadAnalytics() }
         }
     }
 

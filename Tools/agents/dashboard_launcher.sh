@@ -22,7 +22,8 @@ log_message() {
 # Check if dashboard is already running
 is_dashboard_running() {
   if [[ -f ${DASHBOARD_PID_FILE} ]]; then
-    local pid=$(cat "${DASHBOARD_PID_FILE}")
+    local pid
+    pid="$(<"${DASHBOARD_PID_FILE}")"
     if kill -0 "${pid}" 2>/dev/null; then
       return 0 # Running
     else
@@ -75,7 +76,8 @@ stop_dashboard() {
 
   # Stop the dashboard server
   if [[ -f ${DASHBOARD_PID_FILE} ]]; then
-    local server_pid=$(cat "${DASHBOARD_PID_FILE}")
+    local server_pid
+    server_pid="$(<"${DASHBOARD_PID_FILE}")"
     if kill -0 "${server_pid}" 2>/dev/null; then
       kill "${server_pid}"
       log_message "INFO" "Dashboard server stopped (PID ${server_pid})"
@@ -86,7 +88,8 @@ stop_dashboard() {
   # Stop the dashboard agent
   local agent_pid_file="/Users/danielstevens/Desktop/Quantum-workspace/Tools/Automation/agents/dashboard_agent.pid"
   if [[ -f ${agent_pid_file} ]]; then
-    local agent_pid=$(cat "${agent_pid_file}")
+    local agent_pid
+    agent_pid="$(<"${agent_pid_file}")"
     if kill -0 "${agent_pid}" 2>/dev/null; then
       kill "${agent_pid}"
       log_message "INFO" "Dashboard agent stopped (PID ${agent_pid})"
@@ -108,16 +111,18 @@ restart_dashboard() {
 # Show dashboard status
 show_status() {
   if is_dashboard_running; then
-    local pid=$(cat "${DASHBOARD_PID_FILE}")
+    local pid
+    pid="$(<"${DASHBOARD_PID_FILE}")"
     echo -e "${GREEN}✅ Dashboard is running${NC}"
     echo -e "${BLUE}🌐 Dashboard URL: http://localhost:8080${NC}"
-    echo -e "${BLUE}🔢 Server PI${: $}pid${NC}"
+    echo -e "${BLUE}🔢 Server PID: ${pid}${NC}"
 
     # Show agent status
     local agent_pid_file="/Users/danielstevens/Desktop/Quantum-workspace/Tools/Automation/agents/dashboard_agent.pid"
     if [[ -f ${agent_pid_file} ]]; then
-      local agent_pid=$(cat "${agent_pid_file}")
-      echo -e "${BLUE}🤖 Agent PI$$${: $}age}nt_}pid${NC}"
+      local agent_pid
+      agent_pid="$(<"${agent_pid_file}")"
+      echo -e "${BLUE}🤖 Agent PID: ${agent_pid}${NC}"
     fi
   else
     echo -e "${RED}❌ Dashboard is not running${NC}"
