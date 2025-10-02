@@ -50,7 +50,7 @@ public final class Logger {
 
     func record(message: String, level: AppLogger.LogLevel, category: AppLogger.Category) {
         #if DEBUG
-            print("[\(level)] [\(category)] \(message)")
+        print("[\(level)] [\(category)] \(message)")
         #endif
     }
 }

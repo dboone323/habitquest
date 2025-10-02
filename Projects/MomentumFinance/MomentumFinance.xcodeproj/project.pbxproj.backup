@@ -1,0 +1,988 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 90;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		09D3C85A68D88363F77CBB6A /* AccountsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA29FE60425500EFD38F4B1 /* AccountsGenerator.swift */; };
+		1F6029DA5C07EB1C29654A0D /* SavingsGoalsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E0B1F657058E2BE7A68A30 /* SavingsGoalsGenerator.swift */; };
+		681809762DF34D4F00EB877A /* DataExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681809732DF34D4F00EB877A /* DataExportView.swift */; };
+		681809772DF34D4F00EB877A /* DataImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681809742DF34D4F00EB877A /* DataImportView.swift */; };
+		681809782DF34D4F00EB877A /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681809752DF34D4F00EB877A /* HapticManager.swift */; };
+		6B1A2B2C2C0D1E8F00123456 /* MomentumFinanceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B2B2C0D1E8F00123456 /* MomentumFinanceApp.swift */; };
+		6B1A2B2E2C0D1E8F00123456 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B2D2C0D1E8F00123456 /* ContentView.swift */; };
+		6B1A2B302C0D1E9000123456 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B1A2B2F2C0D1E9000123456 /* Assets.xcassets */; };
+		6B1A2B332C0D1E9000123456 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B1A2B322C0D1E9000123456 /* Preview Assets.xcassets */; };
+		6B1A2B580C0D1E9100123456 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B572C0D1E9100123456 /* NavigationCoordinator.swift */; };
+		6B1A2B5E0C0D1E9100123456 /* Features.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B5D2C0D1E9100123456 /* Features.swift */; };
+		6B1A2B600C0D1E9100123456 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B5F2C0D1E9100123456 /* DashboardView.swift */; };
+		6B1A2B620C0D1E9100123456 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B612C0D1E9100123456 /* DashboardViewModel.swift */; };
+		6B1A2B640C0D1E9100123456 /* TransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B632C0D1E9100123456 /* TransactionsView.swift */; };
+		6B1A2B660C0D1E9100123456 /* TransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B652C0D1E9100123456 /* TransactionsViewModel.swift */; };
+		6B1A2B680C0D1E9100123456 /* AccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B672C0D1E9100123456 /* AccountDetailView.swift */; };
+		6B1A2B6A0C0D1E9100123456 /* AccountsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B692C0D1E9100123456 /* AccountsListView.swift */; };
+		6B1A2B6C0C0D1E9100123456 /* CategoryTransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B6B2C0D1E9100123456 /* CategoryTransactionsView.swift */; };
+		6B1A2B6E0C0D1E9100123456 /* BudgetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B6D2C0D1E9100123456 /* BudgetsView.swift */; };
+		6B1A2B700C0D1E9100123456 /* BudgetsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B6F2C0D1E9100123456 /* BudgetsViewModel.swift */; };
+		6B1A2B740C0D1E9100123456 /* SubscriptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B732C0D1E9100123456 /* SubscriptionsView.swift */; };
+		6B1A2B760C0D1E9100123456 /* SubscriptionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B752C0D1E9100123456 /* SubscriptionsViewModel.swift */; };
+		6B1A2B780C0D1E9100123456 /* SubscriptionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B772C0D1E9100123456 /* SubscriptionDetailView.swift */; };
+		6B1A2B7A0C0D1E9100123456 /* GoalsAndReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B792C0D1E9100123456 /* GoalsAndReportsView.swift */; };
+		6B1A2B7C0C0D1E9100123456 /* GoalsAndReportsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B7B2C0D1E9100123456 /* GoalsAndReportsViewModel.swift */; };
+		6B1A2B7E0C0D1E9100123456 /* SavingsGoalViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B7D2C0D1E9100123456 /* SavingsGoalViews.swift */; };
+		6B1A2B800C0D1E9100123456 /* SavingsGoalManagementViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B7F2C0D1E9100123456 /* SavingsGoalManagementViews.swift */; };
+		6B1A2B820C0D1E9100123456 /* ReportsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B812C0D1E9100123456 /* ReportsViews.swift */; };
+		6B1A2B840C0D1E9100123456 /* EnhancedReportsSectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B832C0D1E9100123456 /* EnhancedReportsSectionViews.swift */; };
+		6B1A2B860C0D1E9100123456 /* GoalUtilityViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B852C0D1E9100123456 /* GoalUtilityViews.swift */; };
+		6B1A2B880C0D1E9100123456 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B872C0D1E9100123456 /* SettingsView.swift */; };
+		6B1A2B9D2C0D1E9100123456 /* TabSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B9C2C0D1E9100123456 /* TabSection.swift */; };
+		748B1C8D5C924066E5A8F7D3 /* TransactionsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAE79C791674AFF448C8646 /* TransactionsGenerator.swift */; };
+		815DB79DB4126C68EBAF51E7 /* BudgetsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B98B3A0ED3B79DA710B0901 /* BudgetsGenerator.swift */; };
+		A00100012F0ABCDE00000001 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00100002F0ABCDE00000001 /* Theme.swift */; };
+		A00100132F0ABCDE00000001 /* DashboardComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00100122F0ABCDE00000001 /* DashboardComponents.swift */; };
+		A00100152F0ABCDE00000001 /* TransactionComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00100142F0ABCDE00000001 /* TransactionComponents.swift */; };
+		A00100172F0ABCDE00000001 /* DataImportComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00100162F0ABCDE00000001 /* DataImportComponents.swift */; };
+		A001001B2F0ABCDE00000001 /* DashboardWelcomeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001001A2F0ABCDE00000001 /* DashboardWelcomeHeader.swift */; };
+		A00110112F0ABCDE00000001 /* BreadcrumbNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00110102F0ABCDE00000001 /* BreadcrumbNavigation.swift */; };
+		A0APP002F0ABCDE00000001 /* CoreImports.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0APP012F0ABCDE00000001 /* CoreImports.swift */; };
+		A0CORE_COLORD_001 /* ColorDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Theme/ColorDefinitions.swift; sourceTree = SOURCE_ROOT; };
+		A0CORE_THEMEE_001 /* ThemeEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Theme/ThemeEnums.swift; sourceTree = SOURCE_ROOT; };
+
+		A0CORE_COLORD_BUILD_001 /* ColorDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CORE_COLORD_001 /* ColorDefinitions.swift */; };
+		A0CORE_THEMEE_BUILD_001 /* ThemeEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CORE_THEMEE_001 /* ThemeEnums.swift */; };
+
+		A0CORE172F0ABCDE00000001 /* CoreExports.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CORE012F0ABCDE00000001 /* CoreExports.swift */; };
+		A0CORE182F0ABCDE00000001 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		A0CORE1C2F0ABCDE00000001 /* ImportExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00100022F0ABCDE00000001 /* ImportExport.swift */; };
+		A0CORE1D2F0ABCDE00000001 /* FinancialInsightModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00100182F0ABCDE00000001 /* FinancialInsightModels.swift */; };
+		A0CORE1E2F0ABCDE00000001 /* TransactionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00100102F0ABCDE00000001 /* TransactionFilter.swift */; };
+		A0CORE1F2F0ABCDE00000001 /* SearchEngineService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B962C0D1E9100123456 /* SearchEngineService.swift */; };
+		A0CORE202F0ABCDE00000001 /* SearchTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B972C0D1E9100123456 /* SearchTypes.swift */; };
+		A0CORE212F0ABCDE00000001 /* FinancialAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B3F2C0D1E9100123456 /* FinancialAccount.swift */; };
+		A0CORE222F0ABCDE00000001 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B412C0D1E9100123456 /* Transaction.swift */; };
+		A0CORE232F0ABCDE00000001 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B432C0D1E9100123456 /* Category.swift */; };
+		A0CORE242F0ABCDE00000001 /* ExpenseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B4D2C0D1E9100123456 /* ExpenseCategory.swift */; };
+		A0CORE252F0ABCDE00000001 /* FinancialTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B4B2C0D1E9100123456 /* FinancialTransaction.swift */; };
+		A0CORE262F0ABCDE00000001 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B452C0D1E9100123456 /* Budget.swift */; };
+		A0CORE272F0ABCDE00000001 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B472C0D1E9100123456 /* Subscription.swift */; };
+		A0CORE282F0ABCDE00000001 /* SavingsGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B492C0D1E9100123456 /* SavingsGoal.swift */; };
+		A0CORE292F0ABCDE00000001 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B4F2C0D1E9100123456 /* SampleData.swift */; };
+		A0CORE2A2F0ABCDE00000001 /* SampleDataGenerators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B512C0D1E9100123456 /* SampleDataGenerators.swift */; };
+		A0CORE2B2F0ABCDE00000001 /* SampleDataProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B532C0D1E9100123456 /* SampleDataProviders.swift */; };
+		A0CORE2C2F0ABCDE00000001 /* ComplexDataGenerators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B552C0D1E9100123456 /* ComplexDataGenerators.swift */; };
+		A0CORE2D2F0ABCDE00000001 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B5B2C0D1E9100123456 /* Logger.swift */; };
+		A0CORE2E2F0ABCDE00000001 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1A2B592C0D1E9100123456 /* ErrorHandler.swift */; };
+		A0CORE2F2F0ABCDE00000001 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		A0TEST012F0ABCDE00000001 /* CSVParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0TEST002F0ABCDE00000001 /* CSVParserTests.swift */; };
+		A0TEST022F0ABCDE00000001 /* DataExporterDateRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0TEST032F0ABCDE00000001 /* DataExporterDateRangeTests.swift */; };
+		A0TEST042F0ABCDE00000001 /* DataImporterErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0TEST052F0ABCDE00000001 /* DataImporterErrorTests.swift */; };
+		A0TEST072F0ABCDE00000001 /* CSVParserEdgeCasesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0TEST062F0EDGECASES000001 /* CSVParserEdgeCasesTests.swift */; };
+		A0TEST082F0ABCDE00000001 /* DataExporterContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0TEST072F0CONTENT0000001 /* DataExporterContentTests.swift */; };
+		A0TEST092F0BUDGETS0000001 /* BudgetsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0TEST082F0BUDGETS0000001 /* BudgetsViewTests.swift */; };
+		A0CORE_BUDGETSVM_BUILD_001 /* BudgetsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CORE_BUDGETSVM_001 /* BudgetsViewModel.swift */; };
+		BB7A5BD961FC5DDE5E252E17 /* CategoriesGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FE4C7F884E7BB2E2E7B69D /* CategoriesGenerator.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A0TEST212F0ABCDE00000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6B1A2B202C0D1E8F00123456 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B1A2B272C0D1E8F00123456;
+			remoteInfo = MomentumFinance;
+		};
+		A0TEST232F0ABCDE00000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6B1A2B202C0D1E8F00123456 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A0CORE112F0ABCDE00000001;
+			remoteInfo = MomentumFinanceCore;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2B98B3A0ED3B79DA710B0901 /* BudgetsGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BudgetsGenerator.swift; path = Shared/Models/Generators/BudgetsGenerator.swift; sourceTree = "<group>"; };
+		4FA29FE60425500EFD38F4B1 /* AccountsGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AccountsGenerator.swift; path = Shared/Models/Generators/AccountsGenerator.swift; sourceTree = "<group>"; };
+		681809732DF34D4F00EB877A /* DataExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Views/Settings/DataExportView.swift; sourceTree = SOURCE_ROOT; };
+		681809742DF34D4F00EB877A /* DataImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Views/Settings/DataImportView.swift; sourceTree = SOURCE_ROOT; };
+		681809752DF34D4F00EB877A /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Utils/HapticManager.swift; sourceTree = SOURCE_ROOT; };
+		6B1A2B282C0D1E8F00123456 /* MomentumFinance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MomentumFinance.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B1A2B2B2C0D1E8F00123456 /* MomentumFinanceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentumFinanceApp.swift; sourceTree = "<group>"; };
+		6B1A2B2D2C0D1E8F00123456 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		6B1A2B2F2C0D1E9000123456 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6B1A2B322C0D1E9000123456 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		6B1A2B3F2C0D1E9100123456 /* FinancialAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialAccount.swift; sourceTree = "<group>"; };
+		6B1A2B412C0D1E9100123456 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		6B1A2B432C0D1E9100123456 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		6B1A2B452C0D1E9100123456 /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
+		6B1A2B472C0D1E9100123456 /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
+		6B1A2B492C0D1E9100123456 /* SavingsGoal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsGoal.swift; sourceTree = "<group>"; };
+		6B1A2B4B2C0D1E9100123456 /* FinancialTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialTransaction.swift; sourceTree = "<group>"; };
+		6B1A2B4D2C0D1E9100123456 /* ExpenseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseCategory.swift; sourceTree = "<group>"; };
+		6B1A2B4F2C0D1E9100123456 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		6B1A2B512C0D1E9100123456 /* SampleDataGenerators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDataGenerators.swift; sourceTree = "<group>"; };
+		6B1A2B532C0D1E9100123456 /* SampleDataProviders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDataProviders.swift; sourceTree = "<group>"; };
+		6B1A2B552C0D1E9100123456 /* ComplexDataGenerators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplexDataGenerators.swift; sourceTree = "<group>"; };
+		6B1A2B572C0D1E9100123456 /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
+		6B1A2B592C0D1E9100123456 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
+		6B1A2B5B2C0D1E9100123456 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		6B1A2B5D2C0D1E9100123456 /* Features.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features.swift; sourceTree = "<group>"; };
+		6B1A2B5F2C0D1E9100123456 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		6B1A2B612C0D1E9100123456 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		6B1A2B632C0D1E9100123456 /* TransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsView.swift; sourceTree = "<group>"; };
+		6B1A2B652C0D1E9100123456 /* TransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewModel.swift; sourceTree = "<group>"; };
+		6B1A2B672C0D1E9100123456 /* AccountDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailView.swift; sourceTree = "<group>"; };
+		6B1A2B692C0D1E9100123456 /* AccountsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsListView.swift; sourceTree = "<group>"; };
+		6B1A2B6B2C0D1E9100123456 /* CategoryTransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTransactionsView.swift; sourceTree = "<group>"; };
+		6B1A2B6D2C0D1E9100123456 /* BudgetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetsView.swift; sourceTree = "<group>"; };
+		6B1A2B6F2C0D1E9100123456 /* BudgetsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetsViewModel.swift; sourceTree = "<group>"; };
+		6B1A2B732C0D1E9100123456 /* SubscriptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionsView.swift; sourceTree = "<group>"; };
+		6B1A2B752C0D1E9100123456 /* SubscriptionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionsViewModel.swift; sourceTree = "<group>"; };
+		6B1A2B772C0D1E9100123456 /* SubscriptionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionDetailView.swift; sourceTree = "<group>"; };
+		6B1A2B792C0D1E9100123456 /* GoalsAndReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsAndReportsView.swift; sourceTree = "<group>"; };
+		6B1A2B7B2C0D1E9100123456 /* GoalsAndReportsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsAndReportsViewModel.swift; sourceTree = "<group>"; };
+		6B1A2B7D2C0D1E9100123456 /* SavingsGoalViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsGoalViews.swift; sourceTree = "<group>"; };
+		6B1A2B7F2C0D1E9100123456 /* SavingsGoalManagementViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsGoalManagementViews.swift; sourceTree = "<group>"; };
+		6B1A2B812C0D1E9100123456 /* ReportsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsViews.swift; sourceTree = "<group>"; };
+		6B1A2B832C0D1E9100123456 /* EnhancedReportsSectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedReportsSectionViews.swift; sourceTree = "<group>"; };
+		6B1A2B852C0D1E9100123456 /* GoalUtilityViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalUtilityViews.swift; sourceTree = "<group>"; };
+		6B1A2B872C0D1E9100123456 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Views/Settings/SettingsView.swift; sourceTree = SOURCE_ROOT; };
+		6B1A2B962C0D1E9100123456 /* SearchEngineService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineService.swift; sourceTree = "<group>"; };
+		6B1A2B972C0D1E9100123456 /* SearchTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTypes.swift; sourceTree = "<group>"; };
+		6B1A2B9C2C0D1E9100123456 /* TabSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSection.swift; sourceTree = "<group>"; };
+		84FE4C7F884E7BB2E2E7B69D /* CategoriesGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CategoriesGenerator.swift; path = Shared/Models/Generators/CategoriesGenerator.swift; sourceTree = "<group>"; };
+		A00100002F0ABCDE00000001 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		A00100022F0ABCDE00000001 /* ImportExport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExport.swift; sourceTree = "<group>"; };
+		A00100102F0ABCDE00000001 /* TransactionFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionFilter.swift; sourceTree = "<group>"; };
+		A00100122F0ABCDE00000001 /* DashboardComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardComponents.swift; sourceTree = "<group>"; };
+		A00100142F0ABCDE00000001 /* TransactionComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionComponents.swift; sourceTree = "<group>"; };
+		A00100162F0ABCDE00000001 /* DataImportComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Views/Settings/DataImportComponents.swift; sourceTree = SOURCE_ROOT; };
+		A00100182F0ABCDE00000001 /* FinancialInsightModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Intelligence/FinancialInsightModels.swift; sourceTree = SOURCE_ROOT; };
+		A001001A2F0ABCDE00000001 /* DashboardWelcomeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Features/Dashboard/DashboardWelcomeHeader.swift; sourceTree = SOURCE_ROOT; };
+		A00110102F0ABCDE00000001 /* BreadcrumbNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Navigation/BreadcrumbNavigation.swift; sourceTree = SOURCE_ROOT; };
+		A0APP012F0ABCDE00000001 /* CoreImports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/CoreImports.swift; sourceTree = SOURCE_ROOT; };
+		A0CORE_COLORD_001 /* ColorDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Theme/ColorDefinitions.swift; sourceTree = SOURCE_ROOT; };
+		A0CORE_THEMEE_001 /* ThemeEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Theme/ThemeEnums.swift; sourceTree = SOURCE_ROOT; };
+
+		A0CORE012F0ABCDE00000001 /* CoreExports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentumFinanceCore/CoreExports.swift; sourceTree = SOURCE_ROOT; };
+		A0TEST002F0ABCDE00000001 /* CSVParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentumFinanceTests/CSVParserTests.swift; sourceTree = SOURCE_ROOT; };
+		A0TEST032F0ABCDE00000001 /* DataExporterDateRangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentumFinanceTests/DataExporterDateRangeTests.swift; sourceTree = SOURCE_ROOT; };
+		A0TEST052F0ABCDE00000001 /* DataImporterErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentumFinanceTests/DataImporterErrorTests.swift; sourceTree = SOURCE_ROOT; };
+		A0TEST062F0EDGECASES000001 /* CSVParserEdgeCasesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentumFinanceTests/CSVParserEdgeCasesTests.swift; sourceTree = SOURCE_ROOT; };
+		A0TEST072F0CONTENT0000001 /* DataExporterContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentumFinanceTests/DataExporterContentTests.swift; sourceTree = SOURCE_ROOT; };
+		A0TEST082F0BUDGETS0000001 /* BudgetsViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentumFinanceTests/BudgetsViewTests.swift; sourceTree = SOURCE_ROOT; };
+		A0TEST152F0ABCDE00000001 /* MomentumFinanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MomentumFinanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0CORE_BUDGETSVM_001 /* BudgetsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetsViewModel.swift; sourceTree = "<group>"; };
+		A139CF9EFAAE92F66141FC20 /* SampleDataGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SampleDataGenerator.swift; path = Shared/Models/Generators/SampleDataGenerator.swift; sourceTree = "<group>"; };
+		BCAE79C791674AFF448C8646 /* TransactionsGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TransactionsGenerator.swift; path = Shared/Models/Generators/TransactionsGenerator.swift; sourceTree = "<group>"; };
+		D4E0B1F657058E2BE7A68A30 /* SavingsGoalsGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SavingsGoalsGenerator.swift; path = Shared/Models/Generators/SavingsGoalsGenerator.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6B1A2B252C0D1E8F00123456 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				A0CORE2F2F0ABCDE00000001 /* BuildFile in Frameworks */,
+			);
+		};
+		A0CORE132F0ABCDE00000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		A0TEST132F0ABCDE00000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				A0CORE182F0ABCDE00000001 /* BuildFile in Frameworks */,
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		302375A7F3152B0AAB576E99 /* Generators */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Generators;
+			sourceTree = "<group>";
+		};
+		6B1A2B1F2C0D1E8F00123456 = {
+			isa = PBXGroup;
+			children = (
+				A0CORE002F0ABCDE00000001 /* MomentumFinanceCore */,
+				6B1A2B2A2C0D1E8F00123456 /* MomentumFinance */,
+				6B1A2B3E2C0D1E9100123456 /* Shared */,
+				A0TEST102F0ABCDE00000001 /* MomentumFinanceTests */,
+				6B1A2B292C0D1E8F00123456 /* Products */,
+				84FE4C7F884E7BB2E2E7B69D /* CategoriesGenerator.swift */,
+				4FA29FE60425500EFD38F4B1 /* AccountsGenerator.swift */,
+				2B98B3A0ED3B79DA710B0901 /* BudgetsGenerator.swift */,
+				D4E0B1F657058E2BE7A68A30 /* SavingsGoalsGenerator.swift */,
+				BCAE79C791674AFF448C8646 /* TransactionsGenerator.swift */,
+				A139CF9EFAAE92F66141FC20 /* SampleDataGenerator.swift */,
+			);
+			sourceTree = "<group>";
+		};
+		6B1A2B292C0D1E8F00123456 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B282C0D1E8F00123456 /* MomentumFinance.app */,
+				A0TEST152F0ABCDE00000001 /* MomentumFinanceTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6B1A2B2A2C0D1E8F00123456 /* MomentumFinance */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B2F2C0D1E9000123456 /* Assets.xcassets */,
+				6B1A2B312C0D1E9000123456 /* Preview Content */,
+			);
+			path = MomentumFinance;
+			sourceTree = "<group>";
+		};
+		6B1A2B312C0D1E9000123456 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B322C0D1E9000123456 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6B1A2B3E2C0D1E9100123456 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B2B2C0D1E8F00123456 /* MomentumFinanceApp.swift */,
+				6B1A2B2D2C0D1E8F00123456 /* ContentView.swift */,
+				6B1A2B8A2C0D1E9100123456 /* Models */,
+				6B1A2B8B2C0D1E9100123456 /* Features */,
+				6B1A2B8C2C0D1E9100123456 /* Navigation */,
+				6B1A2B8D2C0D1E9100123456 /* Utilities */,
+				6B1A2B932C0D1E9100123456 /* Views */,
+				6B1A2B942C0D1E9100123456 /* Utils */,
+				A00100002F0ABCDE00000001 /* Theme.swift */,
+				A00100022F0ABCDE00000001 /* ImportExport.swift */,
+				6B1A2B962C0D1E9100123456 /* SearchEngineService.swift */,
+				6B1A2B972C0D1E9100123456 /* SearchTypes.swift */,
+				A00100182F0ABCDE00000001 /* FinancialInsightModels.swift */,
+				A0APP012F0ABCDE00000001 /* CoreImports.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		6B1A2B8A2C0D1E9100123456 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B3F2C0D1E9100123456 /* FinancialAccount.swift */,
+				6B1A2B412C0D1E9100123456 /* Transaction.swift */,
+				6B1A2B432C0D1E9100123456 /* Category.swift */,
+				6B1A2B452C0D1E9100123456 /* Budget.swift */,
+				6B1A2B472C0D1E9100123456 /* Subscription.swift */,
+				6B1A2B492C0D1E9100123456 /* SavingsGoal.swift */,
+				6B1A2B4B2C0D1E9100123456 /* FinancialTransaction.swift */,
+				6B1A2B4D2C0D1E9100123456 /* ExpenseCategory.swift */,
+				6B1A2B4F2C0D1E9100123456 /* SampleData.swift */,
+				6B1A2B512C0D1E9100123456 /* SampleDataGenerators.swift */,
+				6B1A2B532C0D1E9100123456 /* SampleDataProviders.swift */,
+				6B1A2B552C0D1E9100123456 /* ComplexDataGenerators.swift */,
+				302375A7F3152B0AAB576E99 /* Generators */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6B1A2B8B2C0D1E9100123456 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B5D2C0D1E9100123456 /* Features.swift */,
+				6B1A2B8E2C0D1E9100123456 /* Dashboard */,
+				6B1A2B8F2C0D1E9100123456 /* Transactions */,
+				6B1A2B902C0D1E9100123456 /* Budgets */,
+				6B1A2B912C0D1E9100123456 /* Subscriptions */,
+				6B1A2B922C0D1E9100123456 /* GoalsAndReports */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		6B1A2B8C2C0D1E9100123456 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B572C0D1E9100123456 /* NavigationCoordinator.swift */,
+				6B1A2B9C2C0D1E9100123456 /* TabSection.swift */,
+				A00110102F0ABCDE00000001 /* BreadcrumbNavigation.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		6B1A2B8D2C0D1E9100123456 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B592C0D1E9100123456 /* ErrorHandler.swift */,
+				6B1A2B5B2C0D1E9100123456 /* Logger.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		6B1A2B8E2C0D1E9100123456 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B5F2C0D1E9100123456 /* DashboardView.swift */,
+				6B1A2B612C0D1E9100123456 /* DashboardViewModel.swift */,
+				A00100122F0ABCDE00000001 /* DashboardComponents.swift */,
+				A001001A2F0ABCDE00000001 /* DashboardWelcomeHeader.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		6B1A2B8F2C0D1E9100123456 /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B632C0D1E9100123456 /* TransactionsView.swift */,
+				6B1A2B652C0D1E9100123456 /* TransactionsViewModel.swift */,
+				6B1A2B672C0D1E9100123456 /* AccountDetailView.swift */,
+				6B1A2B692C0D1E9100123456 /* AccountsListView.swift */,
+				6B1A2B6B2C0D1E9100123456 /* CategoryTransactionsView.swift */,
+				A00100102F0ABCDE00000001 /* TransactionFilter.swift */,
+				A00100142F0ABCDE00000001 /* TransactionComponents.swift */,
+			);
+			path = Transactions;
+			sourceTree = "<group>";
+		};
+		6B1A2B902C0D1E9100123456 /* Budgets */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B6D2C0D1E9100123456 /* BudgetsView.swift */,
+				6B1A2B6F2C0D1E9100123456 /* BudgetsViewModel.swift */,
+			);
+			path = Budgets;
+			sourceTree = "<group>";
+		};
+		6B1A2B912C0D1E9100123456 /* Subscriptions */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B732C0D1E9100123456 /* SubscriptionsView.swift */,
+				6B1A2B752C0D1E9100123456 /* SubscriptionsViewModel.swift */,
+				6B1A2B772C0D1E9100123456 /* SubscriptionDetailView.swift */,
+			);
+			path = Subscriptions;
+			sourceTree = "<group>";
+		};
+		6B1A2B922C0D1E9100123456 /* GoalsAndReports */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B792C0D1E9100123456 /* GoalsAndReportsView.swift */,
+				6B1A2B7B2C0D1E9100123456 /* GoalsAndReportsViewModel.swift */,
+				6B1A2B7D2C0D1E9100123456 /* SavingsGoalViews.swift */,
+				6B1A2B7F2C0D1E9100123456 /* SavingsGoalManagementViews.swift */,
+				6B1A2B812C0D1E9100123456 /* ReportsViews.swift */,
+				6B1A2B832C0D1E9100123456 /* EnhancedReportsSectionViews.swift */,
+				6B1A2B852C0D1E9100123456 /* GoalUtilityViews.swift */,
+			);
+			path = GoalsAndReports;
+			sourceTree = "<group>";
+		};
+		6B1A2B932C0D1E9100123456 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6B1A2B982C0D1E9100123456 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6B1A2B942C0D1E9100123456 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				681809752DF34D4F00EB877A /* HapticManager.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		6B1A2B982C0D1E9100123456 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				681809732DF34D4F00EB877A /* DataExportView.swift */,
+				681809742DF34D4F00EB877A /* DataImportView.swift */,
+				A00100162F0ABCDE00000001 /* DataImportComponents.swift */,
+				6B1A2B872C0D1E9100123456 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A0CORE002F0ABCDE00000001 /* MomentumFinanceCore */ = {
+			isa = PBXGroup;
+			children = (
+		A0CORE_COLORD_001 /* ColorDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Theme/ColorDefinitions.swift; sourceTree = SOURCE_ROOT; };
+		A0CORE_THEMEE_001 /* ThemeEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared/Theme/ThemeEnums.swift; sourceTree = SOURCE_ROOT; };
+
+				A0CORE012F0ABCDE00000001 /* CoreExports.swift */,
+				A0CORE_BUDGETSVM_001 /* BudgetsViewModel.swift */,
+			);
+			path = MomentumFinanceCore;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0TEST102F0ABCDE00000001 /* MomentumFinanceTests */ = {
+			isa = PBXGroup;
+			children = (
+				A0TEST002F0ABCDE00000001 /* CSVParserTests.swift */,
+				A0TEST032F0ABCDE00000001 /* DataExporterDateRangeTests.swift */,
+				A0TEST052F0ABCDE00000001 /* DataImporterErrorTests.swift */,
+				A0TEST062F0EDGECASES000001 /* CSVParserEdgeCasesTests.swift */,
+				A0TEST072F0CONTENT0000001 /* DataExporterContentTests.swift */,
+				A0TEST082F0BUDGETS0000001 /* BudgetsViewTests.swift */,
+			);
+			path = MomentumFinanceTests;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6B1A2B272C0D1E8F00123456 /* MomentumFinance */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6B1A2B362C0D1E9000123456 /* Build configuration list for PBXNativeTarget "MomentumFinance" */;
+			buildPhases = (
+				6B1A2B242C0D1E8F00123456 /* Sources */,
+				6B1A2B252C0D1E8F00123456 /* Frameworks */,
+				6B1A2B262C0D1E8F00123456 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A0TEST222F0ABCDE00000001 /* PBXTargetDependency */,
+			);
+			name = MomentumFinance;
+			productName = MomentumFinance;
+			productReference = 6B1A2B282C0D1E8F00123456 /* MomentumFinance.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A0CORE112F0ABCDE00000001 /* MomentumFinanceCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0CORE192F0ABCDE00000001 /* Build configuration list for PBXNativeTarget "MomentumFinanceCore" */;
+			buildPhases = (
+				A0CORE142F0ABCDE00000001 /* Sources */,
+				A0CORE132F0ABCDE00000001 /* Frameworks */,
+				A0CORE162F0ABCDE00000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MomentumFinanceCore;
+			productName = MomentumFinanceCore;
+			productType = "com.apple.product-type.framework";
+		};
+		A0TEST112F0ABCDE00000001 /* MomentumFinanceTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0TEST192F0ABCDE00000001 /* Build configuration list for PBXNativeTarget "MomentumFinanceTests" */;
+			buildPhases = (
+				A0TEST122F0ABCDE00000001 /* Sources */,
+				A0TEST132F0ABCDE00000001 /* Frameworks */,
+				A0TEST142F0ABCDE00000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A0TEST202F0ABCDE00000001 /* PBXTargetDependency */,
+				A0TEST222F0ABCDE00000001 /* PBXTargetDependency */,
+			);
+			name = MomentumFinanceTests;
+			productName = MomentumFinanceTests;
+			productReference = A0TEST152F0ABCDE00000001 /* MomentumFinanceTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6B1A2B202C0D1E8F00123456 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1530;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					6B1A2B272C0D1E8F00123456 = {
+						CreatedOnToolsVersion = 15.3;
+					};
+				};
+			};
+			buildConfigurationList = 6B1A2B232C0D1E8F00123456 /* Build configuration list for PBXProject "MomentumFinance" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6B1A2B1F2C0D1E8F00123456;
+			preferredProjectObjectVersion = 90;
+			productRefGroup = 6B1A2B292C0D1E8F00123456 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A0CORE112F0ABCDE00000001 /* MomentumFinanceCore */,
+				6B1A2B272C0D1E8F00123456 /* MomentumFinance */,
+				A0TEST112F0ABCDE00000001 /* MomentumFinanceTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6B1A2B262C0D1E8F00123456 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+				6B1A2B332C0D1E9000123456 /* Preview Assets.xcassets in Resources */,
+				6B1A2B302C0D1E9000123456 /* Assets.xcassets in Resources */,
+			);
+		};
+		A0CORE162F0ABCDE00000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		A0TEST142F0ABCDE00000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6B1A2B242C0D1E8F00123456 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+				A00110112F0ABCDE00000001 /* BreadcrumbNavigation.swift in Sources */,
+				A00100132F0ABCDE00000001 /* DashboardComponents.swift in Sources */,
+				A00100152F0ABCDE00000001 /* TransactionComponents.swift in Sources */,
+				A00100172F0ABCDE00000001 /* DataImportComponents.swift in Sources */,
+				A001001B2F0ABCDE00000001 /* DashboardWelcomeHeader.swift in Sources */,
+				A00100012F0ABCDE00000001 /* Theme.swift in Sources */,
+				6B1A2B2E2C0D1E8F00123456 /* ContentView.swift in Sources */,
+				6B1A2B2C2C0D1E8F00123456 /* MomentumFinanceApp.swift in Sources */,
+				6B1A2B580C0D1E9100123456 /* NavigationCoordinator.swift in Sources */,
+				6B1A2B5E0C0D1E9100123456 /* Features.swift in Sources */,
+				6B1A2B600C0D1E9100123456 /* DashboardView.swift in Sources */,
+				6B1A2B620C0D1E9100123456 /* DashboardViewModel.swift in Sources */,
+				6B1A2B640C0D1E9100123456 /* TransactionsView.swift in Sources */,
+				6B1A2B660C0D1E9100123456 /* TransactionsViewModel.swift in Sources */,
+				6B1A2B680C0D1E9100123456 /* AccountDetailView.swift in Sources */,
+				6B1A2B6A0C0D1E9100123456 /* AccountsListView.swift in Sources */,
+				6B1A2B6C0C0D1E9100123456 /* CategoryTransactionsView.swift in Sources */,
+				6B1A2B6E0C0D1E9100123456 /* BudgetsView.swift in Sources */,
+				6B1A2B740C0D1E9100123456 /* SubscriptionsView.swift in Sources */,
+				6B1A2B760C0D1E9100123456 /* SubscriptionsViewModel.swift in Sources */,
+				6B1A2B780C0D1E9100123456 /* SubscriptionDetailView.swift in Sources */,
+				6B1A2B7A0C0D1E9100123456 /* GoalsAndReportsView.swift in Sources */,
+				6B1A2B7C0C0D1E9100123456 /* GoalsAndReportsViewModel.swift in Sources */,
+				6B1A2B7E0C0D1E9100123456 /* SavingsGoalViews.swift in Sources */,
+				681809762DF34D4F00EB877A /* DataExportView.swift in Sources */,
+				681809772DF34D4F00EB877A /* DataImportView.swift in Sources */,
+				681809782DF34D4F00EB877A /* HapticManager.swift in Sources */,
+				6B1A2B800C0D1E9100123456 /* SavingsGoalManagementViews.swift in Sources */,
+				6B1A2B820C0D1E9100123456 /* ReportsViews.swift in Sources */,
+				6B1A2B840C0D1E9100123456 /* EnhancedReportsSectionViews.swift in Sources */,
+				6B1A2B860C0D1E9100123456 /* GoalUtilityViews.swift in Sources */,
+				6B1A2B880C0D1E9100123456 /* SettingsView.swift in Sources */,
+				6B1A2B9D2C0D1E9100123456 /* TabSection.swift in Sources */,
+				A0APP002F0ABCDE00000001 /* CoreImports.swift in Sources */,
+			);
+		};
+		A0CORE142F0ABCDE00000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+		A0CORE_COLORD_BUILD_001 /* ColorDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CORE_COLORD_001 /* ColorDefinitions.swift */; };
+		A0CORE_THEMEE_BUILD_001 /* ThemeEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CORE_THEMEE_001 /* ThemeEnums.swift */; };
+
+				A0CORE172F0ABCDE00000001 /* CoreExports.swift in Sources */,
+                                A0CORE_COLORD_BUILD_001 /* ColorDefinitions.swift in Sources */,
+                                A0CORE_THEMEE_BUILD_001 /* ThemeEnums.swift in Sources */,
+				A0CORE1C2F0ABCDE00000001 /* ImportExport.swift in Sources */,
+				A0CORE1D2F0ABCDE00000001 /* FinancialInsightModels.swift in Sources */,
+				A0CORE1E2F0ABCDE00000001 /* TransactionFilter.swift in Sources */,
+				A0CORE1F2F0ABCDE00000001 /* SearchEngineService.swift in Sources */,
+				A0CORE202F0ABCDE00000001 /* SearchTypes.swift in Sources */,
+				A0CORE212F0ABCDE00000001 /* FinancialAccount.swift in Sources */,
+				A0CORE222F0ABCDE00000001 /* Transaction.swift in Sources */,
+				A0CORE232F0ABCDE00000001 /* Category.swift in Sources */,
+				A0CORE242F0ABCDE00000001 /* ExpenseCategory.swift in Sources */,
+				A0CORE252F0ABCDE00000001 /* FinancialTransaction.swift in Sources */,
+				A0CORE262F0ABCDE00000001 /* Budget.swift in Sources */,
+				A0CORE272F0ABCDE00000001 /* Subscription.swift in Sources */,
+				A0CORE282F0ABCDE00000001 /* SavingsGoal.swift in Sources */,
+				A0CORE292F0ABCDE00000001 /* SampleData.swift in Sources */,
+				A0CORE2A2F0ABCDE00000001 /* SampleDataGenerators.swift in Sources */,
+				A0CORE2B2F0ABCDE00000001 /* SampleDataProviders.swift in Sources */,
+				A0CORE2C2F0ABCDE00000001 /* ComplexDataGenerators.swift in Sources */,
+				A0CORE2D2F0ABCDE00000001 /* Logger.swift in Sources */,
+				A0CORE2E2F0ABCDE00000001 /* ErrorHandler.swift in Sources */,
+				A0CORE_BUDGETSVM_BUILD_001 /* BudgetsViewModel.swift in Sources */,
+				BB7A5BD961FC5DDE5E252E17 /* CategoriesGenerator.swift in Sources */,
+				09D3C85A68D88363F77CBB6A /* AccountsGenerator.swift in Sources */,
+				815DB79DB4126C68EBAF51E7 /* BudgetsGenerator.swift in Sources */,
+				1F6029DA5C07EB1C29654A0D /* SavingsGoalsGenerator.swift in Sources */,
+				748B1C8D5C924066E5A8F7D3 /* TransactionsGenerator.swift in Sources */,
+			);
+		};
+		A0TEST122F0ABCDE00000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+				A0TEST012F0ABCDE00000001 /* CSVParserTests.swift in Sources */,
+				A0TEST022F0ABCDE00000001 /* DataExporterDateRangeTests.swift in Sources */,
+				A0TEST042F0ABCDE00000001 /* DataImporterErrorTests.swift in Sources */,
+				A0TEST072F0ABCDE00000001 /* CSVParserEdgeCasesTests.swift in Sources */,
+				A0TEST082F0ABCDE00000001 /* DataExporterContentTests.swift in Sources */,
+				A0TEST092F0BUDGETS0000001 /* BudgetsViewTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A0TEST202F0ABCDE00000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B1A2B272C0D1E8F00123456 /* MomentumFinance */;
+			targetProxy = A0TEST212F0ABCDE00000001 /* PBXContainerItemProxy */;
+		};
+		A0TEST222F0ABCDE00000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A0CORE112F0ABCDE00000001 /* MomentumFinanceCore */;
+			targetProxy = A0TEST232F0ABCDE00000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		6B1A2B342C0D1E9000123456 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BASE_CONFIGURATION_FILE = Config/Base.xcconfig;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3N5528D82R;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		6B1A2B352C0D1E9000123456 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BASE_CONFIGURATION_FILE = Config/Base.xcconfig;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3N5528D82R;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6B1A2B372C0D1E9000123456 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"MomentumFinance/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Momentum Finance";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_LSRequiresIPhoneOS = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsMultipleScenes = NO;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = (
+					armv7,
+				);
+				INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsArbitraryLoads = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.momentumfinance.MomentumFinance;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+			};
+			name = Debug;
+		};
+		6B1A2B382C0D1E9000123456 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"MomentumFinance/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Momentum Finance";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_LSRequiresIPhoneOS = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsMultipleScenes = NO;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = (
+					armv7,
+				);
+				INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsArbitraryLoads = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.momentumfinance.MomentumFinance;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+			};
+			name = Release;
+		};
+		A0CORE1A2F0ABCDE00000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDevelopmentRegion = en;
+				INFOPLIST_KEY_CFBundleExecutable = "$(EXECUTABLE_NAME)";
+				INFOPLIST_KEY_CFBundleIdentifier = com.momentumfinance.core;
+				INFOPLIST_KEY_CFBundleName = MomentumFinanceCore;
+				INFOPLIST_KEY_CFBundlePackageType = FMWK;
+				INFOPLIST_KEY_CFBundleShortVersionString = 1.0;
+				INFOPLIST_KEY_CFBundleVersion = 1;
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = com.momentumfinance.core;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+			};
+			name = Debug;
+		};
+		A0CORE1B2F0ABCDE00000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDevelopmentRegion = en;
+				INFOPLIST_KEY_CFBundleExecutable = "$(EXECUTABLE_NAME)";
+				INFOPLIST_KEY_CFBundleIdentifier = com.momentumfinance.core;
+				INFOPLIST_KEY_CFBundleName = MomentumFinanceCore;
+				INFOPLIST_KEY_CFBundlePackageType = FMWK;
+				INFOPLIST_KEY_CFBundleShortVersionString = 1.0;
+				INFOPLIST_KEY_CFBundleVersion = 1;
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = com.momentumfinance.core;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+			};
+			name = Release;
+		};
+		A0TEST1A2F0ABCDE00000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3N5528D82R;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.momentumfinance.MomentumFinanceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+				TEST_HOST = "";
+			};
+			name = Debug;
+		};
+		A0TEST1B2F0ABCDE00000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3N5528D82R;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.momentumfinance.MomentumFinanceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+				TEST_HOST = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6B1A2B232C0D1E8F00123456 /* Build configuration list for PBXProject "MomentumFinance" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6B1A2B342C0D1E9000123456 /* Debug */,
+				6B1A2B352C0D1E9000123456 /* Release */,
+			);
+			defaultConfigurationName = Release;
+		};
+		6B1A2B362C0D1E9000123456 /* Build configuration list for PBXNativeTarget "MomentumFinance" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6B1A2B372C0D1E9000123456 /* Debug */,
+				6B1A2B382C0D1E9000123456 /* Release */,
+			);
+			defaultConfigurationName = Release;
+		};
+		A0CORE192F0ABCDE00000001 /* Build configuration list for PBXNativeTarget "MomentumFinanceCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0CORE1A2F0ABCDE00000001 /* Debug */,
+				A0CORE1B2F0ABCDE00000001 /* Release */,
+			);
+			defaultConfigurationName = Release;
+		};
+		A0TEST192F0ABCDE00000001 /* Build configuration list for PBXNativeTarget "MomentumFinanceTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0TEST1A2F0ABCDE00000001 /* Debug */,
+				A0TEST1B2F0ABCDE00000001 /* Release */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6B1A2B202C0D1E8F00123456 /* Project object */;
+}

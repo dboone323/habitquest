@@ -11,7 +11,7 @@ import subprocess
 import time
 from pathlib import Path
 
-PORT = 8003
+PORT = 8004
 AGENTS_DIR = Path(__file__).parent
 DASHBOARD_DATA_FILE = AGENTS_DIR / "dashboard_data.json"
 AGENT_STATUS_FILE = AGENTS_DIR / "agent_status.json"
@@ -38,13 +38,18 @@ class DashboardAPIHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
 
             # Serve the dashboard HTML
+            simple_dashboard_path = Path(__file__).parent.parent / "Automation" / "simple_dashboard.html"
             dashboard_path = Path(__file__).parent.parent / "dashboard.html"
-            if dashboard_path.exists():
+            
+            if simple_dashboard_path.exists():
+                with open(simple_dashboard_path, "r") as f:
+                    self.wfile.write(f.read().encode())
+            elif dashboard_path.exists():
                 with open(dashboard_path, "r") as f:
                     self.wfile.write(f.read().encode())
             else:
                 self.wfile.write(
-                    b"<html><body><h1>Dashboard not found</h1></body></html>"
+                    b"<html><body><h1>Dashboard not found</h1><p>Looking for simple_dashboard.html or dashboard.html</p></body></html>"
                 )
         else:
             self.send_response(404)

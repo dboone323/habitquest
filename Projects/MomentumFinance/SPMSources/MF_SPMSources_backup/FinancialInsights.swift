@@ -184,7 +184,7 @@ public func fi_suggestDuplicatePaymentInsights(transactions: [FinancialTransacti
             let current = sorted[index]
             let difference = calendar.dateComponents([.day], from: previous.date, to: current.date).day ?? Int.max
             let amountsMatch = abs(previous.amount - current.amount) < 0.01
-            if abs(difference) <= 3 && amountsMatch {
+            if abs(difference) <= 3, amountsMatch {
                 foundDuplicate = true
                 break
             }

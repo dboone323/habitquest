@@ -26,10 +26,10 @@ echo ""
 
 # Verify round-trip
 if [[ "${test_desc}" == "${decompressed}" ]]; then
-    echo "✅ SUCCESS: Round-trip compression/decompression works correctly!"
+  echo "✅ SUCCESS: Round-trip compression/decompression works correctly!"
 else
-    echo "❌ FAILURE: Round-trip compression/decompression failed!"
-    echo "Original != Decompressed"
+  echo "❌ FAILURE: Round-trip compression/decompression failed!"
+  echo "Original != Decompressed"
 fi
 
 echo ""

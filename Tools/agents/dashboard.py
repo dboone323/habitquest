@@ -324,11 +324,11 @@ DASHBOARD_HTML = """
             .main-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .controls {
                 flex-direction: column;
             }
-            
+
             .header h1 {
                 font-size: 1.8rem;
             }
@@ -451,7 +451,7 @@ DASHBOARD_HTML = """
             document.getElementById('agentCount').textContent = data.stats?.active_agents || 0;
             document.getElementById('taskCount').textContent = data.stats?.queued_tasks || 0;
             document.getElementById('completedCount').textContent = data.stats?.completed_tasks || 0;
-            
+
             // Update uptime
             const uptime = Math.floor((new Date() - systemStartTime) / 1000 / 60);
             document.getElementById('uptime').textContent = uptime + 'm';
@@ -471,19 +471,19 @@ DASHBOARD_HTML = """
             const container = document.getElementById('agentList');
             const agentNames = [
                 'agent_build.sh',
-                'agent_debug.sh', 
+                'agent_debug.sh',
                 'agent_codegen.sh',
                 'agent_todo.sh',
                 'task_orchestrator.sh'
             ];
 
             container.innerHTML = '';
-            
+
             agentNames.forEach(name => {
                 const agent = agents[name] || {};
                 const status = agent.status || 'unknown';
                 const pid = agent.pid || 'N/A';
-                
+
                 const item = document.createElement('div');
                 item.className = `agent-item ${status}`;
                 item.innerHTML = `
@@ -552,13 +552,13 @@ DASHBOARD_HTML = """
             try {
                 const response = await fetch('/api/health');
                 const health = await response.json();
-                
+
                 let message = `System Health Check\\n\\n`;
                 message += `MCP Server: ${health.mcp_status}\\n`;
                 message += `Active Agents: ${health.active_agents}\\n`;
                 message += `System Load: ${health.system_load}\\n`;
                 message += `Memory Usage: ${health.memory_usage}\\n`;
-                
+
                 alert(message);
             } catch (error) {
                 alert('Health check failed: ' + error.message);

@@ -19,5 +19,41 @@ if ! cd "${ROOT_DIR}"; then
   exit 1
 fi
 
-# Exclude noisy/archived and test directories; SwiftLint supports --path and config excludes
-swiftlint lint --config "${CONFIG}" --strict || true
+# Build file list either from pre-commit or from tracked files
+files=()
+if [[ $# -gt 0 ]]; then
+  for f in "$@"; do
+    case "${f}" in
+    *Tools/Automation/* | *Archive/* | *Imported/* | *_merge_backups/* | */**Tests/** | */**Tests.swift)
+      continue
+      ;;
+    esac
+    [[ ${f} == *.swift ]] || continue
+    files+=("${f}")
+  done
+else
+  # Fallback: lint all tracked Swift files under repo respecting excludes in config
+  mapfile -t tracked_swift < <(git ls-files '*.swift')
+  for f in "${tracked_swift[@]}"; do
+    case "${f}" in
+    *Tools/Automation/* | *Archive/* | *Imported/* | *_merge_backups/* | */**Tests/** | */**Tests.swift)
+      continue
+      ;;
+    esac
+    files+=("${f}")
+  done
+fi
+
+# If no Swift files are present for this hook invocation, exit successfully
+if [[ ${#files[@]} -eq 0 ]]; then
+  exit 0
+fi
+
+# Prepare multiple --path args for swiftlint
+args=(lint --config "${CONFIG}" --strict)
+for f in "${files[@]}"; do
+  args+=(--path "${f}")
+done
+
+# Run SwiftLint; do not fail the hook on lint errors to allow autofixes to proceed in later hooks
+swiftlint "${args[@]}" || true

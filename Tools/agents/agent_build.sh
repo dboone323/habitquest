@@ -38,7 +38,9 @@ function update_status() {
       '.agents[$agent] = {"status": $status, "pid": ($pid | tonumber), "last_seen": ($timestamp | tonumber)}' \
       "${STATUS_FILE}" >"${STATUS_FILE}.tmp"
 
-    if [[ $? -eq 0 ]] && [[ -s "${STATUS_FILE}.tmp" ]]; then
+    if jq --arg agent "${AGENT_NAME}" --arg status "${status}" --argjson now "${timestamp}" \
+      '.agents[$agent] = (.agents[$agent] // {}) | .agents[$agent].status = $status | .agents[$agent].last_seen = $now | .last_update = $now' \
+      "${STATUS_FILE}" >"${STATUS_FILE}.tmp" && [[ -s "${STATUS_FILE}.tmp" ]]; then
       mv "${STATUS_FILE}.tmp" "${STATUS_FILE}"
     else
       echo "[$(date)] ${AGENT_NAME}: Failed to update status file" >>"${LOG_FILE}"

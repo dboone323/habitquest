@@ -472,7 +472,7 @@ public final class AdvancedFinancialIntelligence: ObservableObject {
             ]
         }
 
-        if net > 500 && !accounts.isEmpty {
+        if net > 500, !accounts.isEmpty {
             return [
                 EnhancedFinancialInsight(
                     title: "Healthy monthly surplus",

@@ -22,32 +22,32 @@ echo "🔍 Checking system dependencies..."
 
 # Check Python3
 if ! command -v python3 &>/dev/null; then
-	echo "❌ Python3 is required but not installed"
-	exit 1
+  echo "❌ Python3 is required but not installed"
+  exit 1
 fi
 
 # Check if pip is available
 if ! python3 -m pip --version &>/dev/null; then
-	echo "❌ pip is required but not available"
-	exit 1
+  echo "❌ pip is required but not available"
+  exit 1
 fi
 
 # Check/install Python dependencies
 echo "📦 Checking Python dependencies..."
 python3 -c "import flask" 2>/dev/null || {
-	echo "⚙️  Installing Flask..."
-	python3 -m pip install flask flask-cors --quiet
+  echo "⚙️  Installing Flask..."
+  python3 -m pip install flask flask-cors --quiet
 }
 
 # Check for essential tools
 if ! command -v curl &>/dev/null; then
-	echo "❌ curl is required but not installed"
-	exit 1
+  echo "❌ curl is required but not installed"
+  exit 1
 fi
 
 if ! command -v jq &>/dev/null; then
-	echo "⚠️  jq is not installed - some features may be limited"
-	echo "   Install with: brew install jq"
+  echo "⚠️  jq is not installed - some features may be limited"
+  echo "   Install with: brew install jq"
 fi
 
 # Initialize directory structure
@@ -58,11 +58,11 @@ mkdir -p "${WORKSPACE_ROOT}/Projects"
 
 # Initialize configuration files if they don't exist
 if [[ ! -f "${SCRIPT_DIR}/agent_status.json" ]]; then
-	echo '{"agents": {}, "last_update": 0}' >"${SCRIPT_DIR}/agent_status.json"
+  echo '{"agents": {}, "last_update": 0}' >"${SCRIPT_DIR}/agent_status.json"
 fi
 
 if [[ ! -f "${SCRIPT_DIR}/task_queue.json" ]]; then
-	echo '{"tasks": [], "completed": [], "failed": []}' >"${SCRIPT_DIR}/task_queue.json"
+  echo '{"tasks": [], "completed": [], "failed": []}' >"${SCRIPT_DIR}/task_queue.json"
 fi
 
 # Check if any agents are already running
@@ -70,33 +70,33 @@ echo "🔍 Checking for existing agent processes..."
 existing_agents=()
 
 for pid_file in "${SCRIPT_DIR}"/*.pid; do
-	if [[ -f ${pid_file} ]]; then
-		pid=$(cat "${pid_file}" 2>/dev/null || echo "")
-		if [[ -n ${pid} ]] && kill -0 "${pid}" 2>/dev/null; then
-			agent_name=$(basename "${pid_file}" .pid)
-			existing_agents+=("${agent_name}")
-		else
-			# Clean up stale PID file
-			rm -f "${pid_file}"
-		fi
-	fi
+  if [[ -f ${pid_file} ]]; then
+    pid=$(cat "${pid_file}" 2>/dev/null || echo "")
+    if [[ -n ${pid} ]] && kill -0 "${pid}" 2>/dev/null; then
+      agent_name=$(basename "${pid_file}" .pid)
+      existing_agents+=("${agent_name}")
+    else
+      # Clean up stale PID file
+      rm -f "${pid_file}"
+    fi
+  fi
 done
 
 if [[ ${#existing_agents[@]} -gt 0 ]]; then
-	echo "⚠️  Found existing agent processes:"
-	for agent in "${existing_agents[@]}"; do
-		echo "   - ${agent}"
-	done
-	echo ""
-	read -p "Stop existing agents and restart? (y/N): " -n 1 -r
-	echo ""
-	if [[ ${REPLY} =~ ^[Yy]$ ]]; then
-		echo "🛑 Stopping existing agents..."
-		"${SCRIPT_DIR}/agent_supervisor.sh" stop
-		sleep 3
-	else
-		echo "ℹ️  Connecting to existing agent system..."
-	fi
+  echo "⚠️  Found existing agent processes:"
+  for agent in "${existing_agents[@]}"; do
+    echo "   - ${agent}"
+  done
+  echo ""
+  read -p "Stop existing agents and restart? (y/N): " -n 1 -r
+  echo ""
+  if [[ ${REPLY} =~ ^[Yy]$ ]]; then
+    echo "🛑 Stopping existing agents..."
+    "${SCRIPT_DIR}/agent_supervisor.sh" stop
+    sleep 3
+  else
+    echo "ℹ️  Connecting to existing agent system..."
+  fi
 fi
 
 # Show system information
@@ -139,7 +139,7 @@ echo "=========================="
 # Check MCP Server
 if curl -s --max-time 3 "${MCP_URL}/health" >/dev/null 2>&1; then
     echo "✅ MCP Server: HEALTHY"
-    
+
     # Get detailed status
     status=$(curl -s --max-time 3 "${MCP_URL}/status" 2>/dev/null)
     if [[ -n "${status}" ]]; then
@@ -207,9 +207,9 @@ read -p "Start the autonomous agent system now? (Y/n): " -n 1 -r
 echo ""
 
 if [[ ${REPLY} =~ ^[Nn]$ ]]; then
-	echo "ℹ️  System ready but not started. Run the following when ready:"
-	echo "   ${SCRIPT_DIR}/agent_supervisor.sh"
-	exit 0
+  echo "ℹ️  System ready but not started. Run the following when ready:"
+  echo "   ${SCRIPT_DIR}/agent_supervisor.sh"
+  exit 0
 fi
 
 echo "🚀 Starting Agent Supervisor in monitoring mode..."
