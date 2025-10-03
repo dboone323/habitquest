@@ -87,3 +87,17 @@ yarn-error.log*
 
 # Dev containers
 .devcontainer/
+
+# Agent runtime files
+Tools/Automation/agents/*.pid
+Tools/Automation/agents/*.processing
+Tools/Automation/agents/*.tmp.*
+Tools/Automation/agents/task_queue.json.old
+Tools/Automation/export_todos.pid
+
+# Temporary TODO export files
+Projects/todo-tree-output.json.broken
+Projects/todo-tree-output.json.fixed
+Projects/todo-tree-output.json.items.*
+Projects/todo-tree-output.json.tmp.*
+Projects/todo-tree-output.json.limited
