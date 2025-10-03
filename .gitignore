@@ -8,6 +8,7 @@ todo-tree-output.json
 Tools/Automation/export_todos.pid
 Tools/Automation/process_todos.log
 Tools/logs/
+Tools/Automation/agents/.dashboard_metrics_state.json
 
 # macOS junk
 .DS_Store
