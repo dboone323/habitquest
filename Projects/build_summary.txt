@@ -1,0 +1,12 @@
+Build Summary - Sun Oct  5 18:25:43 UTC 2025
+====================================
+[info] No simulator UDID resolved; skipping prewarm
+\n=== Building PlannerApp iOS (platform=iOS Simulator,OS=26.0,name=iPhone 7) ===
+[FAIL] PlannerApp iOS (exit 0)
+\n=== Building HabitQuest iOS (platform=iOS Simulator,OS=26.0,name=iPhone 7) ===
+[FAIL] HabitQuest iOS (exit 0)
+\n=== Building AvoidObstaclesGame iOS (platform=iOS Simulator,OS=26.0,name=iPhone 7) ===
+[FAIL] AvoidObstaclesGame iOS (exit 0)
+\n=== Building CodingReviewer macOS (OS 26.0) (platform=macOS,OS=26.0) ===
+[warn] CodingReviewer macOS (OS 26.0) failed (exit 0); retrying with fallback destination platform=macOS
+[FAIL] CodingReviewer macOS (exit 127)
