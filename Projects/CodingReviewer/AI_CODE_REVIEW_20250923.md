@@ -1597,12 +1597,14 @@ func testAnalyze_DetectsSQLInjectionVulnerabilities() {
     XCTAssertTrue(result.vulnerabilities.contains(.sqlInjection))
 }
 
-// Replace vague TODO with specific tasks
-// TODO: Add tests for:
-// - XSS detection
-// - Path traversal attacks
-// - Memory safety issues
-// - Concurrency vulnerabilities
+// Comprehensive test coverage implemented in SecurityAnalysisServiceTests.swift
+// The following security scenarios are now covered with executable tests:
+// - XSS detection (innerHTML, document.write)
+// - Path traversal attacks (Unix and Windows path patterns)
+// - Memory safety issues (unsafeBitCast, unsafe pointers)
+// - Concurrency vulnerabilities (shared mutable state without protection)
+// - Multiple vulnerability detection in complex code
+// - Secure code validation (no false positives)
 ```
 
 ## Recommended Complete Structure
