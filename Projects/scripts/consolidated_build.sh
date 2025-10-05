@@ -196,36 +196,36 @@ run_build() {
     fi
     record_success "${scheme}" "${label}" "${dest}" "${meta_path}" "${platform}"
     return 0
-  fi
-
-  local status=$?
-  if [[ -n "${fallback_dest}" ]]; then
-    append_summary "[warn] ${label} failed (exit ${status}); retrying with fallback destination ${fallback_dest}"
-    if LOG_SUFFIX="${log_suffix}_fallback" DISABLE_INTERNAL_FALLBACK=1 "${SCRIPTS_DIR}/build_with_retry.sh" "${project_dir}" "${scheme}" "${fallback_dest}"; then
-      append_summary "[OK] ${fallback_label}"
-      local meta_path="${project_dir}/build_meta/last_success.json"
-      if [[ -n "${fallback_variant}" ]]; then
-        copy_meta_variant "${meta_path}" "${fallback_variant}"
+  else
+    local status=$?
+    if [[ -n "${fallback_dest}" ]]; then
+      append_summary "[warn] ${label} failed (exit ${status}); retrying with fallback destination ${fallback_dest}"
+      if LOG_SUFFIX="${log_suffix}_fallback" DISABLE_INTERNAL_FALLBACK=1 "${SCRIPTS_DIR}/build_with_retry.sh" "${project_dir}" "${scheme}" "${fallback_dest}"; then
+        append_summary "[OK] ${fallback_label}"
+        local meta_path="${project_dir}/build_meta/last_success.json"
+        if [[ -n "${fallback_variant}" ]]; then
+          copy_meta_variant "${meta_path}" "${fallback_variant}"
+        fi
+        record_success "${scheme}" "${fallback_label}" "${fallback_dest}" "${meta_path}" "${platform}"
+        return 0
+      else
+        local fallback_status=$?
+        append_summary "[FAIL] ${fallback_label} (exit ${fallback_status})"
+        EXIT_CODE=1
+        record_failure "${scheme}" "${fallback_label}" "${fallback_dest}" "${platform}" "exit ${fallback_status}"
+        return ${fallback_status}
       fi
-      record_success "${scheme}" "${fallback_label}" "${fallback_dest}" "${meta_path}" "${platform}"
-      return 0
-    else
-      status=$?
-      append_summary "[FAIL] ${fallback_label} (exit ${status})"
-      EXIT_CODE=1
-      record_failure "${scheme}" "${fallback_label}" "${fallback_dest}" "${platform}" "exit ${status}"
-      return ${status}
     fi
-  fi
 
-  append_summary "[FAIL] ${label} (exit ${status})"
-  EXIT_CODE=1
-  record_failure "${scheme}" "${label}" "${dest}" "${platform}" "exit ${status}"
-  return ${status}
+    append_summary "[FAIL] ${label} (exit ${status})"
+    EXIT_CODE=1
+    record_failure "${scheme}" "${label}" "${dest}" "${platform}" "exit ${status}"
+    return ${status}
+  fi
 }
 
 for scheme in "${IOS_SCHEME_LIST[@]}"; do
-  run_build "${scheme}" "${scheme} iOS" "${IOS_DEST}" "iOS" "ios" "ios"
+  run_build "${scheme}" "${scheme} iOS" "${IOS_DEST}" "iOS" "ios" "ios" || true
 done
 
 if [[ "${ENABLE_MAC_PRIMARY}" == "1" ]]; then
@@ -238,9 +238,9 @@ if [[ "${ENABLE_MAC_PRIMARY}" == "1" ]]; then
   fi
   for scheme in "${MAC_SCHEME_LIST[@]}"; do
     if [[ -n "${MAC_OS_VERSION}" ]]; then
-      run_build "${scheme}" "${scheme} macOS${mac_label_suffix}" "${mac_primary_dest}" "macOS" "mac" "mac" "${MAC_DEST_PLATFORM}" "${scheme} macOS"
+      run_build "${scheme}" "${scheme} macOS${mac_label_suffix}" "${mac_primary_dest}" "macOS" "mac" "mac" "${MAC_DEST_PLATFORM}" "${scheme} macOS" || true
     else
-      run_build "${scheme}" "${scheme} macOS" "${mac_primary_dest}" "macOS" "mac" "mac"
+      run_build "${scheme}" "${scheme} macOS" "${mac_primary_dest}" "macOS" "mac" "mac" || true
     fi
   done
 else
