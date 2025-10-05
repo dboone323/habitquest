@@ -25,7 +25,6 @@
 		79D64464EAB5EDAEFA34222C /* SmartNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F5417CA902C701CBA870E2 /* SmartNotificationService.swift */; };
 		7FE253F461CA143F5788C95B /* DataManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C46BA33086BC7764B5717A /* DataManagementView.swift */; };
 		7FE6A8267707AAACBB1E510A /* StreakAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F60C7D8BC0BF8316C79EE62 /* StreakAnalyticsView.swift */; };
-		81DB6BF6A3A2558F62845F5B /* AnalyticsTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD0847A8D3D0167504FE9D1 /* AnalyticsTypes.swift */; };
 		8D337B7D798339BA73EE86BE /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D834CF685F661DDFA17A897F /* ErrorHandler.swift */; };
 		9EA5FF468BAF263705169BD6 /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8019CB317C9FBD2079031262 /* Achievement.swift */; };
 		AC57D0E12DC13F362E95DADE /* DataExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3573F876BFB6454042FBF311 /* DataExportService.swift */; };
@@ -66,7 +65,6 @@
 		02C46BA33086BC7764B5717A /* DataManagementView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DataManagementView.swift; path = ./HabitQuest/Features/DataManagement/DataManagementView.swift; sourceTree = "<group>"; };
 		08F3B7E2CA8370ACC8F65206 /* PlayerProfile.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlayerProfile.swift; path = ./HabitQuest/Core/Models/PlayerProfile.swift; sourceTree = "<group>"; };
 		3573F876BFB6454042FBF311 /* DataExportService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DataExportService.swift; path = ./HabitQuest/Core/Services/DataExportService.swift; sourceTree = "<group>"; };
-		3FD0847A8D3D0167504FE9D1 /* AnalyticsTypes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AnalyticsTypes.swift; path = ./HabitQuest/Core/Services/AnalyticsTypes.swift; sourceTree = "<group>"; };
 		440C78D8227A5CE9DB978FF4 /* HabitViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HabitViewModel.swift; path = ./HabitQuest/Core/ViewModels/HabitViewModel.swift; sourceTree = "<group>"; };
 		46927FE606B035AB66FA2E98 /* Item.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Item.swift; path = ./HabitQuest/Item.swift; sourceTree = "<group>"; };
 		4D71310BE02C683BBFDB03BB /* StreakService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StreakService.swift; path = ./HabitQuest/Core/Services/StreakService.swift; sourceTree = "<group>"; };
