@@ -85,12 +85,12 @@ jobs:
           if command -v ollama &> /dev/null; then
             echo "ollama_available=true" >> $GITHUB_OUTPUT
             echo "✓ Ollama is installed"
-            
+
             # Try to start Ollama service
             ollama serve &
             OLLAMA_PID=$!
             echo "ollama_pid=$OLLAMA_PID" >> $GITHUB_OUTPUT
-            
+
             # Wait for Ollama to be ready
             for i in {1..30}; do
               if curl -sf http://localhost:11434/api/tags > /dev/null 2>&1; then
@@ -100,7 +100,7 @@ jobs:
               echo "Waiting for Ollama server... ($i/30)"
               sleep 2
             done
-            
+
             # Pull cloud model with error handling and fallback
             if ! ollama list | grep -q "qwen3-coder:480b-cloud"; then
               echo "Pulling qwen3-coder cloud model..."
@@ -109,7 +109,7 @@ jobs:
               if command -v gtimeout >/dev/null 2>&1; then
                 TIMEOUT_CMD="gtimeout 60s"
               fi
-              
+
               if ! $TIMEOUT_CMD ollama pull qwen3-coder:480b-cloud; then
                 echo "⚠ Cloud model pull failed or timed out, will use fallback"
                 echo "Attempting to pull fallback model codellama:7b..."
@@ -117,7 +117,7 @@ jobs:
                 if command -v gtimeout >/dev/null 2>&1; then
                   TIMEOUT_CMD_LONG="gtimeout 300s"
                 fi
-                
+
                 if ! $TIMEOUT_CMD_LONG ollama pull codellama:7b; then
                   echo "⚠ Fallback model pull also failed, AI review may be limited"
                   echo "model_pull_failed=true" >> $GITHUB_OUTPUT
@@ -247,11 +247,11 @@ jobs:
           REVIEW_FILE=$(ls -t ai_reviews/review_*.md 2>/dev/null | head -1)
           if [ -n "$REVIEW_FILE" ]; then
             echo "review_file=$REVIEW_FILE" >> $GITHUB_OUTPUT
-            
+
             # Extract summary
             echo "## AI Code Review Summary" > ai_review_summary.md
             echo "" >> ai_review_summary.md
-            
+
             # Extract key sections
             sed -n '/## Summary/,/## Severity Assessment/p' "$REVIEW_FILE" | head -n -1 >> ai_review_summary.md
             echo "" >> ai_review_summary.md
@@ -336,7 +336,7 @@ jobs:
           script: |
             const mergeStatus = '${{ steps.merge_guard.outputs.status }}';
             const state = mergeStatus === 'approved' ? 'success' : 'failure';
-            const description = mergeStatus === 'approved' 
+            const description = mergeStatus === 'approved'
               ? 'All checks passed, safe to merge'
               : 'Issues found, merge blocked';
 
