@@ -101,3 +101,6 @@ Projects/todo-tree-output.json.fixed
 Projects/todo-tree-output.json.items.*
 Projects/todo-tree-output.json.tmp.*
 Projects/todo-tree-output.json.limited
+
+# Exclude backup files (too large for GitHub)
+.backups/
