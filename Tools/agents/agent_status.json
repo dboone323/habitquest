@@ -96,8 +96,8 @@
     },
     "simple_task_processor": {
       "status": "idle",
-      "last_seen": 1759428828,
-      "pid": 40180
+      "last_seen": 1759766035,
+      "pid": 82747
     },
     "agent_build.sh": {
       "status": "unresponsive",
@@ -113,14 +113,9 @@
       "last_seen": 1759426384
     },
     "agent_todo.sh": {
-      "status": "unresponsive",
-      "last_seen": 1759426391,
-      "capabilities": [
-        "todo",
-        "task_creation",
-        "scan",
-        "analysis"
-      ],
+      "status": "running",
+      "pid": 6263,
+      "last_seen": 1759765941,
       "tasks_completed": 0
     },
     "uiux_agent.sh": {
