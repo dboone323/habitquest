@@ -1,0 +1,323 @@
+name: Unified Security Scan
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: "0 */6 * * *" # Every 6 hours
+  workflow_dispatch:
+
+jobs:
+  security-scan:
+    name: Comprehensive Security Analysis
+    runs-on: macos-latest
+    permissions:
+      security-events: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install security tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install bandit safety trivy
+
+      - name: Run Bandit (Python security)
+        run: |
+          echo "🔍 Running Bandit security scan..."
+          bandit -r . -f json -o bandit-report.json || true
+          echo "Bandit scan completed"
+
+      - name: Run Safety (dependency vulnerabilities)
+        run: |
+          echo "🔍 Checking for vulnerable dependencies..."
+          safety check --output json > safety-report.json || true
+          echo "Safety check completed"
+
+      - name: Run Trivy (container/binary vulnerabilities)
+        run: |
+          echo "🔍 Running Trivy vulnerability scan..."
+          trivy filesystem --format json --output trivy-report.json . || true
+          echo "Trivy scan completed"
+
+      - name: Advanced Secrets Detection
+        run: |
+          echo "🔍 Performing advanced secrets detection..."
+          python3 -c "
+          import os
+          import re
+          import json
+
+          secrets_patterns = [
+              r'(?i)(password|passwd|pwd)\s*[=:]\s*[\"\\'][^\"\\']+',
+              r'(?i)(secret|token|key)\s*[=:]\s*[\"\\'][^\"\\']+',
+              r'(?i)(api_key|apikey)\s*[=:]\s*[\"\\'][^\"\\']+',
+              r'(?i)(private_key|ssh_key)\s*[=:]\s*[\"\\'][^\"\\']+',
+              r'(?i)(access_token|auth_token)\s*[=:]\s*[\"\\'][^\"\\']+',
+              r'(?i)(bearer)\s+[a-zA-Z0-9_\-\.]+',
+              r'(?i)(authorization|auth)\s*:\s*bearer\s+[a-zA-Z0-9_\-\.]+',
+              r'[a-zA-Z0-9_\-\.]{20,}',  # Long random strings
+          ]
+
+          findings = []
+          for root, dirs, files in os.walk('.'):
+              if any(skip in root for skip in ['.git', 'node_modules', '.github', '__pycache__', '.build']):
+                  continue
+              for file in files:
+                  if file.endswith(('.swift', '.py', '.js', '.ts', '.sh', '.json', '.yml', '.yaml')):
+                      try:
+                          with open(os.path.join(root, file), 'r', encoding='utf-8', errors='ignore') as f:
+                              content = f.read()
+                              for pattern in secrets_patterns:
+                                  matches = re.findall(pattern, content)
+                                  if matches:
+                                      for match in matches[:5]:  # Limit to 5 matches per file
+                                          findings.append({
+                                              'file': os.path.join(root, file),
+                                              'pattern': pattern,
+                                              'match': match[:50] + '...' if len(match) > 50 else match
+                                          })
+                      except Exception as e:
+                          pass
+
+          with open('secrets-report.json', 'w') as f:
+              json.dump(findings, f, indent=2)
+
+          print(f'Found {len(findings)} potential secret exposures')
+          "
+
+      - name: Swift Security Analysis
+        run: |
+          echo "🔍 Analyzing Swift code for security issues..."
+          python3 -c "
+          import os
+          import re
+          import json
+
+          swift_findings = []
+          for root, dirs, files in os.walk('.'):
+              if any(skip in root for skip in ['.git', 'node_modules', '.build']):
+                  continue
+              for file in files:
+                  if file.endswith('.swift'):
+                      try:
+                          with open(os.path.join(root, file), 'r', encoding='utf-8', errors='ignore') as f:
+                              content = f.read()
+                              lines = content.split('\n')
+
+                              # Check for insecure patterns
+                              insecure_patterns = [
+                                  (r'http://', 'Insecure HTTP URL'),
+                                  (r'MD5|SHA1|DES|RC4', 'Weak cryptography'),
+                                  (r'SELECT.*\+.*|INSERT.*\+.*|UPDATE.*\+.*', 'SQL injection risk'),
+                                  (r'eval\(|NSExpression', 'Code injection risk'),
+                                  (r'forceUnwrap\(\)', 'Force unwrap usage'),
+                                  (r'try!', 'Force try usage'),
+                              ]
+
+                              for i, line in enumerate(lines, 1):
+                                  for pattern, description in insecure_patterns:
+                                      if re.search(pattern, line, re.IGNORECASE):
+                                          swift_findings.append({
+                                              'file': os.path.join(root, file),
+                                              'line': i,
+                                              'issue': description,
+                                              'code': line.strip()[:100]
+                                          })
+
+                      except Exception as e:
+                          pass
+
+          with open('swift-security-report.json', 'w') as f:
+              json.dump(swift_findings, f, indent=2)
+
+          print(f'Found {len(swift_findings)} Swift security issues')
+          "
+
+      - name: Generate Security Report
+        run: |
+          echo "📊 Generating comprehensive security report..."
+          python3 -c "
+          import json
+          import os
+          from datetime import datetime
+
+          report = {
+              'timestamp': datetime.utcnow().isoformat(),
+              'repository': '${{ github.repository }}',
+              'commit': '${{ github.sha }}',
+              'findings': {}
+          }
+
+          # Load bandit results
+          if os.path.exists('bandit-report.json'):
+              try:
+                  with open('bandit-report.json', 'r') as f:
+                      bandit_data = json.load(f)
+                      report['findings']['bandit'] = bandit_data.get('results', [])
+              except:
+                  report['findings']['bandit'] = []
+
+          # Load safety results
+          if os.path.exists('safety-report.json'):
+              try:
+                  with open('safety-report.json', 'r') as f:
+                      safety_data = json.load(f)
+                      report['findings']['safety'] = safety_data
+              except:
+                  report['findings']['safety'] = []
+
+          # Load secrets results
+          if os.path.exists('secrets-report.json'):
+              try:
+                  with open('secrets-report.json', 'r') as f:
+                      secrets_data = json.load(f)
+                      report['findings']['secrets'] = secrets_data
+              except:
+                  report['findings']['secrets'] = []
+
+          # Load Swift security results
+          if os.path.exists('swift-security-report.json'):
+              try:
+                  with open('swift-security-report.json', 'r') as f:
+                      swift_data = json.load(f)
+                      report['findings']['swift'] = swift_data
+              except:
+                  report['findings']['swift'] = []
+
+          # Calculate summary
+          total_findings = 0
+          critical_findings = 0
+
+          for category, findings in report['findings'].items():
+              if isinstance(findings, list):
+                  count = len(findings)
+              elif isinstance(findings, dict) and 'vulnerabilities' in findings:
+                  count = len(findings['vulnerabilities'])
+              else:
+                  count = 0
+
+              total_findings += count
+
+              # Mark secrets and high-severity bandit findings as critical
+              if category == 'secrets' and count > 0:
+                  critical_findings += count
+              elif category == 'bandit':
+                  for finding in findings:
+                      if finding.get('issue_severity', '').upper() in ['HIGH', 'CRITICAL']:
+                          critical_findings += 1
+
+          report['summary'] = {
+              'total_findings': total_findings,
+              'critical_findings': critical_findings,
+              'scan_status': 'PASSED' if critical_findings == 0 else 'FAILED'
+          }
+
+          with open('security-report.json', 'w') as f:
+              json.dump(report, f, indent=2)
+
+          print(f'Security scan completed: {total_findings} total findings, {critical_findings} critical')
+          print(f'Status: {report[\"summary\"][\"scan_status\"]}')
+          "
+
+      - name: Upload Security Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: |
+            *-report.json
+          retention-days: 30
+
+      - name: Update Security Monitor
+        run: |
+          echo "🔄 Updating security monitoring dashboard..."
+          # This would integrate with our security monitor script
+          # For now, just create a summary file
+          if [ -f security-report.json ]; then
+              cp security-report.json /tmp/latest-security-scan.json || true
+          fi
+
+      - name: Security Scan Results
+        run: |
+          if [ -f security-report.json ]; then
+              critical=$(python3 -c "import json; print(json.load(open('security-report.json'))['summary']['critical_findings'])")
+              total=$(python3 -c "import json; print(json.load(open('security-report.json'))['summary']['total_findings'])")
+              status=$(python3 -c "import json; print(json.load(open('security-report.json'))['summary']['scan_status'])")
+
+              echo "🛡️ Security Scan Results:"
+              echo "Status: $status"
+              echo "Critical Findings: $critical"
+              echo "Total Findings: $total"
+
+              if [ "$status" = "FAILED" ]; then
+                echo "::error::Security scan failed with $critical critical findings"
+                exit 1
+              fi
+          else
+            echo "::warning::Security report not generated"
+          fi
+
+      - name: CodeQL Analysis
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, python, shell
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  dependency-check:
+    name: Dependency Vulnerability Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "Quantum-workspace"
+          path: "."
+          format: "ALL"
+          args: >
+            --enableRetired
+            --enableExperimental
+            --nvdValidForHours 24
+
+      - name: Upload Dependency Check results
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: reports/
+
+  container-security:
+    name: Container Security Scan
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.changed_files, 'Dockerfile') || contains(github.event.pull_request.changed_files, 'docker-compose.yml') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and scan Docker image
+        run: |
+          if [ -f Dockerfile ]; then
+            echo "🐳 Scanning Dockerfile..."
+            docker build -t quantum-scan .
+            trivy image --format json --output container-scan.json quantum-scan || true
+          fi
+
+      - name: Upload container scan results
+        uses: actions/upload-artifact@v4
+        with:
+          name: container-security-report
+          path: container-scan.json

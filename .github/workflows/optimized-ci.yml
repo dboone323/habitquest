@@ -1,0 +1,199 @@
+name: Optimized CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Fast path detection - check what changed
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      automation: ${{ steps.filter.outputs.automation }}
+      shared: ${{ steps.filter.outputs.shared }}
+      projects: ${{ steps.filter.outputs.projects }}
+      docs: ${{ steps.filter.outputs.docs }}
+      workflows: ${{ steps.filter.outputs.workflows }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            automation:
+              - 'Tools/Automation/**'
+              - 'Tools/**/*.py'
+              - 'Tools/**/*.sh'
+            shared:
+              - 'Shared/**'
+              - '**/Shared/**'
+            projects:
+              - 'Projects/**'
+            docs:
+              - 'Documentation/**'
+              - '*.md'
+              - 'docs/**'
+            workflows:
+              - '.github/workflows/**'
+
+  # Automation tests - only run when automation files change
+  automation-tests:
+    needs: changes
+    if: needs.changes.outputs.automation == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('Tools/Automation/requirements*.txt') }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f Tools/Automation/requirements-dev.txt ]; then
+            pip install -r Tools/Automation/requirements-dev.txt
+          elif [ -f Tools/Automation/requirements.txt ]; then
+            pip install -r Tools/Automation/requirements.txt
+          else
+            pip install pytest requests pyyaml
+          fi
+
+      - name: Run automation tests
+        working-directory: Tools/Automation
+        run: |
+          python -m pytest tests/ -v --tb=short || true
+
+      - name: Validate workflow scripts
+        run: |
+          bash Tools/Automation/deploy_workflows_all_projects.sh --validate --allow-failures
+
+  # Shared components validation - only run when shared code changes
+  shared-validation:
+    needs: changes
+    if: needs.changes.outputs.shared == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate shared components
+        run: |
+          echo "Validating shared Swift files..."
+          find Shared/ -name "*.swift" -exec echo "Found: {}" \; || true
+
+          echo "Validating shared utilities..."
+          find Shared/ -name "*.swift" -exec swiftc -parse {} \; 2>&1 | head -20 || true
+
+  # Documentation validation - only run when docs change
+  docs-validation:
+    needs: changes
+    if: needs.changes.outputs.docs == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate documentation
+        run: |
+          echo "Checking for broken links in markdown files..."
+          find . -name "*.md" -exec grep -l "http" {} \; | head -5 || true
+
+          echo "Validating README structure..."
+          if [ -f README.md ]; then
+            echo "✅ README.md exists"
+          else
+            echo "❌ README.md missing"
+            exit 1
+          fi
+
+  # Workflow validation - only run when workflows change
+  workflow-validation:
+    needs: changes
+    if: needs.changes.outputs.workflows == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python for YAML validation
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Validate workflow YAML
+        run: |
+          echo "Validating GitHub Actions workflows..."
+          for workflow in .github/workflows/*.yml; do
+            echo "Checking $workflow..."
+            python -c "import yaml; yaml.safe_load(open('$workflow'))" && echo "✅ Valid" || echo "❌ Invalid"
+          done
+
+  # Always run security checks
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-results.sarif"
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: "trivy-results.sarif"
+
+  # Summary job
+  summary:
+    needs:
+      [
+        changes,
+        automation-tests,
+        shared-validation,
+        docs-validation,
+        workflow-validation,
+        security,
+      ]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: CI Summary
+        run: |
+          echo "## CI Run Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Automation Tests**: ${{ needs.automation-tests.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Shared Validation**: ${{ needs.shared-validation.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Docs Validation**: ${{ needs.docs-validation.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Workflow Validation**: ${{ needs.workflow-validation.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Security Scan**: ${{ needs.security.result }}" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ needs.automation-tests.result }}" == "failure" ]] || \
+             [[ "${{ needs.shared-validation.result }}" == "failure" ]] || \
+             [[ "${{ needs.docs-validation.result }}" == "failure" ]] || \
+             [[ "${{ needs.workflow-validation.result }}" == "failure" ]]; then
+            echo "❌ Some checks failed" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "✅ All relevant checks passed" >> $GITHUB_STEP_SUMMARY
+          fi

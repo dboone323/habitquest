@@ -1,0 +1,376 @@
+name: AI Code Review & Merge Guard
+
+# OA-05: AI-powered code review with merge safeguards
+# Triggers on pull requests to analyze changes using Ollama
+# Enforces validation requirements before allowing merges
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - "**.swift"
+      - "**.sh"
+      - "**.py"
+      - "Projects/**"
+      - "Shared/**"
+      - "Tools/**"
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number to review"
+        required: false
+        type: number
+      base_ref:
+        description: "Base reference (default: main)"
+        required: false
+        default: "main"
+        type: string
+      head_ref:
+        description: "Head reference (default: PR head)"
+        required: false
+        type: string
+      strict_mode:
+        description: "Enable strict merge guard mode"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  statuses: write
+
+jobs:
+  ai-code-review:
+    name: AI Code Review
+    runs-on: macos-latest
+
+    outputs:
+      review_status: ${{ steps.ai_review.outputs.status }}
+      merge_guard_status: ${{ steps.merge_guard.outputs.status }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for proper diffs
+          ref: ${{ github.event.pull_request.head.sha || inputs.head_ref }}
+
+      - name: Setup environment
+        run: |
+          echo "Setting up AI review environment..."
+
+          # Install jq if not present
+          if ! command -v jq &> /dev/null; then
+            brew install jq
+          fi
+
+          # Make scripts executable
+          chmod +x Tools/Automation/ai_code_review.sh
+          chmod +x Tools/Automation/merge_guard.sh
+          chmod +x Tools/Automation/continuous_validation.sh
+
+          # Create output directories
+          mkdir -p ai_reviews
+          mkdir -p validation_reports
+
+      - name: Check Ollama availability
+        id: check_ollama
+        run: |
+          echo "Checking for Ollama installation..."
+
+          if command -v ollama &> /dev/null; then
+            echo "ollama_available=true" >> $GITHUB_OUTPUT
+            echo "✓ Ollama is installed"
+
+            # Try to start Ollama service
+            ollama serve &
+            OLLAMA_PID=$!
+            echo "ollama_pid=$OLLAMA_PID" >> $GITHUB_OUTPUT
+
+            # Wait for Ollama to be ready
+            for i in {1..30}; do
+              if curl -sf http://localhost:11434/api/tags > /dev/null 2>&1; then
+                echo "✓ Ollama server is running"
+                break
+              fi
+              echo "Waiting for Ollama server... ($i/30)"
+              sleep 2
+            done
+
+            # Pull cloud model with error handling and fallback
+            if ! ollama list | grep -q "qwen3-coder:480b-cloud"; then
+              echo "Pulling qwen3-coder cloud model..."
+              # Use gtimeout if available (brew install coreutils), otherwise fallback to no timeout
+              TIMEOUT_CMD=""
+              if command -v gtimeout >/dev/null 2>&1; then
+                TIMEOUT_CMD="gtimeout 60s"
+              fi
+
+              if ! $TIMEOUT_CMD ollama pull qwen3-coder:480b-cloud; then
+                echo "⚠ Cloud model pull failed or timed out, will use fallback"
+                echo "Attempting to pull fallback model codellama:7b..."
+                TIMEOUT_CMD_LONG=""
+                if command -v gtimeout >/dev/null 2>&1; then
+                  TIMEOUT_CMD_LONG="gtimeout 300s"
+                fi
+
+                if ! $TIMEOUT_CMD_LONG ollama pull codellama:7b; then
+                  echo "⚠ Fallback model pull also failed, AI review may be limited"
+                  echo "model_pull_failed=true" >> $GITHUB_OUTPUT
+                else
+                  echo "✓ Fallback model codellama:7b ready"
+                  echo "OLLAMA_MODEL=codellama:7b" >> $GITHUB_ENV
+                fi
+              else
+                echo "✓ Cloud model qwen3-coder:480b-cloud ready"
+              fi
+            else
+              echo "✓ Model already available"
+            fi
+          else
+            echo "ollama_available=false" >> $GITHUB_OUTPUT
+            echo "⚠ Ollama not installed, AI review will be skipped"
+          fi
+
+      - name: Start MCP Server
+        id: mcp_server
+        run: |
+          echo "Starting MCP server..."
+
+          # Check if MCP server script exists
+          if [ -f "Tools/Automation/mcp_server.py" ]; then
+            # Start existing MCP server
+            python3 Tools/Automation/mcp_server.py &
+            MCP_PID=$!
+            echo "mcp_pid=$MCP_PID" >> $GITHUB_OUTPUT
+            echo "mcp_available=true" >> $GITHUB_OUTPUT
+            sleep 3
+            echo "✓ MCP server started (PID: $MCP_PID)"
+          else
+            echo "mcp_available=false" >> $GITHUB_OUTPUT
+            echo "⚠ MCP server script not found, using mock mode"
+          fi
+
+      - name: Run validation checks
+        id: validation
+        run: |
+          echo "Running validation checks for changed projects..."
+
+          # Determine which projects changed
+          BASE_REF="${{ github.event.pull_request.base.sha || inputs.base_ref }}"
+          HEAD_REF="${{ github.event.pull_request.head.sha || inputs.head_ref }}"
+
+          echo "Comparing ${BASE_REF}..${HEAD_REF}"
+
+          # Get changed files
+          CHANGED_FILES=$(git diff --name-only ${BASE_REF}..${HEAD_REF} || echo "")
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No changes detected"
+            echo "validation_status=skipped" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          # Identify changed projects
+          PROJECTS=""
+          if echo "$CHANGED_FILES" | grep -q "Projects/CodingReviewer"; then
+            PROJECTS="$PROJECTS CodingReviewer"
+          fi
+          if echo "$CHANGED_FILES" | grep -q "Projects/AvoidObstaclesGame"; then
+            PROJECTS="$PROJECTS AvoidObstaclesGame"
+          fi
+          if echo "$CHANGED_FILES" | grep -q "Projects/PlannerApp"; then
+            PROJECTS="$PROJECTS PlannerApp"
+          fi
+          if echo "$CHANGED_FILES" | grep -q "Projects/HabitQuest"; then
+            PROJECTS="$PROJECTS HabitQuest"
+          fi
+          if echo "$CHANGED_FILES" | grep -q "Projects/MomentumFinance"; then
+            PROJECTS="$PROJECTS MomentumFinance"
+          fi
+
+          if [ -z "$PROJECTS" ]; then
+            echo "No project-specific changes, running validation for all projects"
+            PROJECTS="all"
+          fi
+
+          echo "Projects to validate: $PROJECTS"
+          echo "projects=$PROJECTS" >> $GITHUB_OUTPUT
+
+          # Run validation for each project
+          VALIDATION_FAILED=false
+          for project in $PROJECTS; do
+            echo "Validating $project..."
+            if [ "$project" = "all" ]; then
+              ./Tools/Automation/continuous_validation.sh validate_all || VALIDATION_FAILED=true
+            else
+              ./Tools/Automation/continuous_validation.sh validate_project "$project" || VALIDATION_FAILED=true
+            fi
+          done
+
+          if [ "$VALIDATION_FAILED" = "true" ]; then
+            echo "validation_status=failed" >> $GITHUB_OUTPUT
+            echo "⚠ Validation checks failed"
+          else
+            echo "validation_status=passed" >> $GITHUB_OUTPUT
+            echo "✓ Validation checks passed"
+          fi
+
+      - name: Run AI code review
+        id: ai_review
+        if: steps.check_ollama.outputs.ollama_available == 'true'
+        env:
+          OLLAMA_MODEL: "qwen3-coder:480b-cloud" # Use cloud model for efficiency
+        run: |
+          echo "Running AI code review with cloud model..."
+
+          BASE_REF="${{ github.event.pull_request.base.sha || inputs.base_ref }}"
+          HEAD_REF="${{ github.event.pull_request.head.sha || inputs.head_ref }}"
+
+          # Run AI review
+          if ./Tools/Automation/ai_code_review.sh "$BASE_REF" "$HEAD_REF"; then
+            echo "status=passed" >> $GITHUB_OUTPUT
+            echo "✓ AI review completed"
+          else
+            echo "status=blocked" >> $GITHUB_OUTPUT
+            echo "⚠ AI review blocked merge"
+          fi
+
+          # Get latest review file
+          REVIEW_FILE=$(ls -t ai_reviews/review_*.md 2>/dev/null | head -1)
+          if [ -n "$REVIEW_FILE" ]; then
+            echo "review_file=$REVIEW_FILE" >> $GITHUB_OUTPUT
+
+            # Extract summary
+            echo "## AI Code Review Summary" > ai_review_summary.md
+            echo "" >> ai_review_summary.md
+
+            # Extract key sections
+            sed -n '/## Summary/,/## Severity Assessment/p' "$REVIEW_FILE" | head -n -1 >> ai_review_summary.md
+            echo "" >> ai_review_summary.md
+            sed -n '/## Severity Assessment/,/## Detailed Findings/p' "$REVIEW_FILE" | head -n -1 >> ai_review_summary.md
+            echo "" >> ai_review_summary.md
+            sed -n '/## Approval Status/,$p' "$REVIEW_FILE" >> ai_review_summary.md
+          fi
+
+      - name: Run merge guard
+        id: merge_guard
+        run: |
+          echo "Running merge guard checks..."
+
+          STRICT_FLAG=""
+          if [ "${{ inputs.strict_mode }}" = "true" ]; then
+            STRICT_FLAG="--strict"
+          fi
+
+          PROJECTS="${{ steps.validation.outputs.projects }}"
+
+          if [ -z "$PROJECTS" ]; then
+            PROJECTS="all"
+          fi
+
+          # Run merge guard
+          if ./Tools/Automation/merge_guard.sh $STRICT_FLAG $PROJECTS; then
+            echo "status=approved" >> $GITHUB_OUTPUT
+            echo "✓ Merge guard: APPROVED"
+          else
+            echo "status=blocked" >> $GITHUB_OUTPUT
+            echo "⚠ Merge guard: BLOCKED"
+          fi
+
+      - name: Post review comment
+        if: github.event_name == 'pull_request' && steps.ai_review.outputs.review_file != ''
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            // Read AI review summary
+            let reviewBody = '# 🤖 AI Code Review\n\n';
+
+            try {
+              const summary = fs.readFileSync('ai_review_summary.md', 'utf8');
+              reviewBody += summary;
+            } catch (error) {
+              reviewBody += '⚠️ AI review completed but summary not available\n';
+            }
+
+            // Add merge guard status
+            reviewBody += '\n\n---\n\n';
+            reviewBody += '## Merge Guard Status\n\n';
+
+            const mergeStatus = '${{ steps.merge_guard.outputs.status }}';
+            const validationStatus = '${{ steps.validation.outputs.validation_status }}';
+
+            if (mergeStatus === 'approved') {
+              reviewBody += '✅ **APPROVED** - All checks passed, safe to merge\n\n';
+            } else {
+              reviewBody += '❌ **BLOCKED** - Issues must be resolved before merging\n\n';
+            }
+
+            reviewBody += `- Validation: ${validationStatus}\n`;
+            reviewBody += `- AI Review: ${{ steps.ai_review.outputs.status }}\n`;
+            reviewBody += `- Merge Guard: ${mergeStatus}\n`;
+
+            // Post comment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: reviewBody
+            });
+
+      - name: Set PR check status
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const mergeStatus = '${{ steps.merge_guard.outputs.status }}';
+            const state = mergeStatus === 'approved' ? 'success' : 'failure';
+            const description = mergeStatus === 'approved'
+              ? 'All checks passed, safe to merge'
+              : 'Issues found, merge blocked';
+
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.payload.pull_request.head.sha,
+              state: state,
+              target_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              description: description,
+              context: 'AI Code Review & Merge Guard'
+            });
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-review-artifacts
+          path: |
+            ai_reviews/
+            validation_reports/
+          retention-days: 30
+
+      - name: Cleanup
+        if: always()
+        run: |
+          # Stop Ollama if started
+          if [ -n "${{ steps.check_ollama.outputs.ollama_pid }}" ]; then
+            kill ${{ steps.check_ollama.outputs.ollama_pid }} 2>/dev/null || true
+          fi
+
+          # Stop MCP server if started
+          if [ -n "${{ steps.mcp_server.outputs.mcp_pid }}" ]; then
+            kill ${{ steps.mcp_server.outputs.mcp_pid }} 2>/dev/null || true
+          fi
+
+          echo "✓ Cleanup completed"

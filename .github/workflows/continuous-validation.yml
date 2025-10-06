@@ -1,0 +1,116 @@
+name: Continuous Validation
+
+on:
+    push:
+        branches:
+            - main
+            - develop
+        paths:
+            - "Projects/**/*.swift"
+            - "Shared/**/*.swift"
+    pull_request:
+        branches:
+            - main
+            - develop
+        paths:
+            - "Projects/**/*.swift"
+            - "Shared/**/*.swift"
+    workflow_dispatch:
+        inputs:
+            project:
+                description: "Project to validate (leave empty for all)"
+                required: false
+                default: "all"
+                type: choice
+                options:
+                    - all
+                    - CodingReviewer
+                    - PlannerApp
+                    - AvoidObstaclesGame
+                    - MomentumFinance
+                    - HabitQuest
+
+jobs:
+    validate:
+        name: Validate Code Quality
+        runs-on: macos-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Xcode
+              uses: maxim-lobanov/setup-xcode@v1
+              with:
+                  xcode-version: latest-stable
+
+            - name: Install SwiftLint
+              run: brew install swiftlint
+
+            - name: Install SwiftFormat
+              run: brew install swiftformat
+
+            - name: Run validation (specific project)
+              if: github.event.inputs.project != 'all'
+              run: |
+                  chmod +x Tools/Automation/continuous_validation.sh
+                  ./Tools/Automation/continuous_validation.sh validate "${{ github.event.inputs.project }}"
+
+            - name: Run validation (all projects)
+              if: github.event.inputs.project == 'all' || github.event.inputs.project == ''
+              run: |
+                  chmod +x Tools/Automation/continuous_validation.sh
+                  ./Tools/Automation/continuous_validation.sh all
+
+            - name: Upload validation reports
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: validation-reports
+                  path: validation_reports/
+                  retention-days: 30
+
+            - name: Check validation status
+              run: |
+                  # Fail the job if any validation failed
+                  if grep -q '"overall_status": "failed"' validation_reports/*.json 2>/dev/null; then
+                    echo "❌ Validation failed for one or more projects"
+                    exit 1
+                  else
+                    echo "✅ All validations passed"
+                  fi
+
+    publish-results:
+        name: Publish Results to MCP
+        runs-on: macos-latest
+        needs: validate
+        if: always()
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Download validation reports
+              uses: actions/download-artifact@v4
+              with:
+                  name: validation-reports
+                  path: validation_reports/
+
+            - name: Start MCP server (if available)
+              continue-on-error: true
+              run: |
+                  if [[ -f Tools/Automation/mcp_server.py ]]; then
+                    python3 Tools/Automation/mcp_server.py &
+                    sleep 5
+                  fi
+
+            - name: Publish reports to MCP
+              continue-on-error: true
+              run: |
+                  for report in validation_reports/*.json; do
+                    if [[ -f "${report}" ]]; then
+                      curl -X POST http://localhost:5005/alerts \
+                        -H "Content-Type: application/json" \
+                        -d "@${report}" || echo "Failed to publish ${report}"
+                    fi
+                  done
