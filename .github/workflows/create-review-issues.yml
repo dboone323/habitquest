@@ -1,7 +1,11 @@
 name: Create Review Issues
+
+# TEMPORARILY DISABLED: No review issue templates in .github/review-issues/
+# Re-enable when templates are added
 "on":
   push:
-    branches: [main]
+    branches: [disabled-until-fixed]
+  workflow_dispatch:
 
 permissions:
   issues: write
