@@ -107,6 +107,16 @@ jobs:
           ./Tools/Automation/observability/cleanup_agent_backups.sh --force
           echo "✅ Agent backup cleanup complete"
 
+      - name: Compress Old Backups
+        run: |
+          ./Tools/Automation/observability/compress_old_backups.sh
+          echo "✅ Backup compression complete"
+
+      - name: Cleanup Old Metrics
+        run: |
+          ./Tools/Automation/observability/cleanup_old_metrics.sh
+          echo "✅ Metrics cleanup complete"
+
       - name: Commit rotated logs
         continue-on-error: true
         run: |
