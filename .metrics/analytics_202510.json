@@ -1,9 +1,8 @@
 {
-  "timestamp": 1759798385,
-  "date": "2025-10-06T19:53:09-05:00",
+  "timestamp": 1759799082,
+  "date": "2025-10-06T20:05:03-05:00",
   "workspace": "/Users/danielstevens/Desktop/Quantum-workspace",
-  "code_metrics": [0;34m[2025-10-06 19:53:09] [agent_analytics] ℹ️  Collecting code metrics for node_modules...[0m
-{
+  "code_metrics": {
   "project": "node_modules",
   "swift_files": 0,
   "total_lines": 0,
@@ -12,30 +11,25 @@
   "blank_lines": 0,
   "comment_ratio": 0
 },
-  "build_metrics": [0;34m[2025-10-06 19:53:09] [agent_analytics] ℹ️  Collecting build metrics...[0m
-{
+  "build_metrics": {
   "total_builds_7d": 20,
   "avg_build_time_seconds": 0,
-  "last_build": "2025-10-06T19:53:11-05:00"
+  "last_build": "2025-10-06T20:05:05-05:00"
 },
-  "coverage_metrics": [0;34m[2025-10-06 19:53:09] [agent_analytics] ℹ️  Collecting coverage metrics for node_modules...[0m
-{
+  "coverage_metrics": {
   "project": "node_modules",
   "coverage_percent": 0,
   "has_tests": false
 },
-  "complexity_metrics": [0;34m[2025-10-06 19:53:09] [agent_analytics] ℹ️  Collecting complexity metrics for node_modules...[0m
-{
+  "complexity_metrics": {
   "project": "node_modules",
-  "complexity_violations": 0
-0,
+  "complexity_violations": 00,
   "avg_complexity": 0
 },
-  "agent_metrics": [0;34m[2025-10-06 19:53:11] [agent_analytics] ℹ️  Collecting agent performance metrics...[0m
-{
-  "total_agents": 0,
-  "active_agents": 0,
-  "tasks_completed_all_time": 0,
-  "agent_availability": 0
+  "agent_metrics": {
+  "total_agents": 30,
+  "active_agents": 14,
+  "tasks_completed_all_time": 11,
+  "agent_availability": 0.466667
 }
 }
