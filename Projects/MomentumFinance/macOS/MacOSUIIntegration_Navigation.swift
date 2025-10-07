@@ -5,6 +5,7 @@ import SwiftData
 import SwiftUI
 
 #if os(macOS)
+
 // MARK: - Navigation System Integration
 
 extension NavigationCoordinator {

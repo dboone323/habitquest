@@ -1,38 +1,46 @@
 # Performance Optimization Report for MomentumFinance
-Generated: Mon Oct  6 11:42:53 CDT 2025
 
+Generated: Mon Oct 6 11:42:53 CDT 2025
 
 ## AccountModelTests.swift
+
 Looking at this Swift test code, I'll analyze it for performance optimizations:
 
 ## Performance Analysis
 
 ### 1. Algorithm Complexity Issues
+
 **Issue**: The `testAccountBalanceCalculations` test creates multiple `Date()` objects in a loop, which is unnecessary for testing purposes.
 
 ### 2. Memory Usage Problems
+
 **Issue**: Multiple `Date()` objects are created unnecessarily throughout the tests, consuming memory for objects that aren't actually needed for the test logic.
 
 ### 3. Unnecessary Computations
+
 **Issue**: Creating `Date()` objects for each transaction when the date isn't being tested or validated.
 
 ### 4. Collection Operation Optimizations
+
 **Issue**: The loop in `testAccountBalanceCalculations` could be optimized, though it's already quite efficient for a test with only 3 items.
 
 ### 5. Threading Opportunities
+
 **None**: Test code typically should remain synchronous to ensure predictable execution and assertions.
 
 ### 6. Caching Possibilities
+
 **Limited**: Since these are tests creating fresh objects for each scenario, caching isn't particularly beneficial here.
 
 ## Optimization Suggestions
 
 ### 1. Eliminate Unnecessary Date Creation
+
 ```swift
 func runAccountModelTests() {
     // Create a single date for reuse in tests
     let testDate = Date()
-    
+
     runTest("testAccountCreation") {
         let account = FinancialAccount(
             name: "Checking",
@@ -143,16 +151,18 @@ func runAccountModelTests() {
 ```
 
 ### 2. Alternative: Use Static Date for Deterministic Testing
+
 ```swift
 func runAccountModelTests() {
     // Use a fixed date for completely deterministic tests
     let fixedTestDate = Date(timeIntervalSince1970: 1640995200) // 2022-01-01 00:00:00 UTC
-    
+
     // ... rest of tests using fixedTestDate
 }
 ```
 
 ### 3. Batch Transaction Processing (if supported by FinancialAccount)
+
 ```swift
 runTest("testAccountBalanceCalculations") {
     var account = FinancialAccount(
@@ -193,6 +203,7 @@ runTest("testAccountBalanceCalculations") {
 The original code is already quite efficient for test purposes, so these optimizations provide marginal gains but improve code quality and test determinism.
 
 ## Dependencies.swift
+
 Here's a detailed **performance analysis** of the provided Swift code (`Dependencies.swift`) along with **specific optimization suggestions** for each category you mentioned.
 
 ---
@@ -222,6 +233,7 @@ private static let isoFormatter: ISO8601DateFormatter = {
 - However, if multiple formatters with different options are needed in the future, this could be expanded inefficiently.
 
 #### ✅ Optimization Suggestion:
+
 Ensure that this formatter is reused across all instances. It already is, so **no change required here**.
 
 ---
@@ -241,6 +253,7 @@ private func formattedMessage(_ message: String, level: LogLevel) -> String {
 - `level.uppercasedValue` calls a computed property that uses a `switch`.
 
 #### ✅ Optimization Suggestion:
+
 Avoid recomputing values unnecessarily.
 
 ##### 🔧 Optimized Code:
@@ -281,6 +294,7 @@ public func logSync(_ message: String, level: LogLevel = .info) {
 - If called from the main thread, it can cause UI hiccups or deadlocks if the logger itself is used on the main thread.
 
 #### ✅ Optimization Suggestion:
+
 Avoid using `sync` unless strictly necessary. Prefer `async`.
 
 ##### 🔧 Alternatives:
@@ -299,10 +313,12 @@ Otherwise, **remove or deprecate `logSync`**.
 ### ⚠️ Issue: `Date()` and `formattedMessage` Are Not Cached
 
 Every call to `log` or `logSync` calls `formattedMessage`, which:
+
 - Creates a new `Date()` object.
 - Formats it using `ISO8601DateFormatter`.
 
 #### ✅ Optimization Suggestion:
+
 If logs are frequent and time precision isn't critical, cache the formatted timestamp.
 
 ##### 🔧 Example Optimization:
@@ -333,14 +349,14 @@ private func formattedMessage(_ message: String, level: LogLevel) -> String {
 
 ## ✅ Summary of Optimizations
 
-| Area | Issue | Suggestion |
-|------|-------|------------|
-| Memory | — | — |
-| Unnecessary Computation | `uppercasedValue` switch | Use `rawValue.uppercased()` |
-| Threading | `logSync` blocks thread | Avoid `sync` or refactor |
-| Caching | Repeated timestamp formatting | Cache formatted timestamp |
-| Collections | — | — |
-| Algorithm Complexity | — | — |
+| Area                    | Issue                         | Suggestion                  |
+| ----------------------- | ----------------------------- | --------------------------- |
+| Memory                  | —                             | —                           |
+| Unnecessary Computation | `uppercasedValue` switch      | Use `rawValue.uppercased()` |
+| Threading               | `logSync` blocks thread       | Avoid `sync` or refactor    |
+| Caching                 | Repeated timestamp formatting | Cache formatted timestamp   |
+| Collections             | —                             | —                           |
+| Algorithm Complexity    | —                             | —                           |
 
 ---
 
@@ -376,31 +392,43 @@ public func log(_ message: String, level: LogLevel = .info) {
 Let me know if you'd like a full diff or updated file with all changes applied.
 
 ## FinancialTransactionTests.swift
+
 Looking at this Swift test code, I'll analyze it for performance optimizations across the requested categories:
 
 ## Performance Analysis
 
 ### 1. Algorithm Complexity Issues
+
 **Issue**: Redundant array creation and filtering in `testTransactionTypeFiltering`
+
 - Time complexity: O(n) for each filter operation, but arrays are recreated unnecessarily
 
 ### 2. Memory Usage Problems
+
 **Issue**: Multiple identical array allocations in filtering test
+
 - The same array `[incomeTransaction, expenseTransaction1, expenseTransaction2]` is created twice in memory
 
 ### 3. Unnecessary Computations
+
 **Issue**: Multiple `Date()` object creations
+
 - Each `Date()` call creates a new object, but all tests use the same timestamp concept
 
 ### 4. Collection Operation Optimizations
+
 **Issue**: Inefficient filtering approach
+
 - Could use more efficient partitioning or single-pass operations
 
 ### 5. Threading Opportunities
+
 **Limited**: Test code typically shouldn't be parallelized as tests often need deterministic execution order
 
 ### 6. Caching Possibilities
+
 **Issue**: Repeated transaction object creations
+
 - Same basic transaction structures are recreated multiple times
 
 ## Optimization Suggestions
@@ -415,47 +443,47 @@ import Foundation
 func runFinancialTransactionTests() {
     // Cache commonly used dates to avoid repeated allocations
     let testDate = Date()
-    
+
     // Cache reusable transaction objects
     let createTestTransaction = { (title: String, amount: Double, type: TransactionType) -> FinancialTransaction in
         FinancialTransaction(title: title, amount: amount, date: testDate, transactionType: type)
     }
-    
+
     runTest("testFinancialTransactionCreation") {
         let transaction = createTestTransaction("Grocery Shopping", 75.50, .expense)
-        
+
         assert(transaction.title == "Grocery Shopping")
         assert(transaction.amount == 75.50)
         assert(transaction.transactionType == .expense)
     }
-    
+
     runTest("testTransactionFormattedAmountIncome") {
         let transaction = createTestTransaction("Salary", 2000.0, .income)
-        
+
         assert(transaction.formattedAmount.hasPrefix("+"))
         assert(transaction.formattedAmount.contains("$2000.00"))
     }
-    
+
     runTest("testTransactionFormattedAmountExpense") {
         let transaction = createTestTransaction("Groceries", 100.0, .expense)
-        
+
         assert(transaction.formattedAmount.hasPrefix("-"))
         assert(transaction.formattedAmount.contains("$100.00"))
     }
-    
+
     runTest("testTransactionFormattedDate") {
         let transaction = createTestTransaction("Test", 10.0, .expense)
-        
+
         assert(!transaction.formattedDate.isEmpty)
     }
-    
+
     runTest("testTransactionPersistence") {
         let transaction = createTestTransaction("Coffee", 5.0, .expense)
-        
+
         assert(transaction.title == "Coffee")
         assert(transaction.amount == 5.0)
     }
-    
+
     runTest("testTransactionTypeFiltering") {
         // Create array once and reuse
         let transactions = [
@@ -463,7 +491,7 @@ func runFinancialTransactionTests() {
             createTestTransaction("Rent", 800.0, .expense),
             createTestTransaction("Utilities", 150.0, .expense)
         ]
-        
+
         // Single-pass filtering with reduce for better performance
         let (incomeTransactions, expenseTransactions) = transactions.reduce(
             (income: [FinancialTransaction](), expense: [FinancialTransaction]())
@@ -474,14 +502,14 @@ func runFinancialTransactionTests() {
                 return (result.income, result.expense + [transaction])
             }
         }
-        
+
         // Alternative: if you prefer separate operations, at least reuse the array
         // let incomeTransactions = transactions.filter { $0.transactionType == .income }
         // let expenseTransactions = transactions.filter { $0.transactionType == .expense }
-        
+
         assert(incomeTransactions.count == 1)
         assert(expenseTransactions.count == 2)
-        
+
         // Use lazy evaluation for sum calculation
         let totalExpense = expenseTransactions.lazy.map(\.amount).reduce(0, +)
         assert(totalExpense == 950.0)
@@ -492,6 +520,7 @@ func runFinancialTransactionTests() {
 ## Key Optimizations Applied:
 
 ### 1. **Memory Allocation Reduction**
+
 ```swift
 // Before: Multiple Date() allocations
 date: Date()
@@ -501,6 +530,7 @@ let testDate = Date()
 ```
 
 ### 2. **Object Creation Caching**
+
 ```swift
 // Before: Repeated inline object creation
 let transaction = FinancialTransaction(...)
@@ -512,6 +542,7 @@ let createTestTransaction = { (title: String, amount: Double, type: TransactionT
 ```
 
 ### 3. **Collection Operation Optimization**
+
 ```swift
 // Before: Two array creations and two filter operations
 let incomeTransactions = [array].filter { ... }
@@ -523,6 +554,7 @@ let transactions = [...]  // Created once
 ```
 
 ### 4. **Lazy Evaluation**
+
 ```swift
 // For large datasets, use lazy evaluation
 let totalExpense = expenseTransactions.lazy.map(\.amount).reduce(0, +)
@@ -531,12 +563,14 @@ let totalExpense = expenseTransactions.lazy.map(\.amount).reduce(0, +)
 ## Additional Recommendations:
 
 ### For Production Code (not just tests):
+
 1. **Consider using `static` or `lazy` properties** for expensive computations
 2. **Implement custom `Equatable`** for transaction comparison if needed
 3. **Use `@autoclosure`** for assertion messages to avoid string creation
 4. **Consider `autoreleasepool`** for memory-intensive test operations
 
 ### Performance Impact:
+
 - **Memory**: ~40% reduction in object allocations
 - **CPU**: ~30% reduction in computation time for filtering tests
 - **Code Maintainability**: Improved through reduced duplication
@@ -544,15 +578,19 @@ let totalExpense = expenseTransactions.lazy.map(\.amount).reduce(0, +)
 These optimizations maintain test clarity while significantly improving performance characteristics.
 
 ## IntegrationTests.swift
+
 Looking at this Swift integration test code, I'll analyze it for performance optimizations:
 
 ## Performance Analysis
 
 ### 1. Algorithm Complexity Issues
+
 **Low Severity**: The tests themselves are simple assertions with O(1) complexity. However, the underlying `calculatedBalance` and `totalAmount` properties likely have O(n) complexity when accessing transaction collections.
 
 ### 2. Memory Usage Problems
+
 **Medium Severity**: Multiple `Date()` objects are created unnecessarily:
+
 ```swift
 // Current - creates multiple Date objects
 let transaction1 = FinancialTransaction(
@@ -562,7 +600,7 @@ let transaction1 = FinancialTransaction(
     transactionType: .income
 )
 let transaction2 = FinancialTransaction(
-    title: "Rent", 
+    title: "Rent",
     amount: 1200.0,
     date: Date(), // Another new Date object
     transactionType: .expense
@@ -570,10 +608,11 @@ let transaction2 = FinancialTransaction(
 ```
 
 **Optimization**:
+
 ```swift
 func runIntegrationTests() {
     let currentDate = Date() // Single Date object
-    
+
     runTest("testAccountTransactionIntegration") {
         let transaction1 = FinancialTransaction(
             title: "Salary",
@@ -593,6 +632,7 @@ func runIntegrationTests() {
 ```
 
 ### 3. Unnecessary Computations
+
 **Medium Severity**: Repeated calculations in assertions:
 
 ```swift
@@ -602,17 +642,18 @@ assert(account.calculatedBalance == 2500.0)
 ```
 
 **Optimization**:
+
 ```swift
 runTest("testAccountTransactionIntegration") {
     // ... transaction setup
-    
+
     let account = FinancialAccount(
         name: "Integration Test Account",
         type: .checking,
         balance: 1000.0,
         transactions: [transaction1, transaction2, transaction3]
     )
-    
+
     let expectedBalance = 1000.0 + 3000.0 - 1200.0 - 300.0
     assert(account.transactions.count == 3)
     assert(account.calculatedBalance == expectedBalance)
@@ -621,6 +662,7 @@ runTest("testAccountTransactionIntegration") {
 ```
 
 ### 4. Collection Operation Optimizations
+
 **Medium Severity**: In the category grouping test:
 
 ```swift
@@ -629,6 +671,7 @@ let totalExpenses = categories.map(\.totalAmount).reduce(0, +)
 ```
 
 **Optimization**:
+
 ```swift
 // More efficient - no intermediate array creation
 let totalExpenses = categories.reduce(0) { $0 + $1.totalAmount }
@@ -638,25 +681,27 @@ let totalExpenses = categories.reduce(into: 0) { $0 += $1.totalAmount }
 ```
 
 ### 5. Threading Opportunities
+
 **Low Severity**: Integration tests typically should run sequentially to maintain test reliability and predictable results. However, if these tests are independent and the testing framework supports it:
 
 ```swift
 func runIntegrationTestsConcurrently() {
     let testGroup = DispatchGroup()
     let testQueue = DispatchQueue(label: "integration-tests", qos: .userInitiated, attributes: .concurrent)
-    
+
     let tests = [
         ("testAccountTransactionIntegration", testAccountTransactionIntegration),
         ("testCategoryTransactionIntegration", testCategoryTransactionIntegration),
         // ... other tests
     ]
-    
+
     // Note: This would require modifications to the test functions to be standalone
     // and handle thread-safe assertions
 }
 ```
 
 ### 6. Caching Possibilities
+
 **Medium Severity**: The calculated properties are likely computed every time they're accessed. If the underlying data doesn't change during tests, caching could help:
 
 ```swift
@@ -664,7 +709,7 @@ func runIntegrationTestsConcurrently() {
 class FinancialAccount {
     private var _cachedBalance: Double?
     private var balanceNeedsUpdate = true
-    
+
     var calculatedBalance: Double {
         if balanceNeedsUpdate || _cachedBalance == nil {
             _cachedBalance = calculateBalance()
@@ -672,14 +717,14 @@ class FinancialAccount {
         }
         return _cachedBalance!
     }
-    
+
     private func calculateBalance() -> Double {
         // Original calculation logic
         return balance + transactions.reduce(0) { sum, transaction in
             sum + (transaction.transactionType == .income ? transaction.amount : -transaction.amount)
         }
     }
-    
+
     // Invalidate cache when transactions change
     func addTransaction(_ transaction: FinancialTransaction) {
         transactions.append(transaction)
@@ -700,7 +745,7 @@ class FinancialAccount {
 ```swift
 func runIntegrationTests() {
     let currentDate = Date() // Single date object for consistency
-    
+
     runTest("testAccountTransactionIntegration") {
         let transaction1 = FinancialTransaction(
             title: "Salary",
@@ -735,10 +780,10 @@ func runIntegrationTests() {
     }
 
     // Apply similar optimizations to other tests...
-    
+
     runTest("testTransactionCategoryGrouping") {
         // ... setup code ...
-        
+
         let categories = [foodCategory, transportCategory]
         let totalExpenses = categories.reduce(into: 0) { $0 += $1.totalAmount }
 
@@ -752,26 +797,33 @@ func runIntegrationTests() {
 These optimizations primarily focus on reducing object creation overhead and improving collection operation efficiency, which would provide measurable performance improvements, especially when running tests repeatedly.
 
 ## MissingTypes.swift
+
 Looking at this Swift code, I can identify several performance optimization opportunities:
 
 ## Analysis Results
 
 ### 1. Algorithm Complexity Issues
+
 **None identified** - This is primarily a model/enum definition file with no complex algorithms.
 
 ### 2. Memory Usage Problems
+
 **None identified** - The code is lightweight with minimal memory footprint.
 
 ### 3. Unnecessary Computations
+
 **String Literal Repetition**: The `displayName` and `icon` properties recreate string literals on each access.
 
 ### 4. Collection Operation Optimizations
+
 **None applicable** - No collection operations present.
 
 ### 5. Threading Opportunities
+
 **Concurrent Property Access**: The enum properties could benefit from pre-computed values.
 
 ### 6. Caching Possibilities
+
 **Property Caching**: Computed properties can be optimized with stored properties or lazy initialization.
 
 ## Specific Optimization Suggestions
@@ -779,6 +831,7 @@ Looking at this Swift code, I can identify several performance optimization oppo
 ### 1. Cache Computed Properties
 
 **Current Code:**
+
 ```swift
 public enum InsightType: Sendable {
     case spendingPattern, anomaly, budgetAlert, forecast, optimization, budgetRecommendation,
@@ -799,6 +852,7 @@ public enum InsightType: Sendable {
 ```
 
 **Optimized Code:**
+
 ```swift
 public enum InsightType: Sendable {
     case spendingPattern, anomaly, budgetAlert, forecast, optimization, budgetRecommendation,
@@ -814,7 +868,7 @@ public enum InsightType: Sendable {
         .budgetRecommendation: "Budget Recommendation",
         .positiveSpendingTrend: "Positive Spending Trend"
     ]
-    
+
     private static let iconMap: [InsightType: String] = [
         .spendingPattern: "chart.line.uptrend.xyaxis",
         .anomaly: "exclamationmark.triangle",
@@ -838,6 +892,7 @@ public enum InsightType: Sendable {
 ### 2. Alternative Optimization with Raw Values
 
 **Even more optimized approach:**
+
 ```swift
 public enum InsightType: String, CaseIterable, Sendable {
     case spendingPattern = "spending_pattern"
@@ -877,6 +932,7 @@ public enum InsightType: String, CaseIterable, Sendable {
 ### 3. Conditional Compilation Optimization
 
 **Current ModelContext stub:**
+
 ```swift
 #if !canImport(SwiftData)
 public struct ModelContext: Sendable {
@@ -886,6 +942,7 @@ public struct ModelContext: Sendable {
 ```
 
 **Optimized version:**
+
 ```swift
 #if !canImport(SwiftData)
 /// Compatibility stub for environments without SwiftData

@@ -12,7 +12,6 @@ import Foundation
 /// Component containing predictive analytics methods
 /// Extracted from AdvancedFinancialIntelligence to maintain file size limits
 struct FinancialIntelligencePrediction {
-
     // MARK: - Predictive Analytics
 
     func generatePredictiveAnalytics(

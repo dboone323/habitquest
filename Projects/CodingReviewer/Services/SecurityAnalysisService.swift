@@ -100,7 +100,7 @@ struct SecurityAnalysisService {
                 }
 
                 // Concurrency - Shared mutable state without protection
-                if line.contains("var") && (line.contains("static") || line.contains("class var")) && !line.contains("private") {
+                if line.contains("var"), line.contains("static") || line.contains("class var"), !line.contains("private") {
                     issues.append(CodeIssue(
                         description: "Shared mutable state without access control - potential race condition",
                         severity: .medium,

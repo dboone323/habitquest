@@ -9,6 +9,7 @@
 ## Quick Reference
 
 ### Daily Check (2 minutes)
+
 ```bash
 # 1. Open dashboard
 open /Users/danielstevens/Desktop/Quantum-workspace/Tools/dashboard.html
@@ -23,6 +24,7 @@ open /Users/danielstevens/Desktop/Quantum-workspace/Tools/dashboard.html
 ```
 
 ### Emergency Response
+
 ```bash
 # If disk >90%, run immediate cleanup:
 ./Tools/Automation/observability/cleanup_agent_backups.sh --force
@@ -34,6 +36,7 @@ open /Users/danielstevens/Desktop/Quantum-workspace/Tools/dashboard.html
 ## Dashboard Monitoring
 
 ### Access Dashboard
+
 ```bash
 # Option 1: Open in browser
 open /Users/danielstevens/Desktop/Quantum-workspace/Tools/dashboard.html
@@ -48,6 +51,7 @@ open Tools/Automation/dashboard/dashboard.html
 ### Dashboard Cards to Monitor
 
 #### 1. **Disk Usage Card** (Top Priority)
+
 ```
 ┌─────────────────────┐
 │ Disk Usage          │
@@ -58,16 +62,19 @@ open Tools/Automation/dashboard/dashboard.html
 ```
 
 **Color Indicators:**
+
 - 🟢 **Green** (0-84%): Healthy
 - 🟡 **Yellow** (85-89%): Warning - Plan cleanup
 - 🔴 **Red** (90-100%): Critical - Immediate action needed
 
 **What to Check:**
+
 - Current percentage
 - Status label (healthy/warning/critical)
 - Trend over time (increasing/stable/decreasing)
 
 #### 2. **MCP Server Card**
+
 ```
 ┌─────────────────────┐
 │ MCP Server          │
@@ -76,14 +83,17 @@ open Tools/Automation/dashboard/dashboard.html
 │   23 alerts (24h)  │
 └─────────────────────┘
 ```
+
 **Note:** High alert count may indicate log accumulation
 
 #### 3. **System Health Section**
+
 - Load average
 - Uptime
 - Agent health percentage
 
 ### Auto-Refresh Feature
+
 - Dashboard auto-refreshes every 30 seconds
 - Manual refresh: Click "🔄 Refresh" button
 - Check browser console (Cmd+Option+J) for detailed logs
@@ -93,6 +103,7 @@ open Tools/Automation/dashboard/dashboard.html
 ## Command-Line Monitoring
 
 ### Quick Disk Check
+
 ```bash
 # Check workspace partition
 df -h /Users/danielstevens/Desktop/Quantum-workspace
@@ -103,6 +114,7 @@ df -h /Users/danielstevens/Desktop/Quantum-workspace
 ```
 
 ### Detailed Size Analysis
+
 ```bash
 # Find largest directories
 cd /Users/danielstevens/Desktop/Quantum-workspace
@@ -115,6 +127,7 @@ du -sh * | sort -hr | head -20
 ```
 
 ### Check Backup Directory
+
 ```bash
 # Count backups (should be ≤10)
 ls -1 Tools/Automation/agents/backups | wc -l
@@ -126,6 +139,7 @@ du -sh Tools/Automation/agents/backups
 ```
 
 ### Check Log Files
+
 ```bash
 # Find large log files
 find Tools/Automation -name "*.log*" -size +10M -exec ls -lh {} \;
@@ -145,6 +159,7 @@ find Tools/Automation -name "*.log*" -exec du -ch {} + | tail -1
 The system automatically runs cleanup tasks daily at **00:00 UTC**:
 
 **Jobs:**
+
 1. **Health Check** - Validates system components
 2. **Log Rotation** - Compresses and archives old logs
 3. **Backup Cleanup** - Removes old backups (keeps 10 newest)
@@ -153,6 +168,7 @@ The system automatically runs cleanup tasks daily at **00:00 UTC**:
 6. **Daily Report** - Generates health summary
 
 **Verify Workflow:**
+
 ```bash
 # Check last workflow run
 gh run list --workflow=nightly-hygiene.yml --limit 5
@@ -164,12 +180,14 @@ gh run view --workflow=nightly-hygiene.yml
 ### Watchdog Monitor
 
 Continuous monitoring script (`watchdog_monitor.sh`) checks:
+
 - MCP server health
 - Disk usage thresholds
 - Agent responsiveness
 - Ollama availability
 
 **Manual Run:**
+
 ```bash
 ./Tools/Automation/observability/watchdog_monitor.sh
 ```
@@ -180,12 +198,12 @@ Continuous monitoring script (`watchdog_monitor.sh`) checks:
 
 ### Warning Levels
 
-| Level | Threshold | Action | Urgency |
-|-------|-----------|--------|---------|
-| 🟢 **Normal** | 0-84% | Continue monitoring | Low |
-| 🟡 **Warning** | 85-89% | Review and plan cleanup | Medium |
-| 🟠 **High** | 90-94% | Execute cleanup scripts | High |
-| 🔴 **Critical** | 95-100% | Immediate emergency cleanup | Urgent |
+| Level           | Threshold | Action                      | Urgency |
+| --------------- | --------- | --------------------------- | ------- |
+| 🟢 **Normal**   | 0-84%     | Continue monitoring         | Low     |
+| 🟡 **Warning**  | 85-89%    | Review and plan cleanup     | Medium  |
+| 🟠 **High**     | 90-94%    | Execute cleanup scripts     | High    |
+| 🔴 **Critical** | 95-100%   | Immediate emergency cleanup | Urgent  |
 
 ### Response Times
 
@@ -199,6 +217,7 @@ Continuous monitoring script (`watchdog_monitor.sh`) checks:
 ## Cleanup Procedures
 
 ### Automated Cleanup (Recommended)
+
 ```bash
 # Full automated cleanup sequence
 ./Tools/Automation/observability/cleanup_agent_backups.sh --force
@@ -211,6 +230,7 @@ df -h /Users/danielstevens/Desktop/Quantum-workspace
 ### Manual Cleanup (If Needed)
 
 #### 1. Remove Old Backups
+
 ```bash
 cd Tools/Automation/agents/backups
 
@@ -225,6 +245,7 @@ ls -1 | wc -l  # Should show: 10
 ```
 
 #### 2. Compress Large Logs
+
 ```bash
 # Find logs >10MB
 find Tools/Automation -name "*.log" -size +10M
@@ -234,6 +255,7 @@ find Tools/Automation -name "*.log" -size +10M -exec gzip {} \;
 ```
 
 #### 3. Clean Build Artifacts
+
 ```bash
 # Remove Xcode derived data (if safe)
 rm -rf ~/Library/Developer/Xcode/DerivedData/*
@@ -243,6 +265,7 @@ find . -name "node_modules" -type d -prune -exec rm -rf {} \;
 ```
 
 #### 4. Clean Git Objects
+
 ```bash
 # Remove unreferenced objects
 git gc --aggressive --prune=now
@@ -256,12 +279,14 @@ git lfs prune
 ## Monitoring Schedule
 
 ### Daily (5 minutes)
+
 - [ ] Open dashboard, check Disk Usage card
 - [ ] Verify percentage is <85%
 - [ ] Check for yellow/red status indicators
 - [ ] Review any alerts or warnings
 
 ### Weekly (15 minutes)
+
 - [ ] Review disk usage trend (increasing/stable?)
 - [ ] Check backup directory size
 - [ ] Review log file accumulation
@@ -269,6 +294,7 @@ git lfs prune
 - [ ] Test manual cleanup scripts
 
 ### Monthly (30 minutes)
+
 - [ ] Analyze disk usage patterns
 - [ ] Review backup retention policy
 - [ ] Optimize storage usage
@@ -280,17 +306,20 @@ git lfs prune
 ## Alerting Setup
 
 ### Browser Notifications (Optional)
+
 Add to dashboard HTML for browser notifications:
+
 ```javascript
 if (diskPercent > 85 && Notification.permission === "granted") {
   new Notification("⚠️ Disk Usage Warning", {
     body: `Disk usage at ${diskPercent}%`,
-    icon: "/path/to/icon.png"
+    icon: "/path/to/icon.png",
   });
 }
 ```
 
 ### Slack Integration (Future)
+
 ```bash
 # In watchdog_monitor.sh, add:
 if [[ $disk_percent -gt 85 ]]; then
@@ -300,6 +329,7 @@ fi
 ```
 
 ### Email Alerts (Future)
+
 ```bash
 # Configure mail command
 if [[ $disk_percent -gt 90 ]]; then
@@ -313,6 +343,7 @@ fi
 ## Troubleshooting
 
 ### Dashboard Shows Old Data
+
 ```bash
 # Regenerate dashboard data
 ./Tools/Automation/dashboard/generate_dashboard_data.sh
@@ -324,6 +355,7 @@ cat Tools/dashboard_data.json | jq '.generated_at'
 ```
 
 ### Dashboard Shows "Data Unavailable"
+
 ```bash
 # Check if data file exists
 ls -lh Tools/dashboard_data.json
@@ -338,6 +370,7 @@ chmod 644 Tools/dashboard_data.json
 ```
 
 ### Disk Usage Not Decreasing After Cleanup
+
 ```bash
 # Wait 5-10 minutes for filesystem to update
 sleep 300 && df -h
@@ -350,6 +383,7 @@ lsof | grep deleted
 ```
 
 ### Backup Count Still >10 After Cleanup
+
 ```bash
 # Verify cleanup script ran
 cat Tools/Automation/logs/backup_cleanup_*.log | tail -50
@@ -366,6 +400,7 @@ grep -i error cleanup.log
 ## Best Practices
 
 ### Do's ✅
+
 - Check dashboard daily (2 min habit)
 - Respond to warnings within 24 hours
 - Keep backups count at ≤10
@@ -375,6 +410,7 @@ grep -i error cleanup.log
 - Review weekly for patterns
 
 ### Don'ts ❌
+
 - Don't ignore yellow/red warnings
 - Don't delete backups without verification
 - Don't disable automated cleanup
@@ -421,24 +457,28 @@ gh run list --workflow=nightly-hygiene.yml --limit 5
 ## Escalation Path
 
 ### Level 1: Normal Monitoring
+
 - **Who:** Any team member
 - **Frequency:** Daily
 - **Action:** Check dashboard, note status
 - **Escalate if:** Disk >85%
 
 ### Level 2: Warning Response
+
 - **Who:** Developer/DevOps
 - **Frequency:** When warned
 - **Action:** Run analysis, plan cleanup
 - **Escalate if:** Disk >90%
 
 ### Level 3: Critical Response
+
 - **Who:** Senior DevOps/Admin
 - **Frequency:** When critical
 - **Action:** Immediate cleanup, investigation
 - **Escalate if:** Disk >95% or cleanup fails
 
 ### Level 4: Emergency Response
+
 - **Who:** System Administrator
 - **Frequency:** When emergency
 - **Action:** Manual intervention, service management

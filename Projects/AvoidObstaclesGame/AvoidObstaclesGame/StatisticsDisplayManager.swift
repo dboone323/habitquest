@@ -19,7 +19,7 @@ class StatisticsDisplayManager {
     private var statisticsLabels: [SKNode] = []
 
     /// Animation actions for reuse
-    private let fadeOutAction: SKAction = SKAction.fadeOut(withDuration: 0.3)
+    private let fadeOutAction: SKAction = .fadeOut(withDuration: 0.3)
 
     // MARK: - Initialization
 

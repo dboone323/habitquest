@@ -20,7 +20,7 @@ struct FinancialIntelligenceRisk {
         _ transactions: [Transaction],
         _ accounts: [Account]
     ) async -> RiskAssessment {
-        let monthlyExpenses = helpers.calculateMonthlyExpenses(transactions)
+        let monthlyExpenses = self.helpers.calculateMonthlyExpenses(transactions)
         guard monthlyExpenses > 0 else {
             return RiskAssessment(
                 overallRiskLevel: .low,

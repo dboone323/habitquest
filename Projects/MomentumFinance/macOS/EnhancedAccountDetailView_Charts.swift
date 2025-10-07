@@ -7,6 +7,7 @@ import SwiftData
 import SwiftUI
 
 #if os(macOS)
+
 // MARK: - Chart Views for Enhanced Account Detail View
 
 /// Balance trend chart showing account balance over time

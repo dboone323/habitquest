@@ -12,7 +12,6 @@ import Foundation
 /// Component containing utility helper methods for financial intelligence
 /// Extracted from AdvancedFinancialIntelligence to maintain file size limits
 struct FinancialIntelligenceHelpers {
-
     // MARK: - Calculation Helpers
 
     func calculateSpendingVelocity(_ transactions: [Transaction]) -> SpendingVelocity {

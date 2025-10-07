@@ -2,9 +2,9 @@ name: AI Self-Healing Workflow
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
     inputs:
       max_retries:
@@ -27,24 +27,24 @@ env:
 
 jobs:
   ai-quality-check:
-    name: "🧠 AI Quality Analysis"
+    name: '🧠 AI Quality Analysis'
     runs-on: ubuntu-latest
     outputs:
       needs-recovery: ${{ steps.quality.outputs.needs-recovery }}
       recovery-plan: ${{ steps.quality.outputs.recovery-plan }}
     steps:
-      - name: "📥 Checkout Code"
+      - name: '📥 Checkout Code'
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: "🐍 Setup Python"
+      - name: '🐍 Setup Python'
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      - name: "📦 Install Dependencies"
+      - name: '📦 Install Dependencies'
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then
@@ -54,7 +54,7 @@ jobs:
             pip install -r requirements-test.txt
           fi
 
-      - name: "🔍 Run Quality Check"
+      - name: '🔍 Run Quality Check'
         id: quality
         run: |
           echo "🧠 Running AI-enhanced quality check..."
@@ -79,36 +79,36 @@ jobs:
             echo "⚠️ Quality issues detected, recovery needed"
           fi
 
-      - name: "📤 Upload Quality Results"
+      - name: '📤 Upload Quality Results'
         uses: actions/upload-artifact@v4
         with:
           name: quality-check-results
           path: quality_output.txt
 
   ai-auto-recovery:
-    name: "🔧 AI Auto Recovery"
+    name: '🔧 AI Auto Recovery'
     runs-on: ubuntu-latest
     needs: ai-quality-check
     if: needs.ai-quality-check.outputs.needs-recovery == 'true'
     steps:
-      - name: "📥 Checkout Code"
+      - name: '📥 Checkout Code'
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: "📥 Download Quality Results"
+      - name: '📥 Download Quality Results'
         uses: actions/download-artifact@v4
         with:
           name: quality-check-results
           path: .
 
-      - name: "🐍 Setup Python for Recovery"
+      - name: '🐍 Setup Python for Recovery'
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      - name: "🔧 Execute AI Recovery Plan"
+      - name: '🔧 Execute AI Recovery Plan'
         run: |
           echo "🧠 Executing AI-powered recovery plan..."
           RECOVERY_PLAN="${{ needs.ai-quality-check.outputs.recovery-plan }}"
@@ -127,14 +127,14 @@ jobs:
               ;;
           esac
 
-      - name: "✅ Validate Recovery"
+      - name: '✅ Validate Recovery'
         run: |
           echo "🔍 Validating recovery effectiveness..."
           # Basic validation
           echo "Recovery validation completed"
 
   ai-retry-mechanism:
-    name: "🔄 AI Retry Mechanism"
+    name: '🔄 AI Retry Mechanism'
     runs-on: ubuntu-latest
     needs: [ai-quality-check, ai-auto-recovery]
     if: failure()
@@ -142,13 +142,13 @@ jobs:
       matrix:
         retry_attempt: [1, 2, 3, 4, 5]
     steps:
-      - name: "📥 Checkout Code"
+      - name: '📥 Checkout Code'
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: "🔄 Execute Retry Attempt ${{ matrix.retry_attempt }}"
+      - name: '🔄 Execute Retry Attempt ${{ matrix.retry_attempt }}'
         run: |
           echo "🔄 Attempting retry #${{ matrix.retry_attempt }}..."
           MAX_RETRIES="${{ env.MAX_RETRIES }}"
@@ -163,18 +163,18 @@ jobs:
           fi
 
   ai-learning-update:
-    name: "🧠 AI Learning Update"
+    name: '🧠 AI Learning Update'
     runs-on: ubuntu-latest
     needs: [ai-quality-check, ai-auto-recovery, ai-retry-mechanism]
     if: always()
     steps:
-      - name: "📥 Checkout Code"
+      - name: '📥 Checkout Code'
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: "📊 Collect Learning Data"
+      - name: '📊 Collect Learning Data'
         run: |
           echo "🧠 Collecting data for AI learning improvement..."
           mkdir -p ai_learning_data
@@ -192,31 +192,31 @@ jobs:
           }
           EOF
 
-      - name: "🧠 Update AI Models"
+      - name: '🧠 Update AI Models'
         run: |
           echo "🔄 Updating AI models with new learning data..."
           # Placeholder for AI model updates
           echo "AI learning update completed"
 
-      - name: "📤 Upload Learning Data"
+      - name: '📤 Upload Learning Data'
         uses: actions/upload-artifact@v4
         with:
           name: ai-learning-data
           path: ai_learning_data/
 
   ai-issue-creation:
-    name: "🎯 AI Issue Management"
+    name: '🎯 AI Issue Management'
     runs-on: ubuntu-latest
     needs: [ai-quality-check, ai-auto-recovery, ai-retry-mechanism]
     if: failure()
     steps:
-      - name: "📥 Checkout Code"
+      - name: '📥 Checkout Code'
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: "🎯 Create AI-Generated Issue"
+      - name: '🎯 Create AI-Generated Issue'
         uses: actions/github-script@v7
         with:
           script: |

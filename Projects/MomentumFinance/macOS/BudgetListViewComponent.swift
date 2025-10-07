@@ -5,8 +5,8 @@
 //  Budgets list view components for macOS three-column layout
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 // This file contains the Budgets list view components
 // Extracted from MacOS_UI_Enhancements.swift to reduce file size

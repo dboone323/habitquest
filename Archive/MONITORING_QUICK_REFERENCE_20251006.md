@@ -1,4 +1,5 @@
 # Monitoring Quick Reference Guide
+
 **Date:** October 6, 2025  
 **Purpose:** Quick reference for monitoring all 8 new implementations
 
@@ -7,6 +8,7 @@
 ## 📊 Daily Monitoring Checklist
 
 ### Morning Check (5 minutes)
+
 ```bash
 # 1. Check GitHub Actions for overnight runs
 open https://github.com/dboone323/Quantum-workspace/actions
@@ -22,6 +24,7 @@ du -sh Tools/Automation/observability/snapshots/
 ```
 
 ### Weekly Check (10 minutes)
+
 ```bash
 # 1. Review weekly health report (Sundays after 02:00 UTC)
 cat Tools/Automation/reports/weekly_health_*.md | tail -100
@@ -41,40 +44,46 @@ open https://github.com/dboone323/Quantum-workspace/issues?q=is:issue+is:open+la
 ## 🎯 Key Metrics to Track
 
 ### Backup Health
-| Metric | Target | Current | Status |
-|--------|--------|---------|--------|
-| Daily Backups | <20 | 608 (before) | ⏳ Monitor |
-| Backup Size | <2GB/week | 34GB (before) | ⏳ Monitor |
-| Compression Ratio | >50% savings | TBD | ⏳ First run tonight |
-| Oldest Backup | <7 days | TBD | ✅ Automated |
+
+| Metric            | Target       | Current       | Status               |
+| ----------------- | ------------ | ------------- | -------------------- |
+| Daily Backups     | <20          | 608 (before)  | ⏳ Monitor           |
+| Backup Size       | <2GB/week    | 34GB (before) | ⏳ Monitor           |
+| Compression Ratio | >50% savings | TBD           | ⏳ First run tonight |
+| Oldest Backup     | <7 days      | TBD           | ✅ Automated         |
 
 ### Code Quality
-| Metric | Target | Current | Status |
-|--------|--------|---------|--------|
-| SwiftLint Warnings | 0 | 68 (before) | ⏳ First run tomorrow |
-| Auto-fix Success Rate | >90% | TBD | ⏳ Monitor |
-| Daily Lint Commits | 0-2 | TBD | ⏳ Monitor |
+
+| Metric                | Target | Current     | Status                |
+| --------------------- | ------ | ----------- | --------------------- |
+| SwiftLint Warnings    | 0      | 68 (before) | ⏳ First run tomorrow |
+| Auto-fix Success Rate | >90%   | TBD         | ⏳ Monitor            |
+| Daily Lint Commits    | 0-2    | TBD         | ⏳ Monitor            |
 
 ### Disk Usage
-| Metric | Target | Current | Status |
-|--------|--------|---------|--------|
-| Backups Directory | <5GB | 34GB (before) | ⏳ Monitor |
-| Metrics Directory | <1GB | ~500MB | ⏳ Monitor |
-| Compression Savings | >20GB/week | TBD | ⏳ Calculate |
+
+| Metric              | Target     | Current       | Status       |
+| ------------------- | ---------- | ------------- | ------------ |
+| Backups Directory   | <5GB       | 34GB (before) | ⏳ Monitor   |
+| Metrics Directory   | <1GB       | ~500MB        | ⏳ Monitor   |
+| Compression Savings | >20GB/week | TBD           | ⏳ Calculate |
 
 ### System Health
-| Metric | Target | Current | Status |
-|--------|--------|---------|--------|
-| Workflow Failures | 0 | TBD | ⏳ Monitor |
-| Critical Issues | 0 | 0 | ✅ Good |
-| Response Time | <24h | TBD | ⏳ Monitor |
+
+| Metric            | Target | Current | Status     |
+| ----------------- | ------ | ------- | ---------- |
+| Workflow Failures | 0      | TBD     | ⏳ Monitor |
+| Critical Issues   | 0      | 0       | ✅ Good    |
+| Response Time     | <24h   | TBD     | ⏳ Monitor |
 
 ---
 
 ## 📅 Scheduled Execution Times
 
 ### Daily (Automated)
+
 - **00:00 UTC** - Nightly hygiene workflow
+
   - Backup cleanup (keep last 7 days)
   - Backup compression (files >24h old)
   - Metrics cleanup (files >90 days old)
@@ -86,12 +95,14 @@ open https://github.com/dboone323/Quantum-workspace/issues?q=is:issue+is:open+la
   - Commit changes if any
 
 ### Weekly (Automated)
+
 - **Sunday 02:00 UTC** - Weekly health check
   - Comprehensive system analysis
   - GitHub issue creation for CRITICAL problems
   - Health report generation
 
 ### On-Demand (Manual)
+
 ```bash
 # Run workflow health monitor manually
 ./Tools/Automation/observability/workflow_health_monitor.sh
@@ -111,6 +122,7 @@ open https://github.com/dboone323/Quantum-workspace/issues?q=is:issue+is:open+la
 ## 🔍 Where to Find Results
 
 ### GitHub Actions Logs
+
 ```
 https://github.com/dboone323/Quantum-workspace/actions
 
@@ -121,6 +133,7 @@ Key Workflows:
 ```
 
 ### Local Report Files
+
 ```bash
 # Weekly health reports
 Tools/Automation/reports/weekly_health_YYYYMMDD.md
@@ -136,6 +149,7 @@ Shared/Tools/Automation/backups/
 ```
 
 ### GitHub Issues
+
 ```
 https://github.com/dboone323/Quantum-workspace/issues
 
@@ -153,11 +167,14 @@ Labels to watch:
 ### CRITICAL Alerts (Immediate Action)
 
 #### 1. Backup Explosion Returns (>50 backups/day)
+
 **Symptoms:**
+
 - Backups directory growing rapidly
 - Multiple backups within minutes
 
 **Immediate Actions:**
+
 ```bash
 # 1. Check deduplication is working
 grep "Skipping backup" Shared/Tools/Automation/ai_enhancement_system.sh
@@ -170,17 +187,21 @@ grep "BACKUP_COOLDOWN" Shared/Tools/Automation/ai_enhancement_system.sh
 ```
 
 **Resolution:**
+
 - Should self-correct with 1-hour cooldown
 - If not, check for infinite loops in automation scripts
 - Review BACKUP_FREQUENCY_INVESTIGATION_20251006.md
 
 #### 2. Disk Space <10GB
+
 **Symptoms:**
+
 - Low disk space warnings
 - Backup compression failing
 - Metrics cleanup failing
 
 **Immediate Actions:**
+
 ```bash
 # 1. Check disk usage
 df -h
@@ -194,16 +215,20 @@ du -sh */ | sort -rh | head -10
 ```
 
 **Resolution:**
+
 - Run manual compression/cleanup
 - Verify automated cleanup is working
 - Check for unexpected large files
 
 #### 3. Workflow Failures (3+ consecutive)
+
 **Symptoms:**
+
 - Multiple failed workflow runs
 - No successful runs in 24h
 
 **Immediate Actions:**
+
 ```bash
 # 1. Check workflow status
 gh run list --limit 10
@@ -216,6 +241,7 @@ grep "error\|failed\|fatal" .github/workflows/*.yml
 ```
 
 **Resolution:**
+
 - Review error logs for root cause
 - Check for dependency issues
 - Verify GitHub Actions quota not exceeded
@@ -223,16 +249,19 @@ grep "error\|failed\|fatal" .github/workflows/*.yml
 ### WARNING Alerts (Monitor Closely)
 
 #### 1. Backup Frequency 20-50/day
+
 - Monitor for increasing trend
 - Review backup deduplication logic
 - Check for new automation scripts creating backups
 
 #### 2. Metrics Directory >2GB
+
 - Verify cleanup_old_metrics.sh running
 - Check retention period (90 days default)
 - Consider reducing retention if needed
 
 #### 3. SwiftLint Auto-fix Commits >5/day
+
 - May indicate new code quality issues
 - Review what's being auto-fixed
 - Consider updating SwiftLint rules
@@ -244,22 +273,26 @@ grep "error\|failed\|fatal" .github/workflows/*.yml
 ### By October 13, 2025, we should see:
 
 ✅ **Backup System:**
+
 - Daily backup count: <20 (down from 608)
 - Backups directory size: <5GB (down from 34GB)
 - Compression ratio: >50% for old backups
 - No manual intervention needed
 
 ✅ **Code Quality:**
+
 - SwiftLint warnings: 0 (down from 68)
 - Daily auto-fix commits: 0-2
 - No build failures from lint issues
 
 ✅ **Disk Management:**
+
 - No disk space alerts
 - Metrics directory: <1GB
 - Backup compression working automatically
 
 ✅ **Monitoring:**
+
 - Weekly health reports generating
 - Workflow health reports generating
 - GitHub issues created for CRITICAL items only
@@ -270,6 +303,7 @@ grep "error\|failed\|fatal" .github/workflows/*.yml
 ## 🛠️ Troubleshooting Commands
 
 ### Debug Backup Issues
+
 ```bash
 # Check backup deduplication logic
 cat Shared/Tools/Automation/ai_enhancement_system.sh | grep -A 20 "should_create_backup"
@@ -285,6 +319,7 @@ file Shared/Tools/Automation/backups/*.tar.gz
 ```
 
 ### Debug Workflow Issues
+
 ```bash
 # Check workflow syntax
 actionlint .github/workflows/*.yml
@@ -300,6 +335,7 @@ gh run view --log
 ```
 
 ### Debug Metrics Issues
+
 ```bash
 # Check metrics directory
 ls -lth Tools/Automation/observability/snapshots/ | head -20
@@ -315,6 +351,7 @@ du -sh Tools/Automation/observability/snapshots/*
 ```
 
 ### Debug SwiftLint Issues
+
 ```bash
 # Check SwiftLint configuration
 cat .swiftlint.yml
@@ -334,6 +371,7 @@ swiftlint version
 ## 📞 Support & Documentation
 
 ### Implementation Documentation
+
 - **IMPLEMENTATION_SUMMARY_20251006.md** - Phase 1 details
 - **IMPLEMENTATION_COMPLETE_20251006.md** - Phase 1 executive summary
 - **ADDITIONAL_IMPROVEMENTS_PLAN_20251006.md** - Phase 2 planning & status
@@ -341,15 +379,18 @@ swiftlint version
 - **MONITORING_QUICK_REFERENCE_20251006.md** - This file
 
 ### Root Cause Analysis
+
 - **BACKUP_FREQUENCY_INVESTIGATION_20251006.md** - Original problem analysis
 
 ### Automation Scripts
+
 - **compress_old_backups.sh** - Backup compression automation
 - **cleanup_old_metrics.sh** - Metrics retention policy
 - **weekly_health_check.sh** - Weekly health monitoring
 - **workflow_health_monitor.sh** - Workflow analysis
 
 ### Workflows
+
 - **.github/workflows/nightly-hygiene.yml** - Daily maintenance
 - **.github/workflows/swiftlint-auto-fix.yml** - Daily lint fixing
 - **.github/workflows/weekly-health-check.yml** - Weekly reporting
@@ -359,6 +400,7 @@ swiftlint version
 ## 🎯 Next Steps
 
 ### This Week (October 7-13, 2025)
+
 - [ ] Monitor first backup compression run (tonight)
 - [ ] Monitor first metrics cleanup run (tonight)
 - [ ] Monitor first SwiftLint auto-fix run (tomorrow)
@@ -368,6 +410,7 @@ swiftlint version
 - [ ] Check for any unexpected issues
 
 ### Week 2 (October 14-20, 2025)
+
 - [ ] Review Week 1 metrics
 - [ ] Fine-tune alert thresholds if needed
 - [ ] Create workflow consolidation analysis
@@ -375,6 +418,7 @@ swiftlint version
 - [ ] Plan Phase 3 enhancements
 
 ### Week 3-4 (October 21 - November 3, 2025)
+
 - [ ] Implement workflow consolidation (if needed)
 - [ ] Add dashboard trend visualization
 - [ ] Consider performance regression detection

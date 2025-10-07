@@ -46,7 +46,7 @@ class SimpleDashboardHandler(http.server.SimpleHTTPRequestHandler):
     def get_simple_dashboard_data(self):
         """Generate simple dashboard data from existing files"""
         current_time = int(time.time())
-        
+
         # Load agent status
         agent_status_file = AGENTS_DIR / "agent_status.json"
         agent_data = {}
@@ -57,13 +57,13 @@ class SimpleDashboardHandler(http.server.SimpleHTTPRequestHandler):
                     agent_data = data.get("agents", {})
             except Exception as e:
                 print(f"Error reading agent_status.json: {e}")
-        
+
         # Process agents
         agents = {}
         for agent_name, agent_info in agent_data.items():
             status = agent_info.get("status", "unknown")
             last_seen = agent_info.get("last_seen", 0)
-            
+
             # Determine display status
             if status in ["active", "running"]:
                 display_status = "running"
@@ -73,13 +73,13 @@ class SimpleDashboardHandler(http.server.SimpleHTTPRequestHandler):
                 display_status = "stopped"
             else:
                 display_status = status
-            
+
             agents[agent_name] = {
                 "status": display_status,
                 "last_seen": last_seen,
                 "pid": agent_info.get("pid", "N/A")
             }
-        
+
         # Get task queue count
         task_queue_file = AGENTS_DIR / "task_queue.json"
         task_count = "N/A"
@@ -101,7 +101,7 @@ class SimpleDashboardHandler(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 print(f"Error reading task_queue.json: {e}")
                 task_count = "Error"
-        
+
         # Basic system info
         try:
             # Get number of running agent processes
@@ -110,12 +110,12 @@ class SimpleDashboardHandler(http.server.SimpleHTTPRequestHandler):
             running_processes = len([line for line in result.stdout.split('\n') if 'agent_' in line and '.sh' in line])
         except:
             running_processes = 0
-        
+
         return {
             "agents": agents,
             "system": {
                 "cpu_usage": "N/A",
-                "memory_usage": "N/A", 
+                "memory_usage": "N/A",
                 "running_processes": running_processes
             },
             "tasks": task_count,

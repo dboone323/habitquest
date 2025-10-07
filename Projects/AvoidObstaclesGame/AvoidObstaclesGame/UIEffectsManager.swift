@@ -19,8 +19,8 @@ class UIEffectsManager {
     private var levelUpLabel: SKLabelNode?
 
     /// Animation actions for reuse
-    private let fadeInAction: SKAction = SKAction.fadeIn(withDuration: 0.5)
-    private let fadeOutAction: SKAction = SKAction.fadeOut(withDuration: 0.3)
+    private let fadeInAction: SKAction = .fadeIn(withDuration: 0.5)
+    private let fadeOutAction: SKAction = .fadeOut(withDuration: 0.3)
 
     // MARK: - Initialization
 
@@ -95,7 +95,7 @@ class UIEffectsManager {
 
     /// Removes all active effect elements from the scene
     func removeAllEffects() {
-        levelUpLabel?.removeFromParent()
+        self.levelUpLabel?.removeFromParent()
         self.levelUpLabel = nil
     }
 }

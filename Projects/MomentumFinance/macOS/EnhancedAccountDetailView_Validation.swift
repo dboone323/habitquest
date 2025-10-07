@@ -18,17 +18,17 @@ extension EnhancedAccountDetailView {
         guard let account, let editData = editedAccount else { return false }
 
         return account.name != editData.name ||
-               account.type != editData.type ||
-               account.balance != editData.balance ||
-               account.currencyCode != editData.currencyCode ||
-               account.institution != editData.institution ||
-               account.accountNumber != editData.accountNumber ||
-               account.interestRate != editData.interestRate ||
-               account.creditLimit != editData.creditLimit ||
-               account.dueDate != editData.dueDate ||
-               account.includeInTotal != editData.includeInTotal ||
-               account.isActive != editData.isActive ||
-               account.notes != editData.notes
+            account.type != editData.type ||
+            account.balance != editData.balance ||
+            account.currencyCode != editData.currencyCode ||
+            account.institution != editData.institution ||
+            account.accountNumber != editData.accountNumber ||
+            account.interestRate != editData.interestRate ||
+            account.creditLimit != editData.creditLimit ||
+            account.dueDate != editData.dueDate ||
+            account.includeInTotal != editData.includeInTotal ||
+            account.isActive != editData.isActive ||
+            account.notes != editData.notes
     }
 
     var validationErrors: [String] {
@@ -55,7 +55,7 @@ extension EnhancedAccountDetailView {
     }
 
     var isValidAccount: Bool {
-        return validationErrors.isEmpty && canSaveChanges
+        self.validationErrors.isEmpty && self.canSaveChanges
     }
 }
 #endif

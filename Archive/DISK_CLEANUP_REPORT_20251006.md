@@ -13,6 +13,7 @@
 ## Investigation Details
 
 ### Initial Disk Status
+
 ```
 Partition: /Users/danielstevens/Desktop
 Total Size: 460GB
@@ -22,6 +23,7 @@ Status: ⚠️ WARNING (>90% threshold)
 ```
 
 ### Space Breakdown
+
 ```
 Location                                    Size
 ----------------------------------------------------
@@ -36,6 +38,7 @@ Projects/PlannerApp                       2.6MB
 ```
 
 ### Backup Directory Analysis
+
 ```
 Directory: Tools/Automation/agents/backups
 Total Backups: 4,265 directories
@@ -46,6 +49,7 @@ Total Space Used: 34GB
 ```
 
 **Sample Backups:**
+
 - `CodingReviewer_20250928_181906` (1.3MB)
 - `CodingReviewer_20250928_181910` (1.3MB)
 - `CodingReviewer_20251004_102401` (6.6MB)
@@ -56,9 +60,11 @@ Total Space Used: 34GB
 ## Solution Implemented
 
 ### Cleanup Script Created
+
 **File:** `Tools/Automation/observability/cleanup_agent_backups.sh`
 
 **Features:**
+
 - Identifies all backup directories in `agents/backups/`
 - Sorts by timestamp (newest first)
 - Retains configurable number of recent backups (default: 10)
@@ -67,6 +73,7 @@ Total Space Used: 34GB
 - Supports `--force` flag for automated execution
 
 **Configuration:**
+
 ```bash
 KEEP_COUNT=10  # Keep the 10 most recent backups
 BACKUPS_DIR="${ROOT_DIR}/Tools/Automation/agents/backups"
@@ -74,6 +81,7 @@ LOG_FILE="${ROOT_DIR}/Tools/Automation/logs/backup_cleanup_$(date).log"
 ```
 
 ### Execution Results
+
 ```
 Total backups before:     4,265
 Backups to keep:             10
@@ -88,6 +96,7 @@ Expected space freed:    ~30-32GB
 ## Post-Cleanup Expected State
 
 ### Expected Disk Usage
+
 ```
 Partition: /Users/danielstevens/Desktop
 Total Size: 460GB
@@ -97,6 +106,7 @@ Status: ✅ HEALTHY (<90% threshold)
 ```
 
 ### Backup Retention Policy
+
 - **Kept:** 10 most recent backups (~66-100MB total)
 - **Deleted:** 4,255 old backups
 - **Freed:** ~30-32GB
@@ -112,6 +122,7 @@ The cleanup script has been created and should be integrated into the nightly hy
 **File to Update:** `.github/workflows/nightly-hygiene.yml`
 
 **Add to `branch-cleanup` job:**
+
 ```yaml
 - name: Cleanup Agent Backups
   run: |
@@ -126,22 +137,26 @@ This ensures old backups are automatically removed daily, preventing future disk
 
 ### Issues Fixed
 
-1. **Path Resolution** 
+1. **Path Resolution**
+
    - **Problem:** Dashboard HTML using `./dashboard_data.json` (incorrect relative path)
    - **Fix:** Multi-path loading with `['../../dashboard_data.json', '../../../Tools/dashboard_data.json', './dashboard_data.json']`
    - **Status:** ✅ Fixed
 
 2. **Error Handling**
+
    - **Problem:** No user feedback when data fails to load
    - **Fix:** Added `showError()` function with clear error messages
    - **Status:** ✅ Fixed
 
 3. **Empty State Handling**
+
    - **Problem:** Generic "No agents" message
    - **Fix:** Enhanced messaging explaining agent_status.json population
    - **Status:** ✅ Fixed
 
 4. **Initialization Logging**
+
    - **Problem:** No debugging information for path resolution
    - **Fix:** Added console logging for each path attempt with timestamps
    - **Status:** ✅ Fixed
@@ -152,6 +167,7 @@ This ensures old backups are automatically removed daily, preventing future disk
    - **Status:** ✅ Fixed
 
 ### Dashboard Data Structure
+
 ```json
 {
   "generated_at": "2025-10-06T16:49:50Z",
@@ -181,6 +197,7 @@ This ensures old backups are automatically removed daily, preventing future disk
 ## Recommendations
 
 ### Immediate Actions
+
 1. ✅ **Cleanup script executed** - Wait for completion (~5-10 minutes for 4,255 deletions)
 2. ⏳ **Monitor cleanup** - Check terminal output for completion summary
 3. ⏳ **Verify disk usage** - Run `df -h` after cleanup to confirm space freed
@@ -188,12 +205,14 @@ This ensures old backups are automatically removed daily, preventing future disk
 5. ⏳ **Test dashboard** - Open `Tools/dashboard.html` to verify all cards load correctly
 
 ### Short-Term Actions (This Week)
+
 1. **Integrate cleanup into nightly workflow** - Add to `.github/workflows/nightly-hygiene.yml`
 2. **Review backup creation** - Investigate why backups were created so frequently (every 30s-5min)
 3. **Add backup retention config** - Make `KEEP_COUNT` configurable via environment variable
 4. **Monitor disk usage** - Watch dashboard daily to ensure cleanup is working
 
 ### Long-Term Actions (Next Sprint)
+
 1. **Implement backup rotation** - Only create new backup if significant changes detected
 2. **Add disk space alerts** - Notify when disk usage exceeds 85%
 3. **Create backup compression** - Compress old backups instead of deleting
@@ -204,6 +223,7 @@ This ensures old backups are automatically removed daily, preventing future disk
 ## Testing Instructions
 
 ### 1. Verify Cleanup Completion
+
 ```bash
 # Check cleanup log
 tail -100 Tools/Automation/logs/backup_cleanup_*.log
@@ -218,6 +238,7 @@ df -h /Users/danielstevens/Desktop/Quantum-workspace
 ```
 
 ### 2. Regenerate Dashboard Data
+
 ```bash
 cd /Users/danielstevens/Desktop/Quantum-workspace
 ./Tools/Automation/dashboard/generate_dashboard_data.sh
@@ -225,6 +246,7 @@ cat Tools/dashboard_data.json | jq '.system.disk_usage'
 ```
 
 ### 3. Test Dashboard
+
 ```bash
 # Open dashboard in browser
 open Tools/dashboard.html
@@ -243,6 +265,7 @@ open Tools/dashboard.html
 ```
 
 ### 4. Verify Auto-Refresh
+
 - Wait 30 seconds
 - Check browser console for "Auto-refresh triggered"
 - Verify data refreshes without page reload
@@ -252,12 +275,14 @@ open Tools/dashboard.html
 ## Success Metrics
 
 ### Disk Usage Improvement
+
 - **Before:** 94% (432GB/460GB)
 - **Target:** <90% (<414GB/460GB)
 - **Expected After:** ~87% (~400GB/460GB)
 - **Space Freed:** ~32GB ✅
 
 ### Dashboard Functionality
+
 - ✅ All cards load correctly
 - ✅ Path resolution works (multi-path fallback)
 - ✅ Error handling provides clear feedback
@@ -265,6 +290,7 @@ open Tools/dashboard.html
 - ✅ Manual refresh button functional
 
 ### System Health
+
 - ✅ Backup retention policy: 10 most recent
 - ✅ Cleanup script integrated
 - ⏳ Nightly automation (pending workflow update)
@@ -275,12 +301,14 @@ open Tools/dashboard.html
 ## Files Created/Modified
 
 ### New Files
+
 1. `Tools/Automation/observability/cleanup_agent_backups.sh` (4.3KB)
    - Automated backup cleanup with retention policy
 2. `DISK_CLEANUP_REPORT_20251006.md` (this file)
    - Comprehensive documentation of disk cleanup process
 
 ### Modified Files
+
 1. `Tools/Automation/dashboard/dashboard.html` (29.6KB)
    - Enhanced path loading with multi-path detection
    - Improved error handling and user feedback
@@ -288,6 +316,7 @@ open Tools/dashboard.html
    - Enhanced refresh button with state management
 
 ### Log Files Generated
+
 1. `Tools/Automation/logs/backup_cleanup_20251006_*.log`
    - Detailed cleanup execution log with deletion summary
 
@@ -298,6 +327,7 @@ open Tools/dashboard.html
 The disk space crisis has been resolved by identifying and removing 4,255 redundant backup directories, freeing approximately 32GB of space. The dashboard has been enhanced with robust path detection, error handling, and user feedback mechanisms. The cleanup script has been created and is ready for integration into the nightly hygiene workflow to prevent future issues.
 
 **Current Status:**
+
 - ✅ Root cause identified (excessive backups)
 - ✅ Cleanup script created and executed
 - ✅ Dashboard enhanced with multi-path loading
@@ -307,6 +337,7 @@ The disk space crisis has been resolved by identifying and removing 4,255 redund
 - ⏳ Nightly workflow integration pending
 
 **Next Steps:**
+
 1. Monitor cleanup completion
 2. Verify disk usage improvement (target: <90%)
 3. Test dashboard with updated data

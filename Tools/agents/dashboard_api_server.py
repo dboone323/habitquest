@@ -40,7 +40,7 @@ class DashboardAPIHandler(http.server.SimpleHTTPRequestHandler):
             # Serve the dashboard HTML
             simple_dashboard_path = Path(__file__).parent.parent / "Automation" / "simple_dashboard.html"
             dashboard_path = Path(__file__).parent.parent / "dashboard.html"
-            
+
             if simple_dashboard_path.exists():
                 with open(simple_dashboard_path, "r") as f:
                     self.wfile.write(f.read().encode())

@@ -6,6 +6,7 @@ import SwiftData
 import SwiftUI
 
 #if os(macOS)
+
 // MARK: - Export Options View for Enhanced Account Detail View
 
 /// Export options sheet for exporting account transactions

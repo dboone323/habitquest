@@ -1,5 +1,5 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 public struct AchievementsSection: View {
     let achievements: [Achievement]

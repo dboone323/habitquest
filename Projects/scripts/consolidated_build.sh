@@ -41,7 +41,8 @@ record_success() {
   local scheme="$1" label="$2" dest="$3" meta_path="$4" platform="$5"
   local entry
   if [[ -n "${PYTHON_BIN}" && -f "${meta_path}" ]]; then
-    entry="$(${PYTHON_BIN} - "$meta_path" "$label" "$dest" "$platform" "$scheme" <<'PY'
+    entry="$(
+      ${PYTHON_BIN} - "$meta_path" "$label" "$dest" "$platform" "$scheme" <<'PY'
 import json, sys
 meta_path, label, dest, platform, scheme = sys.argv[1:6]
 try:
@@ -55,7 +56,7 @@ data["destination"] = dest
 data["status"] = "success"
 print(json.dumps(data))
 PY
-)"
+    )"
   else
     entry=$(printf '{"scheme":"%s","label":"%s","platform":"%s","destination":"%s","status":"success"}' \
       "${scheme}" "${label}" "${platform}" "${dest}")
@@ -67,7 +68,8 @@ record_failure() {
   local scheme="$1" label="$2" dest="$3" platform="$4" reason="$5"
   local entry
   if [[ -n "${PYTHON_BIN}" ]]; then
-    entry="$(${PYTHON_BIN} - "$scheme" "$label" "$dest" "$platform" "$reason" <<'PY'
+    entry="$(
+      ${PYTHON_BIN} - "$scheme" "$label" "$dest" "$platform" "$reason" <<'PY'
 import json, sys
 scheme, label, dest, platform, reason = sys.argv[1:6]
 print(json.dumps({
@@ -79,7 +81,7 @@ print(json.dumps({
     "reason": reason
 }))
 PY
-)"
+    )"
   else
     entry=$(printf '{"scheme":"%s","label":"%s","platform":"%s","destination":"%s","status":"failure","reason":"%s"}' \
       "${scheme}" "${label}" "${platform}" "${dest}" "${reason}")
@@ -117,7 +119,8 @@ resolve_simulator_id() {
     return 1
   fi
   local udid
-  udid=$(printf '%s' "${json_output}" | ${PYTHON_BIN} - "$runtime" "$device_name" <<'PY'
+  udid=$(
+    printf '%s' "${json_output}" | ${PYTHON_BIN} - "$runtime" "$device_name" <<'PY'
 import json, sys
 runtime = sys.argv[1]
 device_name = sys.argv[2]
@@ -130,7 +133,7 @@ for device in data.get("devices", {}).get(runtime, []):
         print(device.get("udid", ""))
         break
 PY
-) || true
+  ) || true
   if [[ -n "${udid}" ]]; then
     printf '%s' "${udid}"
     return 0

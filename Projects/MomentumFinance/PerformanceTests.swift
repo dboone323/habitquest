@@ -6,8 +6,8 @@ func runPerformanceTests() {
     runTest("testTransactionCreationPerformance") {
         let startTime = Date()
 
-        for i in 0..<1000 {
-            let _ = FinancialTransaction(
+        for i in 0 ..< 1000 {
+            _ = FinancialTransaction(
                 title: "Performance Test Transaction \(i)",
                 amount: Double(i),
                 date: Date(),
@@ -25,7 +25,7 @@ func runPerformanceTests() {
     runTest("testAccountBalanceCalculationPerformance") {
         var transactions: [FinancialTransaction] = []
 
-        for i in 0..<10000 {
+        for i in 0 ..< 10000 {
             transactions.append(FinancialTransaction(
                 title: "Transaction \(i)",
                 amount: Double(i % 100),
@@ -54,7 +54,7 @@ func runPerformanceTests() {
     runTest("testCategoryTotalCalculationPerformance") {
         var transactions: [FinancialTransaction] = []
 
-        for i in 0..<5000 {
+        for i in 0 ..< 5000 {
             transactions.append(FinancialTransaction(
                 title: "Category Transaction \(i)",
                 amount: Double(i % 50),
@@ -82,7 +82,7 @@ func runPerformanceTests() {
     runTest("testTransactionFilteringPerformance") {
         var transactions: [FinancialTransaction] = []
 
-        for i in 0..<10000 {
+        for i in 0 ..< 10000 {
             transactions.append(FinancialTransaction(
                 title: "Filter Test \(i)",
                 amount: Double(i),
@@ -104,7 +104,7 @@ func runPerformanceTests() {
     runTest("testMemoryUsageWithLargeDataset") {
         var transactions: [FinancialTransaction] = []
 
-        for i in 0..<50000 {
+        for i in 0 ..< 50000 {
             transactions.append(FinancialTransaction(
                 title: "Memory Test Transaction \(i)",
                 amount: Double(i % 1000),

@@ -165,7 +165,12 @@ public struct TimeFactors {
     public let timesSinceLastCompletion: TimeInterval
     public let optimalTimeWindow: ClosedRange<Int>
 
-    public init(currentHourSuccessRate: Double, currentDaySuccessRate: Double, timesSinceLastCompletion: TimeInterval, optimalTimeWindow: ClosedRange<Int>) {
+    public init(
+        currentHourSuccessRate: Double,
+        currentDaySuccessRate: Double,
+        timesSinceLastCompletion: TimeInterval,
+        optimalTimeWindow: ClosedRange<Int>
+    ) {
         self.currentHourSuccessRate = currentHourSuccessRate
         self.currentDaySuccessRate = currentDaySuccessRate
         self.timesSinceLastCompletion = timesSinceLastCompletion

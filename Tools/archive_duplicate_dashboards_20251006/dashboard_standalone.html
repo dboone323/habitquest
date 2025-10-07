@@ -580,7 +580,7 @@
             title: 'Agents',
             value: dashboardData.agent_summary?.running || 0,
             label: `${dashboardData.agent_summary?.total || 0} total, ${dashboardData.agent_summary?.unresponsive || 0} unresponsive`,
-            status: (dashboardData.agent_summary?.health_percent || 0) > 70 ? 'healthy' : 
+            status: (dashboardData.agent_summary?.health_percent || 0) > 70 ? 'healthy' :
                     (dashboardData.agent_summary?.health_percent || 0) > 40 ? 'warning' : 'critical'
           },
           {
@@ -664,7 +664,7 @@
         agentList.innerHTML = agents.map(([name, data]) => {
           const displayName = name.replace(/_/g, ' ').replace(/\.sh$/, '').replace(/\b\w/g, l => l.toUpperCase());
           const statusClass = data.status || 'unknown';
-          
+
           return `
             <li class="agent-item ${statusClass}">
               <div class="agent-info">
@@ -696,9 +696,9 @@
 
         workflowList.innerHTML = dashboardData.workflows.map(workflow => {
           const conclusion = workflow.conclusion || workflow.status;
-          const statusClass = conclusion === 'success' ? 'success' : 
+          const statusClass = conclusion === 'success' ? 'success' :
                              conclusion === 'failure' ? 'failure' : 'in_progress';
-          
+
           return `
             <div class="workflow-item ${statusClass}">
               <div class="workflow-header">
@@ -875,9 +875,9 @@
           refreshBtn.textContent = '🔄 Refreshing...';
           refreshBtn.disabled = true;
         }
-        
+
         const loaded = await loadDashboardData();
-        
+
         if (loaded && dashboardData) {
           console.log('Dashboard data loaded successfully');
           updateStatusBar();
@@ -891,7 +891,7 @@
         } else {
           console.error('Failed to load dashboard data');
         }
-        
+
         if (refreshBtn) {
           refreshBtn.textContent = '🔄 Refresh';
           refreshBtn.disabled = false;
@@ -918,7 +918,7 @@
           mcp: dashboardData.mcp?.available ? 'online' : 'offline',
           agents: Object.keys(dashboardData.agents || {}).length
         });
-        
+
         // Update all cards
         updateStatusBar();
         updateAgentList();
@@ -928,7 +928,7 @@
         updateLatestMetrics();
         updateTaskSummary();
         updateTimestamps();
-        
+
         console.log('✅ Dashboard initialized successfully');
         console.log('ℹ️  To refresh data: run generate_standalone_dashboard.sh and reload page');
       });

@@ -29,6 +29,7 @@ The Continuous Validation System provides automated code quality checks integrat
 ```
 
 **Features:**
+
 - SwiftLint integration with error/warning counting
 - SwiftFormat verification
 - Build validation using consolidated_build.sh or xcodebuild
@@ -41,12 +42,14 @@ The Continuous Validation System provides automated code quality checks integrat
 **Location:** `.vscode/tasks.json`
 
 **Available Tasks:**
+
 - **Validate Current Project** - Interactive project selection
 - **Validate All Projects** - Runs validation on all projects
 - **Watch for Changes (Auto-validate)** - Background watch mode
 - **View Validation Reports** - Display recent reports
 
 **Usage:**
+
 1. Press `Cmd+Shift+P` (macOS)
 2. Type "Tasks: Run Task"
 3. Select the validation task you want
@@ -56,15 +59,18 @@ The Continuous Validation System provides automated code quality checks integrat
 **Location:** `.github/workflows/continuous-validation.yml`
 
 **Triggers:**
+
 - Push to main/develop branches (Swift file changes)
 - Pull requests (Swift file changes)
 - Manual workflow dispatch
 
 **Jobs:**
+
 - **validate** - Runs validation checks on changed code
 - **publish-results** - Publishes reports to MCP dashboard
 
 **Artifacts:**
+
 - Validation reports retained for 30 days
 - Uploaded as workflow artifacts
 
@@ -73,12 +79,14 @@ The Continuous Validation System provides automated code quality checks integrat
 ### Checks Performed
 
 1. **SwiftLint**
+
    - Runs on all Swift files in project
    - Counts errors and warnings
    - Status: passed/failed based on error count
    - Configurable via `.swiftlint.yml` in project directory
 
 2. **SwiftFormat**
+
    - Verifies code formatting compliance
    - Uses `--lint` mode (read-only)
    - Status: passed/needs_formatting/skipped
@@ -116,6 +124,7 @@ Reports are saved to `validation_reports/` as JSON:
 ```
 
 **Overall Status Logic:**
+
 - `failed` - If lint or build failed
 - `warning` - If format needs updating
 - `passed` - All checks passed
@@ -127,6 +136,7 @@ Reports are saved to `validation_reports/` as JSON:
 Validation reports are automatically published to the MCP server at `http://localhost:5005/alerts` via POST request.
 
 **Alert Structure:**
+
 - Contains full validation report JSON
 - Timestamped for tracking
 - Available via MCP dashboard
@@ -135,6 +145,7 @@ Validation reports are automatically published to the MCP server at `http://loca
 ### Dashboard Visibility
 
 The MCP dashboard displays validation alerts with:
+
 - Project name
 - Overall status (color-coded)
 - Individual check results
@@ -176,6 +187,7 @@ WATCH_EXTENSIONS="*.swift"     # File patterns to watch
 The validation system integrates with `Projects/scripts/consolidated_build.sh` for comprehensive build validation:
 
 **Benefits:**
+
 - Multi-platform build validation (iOS + macOS)
 - Detailed build metadata
 - Consistent with existing build pipeline
@@ -189,6 +201,7 @@ If `consolidated_build.sh` is not available, validation falls back to quick `xco
 ### Common Issues
 
 **1. SwiftLint not found**
+
 ```bash
 # Install SwiftLint
 brew install swiftlint
@@ -198,6 +211,7 @@ export SKIP_LINT=1
 ```
 
 **2. Build timeouts**
+
 ```bash
 # Increase timeout in continuous_validation.sh
 # Default: 180 seconds
@@ -205,6 +219,7 @@ timeout 300 xcodebuild ...
 ```
 
 **3. MCP server not responding**
+
 ```bash
 # Check if MCP server is running
 curl http://localhost:5005/status
@@ -214,6 +229,7 @@ python3 Tools/Automation/mcp_server.py &
 ```
 
 **4. Watch mode not triggering**
+
 ```bash
 # Verify fswatch is installed
 which fswatch
@@ -225,6 +241,7 @@ fswatch -v Projects/ Shared/
 ### Validation Report Location
 
 Reports are saved to:
+
 ```
 validation_reports/
 ├── CodingReviewer_validation_20251005_185143.json
@@ -235,6 +252,7 @@ validation_reports/
 ### Logs
 
 Validation script outputs to stdout with colored status indicators:
+
 - 🔵 **[AI-AUTOMATION]** - Info messages
 - 🟢 **[AI-SUCCESS]** - Success messages
 - 🟡 **[AI-WARNING]** - Warning messages
@@ -263,6 +281,7 @@ export WORKSPACE_ROOT="/Users/user/Quantum-workspace"
 ### Quality Gates
 
 Quality thresholds are defined in `quality-config.yaml`:
+
 - Code coverage: 70% minimum, 85% target
 - Build performance: Max 120 seconds
 - Test performance: Max 30 seconds
@@ -272,21 +291,25 @@ Quality thresholds are defined in `quality-config.yaml`:
 ## Best Practices
 
 1. **Run validation before commits**
+
    ```bash
    ./Tools/Automation/continuous_validation.sh validate <project>
    ```
 
 2. **Use watch mode during development**
+
    ```bash
    ./Tools/Automation/continuous_validation.sh watch
    ```
 
 3. **Review validation reports**
+
    ```bash
    ./Tools/Automation/continuous_validation.sh report
    ```
 
 4. **Address errors before warnings**
+
    - Fix build errors first
    - Then SwiftLint errors
    - Finally format issues and warnings

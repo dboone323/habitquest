@@ -6,6 +6,7 @@ import SwiftData
 import SwiftUI
 
 #if os(macOS)
+
 // MARK: - Supporting Views for Enhanced Account Detail View
 
 /// Detail field component for displaying labeled values

@@ -2,9 +2,9 @@ name: AI-Enhanced CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 permissions:
   contents: read
@@ -13,13 +13,13 @@ permissions:
   actions: read
 
 env:
-  XCODE_VERSION: "15.2"
-  MACOS_VERSION: "14"
+  XCODE_VERSION: '15.2'
+  MACOS_VERSION: '14'
 
 jobs:
   # Phase 1: Predictive Failure Detection
   predictive-analysis:
-    name: "🔮 Predictive Failure Analysis"
+    name: '🔮 Predictive Failure Analysis'
     runs-on: macos-latest
     outputs:
       risk-level: ${{ steps.prediction.outputs.risk-level }}
@@ -49,7 +49,7 @@ jobs:
 
   # Phase 2: Self-Healing Pipeline
   self-healing-build:
-    name: "🔧 Self-Healing Build & Test"
+    name: '🔧 Self-Healing Build & Test'
     runs-on: macos-latest
     needs: predictive-analysis
     if: needs.predictive-analysis.outputs.should-continue == 'true'
@@ -182,7 +182,7 @@ jobs:
 
   # Phase 3: MCP-Powered Analytics
   pipeline-analytics:
-    name: "📊 Pipeline Analytics & Insights"
+    name: '📊 Pipeline Analytics & Insights'
     runs-on: macos-latest
     needs: [predictive-analysis, self-healing-build]
     if: always()
@@ -247,7 +247,7 @@ jobs:
 
   # Phase 4: Automated Issue Management
   automated-issue-management:
-    name: "🎯 Automated Issue Management"
+    name: '🎯 Automated Issue Management'
     runs-on: macos-latest
     needs: [self-healing-build, pipeline-analytics]
     if: failure() || needs.self-healing-build.result == 'failure'

@@ -1,4 +1,5 @@
 # OA-06 Planning: Observability & Hygiene
+
 ## Unattended Automation Stability System
 
 **Status:** ✅ COMPLETED - Merged to main (2025-10-06)  
@@ -23,12 +24,14 @@ Establish monitoring and cleanup automation to keep the unattended Quantum Agent
 ### In Scope
 
 ✅ **Log Management**
+
 - Automated log rotation for all automation scripts
 - Log size monitoring and alerting
 - Error pattern detection and alerting
 - Historical log archival (30-day retention)
 
 ✅ **Metrics Collection**
+
 - Daily snapshots of key performance indicators
 - Automation success/failure rates
 - MCP alert frequency and patterns
@@ -36,6 +39,7 @@ Establish monitoring and cleanup automation to keep the unattended Quantum Agent
 - Validation pass/fail trends
 
 ✅ **Repository Hygiene**
+
 - Auto-delete merged branches (>7 days old)
 - Close stale PRs (>30 days inactive)
 - Clean up abandoned feature branches
@@ -43,6 +47,7 @@ Establish monitoring and cleanup automation to keep the unattended Quantum Agent
 - Purge old AI review artifacts (>30 days)
 
 ✅ **Health Monitoring**
+
 - System status dashboard
 - Service availability checks (Ollama, MCP)
 - Disk space monitoring
@@ -53,7 +58,7 @@ Establish monitoring and cleanup automation to keep the unattended Quantum Agent
 ❌ Full observability platform (Grafana/Prometheus)  
 ❌ Real-time alerting (Slack/PagerDuty integration)  
 ❌ Advanced anomaly detection (ML-based)  
-❌ Distributed tracing  
+❌ Distributed tracing
 
 ---
 
@@ -118,21 +123,27 @@ Tools/Automation/
 ### Phase 1: Log Management & Watchdog (45 min)
 
 **1.1 Create Log Rotation Script**
+
 ```bash
 Tools/Automation/observability/rotate_logs.sh
 ```
+
 Features:
-- Scan for logs in Tools/Automation/*/logs/
+
+- Scan for logs in Tools/Automation/\*/logs/
 - Rotate logs >10MB
 - Compress rotated logs (.gz)
 - Delete logs >30 days old
 - Publish rotation summary to MCP
 
 **1.2 Create Watchdog Monitor**
+
 ```bash
 Tools/Automation/observability/watchdog.sh
 ```
+
 Features:
+
 - Scan recent logs for ERROR patterns
 - Detect repeated failures (>3 in 1 hour)
 - Check disk space usage (<90% threshold)
@@ -140,6 +151,7 @@ Features:
 - Publish critical alerts to MCP
 
 **1.3 Schedule Watchdog**
+
 ```yaml
 .github/workflows/nightly-hygiene.yml
   schedule:
@@ -149,10 +161,13 @@ Features:
 ### Phase 2: Metrics Collection (45 min)
 
 **2.1 Create Metrics Snapshot Script**
+
 ```bash
 Tools/Automation/observability/metrics_snapshot.sh
 ```
+
 Collect:
+
 - Validation success rate (last 24h)
 - AI review statistics (count, avg time)
 - MCP alert breakdown by level
@@ -160,6 +175,7 @@ Collect:
 - Disk usage by category
 
 **2.2 Store Metrics**
+
 ```
 Tools/Automation/metrics/
 ├── snapshots/
@@ -170,6 +186,7 @@ Tools/Automation/metrics/
 ```
 
 **2.3 Generate Trends**
+
 - Compare day-over-day changes
 - Identify performance regressions
 - Alert on threshold violations
@@ -177,30 +194,39 @@ Tools/Automation/metrics/
 ### Phase 3: Repository Cleanup (30 min)
 
 **3.1 Branch Cleanup Script**
+
 ```bash
 Tools/Automation/hygiene/cleanup_branches.sh
 ```
+
 Logic:
+
 - Find merged branches >7 days old
-- Exclude: main, develop, release/*
+- Exclude: main, develop, release/\*
 - Delete local and remote (with confirmation)
 - Log deleted branches
 
 **3.2 PR Cleanup Script**
+
 ```bash
 Tools/Automation/hygiene/cleanup_prs.sh
 ```
+
 Logic:
+
 - Find PRs with no activity >30 days
 - Comment with "stale" warning
 - Close after 7 more days if no response
 - Label with "auto-closed"
 
 **3.3 Artifact Cleanup**
+
 ```bash
 Tools/Automation/hygiene/archive_artifacts.sh
 ```
+
 Cleanup:
+
 - validation_reports/ >30 days
 - ai_reviews/ >30 days
 - mcp_artifacts/ >30 days
@@ -209,49 +235,62 @@ Cleanup:
 ### Phase 4: Dashboard & Reporting (30 min)
 
 **4.1 Create Status Dashboard**
+
 ```html
 Tools/Automation/dashboard/status_dashboard.html
 ```
+
 Display:
+
 - Current system status (all green/yellow/red)
 - Last 24h activity summary
 - Active alerts
 - Quick links to logs/metrics
 
 **4.2 Metrics Viewer**
+
 ```html
 Tools/Automation/dashboard/metrics_viewer.html
 ```
+
 Show:
+
 - Historical charts (last 30 days)
 - Success rate trends
 - Performance graphs
 - Alert frequency
 
 **4.3 Daily Report Generator**
+
 ```bash
 Tools/Automation/observability/generate_daily_report.sh
 ```
+
 Output:
+
 ```markdown
 # Daily System Report - 2025-10-06
 
 ## Activity Summary
+
 - Validations: 15 (13 passed, 2 failed)
 - AI Reviews: 8 (5 approved, 3 needs changes)
 - MCP Alerts: 23 (0 critical, 2 errors, 21 info)
 
 ## Performance
+
 - Avg validation time: 1.2 min
 - Avg AI review time: 2.5 min
 - Ollama uptime: 99.8%
 
 ## Cleanup Actions
+
 - Branches deleted: 3
 - Logs rotated: 5
 - Artifacts archived: 120 files
 
 ## Alerts
+
 - ⚠️ Validation failure rate increased 5%
 - ✅ All systems operational
 ```
@@ -261,6 +300,7 @@ Output:
 ## 📊 Metrics to Track
 
 ### Performance Metrics
+
 - Validation execution time (avg, p50, p95, p99)
 - AI review generation time
 - MCP alert publish latency
@@ -268,6 +308,7 @@ Output:
 - Workflow end-to-end duration
 
 ### Reliability Metrics
+
 - Validation success rate (%)
 - AI review completion rate (%)
 - MCP publish success rate (%)
@@ -275,6 +316,7 @@ Output:
 - Workflow failure rate (%)
 
 ### Quality Metrics
+
 - False positive rate (AI reviews)
 - False negative rate (AI reviews)
 - Validation accuracy
@@ -282,6 +324,7 @@ Output:
 - Developer satisfaction (survey-based)
 
 ### Operational Metrics
+
 - Disk usage (GB, % of total)
 - Log file count and size
 - Active branches
@@ -293,6 +336,7 @@ Output:
 ## 🚨 Alerting Thresholds
 
 ### Critical (Immediate Action)
+
 - Ollama server down >5 minutes
 - MCP server down >5 minutes
 - Disk usage >95%
@@ -300,6 +344,7 @@ Output:
 - AI review failure rate >50% (in 1 hour)
 
 ### Warning (Review Soon)
+
 - Disk usage >85%
 - Validation failure rate >40% (in 24 hours)
 - Log file size >100MB
@@ -307,6 +352,7 @@ Output:
 - Stale branches >50
 
 ### Info (Monitoring)
+
 - Daily activity summary
 - Cleanup actions completed
 - Performance trends
@@ -317,18 +363,21 @@ Output:
 ## 🔐 Security Considerations
 
 ### Log Safety
+
 - Never log sensitive data (tokens, passwords)
 - Sanitize file paths in logs
 - Rotate logs to prevent disk fill
 - Restrict log file permissions (600)
 
 ### Cleanup Safety
+
 - Always confirm before destructive actions
 - Maintain audit trail of deletions
 - Allow recovery period (7 days for branches)
 - Never auto-delete protected branches
 
 ### Dashboard Access
+
 - Read-only view of system status
 - No sensitive data exposed
 - Local-only access (no external hosting)
@@ -338,6 +387,7 @@ Output:
 ## 📝 Configuration
 
 ### Environment Variables
+
 ```bash
 # Watchdog
 export WATCHDOG_ENABLED="true"
@@ -356,17 +406,18 @@ export METRICS_SNAPSHOT_SCHEDULE="0 0 * * *"  # Daily at midnight
 ```
 
 ### Quality Gates
+
 ```yaml
 # quality-config.yaml additions
 observability:
   log_rotation:
     max_size_mb: 10
     retention_days: 30
-  
+
   metrics:
     snapshot_frequency: daily
     retention_days: 90
-  
+
   cleanup:
     merged_branch_age_days: 7
     stale_pr_age_days: 30
@@ -380,21 +431,25 @@ observability:
 ### Test Scenarios
 
 1. **Log Rotation Test**
+
    - Create >10MB log file
    - Run rotate_logs.sh
    - Verify compression and archival
 
 2. **Watchdog Alert Test**
+
    - Inject ERROR lines in logs
    - Run watchdog.sh
    - Verify MCP alert published
 
 3. **Branch Cleanup Test**
+
    - Create old merged branch
    - Run cleanup_branches.sh
    - Verify deletion and logging
 
 4. **Metrics Collection Test**
+
    - Run metrics_snapshot.sh
    - Verify JSON output format
    - Check all metrics present
@@ -409,16 +464,19 @@ observability:
 ## 📚 Documentation Deliverables
 
 1. **OA-06_Implementation_Summary.md**
+
    - Complete technical overview
    - Component descriptions
    - Testing procedures
 
 2. **OBSERVABILITY_GUIDE.md**
+
    - User-facing monitoring guide
    - How to read dashboards
    - Interpreting alerts
 
 3. **HYGIENE_AUTOMATION_GUIDE.md**
+
    - Cleanup automation overview
    - Manual cleanup procedures
    - Recovery from accidental deletion
@@ -450,12 +508,14 @@ OA-06 is complete when:
 ## 📦 What Was Delivered
 
 ### ✅ Core Observability Scripts (Phase 1 Complete)
+
 - `watchdog.sh` (264 lines) - Monitors Ollama, MCP, disk space, log errors with configurable thresholds
 - `metrics_snapshot.sh` (302 lines) - Daily metrics aggregation with JSON output
 - `rotate_logs.sh` (185 lines) - Automated log rotation >10MB, compression, 30-day cleanup
 - `cleanup_branches.sh` (331 lines) - Branch hygiene with age thresholds and safety checks
 
 ### ✅ Enhanced Dashboard System (Phase 4+ Complete)
+
 - `generate_dashboard_data.sh` (293 lines) - Unified data generator from 7+ sources
 - `dashboard.html` (946 lines) - Modern HTML dashboard with:
   - 6-card status bar (Agents, Workflows, MCP, Ollama, Disk, Tasks)
@@ -465,6 +525,7 @@ OA-06 is complete when:
   - Human-readable timestamps
 
 ### ✅ GitHub Automation (Phase 1 Complete)
+
 - `nightly-hygiene.yml` (244 lines) - GitHub Actions workflow with 5 jobs:
   1. health-check - Watchdog + metrics snapshot
   2. log-rotation - Automated log management
@@ -475,6 +536,7 @@ OA-06 is complete when:
 - Manual trigger available with dry-run option
 
 ### ✅ Code Quality Achievements
+
 - **10 Copilot review comments addressed** across 2 review rounds:
   - Round 1 (5 comments): Platform compatibility, unused variables, array handling, workflow naming, disk efficiency
   - Round 2 (5 comments): Curl timeouts, du optimization, config extraction, OS detection, security improvements
@@ -484,6 +546,7 @@ OA-06 is complete when:
 - Configuration management (extracted thresholds to variables)
 
 ### ✅ Documentation Delivered
+
 - `OA-06_Implementation_Summary.md` - Complete technical overview
 - `OA-06_Dashboard_Enhancement.md` - Dashboard feature documentation
 - `OA-05_Copilot_Integration.md` - Related validation enhancements
@@ -494,18 +557,21 @@ OA-06 is complete when:
 ## 🔄 Remaining Tasks (Optional Enhancements)
 
 ### Short-Term Improvements
+
 - [ ] Email notifications for critical alerts (requires SMTP setup)
 - [ ] Integrate dashboard generator into nightly workflow (auto-commit dashboard_data.json)
 - [ ] Add per-agent task tracking (populate by_agent field in task queue)
 - [ ] Dashboard API endpoint (trigger generation from UI vs manual script)
 
 ### Medium-Term Enhancements
+
 - [ ] Historical trending charts (visualize health/disk over time)
 - [ ] Slack integration for daily reports
 - [ ] Custom dashboard widgets (user-configurable views)
 - [ ] Anomaly detection (ML-based pattern recognition)
 
 ### Long-Term Vision
+
 - [ ] Full observability platform migration (Grafana/Prometheus)
 - [ ] Real-time alerting (PagerDuty integration)
 - [ ] Distributed tracing for workflow analysis
@@ -520,6 +586,7 @@ OA-06 is complete when:
 ## 🚀 Rollout Plan
 
 ### ✅ Week 1: Core Implementation (COMPLETED 2025-10-06)
+
 - ✅ Day 1: Log rotation + watchdog
 - ✅ Day 2: Metrics collection
 - ✅ Day 3: Branch/PR cleanup
@@ -527,12 +594,14 @@ OA-06 is complete when:
 - ✅ **BONUS:** Enhanced dashboard system
 
 ### ✅ Week 2: Dashboard & Integration (COMPLETED 2025-10-06)
+
 - ✅ Day 1: Status dashboard (enhanced beyond plan)
 - ✅ Day 2: Unified data generator (7+ sources)
 - ✅ Day 3: GitHub workflow integration
 - ✅ Day 4: Code review fixes (10 comments addressed)
 
 ### 🔄 Week 3: Monitoring & Tuning (IN PROGRESS)
+
 - ⏳ Day 1-7: Monitor metrics collection in production
 - ⏳ Day 1-7: Tune alert thresholds based on real data
 - ⏳ Day 1-7: Validate nightly workflow execution
@@ -545,6 +614,7 @@ OA-06 is complete when:
 ## 🎯 Success Metrics
 
 ### After 1 week of operation (Target: 2025-10-13):
+
 - ⏳ Zero disk space issues
 - ⏳ All logs rotated properly
 - ⏳ Stale branches cleaned up (>80%)
@@ -552,12 +622,14 @@ OA-06 is complete when:
 - ⏳ Alerts published (>95% success rate)
 
 ### After 1 month (Target: 2025-11-06):
+
 - ⏳ Performance trends identified
 - ⏳ Capacity planning data available
 - ⏳ Operational overhead reduced
 - ⏳ System stability improved (>99% uptime)
 
 **Current Status (2025-10-06):**
+
 - ✅ All components deployed to main
 - ✅ Dashboard functional with live data
 - ✅ Nightly workflow scheduled (first run: tonight)
@@ -570,16 +642,19 @@ OA-06 is complete when:
 ## 💡 Future Enhancements
 
 ### Short-Term
+
 - Email notifications for critical alerts
 - Slack integration for daily reports
 - Custom dashboard widgets
 
 ### Medium-Term
+
 - Anomaly detection (ML-based)
 - Predictive capacity planning
 - Auto-scaling recommendations
 
 ### Long-Term
+
 - Full observability platform migration
 - Real-time dashboards
 - Distributed tracing integration
@@ -592,6 +667,7 @@ OA-06 is complete when:
 **Dependencies:** ~~OA-05 must be stable and validated~~ → OA-05 completed, OA-06 delivered
 
 **Next Steps:**
+
 1. ⏳ Monitor nightly workflow execution (first run tonight at 00:00 UTC)
 2. ⏳ Tune alert thresholds based on production data
 3. ⏳ Address disk usage warning (currently 94%)
@@ -599,4 +675,3 @@ OA-06 is complete when:
 
 **Dashboard Access:** Open `Tools/Automation/dashboard/dashboard.html` in browser
 **Data Refresh:** Run `./Tools/Automation/dashboard/generate_dashboard_data.sh`
-

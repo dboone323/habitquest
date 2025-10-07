@@ -5,14 +5,14 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
     paths-ignore:
-      - '**.md'
-      - '**.txt'
+      - "**.md"
+      - "**.txt"
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
   schedule:
-    - cron: '0 2 * * 1' # Weekly security scan
+    - cron: "0 2 * * 1" # Weekly security scan
   workflow_dispatch:
 
 env:
@@ -37,7 +37,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.2'
+          xcode-version: "15.2"
 
       - name: Cache Dependencies
         uses: actions/cache@v3
@@ -78,7 +78,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.2'
+          xcode-version: "15.2"
 
       - name: Install Swift Tools
         run: |
@@ -117,7 +117,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.2'
+          xcode-version: "15.2"
 
       - name: Install Security Tools
         run: |
@@ -176,21 +176,21 @@ jobs:
       matrix:
         include:
           - platform: iOS
-            xcode: '15.2'
-            macos: '14'
-            destination: 'platform=iOS Simulator,name=iPhone 15,OS=17.2'
+            xcode: "15.2"
+            macos: "14"
+            destination: "platform=iOS Simulator,name=iPhone 15,OS=17.2"
           - platform: iOS
-            xcode: '15.0'
-            macos: '13'
-            destination: 'platform=iOS Simulator,name=iPhone 14,OS=17.0'
+            xcode: "15.0"
+            macos: "13"
+            destination: "platform=iOS Simulator,name=iPhone 14,OS=17.0"
           - platform: macOS
-            xcode: '15.2'
-            macos: '14'
-            destination: 'platform=macOS'
+            xcode: "15.2"
+            macos: "14"
+            destination: "platform=macOS"
           - platform: macOS
-            xcode: '15.0'
-            macos: '13'
-            destination: 'platform=macOS'
+            xcode: "15.0"
+            macos: "13"
+            destination: "platform=macOS"
 
     steps:
       - uses: actions/checkout@v4
@@ -269,7 +269,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.2'
+          xcode-version: "15.2"
 
       - name: Install Benchmark Tools
         run: |
@@ -303,7 +303,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.2'
+          xcode-version: "15.2"
 
       - name: Run Integration Tests
         run: |
@@ -335,7 +335,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.2'
+          xcode-version: "15.2"
 
       - name: Create Archive
         run: |
@@ -388,7 +388,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.2'
+          xcode-version: "15.2"
 
       - name: Update Swift Packages
         run: |
@@ -398,17 +398,26 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'chore: update dependencies'
-          title: 'Dependency Updates'
-          body: 'Automated dependency updates'
-          branch: 'chore/dependency-updates'
+          commit-message: "chore: update dependencies"
+          title: "Dependency Updates"
+          body: "Automated dependency updates"
+          branch: "chore/dependency-updates"
           delete-branch: true
 
   # Summary and Notifications
   summary:
     name: Pipeline Summary
     runs-on: ubuntu-latest
-    needs: [dependencies, code-quality, security, build-and-test, benchmark, integration, deploy]
+    needs:
+      [
+        dependencies,
+        code-quality,
+        security,
+        build-and-test,
+        benchmark,
+        integration,
+        deploy,
+      ]
     if: always()
     steps:
       - name: Check Job Status
@@ -424,7 +433,7 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          channel: '#ci-cd-notifications'
+          channel: "#ci-cd-notifications"
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

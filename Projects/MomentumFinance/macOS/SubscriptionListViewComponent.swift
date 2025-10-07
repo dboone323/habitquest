@@ -5,8 +5,8 @@
 //  Subscriptions list view components for macOS three-column layout
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 // This file contains the Subscriptions list view components
 // Extracted from MacOS_UI_Enhancements.swift to reduce file size

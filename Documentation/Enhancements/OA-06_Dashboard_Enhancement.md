@@ -13,6 +13,7 @@ Enhanced the existing Quantum Workspace dashboard to display comprehensive obser
 **Purpose**: Aggregates data from 7+ sources into a unified JSON file for dashboard consumption.
 
 **Key Features**:
+
 - **Agent Status Enhancement**: Transforms epoch timestamps to human-readable format ("5m ago", "2h ago", "3d ago")
 - **Workflow Tracking**: Fetches GitHub Actions workflow runs via `gh` CLI, groups by name with failure counts
 - **MCP Alert Aggregation**: Counts alerts from last 24 hours by severity level (critical/error/warning/info)
@@ -22,6 +23,7 @@ Enhanced the existing Quantum Workspace dashboard to display comprehensive obser
 - **Health Calculation**: Computes overall agent health percentage: `(running + idle) / total * 100`
 
 **Data Sources**:
+
 1. `Tools/agents/agent_status.json` - 28 tracked agents with status, PID, last_seen, tasks_completed
 2. GitHub API (via `gh run list`) - Workflow execution history
 3. `Tools/Automation/alerts/*.json` - MCP alert files from last 24h
@@ -31,6 +33,7 @@ Enhanced the existing Quantum Workspace dashboard to display comprehensive obser
 7. Directory scans - Pending validation reports and active AI reviews
 
 **Output Schema** (`Tools/dashboard_data.json`):
+
 ```json
 {
   "generated_at": "2025-10-06T15:40:13Z",
@@ -100,6 +103,7 @@ Enhanced the existing Quantum Workspace dashboard to display comprehensive obser
 ```
 
 **Technical Implementation**:
+
 - Uses `jq --argjson` for proper JSON composition (avoids string interpolation issues)
 - Compact JSON output (`-c` flag) for variables to prevent formatting issues
 - Handles missing data gracefully (returns `{}` or `[]` for unavailable sources)
@@ -110,8 +114,10 @@ Enhanced the existing Quantum Workspace dashboard to display comprehensive obser
 **New Architecture**: Complete rewrite with modern UI and comprehensive metric visualization.
 
 **Layout**:
+
 1. **Header Section**: Title, subtitle, action buttons (refresh, update metrics, view raw data)
 2. **Status Bar** (6 cards): Quick glance at system health
+
    - Agents: Running count, total, unresponsive count, health indicator
    - Workflows: Total tracked, recent failure count
    - MCP Server: Online/offline status, 24h alert count
@@ -128,8 +134,9 @@ Enhanced the existing Quantum Workspace dashboard to display comprehensive obser
    - **Task Summary** 📋: Total tasks, pending, active, per-agent breakdown (when available)
 
 **Key Features**:
+
 - **Auto-refresh**: Fetches `dashboard_data.json` every 30 seconds
-- **Color-coded indicators**: 
+- **Color-coded indicators**:
   - Green (healthy): >70% health, <85% disk
   - Orange (warning): 40-70% health, 85-95% disk
   - Red (critical): <40% health, >95% disk
@@ -143,6 +150,7 @@ Enhanced the existing Quantum Workspace dashboard to display comprehensive obser
 - **Empty states**: Friendly messages when no data available
 
 **JavaScript Functions**:
+
 - `loadDashboardData()`: Fetches JSON with cache-busting timestamp
 - `updateStatusBar()`: Renders 6 quick-status cards with color indicators
 - `updateAgentList()`: Displays sorted agent list with meta information
@@ -157,6 +165,7 @@ Enhanced the existing Quantum Workspace dashboard to display comprehensive obser
 ### 3. Testing Results
 
 **Dashboard Data Generation**:
+
 ```bash
 $ ./Tools/Automation/dashboard/generate_dashboard_data.sh
 
@@ -176,6 +185,7 @@ Tasks: 0 pending, 0 active
 ```
 
 **Validation**:
+
 - ✅ All 28 agents loaded with last_seen_human timestamps
 - ✅ Workflow data fetched from GitHub (2 workflows, 10 runs total)
 - ✅ MCP alerts aggregated (23 alerts: 0 critical, 2 error, 5 warning, 16 info)
@@ -184,12 +194,14 @@ Tasks: 0 pending, 0 active
 - ✅ JSON structure valid (8KB output)
 
 **Agent Status Sample**:
+
 - Running (13): agent_todo.sh (PID 6263, last seen 5m ago, 0 tasks)
 - Idle (2): simple_task_processor (PID 82747, last seen 2h ago)
 - Stopped (2): public_api_agent.sh, task_orchestrator.sh
 - Unresponsive (10): Various agents with stale timestamps (>1d ago)
 
 **Health Metrics**:
+
 - Overall health: 57% ((13 running + 3 idle) / 28 total)
 - System load: Available
 - Disk status: Warning (94% used, threshold 85%)
@@ -198,24 +210,29 @@ Tasks: 0 pending, 0 active
 ## File Changes
 
 ### New Files:
+
 1. `Tools/Automation/dashboard/generate_dashboard_data.sh` (258 lines) - Data aggregator script
 2. `Tools/Automation/dashboard/dashboard.html` (680+ lines) - Enhanced dashboard UI
 
 ### Modified Files:
+
 1. `Tools/dashboard.html` - Now symlink to `Automation/dashboard/dashboard.html`
 
 ### Generated Files:
+
 1. `Tools/dashboard_data.json` (8KB) - Unified metrics JSON (regenerated on each run)
 
 ## Usage
 
 ### Generate Dashboard Data:
+
 ```bash
 cd /path/to/Quantum-workspace
 ./Tools/Automation/dashboard/generate_dashboard_data.sh
 ```
 
 ### View Dashboard:
+
 ```bash
 open Tools/dashboard.html
 # or
@@ -223,11 +240,13 @@ open Tools/Automation/dashboard/dashboard.html
 ```
 
 ### Automated Updates:
+
 Can be integrated into cron or GitHub Actions workflow:
+
 ```yaml
 - name: Update Dashboard Data
   run: bash Tools/Automation/dashboard/generate_dashboard_data.sh
-  
+
 - name: Commit Dashboard Data
   run: |
     git add Tools/dashboard_data.json
@@ -237,17 +256,21 @@ Can be integrated into cron or GitHub Actions workflow:
 ## Integration Points
 
 ### With OA-06 Nightly Hygiene:
+
 The dashboard consumes data generated by OA-06 scripts:
+
 - `Tools/Automation/observability/watchdog.sh` - Health checks reflected in MCP/Ollama status
 - `Tools/Automation/observability/metrics_snapshot.sh` - Daily metrics displayed in "Daily Metrics" card
 - `Tools/Automation/alerts/*.json` - MCP alerts aggregated in 24h window
 
 ### With Agent Orchestration:
+
 - Reads `Tools/agents/agent_status.json` updated by running agents
 - Displays real-time agent health and task completion
 - Shows last-seen timestamps to identify stale agents
 
 ### With GitHub Actions:
+
 - Fetches workflow runs via `gh run list` command
 - Tracks CI/CD pipeline health and failure rates
 - Can be extended to show build times and test results
@@ -270,6 +293,7 @@ The dashboard consumes data generated by OA-06 scripts:
 ## Performance Considerations
 
 **Script Execution Time**: ~2-3 seconds
+
 - Agent status: <100ms (JSON read)
 - Workflows: ~1s (GitHub API call)
 - MCP alerts: ~500ms (directory scan)
@@ -277,11 +301,13 @@ The dashboard consumes data generated by OA-06 scripts:
 - Disk/metrics: <100ms (local reads)
 
 **Dashboard Load Time**: <200ms
+
 - Initial load: Fetches 8KB JSON
 - Auto-refresh: 30s interval
 - Rendering: Instant (no heavy computation)
 
 **Optimization Notes**:
+
 - Dashboard generator uses compact JSON (`-c` flag) to minimize file size
 - MCP alert scan limited to last 24 hours (prevents reading thousands of old alerts)
 - Workflow query limited to last 10 runs (balances freshness vs speed)
@@ -303,12 +329,14 @@ The dashboard consumes data generated by OA-06 scripts:
 ## Known Issues
 
 **Addressed**:
+
 - ✅ JSON composition fixed (was using string interpolation, now uses `jq --argjson`)
 - ✅ Disk usage calculation fixed (awk syntax error resolved)
 - ✅ Empty metrics handling (returns `{}` instead of error messages)
 - ✅ Workflow data validation (checks for valid JSON before processing)
 
 **Outstanding**:
+
 - MCP server detection method is basic (checks for `mcp` process name, could be more specific)
 - Per-agent task queue not yet implemented (structure prepared, needs agent enhancement)
 - `gh` CLI required for workflow data (falls back to `[]` if unavailable)
@@ -317,16 +345,19 @@ The dashboard consumes data generated by OA-06 scripts:
 ## Dependencies
 
 **Required**:
+
 - `bash` 4.0+ (script uses arrays and string manipulation)
 - `jq` (JSON processing - critical dependency)
 - `df`, `uptime`, `find`, `awk` (standard Unix utilities)
 
 **Optional**:
+
 - `gh` CLI (GitHub workflow tracking - graceful degradation if missing)
 - `curl` (Ollama status - returns unavailable if missing)
 - `pgrep` (MCP detection - uses alternative methods if unavailable)
 
 **Installation**:
+
 ```bash
 # macOS
 brew install jq gh
@@ -349,6 +380,7 @@ pacman -S jq github-cli
 ## Documentation Updates
 
 This implementation completes the OA-06 visualization layer. Related documentation:
+
 - `Documentation/Enhancements/OA-06_Implementation_Summary.md` - Core OA-06 scripts and workflow
 - `Tools/Automation/dashboard/README.md` - (To be created) Dashboard-specific documentation
 - `.github/copilot-instructions.md` - Updated with dashboard usage instructions
@@ -373,6 +405,6 @@ The unified dashboard serves as the single-pane-of-glass operational view for th
 
 ---
 
-*Generated: 2025-10-06*
-*Version: 2.1.0*
-*Component: OA-06 Dashboard Enhancement*
+_Generated: 2025-10-06_
+_Version: 2.1.0_
+_Component: OA-06 Dashboard Enhancement_

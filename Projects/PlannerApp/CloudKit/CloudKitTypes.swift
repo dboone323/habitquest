@@ -5,8 +5,8 @@
 //  Data types and enums for CloudKit integration
 //
 
-import Foundation
 import CloudKit
+import Foundation
 
 // MARK: - Sync Status
 

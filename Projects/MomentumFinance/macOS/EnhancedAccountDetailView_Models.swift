@@ -6,6 +6,7 @@ import SwiftData
 import SwiftUI
 
 #if os(macOS)
+
 // MARK: - Supporting Models for Enhanced Account Detail View
 
 /// Model for editing account information

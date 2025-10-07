@@ -7,6 +7,7 @@
 ## Problem
 
 The original OA-05 implementation used local Ollama models (`codellama:7b`) which:
+
 - Took 15+ minutes to process code reviews
 - Consumed 100% CPU and GPU resources
 - Made the Mac unusable during review execution
@@ -40,27 +41,32 @@ gpt-oss:120b-cloud           # 120B parameters, fast and efficient
 ### 1. Script Configuration (`ai_code_review.sh`)
 
 **Before:**
+
 ```bash
 OLLAMA_MODEL="${OLLAMA_MODEL:-codellama}"
 ```
 
 **After:**
+
 ```bash
 OLLAMA_MODEL="${OLLAMA_MODEL:-qwen3-coder:480b-cloud}"  # Use cloud model
 ```
 
 **Optimization:**
+
 - Reduced temperature: 0.3 → 0.2 (more focused, faster)
 - Reduced max tokens: 2000 → 1500 (sufficient for reviews, faster)
 
 ### 2. GitHub Workflow (`ai-code-review.yml`)
 
 **Before:**
+
 ```yaml
-ollama pull codellama  # 3.8GB download
+ollama pull codellama # 3.8GB download
 ```
 
 **After:**
+
 ```yaml
 ollama pull qwen3-coder:480b-cloud  # <1MB metadata
 env:
@@ -69,14 +75,14 @@ env:
 
 ## Performance Comparison
 
-| Metric | Local Model (codellama) | Cloud Model (qwen3-coder) |
-|--------|------------------------|---------------------------|
-| Execution Time | 15+ minutes | 2-5 minutes (est) |
-| CPU Usage | 100% all cores | ~5% (API calls only) |
-| GPU Usage | 100% | 0% |
-| Memory | 8GB+ | <100MB |
-| Model Size | 3.8GB download | <1MB metadata |
-| Usability | Mac unusable | Mac fully usable |
+| Metric         | Local Model (codellama) | Cloud Model (qwen3-coder) |
+| -------------- | ----------------------- | ------------------------- |
+| Execution Time | 15+ minutes             | 2-5 minutes (est)         |
+| CPU Usage      | 100% all cores          | ~5% (API calls only)      |
+| GPU Usage      | 100%                    | 0%                        |
+| Memory         | 8GB+                    | <100MB                    |
+| Model Size     | 3.8GB download          | <1MB metadata             |
+| Usability      | Mac unusable            | Mac fully usable          |
 
 ## Usage
 
@@ -108,6 +114,7 @@ export OLLAMA_MODEL="qwen3-coder:480b-cloud"      # Code-optimized (default)
 **Ollama Cloud Models are FREE** during beta period (as of October 2025).
 
 Future pricing will likely be:
+
 - Pay-per-token (typical: $0.001-0.01 per 1K tokens)
 - Free tier with rate limits
 - Much cheaper than running local GPU inference
@@ -125,6 +132,7 @@ Estimated cost per review: **$0.01-0.10** depending on diff size.
 ## Expected Results
 
 After cloud model implementation:
+
 - **Review time:** 2-5 minutes (down from 15+)
 - **CPU usage:** ~5% (down from 100%)
 - **Mac usability:** Fully usable during reviews

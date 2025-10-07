@@ -7,8 +7,8 @@
 //  Contains auto-analysis functionality
 //
 
-import Foundation
 import Combine
+import Foundation
 #if canImport(SwiftData)
 import SwiftData
 #endif
@@ -65,11 +65,11 @@ struct FinancialIntelligenceAutoAnalysis {
             }
 
             // Perform analysis using the analysis component
-            let _ = await self.analysisComponent.analyzeSpendingPatterns(payload.transactions)
-            let _ = await self.analysisComponent.analyzeSavingsOpportunities(payload.transactions, payload.accounts)
-            let _ = await self.analysisComponent.analyzeBudgetPerformance(payload.transactions, payload.budgets)
-            let _ = await self.analysisComponent.assessFinancialRisk(payload.transactions, payload.accounts)
-            let _ = await self.analysisComponent.generatePredictions(payload.transactions, payload.accounts)
+            _ = await self.analysisComponent.analyzeSpendingPatterns(payload.transactions)
+            _ = await self.analysisComponent.analyzeSavingsOpportunities(payload.transactions, payload.accounts)
+            _ = await self.analysisComponent.analyzeBudgetPerformance(payload.transactions, payload.budgets)
+            _ = await self.analysisComponent.assessFinancialRisk(payload.transactions, payload.accounts)
+            _ = await self.analysisComponent.generatePredictions(payload.transactions, payload.accounts)
 
         } catch {
             self.autoAnalysisErrorHandler(error)

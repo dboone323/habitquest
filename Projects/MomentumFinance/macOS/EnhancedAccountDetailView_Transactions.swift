@@ -14,22 +14,22 @@ struct TransactionRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(transaction.name)
+                Text(self.transaction.name)
                     .font(.headline)
 
-                Text(transaction.date.formatted(date: .abbreviated, time: .omitted))
+                Text(self.transaction.date.formatted(date: .abbreviated, time: .omitted))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
 
             Spacer()
 
-            Text(transaction.amount.formatted(.currency(code: transaction.currencyCode)))
-                .foregroundStyle(transaction.amount < 0 ? .red : .green)
+            Text(self.transaction.amount.formatted(.currency(code: self.transaction.currencyCode)))
+                .foregroundStyle(self.transaction.amount < 0 ? .red : .green)
                 .font(.subheadline)
         }
         .padding(.vertical, 4)
-        .tag(transaction.id)
+        .tag(self.transaction.id)
         .contextMenu {
             Button("View Details") {
                 // Navigate to transaction detail
@@ -40,15 +40,15 @@ struct TransactionRow: View {
             }
 
             Button(
-                "Mark as \(transaction.isReconciled ? "Unreconciled" : "Reconciled")"
+                "Mark as \(self.transaction.isReconciled ? "Unreconciled" : "Reconciled")"
             ) {
-                self.toggleStatus(transaction)
+                self.toggleStatus(self.transaction)
             }
 
             Divider()
 
             Button("Delete", role: .destructive) {
-                self.deleteTransaction(transaction)
+                self.deleteTransaction(self.transaction)
             }
         }
     }

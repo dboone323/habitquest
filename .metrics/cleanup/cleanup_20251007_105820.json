@@ -1,0 +1,19 @@
+{
+  "timestamp": 1759852745,
+  "date": "2025-10-07T10:59:05-05:00",
+  "workspace": {
+    "size_kb": 7709652,
+    "size_mb": 7528,
+    "file_count": 313781,
+    "directory_count": 89227
+  },
+  "cleanup_actions": {
+    "logs_rotated": true,
+    "old_logs_cleaned": true,
+    "build_artifacts_cleaned": true,
+    "temp_files_cleaned": true,
+    "derived_data_cleaned": true,
+    "package_caches_cleaned": true,
+    "old_metrics_cleaned": true
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "agents": {
+    "build_agent": {
+      "status": "unknown",
+      "pid": null
+    },
+    "debug_agent": {
+      "status": "unknown",
+      "pid": null
+    },
+    "codegen_agent": {
+      "status": "unknown",
+      "pid": null
+    },
+    "uiux_agent": {
+      "status": "unknown",
+      "pid": null
+    },
+    "testing_agent": {
+      "status": "unknown",
+      "pid": null
+    },
+    "security_agent": {
+      "status": "unknown",
+      "pid": null
+    },
+    "performance_monitor": {
+      "status": "stopped",
+      "pid": 7541
+    }
+  },
+  "last_update": 1759849235
+}

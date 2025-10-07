@@ -14,7 +14,7 @@ func runUITestSimulations() {
 
         // Simulate UI display logic
         let displayItems = transactions.map { transaction in
-            return [
+            [
                 "title": transaction.title,
                 "amount": transaction.formattedAmount,
                 "date": transaction.formattedDate,
@@ -69,7 +69,7 @@ func runUITestSimulations() {
 
         // Simulate category budget display
         let categorySummaries = categories.map { category in
-            return [
+            [
                 "name": category.name,
                 "totalSpent": String(format: "$%.2f", category.totalAmount),
                 "transactionCount": String(category.transactions.count),

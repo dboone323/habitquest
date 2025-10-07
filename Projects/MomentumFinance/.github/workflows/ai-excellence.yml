@@ -1,10 +1,10 @@
-name: "AI Excellence - Neural Development System"
+name: 'AI Excellence - Neural Development System'
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   schedule:
     # Run AI optimization every day at 3 AM
     - cron: '0 3 * * *'
@@ -21,12 +21,12 @@ on:
           - deep_learning
 
 env:
-  AI_EXCELLENCE_VERSION: "Phase 4 - Neural Enhanced"
-  PYTHON_VERSION: "3.9"
+  AI_EXCELLENCE_VERSION: 'Phase 4 - Neural Enhanced'
+  PYTHON_VERSION: '3.9'
 
 jobs:
   ai-neural-analysis:
-    name: "🧠 Neural Intelligence Analysis"
+    name: '🧠 Neural Intelligence Analysis'
     runs-on: macos-latest
     permissions:
       contents: read
@@ -104,7 +104,7 @@ jobs:
           path: ai_logs/
 
   ai-self-healing:
-    name: "🔧 AI Self-Healing System"
+    name: '🔧 AI Self-Healing System'
     runs-on: macos-latest
     needs: ai-neural-analysis
     if: always()
@@ -142,7 +142,7 @@ jobs:
           echo "Fix validation completed"
 
   ai-optimization:
-    name: "⚡ AI Performance Optimization"
+    name: '⚡ AI Performance Optimization'
     runs-on: macos-latest
     needs: [ai-neural-analysis, ai-self-healing]
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
@@ -179,7 +179,7 @@ jobs:
           path: optimization_report.md
 
   ai-deployment-readiness:
-    name: "🚀 AI Deployment Readiness Check"
+    name: '🚀 AI Deployment Readiness Check'
     runs-on: macos-latest
     needs: [ai-neural-analysis, ai-self-healing, ai-optimization]
     if: github.ref == 'refs/heads/main'

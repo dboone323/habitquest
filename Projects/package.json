@@ -26,5 +26,8 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "overrides": {
+    "tmp": "^0.2.5"
   }
 }

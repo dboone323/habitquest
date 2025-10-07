@@ -4,6 +4,7 @@
 import Foundation
 
 #if os(macOS)
+
 // MARK: - Extensions for Enhanced Account Detail View
 
 // Extension to add ordinal suffix to numbers

@@ -66,7 +66,7 @@ public struct Achievement: Codable, Identifiable {
 }
 
 /// Static definitions for all game achievements
-public struct AchievementDefinitions {
+public enum AchievementDefinitions {
     /// All available achievements in the game
     public static let allAchievements: [Achievement] = [
         // Score-based achievements
@@ -223,7 +223,7 @@ public struct AchievementDefinitions {
     /// Creates a dictionary of achievements keyed by ID
     public static func createAchievementDictionary() -> [String: Achievement] {
         var achievements: [String: Achievement] = [:]
-        for achievement in allAchievements {
+        for achievement in self.allAchievements {
             achievements[achievement.id] = achievement
         }
         return achievements
@@ -231,41 +231,41 @@ public struct AchievementDefinitions {
 
     /// Gets achievements by type
     public static func getAchievementsByType(_ type: Achievement.AchievementType) -> [Achievement] {
-        allAchievements.filter { $0.type == type }
+        self.allAchievements.filter { $0.type == type }
     }
 
     /// Gets score-based achievements sorted by target value
     public static func getScoreAchievements() -> [Achievement] {
-        getAchievementsByType(.scoreBased).sorted { $0.targetValue < $1.targetValue }
+        self.getAchievementsByType(.scoreBased).sorted { $0.targetValue < $1.targetValue }
     }
 
     /// Gets time-based achievements sorted by target value
     public static func getTimeAchievements() -> [Achievement] {
-        getAchievementsByType(.timeBased).sorted { $0.targetValue < $1.targetValue }
+        self.getAchievementsByType(.timeBased).sorted { $0.targetValue < $1.targetValue }
     }
 
     /// Gets difficulty-based achievements sorted by target value
     public static func getDifficultyAchievements() -> [Achievement] {
-        allAchievements.filter { $0.id.hasPrefix("level_") }.sorted { $0.targetValue < $1.targetValue }
+        self.allAchievements.filter { $0.id.hasPrefix("level_") }.sorted { $0.targetValue < $1.targetValue }
     }
 
     /// Gets streak-based achievements sorted by target value
     public static func getStreakAchievements() -> [Achievement] {
-        getAchievementsByType(.streakBased).sorted { $0.targetValue < $1.targetValue }
+        self.getAchievementsByType(.streakBased).sorted { $0.targetValue < $1.targetValue }
     }
 
     /// Gets collection-based achievements sorted by target value
     public static func getCollectionAchievements() -> [Achievement] {
-        getAchievementsByType(.collectionBased).sorted { $0.targetValue < $1.targetValue }
+        self.getAchievementsByType(.collectionBased).sorted { $0.targetValue < $1.targetValue }
     }
 
     /// Gets special achievements
     public static func getSpecialAchievements() -> [Achievement] {
-        getAchievementsByType(.special)
+        self.getAchievementsByType(.special)
     }
 
     /// Gets hidden achievements
     public static func getHiddenAchievements() -> [Achievement] {
-        allAchievements.filter(\.isHidden)
+        self.allAchievements.filter(\.isHidden)
     }
 }

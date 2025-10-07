@@ -15,6 +15,7 @@ Implemented a comprehensive continuous validation system that integrates SwiftLi
 **Created:** `Tools/Automation/continuous_validation.sh`
 
 **Features:**
+
 - SwiftLint integration with error/warning counting
 - SwiftFormat lint mode for read-only validation
 - Build validation via consolidated_build.sh with xcodebuild fallback
@@ -24,6 +25,7 @@ Implemented a comprehensive continuous validation system that integrates SwiftLi
 - Color-coded console output
 
 **Functions:**
+
 ```bash
 validate_project()   # Run all checks on a single project
 validate_all()       # Validate all projects sequentially
@@ -33,6 +35,7 @@ print_validation_summary()   # Display recent results
 ```
 
 **Usage Examples:**
+
 ```bash
 # Single project validation
 ./continuous_validation.sh validate CodingReviewer
@@ -54,21 +57,25 @@ print_validation_summary()   # Display recent results
 **Added Tasks:**
 
 1. **Validate Current Project**
+
    - Interactive project picker
    - Runs validation on selected project
    - Shows results in dedicated panel
 
 2. **Validate All Projects**
+
    - Validates all 5 projects
    - Sequential execution
    - Consolidated report
 
 3. **Watch for Changes (Auto-validate)**
+
    - Background task using fswatch
    - Auto-triggers on Swift file changes
    - Persistent monitoring session
 
 4. **View Validation Reports**
+
    - Displays recent validation results
    - Reads from validation_reports/ directory
 
@@ -77,6 +84,7 @@ print_validation_summary()   # Display recent results
    - Integrated with existing lint system
 
 **Task Configuration:**
+
 ```json
 {
   "label": "Validate Current Project",
@@ -88,6 +96,7 @@ print_validation_summary()   # Display recent results
 ```
 
 **Input Picker:**
+
 - CodingReviewer
 - PlannerApp
 - AvoidObstaclesGame
@@ -99,6 +108,7 @@ print_validation_summary()   # Display recent results
 **Created:** `.github/workflows/continuous-validation.yml`
 
 **Triggers:**
+
 - Push to main/develop (Swift file changes only)
 - Pull requests to main/develop
 - Manual workflow_dispatch with project selection
@@ -106,6 +116,7 @@ print_validation_summary()   # Display recent results
 **Jobs:**
 
 1. **validate**
+
    - Runs on macos-latest
    - Installs SwiftLint + SwiftFormat via Homebrew
    - Executes validation script
@@ -121,6 +132,7 @@ print_validation_summary()   # Display recent results
 **Artifact Retention:** 30 days
 
 **Workflow Features:**
+
 - Conditional execution based on input
 - Artifact upload for debugging
 - MCP integration for dashboard visibility
@@ -139,6 +151,7 @@ print_validation_summary()   # Display recent results
 **Remaining Tests:**
 
 1. ⏳ Watch mode functionality
+
    - Install fswatch if needed
    - Start watch mode in background
    - Trigger validation by editing Swift file
@@ -146,12 +159,14 @@ print_validation_summary()   # Display recent results
    - Check debouncing behavior
 
 2. ⏳ MCP alert publishing
+
    - Ensure MCP server is running
    - Trigger validation
    - Verify alert appears in /alerts endpoint
    - Check dashboard displays validation status
 
 3. ⏳ consolidated_build.sh integration
+
    - Test fallback to xcodebuild
    - Verify JSON output parsing
    - Check multi-platform build validation
@@ -175,6 +190,7 @@ print_validation_summary()   # Display recent results
 **Remaining Integration:**
 
 1. ⏳ Update existing guides
+
    - Link from master README
    - Update DEVELOPER_TOOLS.md
    - Reference in CI_CD_GUIDE.md
@@ -224,6 +240,7 @@ print_validation_summary()   # Display recent results
 **Response:** Alert ID and persistence confirmation
 
 **Dashboard Display:**
+
 - Color-coded status badges
 - Expandable details per check
 - Historical alert list
@@ -232,11 +249,13 @@ print_validation_summary()   # Display recent results
 ### consolidated_build.sh Integration
 
 **Invocation:**
+
 ```bash
 cd Projects && ./scripts/consolidated_build.sh --json
 ```
 
 **Benefits:**
+
 - Multi-platform validation (iOS + macOS)
 - Consistent with existing build pipeline
 - Detailed build metadata in JSON
@@ -269,6 +288,7 @@ Generated Artifacts:
 **Command:** `./continuous_validation.sh validate CodingReviewer`
 
 **Results:**
+
 - SwiftLint: ❌ Failed (18 errors, 821 warnings)
 - SwiftFormat: ✅ Passed
 - Build: ❌ Failed
@@ -276,6 +296,7 @@ Generated Artifacts:
 **Report Location:** `validation_reports/CodingReviewer_validation_20251005_185143.json`
 
 **Console Output:**
+
 ```
 [AI-AUTOMATION] Running validation for CodingReviewer...
 [AI-AUTOMATION] Running SwiftLint on CodingReviewer...
@@ -292,20 +313,24 @@ Generated Artifacts:
 ## Known Issues & Limitations
 
 1. **MCP Server Dependency**
+
    - Alert publishing requires MCP server running
    - Currently fails silently if server unavailable
    - Could add health check before publishing
 
 2. **Build Timeout**
+
    - 180-second timeout may be too short for large projects
    - Consider making configurable via environment variable
 
 3. **Watch Mode Dependencies**
+
    - Requires fswatch installation (not in default macOS)
    - Should document installation clearly
    - Could add auto-install prompt
 
 4. **CI Performance**
+
    - Full validation of all projects may be slow
    - Consider parallelization in future
    - Smart diff-based project selection
@@ -327,21 +352,25 @@ Generated Artifacts:
 ### Future Enhancements
 
 1. **Code Coverage Integration**
+
    - Parse xcresult bundles
    - Track coverage trends
    - Set coverage gates per project
 
 2. **Performance Regression Detection**
+
    - Track build times
    - Alert on significant increases
    - Historical trend charts
 
 3. **Automated Fix Suggestions**
+
    - Use SwiftLint --fix for auto-fixes
    - Run SwiftFormat --format on validation
    - Create PR with fixes
 
 4. **Smart Validation**
+
    - Detect changed projects via git diff
    - Only validate affected projects
    - Skip validation for doc-only changes
@@ -370,11 +399,13 @@ OA-06: Observability & Hygiene (Not Started)
 ```
 
 **Dependencies:**
+
 - Requires OA-01 health monitoring for alert framework
 - Uses OA-02 MCP endpoints for publishing
 - Complements OA-03 by validating generated code
 
 **Enables:**
+
 - OA-05: Validation reports feed into AI review decisions
 - OA-06: Validation metrics for observability dashboard
 
@@ -412,6 +443,7 @@ export WATCH_DEBOUNCE=5
 ### SwiftLint Configuration
 
 Each project has its own `.swiftlint.yml`:
+
 - `Projects/CodingReviewer/.swiftlint.yml`
 - `Projects/PlannerApp/.swiftlint.yml`
 - etc.
@@ -423,17 +455,20 @@ Workspace-level: `.swiftformat` in repo root
 ## Maintenance Procedures
 
 ### Daily
+
 - Review validation reports in VS Code
 - Address critical errors (build failures)
 - Monitor CI workflow status
 
 ### Weekly
+
 - Review accumulated warnings
 - Update SwiftLint rules as needed
 - Clean up old validation reports
 - Check MCP alert history
 
 ### Monthly
+
 - Review validation trends
 - Update quality gates if needed
 - Refine watch mode filters
@@ -446,6 +481,7 @@ Workspace-level: `.swiftformat` in repo root
 **Symptoms:** Script exits immediately, no reports generated
 
 **Checks:**
+
 1. Verify script is executable: `ls -la Tools/Automation/continuous_validation.sh`
 2. Check workspace root detection: `echo $WORKSPACE_ROOT`
 3. Verify project exists: `ls Projects/CodingReviewer`
@@ -465,6 +501,7 @@ Workspace-level: `.swiftformat` in repo root
 **Symptoms:** "Build check failed" after 180 seconds
 
 **Checks:**
+
 1. Review build logs: `xcodebuild -project ... -showBuildSettings`
 2. Check simulator availability: `xcrun simctl list`
 
@@ -475,6 +512,7 @@ Workspace-level: `.swiftformat` in repo root
 **Symptoms:** Validation succeeds but no alerts in dashboard
 
 **Checks:**
+
 1. MCP server running: `curl http://localhost:5005/status`
 2. Network connectivity: `nc -zv localhost 5005`
 3. Alert endpoint: `curl -X POST http://localhost:5005/alerts -H "Content-Type: application/json" -d '{"test":"test"}'`
@@ -486,6 +524,7 @@ Workspace-level: `.swiftformat` in repo root
 **Symptoms:** File changes don't trigger validation
 
 **Checks:**
+
 1. fswatch installed: `which fswatch`
 2. fswatch running: `ps aux | grep fswatch`
 3. File paths correct: `ls -la Projects/ Shared/`
@@ -508,6 +547,7 @@ Workspace-level: `.swiftformat` in repo root
 ### Validation Coverage
 
 - **Projects Supported:** 5/5 (100%)
+
   - CodingReviewer ✓
   - PlannerApp ✓
   - AvoidObstaclesGame ✓
@@ -515,6 +555,7 @@ Workspace-level: `.swiftformat` in repo root
   - HabitQuest ✓
 
 - **Check Types:** 3/3 (100%)
+
   - SwiftLint ✓
   - SwiftFormat ✓
   - Build ✓

@@ -67,7 +67,7 @@ public class AchievementDataManager {
 
         // Save unlocked achievements
         let unlockedIds = achievements.values.filter(\.isUnlocked).map(\.id)
-        defaults.set(unlockedIds, forKey: unlockedAchievementsKey)
+        defaults.set(unlockedIds, forKey: self.unlockedAchievementsKey)
 
         // Save unlock dates
         for achievement in achievements.values where achievement.isUnlocked {
@@ -81,7 +81,7 @@ public class AchievementDataManager {
         for achievement in achievements.values where !achievement.isUnlocked && achievement.currentValue > 0 {
             progressData[achievement.id] = achievement.currentValue
         }
-        defaults.set(progressData, forKey: achievementProgressKey)
+        defaults.set(progressData, forKey: self.achievementProgressKey)
 
         defaults.synchronize()
     }
@@ -105,7 +105,7 @@ public class AchievementDataManager {
         updatedAchievements[id] = achievement
 
         // Save progress
-        saveProgress(for: updatedAchievements)
+        self.saveProgress(for: updatedAchievements)
 
         return updatedAchievements
     }
@@ -127,7 +127,7 @@ public class AchievementDataManager {
         updatedAchievements[id] = achievement
 
         // Save progress
-        saveProgress(for: updatedAchievements)
+        self.saveProgress(for: updatedAchievements)
 
         return updatedAchievements
     }
@@ -150,7 +150,7 @@ public class AchievementDataManager {
         }
 
         // Save reset progress
-        saveProgress(for: resetAchievements)
+        self.saveProgress(for: resetAchievements)
 
         return resetAchievements
     }
@@ -162,10 +162,10 @@ public class AchievementDataManager {
         let defaults = UserDefaults.standard
 
         // Remove unlocked achievements
-        defaults.removeObject(forKey: unlockedAchievementsKey)
+        defaults.removeObject(forKey: self.unlockedAchievementsKey)
 
         // Remove progress data
-        defaults.removeObject(forKey: achievementProgressKey)
+        defaults.removeObject(forKey: self.achievementProgressKey)
 
         // Remove all unlock dates
         let allKeys = defaults.dictionaryRepresentation().keys

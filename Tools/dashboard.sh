@@ -9,16 +9,16 @@ echo "======================================"
 
 # Ensure dashboard is running
 if [[ -x "${DASHBOARD_SCRIPT}" ]]; then
-    "${DASHBOARD_SCRIPT}" start
-    echo ""
-    echo "🌐 Dashboard URL: http://localhost:8004/dashboard"
-    echo "📊 API Endpoint: http://localhost:8004/api/dashboard-data"
-    echo ""
-    echo "💡 Available commands:"
-    echo "   ${DASHBOARD_SCRIPT} status   - Check dashboard status"
-    echo "   ${DASHBOARD_SCRIPT} restart  - Restart dashboard"
-    echo "   ${DASHBOARD_SCRIPT} stop     - Stop dashboard"
+  "${DASHBOARD_SCRIPT}" start
+  echo ""
+  echo "🌐 Dashboard URL: http://localhost:8004/dashboard"
+  echo "📊 API Endpoint: http://localhost:8004/api/dashboard-data"
+  echo ""
+  echo "💡 Available commands:"
+  echo "   ${DASHBOARD_SCRIPT} status   - Check dashboard status"
+  echo "   ${DASHBOARD_SCRIPT} restart  - Restart dashboard"
+  echo "   ${DASHBOARD_SCRIPT} stop     - Stop dashboard"
 else
-    echo "❌ Dashboard script not found at ${DASHBOARD_SCRIPT}"
-    exit 1
+  echo "❌ Dashboard script not found at ${DASHBOARD_SCRIPT}"
+  exit 1
 fi

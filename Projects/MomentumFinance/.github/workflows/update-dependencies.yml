@@ -2,12 +2,12 @@ name: Update Dependencies
 
 on:
   schedule:
-    - cron: '0 2 * * 1'  # Weekly on Monday at 2 AM
-  workflow_dispatch:  # Allow manual trigger
+    - cron: '0 2 * * 1' # Weekly on Monday at 2 AM
+  workflow_dispatch: # Allow manual trigger
 
 jobs:
   update-dependencies:
-    name: "Update Swift Package Dependencies"
+    name: 'Update Swift Package Dependencies'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -59,7 +59,7 @@ jobs:
           delete-branch: true
 
   update-homebrew:
-    name: "Update Homebrew Dependencies"
+    name: 'Update Homebrew Dependencies'
     runs-on: macos-latest
     if: github.event_name == 'workflow_dispatch'
     steps:
@@ -89,7 +89,7 @@ jobs:
           path: brew_outdated.txt
 
   security-audit:
-    name: "Security Audit of Dependencies"
+    name: 'Security Audit of Dependencies'
     runs-on: macos-latest
     needs: update-dependencies
     steps:

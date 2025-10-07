@@ -1,4 +1,5 @@
 # AI Code Review Guide
+
 ## Using Ollama-Powered AI Reviews in Your Workflow
 
 **Last Updated:** 2025-10-05  
@@ -21,14 +22,14 @@ The AI Code Review system uses **Ollama** (free, local AI models) to automatical
 
 ### How Is It Different from Traditional Linters?
 
-| Feature | Traditional Linter | AI Code Review |
-|---------|-------------------|----------------|
-| **Rule-based** | ✅ Strict patterns | ❌ Flexible analysis |
-| **Context-aware** | ❌ Limited | ✅ Understands intent |
-| **Security analysis** | ⚠️ Basic | ✅ Comprehensive |
-| **Performance insights** | ❌ None | ✅ Identifies bottlenecks |
-| **Business logic bugs** | ❌ Cannot detect | ✅ Often catches |
-| **False positives** | ⚠️ Common | ⚠️ Fewer but possible |
+| Feature                  | Traditional Linter | AI Code Review            |
+| ------------------------ | ------------------ | ------------------------- |
+| **Rule-based**           | ✅ Strict patterns | ❌ Flexible analysis      |
+| **Context-aware**        | ❌ Limited         | ✅ Understands intent     |
+| **Security analysis**    | ⚠️ Basic           | ✅ Comprehensive          |
+| **Performance insights** | ❌ None            | ✅ Identifies bottlenecks |
+| **Business logic bugs**  | ❌ Cannot detect   | ✅ Often catches          |
+| **False positives**      | ⚠️ Common          | ⚠️ Fewer but possible     |
 
 **Best used together:** AI review + SwiftLint + SwiftFormat = comprehensive quality assurance
 
@@ -39,18 +40,20 @@ The AI Code Review system uses **Ollama** (free, local AI models) to automatical
 ### Prerequisites
 
 1. **Ollama Installed** (for local development)
+
    ```bash
    # macOS
    brew install ollama
-   
+
    # Start service
    ollama serve
-   
+
    # Pull required model (first time only)
    ollama pull codellama
    ```
 
 2. **MCP Server Running** (for alerts)
+
    ```bash
    # Start MCP server
    python3 Tools/Automation/mcp_server.py &
@@ -95,9 +98,11 @@ The AI Code Review system uses **Ollama** (free, local AI models) to automatical
 # 🤖 AI Code Review
 
 ## Summary
+
 Brief overview of changes and overall assessment
 
 ## Severity Assessment
+
 - Critical Issues: 0
 - Major Issues: 2
 - Minor Issues: 5
@@ -105,38 +110,47 @@ Brief overview of changes and overall assessment
 ## Detailed Findings
 
 ### Critical Issues
+
 [Blocks merge - must fix]
+
 - Security vulnerability in authentication
 - Unhandled error causing crash
 
 ### Major Issues
+
 [Should fix before merge]
+
 - Performance bottleneck in loop
 - Missing error handling
 
 ### Minor Issues / Suggestions
+
 [Nice to have]
+
 - Variable naming improvement
 - Code simplification opportunity
 
 ## Recommendations
+
 Key actionable items to address
 
 ## Approval Status
+
 [APPROVED | NEEDS_CHANGES | BLOCKED]
 ```
 
 ### Approval Status Meanings
 
-| Status | Meaning | Action Required |
-|--------|---------|----------------|
-| **APPROVED** ✅ | No major issues, safe to merge | None - merge when ready |
-| **NEEDS_CHANGES** ⚠️ | Issues found but not critical | Review and address suggestions |
-| **BLOCKED** ❌ | Critical issues must be fixed | Fix issues before merge is allowed |
+| Status               | Meaning                        | Action Required                    |
+| -------------------- | ------------------------------ | ---------------------------------- |
+| **APPROVED** ✅      | No major issues, safe to merge | None - merge when ready            |
+| **NEEDS_CHANGES** ⚠️ | Issues found but not critical  | Review and address suggestions     |
+| **BLOCKED** ❌       | Critical issues must be fixed  | Fix issues before merge is allowed |
 
 ### Issue Severity Levels
 
 #### Critical 🔴
+
 - **Security vulnerabilities** (data exposure, injection attacks)
 - **Crashes or undefined behavior**
 - **Data loss or corruption risks**
@@ -145,6 +159,7 @@ Key actionable items to address
 **Action:** MUST fix before merge
 
 #### Major 🟠
+
 - **Performance bottlenecks**
 - **Missing error handling**
 - **Code quality violations**
@@ -153,6 +168,7 @@ Key actionable items to address
 **Action:** SHOULD fix before merge
 
 #### Minor 🟡
+
 - **Style inconsistencies**
 - **Simplification opportunities**
 - **Documentation improvements**
@@ -170,6 +186,7 @@ Key actionable items to address
 ### Critical Issues
 
 **Security Vulnerability: Unvalidated User Input**
+
 - Location: `LoginViewController.swift:45`
 - Issue: User password is used directly in SQL query without sanitization
 - Risk: SQL injection attack possible
@@ -177,6 +194,7 @@ Key actionable items to address
 ```
 
 **How to Address:**
+
 ```swift
 // ❌ Before (vulnerable)
 let query = "SELECT * FROM users WHERE password = '\(userInput)'"
@@ -192,6 +210,7 @@ statement.bind(userInput)
 ### Major Issues
 
 **Performance: Inefficient Array Lookup**
+
 - Location: `DataProcessor.swift:120`
 - Issue: Using `contains()` in loop - O(n²) complexity
 - Impact: Slow for large datasets
@@ -199,6 +218,7 @@ statement.bind(userInput)
 ```
 
 **How to Address:**
+
 ```swift
 // ❌ Before (slow)
 for item in largeArray {
@@ -218,12 +238,14 @@ for item in largeArray {
 ### Minor Issues
 
 **Code Quality: Complex Nested Logic**
+
 - Location: `ValidationHelper.swift:67`
 - Issue: 4 levels of nesting, difficult to follow
 - Suggestion: Extract validation logic to separate methods
 ```
 
 **How to Address:**
+
 ```swift
 // ❌ Before (complex)
 func validate() -> Bool {
@@ -320,6 +342,7 @@ The Merge Guard enforces safety requirements before allowing PR merges:
 ### Interpreting AI Feedback
 
 ✅ **DO:**
+
 - Read the full review carefully
 - Understand WHY issues are flagged
 - Use AI suggestions as learning opportunities
@@ -327,6 +350,7 @@ The Merge Guard enforces safety requirements before allowing PR merges:
 - Run local AI review before pushing
 
 ❌ **DON'T:**
+
 - Ignore critical issues
 - Blindly apply all suggestions
 - Assume AI is always right
@@ -343,6 +367,7 @@ AI reviews are powerful but not perfect. If you believe AI flagged something inc
 4. **Improve:** File feedback to improve AI prompts
 
 **Example PR Comment:**
+
 ```markdown
 @reviewer The AI flagged this as a performance issue, but I've benchmarked
 it and it's actually faster than the suggested alternative for our typical
@@ -352,6 +377,7 @@ dataset size (< 100 items). Keeping current implementation.
 ### Maximizing AI Review Value
 
 #### Write Clear Code
+
 ```swift
 // ❌ AI struggles with this
 func p(d: [String: Any]) -> Bool {
@@ -366,6 +392,7 @@ func isValidConfiguration(data: [String: Any]) -> Bool {
 ```
 
 #### Add Context Comments
+
 ```swift
 // ❌ AI may flag this as inefficient
 for item in items {
@@ -381,6 +408,7 @@ for item in items {
 ```
 
 #### Split Large Changes
+
 ```
 # ❌ One huge PR
 git diff main...feature
@@ -454,6 +482,7 @@ export STRICT_MODE="false"                      # Enable strict mode
 ### Workflow Customization
 
 Edit `.github/workflows/ai-code-review.yml` to:
+
 - Change trigger paths
 - Adjust model selection
 - Modify strict mode default
@@ -550,16 +579,19 @@ curl http://localhost:5005/status
 ## 📚 Additional Resources
 
 ### Documentation
+
 - **OA-05_Implementation_Summary.md**: Technical details
 - **GITHUB_TOKEN_SCOPE_ANALYSIS.md**: Security info
 - **Ollama_Autonomy_Issue_List.md**: System roadmap
 
 ### Scripts
+
 - `Tools/Automation/ai_code_review.sh`: AI review script
 - `Tools/Automation/merge_guard.sh`: Safety checks
 - `Tools/Automation/continuous_validation.sh`: Validation runner
 
 ### Workflows
+
 - `.github/workflows/ai-code-review.yml`: PR automation
 - `.github/workflows/continuous-validation.yml`: Validation CI
 
@@ -591,18 +623,18 @@ curl http://localhost:5005/status
 
 ### Exit Codes
 
-| Code | Meaning |
-|------|---------|
-| 0 | Success / Approved |
-| 1 | Blocked / Failed |
+| Code | Meaning            |
+| ---- | ------------------ |
+| 0    | Success / Approved |
+| 1    | Blocked / Failed   |
 
 ### Status Meanings
 
-| Status | Can Merge? |
-|--------|-----------|
-| APPROVED ✅ | Yes |
+| Status           | Can Merge?        |
+| ---------------- | ----------------- |
+| APPROVED ✅      | Yes               |
 | NEEDS_CHANGES ⚠️ | Yes (with review) |
-| BLOCKED ❌ | No |
+| BLOCKED ❌       | No                |
 
 ---
 

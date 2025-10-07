@@ -211,8 +211,12 @@ extension Features.Subscriptions.EnhancedSubscriptionDetailView {
                             HStack {
                                 Text("Amount:")
                                     .frame(width: 100, alignment: .leading)
-                                TextField("Monthly Amount", value: editedSubscription?.amount ?? 0, format: .currency(code: editedSubscription?.currencyCode ?? "USD"))
-                                    .textFieldStyle(.roundedBorder)
+                                TextField(
+                                    "Monthly Amount",
+                                    value: editedSubscription?.amount ?? 0,
+                                    format: .currency(code: editedSubscription?.currencyCode ?? "USD")
+                                )
+                                .textFieldStyle(.roundedBorder)
                             }
 
                             HStack {
@@ -252,8 +256,12 @@ extension Features.Subscriptions.EnhancedSubscriptionDetailView {
                             HStack {
                                 Text("Next Payment:")
                                     .frame(width: 100, alignment: .leading)
-                                DatePicker("Next Payment", selection: editedSubscription?.nextPaymentDate ?? Date(), displayedComponents: .date)
-                                    .datePickerStyle(.compact)
+                                DatePicker(
+                                    "Next Payment",
+                                    selection: editedSubscription?.nextPaymentDate ?? Date(),
+                                    displayedComponents: .date
+                                )
+                                .datePickerStyle(.compact)
                             }
                         }
                         .padding()
@@ -278,7 +286,7 @@ extension Features.Subscriptions.EnhancedSubscriptionDetailView {
                     GroupBox("Notes") {
                         TextEditor(text: editedSubscription?.notes ?? "")
                             .frame(height: 100)
-                        .padding()
+                            .padding()
                     }
                 }
 

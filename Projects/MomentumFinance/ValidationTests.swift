@@ -42,12 +42,12 @@ func runValidationTests() {
     runTest("testVeryLargeAmount") {
         let transaction = FinancialTransaction(
             title: "Lottery Win",
-            amount: 1000000.0,
+            amount: 1_000_000.0,
             date: Date(),
             transactionType: .income
         )
 
-        assert(transaction.amount == 1000000.0)
+        assert(transaction.amount == 1_000_000.0)
         assert(transaction.formattedAmount.contains("$1,000,000.00"))
     }
 

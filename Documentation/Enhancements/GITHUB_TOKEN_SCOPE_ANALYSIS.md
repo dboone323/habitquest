@@ -1,9 +1,11 @@
 # GitHub Token Scope Analysis for OA-05
+
 ## AI Review & Guarded Merge Automation
 
 ### Current Permissions in ai-code-review.yml
 
 The workflow currently uses:
+
 ```yaml
 permissions:
   contents: read
@@ -17,12 +19,14 @@ permissions:
 #### ✅ Sufficient Permissions for Current Features
 
 1. **contents: read**
+
    - ✅ Checkout code
    - ✅ Read files for diff analysis
    - ✅ Access repository content
    - ❌ Cannot merge PRs (requires write)
 
 2. **pull-requests: write**
+
    - ✅ Post review comments
    - ✅ Update PR labels
    - ✅ Request reviews
@@ -30,6 +34,7 @@ permissions:
    - ❌ Cannot merge (different permission)
 
 3. **checks: write**
+
    - ✅ Create check runs
    - ✅ Update check run status
    - ✅ Add annotations to code
@@ -44,24 +49,28 @@ permissions:
 To enable automated PR merging, we need **ONE OF**:
 
 #### Option 1: Using GITHUB_TOKEN (Recommended for security)
+
 ```yaml
 permissions:
-  contents: write      # Required for merge operation
+  contents: write # Required for merge operation
   pull-requests: write # Already have
 ```
 
 **Limitations:**
+
 - Cannot trigger subsequent workflows (by GitHub design)
 - Some branch protection rules may block automation
 - Safer as it's scoped to the workflow run
 
 #### Option 2: Using Personal Access Token (PAT)
+
 ```yaml
 env:
   GH_TOKEN: ${{ secrets.PAT_TOKEN }}
 ```
 
 **Requirements:**
+
 - Create PAT with `repo` scope (full repository access)
 - Add as repository secret
 - More powerful but higher security risk
@@ -70,15 +79,16 @@ env:
 
 #### Risk Analysis
 
-| Approach | Security Risk | Capability | Recommendation |
-|----------|---------------|------------|----------------|
-| Status checks only | ⬛️ None | Block merges | ✅ Current (safe) |
-| contents: write | 🟨 Low | Auto-merge | ✅ Safe with guards |
-| PAT token | 🟥 High | Full automation | ⚠️ Use sparingly |
+| Approach           | Security Risk | Capability      | Recommendation      |
+| ------------------ | ------------- | --------------- | ------------------- |
+| Status checks only | ⬛️ None       | Block merges    | ✅ Current (safe)   |
+| contents: write    | 🟨 Low        | Auto-merge      | ✅ Safe with guards |
+| PAT token          | 🟥 High       | Full automation | ⚠️ Use sparingly    |
 
 #### Best Practices
 
 1. **Use Status Checks (Current Approach - RECOMMENDED)**
+
    - ✅ No elevated permissions needed
    - ✅ PR blocked until checks pass
    - ✅ Human review still required
@@ -86,6 +96,7 @@ env:
    - ✅ Works with branch protection
 
 2. **Opt-in Auto-Merge (If Needed)**
+
    - Require explicit label (`auto-merge-approved`)
    - Require all checks passing
    - Require merge guard approval
@@ -101,6 +112,7 @@ env:
 ### Recommended Implementation Strategy
 
 #### Phase 1: Current (Status Checks) ✅
+
 ```yaml
 # Block merge via status checks
 # Human merges manually after review
@@ -112,16 +124,19 @@ permissions:
 ```
 
 **Pros:**
+
 - Safest approach
 - Full audit trail
 - Human in the loop
 - Works with all protection rules
 
 **Cons:**
+
 - Requires manual merge
 - Cannot fully automate
 
 #### Phase 2: Opt-in Auto-Merge (Future)
+
 ```yaml
 # Only if PR has 'auto-merge-approved' label
 permissions:
@@ -132,15 +147,18 @@ permissions:
 ```
 
 **Pros:**
+
 - Selective automation
 - Still requires explicit approval
 - Maintains safety guards
 
 **Cons:**
+
 - Needs elevated permissions
 - Requires careful testing
 
 #### Phase 3: Full Automation (Advanced)
+
 ```yaml
 # Automatic merge after all checks pass
 # Use PAT for cross-workflow triggers
@@ -149,10 +167,12 @@ env:
 ```
 
 **Pros:**
+
 - Fully automated workflow
 - Can trigger downstream actions
 
 **Cons:**
+
 - Highest security risk
 - Complex to configure safely
 - May conflict with protection rules
@@ -162,6 +182,7 @@ env:
 **CHOSEN: Phase 1 (Status Checks Only)**
 
 **Rationale:**
+
 1. ✅ Safest approach for initial deployment
 2. ✅ No additional permissions needed
 3. ✅ Works with all branch protection settings
@@ -170,6 +191,7 @@ env:
 6. ✅ Easy to rollback if issues
 
 **Auto-merge can be added later if needed via:**
+
 - Adding `contents: write` permission
 - Implementing opt-in label mechanism
 - Adding merge operation to workflow
@@ -180,62 +202,63 @@ env:
 Add this job to `ai-code-review.yml` **only if auto-merge is desired**:
 
 ```yaml
-  auto-merge:
-    name: Auto-Merge (Opt-in)
-    needs: ai-code-review
-    if: |
-      github.event_name == 'pull_request' &&
-      contains(github.event.pull_request.labels.*.name, 'auto-merge-approved') &&
-      needs.ai-code-review.outputs.merge_guard_status == 'approved'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    
-    steps:
-      - name: Verify all checks passed
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { data: checks } = await github.rest.checks.listForRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: context.payload.pull_request.head.sha
-            });
-            
-            const failedChecks = checks.check_runs.filter(
-              check => check.conclusion !== 'success'
-            );
-            
-            if (failedChecks.length > 0) {
-              core.setFailed('Not all checks passed');
-            }
-      
-      - name: Auto-merge PR
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.pulls.merge({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              merge_method: 'squash',
-              commit_title: `${context.payload.pull_request.title} (#${context.payload.pull_request.number})`,
-              commit_message: 'Auto-merged after AI review approval and validation checks'
-            });
-            
-            // Post merge notification
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              body: '✅ Auto-merged after all checks passed and AI review approved'
-            });
+auto-merge:
+  name: Auto-Merge (Opt-in)
+  needs: ai-code-review
+  if: |
+    github.event_name == 'pull_request' &&
+    contains(github.event.pull_request.labels.*.name, 'auto-merge-approved') &&
+    needs.ai-code-review.outputs.merge_guard_status == 'approved'
+  runs-on: ubuntu-latest
+  permissions:
+    contents: write
+    pull-requests: write
+
+  steps:
+    - name: Verify all checks passed
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: checks } = await github.rest.checks.listForRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: context.payload.pull_request.head.sha
+          });
+
+          const failedChecks = checks.check_runs.filter(
+            check => check.conclusion !== 'success'
+          );
+
+          if (failedChecks.length > 0) {
+            core.setFailed('Not all checks passed');
+          }
+
+    - name: Auto-merge PR
+      uses: actions/github-script@v7
+      with:
+        script: |
+          await github.rest.pulls.merge({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.payload.pull_request.number,
+            merge_method: 'squash',
+            commit_title: `${context.payload.pull_request.title} (#${context.payload.pull_request.number})`,
+            commit_message: 'Auto-merged after AI review approval and validation checks'
+          });
+
+          // Post merge notification
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.pull_request.number,
+            body: '✅ Auto-merged after all checks passed and AI review approved'
+          });
 ```
 
 ### Usage Instructions
 
 #### Current (Manual Merge):
+
 1. Create PR as usual
 2. AI review runs automatically
 3. Merge guard checks validation
@@ -243,6 +266,7 @@ Add this job to `ai-code-review.yml` **only if auto-merge is desired**:
 5. **Human merges manually** after review
 
 #### Future (Opt-in Auto-Merge):
+
 1. Create PR as usual
 2. AI review runs automatically
 3. If approved, add `auto-merge-approved` label
@@ -252,12 +276,14 @@ Add this job to `ai-code-review.yml` **only if auto-merge is desired**:
 ### Monitoring & Audit
 
 #### What to Monitor:
+
 - Number of auto-merged PRs
 - Time from PR creation to merge
 - False positive rate (auto-merge when shouldn't)
 - False negative rate (block when should merge)
 
 #### Audit Trail:
+
 - All operations logged in GitHub Actions
 - PR comments show AI review results
 - Commit status shows merge guard decision

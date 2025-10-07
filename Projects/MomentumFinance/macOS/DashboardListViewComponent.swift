@@ -5,8 +5,8 @@
 //  Dashboard list view component for macOS three-column layout
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 // This file contains the Dashboard list view component
 // Extracted from MacOS_UI_Enhancements.swift to reduce file size

@@ -1,6 +1,7 @@
 # Archived Workflows - October 6, 2025
 
 ## Overview
+
 These workflows were deprecated due to redundancy identified in the workflow consolidation analysis (WORKFLOW_CONSOLIDATION_ANALYSIS_20251006.md).
 
 ---
@@ -8,17 +9,20 @@ These workflows were deprecated due to redundancy identified in the workflow con
 ## Workflows Archived October 6, 2025
 
 ### pr-validation.yml
+
 **Archived:** October 6, 2025  
 **Reason:** Consolidated into pr-validation-unified.yml  
 **Functionality:** Basic PR sanity checks, TODO/FIXME enforcement  
 **Replacement:** pr-validation-unified.yml (unified PR validation with conditional checks)
 
 #### Original Configuration
+
 - **Trigger:** Pull requests (opened, synchronize, reopened)
 - **Runner:** ubuntu-latest
 - **Checks:** Repository sanity, TODO/FIXME enforcement
 
 #### Why Consolidated
+
 - Generic checks now in basic-validation job of unified workflow
 - Better organization with conditional execution
 - Single entry point for PR validation
@@ -26,17 +30,20 @@ These workflows were deprecated due to redundancy identified in the workflow con
 ---
 
 ### validate-and-lint-pr.yml
+
 **Archived:** October 6, 2025  
 **Reason:** Consolidated into pr-validation-unified.yml  
 **Functionality:** Automation/workflow-specific validation (Bash syntax, ShellCheck, deploy validation)  
 **Replacement:** pr-validation-unified.yml (automation-validation job runs conditionally)
 
 #### Original Configuration
+
 - **Trigger:** Pull requests affecting `.github/workflows/**` or `Tools/Automation/**`
 - **Runner:** ubuntu-latest
 - **Checks:** Bash syntax, ShellCheck, deploy validation, master automation test
 
 #### Why Consolidated
+
 - Path-specific checks now in automation-validation job
 - Conditional execution preserved (only runs when automation/workflows change)
 - Clearer organization as single unified workflow
@@ -46,16 +53,19 @@ These workflows were deprecated due to redundancy identified in the workflow con
 ## Workflows NOT Archived (Previously Thought Redundant)
 
 ### ci.yml - NOT FOUND
+
 **Status:** File did not exist in repository  
 **Note:** Mentioned in initial analysis but already removed or never existed
 
 ### Original Configuration
+
 - **Trigger:** Push to main/code-local-snapshot, PRs to main
 - **Python Version:** 3.12 only
 - **Test Scope:** Tools/Automation/tests/test_mcp_agents.py
 - **Runner:** macos-latest
 
 ### Why Deprecated
+
 - Identical functionality to automation-tests.yml
 - Less comprehensive than automation-ci.yml (no Python matrix)
 - Caused triple execution of same tests
@@ -64,13 +74,14 @@ These workflows were deprecated due to redundancy identified in the workflow con
 ---
 
 ## automation-tests.yml
+
 **Archived:** October 6, 2025  
 **Reason:** Redundant with automation-ci.yml  
 **Functionality:** Automation pytest (Python 3.12 only)  
 **Replacement:** automation-ci.yml (has Python matrix 3.10-3.12, pip caching, artifact uploads)
 
-
 ### automation-tests.yml - NOT FOUND
+
 **Status:** File did not exist in repository  
 **Note:** Mentioned in initial analysis but already removed or never existed
 
@@ -79,22 +90,27 @@ These workflows were deprecated due to redundancy identified in the workflow con
 ## Impact of Consolidation
 
 ### Before Consolidation
+
 - **Total Workflows:** 16
 - **PR Validation Workflows:** 2 (pr-validation.yml, validate-and-lint-pr.yml)
 - **Workflow Organization:** Split between generic and automation-specific
 
-### After Consolidation  
+### After Consolidation
+
 - **Total Workflows:** 14 (12.5% reduction)
 - **PR Validation Workflows:** 1 (pr-validation-unified.yml)
 - **Workflow Organization:** Unified with conditional execution
 
 ### What pr-validation-unified.yml Provides
+
 ✅ **Basic Validation** (always runs):
+
 - Repository sanity checks
 - TODO/FIXME enforcement
 - Validation log uploads
 
 ✅ **Automation Validation** (conditional - only when automation/workflow files change):
+
 - Bash syntax checking
 - ShellCheck linting
 - Deploy validation
@@ -102,6 +118,7 @@ These workflows were deprecated due to redundancy identified in the workflow con
 - Workflow YAML validation
 
 ✅ **Validation Summary:**
+
 - Comprehensive status report
 - Clear pass/fail indicators
 - Skipped job notifications

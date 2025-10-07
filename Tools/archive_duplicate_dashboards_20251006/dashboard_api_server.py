@@ -107,10 +107,10 @@ class DashboardAPIHandler(http.server.SimpleHTTPRequestHandler):
 
         # Process task data
         tasks_data = self.process_task_data(task_queue)
-        
+
         # Get orchestrator status
         orchestrator_data = self.get_orchestrator_status(agent_status, task_queue, current_time)
-        
+
         # Get task statistics
         task_stats = self.get_task_statistics(task_queue, current_time)
 
@@ -380,31 +380,31 @@ class DashboardAPIHandler(http.server.SimpleHTTPRequestHandler):
                 return f"{diff // 86400}d ago"
         except:
             return "unknown"
-    
+
     def get_orchestrator_status(self, agent_status, task_queue, current_time):
         """Get task orchestrator status and metrics"""
         orchestrator_info = {}
         status_agents = agent_status.get("agents", {})
-        
+
         # Find orchestrator (multiple possible keys)
         orch = status_agents.get("task_orchestrator") or status_agents.get("task_orchestrator.sh") or {}
-        
+
         status = orch.get("status", "offline")
         last_seen = int(orch.get("last_seen", 0) or 0)
         pid = orch.get("pid", "N/A")
-        
+
         # Determine if running
         is_running = False
         if last_seen > 0:
             time_diff = current_time - last_seen
             is_running = time_diff < 300  # Active in last 5 minutes
-        
+
         # Count tasks by status
         tasks = task_queue.get("tasks", [])
         queued = sum(1 for t in tasks if t.get("status") == "queued")
         in_progress = sum(1 for t in tasks if t.get("status") == "in_progress")
         completed = sum(1 for t in tasks if t.get("status") == "completed")
-        
+
         # Get recent assignments (last 10)
         recent_assignments = []
         sorted_tasks = sorted(tasks, key=lambda t: t.get("assigned_at", 0) or 0, reverse=True)
@@ -417,7 +417,7 @@ class DashboardAPIHandler(http.server.SimpleHTTPRequestHandler):
                     "assigned_at": task.get("assigned_at", 0),
                     "assigned_at_relative": self.format_relative_time(task.get("assigned_at", 0), current_time)
                 })
-        
+
         return {
             "status": status,
             "is_running": is_running,
@@ -430,26 +430,26 @@ class DashboardAPIHandler(http.server.SimpleHTTPRequestHandler):
             "recent_assignments": recent_assignments,
             "health": "healthy" if is_running else "offline"
         }
-    
+
     def get_task_statistics(self, task_queue, current_time):
         """Calculate task statistics and metrics"""
         tasks = task_queue.get("tasks", [])
-        
+
         # Count by status
         status_counts = {}
         for task in tasks:
             status = task.get("status", "unknown")
             status_counts[status] = status_counts.get(status, 0) + 1
-        
+
         # Calculate completion metrics
         completed_tasks = [t for t in tasks if t.get("status") == "completed"]
         failed_tasks = [t for t in tasks if t.get("status") == "failed"]
-        
+
         total_completed = len(completed_tasks)
         total_failed = len(failed_tasks)
         total_finished = total_completed + total_failed
         success_rate = (total_completed / total_finished * 100) if total_finished > 0 else 0
-        
+
         # Calculate average completion time
         completion_times = []
         for task in completed_tasks:
@@ -460,9 +460,9 @@ class DashboardAPIHandler(http.server.SimpleHTTPRequestHandler):
                     completion_times.append(int(completed) - int(created))
                 except:
                     pass
-        
+
         avg_completion_time = sum(completion_times) / len(completion_times) if completion_times else 0
-        
+
         # Get recent completions (last 10)
         recent_completions = []
         sorted_completed = sorted(completed_tasks, key=lambda t: t.get("completed_at", 0) or 0, reverse=True)
@@ -475,7 +475,7 @@ class DashboardAPIHandler(http.server.SimpleHTTPRequestHandler):
                 "completed_at_relative": self.format_relative_time(task.get("completed_at", 0), current_time),
                 "duration": task.get("completed_at", 0) - task.get("created_at", 0) if task.get("completed_at") and task.get("created_at") else 0
             })
-        
+
         return {
             "by_status": status_counts,
             "total_tasks": len(tasks),
@@ -517,15 +517,15 @@ def main():
         except (OSError, ValueError):
             # Process doesn't exist or PID file is invalid
             PID_FILE.unlink()
-    
+
     # Write current PID to file
     with open(PID_FILE, 'w') as f:
         f.write(str(os.getpid()))
-    
+
     # Set up signal handlers
     signal.signal(signal.SIGTERM, cleanup_handler)
     signal.signal(signal.SIGINT, cleanup_handler)
-    
+
     print(f"Starting Dashboard API Server on port {PORT}")
     print(f"Dashboard: http://localhost:{PORT}/dashboard")
     print(f"API endpoint: http://localhost:{PORT}/api/dashboard-data")

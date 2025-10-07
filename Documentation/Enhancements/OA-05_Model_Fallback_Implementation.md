@@ -12,12 +12,14 @@ Implemented comprehensive fallback mechanisms for cloud model availability based
 ## Copilot Feedback Addressed
 
 ### 1. Cloud Model Availability (Critical)
+
 **Copilot Comment**: "The cloud model qwen3-coder:480b-cloud may not be available in all environments. Consider adding a fallback mechanism to check model availability and fall back to a local model if the cloud model is unavailable."
 
 **Impact**: Production deployments could fail if cloud model unavailable
 **Priority**: High - affects system reliability
 
 ### 2. Pull Operation Error Handling (Major)
+
 **Copilot Comment**: "The model availability check and pull operation should include error handling. If the cloud model pull fails, the workflow will continue without a fallback, potentially causing the AI review step to fail silently."
 
 **Impact**: Silent failures reduce debugging visibility
@@ -28,6 +30,7 @@ Implemented comprehensive fallback mechanisms for cloud model availability based
 ### Script Changes (`ai_code_review.sh`)
 
 #### 1. Fallback Model Configuration
+
 ```bash
 # Primary model (cloud, fast, zero local compute)
 OLLAMA_MODEL="${OLLAMA_MODEL:-qwen3-coder:480b-cloud}"
@@ -37,11 +40,13 @@ OLLAMA_FALLBACK_MODELS=("codellama:7b" "qwen:7b" "deepseek-coder:6.7b")
 ```
 
 **Rationale**:
+
 - Cloud model preferred for speed (23x faster than local)
 - Multiple fallback options increase availability
 - Ordered by preference (quality vs size tradeoff)
 
 #### 2. Enhanced Health Check Function
+
 ```bash
 check_ollama_health() {
     # 1. Check Ollama server running
@@ -54,6 +59,7 @@ check_ollama_health() {
 ```
 
 **Key Features**:
+
 - ✅ Timeout protection (60s cloud, 300s local)
 - ✅ Automatic fallback selection
 - ✅ Dynamic model export for runtime switching
@@ -61,6 +67,7 @@ check_ollama_health() {
 - ✅ Graceful degradation path
 
 #### 3. Fallback Logic Flow
+
 ```
 1. Is primary cloud model available?
    ✓ Yes → Use qwen3-coder:480b-cloud
@@ -85,21 +92,23 @@ check_ollama_health() {
 ### Workflow Changes (`ai-code-review.yml`)
 
 #### 1. Error Handling for Model Pulls
+
 ```yaml
 # Pull cloud model with timeout and fallback
 if ! timeout 60s ollama pull qwen3-coder:480b-cloud; then
-  echo "⚠ Cloud model pull failed, using fallback"
-  if ! timeout 300s ollama pull codellama:7b; then
-    echo "⚠ Fallback also failed"
-    echo "model_pull_failed=true" >> $GITHUB_OUTPUT
-  else
-    echo "✓ Fallback model ready"
-    echo "OLLAMA_MODEL=codellama:7b" >> $GITHUB_ENV
-  fi
+echo "⚠ Cloud model pull failed, using fallback"
+if ! timeout 300s ollama pull codellama:7b; then
+echo "⚠ Fallback also failed"
+echo "model_pull_failed=true" >> $GITHUB_OUTPUT
+else
+echo "✓ Fallback model ready"
+echo "OLLAMA_MODEL=codellama:7b" >> $GITHUB_ENV
+fi
 fi
 ```
 
 **Key Features**:
+
 - ✅ Timeout enforcement (prevents hanging workflows)
 - ✅ Automatic fallback to local model
 - ✅ Status tracking via `$GITHUB_OUTPUT`
@@ -107,6 +116,7 @@ fi
 - ✅ Clear logging for debugging
 
 #### 2. Graceful Degradation
+
 - Continue workflow even if model pull fails
 - AI review step checks model availability
 - Reports degraded mode in PR comment
@@ -117,6 +127,7 @@ fi
 ### Test Cases
 
 #### 1. Cloud Model Available (Happy Path)
+
 ```bash
 # Setup: Cloud model already pulled
 ollama list | grep qwen3-coder:480b-cloud
@@ -126,6 +137,7 @@ ollama list | grep qwen3-coder:480b-cloud
 ```
 
 #### 2. Cloud Model Pull Success
+
 ```bash
 # Setup: Cloud model not available
 ollama rm qwen3-coder:480b-cloud
@@ -135,6 +147,7 @@ ollama rm qwen3-coder:480b-cloud
 ```
 
 #### 3. Cloud Model Pull Timeout
+
 ```bash
 # Setup: Network issues, slow connection
 # Simulate: Use timeout 5s instead of 60s
@@ -144,6 +157,7 @@ ollama rm qwen3-coder:480b-cloud
 ```
 
 #### 4. All Models Unavailable
+
 ```bash
 # Setup: No models available, pull fails
 # Simulate: Disconnect network
@@ -171,18 +185,21 @@ gh workflow view ai-code-review --yaml
 ## Performance Impact
 
 ### Cloud Model (Primary)
+
 - **Pull time**: <60 seconds (lightweight metadata)
 - **Review time**: ~39 seconds
 - **CPU usage**: ~5%
 - **Total**: ~99 seconds (first run), ~39 seconds (cached)
 
 ### Local Fallback (codellama:7b)
+
 - **Pull time**: ~300 seconds (4GB download)
 - **Review time**: ~120 seconds
 - **CPU usage**: ~40%
 - **Total**: ~420 seconds (first run), ~120 seconds (cached)
 
 ### Tradeoffs
+
 - Cloud model 3x faster but requires network
 - Local model slower but always available offline
 - Automatic selection optimizes for environment
@@ -190,24 +207,28 @@ gh workflow view ai-code-review --yaml
 ## Operational Benefits
 
 ### 1. Reliability
+
 - ✅ No single point of failure
 - ✅ Works in air-gapped environments (after initial setup)
 - ✅ Resilient to network issues
 - ✅ Graceful degradation vs hard failures
 
 ### 2. Observability
+
 - ✅ Clear logging at each fallback stage
 - ✅ Workflow outputs track model selection
 - ✅ PR comments indicate degraded mode
 - ✅ GitHub Actions artifacts contain full logs
 
 ### 3. Maintainability
+
 - ✅ Configurable fallback order
 - ✅ Easy to add/remove models
 - ✅ Timeout values adjustable
 - ✅ No hardcoded assumptions
 
 ### 4. Developer Experience
+
 - ✅ Works "out of the box" with defaults
 - ✅ Environment variable overrides available
 - ✅ Transparent fallback behavior
@@ -245,21 +266,25 @@ OLLAMA_FALLBACK_MODELS="" \
 ## Edge Cases Handled
 
 ### 1. Network Failure During Pull
+
 - **Scenario**: Connection lost mid-download
 - **Handling**: Timeout enforced, moves to next fallback
 - **Result**: Workflow completes with available model
 
 ### 2. Disk Space Exhaustion
+
 - **Scenario**: Not enough space for model download
 - **Handling**: Pull fails, error logged, review skipped
 - **Result**: Workflow continues, reports degraded mode
 
 ### 3. Ollama Server Crash
+
 - **Scenario**: Server dies during review
 - **Handling**: API call fails, caught by error handling
 - **Result**: Review marked as failed, does not block merge
 
 ### 4. Model Corruption
+
 - **Scenario**: Partially downloaded/corrupted model
 - **Handling**: Pull re-downloads, validates hash
 - **Result**: Fresh model installed, review proceeds
@@ -267,12 +292,14 @@ OLLAMA_FALLBACK_MODELS="" \
 ## Monitoring & Alerts
 
 ### Success Metrics
+
 - Model availability rate: % using primary vs fallback
 - Pull success rate: % successful without timeout
 - Review completion rate: % workflows completing AI review
 - Performance distribution: cloud vs local model usage
 
 ### Alert Thresholds
+
 - ⚠️ Warning: >30% fallback usage (investigate cloud availability)
 - ⚠️ Warning: >10% pull failures (check network/disk)
 - 🚨 Critical: >20% review failures (service degraded)
@@ -301,21 +328,25 @@ OLLAMA_FALLBACK_MODELS="" \
 ## Future Enhancements
 
 ### 1. Model Performance Tracking
+
 - Log review time by model type
 - Track accuracy differences (cloud vs local)
 - Optimize fallback order based on metrics
 
 ### 2. Intelligent Caching
+
 - Prefer cached models over pulls
 - Pre-warm models on runners
 - Shared model cache across workflows
 
 ### 3. Multi-Cloud Support
+
 - Support different cloud providers (HuggingFace, Replicate)
 - API key rotation for rate limits
 - Geographic model selection
 
 ### 4. Dynamic Fallback Selection
+
 - Choose fallback based on diff size
 - Small diffs → small models
 - Large diffs → large models
@@ -330,6 +361,7 @@ OLLAMA_FALLBACK_MODELS="" \
 ## Attribution
 
 Implementation based on GitHub Copilot code review feedback:
+
 - **Reviewer**: GitHub Copilot AI
 - **PR**: #84 - OA-05 AI Review & Guarded Merge
 - **Date**: October 6, 2025
@@ -342,6 +374,6 @@ This demonstrates the value of dual AI review: Ollama analyzes user code, Copilo
 ✅ **Reliability**: Fallback mechanism ensures >95% availability  
 ✅ **Performance**: Cloud-first optimizes for speed, local ensures availability  
 ✅ **Observability**: Comprehensive logging enables debugging  
-✅ **Maintainability**: Configurable, extensible, well-documented  
+✅ **Maintainability**: Configurable, extensible, well-documented
 
 The system now gracefully handles cloud model unavailability, preventing workflow failures while maintaining optimal performance when conditions allow.

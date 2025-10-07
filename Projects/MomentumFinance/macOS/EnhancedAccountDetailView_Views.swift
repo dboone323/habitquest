@@ -34,7 +34,10 @@ extension EnhancedAccountDetailView {
                     }
 
                     if let account = self.account, let interestRate = account.interestRate {
-                        AccountDetailField(label: "Interest Rate", value: "\(interestRate.formatted(.percent.precision(.fractionLength(2))))")
+                        AccountDetailField(
+                            label: "Interest Rate",
+                            value: "\(interestRate.formatted(.percent.precision(.fractionLength(2))))"
+                        )
                     }
 
                     if let account = self.account, let dueDate = account.dueDate {
@@ -165,8 +168,12 @@ extension EnhancedAccountDetailView {
                             HStack {
                                 Text("Balance:")
                                     .frame(width: 100, alignment: .leading)
-                                TextField("Current Balance", value: self.editedAccount?.balance ?? 0, format: .currency(code: self.editedAccount?.currencyCode ?? "USD"))
-                                    .textFieldStyle(.roundedBorder)
+                                TextField(
+                                    "Current Balance",
+                                    value: self.editedAccount?.balance ?? 0,
+                                    format: .currency(code: self.editedAccount?.currencyCode ?? "USD")
+                                )
+                                .textFieldStyle(.roundedBorder)
                             }
 
                             HStack {
@@ -181,16 +188,24 @@ extension EnhancedAccountDetailView {
                                 HStack {
                                     Text("Credit Limit:")
                                         .frame(width: 100, alignment: .leading)
-                                    TextField("Credit Limit", value: self.editedAccount?.creditLimit ?? 0, format: .currency(code: self.editedAccount?.currencyCode ?? "USD"))
-                                        .textFieldStyle(.roundedBorder)
+                                    TextField(
+                                        "Credit Limit",
+                                        value: self.editedAccount?.creditLimit ?? 0,
+                                        format: .currency(code: self.editedAccount?.currencyCode ?? "USD")
+                                    )
+                                    .textFieldStyle(.roundedBorder)
                                 }
 
                                 HStack {
                                     Text("Interest Rate:")
                                         .frame(width: 100, alignment: .leading)
-                                    TextField("Interest Rate", value: self.editedAccount?.interestRate ?? 0, format: .percent.precision(.fractionLength(2)))
-                                        .textFieldStyle(.roundedBorder)
-                                        .frame(width: 100)
+                                    TextField(
+                                        "Interest Rate",
+                                        value: self.editedAccount?.interestRate ?? 0,
+                                        format: .percent.precision(.fractionLength(2))
+                                    )
+                                    .textFieldStyle(.roundedBorder)
+                                    .frame(width: 100)
                                 }
 
                                 HStack {
@@ -220,7 +235,7 @@ extension EnhancedAccountDetailView {
                             .onChange(of: self.editedAccount?.notes ?? "") { _, newValue in
                                 self.validateNotes(newValue)
                             }
-                        .padding()
+                            .padding()
                     }
                 }
 

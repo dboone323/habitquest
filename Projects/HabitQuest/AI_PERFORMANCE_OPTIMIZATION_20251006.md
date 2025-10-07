@@ -1,25 +1,29 @@
 # Performance Optimization Report for HabitQuest
-Generated: Mon Oct  6 11:36:20 CDT 2025
 
+Generated: Mon Oct 6 11:36:20 CDT 2025
 
 ## Dependencies.swift
+
 ## Performance Analysis of Dependencies.swift
 
 ### 1. Algorithm Complexity Issues
+
 **No significant algorithmic complexity issues found.** The code uses straightforward operations with O(1) complexity.
 
 ### 2. Memory Usage Problems
 
 #### Issue: Unnecessary DispatchQueue Creation
+
 The logger creates a dedicated serial queue even when using default print output, which may be overkill for simple logging.
 
 #### Optimization:
+
 ```swift
 public final class Logger {
     // Keep existing queue for custom handlers, but optimize default case
     private let queue = DispatchQueue(label: "com.quantumworkspace.logger", qos: .utility)
     private let defaultQueue = DispatchQueue.global(qos: .utility) // Reuse global queue
-    
+
     private var outputHandler: @Sendable (String) -> Void = Logger.defaultOutputHandler
     private var usesCustomHandler = false
 
@@ -29,7 +33,7 @@ public final class Logger {
             self.outputHandler(self.formattedMessage(message, level: level))
         }
     }
-    
+
     public func setOutputHandler(_ handler: @escaping @Sendable (String) -> Void) {
         self.queue.sync {
             self.outputHandler = handler
@@ -42,13 +46,15 @@ public final class Logger {
 ### 3. Unnecessary Computations
 
 #### Issue: Date formatting on every log call
+
 The `formattedMessage` method creates a timestamp string for every log entry, even when logging might be filtered by level.
 
 #### Optimization:
+
 ```swift
 public final class Logger {
     private let timestampCache = TimestampCache()
-    
+
     private func formattedMessage(_ message: String, level: LogLevel) -> String {
         // Cache timestamp for better performance in high-frequency logging
         let timestamp = timestampCache.currentTimestamp
@@ -61,12 +67,12 @@ private final class TimestampCache {
     private var lastTimestamp: String = ""
     private var lastDate: Date = Date.distantPast
     private let queue = DispatchQueue(label: "timestamp-cache", attributes: .concurrent)
-    
+
     init() {
         self.formatter = ISO8601DateFormatter()
         self.formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
     }
-    
+
     var currentTimestamp: String {
         let now = Date()
         return queue.sync {
@@ -82,14 +88,17 @@ private final class TimestampCache {
 ```
 
 ### 4. Collection Operation Optimizations
+
 **No collection operations found that require optimization.**
 
 ### 5. Threading Opportunities
 
 #### Issue: Synchronous queue operations blocking caller
+
 The `setOutputHandler` and `resetOutputHandler` methods use `sync` which can block the calling thread unnecessarily.
 
 #### Optimization:
+
 ```swift
 public final class Logger {
     public func setOutputHandler(_ handler: @escaping @Sendable (String) -> Void) {
@@ -99,14 +108,14 @@ public final class Logger {
             self.usesCustomHandler = true
         }
     }
-    
+
     public func resetOutputHandler() {
         self.queue.async {
             self.outputHandler = Logger.defaultOutputHandler
             self.usesCustomHandler = false
         }
     }
-    
+
     // If you need synchronous behavior, provide a separate method
     public func setOutputHandlerSync(_ handler: @escaping @Sendable (String) -> Void) {
         self.queue.sync {
@@ -120,9 +129,11 @@ public final class Logger {
 ### 6. Caching Possibilities
 
 #### Issue: Repeated string formatting and level conversion
+
 The log level uppercase conversion and message formatting can be cached or optimized.
 
 #### Optimization:
+
 ```swift
 public enum LogLevel: String {
     case debug, info, warning, error
@@ -137,12 +148,12 @@ public enum LogLevel: String {
         _uppercasedValue = value
         return value
     }
-    
+
     // Or use a more efficient approach with precomputed values
     public var uppercasedValue: String {
         switch self {
         case .debug: return "DEBUG"
-        case .info: return "INFO" 
+        case .info: return "INFO"
         case .warning: return "WARNING"
         case .error: return "ERROR"
         }
@@ -154,16 +165,16 @@ public final class Logger {
     private var batchedMessages: [String] = []
     private let batchSize = 10
     private let batchQueue = DispatchQueue(label: "logger-batch")
-    
+
     public func log(_ message: String, level: LogLevel = .info) {
         // Batch messages to reduce queue hopping
         batchQueue.async {
             self.batchedMessages.append(self.formattedMessage(message, level: level))
-            
+
             if self.batchedMessages.count >= self.batchSize {
                 let messagesToSend = self.batchedMessages
                 self.batchedMessages.removeAll()
-                
+
                 self.queue.async {
                     for message in messagesToSend {
                         self.outputHandler(message)
@@ -178,25 +189,27 @@ public final class Logger {
 ## Additional Optimizations
 
 ### String Interpolation Optimization
+
 ```swift
 // Instead of string interpolation, use more efficient string building for high-frequency operations
 private func formattedMessage(_ message: String, level: LogLevel) -> String {
     let timestamp = timestampCache.currentTimestamp
     // More efficient than string interpolation for frequent calls
     return "[\(timestamp)] [\(level.uppercasedValue)] \(message)"
-    
+
     // Alternative for even better performance:
     // return String(format: "[%@@[%@] %@", timestamp, level.uppercasedValue, message)
 }
 ```
 
 ### Lazy Initialization for Infrequently Used Components
+
 ```swift
 public struct Dependencies {
     // Lazy initialization for components that might not be used
     private var _performanceManager: PerformanceManager?
     private var _logger: Logger?
-    
+
     public var performanceManager: PerformanceManager {
         if let manager = _performanceManager {
             return manager
@@ -205,7 +218,7 @@ public struct Dependencies {
         _performanceManager = manager
         return manager
     }
-    
+
     public var logger: Logger {
         if let logger = _logger {
             return logger
@@ -229,6 +242,7 @@ public struct Dependencies {
 These optimizations will significantly improve performance in high-frequency logging scenarios while maintaining the same API and functionality.
 
 ## PerformanceManager.swift
+
 Here's a detailed performance analysis of the `PerformanceManager.swift` code, followed by **specific optimization suggestions** for each category you've requested.
 
 ---
@@ -236,14 +250,17 @@ Here's a detailed performance analysis of the `PerformanceManager.swift` code, f
 ## 🔍 1. **Algorithm Complexity Issues**
 
 ### ✅ **Current Implementation:**
+
 - The `calculateCurrentFPSLocked()` function uses a circular buffer to calculate FPS from the last `fpsSampleSize` frames (default 10).
 - It calculates the elapsed time between the first and last frame in that window and computes FPS.
 
 ### ⚠️ **Issue:**
+
 - The FPS calculation is **O(1)**, which is good.
 - However, **`calculateFPSForDegradedCheck()`** calls `frameQueue.sync` and recomputes FPS even if it was recently cached. This can cause **unnecessary synchronization overhead**.
 
 ### 🛠️ **Optimization Suggestion:**
+
 Avoid redundant computation in `calculateFPSForDegradedCheck()` by reusing cached FPS if available.
 
 ```swift
@@ -272,14 +289,17 @@ private func calculateFPSForDegradedCheck() -> Double {
 ## 🧠 2. **Memory Usage Problems**
 
 ### ✅ **Current Implementation:**
+
 - Memory usage is fetched via `task_info()` and cached.
 - Memory is stored in `mach_task_basic_info` struct.
 
 ### ⚠️ **Issue:**
+
 - `machInfoCache` is **reused**, which is good, but there's **no error handling** for `task_info()` failure.
 - `withUnsafeMutablePointer` and `withMemoryRebound` usage is correct but verbose.
 
 ### 🛠️ **Optimization Suggestion:**
+
 - Add error logging or fallback.
 - Consider simplifying the memory fetch logic.
 
@@ -308,12 +328,15 @@ private func calculateMemoryUsageLocked() -> Double {
 ## ⏱️ 3. **Unnecessary Computations**
 
 ### ✅ **Current Implementation:**
+
 - `isPerformanceDegraded()` calls `calculateFPSForDegradedCheck()` and `fetchMemoryUsageLocked()`.
 
 ### ⚠️ **Issue:**
+
 - `calculateFPSForDegradedCheck()` duplicates logic from `getCurrentFPS()` and may **recompute FPS even if already cached**.
 
 ### 🛠️ **Optimization Suggestion:**
+
 Refactor to **reuse existing cached FPS** directly.
 
 ```swift
@@ -350,12 +373,15 @@ public func isPerformanceDegraded() -> Bool {
 ## 📦 4. **Collection Operation Optimizations**
 
 ### ✅ **Current Implementation:**
+
 - Circular buffer is used efficiently with `frameWriteIndex`.
 
 ### ⚠️ **Issue:**
+
 - No real issues here. The circular buffer is well implemented.
 
 ### 🛠️ **Enhancement Suggestion:**
+
 If you want to make it more Swifty and maintainable, consider wrapping the circular buffer logic into a reusable struct.
 
 ```swift
@@ -395,13 +421,16 @@ struct CircularBuffer<T> {
 ## 🧵 5. **Threading Opportunities**
 
 ### ✅ **Current Implementation:**
+
 - Uses concurrent queues with `.barrier` for writes.
 - Uses `sync` for reads and `async` for updates.
 
 ### ⚠️ **Issue:**
+
 - `isPerformanceDegraded(completion:)` dispatches to `.utility` then to `.main`. Could be optimized by **reusing existing queues** or using `.userInitiated` if needed faster.
 
 ### 🛠️ **Optimization Suggestion:**
+
 Use a dedicated concurrent queue for performance checks or reuse existing.
 
 ```swift
@@ -420,12 +449,15 @@ public func isPerformanceDegraded(completion: @escaping (Bool) -> Void) {
 ## 🗃️ 6. **Caching Possibilities**
 
 ### ✅ **Current Implementation:**
+
 - FPS, memory usage, and performance degraded flags are cached.
 
 ### ⚠️ **Issue:**
+
 - Cache invalidation uses time-based checks, but some values (like FPS) are **reset to 0** on write (`lastFPSUpdate = 0`), which forces recomputation even if not needed.
 
 ### 🛠️ **Optimization Suggestion:**
+
 Only invalidate cache if it's stale, not on every write.
 
 ```swift
@@ -450,14 +482,14 @@ public func recordFrame() {
 
 ## ✅ Summary of Key Optimizations
 
-| Area                     | Optimization                                                                 |
-|--------------------------|------------------------------------------------------------------------------|
-| **FPS Calculation**      | Avoid redundant FPS recalculation in degraded check                          |
-| **Memory Usage**         | Add error handling and simplify `task_info()` usage                          |
-| **Performance Check**    | Reuse cached FPS instead of recomputing                                      |
-| **Threading**            | Reuse queues, avoid unnecessary dispatch hops                                |
-| **Caching**              | Only invalidate cache when stale                                             |
-| **Circular Buffer**      | Optional: encapsulate into reusable struct                                   |
+| Area                  | Optimization                                        |
+| --------------------- | --------------------------------------------------- |
+| **FPS Calculation**   | Avoid redundant FPS recalculation in degraded check |
+| **Memory Usage**      | Add error handling and simplify `task_info()` usage |
+| **Performance Check** | Reuse cached FPS instead of recomputing             |
+| **Threading**         | Reuse queues, avoid unnecessary dispatch hops       |
+| **Caching**           | Only invalidate cache when stale                    |
+| **Circular Buffer**   | Optional: encapsulate into reusable struct          |
 
 ---
 

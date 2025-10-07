@@ -18,7 +18,7 @@ function update_status() {
   if [[ ! -s ${STATUS_FILE} ]]; then
     echo '{"agents":{"build_agent":{"status":"unknown","pid":null},"debug_agent":{"status":"unknown","pid":null},"codegen_agent":{"status":"unknown","pid":null},"uiux_agent":{"status":"unknown","pid":null},"testing_agent":{"status":"unknown","pid":null},"security_agent":{"status":"unknown","pid":null},"performance_monitor":{"status":"unknown","pid":null}},"last_update":0}' >"${STATUS_FILE}"
   fi
-  
+
   # Single jq command with proper error handling
   if jq ".agents.performance_monitor.status = \"${status}\" | .agents.performance_monitor.pid = ${PID} | .last_update = $(date +%s)" "${STATUS_FILE}" >"${STATUS_FILE}.tmp" && [[ -s "${STATUS_FILE}.tmp" ]]; then
     mv "${STATUS_FILE}.tmp" "${STATUS_FILE}"
