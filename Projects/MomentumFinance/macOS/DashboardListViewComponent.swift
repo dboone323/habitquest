@@ -13,7 +13,7 @@ import SwiftUI
 
 #if os(macOS)
 // Dashboard list view for the middle column
-extension Features.Dashboard {
+extension Features.FinancialDashboard {
     struct DashboardListView: View {
         @Environment(\.modelContext) private var modelContext
         @Query private var accounts: [FinancialAccount]

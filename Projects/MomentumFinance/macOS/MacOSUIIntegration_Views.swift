@@ -176,7 +176,7 @@ struct IntegratedMacOSContentView: View {
                 // Default view when no item is selected
                 switch self.navigationCoordinator.selectedSidebarItem {
                 case .dashboard:
-                    Features.Dashboard.DashboardView()
+                    Features.FinancialDashboard.DashboardView()
                 case .transactions:
                     TransactionsOverviewView()
                 case .budgets:

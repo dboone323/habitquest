@@ -52,7 +52,8 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Initialization
 
     override init(size: CGSize) {
-        // Initialize all service managers
+        // Initialize all service managers with empty scenes initially
+        // They will be properly configured in didMove(to:)
         self.playerManager = PlayerManager(scene: SKScene())
         self.obstacleManager = ObstacleManager(scene: SKScene())
         self.uiManager = UIManager(scene: SKScene())
@@ -66,7 +67,8 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        // Initialize all service managers
+        // Initialize all service managers with empty scenes initially
+        // They will be properly configured in didMove(to:)
         self.playerManager = PlayerManager(scene: SKScene())
         self.obstacleManager = ObstacleManager(scene: SKScene())
         self.uiManager = UIManager(scene: SKScene())
@@ -107,6 +109,13 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
 
     /// Called when the scene is first presented by the view.
     override public func didMove(to _: SKView) {
+        // Configure managers with the actual scene
+        self.playerManager.updateScene(self)
+        self.obstacleManager.updateScene(self)
+        self.uiManager.updateScene(self)
+        self.physicsManager.updateScene(self)
+        self.effectsManager.updateScene(self)
+
         // Setup the scene
         self.setupScene()
 
@@ -378,12 +387,12 @@ extension GameScene: PhysicsManagerDelegate {
 }
 
 extension GameScene: AchievementDelegate {
-    func achievementUnlocked(_ achievement: Achievement) {
+    public func achievementUnlocked(_ achievement: Achievement) {
         // Show achievement notification
         self.uiManager.showScorePopup(score: achievement.points, at: CGPoint(x: size.width / 2, y: size.height / 2))
     }
 
-    func achievementProgressUpdated(_: Achievement, progress _: Float) {
+    public func achievementProgressUpdated(_: Achievement, progress _: Float) {
         // Could show progress indicator
     }
 }

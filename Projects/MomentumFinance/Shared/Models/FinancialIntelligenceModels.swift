@@ -1,5 +1,4 @@
 import Foundation
-import SwiftUI
 
 // MARK: - Financial Intelligence Types
 
@@ -78,15 +77,6 @@ public enum InsightPriority: Int, CaseIterable, Sendable, Comparable {
 
     public static func < (lhs: InsightPriority, rhs: InsightPriority) -> Bool {
         lhs.rawValue < rhs.rawValue
-    }
-
-    public var color: Color {
-        switch self {
-        case .low: .gray
-        case .medium: .yellow
-        case .high: .orange
-        case .urgent: .red
-        }
     }
 }
 

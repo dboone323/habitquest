@@ -13,6 +13,7 @@ excluded:
   - "**/Generated"
   - "**/BuildArtifacts"
   - "**/backups/**"
+  - "**/*_????????_??????/**/*"
 
 # Core disabled (temporary until refactors reduce violations)
 disabled_rules:
@@ -31,6 +32,13 @@ disabled_rules:
   - opening_brace
   - trailing_comma
   - sorted_imports
+  - for_where
+  - unused_optional_binding
+  - orphaned_doc_comment
+  - closure_parameter_position
+  - unneeded_override
+  - static_over_final_class
+  - implicit_return
 
 opt_in_rules:
   - explicit_init

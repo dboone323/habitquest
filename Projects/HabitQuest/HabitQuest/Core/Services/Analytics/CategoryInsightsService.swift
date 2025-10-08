@@ -123,17 +123,17 @@ final class CategoryInsightsService {
 
 // MARK: - Supporting Types
 
-struct CategoryPerformance {
-    let category: HabitCategory
-    let habitCount: Int
-    let completionRate: Double
-    let averageStreak: Int
-    let totalXP: Int
-    let trend: CategoryTrend
-    let topPerformingHabits: [HabitPerformanceSummary]
+public struct CategoryPerformance {
+    public let category: HabitCategory
+    public let habitCount: Int
+    public let completionRate: Double
+    public let averageStreak: Int
+    public let totalXP: Int
+    public let trend: CategoryTrend
+    public let topPerformingHabits: [HabitPerformanceSummary]
 }
 
-struct HabitPerformanceSummary {
+public struct HabitPerformanceSummary {
     let habitId: UUID
     let habitName: String
     let completionRate: Double
@@ -141,7 +141,7 @@ struct HabitPerformanceSummary {
     let totalXP: Int
 }
 
-enum CategoryTrend {
+public enum CategoryTrend {
     case improving
     case stable
     case declining

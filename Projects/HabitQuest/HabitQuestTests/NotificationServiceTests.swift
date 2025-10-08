@@ -9,7 +9,7 @@ final class NotificationServiceTests: XCTestCase {
         try await super.setUp()
 
         // Create test habit
-        testHabit = Habit(
+        self.testHabit = Habit(
             name: "Test Habit",
             habitDescription: "A test habit for notifications",
             frequency: .daily,
@@ -20,7 +20,7 @@ final class NotificationServiceTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        testHabit = nil
+        self.testHabit = nil
         try await super.tearDown()
     }
 
@@ -50,7 +50,7 @@ final class NotificationServiceTests: XCTestCase {
         XCTAssertEqual(NotificationService.NotificationCategory.achievementUnlocked.title, "Achievement Unlocked!")
     }
 
-        // MARK: - Notification Scheduling Tests
+    // MARK: - Notification Scheduling Tests
 
     func testScheduleHabitReminders() async {
         let habits: [Habit] = [testHabit]
@@ -62,7 +62,7 @@ final class NotificationServiceTests: XCTestCase {
 
     func testScheduleHabitReminder() async {
         // Test that the method completes without error
-        await NotificationService.scheduleHabitReminder(for: testHabit)
+        await NotificationService.scheduleHabitReminder(for: self.testHabit)
         XCTAssertTrue(true, "Method should complete without error")
     }
 

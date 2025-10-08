@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension Features.Dashboard {
+extension Features.FinancialDashboard {
     struct DashboardWelcomeHeader: View {
         let greeting: String
         let wellnessPercentage: Int

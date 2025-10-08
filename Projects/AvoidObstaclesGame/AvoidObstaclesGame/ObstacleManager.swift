@@ -50,6 +50,11 @@ class ObstacleManager {
         self.preloadObstaclePool()
     }
 
+    /// Updates the scene reference (called when scene is properly initialized)
+    func updateScene(_ scene: SKScene) {
+        self.scene = scene
+    }
+
     // MARK: - Object Pooling
 
     /// Preloads the obstacle pool with initial obstacles

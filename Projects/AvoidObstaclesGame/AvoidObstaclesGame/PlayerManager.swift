@@ -61,6 +61,11 @@ class PlayerManager {
         self.scene = scene
     }
 
+    /// Updates the scene reference (called when scene is properly initialized)
+    func updateScene(_ scene: SKScene) {
+        self.scene = scene
+    }
+
     // MARK: - Player Creation
 
     /// Creates and configures the player node

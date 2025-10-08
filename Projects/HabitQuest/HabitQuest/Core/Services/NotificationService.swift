@@ -28,6 +28,16 @@ enum NotificationService {
 
     /// Request notification permissions from the user
     static func requestNotificationPermissions() async -> Bool {
+        // Skip permission request during automated testing to avoid blocking UI
+        #if DEBUG
+        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
+            // We're running in a test environment - return true to simulate granted permissions
+            self.logger.info("Skipping notification permission request during testing")
+            await self.setupNotificationCategories()
+            return true
+        }
+        #endif
+
         let center = UNUserNotificationCenter.current()
 
         do {

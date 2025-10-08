@@ -8,7 +8,7 @@ public enum Features {}
 
 // Dashboard namespace
 public extension Features {
-    enum Dashboard {}
+    enum FinancialDashboard {}
 }
 
 // Transactions namespace
@@ -68,12 +68,27 @@ public extension Features {
 
             public init() {
                 // Initialize search engine with placeholder context - will be updated in onAppear
-                let container = try! ModelContainer(
-                    for: FinancialAccount.self, FinancialTransaction.self
-                )
-                _searchEngine = StateObject(
-                    wrappedValue: SearchEngineService(modelContext: ModelContext(container))
-                )
+                do {
+                    let container = try ModelContainer(
+                        for: FinancialAccount.self, FinancialTransaction.self
+                    )
+                    _searchEngine = StateObject(
+                        wrappedValue: SearchEngineService(modelContext: ModelContext(container))
+                    )
+                } catch {
+                    // Fallback to empty container if initialization fails
+                    do {
+                        let container = try ModelContainer()
+                        _searchEngine = StateObject(
+                            wrappedValue: SearchEngineService(modelContext: ModelContext(container))
+                        )
+                    } catch {
+                        // If even the empty container fails, create a minimal fallback
+                        _searchEngine = StateObject(
+                            wrappedValue: SearchEngineService(modelContext: nil)
+                        )
+                    }
+                }
             }
 
             public var body: some View {

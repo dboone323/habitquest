@@ -6,9 +6,9 @@
 //  Copyright © 2025 Daniel Stevens. All rights reserved.
 //
 
-import XCTest
-import SwiftUI
 @testable import MomentumFinanceCore
+import SwiftUI
+import XCTest
 
 @MainActor
 final class ColorDefinitionsTests: XCTestCase {
@@ -287,7 +287,7 @@ final class ColorDefinitionsTests: XCTestCase {
 
     func testColorDefinitionsPerformance() {
         measure {
-            for _ in 0..<1000 {
+            for _ in 0 ..< 1000 {
                 _ = ColorDefinitions.background(.light)
                 _ = ColorDefinitions.text(.primary, .dark)
                 _ = ColorDefinitions.accent(.primary, .light)
@@ -300,7 +300,7 @@ final class ColorDefinitionsTests: XCTestCase {
     func testColorHexInitPerformance() {
         let hexStrings = ["#FF0000", "#00FF00", "#0000FF", "#FFFFFF", "#000000"]
         measure {
-            for _ in 0..<1000 {
+            for _ in 0 ..< 1000 {
                 for hex in hexStrings {
                     _ = Color(hex: hex)
                 }

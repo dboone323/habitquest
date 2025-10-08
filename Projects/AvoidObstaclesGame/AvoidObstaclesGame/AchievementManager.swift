@@ -94,10 +94,8 @@ class AchievementManager {
             ("speedrunner", 30.0),
         ]
 
-        for (achievementId, targetTime) in timeAchievements {
-            if survivalTime >= targetTime {
-                self.unlockAchievement(achievementId)
-            }
+        for (achievementId, targetTime) in timeAchievements where survivalTime >= targetTime {
+            self.unlockAchievement(achievementId)
         }
     }
 
@@ -109,10 +107,8 @@ class AchievementManager {
             ("level_6", 6),
         ]
 
-        for (achievementId, targetLevel) in difficultyAchievements {
-            if level >= targetLevel {
-                self.unlockAchievement(achievementId)
-            }
+        for (achievementId, targetLevel) in difficultyAchievements where level >= targetLevel {
+            self.unlockAchievement(achievementId)
         }
     }
 
@@ -123,10 +119,8 @@ class AchievementManager {
             ("no_hit_100", 100),
         ]
 
-        for (achievementId, targetScore) in streakAchievements {
-            if score >= targetScore {
-                self.unlockAchievement(achievementId)
-            }
+        for (achievementId, targetScore) in streakAchievements where score >= targetScore {
+            self.unlockAchievement(achievementId)
         }
     }
 

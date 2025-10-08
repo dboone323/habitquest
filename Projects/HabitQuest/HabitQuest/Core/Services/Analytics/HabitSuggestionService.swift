@@ -28,7 +28,7 @@ final class HabitSuggestionService {
 
         // Analyze category gaps
         let existingCategories = Set(profile.existingHabits.map(\.category))
-        let suggestedCategories: [HabitCategory] = [.health, .productivity, .learning, .social, .other, .creativity]
+        let suggestedCategories: [AnalyticsHabitCategory] = [.health, .productivity, .learning, .social, .other, .creativity]
 
         for category in suggestedCategories where !existingCategories.contains(category) {
             if let suggestion = createCategorySuggestion(for: category, profile: profile) {
@@ -246,15 +246,19 @@ final class HabitSuggestionService {
         }
         let peakHour = hourCounts.max(by: { $0.value < $1.value })?.key ?? 9
 
+        // Convert habits to analytics format
+        let analyticsHabits = habits.map { self.convertToAnalyticsHabit($0) }
+        let preferredCategories = Dictionary(grouping: habits, by: { $0.category }).keys.map { self.convertToAnalyticsCategory($0) }
+
         return UserProfile(
-            existingHabits: habits,
+            existingHabits: analyticsHabits,
             averageConsistency: averageConsistency,
             peakProductivityHour: peakHour,
-            preferredCategories: Dictionary(grouping: habits, by: \.category).keys.map(\.self)
+            preferredCategories: preferredCategories
         )
     }
 
-    private func createCategorySuggestion(for category: HabitCategory, profile: UserProfile) -> HabitSuggestion? {
+    private func createCategorySuggestion(for category: AnalyticsHabitCategory, profile: UserProfile) -> HabitSuggestion? {
         // Only suggest if user has shown interest in related categories
         let relatedCategories = self.getRelatedCategories(for: category)
         let hasRelatedHabits = profile.preferredCategories.contains { relatedCategories.contains($0) }
@@ -337,7 +341,48 @@ final class HabitSuggestionService {
         }
     }
 
-    private func getRelatedCategories(for category: HabitCategory) -> [HabitCategory] {
+    private func convertToAnalyticsHabit(_ habit: Habit) -> AnalyticsHabit {
+        let analyticsLogs = habit.logs.map { log in
+            AnalyticsHabitLog(
+                id: log.id,
+                completionDate: log.completionDate,
+                isCompleted: log.isCompleted,
+                xpEarned: log.xpEarned
+            )
+        }
+
+        return AnalyticsHabit(
+            id: habit.id,
+            name: habit.name,
+            category: self.convertToAnalyticsCategory(habit.category),
+            difficulty: self.convertToAnalyticsDifficulty(habit.difficulty),
+            streak: habit.streak,
+            logs: analyticsLogs
+        )
+    }
+
+    private func convertToAnalyticsCategory(_ category: HabitCategory) -> AnalyticsHabitCategory {
+        switch category {
+        case .health: .health
+        case .fitness: .fitness
+        case .learning: .learning
+        case .productivity: .productivity
+        case .social: .social
+        case .creativity: .creativity
+        case .mindfulness: .mindfulness
+        case .other: .other
+        }
+    }
+
+    private func convertToAnalyticsDifficulty(_ difficulty: HabitDifficulty) -> AnalyticsHabitDifficulty {
+        switch difficulty {
+        case .easy: .easy
+        case .medium: .medium
+        case .hard: .hard
+        }
+    }
+
+    private func getRelatedCategories(for category: AnalyticsHabitCategory) -> [AnalyticsHabitCategory] {
         switch category {
         case .health:
             [.fitness]
@@ -360,10 +405,3 @@ final class HabitSuggestionService {
 }
 
 // MARK: - Supporting Types
-
-struct UserProfile {
-    let existingHabits: [Habit]
-    let averageConsistency: Double
-    let peakProductivityHour: Int
-    let preferredCategories: [HabitCategory]
-}

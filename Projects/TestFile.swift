@@ -39,7 +39,11 @@ class TestValidator {
     // 2. Force try ('try!')
     func processInput(_ input: String) -> String {
         let data = input.data(using: .utf8)
-        let json = try! JSONSerialization.jsonObject(with: data!, options: [])
-        return "\(json)"
+        do {
+            let json = try JSONSerialization.jsonObject(with: data!, options: [])
+            return "\(json)"
+        } catch {
+            return "Error: \(error.localizedDescription)"
+        }
     }
 }

@@ -36,6 +36,13 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
         self.setupPhysicsWorld()
     }
 
+    /// Updates the scene reference (called when scene is properly initialized)
+    func updateScene(_ scene: SKScene) {
+        self.scene = scene
+        self.physicsWorld = scene.physicsWorld
+        self.setupPhysicsWorld()
+    }
+
     // MARK: - Physics World Setup
 
     /// Sets up the physics world with proper configuration

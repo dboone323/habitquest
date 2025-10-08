@@ -5,8 +5,8 @@
 //  Created by Daniel Stevens on 2025
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 import XCTest
 
 @testable import MomentumFinanceCore
@@ -24,21 +24,21 @@ final class BudgetsViewTests: XCTestCase {
             ExpenseCategory.self,
             FinancialTransaction.self
         ])
-        modelContainer = try ModelContainer(
+        self.modelContainer = try ModelContainer(
             for: schema,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
-        modelContext = ModelContext(modelContainer)
+        self.modelContext = ModelContext(self.modelContainer)
 
         // Initialize view model
-        viewModel = BudgetsViewModel()
-        viewModel.setModelContext(modelContext)
+        self.viewModel = BudgetsViewModel()
+        self.viewModel.setModelContext(self.modelContext)
     }
 
     override func tearDownWithError() throws {
-        modelContainer = nil
-        modelContext = nil
-        viewModel = nil
+        self.modelContainer = nil
+        self.modelContext = nil
+        self.viewModel = nil
     }
 
     // MARK: - View Model Business Logic Tests
@@ -47,8 +47,8 @@ final class BudgetsViewTests: XCTestCase {
         // Given: Multiple budgets for the same month
         let category1 = ExpenseCategory(name: "Food", iconName: "fork.knife")
         let category2 = ExpenseCategory(name: "Transport", iconName: "car")
-        modelContext.insert(category1)
-        modelContext.insert(category2)
+        self.modelContext.insert(category1)
+        self.modelContext.insert(category2)
 
         let currentMonth = Date()
         let budget1 = Budget(name: "Food Budget", limitAmount: 500.0, month: currentMonth)
@@ -60,7 +60,7 @@ final class BudgetsViewTests: XCTestCase {
         let budgets = [budget1, budget2]
 
         // When: Calculating total budgeted amount
-        let total = viewModel.totalBudgetedAmount(budgets, for: currentMonth)
+        let total = self.viewModel.totalBudgetedAmount(budgets, for: currentMonth)
 
         // Then: Should sum all budget limits
         XCTAssertEqual(total, 800.0)
@@ -69,12 +69,12 @@ final class BudgetsViewTests: XCTestCase {
     func testBudgetsViewModelCalculatesRemainingBudget() throws {
         // Given: Budgets with spending
         let category = ExpenseCategory(name: "Food", iconName: "fork.knife")
-        modelContext.insert(category)
+        self.modelContext.insert(category)
 
         let currentMonth = Date()
         let budget = Budget(name: "Food Budget", limitAmount: 500.0, month: currentMonth)
         budget.category = category
-        modelContext.insert(budget)
+        self.modelContext.insert(budget)
 
         // Create a transaction to simulate spending
         let transaction = FinancialTransaction(
@@ -84,12 +84,12 @@ final class BudgetsViewTests: XCTestCase {
             transactionType: .expense
         )
         transaction.category = category
-        modelContext.insert(transaction)
+        self.modelContext.insert(transaction)
 
         let budgets = [budget]
 
         // When: Calculating remaining budget
-        let remaining = viewModel.remainingBudget(budgets, for: currentMonth)
+        let remaining = self.viewModel.remainingBudget(budgets, for: currentMonth)
 
         // Then: Should be limit minus spent
         XCTAssertEqual(remaining, 250.0)
@@ -98,12 +98,12 @@ final class BudgetsViewTests: XCTestCase {
     func testBudgetsViewModelDetectsOverBudget() throws {
         // Given: Over-budget scenario
         let category = ExpenseCategory(name: "Food", iconName: "fork.knife")
-        modelContext.insert(category)
+        self.modelContext.insert(category)
 
         let currentMonth = Date()
         let budget = Budget(name: "Food Budget", limitAmount: 500.0, month: currentMonth)
         budget.category = category
-        modelContext.insert(budget)
+        self.modelContext.insert(budget)
 
         // Create a transaction to simulate over-budget spending
         let transaction = FinancialTransaction(
@@ -113,12 +113,12 @@ final class BudgetsViewTests: XCTestCase {
             transactionType: .expense
         )
         transaction.category = category
-        modelContext.insert(transaction)
+        self.modelContext.insert(transaction)
 
         let budgets = [budget]
 
         // When: Checking for over-budget categories
-        let hasOverBudget = viewModel.hasOverBudgetCategories(budgets, for: currentMonth)
+        let hasOverBudget = self.viewModel.hasOverBudgetCategories(budgets, for: currentMonth)
 
         // Then: Should detect over-budget
         XCTAssertTrue(hasOverBudget)
@@ -127,12 +127,12 @@ final class BudgetsViewTests: XCTestCase {
     func testBudgetsViewModelCreatesBudgetSuccessfully() throws {
         // Given: Valid budget parameters
         let category = ExpenseCategory(name: "Food", iconName: "fork.knife")
-        modelContext.insert(category)
+        self.modelContext.insert(category)
 
         let currentMonth = Date()
 
         // When: Creating a budget
-        viewModel.createBudget(category: category, limitAmount: 500.0, month: currentMonth)
+        self.viewModel.createBudget(category: category, limitAmount: 500.0, month: currentMonth)
 
         // Then: Budget should be created and saved
         let descriptor = FetchDescriptor<Budget>()
@@ -145,15 +145,15 @@ final class BudgetsViewTests: XCTestCase {
     func testBudgetsViewModelPreventsDuplicateBudgets() throws {
         // Given: Existing budget for category and month
         let category = ExpenseCategory(name: "Food", iconName: "fork.knife")
-        modelContext.insert(category)
+        self.modelContext.insert(category)
 
         let currentMonth = Date()
         let existingBudget = Budget(name: "Food Budget", limitAmount: 400.0, month: currentMonth)
         existingBudget.category = category
-        modelContext.insert(existingBudget)
+        self.modelContext.insert(existingBudget)
 
         // When: Attempting to create duplicate budget
-        viewModel.createBudget(category: category, limitAmount: 500.0, month: currentMonth)
+        self.viewModel.createBudget(category: category, limitAmount: 500.0, month: currentMonth)
 
         // Then: Should not create duplicate
         let descriptor = FetchDescriptor<Budget>()
@@ -165,14 +165,14 @@ final class BudgetsViewTests: XCTestCase {
     func testBudgetsViewModelUpdatesBudgetLimit() throws {
         // Given: Existing budget
         let category = ExpenseCategory(name: "Food", iconName: "fork.knife")
-        modelContext.insert(category)
+        self.modelContext.insert(category)
 
         let budget = Budget(name: "Food Budget", limitAmount: 400.0, month: Date())
         budget.category = category
-        modelContext.insert(budget)
+        self.modelContext.insert(budget)
 
         // When: Updating budget limit
-        viewModel.updateBudgetLimit(budget, newLimit: 600.0)
+        self.viewModel.updateBudgetLimit(budget, newLimit: 600.0)
 
         // Then: Budget limit should be updated
         XCTAssertEqual(budget.limitAmount, 600.0)
@@ -181,14 +181,14 @@ final class BudgetsViewTests: XCTestCase {
     func testBudgetsViewModelDeletesBudget() throws {
         // Given: Existing budget
         let category = ExpenseCategory(name: "Food", iconName: "fork.knife")
-        modelContext.insert(category)
+        self.modelContext.insert(category)
 
         let budget = Budget(name: "Food Budget", limitAmount: 400.0, month: Date())
         budget.category = category
-        modelContext.insert(budget)
+        self.modelContext.insert(budget)
 
         // When: Deleting budget
-        viewModel.deleteBudget(budget)
+        self.viewModel.deleteBudget(budget)
 
         // Then: Budget should be removed
         let descriptor = FetchDescriptor<Budget>()
@@ -200,15 +200,15 @@ final class BudgetsViewTests: XCTestCase {
         // Given: Multiple budgets with different statuses
         let foodCategory = ExpenseCategory(name: "Food", iconName: "fork.knife")
         let transportCategory = ExpenseCategory(name: "Transport", iconName: "car")
-        modelContext.insert(foodCategory)
-        modelContext.insert(transportCategory)
+        self.modelContext.insert(foodCategory)
+        self.modelContext.insert(transportCategory)
 
         let currentMonth = Date()
 
         // On-track budget
         let foodBudget = Budget(name: "Food Budget", limitAmount: 500.0, month: currentMonth)
         foodBudget.category = foodCategory
-        modelContext.insert(foodBudget)
+        self.modelContext.insert(foodBudget)
 
         // Create transaction for food budget
         let foodTransaction = FinancialTransaction(
@@ -218,12 +218,12 @@ final class BudgetsViewTests: XCTestCase {
             transactionType: .expense
         )
         foodTransaction.category = foodCategory
-        modelContext.insert(foodTransaction)
+        self.modelContext.insert(foodTransaction)
 
         // Over-budget
         let transportBudget = Budget(name: "Transport Budget", limitAmount: 300.0, month: currentMonth)
         transportBudget.category = transportCategory
-        modelContext.insert(transportBudget)
+        self.modelContext.insert(transportBudget)
 
         // Create transaction for transport budget (over budget)
         let transportTransaction = FinancialTransaction(
@@ -233,12 +233,12 @@ final class BudgetsViewTests: XCTestCase {
             transactionType: .expense
         )
         transportTransaction.category = transportCategory
-        modelContext.insert(transportTransaction)
+        self.modelContext.insert(transportTransaction)
 
         let budgets = [foodBudget, transportBudget]
 
         // When: Calculating progress summary
-        let summary = viewModel.budgetProgressSummary(budgets, for: currentMonth)
+        let summary = self.viewModel.budgetProgressSummary(budgets, for: currentMonth)
 
         // Then: Summary should be correct
         XCTAssertEqual(summary.totalBudgeted, 800.0)
@@ -272,14 +272,14 @@ final class BudgetsViewTests: XCTestCase {
         var budgets: [Budget] = []
         let currentMonth = Date()
 
-        for i in 0..<100 {
+        for i in 0 ..< 100 {
             let category = ExpenseCategory(name: "Category \(i)", iconName: "circle")
-            modelContext.insert(category)
+            self.modelContext.insert(category)
 
             let budget = Budget(name: "Budget \(i)", limitAmount: Double(i * 10 + 100), month: currentMonth)
             budget.category = category
             budgets.append(budget)
-            modelContext.insert(budget)
+            self.modelContext.insert(budget)
 
             // Create transaction for each budget
             let transaction = FinancialTransaction(
@@ -289,14 +289,14 @@ final class BudgetsViewTests: XCTestCase {
                 transactionType: .expense
             )
             transaction.category = category
-            modelContext.insert(transaction)
+            self.modelContext.insert(transaction)
         }
 
         // When: Performing calculations on large dataset
         measure {
-            let total = viewModel.totalBudgetedAmount(budgets, for: currentMonth)
-            let remaining = viewModel.remainingBudget(budgets, for: currentMonth)
-            let summary = viewModel.budgetProgressSummary(budgets, for: currentMonth)
+            let total = self.viewModel.totalBudgetedAmount(budgets, for: currentMonth)
+            let remaining = self.viewModel.remainingBudget(budgets, for: currentMonth)
+            let summary = self.viewModel.budgetProgressSummary(budgets, for: currentMonth)
 
             // Then: Operations should complete within reasonable time
             XCTAssertGreaterThan(total, 0)
@@ -313,9 +313,9 @@ final class BudgetsViewTests: XCTestCase {
         let currentMonth = Date()
 
         // When: Calculating with empty array
-        let total = viewModel.totalBudgetedAmount(budgets, for: currentMonth)
-        let remaining = viewModel.remainingBudget(budgets, for: currentMonth)
-        let hasOverBudget = viewModel.hasOverBudgetCategories(budgets, for: currentMonth)
+        let total = self.viewModel.totalBudgetedAmount(budgets, for: currentMonth)
+        let remaining = self.viewModel.remainingBudget(budgets, for: currentMonth)
+        let hasOverBudget = self.viewModel.hasOverBudgetCategories(budgets, for: currentMonth)
 
         // Then: Should return zero/false values
         XCTAssertEqual(total, 0.0)
@@ -326,7 +326,7 @@ final class BudgetsViewTests: XCTestCase {
     func testBudgetsViewModelHandlesZeroLimitBudget() throws {
         // Given: Budget with zero limit
         let category = ExpenseCategory(name: "Test", iconName: "circle")
-        modelContext.insert(category)
+        self.modelContext.insert(category)
 
         let budget = Budget(name: "Zero Budget", limitAmount: 0.0, month: Date())
         budget.category = category
@@ -335,7 +335,7 @@ final class BudgetsViewTests: XCTestCase {
         // No transactions needed for zero spending
 
         // When: Calculating progress
-        let summary = viewModel.budgetProgressSummary(budgets, for: Date())
+        let summary = self.viewModel.budgetProgressSummary(budgets, for: Date())
 
         // Then: Should handle zero division gracefully
         XCTAssertEqual(summary.progressPercentage, 0.0)
@@ -344,11 +344,11 @@ final class BudgetsViewTests: XCTestCase {
     func testBudgetsViewModelHandlesNegativeSpending() throws {
         // Given: Budget with negative spending (refunds, etc.)
         let category = ExpenseCategory(name: "Test", iconName: "circle")
-        modelContext.insert(category)
+        self.modelContext.insert(category)
 
         let budget = Budget(name: "Test Budget", limitAmount: 500.0, month: Date())
         budget.category = category
-        modelContext.insert(budget)
+        self.modelContext.insert(budget)
 
         // No transactions needed for zero spending
 
@@ -357,14 +357,14 @@ final class BudgetsViewTests: XCTestCase {
             title: "Grocery Refund",
             amount: 50.0,
             date: Date(),
-            transactionType: .income  // Refunds are income
+            transactionType: .income // Refunds are income
         )
         refundTransaction.category = category
-        modelContext.insert(refundTransaction)
+        self.modelContext.insert(refundTransaction)
         let budgets = [budget]
 
         // When: Calculating remaining budget
-        let remaining = viewModel.remainingBudget(budgets, for: Date())
+        let remaining = self.viewModel.remainingBudget(budgets, for: Date())
 
         // Then: Should handle negative spending correctly
         XCTAssertEqual(remaining, 550.0) // 500 + 50 refund
@@ -375,14 +375,14 @@ final class BudgetsViewTests: XCTestCase {
     func testBudgetsViewModelApplyRolloverToNextPeriod() throws {
         // Given: Budget with rollover enabled
         let category = ExpenseCategory(name: "Food", iconName: "fork.knife")
-        modelContext.insert(category)
+        self.modelContext.insert(category)
 
         let currentMonth = Date()
         let budget = Budget(name: "Food Budget", limitAmount: 500.0, month: currentMonth)
         budget.category = category
         budget.rolloverEnabled = true
         budget.maxRolloverPercentage = 50.0 // Max 50% of remaining
-        modelContext.insert(budget)
+        self.modelContext.insert(budget)
 
         // Create transaction to simulate spending (300 spent, 200 remaining)
         let transaction = FinancialTransaction(
@@ -392,10 +392,10 @@ final class BudgetsViewTests: XCTestCase {
             transactionType: .expense
         )
         transaction.category = category
-        modelContext.insert(transaction)
+        self.modelContext.insert(transaction)
 
         // When: Applying rollover to next period
-        viewModel.applyRolloverToNextPeriod(for: budget)
+        self.viewModel.applyRolloverToNextPeriod(for: budget)
 
         // Then: Next period budget should be created with rollover amount
         let descriptor = FetchDescriptor<Budget>()
@@ -414,14 +414,14 @@ final class BudgetsViewTests: XCTestCase {
     func testBudgetsViewModelGetRolloverSummary() throws {
         // Given: Budget with rollover settings
         let category = ExpenseCategory(name: "Food", iconName: "fork.knife")
-        modelContext.insert(category)
+        self.modelContext.insert(category)
 
         let budget = Budget(name: "Food Budget", limitAmount: 500.0, month: Date())
         budget.category = category
         budget.rolloverEnabled = true
         budget.maxRolloverPercentage = 50.0
         budget.rolledOverAmount = 50.0
-        modelContext.insert(budget)
+        self.modelContext.insert(budget)
 
         // Create transaction to simulate spending
         let transaction = FinancialTransaction(
@@ -431,10 +431,10 @@ final class BudgetsViewTests: XCTestCase {
             transactionType: .expense
         )
         transaction.category = category
-        modelContext.insert(transaction)
+        self.modelContext.insert(transaction)
 
         // When: Getting rollover summary
-        let summary = viewModel.getRolloverSummary(for: budget)
+        let summary = self.viewModel.getRolloverSummary(for: budget)
 
         // Then: Summary should contain correct information
         XCTAssertEqual(summary.unusedAmount, 200.0)
@@ -449,22 +449,22 @@ final class BudgetsViewTests: XCTestCase {
     func testBudgetsViewModelSpendingTrend() throws {
         // Given: Category with spending history
         let category = ExpenseCategory(name: "Food", iconName: "fork.knife")
-        modelContext.insert(category)
+        self.modelContext.insert(category)
 
         // When: Getting spending trend for 3 months
-        let trend = viewModel.spendingTrend(for: category, months: 3)
+        let trend = self.viewModel.spendingTrend(for: category, months: 3)
 
         // Then: Should return trend data (may be empty if no transactions)
         XCTAssertEqual(trend.count, 3)
         XCTAssertEqual(trend[0].categoryName, "Food")
     }
 
-        // MARK: - Budget Filtering Tests
+    // MARK: - Budget Filtering Tests
 
     func testBudgetsViewModelBudgetsForMonth() throws {
         // Given: Budgets for different months
         let category = ExpenseCategory(name: "Food", iconName: "fork.knife")
-        modelContext.insert(category)
+        self.modelContext.insert(category)
 
         let calendar = Calendar.current
         let currentMonth = Date()
@@ -479,7 +479,7 @@ final class BudgetsViewTests: XCTestCase {
         let budgets = [currentBudget, lastMonthBudget]
 
         // When: Filtering budgets for current month
-        let currentMonthBudgets = viewModel.budgetsForMonth(budgets, month: currentMonth)
+        let currentMonthBudgets = self.viewModel.budgetsForMonth(budgets, month: currentMonth)
 
         // Then: Should return only current month budgets
         XCTAssertEqual(currentMonthBudgets.count, 1)
@@ -490,14 +490,14 @@ final class BudgetsViewTests: XCTestCase {
         // Given: Mix of over-budget and on-budget categories
         let foodCategory = ExpenseCategory(name: "Food", iconName: "fork.knife")
         let transportCategory = ExpenseCategory(name: "Transport", iconName: "car")
-        modelContext.insert(foodCategory)
-        modelContext.insert(transportCategory)
+        self.modelContext.insert(foodCategory)
+        self.modelContext.insert(transportCategory)
 
         let currentMonth = Date()
 
         let overBudget = Budget(name: "Food Budget", limitAmount: 500.0, month: currentMonth)
         overBudget.category = foodCategory
-        modelContext.insert(overBudget)
+        self.modelContext.insert(overBudget)
 
         // Create over-budget transaction
         let overBudgetTransaction = FinancialTransaction(
@@ -507,11 +507,11 @@ final class BudgetsViewTests: XCTestCase {
             transactionType: .expense
         )
         overBudgetTransaction.category = foodCategory
-        modelContext.insert(overBudgetTransaction)
+        self.modelContext.insert(overBudgetTransaction)
 
         let onBudget = Budget(name: "Transport Budget", limitAmount: 300.0, month: currentMonth)
         onBudget.category = transportCategory
-        modelContext.insert(onBudget)
+        self.modelContext.insert(onBudget)
 
         // Create on-budget transaction
         let onBudgetTransaction = FinancialTransaction(
@@ -521,12 +521,12 @@ final class BudgetsViewTests: XCTestCase {
             transactionType: .expense
         )
         onBudgetTransaction.category = transportCategory
-        modelContext.insert(onBudgetTransaction)
+        self.modelContext.insert(onBudgetTransaction)
 
         let budgets = [overBudget, onBudget]
 
         // When: Getting over-budget categories
-        let overBudgetCategories = viewModel.overBudgetCategories(budgets, for: currentMonth)
+        let overBudgetCategories = self.viewModel.overBudgetCategories(budgets, for: currentMonth)
 
         // Then: Should return only over-budget categories
         XCTAssertEqual(overBudgetCategories.count, 1)

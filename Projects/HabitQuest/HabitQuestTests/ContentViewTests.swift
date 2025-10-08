@@ -288,7 +288,7 @@ final class ContentViewTests: XCTestCase {
 
     func testFooterStatsViewWithLargeItemCount() {
         // Test with a very large item count
-        let footerStatsView = FooterStatsView(itemCount: 999999)
+        let footerStatsView = FooterStatsView(itemCount: 999_999)
 
         XCTAssertNotNil(footerStatsView)
     }
@@ -338,6 +338,7 @@ final class ContentViewTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testItemRowViewCreationPerformance() {
         // Test performance of creating ItemRowView instances
         let items = (0 ..< 100).map { Item(timestamp: Date().addingTimeInterval(Double(-$0 * 60))) }
@@ -381,16 +382,16 @@ final class ContentViewTests: XCTestCase {
     func testItemRowViewAllTimeIcons() {
         // Test all time-based icon scenarios comprehensively
         let testCases: [(hour: Int, expectedIcon: String)] = [
-            (0, "moon.stars.fill"),   // Midnight
-            (5, "moon.stars.fill"),   // Early morning
-            (6, "sunrise.fill"),      // Sunrise
-            (9, "sunrise.fill"),      // Morning
-            (12, "sun.max.fill"),     // Noon
-            (15, "sun.max.fill"),     // Afternoon
-            (18, "sunset.fill"),      // Evening
-            (20, "sunset.fill"),      // Evening
-            (22, "moon.stars.fill"),  // Night
-            (23, "moon.stars.fill"),  // Late night
+            (0, "moon.stars.fill"), // Midnight
+            (5, "moon.stars.fill"), // Early morning
+            (6, "sunrise.fill"), // Sunrise
+            (9, "sunrise.fill"), // Morning
+            (12, "sun.max.fill"), // Noon
+            (15, "sun.max.fill"), // Afternoon
+            (18, "sunset.fill"), // Evening
+            (20, "sunset.fill"), // Evening
+            (22, "moon.stars.fill"), // Night
+            (23, "moon.stars.fill"), // Late night
         ]
 
         for testCase in testCases {

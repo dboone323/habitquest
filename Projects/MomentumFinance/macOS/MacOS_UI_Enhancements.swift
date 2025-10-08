@@ -11,7 +11,7 @@ import SwiftUI
 // List view components needed for the three-column macOS layout
 
 // Dashboard list view for the middle column
-extension Features.Dashboard {
+extension Features.FinancialDashboard {
     struct DashboardListView: View {
         @Environment(\.modelContext) private var modelContext
         @Query private var accounts: [FinancialAccount]
@@ -1206,7 +1206,7 @@ struct ContentView_macOS: View {
             Group {
                 switch self.selectedSidebarItem {
                 case .dashboard:
-                    Features.Dashboard.DashboardListView()
+                    Features.FinancialDashboard.DashboardListView()
                 case .transactions:
                     Features.Transactions.TransactionsListView()
                 case .budgets:
@@ -1252,7 +1252,7 @@ struct ContentView_macOS: View {
                     // Default view when no item is selected
                     switch self.selectedSidebarItem {
                     case .dashboard:
-                        Features.Dashboard.DashboardView()
+                        Features.FinancialDashboard.DashboardView()
                     case .transactions:
                         Text("Select a transaction or account")
                             .font(.title2)

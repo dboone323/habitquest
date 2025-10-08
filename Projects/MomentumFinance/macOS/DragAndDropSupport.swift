@@ -262,16 +262,14 @@ struct DroppableFinanceItemModifier<T: DraggableFinanceItem>: ViewModifier {
                     var droppedItems: [T] = []
 
                     for provider in providers {
-                        for type in self.acceptedTypes {
-                            if provider.hasItemConformingToTypeIdentifier(type.uniformType.identifier) {
-                                do {
-                                    let data = try await provider.loadDataRepresentation(forTypeIdentifier: type.uniformType.identifier)
-                                    let decoder = JSONDecoder()
-                                    let item = try decoder.decode(T.self, from: data)
-                                    droppedItems.append(item)
-                                } catch {
-                                    self.logger.error("Error decoding dropped item: \(error)")
-                                }
+                        for type in self.acceptedTypes where provider.hasItemConformingToTypeIdentifier(type.uniformType.identifier) {
+                            do {
+                                let data = try await provider.loadDataRepresentation(forTypeIdentifier: type.uniformType.identifier)
+                                let decoder = JSONDecoder()
+                                let item = try decoder.decode(T.self, from: data)
+                                droppedItems.append(item)
+                            } catch {
+                                self.logger.error("Error decoding dropped item: \(error)")
                             }
                         }
                     }

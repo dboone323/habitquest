@@ -67,6 +67,11 @@ class UIManager {
         self.fadeOutAction = SKAction.fadeOut(withDuration: 0.3)
     }
 
+    /// Updates the scene reference (called when scene is properly initialized)
+    func updateScene(_ scene: SKScene) {
+        self.scene = scene
+    }
+
     // MARK: - Setup
 
     /// Sets up all initial UI elements

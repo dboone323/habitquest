@@ -18,11 +18,10 @@ final class BehavioralInsightsService {
 
         return BehavioralInsights(
             moodCorrelation: moodCorrelation,
-            strongestDays: dayOfWeekPattern.strongest,
-            weakestDays: dayOfWeekPattern.weakest,
-            streakBreakFactors: streakBreakFactors,
             motivationTriggers: motivationTriggers,
-            personalityInsights: self.generatePersonalityInsights(habit)
+            commonBreakPoints: streakBreakFactors,
+            personalityInsights: self.generatePersonalityInsights(habit),
+            recommendations: self.generateRecommendations(habit)
         )
     }
 
@@ -173,6 +172,53 @@ final class BehavioralInsightsService {
         }
 
         return insights
+    }
+
+    /// Generate personalized recommendations based on habit patterns
+    func generateRecommendations(_ habit: Habit) -> [String] {
+        var recommendations: [String] = []
+
+        let consistency = self.calculateConsistencyScore(habit)
+        let adaptability = self.calculateAdaptabilityScore(habit)
+        let timePreference = self.analyzeTimePreference(habit)
+
+        // Consistency-based recommendations
+        if consistency < 0.5 {
+            recommendations.append("Start with smaller, more achievable goals to build momentum")
+            recommendations.append("Use habit stacking - attach new habits to existing routines")
+        } else if consistency < 0.7 {
+            recommendations.append("Set up accountability reminders or partner with a friend")
+        }
+
+        // Adaptability-based recommendations
+        if adaptability < 0.4 {
+            recommendations.append("Create a consistent environment that supports your habits")
+            recommendations.append("Minimize major schedule disruptions during habit formation")
+        }
+
+        // Time-based recommendations
+        if timePreference.hour < 10 {
+            recommendations.append("Schedule important habits early in the day when energy is highest")
+        } else if timePreference.hour > 18 {
+            recommendations.append("Consider evening routines that align with your natural rhythm")
+        }
+
+        // Streak-based recommendations
+        let streakPatterns = self.analyzeStreakPatterns(habit)
+        if streakPatterns.longestStreak < 7 {
+            recommendations.append("Focus on building 7-day streaks before extending goals")
+        }
+
+        // Default recommendations if analysis is inconclusive
+        if recommendations.isEmpty {
+            recommendations = [
+                "Track your habits consistently to identify patterns",
+                "Celebrate small wins to maintain motivation",
+                "Adjust your approach based on what works for your lifestyle"
+            ]
+        }
+
+        return recommendations
     }
 
     // MARK: - Private Analysis Methods

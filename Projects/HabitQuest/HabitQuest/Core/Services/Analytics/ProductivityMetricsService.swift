@@ -231,14 +231,27 @@ final class ProductivityMetricsService {
         return recommendations
     }
 
-    private func getTopPerformingCategories() async -> [HabitCategory] {
+    private func getTopPerformingCategories() async -> [AnalyticsHabitCategory] {
         let habits = await fetchAllHabits()
         let categoryPerformance = Dictionary(grouping: habits, by: \.category).mapValues { categoryHabits in
             let allLogs = categoryHabits.flatMap(\.logs)
             return Double(allLogs.filter(\.isCompleted).count) / Double(max(allLogs.count, 1))
         }
 
-        return categoryPerformance.sorted { $0.value > $1.value }.prefix(3).map(\.key)
+        return categoryPerformance.sorted { $0.value > $1.value }.prefix(3).map { self.convertToAnalyticsCategory($0.key) }
+    }
+
+    private func convertToAnalyticsCategory(_ category: HabitCategory) -> AnalyticsHabitCategory {
+        switch category {
+        case .health: .health
+        case .fitness: .fitness
+        case .learning: .learning
+        case .productivity: .productivity
+        case .social: .social
+        case .creativity: .creativity
+        case .mindfulness: .mindfulness
+        case .other: .other
+        }
     }
 
     private func identifyImprovementAreas(score: ProductivityScore) -> [ProductivityArea] {
@@ -302,55 +315,3 @@ final class ProductivityMetricsService {
 }
 
 // MARK: - Supporting Types
-
-public struct ProductivityScore {
-    public let overallScore: Double
-    public let completionRate: Double
-    public let streakHealth: Double
-    public let diversityScore: Double
-    public let momentumScore: Double
-    public let recommendations: [String]
-}
-
-public struct ProductivityInsights {
-    public let currentScore: ProductivityScore
-    public let weeklyCompletionRate: Double
-    public let activeStreaks: Int
-    public let xpEarnedThisWeek: Int
-    public let topPerformingCategories: [HabitCategory]
-    public let improvementAreas: [ProductivityArea]
-    public let nextMilestones: [ProductivityMilestone]
-}
-
-public struct ProductivityTrends {
-    public let dailyScores: [Double]
-    public let trend: ProductivityTrend
-    public let averageScore: Double
-    public let bestDay: Double
-    public let consistencyScore: Double
-}
-
-public enum ProductivityTrend {
-    case improving
-    case stable
-    case declining
-}
-
-public enum ProductivityArea {
-    case consistency
-    case streaks
-    case diversity
-    case momentum
-}
-
-public struct ProductivityMilestone {
-    public let type: MilestoneType
-    public let currentValue: Int
-    public let targetValue: Int
-    public let description: String
-}
-
-public enum MilestoneType {
-    case totalCompletions
-    case longestStreak
-}

@@ -35,6 +35,11 @@ class EffectsManager {
         self.preloadEffects()
     }
 
+    /// Updates the scene reference (called when scene is properly initialized)
+    func updateScene(_ scene: SKScene) {
+        self.scene = scene
+    }
+
     // MARK: - Effect Preloading
 
     /// Preloads particle effects for better performance

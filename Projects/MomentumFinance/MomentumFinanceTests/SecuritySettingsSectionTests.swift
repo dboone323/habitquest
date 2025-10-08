@@ -1,10 +1,9 @@
-import XCTest
-import SwiftUI
 @testable import MomentumFinanceCore
+import SwiftUI
+import XCTest
 
 @MainActor
 final class SecuritySettingsSectionTests: XCTestCase {
-
     // MARK: - Setup & Teardown
 
     override func setUp() async throws {
@@ -150,7 +149,11 @@ final class SecuritySettingsSectionTests: XCTestCase {
         let viewModel = SecuritySettingsViewModel()
 
         // Then: Should fall back to default (300)
-        XCTAssertEqual(viewModel.authenticationTimeoutBinding.wrappedValue, 300, "Should fall back to default timeout on invalid persistence")
+        XCTAssertEqual(
+            viewModel.authenticationTimeoutBinding.wrappedValue,
+            300,
+            "Should fall back to default timeout on invalid persistence"
+        )
     }
 
     // MARK: - Combined Settings Tests
@@ -265,7 +268,7 @@ final class SecuritySettingsSectionTests: XCTestCase {
             let viewModel = SecuritySettingsViewModel()
 
             // When: Rapidly changing settings
-            for i in 0..<100 {
+            for i in 0 ..< 100 {
                 viewModel.biometricEnabledBinding.wrappedValue = (i % 2 == 0)
                 viewModel.authenticationTimeoutBinding.wrappedValue = 60 + (i * 10)
             }

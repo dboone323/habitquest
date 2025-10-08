@@ -14,13 +14,13 @@ final class AnalyticsServiceTests: XCTestCase {
         // Create in-memory model context for testing
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Habit.self, configurations: config)
-        modelContext = ModelContext(container)
+        self.modelContext = ModelContext(container)
 
         // Initialize analytics service
-        analyticsService = AnalyticsService(modelContext: modelContext)
+        self.analyticsService = AnalyticsService(modelContext: self.modelContext)
 
         // Create test habit
-        testHabit = Habit(
+        self.testHabit = Habit(
             name: "Test Habit",
             habitDescription: "A test habit for analytics",
             frequency: .daily,
@@ -28,14 +28,14 @@ final class AnalyticsServiceTests: XCTestCase {
             category: .health,
             difficulty: .easy
         )
-        modelContext.insert(testHabit)
-        try modelContext.save()
+        self.modelContext.insert(self.testHabit)
+        try self.modelContext.save()
     }
 
     override func tearDown() async throws {
-        analyticsService = nil
-        modelContext = nil
-        testHabit = nil
+        self.analyticsService = nil
+        self.modelContext = nil
+        self.testHabit = nil
         try await super.tearDown()
     }
 
@@ -315,7 +315,7 @@ final class AnalyticsServiceTests: XCTestCase {
         // Test property access and validation
         let moodStats = [
             MoodStats(mood: .excellent, completionRate: 0.95, averageXP: 15),
-                            MoodStats(mood: .bad, completionRate: 0.4, averageXP: 5)
+            MoodStats(mood: .bad, completionRate: 0.4, averageXP: 5)
         ]
 
         let moodCorrelation = MoodCorrelation(
@@ -370,7 +370,7 @@ final class AnalyticsServiceTests: XCTestCase {
     func testMoodStatsMethods() {
         // Test method functionality - MoodStats is a struct with no methods
         let moodStats = MoodStats(
-                                    mood: .bad,
+            mood: .bad,
             completionRate: 0.3,
             averageXP: 4
         )
@@ -425,7 +425,7 @@ final class AnalyticsServiceTests: XCTestCase {
 
     func testAnalyticsServiceInitialization() async {
         // Test that analytics service initializes correctly
-        XCTAssertNotNil(analyticsService)
+        XCTAssertNotNil(self.analyticsService)
     }
 
     func testGetAnalytics() async {
@@ -461,9 +461,9 @@ final class AnalyticsServiceTests: XCTestCase {
 
     func testGetHabitTrends() async {
         // Test getting habit trends
-        let trends = await analyticsService.getHabitTrends(for: testHabit.id, days: 7)
+        let trends = await analyticsService.getHabitTrends(for: self.testHabit.id, days: 7)
 
-        XCTAssertEqual(trends.habitId, testHabit.id)
+        XCTAssertEqual(trends.habitId, self.testHabit.id)
         XCTAssertEqual(trends.completionRates.count, 7) // Should return array for 7 days
         XCTAssertTrue(trends.streaks.isEmpty) // No completed logs, so no streaks
         XCTAssertEqual(trends.xpEarned.count, 7) // Should return array for 7 days
@@ -501,7 +501,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let score = await analyticsService.calculateProductivityScore()
 
         // Debug prints
-        print("DEBUG: Expected diversityScore = 1.0/8.0 = \(1.0/8.0), actual diversityScore = \(score.diversityScore)")
+        print("DEBUG: Expected diversityScore = 1.0/8.0 = \(1.0 / 8.0), actual diversityScore = \(score.diversityScore)")
         print("DEBUG: Expected completionRate = 0.0, actual completionRate = \(score.completionRate)")
         print("DEBUG: Expected streakHealth = 0.0, actual streakHealth = \(score.streakHealth)")
         print("DEBUG: Expected overallScore = 0.0, actual overallScore = \(score.overallScore)")
@@ -511,7 +511,7 @@ final class AnalyticsServiceTests: XCTestCase {
         XCTAssertEqual(score.overallScore, 0.09375, accuracy: 0.001) // (0.0*0.4) + (0.0*0.3) + (0.125*0.15) + (0.5*0.15)
         XCTAssertEqual(score.completionRate, 0.0)
         XCTAssertEqual(score.streakHealth, 0.0)
-        XCTAssertEqual(score.diversityScore, 1.0/8.0, accuracy: 0.001) // 1 category out of 8 total
+        XCTAssertEqual(score.diversityScore, 1.0 / 8.0, accuracy: 0.001) // 1 category out of 8 total
         XCTAssertEqual(score.momentumScore, 0.5, accuracy: 0.001) // Momentum score calculation returns 0.5 for no data
         XCTAssertGreaterThan(score.recommendations.count, 0) // Should have some recommendations
     }

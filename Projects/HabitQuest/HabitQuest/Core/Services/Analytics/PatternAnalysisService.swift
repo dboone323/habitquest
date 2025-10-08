@@ -158,17 +158,22 @@ final class PatternAnalysisService {
         return weekdayCounts.max(by: { $0.value < $1.value })?.key ?? 2 // Default to Tuesday
     }
 
-    private func analyzeTimePreference(_ logs: [HabitLog]) -> Int {
+    private func analyzeTimePreference(_ logs: [HabitLog]) -> [String] {
         let completionHours = logs.compactMap { log in
             log.isCompleted ? Calendar.current.component(.hour, from: log.completionDate) : nil
         }
 
-        guard !completionHours.isEmpty else { return 9 } // Default to 9 AM
+        guard !completionHours.isEmpty else { return ["9:00 AM"] } // Default to 9 AM
 
         let hourCounts = Dictionary(grouping: completionHours, by: { $0 })
             .mapValues(\.count)
 
-        return hourCounts.max(by: { $0.value < $1.value })?.key ?? 9
+        let optimalHour = hourCounts.max(by: { $0.value < $1.value })?.key ?? 9
+
+        // Convert hour to time string
+        let hour12 = optimalHour == 0 ? 12 : (optimalHour > 12 ? optimalHour - 12 : optimalHour)
+        let amPm = optimalHour >= 12 ? "PM" : "AM"
+        return ["\(hour12):00 \(amPm)"]
     }
 
     private func calculateSuccessRateForHour(habit: Habit, hour: Int) -> Double {

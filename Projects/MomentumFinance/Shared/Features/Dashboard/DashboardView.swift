@@ -27,7 +27,7 @@ final class _DebugColorThemeStub {
 
 // MARK: - Theme Types
 
-extension Features.Dashboard {
+extension Features.FinancialDashboard {
     // Enum for dashboard destinations
     enum DashboardDestination: Hashable {
         case transactions
@@ -250,6 +250,6 @@ extension Features.Dashboard {
 }
 
 #Preview {
-    Features.Dashboard.DashboardView()
+    Features.FinancialDashboard.DashboardView()
         .modelContainer(for: [FinancialAccount.self, Subscription.self, Budget.self])
 }

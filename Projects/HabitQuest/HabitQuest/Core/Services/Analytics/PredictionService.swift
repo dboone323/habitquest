@@ -223,8 +223,8 @@ final class PredictionService {
         2 // Tuesday
     }
 
-    private func analyzeTimePreference(_: [HabitLog]) -> Int {
-        9 // 9 AM
+    private func analyzeTimePreference(_: [HabitLog]) -> [String] {
+        ["9:00 AM"] // Default to 9 AM
     }
 
     private func calculateSuccessRateForHour(habit: Habit, hour: Int) -> Double {

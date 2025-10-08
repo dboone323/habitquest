@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-extension Features.Dashboard {
+extension Features.FinancialDashboard {
     struct DashboardUpcomingSubscriptions: View {
         let subscriptions: [Subscription]
         let colorTheme: ColorTheme

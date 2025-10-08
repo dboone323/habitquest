@@ -6,7 +6,7 @@ import SwiftUI
 
 #if os(macOS)
 // Dashboard-specific UI enhancements
-extension Features.Dashboard {
+extension Features.FinancialDashboard {
     /// macOS-specific dashboard view
     struct DashboardListView: View {
         @Environment(\.modelContext) private var modelContext

@@ -76,33 +76,6 @@ final class AnalyticsService {
 
 // MARK: - Supporting Types
 
-public enum TimePeriod {
-    case week, month, quarter, year
-
-    public var startDate: Date {
-        let calendar = Calendar.current
-        switch self {
-        case .week:
-            return calendar.date(byAdding: .day, value: -7, to: Date()) ?? Date()
-        case .month:
-            return calendar.date(byAdding: .month, value: -1, to: Date()) ?? Date()
-        case .quarter:
-            return calendar.date(byAdding: .month, value: -3, to: Date()) ?? Date()
-        case .year:
-            return calendar.date(byAdding: .year, value: -1, to: Date()) ?? Date()
-        }
-    }
-
-    public var dayCount: Int {
-        switch self {
-        case .week: 7
-        case .month: 30
-        case .quarter: 90
-        case .year: 365
-        }
-    }
-}
-
 public struct HabitAnalytics {
     public let overallStats: OverallStats
     public let streakAnalytics: AnalyticsStreakData
@@ -227,14 +200,6 @@ public struct CategoryInsight {
     public let completionRate: Double
     public let averageStreak: Int
     public let totalXPEarned: Int
-}
-
-public struct ProductivityMetrics {
-    public let period: TimePeriod
-    public let completionRate: Double
-    public let streakCount: Int
-    public let xpEarned: Int
-    public let missedOpportunities: Int
 }
 
 public enum HabitTrend: String, Codable {

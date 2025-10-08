@@ -8,7 +8,7 @@ import SwiftUI
 // Temporary placeholder views until namespace issues are resolved
 public struct DashboardView: View {
     public var body: some View {
-        Features.Dashboard.DashboardView()
+        Features.FinancialDashboard.DashboardView()
     }
 }
 
