@@ -1,11 +1,7 @@
 # Unified SwiftLint configuration (proposed root)
 # Once validated, move to repository root as .swiftlint.yml and delete project-level duplicates.
 
-included:
-  - Projects
-  - Shared
-  - Tools
-  - Documentation
+included: []
 
 excluded:
   - Carthage
@@ -16,6 +12,7 @@ excluded:
   - "**/Snapshots"
   - "**/Generated"
   - "**/BuildArtifacts"
+  - "**/backups/**"
 
 # Core disabled (temporary until refactors reduce violations)
 disabled_rules:
