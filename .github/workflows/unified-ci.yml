@@ -1,12 +1,10 @@
 name: Unified CI
 
-# TEMPORARILY DISABLED: pre-commit command not found in CI environment
-# Re-enable after adding pre-commit installation step
 on:
   push:
-    branches: [disabled-until-fixed]
+    branches: [main]
   pull_request:
-    branches: [disabled-until-fixed]
+    branches: [main]
 
 jobs:
   build-and-test:

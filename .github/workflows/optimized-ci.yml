@@ -1,12 +1,10 @@
 name: Optimized CI
 
-# TEMPORARILY DISABLED: Needs xcodebuild-based test configuration
-# Re-enable after test infrastructure is updated
 on:
   push:
-    branches: [disabled-until-fixed]
+    branches: [main]
   pull_request:
-    branches: [disabled-until-fixed]
+    branches: [main]
   workflow_dispatch:
 
 concurrency:

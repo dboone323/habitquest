@@ -1,8 +1,8 @@
 # .github/workflows README
 
-## Active Workflows (14 workflows)
+## Active Workflows (13 workflows)
 
-Last updated: October 6, 2025
+Last updated: October 2025 (Post-Optimization)
 
 ---
 
@@ -21,7 +21,7 @@ Last updated: October 6, 2025
   - Test reports (JUnit XML)
   - Artifact uploads
 
-#### optimized-ci.yml
+#### optimized-ci.yml ⭐ RE-ENABLED
 
 - **Purpose:** Smart path-based CI with change detection
 - **Triggers:** Push/PR to main
@@ -33,7 +33,7 @@ Last updated: October 6, 2025
   - Security scanning with Trivy
   - Comprehensive summary report
 
-#### unified-ci.yml
+#### unified-ci.yml ⭐ RE-ENABLED
 
 - **Purpose:** Full build and test for all 5 Swift projects
 - **Triggers:** Push/PR to main
@@ -48,9 +48,9 @@ Last updated: October 6, 2025
 
 ---
 
-### Pull Request Validation (3 workflows)
+### Pull Request Validation (2 workflows)
 
-#### pr-validation-unified.yml ⭐ NEW
+#### pr-validation-unified.yml
 
 - **Purpose:** Unified PR validation (basic + automation checks)
 - **Triggers:** PR opened/sync/reopened
@@ -71,28 +71,25 @@ Last updated: October 6, 2025
 - **Runner:** ubuntu-latest
 - **Unique:** AI analysis of code changes
 
-#### trunk.yml
-
-- **Purpose:** Trunk.io code quality checks
-- **Triggers:** PR, push to main
-- **Runner:** ubuntu-latest
-- **Unique:** Third-party integration for code quality
-
 ---
 
 ### Security & Quality (2 workflows)
 
-#### enhanced-security.yml
+#### codeql-analysis.yml ⭐ ENHANCED
 
-- **Purpose:** Unified security vulnerability scanning
-- **Triggers:** Push (main, develop), PR, Schedule
+- **Purpose:** Comprehensive security analysis (CodeQL + additional scanners)
+- **Triggers:** Push/PR to main, Weekly schedule
 - **Runner:** ubuntu-latest
 - **Key Features:**
-  - Trivy vulnerability scanner
-  - SARIF report upload
-  - CodeQL integration
+  - CodeQL analysis for Swift/JavaScript
+  - Bandit (Python security)
+  - Safety (dependency vulnerabilities)
+  - Trivy (container/binary vulnerabilities)
+  - Advanced secrets detection
+  - Swift security analysis
+  - Comprehensive security reporting
 
-#### test-coverage.yml
+#### test-coverage.yml ⭐ RE-ENABLED
 
 - **Purpose:** Test coverage tracking and quality gates
 - **Triggers:** Push to main, PR
@@ -119,7 +116,7 @@ Last updated: October 6, 2025
   - Watchdog execution
   - Metrics snapshot
 
-#### swiftlint-auto-fix.yml ⭐ NEW
+#### swiftlint-auto-fix.yml
 
 - **Purpose:** Automatically fix SwiftLint violations
 - **Schedule:** Daily at 01:00 UTC
@@ -129,7 +126,7 @@ Last updated: October 6, 2025
   - Auto-fix violations
   - Commit changes if any
 
-#### weekly-health-check.yml ⭐ NEW
+#### weekly-health-check.yml
 
 - **Purpose:** Comprehensive system health monitoring
 - **Schedule:** Weekly Sunday at 02:00 UTC
@@ -186,144 +183,48 @@ Last updated: October 6, 2025
   - Optional MCP server integration
   - Fails on validation errors
 - **Unique:** Only workflow focused on Swift code quality validation
-- **Status:** ✅ KEEP (unique Swift validation functionality)
 
 ---
 
-## Archived Workflows
+## Recently Removed Workflows
 
-See `archive_20251006/README.md` for workflows deprecated during the October 2025 consolidation.
+**Removed in October 2025 Optimization:**
 
-**Archived (October 6, 2025):**
-
-- `pr-validation.yml` - Merged into pr-validation-unified.yml
-- `validate-and-lint-pr.yml` - Merged into pr-validation-unified.yml
-
-**Note:** `ci.yml` and `automation-tests.yml` mentioned in initial analysis were already absent from repository.
+- `trunk.yml` - Unused Trunk.io integration (user doesn't use Trunk)
+- `pr-validation.yml` - Basic PR validation (merged into pr-validation-unified.yml)
+- `enhanced-security.yml` - Security scanning (merged into codeql-analysis.yml)
 
 ---
 
 ## Workflow Consolidation History
 
-### October 6, 2025 - Phase 1 & 2 Consolidation
+### October 2025 - Major Optimization
 
-**Before:** 16 workflows  
-**After:** 14 workflows  
-**Reduction:** 2 workflows (12.5% ↓)
+**Before:** 16 workflows (including disabled)  
+**After:** 13 active workflows  
+**Reduction:** 3 workflows removed, 3 workflows re-enabled  
 
 **Changes:**
 
-1. ✅ Created `pr-validation-unified.yml` (combines 2 workflows)
-2. ✅ Archived `pr-validation.yml` (generic PR checks)
-3. ✅ Archived `validate-and-lint-pr.yml` (automation-specific checks)
-4. ✅ Investigated `continuous-validation.yml` - KEEP (unique Swift validation)
+1. ✅ **Removed** `trunk.yml` (unused Trunk.io integration)
+2. ✅ **Removed** `pr-validation.yml` (basic checks, redundant with unified)
+3. ✅ **Merged** `enhanced-security.yml` into `codeql-analysis.yml`
+4. ✅ **Re-enabled** `optimized-ci.yml` (valuable conditional CI)
+5. ✅ **Re-enabled** `unified-ci.yml` (comprehensive project builds)
+6. ✅ **Re-enabled** `test-coverage.yml` (test coverage tracking)
 
 **Impact:**
 
-- Single entry point for PR validation
-- Clearer organization
-- Conditional path-based execution preserved
-- All functionality maintained
-- Easier maintenance
+- Single comprehensive security workflow
+- Eliminated redundant PR validation
+- Restored valuable CI/CD functionality
+- Improved workflow efficiency
+- Better organization and maintainability
 
 **Benefits:**
 
-- ✅ Reduced PR validation complexity
-- ✅ Conditional execution still efficient
-- ✅ Clearer workflow purpose
-- ✅ Easier to maintain and update
-
----
-
-## Workflow Organization Matrix
-
-| Category             | Count  | Purpose                                      |
-| -------------------- | ------ | -------------------------------------------- |
-| **CI**               | 3      | Build, test, and validate code changes       |
-| **PR Validation**    | 3      | Validate pull requests before merge          |
-| **Security**         | 2      | Scan for vulnerabilities and enforce quality |
-| **Maintenance**      | 4      | Automated daily/weekly maintenance tasks     |
-| **Specialized**      | 2      | Self-healing and issue automation            |
-| **Swift Validation** | 1      | Swift-specific code quality checks           |
-| **TOTAL**            | **14** | Comprehensive CI/CD coverage                 |
-
----
-
-## Quick Reference
-
-### For Contributors
-
-**When you open a PR:**
-
-- `pr-validation-unified.yml` runs automatically
-- `ai-code-review.yml` provides AI feedback
-- `trunk.yml` checks code quality
-- If you modified automation/workflows: additional validation runs
-
-**When you push to main:**
-
-- `optimized-ci.yml` runs (smart path-based checks)
-- `unified-ci.yml` builds all Swift projects (if Swift files changed)
-- `continuous-validation.yml` validates Swift code (if Swift files changed)
-- `create-review-issues.yml` may create issues for review
-
-**Nightly (automatically):**
-
-- 00:00 UTC: Backup cleanup, compression, metrics cleanup
-- 01:00 UTC: SwiftLint auto-fixes committed
-
-**Weekly (automatically):**
-
-- Sunday 02:00 UTC: Comprehensive health report
-
-### For Maintainers
-
-**Monitor workflows:**
-
-```bash
-gh run list --limit 20
-gh run list --status failure --limit 10
-```
-
-**Check specific workflow:**
-
-```bash
-gh run list --workflow=pr-validation-unified.yml --limit 5
-```
-
-**Disable workflow temporarily:**
-
-```bash
-gh workflow disable <workflow-name>.yml
-```
-
-**View workflow file:**
-
-```bash
-cat .github/workflows/<workflow-name>.yml
-```
-
----
-
-## Future Improvements
-
-Potential optimizations (low priority):
-
-1. **Workflow Run Time:** Track and optimize slow workflows
-2. **Caching:** Expand caching strategies for faster runs
-3. **Matrix Optimization:** Review matrix strategies for efficiency
-4. **Alert Tuning:** Fine-tune failure notification thresholds
-5. **Documentation:** Add inline documentation to complex workflows
-
----
-
-## Questions or Issues?
-
-- **Documentation:** See `WORKFLOW_CONSOLIDATION_ANALYSIS_20251006.md`
-- **Restoration:** See `archive_20251006/README.md`
-- **GitHub Issues:** Create issue with `workflow` label
-- **Monitoring:** Check GitHub Actions dashboard
-
-**Last Updated:** October 6, 2025  
-**Status:** ✅ Consolidation Phase 1 & 2 Complete  
-**Next Review:** October 13, 2025
+- ✅ Reduced workflow complexity (13 vs 16+)
+- ✅ Enhanced security scanning coverage
+- ✅ Restored comprehensive CI/CD capabilities
+- ✅ Eliminated unused components
+- ✅ Improved performance with conditional execution
