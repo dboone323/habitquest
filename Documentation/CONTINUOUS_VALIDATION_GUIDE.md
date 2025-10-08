@@ -315,9 +315,9 @@ Quality thresholds are defined in `quality-config.yaml`:
    - Finally format issues and warnings
 
 5. **Check CI validation status**
-   - Review GitHub Actions workflow results
-   - Download validation report artifacts
-   - Fix issues identified in CI
+   - Review local Ollama CI/CD results: `./Tools/local_ci_cd.sh report`
+   - Check validation logs in `Tools/local_ci_logs/`
+   - Fix issues identified in local CI runs
 
 ## Future Enhancements
 

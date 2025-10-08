@@ -1,0 +1,4 @@
+
+
+*** If you believe this error represents a bug, please attach the log file at /Users/danielstevens/Desktop/Quantum-workspace/local_ci_logs/AvoidObstaclesGame_coverage_20251008_113910/Staging/1_Test/Diagnostics/AvoidObstaclesGameUITests-CA0B8C8C-BEE5-445C-AE70-6F9913395F10-Configuration-Test Scheme Action-Iteration-1/AvoidObstaclesGameUITests-047D40D2-37A0-4F6B-9A80-482FA187C748/Session-AvoidObstaclesGameUITests-2025-10-08_113935-EySkZZ.log
+

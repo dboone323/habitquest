@@ -643,7 +643,7 @@ curl http://localhost:5005/status
 ### Common Questions
 
 **Q: Do I need Ollama installed to create PRs?**  
-A: No, AI review runs in GitHub Actions. Local Ollama is optional for pre-push review.
+A: Yes, AI review runs locally using Ollama. Install Ollama and pull the required models for full functionality.
 
 **Q: Can I merge if AI review fails?**  
 A: Depends on severity. BLOCKED status prevents merge. NEEDS_CHANGES allows merge with human review.

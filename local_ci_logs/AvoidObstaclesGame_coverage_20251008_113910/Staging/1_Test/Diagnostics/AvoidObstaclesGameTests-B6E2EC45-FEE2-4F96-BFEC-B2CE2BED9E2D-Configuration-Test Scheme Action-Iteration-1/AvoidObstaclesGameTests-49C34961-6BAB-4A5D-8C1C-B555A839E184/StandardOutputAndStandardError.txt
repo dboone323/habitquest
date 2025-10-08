@@ -1,0 +1,148 @@
+2025-10-08 11:40:13.829558-0500 AvoidObstaclesGame[66803:8815221] [UIKit App Config] `UIScene` lifecycle will soon be required. Failure to adopt will result in an assert in the future.
+2025-10-08 11:40:13.843237-0500 AvoidObstaclesGame[66803:8815221] [UIFocus] SKView implements focusItemsInRect: - caching for linear focus movement is limited as long as this view is on screen.
+2025-10-08 11:40:13.901907-0500 AvoidObstaclesGame[66803:8815221] [plugin] AddInstanceForFactory: No factory registered for id <CFUUID 0x600000235f60> F8BB1C28-BAE8-11D6-9C31-00039315CD46
+Could not find sound file: collision
+Could not find sound file: score
+Could not find sound file: gameOver
+Could not find sound file: levelUp
+Could not find sound file: powerUp
+Could not find sound file: shield
+Could not find sound file: explosion
+Could not find music file: background1
+Frame rate dropped below 45 FPS
+Test Suite 'GameModelTests' started at 2025-10-08 11:40:15.647.
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testGameScoreCreation]' started.
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testGameScoreCreation]' passed (0.012 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testGameScorePersistence]' started.
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testGameScorePersistence]' passed (0.005 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testHighScoreTracking]' started.
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testHighScoreTracking]' passed (0.005 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testLargeDatasetPerformance]' started.
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testLargeDatasetPerformance]' passed (0.005 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testPlayerStatistics]' started.
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testPlayerStatistics]' passed (0.005 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testScoresByDateRange]' started.
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testScoresByDateRange]' passed (0.005 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testScoresByLevel]' started.
+Test Case '-[AvoidObstaclesGameTests.GameModelTests testScoresByLevel]' passed (0.005 seconds).
+Test Suite 'GameModelTests' passed at 2025-10-08 11:40:15.690.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.041 (0.043) seconds
+Test Suite 'AvoidObstaclesGameTests' started at 2025-10-08 11:40:15.694.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testCollisionDetection]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testCollisionDetection]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testDifficultyScaling]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testDifficultyScaling]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testGameLoadFunctionality]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testGameLoadFunctionality]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testGameLoopPerformance]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testGameLoopPerformance]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testGameOverCondition]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testGameOverCondition]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testGameSaveFunctionality]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testGameSaveFunctionality]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testGameStartState]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testGameStartState]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testHighScoreTracking]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testHighScoreTracking]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testLevelCompletion]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testLevelCompletion]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testLevelProgression]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testLevelProgression]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testMaximumValues]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testMaximumValues]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testNegativeValues]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testNegativeValues]' passed (0.002 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testObstacleGeneration]' started.
+2025-10-08 11:40:15.705654-0500 AvoidObstaclesGame[66803:8815221] [UIFocus] SKView implements focusItemsInRect: - caching for linear focus movement is limited as long as this view is on screen.
+Could not find music file: background1
+Could not find music file: background1
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testObstacleGeneration]' passed (0.006 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testObstacleGenerationPerformance]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testObstacleGenerationPerformance]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testPauseResumeFunctionality]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testPauseResumeFunctionality]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testPlayerMovement]' started.
+2025-10-08 11:40:15.714228-0500 AvoidObstaclesGame[66803:8815221] [UIFocus] SKView implements focusItemsInRect: - caching for linear focus movement is limited as long as this view is on screen.
+Could not find music file: background1
+Could not find music file: background1
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testPlayerMovement]' passed (0.007 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testPowerUpActivation]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testPowerUpActivation]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testPowerUpExpiration]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testPowerUpExpiration]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testScoreCalculation]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testScoreCalculation]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testScoreMultiplier]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testScoreMultiplier]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testZeroScore]' started.
+Test Case '-[AvoidObstaclesGameTests.AvoidObstaclesGameTests testZeroScore]' passed (0.000 seconds).
+Test Suite 'AvoidObstaclesGameTests' passed at 2025-10-08 11:40:15.724.
+	 Executed 21 tests, with 0 failures (0 unexpected) in 0.025 (0.030) seconds
+Test Suite 'DataExportServiceTests' started at 2025-10-08 11:40:15.727.
+Test Case '-[AvoidObstaclesGameTests.DataExportServiceTests testDataIntegrityAfterExportImport]' started.
+Test Case '-[AvoidObstaclesGameTests.DataExportServiceTests testDataIntegrityAfterExportImport]' passed (0.008 seconds).
+Test Case '-[AvoidObstaclesGameTests.DataExportServiceTests testEmptyDataExport]' started.
+Test Case '-[AvoidObstaclesGameTests.DataExportServiceTests testEmptyDataExport]' passed (0.006 seconds).
+Test Case '-[AvoidObstaclesGameTests.DataExportServiceTests testExportImportRoundTrip]' started.
+Test Case '-[AvoidObstaclesGameTests.DataExportServiceTests testExportImportRoundTrip]' passed (0.006 seconds).
+Test Suite 'DataExportServiceTests' passed at 2025-10-08 11:40:15.748.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.020 (0.021) seconds
+Test Suite 'GameSceneTests' started at 2025-10-08 11:40:15.750.
+Test Case '-[AvoidObstaclesGameTests.GameSceneTests testGameSceneInitialization]' started.
+Test Case '-[AvoidObstaclesGameTests.GameSceneTests testGameSceneInitialization]' passed (0.010 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameSceneTests testGameSceneMethods]' started.
+Test Case '-[AvoidObstaclesGameTests.GameSceneTests testGameSceneMethods]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameSceneTests testGameSceneProperties]' started.
+2025-10-08 11:40:15.763157-0500 AvoidObstaclesGame[66803:8815221] [UIFocus] SKView implements focusItemsInRect: - caching for linear focus movement is limited as long as this view is on screen.
+Could not find music file: background1
+Test Case '-[AvoidObstaclesGameTests.GameSceneTests testGameSceneProperties]' passed (0.003 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameSceneTests testPhysicsCategoryInitialization]' started.
+Test Case '-[AvoidObstaclesGameTests.GameSceneTests testPhysicsCategoryInitialization]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameSceneTests testPhysicsCategoryMethods]' started.
+Test Case '-[AvoidObstaclesGameTests.GameSceneTests testPhysicsCategoryMethods]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameSceneTests testPhysicsCategoryProperties]' started.
+Test Case '-[AvoidObstaclesGameTests.GameSceneTests testPhysicsCategoryProperties]' passed (0.001 seconds).
+Test Suite 'GameSceneTests' passed at 2025-10-08 11:40:15.768.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.016 (0.017) seconds
+Test Suite 'HighScoreManagerTests' started at 2025-10-08 11:40:15.770.
+Test Case '-[AvoidObstaclesGameTests.HighScoreManagerTests testHighScoreManagerInitialization]' started.
+Test Case '-[AvoidObstaclesGameTests.HighScoreManagerTests testHighScoreManagerInitialization]' passed (0.003 seconds).
+Test Case '-[AvoidObstaclesGameTests.HighScoreManagerTests testHighScoreManagerMethods]' started.
+Test Case '-[AvoidObstaclesGameTests.HighScoreManagerTests testHighScoreManagerMethods]' passed (0.002 seconds).
+Test Case '-[AvoidObstaclesGameTests.HighScoreManagerTests testHighScoreManagerProperties]' started.
+Test Case '-[AvoidObstaclesGameTests.HighScoreManagerTests testHighScoreManagerProperties]' passed (0.002 seconds).
+Test Case '-[AvoidObstaclesGameTests.HighScoreManagerTests testHighScoreManagerScoreOperations]' started.
+Test Case '-[AvoidObstaclesGameTests.HighScoreManagerTests testHighScoreManagerScoreOperations]' passed (0.005 seconds).
+Test Suite 'HighScoreManagerTests' passed at 2025-10-08 11:40:15.783.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.012 (0.014) seconds
+Test Suite 'GameDifficultyTests' started at 2025-10-08 11:40:15.786.
+Test Case '-[AvoidObstaclesGameTests.GameDifficultyTests testGameDifficultyInitialization]' started.
+Test Case '-[AvoidObstaclesGameTests.GameDifficultyTests testGameDifficultyInitialization]' passed (0.003 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameDifficultyTests testGameDifficultyMethods]' started.
+Test Case '-[AvoidObstaclesGameTests.GameDifficultyTests testGameDifficultyMethods]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameDifficultyTests testGameDifficultyProgression]' started.
+Test Case '-[AvoidObstaclesGameTests.GameDifficultyTests testGameDifficultyProgression]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameDifficultyTests testGameDifficultyProperties]' started.
+Test Case '-[AvoidObstaclesGameTests.GameDifficultyTests testGameDifficultyProperties]' passed (0.000 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameDifficultyTests testGameDifficultyStaticMethods]' started.
+Test Case '-[AvoidObstaclesGameTests.GameDifficultyTests testGameDifficultyStaticMethods]' passed (0.001 seconds).
+Test Suite 'GameDifficultyTests' passed at 2025-10-08 11:40:15.792.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.005 (0.006) seconds
+Test Suite 'GameViewControllerTests' started at 2025-10-08 11:40:15.795.
+Test Case '-[AvoidObstaclesGameTests.GameViewControllerTests testGameViewControllerInitialization]' started.
+Test Case '-[AvoidObstaclesGameTests.GameViewControllerTests testGameViewControllerInitialization]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameViewControllerTests testGameViewControllerMethods]' started.
+Test Case '-[AvoidObstaclesGameTests.GameViewControllerTests testGameViewControllerMethods]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.GameViewControllerTests testGameViewControllerProperties]' started.
+Test Case '-[AvoidObstaclesGameTests.GameViewControllerTests testGameViewControllerProperties]' passed (0.004 seconds).
+Test Suite 'GameViewControllerTests' passed at 2025-10-08 11:40:15.802.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.006 (0.007) seconds
+Test Suite 'AppDelegateTests' started at 2025-10-08 11:40:15.804.
+Test Case '-[AvoidObstaclesGameTests.AppDelegateTests testAppDelegateInitialization]' started.
+Test Case '-[AvoidObstaclesGameTests.AppDelegateTests testAppDelegateInitialization]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.AppDelegateTests testAppDelegateMethods]' started.
+Test Case '-[AvoidObstaclesGameTests.AppDelegateTests testAppDelegateMethods]' passed (0.001 seconds).
+Test Case '-[AvoidObstaclesGameTests.AppDelegateTests testAppDelegateProperties]' started.
+Test Case '-[AvoidObstaclesGameTests.AppDelegateTests testAppDelegateProperties]' passed (0.000 seconds).
+Test Suite 'AppDelegateTests' passed at 2025-10-08 11:40:15.807.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds

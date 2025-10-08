@@ -12,7 +12,7 @@ This is a **Unified Code Architecture** workspace containing multiple Swift proj
 - **MomentumFinance**: Finance tracking app (macOS, iOS)
 - **HabitQuest**: Habit tracking application (iOS)
 
-**Languages & Frameworks:** Swift (primary), SwiftUI, UIKit, SpriteKit, CloudKit, Python (automation), Shell scripts, GitHub Actions
+**Languages & Frameworks:** Swift (primary), SwiftUI, UIKit, SpriteKit, CloudKit, Python (automation), Shell scripts, Local Ollama CI/CD
 
 ## Build Instructions & Dependencies
 

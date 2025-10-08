@@ -1,0 +1,5 @@
+# SwiftLint Configuration for HabitQuest
+
+# Analyzer rules
+analyzer_rules:
+  - unused_declaration

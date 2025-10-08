@@ -1,230 +1,191 @@
 # .github/workflows README
 
-## Active Workflows (13 workflows)
+## CI/CD System Migration: Local Ollama CI/CD
 
-Last updated: October 2025 (Post-Optimization)
-
----
-
-### Continuous Integration (3 workflows)
-
-#### automation-ci.yml
-
-- **Purpose:** Tests automation code with Python version matrix
-- **Triggers:** Push/PR to `Tools/Automation/**`
-- **Runner:** ubuntu-latest
-- **Key Features:**
-  - Python 3.10, 3.11, 3.12 matrix testing
-  - Pip caching with wheels
-  - Virtual environment management
-  - Asset building
-  - Test reports (JUnit XML)
-  - Artifact uploads
-
-#### optimized-ci.yml ⭐ RE-ENABLED
-
-- **Purpose:** Smart path-based CI with change detection
-- **Triggers:** Push/PR to main
-- **Runner:** ubuntu-latest
-- **Key Features:**
-  - Path-based job triggering (automation, shared, projects, docs, workflows)
-  - Conditional execution (only runs relevant checks)
-  - Concurrency control (cancel-in-progress)
-  - Security scanning with Trivy
-  - Comprehensive summary report
-
-#### unified-ci.yml ⭐ RE-ENABLED
-
-- **Purpose:** Full build and test for all 5 Swift projects
-- **Triggers:** Push/PR to main
-- **Runner:** macos-latest
-- **Key Features:**
-  - Matrix build for all projects (AvoidObstaclesGame, HabitQuest, MomentumFinance, PlannerApp, CodingReviewer)
-  - SwiftFormat idempotence check
-  - SwiftLint validation
-  - SwiftPM and Xcode builds
-  - Semantic release on main
-  - Artifact archival
+**October 8, 2025 Update:** All GitHub Actions workflows have been disabled and replaced with a local Ollama-based CI/CD system for improved privacy, performance, and AI-powered automation.
 
 ---
 
-### Pull Request Validation (2 workflows)
+## Migration to Local Ollama CI/CD
 
-#### pr-validation-unified.yml
+### Why Local CI/CD?
 
-- **Purpose:** Unified PR validation (basic + automation checks)
-- **Triggers:** PR opened/sync/reopened
-- **Runner:** ubuntu-latest
-- **Key Features:**
-  - Always: Basic sanity checks, TODO/FIXME enforcement
-  - Conditional: Automation validation (when Tools/Automation or .github/workflows changed)
-  - Bash syntax checking
-  - ShellCheck linting
-  - Deploy validation
-  - Workflow YAML validation
-  - Comprehensive summary
+- **Privacy:** No code sent to GitHub's servers
+- **Performance:** Local execution with AI assistance
+- **Cost:** No GitHub Actions minutes consumed
+- **AI Integration:** Direct Ollama model access for code review and test generation
+- **Flexibility:** Run CI/CD on-demand without waiting for GitHub runners
 
-#### ai-code-review.yml
+### Local CI/CD System
 
-- **Purpose:** AI-powered code review and merge guard
-- **Triggers:** PR
-- **Runner:** ubuntu-latest
-- **Unique:** AI analysis of code changes
+**Location:** `Tools/local_ci_cd.sh`
 
----
+**Features:**
+- 🤖 AI-powered pre-commit validation using Ollama models
+- 🔧 Code formatting with SwiftFormat
+- 🧹 Code linting with SwiftLint
+- 🏗️ Project building (Xcode/SwiftPM)
+- 🧪 Automated testing with simulator management
+- 🤖 AI-powered test generation for missing tests
+- 📊 Comprehensive CI/CD reports
 
-### Security & Quality (2 workflows)
+**Commands:**
+```bash
+# Check system status
+./Tools/local_ci_cd.sh status
 
-#### codeql-analysis.yml ⭐ ENHANCED
+# Run CI for specific project
+./Tools/local_ci_cd.sh run CodingReviewer
 
-- **Purpose:** Comprehensive security analysis (CodeQL + additional scanners)
-- **Triggers:** Push/PR to main, Weekly schedule
-- **Runner:** ubuntu-latest
-- **Key Features:**
-  - CodeQL analysis for Swift/JavaScript
-  - Bandit (Python security)
-  - Safety (dependency vulnerabilities)
-  - Trivy (container/binary vulnerabilities)
-  - Advanced secrets detection
-  - Swift security analysis
-  - Comprehensive security reporting
+# Run CI for all projects
+./Tools/local_ci_cd.sh all
 
-#### test-coverage.yml ⭐ RE-ENABLED
+# Individual commands
+./Tools/local_ci_cd.sh format CodingReviewer
+./Tools/local_ci_cd.sh lint CodingReviewer
+./Tools/local_ci_cd.sh build CodingReviewer
+./Tools/local_ci_cd.sh test CodingReviewer
 
-- **Purpose:** Test coverage tracking and quality gates
-- **Triggers:** Push to main, PR
-- **Runner:** macos-latest
-- **Key Features:**
-  - Coverage analysis
-  - Quality gate enforcement
-  - Trend tracking
+# Generate CI report
+./Tools/local_ci_cd.sh report
+```
 
 ---
 
-### Scheduled Maintenance (4 workflows)
+## Disabled GitHub Workflows
 
-#### nightly-hygiene.yml
+All GitHub Actions workflows have been disabled (`.disabled.yml` extension) as they are no longer used:
 
-- **Purpose:** Daily automated maintenance
-- **Schedule:** Daily at 00:00 UTC
-- **Runner:** ubuntu-latest
-- **Tasks:**
-  - Backup cleanup (keep last 7 days)
-  - Backup compression (files >24h old)
-  - Metrics cleanup (90-day retention)
-  - Log rotation
-  - Watchdog execution
-  - Metrics snapshot
+### Previously Active Workflows (Now Disabled)
 
-#### swiftlint-auto-fix.yml
+#### Continuous Integration
+- `automation-ci.disabled.yml` - Python automation testing
+- `optimized-ci.disabled.yml` - Smart path-based CI
+- `unified-ci.disabled.yml` - Full Swift project builds
 
-- **Purpose:** Automatically fix SwiftLint violations
-- **Schedule:** Daily at 01:00 UTC
-- **Runner:** macos-latest
-- **Tasks:**
-  - Scan all Swift files
-  - Auto-fix violations
-  - Commit changes if any
+#### Pull Request Validation
+- `pr-validation-unified.disabled.yml` - PR validation checks
+- `ai-code-review.disabled.yml` - AI-powered code review
 
-#### weekly-health-check.yml
+#### Security & Quality
+- `codeql-analysis.disabled.yml` - Security analysis
+- `test-coverage.disabled.yml` - Test coverage tracking
 
-- **Purpose:** Comprehensive system health monitoring
-- **Schedule:** Weekly Sunday at 02:00 UTC
-- **Runner:** ubuntu-latest
-- **Tasks:**
-  - System health analysis
-  - GitHub issue creation for CRITICAL problems
-  - Health report generation
+#### Scheduled Maintenance
+- `nightly-hygiene.disabled.yml` - Daily maintenance
+- `swiftlint-auto-fix.disabled.yml` - Auto-fix violations
+- `weekly-health-check.disabled.yml` - Health monitoring
+- `workflow-failure-notify.disabled.yml` - Failure notifications
 
-#### workflow-failure-notify.yml
+#### Specialized
+- `quantum-agent-self-heal.disabled.yml` - Self-healing workflow
+- `create-review-issues.disabled.yml` - Auto-create review issues
 
-- **Purpose:** Notification system for workflow failures
-- **Triggers:** Workflow failure events
-- **Runner:** ubuntu-latest
-- **Tasks:**
-  - Alert on failures
-  - Create notifications
+#### Swift Validation
+- `continuous-validation.disabled.yml` - Swift code quality
 
 ---
 
-### Specialized (2 workflows)
+## Migration Benefits
 
-#### quantum-agent-self-heal.yml
+### Performance Improvements
+- **Faster Execution:** Local runs eliminate GitHub runner queue times
+- **Parallel Processing:** Run multiple projects simultaneously on local hardware
+- **No Rate Limits:** No GitHub API rate limiting for AI operations
 
-- **Purpose:** Reusable self-healing workflow
-- **Type:** Reusable workflow
-- **Runner:** ubuntu-latest
-- **Unique:** Called by other workflows for self-healing capabilities
+### Cost Savings
+- **Zero GitHub Actions Costs:** No consumption of GitHub's free minutes
+- **Local Resources Only:** Uses existing development hardware
 
-#### create-review-issues.yml
+### Enhanced AI Capabilities
+- **Direct Ollama Access:** Use any installed Ollama model for code analysis
+- **Custom AI Workflows:** Tailored AI prompts for specific project needs
+- **Offline Operation:** Works without internet connectivity
 
-- **Purpose:** Auto-create review issues for changes
-- **Triggers:** Push to main
-- **Runner:** ubuntu-latest
-- **Tasks:**
-  - Analyze changes
-  - Create GitHub issues for review
-
----
-
-### Swift Code Validation (1 workflow)
-
-#### continuous-validation.yml
-
-- **Purpose:** Swift code quality validation for Projects and Shared
-- **Triggers:**
-  - Push/PR to main/develop (when Swift files change)
-  - Manual workflow_dispatch (can specify project)
-- **Runner:** macos-latest
-- **Key Features:**
-  - SwiftLint and SwiftFormat validation
-  - Project-specific or all-project validation
-  - Validation report generation
-  - Optional MCP server integration
-  - Fails on validation errors
-- **Unique:** Only workflow focused on Swift code quality validation
+### Improved Developer Experience
+- **Immediate Feedback:** Run CI/CD instantly during development
+- **Flexible Scheduling:** Execute when convenient, not tied to Git events
+- **Better Debugging:** Direct access to logs and build artifacts
 
 ---
 
-## Recently Removed Workflows
+## Getting Started with Local CI/CD
 
-**Removed in October 2025 Optimization:**
+### Prerequisites
+1. **Ollama Installed:** `brew install ollama`
+2. **Models Available:** Run `ollama pull qwen3-coder:480b-cloud`
+3. **SwiftFormat & SwiftLint:** `brew install swiftformat swiftlint`
 
-- `trunk.yml` - Unused Trunk.io integration (user doesn't use Trunk)
-- `pr-validation.yml` - Basic PR validation (merged into pr-validation-unified.yml)
-- `enhanced-security.yml` - Security scanning (merged into codeql-analysis.yml)
+### Quick Start
+```bash
+# Navigate to workspace
+cd /path/to/Quantum-workspace
+
+# Check system status
+./Tools/local_ci_cd.sh status
+
+# Run CI for a specific project
+./Tools/local_ci_cd.sh run CodingReviewer
+
+# Run CI for all projects
+./Tools/local_ci_cd.sh all
+```
+
+### Integration with Development Workflow
+
+**Pre-commit Hook (Recommended):**
+The local CI/CD system integrates with Git hooks for automatic validation:
+- Automatic AI-powered code review on commit
+- SwiftFormat and SwiftLint validation
+- Build verification
+
+**Manual Execution:**
+Run CI/CD at any time during development for immediate feedback.
 
 ---
 
-## Workflow Consolidation History
+## Troubleshooting
 
-### October 2025 - Major Optimization
+### Common Issues
 
-**Before:** 16 workflows (including disabled)  
-**After:** 13 active workflows  
-**Reduction:** 3 workflows removed, 3 workflows re-enabled  
+**Ollama Not Available:**
+```bash
+# Check Ollama status
+ollama list
 
-**Changes:**
+# Start Ollama if needed
+ollama serve
 
-1. ✅ **Removed** `trunk.yml` (unused Trunk.io integration)
-2. ✅ **Removed** `pr-validation.yml` (basic checks, redundant with unified)
-3. ✅ **Merged** `enhanced-security.yml` into `codeql-analysis.yml`
-4. ✅ **Re-enabled** `optimized-ci.yml` (valuable conditional CI)
-5. ✅ **Re-enabled** `unified-ci.yml` (comprehensive project builds)
-6. ✅ **Re-enabled** `test-coverage.yml` (test coverage tracking)
+# Pull required models
+ollama pull qwen3-coder:480b-cloud
+```
 
-**Impact:**
+**Swift Tools Missing:**
+```bash
+# Install SwiftFormat and SwiftLint
+brew install swiftformat swiftlint
+```
 
-- Single comprehensive security workflow
-- Eliminated redundant PR validation
-- Restored valuable CI/CD functionality
-- Improved workflow efficiency
-- Better organization and maintainability
+**Simulator Issues:**
+```bash
+# Clean up stuck simulators
+./Tools/local_ci_cd.sh cleanup
+```
 
-**Benefits:**
+### Logs and Reports
+- **CI Logs:** `Tools/local_ci_logs/` directory
+- **Reports:** Generated with `./Tools/local_ci_cd.sh report`
+- **Debug Info:** Check Ollama model availability and local tool versions
 
-- ✅ Reduced workflow complexity (13 vs 16+)
-- ✅ Enhanced security scanning coverage
-- ✅ Restored comprehensive CI/CD capabilities
-- ✅ Eliminated unused components
-- ✅ Improved performance with conditional execution
+---
+
+## Future Considerations
+
+- **Scheduled Runs:** Consider cron jobs for regular CI execution
+- **CI Server:** Could be extended to run on dedicated CI server
+- **Model Updates:** Keep Ollama models updated for best AI performance
+- **Custom Workflows:** Extend the system for project-specific requirements
+
+---
+
+*Last updated: October 8, 2025 - Migrated to Local Ollama CI/CD*

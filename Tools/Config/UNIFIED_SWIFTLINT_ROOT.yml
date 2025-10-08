@@ -52,10 +52,10 @@ opt_in_rules:
   - unneeded_parentheses_in_closure_argument
   - untyped_error_in_catch
   - prefer_self_type_over_type_of_self
-  - explicit_self
-  - unused_import
 
 analyzer_rules:
+  - explicit_self
+  - unused_import
   - unused_declaration
 
 reporter: xcode
