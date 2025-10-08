@@ -1,366 +1,298 @@
-# Code Examples
+# Code Examples and Integration Guides
 
-This directory contains practical code examples for common development tasks in the Quantum workspace.
+This directory contains practical examples and integration guides for Quantum-workspace projects.
 
-## 📱 iOS/macOS Development Examples
+## CodingReviewer Examples
 
-### Basic App Structure
+### Basic Code Analysis
 
 ```swift
-import SwiftUI
+import CodingReviewer
 
-@main
-struct MyApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+// Initialize service
+let reviewService = CodeReviewService()
+
+// Analyze code
+do {
+    let result = try await reviewService.analyzeCode(
+        code: """
+        func calculateTotal(items: [Double]) -> Double {
+            return items.reduce(0, +)
         }
-    }
-}
+        """,
+        language: "swift",
+        analysisType: .comprehensive
+    )
 
-struct ContentView: View {
-    var body: some View {
-        Text("Hello, Quantum!")
-            .padding()
+    // Process results
+    print("Analysis complete:")
+    print("- Issues found: \(result.issues.count)")
+    print("- Suggestions: \(result.suggestions.count)")
+
+    for issue in result.issues {
+        print("Issue: \(issue.description)")
+    }
+
+} catch {
+    print("Analysis failed: \(error)")
+}
+```
+
+### AI-Enhanced Code Review
+
+```swift
+import CodingReviewer
+
+let aiService = AIEnhancedCodeAnalysisService()
+
+// Perform AI analysis
+do {
+    let aiResult = try await aiService.analyzeCodeWithAI(
+        code: swiftCode,
+        language: "swift",
+        context: "iOS networking layer"
+    )
+
+    // Display results
+    for suggestion in aiResult.suggestions {
+        print("AI Suggestion: \(suggestion.description)")
+        print("Impact: \(suggestion.impact)")
+        print("Confidence: \(suggestion.confidence)%")
+    }
+
+} catch {
+    print("AI analysis failed: \(error)")
+}
+```
+
+### Custom Analysis Rules
+
+```swift
+import CodingReviewer
+
+// Create custom validation rules
+let customRules = [
+    ValidationRule(
+        name: "API Key Security",
+        pattern: #"API_KEY\s*=\s*["'][^"']*["']"#,
+        severity: .critical,
+        message: "Hardcoded API keys detected"
+    )
+]
+
+// Apply custom validation
+let validator = CustomValidator(rules: customRules)
+let violations = validator.validate(code: sourceCode)
+
+for violation in violations {
+    print("Violation: \(violation.message) at line \(violation.line)")
+}
+```
+
+## PlannerApp Examples
+
+### CloudKit Synchronization
+
+```swift
+import PlannerApp
+
+class PlanManager {
+    private let cloudKitManager = CloudKitManager()
+
+    func syncPlans() async throws {
+        // Fetch remote changes
+        let remotePlans = try await cloudKitManager.fetchPlans()
+
+        // Merge with local data
+        let mergedPlans = try await mergePlans(localPlans, remotePlans)
+
+        // Save merged data
+        try await cloudKitManager.savePlans(mergedPlans)
+    }
+
+    func createPlan(title: String, dueDate: Date) async throws {
+        let plan = PlanItem(
+            id: UUID(),
+            title: title,
+            dueDate: dueDate,
+            isCompleted: false
+        )
+
+        try await cloudKitManager.savePlan(plan)
     }
 }
 ```
 
-### SwiftUI View with State Management
+### Reminder Management
 
 ```swift
-struct TaskListView: View {
-    @StateObject private var viewModel = TaskListViewModel()
+import PlannerApp
 
-    var body: some View {
-        NavigationView {
-            List(viewModel.tasks) { task in
-                TaskRow(task: task)
-                    .onTapGesture {
-                        viewModel.toggleTask(task)
-                    }
+class ReminderService {
+    func scheduleReminder(for plan: PlanItem) {
+        let content = UNMutableNotificationContent()
+        content.title = "Plan Due"
+        content.body = plan.title
+        content.sound = .default
+
+        let trigger = UNCalendarNotificationTrigger(
+            dateMatching: Calendar.current.dateComponents(
+                [.year, .month, .day, .hour, .minute],
+                from: plan.dueDate
+            ),
+            repeats: false
+        )
+
+        let request = UNNotificationRequest(
+            identifier: plan.id.uuidString,
+            content: content,
+            trigger: trigger
+        )
+
+        UNUserNotificationCenter.current().add(request)
+    }
+}
+```
+
+## AvoidObstaclesGame Examples
+
+### Game Scene Setup
+
+```swift
+import SpriteKit
+
+class GameScene: SKScene {
+    private var player: SKSpriteNode!
+    private var obstacles: [SKSpriteNode] = []
+    private var scoreLabel: SKLabelNode!
+
+    override func didMove(to view: SKView) {
+        setupPlayer()
+        setupPhysics()
+        setupScoreLabel()
+        startObstacleSpawner()
+    }
+
+    private func setupPlayer() {
+        player = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
+        player.position = CGPoint(x: frame.midX, y: 100)
+        player.physicsBody = SKPhysicsBody(rectangleOf: player.size)
+        player.physicsBody?.isDynamic = true
+        addChild(player)
+    }
+
+    private func setupPhysics() {
+        physicsWorld.gravity = CGVector(dx: 0, dy: -9.8)
+        physicsWorld.contactDelegate = self
+    }
+}
+```
+
+### Collision Detection
+
+```swift
+extension GameScene: SKPhysicsContactDelegate {
+    func didBegin(_ contact: SKPhysicsContact) {
+        let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+
+        if collision == PhysicsCategory.player | PhysicsCategory.obstacle {
+            gameOver()
+        } else if collision == PhysicsCategory.player | PhysicsCategory.coin {
+            collectCoin(contact.bodyB.node!)
+        }
+    }
+
+    private func gameOver() {
+        // Handle game over logic
+        let gameOverLabel = SKLabelNode(text: "Game Over")
+        gameOverLabel.position = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(gameOverLabel)
+
+        run(SKAction.sequence([
+            SKAction.wait(forDuration: 2.0),
+            SKAction.run { [weak self] in
+                self?.resetGame()
             }
-            .navigationTitle("Tasks")
-            .toolbar {
-                Button(action: viewModel.addTask) {
-                    Image(systemName: "plus")
-                }
-            }
-        }
-    }
-}
-
-class TaskListViewModel: ObservableObject {
-    @Published var tasks: [Task] = []
-
-    func addTask() {
-        let newTask = Task(title: "New Task", isCompleted: false)
-        tasks.append(newTask)
-    }
-
-    func toggleTask(_ task: Task) {
-        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
-            tasks[index].isCompleted.toggle()
-        }
+        ]))
     }
 }
 ```
 
-### SwiftData Integration
+## Integration Examples
 
-```swift
-import SwiftData
-
-@Model
-class Task {
-    var id = UUID()
-    var title: String
-    var isCompleted: Bool
-    var createdAt: Date
-
-    init(title: String, isCompleted: Bool = false) {
-        self.title = title
-        self.isCompleted = isCompleted
-        self.createdAt = Date()
-    }
-}
-
-struct PersistenceController {
-    static let shared = PersistenceController()
-
-    let container: ModelContainer
-
-    init() {
-        container = try! ModelContainer(for: Task.self)
-    }
-}
-```
-
-## 🧪 Testing Examples
-
-### Unit Test Example
-
-```swift
-import XCTest
-@testable import MyApp
-
-class TaskListViewModelTests: XCTestCase {
-    var viewModel: TaskListViewModel!
-
-    override func setUp() {
-        super.setUp()
-        viewModel = TaskListViewModel()
-    }
-
-    override func tearDown() {
-        viewModel = nil
-        super.tearDown()
-    }
-
-    func testAddTask() {
-        let initialCount = viewModel.tasks.count
-
-        viewModel.addTask()
-
-        XCTAssertEqual(viewModel.tasks.count, initialCount + 1)
-        XCTAssertEqual(viewModel.tasks.last?.title, "New Task")
-        XCTAssertFalse(viewModel.tasks.last?.isCompleted ?? true)
-    }
-
-    func testToggleTask() {
-        viewModel.addTask()
-        let task = viewModel.tasks[0]
-        let initialState = task.isCompleted
-
-        viewModel.toggleTask(task)
-
-        XCTAssertNotEqual(viewModel.tasks[0].isCompleted, initialState)
-    }
-}
-```
-
-### UI Test Example
-
-```swift
-import XCTest
-
-class MyAppUITests: XCTestCase {
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        app.launch()
-    }
-
-    func testTaskCreation() {
-        let addButton = app.buttons["Add Task"]
-        XCTAssertTrue(addButton.exists)
-
-        addButton.tap()
-
-        let taskList = app.tables["Task List"]
-        XCTAssertTrue(taskList.exists)
-
-        let newTaskCell = taskList.cells.element(boundBy: 0)
-        XCTAssertTrue(newTaskCell.exists)
-    }
-
-    func testTaskCompletion() {
-        // Assuming there's at least one task
-        let taskCell = app.tables["Task List"].cells.element(boundBy: 0)
-        XCTAssertTrue(taskCell.exists)
-
-        taskCell.tap()
-
-        // Verify task is marked complete
-        let completedTask = app.tables["Task List"].cells.element(boundBy: 0)
-        XCTAssertTrue(completedTask.exists)
-    }
-}
-```
-
-## 🔧 Automation Script Examples
-
-### Basic Automation Script
+### Command Line Tool Integration
 
 ```bash
 #!/bin/bash
 
-# Basic automation script template
-set -euo pipefail
+# Integrate with CodingReviewer CLI
+analyze_code() {
+    local file="$1"
+    local language="${2:-swift}"
 
-PROJECT_NAME="${1:-}"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-if [[ -z $PROJECT_NAME ]]; then
-    echo "Usage: $0 <project_name>"
-    exit 1
-fi
-
-echo "Running automation for $PROJECT_NAME..."
-
-# Add your automation logic here
-echo "✅ Automation completed for $PROJECT_NAME"
-```
-
-### Advanced Automation with Error Handling
-
-```bash
-#!/bin/bash
-
-# Advanced automation with comprehensive error handling
-set -euo pipefail
-
-PROJECT_NAME="${1:-}"
-LOG_FILE="/tmp/automation_$(date +%Y%m%d_%H%M%S).log"
-
-# Logging function
-log() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $*" | tee -a "$LOG_FILE"
+    if command -v coding-review >/dev/null 2>&1; then
+        coding-review analyze --file "$file" --language "$language"
+    else
+        echo "CodingReviewer CLI not found"
+        return 1
+    fi
 }
 
-# Error handling
-error_exit() {
-    log "ERROR: $1"
-    exit 1
-}
-
-# Validate input
-if [[ -z $PROJECT_NAME ]]; then
-    error_exit "Project name is required"
-fi
-
-log "Starting automation for $PROJECT_NAME"
-
-# Your automation logic here
-if your_command_here; then
-    log "✅ Automation completed successfully"
-else
-    error_exit "Automation failed"
-fi
+# Usage
+analyze_code "MyClass.swift" "swift"
 ```
 
-## 📋 Configuration Examples
-
-### SwiftFormat Configuration (.swiftformat)
+### CI/CD Pipeline Integration
 
 ```yaml
-# SwiftFormat configuration
---indent 4
---maxwidth 120
---wraparguments beforefirst
---wrapparameters beforefirst
---binarygrouping none
---hexgrouping none
---decimalgrouping none
---octalgrouping none
---stripunusedargs closure-only
---disable blankLinesAtStartOfScope,blankLinesAtEndOfScope
-```
-
-### SwiftLint Configuration (.swiftlint.yml)
-
-```yaml
-disabled_rules:
-  - trailing_whitespace
-  - vertical_whitespace
-
-opt_in_rules:
-  - empty_count
-  - force_unwrapping
-
-included:
-  - Source
-
-excluded:
-  - Carthage
-  - Pods
-  - Source/ExcludedFolder
-  - Source/*/ExcludedFile.swift
-
-line_length: 120
-indentation: 4
-```
-
-## 🚀 Deployment Examples
-
-### Fastlane Fastfile
-
-```ruby
-# Fastfile
-default_platform(:ios)
-
-platform :ios do
-  desc "Build and deploy to TestFlight"
-  lane :beta do
-    # Increment build number
-    increment_build_number
-
-    # Build the app
-    build_app(
-      scheme: "MyApp",
-      export_method: "app-store"
-    )
-
-    # Upload to TestFlight
-    upload_to_testflight
-  end
-
-  desc "Run tests"
-  lane :test do
-    run_tests(
-      scheme: "MyApp",
-      devices: ["iPhone 13"]
-    )
-  end
-end
-```
-
-### GitHub Actions Workflow
-
-```yaml
-name: CI/CD
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+# .github/workflows/code-review.yml
+name: Code Review
+on: [pull_request]
 
 jobs:
-  build-and-test:
+  review:
     runs-on: macos-latest
-
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: "14.0"
+      - name: Setup CodingReviewer
+        run: |
+          brew install coding-reviewer
 
-      - name: Build
-        run: xcodebuild -scheme MyApp -configuration Release
+      - name: Analyze Code
+        run: |
+          coding-review analyze --project MyProject.xcodeproj --output review-results.json
 
-      - name: Run tests
-        run: xcodebuild test -scheme MyApp -destination 'platform=iOS Simulator,name=iPhone 13'
-
-      - name: Upload artifacts
+      - name: Upload Results
         uses: actions/upload-artifact@v3
         with:
-          name: build-artifacts
-          path: build/
+          name: code-review-results
+          path: review-results.json
 ```
 
-## 📚 Additional Resources
+### Swift Package Manager Integration
 
-- [Swift Documentation](https://docs.swift.org)
-- [SwiftUI Tutorials](https://developer.apple.com/tutorials/swiftui)
-- [Xcode Help](https://help.apple.com/xcode)
-- [Fastlane Documentation](https://docs.fastlane.tools)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+```swift
+// Package.swift
+// swift-tools-version:5.7
+
+import PackageDescription
+
+let package = Package(
+    name: "MyApp",
+    dependencies: [
+        .package(url: "https://github.com/quantum-workspace/CodingReviewer.git", from: "1.0.0"),
+        .package(url: "https://github.com/quantum-workspace/PlannerApp.git", from: "1.0.0"),
+    ],
+    targets: [
+        .executableTarget(
+            name: "MyApp",
+            dependencies: ["CodingReviewer", "PlannerApp"]
+        )
+    ]
+)
+```
 
 ---
 
-_Examples are automatically generated and may need adaptation for your specific use case._
+*These examples demonstrate common usage patterns and integration approaches for Quantum-workspace projects.*

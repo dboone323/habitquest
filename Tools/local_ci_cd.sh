@@ -1363,7 +1363,7 @@ class MockURLProtocol: URLProtocol {
     }
 
     override func stopLoading() {
-        // Cleanup if needed
+        # Cleanup if needed
     }
 }
 EOF
@@ -1395,196 +1395,1331 @@ EOF
     fi
 }
 
-# Run complete CI pipeline for a project
-run_ci_pipeline() {
+# AI-powered automated fix suggestions
+generate_fix_suggestions() {
     local project_name="$1"
-    local start_time
-    start_time=$(date +%s)
+    local project_path="${PROJECTS_DIR}/${project_name}"
+    local suggestions_file
+    suggestions_file="${LOGS_DIR}/${project_name}_fix_suggestions_$(date +%Y%m%d_%H%M%S).md"
 
-    print_status "🚀 Starting Local CI/CD Pipeline for ${project_name}"
-    echo "Started at: $(date)"
-    echo
+    print_ai "🤖 Generating automated fix suggestions for ${project_name}..."
 
-    local status="SUCCESS"
-    local failed_steps=()
+    # Initialize suggestions file
+    {
+        echo "# 🤖 AI-Powered Fix Suggestions for ${project_name}"
+        echo "Generated: $(date)"
+        echo ""
+        echo "## Issues Analyzed"
+        echo ""
+    } >"${suggestions_file}"
 
-    # Step 1: AI Pre-commit validation
-    if ! run_ai_pre_commit "${project_name}"; then
-        failed_steps+=("AI Pre-commit")
-        status="FAILED"
+    local has_issues=false
+
+    # Analyze recent lint errors
+    print_ai "Analyzing recent lint errors..."
+    local recent_lint_log
+    recent_lint_log=$(find "${LOGS_DIR}" -name "*lint*" -mtime -1 2>/dev/null | grep -i "${project_name}" 2>/dev/null | head -1 || true)
+
+    if [[ -f "${recent_lint_log}" ]]; then
+        local lint_errors
+        lint_errors=$(grep -E "warning|error" "${recent_lint_log}" | head -10 || true)
+
+        if [[ -n "${lint_errors}" ]]; then
+            has_issues=true
+            {
+                echo "### SwiftLint Issues"
+                echo ""
+                echo "\`\`\`"
+                echo "${lint_errors}"
+                echo "\`\`\`"
+                echo ""
+            } >>"${suggestions_file}"
+
+            # Generate AI suggestions for lint issues
+            local lint_suggestions
+            lint_suggestions=$(echo "Analyze these SwiftLint errors and suggest specific fixes:
+
+${lint_errors}
+
+Provide specific code changes to fix each issue:" | timeout 15s ollama run qwen3-coder:480b-cloud 2>/dev/null || echo "AI suggestions temporarily unavailable")
+
+            if [[ "${lint_suggestions}" != "AI suggestions temporarily unavailable" ]]; then
+                {
+                    echo "### 🤖 AI-Generated Fixes for Lint Issues"
+                    echo ""
+                    echo "${lint_suggestions}"
+                    echo ""
+                } >>"${suggestions_file}"
+            fi
+        fi
     fi
 
-    # Step 2: Code formatting
-    if ! format_code "${project_name}"; then
-        failed_steps+=("Code Formatting")
-        status="FAILED"
+    # Analyze recent build failures
+    print_ai "Analyzing recent build failures..."
+    local recent_build_log
+    recent_build_log=$(find "${LOGS_DIR}" -name "*build*" -mtime -1 2>/dev/null | grep -i "${project_name}" 2>/dev/null | head -1 || true)
+
+    if [[ -f "${recent_build_log}" ]]; then
+        local build_errors
+        build_errors=$(grep -E "error:" "${recent_build_log}" | head -10 || true)
+
+        if [[ -n "${build_errors}" ]]; then
+            has_issues=true
+            {
+                echo "### Build Errors"
+                echo ""
+                echo "\`\`\`"
+                echo "${build_errors}"
+                echo "\`\`\`"
+                echo ""
+            } >>"${suggestions_file}"
+
+            # Generate AI suggestions for build errors
+            local build_suggestions
+            build_suggestions=$(echo "Analyze these Swift build errors and suggest specific fixes:
+
+${build_errors}
+
+Provide specific code changes or configuration fixes:" | timeout 15s ollama run qwen3-coder:480b-cloud 2>/dev/null || echo "AI suggestions temporarily unavailable")
+
+            if [[ "${build_suggestions}" != "AI suggestions temporarily unavailable" ]]; then
+                {
+                    echo "### 🤖 AI-Generated Fixes for Build Errors"
+                    echo ""
+                    echo "${build_suggestions}"
+                    echo ""
+                } >>"${suggestions_file}"
+            fi
+        fi
     fi
 
-    # Step 3: Code linting
-    if ! lint_code "${project_name}"; then
-        failed_steps+=("Code Linting")
-        status="FAILED"
+    # Analyze test failures
+    print_ai "Analyzing recent test failures..."
+    local recent_test_log
+    recent_test_log=$(find "${LOGS_DIR}" -name "*test*" -mtime -1 2>/dev/null | grep -i "${project_name}" 2>/dev/null | head -1 || true)
+
+    if [[ -f "${recent_test_log}" ]]; then
+        local test_failures
+        test_failures=$(grep -E "failed|error" "${recent_test_log}" | head -10 || true)
+
+        if [[ -n "${test_failures}" ]]; then
+            has_issues=true
+            {
+                echo "### Test Failures"
+                echo ""
+                echo "\`\`\`"
+                echo "${test_failures}"
+                echo "\`\`\`"
+                echo ""
+            } >>"${suggestions_file}"
+
+            # Generate AI suggestions for test failures
+            local test_suggestions
+            test_suggestions=$(echo "Analyze these test failures and suggest fixes:
+
+${test_failures}
+
+Provide specific test fixes or code changes:" | timeout 15s ollama run qwen3-coder:480b-cloud 2>/dev/null || echo "AI suggestions temporarily unavailable")
+
+            if [[ "${test_suggestions}" != "AI suggestions temporarily unavailable" ]]; then
+                {
+                    echo "### 🤖 AI-Generated Fixes for Test Failures"
+                    echo ""
+                    echo "${test_suggestions}"
+                    echo ""
+                } >>"${suggestions_file}"
+            fi
+        fi
     fi
 
-    # Step 4: Build
-    if ! build_project "${project_name}"; then
-        failed_steps+=("Build")
-        status="FAILED"
+    # Analyze code quality issues
+    print_ai "Analyzing code quality patterns..."
+    local swift_files
+    swift_files=$(find "${project_path}" -name "*.swift" -not -path "*/Tests/*" | head -5)
+
+    for file in ${swift_files}; do
+        if [[ -f "${file}" ]]; then
+            local file_content
+            file_content=$(head -50 "${file}")
+
+            # Look for common code quality issues
+            local quality_issues=""
+
+            # Check for force unwrapping
+            if echo "${file_content}" | grep -q "!"; then
+                quality_issues="${quality_issues}- Force unwrapping detected (use optional binding or guard statements)\n"
+            fi
+
+            # Check for large functions
+            local line_count
+            line_count=$(wc -l <"${file}")
+            if [[ ${line_count} -gt 200 ]]; then
+                quality_issues="${quality_issues}- Large file (${line_count} lines) - consider breaking into smaller components\n"
+            fi
+
+            # Check for TODO/FIXME comments
+            if echo "${file_content}" | grep -qi "TODO\|FIXME"; then
+                quality_issues="${quality_issues}- TODO/FIXME comments found - address technical debt\n"
+            fi
+
+            if [[ -n "${quality_issues}" ]]; then
+                has_issues=true
+                {
+                    echo "### Code Quality Issues in $(basename "${file}")"
+                    echo ""
+                    echo "${quality_issues}"
+                    echo ""
+                } >>"${suggestions_file}"
+
+                # Generate AI suggestions for code quality
+                local quality_suggestions
+                quality_suggestions=$(echo "Analyze this Swift code for quality improvements:
+
+${file_content}
+
+Issues found:
+${quality_issues}
+
+Suggest specific improvements:" | timeout 15s ollama run qwen3-coder:480b-cloud 2>/dev/null || echo "AI suggestions temporarily unavailable")
+
+                if [[ "${quality_suggestions}" != "AI suggestions temporarily unavailable" ]]; then
+                    {
+                        echo "### 🤖 AI-Generated Code Quality Improvements"
+                        echo ""
+                        echo "${quality_suggestions}"
+                        echo ""
+                    } >>"${suggestions_file}"
+                fi
+            fi
+        fi
+    done
+
+    # Add preventive measures and best practices
+    {
+        echo "## 🛡️ Preventive Measures & Best Practices"
+        echo ""
+        echo "### Swift Best Practices"
+        echo "- Use optional binding instead of force unwrapping"
+        echo "- Implement proper error handling with do-catch blocks"
+        echo "- Add unit tests for new functionality"
+        echo "- Use SwiftLint rules for consistent code style"
+        echo ""
+        echo "### Performance Considerations"
+        echo "- Avoid force casting - use 'as?' and handle nil cases"
+        echo "- Use lazy properties for expensive computations"
+        echo "- Consider using structs over classes when possible"
+        echo "- Profile with Instruments for performance bottlenecks"
+        echo ""
+        echo "### Testing Recommendations"
+        echo "- Write tests for edge cases and error conditions"
+        echo "- Use mock objects for external dependencies"
+        echo "- Test async operations with expectations"
+        echo "- Maintain >70% code coverage target"
+        echo ""
+    } >>"${suggestions_file}"
+
+    if [[ ${has_issues} == false ]]; then
+        {
+            echo "## ✅ No Issues Found"
+            echo ""
+            echo "Great job! No recent errors or quality issues detected."
+            echo "Continue following best practices to maintain code quality."
+            echo ""
+        } >>"${suggestions_file}"
     fi
 
-    # Step 5: Tests
-    if ! run_tests "${project_name}"; then
-        failed_steps+=("Tests")
-        status="FAILED"
-    fi
+    print_success "🤖 Fix suggestions saved to: ${suggestions_file}"
 
-    # Step 6: Code Coverage
-    if ! measure_code_coverage "${project_name}"; then
-        failed_steps+=("Code Coverage")
-        status="FAILED"
-    fi
-
-    # Step 7: Performance Regression Detection
-    if ! detect_performance_regression "${project_name}"; then
-        failed_steps+=("Performance Regression")
-        status="FAILED"
-    fi
-
-    # Step 8: Generate missing tests (if needed)
-    generate_missing_tests "${project_name}"
-
-    # Calculate duration
-    local end_time
-    end_time=$(date +%s)
-    local duration=$((end_time - start_time))
-
-    echo
-    print_status "🏁 CI/CD Pipeline completed for ${project_name}"
-    echo "Duration: ${duration} seconds"
-    echo "Status: ${status}"
-
-    if [[ ${#failed_steps[@]} -gt 0 ]]; then
-        print_error "Failed steps: ${failed_steps[*]}"
-        return 1
+    # Display summary
+    if [[ ${has_issues} == true ]]; then
+        print_ai "📋 Issues found and suggestions generated"
+        echo "Review the suggestions file for detailed recommendations"
     else
-        print_success "All steps passed!"
-        return 0
+        print_success "🎉 No issues detected - code looks good!"
     fi
 }
 
-# Run CI for all projects
-run_all_ci() {
-    print_status "🔄 Running Local CI/CD for ALL projects..."
+# Historical trend analysis and dashboards
+generate_trend_analysis() {
+    print_ai "📊 Generating historical trend analysis..."
 
-    # Initial cleanup
-    cleanup_simulators
+    local trend_report
+    trend_report="${LOGS_DIR}/trend_analysis_$(date +%Y%m%d_%H%M%S).md"
+    local dashboard_data
+    dashboard_data="${LOGS_DIR}/dashboard_data_$(date +%Y%m%d_%H%M%S).json"
 
-    if ! check_ollama; then
-        print_error "Ollama not available, cannot run AI-enhanced CI"
-        return 1
-    fi
+    # Initialize trend report
+    {
+        echo "# 📊 Quantum-workspace Trend Analysis Dashboard"
+        echo "Generated: $(date)"
+        echo ""
+        echo "## Overview"
+        echo ""
+        echo "This report analyzes historical trends in code quality, performance, and build health across all projects."
+        echo ""
+    } >"${trend_report}"
 
-    local total_projects=0
-    local successful_projects=0
-    local failed_projects=()
+    # Initialize dashboard JSON
+    {
+        echo "{"
+        echo "  \"generated_at\": \"$(date -Iseconds)\","
+        echo "  \"analysis_period\": \"last_30_days\","
+        echo "  \"projects\": {"
+    } >"${dashboard_data}"
 
-    # Get list of projects to process sequentially
-    local projects_to_process=()
+    local first_project=true
+    local projects_found=()
+
+    # Analyze each project
     for project in "${PROJECTS_DIR}"/*; do
         if [[ -d ${project} ]]; then
             local project_name
             project_name=$(basename "${project}")
             local swift_files
-            swift_files=$(find "${project}" -name "*.swift" 2>/dev/null | wc -l | tr -d ' ')
+            swift_files=$(find "${project}" -name "*.swift" 2>/dev/null | wc -l)
 
             if [[ ${swift_files} -gt 0 ]]; then
-                projects_to_process+=("${project_name}")
+                projects_found+=("${project_name}")
+
+                if [[ ${first_project} == false ]]; then
+                    echo "," >>"${dashboard_data}"
+                fi
+                first_project=false
+
+                analyze_project_trends "${project_name}" "${trend_report}" "${dashboard_data}"
             fi
         fi
     done
 
-    total_projects=${#projects_to_process[@]}
+    # Close dashboard JSON
+    {
+        echo ""
+        echo "  },"
+        echo "  \"summary\": {"
+        echo "    \"total_projects\": ${#projects_found[@]},"
+        echo "    \"analysis_period_days\": 30,"
+        echo "    \"generated_at\": \"$(date -Iseconds)\""
+        echo "  }"
+        echo "}"
+    } >>"${dashboard_data}"
 
-    print_status "Found ${total_projects} projects to process: ${projects_to_process[*]}"
+    # Generate summary section
+    {
+        echo "## 📈 Key Trends & Insights"
+        echo ""
+        echo "### Build Health Trends"
+        echo "- **Success Rate**: Analyze build success rates over time"
+        echo "- **Duration Trends**: Monitor build time changes"
+        echo "- **Failure Patterns**: Identify common failure causes"
+        echo ""
+        echo "### Code Quality Evolution"
+        echo "- **Lint Violations**: Track reduction in code quality issues"
+        echo "- **Coverage Changes**: Monitor test coverage improvements"
+        echo "- **Complexity Metrics**: Watch for code complexity trends"
+        echo ""
+        echo "### Performance Monitoring"
+        echo "- **Build Times**: Track build performance against quality gates"
+        echo "- **Test Times**: Monitor test execution performance"
+        echo "- **Regression Detection**: Identify performance degradation"
+        echo ""
+        echo "### Recommendations"
+        echo ""
+        echo "Based on the trend analysis, here are actionable recommendations:"
+        echo ""
+        echo "1. **Focus Areas**: Prioritize projects with declining trends"
+        echo "2. **Quality Gates**: Adjust quality gates based on historical performance"
+        echo "3. **Automation**: Increase automation for frequently failing processes"
+        echo "4. **Resource Allocation**: Allocate more resources to problematic areas"
+        echo ""
+    } >>"${trend_report}"
 
-    # Process projects sequentially to avoid simulator conflicts
-    for project_name in "${projects_to_process[@]}"; do
-        local swift_files
-        swift_files=$(find "${PROJECTS_DIR}/${project_name}" -name "*.swift" 2>/dev/null | wc -l | tr -d ' ')
+    print_success "📊 Trend analysis complete:"
+    print_success "  Report: ${trend_report}"
+    print_success "  Data: ${dashboard_data}"
 
-        print_status "🔧 Processing ${project_name} (${swift_files} Swift files)..."
+    # Generate simple dashboard HTML if requested
+    if [[ "${1-}" == "--html" ]]; then
+        generate_html_dashboard "${dashboard_data}"
+    fi
+}
 
-        if run_ci_pipeline "${project_name}"; then
-            ((successful_projects++))
-            print_success "✅ ${project_name} completed successfully"
-        else
-            failed_projects+=("${project_name}")
-            print_error "❌ ${project_name} failed"
+# Analyze trends for a specific project
+analyze_project_trends() {
+    local project_name="$1"
+    local trend_report="$2"
+    local dashboard_data="$3"
+
+    print_ai "Analyzing trends for ${project_name}..."
+
+    # Collect historical data
+    local build_logs
+    build_logs=$(find "${LOGS_DIR}" -name "*${project_name}*build*" -mtime -30 2>/dev/null | wc -l)
+    local test_logs
+    test_logs=$(find "${LOGS_DIR}" -name "*${project_name}*test*" -mtime -30 2>/dev/null | wc -l)
+    local coverage_logs
+    coverage_logs=$(find "${LOGS_DIR}" -name "*${project_name}*coverage*" -mtime -30 2>/dev/null | wc -l)
+    local performance_logs
+    performance_logs=$(find "${LOGS_DIR}" -name "*${project_name}*performance*" -mtime -30 2>/dev/null | wc -l)
+
+    # Calculate success rates
+    local build_success_rate=0
+    local test_success_rate=0
+    if [[ ${build_logs} -gt 0 ]]; then
+        local successful_builds
+        successful_builds=$(grep -l "SUCCESS\|success" "${LOGS_DIR}"/*${project_name}*build* 2>/dev/null || echo "")
+        successful_builds=$(echo "${successful_builds}" | wc -l)
+        if [[ ${build_logs} -gt 0 ]]; then
+            build_success_rate=$((successful_builds * 100 / build_logs))
         fi
+    fi
 
-        echo
-        # Brief pause between projects to allow system cleanup
-        sleep 2
+    if [[ ${test_logs} -gt 0 ]]; then
+        local successful_tests
+        successful_tests=$(grep -l "SUCCESS\|success\|passed" "${LOGS_DIR}"/*${project_name}*test* 2>/dev/null || echo "")
+        successful_tests=$(echo "${successful_tests}" | wc -l)
+        if [[ ${test_logs} -gt 0 ]]; then
+            test_success_rate=$((successful_tests * 100 / test_logs))
+        fi
+    fi
+
+    # Analyze coverage trends
+    local avg_coverage=0
+    local coverage_trend="stable"
+    if [[ ${coverage_logs} -gt 0 ]]; then
+        local coverage_values
+        coverage_values=$(grep -h "coverage_percent" "${LOGS_DIR}"/*${project_name}*coverage* 2>/dev/null | grep -o "[0-9]\+\.[0-9]\+" | head -10 || echo "")
+        if [[ -n "${coverage_values}" ]]; then
+            avg_coverage=$(echo "${coverage_values}" | awk '{sum+=$1} END {if (NR > 0) print sum/NR; else print 0}')
+            # Simple trend analysis (compare first half vs second half)
+            local total_count
+            total_count=$(echo "${coverage_values}" | wc -l)
+            if [[ ${total_count} -gt 1 ]]; then
+                local half_count=$((total_count / 2))
+                local first_half_avg
+                first_half_avg=$(echo "${coverage_values}" | head -n ${half_count} | awk '{sum+=$1} END {if (NR > 0) print sum/NR; else print 0}')
+                local second_half_avg
+                second_half_avg=$(echo "${coverage_values}" | tail -n ${half_count} | awk '{sum+=$1} END {if (NR > 0) print sum/NR; else print 0}')
+
+                if [[ -n "${first_half_avg}" && -n "${second_half_avg}" ]] && awk -v a="${second_half_avg}" -v b="${first_half_avg}" 'BEGIN {exit !(a > b + 1)}' 2>/dev/null; then
+                    coverage_trend="improving"
+                elif [[ -n "${first_half_avg}" && -n "${second_half_avg}" ]] && awk -v a="${first_half_avg}" -v b="${second_half_avg}" 'BEGIN {exit !(a > b + 1)}' 2>/dev/null; then
+                    coverage_trend="declining"
+                fi
+            fi
+        fi
+    fi
+
+    # Analyze performance trends
+    local avg_build_time=0
+    local avg_test_time=0
+    local performance_trend="stable"
+    if [[ ${performance_logs} -gt 0 ]]; then
+        local build_times
+        build_times=$(grep -h "build_time_seconds" "${LOGS_DIR}"/*${project_name}*performance* 2>/dev/null | grep -o "[0-9]\+" | head -10)
+        local test_times
+        test_times=$(grep -h "test_time_seconds" "${LOGS_DIR}"/*${project_name}*performance* 2>/dev/null | grep -o "[0-9]\+" | head -10)
+
+        if [[ -n "${build_times}" ]]; then
+            avg_build_time=$(echo "${build_times}" | awk '{sum+=$1} END {print sum/NR}')
+        fi
+        if [[ -n "${test_times}" ]]; then
+            avg_test_time=$(echo "${test_times}" | awk '{sum+=$1} END {print sum/NR}')
+        fi
+    fi
+
+    # Add to trend report
+    {
+        echo "### ${project_name} Trends"
+        echo ""
+        echo "#### 📊 Metrics Overview"
+        echo "- **Build Success Rate**: ${build_success_rate}% (${build_logs} builds analyzed)"
+        echo "- **Test Success Rate**: ${test_success_rate}% (${test_logs} tests analyzed)"
+        echo "- **Average Coverage**: ${avg_coverage}% (${coverage_logs} coverage reports)"
+        echo "- **Coverage Trend**: ${coverage_trend}"
+        echo "- **Average Build Time**: ${avg_build_time}s"
+        echo "- **Average Test Time**: ${avg_test_time}s"
+        echo ""
+        echo "#### 🎯 Quality Gate Compliance"
+    } >>"${trend_report}"
+
+    # Check recent quality gate compliance
+    local recent_qg_file
+    recent_qg_file=$(find "${LOGS_DIR}" -name "*quality_gate*" -mtime -7 | head -1)
+    if [[ -f "${recent_qg_file}" ]]; then
+        local qg_status
+        qg_status=$(jq -r ".projects.\"${project_name}\".overall_passed // \"unknown\"" "${recent_qg_file}" 2>/dev/null || echo "unknown")
+        {
+            echo "- **Quality Gates**: $([[ "${qg_status}" == "true" ]] && echo "✅ PASSING" || echo "❌ FAILING")"
+        } >>"${trend_report}"
+    else
+        echo "- **Quality Gates**: No recent data" >>"${trend_report}"
+    fi
+
+    echo "" >>"${trend_report}"
+
+    # Add to dashboard JSON
+    cat >>"${dashboard_data}" <<EOF
+    "${project_name}": {
+      "metrics": {
+        "build_success_rate": ${build_success_rate},
+        "test_success_rate": ${test_success_rate},
+        "average_coverage": ${avg_coverage},
+        "coverage_trend": "${coverage_trend}",
+        "average_build_time": ${avg_build_time},
+        "average_test_time": ${avg_test_time},
+        "total_build_logs": ${build_logs},
+        "total_test_logs": ${test_logs},
+        "total_coverage_logs": ${coverage_logs},
+        "total_performance_logs": ${performance_logs}
+      },
+      "analysis_period": "30_days",
+      "last_updated": "$(date -Iseconds)"
+    }
+EOF
+}
+
+# Generate HTML dashboard
+generate_html_dashboard() {
+    local dashboard_data="$1"
+    local html_file
+    html_file="${LOGS_DIR}/dashboard_$(date +%Y%m%d_%H%M%S).html"
+
+    print_ai "Generating HTML dashboard..."
+
+    cat >"${html_file}" <<'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum-workspace CI/CD Dashboard</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 30px; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .metric-card { background: #f8f9fa; border-radius: 8px; padding: 20px; border-left: 4px solid #007acc; }
+        .metric-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #333; }
+        .metric-value { font-size: 24px; font-weight: bold; color: #007acc; }
+        .metric-trend { font-size: 14px; margin-top: 5px; }
+        .trend-improving { color: #28a745; }
+        .trend-declining { color: #dc3545; }
+        .trend-stable { color: #6c757d; }
+        .project-section { margin-bottom: 40px; }
+        .project-title { font-size: 20px; margin-bottom: 15px; color: #333; border-bottom: 2px solid #007acc; padding-bottom: 5px; }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Quantum-workspace CI/CD Dashboard</h1>
+            <p>Real-time insights into code quality, performance, and build health</p>
+        </div>
+EOF
+
+    # Add dashboard data using jq to parse JSON
+    if command -v jq &>/dev/null && [[ -f "${dashboard_data}" ]]; then
+        local projects
+        projects=$(jq -r '.projects | keys[]' "${dashboard_data}" 2>/dev/null)
+
+        for project in ${projects}; do
+            local build_rate
+            build_rate=$(jq -r ".projects.\"${project}\".metrics.build_success_rate" "${dashboard_data}" 2>/dev/null)
+            local test_rate
+            test_rate=$(jq -r ".projects.\"${project}\".metrics.test_success_rate" "${dashboard_data}" 2>/dev/null)
+            local coverage
+            coverage=$(jq -r ".projects.\"${project}\".metrics.average_coverage" "${dashboard_data}" 2>/dev/null)
+            local coverage_trend
+            coverage_trend=$(jq -r ".projects.\"${project}\".metrics.coverage_trend" "${dashboard_data}" 2>/dev/null)
+
+            cat >>"${html_file}" <<'INNER_EOF'
+        <div class="project-section">
+            <h2 class="project-title">${project}</h2>
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="metric-title">Build Success Rate</div>
+                    <div class="metric-value">${build_rate}%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Test Success Rate</div>
+                    <div class="metric-value">${test_rate}%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Code Coverage</div>
+                    <div class="metric-value">${coverage}%</div>
+                    <div class="metric-trend trend-${coverage_trend}">${coverage_trend}</div>
+                </div>
+            </div>
+        </div>
+INNER_EOF
+        done
+    else
+        echo "<p>Dashboard data not available. Run trend analysis first.</p>" >>"${html_file}"
+    fi
+
+    cat >>"${html_file}" <<EOF
+        <div class="footer">
+            <p>Generated on $(date) | Quantum-workspace Local CI/CD System</p>
+        </div>
+    </div>
+</body>
+</html>
+EOF
+
+    print_success "📊 HTML dashboard generated: ${html_file}"
+}
+
+# Safe array handling functions for bash set -u compatibility
+array_to_json() {
+    local array_name="$1"
+    local json="["
+
+    # Use eval to safely access the array
+    local array_length
+    eval "array_length=\${#$array_name[@]}"
+
+    for ((i = 0; i < array_length; i++)); do
+        if [[ $i -gt 0 ]]; then
+            json+=", "
+        fi
+        local value
+        eval "value=\${$array_name[$i]}"
+        json+="\"$value\""
     done
 
-    echo
-    print_status "📊 CI/CD Summary"
-    echo "Total projects: ${total_projects}"
-    echo "Successful: ${successful_projects}"
-    echo "Failed: ${#failed_projects[@]}"
+    json+="]"
+    echo "$json"
+}
 
-    if [[ ${#failed_projects[@]} -gt 0 ]]; then
-        print_error "Failed projects: ${failed_projects[*]}"
-        cleanup_simulators
+array_length() {
+    local array_name="$1"
+    local length
+    eval "length=\${#$array_name[@]}"
+    echo "$length"
+}
+
+# Custom validation rules system
+validate_custom_rules() {
+    local project_name="$1"
+    local project_path="${PROJECTS_DIR}/${project_name}"
+    local custom_rules_file="${CODE_DIR}/custom-validation-rules.yaml"
+
+    print_ai "🔍 Validating custom rules for ${project_name}..."
+
+    # Check if custom rules file exists
+    if [[ ! -f "${custom_rules_file}" ]]; then
+        print_ai "No custom validation rules file found. Creating template..."
+        create_custom_rules_template "${custom_rules_file}"
+        print_success "Custom rules template created: ${custom_rules_file}"
+        print_ai "Edit the template to define project-specific validation rules"
+        return 0
+    fi
+
+    local validation_report
+    validation_report="${LOGS_DIR}/${project_name}_custom_validation_$(date +%Y%m%d_%H%M%S).json"
+
+    # Initialize validation report
+    {
+        echo "{"
+        echo "  \"project\": \"${project_name}\","
+        echo "  \"timestamp\": \"$(date -Iseconds)\","
+        echo "  \"custom_rules_validation\": {"
+    } >"${validation_report}"
+
+    # Run all validation checks and collect status
+    local overall_status=0
+
+    # File structure validation
+    if ! validate_file_structure_rules "${project_name}" "${project_path}" "${validation_report}"; then
+        overall_status=1
+    fi
+
+    # Naming convention validation
+    if ! validate_naming_convention_rules "${project_name}" "${project_path}" "${validation_report}"; then
+        overall_status=1
+    fi
+
+    # Dependency validation
+    if ! validate_dependency_rules "${project_name}" "${project_path}" "${validation_report}"; then
+        overall_status=1
+    fi
+
+    # Architecture validation
+    if ! validate_architecture_rules "${project_name}" "${project_path}" "${validation_report}"; then
+        overall_status=1
+    fi
+
+    # Close validation report
+    {
+        echo "  },"
+        echo "  \"overall_status\": \"$(if [[ ${overall_status} -eq 0 ]]; then echo "PASS"; else echo "FAIL"; fi)\","
+        echo "  \"summary\": \"Custom validation completed\""
+        echo "}"
+    } >>"${validation_report}"
+
+    print_success "Custom validation report saved: ${validation_report}"
+
+    if [[ ${overall_status} -eq 0 ]]; then
+        print_success "✅ All custom validation rules passed for ${project_name}"
+        return 0
+    else
+        print_error "❌ Some custom validation rules failed for ${project_name}"
+        return 1
+    fi
+}
+
+# Validate file structure rules
+validate_file_structure_rules() {
+    local project_name="$1"
+    local project_path="$2"
+    local validation_report="$3"
+
+    print_ai "Validating file structure rules..."
+
+    # Declare arrays
+    declare -a required_dirs=("Sources" "Tests" "Resources")
+    declare -a missing_dirs=()
+    declare -a forbidden_patterns=("*.orig" "*.bak" "*.tmp" ".DS_Store")
+    declare -a forbidden_files=()
+
+    # Check for required directories
+    for dir in "${required_dirs[@]}"; do
+        if [[ ! -d "${project_path}/${dir}" ]]; then
+            missing_dirs+=("${dir}")
+        fi
+    done
+
+    # Check for forbidden files
+    for pattern in "${forbidden_patterns[@]}"; do
+        local found_files
+        found_files=$(find "${project_path}" -name "${pattern}" 2>/dev/null)
+        if [[ -n "${found_files}" ]]; then
+            forbidden_files+=("${found_files}")
+        fi
+    done
+
+    # Report findings
+    local missing_dirs_json
+    missing_dirs_json=$(array_to_json "missing_dirs")
+    local forbidden_files_json
+    forbidden_files_json=$(array_to_json "forbidden_files")
+    local missing_dirs_count
+    missing_dirs_count=$(array_length "missing_dirs")
+    local forbidden_files_count
+    forbidden_files_count=$(array_length "forbidden_files")
+    local missing_dirs_status
+    missing_dirs_status=$(if [[ ${missing_dirs_count} -eq 0 ]]; then echo "PASS"; else echo "FAIL"; fi)
+    local forbidden_files_status
+    forbidden_files_status=$(if [[ ${forbidden_files_count} -eq 0 ]]; then echo "PASS"; else echo "FAIL"; fi)
+
+    cat >>"${validation_report}" <<EOF
+    "file_structure": {
+      "required_directories": {
+        "expected": ["Sources", "Tests", "Resources"],
+        "missing": ${missing_dirs_json},
+        "status": "${missing_dirs_status}"
+      },
+      "forbidden_files": {
+        "patterns": ["*.orig", "*.bak", "*.tmp", ".DS_Store"],
+        "found": ${forbidden_files_json},
+        "status": "${forbidden_files_status}"
+      }
+    },
+EOF
+
+    # Return status
+    if [[ ${#missing_dirs[@]} -gt 0 ]] || [[ ${#forbidden_files[@]} -gt 0 ]]; then
         return 1
     else
-        print_success "All projects passed CI/CD!"
-        cleanup_simulators
         return 0
     fi
 }
 
-# Generate CI/CD report
-generate_ci_report() {
-    local report_file
-    report_file="${LOGS_DIR}/ci_report_$(date +%Y%m%d_%H%M%S).md"
+# Validate naming convention rules
+validate_naming_convention_rules() {
+    local project_name="$1"
+    local project_path="$2"
+    local validation_report="$3"
 
-    print_status "Generating CI/CD report..."
+    print_ai "Validating naming convention rules..."
 
-    {
-        echo "# Local Ollama CI/CD Report"
-        echo "Generated: $(date)"
-        echo ""
-        echo "## System Status"
-        echo "- Ollama: $(ollama --version 2>/dev/null | head -1 || echo 'Not available')"
-        echo "- SwiftFormat: $(swiftformat --version 2>/dev/null || echo 'Not available')"
-        echo "- SwiftLint: $(swiftlint version 2>/dev/null || echo 'Not available')"
-        echo ""
-        echo "## Recent Logs"
-    } >"${report_file}"
+    # Declare arrays
+    local swift_files
+    swift_files=$(find "${project_path}" -name "*.swift" -not -path "*/Tests/*" | head -10)
+    declare -a naming_violations=()
+    declare -a camelcase_violations=()
 
-    # Add recent log files
-    if [[ -d ${LOGS_DIR} ]]; then
-        local recent_logs
-        recent_logs=$(find "${LOGS_DIR}" -name "*.log" -mtime -1 | head -10 || true)
+    # Check Swift file naming (should match class/struct names)
+    for file in ${swift_files}; do
+        local filename
+        filename=$(basename "${file}" .swift)
 
-        if [[ -n ${recent_logs} ]]; then
-            echo "${recent_logs}" | while read -r log; do
-                echo "- $(basename "${log}")"
-            done
-        else
-            echo "- No recent logs found"
+        # Check if file contains a type with matching name
+        if ! grep -q "class ${filename}\|struct ${filename}\|enum ${filename}" "${file}"; then
+            # Allow some common exceptions
+            if [[ "${filename}" != "AppDelegate" ]] && [[ "${filename}" != "SceneDelegate" ]] &&
+                [[ "${filename}" != "ViewController" ]] && [[ ! "${filename}" =~ ^.*View$ ]] &&
+                [[ ! "${filename}" =~ ^.*Model$ ]] && [[ ! "${filename}" =~ ^.*Manager$ ]]; then
+                naming_violations+=("${filename}.swift")
+            fi
         fi
+    done
+
+    # Check for non-camelCase variables (basic check)
+    for file in ${swift_files}; do
+        # Look for variable declarations with underscores
+        local underscore_vars
+        underscore_vars=$(grep -n "let [a-zA-Z_]*_[a-zA-Z_]*" "${file}" | head -3 || true)
+        if [[ -n "${underscore_vars}" ]]; then
+            camelcase_violations+=("$(basename "${file}"):$(echo "${underscore_vars}" | head -1 | cut -d: -f1)")
+        fi
+    done
+
+    # Report findings
+    local naming_violations_json
+    naming_violations_json=$(array_to_json "naming_violations")
+    local camelcase_violations_json
+    camelcase_violations_json=$(array_to_json "camelcase_violations")
+    local naming_violations_count
+    naming_violations_count=$(array_length "naming_violations")
+    local camelcase_violations_count
+    camelcase_violations_count=$(array_length "camelcase_violations")
+    local naming_violations_status
+    naming_violations_status=$(if [[ ${naming_violations_count} -eq 0 ]]; then echo "PASS"; else echo "FAIL"; fi)
+    local camelcase_violations_status
+    camelcase_violations_status=$(if [[ ${camelcase_violations_count} -eq 0 ]]; then echo "PASS"; else echo "FAIL"; fi)
+
+    cat >>"${validation_report}" <<EOF
+    "naming_conventions": {
+      "file_naming": {
+        "description": "Swift files should contain types matching their filename",
+        "violations": ${naming_violations_json},
+        "status": "${naming_violations_status}"
+      },
+      "camelcase_variables": {
+        "description": "Variables should use camelCase naming",
+        "violations": ${camelcase_violations_json},
+        "status": "${camelcase_violations_status}"
+      }
+    },
+EOF
+
+    # Return status
+    if [[ ${#naming_violations[@]} -gt 0 ]] || [[ ${#camelcase_violations[@]} -gt 0 ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+# Validate dependency rules
+validate_dependency_rules() {
+    local project_name="$1"
+    local project_path="$2"
+    local validation_report="$3"
+
+    print_ai "Validating dependency rules..."
+
+    # Check for circular dependencies (basic check)
+    local circular_deps=()
+
+    # Check for UIKit imports in data models
+    local data_model_files
+    data_model_files=$(find "${project_path}" -name "*Model*.swift" -o -name "*Entity*.swift" | head -5)
+    declare -a ui_imports_in_models=()
+
+    for file in ${data_model_files}; do
+        if grep -q "import UIKit\|import SwiftUI" "${file}"; then
+            ui_imports_in_models+=("$(basename "${file}")")
+        fi
+    done
+
+    # Check for force unwrapping
+    declare -a force_unwraps=()
+    local swift_files
+    swift_files=$(find "${project_path}" -name "*.swift" -not -path "*/Tests/*" | head -10)
+
+    for file in ${swift_files}; do
+        local unwrap_count
+        unwrap_count=$(grep -c "!" "${file}" 2>/dev/null) || unwrap_count=0
+        if [[ ${unwrap_count} -gt 5 ]]; then
+            force_unwraps+=("$(basename "${file}"): ${unwrap_count} force unwraps")
+        fi
+    done
+
+    # Report findings
+    local ui_imports_in_models_json
+    ui_imports_in_models_json=$(array_to_json "ui_imports_in_models")
+    local force_unwraps_json
+    force_unwraps_json=$(array_to_json "force_unwraps")
+    local ui_imports_count
+    ui_imports_count=$(array_length "ui_imports_in_models")
+    local force_unwraps_count
+    force_unwraps_count=$(array_length "force_unwraps")
+    local ui_imports_status
+    ui_imports_status=$(if [[ ${ui_imports_count} -eq 0 ]]; then echo "PASS"; else echo "FAIL"; fi)
+    local force_unwraps_status
+    force_unwraps_status=$(if [[ ${force_unwraps_count} -eq 0 ]]; then echo "PASS"; else echo "FAIL"; fi)
+
+    cat >>"${validation_report}" <<EOF
+    "dependency_rules": {
+      "ui_imports_in_models": {
+        "description": "Data models should not import UI frameworks",
+        "violations": ${ui_imports_in_models_json},
+        "status": "${ui_imports_status}"
+      },
+      "force_unwrapping": {
+        "description": "Minimize force unwrapping (max 5 per file)",
+        "violations": ${force_unwraps_json},
+        "status": "${force_unwraps_status}"
+      }
+    },
+EOF
+
+    # Return status
+    if [[ ${#ui_imports_in_models[@]} -gt 0 ]] || [[ ${#force_unwraps[@]} -gt 0 ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+# Validate architecture rules
+validate_architecture_rules() {
+    local project_name="$1"
+    local project_path="$2"
+    local validation_report="$3"
+
+    print_ai "Validating architecture rules..."
+
+    # Declare arrays
+    local view_files
+    view_files=$(find "${project_path}" -name "*View*.swift" | head -5)
+    declare -a missing_viewmodels=()
+    local viewmodel_files
+    viewmodel_files=$(find "${project_path}" -name "*ViewModel*.swift" | head -5)
+    declare -a missing_viewmodel_tests=()
+    declare -a large_files=()
+    local swift_files
+    swift_files=$(find "${project_path}" -name "*.swift" -not -path "*/Tests/*")
+
+    # Check for MVVM pattern adherence
+    for view_file in ${view_files}; do
+        local viewmodel_file
+        viewmodel_file="${view_file%.swift}ViewModel.swift"
+        if [[ ! -f "${viewmodel_file}" ]]; then
+            missing_viewmodels+=("$(basename "${view_file}")")
+        fi
+    done
+
+    # Check for test coverage of view models
+    for vm_file in ${viewmodel_files}; do
+        local test_file
+        test_file="${vm_file%.swift}Tests.swift"
+        if [[ ! -f "${test_file}" ]]; then
+            missing_viewmodel_tests+=("$(basename "${vm_file}")")
+        fi
+    done
+
+    # Check for large files (complexity indicator)
+    for file in ${swift_files}; do
+        local line_count
+        line_count=$(wc -l <"${file}")
+        if [[ "${line_count}" -gt 500 ]]; then
+            large_files+=("$(basename "${file}"): ${line_count} lines")
+        fi
+    done
+
+    # Report findings
+    local missing_viewmodels_json
+    missing_viewmodels_json=$(array_to_json "missing_viewmodels")
+    local missing_viewmodel_tests_json
+    missing_viewmodel_tests_json=$(array_to_json "missing_viewmodel_tests")
+    local large_files_json
+    large_files_json=$(array_to_json "large_files")
+    local missing_viewmodels_count
+    missing_viewmodels_count=$(array_length "missing_viewmodels")
+    local missing_tests_count
+    missing_tests_count=$(array_length "missing_viewmodel_tests")
+    local large_files_count
+    large_files_count=$(array_length "large_files")
+    local missing_viewmodels_status
+    missing_viewmodels_status=$(if [[ ${missing_viewmodels_count} -eq 0 ]]; then echo "PASS"; else echo "FAIL"; fi)
+    local missing_tests_status
+    missing_tests_status=$(if [[ ${missing_tests_count} -eq 0 ]]; then echo "PASS"; else echo "FAIL"; fi)
+    local large_files_status
+    large_files_status=$(if [[ ${large_files_count} -eq 0 ]]; then echo "PASS"; else echo "FAIL"; fi)
+
+    cat >>"${validation_report}" <<EOF
+    "architecture_rules": {
+      "mvvm_pattern": {
+        "description": "Views should have corresponding ViewModels",
+        "missing_viewmodels": ${missing_viewmodels_json},
+        "status": "${missing_viewmodels_status}"
+      },
+      "viewmodel_testing": {
+        "description": "ViewModels should have corresponding test files",
+        "missing_tests": ${missing_viewmodel_tests_json},
+        "status": "${missing_tests_status}"
+      },
+      "file_size_limits": {
+        "description": "Files should not exceed 500 lines",
+        "large_files": ${large_files_json},
+        "status": "${large_files_status}"
+      }
+    }
+EOF
+
+    # Return status
+    if [[ ${#missing_viewmodels[@]} -gt 0 ]] || [[ ${#missing_viewmodel_tests[@]} -gt 0 ]] || [[ ${#large_files[@]} -gt 0 ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+# Create custom validation rules template
+create_custom_rules_template() {
+    local template_file="$1"
+
+    cat >"${template_file}" <<'EOF'
+# Custom Validation Rules for Quantum-workspace
+# This file defines project-specific validation rules beyond generic quality gates
+
+# Global settings
+global:
+  max_file_size_lines: 500
+  max_force_unwraps_per_file: 5
+  required_directories: ["Sources", "Tests", "Resources"]
+  forbidden_file_patterns: ["*.orig", "*.bak", "*.tmp", ".DS_Store"]
+
+# Project-specific rules
+projects:
+  CodingReviewer:
+    architecture:
+      pattern: "MVVM"
+      require_viewmodels: true
+      require_tests: true
+    dependencies:
+      forbid_ui_in_models: true
+      max_force_unwraps: 3
+    naming:
+      file_matches_type: true
+      camelcase_variables: true
+
+  AvoidObstaclesGame:
+    architecture:
+      pattern: "MVC"
+      require_viewmodels: false
+      require_tests: true
+    dependencies:
+      forbid_ui_in_models: true
+      max_force_unwraps: 5
+    naming:
+      file_matches_type: false  # Game files may have different naming
+      camelcase_variables: true
+
+  PlannerApp:
+    architecture:
+      pattern: "MVVM"
+      require_viewmodels: true
+      require_tests: true
+    dependencies:
+      forbid_ui_in_models: true
+      max_force_unwraps: 2
+    naming:
+      file_matches_type: true
+      camelcase_variables: true
+
+  HabitQuest:
+    architecture:
+      pattern: "MVVM"
+      require_viewmodels: true
+      require_tests: true
+    dependencies:
+      forbid_ui_in_models: true
+      max_force_unwraps: 3
+    naming:
+      file_matches_type: true
+      camelcase_variables: true
+
+  MomentumFinance:
+    architecture:
+      pattern: "MVVM"
+      require_viewmodels: true
+      require_tests: true
+    dependencies:
+      forbid_ui_in_models: true
+      max_force_unwraps: 2
+    naming:
+      file_matches_type: true
+      camelcase_variables: true
+
+# Example of how to add custom rules:
+#
+# projects:
+#   MyProject:
+#     custom_rules:
+#       - name: "API Key Validation"
+#         description: "Ensure API keys are properly configured"
+#         check: "grep -q 'API_KEY' Config/*.swift"
+#         severity: "error"
+#       - name: "Database Schema Check"
+#         description: "Validate database schema migrations"
+#         check: "find . -name '*Migration*.swift' | wc -l"
+#         severity: "warning"
+EOF
+
+    print_success "Custom validation rules template created"
+}
+
+# Notification system for Slack and Email
+send_notifications() {
+    local project_name="$1"
+    local event="$2"
+    local status="$3"
+    local details="$4"
+
+    print_ai "📢 Sending notifications for ${project_name}: ${event} (${status})"
+
+    # Load notification configuration
+    local config_file="${CODE_DIR}/notification-config.yaml"
+    if [[ ! -f "${config_file}" ]]; then
+        print_ai "No notification configuration found. Creating template..."
+        create_notification_config_template "${config_file}"
+        print_success "Notification config template created: ${config_file}"
+        return 0
     fi
 
-    echo "" >>"${report_file}"
-    echo "## Recommendations"
-    echo "1. Review failed builds and fix issues"
-    echo "2. Address SwiftLint violations"
-    echo "3. Ensure all tests pass"
-    echo "4. Run AI analysis for optimization opportunities"
+    # Send Slack notification if configured
+    send_slack_notification "${project_name}" "${event}" "${status}" "${details}" "${config_file}"
 
-    print_success "CI/CD report saved to ${report_file}"
+    # Send email notification if configured
+    send_email_notification "${project_name}" "${event}" "${status}" "${details}" "${config_file}"
+
+    print_success "Notifications sent for ${project_name}"
+}
+
+# Send Slack notification
+send_slack_notification() {
+    local project_name="$1"
+    local event="$2"
+    local status="$3"
+    local details="$4"
+    local config_file="$5"
+
+    # Check if Slack is configured (parse existing simple format)
+    local slack_webhook
+    slack_webhook=$(grep -E "^slack_webhook:" "${config_file}" | sed 's/.*slack_webhook:\s*//' | tr -d '"' || echo "")
+    local enable_slack
+    enable_slack=$(grep -E "^enable_slack:" "${config_file}" | sed 's/.*enable_slack:\s*//' | tr -d '"' || echo "false")
+
+    if [[ "${enable_slack}" != "true" ]] || [[ -z "${slack_webhook}" ]]; then
+        return 0 # Slack not configured or disabled, skip silently
+    fi
+
+    # Determine color based on status
+    local color="good"
+    case "${status}" in
+    "ERROR" | "FAIL" | "FAILED")
+        color="danger"
+        ;;
+    "WARNING" | "WARN")
+        color="warning"
+        ;;
+    "SUCCESS" | "PASS" | "PASSED")
+        color="good"
+        ;;
+    *)
+        color="good"
+        ;;
+    esac
+
+    # Create Slack message payload
+    local payload
+    payload=$(
+        cat <<EOF
+{
+    "attachments": [
+        {
+            "color": "${color}",
+            "title": "Quantum-workspace CI/CD: ${project_name}",
+            "fields": [
+                {
+                    "title": "Event",
+                    "value": "${event}",
+                    "short": true
+                },
+                {
+                    "title": "Status",
+                    "value": "${status}",
+                    "short": true
+                },
+                {
+                    "title": "Details",
+                    "value": "${details}",
+                    "short": false
+                }
+            ],
+            "footer": "Quantum-workspace Local CI/CD",
+            "ts": $(date +%s)
+        }
+    ]
+}
+EOF
+    )
+
+    # Send to Slack
+    if command -v curl &>/dev/null; then
+        local response
+        response=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H 'Content-type: application/json' --data "${payload}" "${slack_webhook}")
+        if [[ "${response}" == "200" ]]; then
+            print_ai "✅ Slack notification sent"
+        else
+            print_error "❌ Failed to send Slack notification (HTTP ${response})"
+        fi
+    else
+        print_error "❌ curl not available for Slack notifications"
+    fi
+}
+
+# Send email notification
+send_email_notification() {
+    local project_name="$1"
+    local event="$2"
+    local status="$3"
+    local details="$4"
+    local config_file="$5"
+
+    # Check if email is configured (parse existing simple format)
+    local email_recipients
+    email_recipients=$(grep -E "^email_recipients:" "${config_file}" | sed 's/.*email_recipients:\s*//' | tr -d '"' || echo "")
+    local enable_email
+    enable_email=$(grep -E "^enable_email:" "${config_file}" | sed 's/.*enable_email:\s*//' | tr -d '"' || echo "false")
+
+    if [[ "${enable_email}" != "true" ]] || [[ -z "${email_recipients}" ]]; then
+        return 0 # Email not configured or disabled, skip silently
+    fi
+
+    # Create email content
+    local subject="Quantum-workspace CI/CD: ${project_name} - ${event} (${status})"
+    local body
+    body=$(
+        cat <<EOF
+Quantum-workspace CI/CD Notification
+
+Project: ${project_name}
+Event: ${event}
+Status: ${status}
+Details: ${details}
+
+Timestamp: $(date)
+System: Quantum-workspace Local CI/CD
+
+---
+This is an automated notification from the Quantum-workspace CI/CD system.
+EOF
+    )
+
+    # Send email using mail command (simpler approach)
+    if command -v mail &>/dev/null; then
+        echo "${body}" | mail -s "${subject}" "${email_recipients}"
+        print_ai "✅ Email notification sent"
+    else
+        print_error "❌ mail command not available for email notifications"
+    fi
+}
+
+# Create notification configuration template
+create_notification_config_template() {
+    local config_file="$1"
+
+    cat >"${config_file}" <<'EOF'
+# Notification Configuration for Quantum-workspace CI/CD
+# Configure Slack webhooks and email settings for automated notifications
+
+# Slack Configuration
+slack:
+  # Get webhook URL from: https://api.slack.com/apps -> Your App -> Features -> Incoming Webhooks
+  webhook_url: "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
+  # Optional: specify channel (if not included in webhook URL)
+  # channel: "#ci-cd-notifications"
+  # Optional: custom username
+  # username: "Quantum CI/CD"
+
+# Email Configuration
+email:
+  # SMTP server settings
+  smtp_server: "smtp.gmail.com"
+  smtp_port: 587
+  smtp_user: "your-email@gmail.com"
+  smtp_password: "your-app-password"
+  from_email: "quantum-cicd@yourdomain.com"
+  # List of recipients
+  to_emails:
+    - "team@yourdomain.com"
+    - "devops@yourdomain.com"
+
+# Notification Rules
+rules:
+  # Notify on build failures
+  build_failures:
+    enabled: true
+    channels: ["slack", "email"]
+    events: ["Build Failed", "Build Error"]
+
+  # Notify on test failures
+  test_failures:
+    enabled: true
+    channels: ["slack"]
+    events: ["Tests Failed", "Test Suite Error"]
+
+  # Notify on quality gate failures
+  quality_gates:
+    enabled: true
+    channels: ["email"]
+    events: ["Quality Gates Failed"]
+
+  # Notify on successful deployments
+  successes:
+    enabled: false  # Set to true to enable success notifications
+    channels: ["slack"]
+    events: ["Build Success", "All Tests Passed", "Quality Gates Passed"]
+
+# Example configuration for Gmail:
+#
+# email:
+#   smtp_server: "smtp.gmail.com"
+#   smtp_port: 587
+#   smtp_user: "your-email@gmail.com"
+#   smtp_password: "your-gmail-app-password"  # Generate from Google Account settings
+#   from_email: "quantum-cicd@gmail.com"
+#   to_emails:
+#     - "team@company.com"
+EOF
+
+    print_success "Notification configuration template created"
+}
+
+# Run CI pipeline with notifications
+run_ci_pipeline_with_notifications() {
+    local project_name="$1"
+    local start_time
+    start_time=$(date +%s)
+
+    print_ai "🚀 Starting CI/CD pipeline with notifications for ${project_name}"
+
+    # Run the standard pipeline
+    if run_ci_pipeline "$project_name"; then
+        local duration=$(($(date +%s) - start_time))
+        send_notifications "${project_name}" "CI/CD Pipeline Success" "SUCCESS" "Pipeline completed successfully in ${duration}s"
+        return 0
+    else
+        local duration=$(($(date +%s) - start_time))
+        send_notifications "${project_name}" "CI/CD Pipeline Failed" "ERROR" "Pipeline failed after ${duration}s. Check logs for details."
+        return 1
+    fi
 }
 
 # Show usage
@@ -1597,18 +2732,28 @@ show_usage() {
     echo "  status          - Check system status and Ollama availability"
     echo "  cleanup         - Clean up simulators and stuck processes"
     echo "  run <project>   - Run complete CI/CD pipeline for specific project"
+    echo "  run-notify <p>  - Run CI/CD pipeline with Slack/Email notifications"
     echo "  all             - Run CI/CD pipeline for all projects"
     echo "  format <project> - Format code for specific project"
     echo "  lint <project>   - Lint code for specific project"
     echo "  build <project>  - Build specific project"
     echo "  test <project>   - Run tests for specific project"
     echo "  report          - Generate CI/CD status report"
+    echo "  fix <project>   - Generate AI-powered fix suggestions for issues"
+    echo "  notify <p> <e> <s> <d> - Send custom notification (project, event, status, details)"
+    echo "  trend           - Generate historical trend analysis and dashboard"
+    echo "  trend --html    - Generate trend analysis with HTML dashboard"
+    echo "  validate_custom_rules <p> - Validate project-specific custom rules"
     echo ""
     echo "Examples:"
     echo "  $0 status"
     echo "  $0 run CodingReviewer"
+    echo "  $0 run-notify CodingReviewer"
     echo "  $0 all"
     echo "  $0 report"
+    echo "  $0 fix CodingReviewer"
+    echo "  $0 notify CodingReviewer 'Build Failed' 'ERROR' 'Build failed with exit code 1'"
+    echo "  $0 trend"
 }
 
 # Main execution
@@ -1627,6 +2772,13 @@ main() {
             exit 1
         fi
         check_ollama && run_ci_pipeline "$2"
+        ;;
+    "run-notify")
+        if [[ -z ${2-} ]]; then
+            print_error "Project name required"
+            exit 1
+        fi
+        check_ollama && run_ci_pipeline_with_notifications "$2"
         ;;
     "all")
         run_all_ci
@@ -1662,8 +2814,32 @@ main() {
     "report")
         generate_ci_report
         ;;
+    "fix")
+        if [[ -z ${2-} ]]; then
+            print_error "Project name required"
+            exit 1
+        fi
+        check_ollama && generate_fix_suggestions "$2"
+        ;;
+    "notify")
+        if [[ -z ${2-} ]] || [[ -z ${3-} ]] || [[ -z ${4-} ]] || [[ -z ${5-} ]]; then
+            print_error "Usage: notify <project> <event> <status> <details>"
+            exit 1
+        fi
+        send_notifications "$2" "$3" "$4" "$5"
+        ;;
     "validate_quality_gates")
         validate_quality_gates
+        ;;
+    "trend")
+        generate_trend_analysis "${2-}"
+        ;;
+    "validate_custom_rules")
+        if [[ -z ${2-} ]]; then
+            print_error "Project name required"
+            exit 1
+        fi
+        validate_custom_rules "$2"
         ;;
     *)
         show_usage

@@ -1,0 +1,85 @@
+# Custom Validation Rules for Quantum-workspace
+# This file defines project-specific validation rules beyond generic quality gates
+
+# Global settings
+global:
+  max_file_size_lines: 500
+  max_force_unwraps_per_file: 5
+  required_directories: ["Sources", "Tests", "Resources"]
+  forbidden_file_patterns: ["*.orig", "*.bak", "*.tmp", ".DS_Store"]
+
+# Project-specific rules
+projects:
+  CodingReviewer:
+    architecture:
+      pattern: "MVVM"
+      require_viewmodels: true
+      require_tests: true
+    dependencies:
+      forbid_ui_in_models: true
+      max_force_unwraps: 3
+    naming:
+      file_matches_type: true
+      camelcase_variables: true
+
+  AvoidObstaclesGame:
+    architecture:
+      pattern: "MVC"
+      require_viewmodels: false
+      require_tests: true
+    dependencies:
+      forbid_ui_in_models: true
+      max_force_unwraps: 5
+    naming:
+      file_matches_type: false  # Game files may have different naming
+      camelcase_variables: true
+
+  PlannerApp:
+    architecture:
+      pattern: "MVVM"
+      require_viewmodels: true
+      require_tests: true
+    dependencies:
+      forbid_ui_in_models: true
+      max_force_unwraps: 2
+    naming:
+      file_matches_type: true
+      camelcase_variables: true
+
+  HabitQuest:
+    architecture:
+      pattern: "MVVM"
+      require_viewmodels: true
+      require_tests: true
+    dependencies:
+      forbid_ui_in_models: true
+      max_force_unwraps: 3
+    naming:
+      file_matches_type: true
+      camelcase_variables: true
+
+  MomentumFinance:
+    architecture:
+      pattern: "MVVM"
+      require_viewmodels: true
+      require_tests: true
+    dependencies:
+      forbid_ui_in_models: true
+      max_force_unwraps: 2
+    naming:
+      file_matches_type: true
+      camelcase_variables: true
+
+# Example of how to add custom rules:
+#
+# projects:
+#   MyProject:
+#     custom_rules:
+#       - name: "API Key Validation"
+#         description: "Ensure API keys are properly configured"
+#         check: "grep -q 'API_KEY' Config/*.swift"
+#         severity: "error"
+#       - name: "Database Schema Check"
+#         description: "Validate database schema migrations"
+#         check: "find . -name '*Migration*.swift' | wc -l"
+#         severity: "warning"

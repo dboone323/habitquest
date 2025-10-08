@@ -1,178 +1,227 @@
-# Quantum Workspace Documentation
+# Quantum-workspace Documentation
 
-Welcome to the comprehensive documentation for the Quantum workspace automation system.
+Generated: 2025-10-08 14:42:50 -0500
 
-## 📚 Documentation Overview
+## Overview
 
-This workspace provides a complete development environment with automated tools for iOS/macOS development, featuring advanced automation, quality assurance, and deployment capabilities.
+This documentation provides comprehensive guides, API references, and examples for the Quantum-workspace project - a unified Swift development environment containing multiple applications with shared architecture and automation tooling.
 
-## 🚀 Quick Start
+## Projects
 
-- **[Getting Started Tutorial](./Tutorials/getting_started.md)** - Set up your development environment
-- **[Developer Tools Tutorial](./Tutorials/developer_tools.md)** - Master the available tools
-- **[CI/CD Setup Tutorial](./Tutorials/ci_cd_setup.md)** - Configure continuous integration
+### CodingReviewer
+Advanced code review and analysis application with AI-powered suggestions.
 
-## 📖 Guides
+- **Platform**: macOS
+- **Architecture**: MVVM with SwiftUI
+- **Key Features**: AI analysis, performance monitoring, security scanning
+- **API Docs**: [CodingReviewer API](./API/CodingReviewer_API.md)
 
-### Development
+### PlannerApp
+Planning and organization application with CloudKit synchronization.
 
-- **[Developer Tools Guide](./Guides/DEVELOPER_TOOLS.md)** - Complete tool reference
-- **[CI/CD Guide](./Guides/CI_CD_GUIDE.md)** - Pipeline configuration and management
-- **[Architecture Guide](./Guides/ARCHITECTURE.md)** - System design and patterns
+- **Platform**: macOS, iOS
+- **Architecture**: MVVM with CloudKit integration
+- **Key Features**: Cross-device sync, reminders, categories
+- **API Docs**: [PlannerApp API](./API/PlannerApp_API.md)
 
-### Projects
+### AvoidObstaclesGame
+2D obstacle avoidance game built with SpriteKit.
 
-- **"** - [API Reference](./API/"_API.md)
-- **AvoidObstaclesGame** - [API Reference](./API/AvoidObstaclesGame_API.md)
-- **CodingReviewer** - [API Reference](./API/CodingReviewer_API.md)
-- **Config** - [API Reference](./API/Config_API.md)
-- **HabitQuest** - [API Reference](./API/HabitQuest_API.md)
-- **MomentumFinance** - [API Reference](./API/MomentumFinance_API.md)
-- **PlannerApp** - [API Reference](./API/PlannerApp_API.md)
-- **Tools** - [API Reference](./API/Tools_API.md)
-- **scripts** - [API Reference](./API/scripts_API.md)
+- **Platform**: iOS
+- **Architecture**: Game loop with SpriteKit
+- **Key Features**: Physics-based gameplay, scoring system
+- **API Docs**: [AvoidObstaclesGame API](./API/AvoidObstaclesGame_API.md)
 
-## 🛠️ Automation System
+### MomentumFinance
+Financial tracking and management application.
 
-### Core Components
+- **Platform**: macOS, iOS
+- **Architecture**: MVVM with local storage
+- **Key Features**: Budget tracking, expense categorization
+- **API Docs**: [MomentumFinance API](./API/MomentumFinance_API.md)
 
-- **Master Automation Controller** - Central command interface
-- **Intelligent Auto-Fix** - Automatic code issue resolution
-- **Performance Monitoring** - Build and system performance tracking
-- **Security Scanning** - Automated security validation
-- **Email Alerting** - Critical event notifications
+### HabitQuest
+Habit tracking application with gamification elements.
 
-### Key Scripts
+- **Platform**: iOS
+- **Architecture**: MVVM with Core Data
+- **Key Features**: Habit streaks, achievements, progress tracking
+- **API Docs**: [HabitQuest API](./API/HabitQuest_API.md)
 
-- `master_automation.sh` - Main automation interface
-- `intelligent_autofix.sh` - Code quality and fixing
-- `performance_monitor.sh` - Performance monitoring
-- `security_check.sh` - Security validation
-- `email_alert_system.sh` - Alert notifications
+## Getting Started
 
-## 🔧 Configuration
+### Prerequisites
 
-### Main Configuration Files
+- **macOS**: 12.0 or later
+- **Xcode**: 14.0 or later
+- **Swift**: 5.7 or later
+- **Command Line Tools**: Latest version
 
-- `Tools/Automation/config/automation_config.yaml` - Core automation settings
-- `Tools/Automation/config/error_recovery.yaml` - Error handling configuration
-- `Tools/Automation/config/alerting.yaml` - Email alert settings
-- `Tools/Automation/config/integration_testing.yaml` - Testing configuration
+### Quick Start
 
-### Project-Specific Settings
+1. **Clone Repository**
+   ```bash
+   git clone <repository-url>
+   cd Quantum-workspace
+   ```
 
-Each project contains its own configuration for:
+2. **Setup Environment**
+   ```bash
+   # Check automation status
+   ./Tools/Automation/master_automation.sh status
 
-- Build settings and targets
-- Test configurations
-- Deployment settings
-- Quality gates
+   # Run full automation
+   ./Tools/Automation/master_automation.sh all
+   ```
 
-## 📊 Monitoring & Analytics
+3. **Open Projects**
+   - Open individual `.xcodeproj` files in Xcode
+   - Or use unified workspace: `Code.code-workspace`
 
-### Dashboards
+## Architecture Principles
 
-- **Unified Dashboard** - System-wide status overview
-- **Performance Reports** - Build time and resource usage
-- **Test Results** - Automated test execution reports
-- **Security Reports** - Vulnerability scanning results
+### Shared Architecture
 
-### Logs
+All projects follow consistent architectural patterns:
 
-- `Tools/Automation/logs/` - Automation system logs
-- `.autofix.log` - Auto-fix operation logs
-- `.alerts.log` - Alert system logs
+#### BaseViewModel Protocol
+```swift
+@MainActor
+protocol BaseViewModel: ObservableObject {
+    associatedtype State
+    associatedtype Action
+    var state: State { get set }
+    var isLoading: Bool { get set }
+    func handle(_ action: Action)
+}
+```
 
-## 🚨 Troubleshooting
+#### Key Rules
+1. **Data models NEVER import SwiftUI** - keeps separation of concerns
+2. **Avoid Codable in complex data models** - prevents circular dependencies
+3. **Use synchronous operations with background queues** - not async/await everywhere
+4. **Specific naming over generic** - avoid "Dashboard", "Manager" names
+5. **Sendable for thread safety** - prefer over complex async patterns
 
-### Common Issues
+### Code Organization
 
-1. **Build Failures** - Check Xcode version and code signing
-2. **Test Failures** - Verify test environment and dependencies
-3. **Automation Errors** - Review logs and system status
-4. **Performance Issues** - Check resource usage and optimization settings
+```
+Projects/
+├── {ProjectName}/
+│   ├── {ProjectName}/           # Main application code
+│   │   ├── Views/              # SwiftUI views
+│   │   ├── ViewModels/         # View models
+│   │   ├── Models/             # Data models
+│   │   ├── Services/           # Business logic
+│   │   └── Utilities/          # Helper functions
+│   ├── Tests/                  # Unit and UI tests
+│   └── {ProjectName}.xcodeproj # Xcode project
+```
 
-### Getting Help
+## Development Workflow
 
-1. Check system status: `./Tools/Automation/master_automation.sh status`
-2. Review logs in `Tools/Automation/logs/`
-3. Run diagnostics: `./Tools/Automation/master_automation.sh validate <project>`
-4. Create an issue in the repository
+### Building Projects
 
-## 📈 Best Practices
+```bash
+# Build all projects
+./Tools/Automation/master_automation.sh all
 
-### Development Workflow
+# Build specific project
+./Tools/Automation/master_automation.sh run CodingReviewer
 
-1. Always run quality checks before committing
-2. Use automation scripts instead of manual commands
-3. Keep tools and dependencies updated
-4. Review changes in pull requests
-5. Monitor system performance regularly
-
-### Code Quality
-
-- Follow Swift style guidelines
-- Write comprehensive tests
-- Document public APIs
-- Use meaningful commit messages
-- Keep dependencies minimal and updated
-
-### Automation
-
-- Configure alerts for critical events
-- Set up branch protection rules
-- Monitor CI/CD pipeline health
-- Review automation logs regularly
-- Update configurations as needed
-
-## 🔄 Continuous Integration
-
-### GitHub Actions
-
-The workspace includes comprehensive CI/CD pipelines with:
-
-- Automated building and testing
-- Code quality checks
-- Security scanning
-- TestFlight deployment
-- Performance monitoring
+# Check status
+./Tools/Automation/master_automation.sh status
+```
 
 ### Quality Gates
 
-- Code formatting compliance
-- Test coverage requirements
-- Security scan results
-- Performance benchmarks
-- Documentation updates
+- **Code Coverage**: Minimum 70%, target 85%
+- **Build Performance**: Maximum 120 seconds
+- **Test Performance**: Maximum 30 seconds
+- **File Limits**: Maximum 500 lines per file, 1000KB file size
 
-## 🤝 Contributing
+### Linting and Formatting
 
-### Development Setup
+```bash
+# Format code
+swiftformat .
 
-1. Fork the repository
-2. Clone your fork
-3. Set up the development environment
-4. Create a feature branch
-5. Make your changes
-6. Run quality checks
-7. Submit a pull request
+# Lint code
+swiftlint --strict
+```
 
-### Code Standards
+## Documentation Sections
 
-- Follow existing code style
-- Add tests for new features
-- Update documentation
-- Ensure CI/CD passes
-- Get code review approval
+### API Reference
+- [CodingReviewer API](./API/CodingReviewer_API.md)
+- [PlannerApp API](./API/PlannerApp_API.md)
+- [AvoidObstaclesGame API](./API/AvoidObstaclesGame_API.md)
+- [MomentumFinance API](./API/MomentumFinance_API.md)
+- [HabitQuest API](./API/HabitQuest_API.md)
 
-## 📞 Support
+### Tutorials
+- [Getting Started](./Tutorials/getting_started.md)
+- [Developer Tools](./Tutorials/developer_tools.md)
+- [CI/CD Setup](./Tutorials/ci_cd_setup.md)
 
-- **Documentation**: This comprehensive guide
-- **Issues**: GitHub Issues for bugs and feature requests
-- **Discussions**: GitHub Discussions for questions and ideas
-- **Wiki**: Additional guides and examples
+### Guides
+- [AI Code Review Guide](./AI_CODE_REVIEW_GUIDE.md)
+- [Continuous Validation Guide](./CONTINUOUS_VALIDATION_GUIDE.md)
+- [Production Deployment Guide](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+
+### Examples
+See the [Examples](./Examples/) directory for code samples and integration examples.
+
+## Contributing
+
+### Code Style
+- Follow Swift API Design Guidelines
+- Use SwiftFormat for consistent formatting
+- Write comprehensive unit tests
+- Document public APIs
+
+### Testing
+- Unit tests for business logic
+- UI tests for critical user flows
+- Integration tests for services
+- Performance tests for critical paths
+
+### Pull Request Process
+1. Create feature branch
+2. Implement changes with tests
+3. Run full automation suite
+4. Submit pull request with description
+5. Address review feedback
+
+## Troubleshooting
+
+### Common Issues
+
+#### Build Failures
+- Ensure Xcode command line tools are installed
+- Check Swift version compatibility
+- Verify all dependencies are available
+
+#### Test Failures
+- Run tests individually to isolate issues
+- Check test logs for detailed error messages
+- Verify test data and mock objects
+
+#### Performance Issues
+- Use Instruments to profile performance
+- Check for memory leaks
+- Optimize expensive operations
+
+### Getting Help
+
+- Check existing issues and documentation
+- Review automation logs for errors
+- Use the status command for environment validation
+
+## License
+
+See individual project licenses for details.
 
 ---
 
-_Generated automatically on: $(date)_
-_Quantum Workspace Automation System v2.0_
+*Generated by Quantum-workspace documentation generator*

@@ -1,0 +1,61 @@
+{
+  "project": "AvoidObstaclesGame",
+  "timestamp": "2025-10-08T14:32:20-05:00",
+  "custom_rules_validation": {
+    "file_structure": {
+      "required_directories": {
+        "expected": ["Sources", "Tests", "Resources"],
+        "missing": ["Sources", "Tests", "Resources"],
+        "status": "FAIL"
+      },
+      "forbidden_files": {
+        "patterns": ["*.orig", "*.bak", "*.tmp", ".DS_Store"],
+        "found": [],
+        "status": "PASS"
+      }
+    },
+    "naming_conventions": {
+      "file_naming": {
+        "description": "Swift files should contain types matching their filename",
+        "violations": [],
+        "status": "PASS"
+      },
+      "camelcase_variables": {
+        "description": "Variables should use camelCase naming",
+        "violations": [],
+        "status": "PASS"
+      }
+    },
+    "dependency_rules": {
+      "ui_imports_in_models": {
+        "description": "Data models should not import UI frameworks",
+        "violations": [],
+        "status": "PASS"
+      },
+      "force_unwrapping": {
+        "description": "Minimize force unwrapping (max 5 per file)",
+        "violations": [],
+        "status": "PASS"
+      }
+    },
+    "architecture_rules": {
+      "mvvm_pattern": {
+        "description": "Views should have corresponding ViewModels",
+        "missing_viewmodels": ["GameViewController.swift", "GameViewControllerTests.swift"],
+        "status": "FAIL"
+      },
+      "viewmodel_testing": {
+        "description": "ViewModels should have corresponding test files",
+        "missing_tests": [],
+        "status": "PASS"
+      },
+      "file_size_limits": {
+        "description": "Files should not exceed 500 lines",
+        "large_files": ["AudioManager.swift:      556 lines", "PlayerManager.swift:      514 lines", "UIManager.swift:      592 lines"],
+        "status": "FAIL"
+      }
+    }
+  },
+  "overall_status": "FAIL",
+  "summary": "Custom validation completed"
+}

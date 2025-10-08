@@ -47,6 +47,13 @@ class UIManager {
     private var fpsLabel: SKLabelNode?
     private var memoryLabel: SKLabelNode?
     private var qualityLabel: SKLabelNode?
+
+    /// Accessibility overlay for VoiceOver support
+    private var accessibilityOverlay: UIView?
+    private var restartButton: UIButton?
+    private var gameStateAnnouncement: String = ""
+
+    /// Performance monitoring timer
     private var performanceUpdateTimer: Timer?
 
     /// Whether performance monitoring is visible
@@ -70,6 +77,7 @@ class UIManager {
     /// Updates the scene reference (called when scene is properly initialized)
     func updateScene(_ scene: SKScene) {
         self.scene = scene
+        self.setupAccessibilityOverlay()
     }
 
     // MARK: - Setup
@@ -79,6 +87,7 @@ class UIManager {
         self.setupScoreLabel()
         self.setupHighScoreLabel()
         self.setupDifficultyLabel()
+        self.updateAccessibilityState()
     }
 
     /// Sets up the score label
@@ -133,24 +142,116 @@ class UIManager {
         scene.addChild(difficultyLabel)
     }
 
+    // MARK: - Accessibility Support
+
+    /// Sets up accessibility overlay for VoiceOver support
+    private func setupAccessibilityOverlay() {
+        guard let scene else { return }
+
+        // Create accessibility overlay view
+        let overlay = UIView(frame: scene.view?.bounds ?? .zero)
+        overlay.isAccessibilityElement = false
+        overlay.accessibilityLabel = "Avoid Obstacles Game"
+        overlay.accessibilityHint = "Tap to control the player character"
+
+        // Create restart button for accessibility
+        let button = UIButton(type: .system)
+        button.setTitle("Restart Game", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .medium)
+        button.backgroundColor = .systemBlue
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 8
+        button.isHidden = true // Initially hidden, shown during game over
+        button.addTarget(self, action: #selector(restartButtonTapped), for: .touchUpInside)
+
+        // Set accessibility properties
+        button.accessibilityLabel = "Restart Game"
+        button.accessibilityHint = "Double tap to start a new game"
+        button.accessibilityTraits = .button
+
+        // Position button (will be updated when game over screen is shown)
+        button.frame = CGRect(x: 0, y: 0, width: 150, height: 50)
+
+        overlay.addSubview(button)
+        scene.view?.addSubview(overlay)
+
+        self.accessibilityOverlay = overlay
+        self.restartButton = button
+
+        // Announce initial game state
+        self.announceGameState("Game started. Tap screen to control player.")
+    }
+
+    /// Updates accessibility state based on current game state
+    private func updateAccessibilityState() {
+        let score = self.scoreLabel?.text ?? "Score: 0"
+        let level = self.difficultyLabel?.text ?? "Level: 1"
+        let highScore = self.highScoreLabel?.text ?? "Best: 0"
+
+        self.gameStateAnnouncement = "\(score). \(level). \(highScore). Tap to move player."
+
+        // Update overlay accessibility
+        self.accessibilityOverlay?.accessibilityLabel = "Avoid Obstacles Game - \(self.gameStateAnnouncement)"
+    }
+
+    /// Announces game state changes to VoiceOver
+    /// - Parameter message: The message to announce
+    private func announceGameState(_ message: String) {
+        UIAccessibility.post(notification: .announcement, argument: message)
+    }
+
+    /// Handles restart button tap for accessibility
+    @objc private func restartButtonTapped() {
+        self.delegate?.restartButtonTapped()
+    }
+
+    /// Shows the accessibility restart button
+    private func showAccessibilityRestartButton() {
+        guard let scene, let restartButton else { return }
+
+        // Position button near the visual restart label
+        let buttonWidth: CGFloat = 150
+        let buttonHeight: CGFloat = 50
+        let centerX = scene.size.width / 2
+        let centerY = scene.size.height / 2 - 40
+
+        restartButton.frame = CGRect(
+            x: centerX - buttonWidth / 2,
+            y: centerY - buttonHeight / 2,
+            width: buttonWidth,
+            height: buttonHeight
+        )
+
+        restartButton.isHidden = false
+        restartButton.becomeFirstResponder()
+    }
+
+    /// Hides the accessibility restart button
+    private func hideAccessibilityRestartButton() {
+        self.restartButton?.isHidden = true
+    }
+
     // MARK: - Updates
 
     /// Updates the score display
     /// - Parameter score: New score value
     func updateScore(_ score: Int) {
         self.scoreLabel?.text = "Score: \(score)"
+        self.updateAccessibilityState()
     }
 
     /// Updates the high score display
     /// - Parameter highScore: New high score value
     func updateHighScore(_ highScore: Int) {
         self.highScoreLabel?.text = "Best: \(highScore)"
+        self.updateAccessibilityState()
     }
 
     /// Updates the difficulty level display
     /// - Parameter level: New difficulty level
     func updateDifficultyLevel(_ level: Int) {
         self.difficultyLabel?.text = "Level: \(level)"
+        self.updateAccessibilityState()
     }
 
     // MARK: - Game Over Screen
@@ -229,6 +330,15 @@ class UIManager {
                 self.fadeInAction,
             ]))
         }
+
+        // Show accessibility restart button
+        self.showAccessibilityRestartButton()
+
+        // Announce game over state
+        let announcement = isNewHighScore ?
+            "Game over. Final score: \(finalScore). New high score achieved! Tap restart button to play again." :
+            "Game over. Final score: \(finalScore). Tap restart button to play again."
+        self.announceGameState(announcement)
     }
 
     /// Hides the game over screen
@@ -242,6 +352,12 @@ class UIManager {
         self.restartLabel = nil
         self.highScoreAchievedLabel = nil
         self.finalScoreLabel = nil
+
+        // Hide accessibility restart button
+        self.hideAccessibilityRestartButton()
+
+        // Announce game restart
+        self.announceGameState("Game restarted. Tap screen to control player.")
     }
 
     // MARK: - Level Up Effects
@@ -274,6 +390,9 @@ class UIManager {
                 self?.levelUpLabel = nil
             }
         }
+
+        // Announce level up to VoiceOver
+        self.announceGameState("Level up! Difficulty increased.")
     }
 
     // MARK: - Score Popups
@@ -303,6 +422,11 @@ class UIManager {
         let sequence = SKAction.sequence([animation, remove])
 
         scoreLabel.run(sequence)
+
+        // Announce score increase to VoiceOver (only for significant scores to avoid spam)
+        if score >= 10 {
+            self.announceGameState("Score increased by \(score) points")
+        }
     }
 
     // MARK: - Statistics Display
@@ -418,6 +542,9 @@ class UIManager {
         self.stopPerformanceUpdates()
         self.performanceOverlay?.removeFromParent()
 
+        // Clean up accessibility overlay
+        self.accessibilityOverlay?.removeFromSuperview()
+
         self.scoreLabel = nil
         self.highScoreLabel = nil
         self.difficultyLabel = nil
@@ -430,6 +557,8 @@ class UIManager {
         self.fpsLabel = nil
         self.memoryLabel = nil
         self.qualityLabel = nil
+        self.accessibilityOverlay = nil
+        self.restartButton = nil
         self.statisticsLabels.removeAll()
     }
 

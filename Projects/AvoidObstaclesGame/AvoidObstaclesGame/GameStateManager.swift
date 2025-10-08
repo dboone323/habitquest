@@ -58,21 +58,43 @@ class GameStateManager {
     /// Total survival time in current game
     private(set) var survivalTime: TimeInterval = 0
 
-    /// Statistics tracking
+    /// Statistics tracking with security
     private var gamesPlayed: Int = 0
     private var totalScore: Int = 0
     private var bestSurvivalTime: TimeInterval = 0
+    private var dataHash: Data?
+
+    // MARK: - Security Properties
+
+    /// Verifies score integrity
+    private func verifyScoreIntegrity() -> Bool {
+        let dataString = "\(score)\(currentDifficultyLevel)\(gamesPlayed)"
+        let currentHash = SecurityFramework.Crypto.sha256(dataString)
+        return dataHash.map { $0 == currentHash } ?? true
+    }
+
+    /// Updates data hash for integrity checking
+    private func updateDataHash() {
+        let dataString = "\(score)\(currentDifficultyLevel)\(gamesPlayed)\(totalScore)\(bestSurvivalTime)"
+        self.dataHash = SecurityFramework.Crypto.sha256(dataString)
+    }
 
     // MARK: - Initialization
 
     init() {
-        self.loadStatistics()
+        self.loadStatisticsSecurely()
     }
 
     // MARK: - Game Lifecycle
 
-    /// Starts a new game
+    /// Starts a new game with security validation
     func startGame() {
+        // Validate game can start
+        guard self.currentState == .waitingToStart || self.currentState == .gameOver else {
+            SecurityFramework.Monitoring.logSecurityEvent(.inputValidationFailed(type: "Invalid Game Start State"))
+            return
+        }
+
         self.currentState = .playing
         self.score = 0
         self.currentDifficultyLevel = 1
@@ -80,20 +102,35 @@ class GameStateManager {
         self.gameStartTime = Date()
         self.survivalTime = 0
         self.gamesPlayed += 1
-        self.saveStatistics()
+        self.updateDataHash()
+        self.saveStatisticsSecurely()
     }
 
-    /// Ends the current game
+    /// Ends the current game with validation
     func endGame() {
+        guard self.currentState == .playing else {
+            SecurityFramework.Monitoring.logSecurityEvent(.inputValidationFailed(type: "Invalid Game End State"))
+            return
+        }
+
         self.currentState = .gameOver
         self.survivalTime = self.gameStartTime.map { Date().timeIntervalSince($0) } ?? 0
+
+        // Validate survival time
+        let timeValidation = SecurityFramework.Validation.validateNumericInput(self.survivalTime, minValue: 0, maxValue: 3600) // Max 1 hour
+        guard case .success = timeValidation else {
+            SecurityFramework.Monitoring.logSecurityEvent(.inputValidationFailed(type: "Invalid Survival Time"))
+            return
+        }
+
         self.totalScore += self.score
 
         if self.survivalTime > self.bestSurvivalTime {
             self.bestSurvivalTime = self.survivalTime
         }
 
-        self.saveStatistics()
+        self.updateDataHash()
+        self.saveStatisticsSecurely()
         self.delegate?.gameDidEnd(withScore: self.score, survivalTime: self.survivalTime)
     }
 
@@ -117,11 +154,27 @@ class GameStateManager {
 
     // MARK: - Score Management
 
-    /// Adds points to the score
+    /// Adds points to the score with validation
     /// - Parameter points: Number of points to add
     func addScore(_ points: Int) {
-        guard self.currentState == .playing else { return }
+        guard self.currentState == .playing else {
+            SecurityFramework.Monitoring.logSecurityEvent(.inputValidationFailed(type: "Invalid Game State"))
+            return
+        }
+
+        // Validate points input
+        let validation = SecurityFramework.Validation.validateNumericInput(points, minValue: 0, maxValue: 1000)
+        guard case .success = validation else {
+            SecurityFramework.Monitoring.logSecurityEvent(.inputValidationFailed(type: "Invalid Score Points"))
+            return
+        }
+
         self.score += points
+
+        // Verify score integrity
+        if !self.verifyScoreIntegrity() {
+            SecurityFramework.Monitoring.logSecurityEvent(.incidentDetected(type: "Score Integrity Violation"))
+        }
     }
 
     /// Gets the current score
@@ -203,7 +256,52 @@ class GameStateManager {
         }.value
     }
 
-    // MARK: - Persistence
+    // MARK: - Secure Persistence
+
+    private func loadStatisticsSecurely() {
+        do {
+            // Try to load from secure storage first
+            if let secureData = try? SecurityFramework.DataSecurity.retrieveFromKeychain(key: "gameStatistics") {
+                let statistics = try JSONDecoder().decode(GameStatistics.self, from: secureData)
+
+                // Verify data integrity
+                if statistics.verifyIntegrity() {
+                    self.gamesPlayed = statistics.gamesPlayed
+                    self.totalScore = statistics.totalScore
+                    self.bestSurvivalTime = statistics.bestSurvivalTime
+                    self.dataHash = statistics.dataHash
+                    return
+                } else {
+                    SecurityFramework.Monitoring.logSecurityEvent(.incidentDetected(type: "Statistics Integrity Violation"))
+                }
+            }
+        } catch {
+            SecurityFramework.Monitoring.logSecurityEvent(.keychainOperationFailed(operation: "Load Statistics"))
+        }
+
+        // Fallback to UserDefaults
+        self.loadStatistics()
+    }
+
+    private func saveStatisticsSecurely() {
+        let statistics = GameStatistics(
+            gamesPlayed: self.gamesPlayed,
+            totalScore: self.totalScore,
+            bestSurvivalTime: self.bestSurvivalTime,
+            dataHash: self.dataHash
+        )
+
+        do {
+            let data = try JSONEncoder().encode(statistics)
+            try SecurityFramework.DataSecurity.storeInKeychain(key: "gameStatistics", data: data)
+        } catch {
+            SecurityFramework.Monitoring.logSecurityEvent(.keychainOperationFailed(operation: "Save Statistics"))
+            // Fallback to UserDefaults
+            self.saveStatistics()
+        }
+    }
+
+    // MARK: - Legacy Persistence (for fallback)
 
     private func loadStatistics() {
         let defaults = UserDefaults.standard
@@ -212,31 +310,12 @@ class GameStateManager {
         self.bestSurvivalTime = defaults.double(forKey: "bestSurvivalTime")
     }
 
-    private func loadStatisticsAsync() async {
-        await Task.detached {
-            let defaults = UserDefaults.standard
-            self.gamesPlayed = defaults.integer(forKey: "gamesPlayed")
-            self.totalScore = defaults.integer(forKey: "totalScore")
-            self.bestSurvivalTime = defaults.double(forKey: "bestSurvivalTime")
-        }.value
-    }
-
     private func saveStatistics() {
         let defaults = UserDefaults.standard
         defaults.set(self.gamesPlayed, forKey: "gamesPlayed")
         defaults.set(self.totalScore, forKey: "totalScore")
         defaults.set(self.bestSurvivalTime, forKey: "bestSurvivalTime")
         defaults.synchronize()
-    }
-
-    private func saveStatisticsAsync() async {
-        await Task.detached {
-            let defaults = UserDefaults.standard
-            defaults.set(self.gamesPlayed, forKey: "gamesPlayed")
-            defaults.set(self.totalScore, forKey: "totalScore")
-            defaults.set(self.bestSurvivalTime, forKey: "bestSurvivalTime")
-            defaults.synchronize()
-        }.value
     }
 
     // MARK: - State Queries
@@ -260,23 +339,20 @@ class GameStateManager {
     }
 }
 
-// MARK: - Object Pooling
+// MARK: - Supporting Types
 
-/// Object pool for performance optimization
-private var objectPool: [Any] = []
-private let maxPoolSize = 50
+/// Secure game statistics structure
+private struct GameStatistics: Codable {
+    let gamesPlayed: Int
+    let totalScore: Int
+    let bestSurvivalTime: TimeInterval
+    let dataHash: Data?
 
-/// Get an object from the pool or create new one
-private func getPooledObject<T>() -> T? {
-    if let pooled = objectPool.popLast() as? T {
-        return pooled
-    }
-    return nil
-}
-
-/// Return an object to the pool
-private func returnToPool(_ object: Any) {
-    if objectPool.count < maxPoolSize {
-        objectPool.append(object)
+    /// Verifies data integrity
+    func verifyIntegrity() -> Bool {
+        guard let storedHash = dataHash else { return false }
+        let dataString = "\(gamesPlayed)\(totalScore)\(bestSurvivalTime)"
+        let currentHash = SecurityFramework.Crypto.sha256(dataString)
+        return storedHash == currentHash
     }
 }

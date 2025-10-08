@@ -12,12 +12,12 @@ import jwt
 
 
 class JWTAuthManager:
-    def __init__(self, secret_key: str = None):
+    def __init__(self, jwt_secret: str = None):
         # Use provided key, environment variable, or load from secure config
-        if secret_key:
-            self.secret_key = secret_key
+        if jwt_secret:
+            self.jwt_secret = jwt_secret
         elif os.getenv("JWT_SECRET"):
-            self.secret_key = os.getenv("JWT_SECRET")
+            self.jwt_secret = os.getenv("JWT_SECRET")
         else:
             # Try to load from secure config
             try:
@@ -34,34 +34,68 @@ class JWTAuthManager:
                     cwd="/Users/danielstevens/Desktop/Quantum-workspace/Tools",
                 )
                 if result.returncode == 0 and result.stdout.strip():
-                    self.secret_key = result.stdout.strip()
+                    self.jwt_secret = result.stdout.strip()
                 else:
                     # Fallback to secure random key
                     import secrets
 
-                    self.secret_key = secrets.token_hex(32)
+                    self.jwt_secret = secrets.token_hex(32)
             except:
                 # Final fallback
                 import secrets
 
-                self.secret_key = secrets.token_hex(32)
+                self.jwt_secret = secrets.token_hex(32)
 
         self.algorithm = "HS256"
         self.token_expiry = timedelta(hours=24)
 
-        # Simple user store for testing
-        self.users = {
-            "admin": {
-                "password_hash": self._hash_password("admin"),
+        # Simple user store for testing - use environment variables for security
+        self.users = {}
+        self._load_test_users()
+
+    def _load_test_users(self):
+        """Load test users from environment variables for security"""
+        # Only create test users if explicitly configured via environment
+        admin_password = os.getenv("TEST_ADMIN_PASSWORD")
+        user_password = os.getenv("TEST_USER_PASSWORD")
+
+        if admin_password:
+            self.users["admin"] = {
+                "password_hash": self._hash_password(admin_password),
                 "role": "admin",
                 "permissions": ["read", "write", "admin"],
-            },
-            "user": {
-                "password_hash": self._hash_password("user"),
+            }
+
+        if user_password:
+            self.users["user"] = {
+                "password_hash": self._hash_password(user_password),
                 "role": "user",
                 "permissions": ["read"],
-            },
-        }
+            }
+
+        # In development/test environments, create secure test users if none configured
+        if not self.users and os.getenv("DEVELOPMENT") == "true":
+            import secrets
+            # Create test users with random passwords for security
+            admin_pass = secrets.token_hex(8)
+            user_pass = secrets.token_hex(8)
+
+            self.users = {
+                "admin": {
+                    "password_hash": self._hash_password(admin_pass),
+                    "role": "admin",
+                    "permissions": ["read", "write", "admin"],
+                },
+                "user": {
+                    "password_hash": self._hash_password(user_pass),
+                    "role": "user",
+                    "permissions": ["read"],
+                },
+            }
+
+            # Log secure passwords (only in development)
+            print(f"Development test admin password: {admin_pass}")
+            print(f"Development test user password: {user_pass}")
 
     def _hash_password(self, password: str) -> str:
         return hashlib.sha256(password.encode()).hexdigest()
@@ -84,11 +118,11 @@ class JWTAuthManager:
             "exp": datetime.now(timezone.utc) + self.token_expiry,
             "iat": datetime.now(timezone.utc),
         }
-        return jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
+        return jwt.encode(payload, self.jwt_secret, algorithm=self.algorithm)
 
     def verify_token(self, token: str) -> Optional[Dict]:
         try:
-            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
+            payload = jwt.decode(token, self.jwt_secret, algorithms=[self.algorithm])
             return payload
         except jwt.ExpiredSignatureError:
             return None
@@ -125,8 +159,11 @@ def get_auth_manager():
 def main():
     auth = get_auth_manager()
 
-    # Test login
-    token = auth.login("admin", "admin")
+    # Test login using environment variables or generated credentials
+    test_username = os.getenv("TEST_USERNAME", "admin")
+    test_credential = os.getenv("TEST_PASSWORD", os.getenv("TEST_ADMIN_PASSWORD", "secure_test_credential"))
+
+    token = auth.login(test_username, test_credential)
     if token:
         print("Login successful! Token generated")
 
