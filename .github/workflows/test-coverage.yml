@@ -1,12 +1,10 @@
 name: Test Coverage & Quality Gates
 
-# TEMPORARILY DISABLED: Projects use Xcode, not Swift Package Manager
-# Re-enable after configuring xcodebuild-based testing
 on:
   push:
-    branches: [disabled-until-fixed]
+    branches: [main]
   pull_request:
-    branches: [disabled-until-fixed]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
