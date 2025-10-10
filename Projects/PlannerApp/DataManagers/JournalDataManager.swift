@@ -10,87 +10,60 @@ protocol JournalDataManaging {
     func find(by id: UUID) -> JournalEntry?
 }
 
-/// Manages storage and retrieval of `JournalEntry` objects with UserDefaults persistence.
+/// Legacy JournalDataManager - now delegates to PlannerDataManager for backward compatibility
+/// This class is maintained for existing code that imports JournalDataManager directly
 final class JournalDataManager: JournalDataManaging {
-    /// Shared singleton instance.
+    /// Shared singleton instance - now delegates to PlannerDataManager
     static let shared = JournalDataManager()
 
-    /// UserDefaults key for storing journal entries.
-    private let entriesKey = "SavedJournalEntries"
-
-    /// UserDefaults instance for persistence.
-    private let userDefaults: UserDefaults
+    /// Delegate to the consolidated PlannerDataManager
+    private let plannerDataManager = PlannerDataManager.shared
 
     /// Private initializer to enforce singleton usage.
-    private init(userDefaults: UserDefaults = .standard) {
-        self.userDefaults = userDefaults
-    }
+    private init() {}
 
-    /// Loads all journal entries from UserDefaults.
+    /// Loads all journal entries from PlannerDataManager.
     /// - Returns: Array of `JournalEntry` objects.
     func load() -> [JournalEntry] {
-        guard let data = userDefaults.data(forKey: entriesKey),
-              let decodedEntries = try? JSONDecoder().decode([JournalEntry].self, from: data)
-        else {
-            return []
-        }
-        return decodedEntries
+        return plannerDataManager.loadJournalEntries()
     }
 
-    /// Saves the provided journal entries to UserDefaults.
+    /// Saves the provided journal entries using PlannerDataManager.
     /// - Parameter entries: Array of `JournalEntry` objects to save.
     func save(entries: [JournalEntry]) {
-        if let encoded = try? JSONEncoder().encode(entries) {
-            self.userDefaults.set(encoded, forKey: self.entriesKey)
-        }
+        plannerDataManager.saveJournalEntries(entries)
     }
 
-    /// Adds a new journal entry to the stored entries.
+    /// Adds a new journal entry using PlannerDataManager.
     /// - Parameter entry: The `JournalEntry` to add.
     func add(_ entry: JournalEntry) {
-        var currentEntries = self.load()
-        currentEntries.append(entry)
-        self.save(entries: currentEntries)
+        plannerDataManager.addJournalEntry(entry)
     }
 
-    /// Updates an existing journal entry.
+    /// Updates an existing journal entry using PlannerDataManager.
     /// - Parameter entry: The `JournalEntry` to update.
     func update(_ entry: JournalEntry) {
-        var currentEntries = self.load()
-        if let index = currentEntries.firstIndex(where: { $0.id == entry.id }) {
-            currentEntries[index] = entry
-            self.save(entries: currentEntries)
-        }
+        plannerDataManager.updateJournalEntry(entry)
     }
 
-    /// Deletes a journal entry from storage.
+    /// Deletes a journal entry using PlannerDataManager.
     /// - Parameter entry: The `JournalEntry` to delete.
     func delete(_ entry: JournalEntry) {
-        var currentEntries = self.load()
-        currentEntries.removeAll { $0.id == entry.id }
-        self.save(entries: currentEntries)
+        plannerDataManager.deleteJournalEntry(entry)
     }
 
-    /// Finds a journal entry by its ID.
-    /// - Parameter id: The UUID of the entry to find.
+    /// Finds a journal entry by its ID using PlannerDataManager.
+    /// - Parameter id: The UUID of the journal entry to find.
     /// - Returns: The `JournalEntry` if found, otherwise nil.
     func find(by id: UUID) -> JournalEntry? {
-        let entries = self.load()
-        return entries.first { $0.id == id }
+        return plannerDataManager.findJournalEntry(by: id)
     }
 
     /// Gets journal entries for a specific date.
     /// - Parameter date: The date to get entries for.
     /// - Returns: Array of entries on the specified date.
     func entries(for date: Date) -> [JournalEntry] {
-        let calendar = Calendar.current
-        let targetDate = calendar.startOfDay(for: date)
-        let nextDay = calendar.date(byAdding: .day, value: 1, to: targetDate)!
-
-        return self.load().filter { entry in
-            let entryDate = calendar.startOfDay(for: entry.date)
-            return entryDate >= targetDate && entryDate < nextDay
-        }.sorted { $0.date > $1.date } // Most recent first
+        return plannerDataManager.journalEntries(for: date)
     }
 
     /// Gets journal entries within a date range.
@@ -99,77 +72,44 @@ final class JournalDataManager: JournalDataManaging {
     ///   - endDate: The end of the date range.
     /// - Returns: Array of entries within the date range.
     func entries(between startDate: Date, and endDate: Date) -> [JournalEntry] {
-        self.load().filter { entry in
-            entry.date >= startDate && entry.date <= endDate
-        }.sorted { $0.date > $1.date }
+        return plannerDataManager.journalEntries(between: startDate, and: endDate)
     }
 
     /// Gets recent journal entries.
     /// - Parameter count: Number of recent entries to return.
     /// - Returns: Array of recent entries.
     func recentEntries(count: Int = 10) -> [JournalEntry] {
-        self.load().sorted { $0.date > $1.date }.prefix(count).map(\.self)
+        return plannerDataManager.recentJournalEntries(count: count)
     }
 
     /// Gets journal entries with a specific mood.
     /// - Parameter mood: The mood to filter by.
     /// - Returns: Array of entries with the specified mood.
     func entries(withMood mood: String) -> [JournalEntry] {
-        self.load().filter { $0.mood == mood }.sorted { $0.date > $1.date }
+        return plannerDataManager.journalEntries(withMood: mood)
     }
 
     /// Gets all unique moods from journal entries.
     /// - Returns: Array of unique mood strings.
     func uniqueMoods() -> [String] {
-        let moods = self.load().map(\.mood)
-        return Array(Set(moods)).sorted()
+        return plannerDataManager.uniqueJournalMoods()
     }
 
     /// Gets journal entries sorted by date.
     /// - Returns: Array of entries sorted by date (most recent first).
     func entriesSortedByDate() -> [JournalEntry] {
-        self.load().sorted { $0.date > $1.date }
+        return plannerDataManager.journalEntriesSortedByDate()
     }
 
     /// Clears all journal entries from storage.
     func clearAllEntries() {
-        self.userDefaults.removeObject(forKey: self.entriesKey)
+        // Note: This only clears journal entries, not other data types
+        plannerDataManager.saveJournalEntries([])
     }
 
     /// Gets statistics about journal entries.
     /// - Returns: Dictionary with journal statistics.
     func getJournalStatistics() -> [String: Any] {
-        let entries = self.load()
-        let total = entries.count
-        let thisWeek = self.entries(between: Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date(), and: Date()).count
-        let moods = self.uniqueMoods()
-
-        return [
-            "total": total,
-            "thisWeek": thisWeek,
-            "uniqueMoods": moods.count,
-            "moods": moods,
-        ]
-    }
-}
-
-// MARK: - Object Pooling
-
-/// Object pool for performance optimization
-private var objectPool: [Any] = []
-private let maxPoolSize = 50
-
-/// Get an object from the pool or create new one
-private func getPooledObject<T>() -> T? {
-    if let pooled = objectPool.popLast() as? T {
-        return pooled
-    }
-    return nil
-}
-
-/// Return an object to the pool
-private func returnToPool(_ object: Any) {
-    if objectPool.count < maxPoolSize {
-        objectPool.append(object)
+        return plannerDataManager.getJournalEntryStatistics()
     }
 }

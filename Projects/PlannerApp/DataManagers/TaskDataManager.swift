@@ -10,99 +10,73 @@ protocol TaskDataManaging {
     func find(by id: UUID) -> PlannerTask?
 }
 
-/// Manages storage and retrieval of `PlannerTask` objects with UserDefaults persistence.
+/// Legacy TaskDataManager - now delegates to PlannerDataManager for backward compatibility
+/// This class is maintained for existing code that imports TaskDataManager directly
 final class TaskDataManager: TaskDataManaging {
-    /// Shared singleton instance.
+    /// Shared singleton instance - now delegates to PlannerDataManager
     static let shared = TaskDataManager()
 
-    /// UserDefaults key for storing tasks.
-    private let tasksKey = "SavedTasks"
-
-    /// UserDefaults instance for persistence.
-    private let userDefaults: UserDefaults
+    /// Delegate to the consolidated PlannerDataManager
+    private let plannerDataManager = PlannerDataManager.shared
 
     /// Private initializer to enforce singleton usage.
-    private init(userDefaults: UserDefaults = .standard) {
-        self.userDefaults = userDefaults
-    }
+    private init() {}
 
-    /// Loads all tasks from UserDefaults.
+    /// Loads all tasks from PlannerDataManager.
     /// - Returns: Array of `PlannerTask` objects.
     func load() -> [PlannerTask] {
-        guard let data = userDefaults.data(forKey: tasksKey),
-              let decodedTasks = try? JSONDecoder().decode([PlannerTask].self, from: data)
-        else {
-            return []
-        }
-        return decodedTasks
+        return plannerDataManager.loadTasks()
     }
 
-    /// Saves the provided tasks to UserDefaults.
+    /// Saves the provided tasks using PlannerDataManager.
     /// - Parameter tasks: Array of `PlannerTask` objects to save.
     func save(tasks: [PlannerTask]) {
-        if let encoded = try? JSONEncoder().encode(tasks) {
-            self.userDefaults.set(encoded, forKey: self.tasksKey)
-        }
+        plannerDataManager.saveTasks(tasks)
     }
 
-    /// Adds a new task to the stored tasks.
+    /// Adds a new task using PlannerDataManager.
     /// - Parameter task: The `PlannerTask` to add.
     func add(_ task: PlannerTask) {
-        var currentTasks = self.load()
-        currentTasks.append(task)
-        self.save(tasks: currentTasks)
+        plannerDataManager.addTask(task)
     }
 
-    /// Updates an existing task.
+    /// Updates an existing task using PlannerDataManager.
     /// - Parameter task: The `PlannerTask` to update.
     func update(_ task: PlannerTask) {
-        var currentTasks = self.load()
-        if let index = currentTasks.firstIndex(where: { $0.id == task.id }) {
-            currentTasks[index] = task
-            self.save(tasks: currentTasks)
-        }
+        plannerDataManager.updateTask(task)
     }
 
-    /// Deletes a task from storage.
+    /// Deletes a task using PlannerDataManager.
     /// - Parameter task: The `PlannerTask` to delete.
     func delete(_ task: PlannerTask) {
-        var currentTasks = self.load()
-        currentTasks.removeAll { $0.id == task.id }
-        self.save(tasks: currentTasks)
+        plannerDataManager.deleteTask(task)
     }
 
-    /// Finds a task by its ID.
+    /// Finds a task by its ID using PlannerDataManager.
     /// - Parameter id: The UUID of the task to find.
     /// - Returns: The `PlannerTask` if found, otherwise nil.
     func find(by id: UUID) -> PlannerTask? {
-        let tasks = self.load()
-        return tasks.first { $0.id == id }
+        return plannerDataManager.findTask(by: id)
     }
 
     /// Gets tasks filtered by completion status.
     /// - Parameter completed: Whether to get completed or incomplete tasks.
     /// - Returns: Array of filtered tasks.
     func tasks(filteredByCompletion completed: Bool) -> [PlannerTask] {
-        self.load().filter { $0.isCompleted == completed }
+        return plannerDataManager.tasksFiltered(by: completed)
     }
 
     /// Gets tasks due within a specified number of days.
     /// - Parameter days: Number of days from now.
     /// - Returns: Array of tasks due within the specified period.
     func tasksDue(within days: Int) -> [PlannerTask] {
-        let futureDate = Calendar.current.date(byAdding: .day, value: days, to: Date()) ?? Date()
-        return self.load().filter { task in
-            if let dueDate = task.dueDate {
-                return dueDate <= futureDate && !task.isCompleted
-            }
-            return false
-        }
+        return plannerDataManager.tasksDue(within: days)
     }
 
     /// Gets overdue tasks.
     /// - Returns: Array of overdue tasks.
     func overdueTasks() -> [PlannerTask] {
-        self.load().filter { task in
+        return plannerDataManager.tasksDue(within: 0).filter { task in
             if let dueDate = task.dueDate {
                 return dueDate < Date() && !task.isCompleted
             }
@@ -113,77 +87,24 @@ final class TaskDataManager: TaskDataManaging {
     /// Gets tasks sorted by priority.
     /// - Returns: Array of tasks sorted by priority (high to low).
     func tasksSortedByPriority() -> [PlannerTask] {
-        self.load().sorted { $0.priority.sortOrder > $1.priority.sortOrder }
+        return plannerDataManager.tasksSortedByPriority()
     }
 
     /// Gets tasks sorted by due date.
     /// - Returns: Array of tasks sorted by due date (soonest first).
     func tasksSortedByDate() -> [PlannerTask] {
-        self.load().sorted { lhs, rhs in
-            switch (lhs.dueDate, rhs.dueDate) {
-            case let (.some(lhsDate), .some(rhsDate)):
-                lhsDate < rhsDate
-            case (.some, .none):
-                true
-            case (.none, .some):
-                false
-            case (.none, .none):
-                lhs.createdAt < rhs.createdAt
-            }
-        }
+        return plannerDataManager.tasksSortedByDate()
     }
 
     /// Clears all tasks from storage.
     func clearAllTasks() {
-        self.userDefaults.removeObject(forKey: self.tasksKey)
+        // Note: This only clears tasks, not other data types
+        plannerDataManager.saveTasks([])
     }
 
     /// Gets statistics about tasks.
     /// - Returns: Dictionary with task statistics.
     func getTaskStatistics() -> [String: Int] {
-        let tasks = self.load()
-        let total = tasks.count
-        let completed = tasks.count(where: { $0.isCompleted })
-        let overdue = self.overdueTasks().count
-
-        // Count tasks due today (between start of today and end of today)
-        let calendar = Calendar.current
-        let todayStart = calendar.startOfDay(for: Date())
-        let todayEnd = calendar.date(byAdding: .day, value: 1, to: todayStart)!
-        let dueToday = tasks.count { task in
-            if let dueDate = task.dueDate, !task.isCompleted {
-                return dueDate >= todayStart && dueDate < todayEnd
-            }
-            return false
-        }
-
-        return [
-            "total": total,
-            "completed": completed,
-            "incomplete": total - completed,
-            "overdue": overdue,
-            "dueToday": dueToday,
-        ]
-    }
-}
-
-// MARK: - Object Pooling
-
-/// Object pool for performance optimization
-private var objectPool: [Any] = []
-private let maxPoolSize = 50
-
-/// Get an object from the pool or create new one
-private func getPooledObject<T>() -> T? {
-    if let pooled = objectPool.popLast() as? T {
-        return pooled
-    }
-    return nil
-}
-
-/// Return an object to the pool
-private func returnToPool(_ object: Any) {
-    if objectPool.count < maxPoolSize {
-        objectPool.append(object)
+        return plannerDataManager.getTaskStatistics()
     }
 }

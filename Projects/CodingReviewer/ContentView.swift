@@ -82,7 +82,7 @@ public struct ContentView: View {
             }
         case let .failure(error):
             self.logger.error("File selection failed: \(error.localizedDescription)")
-            // TODO: Handle error properly
+        // TODO: Handle error properly
         }
     }
 

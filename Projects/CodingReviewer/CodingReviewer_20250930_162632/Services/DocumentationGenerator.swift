@@ -34,10 +34,10 @@ struct DocumentationGenerator {
                 // Check if this line starts a function
                 if !inFunction,
                    trimmed.hasPrefix("func ") ||
-                   trimmed.hasPrefix("private func ") ||
-                   trimmed.hasPrefix("public func ") ||
-                   trimmed.hasPrefix("internal func ") ||
-                   trimmed.hasPrefix("static func ") {
+                    trimmed.hasPrefix("private func ") ||
+                    trimmed.hasPrefix("public func ") ||
+                    trimmed.hasPrefix("internal func ") ||
+                    trimmed.hasPrefix("static func ") {
                     inFunction = true
                     currentFunction = [trimmed]
                     braceCount = 0

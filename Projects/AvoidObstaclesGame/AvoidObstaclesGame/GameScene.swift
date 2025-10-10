@@ -24,7 +24,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     private let obstacleManager: ObstacleManager
 
     /// UI management
-    private let uiManager: UIManager
+    private let uiManager: GameHUDManager
 
     /// Physics management
     private let physicsManager: PhysicsManager
@@ -56,7 +56,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         // They will be properly configured in didMove(to:)
         self.playerManager = PlayerManager(scene: SKScene())
         self.obstacleManager = ObstacleManager(scene: SKScene())
-        self.uiManager = UIManager(scene: SKScene())
+        self.uiManager = GameHUDManager(scene: SKScene())
         self.physicsManager = PhysicsManager(scene: SKScene())
         self.effectsManager = EffectsManager(scene: SKScene())
 
@@ -71,7 +71,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         // They will be properly configured in didMove(to:)
         self.playerManager = PlayerManager(scene: SKScene())
         self.obstacleManager = ObstacleManager(scene: SKScene())
-        self.uiManager = UIManager(scene: SKScene())
+        self.uiManager = GameHUDManager(scene: SKScene())
         self.physicsManager = PhysicsManager(scene: SKScene())
         self.effectsManager = EffectsManager(scene: SKScene())
 
@@ -341,16 +341,16 @@ extension GameScene: PlayerDelegate {
 }
 
 extension GameScene: ObstacleDelegate {
-    func obstacleDidSpawn(_: SKSpriteNode) {
+    func obstacleDidSpawn(_: Obstacle) {
         // Obstacle spawned successfully
     }
 
-    func obstacleDidRecycle(_: SKSpriteNode) {
+    func obstacleDidRecycle(_: Obstacle) {
         // Obstacle recycled
     }
 }
 
-extension GameScene: UIManagerDelegate {
+extension GameScene: GameHUDManagerDelegate {
     func restartButtonTapped() {
         self.restartGame()
     }

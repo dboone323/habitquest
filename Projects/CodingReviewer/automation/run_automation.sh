@@ -4,7 +4,7 @@
 set -e
 
 PROJECT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-AUTOMATION_DIR="${PROJECT_PATH}/Tools/Automation"
+AUTOMATION_DIR="${PROJECT_PATH}/../../Tools/Automation"
 
 echo "🤖 Running Quantum Automation for CodingReviewer"
 
@@ -14,7 +14,7 @@ if [[ -f "${AUTOMATION_DIR}/ai_enhancement_system.sh" ]]; then
   bash "${AUTOMATION_DIR}/ai_enhancement_system.sh" analyze "CodingReviewer"
 fi
 
-# Run simple auto-fix
+# Run intelligent auto-fix
 if [[ -f "${AUTOMATION_DIR}/simple_autofix.sh" ]]; then
   echo "🔧 Running simple auto-fix..."
   bash "${AUTOMATION_DIR}/simple_autofix.sh" "${PROJECT_PATH}"
