@@ -10,147 +10,90 @@ protocol GoalDataManaging {
     func find(by id: UUID) -> Goal?
 }
 
-/// Manages storage and retrieval of `Goal` objects with UserDefaults persistence.
+/// Legacy GoalDataManager - now delegates to PlannerDataManager for backward compatibility
+/// This class is maintained for existing code that imports GoalDataManager directly
 final class GoalDataManager: GoalDataManaging {
-    /// Shared singleton instance.
+    /// Shared singleton instance - now delegates to PlannerDataManager
     static let shared = GoalDataManager()
 
-    /// UserDefaults key for storing goals.
-    private let goalsKey = "SavedGoals"
-
-    /// UserDefaults instance for persistence.
-    private let userDefaults: UserDefaults
+    /// Delegate to the consolidated PlannerDataManager
+    private let plannerDataManager = PlannerDataManager.shared
 
     /// Private initializer to enforce singleton usage.
-    private init(userDefaults: UserDefaults = .standard) {
-        self.userDefaults = userDefaults
-    }
+    private init() {}
 
-    /// Loads all goals from UserDefaults.
+    /// Loads all goals from PlannerDataManager.
     /// - Returns: Array of `Goal` objects.
     func load() -> [Goal] {
-        guard let data = userDefaults.data(forKey: goalsKey),
-              let decodedGoals = try? JSONDecoder().decode([Goal].self, from: data)
-        else {
-            return []
-        }
-        return decodedGoals
+        return plannerDataManager.loadGoals()
     }
 
-    /// Saves the provided goals to UserDefaults.
+    /// Saves the provided goals using PlannerDataManager.
     /// - Parameter goals: Array of `Goal` objects to save.
     func save(goals: [Goal]) {
-        if let encoded = try? JSONEncoder().encode(goals) {
-            self.userDefaults.set(encoded, forKey: self.goalsKey)
-        }
+        plannerDataManager.saveGoals(goals)
     }
 
-    /// Adds a new goal to the stored goals.
+    /// Adds a new goal using PlannerDataManager.
     /// - Parameter goal: The `Goal` to add.
     func add(_ goal: Goal) {
-        var currentGoals = self.load()
-        currentGoals.append(goal)
-        self.save(goals: currentGoals)
+        plannerDataManager.addGoal(goal)
     }
 
-    /// Updates an existing goal.
+    /// Updates an existing goal using PlannerDataManager.
     /// - Parameter goal: The `Goal` to update.
     func update(_ goal: Goal) {
-        var currentGoals = self.load()
-        if let index = currentGoals.firstIndex(where: { $0.id == goal.id }) {
-            currentGoals[index] = goal
-            self.save(goals: currentGoals)
-        }
+        plannerDataManager.updateGoal(goal)
     }
 
-    /// Deletes a goal from storage.
+    /// Deletes a goal using PlannerDataManager.
     /// - Parameter goal: The `Goal` to delete.
     func delete(_ goal: Goal) {
-        var currentGoals = self.load()
-        currentGoals.removeAll { $0.id == goal.id }
-        self.save(goals: currentGoals)
+        plannerDataManager.deleteGoal(goal)
     }
 
-    /// Finds a goal by its ID.
+    /// Finds a goal by its ID using PlannerDataManager.
     /// - Parameter id: The UUID of the goal to find.
     /// - Returns: The `Goal` if found, otherwise nil.
     func find(by id: UUID) -> Goal? {
-        let goals = self.load()
-        return goals.first { $0.id == id }
+        return plannerDataManager.findGoal(by: id)
     }
 
     /// Gets goals filtered by completion status.
     /// - Parameter completed: Whether to get completed or incomplete goals.
     /// - Returns: Array of filtered goals.
     func goals(filteredByCompletion completed: Bool) -> [Goal] {
-        self.load().filter { $0.isCompleted == completed }
+        return plannerDataManager.goalsFiltered(by: completed)
     }
 
     /// Gets goals due within a specified number of days.
     /// - Parameter days: Number of days from now.
     /// - Returns: Array of goals due within the specified period.
     func goalsDue(within days: Int) -> [Goal] {
-        let futureDate = Calendar.current.date(byAdding: .day, value: days, to: Date()) ?? Date()
-        return self.load().filter { $0.targetDate <= futureDate && !$0.isCompleted }
+        return plannerDataManager.goalsDue(within: days)
     }
 
     /// Gets goals sorted by priority.
     /// - Returns: Array of goals sorted by priority (high to low).
     func goalsSortedByPriority() -> [Goal] {
-        self.load().sorted { (goal1: Goal, goal2: Goal) -> Bool in
-            goal1.priority.sortOrder > goal2.priority.sortOrder
-        }
+        return plannerDataManager.goalsSortedByPriority()
     }
 
     /// Gets goals sorted by target date.
     /// - Returns: Array of goals sorted by target date (soonest first).
     func goalsSortedByDate() -> [Goal] {
-        self.load().sorted { (goal1: Goal, goal2: Goal) -> Bool in
-            goal1.targetDate < goal2.targetDate
-        }
+        return plannerDataManager.goalsSortedByDate()
     }
 
     /// Clears all goals from storage.
     func clearAllGoals() {
-        self.userDefaults.removeObject(forKey: self.goalsKey)
+        // Note: This only clears goals, not other data types
+        plannerDataManager.saveGoals([])
     }
 
     /// Gets statistics about goals.
     /// - Returns: Dictionary with goal statistics.
     func getGoalStatistics() -> [String: Int] {
-        let goals = self.load()
-        let total = goals.count
-        let completed = goals.count(where: { $0.isCompleted })
-        let overdue = goals.count(where: { $0.targetDate < Date() && !$0.isCompleted })
-        let dueThisWeek = self.goalsDue(within: 7).count
-
-        return [
-            "total": total,
-            "completed": completed,
-            "incomplete": total - completed,
-            "overdue": overdue,
-            "dueThisWeek": dueThisWeek,
-        ]
-    }
-}
-
-// MARK: - Object Pooling
-
-/// Object pool for performance optimization
-private var objectPool: [Any] = []
-private let maxPoolSize = 50
-
-/// Get an object from the pool or create new one
-private func getPooledObject<T>() -> T? {
-    if let pooled = objectPool.popLast() as? T {
-        return pooled
-    }
-    return nil
-}
-
-/// Return an object to the pool
-private func returnToPool(_ object: Any) {
-    if objectPool.count < maxPoolSize {
-        objectPool.append(object)
+        return plannerDataManager.getGoalStatistics()
     }
 }

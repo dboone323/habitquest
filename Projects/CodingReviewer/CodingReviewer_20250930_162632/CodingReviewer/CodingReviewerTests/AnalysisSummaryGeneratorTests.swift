@@ -66,7 +66,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
             CodeIssue(description: "Force unwrap", severity: IssueSeverity.high, line: 10, category: IssueCategory.bug),
             CodeIssue(description: "Eval usage", severity: IssueSeverity.critical, line: 20, category: IssueCategory.security),
             CodeIssue(description: "Inefficient loop", severity: IssueSeverity.medium, line: 30, category: IssueCategory.performance),
-            CodeIssue(description: "Long line", severity: IssueSeverity.low, line: 40, category: IssueCategory.style),
+            CodeIssue(description: "Long line", severity: IssueSeverity.low, line: 40, category: IssueCategory.style)
         ]
 
         // When generating summary
@@ -89,7 +89,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         let issues = [
             CodeIssue(description: "Issue 1", severity: IssueSeverity.high, line: 10, category: IssueCategory.bug),
             CodeIssue(description: "Issue 2", severity: IssueSeverity.high, line: 20, category: IssueCategory.bug),
-            CodeIssue(description: "Issue 3", severity: IssueSeverity.medium, line: 15, category: IssueCategory.security),
+            CodeIssue(description: "Issue 3", severity: IssueSeverity.medium, line: 15, category: IssueCategory.security)
         ]
 
         // When generating summary
@@ -109,7 +109,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
             CodeIssue(description: "Another critical", severity: IssueSeverity.critical, line: 2, category: IssueCategory.bug),
             CodeIssue(description: "High security", severity: IssueSeverity.high, line: 3, category: IssueCategory.security),
             CodeIssue(description: "Medium perf", severity: IssueSeverity.medium, line: 4, category: IssueCategory.performance),
-            CodeIssue(description: "Low style", severity: IssueSeverity.low, line: 5, category: IssueCategory.style),
+            CodeIssue(description: "Low style", severity: IssueSeverity.low, line: 5, category: IssueCategory.style)
         ]
 
         // When generating summary
@@ -129,7 +129,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
             CodeIssue(description: "Bug 2", severity: IssueSeverity.high, line: 2, category: IssueCategory.bug),
             CodeIssue(description: "Security 1", severity: IssueSeverity.high, line: 3, category: IssueCategory.security),
             CodeIssue(description: "Performance 1", severity: IssueSeverity.high, line: 4, category: IssueCategory.performance),
-            CodeIssue(description: "Style 1", severity: IssueSeverity.high, line: 5, category: IssueCategory.style),
+            CodeIssue(description: "Style 1", severity: IssueSeverity.high, line: 5, category: IssueCategory.style)
         ]
 
         // When generating summary
@@ -147,7 +147,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
     func testGenerateSummary_SwiftLanguage() {
         // Given Swift issues
         let issues = [
-            CodeIssue(description: "Swift issue", severity: IssueSeverity.high, line: 1, category: IssueCategory.bug),
+            CodeIssue(description: "Swift issue", severity: IssueSeverity.high, line: 1, category: IssueCategory.bug)
         ]
 
         // When generating summary for Swift
@@ -160,7 +160,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
     func testGenerateSummary_JavaScriptLanguage() {
         // Given JavaScript issues
         let issues = [
-            CodeIssue(description: "JS issue", severity: IssueSeverity.high, line: 1, category: IssueCategory.security),
+            CodeIssue(description: "JS issue", severity: IssueSeverity.high, line: 1, category: IssueCategory.security)
         ]
 
         // When generating summary for JavaScript
@@ -176,7 +176,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         // Given issues with suggestions
         let issues = [
             CodeIssue(description: "Force unwrap", severity: IssueSeverity.high, line: 10, category: IssueCategory.bug),
-            CodeIssue(description: "Eval usage", severity: IssueSeverity.critical, line: 20, category: IssueCategory.security),
+            CodeIssue(description: "Eval usage", severity: IssueSeverity.critical, line: 20, category: IssueCategory.security)
         ]
 
         // When generating summary
@@ -206,7 +206,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
     func testGenerateSummary_IssuesWithoutSuggestions() {
         // Given issues without suggestions
         let issues = [
-            CodeIssue(description: "Long line", severity: IssueSeverity.low, line: 1, category: IssueCategory.style),
+            CodeIssue(description: "Long line", severity: IssueSeverity.low, line: 1, category: IssueCategory.style)
         ]
 
         // When generating summary
@@ -223,7 +223,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
         // Given issue with very long message
         let longMessage = String(repeating: "A", count: 1000)
         let issues = [
-            CodeIssue(description: longMessage, severity: IssueSeverity.high, line: 1, category: IssueCategory.bug),
+            CodeIssue(description: longMessage, severity: IssueSeverity.high, line: 1, category: IssueCategory.bug)
         ]
 
         // When generating summary
@@ -236,7 +236,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
     func testGenerateSummary_SpecialCharactersInMessages() {
         // Given issues with special characters
         let issues = [
-            CodeIssue(description: "Issue with <>&\"'", severity: IssueSeverity.high, line: 1, category: IssueCategory.bug),
+            CodeIssue(description: "Issue with <>&\"'", severity: IssueSeverity.high, line: 1, category: IssueCategory.bug)
         ]
 
         // When generating summary
@@ -272,7 +272,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
     func testGenerateSummary_Structure() {
         // Given some issues
         let issues = [
-            CodeIssue(description: "Test issue", severity: IssueSeverity.high, line: 1, category: IssueCategory.bug),
+            CodeIssue(description: "Test issue", severity: IssueSeverity.high, line: 1, category: IssueCategory.bug)
         ]
 
         // When generating summary
@@ -288,7 +288,7 @@ final class AnalysisSummaryGeneratorTests: XCTestCase {
     func testGenerateSummary_NoEmptySections() {
         // Given issues that don't create empty sections
         let issues = [
-            CodeIssue(description: "Test", severity: IssueSeverity.high, line: 1, category: IssueCategory.bug),
+            CodeIssue(description: "Test", severity: IssueSeverity.high, line: 1, category: IssueCategory.bug)
         ]
 
         // When generating summary

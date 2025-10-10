@@ -65,7 +65,7 @@ struct IssueRowPresenter {
         .low: Palette(iconName: "info.circle.fill", iconColor: .blue, severityColor: .blue, colorIdentifier: "blue"),
         .medium: Palette(iconName: "exclamationmark.triangle.fill", iconColor: .orange, severityColor: .orange, colorIdentifier: "orange"),
         .high: Palette(iconName: "exclamationmark.triangle.fill", iconColor: .red, severityColor: .red, colorIdentifier: "red"),
-        .critical: Palette(iconName: "xmark.circle.fill", iconColor: .red, severityColor: .red, colorIdentifier: "red"),
+        .critical: Palette(iconName: "xmark.circle.fill", iconColor: .red, severityColor: .red, colorIdentifier: "red")
     ]
 
     private var paletteForIssue: Palette {

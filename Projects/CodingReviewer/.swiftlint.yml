@@ -3,3 +3,16 @@
 # Analyzer rules
 analyzer_rules:
   - unused_declaration
+
+# Disabled rules for this project
+disabled_rules:
+  - trailing_whitespace
+  - line_length
+
+# Custom rules
+custom_rules:
+  force_unwrap:
+    name: "Force Unwrap"
+    regex: "\\!"
+    message: "Force unwrapping is discouraged"
+    severity: warning

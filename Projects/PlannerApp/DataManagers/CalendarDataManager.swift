@@ -10,153 +10,93 @@ protocol CalendarDataManaging {
     func find(by id: UUID) -> CalendarEvent?
 }
 
-/// Manages storage and retrieval of `CalendarEvent` objects with UserDefaults persistence.
+/// Legacy CalendarDataManager - now delegates to PlannerDataManager for backward compatibility
+/// This class is maintained for existing code that imports CalendarDataManager directly
 final class CalendarDataManager: CalendarDataManaging {
-    /// Shared singleton instance.
+    /// Shared singleton instance - now delegates to PlannerDataManager
     static let shared = CalendarDataManager()
 
-    /// UserDefaults key for storing calendar events.
-    private let eventsKey = "SavedCalendarEvents"
-
-    /// UserDefaults instance for persistence.
-    private let userDefaults: UserDefaults
+    /// Delegate to the consolidated PlannerDataManager
+    private let plannerDataManager = PlannerDataManager.shared
 
     /// Private initializer to enforce singleton usage.
-    private init(userDefaults: UserDefaults = .standard) {
-        self.userDefaults = userDefaults
-    }
+    private init() {}
 
-    /// Loads all calendar events from UserDefaults.
+    /// Loads all calendar events from PlannerDataManager.
     /// - Returns: Array of `CalendarEvent` objects.
     func load() -> [CalendarEvent] {
-        guard let data = userDefaults.data(forKey: eventsKey),
-              let decodedEvents = try? JSONDecoder().decode([CalendarEvent].self, from: data)
-        else {
-            return []
-        }
-        return decodedEvents
+        return plannerDataManager.loadCalendarEvents()
     }
 
-    /// Saves the provided events to UserDefaults.
+    /// Saves the provided calendar events using PlannerDataManager.
     /// - Parameter events: Array of `CalendarEvent` objects to save.
     func save(events: [CalendarEvent]) {
-        if let encoded = try? JSONEncoder().encode(events) {
-            self.userDefaults.set(encoded, forKey: self.eventsKey)
-        }
+        plannerDataManager.saveCalendarEvents(events)
     }
 
-    /// Adds a new calendar event to the stored events.
+    /// Adds a new calendar event using PlannerDataManager.
     /// - Parameter event: The `CalendarEvent` to add.
     func add(_ event: CalendarEvent) {
-        var currentEvents = self.load()
-        currentEvents.append(event)
-        self.save(events: currentEvents)
+        plannerDataManager.addCalendarEvent(event)
     }
 
-    /// Updates an existing calendar event.
+    /// Updates an existing calendar event using PlannerDataManager.
     /// - Parameter event: The `CalendarEvent` to update.
     func update(_ event: CalendarEvent) {
-        var currentEvents = self.load()
-        if let index = currentEvents.firstIndex(where: { $0.id == event.id }) {
-            currentEvents[index] = event
-            self.save(events: currentEvents)
-        }
+        plannerDataManager.updateCalendarEvent(event)
     }
 
-    /// Deletes a calendar event from storage.
+    /// Deletes a calendar event using PlannerDataManager.
     /// - Parameter event: The `CalendarEvent` to delete.
     func delete(_ event: CalendarEvent) {
-        var currentEvents = self.load()
-        currentEvents.removeAll { $0.id == event.id }
-        self.save(events: currentEvents)
+        plannerDataManager.deleteCalendarEvent(event)
     }
 
-    /// Finds a calendar event by its ID.
-    /// - Parameter id: The UUID of the event to find.
+    /// Finds a calendar event by its ID using PlannerDataManager.
+    /// - Parameter id: The UUID of the calendar event to find.
     /// - Returns: The `CalendarEvent` if found, otherwise nil.
     func find(by id: UUID) -> CalendarEvent? {
-        let events = self.load()
-        return events.first { $0.id == id }
+        return plannerDataManager.findCalendarEvent(by: id)
     }
 
-    /// Gets events for a specific date.
-    /// - Parameter date: The date to get events for.
+    /// Gets calendar events for a specific date.
+    /// - Parameter date: The date to filter events for.
     /// - Returns: Array of events on the specified date.
     func events(for date: Date) -> [CalendarEvent] {
-        let calendar = Calendar.current
-        let targetDate = calendar.startOfDay(for: date)
-        let nextDay = calendar.date(byAdding: .day, value: 1, to: targetDate)!
-
-        return self.load().filter { event in
-            let eventDate = calendar.startOfDay(for: event.date)
-            return eventDate >= targetDate && eventDate < nextDay
-        }.sorted { $0.date < $1.date }
+        return plannerDataManager.calendarEvents(for: date)
     }
 
-    /// Gets events within a date range.
+    /// Gets calendar events within a date range.
     /// - Parameters:
-    ///   - startDate: The start of the date range.
-    ///   - endDate: The end of the date range.
+    ///   - startDate: The start date of the range.
+    ///   - endDate: The end date of the range.
     /// - Returns: Array of events within the date range.
     func events(between startDate: Date, and endDate: Date) -> [CalendarEvent] {
-        self.load().filter { event in
-            event.date >= startDate && event.date <= endDate
-        }.sorted { $0.date < $1.date }
+        return plannerDataManager.calendarEvents(between: startDate, and: endDate)
     }
 
-    /// Gets upcoming events within a specified number of days.
+    /// Gets calendar events sorted by date.
+    /// - Returns: Array of events sorted by date (soonest first).
+    func eventsSortedByDate() -> [CalendarEvent] {
+        return plannerDataManager.calendarEventsSortedByDate()
+    }
+
+    /// Gets upcoming calendar events within a specified number of days.
     /// - Parameter days: Number of days from now.
     /// - Returns: Array of upcoming events.
     func upcomingEvents(within days: Int) -> [CalendarEvent] {
-        let futureDate = Calendar.current.date(byAdding: .day, value: days, to: Date()) ?? Date()
-        return self.load().filter { $0.date > Date() && $0.date <= futureDate }
-            .sorted { $0.date < $1.date }
+        return plannerDataManager.upcomingCalendarEvents(within: days)
     }
 
-    /// Gets events sorted by date.
-    /// - Returns: Array of events sorted by date (soonest first).
-    func eventsSortedByDate() -> [CalendarEvent] {
-        self.load().sorted { $0.date < $1.date }
-    }
-
-    /// Clears all events from storage.
+    /// Clears all calendar events from storage.
     func clearAllEvents() {
-        self.userDefaults.removeObject(forKey: self.eventsKey)
+        // Note: This only clears calendar events, not other data types
+        plannerDataManager.saveCalendarEvents([])
     }
 
     /// Gets statistics about calendar events.
-    /// - Returns: Dictionary with event statistics.
+    /// - Returns: Dictionary with calendar event statistics.
     func getEventStatistics() -> [String: Int] {
-        let events = self.load()
-        let total = events.count
-        let today = self.events(for: Date()).count
-        let thisWeek = self.upcomingEvents(within: 7).count
-
-        return [
-            "total": total,
-            "today": today,
-            "thisWeek": thisWeek,
-        ]
-    }
-}
-
-// MARK: - Object Pooling
-
-/// Object pool for performance optimization
-private var objectPool: [Any] = []
-private let maxPoolSize = 50
-
-/// Get an object from the pool or create new one
-private func getPooledObject<T>() -> T? {
-    if let pooled = objectPool.popLast() as? T {
-        return pooled
-    }
-    return nil
-}
-
-/// Return an object to the pool
-private func returnToPool(_ object: Any) {
-    if objectPool.count < maxPoolSize {
-        objectPool.append(object)
+        return plannerDataManager.getCalendarEventStatistics()
     }
 }
