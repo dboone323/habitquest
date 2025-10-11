@@ -534,9 +534,11 @@
 				<key>GCC_WARN_UNUSED_VARIABLE</key>
 				<string>YES</string>
 				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>18.4</string>
+				<string>26.0</string>
 				<key>LOCALIZATION_PREFERS_STRING_CATALOGS</key>
 				<string>YES</string>
+				<key>MACOSX_DEPLOYMENT_TARGET</key>
+				<string>26.0</string>
 				<key>MTL_ENABLE_DEBUG_INFO</key>
 				<string>INCLUDE_SOURCE</string>
 				<key>MTL_FAST_MATH</key>
@@ -544,11 +546,15 @@
 				<key>ONLY_ACTIVE_ARCH</key>
 				<string>YES</string>
 				<key>SDKROOT</key>
-				<string>iphoneos</string>
+				<string>auto</string>
 				<key>SWIFT_ACTIVE_COMPILATION_CONDITIONS</key>
 				<string>DEBUG $(inherited)</string>
 				<key>SWIFT_OPTIMIZATION_LEVEL</key>
 				<string>-Onone</string>
+				<key>SUPPORTED_PLATFORMS</key>
+				<string>iphoneos iphonesimulator macosx xros xrsimulator</string>
+				<key>TARGETED_DEVICE_FAMILY</key>
+				<string>1,2,7</string>
 			</dict>
 			<key>isa</key>
 			<string>XCBuildConfiguration</string>
@@ -650,17 +656,23 @@
 				<key>GCC_WARN_UNUSED_VARIABLE</key>
 				<string>YES</string>
 				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>18.4</string>
+				<string>26.0</string>
 				<key>LOCALIZATION_PREFERS_STRING_CATALOGS</key>
 				<string>YES</string>
+				<key>MACOSX_DEPLOYMENT_TARGET</key>
+				<string>26.0</string>
 				<key>MTL_ENABLE_DEBUG_INFO</key>
 				<string>NO</string>
 				<key>MTL_FAST_MATH</key>
 				<string>YES</string>
 				<key>SDKROOT</key>
-				<string>iphoneos</string>
+				<string>auto</string>
 				<key>SWIFT_COMPILATION_MODE</key>
 				<string>wholemodule</string>
+				<key>SUPPORTED_PLATFORMS</key>
+				<string>iphoneos iphonesimulator macosx xros xrsimulator</string>
+				<key>TARGETED_DEVICE_FAMILY</key>
+				<string>1,2,7</string>
 				<key>VALIDATE_PRODUCT</key>
 				<string>YES</string>
 			</dict>
@@ -725,9 +737,9 @@
 				<key>SWIFT_EMIT_LOC_STRINGS</key>
 				<string>YES</string>
 				<key>SWIFT_VERSION</key>
-				<string>5.0</string>
+				<string>6.0</string>
 				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>1,2</string>
+				<string>1,2,7</string>
 			</dict>
 			<key>isa</key>
 			<string>XCBuildConfiguration</string>
@@ -776,9 +788,9 @@
 				<key>SWIFT_EMIT_LOC_STRINGS</key>
 				<string>YES</string>
 				<key>SWIFT_VERSION</key>
-				<string>5.0</string>
+				<string>6.0</string>
 				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>1,2</string>
+				<string>1,2,7</string>
 			</dict>
 			<key>isa</key>
 			<string>XCBuildConfiguration</string>
@@ -824,9 +836,9 @@
 				<key>SWIFT_EMIT_LOC_STRINGS</key>
 				<string>NO</string>
 				<key>SWIFT_VERSION</key>
-				<string>5.0</string>
+				<string>6.0</string>
 				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>1,2</string>
+				<string>1,2,7</string>
 				<key>TEST_HOST</key>
 				<string>$(BUILT_PRODUCTS_DIR)/AvoidObstaclesGame.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AvoidObstaclesGame</string>
 			</dict>
@@ -860,9 +872,9 @@
 				<key>SWIFT_EMIT_LOC_STRINGS</key>
 				<string>NO</string>
 				<key>SWIFT_VERSION</key>
-				<string>5.0</string>
+				<string>6.0</string>
 				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>1,2</string>
+				<string>1,2,7</string>
 				<key>TEST_HOST</key>
 				<string>$(BUILT_PRODUCTS_DIR)/AvoidObstaclesGame.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AvoidObstaclesGame</string>
 			</dict>
@@ -906,9 +918,9 @@
 				<key>SWIFT_EMIT_LOC_STRINGS</key>
 				<string>NO</string>
 				<key>SWIFT_VERSION</key>
-				<string>5.0</string>
+				<string>6.0</string>
 				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>1,2</string>
+				<string>1,2,7</string>
 				<key>TEST_TARGET_NAME</key>
 				<string>AvoidObstaclesGame</string>
 			</dict>
@@ -938,9 +950,9 @@
 				<key>SWIFT_EMIT_LOC_STRINGS</key>
 				<string>NO</string>
 				<key>SWIFT_VERSION</key>
-				<string>5.0</string>
+				<string>6.0</string>
 				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>1,2</string>
+				<string>1,2,7</string>
 				<key>TEST_TARGET_NAME</key>
 				<string>AvoidObstaclesGame</string>
 			</dict>

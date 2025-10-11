@@ -7,8 +7,11 @@ public struct GoalsView: View {
     @State private var goals: [Goal] = [] // Holds all goals
     @State private var showAddGoal = false // State to control presentation of AddGoal sheet
 
-    // Read date/time settings if needed for display (e.g., formatter locale)
-    @AppStorage(AppSettingKeys.use24HourTime) private var use24HourTime: Bool = false // Example, not used in formatter below
+    // Avoid @AppStorage during testing to prevent UserDefaults access crashes
+    private var use24HourTime: Bool {
+        let isTesting = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+        return isTesting ? false : UserDefaults.standard.bool(forKey: AppSettingKeys.use24HourTime)
+    }
 
     public var body: some View {
         NavigationStack {

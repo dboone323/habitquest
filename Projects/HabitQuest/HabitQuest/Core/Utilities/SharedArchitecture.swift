@@ -5,7 +5,7 @@ import SwiftUI
 
 /// Protocol for standardized MVVM pattern across all projects
 @MainActor
-protocol BaseViewModel: ObservableObject {
+public protocol BaseViewModel: ObservableObject {
     associatedtype State
     associatedtype Action
 
@@ -18,7 +18,7 @@ protocol BaseViewModel: ObservableObject {
 }
 
 extension BaseViewModel {
-    func resetError() {
+    public func resetError() {
         errorMessage = nil
     }
 

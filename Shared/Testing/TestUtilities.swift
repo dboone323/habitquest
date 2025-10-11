@@ -5,7 +5,9 @@ import XCTest
 @MainActor
 class TestUtilities {
     /// Creates an in-memory ModelContainer for testing
-    static func createTestContainer(for models: [(some PersistentModel).Type]) throws -> ModelContainer {
+    static func createTestContainer(for models: [(some PersistentModel).Type]) throws
+        -> ModelContainer
+    {
         let schema = Schema(models)
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [configuration])
@@ -50,10 +52,251 @@ class TestUtilities {
     static func createTestCodeFile() -> [String: Any] {
         [
             "name": "TestFile.swift",
-            "content": "import Foundation\n\nclass TestClass {\n    func testMethod() {\n        print(\"Hello, test!\")\n    }\n}",
+            "content":
+                "import Foundation\n\nclass TestClass {\n    func testMethod() {\n        print(\"Hello, test!\")\n    }\n}",
             "language": "swift",
             "size": 100,
         ]
+    }
+}
+
+// MARK: - BaseViewModel Testing Utilities
+
+/// Base test case for view model testing
+@MainActor
+class BaseViewModelTestCase<ViewModelType: BaseViewModel>: XCTestCase {
+    var viewModel: ViewModelType!
+    var cancellables = Set<AnyCancellable>()
+
+    override func setUp() {
+        super.setUp()
+        self.cancellables = Set<AnyCancellable>()
+        self.setupViewModel()
+    }
+
+    override func tearDown() {
+        self.cancellables.forEach { $0.cancel() }
+        self.cancellables.removeAll()
+        self.viewModel = nil
+        super.tearDown()
+    }
+
+    /// Override in subclasses to set up the view model
+    func setupViewModel() {
+        fatalError("Subclasses must implement setupViewModel()")
+    }
+
+    /// Helper to test state changes after action
+    func assertStateChange<T: Equatable>(
+        action: ViewModelType.Action,
+        expectedState: T,
+        keyPath: KeyPath<ViewModelType.State, T>,
+        timeout: TimeInterval = 2.0,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) async {
+        let initialState = viewModel.state[keyPath: keyPath]
+
+        await viewModel.handle(action)
+
+        // Wait for state to change
+        let expectation = XCTestExpectation(description: "State change")
+        var stateChanged = false
+
+        // Use a simple polling approach for state changes
+        for _ in 0..<Int(timeout * 10) {
+            if viewModel.state[keyPath: keyPath] != initialState {
+                stateChanged = true
+                break
+            }
+            try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
+        }
+
+        XCTAssertTrue(stateChanged, "State did not change after action", file: file, line: line)
+        XCTAssertEqual(viewModel.state[keyPath: keyPath], expectedState, file: file, line: line)
+    }
+
+    /// Helper to test async actions complete successfully
+    func assertActionCompletes(
+        action: ViewModelType.Action,
+        timeout: TimeInterval = 5.0,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) async {
+        let expectation = XCTestExpectation(description: "Action completion")
+
+        do {
+            await viewModel.handle(action)
+            expectation.fulfill()
+        } catch {
+            XCTFail("Action failed with error: \(error)", file: file, line: line)
+        }
+
+        await fulfillment(of: [expectation], timeout: timeout)
+    }
+
+    /// Helper to test loading states during actions
+    func assertLoadingStateDuringAction(
+        action: ViewModelType.Action,
+        timeout: TimeInterval = 5.0,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) async {
+        XCTAssertFalse(
+            viewModel.isLoading, "View model should not be loading initially", file: file,
+            line: line)
+
+        let loadingExpectation = XCTestExpectation(description: "Loading state")
+        let completionExpectation = XCTestExpectation(description: "Action completion")
+
+        // Monitor loading state changes
+        var loadingStates: [Bool] = []
+
+        Task {
+            while !completionExpectation.isFulfilled {
+                loadingStates.append(viewModel.isLoading)
+                try? await Task.sleep(nanoseconds: 50_000_000)  // 0.05 seconds
+            }
+        }
+
+        Task {
+            await viewModel.handle(action)
+            completionExpectation.fulfill()
+        }
+
+        await fulfillment(of: [completionExpectation], timeout: timeout)
+
+        // Verify loading state was set to true at some point
+        XCTAssertTrue(
+            loadingStates.contains(true), "Loading state was never set to true", file: file,
+            line: line)
+        XCTAssertFalse(
+            viewModel.isLoading, "Loading state should be false after completion", file: file,
+            line: line)
+    }
+
+    /// Helper to test error handling
+    func assertErrorThrown<T>(
+        action: ViewModelType.Action,
+        expectedError: T,
+        keyPath: KeyPath<ViewModelType, String?>,
+        timeout: TimeInterval = 5.0,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) async where T: Error & Equatable {
+        do {
+            await viewModel.handle(action)
+            XCTFail("Expected error but action completed successfully", file: file, line: line)
+        } catch {
+            XCTAssertEqual(error as? T, expectedError, file: file, line: line)
+            XCTAssertNotNil(
+                viewModel[keyPath: keyPath], "Error message should be set", file: file, line: line)
+        }
+    }
+}
+
+/// Mock BaseViewModel for testing
+@MainActor
+class MockBaseViewModel<StateType, ActionType>: BaseViewModel {
+    typealias State = StateType
+    typealias Action = ActionType
+
+    var state: StateType
+    var isLoading = false
+    var errorMessage: String?
+
+    var handledActions: [ActionType] = []
+    var shouldFailAction: Bool = false
+    var mockError: Error?
+
+    init(initialState: StateType) {
+        self.state = initialState
+    }
+
+    func handle(_ action: ActionType) async {
+        handledActions.append(action)
+        isLoading = true
+
+        // Simulate async work
+        try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
+
+        if shouldFailAction, let error = mockError {
+            setError(error)
+        }
+
+        isLoading = false
+    }
+
+    func resetMock() {
+        handledActions.removeAll()
+        shouldFailAction = false
+        mockError = nil
+        errorMessage = nil
+        isLoading = false
+    }
+}
+
+/// Async action testing helpers
+extension XCTestCase {
+    /// Test async action with expectation
+    func testAsyncAction<T>(
+        timeout: TimeInterval = 5.0,
+        operation: @escaping () async throws -> T,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) async throws -> T {
+        let expectation = XCTestExpectation(description: "Async operation")
+
+        let task = Task {
+            let result = try await operation()
+            expectation.fulfill()
+            return result
+        }
+
+        await fulfillment(of: [expectation], timeout: timeout)
+
+        return try await task.value
+    }
+
+    /// Assert async operation completes within timeout
+    func assertAsyncCompletes<T>(
+        _ operation: @escaping () async throws -> T,
+        timeout: TimeInterval = 5.0,
+        message: String = "Async operation did not complete",
+        file: StaticString = #file,
+        line: UInt = #line
+    ) async {
+        do {
+            _ = try await testAsyncAction(
+                timeout: timeout, operation: operation, file: file, line: line)
+        } catch {
+            XCTFail("\(message): \(error)", file: file, line: line)
+        }
+    }
+
+    /// Assert async operation throws specific error
+    func assertAsyncThrows<T, E>(
+        _ operation: @escaping () async throws -> T,
+        expectedError: E,
+        timeout: TimeInterval = 5.0,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) async where E: Error & Equatable {
+        let expectation = XCTestExpectation(description: "Async operation error")
+
+        do {
+            _ = try await operation()
+            XCTFail("Expected error but operation completed successfully", file: file, line: line)
+        } catch {
+            if let actualError = error as? E {
+                XCTAssertEqual(actualError, expectedError, file: file, line: line)
+                expectation.fulfill()
+            } else {
+                XCTFail("Unexpected error type: \(error)", file: file, line: line)
+            }
+        }
+
+        await fulfillment(of: [expectation], timeout: timeout)
     }
 }
 
@@ -99,29 +342,32 @@ extension XCTestCase {
 /// Mock data generators
 enum MockDataGenerator {
     static func generateTransactions(count: Int) -> [[String: Any]] {
-        (1 ... count).map { i in
+        (1...count).map { i in
             [
                 "id": UUID().uuidString,
-                "amount": Double.random(in: 5.0 ... 500.0),
+                "amount": Double.random(in: 5.0...500.0),
                 "description": "Transaction \(i)",
                 "date": Date().addingTimeInterval(-Double(i * 86400)),
                 "type": i % 2 == 0 ? "income" : "expense",
-                "category": ["Food", "Transport", "Entertainment", "Bills", "Shopping"].randomElement()!,
+                "category": ["Food", "Transport", "Entertainment", "Bills", "Shopping"]
+                    .randomElement()!,
             ]
         }
     }
 
     static func generateHabits(count: Int) -> [[String: Any]] {
-        let habitNames = ["Exercise", "Read", "Meditate", "Drink Water", "Walk", "Study", "Cook", "Sleep Early"]
+        let habitNames = [
+            "Exercise", "Read", "Meditate", "Drink Water", "Walk", "Study", "Cook", "Sleep Early",
+        ]
 
-        return (1 ... count).map { i in
+        return (1...count).map { i in
             [
                 "id": UUID().uuidString,
                 "name": habitNames.randomElement() ?? "Habit \(i)",
                 "description": "Description for habit \(i)",
                 "frequency": ["daily", "weekly", "monthly"].randomElement()!,
                 "isActive": Bool.random(),
-                "streak": Int.random(in: 0 ... 30),
+                "streak": Int.random(in: 0...30),
             ]
         }
     }
@@ -130,7 +376,7 @@ enum MockDataGenerator {
         let languages = ["swift", "javascript", "python", "java", "typescript"]
         let fileTypes = ["class", "function", "interface", "enum", "struct"]
 
-        return (1 ... count).map { i in
+        return (1...count).map { i in
             let language = languages.randomElement()!
             let fileType = fileTypes.randomElement()!
 
@@ -139,8 +385,109 @@ enum MockDataGenerator {
                 "name": "\(fileType.capitalized)\(i).\(language)",
                 "content": self.generateCodeContent(language: language, type: fileType, index: i),
                 "language": language,
-                "size": Int.random(in: 100 ... 5000),
-                "complexity": Int.random(in: 1 ... 10),
+                "size": Int.random(in: 100...5000),
+                "complexity": Int.random(in: 1...10),
+            ]
+        }
+    }
+
+    // MARK: - Cross-Project Mock Data Factories
+
+    /// Generate mock data for PlannerApp
+    static func generatePlannerTasks(count: Int) -> [[String: Any]] {
+        let priorities = ["low", "medium", "high"]
+        let categories = ["Work", "Personal", "Health", "Learning", "Finance"]
+
+        return (1...count).map { i in
+            [
+                "id": UUID().uuidString,
+                "title": "Task \(i)",
+                "description": "Description for task \(i)",
+                "priority": priorities.randomElement()!,
+                "category": categories.randomElement()!,
+                "isCompleted": Bool.random(),
+                "dueDate": Date().addingTimeInterval(Double.random(in: -86400 * 7...86400 * 30)),
+                "createdAt": Date().addingTimeInterval(-Double.random(in: 0...86400 * 365)),
+            ]
+        }
+    }
+
+    /// Generate mock data for MomentumFinance
+    static func generateFinancialAccounts(count: Int) -> [[String: Any]] {
+        let accountTypes = ["checking", "savings", "credit", "investment"]
+        let accountNames = [
+            "Main Checking", "Emergency Savings", "Credit Card", "Investment Account",
+            "Business Account",
+        ]
+
+        return (1...count).map { i in
+            let accountType = accountTypes.randomElement()!
+            let isCredit = accountType == "credit"
+
+            return [
+                "id": UUID().uuidString,
+                "name": accountNames.randomElement() ?? "Account \(i)",
+                "type": accountType,
+                "balance": isCredit ? Double.random(in: -5000...0) : Double.random(in: 0...10000),
+                "currency": "USD",
+                "isActive": Bool.random(),
+                "createdAt": Date().addingTimeInterval(-Double.random(in: 0...86400 * 365)),
+            ]
+        }
+    }
+
+    /// Generate mock data for CodingReviewer
+    static func generateCodeReviews(count: Int) -> [[String: Any]] {
+        let statuses = ["pending", "approved", "changes_requested", "commented"]
+        let languages = ["swift", "javascript", "python", "java", "typescript"]
+
+        return (1...count).map { i in
+            [
+                "id": UUID().uuidString,
+                "title": "Code Review \(i)",
+                "description": "Review for feature implementation \(i)",
+                "status": statuses.randomElement()!,
+                "language": languages.randomElement()!,
+                "fileCount": Int.random(in: 1...20),
+                "lineCount": Int.random(in: 10...1000),
+                "complexity": Int.random(in: 1...10),
+                "createdAt": Date().addingTimeInterval(-Double.random(in: 0...86400 * 30)),
+            ]
+        }
+    }
+
+    /// Generate mock data for AvoidObstaclesGame
+    static func generateGameSessions(count: Int) -> [[String: Any]] {
+        return (1...count).map { i in
+            [
+                "id": UUID().uuidString,
+                "score": Int.random(in: 0...10000),
+                "duration": Double.random(in: 30...600),  // seconds
+                "level": Int.random(in: 1...50),
+                "obstaclesAvoided": Int.random(in: 0...100),
+                "powerUpsUsed": Int.random(in: 0...10),
+                "completed": Bool.random(),
+                "playedAt": Date().addingTimeInterval(-Double.random(in: 0...86400 * 7)),
+            ]
+        }
+    }
+
+    /// Generate mock data for HabitQuest
+    static func generateHabitEntries(count: Int) -> [[String: Any]] {
+        let habitTypes = ["exercise", "reading", "meditation", "water", "sleep", "learning"]
+        let frequencies = ["daily", "weekly", "monthly"]
+
+        return (1...count).map { i in
+            [
+                "id": UUID().uuidString,
+                "habitId": UUID().uuidString,
+                "type": habitTypes.randomElement()!,
+                "frequency": frequencies.randomElement()!,
+                "targetValue": Int.random(in: 1...30),
+                "currentValue": Int.random(in: 0...30),
+                "streak": Int.random(in: 0...100),
+                "isCompleted": Bool.random(),
+                "date": Date().addingTimeInterval(-Double.random(in: 0...86400 * 30)),
             ]
         }
     }

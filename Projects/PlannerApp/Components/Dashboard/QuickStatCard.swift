@@ -48,7 +48,7 @@ public struct QuickStatCard: View {
         value: "5",
         subtitle: "3 completed",
         icon: "checkmark.circle.fill",
-        color: .blue
+        color: Color.blue.opacity(0.8)
     )
     .environmentObject(ThemeManager())
 }

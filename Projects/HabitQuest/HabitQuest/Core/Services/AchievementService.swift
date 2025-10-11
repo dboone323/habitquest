@@ -140,7 +140,7 @@ enum AchievementService {
                 category: .special,
                 xpReward: 300,
                 requirement: .weekendWarrior
-            ),
+            )
         ]
     }
 

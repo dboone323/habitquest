@@ -1,12 +1,102 @@
 # PlannerApp API Documentation
 
-Generated: Wed Sep 24 09:04:17 CDT 2025
+Generated: October 11, 2025
 Project: PlannerApp
 Location: /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
 
 ## Overview
 
-This document contains the public API reference for PlannerApp.
+This document contains the public API reference for PlannerApp, including the AI-powered dashboard features and intelligent task management system.
+
+## AI-Powered Features
+
+### AITaskPrioritizationService
+
+File: `/Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/Services/AITaskPrioritizationService.swift`
+
+AI-powered task prioritization service that provides intelligent task suggestions and productivity insights using pattern recognition, goal-based analysis, and time-based recommendations.
+
+#### Public Types
+
+- **public class AITaskPrioritizationService: ObservableObject {** (line 10)
+  - Singleton service for AI-powered task analysis and suggestions
+  - Thread-safe with @MainActor isolation
+  - Provides real-time task suggestions and productivity insights
+
+#### Public Properties
+
+- `public static var shared: AITaskPrioritizationService` (line 12)
+  - Singleton instance for accessing AI services throughout the app
+- `@Published public var isProcessing = false` (line 18)
+  - Indicates when AI analysis is in progress
+- `@Published public var lastUpdate: Date?` (line 19)
+  - Timestamp of the last AI analysis update
+
+#### Public Functions
+
+- `parseNaturalLanguageTask(_ input: String) async throws -> PlannerTask?` (line 32)
+  - Parses natural language input into structured task objects
+  - Extracts priority, due dates, and times from text
+  - Supports patterns like "urgent task by tomorrow at 2pm"
+  - Returns nil if parsing fails
+
+- `generateTaskSuggestions(currentTasks: [PlannerTask], recentActivity: [ActivityRecord], userGoals: [Goal]) -> [TaskSuggestion]` (line 75)
+  - Generates AI-powered task suggestions based on user patterns and goals
+  - Analyzes completion patterns, goal progress, and time-based opportunities
+  - Returns prioritized list of actionable suggestions
+
+- `generateProductivityInsights(activityData: [ActivityRecord], taskData: [PlannerTask], goalData: [Goal]) -> [ProductivityInsight]` (line 184)
+  - Analyzes user activity to generate productivity insights
+  - Calculates productivity scores, identifies trends, and provides optimization recommendations
+  - Returns up to 5 most relevant insights sorted by priority
+
+#### Supporting Data Models
+
+- **public struct TaskSuggestion: Identifiable, Codable {** (line 334)
+  - Represents an AI-generated task suggestion
+  - Properties: id, title, subtitle, reasoning, priority, urgency, suggestedTime, category, confidence
+
+- **public struct ProductivityInsight: Identifiable, Codable {** (line 356)
+  - Represents an AI-generated productivity insight
+  - Properties: id, title, description, icon, priority, category, actionable
+
+- **public enum ActivityType: String, Codable {** (line 372)
+  - Types of user activities tracked for AI analysis
+  - Cases: taskCreated, taskCompleted, goalCreated, goalCompleted
+
+- **public struct ActivityRecord: Codable {** (line 377)
+  - Records user activity for pattern analysis
+  - Properties: id, type, timestamp
+
+### DashboardViewModel AI Integration
+
+File: `/Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/ViewModels/DashboardViewModel.swift`
+
+Enhanced dashboard view model with AI-powered suggestions and productivity insights.
+
+#### AI-Related Properties
+
+- `@Published var aiSuggestions: [AISuggestion] = []` (line 44)
+  - Array of AI-generated task suggestions for display
+- `@Published var productivityInsights: [ProductivityInsight] = []` (line 45)
+  - Array of AI-generated productivity insights
+- `private let aiService = AITaskPrioritizationService.shared` (line 54)
+  - Reference to the shared AI service instance
+
+#### AI Caching Properties
+
+- `private var lastAISuggestionsUpdate: Date?` (line 70)
+  - Timestamp of last AI suggestions update for caching
+- `private var lastProductivityInsightsUpdate: Date?` (line 71)
+  - Timestamp of last productivity insights update for caching
+- `private let aiCacheTimeout: TimeInterval = 300` (line 72)
+  - 5-minute cache timeout for AI-generated content
+
+#### AI Data Models
+
+- **public struct AISuggestion: Identifiable {** (line 10)
+  - UI-friendly representation of AI task suggestions
+  - Properties: id, title, subtitle, reasoning, priority, urgency, suggestedTime, icon, color
 
 ## Classes and Structs
 

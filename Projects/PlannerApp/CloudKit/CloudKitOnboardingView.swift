@@ -4,7 +4,7 @@ import Foundation
 import SwiftUI
 
 public struct CloudKitOnboardingView: View {
-    @StateObject private var cloudKit = EnhancedCloudKitManager.shared // Changed to EnhancedCloudKitManager
+    @StateObject private var cloudKit = CloudKitManager.shared // Changed to CloudKitManager
     @Environment(\.dismiss) private var dismiss
     @State private var isRequestingPermission = false
     @State private var showingMergeOptions = false

@@ -23,8 +23,15 @@ let package = Package(
         .target(
             name: "MomentumFinance",
             dependencies: ["SharedKit"],
-            path: "Shared",
-            resources: [],
+            path: ".",
+            exclude: ["UI/macOS", "UI/iOS", "Sources/UI/macOS", "Sources/UI/iOS"], // Exclude platform-specific UI for now
+            sources: [
+                "Core",
+                "Features",
+                "App",
+                "Shared",
+                "Sources"
+            ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]

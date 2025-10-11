@@ -245,6 +245,7 @@ struct KeyboardShortcutHandler: View {
 class MenuBarManager: ObservableObject {
     private var statusItem: NSStatusItem?
 
+    @MainActor
     func setupMenuBar() {
         self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
 
@@ -297,12 +298,12 @@ class MenuBarManager: ObservableObject {
         // Implement quick add goal
     }
 
-    @objc private func showDashboard() {
+    @objc @MainActor private func showDashboard() {
         // Bring app to front
         NSApp.activate(ignoringOtherApps: true)
     }
 
-    @objc private func quitApp() {
+    @objc @MainActor private func quitApp() {
         NSApp.terminate(nil)
     }
 }
@@ -399,6 +400,7 @@ extension NSTouchBarItem.Identifier {
 
 // Multiple windows support
 enum WindowManager {
+    @MainActor
     static func openNewWindow(content: AnyView) {
         let windowController = NSWindowController(
             window: NSWindow(
@@ -426,12 +428,13 @@ enum WindowManager {
 
 // File system integration
 enum FileExportManager {
+    @MainActor
     static func exportToFile(_ data: some Codable, fileName: String) {
         let panel = NSSavePanel()
         panel.nameFieldStringValue = fileName
         panel.allowedContentTypes = [.json]
 
-        panel.begin { response in
+        panel.begin { @MainActor response in
             if response == .OK, let url = panel.url {
                 do {
                     let jsonData = try JSONEncoder().encode(data)
@@ -443,12 +446,13 @@ enum FileExportManager {
         }
     }
 
+    @MainActor
     static func importFromFile<T: Codable>(_ type: T.Type, completion: @escaping (T?) -> Void) {
         let panel = NSOpenPanel()
         panel.allowedContentTypes = [.json]
         panel.allowsMultipleSelection = false
 
-        panel.begin { response in
+        panel.begin { @MainActor response in
             if response == .OK, let url = panel.urls.first {
                 do {
                     let data = try Data(contentsOf: url)

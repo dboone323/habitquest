@@ -11,7 +11,7 @@ extension Theme {
     // MARK: - Modern Enhanced Themes
 
     // Modern productivity theme with better contrast
-    static let productivityPro = Theme(
+    @MainActor static let productivityPro = Theme(
         name: "Productivity Pro",
         primaryAccentColor: Color(red: 0.17, green: 0.35, blue: 0.63), // Professional Blue
         secondaryAccentColor: Color(red: 0.42, green: 0.48, blue: 0.50), // Neutral Gray
@@ -26,7 +26,7 @@ extension Theme {
     )
 
     // Nature-inspired theme with warm colors
-    static let natureInspired = Theme(
+    @MainActor static let natureInspired = Theme(
         name: "Nature Inspired",
         primaryAccentColor: Color(red: 0.18, green: 0.31, blue: 0.09), // Forest Green
         secondaryAccentColor: Color(red: 0.41, green: 0.69, blue: 0.67), // Sage
@@ -41,7 +41,7 @@ extension Theme {
     )
 
     // High contrast theme for better accessibility
-    static let highContrast = Theme(
+    @MainActor static let highContrast = Theme(
         name: "High Contrast",
         primaryAccentColor: Color(red: 0.0, green: 0.0, blue: 1.0), // Pure Blue
         secondaryAccentColor: Color(red: 0.0, green: 0.0, blue: 0.0), // Black
@@ -56,7 +56,7 @@ extension Theme {
     )
 
     // Modern gradient theme
-    static let modernGradient = Theme(
+    @MainActor static let modernGradient = Theme(
         name: "Modern Gradient",
         primaryAccentColor: Color(red: 0.38, green: 0.42, blue: 0.98), // iOS Blue
         secondaryAccentColor: Color(red: 0.35, green: 0.34, blue: 0.84), // Purple
@@ -71,7 +71,7 @@ extension Theme {
     )
 
     // Updated list including new themes
-    static let allAvailableThemes: [Theme] = [
+    @MainActor static let allAvailableThemes: [Theme] = [
         defaultTheme,
         productivityPro,
         natureInspired,
@@ -88,7 +88,13 @@ extension Theme {
 
 // MARK: - Gradient Support Extensions
 
+import SwiftUI
+// import SharedKit
+
 extension Color {
+    // Note: gradient() and glassMorphism are now in SharedKit
+    // Add any PlannerApp-specific color extensions here
+
     // Create gradient colors for modern effects
     static func gradient(from startColor: Color, to endColor: Color) -> LinearGradient {
         LinearGradient(
@@ -96,12 +102,6 @@ extension Color {
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
-    }
-
-    // Glass morphism effect
-    var glassMorphism: some View {
-        opacity(0.7)
-            .background(.ultraThinMaterial)
     }
 }
 

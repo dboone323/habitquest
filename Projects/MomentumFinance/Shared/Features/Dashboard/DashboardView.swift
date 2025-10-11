@@ -1,9 +1,9 @@
+import AppKit
 import SwiftData
 import SwiftUI
 
 // AppKit is only available on macOS
 #if canImport(AppKit)
-import AppKit
 #endif
 
 // Temporary ColorTheme stub for macOS compatibility (only if not already defined)

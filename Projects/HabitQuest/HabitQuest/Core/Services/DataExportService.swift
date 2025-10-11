@@ -1,7 +1,7 @@
 import Foundation
-import os
 import OSLog
 import SwiftData
+import os
 
 /// Service for exporting and importing HabitQuest user data
 /// Handles backup, restore, and data portability features

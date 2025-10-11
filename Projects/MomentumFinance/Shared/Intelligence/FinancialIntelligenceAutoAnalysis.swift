@@ -1,3 +1,7 @@
+import Foundation
+import Combine
+import SwiftData
+
 //
 //  FinancialIntelligenceAutoAnalysis.swift
 //  MomentumFinance
@@ -7,10 +11,7 @@
 //  Contains auto-analysis functionality
 //
 
-import Combine
-import Foundation
 #if canImport(SwiftData)
-import SwiftData
 #endif
 
 /// Component containing auto-analysis methods

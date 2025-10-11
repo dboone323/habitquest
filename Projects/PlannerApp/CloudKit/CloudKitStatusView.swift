@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - Enhanced Sync Status View
 
 public struct EnhancedSyncStatusView: View {
-    @ObservedObject var cloudKit = EnhancedCloudKitManager.shared
+    @ObservedObject var cloudKit = CloudKitManager.shared
     @EnvironmentObject var themeManager: ThemeManager
 
     let showLabel: Bool

@@ -1,13 +1,12 @@
-// Momentum Finance - Budget Notification Scheduler
-// Copyright © 2025 Momentum Finance. All rights reserved.
-
 import Foundation
+import "./NotificationTypes.swift"
 import OSLog
 import UserNotifications
 
-// Import shared types
-import "./NotificationTypes.swift"
+// Momentum Finance - Budget Notification Scheduler
+// Copyright © 2025 Momentum Finance. All rights reserved.
 
+// Import shared types
 /// Schedules and manages budget-related notifications
 public struct BudgetNotificationScheduler {
     private let center = UNUserNotificationCenter.current()

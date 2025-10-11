@@ -88,7 +88,7 @@ final class StreakAnalyticsViewModel: ObservableObject {
     }
 
     private func generateAnalyticsData(habits: [Habit], service: StreakService) async
-        -> StreakAnalyticsData {
+    -> StreakAnalyticsData {
         var streakAnalytics: [StreakAnalytics] = []
         var topPerformers: [TopPerformer] = []
 
@@ -134,14 +134,14 @@ final class StreakAnalyticsViewModel: ObservableObject {
     }
 
     private func generateStreakDistribution(_ analytics: [StreakAnalytics])
-        -> [StreakDistributionData] {
+    -> [StreakDistributionData] {
         let streaks = analytics.map(\.currentStreak)
         let ranges = [
             (0 ... 2, "Getting Started"),
             (3 ... 6, "Building"),
             (7 ... 29, "Strong"),
             (30 ... 99, "Impressive"),
-            (100 ... Int.max, "Legendary"),
+            (100 ... Int.max, "Legendary")
         ]
 
         return ranges.map { range, label in
@@ -181,7 +181,7 @@ final class StreakAnalyticsViewModel: ObservableObject {
     }
 
     private func generateWeeklyPatterns(habits _: [Habit], service _: StreakService) async
-        -> [WeeklyPattern] {
+    -> [WeeklyPattern] {
         // Simplified weekly pattern generation
         let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         return daysOfWeek.map { day in

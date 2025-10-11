@@ -11,9 +11,17 @@
 		09B893646F094912912D8D0C /* AccessibilityEnhancements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CF15C9EA30469D94143B05 /* AccessibilityEnhancements.swift */; };
 		0FAE27BD7336477CB7DC2463 /* EnhancedCloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D463C5CFA44C758C406995 /* EnhancedCloudKitManager.swift */; };
 		16FA9BF3C41C4EA2B946F14D /* ThemePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF43B4BBA5047188588BA80 /* ThemePreviewView.swift */; };
-		26CE39764CE24FC3B7F58456 /* MainTabView_Enhanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72406C50B8A24CFDA5B7097F /* MainTabView_Enhanced.swift */; };
+		18E319D4BC52297CAF6E41EC /* GoalsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91AE0D3709D0506CD284981E /* GoalsHeaderView.swift */; };
+		21BAD7D2378327B009F15F9D /* JournalEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BD86FF3B81ABBF6E80B3F5 /* JournalEmptyStateView.swift */; };
+		249783CC7293CA1AC4FE3F41 /* GoalItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CE66A27B669533E41CF4ED /* GoalItemView.swift */; };
+		294A965B2C181381C5794419 /* TaskManagerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170FDFEBC7979AC62BA42F5 /* TaskManagerHeaderView.swift */; };
+		2979003D497008247A47681B /* TaskRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C94F4AAD22B1FF3C05D35B2 /* TaskRow.swift */; };
+		2EAE1AA888BD2E94C433957D /* JournalDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2B66F4EF7982B077BA0D63 /* JournalDataManager.swift */; };
 		35AE9E7F2E454E2EBE420FC1 /* EnhancedPlatformNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DD74B7533C421198F24E98 /* EnhancedPlatformNavigation.swift */; };
+		59B649CEF0CB23ADE638EFCD /* QuickStatCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67ACE95BBA199F7EAE8FE14 /* QuickStatCard.swift */; };
 		5C1C855B2C8C44B8A3D89FBB /* CalendarGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD15E0B99B046B29B70576B /* CalendarGrid.swift */; };
+		5D74BB8E1068F0F00D247109 /* GoalsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED107C0350FEE4D63969F37 /* GoalsListView.swift */; };
+		66F66B7025AEC569CFB301FC /* TaskInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCEB989B2A464998A639437 /* TaskInputView.swift */; };
 		6832162D2DE49E4C003EDB36 /* PlatformAdaptiveNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6832162A2DE49E4C003EDB36 /* PlatformAdaptiveNavigation.swift */; };
 		6832162E2DE49E4C003EDB36 /* CloudKitEnhancements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683216232DE49E4C003EDB36 /* CloudKitEnhancements.swift */; };
 		6832162F2DE49E4C003EDB36 /* CloudKitSyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683216262DE49E4C003EDB36 /* CloudKitSyncView.swift */; };
@@ -28,6 +36,7 @@
 		685D29C72DC13FE800967CFB /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F0974B2DC01FE100092697 /* Task.swift */; };
 		685D29C82DC13FED00967CFB /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F0974A2DC01FE100092697 /* JournalEntry.swift */; };
 		685D29CA2DC14A7900967CFB /* DataManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685D29C92DC14A7900967CFB /* DataManagerError.swift */; };
+                21DD825BCDA247BBBC952C07 /* PlannerDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DD825BCDA247BBBC952C06 /* PlannerDataManager.swift */; };
 		685D29D42DC14EB000967CFB /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685D29D32DC14EA900967CFB /* DashboardViewModel.swift */; };
 		685D29D72DC1542000967CFB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685D29D62DC1542000967CFB /* SettingsView.swift */; };
 		685D29D92DC1545E00967CFB /* AppSettingKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685D29D82DC1545E00967CFB /* AppSettingKeys.swift */; };
@@ -46,12 +55,22 @@
 		68F097602DC023E500092697 /* JournalDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F0974E2DC0201100092697 /* JournalDetailView.swift */; };
 		68F097612DC023EB00092697 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F0974F2DC0201100092697 /* JournalView.swift */; };
 		68F097672DC025AF00092697 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F097662DC025AF00092697 /* DashboardView.swift */; };
+		69A6A041A2EEA5D9FAF534A4 /* ProgressUpdateSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE90D4582C55CDBEFE61F21F /* ProgressUpdateSheet.swift */; };
+		6B77786B01CC93574EDE8046 /* JournalHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2739643F6B9EF7269FC1F2 /* JournalHeaderView.swift */; };
+		71A0695ED3E4DA9D7A4B732C /* JournalListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD109E92AF51E8CD49A8BF8B /* JournalListView.swift */; };
 		780673CFFB374C9A9EA50B1D /* GoalRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC37A48E0964021A66D4818 /* GoalRowView.swift */; };
+		7B399837B288FA4C1F002145 /* CalendarDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4B813820E60EF9E7D606DD /* CalendarDataManager.swift */; };
+		81AF11E95E35F0BDDDD54B71 /* UpcomingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1822D76E9EE901F530EA36CD /* UpcomingItemView.swift */; };
+		92743B29CFC05A1D9AD104E3 /* GoalsEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8E365566F7FC5BBEAC8DBB /* GoalsEmptyStateView.swift */; };
 		92C6D340BC754658825D713F /* EventRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143769D581A1407585E7A8B9 /* EventRowView.swift */; };
 		9CF888A7AD4D422C87189DD3 /* CalendarComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113774714F674A5E8121FF9B /* CalendarComponents.swift */; };
+		A76AD489B1782EADBAB2143B /* JournalRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582BE53AF6BD3B42500BBFEE /* JournalRow.swift */; };
 		A98E4989293C4E63A94B04DF /* ModernThemes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C35CB789C345C39F0E55A3 /* ModernThemes.swift */; };
+		B0B81B23BFB6856A15260781 /* TaskDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9893F8A4E6CA64CE4448867C /* TaskDataManager.swift */; };
+		BE39633A2A134D4F112E82F9 /* QuickActionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0106DDABAEA7A50890F935E6 /* QuickActionCard.swift */; };
 		C281D26FA91D4D84A1BACB90 /* CloudKitMigrationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D83ECDC90B4A4E86570F04 /* CloudKitMigrationHelper.swift */; };
 		D3B62AEB3150480696E34AC2 /* DateSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4CD3BF68B740DCA1401394 /* DateSectionView.swift */; };
+		DBD2722588798E4B7A2A03A9 /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC169814801F8CDBBBC73C7 /* TaskListView.swift */; };
 		EC334CC720874E159EB225A4 /* TaskRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3698D37148483F8BE8E470 /* TaskRowView.swift */; };
 		F88CE36DFF624C828ADE25B1 /* VisualEnhancements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A5A2135AE4820844E6552 /* VisualEnhancements.swift */; };
 /* End PBXBuildFile section */
@@ -74,15 +93,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00CE66A27B669533E41CF4ED /* GoalItemView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GoalItemView.swift; path = Components/Goals/GoalItemView.swift; sourceTree = "<group>"; };
+		0106DDABAEA7A50890F935E6 /* QuickActionCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = QuickActionCard.swift; path = Components/Dashboard/QuickActionCard.swift; sourceTree = "<group>"; };
 		01C35CB789C345C39F0E55A3 /* ModernThemes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styling/ModernThemes.swift; sourceTree = "<group>"; };
+		0C94F4AAD22B1FF3C05D35B2 /* TaskRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskRow.swift; path = Components/Tasks/TaskRow.swift; sourceTree = "<group>"; };
 		0E3698D37148483F8BE8E470 /* TaskRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Calendar/TaskRowView.swift; sourceTree = "<group>"; };
 		113774714F674A5E8121FF9B /* CalendarComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Calendar/CalendarComponents.swift; sourceTree = "<group>"; };
 		143769D581A1407585E7A8B9 /* EventRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Calendar/EventRowView.swift; sourceTree = "<group>"; };
+		1822D76E9EE901F530EA36CD /* UpcomingItemView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UpcomingItemView.swift; path = Components/Dashboard/UpcomingItemView.swift; sourceTree = "<group>"; };
+		1ED107C0350FEE4D63969F37 /* GoalsListView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GoalsListView.swift; path = Components/Goals/GoalsListView.swift; sourceTree = "<group>"; };
 		2A3A5A2135AE4820844E6552 /* VisualEnhancements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/VisualEnhancements.swift; sourceTree = "<group>"; };
+		2A8E365566F7FC5BBEAC8DBB /* GoalsEmptyStateView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GoalsEmptyStateView.swift; path = Components/Goals/GoalsEmptyStateView.swift; sourceTree = "<group>"; };
 		32CF15C9EA30469D94143B05 /* AccessibilityEnhancements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accessibility/AccessibilityEnhancements.swift; sourceTree = "<group>"; };
 		32D83ECDC90B4A4E86570F04 /* CloudKitMigrationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit/CloudKitMigrationHelper.swift; sourceTree = "<group>"; };
+		3BC169814801F8CDBBBC73C7 /* TaskListView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskListView.swift; path = Components/Tasks/TaskListView.swift; sourceTree = "<group>"; };
+		4E2739643F6B9EF7269FC1F2 /* JournalHeaderView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JournalHeaderView.swift; path = Components/Journal/JournalHeaderView.swift; sourceTree = "<group>"; };
 		50DD74B7533C421198F24E98 /* EnhancedPlatformNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/EnhancedPlatformNavigation.swift; sourceTree = "<group>"; };
 		53D463C5CFA44C758C406995 /* EnhancedCloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit/EnhancedCloudKitManager.swift; sourceTree = "<group>"; };
+		582BE53AF6BD3B42500BBFEE /* JournalRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JournalRow.swift; path = Components/Journal/JournalRow.swift; sourceTree = "<group>"; };
 		683216232DE49E4C003EDB36 /* CloudKitEnhancements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitEnhancements.swift; sourceTree = "<group>"; };
 		683216242DE49E4C003EDB36 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		683216252DE49E4C003EDB36 /* CloudKitOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitOnboardingView.swift; sourceTree = "<group>"; };
@@ -92,6 +120,7 @@
 		6832162A2DE49E4C003EDB36 /* PlatformAdaptiveNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformAdaptiveNavigation.swift; sourceTree = "<group>"; };
 		6832162B2DE49E4C003EDB36 /* SyncStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncStatusView.swift; sourceTree = "<group>"; };
 		685D29C92DC14A7900967CFB /* DataManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerError.swift; sourceTree = "<group>"; };
+                21DD825BCDA247BBBC952C06 /* PlannerDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannerDataManager.swift; sourceTree = "<group>"; };
 		685D29D32DC14EA900967CFB /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		685D29D62DC1542000967CFB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		685D29D82DC1545E00967CFB /* AppSettingKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingKeys.swift; sourceTree = "<group>"; };
@@ -118,11 +147,21 @@
 		68F097552DC020A200092697 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		68F097562DC020BC00092697 /* PlannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannerApp.swift; sourceTree = "<group>"; };
 		68F097662DC025AF00092697 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
-		72406C50B8A24CFDA5B7097F /* MainTabView_Enhanced.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp/MainTabView_Enhanced.swift; sourceTree = "<group>"; };
+		91AE0D3709D0506CD284981E /* GoalsHeaderView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GoalsHeaderView.swift; path = Components/Goals/GoalsHeaderView.swift; sourceTree = "<group>"; };
+		9893F8A4E6CA64CE4448867C /* TaskDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskDataManager.swift; path = DataManagers/TaskDataManager.swift; sourceTree = "<group>"; };
+		B67ACE95BBA199F7EAE8FE14 /* QuickStatCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = QuickStatCard.swift; path = Components/Dashboard/QuickStatCard.swift; sourceTree = "<group>"; };
+		BB4B813820E60EF9E7D606DD /* CalendarDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CalendarDataManager.swift; path = DataManagers/CalendarDataManager.swift; sourceTree = "<group>"; };
+		BD109E92AF51E8CD49A8BF8B /* JournalListView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JournalListView.swift; path = Components/Journal/JournalListView.swift; sourceTree = "<group>"; };
+		BF2B66F4EF7982B077BA0D63 /* JournalDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JournalDataManager.swift; path = DataManagers/JournalDataManager.swift; sourceTree = "<group>"; };
+		C170FDFEBC7979AC62BA42F5 /* TaskManagerHeaderView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskManagerHeaderView.swift; path = Components/Tasks/TaskManagerHeaderView.swift; sourceTree = "<group>"; };
 		CBC37A48E0964021A66D4818 /* GoalRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Calendar/GoalRowView.swift; sourceTree = "<group>"; };
+		DE90D4582C55CDBEFE61F21F /* ProgressUpdateSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProgressUpdateSheet.swift; path = Components/Goals/ProgressUpdateSheet.swift; sourceTree = "<group>"; };
 		EFD15E0B99B046B29B70576B /* CalendarGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Calendar/CalendarGrid.swift; sourceTree = "<group>"; };
 		EFF43B4BBA5047188588BA80 /* ThemePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Settings/ThemePreviewView.swift; sourceTree = "<group>"; };
+		F9BD86FF3B81ABBF6E80B3F5 /* JournalEmptyStateView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JournalEmptyStateView.swift; path = Components/Journal/JournalEmptyStateView.swift; sourceTree = "<group>"; };
 		FCC6142FC88F4A8B969FE162 /* PlatformFeatures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform/PlatformFeatures.swift; sourceTree = "<group>"; };
+            8FCEB989B2A464998A639437 /* TaskInputView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskInputView.swift; path = Views/Tasks/TaskInputView.swift; sourceTree = "<group>"; };
+
 		FD4CD3BF68B740DCA1401394 /* DateSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Calendar/DateSectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -243,7 +282,6 @@
 				CBC37A48E0964021A66D4818 /* GoalRowView.swift */,
 				0E3698D37148483F8BE8E470 /* TaskRowView.swift */,
 				EFF43B4BBA5047188588BA80 /* ThemePreviewView.swift */,
-				72406C50B8A24CFDA5B7097F /* MainTabView_Enhanced.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -265,6 +303,25 @@
 				683216272DE49E4C003EDB36 /* CloudKit */,
 				6832162C2DE49E4C003EDB36 /* Components */,
 				686B16822DE62B6600FA5A84 /* Recovered References */,
+				91AE0D3709D0506CD284981E /* GoalsHeaderView.swift */,
+				1ED107C0350FEE4D63969F37 /* GoalsListView.swift */,
+				BF2B66F4EF7982B077BA0D63 /* JournalDataManager.swift */,
+				DE90D4582C55CDBEFE61F21F /* ProgressUpdateSheet.swift */,
+				BB4B813820E60EF9E7D606DD /* CalendarDataManager.swift */,
+				9893F8A4E6CA64CE4448867C /* TaskDataManager.swift */,
+				2A8E365566F7FC5BBEAC8DBB /* GoalsEmptyStateView.swift */,
+				00CE66A27B669533E41CF4ED /* GoalItemView.swift */,
+				F9BD86FF3B81ABBF6E80B3F5 /* JournalEmptyStateView.swift */,
+				4E2739643F6B9EF7269FC1F2 /* JournalHeaderView.swift */,
+				BD109E92AF51E8CD49A8BF8B /* JournalListView.swift */,
+				582BE53AF6BD3B42500BBFEE /* JournalRow.swift */,
+				0C94F4AAD22B1FF3C05D35B2 /* TaskRow.swift */,
+				1822D76E9EE901F530EA36CD /* UpcomingItemView.swift */,
+				C170FDFEBC7979AC62BA42F5 /* TaskManagerHeaderView.swift */,
+				8FCEB989B2A464998A639437 /* TaskInputView.swift */,
+				3BC169814801F8CDBBBC73C7 /* TaskListView.swift */,
+				B67ACE95BBA199F7EAE8FE14 /* QuickStatCard.swift */,
+				0106DDABAEA7A50890F935E6 /* QuickActionCard.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -294,6 +351,7 @@
 			children = (
 				685D29C92DC14A7900967CFB /* DataManagerError.swift */,
 				68F0974C2DC01FF500092697 /* GoalDataManager.swift */,
+                            21DD825BCDA247BBBC952C06 /* PlannerDataManager.swift */,
 			);
 			path = DataManagers;
 			sourceTree = "<group>";
@@ -491,6 +549,7 @@
 				685D29D72DC1542000967CFB /* SettingsView.swift in Sources */,
 				68F097612DC023EB00092697 /* JournalView.swift in Sources */,
 				68F0975B2DC023C700092697 /* CalendarView.swift in Sources */,
+                            21DD825BCDA247BBBC952C07 /* PlannerDataManager.swift in Sources */,
 				685D29CA2DC14A7900967CFB /* DataManagerError.swift in Sources */,
 				68F097602DC023E500092697 /* JournalDetailView.swift in Sources */,
 				68F097672DC025AF00092697 /* DashboardView.swift in Sources */,
@@ -500,7 +559,6 @@
 				685D29DD2DC15A0A00967CFB /* Theme.swift in Sources */,
 				68F097572DC0229600092697 /* PlannerApp.swift in Sources */,
 				68F0975A2DC023C100092697 /* AddCalendarEventView.swift in Sources */,
-				685D29CE2DC14AAF00967CFB /* TaskDataManager.swift in Sources */,
 				68F0975C2DC023CD00092697 /* AddGoalView.swift in Sources */,
 				6832162D2DE49E4C003EDB36 /* PlatformAdaptiveNavigation.swift in Sources */,
 				6832162E2DE49E4C003EDB36 /* CloudKitEnhancements.swift in Sources */,
@@ -534,7 +592,25 @@
 				686B16902DE62BF200FA5A84 /* NotificationExtensions.swift in Sources */,
 				686B16912DE62BF200FA5A84 /* NetworkMonitor.swift in Sources */,
 				16FA9BF3C41C4EA2B946F14D /* ThemePreviewView.swift in Sources */,
-				26CE39764CE24FC3B7F58456 /* MainTabView_Enhanced.swift in Sources */,
+				18E319D4BC52297CAF6E41EC /* GoalsHeaderView.swift in Sources */,
+				5D74BB8E1068F0F00D247109 /* GoalsListView.swift in Sources */,
+				2EAE1AA888BD2E94C433957D /* JournalDataManager.swift in Sources */,
+				69A6A041A2EEA5D9FAF534A4 /* ProgressUpdateSheet.swift in Sources */,
+				7B399837B288FA4C1F002145 /* CalendarDataManager.swift in Sources */,
+				B0B81B23BFB6856A15260781 /* TaskDataManager.swift in Sources */,
+				92743B29CFC05A1D9AD104E3 /* GoalsEmptyStateView.swift in Sources */,
+				249783CC7293CA1AC4FE3F41 /* GoalItemView.swift in Sources */,
+				21BAD7D2378327B009F15F9D /* JournalEmptyStateView.swift in Sources */,
+				6B77786B01CC93574EDE8046 /* JournalHeaderView.swift in Sources */,
+				71A0695ED3E4DA9D7A4B732C /* JournalListView.swift in Sources */,
+				A76AD489B1782EADBAB2143B /* JournalRow.swift in Sources */,
+				2979003D497008247A47681B /* TaskRow.swift in Sources */,
+				81AF11E95E35F0BDDDD54B71 /* UpcomingItemView.swift in Sources */,
+				294A965B2C181381C5794419 /* TaskManagerHeaderView.swift in Sources */,
+				66F66B7025AEC569CFB301FC /* TaskInputView.swift in Sources */,
+				DBD2722588798E4B7A2A03A9 /* TaskListView.swift in Sources */,
+				59B649CEF0CB23ADE638EFCD /* QuickStatCard.swift in Sources */,
+				BE39633A2A134D4F112E82F9 /* QuickActionCard.swift in Sources */,
 			);
 		};
 		68F0971F2DC01EFB00092697 /* Sources */ = {
@@ -566,9 +642,9 @@
 		68F097352DC01EFB00092697 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BASE_CONFIGURATION_FILE = Config/Base.xcconfig;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BASE_CONFIGURATION_FILE = Config/Base.xcconfig;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -629,9 +705,9 @@
 		68F097362DC01EFB00092697 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BASE_CONFIGURATION_FILE = Config/Base.xcconfig;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BASE_CONFIGURATION_FILE = Config/Base.xcconfig;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

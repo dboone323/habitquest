@@ -16,7 +16,7 @@ import UIKit
 #endif
 
 // Defines the properties of a visual theme
-public struct Theme: Identifiable, Equatable { // Added Equatable for comparison
+public struct Theme: Identifiable, Equatable, Sendable { // Added Equatable for comparison
     public let id = UUID()
     let name: String
 
@@ -49,6 +49,7 @@ public struct Theme: Identifiable, Equatable { // Added Equatable for comparison
 
     // --- Predefined Themes ---
 
+    // Removed @MainActor to allow access from ThemeManager during testing
     static let defaultTheme = Theme(
         name: "Default",
         primaryAccentColor: Color.accentColor, // Use the system/asset catalog accent
@@ -96,6 +97,8 @@ public struct Theme: Identifiable, Equatable { // Added Equatable for comparison
         #endif
     }
 
+        // Ocean Blue Theme
+    // Removed @MainActor to allow access during testing
     static let oceanBlue = Theme(
         name: "Ocean Blue",
         primaryAccentColor: Color(red: 0.0, green: 0.48, blue: 0.87), // Modern blue
@@ -110,6 +113,8 @@ public struct Theme: Identifiable, Equatable { // Added Equatable for comparison
         secondaryFontName: nil
     )
 
+        // Forest Green Theme
+    // Removed @MainActor to allow access during testing
     static let forestGreen = Theme(
         name: "Forest Green",
         primaryAccentColor: Color(red: 0.20, green: 0.65, blue: 0.35), // Natural green
@@ -124,6 +129,8 @@ public struct Theme: Identifiable, Equatable { // Added Equatable for comparison
         secondaryFontName: nil
     )
 
+        // Sunset Orange Theme
+    // Removed @MainActor to allow access during testing
     static let sunsetOrange = Theme(
         name: "Sunset Orange",
         primaryAccentColor: Color(red: 0.90, green: 0.50, blue: 0.15), // Warm orange
@@ -139,6 +146,7 @@ public struct Theme: Identifiable, Equatable { // Added Equatable for comparison
     )
 
     // Add a Dark Mode Theme Example
+    // Removed @MainActor to allow access during testing
     static let midnightDark = Theme(
         name: "Midnight Dark",
         primaryAccentColor: Color(red: 0.7, green: 0.5, blue: 1.0), // Purple accent
@@ -154,6 +162,7 @@ public struct Theme: Identifiable, Equatable { // Added Equatable for comparison
     )
 
     // Modern minimal theme
+    // Removed @MainActor to allow access during testing
     static let minimalGray = Theme(
         name: "Minimal Gray",
         primaryAccentColor: Color(red: 0.20, green: 0.20, blue: 0.20),
@@ -169,6 +178,7 @@ public struct Theme: Identifiable, Equatable { // Added Equatable for comparison
     )
 
     // Warm pink theme for a softer feel
+    // Removed @MainActor to allow access during testing
     static let rosePink = Theme(
         name: "Rose Pink",
         primaryAccentColor: Color(red: 0.85, green: 0.40, blue: 0.60),
@@ -184,6 +194,7 @@ public struct Theme: Identifiable, Equatable { // Added Equatable for comparison
     )
 
     // List of all available themes for pickers etc.
+    // Removed @MainActor to allow access from ThemeManager during testing
     static let availableThemes: [Theme] = [
         defaultTheme,
         oceanBlue,

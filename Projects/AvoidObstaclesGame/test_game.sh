@@ -6,11 +6,11 @@ echo "Starting AvoidObstaclesGame test..."
 cd "$(dirname "$0")" || exit
 
 echo "Building project..."
-if xcodebuild -project AvoidObstaclesGame.xcodeproj -scheme AvoidObstaclesGame -destination 'platform=iOS Simulator,name=iPhone 16' build; then
+if xcodebuild -project AvoidObstaclesGame.xcodeproj -scheme AvoidObstaclesGame -destination 'platform=iOS Simulator,name=iPhone 17' build; then
   echo "Build successful! Starting simulator..."
 
   # Boot the simulator if not already running
-  xcrun simctl boot "iPhone 16" 2>/dev/null || true
+  xcrun simctl boot "iPhone 17" 2>/dev/null || true
 
   # Open the simulator
   open -a Simulator
@@ -20,10 +20,10 @@ if xcodebuild -project AvoidObstaclesGame.xcodeproj -scheme AvoidObstaclesGame -
 
   if [[ -d ${APP_PATH} ]]; then
     echo "Installing app on simulator..."
-    xcrun simctl install "iPhone 16" "${APP_PATH}"
+    xcrun simctl install "iPhone 17" "${APP_PATH}"
 
     echo "Launching AvoidObstaclesGame..."
-    xcrun simctl launch "iPhone 16" com.DanielStevens.AvoidObstaclesGame
+    xcrun simctl launch "iPhone 17" com.DanielStevens.AvoidObstaclesGame
 
     echo "Game launched successfully! Check the simulator to test all features:"
     echo "1. High score tracking (top 10 scores)"

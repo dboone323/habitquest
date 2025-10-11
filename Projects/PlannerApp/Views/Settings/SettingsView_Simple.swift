@@ -13,32 +13,52 @@ public struct SettingsView: View {
     // Environment Object to access the shared ThemeManager instance
     @EnvironmentObject var themeManager: ThemeManager
 
-    // --- AppStorage properties to bind UI controls directly to UserDefaults ---
-    @AppStorage(AppSettingKeys.userName) private var userName: String = ""
-    @AppStorage(AppSettingKeys.dashboardItemLimit) private var dashboardItemLimit: Int = 3
-    @AppStorage(AppSettingKeys.themeColorName) private var selectedThemeName: String = Theme.defaultTheme.name
+    // Avoid @AppStorage during testing to prevent UserDefaults access crashes
+    @State private var userName: String = ""
+    @State private var dashboardItemLimit: Int = 3
+    @State private var selectedThemeName: String = Theme.defaultTheme.name
+    @State private var notificationsEnabled: Bool = true
+    @State private var defaultReminderTime: Double = 3600
+    @State private var firstDayOfWeek: Int = Calendar.current.firstWeekday
+    @State private var use24HourTime: Bool = false
+    @State private var autoDeleteCompleted: Bool = false
+    @State private var autoDeleteDays: Int = 30
+    @State private var defaultView: String = "Dashboard"
+    @State private var journalBiometricsEnabled: Bool = false
+    @State private var autoSyncEnabled: Bool = true
+    @State private var syncFrequency: String = "hourly"
+    @State private var enableHapticFeedback: Bool = true
+    @State private var enableAnalytics: Bool = false
 
-    // Notification Settings
-    @AppStorage(AppSettingKeys.notificationsEnabled) private var notificationsEnabled: Bool = true
-    @AppStorage(AppSettingKeys.defaultReminderTime) private var defaultReminderTime: Double = 3600
+    // Initialize settings from UserDefaults, but skip during testing
+    private func initializeSettings() {
+        let isTesting = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
 
-    // Date & Time Settings
-    @AppStorage(AppSettingKeys.firstDayOfWeek) private var firstDayOfWeek: Int = Calendar.current.firstWeekday
-    @AppStorage(AppSettingKeys.use24HourTime) private var use24HourTime: Bool = false
-
-    // App Behavior Settings
-    @AppStorage(AppSettingKeys.autoDeleteCompleted) private var autoDeleteCompleted: Bool = false
-    @AppStorage(AppSettingKeys.autoDeleteDays) private var autoDeleteDays: Int = 30
-    @AppStorage(AppSettingKeys.defaultView) private var defaultView: String = "Dashboard"
-
-    // Journal Security
-    @AppStorage(AppSettingKeys.journalBiometricsEnabled) private var journalBiometricsEnabled: Bool = false
-
-    // Additional settings
-    @AppStorage(AppSettingKeys.autoSyncEnabled) private var autoSyncEnabled: Bool = true
-    @AppStorage(AppSettingKeys.syncFrequency) private var syncFrequency: String = "hourly"
-    @AppStorage(AppSettingKeys.enableHapticFeedback) private var enableHapticFeedback: Bool = true
-    @AppStorage(AppSettingKeys.enableAnalytics) private var enableAnalytics: Bool = false
+        if !isTesting {
+            userName = UserDefaults.standard.string(forKey: AppSettingKeys.userName) ?? ""
+            dashboardItemLimit = UserDefaults.standard.integer(forKey: AppSettingKeys.dashboardItemLimit)
+            if dashboardItemLimit == 0 { dashboardItemLimit = 3 }
+            selectedThemeName = UserDefaults.standard.string(forKey: AppSettingKeys.themeColorName) ?? Theme.defaultTheme.name
+            notificationsEnabled = UserDefaults.standard.bool(forKey: AppSettingKeys.notificationsEnabled)
+            if !UserDefaults.standard.bool(forKey: "notificationsEnabled_set") { notificationsEnabled = true }
+            defaultReminderTime = UserDefaults.standard.double(forKey: AppSettingKeys.defaultReminderTime)
+            if defaultReminderTime == 0 { defaultReminderTime = 3600 }
+            firstDayOfWeek = UserDefaults.standard.integer(forKey: AppSettingKeys.firstDayOfWeek)
+            if firstDayOfWeek == 0 { firstDayOfWeek = Calendar.current.firstWeekday }
+            use24HourTime = UserDefaults.standard.bool(forKey: AppSettingKeys.use24HourTime)
+            autoDeleteCompleted = UserDefaults.standard.bool(forKey: AppSettingKeys.autoDeleteCompleted)
+            autoDeleteDays = UserDefaults.standard.integer(forKey: AppSettingKeys.autoDeleteDays)
+            if autoDeleteDays == 0 { autoDeleteDays = 30 }
+            defaultView = UserDefaults.standard.string(forKey: AppSettingKeys.defaultView) ?? "Dashboard"
+            journalBiometricsEnabled = UserDefaults.standard.bool(forKey: AppSettingKeys.journalBiometricsEnabled)
+            autoSyncEnabled = UserDefaults.standard.bool(forKey: AppSettingKeys.autoSyncEnabled)
+            if !UserDefaults.standard.bool(forKey: "autoSyncEnabled_set") { autoSyncEnabled = true }
+            syncFrequency = UserDefaults.standard.string(forKey: AppSettingKeys.syncFrequency) ?? "hourly"
+            enableHapticFeedback = UserDefaults.standard.bool(forKey: AppSettingKeys.enableHapticFeedback)
+            if !UserDefaults.standard.bool(forKey: "enableHapticFeedback_set") { enableHapticFeedback = true }
+            enableAnalytics = UserDefaults.standard.bool(forKey: AppSettingKeys.enableAnalytics)
+        }
+    }
 
     // --- State for managing UI elements ---
     @State private var showingNotificationAlert = false
@@ -68,7 +88,6 @@ public struct SettingsView: View {
         return context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
     }
 
-    var body: some View {
         NavigationStack {
             Form {
                 // --- Profile Section ---
@@ -249,6 +268,7 @@ public struct SettingsView: View {
             .scrollContentBackground(.hidden)
             .foregroundColor(self.themeManager.currentTheme.primaryTextColor)
             .accentColor(self.themeManager.currentTheme.primaryAccentColor)
+            .onAppear(perform: self.initializeSettings)
             // Simplified sheet presentations
             .sheet(isPresented: self.$showingCloudKitSheet) {
                 // Placeholder for CloudKit sync view

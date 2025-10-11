@@ -5,7 +5,7 @@ import CoreTransferable
 import Foundation
 
 /// Represents the priority of a task (low, medium, high).
-public enum TaskPriority: String, CaseIterable, Codable {
+public enum TaskPriority: String, CaseIterable, Codable, Sendable {
     /// Low priority task.
     case low
     /// Medium priority task.

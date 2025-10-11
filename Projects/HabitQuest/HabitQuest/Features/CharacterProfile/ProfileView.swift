@@ -97,7 +97,7 @@ public struct AnalyticsTabView: View {
             .frame(minHeight: 200)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.2))
         .cornerRadius(16)
     }
 }
@@ -142,7 +142,7 @@ public struct TrendsView: View {
             }
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(Color.secondary.opacity(0.1))
         .cornerRadius(12)
     }
 }
@@ -187,7 +187,7 @@ public struct PatternsView: View {
             }
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(Color.secondary.opacity(0.1))
         .cornerRadius(12)
     }
 }
@@ -223,7 +223,7 @@ public struct InsightsView: View {
                 .foregroundColor(.secondary)
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(Color.secondary.opacity(0.1))
         .cornerRadius(12)
     }
 }
@@ -247,11 +247,11 @@ public struct AdvancedAnalyticsView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.2))
                         .cornerRadius(12)
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.2))
                     .cornerRadius(16)
 
                     // Detailed Analytics Components
@@ -262,6 +262,7 @@ public struct AdvancedAnalyticsView: View {
                 .padding()
             }
             .navigationTitle("Advanced Analytics")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -271,6 +272,7 @@ public struct AdvancedAnalyticsView: View {
                     .accessibilityLabel("Button")
                 }
             }
+            #endif
         }
     }
 }
@@ -287,7 +289,7 @@ public struct AnalyticsInsightsCard: View {
                     icon: "brain",
                     title: "Optimal Scheduling",
                     insight:
-                    "Your success rate is 34% higher when habits are scheduled before 10 AM",
+                        "Your success rate is 34% higher when habits are scheduled before 10 AM",
                     color: .blue
                 )
 
@@ -307,7 +309,7 @@ public struct AnalyticsInsightsCard: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.2))
         .cornerRadius(16)
     }
 }
@@ -369,7 +371,7 @@ public struct PredictiveAnalyticsCard: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.2))
         .cornerRadius(16)
     }
 }
@@ -437,7 +439,7 @@ public struct BehavioralPatternsCard: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.2))
         .cornerRadius(16)
     }
 }

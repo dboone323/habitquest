@@ -9,7 +9,7 @@ import CloudKit
 
 // MARK: - CloudKit Zones Extensions
 
-extension EnhancedCloudKitManager {
+extension CloudKitManager {
     /// Create a custom zone for more efficient organization
     func createCustomZone() async throws {
         let customZone = CKRecordZone(zoneName: "PlannerAppData")

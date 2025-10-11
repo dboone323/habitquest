@@ -14,12 +14,21 @@ public struct HabitDetailSheet: View {
                 Spacer()
             }
             .navigationTitle(self.habit.name)
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
+                #if os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") { self.dismiss() }
                         .accessibilityLabel("Done")
                 }
+                #else
+                ToolbarItem(placement: .automatic) {
+                    Button("Done") { self.dismiss() }
+                        .accessibilityLabel("Done")
+                }
+                #endif
             }
         }
     }
@@ -80,7 +89,9 @@ public struct AnalyticsExportView: View {
                 .padding()
             }
             .navigationTitle("Export Details")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
         }
     }
 

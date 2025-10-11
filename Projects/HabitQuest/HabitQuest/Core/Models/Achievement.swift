@@ -21,7 +21,11 @@ final class Achievement {
     var category: AchievementCategory
 
     /// XP bonus awarded when achievement is unlocked
-    var xpReward: Int
+    var xpReward: Int {
+        didSet {
+            xpReward = max(0, xpReward)
+        }
+    }
 
     /// Whether this achievement is hidden until unlocked
     var isHidden: Bool
@@ -30,7 +34,11 @@ final class Achievement {
     var unlockedDate: Date?
 
     /// Current progress toward this achievement (0.0 to 1.0)
-    var progress: Float
+    var progress: Float {
+        didSet {
+            progress = min(max(progress, 0.0), 1.0)
+        }
+    }
 
     /// Achievement requirement type and value (stored as encoded data)
     private var requirementData: Data
@@ -38,16 +46,19 @@ final class Achievement {
     /// Achievement requirement type and value
     var requirement: AchievementRequirement {
         get {
-            guard let decoded = try? JSONDecoder().decode(AchievementRequirement.self, from: requirementData) else {
-                return .totalCompletions(1) // Default fallback
+            do {
+                return try JSONDecoder().decode(AchievementRequirement.self, from: requirementData)
+            } catch {
+                assertionFailure("Failed to decode AchievementRequirement: \(error)")
+                return .totalCompletions(1)
             }
-            return decoded
         }
         set {
-            guard let encoded = try? JSONEncoder().encode(newValue) else {
-                return
+            do {
+                self.requirementData = try JSONEncoder().encode(newValue)
+            } catch {
+                assertionFailure("Failed to encode AchievementRequirement: \(error)")
             }
-            self.requirementData = encoded
         }
     }
 

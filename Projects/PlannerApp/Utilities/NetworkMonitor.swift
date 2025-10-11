@@ -9,6 +9,7 @@ extension NSNotification.Name {
     static let networkStatusChanged = NSNotification.Name("networkStatusChanged")
 }
 
+@MainActor
 class NetworkMonitor {
     static let shared = NetworkMonitor()
 
@@ -33,15 +34,17 @@ class NetworkMonitor {
         self.monitor.start(queue: self.queue)
 
         self.monitor.pathUpdateHandler = { [weak self] path in
-            self?.isConnected = path.status == .satisfied
-            self?.getConnectionType(path)
+            Task { @MainActor in
+                self?.isConnected = path.status == .satisfied
+                self?.getConnectionType(path)
 
-            // Post notification of status change
-            NotificationCenter.default.post(
-                name: .networkStatusChanged,
-                object: nil,
-                userInfo: ["isConnected": self?.isConnected ?? false]
-            )
+                // Post notification of status change
+                NotificationCenter.default.post(
+                    name: .networkStatusChanged,
+                    object: nil,
+                    userInfo: ["isConnected": self?.isConnected ?? false]
+                )
+            }
         }
     }
 

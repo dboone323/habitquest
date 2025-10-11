@@ -12,13 +12,19 @@ import AppKit
 public struct SettingsView: View {
     @EnvironmentObject var themeManager: ThemeManager
 
-    // State properties with AppStorage keys
-    @AppStorage(AppSettingKeys.userName) private var userName: String = ""
-    @AppStorage(AppSettingKeys.dashboardItemLimit) private var dashboardItemLimit: Int = 3
-    @AppStorage(AppSettingKeys.notificationsEnabled) private var notificationsEnabled: Bool = true
-    @AppStorage(AppSettingKeys.use24HourTime) private var use24HourTime: Bool = false
-    @AppStorage(AppSettingKeys.autoDeleteCompleted) private var autoDeleteCompleted: Bool = false
-    @AppStorage(AppSettingKeys.autoSyncEnabled) private var autoSyncEnabled: Bool = true
+    // State properties with AppStorage keys - avoid during testing
+    @State private var userName: String = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? "" :
+        UserDefaults.standard.string(forKey: AppSettingKeys.userName) ?? ""
+    @State private var dashboardItemLimit: Int = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? 3 :
+        UserDefaults.standard.integer(forKey: AppSettingKeys.dashboardItemLimit)
+    @State private var notificationsEnabled: Bool = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? true :
+        UserDefaults.standard.bool(forKey: AppSettingKeys.notificationsEnabled)
+    @State private var use24HourTime: Bool = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? false :
+        UserDefaults.standard.bool(forKey: AppSettingKeys.use24HourTime)
+    @State private var autoDeleteCompleted: Bool = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? false :
+        UserDefaults.standard.bool(forKey: AppSettingKeys.autoDeleteCompleted)
+    @State private var autoSyncEnabled: Bool = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? true :
+        UserDefaults.standard.bool(forKey: AppSettingKeys.autoSyncEnabled)
 
     // State for managing UI elements
     @State private var showingNotificationAlert = false

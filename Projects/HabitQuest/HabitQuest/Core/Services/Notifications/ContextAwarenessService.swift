@@ -70,7 +70,7 @@ final class ContextAwarenessService {
         content.userInfo = [
             "habitId": habit.id.uuidString,
             "milestoneStreak": milestone.streakCount,
-            "notificationType": "celebration",
+            "notificationType": "celebration"
         ]
 
         // Schedule immediately
@@ -175,7 +175,7 @@ final class ContextAwarenessService {
 
         content.userInfo = [
             "habitId": habit.id.uuidString,
-            "notificationType": "urgent",
+            "notificationType": "urgent"
         ]
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1800, repeats: false) // 30 minutes
@@ -203,7 +203,7 @@ final class ContextAwarenessService {
 
         content.userInfo = [
             "habitId": habit.id.uuidString,
-            "notificationType": "motivational",
+            "notificationType": "motivational"
         ]
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7200, repeats: false) // 2 hours

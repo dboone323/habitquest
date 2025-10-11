@@ -391,7 +391,7 @@ final class ContentViewTests: XCTestCase {
             (18, "sunset.fill"), // Evening
             (20, "sunset.fill"), // Evening
             (22, "moon.stars.fill"), // Night
-            (23, "moon.stars.fill"), // Late night
+            (23, "moon.stars.fill") // Late night
         ]
 
         for testCase in testCases {

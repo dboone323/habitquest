@@ -9,10 +9,11 @@
 /* Begin PBXBuildFile section */
 		0631A476FC374621BC21A58C /* PlatformFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC6142FC88F4A8B969FE162 /* PlatformFeatures.swift */; };
 		09B893646F094912912D8D0C /* AccessibilityEnhancements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CF15C9EA30469D94143B05 /* AccessibilityEnhancements.swift */; };
-		0FAE27BD7336477CB7DC2463 /* EnhancedCloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D463C5CFA44C758C406995 /* EnhancedCloudKitManager.swift */; };
+		15EA66CE55EA4C4B69D85C1C /* AITaskPrioritizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E73D02B302CE29F41A7776 /* AITaskPrioritizationService.swift */; };
 		16FA9BF3C41C4EA2B946F14D /* ThemePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF43B4BBA5047188588BA80 /* ThemePreviewView.swift */; };
 		18E319D4BC52297CAF6E41EC /* GoalsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91AE0D3709D0506CD284981E /* GoalsHeaderView.swift */; };
 		21BAD7D2378327B009F15F9D /* JournalEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BD86FF3B81ABBF6E80B3F5 /* JournalEmptyStateView.swift */; };
+		21DD825BCDA247BBBC952C07 /* PlannerDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DD825BCDA247BBBC952C06 /* PlannerDataManager.swift */; };
 		249783CC7293CA1AC4FE3F41 /* GoalItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CE66A27B669533E41CF4ED /* GoalItemView.swift */; };
 		294A965B2C181381C5794419 /* TaskManagerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170FDFEBC7979AC62BA42F5 /* TaskManagerHeaderView.swift */; };
 		2979003D497008247A47681B /* TaskRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C94F4AAD22B1FF3C05D35B2 /* TaskRow.swift */; };
@@ -36,7 +37,6 @@
 		685D29C72DC13FE800967CFB /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F0974B2DC01FE100092697 /* Task.swift */; };
 		685D29C82DC13FED00967CFB /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F0974A2DC01FE100092697 /* JournalEntry.swift */; };
 		685D29CA2DC14A7900967CFB /* DataManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685D29C92DC14A7900967CFB /* DataManagerError.swift */; };
-                21DD825BCDA247BBBC952C07 /* PlannerDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DD825BCDA247BBBC952C06 /* PlannerDataManager.swift */; };
 		685D29D42DC14EB000967CFB /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685D29D32DC14EA900967CFB /* DashboardViewModel.swift */; };
 		685D29D72DC1542000967CFB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685D29D62DC1542000967CFB /* SettingsView.swift */; };
 		685D29D92DC1545E00967CFB /* AppSettingKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685D29D82DC1545E00967CFB /* AppSettingKeys.swift */; };
@@ -73,6 +73,7 @@
 		DBD2722588798E4B7A2A03A9 /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC169814801F8CDBBBC73C7 /* TaskListView.swift */; };
 		EC334CC720874E159EB225A4 /* TaskRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3698D37148483F8BE8E470 /* TaskRowView.swift */; };
 		F88CE36DFF624C828ADE25B1 /* VisualEnhancements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A5A2135AE4820844E6552 /* VisualEnhancements.swift */; };
+		FE7B0959BCC9379FEC332199 /* AIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE09162C289B9DB6B199AA4 /* AIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +103,7 @@
 		143769D581A1407585E7A8B9 /* EventRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Calendar/EventRowView.swift; sourceTree = "<group>"; };
 		1822D76E9EE901F530EA36CD /* UpcomingItemView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UpcomingItemView.swift; path = Components/Dashboard/UpcomingItemView.swift; sourceTree = "<group>"; };
 		1ED107C0350FEE4D63969F37 /* GoalsListView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GoalsListView.swift; path = Components/Goals/GoalsListView.swift; sourceTree = "<group>"; };
+		21DD825BCDA247BBBC952C06 /* PlannerDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannerDataManager.swift; sourceTree = "<group>"; };
 		2A3A5A2135AE4820844E6552 /* VisualEnhancements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/VisualEnhancements.swift; sourceTree = "<group>"; };
 		2A8E365566F7FC5BBEAC8DBB /* GoalsEmptyStateView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GoalsEmptyStateView.swift; path = Components/Goals/GoalsEmptyStateView.swift; sourceTree = "<group>"; };
 		32CF15C9EA30469D94143B05 /* AccessibilityEnhancements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accessibility/AccessibilityEnhancements.swift; sourceTree = "<group>"; };
@@ -109,7 +111,7 @@
 		3BC169814801F8CDBBBC73C7 /* TaskListView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskListView.swift; path = Components/Tasks/TaskListView.swift; sourceTree = "<group>"; };
 		4E2739643F6B9EF7269FC1F2 /* JournalHeaderView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JournalHeaderView.swift; path = Components/Journal/JournalHeaderView.swift; sourceTree = "<group>"; };
 		50DD74B7533C421198F24E98 /* EnhancedPlatformNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/EnhancedPlatformNavigation.swift; sourceTree = "<group>"; };
-		53D463C5CFA44C758C406995 /* EnhancedCloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit/EnhancedCloudKitManager.swift; sourceTree = "<group>"; };
+		55E73D02B302CE29F41A7776 /* AITaskPrioritizationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AITaskPrioritizationService.swift; path = Services/AITaskPrioritizationService.swift; sourceTree = "<group>"; };
 		582BE53AF6BD3B42500BBFEE /* JournalRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JournalRow.swift; path = Components/Journal/JournalRow.swift; sourceTree = "<group>"; };
 		683216232DE49E4C003EDB36 /* CloudKitEnhancements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitEnhancements.swift; sourceTree = "<group>"; };
 		683216242DE49E4C003EDB36 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
@@ -120,7 +122,6 @@
 		6832162A2DE49E4C003EDB36 /* PlatformAdaptiveNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformAdaptiveNavigation.swift; sourceTree = "<group>"; };
 		6832162B2DE49E4C003EDB36 /* SyncStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncStatusView.swift; sourceTree = "<group>"; };
 		685D29C92DC14A7900967CFB /* DataManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerError.swift; sourceTree = "<group>"; };
-                21DD825BCDA247BBBC952C06 /* PlannerDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannerDataManager.swift; sourceTree = "<group>"; };
 		685D29D32DC14EA900967CFB /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		685D29D62DC1542000967CFB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		685D29D82DC1545E00967CFB /* AppSettingKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingKeys.swift; sourceTree = "<group>"; };
@@ -147,12 +148,14 @@
 		68F097552DC020A200092697 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		68F097562DC020BC00092697 /* PlannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannerApp.swift; sourceTree = "<group>"; };
 		68F097662DC025AF00092697 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		8CE09162C289B9DB6B199AA4 /* AIView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AIView.swift; path = Views/AIView.swift; sourceTree = "<group>"; };
+		8FCEB989B2A464998A639437 /* TaskInputView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskInputView.swift; path = Views/Tasks/TaskInputView.swift; sourceTree = "<group>"; };
 		91AE0D3709D0506CD284981E /* GoalsHeaderView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GoalsHeaderView.swift; path = Components/Goals/GoalsHeaderView.swift; sourceTree = "<group>"; };
-		9893F8A4E6CA64CE4448867C /* TaskDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskDataManager.swift; path = DataManagers/TaskDataManager.swift; sourceTree = "<group>"; };
+		9893F8A4E6CA64CE4448867C /* TaskDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskDataManager.swift; path = Services/TaskDataManager.swift; sourceTree = "<group>"; };
 		B67ACE95BBA199F7EAE8FE14 /* QuickStatCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = QuickStatCard.swift; path = Components/Dashboard/QuickStatCard.swift; sourceTree = "<group>"; };
-		BB4B813820E60EF9E7D606DD /* CalendarDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CalendarDataManager.swift; path = DataManagers/CalendarDataManager.swift; sourceTree = "<group>"; };
+		BB4B813820E60EF9E7D606DD /* CalendarDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CalendarDataManager.swift; path = Services/CalendarDataManager.swift; sourceTree = "<group>"; };
 		BD109E92AF51E8CD49A8BF8B /* JournalListView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JournalListView.swift; path = Components/Journal/JournalListView.swift; sourceTree = "<group>"; };
-		BF2B66F4EF7982B077BA0D63 /* JournalDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JournalDataManager.swift; path = DataManagers/JournalDataManager.swift; sourceTree = "<group>"; };
+		BF2B66F4EF7982B077BA0D63 /* JournalDataManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JournalDataManager.swift; path = Services/JournalDataManager.swift; sourceTree = "<group>"; };
 		C170FDFEBC7979AC62BA42F5 /* TaskManagerHeaderView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskManagerHeaderView.swift; path = Components/Tasks/TaskManagerHeaderView.swift; sourceTree = "<group>"; };
 		CBC37A48E0964021A66D4818 /* GoalRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Calendar/GoalRowView.swift; sourceTree = "<group>"; };
 		DE90D4582C55CDBEFE61F21F /* ProgressUpdateSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProgressUpdateSheet.swift; path = Components/Goals/ProgressUpdateSheet.swift; sourceTree = "<group>"; };
@@ -160,8 +163,6 @@
 		EFF43B4BBA5047188588BA80 /* ThemePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Settings/ThemePreviewView.swift; sourceTree = "<group>"; };
 		F9BD86FF3B81ABBF6E80B3F5 /* JournalEmptyStateView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JournalEmptyStateView.swift; path = Components/Journal/JournalEmptyStateView.swift; sourceTree = "<group>"; };
 		FCC6142FC88F4A8B969FE162 /* PlatformFeatures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform/PlatformFeatures.swift; sourceTree = "<group>"; };
-            8FCEB989B2A464998A639437 /* TaskInputView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskInputView.swift; path = Views/Tasks/TaskInputView.swift; sourceTree = "<group>"; };
-
 		FD4CD3BF68B740DCA1401394 /* DateSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Calendar/DateSectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -270,7 +271,6 @@
 			children = (
 				32CF15C9EA30469D94143B05 /* AccessibilityEnhancements.swift */,
 				32D83ECDC90B4A4E86570F04 /* CloudKitMigrationHelper.swift */,
-				53D463C5CFA44C758C406995 /* EnhancedCloudKitManager.swift */,
 				50DD74B7533C421198F24E98 /* EnhancedPlatformNavigation.swift */,
 				2A3A5A2135AE4820844E6552 /* VisualEnhancements.swift */,
 				FCC6142FC88F4A8B969FE162 /* PlatformFeatures.swift */,
@@ -292,9 +292,9 @@
 				685D29DB2DC159EE00967CFB /* Styling */,
 				685D29DA2DC1566A00967CFB /* Utilities */,
 				685D29D12DC14E6B00967CFB /* ViewModels */,
-				68F097432DC01F8500092697 /* MainApp */,
+				68F097432DC01F8500092697 /* Views */,
 				68F097422DC01F7C00092697 /* Views */,
-				68F097412DC01F6F00092697 /* DataManagers */,
+				68F097412DC01F6F00092697 /* Services */,
 				68F097402DC01F6300092697 /* Models */,
 				68F097172DC01EFA00092697 /* PlannerApp */,
 				68F097262DC01EFB00092697 /* PlannerAppTests */,
@@ -322,6 +322,8 @@
 				3BC169814801F8CDBBBC73C7 /* TaskListView.swift */,
 				B67ACE95BBA199F7EAE8FE14 /* QuickStatCard.swift */,
 				0106DDABAEA7A50890F935E6 /* QuickActionCard.swift */,
+				8CE09162C289B9DB6B199AA4 /* AIView.swift */,
+				55E73D02B302CE29F41A7776 /* AITaskPrioritizationService.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -346,14 +348,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		68F097412DC01F6F00092697 /* DataManagers */ = {
+		68F097412DC01F6F00092697 /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				685D29C92DC14A7900967CFB /* DataManagerError.swift */,
 				68F0974C2DC01FF500092697 /* GoalDataManager.swift */,
-                            21DD825BCDA247BBBC952C06 /* PlannerDataManager.swift */,
+				21DD825BCDA247BBBC952C06 /* PlannerDataManager.swift */,
 			);
-			path = DataManagers;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		68F097422DC01F7C00092697 /* Views */ = {
@@ -368,14 +370,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		68F097432DC01F8500092697 /* MainApp */ = {
+		68F097432DC01F8500092697 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				68F097662DC025AF00092697 /* DashboardView.swift */,
 				68F097552DC020A200092697 /* MainTabView.swift */,
 				68F097562DC020BC00092697 /* PlannerApp.swift */,
 			);
-			path = MainApp;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		68F097442DC01F9100092697 /* Journal */ = {
@@ -549,7 +551,7 @@
 				685D29D72DC1542000967CFB /* SettingsView.swift in Sources */,
 				68F097612DC023EB00092697 /* JournalView.swift in Sources */,
 				68F0975B2DC023C700092697 /* CalendarView.swift in Sources */,
-                            21DD825BCDA247BBBC952C07 /* PlannerDataManager.swift in Sources */,
+				21DD825BCDA247BBBC952C07 /* PlannerDataManager.swift in Sources */,
 				685D29CA2DC14A7900967CFB /* DataManagerError.swift in Sources */,
 				68F097602DC023E500092697 /* JournalDetailView.swift in Sources */,
 				68F097672DC025AF00092697 /* DashboardView.swift in Sources */,
@@ -578,7 +580,6 @@
 				68F097592DC0232400092697 /* MainTabView.swift in Sources */,
 				09B893646F094912912D8D0C /* AccessibilityEnhancements.swift in Sources */,
 				C281D26FA91D4D84A1BACB90 /* CloudKitMigrationHelper.swift in Sources */,
-				0FAE27BD7336477CB7DC2463 /* EnhancedCloudKitManager.swift in Sources */,
 				35AE9E7F2E454E2EBE420FC1 /* EnhancedPlatformNavigation.swift in Sources */,
 				F88CE36DFF624C828ADE25B1 /* VisualEnhancements.swift in Sources */,
 				0631A476FC374621BC21A58C /* PlatformFeatures.swift in Sources */,
@@ -611,6 +612,8 @@
 				DBD2722588798E4B7A2A03A9 /* TaskListView.swift in Sources */,
 				59B649CEF0CB23ADE638EFCD /* QuickStatCard.swift in Sources */,
 				BE39633A2A134D4F112E82F9 /* QuickActionCard.swift in Sources */,
+				FE7B0959BCC9379FEC332199 /* AIView.swift in Sources */,
+				15EA66CE55EA4C4B69D85C1C /* AITaskPrioritizationService.swift in Sources */,
 			);
 		};
 		68F0971F2DC01EFB00092697 /* Sources */ = {
@@ -779,9 +782,10 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.DanielStevens.PlannerApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -789,7 +793,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.4;
 			};
@@ -817,9 +821,10 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.DanielStevens.PlannerApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -827,7 +832,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.4;
 			};
@@ -841,14 +846,15 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3N5528D82R;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.DanielStevens.PlannerAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlannerApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PlannerApp";
 				XROS_DEPLOYMENT_TARGET = 2.4;
@@ -863,14 +869,15 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3N5528D82R;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.DanielStevens.PlannerAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlannerApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PlannerApp";
 				XROS_DEPLOYMENT_TARGET = 2.4;
@@ -884,14 +891,15 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3N5528D82R;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.DanielStevens.PlannerAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				TEST_TARGET_NAME = PlannerApp;
 				XROS_DEPLOYMENT_TARGET = 2.4;
@@ -905,14 +913,15 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3N5528D82R;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.DanielStevens.PlannerAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				TEST_TARGET_NAME = PlannerApp;
 				XROS_DEPLOYMENT_TARGET = 2.4;

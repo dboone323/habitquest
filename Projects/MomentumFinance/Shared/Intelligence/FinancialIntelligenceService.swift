@@ -1,5 +1,5 @@
-import CoreML
 import Foundation
+import CoreML
 import OSLog
 import SwiftData
 import SwiftUI

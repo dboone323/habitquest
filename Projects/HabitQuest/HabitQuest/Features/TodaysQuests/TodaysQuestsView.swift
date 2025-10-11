@@ -215,8 +215,11 @@ private struct AddQuestView: View {
                 }
             }
             .navigationTitle("New Quest")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
+                #if os(iOS)
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
                         self.dismiss()
@@ -238,6 +241,29 @@ private struct AddQuestView: View {
                     .accessibilityLabel("Add")
                     .disabled(self.name.isEmpty)
                 }
+                #else
+                ToolbarItem {
+                    Button("Cancel") {
+                        self.dismiss()
+                    }
+                    .accessibilityLabel("Cancel")
+                }
+
+                ToolbarItem {
+                    Button("Add") {
+                        let habit = Habit(
+                            name: name,
+                            habitDescription: description,
+                            frequency: frequency,
+                            xpValue: xpValue
+                        )
+                        self.onAdd(habit)
+                        self.dismiss()
+                    }
+                    .accessibilityLabel("Add")
+                    .disabled(self.name.isEmpty)
+                }
+                #endif
             }
         }
     }

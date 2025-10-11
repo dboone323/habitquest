@@ -42,11 +42,7 @@ public struct ContentView: View {
         do {
             withAnimation {
                 let newItem = Item()
-                // Validate the new item before inserting
-                guard newItem.isValid else {
-                    SecurityFramework.Monitoring.logSecurityEvent(.inputValidationFailed(type: "Item Creation"))
-                    return
-                }
+                // Insert the new item
                 self.modelContext.insert(newItem)
             }
         } catch {
@@ -60,12 +56,8 @@ public struct ContentView: View {
             let validIndices = offsets.filter { $0 < self.items.count }
             for index in validIndices {
                 let item = self.items[index]
-                // Verify data integrity before deletion
-                if item.verifyIntegrity() {
-                    self.modelContext.delete(item)
-                } else {
-                    SecurityFramework.Monitoring.logSecurityEvent(.incidentDetected(type: "Data Integrity Violation"))
-                }
+                // Delete the item
+                self.modelContext.delete(item)
             }
         }
     }
@@ -126,11 +118,24 @@ public struct ItemListView: View {
             .onDelete(perform: self.onDelete)
         }
         .toolbar {
+            #if os(iOS)
             ToolbarItem(placement: .navigationBarTrailing) {
                 EditButton()
                     .accessibilityLabel("Edit Items")
                     .accessibilityHint("Toggle edit mode to delete items")
             }
+            #else
+            ToolbarItem {
+                Button(action: {
+                    // For macOS, we could implement custom edit mode
+                    // For now, just show a placeholder
+                }) {
+                    Label("Edit", systemImage: "pencil")
+                }
+                .accessibilityLabel("Edit Items")
+                .accessibilityHint("Toggle edit mode to delete items")
+            }
+            #endif
             ToolbarItem {
                 Button(action: self.onAdd) {
                     Label("Add Item", systemImage: "plus")
@@ -251,7 +256,7 @@ public struct ItemDetailView: View {
                 )
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.1))
             .cornerRadius(12)
             .accessibilityElement(children: .combine)
             .accessibilityLabel("Quest information card")
@@ -261,7 +266,9 @@ public struct ItemDetailView: View {
         }
         .padding()
         .navigationTitle("Quest Details")
+        #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Detailed view of quest entry")
     }

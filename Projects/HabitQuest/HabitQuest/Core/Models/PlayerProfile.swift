@@ -6,10 +6,18 @@ import SwiftData
 @Model
 final class PlayerProfile {
     /// Current character level (starts at 1)
-    var level: Int
+    var level: Int {
+        didSet {
+            level = max(1, level)
+        }
+    }
 
     /// Current experience points accumulated
-    var currentXP: Int
+    var currentXP: Int {
+        didSet {
+            currentXP = max(0, currentXP)
+        }
+    }
 
     /// Experience points needed to reach the next level
     var xpForNextLevel: Int
@@ -31,11 +39,12 @@ final class PlayerProfile {
 
     /// Calculate progress toward next level as a percentage (0.0 to 1.0)
     var xpProgress: Float {
-        let previousLevelXP = self.level > 1 ? GameRules.calculateXPForLevel(self.level - 1) : 0
-        let currentLevelXP = GameRules.calculateXPForLevel(self.level)
-        let progressInCurrentLevel = self.currentXP - previousLevelXP
-        let xpNeededForCurrentLevel = currentLevelXP - previousLevelXP
+        let xpForCurrentLevel = GameRules.calculateXPForLevel(level)
+        let xpForNextLevel = GameRules.calculateXPForLevel(level + 1)
+        let xpInLevel = currentXP - xpForCurrentLevel
+        let xpNeeded = xpForNextLevel - xpForCurrentLevel
 
-        return xpNeededForCurrentLevel > 0 ? Float(progressInCurrentLevel) / Float(xpNeededForCurrentLevel) : 0.0
+        guard xpNeeded > 0 && xpInLevel >= 0 else { return 0.0 }
+        return min(Float(xpInLevel) / Float(xpNeeded), 1.0)
     }
 }

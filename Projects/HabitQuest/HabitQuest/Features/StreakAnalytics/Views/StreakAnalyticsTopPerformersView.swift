@@ -15,7 +15,7 @@ public struct StreakAnalyticsTopPerformersView: View {
             }
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(Color.secondary.opacity(0.1))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 8)
     }

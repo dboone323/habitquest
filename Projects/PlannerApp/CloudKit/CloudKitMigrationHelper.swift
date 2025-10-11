@@ -8,7 +8,7 @@ class CloudKitMigrationHelper {
     static let shared = CloudKitMigrationHelper()
 
     private let migrationKey = "hasPerformedCloudKitMigration"
-    private let cloudKitManager = EnhancedCloudKitManager.shared // Changed to EnhancedCloudKitManager
+    private let cloudKitManager = CloudKitManager.shared // Changed to CloudKitManager
 
     private init() {}
 

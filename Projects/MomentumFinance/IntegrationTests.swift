@@ -3,23 +3,25 @@ import Foundation
 // MARK: - Integration Tests
 
 func runIntegrationTests() {
+    // Use fixed date for deterministic tests
+    let testDate = Date(timeIntervalSince1970: 1640995200) // 2022-01-01 00:00:00 UTC
     runTest("testAccountTransactionIntegration") {
         let transaction1 = FinancialTransaction(
             title: "Salary",
             amount: 3000.0,
-            date: Date(),
+            date: testDate,
             transactionType: .income
         )
         let transaction2 = FinancialTransaction(
             title: "Rent",
             amount: 1200.0,
-            date: Date(),
+            date: testDate,
             transactionType: .expense
         )
         let transaction3 = FinancialTransaction(
             title: "Groceries",
             amount: 300.0,
-            date: Date(),
+            date: testDate,
             transactionType: .expense
         )
 
@@ -39,24 +41,24 @@ func runIntegrationTests() {
         let transaction1 = FinancialTransaction(
             title: "Restaurant",
             amount: 50.0,
-            date: Date(),
+            date: testDate,
             transactionType: .expense
         )
         let transaction2 = FinancialTransaction(
             title: "Coffee Shop",
             amount: 25.0,
-            date: Date(),
+            date: testDate,
             transactionType: .expense
         )
 
-        let category = ExpenseCategory(
+        // Use TransactionCategory instead of ExpenseCategory for consistency
+        let category = TransactionCategory(
             name: "Food & Dining",
-            color: "#FF6B6B",
             transactions: [transaction1, transaction2]
         )
 
         assert(category.transactions.count == 2)
-        assert(category.totalAmount == 75.0)
+        assert(category.totalExpenses == 75.0)
     }
 
     runTest("testMultiAccountBalanceCalculation") {
@@ -65,8 +67,8 @@ func runIntegrationTests() {
             type: .checking,
             balance: 500.0,
             transactions: [
-                FinancialTransaction(title: "Deposit", amount: 1000.0, date: Date(), transactionType: .income),
-                FinancialTransaction(title: "ATM", amount: 200.0, date: Date(), transactionType: .expense)
+                FinancialTransaction(title: "Deposit", amount: 1000.0, date: testDate, transactionType: .income),
+                FinancialTransaction(title: "ATM", amount: 200.0, date: testDate, transactionType: .expense)
             ]
         )
 
@@ -75,7 +77,7 @@ func runIntegrationTests() {
             type: .savings,
             balance: 2000.0,
             transactions: [
-                FinancialTransaction(title: "Interest", amount: 50.0, date: Date(), transactionType: .income)
+                FinancialTransaction(title: "Interest", amount: 50.0, date: testDate, transactionType: .income)
             ]
         )
 
@@ -85,29 +87,27 @@ func runIntegrationTests() {
     }
 
     runTest("testTransactionCategoryGrouping") {
-        let foodCategory = ExpenseCategory(
+        let foodCategory = TransactionCategory(
             name: "Food",
-            color: "#FF6B6B",
             transactions: [
-                FinancialTransaction(title: "Groceries", amount: 100.0, date: Date(), transactionType: .expense),
-                FinancialTransaction(title: "Restaurant", amount: 50.0, date: Date(), transactionType: .expense)
+                FinancialTransaction(title: "Groceries", amount: 100.0, date: testDate, transactionType: .expense),
+                FinancialTransaction(title: "Restaurant", amount: 50.0, date: testDate, transactionType: .expense)
             ]
         )
 
-        let transportCategory = ExpenseCategory(
+        let transportCategory = TransactionCategory(
             name: "Transportation",
-            color: "#4ECDC4",
             transactions: [
-                FinancialTransaction(title: "Gas", amount: 60.0, date: Date(), transactionType: .expense),
-                FinancialTransaction(title: "Bus Pass", amount: 40.0, date: Date(), transactionType: .expense)
+                FinancialTransaction(title: "Gas", amount: 60.0, date: testDate, transactionType: .expense),
+                FinancialTransaction(title: "Bus Pass", amount: 40.0, date: testDate, transactionType: .expense)
             ]
         )
 
         let categories = [foodCategory, transportCategory]
-        let totalExpenses = categories.map(\.totalAmount).reduce(0, +)
+        let totalExpenses = categories.map(\.totalExpenses).reduce(0, +)
 
         assert(totalExpenses == 250.0)
-        assert(foodCategory.totalAmount == 150.0)
-        assert(transportCategory.totalAmount == 100.0)
+        assert(foodCategory.totalExpenses == 150.0)
+        assert(transportCategory.totalExpenses == 100.0)
     }
 }

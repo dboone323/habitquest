@@ -202,13 +202,24 @@ public struct BehavioralInsights {
 
 // MARK: - Habit Suggestion Types
 
-public struct HabitSuggestion {
+public struct AnalyticsHabitSuggestion: Identifiable {
+    public let id: UUID
     public let name: String
     public let description: String
     public let category: AnalyticsHabitCategory
     public let difficulty: AnalyticsHabitDifficulty
     public let reasoning: String
     public let expectedSuccess: Double
+
+    public init(name: String, description: String, category: AnalyticsHabitCategory, difficulty: AnalyticsHabitDifficulty, reasoning: String, expectedSuccess: Double) {
+        self.id = UUID()
+        self.name = name
+        self.description = description
+        self.category = category
+        self.difficulty = difficulty
+        self.reasoning = reasoning
+        self.expectedSuccess = expectedSuccess
+    }
 }
 
 public struct UserProfile {

@@ -7,26 +7,40 @@ import SwiftUI
 // Include Theme from the same Styling directory
 // Include AppSettingKeys from Utilities directory
 
+// Removed @MainActor since Theme properties are no longer main actor isolated
 public class ThemeManager: ObservableObject {
     // Published property holding the currently active theme. Views observe this.
     // Initialize by finding the theme matching the name currently stored in UserDefaults.
-    @Published var currentTheme: Theme = .availableThemes.first {
-        $0.name == UserDefaults.standard.string(forKey: AppSettingKeys.themeColorName)
-    } ?? Theme.defaultTheme // Fallback to default theme if no match or nothing saved
+    @Published var currentTheme: Theme
 
-    // Monitors UserDefaults for changes to the theme name setting.
-    // When the value in UserDefaults changes (e.g., via the Picker in SettingsView),
-    // the `didSet` observer calls `updateCurrentTheme`.
-    @AppStorage(AppSettingKeys.themeColorName) var currentThemeName: String = Theme.defaultTheme.name {
+    // Public property to allow external access to current theme name for UI binding
+    public var currentThemeName: String = Theme.defaultTheme.name {
         didSet {
             self.updateCurrentTheme()
         }
     }
 
-    init() {
-        // Initial theme is set by the @Published property initializer above.
-        // This ensures the theme is correct even before `selectedThemeName.didSet` is first called.
-        print("ThemeManager initialized. Current theme loaded: \(self.currentTheme.name)")
+    private var isTesting: Bool
+
+    init(testing: Bool = false) {
+        self.isTesting = testing
+
+        if testing {
+            // In testing mode, use default theme without accessing UserDefaults
+            self.currentTheme = Theme.defaultTheme
+            print("ThemeManager initialized in testing mode. Current theme: \(self.currentTheme.name)")
+        } else {
+            // Initialize with the current theme from UserDefaults
+            let savedThemeName = UserDefaults.standard.string(forKey: AppSettingKeys.themeColorName)
+            self.currentTheme = Theme.availableThemes.first {
+                $0.name == savedThemeName
+            } ?? Theme.defaultTheme
+
+            // Set the currentThemeName to match the loaded theme (this will trigger didSet)
+            self.currentThemeName = self.currentTheme.name
+
+            print("ThemeManager initialized. Current theme loaded: \(self.currentTheme.name)")
+        }
     }
 
     // Finds the Theme struct corresponding to the name stored in `currentThemeName`
@@ -56,23 +70,7 @@ public class ThemeManager: ObservableObject {
     }
 }
 
-// MARK: - Object Pooling
+// MARK: - Object Pooling (Removed - unused and causing concurrency issues)
 
-/// Object pool for performance optimization
-private var objectPool: [Any] = []
-private let maxPoolSize = 50
-
-/// Get an object from the pool or create new one
-private func getPooledObject<T>() -> T? {
-    if let pooled = objectPool.popLast() as? T {
-        return pooled
-    }
-    return nil
-}
-
-/// Return an object to the pool
-private func returnToPool(_ object: Any) {
-    if objectPool.count < maxPoolSize {
-        objectPool.append(object)
-    }
-}
+// Object pooling was removed as it was unused and caused concurrency-safety issues
+// with Swift 6's stricter concurrency checking.

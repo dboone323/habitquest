@@ -9,7 +9,7 @@ import CloudKit
 
 // MARK: - CloudKit Subscriptions Extensions
 
-extension EnhancedCloudKitManager {
+extension CloudKitManager {
     /// Set up CloudKit subscriptions for silent push notifications when data changes
     func setupCloudKitSubscriptions() async {
         do {

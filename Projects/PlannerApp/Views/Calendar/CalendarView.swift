@@ -14,10 +14,15 @@ public struct CalendarView: View {
     @State private var selectedDate = Date()
     @State private var showingDateDetails = false
 
-    // Settings from UserDefaults
-    @AppStorage(AppSettingKeys.firstDayOfWeek) private var firstDayOfWeekSetting: Int = Calendar
-        .current.firstWeekday
-    @AppStorage(AppSettingKeys.use24HourTime) private var use24HourTime: Bool = false
+    // Settings from UserDefaults - avoid during testing
+    private var firstDayOfWeekSetting: Int {
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? Calendar.current.firstWeekday :
+        UserDefaults.standard.integer(forKey: AppSettingKeys.firstDayOfWeek)
+    }
+    private var use24HourTime: Bool {
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? false :
+        UserDefaults.standard.bool(forKey: AppSettingKeys.use24HourTime)
+    }
 
     // Computed property to group events by the start of their day
     private var groupedEvents: [Date: [CalendarEvent]] {

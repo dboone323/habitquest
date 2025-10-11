@@ -37,7 +37,7 @@ public struct QuickActionCard: View {
     QuickActionCard(
         title: "Add Task",
         icon: "plus.circle.fill",
-        color: .blue
+        color: Color.blue.opacity(0.8)
     ) {
         print("Action tapped")
     }

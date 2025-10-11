@@ -15,7 +15,7 @@ import SystemConfiguration
 
 // MARK: - Device Management Extensions
 
-extension EnhancedCloudKitManager {
+extension CloudKitManager {
     /// Structure to represent a device syncing with iCloud
     struct SyncedDevice: Identifiable {
         let id = UUID()

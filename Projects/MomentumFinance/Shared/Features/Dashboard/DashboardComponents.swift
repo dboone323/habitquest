@@ -189,7 +189,7 @@ public struct DashboardInsights: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.vertical, 20)
             } else {
-                ForEach(self.insights.prefix(2)) { insight in
+                ForEach(Array(self.insights.prefix(2)), id: \.id) { insight in
                     HStack(spacing: 12) {
                         Image(systemName: insight.type.icon)
                             .foregroundColor(.blue)
@@ -198,7 +198,7 @@ public struct DashboardInsights: View {
                             Text(insight.title)
                                 .font(.subheadline)
                                 .foregroundColor(.primary)
-                            Text(insight.description)
+                            Text(insight.insightDescription)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .lineLimit(2)

@@ -33,8 +33,11 @@ public struct StreakAnalyticsView: View {
                 .padding()
             }
             .navigationTitle("Streak Analytics")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.large)
+            #endif
             .toolbar {
+                #if os(iOS)
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     if self.viewModel.analyticsData != nil {
                         Menu {
@@ -66,6 +69,39 @@ public struct StreakAnalyticsView: View {
                         .disabled(self.viewModel.isLoading)
                     }
                 }
+                #else
+                ToolbarItem {
+                    if self.viewModel.analyticsData != nil {
+                        Menu {
+                            Button("Export Data", systemImage: "square.and.arrow.up") {
+                                Task { await self.viewModel.exportAnalytics() }
+                            }
+                            .accessibilityLabel("Export Data")
+
+                            Button("Share Report", systemImage: "square.and.arrow.up.fill") {
+                                self.viewModel.shareAnalyticsReport()
+                            }
+                            .accessibilityLabel("Share Report")
+
+                            Divider()
+
+                            Button("Refresh", systemImage: "arrow.clockwise") {
+                                Task { await self.viewModel.refreshAnalytics() }
+                            }
+                            .accessibilityLabel("Refresh")
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
+                        }
+                        .disabled(self.viewModel.isLoading)
+                    } else {
+                        Button("Refresh") {
+                            Task { await self.viewModel.refreshAnalytics() }
+                        }
+                        .accessibilityLabel("Refresh")
+                        .disabled(self.viewModel.isLoading)
+                    }
+                }
+                #endif
             }
         }
     }

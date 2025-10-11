@@ -10,7 +10,7 @@ final class HabitSuggestionService {
     }
 
     /// Generate personalized habit suggestions using ML
-    func generateHabitSuggestions() async -> [HabitSuggestion] {
+    func generateHabitSuggestions() async -> [AnalyticsHabitSuggestion] {
         let existingHabits = await fetchAllHabits()
         let userProfile = await analyzeUserProfile(from: existingHabits)
 
@@ -18,13 +18,13 @@ final class HabitSuggestionService {
             self.generateCategoryBasedSuggestions(profile: userProfile),
             self.generateTimeBasedSuggestions(profile: userProfile),
             self.generateComplementarySuggestions(existing: existingHabits),
-            self.generateTrendingSuggestions(),
+            self.generateTrendingSuggestions()
         ].flatMap(\.self)
     }
 
     /// Generate suggestions based on user's existing habit categories
-    func generateCategoryBasedSuggestions(profile: UserProfile) -> [HabitSuggestion] {
-        var suggestions: [HabitSuggestion] = []
+    func generateCategoryBasedSuggestions(profile: UserProfile) -> [AnalyticsHabitSuggestion] {
+        var suggestions: [AnalyticsHabitSuggestion] = []
 
         // Analyze category gaps
         let existingCategories = Set(profile.existingHabits.map(\.category))
@@ -40,8 +40,8 @@ final class HabitSuggestionService {
     }
 
     /// Generate suggestions based on user's time patterns and availability
-    func generateTimeBasedSuggestions(profile: UserProfile) -> [HabitSuggestion] {
-        var suggestions: [HabitSuggestion] = []
+    func generateTimeBasedSuggestions(profile: UserProfile) -> [AnalyticsHabitSuggestion] {
+        var suggestions: [AnalyticsHabitSuggestion] = []
 
         // Analyze peak productivity times
         let peakHour = profile.peakProductivityHour
@@ -50,7 +50,7 @@ final class HabitSuggestionService {
         // Suggest habits that align with peak times
         switch timeOfDay {
         case "morning":
-            suggestions.append(HabitSuggestion(
+            suggestions.append(AnalyticsHabitSuggestion(
                 name: "Morning Meditation",
                 description: "Start your day with 10 minutes of mindfulness meditation",
                 category: .mindfulness,
@@ -59,7 +59,7 @@ final class HabitSuggestionService {
                 expectedSuccess: 0.85
             ))
         case "afternoon":
-            suggestions.append(HabitSuggestion(
+            suggestions.append(AnalyticsHabitSuggestion(
                 name: "Afternoon Walk",
                 description: "Take a 15-minute walk to recharge and boost creativity",
                 category: .fitness,
@@ -68,7 +68,7 @@ final class HabitSuggestionService {
                 expectedSuccess: 0.8
             ))
         case "evening":
-            suggestions.append(HabitSuggestion(
+            suggestions.append(AnalyticsHabitSuggestion(
                 name: "Evening Reflection",
                 description: "Spend 10 minutes reflecting on your day and planning tomorrow",
                 category: .productivity,
@@ -84,15 +84,15 @@ final class HabitSuggestionService {
     }
 
     /// Generate complementary habits that work well with existing ones
-    func generateComplementarySuggestions(existing: [Habit]) -> [HabitSuggestion] {
-        var suggestions: [HabitSuggestion] = []
+    func generateComplementarySuggestions(existing: [Habit]) -> [AnalyticsHabitSuggestion] {
+        var suggestions: [AnalyticsHabitSuggestion] = []
 
         // Analyze existing habits for complementary suggestions
         let categories = Dictionary(grouping: existing, by: \.category)
 
         // Health habits - suggest complementary wellness activities
         if categories[.health] != nil {
-            suggestions.append(HabitSuggestion(
+            suggestions.append(AnalyticsHabitSuggestion(
                 name: "Healthy Meal Prep",
                 description: "Prepare nutritious meals for the week ahead",
                 category: .health,
@@ -104,7 +104,7 @@ final class HabitSuggestionService {
 
         // Productivity habits - suggest focus enhancement
         if categories[.productivity] != nil {
-            suggestions.append(HabitSuggestion(
+            suggestions.append(AnalyticsHabitSuggestion(
                 name: "Deep Work Session",
                 description: "Dedicate 90 minutes of uninterrupted focused work",
                 category: .productivity,
@@ -116,7 +116,7 @@ final class HabitSuggestionService {
 
         // Learning habits - suggest application of knowledge
         if categories[.learning] != nil {
-            suggestions.append(HabitSuggestion(
+            suggestions.append(AnalyticsHabitSuggestion(
                 name: "Knowledge Application",
                 description: "Apply what you've learned to a practical project",
                 category: .learning,
@@ -130,11 +130,11 @@ final class HabitSuggestionService {
     }
 
     /// Generate trending habit suggestions based on current popular habits
-    func generateTrendingSuggestions() -> [HabitSuggestion] {
+    func generateTrendingSuggestions() -> [AnalyticsHabitSuggestion] {
         // These would be updated based on trending data
         // For now, return some evergreen popular habits
         [
-            HabitSuggestion(
+            AnalyticsHabitSuggestion(
                 name: "Digital Detox Hour",
                 description: "Spend one hour each evening without screens",
                 category: .health,
@@ -142,7 +142,7 @@ final class HabitSuggestionService {
                 reasoning: "Popular habit for better sleep and mental health",
                 expectedSuccess: 0.9
             ),
-            HabitSuggestion(
+            AnalyticsHabitSuggestion(
                 name: "Gratitude Journaling",
                 description: "Write down 3 things you're grateful for each day",
                 category: .mindfulness,
@@ -150,20 +150,20 @@ final class HabitSuggestionService {
                 reasoning: "Trending practice for improved mental wellbeing",
                 expectedSuccess: 0.85
             ),
-            HabitSuggestion(
+            AnalyticsHabitSuggestion(
                 name: "Skill Building",
                 description: "Learn a new skill for 30 minutes daily",
                 category: .learning,
                 difficulty: .medium,
                 reasoning: "Highly popular for personal and professional growth",
                 expectedSuccess: 0.8
-            ),
+            )
         ]
     }
 
     /// Generate habit stacking suggestions based on existing routines
-    func generateHabitStackingSuggestions(existing: [Habit]) -> [HabitSuggestion] {
-        var suggestions: [HabitSuggestion] = []
+    func generateHabitStackingSuggestions(existing: [Habit]) -> [AnalyticsHabitSuggestion] {
+        var suggestions: [AnalyticsHabitSuggestion] = []
 
         // Find habits that could serve as anchors for stacking
         let morningHabits = existing.filter { habit in
@@ -180,7 +180,7 @@ final class HabitSuggestionService {
 
         // Suggest stacking on morning routines
         if !morningHabits.isEmpty {
-            suggestions.append(HabitSuggestion(
+            suggestions.append(AnalyticsHabitSuggestion(
                 name: "Morning Affirmations",
                 description: "Add positive affirmations to your existing morning routine",
                 category: .mindfulness,
@@ -192,7 +192,7 @@ final class HabitSuggestionService {
 
         // Suggest stacking on evening routines
         if !eveningHabits.isEmpty {
-            suggestions.append(HabitSuggestion(
+            suggestions.append(AnalyticsHabitSuggestion(
                 name: "Evening Review",
                 description: "Review your day while doing your evening routine",
                 category: .productivity,
@@ -206,13 +206,13 @@ final class HabitSuggestionService {
     }
 
     /// Generate challenge-based suggestions for advanced users
-    func generateChallengeSuggestions(profile: UserProfile) -> [HabitSuggestion] {
-        var suggestions: [HabitSuggestion] = []
+    func generateChallengeSuggestions(profile: UserProfile) -> [AnalyticsHabitSuggestion] {
+        var suggestions: [AnalyticsHabitSuggestion] = []
 
         // Only suggest challenges for users with good consistency
         guard profile.averageConsistency > 0.7 else { return suggestions }
 
-        suggestions.append(HabitSuggestion(
+        suggestions.append(AnalyticsHabitSuggestion(
             name: "30-Day Challenge",
             description: "Take on a challenging habit for a full month",
             category: .other,
@@ -258,7 +258,7 @@ final class HabitSuggestionService {
         )
     }
 
-    private func createCategorySuggestion(for category: AnalyticsHabitCategory, profile: UserProfile) -> HabitSuggestion? {
+    private func createCategorySuggestion(for category: AnalyticsHabitCategory, profile: UserProfile) -> AnalyticsHabitSuggestion? {
         // Only suggest if user has shown interest in related categories
         let relatedCategories = self.getRelatedCategories(for: category)
         let hasRelatedHabits = profile.preferredCategories.contains { relatedCategories.contains($0) }
@@ -267,7 +267,7 @@ final class HabitSuggestionService {
 
         switch category {
         case .health:
-            return HabitSuggestion(
+            return AnalyticsHabitSuggestion(
                 name: "Daily Hydration",
                 description: "Drink 8 glasses of water throughout the day",
                 category: .health,
@@ -276,7 +276,7 @@ final class HabitSuggestionService {
                 expectedSuccess: 0.8
             )
         case .productivity:
-            return HabitSuggestion(
+            return AnalyticsHabitSuggestion(
                 name: "Task Prioritization",
                 description: "Spend 10 minutes each morning prioritizing your tasks",
                 category: .productivity,
@@ -285,7 +285,7 @@ final class HabitSuggestionService {
                 expectedSuccess: 0.75
             )
         case .learning:
-            return HabitSuggestion(
+            return AnalyticsHabitSuggestion(
                 name: "Daily Reading",
                 description: "Read for 20 minutes to expand your knowledge",
                 category: .learning,
@@ -294,7 +294,7 @@ final class HabitSuggestionService {
                 expectedSuccess: 0.7
             )
         case .social:
-            return HabitSuggestion(
+            return AnalyticsHabitSuggestion(
                 name: "Quality Connection",
                 description: "Have a meaningful conversation with someone you care about",
                 category: .social,
@@ -303,7 +303,7 @@ final class HabitSuggestionService {
                 expectedSuccess: 0.65
             )
         case .other:
-            return HabitSuggestion(
+            return AnalyticsHabitSuggestion(
                 name: "Expense Tracking",
                 description: "Track all expenses for better financial awareness",
                 category: .other,
@@ -312,7 +312,7 @@ final class HabitSuggestionService {
                 expectedSuccess: 0.7
             )
         case .creativity:
-            return HabitSuggestion(
+            return AnalyticsHabitSuggestion(
                 name: "Creative Expression",
                 description: "Spend 15 minutes on a creative activity you enjoy",
                 category: .creativity,
@@ -321,7 +321,7 @@ final class HabitSuggestionService {
                 expectedSuccess: 0.75
             )
         case .fitness:
-            return HabitSuggestion(
+            return AnalyticsHabitSuggestion(
                 name: "Regular Exercise",
                 description: "Engage in physical activity for at least 30 minutes",
                 category: .fitness,
@@ -330,7 +330,7 @@ final class HabitSuggestionService {
                 expectedSuccess: 0.7
             )
         case .mindfulness:
-            return HabitSuggestion(
+            return AnalyticsHabitSuggestion(
                 name: "Mindful Breathing",
                 description: "Practice deep breathing exercises for 5 minutes daily",
                 category: .mindfulness,

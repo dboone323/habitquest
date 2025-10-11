@@ -89,37 +89,37 @@ final class AdvancedAnalyticsEngine {
     // MARK: - Habit Suggestions
 
     /// Generate personalized habit suggestions using ML
-    func generateHabitSuggestions() async -> [HabitSuggestion] {
+    func generateHabitSuggestions() async -> [AnalyticsHabitSuggestion] {
         await self.habitSuggestionService.generateHabitSuggestions()
     }
 
     /// Generate suggestions based on user's existing habit categories
-    func generateCategoryBasedSuggestions(profile: UserProfile) -> [HabitSuggestion] {
+    func generateCategoryBasedSuggestions(profile: UserProfile) -> [AnalyticsHabitSuggestion] {
         self.habitSuggestionService.generateCategoryBasedSuggestions(profile: profile)
     }
 
     /// Generate suggestions based on user's time patterns and availability
-    func generateTimeBasedSuggestions(profile: UserProfile) -> [HabitSuggestion] {
+    func generateTimeBasedSuggestions(profile: UserProfile) -> [AnalyticsHabitSuggestion] {
         self.habitSuggestionService.generateTimeBasedSuggestions(profile: profile)
     }
 
     /// Generate complementary habits that work well with existing ones
-    func generateComplementarySuggestions(existing: [Habit]) -> [HabitSuggestion] {
+    func generateComplementarySuggestions(existing: [Habit]) -> [AnalyticsHabitSuggestion] {
         self.habitSuggestionService.generateComplementarySuggestions(existing: existing)
     }
 
     /// Generate trending habit suggestions
-    func generateTrendingSuggestions() -> [HabitSuggestion] {
+    func generateTrendingSuggestions() -> [AnalyticsHabitSuggestion] {
         self.habitSuggestionService.generateTrendingSuggestions()
     }
 
     /// Generate habit stacking suggestions based on existing routines
-    func generateHabitStackingSuggestions(existing: [Habit]) -> [HabitSuggestion] {
+    func generateHabitStackingSuggestions(existing: [Habit]) -> [AnalyticsHabitSuggestion] {
         self.habitSuggestionService.generateHabitStackingSuggestions(existing: existing)
     }
 
     /// Generate challenge-based suggestions for advanced users
-    func generateChallengeSuggestions(profile: UserProfile) -> [HabitSuggestion] {
+    func generateChallengeSuggestions(profile: UserProfile) -> [AnalyticsHabitSuggestion] {
         self.habitSuggestionService.generateChallengeSuggestions(profile: profile)
     }
 }

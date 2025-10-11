@@ -1,8 +1,9 @@
-import Combine
 import Foundation
-import SwiftUI
-#if canImport(SwiftData)
+import Combine
 import SwiftData
+import SwiftUI
+
+#if canImport(SwiftData)
 #endif
 
 //

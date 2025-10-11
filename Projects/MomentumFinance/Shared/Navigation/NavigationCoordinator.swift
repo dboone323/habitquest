@@ -1,7 +1,7 @@
 import Foundation // For SearchTypes dependencies
 import LocalAuthentication
-import Observation
 import OSLog
+import Observation
 import SwiftUI
 
 // SearchResult types are available from Shared/SearchTypes.swift

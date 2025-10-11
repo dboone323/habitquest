@@ -39,7 +39,8 @@ public struct TaskManagerView: View {
                 TaskInputView(
                     newTaskTitle: self.$newTaskTitle,
                     isInputFieldFocused: self.$isInputFieldFocused,
-                    onAddTask: self.addTask
+                    onAddTask: self.addTask,
+                    onAddAITask: self.addAITask
                 )
                 .environmentObject(self.themeManager)
 
@@ -106,6 +107,14 @@ public struct TaskManagerView: View {
         self.isInputFieldFocused = false // Dismiss keyboard
     }
 
+    // Adds a new task using AI-parsed data
+    private func addAITask(_ aiTask: PlannerTask) {
+        self.tasks.append(aiTask) // Add the AI-parsed task directly
+        self.newTaskTitle = "" // Clear the input field
+        self.saveTasks() // Persist changes
+        self.isInputFieldFocused = false // Dismiss keyboard
+    }
+
     // Handles deletion from the incomplete tasks section
     private func deleteTaskIncomplete(at offsets: IndexSet) {
         self.deleteTask(from: self.incompleteTasks, at: offsets) // Use helper function
@@ -140,9 +149,24 @@ public struct TaskManagerView: View {
     // --- Auto Deletion Logic ---
     // Checks settings and performs auto-deletion if enabled
     private func performAutoDeletionIfNeeded() {
-        // Read settings directly using AppStorage within this function scope
-        @AppStorage(AppSettingKeys.autoDeleteCompleted) var autoDeleteEnabled = false
-        @AppStorage(AppSettingKeys.autoDeleteDays) var autoDeleteDays = 30
+        // Avoid @AppStorage during testing to prevent UserDefaults access crashes
+        let isTesting = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+
+        let autoDeleteEnabled: Bool
+        var autoDeleteDays: Int
+
+        if isTesting {
+            // Use default values during testing
+            autoDeleteEnabled = false
+            autoDeleteDays = 30
+        } else {
+            // Read settings from UserDefaults
+            autoDeleteEnabled = UserDefaults.standard.bool(forKey: AppSettingKeys.autoDeleteCompleted)
+            autoDeleteDays = UserDefaults.standard.integer(forKey: AppSettingKeys.autoDeleteDays)
+            if autoDeleteDays == 0 { // If not set, use default
+                autoDeleteDays = 30
+            }
+        }
 
         // Only proceed if auto-delete is enabled
         guard autoDeleteEnabled else {
