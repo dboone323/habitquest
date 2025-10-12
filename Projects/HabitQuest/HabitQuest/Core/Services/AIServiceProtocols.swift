@@ -273,7 +273,7 @@ public struct CacheStats: Codable, Sendable {
     public let cacheSize: Int
     public let lastCleanup: Date?
 
-    public init(
+    public nonisolated init(
         totalEntries: Int = 0,
         hitRate: Double = 0.0,
         averageResponseTime: TimeInterval = 0.0,
@@ -297,7 +297,7 @@ public struct PerformanceMetrics: Codable, Sendable {
     public let peakConcurrentOperations: Int
     public let uptime: TimeInterval
 
-    public init(
+    public nonisolated init(
         totalOperations: Int = 0,
         successRate: Double = 0.0,
         averageResponseTime: TimeInterval = 0.0,

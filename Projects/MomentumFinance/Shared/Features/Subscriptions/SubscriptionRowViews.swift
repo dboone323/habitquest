@@ -1,4 +1,4 @@
-import AppKit
+import UIKit
 import SwiftUI
 
 #if canImport(AppKit)

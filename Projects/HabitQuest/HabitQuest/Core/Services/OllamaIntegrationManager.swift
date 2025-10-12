@@ -38,7 +38,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         }
 
         // Use retry manager for robust error handling
-        let result = try await retryManager.retry {
+        let result = try await retryManager.retry { @Sendable in
             try await self.client.generate(
                 model: "llama2",
                 prompt: prompt,
@@ -127,7 +127,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         }
 
         // Use retry manager for robust error handling
-        let result = try await retryManager.retry {
+        let result = try await retryManager.retry { @Sendable in
             try await self.analyzeCodebase(code: code, language: language, analysisType: analysisType)
         }
 
@@ -610,8 +610,8 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             return try await self.client.generate(
                 model: model,
                 prompt: prompt,
-                maxTokens: maxTokens,
-                temperature: temperature
+                temperature: temperature,
+                maxTokens: maxTokens
             )
         } catch {
             self.logger.log("Ollama generation failed, trying Hugging Face fallback: \(error.localizedDescription)")
@@ -675,7 +675,21 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 
 extension OllamaIntegrationManager: AICachingService {
     public func cacheResponse(key: String, response: String, metadata: [String: Any]?) async {
-        await cache.cacheResponse(key: key, response: response, metadata: metadata)
+        // Convert metadata to Sendable form for actor isolation
+        let sendableMetadata = metadata?.compactMapValues { value -> String? in
+            if let stringValue = value as? String {
+                return stringValue
+            } else if let intValue = value as? Int {
+                return String(intValue)
+            } else if let doubleValue = value as? Double {
+                return String(doubleValue)
+            } else if let boolValue = value as? Bool {
+                return String(boolValue)
+            } else {
+                return nil // Skip non-Sendable values
+            }
+        }
+        await cache.cacheResponse(key: key, response: response, metadata: sendableMetadata)
     }
 
     public func getCachedResponse(key: String) async -> String? {
@@ -695,7 +709,21 @@ extension OllamaIntegrationManager: AICachingService {
 
 extension OllamaIntegrationManager: AIPerformanceMonitoring {
     public func recordOperation(operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?) async {
-        await performanceMonitor.recordOperation(operation: operation, duration: duration, success: success, metadata: metadata)
+        // Convert metadata to Sendable form for actor isolation
+        let sendableMetadata = metadata?.compactMapValues { value -> String? in
+            if let stringValue = value as? String {
+                return stringValue
+            } else if let intValue = value as? Int {
+                return String(intValue)
+            } else if let doubleValue = value as? Double {
+                return String(doubleValue)
+            } else if let boolValue = value as? Bool {
+                return String(boolValue)
+            } else {
+                return nil // Skip non-Sendable values
+            }
+        }
+        await performanceMonitor.recordOperation(operation: operation, duration: duration, success: success, metadata: sendableMetadata)
     }
 
     public func getPerformanceMetrics() async -> PerformanceMetrics {

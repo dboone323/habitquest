@@ -119,7 +119,7 @@ public class HuggingFaceClient {
         }
 
         // Use retry manager with circuit breaker integration
-        let result = try await retryManager.retry(operation: "generate") {
+        let result = try await retryManager.retry(operation: "generate") { @Sendable in
             try await self.performGenerateRequest(
                 prompt: prompt,
                 model: model,
@@ -595,9 +595,9 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
     }
 
     public func getPerformanceMetrics() async -> PerformanceMetrics {
-        let metricsData = await getPerformanceMetrics()
+        let metricsData = self.metrics.getMetrics()
         return PerformanceMetrics(
-            totalOperations: metricsData.totalOperations,
+            totalOperations: metricsData.totalRequests,
             successRate: metricsData.successRate,
             averageResponseTime: metricsData.averageResponseTime,
             errorBreakdown: metricsData.errorBreakdown,

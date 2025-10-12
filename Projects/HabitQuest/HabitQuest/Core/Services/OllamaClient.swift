@@ -38,7 +38,7 @@ public class OllamaClient: ObservableObject {
         self.session = URLSession(configuration: configuration)
 
         // Enhanced logging
-        self.logger = Logger(subsystem: "com.habitquest.ollama", category: Logger.Category(rawValue: "AI"))
+        self.logger = Logger()
 
         // Cache and metrics
         self.cache = OllamaCache(enabled: config.enableCaching, expiryTime: config.cacheExpiryTime)
@@ -407,11 +407,11 @@ public class OllamaClient: ObservableObject {
     // MARK: - Actor-Isolated Cache & Metrics Operations
 
     private func getCachedValue(for key: String) async -> String? {
-        cache.get(key)
+        await cache.get(key)
     }
 
     private func setCachedValue(_ key: String, value: String) async {
-        cache.set(key, value: value)
+        await cache.set(key, value: value)
     }
 
     private func recordCacheHit() async {
@@ -429,11 +429,10 @@ public class OllamaClient: ObservableObject {
 
 // MARK: - Enhanced Cache System
 
-private class OllamaCache {
+private actor OllamaCache {
     private var cache: [String: CacheEntry] = [:]
     private let enabled: Bool
     private let expiryTime: TimeInterval
-    private let queue = DispatchQueue(label: "ollama.cache", attributes: .concurrent)
 
     struct CacheEntry {
         let value: String
@@ -450,27 +449,24 @@ private class OllamaCache {
     }
 
     func get(_ key: String) -> String? {
-        guard self.enabled else { return nil }
-
-        return self.queue.sync {
-            guard let entry = cache[key], !entry.isExpired(expiryTime: expiryTime) else {
-                self.cache.removeValue(forKey: key)
-                return nil
-            }
-            return entry.value
+        guard let entry = self.cache[key], !entry.isExpired(expiryTime: self.expiryTime) else {
+            self.cache.removeValue(forKey: key)
+            return nil
         }
+        return entry.value
     }
 
     func set(_ key: String, value: String) {
         guard self.enabled else { return }
-
-        self.queue.async(flags: .barrier) {
             self.cache[key] = CacheEntry(value: value, timestamp: Date())
-
             // Clean expired entries periodically
-            if self.cache.count > 100 {
-                self.cleanExpiredEntries()
-            }
+        self.cache[key] = CacheEntry(value: value, timestamp: Date())
+
+        self.cache[key] = CacheEntry(value: value, timestamp: Date())
+
+        // Clean expired entries periodically
+        if self.cache.count > 100 {
+            self.cleanExpiredEntries()
         }
     }
 
@@ -478,7 +474,6 @@ private class OllamaCache {
         self.cache = self.cache.filter { !$0.value.isExpired(expiryTime: self.expiryTime) }
     }
 }
-
 // MARK: - Metrics System
 
 private class OllamaMetrics {
