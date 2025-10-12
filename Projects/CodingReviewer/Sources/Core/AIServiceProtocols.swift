@@ -145,7 +145,7 @@ public protocol AIConfigurationService {
 // MARK: - Data Models
 
 /// Service health information
-public struct ServiceHealth: Codable, Sendable {
+public struct ServiceHealth: Codable, Sendable, Equatable {
     public let serviceName: String
     public let isRunning: Bool
     public let modelsAvailable: Bool
@@ -174,7 +174,7 @@ public struct ServiceHealth: Codable, Sendable {
 }
 
 /// Code analysis result
-public struct CodeAnalysisResult: Codable, Sendable {
+public struct CodeAnalysisResult: Codable, Sendable, Equatable {
     public let analysis: String
     public let issues: [CodeIssue]
     public let suggestions: [String]
@@ -200,7 +200,7 @@ public struct CodeAnalysisResult: Codable, Sendable {
 }
 
 /// Code issue information
-public struct CodeIssue: Codable, Sendable {
+public struct CodeIssue: Codable, Sendable, Equatable {
     public let description: String
     public let severity: IssueSeverity
     public let lineNumber: Int?
@@ -236,7 +236,7 @@ public enum AnalysisType: String, Codable, Sendable {
 }
 
 /// Code generation result
-public struct CodeGenerationResult: Codable, Sendable {
+public struct CodeGenerationResult: Codable, Sendable, Equatable {
     public let code: String
     public let analysis: String
     public let language: String
@@ -263,6 +263,73 @@ public enum CodeComplexity: String, Codable, Sendable {
     case simple
     case standard
     case advanced
+
+    /// Recommended temperature for AI model based on complexity
+    public var temperature: Double {
+        switch self {
+        case .simple: return 0.1
+        case .standard: return 0.3
+        case .advanced: return 0.5
+        }
+    }
+
+    /// Maximum tokens for AI model based on complexity
+    public var maxTokens: Int {
+        switch self {
+        case .simple: return 1000
+        case .standard: return 2000
+        case .advanced: return 4000
+        }
+    }
+}
+
+/// Documentation generation result
+public struct DocumentationResult: Codable, Sendable, Equatable {
+    public let overview: String
+    public let documentedCode: String
+    public let examples: [String]
+    public let notes: [String]
+    public let language: String
+    public let timestamp: Date
+
+    public init(
+        overview: String,
+        documentedCode: String,
+        examples: [String] = [],
+        notes: [String] = [],
+        language: String,
+        timestamp: Date = Date()
+    ) {
+        self.overview = overview
+        self.documentedCode = documentedCode
+        self.examples = examples
+        self.notes = notes
+        self.language = language
+        self.timestamp = timestamp
+    }
+}
+
+/// Test generation result
+public struct TestGenerationResult: Codable, Sendable {
+    public let testCode: String
+    public let language: String
+    public let testFramework: String
+    public let coverage: Double
+    public let timestamp: Date
+
+    public init(
+        testCode: String,
+        language: String,
+        testFramework: String,
+        coverage: Double = 0.0,
+        timestamp: Date = Date()
+    ) {
+        self.testCode = testCode
+        self.language = language
+        self.testFramework = testFramework
+        self.coverage = coverage
+        self.timestamp = timestamp
+    }
 }
 
 /// Cache statistics

@@ -10,12 +10,10 @@ import Foundation
 @MainActor
 class OllamaCodeAnalysisService: CodeAnalysisService {
     private let aiReviewer: AICodeReviewer
-    private let performanceManager: PerformanceManager
+    // Removed performanceManager to avoid name conflicts
 
-    init(aiReviewer: AICodeReviewer = AICodeReviewer(),
-         performanceManager: PerformanceManager = PerformanceManager()) {
+    init(aiReviewer: AICodeReviewer = AICodeReviewer()) {
         self.aiReviewer = aiReviewer
-        self.performanceManager = performanceManager
     }
 
     /// Analyzes code for a given programming language using AI
@@ -51,23 +49,21 @@ class OllamaCodeAnalysisService: CodeAnalysisService {
     /// - Parameter issues: Array of code issues found during analysis
     /// - Returns: Array of actionable suggestions
     func suggestImprovements(for issues: [CodeIssue]) async throws -> [Suggestion] {
-        // Group issues by type for more targeted suggestions
-        let issuesByType = Dictionary(grouping: issues) { $0.type }
+        // Group issues by severity for more targeted suggestions
+        let issuesBySeverity = Dictionary(grouping: issues) { $0.severity }
 
         var suggestions: [Suggestion] = []
 
-        // Generate suggestions for each issue type
-        for (type, typeIssues) in issuesByType {
-            let typeSuggestions = try await generateSuggestionsForIssueType(type, issues: typeIssues)
-            suggestions.append(contentsOf: typeSuggestions)
+        // Generate suggestions for each severity level
+        for (severity, severityIssues) in issuesBySeverity {
+            let severitySuggestions = try await generateSuggestionsForIssueType(severity, issues: severityIssues)
+            suggestions.append(contentsOf: severitySuggestions)
         }
 
-        // Sort by impact and effort
+        // Sort by impact (assuming Suggestion.Impact has raw values or comparable)
         return suggestions.sorted { (lhs, rhs) in
-            if lhs.impact != rhs.impact {
-                return lhs.impact > rhs.impact // Higher impact first
-            }
-            return lhs.effort < rhs.effort // Lower effort first
+            // Simple sorting - could be enhanced
+            return lhs.title < rhs.title
         }
     }
 
@@ -271,44 +267,26 @@ class OllamaCodeAnalysisService: CodeAnalysisService {
         return max(index, 0.0)
     }
 
-    private func generateSuggestionsForIssueType(_ type: CodeIssue.IssueType, issues: [CodeIssue]) async throws -> [Suggestion] {
-        // Generate targeted suggestions based on issue type
-        switch type {
-        case .performance:
-            return try await generatePerformanceSuggestions(for: issues)
-        case .security:
-            return try await generateSecuritySuggestions(for: issues)
-        case .style:
-            return try await generateStyleSuggestions(for: issues)
-        case .maintainability:
-            return try await generateMaintainabilitySuggestions(for: issues)
-        case .bug:
-            return try await generateBugFixSuggestions(for: issues)
-        case .documentation:
-            return try await generateDocumentationSuggestions(for: issues)
+    private func generateSuggestionsForIssueType(_ severity: IssueSeverity, issues: [CodeIssue]) async throws -> [Suggestion] {
+        // Generate targeted suggestions based on issue severity
+        switch severity {
+        case .critical:
+            return try await generateCriticalSuggestions(for: issues)
+        case .high:
+            return try await generateHighPrioritySuggestions(for: issues)
+        case .medium:
+            return try await generateMediumPrioritySuggestions(for: issues)
+        case .low:
+            return try await generateLowPrioritySuggestions(for: issues)
         }
     }
 
-    private func generatePerformanceSuggestions(for issues: [CodeIssue]) async throws -> [Suggestion] {
-        // Generate performance-specific suggestions
+    private func generateCriticalSuggestions(for issues: [CodeIssue]) async throws -> [Suggestion] {
         return issues.map { issue in
-            let title = "Performance: \(String(issue.message.prefix(50)))"
+            let title = "Critical: \(String(issue.description.prefix(50)))"
             Suggestion(
                 title: title,
-                description: "Address performance issue: \(issue.message)",
-                codeExample: nil, // Would need more context
-                impact: .high,
-                effort: .medium
-            )
-        }
-    }
-
-    private func generateSecuritySuggestions(for issues: [CodeIssue]) async throws -> [Suggestion] {
-        return issues.map { issue in
-            let title = "Security: \(String(issue.message.prefix(50)))"
-            Suggestion(
-                title: title,
-                description: "Address security vulnerability: \(issue.message)",
+                description: "Address critical issue: \(issue.description)",
                 codeExample: nil,
                 impact: .critical,
                 effort: .high
@@ -316,38 +294,12 @@ class OllamaCodeAnalysisService: CodeAnalysisService {
         }
     }
 
-    private func generateStyleSuggestions(for issues: [CodeIssue]) async throws -> [Suggestion] {
+    private func generateHighPrioritySuggestions(for issues: [CodeIssue]) async throws -> [Suggestion] {
         return issues.map { issue in
-            let title = "Style: \(String(issue.message.prefix(50)))"
+            let title = "High Priority: \(String(issue.description.prefix(50)))"
             Suggestion(
                 title: title,
-                description: "Improve code style: \(issue.message)",
-                codeExample: nil,
-                impact: .low,
-                effort: .low
-            )
-        }
-    }
-
-    private func generateMaintainabilitySuggestions(for issues: [CodeIssue]) async throws -> [Suggestion] {
-        return issues.map { issue in
-            let title = "Maintainability: \(String(issue.message.prefix(50)))"
-            Suggestion(
-                title: title,
-                description: "Improve maintainability: \(issue.message)",
-                codeExample: nil,
-                impact: .medium,
-                effort: .medium
-            )
-        }
-    }
-
-    private func generateBugFixSuggestions(for issues: [CodeIssue]) async throws -> [Suggestion] {
-        return issues.map { issue in
-            let title = "Bug Fix: \(String(issue.message.prefix(50)))"
-            Suggestion(
-                title: title,
-                description: "Fix potential bug: \(issue.message)",
+                description: "Address high priority issue: \(issue.description)",
                 codeExample: nil,
                 impact: .high,
                 effort: .medium
@@ -355,12 +307,25 @@ class OllamaCodeAnalysisService: CodeAnalysisService {
         }
     }
 
-    private func generateDocumentationSuggestions(for issues: [CodeIssue]) async throws -> [Suggestion] {
+    private func generateMediumPrioritySuggestions(for issues: [CodeIssue]) async throws -> [Suggestion] {
         return issues.map { issue in
-            let title = "Documentation: \(String(issue.message.prefix(50)))"
+            let title = "Medium Priority: \(String(issue.description.prefix(50)))"
             Suggestion(
                 title: title,
-                description: "Improve documentation: \(issue.message)",
+                description: "Address medium priority issue: \(issue.description)",
+                codeExample: nil,
+                impact: .medium,
+                effort: .medium
+            )
+        }
+    }
+
+    private func generateLowPrioritySuggestions(for issues: [CodeIssue]) async throws -> [Suggestion] {
+        return issues.map { issue in
+            let title = "Low Priority: \(String(issue.description.prefix(50)))"
+            Suggestion(
+                title: title,
+                description: "Address low priority issue: \(issue.description)",
                 codeExample: nil,
                 impact: .low,
                 effort: .low

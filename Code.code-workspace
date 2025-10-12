@@ -26,6 +26,14 @@
             "source.fixAll": "explicit",
             "source.organizeImports": "explicit"
         },
+        "editor.codeActions.triggerOnFocusChange": false,
+        "swift.buildArguments": [],
+        "swift.disableAutoResolve": false,
+        "swift.formatOnSave": false,
+        "swift.lintOnSave": false,
+        "swift.showErrors": true,
+        "swift.showWarnings": true,
+        "swift.showNotifications": false,
         "files.associations": {
             "*.swift": "swift",
             "*.sh": "shellscript",
@@ -43,7 +51,6 @@
             "**/build": true,
             "**/DerivedData": true
         },
-        "editor.codeActions.triggerOnFocusChange": true,
         "github.copilot.chat.codesearch.enabled": true,
         "github.copilot.chat.languageContext.fix.typescript.enabled": true,
         "chat.mcp.autostart": "newAndOutdated",
@@ -113,6 +120,24 @@
                 "name": "Release MomentumFinance (🏗️ Projects/MomentumFinance)",
                 "program": "${workspaceFolder:🏗️ Projects}/MomentumFinance/.build/release/MomentumFinance",
                 "preLaunchTask": "swift: Build Release MomentumFinance (🏗️ Projects/MomentumFinance)"
+            },
+            {
+                "type": "swift",
+                "request": "launch",
+                "args": [],
+                "cwd": "${workspaceFolder:🏗️ Projects}/QuantumChemistry",
+                "name": "Debug QuantumChemistryDemo (🏗️ Projects/QuantumChemistry)",
+                "program": "/Users/danielstevens/Desktop/Quantum-workspace/Projects/QuantumChemistry/.build/arm64-apple-macosx/debug/QuantumChemistryDemo",
+                "preLaunchTask": "swift: Build Debug QuantumChemistryDemo (🏗️ Projects/QuantumChemistry)"
+            },
+            {
+                "type": "swift",
+                "request": "launch",
+                "args": [],
+                "cwd": "${workspaceFolder:🏗️ Projects}/QuantumChemistry",
+                "name": "Release QuantumChemistryDemo (🏗️ Projects/QuantumChemistry)",
+                "program": "/Users/danielstevens/Desktop/Quantum-workspace/Projects/QuantumChemistry/.build/arm64-apple-macosx/release/QuantumChemistryDemo",
+                "preLaunchTask": "swift: Build Release QuantumChemistryDemo (🏗️ Projects/QuantumChemistry)"
             }
         ]
     }

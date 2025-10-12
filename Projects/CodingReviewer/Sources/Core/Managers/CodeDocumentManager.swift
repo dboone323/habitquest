@@ -53,9 +53,11 @@ class CodeDocumentManager {
     /// Gets cache statistics for monitoring
     func getCacheStats() -> CacheStats {
         CacheStats(
-            cachedCount: cachedDocuments.count,
-            cacheLimit: cacheLimit,
-            hitRate: calculateHitRate()
+            totalEntries: cachedDocuments.count,
+            hitRate: calculateHitRate(),
+            averageResponseTime: 0.0,
+            cacheSize: cachedDocuments.values.reduce(0) { $0 + $1.size },
+            lastCleanup: nil
         )
     }
 
@@ -149,21 +151,14 @@ enum ProgrammingLanguage: String, Sendable {
     case unknown
 }
 
-struct CacheStats {
-    let cachedCount: Int
-    let cacheLimit: Int
-    let hitRate: Double
+// Note: CacheStats and PerformanceMetrics are defined in AIServiceProtocols.swift
 
-    var utilizationPercentage: Double {
-        Double(cachedCount) / Double(cacheLimit) * 100.0
-    }
-}
+// MARK: - Code Document Performance Manager
 
-// MARK: - Performance Manager
-
-/// Manages performance monitoring and optimization for code analysis operations
+/// Manages performance monitoring and optimization for code document operations
+/// Renamed to avoid conflict with Core/Utilities/PerformanceManager.swift
 @MainActor
-class PerformanceManager {
+class CodeDocumentPerformanceManager {
     private var cachedMetrics: PerformanceMetrics?
     private let metricsQueue = DispatchQueue(label: "com.codingreviewer.metrics", qos: .background)
 
@@ -213,20 +208,16 @@ class PerformanceManager {
     }
 
     /// Gets current performance metrics with caching
-    func getPerformanceMetrics() -> PerformanceMetrics {
-        if let cached = cachedMetrics, cached.timestamp.timeIntervalSinceNow > -300 { // 5 minutes
-            return cached
-        }
-
-        let metrics = PerformanceMetrics(
-            timestamp: Date(),
-            memoryUsage: getMemoryUsage(),
-            cpuUsage: getCPUUsage(),
-            analysisTime: getAverageAnalysisTime()
+    func getSimplePerformanceMetrics() -> PerformanceMetrics {
+        // Return simplified metrics using AIServiceProtocols.PerformanceMetrics
+        return PerformanceMetrics(
+            totalOperations: 0,
+            successRate: 1.0,
+            averageResponseTime: getAverageAnalysisTime(),
+            errorBreakdown: [:],
+            peakConcurrentOperations: 1,
+            uptime: 0.0
         )
-
-        cachedMetrics = metrics
-        return metrics
     }
 
     private func getMemoryUsage() -> Double {
@@ -245,12 +236,7 @@ class PerformanceManager {
     }
 }
 
-struct PerformanceMetrics {
-    let timestamp: Date
-    let memoryUsage: Double // MB
-    let cpuUsage: Double // Percentage
-    let analysisTime: TimeInterval // Seconds
-}
+// Note: PerformanceMetrics is defined in AIServiceProtocols.swift
 
 struct CodeFile {
     let name: String

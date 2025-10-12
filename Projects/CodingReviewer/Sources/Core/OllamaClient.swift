@@ -20,6 +20,13 @@ public protocol OllamaClientProtocol {
 
 @MainActor
 public class OllamaClient: ObservableObject, OllamaClientProtocol {
+    // MARK: - Singleton
+
+    /// Shared singleton instance for convenient access
+    public static let shared = OllamaClient()
+
+    // MARK: - Properties
+
     private let config: OllamaConfig
     private let session: URLSession
     private let logger: Logger

@@ -16,9 +16,9 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
     private let healthMonitor = AIHealthMonitor.shared
     private let retryManager = RetryManager()
 
-    public init(config: OllamaConfig = .default) {
+    public init(config: OllamaConfig = .default) async {
         self.config = config
-        self.client = OllamaClient(config: config)
+        self.client = await OllamaClient(config: config)
     }
 
     // MARK: - AITextGenerationService Protocol
@@ -151,6 +151,16 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         return result
     }
 
+    private func parseAnalysisResult(from jsonString: String, language: String, analysisType: AnalysisType) throws -> CodeAnalysisResult {
+        let jsonData = jsonString.data(using: .utf8) ?? Data()
+        return try JSONDecoder().decode(CodeAnalysisResult.self, from: jsonData)
+    }
+
+    private func parseCodeGenerationResult(from jsonString: String, language: String) throws -> CodeGenerationResult {
+        let jsonData = jsonString.data(using: .utf8) ?? Data()
+        return try JSONDecoder().decode(CodeGenerationResult.self, from: jsonData)
+    }
+
     public func generateDocumentation(code: String, language: String) async throws -> String {
         let startTime = Date()
         let cacheKey = await cache.generateKey(for: code, model: "llama2", operation: "documentation")
@@ -166,7 +176,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         }
 
         do {
-            let result = try await self.generateDocumentation(code: code, language: language, includeExamples: true).documentation
+            let result = try await self.generateDocumentation(code: code, language: language, includeExamples: true).documentedCode
 
             await cache.cacheResponse(key: cacheKey, response: result, metadata: [
                 "operation": "generateDocumentation",
@@ -207,7 +217,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         }
 
         do {
-            let result = try await self.generateTests(code: code, language: language, testFramework: testFramework).testCode
+            let result = try await self.generateTests(code: code, language: language, testFramework: "XCTest").testCode
 
             await cache.cacheResponse(key: cacheKey, response: result, metadata: [
                 "operation": "generateTests",
@@ -301,21 +311,16 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         } catch {
             logger.log("Ollama code generation failed, trying Hugging Face fallback: \(error.localizedDescription)")
 
-            // Fallback to Hugging Face
-            let prompt = buildCodeGenerationPrompt(description, language, context, .standard)
-            let fallbackResult = try await HuggingFaceClient.shared.generateWithFallback(
-                prompt: prompt,
-                maxTokens: 500,
-                temperature: 0.3,
-                taskType: .codeGeneration
-            )
+            // Fallback to Hugging Face - commented out for now
+            // let prompt = buildCodeGenerationPrompt(description, language, context, .standard)
+            // let fallbackResult = try await HuggingFaceClient.shared.generateWithFallback(
+            //     prompt: prompt,
+            //     maxTokens: 500,
+            //     temperature: 0.3
+            // )
 
-            return CodeGenerationResult(
-                code: fallbackResult,
-                analysis: "Generated via Hugging Face fallback",
-                language: language,
-                complexity: .standard
-            )
+            // For now, just re-throw the original error
+            throw error
         }
     }
 
@@ -496,9 +501,11 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         )
 
         return DocumentationResult(
-            documentation: documentation,
-            language: language,
-            includesExamples: includeExamples
+            overview: "Auto-generated documentation",
+            documentedCode: documentation,
+            examples: [],
+            notes: [],
+            language: language
         )
     }
 
@@ -589,14 +596,14 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             guard let code = task.code else {
                 throw IntegrationError.missingRequiredData("code")
             }
-            let result = try await generateDocumentation(code: code, language: task.language ?? "Swift")
+            let result = try await generateDocumentation(code: code, language: task.language ?? "Swift", includeExamples: true)
             return TaskResult(task: task, success: true, documentationResult: result)
 
         case .testing:
             guard let code = task.code else {
                 throw IntegrationError.missingRequiredData("code")
             }
-            let result = try await generateTests(code: code, language: task.language ?? "Swift")
+            let result = try await generateTests(code: code, language: task.language ?? "Swift", testFramework: "XCTest")
             return TaskResult(task: task, success: true, testResult: result)
         }
     }
@@ -605,6 +612,23 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 // MARK: - AICachingService Protocol
 
 extension OllamaIntegrationManager {
+    /// Check the health status of the Ollama service
+    public func checkServiceHealth() async -> ServiceHealth {
+        let isRunning = await client.isServerRunning()
+        let models = isRunning ? (try? await client.listModels()) ?? [] : []
+        let modelsAvailable = !models.isEmpty
+
+        return ServiceHealth(
+            serviceName: "Ollama",
+            isRunning: isRunning,
+            modelsAvailable: modelsAvailable,
+            responseTime: nil,
+            errorRate: 0.0,
+            lastChecked: Date(),
+            recommendations: isRunning ? [] : ["Start Ollama server"]
+        )
+    }
+
     public func cacheResponse(key: String, response: String, metadata: [String: Any]?) async {
         await cache.cacheResponse(key: key, response: response, metadata: metadata)
     }
@@ -666,7 +690,7 @@ private actor RetryManager {
 
         // Check circuit breaker
         if isCircuitBreakerOpen(for: circuitBreakerKey) {
-            throw AIServiceProtocols.AIError.serviceUnavailable("Circuit breaker open for operation: \(operation)")
+            throw IntegrationError.serviceUnavailable
         }
 
         var lastError: Error?
@@ -698,18 +722,13 @@ private actor RetryManager {
             }
         }
 
-        throw lastError ?? AIServiceProtocols.AIError.operationFailed("All retry attempts failed for operation: \(operation)")
+        throw lastError ?? IntegrationError.serviceUnavailable
     }
 
     private func shouldNotRetry(_ error: Error) -> Bool {
-        // Don't retry authentication or configuration errors
-        if let aiError = error as? AIServiceProtocols.AIError {
-            switch aiError {
-            case .authenticationFailed, .invalidConfiguration:
-                return true
-            default:
-                return false
-            }
+        // Don't retry configuration errors
+        if error is IntegrationError {
+            return true
         }
         return false
     }

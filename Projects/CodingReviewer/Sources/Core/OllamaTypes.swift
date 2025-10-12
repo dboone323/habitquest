@@ -168,6 +168,7 @@ public enum OllamaError: LocalizedError {
     case contextWindowExceeded
     case authenticationFailed
     case serverOverloaded
+    case invalidConfiguration(String)
 
     public var errorDescription: String? {
         switch self {
@@ -199,6 +200,8 @@ public enum OllamaError: LocalizedError {
             "Authentication failed"
         case .serverOverloaded:
             "Server is overloaded"
+        case let .invalidConfiguration(message):
+            "Invalid configuration: \(message)"
         }
     }
 
@@ -221,82 +224,11 @@ public enum OllamaError: LocalizedError {
 }
 
 // MARK: - Integration Result Models
+// Note: ServiceHealth is defined in AIServiceProtocols.swift
 
-public struct ServiceHealth {
-    public let ollamaRunning: Bool
-    public let modelsAvailable: Bool
-    public let modelCount: Int
-    public let recommendedActions: [String]
-}
-
-public enum CodeComplexity {
-    case simple
-    case standard
-    case advanced
-
-    public var temperature: Double {
-        switch self {
-        case .simple: 0.1
-        case .standard: 0.3
-        case .advanced: 0.5
-        }
-    }
-
-    public var maxTokens: Int {
-        switch self {
-        case .simple: 1000
-        case .standard: 2000
-        case .advanced: 4000
-        }
-    }
-}
-
-public enum AnalysisType {
-    case bugs
-    case performance
-    case security
-    case comprehensive
-}
-
-public struct CodeGenerationResult {
-    public let code: String
-    public let analysis: String
-    public let language: String
-    public let complexity: CodeComplexity
-}
-
-public struct CodeAnalysisResult {
-    public let analysis: String
-    public let issues: [CodeIssue]
-    public let suggestions: [String]
-    public let language: String
-    public let analysisType: AnalysisType
-}
-
-public struct CodeIssue {
-    public let description: String
-    public let severity: IssueSeverity
-}
-
-public enum IssueSeverity {
-    case low
-    case medium
-    case high
-    case critical
-}
-
-public struct DocumentationResult {
-    public let documentation: String
-    public let language: String
-    public let includesExamples: Bool
-}
-
-public struct TestGenerationResult {
-    public let testCode: String
-    public let language: String
-    public let testFramework: String
-    public let coverage: Double
-}
+// Note: CodeComplexity, AnalysisType, CodeGenerationResult, CodeAnalysisResult, CodeIssue,
+// IssueSeverity, DocumentationResult, and TestGenerationResult are now defined in
+// AIServiceProtocols.swift with proper Codable/Sendable conformance
 
 public struct AutomationTask {
     public let id: String

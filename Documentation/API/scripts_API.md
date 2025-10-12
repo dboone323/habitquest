@@ -1,11 +1,35 @@
-# scripts API Documentation
+# scripts API Reference
 
-Generated: Wed Sep 24 09:04:20 CDT 2025
-Project: scripts
-Location: /Users/danielstevens/Desktop/Quantum-workspace/Projects/scripts
+**Generated:** Sun Oct 12 09:52:59 CDT 2025
+**Type:** Manual Documentation
 
-## Overview
+## Public API Overview
 
-This document contains the public API reference for scripts.
+### Public Classes
 
-No Swift files found in project.
+
+### Public Structs
+
+
+### Public Enums
+
+
+### Public Protocols
+
+
+
+## Usage
+
+For detailed usage examples, see the source files in:
+`/Users/danielstevens/Desktop/Quantum-workspace/Projects/scripts/`
+
+## Architecture Notes
+
+This project follows the Quantum Workspace architecture patterns. See [ARCHITECTURE.md](../../ARCHITECTURE.md) for details.
+
+---
+
+*For full HTML documentation, run:*
+```bash
+jazzy --module scripts --output Documentation/API/scripts
+```

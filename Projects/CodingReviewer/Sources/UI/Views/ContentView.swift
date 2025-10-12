@@ -104,7 +104,8 @@ public struct ContentView: View {
         defer { isAnalyzing = false }
 
         do {
-            let language = languageDetector.detectLanguage(from: selectedFileURL)
+            guard let fileURL = selectedFileURL else { return }
+            let language = languageDetector.detectLanguage(from: fileURL)
             let result = try await codeReviewService.analyzeCode(
                 codeContent,
                 language: language,
@@ -125,8 +126,9 @@ public struct ContentView: View {
         defer { isAnalyzing = false }
 
         do {
-            let language = languageDetector.detectLanguage(from: selectedFileURL)
-            let result = try await codeReviewService.generateDocumentation(codeContent, language: language, includeExamples: true)
+            guard let fileURL = selectedFileURL else { return }
+            let language = languageDetector.detectLanguage(from: fileURL)
+            let result = try await codeReviewService.generateDocumentation(codeContent, language: language)
             documentationResult = result
             logger.info("Documentation generation completed successfully")
         } catch {
@@ -142,8 +144,9 @@ public struct ContentView: View {
         defer { isAnalyzing = false }
 
         do {
-            let language = languageDetector.detectLanguage(from: selectedFileURL)
-            let result = try await codeReviewService.generateTests(codeContent, language: language, testFramework: "XCTest")
+            guard let fileURL = selectedFileURL else { return }
+            let language = languageDetector.detectLanguage(from: fileURL)
+            let result = try await codeReviewService.generateTests(codeContent, language: language)
             testResult = result
             logger.info("Test generation completed successfully")
         } catch {

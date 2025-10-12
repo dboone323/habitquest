@@ -30,7 +30,7 @@ protocol CodeAnalysisService {
 struct AnalysisResult {
     let complexityScore: Double
     let maintainabilityIndex: Double
-    let issues: [CodeIssue]
+    let issues: [CodeIssue]  // Using CodeIssue from AIServiceProtocols (imported implicitly)
     let metrics: CodeMetrics
     let suggestions: [Suggestion]
 
@@ -42,31 +42,8 @@ struct AnalysisResult {
     }
 }
 
-/// Represents a specific issue found in code
-struct CodeIssue {
-    let type: IssueType
-    let severity: Severity
-    let message: String
-    let lineNumber: Int?
-    let columnNumber: Int?
-    let ruleId: String?
-
-    enum IssueType {
-        case style
-        case performance
-        case security
-        case maintainability
-        case bug
-        case documentation
-    }
-
-    enum Severity {
-        case info
-        case warning
-        case error
-        case critical
-    }
-}
+// Note: CodeIssue is now defined in AIServiceProtocols.swift with proper Codable/Sendable conformance
+// Using qualified name AIServiceProtocols.CodeIssue to reference it
 
 /// Represents a suggestion for code improvement
 struct Suggestion {
