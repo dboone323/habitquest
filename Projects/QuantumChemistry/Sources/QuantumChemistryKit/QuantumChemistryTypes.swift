@@ -236,3 +236,141 @@ extension SIMD3<Double> {
         sqrt(x * x + y * y + z * z)
     }
 }
+
+// MARK: - Quantum Hardware Integration Types
+
+/// Quantum hardware providers for real quantum computation
+public enum QuantumHardwareProvider {
+    case ibmQuantum
+    case rigetti
+    case ionQ
+    case simulator
+}
+
+/// Configuration for quantum hardware execution
+public struct QuantumHardwareConfig {
+    public let provider: QuantumHardwareProvider
+    public let backend: String
+    public let shots: Int
+    public let optimizationLevel: Int
+    public let apiKey: String?
+
+    public init(provider: QuantumHardwareProvider,
+                backend: String = "simulator",
+                shots: Int = 1000,
+                optimizationLevel: Int = 1,
+                apiKey: String? = nil) {
+        self.provider = provider
+        self.backend = backend
+        self.shots = shots
+        self.optimizationLevel = optimizationLevel
+        self.apiKey = apiKey
+    }
+}
+
+/// Result from quantum hardware execution
+public struct QuantumHardwareResult {
+    public let jobId: String
+    public let provider: QuantumHardwareProvider
+    public let backend: String
+    public let executionTime: TimeInterval
+    public let shots: Int
+    public let counts: [String: Int]
+    public let expectationValue: Double
+    public let fidelity: Double
+    public let errorRate: Double
+
+    public init(jobId: String,
+                provider: QuantumHardwareProvider,
+                backend: String,
+                executionTime: TimeInterval,
+                shots: Int,
+                counts: [String: Int],
+                expectationValue: Double,
+                fidelity: Double = 0.95,
+                errorRate: Double = 0.01) {
+        self.jobId = jobId
+        self.provider = provider
+        self.backend = backend
+        self.executionTime = executionTime
+        self.shots = shots
+        self.counts = counts
+        self.expectationValue = expectationValue
+        self.fidelity = fidelity
+        self.errorRate = errorRate
+    }
+}
+
+/// Job status for quantum hardware execution
+public enum QuantumJobStatus {
+    case queued
+    case running
+    case completed
+    case failed(String)
+    case cancelled
+}
+
+/// Quantum circuit representation for hardware submission
+public struct QuantumCircuit {
+    public let qubits: Int
+    public let gates: [QuantumGate]
+    public let measurements: [Int]
+
+    public init(qubits: Int, gates: [QuantumGate], measurements: [Int]) {
+        self.qubits = qubits
+        self.gates = gates
+        self.measurements = measurements
+    }
+}
+
+/// Quantum gate representation
+public struct QuantumGate {
+    public let type: GateType
+    public let qubits: [Int]
+    public let parameters: [Double]
+
+    public enum GateType {
+        case h // Hadamard
+        case x // Pauli-X
+        case y // Pauli-Y
+        case z // Pauli-Z
+        case rx // Rotation-X
+        case ry // Rotation-Y
+        case rz // Rotation-Z
+        case cnot // CNOT
+        case cz // Controlled-Z
+        case toffoli // Toffoli
+    }
+
+    public init(type: GateType, qubits: [Int], parameters: [Double] = []) {
+        self.type = type
+        self.qubits = qubits
+        self.parameters = parameters
+    }
+}
+
+/// VQE ansatz for molecular ground state preparation
+public struct VQEAnsatz {
+    public let layers: Int
+    public let parameters: [Double]
+    public let circuit: QuantumCircuit
+
+    public init(layers: Int, parameters: [Double], circuit: QuantumCircuit) {
+        self.layers = layers
+        self.parameters = parameters
+        self.circuit = circuit
+    }
+}
+
+/// QMC walker for quantum Monte Carlo on hardware
+public struct QMCWalker {
+    public let position: [Double]
+    public let weight: Double
+    public let energy: Double
+
+    public init(position: [Double], weight: Double, energy: Double) {
+        self.position = position
+        self.weight = weight
+        self.energy = energy
+    }
+}

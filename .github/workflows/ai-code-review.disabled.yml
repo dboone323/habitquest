@@ -101,32 +101,20 @@ jobs:
               sleep 2
             done
 
-            # Pull cloud model with error handling and fallback
-            if ! ollama list | grep -q "qwen3-coder:480b-cloud"; then
-              echo "Pulling qwen3-coder cloud model..."
+            # Pull local model with extended timeout
+            if ! ollama list | grep -q "codellama:7b"; then
+              echo "Pulling codellama:7b local model..."
               # Use gtimeout if available (brew install coreutils), otherwise fallback to no timeout
               TIMEOUT_CMD=""
               if command -v gtimeout >/dev/null 2>&1; then
-                TIMEOUT_CMD="gtimeout 60s"
+                TIMEOUT_CMD="gtimeout 300s"
               fi
 
-              if ! $TIMEOUT_CMD ollama pull qwen3-coder:480b-cloud; then
-                echo "⚠ Cloud model pull failed or timed out, will use fallback"
-                echo "Attempting to pull fallback model codellama:7b..."
-                TIMEOUT_CMD_LONG=""
-                if command -v gtimeout >/dev/null 2>&1; then
-                  TIMEOUT_CMD_LONG="gtimeout 300s"
-                fi
-
-                if ! $TIMEOUT_CMD_LONG ollama pull codellama:7b; then
-                  echo "⚠ Fallback model pull also failed, AI review may be limited"
-                  echo "model_pull_failed=true" >> $GITHUB_OUTPUT
-                else
-                  echo "✓ Fallback model codellama:7b ready"
-                  echo "OLLAMA_MODEL=codellama:7b" >> $GITHUB_ENV
-                fi
+              if ! $TIMEOUT_CMD ollama pull codellama:7b; then
+                echo "⚠ Local model pull failed or timed out, will use fallback"
+                echo "model_pull_failed=true" >> $GITHUB_OUTPUT
               else
-                echo "✓ Cloud model qwen3-coder:480b-cloud ready"
+                echo "✓ Local model codellama:7b ready"
               fi
             else
               echo "✓ Model already available"
@@ -227,7 +215,7 @@ jobs:
         id: ai_review
         if: steps.check_ollama.outputs.ollama_available == 'true'
         env:
-          OLLAMA_MODEL: "qwen3-coder:480b-cloud" # Use cloud model for efficiency
+          OLLAMA_MODEL: "codellama:7b" # Use local CodeLlama model
         run: |
           echo "Running AI code review with cloud model..."
 

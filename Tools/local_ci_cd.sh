@@ -119,7 +119,7 @@ Check for:
 Provide brief, actionable feedback:"
 
                     local ai_feedback
-                    ai_feedback=$(echo "${review_prompt}" | timeout 10s ollama run qwen3-coder:480b-cloud 2>/dev/null || echo "AI review temporarily unavailable")
+                    ai_feedback=$(echo "${review_prompt}" | timeout 10s ollama run codellama:7b 2>/dev/null || echo "${review_prompt}" | curl -s -X POST "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium" -H "Authorization: Bearer ${HUGGINGFACE_TOKEN:-}" -H "Content-Type: application/json" -d "{\"inputs\": \"$(echo "${review_prompt}" | head -c 400)\", \"parameters\": {\"max_length\": 150}}" 2>/dev/null | jq -r '.[0]?.generated_text' 2>/dev/null || echo "AI review temporarily unavailable")
 
                     if [[ ${ai_feedback} != "AI review temporarily unavailable" ]]; then
                         echo "${ai_feedback}" | head -5
@@ -1441,7 +1441,7 @@ generate_fix_suggestions() {
 
 ${lint_errors}
 
-Provide specific code changes to fix each issue:" | timeout 15s ollama run qwen3-coder:480b-cloud 2>/dev/null || echo "AI suggestions temporarily unavailable")
+Provide specific code changes to fix each issue:" | timeout 15s ollama run codellama:7b 2>/dev/null || echo "Provide specific code changes to fix each issue:" | curl -s -X POST "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium" -H "Authorization: Bearer ${HUGGINGFACE_TOKEN:-}" -H "Content-Type: application/json" -d "{\"inputs\": \"Provide specific code changes to fix each issue:\", \"parameters\": {\"max_length\": 200}}" 2>/dev/null | jq -r '.[0]?.generated_text' 2>/dev/null || echo "AI suggestions temporarily unavailable")
 
             if [[ "${lint_suggestions}" != "AI suggestions temporarily unavailable" ]]; then
                 {
@@ -1480,7 +1480,7 @@ Provide specific code changes to fix each issue:" | timeout 15s ollama run qwen3
 
 ${build_errors}
 
-Provide specific code changes or configuration fixes:" | timeout 15s ollama run qwen3-coder:480b-cloud 2>/dev/null || echo "AI suggestions temporarily unavailable")
+Provide specific code changes or configuration fixes:" | timeout 15s ollama run codellama:7b 2>/dev/null || echo "Provide specific code changes or configuration fixes:" | curl -s -X POST "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium" -H "Authorization: Bearer ${HUGGINGFACE_TOKEN:-}" -H "Content-Type: application/json" -d "{\"inputs\": \"Provide specific code changes or configuration fixes:\", \"parameters\": {\"max_length\": 200}}" 2>/dev/null | jq -r '.[0]?.generated_text' 2>/dev/null || echo "AI suggestions temporarily unavailable")
 
             if [[ "${build_suggestions}" != "AI suggestions temporarily unavailable" ]]; then
                 {
@@ -1519,7 +1519,7 @@ Provide specific code changes or configuration fixes:" | timeout 15s ollama run 
 
 ${test_failures}
 
-Provide specific test fixes or code changes:" | timeout 15s ollama run qwen3-coder:480b-cloud 2>/dev/null || echo "AI suggestions temporarily unavailable")
+Provide specific test fixes or code changes:" | timeout 15s ollama run codellama:7b 2>/dev/null || echo "Provide specific test fixes or code changes:" | curl -s -X POST "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium" -H "Authorization: Bearer ${HUGGINGFACE_TOKEN:-}" -H "Content-Type: application/json" -d "{\"inputs\": \"Provide specific test fixes or code changes:\", \"parameters\": {\"max_length\": 200}}" 2>/dev/null | jq -r '.[0]?.generated_text' 2>/dev/null || echo "AI suggestions temporarily unavailable")
 
             if [[ "${test_suggestions}" != "AI suggestions temporarily unavailable" ]]; then
                 {
@@ -1580,7 +1580,7 @@ ${file_content}
 Issues found:
 ${quality_issues}
 
-Suggest specific improvements:" | timeout 15s ollama run qwen3-coder:480b-cloud 2>/dev/null || echo "AI suggestions temporarily unavailable")
+Suggest specific improvements:" | timeout 15s ollama run codellama:7b 2>/dev/null || echo "Suggest specific improvements:" | curl -s -X POST "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium" -H "Authorization: Bearer ${HUGGINGFACE_TOKEN:-}" -H "Content-Type: application/json" -d "{\"inputs\": \"Suggest specific improvements:\", \"parameters\": {\"max_length\": 200}}" 2>/dev/null | jq -r '.[0]?.generated_text' 2>/dev/null || echo "AI suggestions temporarily unavailable")
 
                 if [[ "${quality_suggestions}" != "AI suggestions temporarily unavailable" ]]; then
                     {

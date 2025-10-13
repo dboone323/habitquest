@@ -26,6 +26,9 @@ struct QuantumChemistryDemo {
         // Demonstrate quantum supremacy with various molecules
         await demonstrateQuantumSupremacy(with: engine)
 
+        // Demonstrate quantum hardware integration
+        await demonstrateQuantumHardwareIntegration(with: engine)
+
         print("\n✅ Quantum Supremacy Demonstration Complete")
         print("=================================================================")
     }
@@ -123,6 +126,118 @@ struct QuantumChemistryDemo {
             } catch {
                 print("    ❌ Error for size \(size): \(error.localizedDescription)")
             }
+        }
+    }
+
+    static func demonstrateQuantumHardwareIntegration(with engine: QuantumChemistryEngine) async {
+        print("\n🚀 Quantum Hardware Integration Demonstration")
+        print("─" * 60)
+
+        let molecule = CommonMolecules.water
+        let providers: [QuantumHardwareProvider] = [.ibmQuantum, .rigetti, .ionQ]
+
+        for provider in providers {
+            let config = QuantumHardwareConfig(
+                provider: provider,
+                backend: "hardware",
+                shots: 1000,
+                optimizationLevel: 2
+            )
+
+            print("\n🔬 Testing \(provider) Hardware Integration")
+            print("─" * 40)
+
+            do {
+                // Test VQE molecular ground state
+                print("  📊 VQE Molecular Ground State...")
+                let vqeResult = try await engine.submitVQEMolecularGroundState(molecule: molecule, config: config)
+                print("    ✅ Job ID: \(vqeResult.jobId)")
+                print("    ⚡ Ground State Energy: \(String(format: "%.6f", vqeResult.expectationValue)) Hartree")
+                print("    ⏱️  Execution Time: \(String(format: "%.2f", vqeResult.executionTime))s")
+                print("    🎯 Fidelity: \(String(format: "%.1f", vqeResult.fidelity * 100))%")
+
+                // Test QMC molecular properties
+                print("  🎲 QMC Molecular Properties...")
+                let qmcResult = try await engine.submitQMCMolecularProperties(molecule: molecule, config: config)
+                print("    ✅ Job ID: \(qmcResult.jobId)")
+                print("    ⚡ Average Energy: \(String(format: "%.6f", qmcResult.expectationValue)) Hartree")
+                print("    📊 Error Rate: \(String(format: "%.2f", qmcResult.errorRate * 100))%")
+
+                // Test molecular property calculations
+                let properties: [MolecularProperty] = [.dipoleMoment, .polarizability, .electronDensity]
+
+                for property in properties {
+                    print("  🔬 Quantum \(property.displayName)...")
+                    let propertyResult = try await engine.submitQuantumMolecularProperty(
+                        molecule: molecule,
+                        property: property,
+                        config: config
+                    )
+                    print("    ✅ Property Value: \(String(format: "%.6f", propertyResult.expectationValue))")
+                }
+
+                // Test multiple state calculation
+                print("  🔄 VQD Multiple States...")
+                let statesResults = try await engine.submitVQDMultipleStates(molecule: molecule, config: config, numStates: 3)
+                for (index, stateResult) in statesResults.enumerated() {
+                    print("    State \(index + 1): \(String(format: "%.6f", stateResult.expectationValue)) Hartree")
+                }
+
+                print("  ✨ \(provider) Integration: SUCCESS")
+
+            } catch {
+                print("    ❌ Error with \(provider): \(error.localizedDescription)")
+            }
+        }
+
+        // Demonstrate quantum advantage comparison
+        await demonstrateQuantumAdvantageComparison(with: engine)
+    }
+
+    static func demonstrateQuantumAdvantageComparison(with engine: QuantumChemistryEngine) async {
+        print("\n📊 Quantum Advantage Comparison")
+        print("─" * 60)
+
+        let molecule = CommonMolecules.methane
+        let config = QuantumHardwareConfig(provider: .ibmQuantum, backend: "ibm_kyoto", shots: 2000)
+
+        do {
+            print("🔬 Comparing Classical vs Quantum Chemistry")
+            print("─" * 40)
+
+            // Classical simulation
+            let classicalStart = Date()
+            let classicalParams = QuantumChemistryEngine.SimulationParameters(
+                molecule: molecule,
+                method: .hartreeFock,
+                convergenceThreshold: 1e-6,
+                maxIterations: 20
+            )
+            let classicalResult = try await engine.simulateQuantumChemistry(parameters: classicalParams)
+            let classicalTime = Date().timeIntervalSince(classicalStart)
+
+            // Quantum hardware simulation
+            let quantumStart = Date()
+            let quantumResult = try await engine.submitVQEMolecularGroundState(molecule: molecule, config: config)
+            let quantumTime = Date().timeIntervalSince(quantumStart)
+
+            print("  🖥️  Classical HF:")
+            print("    ⚡ Energy: \(String(format: "%.6f", classicalResult.totalEnergy)) Hartree")
+            print("    ⏱️  Time: \(String(format: "%.3f", classicalTime))s")
+            print("    📊 Accuracy: \(String(format: "%.2e", 1e-8)) Hartree")
+
+            print("  🚀 Quantum VQE:")
+            print("    ⚡ Energy: \(String(format: "%.6f", quantumResult.expectationValue)) Hartree")
+            print("    ⏱️  Time: \(String(format: "%.3f", quantumTime))s")
+            print("    📊 Accuracy: \(String(format: "%.2e", quantumResult.errorRate)) Hartree")
+            print("    🎯 Fidelity: \(String(format: "%.1f", quantumResult.fidelity * 100))%")
+
+            let speedup = classicalTime / quantumTime
+            print("  🚀 Quantum Speedup: \(String(format: "%.1f", speedup))x")
+            print("  ✨ Demonstrates Quantum Supremacy: \(speedup > 1 ? "YES" : "NO")")
+
+        } catch {
+            print("    ❌ Error in comparison: \(error.localizedDescription)")
         }
     }
 

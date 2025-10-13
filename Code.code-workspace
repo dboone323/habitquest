@@ -138,6 +138,24 @@
                 "name": "Release QuantumChemistryDemo (🏗️ Projects/QuantumChemistry)",
                 "program": "/Users/danielstevens/Desktop/Quantum-workspace/Projects/QuantumChemistry/.build/arm64-apple-macosx/release/QuantumChemistryDemo",
                 "preLaunchTask": "swift: Build Release QuantumChemistryDemo (🏗️ Projects/QuantumChemistry)"
+            },
+            {
+                "type": "swift",
+                "request": "launch",
+                "args": [],
+                "cwd": "${workspaceFolder:🔧 Shared Components}",
+                "name": "Debug ConsciousAI (🔧 Shared Components)",
+                "program": "/Users/danielstevens/Desktop/Quantum-workspace/Shared/.build/arm64-apple-macosx/debug/ConsciousAI",
+                "preLaunchTask": "swift: Build Debug ConsciousAI (🔧 Shared Components)"
+            },
+            {
+                "type": "swift",
+                "request": "launch",
+                "args": [],
+                "cwd": "${workspaceFolder:🔧 Shared Components}",
+                "name": "Release ConsciousAI (🔧 Shared Components)",
+                "program": "/Users/danielstevens/Desktop/Quantum-workspace/Shared/.build/arm64-apple-macosx/release/ConsciousAI",
+                "preLaunchTask": "swift: Build Release ConsciousAI (🔧 Shared Components)"
             }
         ]
     }
