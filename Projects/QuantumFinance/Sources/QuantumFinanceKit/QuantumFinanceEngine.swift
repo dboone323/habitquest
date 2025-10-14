@@ -14,44 +14,7 @@ import OSLog
 // MARK: - Complex Number Support
 
 /// Simple complex number struct for quantum computations
-public struct ComplexNumber: Sendable {
-    public let real: Double
-    public let imaginary: Double
-
-    public init(real: Double, imaginary: Double) {
-        self.real = real
-        self.imaginary = imaginary
-    }
-
-    public static func *(lhs: ComplexNumber, rhs: ComplexNumber) -> ComplexNumber {
-        return ComplexNumber(
-            real: lhs.real * rhs.real - lhs.imaginary * rhs.imaginary,
-            imaginary: lhs.real * rhs.imaginary + lhs.imaginary * rhs.real
-        )
-    }
-
-    public static func +(lhs: ComplexNumber, rhs: ComplexNumber) -> ComplexNumber {
-        return ComplexNumber(
-            real: lhs.real + rhs.real,
-            imaginary: lhs.imaginary + rhs.imaginary
-        )
-    }
-
-    public static func -(lhs: ComplexNumber, rhs: ComplexNumber) -> ComplexNumber {
-        return ComplexNumber(
-            real: lhs.real - rhs.real,
-            imaginary: lhs.imaginary - rhs.imaginary
-        )
-    }
-
-    public static func /(lhs: ComplexNumber, rhs: Double) -> ComplexNumber {
-        return ComplexNumber(real: lhs.real / rhs, imaginary: lhs.imaginary / rhs)
-    }
-
-    public var magnitudeSquared: Double {
-        return real * real + imaginary * imaginary
-    }
-}
+public typealias ComplexNumber = Complex
 
 // MARK: - Quantum Finance Engine
 

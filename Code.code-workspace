@@ -156,6 +156,42 @@
                 "name": "Release ConsciousAI (🔧 Shared Components)",
                 "program": "/Users/danielstevens/Desktop/Quantum-workspace/Shared/.build/arm64-apple-macosx/release/ConsciousAI",
                 "preLaunchTask": "swift: Build Release ConsciousAI (🔧 Shared Components)"
+            },
+            {
+                "type": "swift",
+                "request": "launch",
+                "args": [],
+                "cwd": "${workspaceFolder:🔧 Shared Components}",
+                "name": "Debug GlobalQuantumNetwork (🔧 Shared Components)",
+                "program": "/Users/danielstevens/Desktop/Quantum-workspace/Shared/.build/arm64-apple-macosx/debug/GlobalQuantumNetwork",
+                "preLaunchTask": "swift: Build Debug GlobalQuantumNetwork (🔧 Shared Components)"
+            },
+            {
+                "type": "swift",
+                "request": "launch",
+                "args": [],
+                "cwd": "${workspaceFolder:🔧 Shared Components}",
+                "name": "Release GlobalQuantumNetwork (🔧 Shared Components)",
+                "program": "/Users/danielstevens/Desktop/Quantum-workspace/Shared/.build/arm64-apple-macosx/release/GlobalQuantumNetwork",
+                "preLaunchTask": "swift: Build Release GlobalQuantumNetwork (🔧 Shared Components)"
+            },
+            {
+                "type": "swift",
+                "request": "launch",
+                "args": [],
+                "cwd": "${workspaceFolder:🔧 Shared Components}",
+                "name": "Debug Phase8GDemo (🔧 Shared Components)",
+                "program": "/Users/danielstevens/Desktop/Quantum-workspace/Shared/.build/arm64-apple-macosx/debug/Phase8GDemo",
+                "preLaunchTask": "swift: Build Debug Phase8GDemo (🔧 Shared Components)"
+            },
+            {
+                "type": "swift",
+                "request": "launch",
+                "args": [],
+                "cwd": "${workspaceFolder:🔧 Shared Components}",
+                "name": "Release Phase8GDemo (🔧 Shared Components)",
+                "program": "/Users/danielstevens/Desktop/Quantum-workspace/Shared/.build/arm64-apple-macosx/release/Phase8GDemo",
+                "preLaunchTask": "swift: Build Release Phase8GDemo (🔧 Shared Components)"
             }
         ]
     }

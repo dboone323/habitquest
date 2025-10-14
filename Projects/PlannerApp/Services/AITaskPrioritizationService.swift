@@ -153,7 +153,7 @@ public class AITaskPrioritizationService: ObservableObject {
 
         // Analyze task categories and suggest balance
         let tasksByPriority = Dictionary(grouping: currentTasks, by: { $0.priority })
-        if let highPriorityCount = tasksByPriority[.high]?.count, highPriorityCount > currentTasks.count / 2 {
+        if let highPriorityCount = tasksByPriority[TaskPriority.high]?.count, highPriorityCount > currentTasks.count / 2 {
             let balanceSuggestion = TaskSuggestion(
                 id: UUID().uuidString,
                 title: "Balance Your Priorities",
@@ -396,7 +396,7 @@ public class AITaskPrioritizationService: ObservableObject {
 
         // Task distribution
         let tasksByPriority = Dictionary(grouping: pendingTasks, by: { $0.priority })
-        if let highPriorityCount = tasksByPriority[.high]?.count, highPriorityCount > pendingTasks.count / 2 {
+        if let highPriorityCount = tasksByPriority[TaskPriority.high]?.count, highPriorityCount > pendingTasks.count / 2 {
             let balanceInsight = ProductivityInsight(
                 id: UUID().uuidString,
                 title: "Priority Balance",
