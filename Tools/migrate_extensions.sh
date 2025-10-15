@@ -10,7 +10,6 @@ code-insiders --install-extension ms-vscode.vscode-typescript-next
 code-insiders --install-extension ms-python.python
 code-insiders --install-extension ms-python.vscode-pylance
 code-insiders --install-extension ms-python.debugpy
-code-insiders --install-extension ms-python.black-formatter
 code-insiders --install-extension swiftlang.swift-vscode
 code-insiders --install-extension ms-vscode.cpptools
 code-insiders --install-extension llvm-vs-code-extensions.lldb-dap
@@ -64,7 +63,6 @@ code-insiders --install-extension esbenp.prettier-vscode
 code-insiders --install-extension streetsidesoftware.code-spell-checker
 code-insiders --install-extension redhat.vscode-yaml
 code-insiders --install-extension mads-hartmann.bash-ide-vscode
-code-insiders --install-extension trunk.io
 
 # Productivity and Tools
 echo "🛠️ Installing Productivity Extensions..."

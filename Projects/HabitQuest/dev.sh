@@ -210,12 +210,7 @@ cmd_format() {
     npx prettier --write .
     ;;
   "python")
-    if command -v black &>/dev/null; then
-      black .
-    else
-      log_error "black not installed. Install with: pip install black"
-      exit 1
-    fi
+    log_info "Python formatting not configured (Black removed)"
     ;;
   esac
 

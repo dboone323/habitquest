@@ -148,14 +148,9 @@ setup_python() {
   # shellcheck source=/dev/null
   source "${venv_dir}/bin/activate"
 
-  if [[ -f "${WORKSPACE_DIR}/Tools/Automation/requirements.txt" ]]; then
-    pip install -r "${WORKSPACE_DIR}/Tools/Automation/requirements.txt"
+  if [[ -f "${WORKSPACE_DIR}/requirements.txt" ]]; then
+    pip install -r "${WORKSPACE_DIR}/requirements.txt"
     print_success "Python requirements installed"
-  fi
-
-  if [[ -f "${WORKSPACE_DIR}/Tools/Automation/requirements-dev.txt" ]]; then
-    pip install -r "${WORKSPACE_DIR}/Tools/Automation/requirements-dev.txt"
-    print_success "Development requirements installed"
   fi
 }
 

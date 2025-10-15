@@ -147,6 +147,13 @@ main() {
   # AI reviews cleanup
   cleanup_timestamped_files "$WORKSPACE_ROOT/ai_reviews" "*.md" $MAX_REPORTS "AI review"
 
+  # MD reports cleanup (AI insights, orchestrator status, performance reports)
+  cleanup_timestamped_files "$WORKSPACE_ROOT" "WORKSPACE_AI_INSIGHTS_*.md" $MAX_REPORTS "AI insights report"
+  cleanup_timestamped_files "$WORKSPACE_ROOT" "orchestrator_status_*.md" $MAX_REPORTS "orchestrator status"
+  cleanup_timestamped_files "$WORKSPACE_ROOT" "PERFORMANCE_REPORT_*.md" $MAX_REPORTS "performance report"
+  cleanup_timestamped_files "$WORKSPACE_ROOT/Tools/Automation" "*_report_*.md" $MAX_REPORTS "automation report"
+  cleanup_timestamped_files "$WORKSPACE_ROOT/Tools/Automation" "quantum_*_report*.md" $MAX_REPORTS "quantum report"
+
   # Communication files
   cleanup_timestamped_files "$WORKSPACE_ROOT/communication" "*" $MAX_LOGS "communication file"
 

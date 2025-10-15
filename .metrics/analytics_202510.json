@@ -1,35 +1,35 @@
 {
-  "timestamp": 1760054801,
-  "date": "2025-10-09T19:06:54-05:00",
+  "timestamp": 1760546883,
+  "date": "2025-10-15T11:48:19-05:00",
   "workspace": "/Users/danielstevens/Desktop/Quantum-workspace",
   "code_metrics": {
-  "project": "PlannerApp",
-  "swift_files": 109,
-  "total_lines": 16718,
-  "code_lines": 12749,
-  "comment_lines": 1611,
-  "blank_lines": 2358,
-  "comment_ratio": 0.126363
+  "project": "QuantumFinance",
+  "swift_files": 6,
+  "total_lines": 2509,
+  "code_lines": 1877,
+  "comment_lines": 229,
+  "blank_lines": 403,
+  "comment_ratio": 0.122003
 },
   "build_metrics": {
-  "total_builds_7d": 20,
+  "total_builds_7d": 7,
   "avg_build_time_seconds": 0,
-  "last_build": "2025-10-09T19:07:00-05:00"
+  "last_build": "2025-10-15T11:48:30-05:00"
 },
   "coverage_metrics": {
-  "project": "PlannerApp",
+  "project": "QuantumFinance",
   "coverage_percent": 0,
-  "has_tests": false
+  "has_tests": true
 },
   "complexity_metrics": {
-  "project": "PlannerApp",
+  "project": "QuantumFinance",
   "complexity_violations": 00,
   "avg_complexity": 0
 },
   "agent_metrics": {
-  "total_agents": 37,
-  "active_agents": 15,
-  "tasks_completed_all_time": 13,
-  "agent_availability": 0.405405
+  "total_agents": 11,
+  "active_agents": 9,
+  "tasks_completed_all_time": 0,
+  "agent_availability": 0.818182
 }
 }
