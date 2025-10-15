@@ -35,10 +35,10 @@ public final class QuantumChemistryEngine {
         public let maxIterations: Int
 
         public init(molecule: Molecule,
-                   basisSet: String = "STO-3G",
-                   method: QuantumMethod = .hartreeFock,
-                   convergenceThreshold: Double = 1e-8,
-                   maxIterations: Int = 100) {
+                    basisSet: String = "STO-3G",
+                    method: QuantumMethod = .hartreeFock,
+                    convergenceThreshold: Double = 1e-8,
+                    maxIterations: Int = 100) {
             self.molecule = molecule
             self.basisSet = basisSet
             self.method = method
@@ -132,13 +132,13 @@ public final class QuantumChemistryEngine {
         // For minimal basis, number of orbitals = number of atomic orbitals
         let numOrbitals = molecule.atoms.count // Simplified: 1 orbital per atom for minimal basis
 
-        for i in 0..<numOrbitals {
+        for orbitalIndex in 0..<numOrbitals {
             let orbital = MolecularOrbital(
-                index: i,
-                energy: i < molecule.atoms.count ? Double.random(in: -15...5) : Double.random(in: 1...10),
-                occupation: i < molecule.atoms.count ? 2.0 : 0.0,
+                index: orbitalIndex,
+                energy: orbitalIndex < molecule.atoms.count ? Double.random(in: -15...5) : Double.random(in: 1...10),
+                occupation: orbitalIndex < molecule.atoms.count ? 2.0 : 0.0,
                 coefficients: (0..<molecule.atoms.count).map { _ in Double.random(in: -1...1) },
-                type: i < molecule.atoms.count ? .core : .virtual
+                type: orbitalIndex < molecule.atoms.count ? .core : .virtual
             )
             orbitals.append(orbital)
         }
@@ -283,7 +283,7 @@ public final class QuantumChemistryEngine {
         // More realistic kinetic energy calculation (negative contribution)
         let kineticPerAtom = -5.0 // Typical kinetic energy contribution in Hartree
         let totalEnergy = Double(molecule.atoms.count) * kineticPerAtom
-        let terms = molecule.atoms.map { atom in
+        let terms = molecule.atoms.map { _ in
             EnergyTerm(coefficient: 0.5, orbitals: [0], value: kineticPerAtom)
         }
         return EnergyComponent(type: .kinetic, terms: terms, totalEnergy: totalEnergy)
@@ -293,14 +293,14 @@ public final class QuantumChemistryEngine {
         var terms: [EnergyTerm] = []
         var totalEnergy = 0.0
 
-        for i in 0..<molecule.atoms.count {
-            for j in (i+1)..<molecule.atoms.count {
-                let distance = calculateDistance(molecule.atoms[i].position, molecule.atoms[j].position)
+        for atomIndex in 0..<molecule.atoms.count {
+            for otherAtomIndex in (atomIndex+1)..<molecule.atoms.count {
+                let distance = calculateDistance(molecule.atoms[atomIndex].position, molecule.atoms[otherAtomIndex].position)
                 // Nuclear repulsion (positive) and electron-nuclear attraction (negative)
-                let repulsion = Double(molecule.atoms[i].atomicNumber * molecule.atoms[j].atomicNumber) / max(distance, 0.1)
-                let attraction = -2.0 * Double(molecule.atoms[i].atomicNumber + molecule.atoms[j].atomicNumber) / max(distance, 0.1)
+                let repulsion = Double(molecule.atoms[atomIndex].atomicNumber * molecule.atoms[otherAtomIndex].atomicNumber) / max(distance, 0.1)
+                let attraction = -2.0 * Double(molecule.atoms[atomIndex].atomicNumber + molecule.atoms[otherAtomIndex].atomicNumber) / max(distance, 0.1)
                 let netPotential = repulsion + attraction
-                terms.append(EnergyTerm(coefficient: 1.0, orbitals: [i, j], value: netPotential))
+                terms.append(EnergyTerm(coefficient: 1.0, orbitals: [atomIndex, otherAtomIndex], value: netPotential))
                 totalEnergy += netPotential
             }
         }
@@ -361,9 +361,9 @@ public final class QuantumChemistryEngine {
 
     private func calculateBondLengths(molecule: Molecule) -> [Double] {
         var lengths: [Double] = []
-        for i in 0..<molecule.atoms.count {
-            for j in (i+1)..<molecule.atoms.count {
-                let distance = calculateDistance(molecule.atoms[i].position, molecule.atoms[j].position)
+        for atomIndex in 0..<molecule.atoms.count {
+            for otherAtomIndex in (atomIndex+1)..<molecule.atoms.count {
+                let distance = calculateDistance(molecule.atoms[atomIndex].position, molecule.atoms[otherAtomIndex].position)
                 lengths.append(distance)
             }
         }
@@ -512,7 +512,7 @@ public final class QuantumChemistryEngine {
 
         // Initial state preparation
         for qubit in 0..<orbitals {
-            gates.append(QuantumGate(type: .h, qubits: [qubit]))
+            gates.append(QuantumGate(type: .hadamard, qubits: [qubit]))
         }
 
         // Variational layers
@@ -520,13 +520,13 @@ public final class QuantumChemistryEngine {
             // Single qubit rotations
             for qubit in 0..<orbitals {
                 let thetaIndex = layer * orbitals * 2 + qubit * 2
-                gates.append(QuantumGate(type: .ry, qubits: [qubit], parameters: [parameters[thetaIndex]]))
-                gates.append(QuantumGate(type: .rz, qubits: [qubit], parameters: [parameters[thetaIndex + 1]]))
+                gates.append(QuantumGate(type: .rotationY, qubits: [qubit], parameters: [parameters[thetaIndex]]))
+                gates.append(QuantumGate(type: .rotationZ, qubits: [qubit], parameters: [parameters[thetaIndex + 1]]))
             }
 
             // Entangling gates
             for qubit in 0..<orbitals-1 {
-                gates.append(QuantumGate(type: .cz, qubits: [qubit, qubit + 1]))
+                gates.append(QuantumGate(type: .controlledZ, qubits: [qubit, qubit + 1]))
             }
         }
 
@@ -540,13 +540,13 @@ public final class QuantumChemistryEngine {
 
         // Initialize walkers in superposition
         for qubit in 0..<min(orbitals, 10) { // Limit qubits for hardware constraints
-            gates.append(QuantumGate(type: .h, qubits: [qubit]))
+            gates.append(QuantumGate(type: .hadamard, qubits: [qubit]))
         }
 
         // Add controlled operations for walker propagation
-        for i in 0..<min(walkers / 100, 5) { // Limit depth for hardware
+        for walkerIndex in 0..<min(walkers / 100, 5) { // Limit depth for hardware
             for qubit in 0..<min(orbitals, 10) {
-                gates.append(QuantumGate(type: .rx, qubits: [qubit], parameters: [Double(i) * 0.1]))
+                gates.append(QuantumGate(type: .rotationX, qubits: [qubit], parameters: [Double(walkerIndex) * 0.1]))
             }
         }
 
@@ -562,7 +562,7 @@ public final class QuantumChemistryEngine {
 
         // Initialize precision qubits in superposition
         for qubit in 0..<precisionQubits {
-            gates.append(QuantumGate(type: .h, qubits: [qubit]))
+            gates.append(QuantumGate(type: .hadamard, qubits: [qubit]))
         }
 
         // Add controlled operations for phase estimation
@@ -570,7 +570,7 @@ public final class QuantumChemistryEngine {
             let angle = Double(precisionQubit + 1) * Double.pi / Double(1 << precisionQubit)
             for orbitalQubit in 0..<orbitals {
                 gates.append(QuantumGate(type: .cnot, qubits: [precisionQubit, precisionQubits + orbitalQubit]))
-                gates.append(QuantumGate(type: .rz, qubits: [precisionQubits + orbitalQubit], parameters: [angle]))
+                gates.append(QuantumGate(type: .rotationZ, qubits: [precisionQubits + orbitalQubit], parameters: [angle]))
                 gates.append(QuantumGate(type: .cnot, qubits: [precisionQubit, precisionQubits + orbitalQubit]))
             }
         }
@@ -589,7 +589,7 @@ public final class QuantumChemistryEngine {
         for previousState in 0..<stateIndex {
             let deflationAngle = Double(previousState + 1) * Double.pi / 4.0
             for qubit in 0..<ansatz.circuit.qubits {
-                modifiedGates.append(QuantumGate(type: .rz, qubits: [qubit], parameters: [deflationAngle]))
+                modifiedGates.append(QuantumGate(type: .rotationZ, qubits: [qubit], parameters: [deflationAngle]))
             }
         }
 
@@ -605,32 +605,32 @@ public final class QuantumChemistryEngine {
         case .dipoleMoment:
             // Circuit for dipole moment calculation
             for qubit in 0..<orbitals {
-                gates.append(QuantumGate(type: .h, qubits: [qubit]))
-                gates.append(QuantumGate(type: .ry, qubits: [qubit], parameters: [Double.pi / 4.0]))
+                gates.append(QuantumGate(type: .hadamard, qubits: [qubit]))
+                gates.append(QuantumGate(type: .rotationY, qubits: [qubit], parameters: [Double.pi / 4.0]))
             }
         case .polarizability:
             // Circuit for polarizability calculation
             for qubit in 0..<orbitals {
-                gates.append(QuantumGate(type: .h, qubits: [qubit]))
-                gates.append(QuantumGate(type: .rx, qubits: [qubit], parameters: [Double.pi / 3.0]))
+                gates.append(QuantumGate(type: .hadamard, qubits: [qubit]))
+                gates.append(QuantumGate(type: .rotationX, qubits: [qubit], parameters: [Double.pi / 3.0]))
             }
         case .electronDensity:
             // Circuit for electron density calculation
             for qubit in 0..<orbitals {
-                gates.append(QuantumGate(type: .h, qubits: [qubit]))
-                gates.append(QuantumGate(type: .rz, qubits: [qubit], parameters: [Double.pi / 6.0]))
+                gates.append(QuantumGate(type: .hadamard, qubits: [qubit]))
+                gates.append(QuantumGate(type: .rotationZ, qubits: [qubit], parameters: [Double.pi / 6.0]))
             }
         case .vibrationalFrequency:
             // Circuit for vibrational frequency calculation
             for qubit in 0..<orbitals {
-                gates.append(QuantumGate(type: .h, qubits: [qubit]))
-                gates.append(QuantumGate(type: .ry, qubits: [qubit], parameters: [Double.pi / 8.0]))
+                gates.append(QuantumGate(type: .hadamard, qubits: [qubit]))
+                gates.append(QuantumGate(type: .rotationY, qubits: [qubit], parameters: [Double.pi / 8.0]))
             }
         case .reactionEnergy:
             // Circuit for reaction energy calculation
             for qubit in 0..<orbitals {
-                gates.append(QuantumGate(type: .h, qubits: [qubit]))
-                gates.append(QuantumGate(type: .rz, qubits: [qubit], parameters: [Double.pi / 12.0]))
+                gates.append(QuantumGate(type: .hadamard, qubits: [qubit]))
+                gates.append(QuantumGate(type: .rotationZ, qubits: [qubit], parameters: [Double.pi / 12.0]))
             }
         }
 
@@ -640,13 +640,13 @@ public final class QuantumChemistryEngine {
     private func generateInverseQFT(qubits: Int) -> [QuantumGate] {
         var gates: [QuantumGate] = []
 
-        for i in (0..<qubits).reversed() {
-            gates.append(QuantumGate(type: .h, qubits: [i]))
-            for j in 0..<i {
-                let angle = Double.pi / Double(1 << (i - j))
-                gates.append(QuantumGate(type: .cnot, qubits: [j, i]))
-                gates.append(QuantumGate(type: .rz, qubits: [i], parameters: [angle]))
-                gates.append(QuantumGate(type: .cnot, qubits: [j, i]))
+        for qubitIndex in (0..<qubits).reversed() {
+            gates.append(QuantumGate(type: .hadamard, qubits: [qubitIndex]))
+            for controlIndex in 0..<qubitIndex {
+                let angle = Double.pi / Double(1 << (qubitIndex - controlIndex))
+                gates.append(QuantumGate(type: .cnot, qubits: [controlIndex, qubitIndex]))
+                gates.append(QuantumGate(type: .rotationZ, qubits: [qubitIndex], parameters: [angle]))
+                gates.append(QuantumGate(type: .cnot, qubits: [controlIndex, qubitIndex]))
             }
         }
 
@@ -697,13 +697,13 @@ public final class QuantumChemistryEngine {
         let energy = baseEnergy - correction + stateOffset + Double.random(in: -0.1...0.1)
 
         // For molecular properties, return absolute value to ensure non-negative
-        if circuit.gates.contains(where: { $0.type == .ry && $0.parameters.contains(where: { $0 == Double.pi / 4.0 }) }) {
+        if circuit.gates.contains(where: { $0.type == .rotationY && $0.parameters.contains(where: { $0 == Double.pi / 4.0 }) }) {
             // This is likely a dipole moment calculation
             return abs(energy) * 0.1 // Scale to reasonable dipole moment range
-        } else if circuit.gates.contains(where: { $0.type == .rx && $0.parameters.contains(where: { $0 == Double.pi / 3.0 }) }) {
+        } else if circuit.gates.contains(where: { $0.type == .rotationX && $0.parameters.contains(where: { $0 == Double.pi / 3.0 }) }) {
             // This is likely a polarizability calculation
             return abs(energy) * 0.01 // Scale to reasonable polarizability range
-        } else if circuit.gates.contains(where: { $0.type == .rz && $0.parameters.contains(where: { $0 == Double.pi / 6.0 }) }) {
+        } else if circuit.gates.contains(where: { $0.type == .rotationZ && $0.parameters.contains(where: { $0 == Double.pi / 6.0 }) }) {
             // This is likely an electron density calculation
             return abs(energy) * 0.001 // Scale to reasonable density range
         }

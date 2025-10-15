@@ -88,7 +88,6 @@ extension Theme {
 
 // MARK: - Gradient Support Extensions
 
-import SwiftUI
 // import SharedKit
 
 extension Color {

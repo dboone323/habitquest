@@ -330,15 +330,15 @@ public struct QuantumGate {
     public let parameters: [Double]
 
     public enum GateType {
-        case h // Hadamard
-        case x // Pauli-X
-        case y // Pauli-Y
-        case z // Pauli-Z
-        case rx // Rotation-X
-        case ry // Rotation-Y
-        case rz // Rotation-Z
+        case hadamard // Hadamard
+        case pauliX // Pauli-X
+        case pauliY // Pauli-Y
+        case pauliZ // Pauli-Z
+        case rotationX // Rotation-X
+        case rotationY // Rotation-Y
+        case rotationZ // Rotation-Z
         case cnot // CNOT
-        case cz // Controlled-Z
+        case controlledZ // Controlled-Z
         case toffoli // Toffoli
     }
 

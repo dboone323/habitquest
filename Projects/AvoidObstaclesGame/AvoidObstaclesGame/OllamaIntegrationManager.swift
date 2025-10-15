@@ -15,6 +15,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
     private let performanceMonitor = AIOperationMonitor()
     private let healthMonitor = AIHealthMonitor.shared
     private let retryManager = RetryManager()
+    private let testFramework = "XCTest" // Default test framework
 
     public init(config: OllamaConfig = .default) {
         self.config = config
@@ -548,6 +549,18 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         return min(Double(testMethods) * 15.0, 85.0)
     }
 
+    // MARK: - Helper Functions
+
+    private func parseAnalysisResult(from jsonString: String, language: String, analysisType: AnalysisType) throws -> CodeAnalysisResult {
+        let jsonData = jsonString.data(using: .utf8) ?? Data()
+        return try JSONDecoder().decode(CodeAnalysisResult.self, from: jsonData)
+    }
+
+    private func parseCodeGenerationResult(from jsonString: String, language: String) throws -> CodeGenerationResult {
+        let jsonData = jsonString.data(using: .utf8) ?? Data()
+        return try JSONDecoder().decode(CodeGenerationResult.self, from: jsonData)
+    }
+
     // MARK: - Batch Processing
 
     public func processBatchTasks(_ tasks: [AutomationTask]) async throws -> [TaskResult] {
@@ -666,7 +679,7 @@ private actor RetryManager {
 
         // Check circuit breaker
         if isCircuitBreakerOpen(for: circuitBreakerKey) {
-            throw AIServiceProtocols.AIError.serviceUnavailable("Circuit breaker open for operation: \(operation)")
+            throw AIError.serviceUnavailable("Circuit breaker open for operation: \(operation)")
         }
 
         var lastError: Error?
@@ -698,12 +711,12 @@ private actor RetryManager {
             }
         }
 
-        throw lastError ?? AIServiceProtocols.AIError.operationFailed("All retry attempts failed for operation: \(operation)")
+        throw lastError ?? AIError.operationFailed("All retry attempts failed for operation: \(operation)")
     }
 
     private func shouldNotRetry(_ error: Error) -> Bool {
         // Don't retry authentication or configuration errors
-        if let aiError = error as? AIServiceProtocols.AIError {
+        if let aiError = error as? AIError {
             switch aiError {
             case .authenticationFailed, .invalidConfiguration:
                 return true

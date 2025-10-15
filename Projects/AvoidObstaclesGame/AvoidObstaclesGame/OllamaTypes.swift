@@ -154,6 +154,26 @@ public struct DocumentationResult: Codable, Sendable {
     }
 }
 
+/// Documentation generation result
+public struct DocumentationResult: Codable, Sendable {
+    public let documentation: String
+    public let language: String
+    public let includesExamples: Bool
+    public let timestamp: Date
+
+    public init(
+        documentation: String,
+        language: String,
+        includesExamples: Bool = false,
+        timestamp: Date = Date()
+    ) {
+        self.documentation = documentation
+        self.language = language
+        self.includesExamples = includesExamples
+        self.timestamp = timestamp
+    }
+}
+
 /// Test generation result
 public struct TestGenerationResult: Codable, Sendable {
     public let testCode: String

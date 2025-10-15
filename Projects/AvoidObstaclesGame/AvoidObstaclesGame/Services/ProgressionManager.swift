@@ -387,12 +387,4 @@ class ProgressionManager {
 }
 
 /// Events that can trigger achievement progress
-enum AchievementEvent {
-    case gameCompleted
-    case scoreReached(score: Int)
-    case difficultyReached(level: Int)
-    case powerUpCollected
-    case shieldUsed
-    case perfectScore(score: Int)
-    case comebackScore(score: Int)
-}
+

@@ -8,7 +8,8 @@
 import Foundation
 
 /// Manages achievements and their unlocking
-class AchievementManager {
+@MainActor
+class AchievementManager: Sendable {
     // MARK: - Properties
 
     /// Shared singleton instance
@@ -294,75 +295,57 @@ class AchievementManager {
     /// Gets all achievements asynchronously
     /// - Returns: Array of all achievements
     func getAllAchievementsAsync() async -> [Achievement] {
-        await Task.detached {
-            self.getAllAchievements()
-        }.value
+        getAllAchievements()
     }
 
     /// Gets only unlocked achievements asynchronously
     /// - Returns: Array of unlocked achievements
     func getUnlockedAchievementsAsync() async -> [Achievement] {
-        await Task.detached {
-            self.getUnlockedAchievements()
-        }.value
+        getUnlockedAchievements()
     }
 
     /// Gets achievements that are in progress asynchronously
     /// - Returns: Array of achievements with progress > 0 and < 100%
     func getInProgressAchievementsAsync() async -> [Achievement] {
-        await Task.detached {
-            self.getInProgressAchievements()
-        }.value
+        getInProgressAchievements()
     }
 
     /// Gets locked achievements asynchronously
     /// - Returns: Array of locked achievements
     func getLockedAchievementsAsync() async -> [Achievement] {
-        await Task.detached {
-            self.getLockedAchievements()
-        }.value
+        getLockedAchievements()
     }
 
     /// Checks if an achievement is unlocked asynchronously
     /// - Parameter id: The achievement ID
     /// - Returns: True if unlocked
     func isAchievementUnlockedAsync(_ id: String) async -> Bool {
-        await Task.detached {
-            self.isAchievementUnlocked(id)
-        }.value
+        isAchievementUnlocked(id)
     }
 
     /// Gets achievement statistics asynchronously
     /// - Returns: Dictionary of statistics
     func getAchievementStatisticsAsync() async -> [String: Any] {
-        await Task.detached {
-            self.getAchievementStatistics()
-        }.value
+        getAchievementStatistics()
     }
 
     /// Gets recently unlocked achievements asynchronously
     /// - Parameter count: Number of recent achievements to return
     /// - Returns: Array of recently unlocked achievements
     func getRecentUnlocksAsync(count: Int = 5) async -> [Achievement] {
-        await Task.detached {
-            self.getRecentUnlocks(count: count)
-        }.value
+        getRecentUnlocks(count: count)
     }
 
     /// Updates achievement progress based on game events asynchronously
     /// - Parameter event: The game event that occurred
     /// - Parameter value: The value associated with the event
     func updateProgressAsync(for event: AchievementEvent, value: Int = 1) async {
-        await Task.detached {
-            self.updateProgress(for: event, value: value)
-        }.value
+        updateProgress(for: event, value: value)
     }
 
     /// Resets all achievements asynchronously (for testing or user request)
     func resetAllAchievementsAsync() async {
-        await Task.detached {
-            self.resetAllAchievements()
-        }.value
+        resetAllAchievements()
     }
 }
 
@@ -380,10 +363,12 @@ enum AchievementEvent {
 // MARK: - Object Pooling
 
 /// Object pool for performance optimization
+@MainActor
 private var objectPool: [Any] = []
 private let maxPoolSize = 50
 
 /// Get an object from the pool or create new one
+@MainActor
 private func getPooledObject<T>() -> T? {
     if let pooled = objectPool.popLast() as? T {
         return pooled
@@ -392,6 +377,7 @@ private func getPooledObject<T>() -> T? {
 }
 
 /// Return an object to the pool
+@MainActor
 private func returnToPool(_ object: Any) {
     if objectPool.count < maxPoolSize {
         objectPool.append(object)
