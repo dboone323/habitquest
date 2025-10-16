@@ -1,5 +1,0 @@
-# SwiftLint Configuration for CodingReviewer
-
-# Analyzer rules
-analyzer_rules:
-  - unused_declaration
