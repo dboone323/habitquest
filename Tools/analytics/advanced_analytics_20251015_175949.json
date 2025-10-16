@@ -1,0 +1,581 @@
+{
+  "timestamp": "2025-10-15T17:59:49.100427",
+  "summary": {
+    "total_tools": 14,
+    "excellent_health": 14,
+    "good_health": 0,
+    "fair_health": 0,
+    "poor_health": 0,
+    "critical_health": 0,
+    "high_risk": 0,
+    "critical_risk": 0
+  },
+  "predictions": {
+    "git": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          0.446,
+          0.448,
+          0.448,
+          0.585,
+          0.45,
+          0.449
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for git - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.327,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0.009
+      },
+      "timestamp": "2025-10-15T17:59:48.902098"
+    },
+    "python3": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          0.679,
+          0.705,
+          0.694,
+          0.688,
+          0.694,
+          0.687
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for python3 - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.325,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0.0
+      },
+      "timestamp": "2025-10-15T17:59:48.917758"
+    },
+    "node": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          0.112,
+          0.092,
+          0.098,
+          0.105,
+          0.099,
+          0.106
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for node - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.325,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0
+      },
+      "timestamp": "2025-10-15T17:59:48.932132"
+    },
+    "npm": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          0.433,
+          0.434,
+          0.443,
+          0.432,
+          0.434,
+          0.441
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for npm - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.325,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0.002
+      },
+      "timestamp": "2025-10-15T17:59:48.948111"
+    },
+    "brew": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          0.22,
+          0.219,
+          0.221,
+          0.236,
+          0.213,
+          0.402
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for brew - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.335,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0.052
+      },
+      "timestamp": "2025-10-15T17:59:48.963168"
+    },
+    "ollama": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          0.189,
+          0.19,
+          0.462,
+          0.191,
+          0.194,
+          0.189
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for ollama - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.325,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0
+      },
+      "timestamp": "2025-10-15T17:59:48.978407"
+    },
+    "jq": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          0.048,
+          0.057,
+          0.531,
+          0.063,
+          0.046,
+          0.063
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for jq - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.325,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0
+      },
+      "timestamp": "2025-10-15T17:59:48.993681"
+    },
+    "swiftlint": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          1.957,
+          0.974,
+          1.219,
+          1.227,
+          0.962,
+          0.929
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for swiftlint - prepare mitigation",
+        "Performance improving for swiftlint - continue monitoring"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.325,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0
+      },
+      "timestamp": "2025-10-15T17:59:49.009343"
+    },
+    "swiftformat": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          0.425,
+          0.782,
+          0.4,
+          0.447,
+          0.457,
+          1.073
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for swiftformat - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.351,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0.132
+      },
+      "timestamp": "2025-10-15T17:59:49.024483"
+    },
+    "xcodebuild": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          0.154,
+          1.657,
+          0.654,
+          0.128,
+          1.175,
+          0.544
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for xcodebuild - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.325,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0
+      },
+      "timestamp": "2025-10-15T17:59:49.039303"
+    },
+    "swift": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          0.155,
+          0.172,
+          0.166,
+          0.16,
+          0.154,
+          0.156
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for swift - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.325,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0
+      },
+      "timestamp": "2025-10-15T17:59:49.054732"
+    },
+    "fastlane": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          -0.056,
+          -0.047,
+          -0.06,
+          -0.06,
+          -0.052,
+          -0.045
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for fastlane - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.325,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0.002
+      },
+      "timestamp": "2025-10-15T17:59:49.070254"
+    },
+    "pod": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          0.5,
+          0.495,
+          0.489,
+          0.476,
+          0.718,
+          0.487
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for pod - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.332,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0.034
+      },
+      "timestamp": "2025-10-15T17:59:49.085284"
+    },
+    "gh": {
+      "health_score": 0.95,
+      "health_status": "EXCELLENT",
+      "performance_forecast": {
+        "forecast": [
+          0.159,
+          0.42,
+          1.471,
+          1.597,
+          0.959,
+          0.191
+        ],
+        "confidence": 0.75,
+        "horizon_hours": 6
+      },
+      "time_series_forecast": {
+        "forecast": [
+          0.328,
+          0.04,
+          0.056,
+          0.045,
+          0.038,
+          0.035
+        ],
+        "method": "ensemble",
+        "confidence": 0.7,
+        "horizon_hours": 6
+      },
+      "recommendations": [
+        "Performance degradation predicted for gh - prepare mitigation"
+      ],
+      "risk_metrics": {
+        "overall_risk": 0.325,
+        "risk_level": "MEDIUM",
+        "health_risk": 0.05,
+        "performance_risk": 1,
+        "trend_risk": 0
+      },
+      "timestamp": "2025-10-15T17:59:49.100423"
+    }
+  },
+  "insights": [
+    "System health is excellent - maintain current practices",
+    "Performance degrading: swiftformat",
+    "Performance improving: swiftlint"
+  ]
+}

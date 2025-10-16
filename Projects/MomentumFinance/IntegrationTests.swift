@@ -4,7 +4,7 @@ import Foundation
 
 func runIntegrationTests() {
     // Use fixed date for deterministic tests
-    let testDate = Date(timeIntervalSince1970: 1640995200) // 2022-01-01 00:00:00 UTC
+    let testDate = Date(timeIntervalSince1970: 1_640_995_200) // 2022-01-01 00:00:00 UTC
     runTest("testAccountTransactionIntegration") {
         let transaction1 = FinancialTransaction(
             title: "Salary",
@@ -68,7 +68,7 @@ func runIntegrationTests() {
             balance: 500.0,
             transactions: [
                 FinancialTransaction(title: "Deposit", amount: 1000.0, date: testDate, transactionType: .income),
-                FinancialTransaction(title: "ATM", amount: 200.0, date: testDate, transactionType: .expense)
+                FinancialTransaction(title: "ATM", amount: 200.0, date: testDate, transactionType: .expense),
             ]
         )
 
@@ -77,7 +77,7 @@ func runIntegrationTests() {
             type: .savings,
             balance: 2000.0,
             transactions: [
-                FinancialTransaction(title: "Interest", amount: 50.0, date: testDate, transactionType: .income)
+                FinancialTransaction(title: "Interest", amount: 50.0, date: testDate, transactionType: .income),
             ]
         )
 
@@ -91,7 +91,7 @@ func runIntegrationTests() {
             name: "Food",
             transactions: [
                 FinancialTransaction(title: "Groceries", amount: 100.0, date: testDate, transactionType: .expense),
-                FinancialTransaction(title: "Restaurant", amount: 50.0, date: testDate, transactionType: .expense)
+                FinancialTransaction(title: "Restaurant", amount: 50.0, date: testDate, transactionType: .expense),
             ]
         )
 
@@ -99,7 +99,7 @@ func runIntegrationTests() {
             name: "Transportation",
             transactions: [
                 FinancialTransaction(title: "Gas", amount: 60.0, date: testDate, transactionType: .expense),
-                FinancialTransaction(title: "Bus Pass", amount: 40.0, date: testDate, transactionType: .expense)
+                FinancialTransaction(title: "Bus Pass", amount: 40.0, date: testDate, transactionType: .expense),
             ]
         )
 

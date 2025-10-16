@@ -1,0 +1,50 @@
+name: Workspace Validation
+
+on:
+  push:
+    branches: [ main, master, develop ]
+    paths:
+      - 'Code.code-workspace'
+      - 'Tools/Automation/prevent_workspace_duplication.sh'
+  pull_request:
+    branches: [ main, master, develop ]
+    paths:
+      - 'Code.code-workspace'
+      - 'Tools/Automation/prevent_workspace_duplication.sh'
+
+jobs:
+  validate-workspace:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Validate workspace configuration
+      run: |
+        chmod +x Tools/Automation/prevent_workspace_duplication.sh
+        ./Tools/Automation/prevent_workspace_duplication.sh validate
+
+    - name: Upload validation report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: workspace-validation-report
+        path: workspace_validation_report.md
+
+    - name: Upload validation log
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: workspace-validation-log
+        path: workspace_validation.log
+
+    - name: Check for workspace duplicates
+      run: |
+        # Additional check for any workspace files that shouldn't exist
+        duplicate_count=$(find . -name "*.code-workspace" -type f | grep -v "^./Code.code-workspace$" | grep -v "/workspace_template.code-workspace$" | grep -v "/Archive/" | grep -v "/Workspace_Backup_" | wc -l)
+        if [ "$duplicate_count" -gt 0 ]; then
+          echo "Found $duplicate_count unexpected workspace files:"
+          find . -name "*.code-workspace" -type f | grep -v "^./Code.code-workspace$" | grep -v "/workspace_template.code-workspace$" | grep -v "/Archive/" | grep -v "/Workspace_Backup_"
+          exit 1
+        fi

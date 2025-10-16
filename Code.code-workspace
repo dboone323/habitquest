@@ -27,6 +27,10 @@
             "source.organizeImports": "explicit"
         },
         "editor.codeActions.triggerOnFocusChange": false,
+        "editor.trimAutoWhitespace": true,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+        "editor.detectIndentation": false,
         "swift.buildArguments": [],
         "swift.disableAutoResolve": false,
         "swift.formatOnSave": false,
@@ -37,30 +41,89 @@
         "files.associations": {
             "*.swift": "swift",
             "*.sh": "shellscript",
-            "*.py": "python"
+            "*.py": "python",
+            "*.md": "markdown",
+            "*.json": "json",
+            "*.yml": "yaml",
+            "*.yaml": "yaml"
         },
         "terminal.integrated.defaultProfile.osx": "zsh",
+        "terminal.integrated.scrollback": 10000,
         "search.exclude": {
             "**/build": true,
             "**/DerivedData": true,
             "**/.git": true,
-            "**/node_modules": true
+            "**/node_modules": true,
+            "**/.build": true,
+            "**/Packages": true,
+            "**/*.xcodeproj/xcuserdata": true,
+            "**/*.xcodeproj/project.xcworkspace/xcuserdata": true,
+            "**/xcuserdata": true,
+            "**/.swiftpm": true,
+            "**/Testing": true,
+            "**/test_results": true,
+            "**/debug_results": true
         },
         "files.exclude": {
             "**/.DS_Store": true,
             "**/build": true,
-            "**/DerivedData": true
+            "**/DerivedData": true,
+            "**/.build": true,
+            "**/Packages": true,
+            "**/*.xcodeproj/xcuserdata": true,
+            "**/*.xcodeproj/project.xcworkspace/xcuserdata": true,
+            "**/xcuserdata": true,
+            "**/.swiftpm": true,
+            "**/Testing": true,
+            "**/test_results": true,
+            "**/debug_results": true,
+            "**/.*": false
+        },
+        "files.watcherExclude": {
+            "**/build/**": true,
+            "**/DerivedData/**": true,
+            "**/.git/**": true,
+            "**/node_modules/**": true,
+            "**/.build/**": true,
+            "**/Packages/**": true,
+            "**/*.xcodeproj/xcuserdata/**": true,
+            "**/xcuserdata/**": true,
+            "**/.swiftpm/**": true,
+            "**/Testing/**": true
         },
         "github.copilot.chat.codesearch.enabled": true,
         "github.copilot.chat.languageContext.fix.typescript.enabled": true,
         "chat.mcp.autostart": "newAndOutdated",
         "chat.agent.maxRequests": 1000,
-        "chatgpt.commentCodeLensEnabled": false
+        "chatgpt.commentCodeLensEnabled": false,
+        "workbench.editor.enablePreview": false,
+        "workbench.tree.renderIndentGuides": "always",
+        "explorer.fileNesting.enabled": true,
+        "explorer.fileNesting.expand": false,
+        "explorer.fileNesting.patterns": {
+            "*.swift": "${capture}.test.swift, ${capture}.spec.swift",
+            "Package.swift": "Package.resolved, Package.pins",
+            "*.xcodeproj": "*.xcworkspace",
+            "README.md": "CHANGELOG.md, LICENSE, CODE_OF_CONDUCT.md, CONTRIBUTING.md"
+        }
     },
     "extensions": {
         "recommendations": [
+            "ms-vscode.vscode-json",
             "ms-python.python",
-            "ms-vscode.vscode-json"
+            "ms-vscode.makefile-tools",
+            "ms-vscode.vscode-yaml",
+            "ms-vscode.powershell",
+            "redhat.vscode-yaml",
+            "ms-vscode-remote.remote-containers",
+            "ms-vscode.vscode-docker",
+            "github.copilot",
+            "github.copilot-chat"
+        ],
+        "unwantedRecommendations": [
+            "ms-vscode.vscode-typescript-next",
+            "ms-vscode.vscode-eslint",
+            "esbenp.prettier-vscode"
         ]
     },
     "tasks": {
@@ -98,6 +161,43 @@
                     "status"
                 ],
                 "group": "build"
+            },
+            {
+                "label": "containers: build",
+                "type": "shell",
+                "command": "docker compose -f Tools/docker-compose.yml build",
+                "group": "build"
+            },
+            {
+                "label": "containers: tools",
+                "type": "shell",
+                "command": "docker compose -f Tools/docker-compose.yml run --rm tools",
+                "group": "build"
+            },
+            {
+                "label": "containers: swift tests",
+                "type": "shell",
+                "command": "docker compose -f Tools/docker-compose.yml run --rm swift",
+                "group": "test"
+            },
+            {
+                "label": "containers: cspell",
+                "type": "shell",
+                "command": "docker compose -f Tools/docker-compose.yml run --rm cspell",
+                "group": "test"
+            },
+            {
+                "label": "containers: tools-all",
+                "type": "shell",
+                "command": "docker compose -f Tools/docker-compose.yml run --rm tools-all",
+                "group": "build"
+            },
+            {
+                "label": "containers: build + tools-all",
+                "type": "shell",
+                "command": "docker compose -f Tools/docker-compose.yml build && docker compose -f Tools/docker-compose.yml run --rm tools-all",
+                "group": "build",
+                "problemMatcher": []
             }
         ]
     },
@@ -192,6 +292,24 @@
                 "name": "Release Phase8GDemo (🔧 Shared Components)",
                 "program": "/Users/danielstevens/Desktop/Quantum-workspace/Shared/.build/arm64-apple-macosx/release/Phase8GDemo",
                 "preLaunchTask": "swift: Build Release Phase8GDemo (🔧 Shared Components)"
+            },
+            {
+                "type": "swift",
+                "request": "launch",
+                "args": [],
+                "cwd": "${workspaceFolder:🏗️ Projects}/QuantumFinance",
+                "name": "Debug QuantumFinanceDemo (🏗️ Projects/QuantumFinance)",
+                "program": "/Users/danielstevens/Desktop/Quantum-workspace/Projects/QuantumFinance/.build/arm64-apple-macosx/debug/QuantumFinanceDemo",
+                "preLaunchTask": "swift: Build Debug QuantumFinanceDemo (🏗️ Projects/QuantumFinance)"
+            },
+            {
+                "type": "swift",
+                "request": "launch",
+                "args": [],
+                "cwd": "${workspaceFolder:🏗️ Projects}/QuantumFinance",
+                "name": "Release QuantumFinanceDemo (🏗️ Projects/QuantumFinance)",
+                "program": "/Users/danielstevens/Desktop/Quantum-workspace/Projects/QuantumFinance/.build/arm64-apple-macosx/release/QuantumFinanceDemo",
+                "preLaunchTask": "swift: Build Release QuantumFinanceDemo (🏗️ Projects/QuantumFinance)"
             }
         ]
     }
