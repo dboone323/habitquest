@@ -104,3 +104,13 @@ Projects/todo-tree-output.json.limited
 
 # Exclude backup files (too large for GitHub)
 .backups/
+
+# Auto-fix and workspace backup artifacts
+# Prevent accidental commits of massive backup directories and archives
+.autofix_backups/
+Workspace_Backup_*/
+**/*.backup
+**/*.bak
+**/*.tar
+**/*.tar.gz
+**/*.zip
