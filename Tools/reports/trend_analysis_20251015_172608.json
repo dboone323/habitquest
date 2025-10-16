@@ -1,0 +1,129 @@
+{
+  "timestamp": "2025-10-15T17:26:08.940988",
+  "analysis_period": "all_available_data",
+  "summary": {
+    "total_tools": 14,
+    "degrading_tools": 0,
+    "improving_tools": 0,
+    "stable_tools": 0,
+    "insufficient_data": 14,
+    "total_anomalies": 0
+  },
+  "trends": {
+    "git": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "python3": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "node": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "npm": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "brew": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "ollama": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "jq": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "swiftlint": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "swiftformat": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "xcodebuild": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "swift": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "fastlane": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "pod": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    },
+    "gh": {
+      "trend": "insufficient_data",
+      "slope": 0,
+      "correlation": 0,
+      "volatility": 0,
+      "data_points": 2
+    }
+  },
+  "anomalies": {
+    "git": [],
+    "python3": [],
+    "node": [],
+    "npm": [],
+    "brew": [],
+    "ollama": [],
+    "jq": [],
+    "swiftlint": [],
+    "swiftformat": [],
+    "xcodebuild": [],
+    "swift": [],
+    "fastlane": [],
+    "pod": [],
+    "gh": []
+  },
+  "recommendations": []
+}
