@@ -40,14 +40,14 @@ public struct ReportsSection: View {
                 // Financial Summary Card
                 FinancialSummaryCard(
                     transactions: self.filteredTransactions,
-                    timeframe: self.selectedTimeframe,
+                    timeframe: self.selectedTimeframe
                 )
                 .padding(.horizontal)
 
                 // Spending by Category Chart
                 SpendingByCategoryCard(
                     transactions: self.filteredTransactions,
-                    categories: self.categories,
+                    categories: self.categories
                 )
                 .padding(.horizontal)
 
@@ -111,11 +111,11 @@ public struct FinancialSummaryCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
         #else
-        return Color.white
+            return Color.white
         #endif
     }
 
@@ -187,11 +187,11 @@ public struct SpendingByCategoryCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
         #else
-        return Color.white
+            return Color.white
         #endif
     }
 
@@ -264,11 +264,11 @@ public struct BudgetPerformanceCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
         #else
-        return Color.white
+            return Color.white
         #endif
     }
 
@@ -348,11 +348,11 @@ public struct RecentTransactionsCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
         #else
-        return Color.white
+            return Color.white
         #endif
     }
 

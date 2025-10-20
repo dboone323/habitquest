@@ -49,7 +49,7 @@ struct TransactionDetailActions {
             amount: original.amount,
             date: Date(),
             notes: original.notes,
-            isReconciled: false,
+            isReconciled: false
         )
 
         // Copy other properties and relationships

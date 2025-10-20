@@ -30,7 +30,7 @@ final class TransactionModelTests: XCTestCase {
             description: "Coffee",
             date: Date(),
             type: .expense,
-            categoryName: "Food",
+            categoryName: "Food"
         )
 
         XCTAssertEqual(transaction.amount, 25.99)
@@ -47,7 +47,7 @@ final class TransactionModelTests: XCTestCase {
             description: "Salary",
             date: Date(),
             type: .income,
-            categoryName: "Work",
+            categoryName: "Work"
         )
 
         self.modelContext.insert(transaction)
@@ -76,7 +76,7 @@ final class TransactionModelTests: XCTestCase {
         try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>(
-            predicate: #Predicate { $0.type == .income },
+            predicate: #Predicate { $0.type == .income }
         )
         let incomeTransactions = try modelContext.fetch(fetchRequest)
         let totalIncome = incomeTransactions.reduce(0) { $0 + $1.amount }
@@ -96,7 +96,7 @@ final class TransactionModelTests: XCTestCase {
         try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>(
-            predicate: #Predicate { $0.type == .expense },
+            predicate: #Predicate { $0.type == .expense }
         )
         let expenseTransactions = try modelContext.fetch(fetchRequest)
         let totalExpenses = expenseTransactions.reduce(0) { $0 + $1.amount }
@@ -126,7 +126,7 @@ final class TransactionModelTests: XCTestCase {
         // Test recent transactions (last 3 days)
         let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: today)!
         let fetchRequest = FetchDescriptor<Transaction>(
-            predicate: #Predicate { $0.date >= threeDaysAgo },
+            predicate: #Predicate { $0.date >= threeDaysAgo }
         )
         let recentTransactions = try modelContext.fetch(fetchRequest)
 
@@ -148,7 +148,7 @@ final class TransactionModelTests: XCTestCase {
         try self.modelContext.save()
 
         let fetchRequest = FetchDescriptor<Transaction>(
-            predicate: #Predicate { $0.categoryName == "Food" },
+            predicate: #Predicate { $0.categoryName == "Food" }
         )
         let foodTransactions = try modelContext.fetch(fetchRequest)
 
@@ -166,7 +166,7 @@ final class TransactionModelTests: XCTestCase {
             description: "Zero amount test",
             date: Date(),
             type: .expense,
-            categoryName: "Test",
+            categoryName: "Test"
         )
 
         self.modelContext.insert(zeroTransaction)
@@ -188,7 +188,7 @@ final class TransactionModelTests: XCTestCase {
             description: "Refund",
             date: Date(),
             type: .income,
-            categoryName: "Refunds",
+            categoryName: "Refunds"
         )
 
         self.modelContext.insert(refundTransaction)
@@ -215,7 +215,7 @@ final class TransactionModelTests: XCTestCase {
                 description: "Transaction \(i)",
                 date: Date(),
                 type: i % 2 == 0 ? .income : .expense,
-                categoryName: "Category \(i % 10)",
+                categoryName: "Category \(i % 10)"
             )
             self.modelContext.insert(transaction)
         }

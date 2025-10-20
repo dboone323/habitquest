@@ -76,7 +76,7 @@ public struct AccountDetailView: View {
                             .frame(width: 60, height: 60)
                             .background(
                                 Circle()
-                                    .fill(Color.blue.opacity(0.2)),
+                                    .fill(Color.blue.opacity(0.2))
                             )
 
                         Text(self.account.name)
@@ -98,7 +98,7 @@ public struct AccountDetailView: View {
                         StatView(
                             title: "Income",
                             value: self.formattedCurrency(self.incomeSummary),
-                            color: .green,
+                            color: .green
                         )
 
                         Divider()
@@ -106,7 +106,7 @@ public struct AccountDetailView: View {
                         StatView(
                             title: "Expenses",
                             value: self.formattedCurrency(self.expenseSummary),
-                            color: .red,
+                            color: .red
                         )
                     }
                     .padding(.horizontal)
@@ -115,7 +115,7 @@ public struct AccountDetailView: View {
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(self.backgroundColorForPlatform())
-                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
+                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                 )
 
                 // Time Filter
@@ -140,7 +140,7 @@ public struct AccountDetailView: View {
                             systemImage: "chart.line.downtrend.xyaxis",
                             description: Text(
                                 "No transaction data available for the selected time period."
-                            ),
+                            )
                         )
                         .frame(height: 200)
                     } else {
@@ -152,7 +152,7 @@ public struct AccountDetailView: View {
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(self.backgroundColorForPlatform())
-                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
+                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                 )
 
                 // Transactions List
@@ -180,7 +180,7 @@ public struct AccountDetailView: View {
                             systemImage: "list.bullet",
                             description: Text(
                                 "No transactions in this account for the selected time period."
-                            ),
+                            )
                         )
                         .frame(height: 100)
                     } else {
@@ -203,7 +203,7 @@ public struct AccountDetailView: View {
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(self.backgroundColorForPlatform())
-                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
+                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                 )
             }
             .padding()
@@ -260,9 +260,9 @@ public struct AccountDetailView: View {
 
     private func backgroundColorForPlatform() -> Color {
         #if os(iOS)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #else
-        return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
         #endif
     }
 }
@@ -347,7 +347,7 @@ public struct ActivityChartView: View {
                 LineMark(
                     x: .value("Day", data.day),
                     y: .value("Income", data.income),
-                    series: .value("Type", "Income"),
+                    series: .value("Type", "Income")
                 )
                 .foregroundStyle(.green)
                 .symbol(Circle().strokeBorder(lineWidth: 2))
@@ -356,7 +356,7 @@ public struct ActivityChartView: View {
                 LineMark(
                     x: .value("Day", data.day),
                     y: .value("Expense", data.expense),
-                    series: .value("Type", "Expense"),
+                    series: .value("Type", "Expense")
                 )
                 .foregroundStyle(.red)
                 .symbol(Circle().strokeBorder(lineWidth: 2))

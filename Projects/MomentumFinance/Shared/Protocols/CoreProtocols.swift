@@ -128,7 +128,7 @@ public protocol Exportable {
 
 /// Protocol for export formatters
 public protocol ExportFormatter {
-    func format<T: Encodable>(_ data: T) throws -> Data
+    func format(_ data: some Encodable) throws -> Data
     func fileExtension() -> String
     func mimeType() -> String
 }

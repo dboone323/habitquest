@@ -157,7 +157,7 @@ extension View {
     func slideIn(from edge: Edge, delay: Double = 0) -> some View {
         transition(.asymmetric(
             insertion: .move(edge: edge).combined(with: .opacity),
-            removal: .move(edge: edge.opposite).combined(with: .opacity),
+            removal: .move(edge: edge.opposite).combined(with: .opacity)
         ))
         .animation(AnimationManager.Springs.smooth.delay(delay), value: true)
     }
@@ -188,14 +188,14 @@ extension View {
                             Color.clear,
                         ]),
                         startPoint: .leading,
-                        endPoint: .trailing,
-                    ),
+                        endPoint: .trailing
+                    )
                 )
                 .offset(x: -100)
                 .animation(
                     Animation.linear(duration: 1.5).repeatForever(autoreverses: false),
-                    value: true,
-                ),
+                    value: true
+                )
         )
         .clipped()
     }
@@ -221,7 +221,7 @@ extension AnyTransition {
     static var scaleAndFade: AnyTransition {
         .asymmetric(
             insertion: .scale.combined(with: .opacity),
-            removal: .scale.combined(with: .opacity),
+            removal: .scale.combined(with: .opacity)
         )
     }
 
@@ -229,7 +229,7 @@ extension AnyTransition {
     static var slideAndFadeFromBottom: AnyTransition {
         .asymmetric(
             insertion: .move(edge: .bottom).combined(with: .opacity),
-            removal: .move(edge: .bottom).combined(with: .opacity),
+            removal: .move(edge: .bottom).combined(with: .opacity)
         )
     }
 
@@ -238,12 +238,12 @@ extension AnyTransition {
         .asymmetric(
             insertion: .modifier(
                 active: CardFlipModifier(rotation: 90),
-                identity: CardFlipModifier(rotation: 0),
+                identity: CardFlipModifier(rotation: 0)
             ),
             removal: .modifier(
                 active: CardFlipModifier(rotation: -90),
-                identity: CardFlipModifier(rotation: 0),
-            ),
+                identity: CardFlipModifier(rotation: 0)
+            )
         )
     }
 
@@ -251,7 +251,7 @@ extension AnyTransition {
     static var push: AnyTransition {
         .asymmetric(
             insertion: .move(edge: .trailing),
-            removal: .move(edge: .leading),
+            removal: .move(edge: .leading)
         )
     }
 }
@@ -267,7 +267,7 @@ public struct CardFlipModifier: ViewModifier {
         content
             .rotation3DEffect(
                 .degrees(self.rotation),
-                axis: (x: 0, y: 1, z: 0),
+                axis: (x: 0, y: 1, z: 0)
             )
     }
 }
@@ -297,7 +297,7 @@ public struct LoadingIndicator: View {
                                 Animation.easeInOut(duration: 0.6)
                                     .repeatForever()
                                     .delay(Double(index) * 0.2),
-                                value: self.isAnimating,
+                                value: self.isAnimating
                             )
                     }
                 }
@@ -310,7 +310,7 @@ public struct LoadingIndicator: View {
                     .rotationEffect(.degrees(self.isAnimating ? 360 : 0))
                     .animation(
                         Animation.linear(duration: 1).repeatForever(autoreverses: false),
-                        value: self.isAnimating,
+                        value: self.isAnimating
                     )
 
             case .pulse:
@@ -321,7 +321,7 @@ public struct LoadingIndicator: View {
                     .opacity(self.isAnimating ? 0.5 : 1.0)
                     .animation(
                         Animation.easeInOut(duration: 1).repeatForever(autoreverses: true),
-                        value: self.isAnimating,
+                        value: self.isAnimating
                     )
             }
         }

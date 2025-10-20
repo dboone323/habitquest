@@ -10,12 +10,13 @@ import Foundation
 
 /// Protocol for progression-related events
 protocol ProgressionDelegate: AnyObject {
-    func achievementUnlocked(_ achievement: Achievement)
-    func achievementProgressUpdated(_ achievement: Achievement, progress: Double)
+    func achievementUnlocked(_ achievement: Achievement) async
+    func achievementProgressUpdated(_ achievement: Achievement, progress: Double) async
     func highScoreAchieved(_ score: Int, rank: Int)
 }
 
 /// Manages all progression systems including achievements and high scores
+@MainActor
 class ProgressionManager {
     // MARK: - Properties
 
@@ -137,7 +138,9 @@ class ProgressionManager {
             self.unlockAchievement(id)
         } else {
             self.achievements[id] = achievement
-            self.delegate?.achievementProgressUpdated(achievement, progress: Double(achievement.progress))
+            Task { @MainActor in
+                await self.delegate?.achievementProgressUpdated(achievement, progress: Double(achievement.progress))
+            }
             self.saveAchievementProgress()
         }
     }
@@ -153,7 +156,9 @@ class ProgressionManager {
         self.totalAchievementPoints += achievement.points
 
         self.saveAchievementProgress()
-        self.delegate?.achievementUnlocked(achievement)
+        Task { @MainActor in
+            await self.delegate?.achievementUnlocked(achievement)
+        }
 
         // Play achievement sound and haptic feedback
         AudioManager.shared.playLevelUpSound()
@@ -218,7 +223,7 @@ class ProgressionManager {
 
     /// Gets only unlocked achievements
     func getUnlockedAchievements() -> [Achievement] {
-        self.achievements.values.filter { $0.isUnlocked }.sorted { $0.unlockedDate ?? Date() > $1.unlockedDate ?? Date() }
+        self.achievements.values.filter(\.isUnlocked).sorted { $0.unlockedDate ?? Date() > $1.unlockedDate ?? Date() }
     }
 
     /// Gets achievements that are in progress
@@ -239,7 +244,7 @@ class ProgressionManager {
     /// Gets achievement statistics
     func getAchievementStatistics() -> [String: Any] {
         let totalAchievements = self.achievements.count
-        let unlockedCount = self.achievements.values.filter { $0.isUnlocked }.count
+        let unlockedCount = self.achievements.values.filter(\.isUnlocked).count
         let completionRate = totalAchievements > 0 ? Double(unlockedCount) / Double(totalAchievements) : 0
 
         return [
@@ -290,7 +295,7 @@ class ProgressionManager {
         let defaults = UserDefaults.standard
 
         // Save unlocked achievements
-        let unlockedIds = self.achievements.values.filter { $0.isUnlocked }.map { $0.id }
+        let unlockedIds = self.achievements.values.filter(\.isUnlocked).map(\.id)
         defaults.set(unlockedIds, forKey: self.unlockedAchievementsKey)
 
         // Save unlock dates
@@ -331,60 +336,43 @@ class ProgressionManager {
 
     /// Gets all achievements asynchronously
     func getAllAchievementsAsync() async -> [Achievement] {
-        return await Task.detached(priority: .background) {
-            return self.getAllAchievements()
-        }.value
+        self.getAllAchievements()
     }
 
     /// Gets high scores asynchronously
     func getHighScoresAsync() async -> [Int] {
-        return await Task.detached(priority: .background) {
-            return self.getHighScores()
-        }.value
+        self.getHighScores()
     }
 
     /// Adds a score asynchronously
     func addScoreAsync(_ score: Int) async -> Bool {
-        return await Task.detached(priority: .background) {
-            return self.addScore(score)
-        }.value
+        self.addScore(score)
     }
 
     /// Gets highest score asynchronously
     func getHighestScoreAsync() async -> Int {
-        return await Task.detached(priority: .background) {
-            return self.getHighestScore()
-        }.value
+        self.getHighestScore()
     }
 
     /// Checks if score is high score asynchronously
     func isHighScoreAsync(_ score: Int) async -> Bool {
-        return await Task.detached(priority: .background) {
-            return self.isHighScore(score)
-        }.value
+        self.isHighScore(score)
     }
 
     /// Updates achievement progress asynchronously
     func updateProgressAsync(for event: AchievementEvent, value: Int = 1) async {
-        await Task.detached(priority: .background) {
-            self.updateProgress(for: event, value: value)
-        }.value
+        self.updateProgress(for: event, value: value)
     }
 
     /// Resets achievements asynchronously
     func resetAllAchievementsAsync() async {
-        await Task.detached(priority: .background) {
-            self.resetAllAchievements()
-        }.value
+        self.resetAllAchievements()
     }
 
     /// Clears high scores asynchronously
     func clearHighScoresAsync() async {
-        await Task.detached(priority: .background) {
-            self.clearHighScores()
-        }.value
+        self.clearHighScores()
     }
 }
 
 /// Events that can trigger achievement progress
-

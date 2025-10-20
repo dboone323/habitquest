@@ -1,7 +1,7 @@
 import SwiftUI
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 // Momentum Finance - Haptic Feedback Manager
@@ -17,17 +17,17 @@ public class HapticManager: ObservableObject {
     @Published var isEnabled: Bool = true
 
     #if os(iOS)
-    private let impactFeedbackGenerator = UIImpactFeedbackGenerator()
-    private let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
-    private let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+        private let impactFeedbackGenerator = UIImpactFeedbackGenerator()
+        private let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
+        private let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
     #endif
 
     private init() {
         #if os(iOS)
-        // Prepare generators for better responsiveness
-        self.impactFeedbackGenerator.prepare()
-        self.notificationFeedbackGenerator.prepare()
-        self.selectionFeedbackGenerator.prepare()
+            // Prepare generators for better responsiveness
+            self.impactFeedbackGenerator.prepare()
+            self.notificationFeedbackGenerator.prepare()
+            self.selectionFeedbackGenerator.prepare()
         #endif
     }
 
@@ -35,21 +35,21 @@ public class HapticManager: ObservableObject {
 
     /// Provides impact haptic feedback with varying intensity
     #if os(iOS)
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func impact(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
-        guard self.isEnabled else { return }
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func impact(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
+            guard self.isEnabled else { return }
 
-        let generator = UIImpactFeedbackGenerator(style: style)
-        generator.prepare()
-        generator.impactOccurred()
-    }
+            let generator = UIImpactFeedbackGenerator(style: style)
+            generator.prepare()
+            generator.impactOccurred()
+        }
     #else
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func impact(_: Any) {
-        // No haptic feedback on macOS
-    }
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func impact(_: Any) {
+            // No haptic feedback on macOS
+        }
     #endif
 
     /// Light impact feedback for subtle interactions
@@ -57,9 +57,9 @@ public class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func lightImpact() {
         #if os(iOS)
-        self.impact(.light)
+            self.impact(.light)
         #else
-        self.impact(())
+            self.impact(())
         #endif
     }
 
@@ -68,9 +68,9 @@ public class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func mediumImpact() {
         #if os(iOS)
-        self.impact(.medium)
+            self.impact(.medium)
         #else
-        self.impact(())
+            self.impact(())
         #endif
     }
 
@@ -79,9 +79,9 @@ public class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func heavyImpact() {
         #if os(iOS)
-        self.impact(.heavy)
+            self.impact(.heavy)
         #else
-        self.impact(())
+            self.impact(())
         #endif
     }
 
@@ -92,8 +92,8 @@ public class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func success() {
         #if os(iOS)
-        guard self.isEnabled else { return }
-        self.notificationFeedbackGenerator.notificationOccurred(.success)
+            guard self.isEnabled else { return }
+            self.notificationFeedbackGenerator.notificationOccurred(.success)
         #endif
     }
 
@@ -102,8 +102,8 @@ public class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func warning() {
         #if os(iOS)
-        guard self.isEnabled else { return }
-        self.notificationFeedbackGenerator.notificationOccurred(.warning)
+            guard self.isEnabled else { return }
+            self.notificationFeedbackGenerator.notificationOccurred(.warning)
         #endif
     }
 
@@ -112,8 +112,8 @@ public class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func error() {
         #if os(iOS)
-        guard self.isEnabled else { return }
-        self.notificationFeedbackGenerator.notificationOccurred(.error)
+            guard self.isEnabled else { return }
+            self.notificationFeedbackGenerator.notificationOccurred(.error)
         #endif
     }
 
@@ -124,8 +124,8 @@ public class HapticManager: ObservableObject {
     /// - Returns: <#description#>
     func selection() {
         #if os(iOS)
-        guard self.isEnabled else { return }
-        self.selectionFeedbackGenerator.selectionChanged()
+            guard self.isEnabled else { return }
+            self.selectionFeedbackGenerator.selectionChanged()
         #endif
     }
 
@@ -223,19 +223,19 @@ public class HapticManager: ObservableObject {
 
 public struct HapticFeedbackModifier: ViewModifier {
     #if os(iOS)
-    let style: UIImpactFeedbackGenerator.FeedbackStyle
+        let style: UIImpactFeedbackGenerator.FeedbackStyle
     #endif
     let trigger: Bool
 
     #if os(iOS)
-    init(style: UIImpactFeedbackGenerator.FeedbackStyle, trigger: Bool) {
-        self.style = style
-        self.trigger = trigger
-    }
+        init(style: UIImpactFeedbackGenerator.FeedbackStyle, trigger: Bool) {
+            self.style = style
+            self.trigger = trigger
+        }
     #else
-    init(trigger: Bool) {
-        self.trigger = trigger
-    }
+        init(trigger: Bool) {
+            self.trigger = trigger
+        }
     #endif
 
     /// <#Description#>
@@ -244,7 +244,7 @@ public struct HapticFeedbackModifier: ViewModifier {
         content
             .onChange(of: self.trigger) { _, _ in
                 #if os(iOS)
-                HapticManager.shared.impact(self.style)
+                    HapticManager.shared.impact(self.style)
                 #endif
             }
     }
@@ -279,18 +279,19 @@ public struct SuccessHapticModifier: ViewModifier {
 extension View {
     /// Adds haptic feedback when the trigger value changes
     #if os(iOS)
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func hapticFeedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle, trigger: Bool)
-        -> some View {
-        modifier(HapticFeedbackModifier(style: style, trigger: trigger))
-    }
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func hapticFeedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle, trigger: Bool)
+            -> some View
+        {
+            modifier(HapticFeedbackModifier(style: style, trigger: trigger))
+        }
     #else
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func hapticFeedback(_: Any, trigger: Bool) -> some View {
-        modifier(HapticFeedbackModifier(trigger: trigger))
-    }
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func hapticFeedback(_: Any, trigger: Bool) -> some View {
+            modifier(HapticFeedbackModifier(trigger: trigger))
+        }
     #endif
 
     /// Adds selection haptic feedback when the trigger value changes
@@ -309,21 +310,21 @@ extension View {
 
     /// Adds tap haptic feedback to any view
     #if os(iOS)
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func hapticTap(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .light) -> some View {
-        onTapGesture {
-            HapticManager.shared.impact(style)
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func hapticTap(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .light) -> some View {
+            onTapGesture {
+                HapticManager.shared.impact(style)
+            }
         }
-    }
     #else
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func hapticTap(_: Any = Any.self) -> some View {
-        onTapGesture {
-            // No haptic feedback on macOS
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func hapticTap(_: Any = Any.self) -> some View {
+            onTapGesture {
+                // No haptic feedback on macOS
+            }
         }
-    }
     #endif
 }
 

@@ -17,6 +17,7 @@ public struct OllamaConfig: Sendable {
     public let enableCloudModels: Bool
     public let preferCloudModels: Bool
     public let fallbackModels: [String]
+    public let enableAutoModelDownload: Bool
 
     public static let `default` = OllamaConfig(
         baseURL: "http://localhost:11434",
@@ -31,7 +32,8 @@ public struct OllamaConfig: Sendable {
         enableMetrics: true,
         enableCloudModels: false,
         preferCloudModels: false,
-        fallbackModels: ["codellama", "mistral"]
+        fallbackModels: ["codellama", "mistral"],
+        enableAutoModelDownload: true
     )
 
     public init(
@@ -47,7 +49,8 @@ public struct OllamaConfig: Sendable {
         enableMetrics: Bool = true,
         enableCloudModels: Bool = false,
         preferCloudModels: Bool = false,
-        fallbackModels: [String] = ["codellama", "mistral"]
+        fallbackModels: [String] = ["codellama", "mistral"],
+        enableAutoModelDownload: Bool = true
     ) {
         self.baseURL = baseURL
         self.defaultModel = defaultModel
@@ -62,6 +65,7 @@ public struct OllamaConfig: Sendable {
         self.enableCloudModels = enableCloudModels
         self.preferCloudModels = preferCloudModels
         self.fallbackModels = fallbackModels
+        self.enableAutoModelDownload = enableAutoModelDownload
     }
 }
 
@@ -133,26 +137,6 @@ public struct OllamaServerStatus: Codable, Sendable {
 }
 
 // MARK: - Ollama-Specific Result Types
-
-/// Documentation generation result
-public struct DocumentationResult: Codable, Sendable {
-    public let documentation: String
-    public let language: String
-    public let includesExamples: Bool
-    public let timestamp: Date
-
-    public init(
-        documentation: String,
-        language: String,
-        includesExamples: Bool = false,
-        timestamp: Date = Date()
-    ) {
-        self.documentation = documentation
-        self.language = language
-        self.includesExamples = includesExamples
-        self.timestamp = timestamp
-    }
-}
 
 /// Documentation generation result
 public struct DocumentationResult: Codable, Sendable {
@@ -292,21 +276,21 @@ public enum OllamaError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .invalidConfiguration(let details):
+        case let .invalidConfiguration(details):
             "Invalid Ollama configuration: \(details)"
         case .serverNotRunning:
             "Ollama server is not running"
-        case .modelNotAvailable(let model):
+        case let .modelNotAvailable(model):
             "Model '\(model)' is not available"
         case .invalidResponse:
             "Invalid response from Ollama server"
         case .invalidResponseFormat:
             "Invalid response format from Ollama server"
-        case .httpError(let code):
+        case let .httpError(code):
             "HTTP error: \(code)"
         case .timeout:
             "Request timed out"
-        case .networkError(let details):
+        case let .networkError(details):
             "Network error: \(details)"
         }
     }
@@ -322,18 +306,16 @@ public enum IntegrationError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .missingRequiredData(let data):
+        case let .missingRequiredData(data):
             "Missing required data: \(data)"
-        case .invalidTaskType(let type):
+        case let .invalidTaskType(type):
             "Invalid task type: \(type)"
-        case .serviceNotAvailable(let service):
+        case let .serviceNotAvailable(service):
             "Service not available: \(service)"
-        case .operationTimeout(let operation):
+        case let .operationTimeout(operation):
             "Operation timed out: \(operation)"
-        case .configurationError(let details):
+        case let .configurationError(details):
             "Configuration error: \(details)"
         }
     }
 }
-
-

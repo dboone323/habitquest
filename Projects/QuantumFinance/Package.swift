@@ -4,11 +4,11 @@ import PackageDescription
 let package = Package(
     name: "QuantumFinance",
     platforms: [
-        .macOS(.v13)
+        .macOS(.v13),
     ],
     products: [
         .executable(name: "QuantumFinanceDemo", targets: ["QuantumFinanceDemo"]),
-        .library(name: "QuantumFinanceKit", targets: ["QuantumFinanceKit"])
+        .library(name: "QuantumFinanceKit", targets: ["QuantumFinanceKit"]),
     ],
     dependencies: [],
     targets: [
@@ -26,6 +26,6 @@ let package = Package(
             name: "QuantumFinanceTests",
             dependencies: ["QuantumFinanceKit"],
             path: "Tests/QuantumFinanceTests"
-        )
+        ),
     ]
 )

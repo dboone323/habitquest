@@ -156,7 +156,7 @@ public enum CommonMolecules {
         name: "H₂",
         atoms: [
             Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(0, 0, 0), mass: 1.00784),
-            Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(0.74, 0, 0), mass: 1.00784)
+            Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(0.74, 0, 0), mass: 1.00784),
         ]
     )
 
@@ -165,7 +165,7 @@ public enum CommonMolecules {
         atoms: [
             Atom(symbol: "O", atomicNumber: 8, position: SIMD3<Double>(0, 0, 0), mass: 15.999),
             Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(0.96, 0, 0), mass: 1.00784),
-            Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(-0.24, 0.93, 0), mass: 1.00784)
+            Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(-0.24, 0.93, 0), mass: 1.00784),
         ]
     )
 
@@ -176,7 +176,7 @@ public enum CommonMolecules {
             Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(1.09, 0, 0), mass: 1.00784),
             Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(-0.36, 1.02, 0), mass: 1.00784),
             Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(-0.36, -0.51, 0.89), mass: 1.00784),
-            Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(-0.36, -0.51, -0.89), mass: 1.00784)
+            Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(-0.36, -0.51, -0.89), mass: 1.00784),
         ]
     )
 
@@ -196,7 +196,7 @@ public enum CommonMolecules {
             Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(-1.24, 2.13, 0), mass: 1.00784),
             Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(-2.48, 0, 0), mass: 1.00784),
             Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(-1.24, -2.13, 0), mass: 1.00784),
-            Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(1.24, -2.13, 0), mass: 1.00784)
+            Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(1.24, -2.13, 0), mass: 1.00784),
         ]
     )
 
@@ -224,15 +224,15 @@ public enum CommonMolecules {
             Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(6.0, 1.0, 0), mass: 1.00784),
             Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(9.0, 1.0, 0), mass: 1.00784),
             Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(12.0, 1.0, 0), mass: 1.00784),
-            Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(13.5, 0, 0), mass: 1.00784)
+            Atom(symbol: "H", atomicNumber: 1, position: SIMD3<Double>(13.5, 0, 0), mass: 1.00784),
         ]
     )
 }
 
 // MARK: - Extensions
 
-extension SIMD3<Double> {
-    public var magnitude: Double {
+public extension SIMD3<Double> {
+    var magnitude: Double {
         sqrt(x * x + y * y + z * z)
     }
 }
@@ -259,7 +259,8 @@ public struct QuantumHardwareConfig {
                 backend: String = "simulator",
                 shots: Int = 1000,
                 optimizationLevel: Int = 1,
-                apiKey: String? = nil) {
+                apiKey: String? = nil)
+    {
         self.provider = provider
         self.backend = backend
         self.shots = shots
@@ -288,7 +289,8 @@ public struct QuantumHardwareResult {
                 counts: [String: Int],
                 expectationValue: Double,
                 fidelity: Double = 0.95,
-                errorRate: Double = 0.01) {
+                errorRate: Double = 0.01)
+    {
         self.jobId = jobId
         self.provider = provider
         self.backend = backend

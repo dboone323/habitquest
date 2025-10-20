@@ -5,14 +5,14 @@ import Foundation
 
 #if os(macOS)
 
-// MARK: - Extensions for Enhanced Account Detail View
+    // MARK: - Extensions for Enhanced Account Detail View
 
-// Extension to add ordinal suffix to numbers
-extension Int {
-    var ordinal: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .ordinal
-        return formatter.string(from: NSNumber(value: self)) ?? "\(self)"
+    // Extension to add ordinal suffix to numbers
+    extension Int {
+        var ordinal: String {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .ordinal
+            return formatter.string(from: NSNumber(value: self)) ?? "\(self)"
+        }
     }
-}
 #endif

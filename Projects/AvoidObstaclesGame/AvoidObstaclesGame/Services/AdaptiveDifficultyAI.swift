@@ -9,10 +9,10 @@
 import Foundation
 import SpriteKit
 
-/// Simple power-up type enum for AI analysis
 /// AI-powered adaptive difficulty system
 /// Analyzes player behavior patterns and performance metrics to provide
 /// dynamic difficulty scaling for optimal game engagement.
+@MainActor
 public class AdaptiveDifficultyAI {
     // MARK: - Properties
 
@@ -44,10 +44,6 @@ public class AdaptiveDifficultyAI {
 
     private init() {
         setupAnalysisTimer()
-    }
-
-    deinit {
-        analysisTimer?.invalidate()
     }
 
     /// Sets up periodic AI analysis timer
@@ -87,7 +83,8 @@ public class AdaptiveDifficultyAI {
     public func getDifficultyRecommendation() async -> DifficultyAdjustment {
         // If we have a recent analysis, use it
         if let analysis = currentAnalysis,
-           CACurrentMediaTime() - lastAnalysisTime < analysisInterval {
+           CACurrentMediaTime() - lastAnalysisTime < analysisInterval
+        {
             return analysis.recommendation
         }
 
@@ -140,13 +137,13 @@ public class AdaptiveDifficultyAI {
     /// Builds rule-based analysis for player metrics
     private func buildAnalysisPrompt(for metrics: PlayerMetrics) -> String {
         // This method is kept for compatibility but now uses rule-based analysis
-        return "Rule-based analysis for player metrics"
+        "Rule-based analysis for player metrics"
     }
 
     /// Parses rule-based response into difficulty analysis
     private func parseAIAnalysis(_ response: String, metrics: PlayerMetrics) throws -> DifficultyAnalysis {
         // Use rule-based analyzer instead
-        return ruleBasedAnalyzer.analyzeDifficulty(for: metrics)
+        ruleBasedAnalyzer.analyzeDifficulty(for: metrics)
     }
 
     /// Applies AI-recommended difficulty adjustment
@@ -157,7 +154,7 @@ public class AdaptiveDifficultyAI {
             object: self,
             userInfo: [
                 "adjustment": adjustment,
-                "reason": currentAnalysis?.reasoning ?? "AI analysis"
+                "reason": currentAnalysis?.reasoning ?? "AI analysis",
             ]
         )
     }
@@ -172,34 +169,16 @@ public class AdaptiveDifficultyAI {
             object: self,
             userInfo: [
                 "adjustment": adjustment,
-                "reason": "Fallback rule-based adjustment"
+                "reason": "Fallback rule-based adjustment",
             ]
         )
     }
 }
 
-/// MARK: - Supporting Types
-
-/// Player skill level assessment
-public enum PlayerSkillLevel: String, Codable {
-    case beginner
-    case intermediate
-    case advanced
-    case expert
-
-    static func fromString(_ string: String) -> PlayerSkillLevel {
-        switch string.lowercased() {
-        case "beginner": return .beginner
-        case "intermediate": return .intermediate
-        case "advanced": return .advanced
-        case "expert": return .expert
-        default: return .intermediate
-        }
-    }
-}
+// MARK: - Supporting Types
 
 /// Difficulty adjustment recommendations
-public enum DifficultyAdjustment: Equatable {
+public enum DifficultyAdjustment: Equatable, Sendable {
     case increase(magnitude: Double)
     case decrease(magnitude: Double)
     case maintain
@@ -210,6 +189,17 @@ public enum DifficultyAdjustment: Equatable {
         case "decrease": return .decrease(magnitude: magnitude)
         case "maintain": return .maintain
         default: return .maintain
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .increase(let magnitude):
+            return "Increase difficulty by \(String(format: "%.1f", magnitude))"
+        case .decrease(let magnitude):
+            return "Decrease difficulty by \(String(format: "%.1f", magnitude))"
+        case .maintain:
+            return "Maintain current difficulty"
         }
     }
 }
@@ -234,11 +224,6 @@ private struct AIAnalysisResult: Codable {
 }
 
 /// AI-related errors
-enum AIError: Error {
-    case invalidResponse
-    case analysisFailed
-}
-
 // MARK: - Metrics Collection
 
 /// Collects and analyzes player performance metrics
@@ -266,18 +251,18 @@ private class PlayerMetricsCollector {
         let recentGames = Array(gameSessions.suffix(5))
 
         return PlayerMetrics(
-            averageScore: gameSessions.map { $0.finalScore }.average(),
-            highScore: gameSessions.map { $0.finalScore }.max() ?? 0,
-            averageSurvivalTime: gameSessions.map { $0.survivalTime }.average(),
-            maxSurvivalTime: gameSessions.map { $0.survivalTime }.max() ?? 0,
+            averageScore: gameSessions.map(\.finalScore).calculateAverage(),
+            highScore: gameSessions.map(\.finalScore).max() ?? 0,
+            averageSurvivalTime: gameSessions.map(\.survivalTime).calculateAverage(),
+            maxSurvivalTime: gameSessions.map(\.survivalTime).max() ?? 0,
             gamesPlayed: gameSessions.count,
             winRate: calculateWinRate(),
-            averageDifficultyReached: gameSessions.map { Double($0.maxDifficultyReached) }.average(),
+            averageDifficultyReached: gameSessions.map { Double($0.maxDifficultyReached) }.calculateAverage(),
             collisionPatterns: analyzeCollisionPatterns(),
             powerUpUsage: analyzePowerUpUsage(),
             recentGames: GameMetrics(
-                averageScore: recentGames.map { $0.finalScore }.average(),
-                averageSurvivalTime: recentGames.map { $0.survivalTime }.average()
+                averageScore: recentGames.map(\.finalScore).calculateAverage(),
+                averageSurvivalTime: recentGames.map(\.survivalTime).calculateAverage()
             ),
             difficultyProgression: analyzeDifficultyProgression(),
             movementPatterns: analyzeMovementPatterns(),
@@ -329,7 +314,7 @@ private class PlayerMetricsCollector {
 
         for session in gameSessions {
             for collision in session.collisions {
-                patterns[collision.type, default: 0] += 1
+                patterns[collision.obstacleType, default: 0] += 1
             }
         }
 
@@ -341,7 +326,7 @@ private class PlayerMetricsCollector {
 
         for session in gameSessions {
             for powerUp in session.powerUpsCollected {
-                usage[powerUp.type.rawValue, default: 0] += 1
+                usage[powerUp.powerUpType.rawValue, default: 0] += 1
             }
         }
 
@@ -352,12 +337,10 @@ private class PlayerMetricsCollector {
         var milestones: [DifficultyMilestone] = []
 
         for session in gameSessions {
-            if let milestone = session.difficultyMilestones.first {
-                milestones.append(milestone)
-            }
+            milestones.append(contentsOf: session.difficultyMilestones)
         }
 
-        return milestones.sorted { $0.level < $1.level }
+        return milestones.sorted { $0.difficultyLevel < $1.difficultyLevel }
     }
 
     private func analyzeMovementPatterns() -> MovementPatterns {
@@ -366,7 +349,7 @@ private class PlayerMetricsCollector {
         return MovementPatterns(dominantStyle: dominantStyle)
     }
 
-    private func analyzeBehaviorPatterns() -> BehaviorPatterns {
+    private func analyzeBehaviorPatterns() -> AdaptiveBehaviorPatterns {
         let metrics = getCurrentMetrics()
 
         // Calculate risk level based on collision patterns
@@ -379,27 +362,11 @@ private class PlayerMetricsCollector {
         // Estimate frustration tolerance
         let frustrationTolerance = metrics.averageSurvivalTime > 30 ? "high" : "medium"
 
-        return BehaviorPatterns(
+        return AdaptiveBehaviorPatterns(
             riskLevel: riskLevel,
             learningRate: learningRate,
             frustrationTolerance: frustrationTolerance
         )
-    }
-}
-
-/// Difficulty adjustment engine for fallback calculations
-private class DifficultyAdjustmentEngine {
-    func calculateFallbackAdjustment(for skillLevel: PlayerSkillLevel) -> DifficultyAdjustment {
-        switch skillLevel {
-        case .beginner:
-            return .decrease(magnitude: 0.3)
-        case .intermediate:
-            return .maintain
-        case .advanced:
-            return .increase(magnitude: 0.2)
-        case .expert:
-            return .increase(magnitude: 0.4)
-        }
     }
 }
 
@@ -469,26 +436,26 @@ private class RuleBasedDifficultyAnalyzer {
 
         // Skill-based adjustment for consistent players
         switch skillLevel {
-        case .beginner:
+        case .beginner, .novice:
             return .decrease(magnitude: 0.2)
         case .intermediate:
             return .maintain
         case .advanced:
             return .increase(magnitude: 0.15)
-        case .expert:
+        case .expert, .master:
             return .increase(magnitude: 0.25)
         }
     }
 
     private func generateReasoning(for adjustment: DifficultyAdjustment, metrics: PlayerMetrics, skillLevel: PlayerSkillLevel) -> String {
         switch adjustment {
-        case .increase(let magnitude):
+        case let .increase(magnitude):
             if magnitude > 0.2 {
                 return "Player shows expert-level performance with high scores and long survival times. Increasing difficulty to maintain challenge."
             } else {
                 return "Player is performing well above average. Gradually increasing difficulty for optimal engagement."
             }
-        case .decrease(let magnitude):
+        case let .decrease(magnitude):
             if magnitude > 0.3 {
                 return "Recent performance indicates player is struggling significantly. Reducing difficulty to prevent frustration."
             } else {
@@ -527,28 +494,17 @@ private class RuleBasedDifficultyAnalyzer {
     }
 }
 
-/// MARK: - Data Models
+// MARK: - Data Models
 
-/// Complete game session data
-public struct GameSession {
-    let finalScore: Int
-    let survivalTime: TimeInterval
-    let maxDifficultyReached: Int
-    let collisions: [Collision]
-    let powerUpsCollected: [PowerUp]
-    let difficultyMilestones: [DifficultyMilestone]
-    let wasHighScore: Bool
-}
-
-/// Player profile for personalization
-public struct PlayerProfile {
-    let playerId: String
-    let preferredDifficulty: String
-    let playStyle: String
+/// Behavior pattern analysis for adaptive difficulty
+public struct AdaptiveBehaviorPatterns: Sendable {
+    let riskLevel: String
+    let learningRate: String
+    let frustrationTolerance: String
 }
 
 /// Aggregated player metrics
-public struct PlayerMetrics {
+public struct PlayerMetrics: Sendable {
     let averageScore: Double
     let highScore: Int
     let averageSurvivalTime: Double
@@ -561,7 +517,7 @@ public struct PlayerMetrics {
     let recentGames: GameMetrics
     let difficultyProgression: [DifficultyMilestone]
     let movementPatterns: MovementPatterns
-    let behaviorPatterns: BehaviorPatterns
+    let behaviorPatterns: AdaptiveBehaviorPatterns
 
     static let empty = PlayerMetrics(
         averageScore: 0,
@@ -576,48 +532,29 @@ public struct PlayerMetrics {
         recentGames: GameMetrics(averageScore: 0, averageSurvivalTime: 0),
         difficultyProgression: [],
         movementPatterns: MovementPatterns(dominantStyle: "unknown"),
-        behaviorPatterns: BehaviorPatterns(riskLevel: "unknown", learningRate: "unknown", frustrationTolerance: "unknown")
+        behaviorPatterns: AdaptiveBehaviorPatterns(riskLevel: "unknown", learningRate: "unknown", frustrationTolerance: "unknown")
     )
 }
 
 /// Game metrics for recent performance
-public struct GameMetrics {
+public struct GameMetrics: Sendable {
     let averageScore: Double
     let averageSurvivalTime: Double
 }
 
-/// Collision pattern analysis
-public struct CollisionPattern {
-    let type: String
-    let frequency: Int
-}
-
 /// Power-up usage statistics
-public struct PowerUpUsage {
+public struct PowerUpUsage: Sendable {
     let type: PowerUpType
     let count: Int
 }
 
-/// Difficulty milestone tracking
-public struct DifficultyMilestone {
-    let level: Int
-    let timeToReach: TimeInterval
-}
-
 /// Movement pattern analysis
-public struct MovementPatterns {
+public struct MovementPatterns: Sendable {
     let dominantStyle: String
 }
 
-/// Player behavior pattern analysis
-public struct BehaviorPatterns {
-    let riskLevel: String
-    let learningRate: String
-    let frustrationTolerance: String
-}
-
 /// Collision data
-public struct Collision {
+public struct Collision: Sendable {
     let type: String
     let timestamp: TimeInterval
     let position: CGPoint
@@ -625,17 +562,16 @@ public struct Collision {
 
 /// Power-up collection data
 
-
-private extension Array where Element == Int {
-    func average() -> Double {
+private extension [Int] {
+    func calculateAverage() -> Double {
         guard !isEmpty else { return 0 }
         let sum = reduce(0, +)
         return Double(sum) / Double(count)
     }
 }
 
-private extension Array where Element == TimeInterval {
-    func average() -> Double {
+private extension [TimeInterval] {
+    func calculateAverage() -> Double {
         guard !isEmpty else { return 0 }
         let sum = reduce(0, +)
         return sum / Double(count)

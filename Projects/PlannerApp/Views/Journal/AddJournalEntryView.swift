@@ -27,7 +27,7 @@ public struct AddJournalEntryView: View {
             HStack {
                 Button("Cancel", action: {
                     #if os(iOS)
-                    HapticManager.lightImpact()
+                        HapticManager.lightImpact()
                     #endif
                     self.dismiss()
                 })
@@ -47,7 +47,7 @@ public struct AddJournalEntryView: View {
 
                 Button("Save", action: {
                     #if os(iOS)
-                    HapticManager.notificationSuccess()
+                        HapticManager.notificationSuccess()
                     #endif
                     self.saveEntry()
                     self.dismiss()

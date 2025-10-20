@@ -22,9 +22,9 @@ struct AIHabitRecommendation {
 
 class MockAIHabitRecommender {
     func generateRecommendations(for habits: [String], userLevel: Int) -> [AIHabitRecommendation] {
-        return habits.map { habit in
-            let difficulty = Int.random(in: 1...3)
-            let success = Double.random(in: 0.3...0.9)
+        habits.map { habit in
+            let difficulty = Int.random(in: 1 ... 3)
+            let success = Double.random(in: 0.3 ... 0.9)
             let times = ["Morning", "Afternoon", "Evening", "Anytime"]
 
             return AIHabitRecommendation(
@@ -63,7 +63,7 @@ let testHabits = ["Morning Exercise", "Evening Reading", "Meditation", "Drink Wa
 let recommendations = recommender.generateRecommendations(for: testHabits, userLevel: 5)
 
 print("✅ Generated \(recommendations.count) recommendations:")
-recommendations.forEach { rec in
+for rec in recommendations {
     print("   📋 \(rec.habitName)")
     print("      Reason: \(rec.reason)")
     print("      Difficulty: \(rec.difficulty)/3")
@@ -76,7 +76,7 @@ print("3. Testing Pattern Analysis...")
 
 let patterns = recommender.analyzePatterns(habits: testHabits)
 print("✅ Pattern analysis completed:")
-patterns.forEach { habit, pattern in
+for (habit, pattern) in patterns {
     print("   🔍 \(habit): \(pattern)")
 }
 
@@ -102,7 +102,7 @@ enum AIProcessingStatus {
 
 let statuses: [AIProcessingStatus] = [.idle, .analyzing, .generating, .completed]
 print("✅ AI Processing Status validation:")
-statuses.forEach { status in
+for status in statuses {
     print("   \(status.statusDescription)")
 }
 

@@ -1,7 +1,7 @@
 import Foundation
 import Observation
-import SwiftUI
 import os
+import SwiftUI
 
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
@@ -25,7 +25,7 @@ final class ErrorHandler {
 
     private init() {
         #if DEBUG
-        Logger.logDebug("ErrorHandler initialized", category: Logger.ui)
+            Logger.logDebug("ErrorHandler initialized", category: Logger.ui)
         #endif
     }
 
@@ -46,7 +46,7 @@ final class ErrorHandler {
         Logger.logError(
             appError,
             context:
-            "\(context) [\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)]",
+            "\(context) [\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)]"
         )
 
         // Determine if this is a frequent error (same type occurring rapidly)
@@ -65,7 +65,7 @@ final class ErrorHandler {
             // Log but don't show frequent identical errors to avoid spamming the user
             Logger.logDebug(
                 "Suppressing frequent error: \(appError.errorDescription ?? "Unknown")",
-                category: Logger.ui,
+                category: Logger.ui
             )
         }
     }
@@ -154,9 +154,9 @@ final class ErrorHandler {
         // Example: Crashlytics.record(error: error)
 
         #if DEBUG
-        Logger.logDebug(
-            "Error would be reported to analytics: \(error.errorDescription ?? "Unknown")"
-        )
+            Logger.logDebug(
+                "Error would be reported to analytics: \(error.errorDescription ?? "Unknown")"
+            )
         #endif
     }
 }
@@ -342,7 +342,8 @@ public enum AppError: LocalizedError, Identifiable {
         if nsError.code == NSValidationErrorMinimum {
             return .validationError("\(context) \(nsError.localizedDescription)")
         } else if nsError.code == NSFileReadNoSuchFileError
-            || nsError.code == NSFileWriteOutOfSpaceError {
+            || nsError.code == NSFileWriteOutOfSpaceError
+        {
             return .fileSystemError("\(context) \(nsError.localizedDescription)")
         }
         return .dataError("\(context) \(nsError.localizedDescription)")

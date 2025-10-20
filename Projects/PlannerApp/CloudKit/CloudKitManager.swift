@@ -20,19 +20,23 @@ typealias AsyncTask = _Concurrency.Task
 @MainActor
 protocol CloudKitService {
     // MARK: - Sync Operations
+
     func performFullSync() async
     func performSync() async
     func forcePushLocalChanges() async
 
     // MARK: - Conflict Resolution
+
     func resolveConflict(_ conflict: CloudKitManager.SyncConflict, useLocal: Bool) async
     func resolveAllConflicts(useLocal: Bool) async
 
     // MARK: - Account Management
+
     func requestiCloudAccess() async
     func handleNewDeviceLogin() async
 
     // MARK: - Data Upload Operations
+
     func uploadTasks(_ tasks: [PlannerTask]) async throws
     func uploadGoals(_ goals: [Goal]) async throws
     func uploadEvents(_ events: [CalendarEvent]) async throws
@@ -41,26 +45,32 @@ protocol CloudKitService {
     // MARK: - Batch Operations
 
     // MARK: - Subscription Management
+
     func setupCloudKitSubscriptions() async throws
     func handleDatabaseNotification(_ notification: CKDatabaseNotification) async
 
     // MARK: - Zone Management
+
     func createCustomZone() async throws
     func fetchZones() async throws -> [CKRecordZone]
     func deleteZone(named zoneName: String) async throws
 
     // MARK: - Device Management
+
     func getSyncedDevices() async -> [CloudKitManager.SyncedDevice]
     func removeDevice(_ deviceID: String) async throws
 
     // MARK: - Status and Error Handling
+
     func handleError(_ error: Error)
     func resetCloudKitData() async
 
     // MARK: - Configuration
+
     func configureAutoSync(interval: TimeInterval)
 
     // MARK: - Status Properties
+
     var isSignedInToiCloud: Bool { get }
     var syncStatus: CloudKitManager.SyncStatus { get }
     var lastSyncDate: Date? { get }
@@ -74,7 +84,7 @@ protocol CloudKitService {
 extension CloudKitService {
     func configureAutoSync(interval: TimeInterval) {
         // Default implementation - can be overridden
-        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { timer in
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ in
             Task { @MainActor in
                 await self.performFullSync()
             }
@@ -102,12 +112,14 @@ public class CloudKitManager: ObservableObject, CloudKitService {
     @Published var showErrorAlert = false
 
     // MARK: - Data Management Properties
+
     @Published private(set) var tasks: [PlannerTask] = []
     @Published private(set) var goals: [Goal] = []
     @Published private(set) var calendarEvents: [CalendarEvent] = []
     @Published private(set) var journalEntries: [JournalEntry] = []
 
     // MARK: - Private Properties for Data Management
+
     private var userDefaults: UserDefaults
     private let tasksKey = "SavedTasks"
     private let goalsKey = "SavedGoals"
@@ -118,7 +130,7 @@ public class CloudKitManager: ObservableObject, CloudKitService {
     let database: CKDatabase // Changed to internal so extensions can access
     private var subscriptions = Set<AnyCancellable>()
     #if os(iOS)
-    private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
+        private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     #endif
 
     enum SyncStatus: Equatable {
@@ -249,23 +261,23 @@ public class CloudKitManager: ObservableObject, CloudKitService {
             switch self {
             case .notSignedIn:
                 #if os(iOS)
-                return "Go to Settings → Apple ID → iCloud and sign in with your Apple ID."
+                    return "Go to Settings → Apple ID → iCloud and sign in with your Apple ID."
                 #else
-                return "Go to System Settings → Apple ID → iCloud and sign in with your Apple ID."
+                    return "Go to System Settings → Apple ID → iCloud and sign in with your Apple ID."
                 #endif
             case .networkIssue:
                 return "Check your Wi-Fi connection or cellular data. Try syncing again when your connection improves."
             case .permissionDenied:
                 #if os(iOS)
-                return "Go to Settings → Apple ID → iCloud → Apps Using iCloud and enable this app."
+                    return "Go to Settings → Apple ID → iCloud → Apps Using iCloud and enable this app."
                 #else
-                return "Go to System Settings → Apple ID → iCloud and ensure this app is enabled."
+                    return "Go to System Settings → Apple ID → iCloud and ensure this app is enabled."
                 #endif
             case .quotaExceeded:
                 #if os(iOS)
-                return "Go to Settings → Apple ID → iCloud → Manage Storage to free up space or upgrade your storage plan."
+                    return "Go to Settings → Apple ID → iCloud → Manage Storage to free up space or upgrade your storage plan."
                 #else
-                return "Go to System Settings → Apple ID → iCloud → Manage Storage to free up space."
+                    return "Go to System Settings → Apple ID → iCloud → Manage Storage to free up space."
                 #endif
             case .deviceBusy:
                 return "Close some other apps and try again. If the issue persists, restart your device."
@@ -343,6 +355,7 @@ public class CloudKitManager: ObservableObject, CloudKitService {
     }
 
     // MARK: - Data Management Initialization
+
     private func initializeDataManagement() {
         self.userDefaults = .standard
         loadAllData()
@@ -356,6 +369,7 @@ public class CloudKitManager: ObservableObject, CloudKitService {
     }
 
     // MARK: - Task Data Management
+
     func loadTasks() -> [PlannerTask] {
         guard let data = userDefaults.data(forKey: tasksKey),
               let decodedTasks = try? JSONDecoder().decode([PlannerTask].self, from: data)
@@ -397,10 +411,11 @@ public class CloudKitManager: ObservableObject, CloudKitService {
     }
 
     func findTask(by id: UUID) -> PlannerTask? {
-        return tasks.first { $0.id == id }
+        tasks.first { $0.id == id }
     }
 
     // MARK: - Goal Data Management
+
     func loadGoals() -> [Goal] {
         guard let data = userDefaults.data(forKey: goalsKey),
               let decodedGoals = try? JSONDecoder().decode([Goal].self, from: data)
@@ -442,10 +457,11 @@ public class CloudKitManager: ObservableObject, CloudKitService {
     }
 
     func findGoal(by id: UUID) -> Goal? {
-        return goals.first { $0.id == id }
+        goals.first { $0.id == id }
     }
 
     // MARK: - Calendar Data Management
+
     func loadCalendarEvents() -> [CalendarEvent] {
         guard let data = userDefaults.data(forKey: calendarKey),
               let decodedEvents = try? JSONDecoder().decode([CalendarEvent].self, from: data)
@@ -487,10 +503,11 @@ public class CloudKitManager: ObservableObject, CloudKitService {
     }
 
     func findCalendarEvent(by id: UUID) -> CalendarEvent? {
-        return calendarEvents.first { $0.id == id }
+        calendarEvents.first { $0.id == id }
     }
 
     // MARK: - Journal Data Management
+
     func loadJournalEntries() -> [JournalEntry] {
         guard let data = userDefaults.data(forKey: journalKey),
               let decodedEntries = try? JSONDecoder().decode([JournalEntry].self, from: data)
@@ -532,10 +549,11 @@ public class CloudKitManager: ObservableObject, CloudKitService {
     }
 
     func findJournalEntry(by id: UUID) -> JournalEntry? {
-        return journalEntries.first { $0.id == id }
+        journalEntries.first { $0.id == id }
     }
 
     // MARK: - CloudKit Sync Methods for Data Types
+
     private func syncTasksToCloudKit() async {
         guard isSignedInToiCloud else { return }
         do {
@@ -907,18 +925,18 @@ public class CloudKitManager: ObservableObject, CloudKitService {
 
     private func beginBackgroundTask() {
         #if os(iOS)
-        self.backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "CloudKit Sync") {
-            self.endBackgroundTask()
-        }
+            self.backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "CloudKit Sync") {
+                self.endBackgroundTask()
+            }
         #endif
     }
 
     private func endBackgroundTask() {
         #if os(iOS)
-        if self.backgroundTask != .invalid {
-            UIApplication.shared.endBackgroundTask(self.backgroundTask)
-            self.backgroundTask = .invalid
-        }
+            if self.backgroundTask != .invalid {
+                UIApplication.shared.endBackgroundTask(self.backgroundTask)
+                self.backgroundTask = .invalid
+            }
         #endif
     }
 
@@ -1153,7 +1171,7 @@ public class CloudKitManager: ObservableObject, CloudKitService {
     // Placeholder local fetch/save methods - these should call your Services
     // These need to be implemented properly by interacting with your existing Services
     private func fetchLocalTasks() async throws -> [PlannerTask] {
-        return tasks
+        tasks
     }
 
     private func saveLocalTasks(_ tasks: [PlannerTask]) async throws {
@@ -1161,7 +1179,7 @@ public class CloudKitManager: ObservableObject, CloudKitService {
     }
 
     private func fetchLocalGoals() async throws -> [Goal] {
-        return goals
+        goals
     }
 
     private func saveLocalGoals(_ goals: [Goal]) async throws {
@@ -1169,7 +1187,7 @@ public class CloudKitManager: ObservableObject, CloudKitService {
     }
 
     private func fetchLocalEvents() async throws -> [CalendarEvent] {
-        return calendarEvents
+        calendarEvents
     }
 
     private func saveLocalEvents(_ events: [CalendarEvent]) async throws {
@@ -1177,7 +1195,7 @@ public class CloudKitManager: ObservableObject, CloudKitService {
     }
 
     private func fetchLocalJournalEntries() async throws -> [JournalEntry] {
-        return journalEntries
+        journalEntries
     }
 
     private func saveLocalJournalEntries(_ entries: [JournalEntry]) async throws {
@@ -1437,11 +1455,11 @@ extension CloudKitManager {
     /// Get the current device name
     static var deviceName: String {
         #if os(iOS)
-        return UIDevice.current.name
+            return UIDevice.current.name
         #elseif os(macOS)
-        return Host.current().localizedName ?? "Mac"
+            return Host.current().localizedName ?? "Mac"
         #else
-        return "Unknown Device"
+            return "Unknown Device"
         #endif
     }
 
@@ -1454,15 +1472,14 @@ extension CloudKitManager {
 
 // MARK: - Data Management Extensions
 
-extension CloudKitManager {
-}
+extension CloudKitManager {}
 
 // MARK: - Protocol Conformance Extensions
 
 @MainActor
 extension CloudKitManager: TaskDataManaging {
     func load() -> [PlannerTask] {
-        return tasks
+        tasks
     }
 
     func save(tasks: [PlannerTask]) {
@@ -1482,13 +1499,13 @@ extension CloudKitManager: TaskDataManaging {
     }
 
     func find(by id: UUID) -> PlannerTask? {
-        return findTask(by: id)
+        findTask(by: id)
     }
 }
 
 extension CloudKitManager: GoalDataManaging {
     func load() -> [Goal] {
-        return goals
+        goals
     }
 
     func save(goals: [Goal]) {
@@ -1508,6 +1525,6 @@ extension CloudKitManager: GoalDataManaging {
     }
 
     func find(by id: UUID) -> Goal? {
-        return findGoal(by: id)
+        findGoal(by: id)
     }
 }

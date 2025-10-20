@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 extension Features.Budgets {
@@ -19,16 +19,16 @@ extension Features.Budgets {
         private var modelContext
         @State private var viewModel = BudgetsViewModel()
         #if canImport(SwiftData)
-        #if canImport(SwiftData)
-        private var budgets: [Budget] = []
-        private var categories: [ExpenseCategory] = []
+            #if canImport(SwiftData)
+                private var budgets: [Budget] = []
+                private var categories: [ExpenseCategory] = []
+            #else
+                private var budgets: [Budget] = []
+                private var categories: [ExpenseCategory] = []
+            #endif
         #else
-        private var budgets: [Budget] = []
-        private var categories: [ExpenseCategory] = []
-        #endif
-        #else
-        private var budgets: [Budget] = []
-        private var categories: [ExpenseCategory] = []
+            private var budgets: [Budget] = []
+            private var categories: [ExpenseCategory] = []
         #endif
         @State private var showingAddBudget = false
         @State private var selectedTimeframe: TimeFrame = .thisMonth
@@ -206,9 +206,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-            return Color(uiColor: .systemGroupedBackground)
+                return Color(uiColor: .systemGroupedBackground)
             #else
-            return Color(nsColor: .controlBackgroundColor)
+                return Color(nsColor: .controlBackgroundColor)
             #endif
         }
     }
@@ -262,7 +262,7 @@ extension Features.Budgets {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(self.backgroundColorForPlatform())
-                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
+                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
             )
         }
 
@@ -296,9 +296,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-            return Color(uiColor: .systemGroupedBackground)
+                return Color(uiColor: .systemGroupedBackground)
             #else
-            return Color(nsColor: .controlBackgroundColor)
+                return Color(nsColor: .controlBackgroundColor)
             #endif
         }
     }
@@ -357,7 +357,7 @@ extension Features.Budgets {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(self.backgroundColorForPlatform())
-                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 1),
+                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 1)
             )
         }
 
@@ -379,9 +379,9 @@ extension Features.Budgets {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-            return Color(uiColor: .systemGroupedBackground)
+                return Color(uiColor: .systemGroupedBackground)
             #else
-            return Color(nsColor: .controlBackgroundColor)
+                return Color(nsColor: .controlBackgroundColor)
             #endif
         }
     }

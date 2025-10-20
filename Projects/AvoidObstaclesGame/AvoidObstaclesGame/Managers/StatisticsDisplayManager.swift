@@ -19,7 +19,9 @@ class StatisticsDisplayManager {
     private var statisticsLabels: [SKNode] = []
 
     /// Animation actions for reuse
-    private let fadeOutAction: SKAction = .fadeOut(withDuration: 0.3)
+    private var fadeOutAction: SKAction {
+        .fadeOut(withDuration: 0.3)
+    }
 
     // MARK: - Initialization
 
@@ -33,6 +35,7 @@ class StatisticsDisplayManager {
 
     /// Shows game statistics overlay
     /// - Parameter statistics: Dictionary of statistics to display
+    @MainActor
     func showStatistics(_ statistics: [String: Any]) {
         guard let scene else { return }
 
@@ -68,6 +71,7 @@ class StatisticsDisplayManager {
     }
 
     /// Hides the statistics display
+    @MainActor
     func hideStatistics() {
         for label in self.statisticsLabels {
             label.run(SKAction.sequence([self.fadeOutAction, SKAction.removeFromParent()]))
@@ -107,6 +111,7 @@ class StatisticsDisplayManager {
     // MARK: - Cleanup
 
     /// Removes all statistics display elements from the scene
+    @MainActor
     func removeAllStatistics() {
         self.hideStatistics()
     }

@@ -25,25 +25,37 @@ public class AIHealthMonitor: @unchecked Sendable {
 
     /// Get health status for service
     public func getHealth(for service: String) -> ServiceHealth {
+        var result = ServiceHealth(serviceName: service, isRunning: false, modelsAvailable: false, responseTime: nil, errorRate: 1.0, lastChecked: Date(), recommendations: ["Service not found"])
         queue.sync {
-            healthStatus[service] ?? .unknown
+            result = healthStatus[service] ?? ServiceHealth(serviceName: service, isRunning: false, modelsAvailable: false, responseTime: nil, errorRate: 1.0, lastChecked: Date(), recommendations: ["No health data available"])
         }
+        return result
     }
 
     /// Get overall health status
     public func getOverallHealth() -> ServiceHealth {
+        var result = ServiceHealth(serviceName: "overall", isRunning: false, modelsAvailable: false, responseTime: nil, errorRate: 1.0, lastChecked: Date(), recommendations: ["No services monitored"])
         queue.sync {
             let statuses = healthStatus.values
-            if statuses.contains(.unhealthy) {
-                return .unhealthy
-            } else if statuses.contains(.degraded) {
-                return .degraded
-            } else if statuses.contains(.healthy) {
-                return .healthy
+            if statuses.isEmpty {
+                result = ServiceHealth(serviceName: "overall", isRunning: false, modelsAvailable: false, responseTime: nil, errorRate: 1.0, lastChecked: Date(), recommendations: ["No services monitored"])
             } else {
-                return .unknown
+                let runningCount = statuses.filter(\.isRunning).count
+                let avgResponseTime = statuses.compactMap(\.responseTime).reduce(0, +) / Double(statuses.count)
+                let avgErrorRate = statuses.map(\.errorRate).reduce(0, +) / Double(statuses.count)
+
+                result = ServiceHealth(
+                    serviceName: "overall",
+                    isRunning: runningCount > 0,
+                    modelsAvailable: statuses.contains { $0.modelsAvailable },
+                    responseTime: avgResponseTime > 0 ? avgResponseTime : nil,
+                    errorRate: avgErrorRate,
+                    lastChecked: Date(),
+                    recommendations: ["Monitor individual services for details"]
+                )
             }
         }
+        return result
     }
 
     /// Reset health status

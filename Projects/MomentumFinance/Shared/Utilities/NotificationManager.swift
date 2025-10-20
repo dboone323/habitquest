@@ -1,7 +1,7 @@
 import Foundation
+import os
 import OSLog
 import SwiftData
-import os
 
 @preconcurrency import UserNotifications
 

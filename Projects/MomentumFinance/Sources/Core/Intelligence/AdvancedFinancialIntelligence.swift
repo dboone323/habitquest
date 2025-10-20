@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 import SwiftData
 import SwiftUI
 
@@ -33,29 +33,29 @@ public class AdvancedFinancialIntelligence: ObservableObject {
     private let riskEngine = RiskAssessmentEngine()
     private var cancellables = Set<AnyCancellable>()
     #if canImport(SwiftData)
-    private let dataProvider: AdvancedFinancialDataProvider?
-    private let autoAnalysisErrorHandler: (Error) -> Void
+        private let dataProvider: AdvancedFinancialDataProvider?
+        private let autoAnalysisErrorHandler: (Error) -> Void
     #endif
 
     // MARK: - Initialization
 
     #if canImport(SwiftData)
-    public init(
-        dataProvider: AdvancedFinancialDataProvider? = nil,
-        onAutoAnalysisError: @escaping (Error) -> Void = { error in
-            #if DEBUG
-            print("AdvancedFinancialIntelligence auto-analysis error:", error)
-            #endif
+        public init(
+            dataProvider: AdvancedFinancialDataProvider? = nil,
+            onAutoAnalysisError: @escaping (Error) -> Void = { error in
+                #if DEBUG
+                    print("AdvancedFinancialIntelligence auto-analysis error:", error)
+                #endif
+            }
+        ) {
+            self.dataProvider = dataProvider
+            self.autoAnalysisErrorHandler = onAutoAnalysisError
+            self.setupAutoAnalysis()
         }
-    ) {
-        self.dataProvider = dataProvider
-        self.autoAnalysisErrorHandler = onAutoAnalysisError
-        self.setupAutoAnalysis()
-    }
     #else
-    public init() {
-        self.setupAutoAnalysis()
-    }
+        public init() {
+            self.setupAutoAnalysis()
+        }
     #endif
 
     // MARK: - Public Methods
@@ -128,7 +128,8 @@ public class AdvancedFinancialIntelligence: ObservableObject {
     // MARK: - Private Analysis Methods
 
     private func analyzeSpendingPatterns(_ transactions: [Transaction]) async
-        -> [EnhancedFinancialInsight] {
+        -> [EnhancedFinancialInsight]
+    {
         var insights: [EnhancedFinancialInsight] = []
 
         // Analyze spending velocity
@@ -335,7 +336,7 @@ public class AdvancedFinancialIntelligence: ObservableObject {
 
     private func setupAutoAnalysis() {
         #if canImport(SwiftData)
-        guard self.dataProvider != nil else { return }
+            guard self.dataProvider != nil else { return }
         #endif
         // Setup automatic analysis every 24 hours
         Timer.publish(every: 86400, on: .main, in: .common)
@@ -350,36 +351,37 @@ public class AdvancedFinancialIntelligence: ObservableObject {
 
     private func performAutoAnalysis() async {
         #if canImport(SwiftData)
-        guard let dataProvider else { return }
-        if self.isAnalyzing { return }
+            guard let dataProvider else { return }
+            if self.isAnalyzing { return }
 
-        do {
-            let snapshot = try await dataProvider.makeSnapshot()
-            let payload = self.makeAutoAnalysisPayload(from: snapshot)
+            do {
+                let snapshot = try await dataProvider.makeSnapshot()
+                let payload = self.makeAutoAnalysisPayload(from: snapshot)
 
-            if payload.transactions.isEmpty, payload.accounts.isEmpty, payload.budgets.isEmpty {
-                self.insights = []
-                self.riskAssessment = nil
-                self.predictiveAnalytics = nil
-                self.lastAnalysisDate = Date()
-                return
+                if payload.transactions.isEmpty, payload.accounts.isEmpty, payload.budgets.isEmpty {
+                    self.insights = []
+                    self.riskAssessment = nil
+                    self.predictiveAnalytics = nil
+                    self.lastAnalysisDate = Date()
+                    return
+                }
+
+                await self.generateInsights(
+                    from: payload.transactions,
+                    accounts: payload.accounts,
+                    budgets: payload.budgets
+                )
+            } catch {
+                self.autoAnalysisErrorHandler(error)
             }
-
-            await self.generateInsights(
-                from: payload.transactions,
-                accounts: payload.accounts,
-                budgets: payload.budgets
-            )
-        } catch {
-            self.autoAnalysisErrorHandler(error)
-        }
         #else
-        // Auto-analysis requires SwiftData-backed storage; no-op when unavailable.
+            // Auto-analysis requires SwiftData-backed storage; no-op when unavailable.
         #endif
     }
 
     private func prioritizeInsights(_ insights: [EnhancedFinancialInsight])
-        -> [EnhancedFinancialInsight] {
+        -> [EnhancedFinancialInsight]
+    {
         insights.sorted { first, second in
             // Priority by severity first, then by impact score
             if first.priority != second.priority {
@@ -587,47 +589,47 @@ private class RiskAssessmentEngine {
 }
 
 #if canImport(SwiftData)
-public struct AdvancedFinancialDomainSnapshot {
-    public let transactions: [FinancialTransaction]
-    public let accounts: [FinancialAccount]
-    public let budgets: [Budget]
+    public struct AdvancedFinancialDomainSnapshot {
+        public let transactions: [FinancialTransaction]
+        public let accounts: [FinancialAccount]
+        public let budgets: [Budget]
 
-    public init(
-        transactions: [FinancialTransaction],
-        accounts: [FinancialAccount],
-        budgets: [Budget]
-    ) {
-        self.transactions = transactions
-        self.accounts = accounts
-        self.budgets = budgets
-    }
-}
-
-@MainActor
-public protocol AdvancedFinancialDataProvider: AnyObject {
-    func makeSnapshot() async throws -> AdvancedFinancialDomainSnapshot
-}
-
-@MainActor
-public final class SwiftDataAdvancedFinancialDataProvider: AdvancedFinancialDataProvider {
-    private let modelContext: ModelContext
-
-    public init(modelContext: ModelContext) {
-        self.modelContext = modelContext
+        public init(
+            transactions: [FinancialTransaction],
+            accounts: [FinancialAccount],
+            budgets: [Budget]
+        ) {
+            self.transactions = transactions
+            self.accounts = accounts
+            self.budgets = budgets
+        }
     }
 
-    public func makeSnapshot() async throws -> AdvancedFinancialDomainSnapshot {
-        let transactions = try self.modelContext.fetch(FetchDescriptor<FinancialTransaction>())
-        let accounts = try self.modelContext.fetch(FetchDescriptor<FinancialAccount>())
-        let budgets = try self.modelContext.fetch(FetchDescriptor<Budget>())
-
-        return AdvancedFinancialDomainSnapshot(
-            transactions: transactions,
-            accounts: accounts,
-            budgets: budgets
-        )
+    @MainActor
+    public protocol AdvancedFinancialDataProvider: AnyObject {
+        func makeSnapshot() async throws -> AdvancedFinancialDomainSnapshot
     }
-}
+
+    @MainActor
+    public final class SwiftDataAdvancedFinancialDataProvider: AdvancedFinancialDataProvider {
+        private let modelContext: ModelContext
+
+        public init(modelContext: ModelContext) {
+            self.modelContext = modelContext
+        }
+
+        public func makeSnapshot() async throws -> AdvancedFinancialDomainSnapshot {
+            let transactions = try self.modelContext.fetch(FetchDescriptor<FinancialTransaction>())
+            let accounts = try self.modelContext.fetch(FetchDescriptor<FinancialAccount>())
+            let budgets = try self.modelContext.fetch(FetchDescriptor<Budget>())
+
+            return AdvancedFinancialDomainSnapshot(
+                transactions: transactions,
+                accounts: accounts,
+                budgets: budgets
+            )
+        }
+    }
 #endif
 
 // End of AdvancedFinancialIntelligence class and related types

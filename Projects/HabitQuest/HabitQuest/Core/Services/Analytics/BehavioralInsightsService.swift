@@ -214,7 +214,7 @@ final class BehavioralInsightsService {
             recommendations = [
                 "Track your habits consistently to identify patterns",
                 "Celebrate small wins to maintain motivation",
-                "Adjust your approach based on what works for your lifestyle"
+                "Adjust your approach based on what works for your lifestyle",
             ]
         }
 

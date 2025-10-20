@@ -27,7 +27,7 @@ final class TaskDataManager: TaskDataManaging {
     /// Loads all tasks from CloudKitManager.
     /// - Returns: Array of `PlannerTask` objects.
     func load() -> [PlannerTask] {
-        return cloudKitManager.loadTasks()
+        cloudKitManager.loadTasks()
     }
 
     /// Saves the provided tasks using CloudKitManager.
@@ -58,14 +58,14 @@ final class TaskDataManager: TaskDataManaging {
     /// - Parameter id: The UUID of the task to find.
     /// - Returns: The `PlannerTask` if found, otherwise nil.
     func find(by id: UUID) -> PlannerTask? {
-        return cloudKitManager.findTask(by: id)
+        cloudKitManager.findTask(by: id)
     }
 
     /// Gets tasks filtered by completion status.
     /// - Parameter completed: Whether to get completed or incomplete tasks.
     /// - Returns: Array of filtered tasks.
     func tasks(filteredByCompletion completed: Bool) -> [PlannerTask] {
-        return cloudKitManager.tasks.filter { $0.isCompleted == completed }
+        cloudKitManager.tasks.filter { $0.isCompleted == completed }
     }
 
     /// Gets tasks due within a specified number of days.
@@ -84,7 +84,7 @@ final class TaskDataManager: TaskDataManaging {
     /// Gets overdue tasks.
     /// - Returns: Array of overdue tasks.
     func overdueTasks() -> [PlannerTask] {
-        return tasksDue(within: 0).filter { task in
+        tasksDue(within: 0).filter { task in
             if let dueDate = task.dueDate {
                 return dueDate < Date() && !task.isCompleted
             }
@@ -95,13 +95,13 @@ final class TaskDataManager: TaskDataManaging {
     /// Gets tasks sorted by priority.
     /// - Returns: Array of tasks sorted by priority (high to low).
     func tasksSortedByPriority() -> [PlannerTask] {
-        return cloudKitManager.tasks.sorted { $0.priority.sortOrder > $1.priority.sortOrder }
+        cloudKitManager.tasks.sorted { $0.priority.sortOrder > $1.priority.sortOrder }
     }
 
     /// Gets tasks sorted by due date.
     /// - Returns: Array of tasks sorted by due date (soonest first).
     func tasksSortedByDate() -> [PlannerTask] {
-        return cloudKitManager.tasks.sorted { lhs, rhs in
+        cloudKitManager.tasks.sorted { lhs, rhs in
             switch (lhs.dueDate, rhs.dueDate) {
             case let (.some(lhsDate), .some(rhsDate)):
                 return lhsDate < rhsDate

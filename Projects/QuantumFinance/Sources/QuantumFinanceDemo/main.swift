@@ -1,5 +1,5 @@
 //
-//  QuantumFinanceDemo.swift
+//  main.swift
 //  QuantumFinanceDemo
 //
 //  Demonstration of Quantum Portfolio Optimization
@@ -11,16 +11,16 @@ import QuantumFinanceKit
 
 // MARK: - Mock AI Service for Quantum Enhancement
 
-struct MockAIService {
+enum MockAIService {
     static func analyzeMarketConditions() -> String {
-        return "Market analysis: Tech sector showing strong momentum, commodities hedging against inflation"
+        "Market analysis: Tech sector showing strong momentum, commodities hedging against inflation"
     }
 
     static func predictVolatilityAdjustment(for assets: [Asset]) -> [String: Double] {
         var adjustments: [String: Double] = [:]
         for asset in assets {
             // Simulate AI-driven volatility predictions
-            adjustments[asset.symbol] = Double.random(in: 0.9...1.1)
+            adjustments[asset.symbol] = Double.random(in: 0.9 ... 1.1)
         }
         return adjustments
     }
@@ -57,11 +57,11 @@ struct QuantumFinanceDemo {
 
             // Create quantum finance engine
             let constraints = MarketConstraints(
-                maxWeightPerAsset: 0.25,  // Max 25% per asset
-                minWeightPerAsset: 0.01,  // Min 1% per asset
-                maxVolatility: 0.30,      // Max 30% portfolio volatility
-                minReturn: 0.08,          // Min 8% expected return
-                riskFreeRate: 0.025       // 2.5% risk-free rate
+                maxWeightPerAsset: 0.25, // Max 25% per asset
+                minWeightPerAsset: 0.01, // Min 1% per asset
+                maxVolatility: 0.30, // Max 30% portfolio volatility
+                minReturn: 0.08, // Min 8% expected return
+                riskFreeRate: 0.025 // 2.5% risk-free rate
             )
 
             let engine = QuantumFinanceEngine(assets: assets, constraints: constraints)
@@ -169,7 +169,7 @@ struct QuantumFinanceDemo {
     // Simulate classical optimization time (exponential scaling)
     private static func simulateClassicalOptimization(_ numAssets: Int) -> Double {
         // Classical brute force: 2^n combinations, assume 1e6 operations/second
-        let operations = Double(1 << min(numAssets, 20))  // Cap to avoid overflow
+        let operations = Double(1 << min(numAssets, 20)) // Cap to avoid overflow
         return operations / 1_000_000.0
     }
 
@@ -179,22 +179,22 @@ struct QuantumFinanceDemo {
 
         // Simulate different market conditions
         let scenarios = [
-            ("Bull Market", 1.2, 0.8),   // +20% returns, -20% volatility
-            ("Bear Market", 0.7, 1.3),   // -30% returns, +30% volatility
+            ("Bull Market", 1.2, 0.8), // +20% returns, -20% volatility
+            ("Bear Market", 0.7, 1.3), // -30% returns, +30% volatility
             ("High Volatility", 1.0, 1.5), // Same returns, +50% volatility
-            ("Low Volatility", 1.0, 0.7)   // Same returns, -30% volatility
+            ("Low Volatility", 1.0, 0.7), // Same returns, -30% volatility
         ]
 
         for (scenario, returnMultiplier, volMultiplier) in scenarios {
             let adjustedMetrics = adjustMetricsForScenario(engine.calculateRiskMetrics(for: weights),
-                                                         returnMultiplier, volMultiplier)
+                                                           returnMultiplier, volMultiplier)
             print("    \(scenario): Return \(String(format: "%.1f", adjustedMetrics.expectedReturn * 100))%, " +
-                  "Volatility \(String(format: "%.1f", adjustedMetrics.volatility * 100))%")
+                "Volatility \(String(format: "%.1f", adjustedMetrics.volatility * 100))%")
         }
     }
 
     private static func adjustMetricsForScenario(_ metrics: RiskMetrics, _ returnMult: Double, _ volMult: Double) -> RiskMetrics {
-        return RiskMetrics(
+        RiskMetrics(
             expectedReturn: metrics.expectedReturn * returnMult,
             volatility: metrics.volatility * volMult,
             sharpeRatio: (metrics.expectedReturn * returnMult - 0.025) / (metrics.volatility * volMult),

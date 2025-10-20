@@ -197,7 +197,8 @@ struct AICodeReviewer {
         let response = try await ollamaClient.generateResponse(for: prompt, model: "codellama")
 
         guard let data = response.data(using: .utf8),
-              let jsonArray = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
+              let jsonArray = try JSONSerialization.jsonObject(with: data) as? [[String: Any]]
+        else {
             throw AICodeReviewerError.invalidResponse
         }
 
@@ -230,13 +231,15 @@ struct AICodeReviewer {
         let response = try await ollamaClient.generateResponse(for: prompt, model: "codellama")
 
         guard let data = response.data(using: .utf8),
-              let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+              let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+        else {
             throw AICodeReviewerError.invalidResponse
         }
 
         // Parse JSON and create DocumentationResult
         guard let overview = json["overview"] as? String,
-              let documentedCode = json["documentedCode"] as? String else {
+              let documentedCode = json["documentedCode"] as? String
+        else {
             throw AICodeReviewerError.invalidResponse
         }
 
@@ -284,7 +287,8 @@ struct AICodeReviewer {
         let response = try await ollamaClient.generateResponse(for: prompt, model: "codellama")
 
         guard let data = response.data(using: .utf8),
-              let jsonArray = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
+              let jsonArray = try JSONSerialization.jsonObject(with: data) as? [[String: Any]]
+        else {
             throw AICodeReviewerError.invalidResponse
         }
 
@@ -293,6 +297,7 @@ struct AICodeReviewer {
 }
 
 // MARK: - Supporting Types
+
 // Note: StyleReview is defined in CodeReviewService.swift to avoid duplication
 
 struct CodeSmell {
@@ -464,7 +469,7 @@ enum AICodeReviewerError: Error {
 struct DummyOllamaClient: OllamaClientProtocol {
     func generateResponse(for prompt: String, model: String) async throws -> String {
         // Return a placeholder JSON response for testing
-        return """
+        """
         {
             "rating": 7,
             "violations": [],

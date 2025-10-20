@@ -2,9 +2,9 @@
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
 import Observation
+import Shared
 import SwiftData
 import SwiftUI
-import Shared
 
 extension Features.Transactions {
     @MainActor
@@ -42,15 +42,15 @@ extension Features.Transactions {
             switch action {
             case .loadTransactions:
                 await loadTransactions()
-            case .filterTransactions(let type):
+            case let .filterTransactions(type):
                 filterTransactions(type: type)
-            case .searchTransactions(let query):
+            case let .searchTransactions(query):
                 searchTransactions(query: query)
-            case .deleteTransaction(let transaction):
+            case let .deleteTransaction(transaction):
                 deleteTransaction(transaction)
-            case .createTransaction(let title, let amount, let type, let category, let account, let date, let notes):
+            case let .createTransaction(title, amount, type, category, account, date, notes):
                 createTransaction(title: title, amount: amount, type: type, category: category, account: account, date: date, notes: notes)
-            case .setError(let message):
+            case let .setError(message):
                 self.state.errorMessage = message
             }
         }
@@ -116,8 +116,8 @@ extension Features.Transactions {
         /// <#Description#>
         /// - Returns: <#description#>
         func groupTransactionsByMonth(_ transactions: [FinancialTransaction]) -> [String:
-            [FinancialTransaction]
-        ] {
+            [FinancialTransaction]]
+        {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM yyyy"
 
@@ -130,7 +130,8 @@ extension Features.Transactions {
         /// <#Description#>
         /// - Returns: <#description#>
         func totalIncome(_ transactions: [FinancialTransaction], for period: DateInterval? = nil)
-            -> Double {
+            -> Double
+        {
             let filteredTransactions: [FinancialTransaction] =
                 if let period {
                     transactions.filter { transaction in
@@ -150,7 +151,8 @@ extension Features.Transactions {
         /// <#Description#>
         /// - Returns: <#description#>
         func totalExpenses(_ transactions: [FinancialTransaction], for period: DateInterval? = nil)
-            -> Double {
+            -> Double
+        {
             let filteredTransactions: [FinancialTransaction] =
                 if let period {
                     transactions.filter { transaction in
@@ -170,7 +172,8 @@ extension Features.Transactions {
         /// <#Description#>
         /// - Returns: <#description#>
         func netIncome(_ transactions: [FinancialTransaction], for period: DateInterval? = nil)
-            -> Double {
+            -> Double
+        {
             self.totalIncome(transactions, for: period)
                 - self.totalExpenses(transactions, for: period)
         }
@@ -179,7 +182,8 @@ extension Features.Transactions {
         /// <#Description#>
         /// - Returns: <#description#>
         func currentMonthTransactions(_ transactions: [FinancialTransaction])
-            -> [FinancialTransaction] {
+            -> [FinancialTransaction]
+        {
             let calendar = Calendar.current
             let now = Date()
 
@@ -192,7 +196,8 @@ extension Features.Transactions {
         /// <#Description#>
         /// - Returns: <#description#>
         func recentTransactions(_ transactions: [FinancialTransaction], limit: Int = 10)
-            -> [FinancialTransaction] {
+            -> [FinancialTransaction]
+        {
             Array(
                 transactions
                     .sorted { $0.date > $1.date }
@@ -242,7 +247,7 @@ extension Features.Transactions {
             category: ExpenseCategory?,
             account: FinancialAccount,
             date: Date = Date(),
-            notes: String? = nil,
+            notes: String? = nil
         ) {
             guard let modelContext else { return }
 
@@ -251,7 +256,7 @@ extension Features.Transactions {
                 amount: amount,
                 date: date,
                 transactionType: type,
-                notes: notes,
+                notes: notes
             )
 
             transaction.category = category

@@ -27,7 +27,7 @@ final class GoalDataManager: GoalDataManaging {
     /// Loads all goals from CloudKitManager.
     /// - Returns: Array of `Goal` objects.
     func load() -> [Goal] {
-        return cloudKitManager.loadGoals()
+        cloudKitManager.loadGoals()
     }
 
     /// Saves the provided goals using CloudKitManager.
@@ -58,14 +58,14 @@ final class GoalDataManager: GoalDataManaging {
     /// - Parameter id: The UUID of the goal to find.
     /// - Returns: The `Goal` if found, otherwise nil.
     func find(by id: UUID) -> Goal? {
-        return cloudKitManager.findGoal(by: id)
+        cloudKitManager.findGoal(by: id)
     }
 
     /// Gets goals filtered by completion status.
     /// - Parameter completed: Whether to get completed or incomplete goals.
     /// - Returns: Array of filtered goals.
     func goals(filteredByCompletion completed: Bool) -> [Goal] {
-        return cloudKitManager.goals.filter { $0.isCompleted == completed }
+        cloudKitManager.goals.filter { $0.isCompleted == completed }
     }
 
     /// Gets goals due within a specified number of days.
@@ -79,13 +79,13 @@ final class GoalDataManager: GoalDataManaging {
     /// Gets goals sorted by priority.
     /// - Returns: Array of goals sorted by priority (high to low).
     func goalsSortedByPriority() -> [Goal] {
-        return cloudKitManager.goals.sorted { $0.priority.sortOrder > $1.priority.sortOrder }
+        cloudKitManager.goals.sorted { $0.priority.sortOrder > $1.priority.sortOrder }
     }
 
     /// Gets goals sorted by target date.
     /// - Returns: Array of goals sorted by target date (soonest first).
     func goalsSortedByDate() -> [Goal] {
-        return cloudKitManager.goals.sorted { $0.targetDate < $1.targetDate }
+        cloudKitManager.goals.sorted { $0.targetDate < $1.targetDate }
     }
 
     /// Clears all goals from storage.

@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 
 /// AI-powered task prioritization service for PlannerApp
 /// Provides intelligent task suggestions and productivity insights
@@ -9,7 +9,7 @@ import Combine
 @MainActor
 public class AITaskPrioritizationService: ObservableObject {
     public static var shared: AITaskPrioritizationService {
-        return _shared
+        _shared
     }
 
     private static let _shared = AITaskPrioritizationService()
@@ -51,7 +51,7 @@ public class AITaskPrioritizationService: ObservableObject {
             "today": Calendar.current.date(byAdding: .day, value: 0, to: Date())!,
             "tomorrow": Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
             "next week": Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
-            "this week": Calendar.current.date(byAdding: .day, value: 7, to: Date())!
+            "this week": Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
         ]
 
         for (pattern, date) in datePatterns {
@@ -131,7 +131,7 @@ public class AITaskPrioritizationService: ObservableObject {
 
         // Analyze completion patterns
         let completedTasks = recentActivity.filter { $0.type == .taskCompleted }
-        let completionTimes = completedTasks.compactMap { $0.timestamp }
+        let completionTimes = completedTasks.compactMap(\.timestamp)
 
         if !completionTimes.isEmpty {
             // Suggest tasks during peak productivity times
@@ -188,7 +188,7 @@ public class AITaskPrioritizationService: ObservableObject {
                 // This could be improved with a proper relationship
                 task.title.lowercased().contains(goal.title.lowercased().components(separatedBy: " ").first ?? "")
             }
-            let completedTasks = relatedTasks.filter { $0.isCompleted }.count
+            let completedTasks = relatedTasks.filter(\.isCompleted).count
             let progress = Double(completedTasks) / Double(max(relatedTasks.count, 1))
 
             if progress < 0.3 && relatedTasks.count > 2 {
@@ -312,9 +312,9 @@ public class AITaskPrioritizationService: ObservableObject {
             id: UUID().uuidString,
             title: "Today's Productivity Score",
             description: String(format: "%.1f/10 - Based on task completion (%.0f%%) and focus time (%.1f hours)",
-                              productivityScore * 10,
-                              completionRate * 100,
-                              focusTime / 60),
+                                productivityScore * 10,
+                                completionRate * 100,
+                                focusTime / 60),
             icon: productivityScore > 0.7 ? "star.fill" : productivityScore > 0.4 ? "star.leadinghalf.filled" : "star",
             priority: .high,
             category: .performance,
@@ -340,7 +340,7 @@ public class AITaskPrioritizationService: ObservableObject {
         }
 
         // Peak productivity time
-        let peakHour = self.calculatePeakProductivityHour(activities.map { $0.timestamp })
+        let peakHour = self.calculatePeakProductivityHour(activities.map(\.timestamp))
 
         let peakInsight = ProductivityInsight(
             id: UUID().uuidString,
@@ -360,7 +360,7 @@ public class AITaskPrioritizationService: ObservableObject {
     private func analyzeTaskPatterns(_ tasks: [PlannerTask]) -> [ProductivityInsight] {
         var insights: [ProductivityInsight] = []
 
-        let completedTasks = tasks.filter { $0.isCompleted }
+        let completedTasks = tasks.filter(\.isCompleted)
         let pendingTasks = tasks.filter { !$0.isCompleted }
 
         // Task completion patterns
@@ -425,7 +425,7 @@ public class AITaskPrioritizationService: ObservableObject {
             let relatedTasks = tasks.filter { task in
                 task.title.lowercased().contains(goal.title.lowercased().components(separatedBy: " ").first ?? "")
             }
-            let completedTasks = relatedTasks.filter { $0.isCompleted }.count
+            let completedTasks = relatedTasks.filter(\.isCompleted).count
             let totalTasks = relatedTasks.count
 
             if totalTasks > 0 {
@@ -472,7 +472,7 @@ public class AITaskPrioritizationService: ObservableObject {
 
     private func calculateFocusTime(_ activities: [ActivityRecord]) -> Double {
         // Estimate focus time based on activity density
-        let timeIntervals = activities.map { $0.timestamp }.sorted()
+        let timeIntervals = activities.map(\.timestamp).sorted()
         guard timeIntervals.count >= 2 else { return 0.0 }
 
         var totalFocusTime: Double = 0
@@ -544,7 +544,8 @@ public class AITaskPrioritizationService: ObservableObject {
 
         // If the time has passed today, schedule for tomorrow
         if let suggestedTime = calendar.date(from: components),
-           suggestedTime < now {
+           suggestedTime < now
+        {
             return calendar.date(byAdding: .day, value: 1, to: suggestedTime) ?? now
         }
 
@@ -602,7 +603,7 @@ public class AITaskPrioritizationService: ObservableObject {
     }
 
     private nonisolated func prioritizeSuggestions(_ suggestions: [TaskSuggestion]) -> [TaskSuggestion] {
-        return suggestions.sorted { lhs, rhs in
+        suggestions.sorted { lhs, rhs in
             // Sort by priority first, then by urgency, then by confidence
             if lhs.priority != rhs.priority {
                 return lhs.priority.rawValue > rhs.priority.rawValue

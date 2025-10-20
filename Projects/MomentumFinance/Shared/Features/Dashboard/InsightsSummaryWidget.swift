@@ -8,31 +8,31 @@ import SwiftUI
 public struct InsightsSummaryWidget: View {
     @Environment(\.modelContext) private var modelContext
     #if canImport(SwiftData)
-    #if canImport(SwiftData)
-    #if canImport(SwiftData)
-    #if canImport(SwiftData)
-    private var transactions: [FinancialTransaction] = []
-    private var accounts: [FinancialAccount] = []
-    private var budgets: [Budget] = []
+        #if canImport(SwiftData)
+            #if canImport(SwiftData)
+                #if canImport(SwiftData)
+                    private var transactions: [FinancialTransaction] = []
+                    private var accounts: [FinancialAccount] = []
+                    private var budgets: [Budget] = []
+                #else
+                    private var transactions: [FinancialTransaction] = []
+                    private var accounts: [FinancialAccount] = []
+                    private var budgets: [Budget] = []
+                #endif
+            #else
+                private var transactions: [FinancialTransaction] = []
+                private var accounts: [FinancialAccount] = []
+                private var budgets: [Budget] = []
+            #endif
+        #else
+            private var transactions: [FinancialTransaction] = []
+            private var accounts: [FinancialAccount] = []
+            private var budgets: [Budget] = []
+        #endif
     #else
-    private var transactions: [FinancialTransaction] = []
-    private var accounts: [FinancialAccount] = []
-    private var budgets: [Budget] = []
-    #endif
-    #else
-    private var transactions: [FinancialTransaction] = []
-    private var accounts: [FinancialAccount] = []
-    private var budgets: [Budget] = []
-    #endif
-    #else
-    private var transactions: [FinancialTransaction] = []
-    private var accounts: [FinancialAccount] = []
-    private var budgets: [Budget] = []
-    #endif
-    #else
-    private var transactions: [FinancialTransaction] = []
-    private var accounts: [FinancialAccount] = []
-    private var budgets: [Budget] = []
+        private var transactions: [FinancialTransaction] = []
+        private var accounts: [FinancialAccount] = []
+        private var budgets: [Budget] = []
     #endif
 
     @State private var isLoading = true
@@ -194,13 +194,13 @@ public struct InsightsSummaryWidget: View {
 
     private func insightBackgroundColor() -> some View {
         #if os(iOS)
-        #if os(iOS)
-        return Color(UIColor.secondarySystemBackground)
+            #if os(iOS)
+                return Color(UIColor.secondarySystemBackground)
+            #else
+                return Color.secondary.opacity(0.1)
+            #endif
         #else
-        return Color.secondary.opacity(0.1)
-        #endif
-        #else
-        return Color(NSColor.windowBackgroundColor)
+            return Color(NSColor.windowBackgroundColor)
         #endif
     }
 }

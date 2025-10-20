@@ -35,13 +35,13 @@ struct QuantumChemistryDemo {
         let molecules = [
             ("Hydrogen Molecule", CommonMolecules.hydrogen),
             ("Water Molecule", CommonMolecules.water),
-            ("Methane Molecule", CommonMolecules.methane)
+            ("Methane Molecule", CommonMolecules.methane),
         ]
 
         let methods: [QuantumChemistryEngine.QuantumMethod] = [
             .hartreeFock,
             .densityFunctionalTheory,
-            .variationalQuantumEigensolver
+            .variationalQuantumEigensolver,
         ]
 
         for (name, molecule) in molecules {
@@ -91,7 +91,7 @@ struct QuantumChemistryDemo {
         print("Classical methods scale exponentially, quantum methods scale polynomially")
         print("─" * 60)
 
-        for size in 2...6 {
+        for size in 2 ... 6 {
             let molecule = createHydrogenChain(size: size)
             let parameters = QuantumChemistryEngine.SimulationParameters(
                 molecule: molecule,
@@ -124,7 +124,7 @@ struct QuantumChemistryDemo {
 
     static func createHydrogenChain(size: Int) -> Molecule {
         var atoms: [Atom] = []
-        for i in 0..<size {
+        for i in 0 ..< size {
             let position = SIMD3<Double>(Double(i) * 0.74, 0, 0) // H-H bond length
             let atom = Atom(symbol: "H", atomicNumber: 1, position: position, mass: 1.00784)
             atoms.append(atom)
@@ -138,7 +138,7 @@ struct QuantumChemistryDemo {
 class MockAIService: AITextGenerationService {
     func generateText(prompt: String, maxTokens: Int) async throws -> String {
         // Return mock AI response for demonstration
-        return "Quantum algorithm optimized for \(prompt.split(separator: " ").first ?? "molecule")"
+        "Quantum algorithm optimized for \(prompt.split(separator: " ").first ?? "molecule")"
     }
 }
 
@@ -167,7 +167,7 @@ extension SIMD3<Double> {
 }
 
 extension String {
-    static func *(lhs: String, rhs: Int) -> String {
+    static func * (lhs: String, rhs: Int) -> String {
         String(repeating: lhs, count: rhs)
     }
 }

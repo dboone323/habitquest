@@ -1,7 +1,7 @@
 import Foundation
-import SwiftUI
-import enum Shared.FinancialIntelligenceModels.InsightPriority
 import struct Shared.FinancialIntelligenceModels.FinancialInsight
+import enum Shared.FinancialIntelligenceModels.InsightPriority
+import SwiftUI
 
 // Import insight types
 public struct InsightsLoadingView: View {

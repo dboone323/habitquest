@@ -21,7 +21,7 @@ public struct AddCalendarEventView: View {
             HStack {
                 Button("Cancel", action: {
                     #if os(iOS)
-                    HapticManager.lightImpact()
+                        HapticManager.lightImpact()
                     #endif
                     self.dismiss()
                 })
@@ -41,7 +41,7 @@ public struct AddCalendarEventView: View {
 
                 Button("Save", action: {
                     #if os(iOS)
-                    HapticManager.notificationSuccess()
+                        HapticManager.notificationSuccess()
                     #endif
                     self.saveEvent()
                     self.dismiss()

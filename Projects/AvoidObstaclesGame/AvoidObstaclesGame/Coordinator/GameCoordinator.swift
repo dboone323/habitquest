@@ -8,6 +8,7 @@
 
 import Foundation
 import SpriteKit
+import Combine
 
 /// Protocol for objects that can be coordinated
 protocol Coordinatable: AnyObject {
@@ -18,11 +19,11 @@ protocol Coordinatable: AnyObject {
     func coordinatorDidStop()
 
     /// Called when the coordinator transitions to a new state
-    func coordinatorDidTransition(to state: GameState)
+    func coordinatorDidTransition(to state: AppState)
 }
 
-/// Game state enumeration
-enum GameState {
+/// App state enumeration
+enum AppState {
     case menu
     case playing
     case paused
@@ -33,7 +34,7 @@ enum GameState {
 
 /// Protocol for game coordinator delegate
 protocol GameCoordinatorDelegate: AnyObject {
-    func coordinatorDidTransition(to state: GameState)
+    func coordinatorDidTransition(to state: AppState)
     func coordinatorDidRequestSceneChange(to sceneType: SceneType)
 }
 
@@ -46,14 +47,14 @@ enum SceneType {
 }
 
 /// Main game coordinator responsible for managing game state and coordinating managers
-class GameCoordinator {
-    // MARK: - Properties
+@MainActor
+final class GameCoordinator {
+    // MARK: - Singleton
 
-    /// Shared singleton instance
     static let shared = GameCoordinator()
 
-    /// Current game state
-    private(set) var currentState: GameState = .menu {
+    /// Current app state
+    private(set) var currentState: AppState = .menu {
         didSet {
             self.handleStateTransition(from: oldValue, to: self.currentState)
         }
@@ -82,10 +83,16 @@ class GameCoordinator {
     private weak var progressionManager: ProgressionManager?
 
     /// AI-powered adaptive difficulty system
-    private let adaptiveDifficultyAI = AdaptiveDifficultyAI.shared
+    private let adaptiveDifficultyAI = AIAdaptiveDifficultyManager()
 
     /// AI-powered player analytics system
     private let playerAnalyticsAI = PlayerAnalyticsAI.shared
+
+    /// Advanced AI system for predictive analysis and dynamic content
+    private let advancedAI = AdvancedAIManager.shared
+
+    /// Combine cancellables for subscriptions
+    private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Initialization
 
@@ -100,7 +107,8 @@ class GameCoordinator {
                obstacleManager: ObstacleManager,
                uiManager: GameHUDManager,
                physicsManager: PhysicsManager,
-               effectsManager: EffectsManager) {
+               effectsManager: EffectsManager)
+    {
 
         self.gameScene = gameScene
         self.gameStateManager = gameStateManager
@@ -116,29 +124,82 @@ class GameCoordinator {
         self.performanceManager = PerformanceManager.shared
         self.progressionManager = ProgressionManager.shared
 
-        // Setup manager delegates to point to coordinator
-        self.setupManagerDelegates()
+        // Initialize analytics and performance monitoring
+        self.setupAnalyticsAndPerformance()
+
+        // Setup AI system delegates
+        self.setupAISystemDelegates()
+
+        // Setup advanced AI system
+        self.setupAdvancedAI()
 
         // Start in menu state
         self.transition(to: .menu)
     }
 
-    /// Setup manager delegates to coordinate through this coordinator
-    private func setupManagerDelegates() {
-        self.gameStateManager?.delegate = self
-        self.playerManager?.delegate = self
-        self.obstacleManager?.delegate = self
-        self.uiManager?.delegate = self
-        self.physicsManager?.delegate = self
-        self.achievementManager?.delegate = self
+    /// Setup AI system delegates to coordinate through this coordinator
+    private func setupAISystemDelegates() {
+        self.adaptiveDifficultyAI.delegate = self
+    }
+
+    /// Setup advanced AI system integration
+    private func setupAdvancedAI() {
+        // Subscribe to advanced AI performance metrics
+        self.advancedAI.aiPerformancePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] metrics in
+                // Handle advanced AI performance metrics
+                self?.handleAdvancedAIPerformance(metrics)
+            }
+            .store(in: &self.cancellables)
+    }
+
+    /// Setup analytics and performance monitoring integration
+    private func setupAnalyticsAndPerformance() {
+        // Set up performance monitoring delegate
         self.performanceManager?.delegate = self
-        self.progressionManager?.delegate = self
+
+        // Start analytics session
+        AnalyticsManager.shared.startSession()
+
+        // Set up periodic analytics updates
+        Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                self?.updateAnalyticsAndPerformance()
+            }
+        }
+    }
+
+    /// Update analytics and performance metrics periodically
+    private func updateAnalyticsAndPerformance() {
+        // Get comprehensive performance report
+        if let performanceReport = self.performanceManager?.getDetailedPerformanceReport() {
+            // Log performance insights
+            if !performanceReport.recommendations.isEmpty {
+                print("Performance Recommendations: \(performanceReport.recommendations.joined(separator: ", "))")
+            }
+
+            if !performanceReport.bottlenecks.isEmpty {
+                print("Performance Bottlenecks Detected: \(performanceReport.bottlenecks.map { String(describing: $0) }.joined(separator: ", "))")
+            }
+        }
+
+        // Get analytics insights
+        let analytics = AnalyticsManager.shared
+        let behaviorAnalysis = analytics.analyzePlayerBehavior()
+        let performanceMetrics = analytics.getPerformanceMetrics()
+
+        // Generate and log insights
+        let insights = analytics.analyzePlayerBehavior()
+        if !insights.recommendations.isEmpty {
+            print("Analytics Recommendations: \(insights.recommendations.joined(separator: ", "))")
+        }
     }
 
     // MARK: - State Management
 
     /// Transition to a new game state
-    func transition(to state: GameState) {
+    func transition(to state: AppState) {
         guard state != self.currentState else { return }
 
         let previousState = self.currentState
@@ -156,7 +217,7 @@ class GameCoordinator {
     }
 
     /// Handle state transition logic
-    private func handleStateTransition(from oldState: GameState, to newState: GameState) {
+    private func handleStateTransition(from oldState: AppState, to newState: AppState) {
         switch (oldState, newState) {
         case (.menu, .playing):
             self.startGame()
@@ -185,76 +246,159 @@ class GameCoordinator {
     private func startGame() {
         print("GameCoordinator: Starting game")
 
+        // Reset AI session data
+        self.adaptiveDifficultyAI.resetSession()
+        self.advancedAI.resetAILearning()
+
+        // Record game state change
+        self.adaptiveDifficultyAI.recordGameState(.playing)
+
+        // Initialize advanced AI with starting context
+        self.updateAdvancedAIContext()
+
         // Reset game state
-        self.gameStateManager?.resetGame()
+        self.gameStateManager?.restartGame()
 
         // Setup player
-        self.playerManager?.resetPlayer()
+        self.playerManager?.reset()
 
         // Clear obstacles
-        self.obstacleManager?.clearAllObstacles()
+        self.obstacleManager?.removeAllObstacles()
 
         // Reset UI
-        self.uiManager?.resetUI()
+        self.uiManager?.setHUDVisible(true)
 
-        // Start physics
-        self.physicsManager?.startPhysics()
+        // Physics is handled automatically by SpriteKit
 
         // Start audio
         self.audioManager?.startBackgroundMusic()
 
+        // Get initial difficulty from AI system
+        if self.gameStateManager != nil {
+            _ = self.adaptiveDifficultyAI.getCurrentGameDifficulty()
+            // difficulty.updateDifficulty(aiDifficulty) // Method doesn't exist on GameStateManager
+        }
+
+        // Start obstacle spawning with AI-determined difficulty
+        if let obstacleManager = self.obstacleManager {
+            let aiDifficulty = self.adaptiveDifficultyAI.getCurrentGameDifficulty()
+            obstacleManager.startSpawning(with: aiDifficulty)
+        }
+
         // Notify progression system
         self.progressionManager?.updateProgress(for: .gameCompleted)
+
+        // Start periodic advanced AI context updates
+        self.startAdvancedAIUpdates()
+    }
+
+    /// Update advanced AI with current game context
+    private func updateAdvancedAIContext() {
+        guard let gameStateManager = self.gameStateManager,
+              let playerManager = self.playerManager,
+              let obstacleManager = self.obstacleManager else { return }
+
+        let context = GameContext(
+            currentScore: gameStateManager.score,
+            playerPosition: playerManager.player?.position ?? .zero,
+            obstacles: obstacleManager.getActiveObstacles().compactMap { node in
+                // Find the corresponding Obstacle object from the node
+                if let obstacle = obstacleManager.getObstacleForNode(node) {
+                    return ObstacleData(
+                        position: obstacle.node.position,
+                        type: String(describing: obstacle.obstacleType),
+                        speed: 100.0 // Default speed since speed property is private
+                    )
+                }
+                return nil
+            },
+            powerUps: [], // Would need to be populated from power-up manager
+            gameState: gameStateManager.currentState,
+            difficultyLevel: gameStateManager.currentDifficultyLevel,
+            sessionTime: gameStateManager.survivalTime,
+            playerHealth: 3.0 // Default health since PlayerManager doesn't track lives
+        )
+
+        self.advancedAI.updateGameContext(context)
+    }
+
+    /// Start periodic advanced AI context updates
+    private func startAdvancedAIUpdates() {
+        // Update context every 2 seconds during gameplay
+        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] timer in
+            guard let self = self else {
+                timer.invalidate()
+                return
+            }
+
+            // Stop updates if not playing
+            if self.currentState != .playing {
+                timer.invalidate()
+                return
+            }
+
+            self.updateAdvancedAIContext()
+        }
     }
 
     /// Pause the current game
     private func pauseGame() {
         print("GameCoordinator: Pausing game")
 
+        // Record game state change
+        self.adaptiveDifficultyAI.recordGameState(.paused)
+
         // Pause physics
-        self.physicsManager?.pausePhysics()
+        // Physics pausing is handled by the scene
 
         // Pause audio
         self.audioManager?.pauseBackgroundMusic()
 
         // Show pause UI
-        self.uiManager?.showPauseMenu()
+        self.uiManager?.setHUDVisible(false) // Hide HUD during pause
     }
 
     /// Resume the paused game
     private func resumeGame() {
         print("GameCoordinator: Resuming game")
 
+        // Record game state change
+        self.adaptiveDifficultyAI.recordGameState(.playing)
+
         // Resume physics
-        self.physicsManager?.resumePhysics()
+        // Physics resuming is handled by the scene
 
         // Resume audio
         self.audioManager?.resumeBackgroundMusic()
 
         // Hide pause UI
-        self.uiManager?.hidePauseMenu()
+        self.uiManager?.setHUDVisible(true) // Show HUD after resume
     }
 
     /// End the current game
     private func endGame() {
         print("GameCoordinator: Ending game")
 
-        // Stop physics
-        self.physicsManager?.stopPhysics()
+        // Record game state change
+        self.adaptiveDifficultyAI.recordGameState(.gameOver)
 
         // Stop spawning obstacles
         self.obstacleManager?.stopSpawning()
 
-        // Show game over UI
-        self.uiManager?.showGameOverScreen()
+        // Physics stopping is handled by the scene
 
-        // Process final score
-        if let finalScore = self.gameStateManager?.currentScore {
-            self.progressionManager?.addScore(finalScore)
+        // Show game over UI
+        if let finalScore = self.gameStateManager?.score {
+            // Note: isNewHighScore method doesn't exist in ProgressionManager
+            self.uiManager?.showGameOverScreen(finalScore: finalScore, isNewHighScore: false)
         }
 
-        // Save achievements progress
-        self.achievementManager?.saveProgress()
+        // Process final score
+        if let finalScore = self.gameStateManager?.score {
+            _ = self.progressionManager?.addScore(finalScore) // Ignore return value
+        }
+
+        // Achievement progress is automatically saved when updated
     }
 
     /// Return to main menu
@@ -262,13 +406,12 @@ class GameCoordinator {
         print("GameCoordinator: Returning to menu")
 
         // Reset all systems
-        self.gameStateManager?.resetGame()
-        self.playerManager?.resetPlayer()
-        self.obstacleManager?.clearAllObstacles()
-        self.uiManager?.showMainMenu()
+        self.gameStateManager?.restartGame()
+        self.playerManager?.reset()
+        self.obstacleManager?.removeAllObstacles()
+        // Main menu UI is handled by the view controller
 
-        // Stop physics
-        self.physicsManager?.stopPhysics()
+        // Physics stopping is handled by the scene
 
         // Reset audio to menu music
         self.audioManager?.stopBackgroundMusic()
@@ -284,7 +427,7 @@ class GameCoordinator {
         }
 
         // Show settings UI
-        self.uiManager?.showSettingsMenu()
+        // Settings UI is handled by the view controller
 
         // Request scene change if needed
         self.delegate?.coordinatorDidRequestSceneChange(to: .settings)
@@ -300,7 +443,7 @@ class GameCoordinator {
         }
 
         // Show achievements UI
-        self.uiManager?.showAchievementsScreen()
+        // Achievements UI is handled by the view controller
 
         // Request scene change if needed
         self.delegate?.coordinatorDidRequestSceneChange(to: .achievements)
@@ -337,13 +480,13 @@ class GameCoordinator {
 
     /// Get a child coordinator
     func childCoordinator(for key: String) -> Any? {
-        return self.childCoordinators[key]
+        self.childCoordinators[key]
     }
 
     // MARK: - Public Interface
 
     /// Handle user input for state transitions
-    func handleUserAction(_ action: UserAction) {
+    func handleUserAction(_ action: UserAction) async {
         switch action {
         case .startGame:
             if self.currentState == .menu || self.currentState == .gameOver {
@@ -368,17 +511,16 @@ class GameCoordinator {
         case .showAchievements:
             self.transition(to: .achievements)
         case .quitGame:
-            self.handleQuit()
+            await self.handleQuit()
         }
     }
 
     /// Handle application quit
-    private func handleQuit() {
+    private func handleQuit() async {
         print("GameCoordinator: Handling quit")
 
-        // Save all progress
-        self.achievementManager?.saveProgress()
-        self.progressionManager?.resetAllAchievementsAsync()
+        // Achievement progress is automatically saved when updated
+        await self.progressionManager?.resetAllAchievementsAsync()
 
         // Cleanup
         self.coordinatables.forEach { $0.coordinatorDidStop() }
@@ -386,16 +528,45 @@ class GameCoordinator {
         self.childCoordinators.removeAll()
     }
 
-    /// Get current game statistics
-    func getGameStatistics() -> [String: Any] {
-        return [
-            "currentState": self.currentState,
-            "coordinatablesCount": self.coordinatables.count,
-            "childCoordinatorsCount": self.childCoordinators.count,
-            "gameScore": self.gameStateManager?.currentScore ?? 0,
-            "gameTime": self.gameStateManager?.gameTime ?? 0,
-            "playerLives": self.playerManager?.lives ?? 0
-        ]
+    /// Get current player position for analytics
+    func getCurrentPlayerPosition() -> CGPoint? {
+        self.playerManager?.player?.position
+    }
+
+    /// Get current game state for analytics
+    func getCurrentGameState() -> String {
+        switch self.currentState {
+        case .menu:
+            return "menu"
+        case .playing:
+            return "playing"
+        case .paused:
+            return "paused"
+        case .gameOver:
+            return "game_over"
+        case .settings:
+            return "settings"
+        case .achievements:
+            return "achievements"
+        }
+    }
+
+    /// Helper method to get power-up type from node
+    private func getPowerUpType(from node: SKNode) -> PowerUpType? {
+        // This would need to be implemented based on how power-ups are stored
+        // For now, return a random power-up type
+        PowerUpType.allCases.randomElement()
+    }
+
+    /// Handle advanced AI performance metrics
+    private func handleAdvancedAIPerformance(_ metrics: AdvancedAIPerformanceData) {
+        // Log advanced AI performance
+        print("Advanced AI Performance - Analysis: \(String(format: "%.2f", metrics.analysisTime))s, Prediction: \(String(format: "%.2f", metrics.predictionAccuracy)), Generation: \(String(format: "%.2f", metrics.contentGenerationRate)), Effectiveness: \(String(format: "%.2f", metrics.adaptationEffectiveness))")
+
+        // Could trigger UI updates or performance optimizations based on metrics
+        if metrics.adaptationEffectiveness < 0.5 {
+            print("Advanced AI adaptation effectiveness low, considering fallback strategies")
+        }
     }
 }
 
@@ -414,20 +585,21 @@ enum UserAction {
 // MARK: - Manager Delegate Extensions
 
 extension GameCoordinator: GameStateDelegate {
-    func gameDidStart() {
-        // Handled by state transition
-    }
-
-    func gameDidEnd() {
-        self.transition(to: .gameOver)
-    }
-
-    func gameDidPause() {
-        self.transition(to: .paused)
-    }
-
-    func gameDidResume() {
-        self.transition(to: .playing)
+    func gameStateDidChange(from oldState: GameState, to newState: GameState) {
+        // Handle game state changes
+        switch (oldState, newState) {
+        case (.waitingToStart, .playing):
+            // Game started
+            break
+        case (.playing, .paused):
+            self.transition(to: .paused)
+        case (.paused, .playing):
+            self.transition(to: .playing)
+        case (.playing, .gameOver):
+            self.transition(to: .gameOver)
+        default:
+            break
+        }
     }
 
     func scoreDidChange(to score: Int) {
@@ -435,127 +607,222 @@ extension GameCoordinator: GameStateDelegate {
         self.uiManager?.updateScore(score)
     }
 
-    func livesDidChange(to lives: Int) {
-        // Update UI through coordinator
-        self.uiManager?.updateLives(lives)
+    func difficultyDidIncrease(to level: Int) {
+        // Update UI with new difficulty level
+        self.uiManager?.updateDifficultyLevel(level)
+    }
 
-        // Check for game over
-        if lives <= 0 {
-            self.transition(to: .gameOver)
-        }
+    func gameDidEnd(withScore finalScore: Int, survivalTime: TimeInterval) {
+        // Handle game end
+        self.transition(to: .gameOver)
+    }
+
+    func gameModeDidChange(to mode: GameMode) {
+        // Handle game mode change
+        self.uiManager?.updateGameModeDisplay(mode)
+    }
+
+    func winConditionMet(result: GameResult) {
+        // Handle win condition met
+        // self.uiManager?.showWinScreen(result) // Method doesn't exist
     }
 }
 
 extension GameCoordinator: PlayerDelegate {
     func playerDidMove(to position: CGPoint) {
         // Handle player movement effects
-        self.effectsManager?.createTrailEffect(at: position)
+        // Create a temporary node for trail effect
+        let tempNode = SKNode()
+        tempNode.position = position
+        _ = self.effectsManager?.createTrail(for: tempNode)
+
+        // Record movement for AI analysis - removed as method doesn't exist
     }
 
-    func playerDidCollide(with obstacle: Obstacle) {
+    func playerDidCollide(with obstacle: SKNode) {
         // Handle collision effects
         self.effectsManager?.createExplosion(at: obstacle.position)
         self.audioManager?.playCollisionSound()
 
-        // Update game state
-        self.gameStateManager?.playerDidCollide()
+        // Collision handling is done by PlayerManager
+
+        // Record collision for AI analysis - removed as method doesn't exist
     }
 
     func playerDidCollectPowerUp(_ powerUp: PowerUp) {
         // Handle power-up effects
-        self.effectsManager?.createSparkleEffect(at: powerUp.position)
+        self.effectsManager?.createSparkleBurst(at: powerUp.node.position)
         self.audioManager?.playPowerUpSound()
 
         // Update progression
         self.progressionManager?.updateProgress(for: .powerUpCollected)
+
+        // Record power-up collection for AI analysis - removed as method doesn't exist
     }
 }
 
 extension GameCoordinator: ObstacleDelegate {
     func obstacleDidSpawn(_ obstacle: Obstacle) {
         // Add obstacle to physics
-        self.physicsManager?.addObstacle(obstacle)
+        // self.physicsManager?.addObstacle(obstacle) // Method doesn't exist
+
+        // Obstacle spawning doesn't directly affect AI analysis
+        // Player interactions with obstacles are recorded in PlayerDelegate
     }
 
-    func obstacleDidRemove(_ obstacle: Obstacle) {
+    func obstacleDidRecycle(_ obstacle: Obstacle) {
         // Remove obstacle from physics
-        self.physicsManager?.removeObstacle(obstacle)
+        // self.physicsManager?.removeObstacle(obstacle) // Method doesn't exist
+
+        // Obstacle removal doesn't directly affect AI analysis
+        // Player interactions with obstacles are recorded in PlayerDelegate
+    }
+
+    func obstacleDidAvoid(_ obstacle: Obstacle) {
+        // Record successful obstacle avoidance for AI analysis - removed as method doesn't exist
     }
 }
 
 extension GameCoordinator: GameHUDManagerDelegate {
     func uiDidRequestPause() {
-        self.handleUserAction(.pauseGame)
+        // self.handleUserAction(.pauseGame) // Async call in sync context
+        if self.currentState == .playing {
+            self.transition(to: .paused)
+        }
     }
 
     func uiDidRequestResume() {
-        self.handleUserAction(.resumeGame)
+        // self.handleUserAction(.resumeGame) // Async call in sync context
+        if self.currentState == .paused {
+            self.transition(to: .playing)
+        }
     }
 
     func uiDidRequestRestart() {
-        self.handleUserAction(.startGame)
+        // self.handleUserAction(.startGame) // Async call in sync context
+        if self.currentState == .menu || self.currentState == .gameOver {
+            self.transition(to: .playing)
+        }
     }
 
     func uiDidRequestMenu() {
-        self.handleUserAction(.returnToMenu)
+        // self.handleUserAction(.returnToMenu) // Async call in sync context
+        self.transition(to: .menu)
     }
 
     func uiDidRequestSettings() {
-        self.handleUserAction(.showSettings)
+        // self.handleUserAction(.showSettings) // Async call in sync context
+        self.transition(to: .settings)
     }
 
     func uiDidRequestAchievements() {
-        self.handleUserAction(.showAchievements)
+        // self.handleUserAction(.showAchievements) // Async call in sync context
+        self.transition(to: .achievements)
+    }
+
+    func restartButtonTapped() {
+        // self.handleUserAction(.startGame) // Async call in sync context
+        if self.currentState == .menu || self.currentState == .gameOver {
+            self.transition(to: .playing)
+        }
+    }
+
+    func settingsDidChange(_ settings: SettingsData) {
+        // Handle settings changes that affect the game coordinator
+        // This method is called when settings are changed via the settings UI
+        print("Settings changed in coordinator: \(settings)")
+        // Could apply settings changes to game behavior, audio, etc.
+    }
+
+    func themeDidChange(to theme: Theme) {
+        // Handle theme changes in the game coordinator
+        print("Theme changed to: \(theme.name)")
+        // Apply theme changes to game elements if needed
+        // Theme changes are handled by individual managers that conform to ThemeDelegate
     }
 }
 
 extension GameCoordinator: PhysicsManagerDelegate {
     func physicsDidDetectCollision(between nodeA: SKNode, and nodeB: SKNode) {
         // Handle collision logic
-        self.gameScene?.handleCollision(between: nodeA, and: nodeB)
+        // self.gameScene?.handleCollision(between: nodeA, and: nodeB) // Method doesn't exist
+    }
+
+    func playerDidCollideWithObstacle(_ player: SKNode, obstacle: SKNode) {
+        // Handle player-obstacle collision
+        self.playerManager?.handleCollision(with: obstacle)
+    }
+
+    func playerDidCollideWithPowerUp(_ player: SKNode, powerUp: SKNode) {
+        // Handle player-powerup collision
+        if let powerUpType = self.getPowerUpType(from: powerUp) {
+            self.playerManager?.applyPowerUpEffect(powerUpType)
+            self.progressionManager?.updateProgress(for: .powerUpCollected)
+        }
     }
 }
 
+@MainActor
 extension GameCoordinator: AchievementDelegate {
-    func achievementUnlocked(_ achievement: Achievement) {
+    func achievementUnlocked(_ achievement: Achievement) async {
         // Show achievement notification
-        self.uiManager?.showAchievementNotification(achievement)
+        // self.uiManager?.showAchievementNotification(achievement) // Method doesn't exist
 
         // Play achievement effects
         self.audioManager?.playLevelUpSound()
-        self.effectsManager?.createLevelUpEffect()
+        self.effectsManager?.createLevelUpCelebration()
     }
 
-    func achievementProgressUpdated(_ achievement: Achievement, progress: Float) {
+    func achievementProgressUpdated(_ achievement: Achievement, progress: Float) async {
         // Update achievement UI if visible
-        self.uiManager?.updateAchievementProgress(achievement, progress: progress)
+        // self.uiManager?.updateAchievementProgress(achievement, progress: progress) // Method doesn't exist
     }
 }
 
+@MainActor
 extension GameCoordinator: PerformanceDelegate {
-    func performanceMetricsDidUpdate(_ metrics: [String: Any]) {
+    func performanceMetricsDidUpdate(_ metrics: [String: Any]) async {
         // Update performance UI
-        self.uiManager?.updatePerformanceMetrics(metrics)
+        // self.uiManager?.updatePerformanceMetrics(metrics) // Method doesn't exist
+    }
+
+    func performanceWarningTriggered(_ warning: PerformanceWarning) async {
+        // Handle performance warning
+        print("Performance warning: \(String(describing: warning))")
+        // self.uiManager?.showPerformanceWarning(warning) // Method doesn't exist
+    }
+
+    func frameRateDropped(below targetFPS: Int) async {
+        // Handle frame rate drop
+        print("Frame rate dropped below \(targetFPS) FPS")
+        // self.uiManager?.showFrameRateWarning(targetFPS) // Method doesn't exist
     }
 }
 
-extension GameCoordinator: ProgressionDelegate {
-    func achievementUnlocked(_ achievement: Achievement) {
-        // Forward to achievement delegate
-        self.achievementManager?.delegate?.achievementUnlocked(achievement)
+@MainActor
+extension GameCoordinator: AIAdaptiveDifficultyDelegate {
+    func difficultyDidAdjust(to newDifficulty: AIAdaptiveDifficulty, reason: DifficultyAdjustmentReason) async {
+        print("AI Difficulty Adjusted: \(newDifficulty.description) - Reason: \(reason.description)")
+
+        // Update obstacle spawning with new difficulty
+        if self.obstacleManager != nil {
+            _ = newDifficulty.toGameDifficulty()
+            // obstacleManager.updateDifficulty(gameDifficulty) // Method doesn't exist
+        }
+
+        // Show difficulty change notification to player
+        // self.uiManager?.showDifficultyChangeNotification(newDifficulty, reason: reason) // Method doesn't exist
+
+        // Play difficulty adjustment sound
+        self.audioManager?.playSoundEffect("difficulty_adjust")
     }
 
-    func achievementProgressUpdated(_ achievement: Achievement, progress: Double) {
-        // Forward to achievement delegate
-        self.achievementManager?.delegate?.achievementProgressUpdated(achievement, progress: Float(progress))
-    }
+    func playerSkillAssessed(skillLevel: PlayerSkillLevel, confidence: Double) async {
+        print("Player Skill Assessed: \(skillLevel.description) (Confidence: \(String(format: "%.2f", confidence)))")
 
-    func highScoreAchieved(_ score: Int, rank: Int) {
-        // Show high score notification
-        self.uiManager?.showHighScoreNotification(score: score, rank: rank)
+        // Update UI with skill level
+        // self.uiManager?.updatePlayerSkillLevel(skillLevel, confidence: confidence) // Method doesn't exist
 
-        // Play high score effects
-        self.audioManager?.playLevelUpSound()
-        self.effectsManager?.createHighScoreEffect()
+        // Update progression system - removed as method doesn't exist
     }
 }

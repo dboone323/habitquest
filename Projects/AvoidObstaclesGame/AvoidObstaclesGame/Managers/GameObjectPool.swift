@@ -7,8 +7,8 @@
 // that conforms to Poolable protocol.
 //
 
-import SpriteKit
 import Foundation
+import SpriteKit
 
 /// Protocol that all poolable game objects must conform to
 protocol Poolable: AnyObject {
@@ -30,8 +30,8 @@ protocol Poolable: AnyObject {
 
 /// Protocol for object pool events
 protocol GameObjectPoolDelegate: AnyObject {
-    func objectDidSpawn<T: Poolable>(_ object: T)
-    func objectDidRecycle<T: Poolable>(_ object: T)
+    func objectDidSpawn(_ object: some Poolable)
+    func objectDidRecycle(_ object: some Poolable)
 }
 
 /// Generic object pool for efficient reuse of game objects
@@ -105,7 +105,7 @@ class GameObjectPool<T: Poolable & Hashable> {
     func preloadPool(with identifiers: [String], countPerType: Int = 5) {
         for identifier in identifiers {
             availablePool[identifier] = []
-            for _ in 0..<countPerType {
+            for _ in 0 ..< countPerType {
                 if let object = objectFactory(identifier) {
                     availablePool[identifier]?.append(object)
                 }
@@ -146,7 +146,7 @@ class GameObjectPool<T: Poolable & Hashable> {
         activeObjects.remove(object)
 
         // Handle scene removal
-        if let scene = scene, let removalHandler = sceneRemovalHandler {
+        if let scene, let removalHandler = sceneRemovalHandler {
             removalHandler(object, scene)
         }
 
@@ -171,7 +171,7 @@ class GameObjectPool<T: Poolable & Hashable> {
     ///   - object: The object to activate
     ///   - parameters: Optional parameters for activation
     func activateObject(_ object: T, parameters: [String: Any]? = nil) {
-        guard let scene = scene else { return }
+        guard let scene else { return }
 
         object.prepareForActivation(parameters: parameters)
         object.isActive = true
@@ -245,7 +245,7 @@ class GameObjectPool<T: Poolable & Hashable> {
     private func calculatePoolHitRate() -> Double {
         // This would require tracking total requests vs pool hits
         // For now, return a placeholder
-        return 0.0
+        0.0
     }
 
     // MARK: - Memory Management
@@ -263,7 +263,7 @@ class GameObjectPool<T: Poolable & Hashable> {
     /// Clears all pools and active objects
     func clearAll() {
         // Remove all active objects from scene
-        if let scene = scene {
+        if let scene {
             for object in activeObjects {
                 if let removalHandler = sceneRemovalHandler {
                     removalHandler(object, scene)
@@ -289,7 +289,7 @@ class GameObjectPool<T: Poolable & Hashable> {
             "pooled_memory_bytes": pooledMemory,
             "total_memory_bytes": activeMemory + pooledMemory,
             "active_object_count": activeObjects.count,
-            "pooled_object_count": availablePool.values.flatMap { $0 }.count
+            "pooled_object_count": availablePool.values.flatMap { $0 }.count,
         ]
     }
 
@@ -302,7 +302,7 @@ class GameObjectPool<T: Poolable & Hashable> {
         return [
             "pool_stats": stats,
             "memory_stats": memory,
-            "pool_efficiency": calculatePoolEfficiency()
+            "pool_efficiency": calculatePoolEfficiency(),
         ]
     }
 

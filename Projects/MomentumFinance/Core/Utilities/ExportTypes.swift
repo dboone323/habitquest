@@ -23,7 +23,7 @@ public struct ExportSettings: Sendable {
         includeAccounts: Bool,
         includeBudgets: Bool,
         includeSubscriptions: Bool,
-        includeGoals: Bool,
+        includeGoals: Bool
     ) {
         self.format = format
         self.startDate = startDate

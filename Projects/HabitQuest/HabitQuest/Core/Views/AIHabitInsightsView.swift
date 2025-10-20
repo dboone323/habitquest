@@ -44,9 +44,9 @@ public struct AIHabitInsightsView: View {
             }
             .navigationTitle("AI Habit Insights")
             #if os(iOS)
-            .navigationBarItems(trailing: Button("Refresh") {
-                smartManager.handle(.updatePredictions)
-            })
+                .navigationBarItems(trailing: Button("Refresh") {
+                    smartManager.handle(.updatePredictions)
+                })
             #endif
         }
     }
@@ -110,9 +110,9 @@ private struct AIStatusHeaderView: View {
 
     private var systemBackgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #else
-        return Color(.controlBackgroundColor)
+            return Color(.controlBackgroundColor)
         #endif
     }
 
@@ -247,9 +247,9 @@ private struct AIInsightsTabView: View {
 
     private var tabBackgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemGray6)
+            return Color(UIColor.systemGray6)
         #else
-        return Color.gray.opacity(0.1)
+            return Color.gray.opacity(0.1)
         #endif
     }
 }
@@ -339,9 +339,9 @@ private struct AIOverviewContent: View {
 
     private var cardBackgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #else
-        return Color(.controlBackgroundColor)
+            return Color(.controlBackgroundColor)
         #endif
     }
 }
@@ -573,9 +573,9 @@ private struct HabitPredictionCard: View {
 
     private var cardBackgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #else
-        return Color(.controlBackgroundColor)
+            return Color(.controlBackgroundColor)
         #endif
     }
 
@@ -583,7 +583,7 @@ private struct HabitPredictionCard: View {
         switch probability {
         case 0.7...:
             .green
-        case 0.4..<0.7:
+        case 0.4 ..< 0.7:
             .yellow
         default:
             .red
@@ -594,7 +594,7 @@ private struct HabitPredictionCard: View {
         switch probability {
         case 0.7...:
             "checkmark.circle.fill"
-        case 0.4..<0.7:
+        case 0.4 ..< 0.7:
             "exclamationmark.triangle.fill"
         default:
             "xmark.circle.fill"
@@ -648,9 +648,9 @@ private struct HabitInsightCard: View {
 
     private var cardBackgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #else
-        return Color(.controlBackgroundColor)
+            return Color(.controlBackgroundColor)
         #endif
     }
 
@@ -729,9 +729,9 @@ private struct HabitSuggestionCard: View {
 
     private var cardBackgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #else
-        return Color(.controlBackgroundColor)
+            return Color(.controlBackgroundColor)
         #endif
     }
 
@@ -739,7 +739,7 @@ private struct HabitSuggestionCard: View {
         switch rate {
         case 0.7...:
             .green
-        case 0.4..<0.7:
+        case 0.4 ..< 0.7:
             .yellow
         default:
             .red
@@ -834,7 +834,8 @@ public struct JournalAnalysisView: View {
             if let latestInsight = smartManager.state.aiInsights
                 .filter({ $0.habitId == habit.id })
                 .sorted(by: { $0.timestamp > $1.timestamp })
-                .first {
+                .first
+            {
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Latest AI Insight")

@@ -1,8 +1,8 @@
 import Foundation
 
 func fi_computeMonthlySpendingByCategory(transactions: [FinancialTransaction]) -> [String: [Date:
-        Double
-]] {
+        Double]]
+{
     let calendar = Calendar.current
     var monthlySpendingByCategory: [String: [Date: Double]] = [:]
 
@@ -229,7 +229,8 @@ func fi_checkBudgetUnderutilized(
 }
 
 func fi_analyzeBudgets(transactions: [FinancialTransaction], budgets: [Budget])
-    -> [FinancialInsight] {
+    -> [FinancialInsight]
+{
     var insights: [FinancialInsight] = []
     let calendar = Calendar.current
     let currentMonth = calendar.component(.month, from: Date())
@@ -292,7 +293,8 @@ func fi_analyzeBudgets(transactions: [FinancialTransaction], budgets: [Budget])
 @MainActor
 extension FinancialIntelligenceService {
     private func findRecurringTransactionInsights(from transactions: [FinancialTransaction])
-        -> [FinancialInsight] {
+        -> [FinancialInsight]
+    {
         let recurringTransactions = fi_findRecurringTransactions(transactions)
         guard !recurringTransactions.isEmpty else { return [] }
 

@@ -1,5 +1,5 @@
-import UIKit
 import SwiftUI
+import UIKit
 
 #if canImport(AppKit)
 #endif
@@ -22,11 +22,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -110,13 +110,13 @@ extension Features.GoalsAndReports {
                         ? LinearGradient(
                             gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
                             startPoint: .leading,
-                            endPoint: .trailing,
+                            endPoint: .trailing
                         )
                         : LinearGradient(
                             gradient: Gradient(colors: [Color.gray.opacity(0.1)]),
                             startPoint: .leading,
-                            endPoint: .trailing,
-                        ),
+                            endPoint: .trailing
+                        )
                 )
         }
 
@@ -124,7 +124,7 @@ extension Features.GoalsAndReports {
             VStack(spacing: 20) {
                 EnhancedFinancialSummaryCard(
                     transactions: self.filteredTransactions,
-                    timeframe: self.selectedTimeframe,
+                    timeframe: self.selectedTimeframe
                 )
                 .padding(.horizontal, 16)
 
@@ -169,7 +169,7 @@ extension Features.GoalsAndReports {
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.gray.opacity(0.1)),
+                    .fill(Color.gray.opacity(0.1))
             )
             .padding(.horizontal, 16)
         }

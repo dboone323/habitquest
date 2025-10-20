@@ -56,7 +56,7 @@ public enum InsightType: Sendable {
 // MARK: - ModelContext for compatibility
 
 #if !canImport(SwiftData)
-public struct ModelContext: Sendable {
-    public init() {}
-}
+    public struct ModelContext: Sendable {
+        public init() {}
+    }
 #endif

@@ -9,6 +9,7 @@
 import SpriteKit
 
 /// Manages HUD (Heads-Up Display) elements
+@MainActor
 class HUDManager {
     // MARK: - Properties
 
@@ -32,6 +33,7 @@ class HUDManager {
     // MARK: - Setup
 
     /// Sets up all HUD elements
+    @MainActor
     func setupHUD() {
         self.setupScoreLabel()
         self.setupHighScoreLabel()
@@ -39,6 +41,7 @@ class HUDManager {
     }
 
     /// Sets up the score label
+    @MainActor
     private func setupScoreLabel() {
         guard let scene else { return }
 
@@ -56,6 +59,7 @@ class HUDManager {
     }
 
     /// Sets up the high score label
+    @MainActor
     private func setupHighScoreLabel() {
         guard let scene else { return }
 
@@ -74,6 +78,7 @@ class HUDManager {
     }
 
     /// Sets up the difficulty label
+    @MainActor
     private func setupDifficultyLabel() {
         guard let scene else { return }
 
@@ -94,18 +99,21 @@ class HUDManager {
 
     /// Updates the score display
     /// - Parameter score: New score value
+    @MainActor
     func updateScore(_ score: Int) {
         self.scoreLabel?.text = "Score: \(score)"
     }
 
     /// Updates the high score display
     /// - Parameter highScore: New high score value
+    @MainActor
     func updateHighScore(_ highScore: Int) {
         self.highScoreLabel?.text = "Best: \(highScore)"
     }
 
     /// Updates the difficulty level display
     /// - Parameter level: New difficulty level
+    @MainActor
     func updateDifficultyLevel(_ level: Int) {
         self.difficultyLabel?.text = "Level: \(level)"
     }
@@ -113,6 +121,7 @@ class HUDManager {
     // MARK: - Cleanup
 
     /// Removes all HUD elements from the scene
+    @MainActor
     func removeAllHUD() {
         let labels = [scoreLabel, highScoreLabel, difficultyLabel]
         for label in labels {

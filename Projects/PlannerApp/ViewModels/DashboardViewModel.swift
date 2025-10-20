@@ -21,30 +21,30 @@ public protocol BaseViewModel: AnyObject {
     func validateState() -> Bool
 }
 
-extension BaseViewModel {
-    public func resetError() {
+public extension BaseViewModel {
+    func resetError() {
         errorMessage = nil
     }
 
-    public func setLoading(_ loading: Bool) {
+    func setLoading(_ loading: Bool) {
         isLoading = loading
     }
 
-    public func setError(_ error: Error) {
+    func setError(_ error: Error) {
         errorMessage = error.localizedDescription
     }
 
-    public func setError(_ message: String) {
+    func setError(_ message: String) {
         errorMessage = message
     }
 
-    public func validateState() -> Bool {
+    func validateState() -> Bool {
         // Default implementation - override in subclasses for specific validation
         true
     }
 
     /// Convenience method for synchronous actions
-    func handle(_ action: Action) {
+    internal func handle(_ action: Action) {
         Task {
             await handle(action)
         }

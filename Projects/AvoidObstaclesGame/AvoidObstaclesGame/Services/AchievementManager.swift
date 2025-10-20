@@ -135,7 +135,9 @@ class AchievementManager: Sendable {
             self.unlockAchievement(id)
         } else {
             self.achievements[id] = achievement
-            self.delegate?.achievementProgressUpdated(achievement, progress: achievement.progress)
+            Task { @MainActor in
+                await self.delegate?.achievementProgressUpdated(achievement, progress: achievement.progress)
+            }
             self.saveProgress()
         }
     }
@@ -154,7 +156,9 @@ class AchievementManager: Sendable {
         self.saveProgress()
 
         // Notify delegate
-        self.delegate?.achievementUnlocked(achievement)
+        Task { @MainActor in
+            await self.delegate?.achievementUnlocked(achievement)
+        }
 
         // Play achievement sound
         AudioManager.shared.playLevelUpSound()

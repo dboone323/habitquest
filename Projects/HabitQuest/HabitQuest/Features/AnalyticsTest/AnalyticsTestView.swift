@@ -102,7 +102,7 @@ public struct AnalyticsTestView: View {
             }
             .navigationTitle("Analytics Tests")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.large)
+                .navigationBarTitleDisplayMode(.large)
             #endif
         }
     }
@@ -141,7 +141,7 @@ public struct AnalyticsTestView: View {
         let metrics = await analyticsService.getProductivityMetrics(for: .week)
         let validMetrics =
             metrics.completionRate >= 0.0 && metrics.completionRate <= 1.0
-            && metrics.streakCount >= 0
+                && metrics.streakCount >= 0
         results.addResult(name: "Productivity Metrics", passed: validMetrics)
 
         // Test 4: Data Consistency
@@ -152,9 +152,9 @@ public struct AnalyticsTestView: View {
         // Test 5: Analytics Data Structure Validation
         let hasValidStructure =
             analytics.overallStats.totalCompletions >= 0
-            && analytics.overallStats.completionRate >= 0.0
-            && analytics.overallStats.completionRate <= 1.0
-            && analytics.streakAnalytics.longestStreak >= 0
+                && analytics.overallStats.completionRate >= 0.0
+                && analytics.overallStats.completionRate <= 1.0
+                && analytics.streakAnalytics.longestStreak >= 0
         results.addResult(name: "Analytics Structure", passed: hasValidStructure)
 
         return results
@@ -195,7 +195,7 @@ public struct AnalyticsTestView: View {
                 xpValue: 10,
                 category: .mindfulness,
                 difficulty: .easy
-            )
+            ),
         ]
 
         // Add habits to context

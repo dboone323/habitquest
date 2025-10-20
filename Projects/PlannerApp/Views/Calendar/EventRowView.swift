@@ -8,7 +8,7 @@ public struct EventRowView: View {
     // Read time format setting from UserDefaults - avoid during testing
     private var use24HourTime: Bool {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? false :
-        UserDefaults.standard.bool(forKey: AppSettingKeys.use24HourTime)
+            UserDefaults.standard.bool(forKey: AppSettingKeys.use24HourTime)
     }
 
     private var timeFormatter: DateFormatter {

@@ -20,13 +20,13 @@ public struct ContentView: View {
         TabView(
             selection: Binding(
                 get: { self.navigationCoordinator.selectedTab },
-                set: { self.navigationCoordinator.selectedTab = $0 },
+                set: { self.navigationCoordinator.selectedTab = $0 }
             )
         ) {
             NavigationStack(
                 path: Binding(
                     get: { self.navigationCoordinator.dashboardNavPath },
-                    set: { self.navigationCoordinator.dashboardNavPath = $0 },
+                    set: { self.navigationCoordinator.dashboardNavPath = $0 }
                 )
             ) {
                 DashboardView()
@@ -40,7 +40,7 @@ public struct ContentView: View {
             NavigationStack(
                 path: Binding(
                     get: { self.navigationCoordinator.transactionsNavPath },
-                    set: { self.navigationCoordinator.transactionsNavPath = $0 },
+                    set: { self.navigationCoordinator.transactionsNavPath = $0 }
                 )
             ) {
                 Features.Transactions.TransactionsView()
@@ -57,7 +57,7 @@ public struct ContentView: View {
             NavigationStack(
                 path: Binding(
                     get: { self.navigationCoordinator.budgetsNavPath },
-                    set: { self.navigationCoordinator.budgetsNavPath = $0 },
+                    set: { self.navigationCoordinator.budgetsNavPath = $0 }
                 )
             ) {
                 Features.Budgets.BudgetsView()
@@ -74,7 +74,7 @@ public struct ContentView: View {
             NavigationStack(
                 path: Binding(
                     get: { self.navigationCoordinator.subscriptionsNavPath },
-                    set: { self.navigationCoordinator.subscriptionsNavPath = $0 },
+                    set: { self.navigationCoordinator.subscriptionsNavPath = $0 }
                 )
             ) {
                 Features.Subscriptions.SubscriptionsView()
@@ -91,7 +91,7 @@ public struct ContentView: View {
             NavigationStack(
                 path: Binding(
                     get: { self.navigationCoordinator.goalsAndReportsNavPath },
-                    set: { self.navigationCoordinator.goalsAndReportsNavPath = $0 },
+                    set: { self.navigationCoordinator.goalsAndReportsNavPath = $0 }
                 )
             ) {
                 Features.GoalsAndReports.GoalsAndReportsView()
@@ -128,21 +128,21 @@ public struct ContentView: View {
 }
 
 #if os(iOS)
-extension View {
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func iOSOptimizations() -> some View {
-        tint(.blue)
+    extension View {
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func iOSOptimizations() -> some View {
+            tint(.blue)
+        }
     }
-}
 
 #elseif os(macOS)
-extension View {
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func macOSOptimizations() -> some View {
-        preferredColorScheme(.light)
-            .tint(.indigo)
+    extension View {
+        /// <#Description#>
+        /// - Returns: <#description#>
+        func macOSOptimizations() -> some View {
+            preferredColorScheme(.light)
+                .tint(.indigo)
+        }
     }
-}
 #endif

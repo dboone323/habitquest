@@ -1,7 +1,7 @@
 import Foundation
+import os
 import SwiftData
 import SwiftUI
-import os
 
 // Import KeychainHelper for secure storage
 // import KeychainHelper
@@ -222,7 +222,7 @@ public struct MomentumFinanceApp: App {
                         // iOS doesn't allow programmatic app termination
                         // User must manually close the app
                         #else
-                        NSApplication.shared.terminate(nil)
+                            NSApplication.shared.terminate(nil)
                         #endif
                     }
                     .accessibilityLabel("Quit App Button")
@@ -242,15 +242,15 @@ public struct MomentumFinanceApp: App {
         }
 
         #if os(macOS)
-        Settings {
-            if let container = sharedModelContainer {
-                SettingsView()
-                    .modelContainer(container)
-            } else {
-                Text("Settings unavailable - Database error")
-                    .padding()
+            Settings {
+                if let container = sharedModelContainer {
+                    SettingsView()
+                        .modelContainer(container)
+                } else {
+                    Text("Settings unavailable - Database error")
+                        .padding()
+                }
             }
-        }
         #endif
     }
 }

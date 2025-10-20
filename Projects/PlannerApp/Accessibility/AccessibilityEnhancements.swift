@@ -8,10 +8,10 @@
 import SwiftUI
 
 #if os(iOS)
-import UIKit
+    import UIKit
 #elseif os(macOS)
-import AppKit
-import Cocoa
+    import AppKit
+    import Cocoa
 #endif
 
 // MARK: - Accessibility Manager
@@ -27,28 +27,28 @@ public class AccessibilityManager: ObservableObject {
         self.updateAccessibilitySettings()
 
         #if os(iOS)
-        // Listen for accessibility changes on iOS
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.accessibilitySettingsChanged),
-            name: UIAccessibility.voiceOverStatusDidChangeNotification,
-            object: nil
-        )
+            // Listen for accessibility changes on iOS
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(self.accessibilitySettingsChanged),
+                name: UIAccessibility.voiceOverStatusDidChangeNotification,
+                object: nil
+            )
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.accessibilitySettingsChanged),
-            name: UIContentSizeCategory.didChangeNotification,
-            object: nil
-        )
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(self.accessibilitySettingsChanged),
+                name: UIContentSizeCategory.didChangeNotification,
+                object: nil
+            )
         #elseif os(macOS)
-        // For macOS, we use different notification mechanisms
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.accessibilitySettingsChanged),
-            name: NSWorkspace.accessibilityDisplayOptionsDidChangeNotification,
-            object: nil
-        )
+            // For macOS, we use different notification mechanisms
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(self.accessibilitySettingsChanged),
+                name: NSWorkspace.accessibilityDisplayOptionsDidChangeNotification,
+                object: nil
+            )
         #endif
     }
 
@@ -60,19 +60,19 @@ public class AccessibilityManager: ObservableObject {
 
     private func updateAccessibilitySettings() {
         #if os(iOS)
-        self.isVoiceOverEnabled = UIAccessibility.isVoiceOverRunning
-        self.prefersDynamicType =
-            UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
-        self.prefersReducedMotion = UIAccessibility.isReduceMotionEnabled
-        self.prefersHighContrast = UIAccessibility.isDarkerSystemColorsEnabled
+            self.isVoiceOverEnabled = UIAccessibility.isVoiceOverRunning
+            self.prefersDynamicType =
+                UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+            self.prefersReducedMotion = UIAccessibility.isReduceMotionEnabled
+            self.prefersHighContrast = UIAccessibility.isDarkerSystemColorsEnabled
         #elseif os(macOS)
-        // Use macOS equivalents
-        self.isVoiceOverEnabled = NSWorkspace.shared.isVoiceOverEnabled
-        self.prefersReducedMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
-        self.prefersHighContrast = NSWorkspace.shared.accessibilityDisplayShouldIncreaseContrast
-        self.prefersDynamicType = UserDefaults.standard.bool(
-            forKey: "AppleAccessibilityDynamicTypeEnabled"
-        )
+            // Use macOS equivalents
+            self.isVoiceOverEnabled = NSWorkspace.shared.isVoiceOverEnabled
+            self.prefersReducedMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+            self.prefersHighContrast = NSWorkspace.shared.accessibilityDisplayShouldIncreaseContrast
+            self.prefersDynamicType = UserDefaults.standard.bool(
+                forKey: "AppleAccessibilityDynamicTypeEnabled"
+            )
         #endif
     }
 }
@@ -278,15 +278,15 @@ enum ScreenReaderAnnouncement {
     static func announce(_ message: String) {
         DispatchQueue.main.async {
             #if os(iOS)
-            UIAccessibility.post(notification: .announcement, argument: message)
+                UIAccessibility.post(notification: .announcement, argument: message)
             #elseif os(macOS)
-            // Using the correct method without an argument parameter
-            let userInfo: [NSAccessibility.NotificationUserInfoKey: Any] = [
-                NSAccessibility.NotificationUserInfoKey.announcement: message,
-            ]
-            NSAccessibility.post(
-                element: NSApp as Any, notification: .announcementRequested, userInfo: userInfo
-            )
+                // Using the correct method without an argument parameter
+                let userInfo: [NSAccessibility.NotificationUserInfoKey: Any] = [
+                    NSAccessibility.NotificationUserInfoKey.announcement: message,
+                ]
+                NSAccessibility.post(
+                    element: NSApp as Any, notification: .announcementRequested, userInfo: userInfo
+                )
             #endif
         }
     }
@@ -294,10 +294,10 @@ enum ScreenReaderAnnouncement {
     static func announcePageChange(_ pageName: String) {
         DispatchQueue.main.async {
             #if os(iOS)
-            UIAccessibility.post(notification: .screenChanged, argument: pageName)
+                UIAccessibility.post(notification: .screenChanged, argument: pageName)
             #elseif os(macOS)
-            // Using a simpler approach for macOS - remove the extra argument parameter
-            NSAccessibility.post(element: NSApp as Any, notification: .selectedTextChanged)
+                // Using a simpler approach for macOS - remove the extra argument parameter
+                NSAccessibility.post(element: NSApp as Any, notification: .selectedTextChanged)
             #endif
         }
     }
@@ -305,12 +305,12 @@ enum ScreenReaderAnnouncement {
     static func announceLayoutChange() {
         DispatchQueue.main.async {
             #if os(iOS)
-            UIAccessibility.post(notification: .layoutChanged, argument: "")
+                UIAccessibility.post(notification: .layoutChanged, argument: "")
             #elseif os(macOS)
-            // Make sure we're using the correct API without an argument parameter
-            NSAccessibility.post(
-                element: NSApp as Any, notification: .layoutChanged, userInfo: nil
-            )
+                // Make sure we're using the correct API without an argument parameter
+                NSAccessibility.post(
+                    element: NSApp as Any, notification: .layoutChanged, userInfo: nil
+                )
             #endif
         }
     }

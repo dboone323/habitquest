@@ -46,7 +46,7 @@ public struct TaskInputView: View {
                         .background(themeManager.currentTheme.secondaryBackgroundColor)
                         .cornerRadius(8)
                         .focused(isInputFieldFocused)
-                        .onChange(of: newTaskTitle) { oldValue, newValue in
+                        .onChange(of: newTaskTitle) { _, newValue in
                             // Auto-parse when user types complete sentences
                             if newValue.contains(".") || newValue.contains("!") || newValue.contains("?") {
                                 processNaturalLanguageInput(newValue)
@@ -120,7 +120,7 @@ public struct TaskInputView: View {
                         Button(action: {
                             if let aiTask = aiParsedTask {
                                 // Use AI-parsed task with full details
-                                if let onAddAITask = onAddAITask {
+                                if let onAddAITask {
                                     onAddAITask(aiTask)
                                 } else {
                                     // Fallback to regular task creation

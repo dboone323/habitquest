@@ -1,5 +1,5 @@
-import UIKit
 import SwiftUI
+import UIKit
 
 #if canImport(AppKit)
 #endif
@@ -328,11 +328,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -399,35 +399,35 @@ extension Features.Subscriptions {
                 #endif
                     .toolbar(content: {
                         #if os(iOS)
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button("Cancel") {
-                                self.dismiss()
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button("Cancel") {
+                                    self.dismiss()
+                                }
+                                .accessibilityLabel("Cancel Button")
                             }
-                            .accessibilityLabel("Cancel Button")
-                        }
 
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Save") {
-                                self.saveSubscription()
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Save") {
+                                    self.saveSubscription()
+                                }
+                                .disabled(!self.isValidForm)
+                                .accessibilityLabel("Save Button")
                             }
-                            .disabled(!self.isValidForm)
-                            .accessibilityLabel("Save Button")
-                        }
                         #else
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") {
-                                self.dismiss()
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Cancel") {
+                                    self.dismiss()
+                                }
+                                .accessibilityLabel("Cancel Button")
                             }
-                            .accessibilityLabel("Cancel Button")
-                        }
 
-                        ToolbarItem(placement: .primaryAction) {
-                            Button("Save") {
-                                self.saveSubscription()
+                            ToolbarItem(placement: .primaryAction) {
+                                Button("Save") {
+                                    self.saveSubscription()
+                                }
+                                .disabled(!self.isValidForm)
+                                .accessibilityLabel("Save Button")
                             }
-                            .disabled(!self.isValidForm)
-                            .accessibilityLabel("Save Button")
-                        }
                         #endif
                     })
                     .background(self.backgroundColor)
@@ -442,7 +442,7 @@ extension Features.Subscriptions {
                 amount: amountValue,
                 billingCycle: frequency,
                 nextDueDate: nextDueDate,
-                notes: notes.isEmpty ? nil : self.notes,
+                notes: notes.isEmpty ? nil : self.notes
             )
 
             subscription.category = self.selectedCategory
@@ -482,29 +482,29 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
         private var secondaryBackgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemGroupedBackground)
+                return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.gray.opacity(0.1)
+                return Color.gray.opacity(0.1)
             #endif
         }
 
         private var toolbarPlacement: ToolbarItemPlacement {
             #if canImport(UIKit)
-            return .navigationBarTrailing
+                return .navigationBarTrailing
             #else
-            return .primaryAction
+                return .primaryAction
             #endif
         }
 
@@ -532,13 +532,13 @@ extension Features.Subscriptions {
                     SubscriptionHeaderView(
                         subscriptions: self.subscriptions,
                         selectedFilter: self.$selectedFilter,
-                        showingAddSubscription: self.$showingAddSubscription,
+                        showingAddSubscription: self.$showingAddSubscription
                     )
 
                     // Content Section
                     SubscriptionContentView(
                         filteredSubscriptions: self.filteredSubscriptions,
-                        selectedSubscription: self.$selectedSubscription,
+                        selectedSubscription: self.$selectedSubscription
                     )
                 }
                 .navigationTitle("Subscriptions")
@@ -586,9 +586,9 @@ extension Features.Subscriptions {
             accounts: [FinancialAccount] = []
         ) {
             #if !canImport(SwiftData)
-            self.subscriptions = subscriptions
-            self.categories = categories
-            self.accounts = accounts
+                self.subscriptions = subscriptions
+                self.categories = categories
+                self.accounts = accounts
             #endif
         }
     }

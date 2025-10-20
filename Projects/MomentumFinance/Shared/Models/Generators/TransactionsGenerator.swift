@@ -54,7 +54,8 @@ final class TransactionsGenerator: DataGenerator {
 
         // Income transactions (salary, etc.)
         if let incomeCategory = categories["Income"],
-           let checkingAccount = accounts["Checking Account"] {
+           let checkingAccount = accounts["Checking Account"]
+        {
             for week in 0 ..< 4 {
                 let payDate = calendar.date(byAdding: .day, value: week * 7 + 1, to: startOfMonth) ?? startOfMonth
                 let income = FinancialTransaction(
@@ -91,7 +92,8 @@ final class TransactionsGenerator: DataGenerator {
 
         for (title, amount, categoryName) in expenseData {
             if let category = categories[categoryName],
-               let account = accounts["Checking Account"] ?? accounts.values.first {
+               let account = accounts["Checking Account"] ?? accounts.values.first
+            {
                 let randomDay = Int.random(in: 1 ... daysInMonth)
                 let transactionDate = calendar.date(byAdding: .day, value: randomDay - 1, to: startOfMonth) ?? startOfMonth
 

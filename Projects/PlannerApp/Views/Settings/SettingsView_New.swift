@@ -5,7 +5,7 @@ import LocalAuthentication
 import SwiftUI
 import UserNotifications
 #if os(macOS)
-import AppKit
+    import AppKit
 #endif
 import Foundation
 
@@ -289,11 +289,11 @@ public struct SettingsView: View {
 
     func openAppSettings() {
         #if os(iOS)
-        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(settingsURL)
-        }
+            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsURL)
+            }
         #elseif os(macOS)
-        NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.notifications")!)
+            NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.notifications")!)
         #endif
     }
 

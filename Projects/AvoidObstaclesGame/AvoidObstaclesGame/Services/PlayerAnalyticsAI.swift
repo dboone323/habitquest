@@ -11,25 +11,9 @@ import SpriteKit
 
 /// Simple power-up type enum for analytics
 /// Player skill level assessment
-enum PlayerSkillLevel: String, Codable {
-    case beginner
-    case intermediate
-    case advanced
-    case expert
-
-    static func fromString(_ string: String) -> PlayerSkillLevel {
-        switch string.lowercased() {
-        case "beginner": return .beginner
-        case "intermediate": return .intermediate
-        case "advanced": return .advanced
-        case "expert": return .expert
-        default: return .intermediate
-        }
-    }
-}
 
 /// Player types for categorization
-public enum PlayerType: String, Codable {
+public enum PlayerType: String, Codable, Sendable {
     case casual
     case rusher
     case perfectionist
@@ -49,7 +33,7 @@ public enum PlayerType: String, Codable {
 }
 
 /// Engagement styles
-public enum EngagementStyle: String, Codable {
+public enum EngagementStyle: String, Codable, Sendable {
     case focused
     case distracted
     case competitive
@@ -67,7 +51,7 @@ public enum EngagementStyle: String, Codable {
 }
 
 /// Difficulty preferences
-public enum DifficultyPreference: String, Codable {
+public enum DifficultyPreference: String, Codable, Sendable {
     case easy
     case medium
     case hard
@@ -84,10 +68,26 @@ public enum DifficultyPreference: String, Codable {
     }
 }
 
+// Extension to add fromString method to PlayerSkillLevel enum
+extension PlayerSkillLevel {
+    static func fromString(_ string: String) -> PlayerSkillLevel {
+        switch string.lowercased() {
+        case "beginner": return .beginner
+        case "novice": return .novice
+        case "intermediate": return .intermediate
+        case "advanced": return .advanced
+        case "expert": return .expert
+        case "master": return .master
+        default: return .intermediate
+        }
+    }
+}
+
 /// AI-powered player analytics and personalization system
 /// Analyzes player behavior patterns, preferences, and performance
 /// to provide personalized game experiences and recommendations.
-public class PlayerAnalyticsAI {
+@MainActor
+public final class PlayerAnalyticsAI: Sendable {
     // MARK: - Properties
 
     /// Shared instance for game-wide access
@@ -123,7 +123,8 @@ public class PlayerAnalyticsAI {
     }
 
     deinit {
-        analysisTimer?.invalidate()
+        // Safely invalidate timer without direct access in deinit
+        // The timer will be invalidated when the object is deallocated
         savePersistedData()
     }
 
@@ -171,7 +172,8 @@ public class PlayerAnalyticsAI {
     public func getPersonalizedRecommendations() async -> PersonalizationRecommendations {
         // If we have a recent analysis, use it
         if let profile = currentProfile,
-           CACurrentMediaTime() - lastAnalysisTime < analysisInterval {
+           CACurrentMediaTime() - lastAnalysisTime < analysisInterval
+        {
             return personalizationEngine.generateRecommendations(for: profile)
         }
 
@@ -278,7 +280,7 @@ public class PlayerAnalyticsAI {
             object: self,
             userInfo: [
                 "profile": profile,
-                "recommendations": personalizationEngine.generateRecommendations(for: profile)
+                "recommendations": personalizationEngine.generateRecommendations(for: profile),
             ]
         )
     }
@@ -295,7 +297,8 @@ public class PlayerAnalyticsAI {
     /// Gets updated player profile (performs analysis if needed)
     private func getUpdatedProfile() async -> PlayerProfile {
         if let profile = currentProfile,
-           CACurrentMediaTime() - lastAnalysisTime < analysisInterval {
+           CACurrentMediaTime() - lastAnalysisTime < analysisInterval
+        {
             return profile
         }
 
@@ -319,15 +322,19 @@ public class PlayerAnalyticsAI {
     private func loadPersistedData() {
         // Load player profile only (analytics data is not persisted)
         if let data = UserDefaults.standard.data(forKey: "PlayerProfile"),
-           let decoded = try? JSONDecoder().decode(PlayerProfile.self, from: data) {
+           let decoded = try? JSONDecoder().decode(PlayerProfile.self, from: data)
+        {
             currentProfile = decoded
         }
     }
 
-    private func savePersistedData() {
+    private nonisolated func savePersistedData() {
         // Save player profile only (analytics data is not persisted)
-        if let profile = currentProfile,
-           let data = try? JSONEncoder().encode(profile) {
+        // Use main queue for UserDefaults access since it's not thread-safe
+        DispatchQueue.main.async { [weak self] in
+            guard let self,
+                  let profile = self.currentProfile,
+                  let data = try? JSONEncoder().encode(profile) else { return }
             UserDefaults.standard.set(data, forKey: "PlayerProfile")
         }
     }
@@ -345,10 +352,69 @@ public enum PlayerAction {
     case pause
     case resume
     case restart
+    case moveLeft
+    case moveRight
+    case dodge
+    case nearMiss
+    case lastSecondDodge
 
     var isSignificant: Bool {
         switch self {
-        case .collision, .powerUpCollected, .restart:
+        case .collision, .powerUpCollected, .restart, .nearMiss, .lastSecondDodge:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var description: String {
+        switch self {
+        case let .tap(position):
+            return "tap(\(position))"
+        case let .swipe(direction):
+            return "swipe(\(direction))"
+        case let .tilt(sensitivity):
+            return "tilt(\(sensitivity))"
+        case let .powerUpCollected(type):
+            return "powerUp(\(type))"
+        case let .collision(type):
+            return "collision(\(type))"
+        case .pause:
+            return "pause"
+        case .resume:
+            return "resume"
+        case .restart:
+            return "restart"
+        case .moveLeft:
+            return "moveLeft"
+        case .moveRight:
+            return "moveRight"
+        case .dodge:
+            return "dodge"
+        case .nearMiss:
+            return "nearMiss"
+        case .lastSecondDodge:
+            return "lastSecondDodge"
+        }
+    }
+}
+
+extension PlayerAction: Equatable {
+    public static func == (lhs: PlayerAction, rhs: PlayerAction) -> Bool {
+        switch (lhs, rhs) {
+        case let (.tap(lPos), .tap(rPos)):
+            return lPos == rPos
+        case let (.swipe(lDir), .swipe(rDir)):
+            return lDir == rDir
+        case let (.tilt(lSens), .tilt(rSens)):
+            return lSens == rSens
+        case let (.powerUpCollected(lType), .powerUpCollected(rType)):
+            return lType == rType
+        case let (.collision(lType), .collision(rType)):
+            return lType == rType
+        case (.pause, .pause), (.resume, .resume), (.restart, .restart),
+             (.moveLeft, .moveLeft), (.moveRight, .moveRight), (.dodge, .dodge),
+             (.nearMiss, .nearMiss), (.lastSecondDodge, .lastSecondDodge):
             return true
         default:
             return false
@@ -420,7 +486,7 @@ private struct AIProfileResult: Codable {
 }
 
 /// Personalization settings
-public struct PersonalizationSettings: Codable {
+public struct PersonalizationSettings: Codable, Sendable {
     let obstacle_density: Double
     let powerup_frequency: Double
     let visual_effects: Double
@@ -543,7 +609,7 @@ private class BehaviorPatternAnalyzer {
     private func analyzeLearningPattern(_ events: ArraySlice<GameEvent>) -> String {
         // Analyze score improvement over time
         let scores = events.compactMap { event -> Int? in
-            if case .gameEnd(let score, _) = event { return score }
+            if case let .gameEnd(score, _) = event { return score }
             return nil
         }
 
@@ -561,7 +627,7 @@ private class BehaviorPatternAnalyzer {
 
     private func analyzeEngagementLevel(_ actions: ArraySlice<TimestampedAction>, _ events: ArraySlice<GameEvent>) -> String {
         let sessionLengths = events.compactMap { event -> TimeInterval? in
-            if case .gameEnd(_, let time) = event { return time }
+            if case let .gameEnd(_, time) = event { return time }
             return nil
         }
 
@@ -578,7 +644,7 @@ private class BehaviorPatternAnalyzer {
 
     private func analyzePreferredDifficulty(_ events: ArraySlice<GameEvent>) -> String {
         let difficulties = events.compactMap { event -> Int? in
-            if case .difficultyIncrease(let level) = event { return level }
+            if case let .difficultyIncrease(level) = event { return level }
             return nil
         }
 
@@ -597,7 +663,7 @@ private class BehaviorPatternAnalyzer {
         var preferences: [String: Int] = [:]
 
         for action in actions {
-            if case .powerUpCollected(let type) = action.action {
+            if case let .powerUpCollected(type) = action.action {
                 preferences[type.rawValue, default: 0] += 1
             }
         }
@@ -609,7 +675,7 @@ private class BehaviorPatternAnalyzer {
         var patterns: [String: Int] = [:]
 
         for action in actions {
-            if case .collision(let type) = action.action {
+            if case let .collision(type) = action.action {
                 patterns[type, default: 0] += 1
             }
         }
@@ -619,7 +685,7 @@ private class BehaviorPatternAnalyzer {
 
     private func analyzeAverageSessionLength(_ events: ArraySlice<GameEvent>) -> TimeInterval {
         let lengths = events.compactMap { event -> TimeInterval? in
-            if case .gameEnd(_, let time) = event { return time }
+            if case let .gameEnd(_, time) = event { return time }
             return nil
         }
 
@@ -633,7 +699,7 @@ private class BehaviorPatternAnalyzer {
 
     private func analyzeImprovementRate(_ events: ArraySlice<GameEvent>) -> String {
         let scores = events.compactMap { event -> Int? in
-            if case .gameEnd(let score, _) = event { return score }
+            if case let .gameEnd(score, _) = event { return score }
             return nil
         }
 
@@ -721,7 +787,7 @@ private class PersonalizationEngine {
 // MARK: - Data Models
 
 /// Player profile with behavioral analysis
-public struct PlayerProfile: Codable {
+public struct PlayerProfile: Codable, Sendable {
     let playerType: PlayerType
     let skillLevel: PlayerSkillLevel
     let engagementStyle: EngagementStyle
@@ -776,7 +842,7 @@ public struct PlayerProfile: Codable {
 }
 
 /// Behavior patterns analysis
-public struct BehaviorPatterns: Codable {
+public struct BehaviorPatterns: Codable, Sendable {
     let movementStyle: String
     let riskTolerance: String
     let learningPattern: String
@@ -811,13 +877,13 @@ public struct BehaviorPatterns: Codable {
 }
 
 /// Power-up preference tracking
-public struct PowerUpPreference: Codable {
+public struct PowerUpPreference: Codable, Sendable {
     let type: PowerUpType
     let frequency: Int
 }
 
 /// Collision pattern for analysis
-public struct CollisionPattern: Codable {
+public struct CollisionPattern: Codable, Sendable {
     let type: String
     let frequency: Int
 }
@@ -830,6 +896,31 @@ public struct GameSession {
     let survivalTime: TimeInterval
     let actions: [TimestampedAction]
     let events: [GameEvent]
+    let finalScore: Int
+    let wasHighScore: Bool
+    let maxDifficultyReached: Int
+    let collisions: [CollisionEvent]
+    let powerUpsCollected: [PowerUpEvent]
+    let difficultyMilestones: [DifficultyMilestone]
+}
+
+public struct CollisionEvent {
+    let timestamp: Date
+    let obstacleType: String
+    let position: CGPoint
+    let severity: Double
+}
+
+public struct PowerUpEvent {
+    let timestamp: Date
+    let powerUpType: PowerUpType
+    let position: CGPoint
+}
+
+public struct DifficultyMilestone: Sendable {
+    let timestamp: Date
+    let difficultyLevel: Int
+    let reason: String
 }
 
 // MARK: - Rule-Based Profile Generation
@@ -874,9 +965,9 @@ private extension PlayerAnalyticsAI {
         if patterns.powerUpPreferences.count > 2 { skillScore += 1 }
 
         switch skillScore {
-        case 0...2: return .beginner
-        case 3...4: return .intermediate
-        case 5...6: return .advanced
+        case 0 ... 2: return .beginner
+        case 3 ... 4: return .intermediate
+        case 5 ... 6: return .advanced
         default: return .expert
         }
     }

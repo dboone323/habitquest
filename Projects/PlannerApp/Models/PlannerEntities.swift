@@ -29,6 +29,7 @@ protocol PlannerPriority: Codable, Hashable {
 }
 
 // MARK: - Enhanced Task Entity
+
 extension PlannerTask: PlannerEntity, Schedulable, PlannerRenderable {
     var color: String {
         switch priority {
@@ -39,7 +40,7 @@ extension PlannerTask: PlannerEntity, Schedulable, PlannerRenderable {
     }
 
     var iconName: String {
-        return isCompleted ? "checkmark.circle.fill" : "circle"
+        isCompleted ? "checkmark.circle.fill" : "circle"
     }
 
     // Hashable conformance for object pooling
@@ -48,14 +49,15 @@ extension PlannerTask: PlannerEntity, Schedulable, PlannerRenderable {
     }
 
     static func == (lhs: PlannerTask, rhs: PlannerTask) -> Bool {
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
     }
 }
 
 // MARK: - Enhanced Goal Entity
+
 extension Goal: PlannerEntity, Schedulable, PlannerRenderable {
     var dueDate: Date? {
-        get { return targetDate }
+        get { targetDate }
         set { if let newDate = newValue { targetDate = newDate } }
     }
 
@@ -70,10 +72,10 @@ extension Goal: PlannerEntity, Schedulable, PlannerRenderable {
     var iconName: String {
         let progressIcon: String
         switch progress {
-        case 0..<0.25: progressIcon = "circle"
-        case 0.25..<0.5: progressIcon = "circle.lefthalf.filled"
-        case 0.5..<0.75: progressIcon = "circle.righthalf.filled"
-        case 0.75..<1.0: progressIcon = "circle.fill"
+        case 0 ..< 0.25: progressIcon = "circle"
+        case 0.25 ..< 0.5: progressIcon = "circle.lefthalf.filled"
+        case 0.5 ..< 0.75: progressIcon = "circle.righthalf.filled"
+        case 0.75 ..< 1.0: progressIcon = "circle.fill"
         default: progressIcon = "checkmark.circle.fill"
         }
         return isCompleted ? "checkmark.circle.fill" : progressIcon
@@ -85,33 +87,34 @@ extension Goal: PlannerEntity, Schedulable, PlannerRenderable {
     }
 
     static func == (lhs: Goal, rhs: Goal) -> Bool {
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
     }
 }
 
 // MARK: - Enhanced Calendar Event Entity
+
 extension CalendarEvent: PlannerEntity, Schedulable, PlannerRenderable {
     var dueDate: Date? {
-        get { return date }
+        get { date }
         set { if let newDate = newValue { date = newDate } }
     }
 
     var isCompleted: Bool {
-        get { return false } // Calendar events are not completable in the same way
-        set { } // No-op
+        get { false } // Calendar events are not completable in the same way
+        set {} // No-op
     }
 
     var priority: any PlannerPriority {
-        get { return EventPriority.medium }
-        set { } // Calendar events have fixed priority
+        get { EventPriority.medium }
+        set {} // Calendar events have fixed priority
     }
 
     var color: String {
-        return "blue"
+        "blue"
     }
 
     var iconName: String {
-        return "calendar"
+        "calendar"
     }
 
     // Hashable conformance for object pooling
@@ -120,20 +123,21 @@ extension CalendarEvent: PlannerEntity, Schedulable, PlannerRenderable {
     }
 
     static func == (lhs: CalendarEvent, rhs: CalendarEvent) -> Bool {
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
     }
 }
 
 // MARK: - Enhanced Journal Entry Entity
+
 extension JournalEntry: PlannerEntity, PlannerRenderable {
     var isCompleted: Bool {
-        get { return false } // Journal entries are not completable
-        set { } // No-op
+        get { false } // Journal entries are not completable
+        set {} // No-op
     }
 
     var priority: any PlannerPriority {
-        get { return JournalPriority.medium }
-        set { } // Journal entries have fixed priority
+        get { JournalPriority.medium }
+        set {} // Journal entries have fixed priority
     }
 
     var color: String {
@@ -149,7 +153,7 @@ extension JournalEntry: PlannerEntity, PlannerRenderable {
     }
 
     var iconName: String {
-        return "book.closed"
+        "book.closed"
     }
 
     // Hashable conformance for object pooling
@@ -158,11 +162,12 @@ extension JournalEntry: PlannerEntity, PlannerRenderable {
     }
 
     static func == (lhs: JournalEntry, rhs: JournalEntry) -> Bool {
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
     }
 }
 
 // MARK: - Priority Enums
+
 enum EventPriority: String, CaseIterable, Codable {
     case low, medium, high
 
@@ -220,25 +225,27 @@ enum JournalPriority: String, CaseIterable, Codable {
 }
 
 // MARK: - Entity Factory
+
 enum PlannerEntityFactory {
     static func createTask(title: String, description: String = "", priority: TaskPriority = .medium, dueDate: Date? = nil) -> PlannerTask {
-        return PlannerTask(title: title, description: description, priority: priority, dueDate: dueDate)
+        PlannerTask(title: title, description: description, priority: priority, dueDate: dueDate)
     }
 
     static func createGoal(title: String, description: String, targetDate: Date, priority: GoalPriority = .medium) -> Goal {
-        return Goal(title: title, description: description, targetDate: targetDate, priority: priority)
+        Goal(title: title, description: description, targetDate: targetDate, priority: priority)
     }
 
     static func createCalendarEvent(title: String, date: Date) -> CalendarEvent {
-        return CalendarEvent(title: title, date: date)
+        CalendarEvent(title: title, date: date)
     }
 
     static func createJournalEntry(title: String, body: String, mood: String) -> JournalEntry {
-        return JournalEntry(title: title, body: body, date: Date(), mood: mood)
+        JournalEntry(title: title, body: body, date: Date(), mood: mood)
     }
 }
 
 // MARK: - Entity Extensions
+
 extension PlannerEntity {
     /// Check if entity is overdue
     var isOverdue: Bool {
@@ -272,40 +279,41 @@ extension PlannerEntity {
 }
 
 // MARK: - Collection Extensions
+
 extension Array where Element: PlannerEntity {
     /// Filter completed entities
     func completed() -> [Element] {
-        return filter { $0.isCompleted }
+        filter(\.isCompleted)
     }
 
     /// Filter incomplete entities
     func incomplete() -> [Element] {
-        return filter { !$0.isCompleted }
+        filter { !$0.isCompleted }
     }
 
     /// Filter overdue entities
     func overdue() -> [Element] {
-        return filter { $0.isOverdue }
+        filter(\.isOverdue)
     }
 
     /// Filter entities due today
     func dueToday() -> [Element] {
-        return filter { $0.isDueToday }
+        filter(\.isDueToday)
     }
 
     /// Filter entities due this week
     func dueThisWeek() -> [Element] {
-        return filter { $0.isDueThisWeek }
+        filter(\.isDueThisWeek)
     }
 
     /// Sort by priority (high to low)
     func sortedByPriority() -> [Element] {
-        return sorted { $0.priority.sortOrder > $1.priority.sortOrder }
+        sorted { $0.priority.sortOrder > $1.priority.sortOrder }
     }
 
     /// Sort by due date (soonest first)
     func sortedByDueDate() -> [Element] where Element: Schedulable {
-        return sorted { lhs, rhs in
+        sorted { lhs, rhs in
             switch (lhs.dueDate, rhs.dueDate) {
             case let (.some(lhsDate), .some(rhsDate)):
                 return lhsDate < rhsDate
@@ -333,8 +341,8 @@ extension Array where Element: PlannerEntity {
             "incomplete": total - completed,
             "overdue": overdue,
             "dueToday": dueToday,
-            "dueThisWeek": dueThisWeek
+            "dueThisWeek": dueThisWeek,
         ]
     }
-}</content>
-<parameter name="filePath">/Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/Models/PlannerEntities.swift
+} </ content>
+<parameter name = "filePath" >/ Users / danielstevens / Desktop / Quantum - workspace / Projects / PlannerApp / Models / PlannerEntities.swift

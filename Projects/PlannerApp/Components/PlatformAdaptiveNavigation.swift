@@ -17,26 +17,26 @@ struct PlatformAdaptiveNavigation<Content: View>: View {
 
     var body: some View {
         #if os(macOS)
-        NavigationSplitView {
-            SidebarView()
-        } detail: {
-            self.content
-        }
-        .navigationSplitViewStyle(.balanced)
-        #elseif os(iOS)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            // iPad layout
             NavigationSplitView {
                 SidebarView()
             } detail: {
                 self.content
             }
-        } else {
-            // iPhone layout
-            NavigationStack {
-                self.content
+            .navigationSplitViewStyle(.balanced)
+        #elseif os(iOS)
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                // iPad layout
+                NavigationSplitView {
+                    SidebarView()
+                } detail: {
+                    self.content
+                }
+            } else {
+                // iPhone layout
+                NavigationStack {
+                    self.content
+                }
             }
-        }
         #endif
     }
 }
@@ -67,24 +67,24 @@ public struct SidebarView: View {
 
     public var body: some View {
         #if os(macOS)
-        List(Tab.allCases, id: \.self, selection: self.$selectedTab) { tab in
-            NavigationLink(value: tab) {
-                Label(tab.rawValue, systemImage: tab.icon)
+            List(Tab.allCases, id: \.self, selection: self.$selectedTab) { tab in
+                NavigationLink(value: tab) {
+                    Label(tab.rawValue, systemImage: tab.icon)
+                }
             }
-        }
-        .navigationTitle("PlannerApp")
-        .listStyle(SidebarListStyle())
-        .frame(minWidth: 200)
+            .navigationTitle("PlannerApp")
+            .listStyle(SidebarListStyle())
+            .frame(minWidth: 200)
         #else
-        // iOS/iPadOS: Use regular List without selection binding
-        List(Tab.allCases, id: \.self) { tab in
-            NavigationLink(value: tab) {
-                Label(tab.rawValue, systemImage: tab.icon)
+            // iOS/iPadOS: Use regular List without selection binding
+            List(Tab.allCases, id: \.self) { tab in
+                NavigationLink(value: tab) {
+                    Label(tab.rawValue, systemImage: tab.icon)
+                }
             }
-        }
-        .navigationTitle("PlannerApp")
-        .listStyle(SidebarListStyle())
-        .frame(minWidth: 200)
+            .navigationTitle("PlannerApp")
+            .listStyle(SidebarListStyle())
+            .frame(minWidth: 200)
         #endif
     }
 }
@@ -115,44 +115,44 @@ public struct PlatformToolbar: ViewModifier {
             .navigationTitle(self.title)
             .toolbar {
                 #if os(macOS)
-                ToolbarItemGroup(placement: .primaryAction) {
-                    ForEach(self.primaryActions, id: \.title) { action in
-                        Button(action: action.action) {
-                            Label(action.title, systemImage: action.icon)
+                    ToolbarItemGroup(placement: .primaryAction) {
+                        ForEach(self.primaryActions, id: \.title) { action in
+                            Button(action: action.action) {
+                                Label(action.title, systemImage: action.icon)
+                            }
+                            .accessibilityLabel("Button")
+                            .help(action.title)
                         }
-                        .accessibilityLabel("Button")
-                        .help(action.title)
-                    }
-                }
-
-                ToolbarItemGroup(placement: .secondaryAction) {
-                    Menu("More") {
-                        ForEach(self.secondaryActions, id: \.title) { action in
-                            Button(action.title, action: action.action)
-                                .accessibilityLabel("Button")
-                        }
-                    }
-                }
-                #else
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    ForEach(self.primaryActions, id: \.title) { action in
-                        Button(action: action.action) {
-                            Image(systemName: action.icon)
-                        }
-                        .accessibilityLabel("Button")
                     }
 
-                    if !self.secondaryActions.isEmpty {
-                        Menu {
+                    ToolbarItemGroup(placement: .secondaryAction) {
+                        Menu("More") {
                             ForEach(self.secondaryActions, id: \.title) { action in
                                 Button(action.title, action: action.action)
                                     .accessibilityLabel("Button")
                             }
-                        } label: {
-                            Image(systemName: "ellipsis.circle")
                         }
                     }
-                }
+                #else
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        ForEach(self.primaryActions, id: \.title) { action in
+                            Button(action: action.action) {
+                                Image(systemName: action.icon)
+                            }
+                            .accessibilityLabel("Button")
+                        }
+
+                        if !self.secondaryActions.isEmpty {
+                            Menu {
+                                ForEach(self.secondaryActions, id: \.title) { action in
+                                    Button(action.title, action: action.action)
+                                        .accessibilityLabel("Button")
+                                }
+                            } label: {
+                                Image(systemName: "ellipsis.circle")
+                            }
+                        }
+                    }
                 #endif
             }
     }
@@ -185,15 +185,15 @@ struct PlatformContextMenu<MenuContent: View>: ViewModifier {
 
     func body(content: Content) -> some View {
         #if os(macOS)
-        content
-            .contextMenu {
-                self.menuContent
-            }
+            content
+                .contextMenu {
+                    self.menuContent
+                }
         #else
-        content
-            .contextMenu {
-                self.menuContent
-            }
+            content
+                .contextMenu {
+                    self.menuContent
+                }
         #endif
     }
 }
@@ -218,15 +218,15 @@ struct AdaptiveGrid<Content: View>: View {
 
     private var columns: [GridItem] {
         #if os(macOS)
-        return Array(repeating: .init(.flexible()), count: 3)
+            return Array(repeating: .init(.flexible()), count: 3)
         #else
-        if self.horizontalSizeClass == .regular {
-            // iPad or iPhone landscape
-            return Array(repeating: .init(.flexible()), count: 2)
-        } else {
-            // iPhone portrait
-            return [.init(.flexible())]
-        }
+            if self.horizontalSizeClass == .regular {
+                // iPad or iPhone landscape
+                return Array(repeating: .init(.flexible()), count: 2)
+            } else {
+                // iPhone portrait
+                return [.init(.flexible())]
+            }
         #endif
     }
 
@@ -250,18 +250,18 @@ struct PlatformSheet<SheetContent: View>: ViewModifier {
 
     func body(content: Content) -> some View {
         #if os(macOS)
-        content
-            .sheet(isPresented: self.$isPresented) {
-                self.sheetContent
-                    .frame(minWidth: 400, minHeight: 300)
-            }
-        #else
-        content
-            .sheet(isPresented: self.$isPresented) {
-                NavigationStack {
+            content
+                .sheet(isPresented: self.$isPresented) {
                     self.sheetContent
+                        .frame(minWidth: 400, minHeight: 300)
                 }
-            }
+        #else
+            content
+                .sheet(isPresented: self.$isPresented) {
+                    NavigationStack {
+                        self.sheetContent
+                    }
+                }
         #endif
     }
 }

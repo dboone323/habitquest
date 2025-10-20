@@ -6,9 +6,9 @@
 //  Copyright © 2024 Quantum Workspace. All rights reserved.
 //
 
+import Combine
 import Foundation
 import SwiftData
-import Combine
 
 /// Service for providing AI-powered financial insights and recommendations
 @MainActor
@@ -103,7 +103,7 @@ public final class FinancialInsightsService: FinancialServiceProtocol {
         let descriptor = FetchDescriptor<FinancialTransaction>(
             predicate: #Predicate<FinancialTransaction> { transaction in
                 transaction.accountId == accountId &&
-                transaction.date <= date
+                    transaction.date <= date
             }
         )
 
@@ -173,15 +173,15 @@ public final class FinancialInsightsService: FinancialServiceProtocol {
 
         // Calculate changes (simplified - would need historical data)
         let monthOverMonthChange = 0.0 // TODO: Implement historical comparison
-        let yearOverYearChange = 0.0   // TODO: Implement historical comparison
+        let yearOverYearChange = 0.0 // TODO: Implement historical comparison
 
         // Create breakdown
         let breakdown = NetWorthBreakdown(
-            cashAndEquivalents: accounts.filter { $0.type == .checking || $0.type == .savings }.reduce(0.0) { $0 + (try? await calculateAccountBalance($1.id, asOf: date)) ?? 0.0 },
-            investments: accounts.filter { $0.type == .investment }.reduce(0.0) { $0 + (try? await calculateAccountBalance($1.id, asOf: date)) ?? 0.0 },
+            cashAndEquivalents: accounts.filter { $0.type == .checking || $0.type == .savings }.reduce(0.0) { await $0 + (try? calculateAccountBalance($1.id, asOf: date)) ?? 0.0 },
+            investments: accounts.filter { $0.type == .investment }.reduce(0.0) { await $0 + (try? calculateAccountBalance($1.id, asOf: date)) ?? 0.0 },
             realEstate: 0.0, // TODO: Add real estate tracking
             personalProperty: 0.0, // TODO: Add personal property tracking
-            creditCardDebt: accounts.filter { $0.type == .creditCard }.reduce(0.0) { $0 + abs((try? await calculateAccountBalance($1.id, asOf: date)) ?? 0.0) },
+            creditCardDebt: accounts.filter { $0.type == .creditCard }.reduce(0.0) { await $0 + abs((try? calculateAccountBalance($1.id, asOf: date)) ?? 0.0) },
             loans: 0.0, // TODO: Add loan tracking
             mortgages: 0.0 // TODO: Add mortgage tracking
         )
@@ -215,7 +215,7 @@ public final class FinancialInsightsService: FinancialServiceProtocol {
                 actionItems: [
                     "Review category spending vs budget limits",
                     "Reallocate underutilized budget amounts",
-                    "Set up spending alerts for high-variance categories"
+                    "Set up spending alerts for high-variance categories",
                 ],
                 timeframe: "2-4 weeks"
             ))
@@ -233,7 +233,7 @@ public final class FinancialInsightsService: FinancialServiceProtocol {
                 actionItems: [
                     "Set up automatic transfers to savings",
                     "Review and cut non-essential expenses",
-                    "Consider high-yield savings options"
+                    "Consider high-yield savings options",
                 ],
                 timeframe: "1-2 months"
             ))
@@ -255,7 +255,7 @@ public final class FinancialInsightsService: FinancialServiceProtocol {
                 actionItems: [
                     "Audit recent \(topCategory.category.rawValue) transactions",
                     "Compare prices and find alternatives",
-                    "Set spending limits for this category"
+                    "Set spending limits for this category",
                 ],
                 timeframe: "1-3 weeks"
             ))
@@ -302,7 +302,7 @@ public final class FinancialInsightsService: FinancialServiceProtocol {
         let transactions = try await fetchRecentTransactions(for: userId, months: 6)
 
         // Use AI to analyze patterns
-        let patterns = try await predictiveAnalytics.analyzeSpendingPatterns(transactions.map { $0.amount })
+        let patterns = try await predictiveAnalytics.analyzeSpendingPatterns(transactions.map(\.amount))
 
         // Calculate category breakdown
         let categoryAnalysis = try await analyzeCategoryBreakdown(transactions)
@@ -376,7 +376,7 @@ public final class FinancialInsightsService: FinancialServiceProtocol {
 
         // Use AI to predict future spending
         let predictions = try await predictiveAnalytics.predictFutureExpenses(
-            historicalData: transactions.map { $0.amount },
+            historicalData: transactions.map(\.amount),
             months: months
         )
 
@@ -414,8 +414,8 @@ public final class FinancialInsightsService: FinancialServiceProtocol {
         let descriptor = FetchDescriptor<FinancialTransaction>(
             predicate: #Predicate<FinancialTransaction> { transaction in
                 transaction.budgetId == budgetId &&
-                transaction.date >= timeRange.start &&
-                transaction.date <= timeRange.end
+                    transaction.date >= timeRange.start &&
+                    transaction.date <= timeRange.end
             }
         )
 
@@ -436,7 +436,7 @@ public final class FinancialInsightsService: FinancialServiceProtocol {
         let descriptor = FetchDescriptor<FinancialTransaction>(
             predicate: #Predicate<FinancialTransaction> { transaction in
                 transaction.userId == userId &&
-                transaction.date >= startDate
+                    transaction.date >= startDate
             },
             sortBy: [SortDescriptor(\.date, order: .reverse)]
         )

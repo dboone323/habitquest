@@ -9,7 +9,7 @@ func runUITestSimulations() {
             FinancialTransaction(title: "Rent", amount: 1200.0, date: Date(), transactionType: .expense),
             FinancialTransaction(title: "Groceries", amount: 150.0, date: Date(), transactionType: .expense),
             FinancialTransaction(title: "Coffee", amount: 5.0, date: Date(), transactionType: .expense),
-            FinancialTransaction(title: "Freelance", amount: 500.0, date: Date(), transactionType: .income)
+            FinancialTransaction(title: "Freelance", amount: 500.0, date: Date(), transactionType: .income),
         ]
 
         // Simulate UI display logic
@@ -18,7 +18,7 @@ func runUITestSimulations() {
                 "title": transaction.title,
                 "amount": transaction.formattedAmount,
                 "date": transaction.formattedDate,
-                "type": transaction.transactionType.rawValue
+                "type": transaction.transactionType.rawValue,
             ]
         }
 
@@ -37,7 +37,7 @@ func runUITestSimulations() {
                 FinancialTransaction(title: "Deposit", amount: 1000.0, date: Date(), transactionType: .income),
                 FinancialTransaction(title: "ATM", amount: 200.0, date: Date(), transactionType: .expense),
                 FinancialTransaction(title: "Paycheck", amount: 2000.0, date: Date(), transactionType: .income),
-                FinancialTransaction(title: "Utilities", amount: 300.0, date: Date(), transactionType: .expense)
+                FinancialTransaction(title: "Utilities", amount: 300.0, date: Date(), transactionType: .expense),
             ]
         )
 
@@ -47,7 +47,7 @@ func runUITestSimulations() {
             "accountType": account.type.rawValue,
             "currentBalance": String(format: "$%.2f", account.calculatedBalance),
             "transactionCount": String(account.transactions.count),
-            "lastTransaction": account.transactions.last?.title ?? "None"
+            "lastTransaction": account.transactions.last?.title ?? "None",
         ]
 
         assert(summary["accountName"] == "Main Checking")
@@ -59,12 +59,12 @@ func runUITestSimulations() {
         let categories = [
             ExpenseCategory(name: "Food", color: "#FF6B6B", transactions: [
                 FinancialTransaction(title: "Groceries", amount: 200.0, date: Date(), transactionType: .expense),
-                FinancialTransaction(title: "Restaurant", amount: 100.0, date: Date(), transactionType: .expense)
+                FinancialTransaction(title: "Restaurant", amount: 100.0, date: Date(), transactionType: .expense),
             ]),
             ExpenseCategory(name: "Transportation", color: "#4ECDC4", transactions: [
                 FinancialTransaction(title: "Gas", amount: 150.0, date: Date(), transactionType: .expense),
-                FinancialTransaction(title: "Bus Pass", amount: 50.0, date: Date(), transactionType: .expense)
-            ])
+                FinancialTransaction(title: "Bus Pass", amount: 50.0, date: Date(), transactionType: .expense),
+            ]),
         ]
 
         // Simulate category budget display
@@ -73,7 +73,7 @@ func runUITestSimulations() {
                 "name": category.name,
                 "totalSpent": String(format: "$%.2f", category.totalAmount),
                 "transactionCount": String(category.transactions.count),
-                "color": category.color
+                "color": category.color,
             ]
         }
 
@@ -90,7 +90,7 @@ func runUITestSimulations() {
             FinancialTransaction(title: "Rent", amount: 1200.0, date: Date(), transactionType: .expense),
             FinancialTransaction(title: "Bonus", amount: 500.0, date: Date(), transactionType: .income),
             FinancialTransaction(title: "Groceries", amount: 150.0, date: Date(), transactionType: .expense),
-            FinancialTransaction(title: "Coffee", amount: 5.0, date: Date(), transactionType: .expense)
+            FinancialTransaction(title: "Coffee", amount: 5.0, date: Date(), transactionType: .expense),
         ]
 
         // Simulate filtering by type
@@ -111,16 +111,16 @@ func runUITestSimulations() {
         let accounts = [
             FinancialAccount(name: "Checking", type: .checking, balance: 1500.0, transactions: []),
             FinancialAccount(name: "Savings", type: .savings, balance: 5000.0, transactions: []),
-            FinancialAccount(name: "Credit Card", type: .credit, balance: -500.0, transactions: [])
+            FinancialAccount(name: "Credit Card", type: .credit, balance: -500.0, transactions: []),
         ]
 
         let categories = [
             ExpenseCategory(name: "Food", color: "#FF6B6B", transactions: [
-                FinancialTransaction(title: "Test", amount: 100.0, date: Date(), transactionType: .expense)
+                FinancialTransaction(title: "Test", amount: 100.0, date: Date(), transactionType: .expense),
             ]),
             ExpenseCategory(name: "Transport", color: "#4ECDC4", transactions: [
-                FinancialTransaction(title: "Test", amount: 50.0, date: Date(), transactionType: .expense)
-            ])
+                FinancialTransaction(title: "Test", amount: 50.0, date: Date(), transactionType: .expense),
+            ]),
         ]
 
         // Simulate dashboard calculations

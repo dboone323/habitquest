@@ -1,5 +1,5 @@
-import Foundation
 import CloudKit
+import Foundation
 
 /// Protocol defining the interface for all data management operations
 protocol DataManaging {
@@ -16,20 +16,24 @@ protocol DataManaging {
 /// Consolidated data manager for all PlannerApp entities with enhanced performance and object pooling
 final class PlannerDataManager: ObservableObject {
     // MARK: - Singleton
+
     @MainActor static let shared = PlannerDataManager()
 
     // MARK: - Published Properties
+
     @Published private(set) var tasks: [PlannerTask] = []
     @Published private(set) var goals: [Goal] = []
     @Published private(set) var calendarEvents: [CalendarEvent] = []
     @Published private(set) var journalEntries: [JournalEntry] = []
 
     // MARK: - Performance Monitoring
+
     @Published private(set) var lastSyncDate: Date?
     @Published private(set) var dataLoadTime: TimeInterval = 0
     @Published private(set) var memoryUsage: Int = 0
 
     // MARK: - Private Properties
+
     private let userDefaults: UserDefaults
     private let tasksKey = "SavedTasks"
     private let goalsKey = "SavedGoals"
@@ -43,6 +47,7 @@ final class PlannerDataManager: ObservableObject {
     private var journalPool = PlannerObjectPool<JournalEntry>()
 
     // MARK: - Initialization
+
     private init(userDefaults: UserDefaults = .standard) {
         self.userDefaults = userDefaults
         loadAllData()
@@ -93,6 +98,7 @@ final class PlannerDataManager: ObservableObject {
     }
 
     // MARK: - Task Management
+
     func saveTasks(_ tasks: [PlannerTask]) {
         self.tasks = tasks
         if let encoded = try? JSONEncoder().encode(tasks) {
@@ -122,10 +128,11 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func findTask(by id: UUID) -> PlannerTask? {
-        return tasks.first { $0.id == id }
+        tasks.first { $0.id == id }
     }
 
     // MARK: - Goal Management
+
     func saveGoals(_ goals: [Goal]) {
         self.goals = goals
         if let encoded = try? JSONEncoder().encode(goals) {
@@ -155,10 +162,11 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func findGoal(by id: UUID) -> Goal? {
-        return goals.first { $0.id == id }
+        goals.first { $0.id == id }
     }
 
     // MARK: - Calendar Management
+
     func saveCalendarEvents(_ events: [CalendarEvent]) {
         self.calendarEvents = events
         if let encoded = try? JSONEncoder().encode(events) {
@@ -188,10 +196,11 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func findCalendarEvent(by id: UUID) -> CalendarEvent? {
-        return calendarEvents.first { $0.id == id }
+        calendarEvents.first { $0.id == id }
     }
 
     // MARK: - Journal Management
+
     func saveJournalEntries(_ entries: [JournalEntry]) {
         self.journalEntries = entries
         if let encoded = try? JSONEncoder().encode(entries) {
@@ -221,10 +230,11 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func findJournalEntry(by id: UUID) -> JournalEntry? {
-        return journalEntries.first { $0.id == id }
+        journalEntries.first { $0.id == id }
     }
 
     // MARK: - Statistics and Analytics
+
     func getTaskStatistics() -> [String: Int] {
         let total = tasks.count
         let completed = tasks.count(where: { $0.isCompleted })
@@ -283,13 +293,14 @@ final class PlannerDataManager: ObservableObject {
             "overdueItems": taskStats["overdue"]! + goalStats["overdue"]!,
             "dataLoadTime": dataLoadTime,
             "memoryUsage": memoryUsage,
-            "lastSyncDate": lastSyncDate as Any
+            "lastSyncDate": lastSyncDate as Any,
         ]
     }
 
     // MARK: - Filtering and Sorting
+
     func tasksFiltered(by completion: Bool) -> [PlannerTask] {
-        return tasks.filter { $0.isCompleted == completion }
+        tasks.filter { $0.isCompleted == completion }
     }
 
     func tasksDue(within days: Int) -> [PlannerTask] {
@@ -303,11 +314,11 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func tasksSortedByPriority() -> [PlannerTask] {
-        return tasks.sorted { $0.priority.sortOrder > $1.priority.sortOrder }
+        tasks.sorted { $0.priority.sortOrder > $1.priority.sortOrder }
     }
 
     func tasksSortedByDate() -> [PlannerTask] {
-        return tasks.sorted { lhs, rhs in
+        tasks.sorted { lhs, rhs in
             switch (lhs.dueDate, rhs.dueDate) {
             case let (.some(lhsDate), .some(rhsDate)):
                 return lhsDate < rhsDate
@@ -322,7 +333,7 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func goalsFiltered(by completion: Bool) -> [Goal] {
-        return goals.filter { $0.isCompleted == completion }
+        goals.filter { $0.isCompleted == completion }
     }
 
     func goalsDue(within days: Int) -> [Goal] {
@@ -331,14 +342,15 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func goalsSortedByPriority() -> [Goal] {
-        return goals.sorted { $0.priority.sortOrder > $1.priority.sortOrder }
+        goals.sorted { $0.priority.sortOrder > $1.priority.sortOrder }
     }
 
     func goalsSortedByDate() -> [Goal] {
-        return goals.sorted { $0.targetDate < $1.targetDate }
+        goals.sorted { $0.targetDate < $1.targetDate }
     }
 
     // MARK: - Journal Filtering and Query Methods
+
     func journalEntries(for date: Date) -> [JournalEntry] {
         let calendar = Calendar.current
         return journalEntries.filter { entry in
@@ -347,31 +359,31 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func journalEntries(between startDate: Date, and endDate: Date) -> [JournalEntry] {
-        return journalEntries.filter { entry in
+        journalEntries.filter { entry in
             entry.date >= startDate && entry.date <= endDate
         }
     }
 
     func recentJournalEntries(count: Int) -> [JournalEntry] {
-        return journalEntries.sorted { $0.date > $1.date }.prefix(count).map { $0 }
+        journalEntries.sorted { $0.date > $1.date }.prefix(count).map { $0 }
     }
 
     func journalEntries(withMood mood: String) -> [JournalEntry] {
-        return journalEntries.filter { $0.mood == mood }
+        journalEntries.filter { $0.mood == mood }
     }
 
     func uniqueJournalMoods() -> [String] {
-        let moods = journalEntries.compactMap { $0.mood }
+        let moods = journalEntries.compactMap(\.mood)
         return Array(Set(moods)).sorted()
     }
 
     func journalEntriesSortedByDate() -> [JournalEntry] {
-        return journalEntries.sorted { $0.date > $1.date }
+        journalEntries.sorted { $0.date > $1.date }
     }
 
     func getJournalEntryStatistics() -> [String: Int] {
         let total = journalEntries.count
-        let moods = journalEntries.compactMap { $0.mood }
+        let moods = journalEntries.compactMap(\.mood)
         let uniqueMoods = Set(moods).count
 
         let calendar = Calendar.current
@@ -393,6 +405,7 @@ final class PlannerDataManager: ObservableObject {
     }
 
     // MARK: - Calendar Filtering and Query Methods
+
     func calendarEvents(for date: Date) -> [CalendarEvent] {
         let calendar = Calendar.current
         return calendarEvents.filter { event in
@@ -401,13 +414,13 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func calendarEvents(between startDate: Date, and endDate: Date) -> [CalendarEvent] {
-        return calendarEvents.filter { event in
+        calendarEvents.filter { event in
             event.date >= startDate && event.date <= endDate
         }
     }
 
     func calendarEventsSortedByDate() -> [CalendarEvent] {
-        return calendarEvents.sorted { $0.date < $1.date }
+        calendarEvents.sorted { $0.date < $1.date }
     }
 
     func upcomingCalendarEvents(within days: Int) -> [CalendarEvent] {
@@ -439,12 +452,14 @@ final class PlannerDataManager: ObservableObject {
     }
 
     // MARK: - CloudKit Integration
+
     func syncWithCloudKit() async {
         // Placeholder for CloudKit sync implementation
         lastSyncDate = Date()
     }
 
     // MARK: - Performance Monitoring
+
     private func updateMemoryUsage() {
         // Estimate memory usage based on data sizes
         let taskSize = tasks.count * MemoryLayout<PlannerTask>.size
@@ -456,6 +471,7 @@ final class PlannerDataManager: ObservableObject {
     }
 
     // MARK: - Data Clearing
+
     func clearAllData() {
         tasks.removeAll()
         goals.removeAll()
@@ -471,6 +487,7 @@ final class PlannerDataManager: ObservableObject {
     }
 
     // MARK: - Object Pool Management
+
     func preloadObjectPools() {
         // Preload pools with commonly used objects
         taskPool.preload(count: 10)
@@ -480,7 +497,7 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func getTaskFromPool() -> PlannerTask? {
-        return taskPool.getObject()
+        taskPool.getObject()
     }
 
     func returnTaskToPool(_ task: PlannerTask) {
@@ -488,7 +505,7 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func getGoalFromPool() -> Goal? {
-        return goalPool.getObject()
+        goalPool.getObject()
     }
 
     func returnGoalToPool(_ goal: Goal) {
@@ -496,7 +513,7 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func getCalendarEventFromPool() -> CalendarEvent? {
-        return calendarPool.getObject()
+        calendarPool.getObject()
     }
 
     func returnCalendarEventToPool(_ event: CalendarEvent) {
@@ -504,7 +521,7 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func getJournalEntryFromPool() -> JournalEntry? {
-        return journalPool.getObject()
+        journalPool.getObject()
     }
 
     func returnJournalEntryToPool(_ entry: JournalEntry) {
@@ -513,6 +530,7 @@ final class PlannerDataManager: ObservableObject {
 }
 
 // MARK: - Enhanced Object Pool
+
 private class PlannerObjectPool<T> {
     private var pool: [T] = []
     private let maxPoolSize: Int
@@ -523,7 +541,7 @@ private class PlannerObjectPool<T> {
 
     func preload(count: Int) {
         // Preload pool with default instances
-        for _ in 0..<min(count, maxPoolSize) {
+        for _ in 0 ..< min(count, maxPoolSize) {
             if let defaultInstance = createDefaultInstance() {
                 pool.append(defaultInstance)
             }
@@ -531,7 +549,7 @@ private class PlannerObjectPool<T> {
     }
 
     func getObject() -> T? {
-        return pool.popLast()
+        pool.popLast()
     }
 
     func returnObject(_ object: T) {
@@ -557,14 +575,15 @@ private class PlannerObjectPool<T> {
     }
 
     var poolSize: Int {
-        return pool.count
+        pool.count
     }
 }
 
 // MARK: - Legacy Protocol Conformance
+
 extension PlannerDataManager: TaskDataManaging {
     func load() -> [PlannerTask] {
-        return tasks
+        tasks
     }
 
     func save(tasks: [PlannerTask]) {
@@ -584,13 +603,13 @@ extension PlannerDataManager: TaskDataManaging {
     }
 
     func find(by id: UUID) -> PlannerTask? {
-        return findTask(by: id)
+        findTask(by: id)
     }
 }
 
 extension PlannerDataManager: GoalDataManaging {
     func load() -> [Goal] {
-        return goals
+        goals
     }
 
     func save(goals: [Goal]) {
@@ -610,6 +629,6 @@ extension PlannerDataManager: GoalDataManaging {
     }
 
     func find(by id: UUID) -> Goal? {
-        return findGoal(by: id)
+        findGoal(by: id)
     }
 }

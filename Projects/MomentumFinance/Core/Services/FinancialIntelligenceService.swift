@@ -1,5 +1,5 @@
-import Foundation
 import CoreML
+import Foundation
 import OSLog
 import SwiftData
 import SwiftUI
@@ -104,7 +104,8 @@ public class FinancialIntelligenceService: ObservableObject {
     }
 
     private func analyzeBudgets(transactions: [FinancialTransaction], budgets: [Budget])
-        -> [FinancialInsight] {
+        -> [FinancialInsight]
+    {
         fi_analyzeBudgets(transactions: transactions, budgets: budgets)
     }
 

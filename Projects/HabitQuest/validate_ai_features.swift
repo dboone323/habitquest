@@ -29,7 +29,7 @@ struct MockPlayerProfile {
 let mockHabits = [
     MockHabit(id: UUID(), name: "Morning Exercise", category: "Health", difficulty: 3, streakCount: 5, completionRate: 0.8),
     MockHabit(id: UUID(), name: "Read Book", category: "Learning", difficulty: 2, streakCount: 12, completionRate: 0.9),
-    MockHabit(id: UUID(), name: "Meditate", category: "Mindfulness", difficulty: 1, streakCount: 3, completionRate: 0.6)
+    MockHabit(id: UUID(), name: "Meditate", category: "Mindfulness", difficulty: 1, streakCount: 3, completionRate: 0.6),
 ]
 
 let mockProfile = MockPlayerProfile(level: 5, totalXP: 1250, completedHabitsCount: 45)
@@ -55,11 +55,11 @@ print("\n3. Testing Recommendation Generation...")
 let recommendations = [
     "Consider increasing difficulty for 'Read Book' - you're maintaining a strong streak!",
     "Try breaking 'Meditate' into shorter 5-minute sessions to improve consistency",
-    "Great job with 'Morning Exercise' - consider adding variety to maintain engagement"
+    "Great job with 'Morning Exercise' - consider adding variety to maintain engagement",
 ]
 
 print("✅ AI Recommendations generated:")
-recommendations.forEach { recommendation in
+for recommendation in recommendations {
     print("   - \(recommendation)")
 }
 
@@ -75,7 +75,7 @@ func calculateSuccessProbability(habit: MockHabit, profile: MockPlayerProfile) -
 }
 
 print("✅ Success probabilities calculated:")
-mockHabits.forEach { habit in
+for habit in mockHabits {
     let probability = calculateSuccessProbability(habit: habit, profile: mockProfile)
     print("   - \(habit.name): \(String(format: "%.1f", probability * 100))%")
 }

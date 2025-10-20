@@ -45,7 +45,8 @@ public struct InsightDetailView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     // Related IDs
                     if self.insight.relatedAccountId != nil || self.insight.relatedTransactionId != nil ||
-                        self.insight.relatedCategoryId != nil || self.insight.relatedBudgetId != nil {
+                        self.insight.relatedCategoryId != nil || self.insight.relatedBudgetId != nil
+                    {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Related Items")
                                 .font(.headline)

@@ -263,15 +263,15 @@ public struct AdvancedAnalyticsView: View {
             }
             .navigationTitle("Advanced Analytics")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        self.dismiss()
+                .navigationBarTitleDisplayMode(.large)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Done") {
+                            self.dismiss()
+                        }
+                        .accessibilityLabel("Button")
                     }
-                    .accessibilityLabel("Button")
                 }
-            }
             #endif
         }
     }
@@ -289,7 +289,7 @@ public struct AnalyticsInsightsCard: View {
                     icon: "brain",
                     title: "Optimal Scheduling",
                     insight:
-                        "Your success rate is 34% higher when habits are scheduled before 10 AM",
+                    "Your success rate is 34% higher when habits are scheduled before 10 AM",
                     color: .blue
                 )
 

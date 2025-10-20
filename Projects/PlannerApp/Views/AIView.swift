@@ -17,7 +17,7 @@ public struct AIView: View {
             .background(themeManager.currentTheme.primaryBackgroundColor.ignoresSafeArea())
             .navigationTitle("AI Assistant")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
         }
     }

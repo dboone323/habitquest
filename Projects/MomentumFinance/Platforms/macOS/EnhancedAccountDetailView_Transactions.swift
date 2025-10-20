@@ -5,52 +5,52 @@ import Shared
 import SwiftUI
 
 #if os(macOS)
-/// Transaction-related view components for the enhanced account detail view
-struct TransactionRow: View {
-    let transaction: FinancialTransaction
-    let toggleStatus: (FinancialTransaction) -> Void
-    let deleteTransaction: (FinancialTransaction) -> Void
+    /// Transaction-related view components for the enhanced account detail view
+    struct TransactionRow: View {
+        let transaction: FinancialTransaction
+        let toggleStatus: (FinancialTransaction) -> Void
+        let deleteTransaction: (FinancialTransaction) -> Void
 
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(self.transaction.name)
-                    .font(.headline)
+        var body: some View {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(self.transaction.name)
+                        .font(.headline)
 
-                Text(self.transaction.date.formatted(date: .abbreviated, time: .omitted))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    Text(self.transaction.date.formatted(date: .abbreviated, time: .omitted))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Text(self.transaction.amount.formatted(.currency(code: self.transaction.currencyCode)))
+                    .foregroundStyle(self.transaction.amount < 0 ? .red : .green)
+                    .font(.subheadline)
             }
+            .padding(.vertical, 4)
+            .tag(self.transaction.id)
+            .contextMenu {
+                Button("View Details") {
+                    // Navigate to transaction detail
+                }
 
-            Spacer()
+                Button("Edit") {
+                    // Edit transaction
+                }
 
-            Text(self.transaction.amount.formatted(.currency(code: self.transaction.currencyCode)))
-                .foregroundStyle(self.transaction.amount < 0 ? .red : .green)
-                .font(.subheadline)
-        }
-        .padding(.vertical, 4)
-        .tag(self.transaction.id)
-        .contextMenu {
-            Button("View Details") {
-                // Navigate to transaction detail
-            }
+                Button(
+                    "Mark as \(self.transaction.isReconciled ? "Unreconciled" : "Reconciled")"
+                ) {
+                    self.toggleStatus(self.transaction)
+                }
 
-            Button("Edit") {
-                // Edit transaction
-            }
+                Divider()
 
-            Button(
-                "Mark as \(self.transaction.isReconciled ? "Unreconciled" : "Reconciled")"
-            ) {
-                self.toggleStatus(self.transaction)
-            }
-
-            Divider()
-
-            Button("Delete", role: .destructive) {
-                self.deleteTransaction(self.transaction)
+                Button("Delete", role: .destructive) {
+                    self.deleteTransaction(self.transaction)
+                }
             }
         }
     }
-}
 #endif

@@ -68,7 +68,8 @@ public struct ThemeComponents: @unchecked Sendable {
 
     @MainActor
     func listRow(icon: String, title: String, @ViewBuilder trailing: @escaping () -> some View)
-        -> some View {
+        -> some View
+    {
         let theme = ColorTheme.shared
         return HStack {
             Image(systemName: icon)

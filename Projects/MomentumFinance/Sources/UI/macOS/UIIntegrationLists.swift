@@ -10,7 +10,7 @@ struct DashboardListView: View {
     var body: some View {
         List(selection: Binding(
             get: { self.navigationCoordinator.selectedListItem },
-            set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+            set: { self.navigationCoordinator.navigateToDetail(item: $0) }
         )) {
             Section("Accounts") {
                 ForEach(self.accounts) { account in
@@ -152,7 +152,7 @@ struct TransactionsListView: View {
 
             List(selection: Binding(
                 get: { self.navigationCoordinator.selectedListItem },
-                set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+                set: { self.navigationCoordinator.navigateToDetail(item: $0) }
             )) {
                 Section("Accounts") {
                     ForEach(self.accounts) { account in
@@ -242,7 +242,7 @@ struct BudgetListView: View {
 
             List(selection: Binding(
                 get: { self.navigationCoordinator.selectedListItem },
-                set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+                set: { self.navigationCoordinator.navigateToDetail(item: $0) }
             )) {
                 ForEach(self.budgets) { budget in
                     NavigationLink(value: ListableItem(id: budget.id, name: budget.name, type: .budget)) {
@@ -322,7 +322,7 @@ struct SubscriptionListView: View {
 
             List(selection: Binding(
                 get: { self.navigationCoordinator.selectedListItem },
-                set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+                set: { self.navigationCoordinator.navigateToDetail(item: $0) }
             )) {
                 ForEach(self.getGroupedSubscriptions()) { group in
                     Section(header: Text(group.title)) {
@@ -470,7 +470,7 @@ struct GoalsListView: View {
     var goalsList: some View {
         List(selection: Binding(
             get: { self.navigationCoordinator.selectedListItem },
-            set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+            set: { self.navigationCoordinator.navigateToDetail(item: $0) }
         )) {
             ForEach(self.goals) { goal in
                 NavigationLink(value: ListableItem(id: goal.id, name: goal.name, type: .goal)) {
@@ -516,7 +516,7 @@ struct GoalsListView: View {
     var reportsList: some View {
         List(selection: Binding(
             get: { self.navigationCoordinator.selectedListItem },
-            set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+            set: { self.navigationCoordinator.navigateToDetail(item: $0) }
         )) {
             NavigationLink(value: ListableItem(id: "spending", name: "Spending by Category", type: .report)) {
                 HStack {

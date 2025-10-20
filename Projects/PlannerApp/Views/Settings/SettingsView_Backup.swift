@@ -6,7 +6,7 @@ import SwiftUI
 import UserNotifications
 
 #if os(macOS)
-import AppKit
+    import AppKit
 #endif
 
 public struct SettingsViewBackup: View {

@@ -142,23 +142,23 @@ public enum CloudKitError: Error, Identifiable {
         switch self {
         case .notSignedIn:
             #if os(iOS)
-            return "Go to Settings → Apple ID → iCloud and sign in with your Apple ID."
+                return "Go to Settings → Apple ID → iCloud and sign in with your Apple ID."
             #else
-            return "Go to System Settings → Apple ID → iCloud and sign in with your Apple ID."
+                return "Go to System Settings → Apple ID → iCloud and sign in with your Apple ID."
             #endif
         case .networkIssue:
             return "Check your Wi-Fi connection or cellular data. Try syncing again when your connection improves."
         case .permissionDenied:
             #if os(iOS)
-            return "Go to Settings → Apple ID → iCloud → Apps Using iCloud and enable this app."
+                return "Go to Settings → Apple ID → iCloud → Apps Using iCloud and enable this app."
             #else
-            return "Go to System Settings → Apple ID → iCloud and ensure this app is enabled."
+                return "Go to System Settings → Apple ID → iCloud and ensure this app is enabled."
             #endif
         case .quotaExceeded:
             #if os(iOS)
-            return "Go to Settings → Apple ID → iCloud → Manage Storage to free up space or upgrade your storage plan."
+                return "Go to Settings → Apple ID → iCloud → Manage Storage to free up space or upgrade your storage plan."
             #else
-            return "Go to System Settings → Apple ID → iCloud → Manage Storage to free up space."
+                return "Go to System Settings → Apple ID → iCloud → Manage Storage to free up space."
             #endif
         case .deviceBusy:
             return "Close some other apps and try again. If the issue persists, restart your device."

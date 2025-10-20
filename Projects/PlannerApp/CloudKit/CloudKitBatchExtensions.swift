@@ -50,10 +50,10 @@ extension CloudKitManager {
         let totalBatches = (items.count + batchSize - 1) / batchSize
         var completedBatches = 0
 
-        for batchIndex in 0..<totalBatches {
+        for batchIndex in 0 ..< totalBatches {
             let startIndex = batchIndex * batchSize
             let endIndex = min(startIndex + batchSize, items.count)
-            let batchItems = Array(items[startIndex..<endIndex])
+            let batchItems = Array(items[startIndex ..< endIndex])
             let records = batchItems.map(recordConverter)
 
             // Use CKModifyRecordsOperation for better control and error handling
@@ -72,9 +72,9 @@ extension CloudKitManager {
 
             modifyOperation.modifyRecordsResultBlock = { result in
                 switch result {
-                case .success(let savedRecords, _):
+                case let .success(savedRecords, _):
                     print("Successfully uploaded batch of \(savedRecords.count) \(recordType) records")
-                case .failure(let error):
+                case let .failure(error):
                     print("Failed to upload \(recordType) batch: \(error.localizedDescription)")
                 }
             }
@@ -85,7 +85,7 @@ extension CloudKitManager {
                     switch result {
                     case .success:
                         continuation.resume()
-                    case .failure(let error):
+                    case let .failure(error):
                         continuation.resume(throwing: error)
                     }
                 }
@@ -107,10 +107,10 @@ extension CloudKitManager {
 
         let totalBatches = (recordIDs.count + batchSize - 1) / batchSize
 
-        for batchIndex in 0..<totalBatches {
+        for batchIndex in 0 ..< totalBatches {
             let startIndex = batchIndex * batchSize
             let endIndex = min(startIndex + batchSize, recordIDs.count)
-            let batchRecordIDs = Array(recordIDs[startIndex..<endIndex])
+            let batchRecordIDs = Array(recordIDs[startIndex ..< endIndex])
 
             let modifyOperation = CKModifyRecordsOperation(
                 recordsToSave: [],
@@ -122,10 +122,10 @@ extension CloudKitManager {
             try await withCheckedThrowingContinuation { continuation in
                 modifyOperation.modifyRecordsResultBlock = { result in
                     switch result {
-                    case .success(_, let deletedRecordIDs):
+                    case let .success(_, deletedRecordIDs):
                         print("Successfully deleted batch of \(deletedRecordIDs?.count ?? 0) records")
                         continuation.resume()
-                    case .failure(let error):
+                    case let .failure(error):
                         continuation.resume(throwing: error)
                     }
                 }
@@ -143,10 +143,10 @@ extension CloudKitManager {
         var allRecords: [CKRecord] = []
         let totalBatches = (recordIDs.count + batchSize - 1) / batchSize
 
-        for batchIndex in 0..<totalBatches {
+        for batchIndex in 0 ..< totalBatches {
             let startIndex = batchIndex * batchSize
             let endIndex = min(startIndex + batchSize, recordIDs.count)
-            let batchRecordIDs = Array(recordIDs[startIndex..<endIndex])
+            let batchRecordIDs = Array(recordIDs[startIndex ..< endIndex])
 
             let fetchOperation = CKFetchRecordsOperation(recordIDs: batchRecordIDs)
             fetchOperation.qualityOfService = .userInitiated
@@ -156,9 +156,9 @@ extension CloudKitManager {
 
                 fetchOperation.perRecordResultBlock = { recordID, result in
                     switch result {
-                    case .success(let record):
+                    case let .success(record):
                         fetchedRecords.append(record)
-                    case .failure(let error):
+                    case let .failure(error):
                         print("Failed to fetch record \(recordID.recordName): \(error.localizedDescription)")
                     }
                 }
@@ -167,7 +167,7 @@ extension CloudKitManager {
                     switch result {
                     case .success:
                         continuation.resume(returning: fetchedRecords)
-                    case .failure(let error):
+                    case let .failure(error):
                         continuation.resume(throwing: error)
                     }
                 }
@@ -271,7 +271,7 @@ extension CloudKitManager {
 
         repeat {
             let queryOperation: CKQueryOperation
-            if let cursor = cursor {
+            if let cursor {
                 queryOperation = CKQueryOperation(cursor: cursor)
             } else {
                 queryOperation = CKQueryOperation(query: query)
@@ -289,9 +289,9 @@ extension CloudKitManager {
 
                 queryOperation.queryResultBlock = { result in
                     switch result {
-                    case .success(let cursor):
+                    case let .success(cursor):
                         continuation.resume(returning: (fetchedRecords, cursor))
-                    case .failure(let error):
+                    case let .failure(error):
                         continuation.resume(throwing: error)
                     }
                 }

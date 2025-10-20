@@ -19,7 +19,7 @@ public final class AIHabitRecommender {
     ///   - habits: User's current habits
     ///   - playerProfile: User's profile data
     ///   - completion: Callback with recommendations
-    internal func generateRecommendations(
+    func generateRecommendations(
         habits: [Habit],
         playerProfile: PlayerProfile,
         completion: @escaping ([HabitRecommendation]) -> Void
@@ -79,7 +79,7 @@ public final class AIHabitRecommender {
                 $0.completionDate > Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
             }
 
-            let completed = recentLogs.filter { $0.isCompleted }.count
+            let completed = recentLogs.filter(\.isCompleted).count
             let total = recentLogs.count
 
             if let existing = completionRates[category] {
@@ -122,7 +122,7 @@ public final class AIHabitRecommender {
         successfulCategories: [HabitCategory],
         existingHabits: [Habit]
     ) -> [HabitRecommendation] {
-        let existingCategories = Set(existingHabits.map { $0.category })
+        let existingCategories = Set(existingHabits.map(\.category))
         var recommendations: [HabitRecommendation] = []
 
         for category in successfulCategories where !existingCategories.contains(category) {
@@ -219,7 +219,7 @@ public final class AIHabitRecommender {
         difficulty: HabitDifficulty = .easy
     ) -> HabitSuggestion {
         let suggestions = habitTemplates[category] ?? habitTemplates[.health]!
-        let template = suggestions[Int.random(in: 0..<suggestions.count)]
+        let template = suggestions[Int.random(in: 0 ..< suggestions.count)]
 
         return HabitSuggestion(
             name: template.name,
@@ -235,43 +235,43 @@ public final class AIHabitRecommender {
         .health: [
             HabitTemplate(name: "Drink Water", description: "Drink 8 glasses of water daily", frequency: .daily),
             HabitTemplate(name: "Healthy Breakfast", description: "Eat a nutritious breakfast", frequency: .daily),
-            HabitTemplate(name: "Evening Walk", description: "Take a 20-minute walk in the evening", frequency: .daily)
+            HabitTemplate(name: "Evening Walk", description: "Take a 20-minute walk in the evening", frequency: .daily),
         ],
         .fitness: [
             HabitTemplate(name: "Daily Exercise", description: "Complete 30 minutes of exercise", frequency: .daily),
             HabitTemplate(name: "Stretching Routine", description: "Do daily stretching exercises", frequency: .daily),
-            HabitTemplate(name: "Step Goal", description: "Walk 10,000 steps per day", frequency: .daily)
+            HabitTemplate(name: "Step Goal", description: "Walk 10,000 steps per day", frequency: .daily),
         ],
         .learning: [
             HabitTemplate(name: "Read 30 Minutes", description: "Read for at least 30 minutes", frequency: .daily),
             HabitTemplate(name: "Learn New Skill", description: "Spend time learning something new", frequency: .daily),
-            HabitTemplate(name: "Language Practice", description: "Practice a foreign language", frequency: .daily)
+            HabitTemplate(name: "Language Practice", description: "Practice a foreign language", frequency: .daily),
         ],
         .productivity: [
             HabitTemplate(name: "Morning Planning", description: "Plan your day every morning", frequency: .daily),
             HabitTemplate(name: "Task Prioritization", description: "Review and prioritize tasks", frequency: .daily),
-            HabitTemplate(name: "Digital Detox", description: "Take breaks from screens", frequency: .daily)
+            HabitTemplate(name: "Digital Detox", description: "Take breaks from screens", frequency: .daily),
         ],
         .social: [
             HabitTemplate(name: "Family Time", description: "Spend quality time with family", frequency: .daily),
             HabitTemplate(name: "Reach Out", description: "Contact a friend or family member", frequency: .daily),
-            HabitTemplate(name: "Social Activity", description: "Participate in a social activity", frequency: .weekly)
+            HabitTemplate(name: "Social Activity", description: "Participate in a social activity", frequency: .weekly),
         ],
         .creativity: [
             HabitTemplate(name: "Creative Writing", description: "Write creatively for 20 minutes", frequency: .daily),
             HabitTemplate(name: "Art Practice", description: "Practice your art form", frequency: .daily),
-            HabitTemplate(name: "Music Time", description: "Play or listen to music mindfully", frequency: .daily)
+            HabitTemplate(name: "Music Time", description: "Play or listen to music mindfully", frequency: .daily),
         ],
         .mindfulness: [
             HabitTemplate(name: "Meditation", description: "Practice meditation for 10 minutes", frequency: .daily),
             HabitTemplate(name: "Gratitude Journal", description: "Write down 3 things you're grateful for", frequency: .daily),
-            HabitTemplate(name: "Mindful Breathing", description: "Practice deep breathing exercises", frequency: .daily)
+            HabitTemplate(name: "Mindful Breathing", description: "Practice deep breathing exercises", frequency: .daily),
         ],
         .other: [
             HabitTemplate(name: "Personal Project", description: "Work on a personal project", frequency: .daily),
             HabitTemplate(name: "Hobby Time", description: "Dedicate time to your favorite hobby", frequency: .daily),
-            HabitTemplate(name: "Skill Building", description: "Practice and improve a skill", frequency: .daily)
-        ]
+            HabitTemplate(name: "Skill Building", description: "Practice and improve a skill", frequency: .daily),
+        ],
     ]
 }
 

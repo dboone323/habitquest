@@ -61,12 +61,14 @@ enum DataParser {
             lowerType.contains("deposit") ||
             lowerType.contains("credit") ||
             lowerType.contains("salary") ||
-            lowerType.contains("payment received") {
+            lowerType.contains("payment received")
+        {
             return .income
         } else if lowerType.contains("expense") ||
             lowerType.contains("debit") ||
             lowerType.contains("withdrawal") ||
-            lowerType.contains("payment") {
+            lowerType.contains("payment")
+        {
             return .expense
         } else {
             // Fallback to amount-based detection

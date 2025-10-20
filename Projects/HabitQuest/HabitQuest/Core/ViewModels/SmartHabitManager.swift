@@ -1,9 +1,10 @@
-import Foundation
 import Combine
+import Foundation
 import SwiftData
 import SwiftUI
 
 // MARK: - AI-Powered Habit Management/// Smart Habit Manager that integrates AI capabilities for intelligent habit tracking and recommendations
+
 @MainActor
 @Observable
 public final class SmartHabitManager: BaseViewModel {
@@ -101,7 +102,7 @@ public final class SmartHabitManager: BaseViewModel {
         let mockHabits = [
             AIHabit(name: "Drink Water", habitDescription: "Drink 8 glasses of water daily", frequency: .daily, category: .health, difficulty: .easy),
             AIHabit(name: "Morning Exercise", habitDescription: "30 minutes of exercise", frequency: .daily, category: .fitness, difficulty: .medium),
-            AIHabit(name: "Read Books", habitDescription: "Read for 30 minutes", frequency: .daily, category: .learning, difficulty: .easy)
+            AIHabit(name: "Read Books", habitDescription: "Read for 30 minutes", frequency: .daily, category: .learning, difficulty: .easy),
         ]
         state.habits = mockHabits
 
@@ -128,14 +129,14 @@ public final class SmartHabitManager: BaseViewModel {
                 category: .trend,
                 type: .trend,
                 motivationLevel: .medium
-            )
+            ),
         ]
         state.aiInsights = mockInsights
 
         // Create mock predictions
         var mockPredictions: [UUID: AIHabitPrediction] = [:]
         for habit in mockHabits {
-            let successRate = Double.random(in: 0.5...0.9)
+            let successRate = Double.random(in: 0.5 ... 0.9)
             mockPredictions[habit.id] = AIHabitPrediction(
                 id: UUID(),
                 habitId: habit.id,
@@ -165,7 +166,7 @@ public final class SmartHabitManager: BaseViewModel {
                 difficulty: .medium,
                 reasoning: "Your learning habits show good potential for language acquisition",
                 expectedSuccess: 0.7
-            )
+            ),
         ]
         state.habitSuggestions = mockSuggestions
 
@@ -208,7 +209,7 @@ public final class SmartHabitManager: BaseViewModel {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             var predictions: [UUID: AIHabitPrediction] = [:]
             for habit in self.state.habits {
-                let successRate = Double.random(in: 0.6...0.95)
+                let successRate = Double.random(in: 0.6 ... 0.95)
                 predictions[habit.id] = AIHabitPrediction(
                     id: UUID(),
                     habitId: habit.id,
@@ -245,7 +246,7 @@ public final class SmartHabitManager: BaseViewModel {
                     difficulty: .easy,
                     reasoning: "Physical activity complements your existing healthy habits",
                     expectedSuccess: 0.8
-                )
+                ),
             ]
             self.state.habitSuggestions = newSuggestions
             self.state.aiProcessingStatus = .completed

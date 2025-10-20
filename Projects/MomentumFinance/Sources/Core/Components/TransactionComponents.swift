@@ -1,7 +1,7 @@
 import Foundation
-import SwiftUI
-import enum Shared.TransactionModels.TransactionFilter
 import struct Shared.CoreFinancialModels.FinancialTransaction
+import enum Shared.TransactionModels.TransactionFilter
+import SwiftUI
 
 // Import transaction types
 public struct TransactionEmptyStateView: View {
@@ -318,7 +318,8 @@ public struct SearchAndFilterSection: View {
     }
 
     private func filterChip(_ title: String, _ isSelected: Bool, _ filter: TransactionFilter)
-        -> some View {
+        -> some View
+    {
         Button(action: {
             self.selectedFilter = filter
         }) {

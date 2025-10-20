@@ -47,6 +47,7 @@ class GameOverScreenManager {
     /// - Parameters:
     ///   - finalScore: The player's final score
     ///   - isNewHighScore: Whether this is a new high score
+    @MainActor
     func showGameOverScreen(finalScore: Int, isNewHighScore: Bool) {
         guard let scene else { return }
 
@@ -123,6 +124,7 @@ class GameOverScreenManager {
     }
 
     /// Hides the game over screen
+    @MainActor
     func hideGameOverScreen() {
         let labels = [gameOverLabel, restartLabel, highScoreAchievedLabel, finalScoreLabel]
         for label in labels {
@@ -137,13 +139,15 @@ class GameOverScreenManager {
 
     // MARK: - Touch Handling
 
-    /// Handles touch events for game over screen interactions
-    /// - Parameter location: Touch location in scene coordinates
-    /// - Returns: True if the touch was handled by the game over screen
+    /// Handles touch events on the game over screen
+    /// - Parameter location: The touch location
+    /// - Returns: Whether the touch was handled
+    @MainActor
     func handleTouch(at location: CGPoint) -> Bool {
         // Check if restart label was tapped
         if let restartLabel,
-           restartLabel.contains(location) {
+           restartLabel.contains(location)
+        {
             self.delegate?.restartButtonTapped()
             return true
         }
@@ -153,6 +157,7 @@ class GameOverScreenManager {
     // MARK: - Cleanup
 
     /// Removes all game over screen elements from the scene
+    @MainActor
     func removeAllGameOverElements() {
         self.hideGameOverScreen()
     }

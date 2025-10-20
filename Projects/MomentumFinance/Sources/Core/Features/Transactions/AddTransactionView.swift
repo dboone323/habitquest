@@ -75,31 +75,31 @@ extension Features.Transactions {
                 #endif
                     .toolbar {
                         #if canImport(UIKit)
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button("Cancel").accessibilityLabel("Button").accessibilityLabel("Button") {
-                                self.dismiss()
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button("Cancel").accessibilityLabel("Button").accessibilityLabel("Button") {
+                                    self.dismiss()
+                                }
                             }
-                        }
 
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Save").accessibilityLabel("Button").accessibilityLabel("Button") {
-                                self.saveTransaction()
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Save").accessibilityLabel("Button").accessibilityLabel("Button") {
+                                    self.saveTransaction()
+                                }
+                                .disabled(!self.isFormValid)
                             }
-                            .disabled(!self.isFormValid)
-                        }
                         #else
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel").accessibilityLabel("Button").accessibilityLabel("Button") {
-                                self.dismiss()
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Cancel").accessibilityLabel("Button").accessibilityLabel("Button") {
+                                    self.dismiss()
+                                }
                             }
-                        }
 
-                        ToolbarItem(placement: .primaryAction) {
-                            Button("Save").accessibilityLabel("Button").accessibilityLabel("Button") {
-                                self.saveTransaction()
+                            ToolbarItem(placement: .primaryAction) {
+                                Button("Save").accessibilityLabel("Button").accessibilityLabel("Button") {
+                                    self.saveTransaction()
+                                }
+                                .disabled(!self.isFormValid)
                             }
-                            .disabled(!self.isFormValid)
-                        }
                         #endif
                     }
             }
@@ -115,7 +115,7 @@ extension Features.Transactions {
                 amount: amountValue,
                 date: date,
                 transactionType: selectedTransactionType,
-                notes: notes.isEmpty ? nil : self.notes,
+                notes: notes.isEmpty ? nil : self.notes
             )
 
             transaction.category = self.selectedCategory

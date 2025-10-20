@@ -1,5 +1,5 @@
-import UIKit
 import SwiftUI
+import UIKit
 
 #if canImport(AppKit)
 #endif
@@ -20,11 +20,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -86,11 +86,11 @@ extension Features.GoalsAndReports {
                                 LinearGradient(
                                     gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
                                     startPoint: .leading,
-                                    endPoint: .trailing,
-                                ),
+                                    endPoint: .trailing
+                                )
                             )
                             .cornerRadius(12)
-                    },
+                    }
                 )
 
                 Spacer()
@@ -186,13 +186,13 @@ extension Features.GoalsAndReports {
                                 Color.blue.opacity(0.05), Color.blue.opacity(0.1),
                             ]),
                             startPoint: .topLeading,
-                            endPoint: .bottomTrailing,
-                        ),
+                            endPoint: .bottomTrailing
+                        )
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.blue.opacity(0.2), lineWidth: 1),
-                    ),
+                            .stroke(Color.blue.opacity(0.2), lineWidth: 1)
+                    )
             )
         }
 
@@ -239,11 +239,11 @@ extension Features.GoalsAndReports {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -297,8 +297,8 @@ extension Features.GoalsAndReports {
                                     .fill(Color.blue.opacity(0.1))
                                     .overlay(
                                         Capsule()
-                                            .stroke(Color.blue.opacity(0.3), lineWidth: 1),
-                                    ),
+                                            .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                                    )
                             )
                     }
                 }
@@ -360,8 +360,8 @@ extension Features.GoalsAndReports {
                                                 : [.blue, .blue.opacity(0.7)]
                                         ),
                                         startPoint: .leading,
-                                        endPoint: .trailing,
-                                    ),
+                                        endPoint: .trailing
+                                    )
                                 )
                                 .frame(
                                     width: geometry.size.width
@@ -411,7 +411,7 @@ extension Features.GoalsAndReports {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(self.backgroundColor)
-                    .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
+                    .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
             )
         }
     }

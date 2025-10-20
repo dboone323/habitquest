@@ -42,11 +42,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -113,35 +113,35 @@ extension Features.Subscriptions {
                 #endif
                     .toolbar(content: {
                         #if os(iOS)
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button("Cancel").accessibilityLabel("Button") {
-                                self.dismiss()
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button("Cancel").accessibilityLabel("Button") {
+                                    self.dismiss()
+                                }
+                                .accessibilityLabel("Cancel Button")
                             }
-                            .accessibilityLabel("Cancel Button")
-                        }
 
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Save").accessibilityLabel("Button") {
-                                self.saveSubscription()
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Save").accessibilityLabel("Button") {
+                                    self.saveSubscription()
+                                }
+                                .disabled(!self.isValidForm)
+                                .accessibilityLabel("Save Button")
                             }
-                            .disabled(!self.isValidForm)
-                            .accessibilityLabel("Save Button")
-                        }
                         #else
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel").accessibilityLabel("Button") {
-                                self.dismiss()
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Cancel").accessibilityLabel("Button") {
+                                    self.dismiss()
+                                }
+                                .accessibilityLabel("Cancel Button")
                             }
-                            .accessibilityLabel("Cancel Button")
-                        }
 
-                        ToolbarItem(placement: .primaryAction) {
-                            Button("Save").accessibilityLabel("Button") {
-                                self.saveSubscription()
+                            ToolbarItem(placement: .primaryAction) {
+                                Button("Save").accessibilityLabel("Button") {
+                                    self.saveSubscription()
+                                }
+                                .disabled(!self.isValidForm)
+                                .accessibilityLabel("Save Button")
                             }
-                            .disabled(!self.isValidForm)
-                            .accessibilityLabel("Save Button")
-                        }
                         #endif
                     })
                     .background(self.backgroundColor)
@@ -156,7 +156,7 @@ extension Features.Subscriptions {
                 amount: amountValue,
                 billingCycle: frequency,
                 nextDueDate: nextDueDate,
-                notes: notes.isEmpty ? nil : self.notes,
+                notes: notes.isEmpty ? nil : self.notes
             )
 
             subscription.category = self.selectedCategory

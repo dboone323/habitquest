@@ -160,8 +160,8 @@ public struct FloatingActionButton: View {
     public var body: some View {
         Button {
             #if os(iOS)
-            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-            impactFeedback.impactOccurred()
+                let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                impactFeedback.impactOccurred()
             #endif
 
             withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {

@@ -7,7 +7,9 @@
 //
 
 import SpriteKit
-import UIKit
+#if os(iOS) || os(tvOS)
+    import UIKit
+#endif
 
 /// Protocol for obstacle pool events
 protocol ObstaclePoolDelegate: AnyObject {
@@ -39,6 +41,7 @@ class ObstaclePool {
 
     // MARK: - Initialization
 
+    @MainActor
     init(scene: SKScene) {
         self.scene = scene
         self.preloadPools()
@@ -52,13 +55,14 @@ class ObstaclePool {
     // MARK: - Pool Management
 
     /// Preloads pools with initial obstacles of each type
+    @MainActor
     func preloadPools() {
         let types: [Obstacle.ObstacleType] = [.spike, .block, .moving]
 
         for type in types {
             availablePools[type] = []
             // Preload 5 obstacles of each type
-            for _ in 0..<5 {
+            for _ in 0 ..< 5 {
                 let obstacle = Obstacle(type: type)
                 availablePools[type]?.append(obstacle)
             }
@@ -68,6 +72,7 @@ class ObstaclePool {
     /// Gets an obstacle from the pool or creates a new one
     /// - Parameter type: The type of obstacle to get
     /// - Returns: A configured obstacle instance
+    @MainActor
     func getObstacle(ofType type: Obstacle.ObstacleType) -> Obstacle {
         // Try to get from pool first
         if let obstacle = availablePools[type]?.popLast() {
@@ -81,6 +86,7 @@ class ObstaclePool {
 
     /// Returns an obstacle to the pool for reuse
     /// - Parameter obstacle: The obstacle to recycle
+    @MainActor
     func recycleObstacle(_ obstacle: Obstacle) {
         guard activeObstacles.contains(obstacle) else { return }
 
@@ -110,8 +116,9 @@ class ObstaclePool {
     /// - Parameters:
     ///   - obstacle: The obstacle to activate
     ///   - position: Position to place the obstacle
+    @MainActor
     func activateObstacle(_ obstacle: Obstacle, at position: CGPoint) {
-        guard let scene = scene else { return }
+        guard let scene else { return }
 
         obstacle.position = position
         obstacle.isVisible = true
@@ -126,6 +133,7 @@ class ObstaclePool {
     // MARK: - Bulk Operations
 
     /// Recycles all active obstacles
+    @MainActor
     func recycleAllObstacles() {
         let obstaclesToRecycle = Array(activeObstacles)
         for obstacle in obstaclesToRecycle {
@@ -135,6 +143,7 @@ class ObstaclePool {
 
     /// Updates all active obstacles
     /// - Parameter deltaTime: Time elapsed since last update
+    @MainActor
     func updateActiveObstacles(deltaTime: TimeInterval) {
         for obstacle in activeObstacles {
             obstacle.update(deltaTime: deltaTime)
@@ -186,6 +195,7 @@ class ObstaclePool {
     }
 
     /// Clears all pools and active obstacles
+    @MainActor
     func clearAll() {
         // Remove all active obstacles from scene
         for obstacle in activeObstacles {
@@ -209,7 +219,7 @@ class ObstaclePool {
         return [
             "active_memory_bytes": activeMemory,
             "pooled_memory_bytes": pooledMemory,
-            "total_memory_bytes": activeMemory + pooledMemory
+            "total_memory_bytes": activeMemory + pooledMemory,
         ]
     }
 }

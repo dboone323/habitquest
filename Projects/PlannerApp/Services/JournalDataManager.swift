@@ -27,7 +27,7 @@ final class JournalDataManager: JournalDataManaging {
     /// Loads all journal entries from CloudKitManager.
     /// - Returns: Array of `JournalEntry` objects.
     func load() -> [JournalEntry] {
-        return cloudKitManager.loadJournalEntries()
+        cloudKitManager.loadJournalEntries()
     }
 
     /// Saves the provided journal entries using CloudKitManager.
@@ -58,7 +58,7 @@ final class JournalDataManager: JournalDataManaging {
     /// - Parameter id: The UUID of the journal entry to find.
     /// - Returns: The `JournalEntry` if found, otherwise nil.
     func find(by id: UUID) -> JournalEntry? {
-        return cloudKitManager.findJournalEntry(by: id)
+        cloudKitManager.findJournalEntry(by: id)
     }
 
     /// Gets journal entries for a specific date.
@@ -77,7 +77,7 @@ final class JournalDataManager: JournalDataManaging {
     ///   - endDate: The end of the date range.
     /// - Returns: Array of entries within the date range.
     func entries(between startDate: Date, and endDate: Date) -> [JournalEntry] {
-        return cloudKitManager.journalEntries.filter { entry in
+        cloudKitManager.journalEntries.filter { entry in
             entry.date >= startDate && entry.date <= endDate
         }
     }
@@ -86,27 +86,27 @@ final class JournalDataManager: JournalDataManaging {
     /// - Parameter count: Number of recent entries to return.
     /// - Returns: Array of recent entries.
     func recentEntries(count: Int = 10) -> [JournalEntry] {
-        return cloudKitManager.journalEntries.sorted { $0.date > $1.date }.prefix(count).map { $0 }
+        cloudKitManager.journalEntries.sorted { $0.date > $1.date }.prefix(count).map { $0 }
     }
 
     /// Gets journal entries with a specific mood.
     /// - Parameter mood: The mood to filter by.
     /// - Returns: Array of entries with the specified mood.
     func entries(withMood mood: String) -> [JournalEntry] {
-        return cloudKitManager.journalEntries.filter { $0.mood == mood }
+        cloudKitManager.journalEntries.filter { $0.mood == mood }
     }
 
     /// Gets all unique moods from journal entries.
     /// - Returns: Array of unique mood strings.
     func uniqueMoods() -> [String] {
-        let moods = cloudKitManager.journalEntries.compactMap { $0.mood }
+        let moods = cloudKitManager.journalEntries.compactMap(\.mood)
         return Array(Set(moods)).sorted()
     }
 
     /// Gets journal entries sorted by date.
     /// - Returns: Array of entries sorted by date (most recent first).
     func entriesSortedByDate() -> [JournalEntry] {
-        return cloudKitManager.journalEntries.sorted { $0.date > $1.date }
+        cloudKitManager.journalEntries.sorted { $0.date > $1.date }
     }
 
     /// Clears all journal entries from storage.
@@ -119,7 +119,7 @@ final class JournalDataManager: JournalDataManaging {
     /// - Returns: Dictionary with journal statistics.
     func getJournalStatistics() -> [String: Any] {
         let total = cloudKitManager.journalEntries.count
-        let moods = cloudKitManager.journalEntries.compactMap { $0.mood }
+        let moods = cloudKitManager.journalEntries.compactMap(\.mood)
         let uniqueMoods = Set(moods).count
 
         let calendar = Calendar.current

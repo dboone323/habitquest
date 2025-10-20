@@ -3,7 +3,7 @@ import Foundation
 import SwiftUI
 
 #if os(iOS)
-import UIKit
+    import UIKit
 #endif
 
 public struct TaskListView: View {
@@ -75,10 +75,10 @@ public struct TaskListView: View {
         .onTapGesture {
             self.isInputFieldFocused = false
             #if os(iOS)
-            UIApplication.shared.sendAction(
-                #selector(UIResponder.resignFirstResponder), to: nil, from: nil,
-                for: nil
-            )
+                UIApplication.shared.sendAction(
+                    #selector(UIResponder.resignFirstResponder), to: nil, from: nil,
+                    for: nil
+                )
             #endif
         }
         #if os(iOS)

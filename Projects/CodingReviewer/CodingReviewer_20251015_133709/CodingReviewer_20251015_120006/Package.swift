@@ -4,13 +4,13 @@ import PackageDescription
 let package = Package(
     name: "CodingReviewer",
     platforms: [
-        .macOS(.v13)
+        .macOS(.v13),
     ],
     products: [
         .executable(
             name: "CodingReviewer",
             targets: ["CodingReviewer"]
-        )
+        ),
     ],
     dependencies: [
         // Add dependencies here if needed
@@ -26,6 +26,6 @@ let package = Package(
             name: "CodingReviewerTests",
             dependencies: ["CodingReviewer"],
             path: "Sources/Tests"
-        )
+        ),
     ]
 )

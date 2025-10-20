@@ -4,31 +4,31 @@ import SwiftUI
 // Platform color helpers (now internal for cross-file use)
 func platformBackgroundColor() -> Color {
     #if os(iOS)
-    return Color(.systemBackground)
+        return Color(.systemBackground)
     #elseif os(macOS)
-    return Color(nsColor: .windowBackgroundColor)
+        return Color(nsColor: .windowBackgroundColor)
     #else
-    return Color.white
+        return Color.white
     #endif
 }
 
 func platformGrayColor() -> Color {
     #if os(iOS)
-    return Color(.systemGray6)
+        return Color(.systemGray6)
     #elseif os(macOS)
-    return Color.gray.opacity(0.2)
+        return Color.gray.opacity(0.2)
     #else
-    return Color.gray.opacity(0.2)
+        return Color.gray.opacity(0.2)
     #endif
 }
 
 func platformSecondaryGrayColor() -> Color {
     #if os(iOS)
-    return Color(.systemGray5)
+        return Color(.systemGray5)
     #elseif os(macOS)
-    return Color.gray.opacity(0.15)
+        return Color.gray.opacity(0.15)
     #else
-    return Color.gray.opacity(0.15)
+        return Color.gray.opacity(0.15)
     #endif
 }
 

@@ -1,25 +1,52 @@
 // MARK: - Core Game Entities and Protocols
+
 // Unified UI/UX improvements for AvoidObstaclesGame
 // Implements AI-recommended architecture for better game management
 
 import SpriteKit
-import UIKit
+#if os(iOS) || os(tvOS)
+    import UIKit
+#endif
+
+// MARK: - Core Enums
+
+/// Movement directions for player input
+public enum MovementDirection: String, Codable, Sendable {
+    case left, right, up, down
+
+    var displayName: String {
+        switch self {
+        case .left: return "Left"
+        case .right: return "Right"
+        case .up: return "Up"
+        case .down: return "Down"
+        }
+    }
+}
+
+/// Game actions for special inputs
+enum GameAction {
+    case jump, pause, menu
+}
 
 // MARK: - Core Protocols
 
 /// Protocol for all game components that need updates
+@MainActor
 protocol GameComponent: AnyObject {
     func update(deltaTime: TimeInterval)
     func reset()
 }
 
 /// Protocol for objects that can be rendered on screen
+@MainActor
 protocol Renderable {
     var node: SKNode { get }
     var isVisible: Bool { get set }
 }
 
 /// Protocol for objects that can collide
+@MainActor
 protocol Collidable {
     var physicsBody: SKPhysicsBody? { get }
     func handleCollision(with other: Collidable)
@@ -28,6 +55,7 @@ protocol Collidable {
 // MARK: - Core Game Entities
 
 /// Represents the player character with enhanced UI feedback
+@MainActor
 class Player: GameComponent, Renderable, Collidable {
     private(set) var node: SKNode
     var isVisible: Bool = true
@@ -42,8 +70,8 @@ class Player: GameComponent, Renderable, Collidable {
     init() {
         // Create player node with improved visual design
         let playerNode = SKShapeNode(circleOfRadius: 15)
-        playerNode.fillColor = UIColor.systemBlue
-        playerNode.strokeColor = UIColor.white
+        playerNode.fillColor = SKColor.blue
+        playerNode.strokeColor = SKColor.white
         playerNode.lineWidth = 2
         playerNode.glowWidth = 1
 
@@ -76,7 +104,7 @@ class Player: GameComponent, Renderable, Collidable {
         trail?.targetNode = node.scene
         trailParticles = trail
 
-        if let trail = trail {
+        if let trail {
             node.addChild(trail)
         }
     }
@@ -110,7 +138,7 @@ class Player: GameComponent, Renderable, Collidable {
         // Add visual feedback for collision
         let flash = SKAction.sequence([
             SKAction.colorize(with: .red, colorBlendFactor: 1.0, duration: 0.1),
-            SKAction.colorize(withColorBlendFactor: 0.0, duration: 0.1)
+            SKAction.colorize(withColorBlendFactor: 0.0, duration: 0.1),
         ])
         node.run(flash)
 
@@ -120,7 +148,7 @@ class Player: GameComponent, Renderable, Collidable {
                 SKAction.moveBy(x: -5, y: 0, duration: 0.05),
                 SKAction.moveBy(x: 10, y: 0, duration: 0.05),
                 SKAction.moveBy(x: -10, y: 0, duration: 0.05),
-                SKAction.moveBy(x: 5, y: 0, duration: 0.05)
+                SKAction.moveBy(x: 5, y: 0, duration: 0.05),
             ])
             scene.run(shake)
         }
@@ -149,6 +177,7 @@ class Player: GameComponent, Renderable, Collidable {
 }
 
 /// Represents game obstacles with improved visual design
+@MainActor
 class Obstacle: GameComponent, Renderable, Collidable, Hashable {
     private(set) var node: SKNode
     var isVisible: Bool = true
@@ -161,13 +190,19 @@ class Obstacle: GameComponent, Renderable, Collidable, Hashable {
     let obstacleType: ObstacleType
 
     enum ObstacleType {
-        case spike, block, moving
+        case spike, block, moving, pulsing, rotating, bouncing, teleporting, splitting, laser
 
-        var color: UIColor {
+        var color: SKColor {
             switch self {
             case .spike: return .red
             case .block: return .orange
             case .moving: return .purple
+            case .pulsing: return .green
+            case .rotating: return .blue
+            case .bouncing: return .yellow
+            case .teleporting: return .cyan
+            case .splitting: return .magenta
+            case .laser: return .white
             }
         }
 
@@ -176,6 +211,19 @@ class Obstacle: GameComponent, Renderable, Collidable, Hashable {
             case .spike: return CGSize(width: 20, height: 40)
             case .block: return CGSize(width: 30, height: 30)
             case .moving: return CGSize(width: 25, height: 25)
+            case .pulsing: return CGSize(width: 35, height: 35)
+            case .rotating: return CGSize(width: 28, height: 28)
+            case .bouncing: return CGSize(width: 32, height: 32)
+            case .teleporting: return CGSize(width: 26, height: 26)
+            case .splitting: return CGSize(width: 40, height: 40)
+            case .laser: return CGSize(width: 100, height: 8)
+            }
+        }
+
+        var hasSpecialBehavior: Bool {
+            switch self {
+            case .spike, .block: return false
+            case .moving, .pulsing, .rotating, .bouncing, .teleporting, .splitting, .laser: return true
             }
         }
     }
@@ -199,16 +247,25 @@ class Obstacle: GameComponent, Renderable, Collidable, Hashable {
             shape.lineWidth = 1
             obstacleNode = shape
 
-        case .block, .moving:
+        case .block, .moving, .pulsing, .rotating, .bouncing, .teleporting, .splitting:
             let shape = SKShapeNode(rectOf: type.size)
             shape.fillColor = type.color
             shape.strokeColor = .white
             shape.lineWidth = 1
             obstacleNode = shape
+
+        case .laser:
+            let shape = SKShapeNode(rectOf: type.size)
+            shape.fillColor = type.color
+            shape.strokeColor = .red
+            shape.lineWidth = 2
+            shape.glowWidth = 2
+            obstacleNode = shape
         }
 
         self.node = obstacleNode
         setupPhysics()
+        setupSpecialBehavior()
     }
 
     private func setupPhysics() {
@@ -223,7 +280,10 @@ class Obstacle: GameComponent, Renderable, Collidable, Hashable {
             path.closeSubpath()
             physicsBody = SKPhysicsBody(polygonFrom: path)
 
-        case .block, .moving:
+        case .block, .moving, .pulsing, .rotating, .bouncing, .teleporting, .splitting:
+            physicsBody = SKPhysicsBody(rectangleOf: obstacleType.size)
+
+        case .laser:
             physicsBody = SKPhysicsBody(rectangleOf: obstacleType.size)
         }
 
@@ -235,6 +295,63 @@ class Obstacle: GameComponent, Renderable, Collidable, Hashable {
         physicsBody.friction = 0.0
 
         node.physicsBody = physicsBody
+    }
+
+    private func setupSpecialBehavior() {
+        switch obstacleType {
+        case .pulsing:
+            setupPulsingBehavior()
+        case .rotating:
+            setupRotatingBehavior()
+        case .bouncing:
+            setupBouncingBehavior()
+        case .teleporting:
+            setupTeleportingBehavior()
+        case .laser:
+            setupLaserBehavior()
+        default:
+            break // No special behavior for spike, block, moving, splitting
+        }
+    }
+
+    private func setupPulsingBehavior() {
+        let pulseAction = SKAction.sequence([
+            SKAction.scale(to: 1.3, duration: 0.8),
+            SKAction.scale(to: 0.7, duration: 0.8),
+        ])
+        node.run(SKAction.repeatForever(pulseAction))
+    }
+
+    private func setupRotatingBehavior() {
+        let rotateAction = SKAction.rotate(byAngle: .pi * 2, duration: 3.0)
+        node.run(SKAction.repeatForever(rotateAction))
+    }
+
+    private func setupBouncingBehavior() {
+        let bounceAction = SKAction.sequence([
+            SKAction.moveBy(x: 0, y: 30, duration: 0.5),
+            SKAction.moveBy(x: 0, y: -30, duration: 0.5),
+        ])
+        node.run(SKAction.repeatForever(bounceAction))
+    }
+
+    private func setupTeleportingBehavior() {
+        let teleportAction = SKAction.sequence([
+            SKAction.fadeOut(withDuration: 0.5),
+            SKAction.wait(forDuration: 1.0),
+            SKAction.fadeIn(withDuration: 0.5),
+            SKAction.wait(forDuration: 2.0),
+        ])
+        node.run(SKAction.repeatForever(teleportAction))
+    }
+
+    private func setupLaserBehavior() {
+        // Laser obstacles pulse with a warning glow
+        let laserPulse = SKAction.sequence([
+            SKAction.colorize(with: .red, colorBlendFactor: 0.8, duration: 0.3),
+            SKAction.colorize(withColorBlendFactor: 0.0, duration: 0.3),
+        ])
+        node.run(SKAction.repeatForever(laserPulse))
     }
 
     var physicsBody: SKPhysicsBody? {
@@ -255,6 +372,39 @@ class Obstacle: GameComponent, Renderable, Collidable, Hashable {
             let verticalMovement = sin(node.position.x * 0.01) * 50
             node.position.y = 200 + verticalMovement
         }
+
+        // Handle special behaviors
+        updateSpecialBehavior(deltaTime)
+    }
+
+    private func updateSpecialBehavior(_ deltaTime: TimeInterval) {
+        switch obstacleType {
+        case .teleporting:
+            // Teleporting obstacles change position randomly
+            if Double.random(in: 0 ..< 1) < 0.02 { // 2% chance per frame
+                if let scene = node.scene {
+                    let newY = CGFloat.random(in: 50 ... (scene.frame.height - 50))
+                    node.position.y = newY
+                }
+            }
+        case .splitting:
+            // Splitting obstacles occasionally spawn smaller obstacles
+            if Double.random(in: 0 ..< 1) < 0.01 { // 1% chance per frame
+                spawnSplitObstacle()
+            }
+        default:
+            break
+        }
+    }
+
+    private func spawnSplitObstacle() {
+        // This would need to be handled by the ObstacleManager
+        // For now, just add a visual effect
+        let flash = SKAction.sequence([
+            SKAction.colorize(with: .white, colorBlendFactor: 1.0, duration: 0.1),
+            SKAction.colorize(withColorBlendFactor: 0.0, duration: 0.1),
+        ])
+        node.run(flash)
     }
 
     func reset() {
@@ -268,17 +418,21 @@ class Obstacle: GameComponent, Renderable, Collidable, Hashable {
     }
 
     // MARK: - Hashable Conformance
-    func hash(into hasher: inout Hasher) {
+
+    nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(ObjectIdentifier(self))
     }
 
-    static func == (lhs: Obstacle, rhs: Obstacle) -> Bool {
-        return lhs === rhs
+    nonisolated static func == (lhs: Obstacle, rhs: Obstacle) -> Bool {
+        lhs === rhs
     }
 }
 
-/// Represents power-ups with enhanced visual effects
-class PowerUp: GameComponent, Renderable, Collidable {
+// MARK: - Boss Battle System
+
+/// Represents a boss enemy with complex behaviors and multiple phases
+@MainActor
+class Boss: GameComponent, Renderable, Collidable, Hashable {
     private(set) var node: SKNode
     var isVisible: Bool = true
     var position: CGPoint {
@@ -286,100 +440,393 @@ class PowerUp: GameComponent, Renderable, Collidable {
         set { node.position = newValue }
     }
 
-    private let type: PowerUpType
-    private var collected = false
+    private(set) var health: CGFloat
+    private let maxHealth: CGFloat
+    private(set) var currentPhase: BossPhase = .phase1
+    private var attackTimer: TimeInterval = 0
+    private var phaseTimer: TimeInterval = 0
+    private var isInvulnerable: Bool = false
+    private var invulnerabilityTimer: TimeInterval = 0
 
-    init(type: PowerUpType) {
-        self.type = type
+    let bossType: BossType
 
-        // Create power-up node with enhanced visuals
-        let powerUpNode = SKShapeNode(circleOfRadius: 12)
-        powerUpNode.fillColor = type.color.withAlphaComponent(0.8)
-        powerUpNode.strokeColor = .white
-        powerUpNode.lineWidth = 2
-        powerUpNode.glowWidth = 3
+    enum BossType: String, CaseIterable {
+        case guardian = "Guardian"
+        case destroyer = "Destroyer"
+        case overlord = "Overlord"
 
-        // Add symbol label based on type
-        let symbol: String
-        switch type {
-        case .shield: symbol = "🛡️"
-        case .speed: symbol = "⚡"
-        case .magnet: symbol = "🧲"
+        var displayName: String {
+            rawValue
         }
 
-        let label = SKLabelNode(text: symbol)
-        label.fontSize = 16
-        label.fontColor = .white
-        label.verticalAlignmentMode = .center
-        powerUpNode.addChild(label)
+        var maxHealth: CGFloat {
+            switch self {
+            case .guardian: return 1000
+            case .destroyer: return 1500
+            case .overlord: return 2000
+            }
+        }
 
-        // Add pulsing animation
-        let pulse = SKAction.sequence([
-            SKAction.scale(to: 1.2, duration: 0.5),
-            SKAction.scale(to: 0.8, duration: 0.5)
-        ])
-        powerUpNode.run(SKAction.repeatForever(pulse))
+        var size: CGSize {
+            switch self {
+            case .guardian: return CGSize(width: 80, height: 120)
+            case .destroyer: return CGSize(width: 100, height: 140)
+            case .overlord: return CGSize(width: 120, height: 160)
+            }
+        }
 
-        self.node = powerUpNode
+        var color: SKColor {
+            switch self {
+            case .guardian: return .purple
+            case .destroyer: return .red
+            case .overlord: return .black
+            }
+        }
+    }
+
+    enum BossPhase {
+        case phase1, phase2, phase3, defeated
+
+        var healthThreshold: CGFloat {
+            switch self {
+            case .phase1: return 1.0
+            case .phase2: return 0.7
+            case .phase3: return 0.3
+            case .defeated: return 0.0
+            }
+        }
+
+        var attackSpeed: TimeInterval {
+            switch self {
+            case .phase1: return 2.0
+            case .phase2: return 1.5
+            case .phase3: return 1.0
+            case .defeated: return 0.0
+            }
+        }
+    }
+
+    init(type: BossType) {
+        self.bossType = type
+        self.maxHealth = type.maxHealth
+        self.health = type.maxHealth
+
+        // Create boss node with enhanced visuals
+        let bossNode = SKShapeNode(rectOf: type.size)
+        bossNode.fillColor = type.color
+        bossNode.strokeColor = .white
+        bossNode.lineWidth = 3
+        bossNode.glowWidth = 5
+
+        self.node = bossNode
+
+        // Add health bar after node is initialized
+        let healthBar = createHealthBar()
+        bossNode.addChild(healthBar)
+
         setupPhysics()
+        setupAnimations()
+    }
+
+    private func createHealthBar() -> SKNode {
+        let healthBarContainer = SKShapeNode(rectOf: CGSize(width: bossType.size.width + 20, height: 10))
+        healthBarContainer.fillColor = .black
+        healthBarContainer.strokeColor = .white
+        healthBarContainer.lineWidth = 1
+        healthBarContainer.position = CGPoint(x: 0, y: bossType.size.height / 2 + 15)
+
+        let healthBarFill = SKShapeNode(rectOf: CGSize(width: bossType.size.width, height: 8))
+        healthBarFill.fillColor = .green
+        healthBarFill.strokeColor = .clear
+        healthBarFill.position = CGPoint(x: 0, y: bossType.size.height / 2 + 15)
+        healthBarFill.name = "healthBar"
+
+        healthBarContainer.addChild(healthBarFill)
+        return healthBarContainer
     }
 
     private func setupPhysics() {
-        let physicsBody = SKPhysicsBody(circleOfRadius: 12)
-        physicsBody.categoryBitMask = PhysicsCategory.powerUp
-        physicsBody.contactTestBitMask = PhysicsCategory.player
-        physicsBody.collisionBitMask = PhysicsCategory.none
+        let physicsBody = SKPhysicsBody(rectangleOf: bossType.size)
+        physicsBody.categoryBitMask = PhysicsCategory.boss
+        physicsBody.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.powerUp
+        physicsBody.collisionBitMask = PhysicsCategory.player
         physicsBody.isDynamic = false
+        physicsBody.restitution = 0.0
+        physicsBody.friction = 0.0
 
         node.physicsBody = physicsBody
+    }
+
+    @MainActor
+    private func setupAnimations() {
+        // Add breathing animation
+        let breatheAction = SKAction.sequence([
+            SKAction.scale(to: 1.05, duration: 1.0),
+            SKAction.scale(to: 0.95, duration: 1.0),
+        ])
+        node.run(SKAction.repeatForever(breatheAction))
+
+        // Add glow pulsing
+        let glowAction = SKAction.sequence([
+            SKAction.run { [weak self] in
+                if let shapeNode = self?.node as? SKShapeNode {
+                    shapeNode.glowWidth = 10
+                }
+            },
+            SKAction.wait(forDuration: 0.5),
+            SKAction.run { [weak self] in
+                if let shapeNode = self?.node as? SKShapeNode {
+                    shapeNode.glowWidth = 5
+                }
+            },
+            SKAction.wait(forDuration: 0.5),
+        ])
+        node.run(SKAction.repeatForever(glowAction))
     }
 
     var physicsBody: SKPhysicsBody? {
         node.physicsBody
     }
 
-    func handleCollision(with other: Collidable) {
-        guard !collected else { return }
-        collected = true
+    func takeDamage(_ damage: CGFloat) {
+        guard !isInvulnerable else { return }
 
-        // Add collection effect
-        let collectEffect = SKAction.sequence([
-            SKAction.scale(to: 1.5, duration: 0.1),
-            SKAction.fadeOut(withDuration: 0.2),
-            SKAction.removeFromParent()
+        health = max(0, health - damage)
+        updateHealthBar()
+
+        // Visual feedback
+        let flashAction = SKAction.sequence([
+            SKAction.colorize(with: .white, colorBlendFactor: 1.0, duration: 0.1),
+            SKAction.colorize(withColorBlendFactor: 0.0, duration: 0.1),
         ])
-        node.run(collectEffect)
+        node.run(flashAction)
 
-        // Notify game manager about collection
-        NotificationCenter.default.post(
-            name: NSNotification.Name("PowerUpCollected"),
-            object: self,
-            userInfo: ["type": type]
-        )
+        // Become temporarily invulnerable
+        isInvulnerable = true
+        invulnerabilityTimer = 0.5
+
+        // Check for phase transitions
+        updatePhase()
+    }
+
+    private func updateHealthBar() {
+        guard let healthBar = node.childNode(withName: "healthBar") as? SKShapeNode else { return }
+
+        let healthPercentage = health / maxHealth
+        let barWidth = bossType.size.width * healthPercentage
+
+        let newSize = CGSize(width: max(0, barWidth), height: 8)
+        let updateAction = SKAction.run {
+            healthBar.path = CGPath(rect: CGRect(origin: CGPoint(x: -newSize.width / 2, y: -newSize.height / 2), size: newSize), transform: nil)
+
+            // Change color based on health
+            if healthPercentage > 0.6 {
+                healthBar.fillColor = .green
+            } else if healthPercentage > 0.3 {
+                healthBar.fillColor = .yellow
+            } else {
+                healthBar.fillColor = .red
+            }
+        }
+        healthBar.run(updateAction)
+    }
+
+    private func updatePhase() {
+        let healthPercentage = health / maxHealth
+
+        if healthPercentage <= BossPhase.phase3.healthThreshold && currentPhase == .phase2 {
+            enterPhase(.phase3)
+        } else if healthPercentage <= BossPhase.phase2.healthThreshold && currentPhase == .phase1 {
+            enterPhase(.phase2)
+        } else if health <= 0 && currentPhase != .defeated {
+            enterPhase(.defeated)
+        }
+    }
+
+    private func enterPhase(_ phase: BossPhase) {
+        currentPhase = phase
+
+        switch phase {
+        case .phase2:
+            phase2Transition()
+        case .phase3:
+            phase3Transition()
+        case .defeated:
+            defeatSequence()
+        default:
+            break
+        }
+    }
+
+    private func phase2Transition() {
+        // Enhanced visuals for phase 2
+        let colorAction = SKAction.colorize(with: .orange, colorBlendFactor: 0.3, duration: 1.0)
+        node.run(colorAction)
+
+        // Increase glow
+        if let shapeNode = node as? SKShapeNode {
+            shapeNode.glowWidth = 8
+        }
+    }
+
+    private func phase3Transition() {
+        // Enhanced visuals for phase 3
+        let colorAction = SKAction.colorize(with: .red, colorBlendFactor: 0.5, duration: 1.0)
+        node.run(colorAction)
+
+        // Maximum glow
+        if let shapeNode = node as? SKShapeNode {
+            shapeNode.glowWidth = 12
+        }
+    }
+
+    private func defeatSequence() {
+        // Victory animation
+        let defeatAction = SKAction.sequence([
+            SKAction.colorize(with: .white, colorBlendFactor: 1.0, duration: 0.5),
+            SKAction.fadeOut(withDuration: 1.0),
+            SKAction.removeFromParent(),
+        ])
+        node.run(defeatAction)
+    }
+
+    func performAttack() -> BossAttack? {
+        guard currentPhase != .defeated else { return nil }
+
+        switch bossType {
+        case .guardian:
+            return performGuardianAttack()
+        case .destroyer:
+            return performDestroyerAttack()
+        case .overlord:
+            return performOverlordAttack()
+        }
+    }
+
+    private func performGuardianAttack() -> BossAttack {
+        switch currentPhase {
+        case .phase1:
+            return .laserBeam
+        case .phase2:
+            return .spikeWave
+        case .phase3:
+            return Bool.random() ? .laserBeam : .spikeWave
+        default:
+            return .laserBeam
+        }
+    }
+
+    private func performDestroyerAttack() -> BossAttack {
+        switch currentPhase {
+        case .phase1:
+            return .projectileBarrage
+        case .phase2:
+            return .shockwave
+        case .phase3:
+            return Bool.random() ? .projectileBarrage : .shockwave
+        default:
+            return .projectileBarrage
+        }
+    }
+
+    private func performOverlordAttack() -> BossAttack {
+        switch currentPhase {
+        case .phase1:
+            return .minionSpawn
+        case .phase2:
+            return .teleportStrike
+        case .phase3:
+            let attacks: [BossAttack] = [.minionSpawn, .teleportStrike, .ultimateAttack]
+            return attacks.randomElement()!
+        default:
+            return .minionSpawn
+        }
+    }
+
+    func handleCollision(with other: Collidable) {
+        // Boss reacts to player collisions
+        if other is Player {
+            // Damage player or trigger special effect
+            let damageAction = SKAction.sequence([
+                SKAction.colorize(with: .red, colorBlendFactor: 0.5, duration: 0.2),
+                SKAction.colorize(withColorBlendFactor: 0.0, duration: 0.2),
+            ])
+            node.run(damageAction)
+        }
     }
 
     func update(deltaTime: TimeInterval) {
-        guard !collected else { return }
-        // Move power-up from right to left
-        node.position.x -= 80 * deltaTime
+        attackTimer += deltaTime
+        phaseTimer += deltaTime
+
+        if isInvulnerable {
+            invulnerabilityTimer -= deltaTime
+            if invulnerabilityTimer <= 0 {
+                isInvulnerable = false
+            }
+        }
+
+        // Update visual effects based on phase
+        updatePhaseEffects(deltaTime)
+    }
+
+    private func updatePhaseEffects(_ deltaTime: TimeInterval) {
+        // Add phase-specific visual effects
+        switch currentPhase {
+        case .phase2:
+            // Pulsing effect
+            let pulse = sin(phaseTimer * 4) * 0.1 + 1.0
+            node.xScale = pulse
+            node.yScale = pulse
+        case .phase3:
+            // More intense pulsing
+            let pulse = sin(phaseTimer * 6) * 0.2 + 1.0
+            node.xScale = pulse
+            node.yScale = pulse
+        default:
+            node.xScale = 1.0
+            node.yScale = 1.0
+        }
     }
 
     func reset() {
-        collected = false
+        health = maxHealth
+        currentPhase = .phase1
+        attackTimer = 0
+        phaseTimer = 0
+        isInvulnerable = false
+        invulnerabilityTimer = 0
         isVisible = true
+
+        // Reset visual state
         node.alpha = 1.0
-        node.setScale(1.0)
+        if let shapeNode = node as? SKShapeNode {
+            shapeNode.glowWidth = 5
+        }
+        node.removeAllActions()
+        setupAnimations()
+
+        updateHealthBar()
     }
 
-    func activate() {
-        // This method is called when the power-up is collected
-        // The actual effect application is handled by the PlayerManager
-        NotificationCenter.default.post(
-            name: NSNotification.Name("PowerUpActivated"),
-            object: self,
-            userInfo: ["type": type]
-        )
+    // MARK: - Hashable Conformance
+
+    nonisolated func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
+    }
+
+    nonisolated static func == (lhs: Boss, rhs: Boss) -> Bool {
+        lhs === rhs
     }
 }
 
-
+/// Types of boss attacks
+enum BossAttack {
+    case laserBeam
+    case spikeWave
+    case projectileBarrage
+    case shockwave
+    case minionSpawn
+    case teleportStrike
+    case ultimateAttack
+}

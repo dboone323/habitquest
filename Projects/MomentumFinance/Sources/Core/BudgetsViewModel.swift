@@ -143,7 +143,7 @@ public final class BudgetsViewModel {
             totalSpent: totalSpent,
             onTrackCount: onTrackCount,
             overBudgetCount: overBudgetCount,
-            totalBudgets: monthBudgets.count,
+            totalBudgets: monthBudgets.count
         )
     }
 
@@ -166,7 +166,7 @@ public final class BudgetsViewModel {
             let monthSpending = MonthlySpending(
                 month: monthDate,
                 amount: spent,
-                categoryName: category.name,
+                categoryName: category.name
             )
             trend.insert(monthSpending, at: 0)
         }

@@ -180,7 +180,7 @@ public struct ModernTextField: View {
 
     var isSecure: Bool = false
     #if os(iOS)
-    var keyboardType: UIKeyboardType = .default
+        var keyboardType: UIKeyboardType = .default
     #endif
 
     public var body: some View {

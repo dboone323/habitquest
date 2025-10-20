@@ -22,22 +22,22 @@ public struct QuestLogView: View {
             }
             .navigationTitle("Quest Log")
             .toolbar(content: {
-                                #if os(iOS)
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        // Filter functionality would go here
-                    } label: {
-                        Image(systemName: "line.3.horizontal.decrease.circle")
+                #if os(iOS)
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            // Filter functionality would go here
+                        } label: {
+                            Image(systemName: "line.3.horizontal.decrease.circle")
+                        }
+                        .accessibilityLabel("Filter Button")
                     }
-                    .accessibilityLabel("Filter Button")
-                }
                 #else
-                ToolbarItem {
-                    Button("Filter") {
-                        // Filter functionality would go here
+                    ToolbarItem {
+                        Button("Filter") {
+                            // Filter functionality would go here
+                        }
+                        .accessibilityLabel("Filter Button")
                     }
-                    .accessibilityLabel("Filter Button")
-                }
                 #endif
             })
             .sheet(isPresented: self.$viewModel.showingAddQuest) {
@@ -252,41 +252,41 @@ private struct AddEditQuestView: View {
             }
             .navigationTitle(self.isEditing ? "Edit Quest" : "New Quest")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                #if os(iOS)
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        self.dismiss()
-                    }
-                    .accessibilityLabel("Cancel")
-                }
+                .toolbar {
+                    #if os(iOS)
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("Cancel") {
+                                self.dismiss()
+                            }
+                            .accessibilityLabel("Cancel")
+                        }
 
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(self.isEditing ? "Save" : "Add") {
-                        self.saveQuest()
-                    }
-                    .accessibilityLabel(self.isEditing ? "Save" : "Add")
-                    .disabled(self.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                }
-                #else
-                ToolbarItem {
-                    Button("Cancel") {
-                        self.dismiss()
-                    }
-                    .accessibilityLabel("Cancel")
-                }
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(self.isEditing ? "Save" : "Add") {
+                                self.saveQuest()
+                            }
+                            .accessibilityLabel(self.isEditing ? "Save" : "Add")
+                            .disabled(self.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        }
+                    #else
+                        ToolbarItem {
+                            Button("Cancel") {
+                                self.dismiss()
+                            }
+                            .accessibilityLabel("Cancel")
+                        }
 
-                ToolbarItem {
-                    Button(self.isEditing ? "Save" : "Add") {
-                        self.saveQuest()
-                    }
-                    .accessibilityLabel(self.isEditing ? "Save" : "Add")
-                    .disabled(self.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        ToolbarItem {
+                            Button(self.isEditing ? "Save" : "Add") {
+                                self.saveQuest()
+                            }
+                            .accessibilityLabel(self.isEditing ? "Save" : "Add")
+                            .disabled(self.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        }
+                    #endif
                 }
-                #endif
-            }
         }
     }
 

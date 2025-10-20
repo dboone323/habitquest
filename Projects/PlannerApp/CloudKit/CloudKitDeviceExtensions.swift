@@ -7,10 +7,10 @@
 
 import CloudKit
 #if os(iOS)
-import UIKit
+    import UIKit
 #endif
 #if os(macOS)
-import SystemConfiguration
+    import SystemConfiguration
 #endif
 
 // MARK: - Device Management Extensions
@@ -45,11 +45,11 @@ extension CloudKitManager {
     /// Get the current device name
     static var deviceName: String {
         #if os(iOS)
-        return UIDevice.current.name
+            return UIDevice.current.name
         #elseif os(macOS)
-        return Host.current().localizedName ?? "Mac"
+            return Host.current().localizedName ?? "Mac"
         #else
-        return "Unknown Device"
+            return "Unknown Device"
         #endif
     }
 

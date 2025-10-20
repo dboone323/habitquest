@@ -17,22 +17,22 @@ extension Features.GoalsAndReports {
         @Environment(\.modelContext)
         private var modelContext
         #if canImport(SwiftData)
-        #if canImport(SwiftData)
-        private var savingsGoals: [SavingsGoal] = []
-        private var transactions: [FinancialTransaction] = []
-        private var budgets: [Budget] = []
-        private var categories: [ExpenseCategory] = []
+            #if canImport(SwiftData)
+                private var savingsGoals: [SavingsGoal] = []
+                private var transactions: [FinancialTransaction] = []
+                private var budgets: [Budget] = []
+                private var categories: [ExpenseCategory] = []
+            #else
+                private var savingsGoals: [SavingsGoal] = []
+                private var transactions: [FinancialTransaction] = []
+                private var budgets: [Budget] = []
+                private var categories: [ExpenseCategory] = []
+            #endif
         #else
-        private var savingsGoals: [SavingsGoal] = []
-        private var transactions: [FinancialTransaction] = []
-        private var budgets: [Budget] = []
-        private var categories: [ExpenseCategory] = []
-        #endif
-        #else
-        private var savingsGoals: [SavingsGoal] = []
-        private var transactions: [FinancialTransaction] = []
-        private var budgets: [Budget] = []
-        private var categories: [ExpenseCategory] = []
+            private var savingsGoals: [SavingsGoal] = []
+            private var transactions: [FinancialTransaction] = []
+            private var budgets: [Budget] = []
+            private var categories: [ExpenseCategory] = []
         #endif
 
         @State private var selectedTab = 0
@@ -49,7 +49,7 @@ extension Features.GoalsAndReports {
                     // Enhanced Header Section
                     HeaderSection(
                         selectedTab: self.$selectedTab,
-                        showingAddGoal: self.$showingAddGoal,
+                        showingAddGoal: self.$showingAddGoal
                     )
 
                     // Content with Animation
@@ -57,14 +57,14 @@ extension Features.GoalsAndReports {
                         SavingsGoalsTab(
                             goals: self.savingsGoals,
                             showingAddGoal: self.$showingAddGoal,
-                            selectedGoal: self.$selectedGoal,
+                            selectedGoal: self.$selectedGoal
                         )
                         .tag(0)
 
                         ReportsTab(
                             transactions: self.transactions,
                             budgets: self.budgets,
-                            categories: self.categories,
+                            categories: self.categories
                         )
                         .tag(1)
                     }
@@ -122,21 +122,21 @@ extension Features.GoalsAndReports {
             // Cross-platform color support
             private var backgroundColor: Color {
                 #if canImport(UIKit)
-                return Color(UIColor.systemBackground)
+                    return Color(UIColor.systemBackground)
                 #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+                    return Color(NSColor.controlBackgroundColor)
                 #else
-                return Color.white
+                    return Color.white
                 #endif
             }
 
             private var secondaryBackgroundColor: Color {
                 #if canImport(UIKit)
-                return Color(UIColor.systemGroupedBackground)
+                    return Color(UIColor.systemGroupedBackground)
                 #elseif canImport(AppKit)
-                return Color(NSColor.controlBackgroundColor)
+                    return Color(NSColor.controlBackgroundColor)
                 #else
-                return Color.gray.opacity(0.1)
+                    return Color.gray.opacity(0.1)
                 #endif
             }
 
@@ -163,7 +163,7 @@ extension Features.GoalsAndReports {
                                     Image(systemName: "plus.circle.fill")
                                         .font(.title2)
                                         .foregroundColor(.blue)
-                                },
+                                }
                             )
                         }
                     }
@@ -209,23 +209,23 @@ extension Features.GoalsAndReports {
                                                             .blue, .blue.opacity(0.8),
                                                         ]),
                                                         startPoint: .leading,
-                                                        endPoint: .trailing,
+                                                        endPoint: .trailing
                                                     )
                                                     : LinearGradient(
                                                         gradient: Gradient(colors: [Color.clear]),
                                                         startPoint: .leading,
-                                                        endPoint: .trailing,
-                                                    ),
-                                            ),
+                                                        endPoint: .trailing
+                                                    )
+                                            )
                                     )
-                                },
+                                }
                             )
                         }
                         .padding(4)
                         .background(
                             RoundedRectangle(cornerRadius: 14)
                                 .fill(self.secondaryBackgroundColor)
-                                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
+                                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         )
                     }
                 }
@@ -236,8 +236,8 @@ extension Features.GoalsAndReports {
                             self.backgroundColor, self.secondaryBackgroundColor,
                         ]),
                         startPoint: .top,
-                        endPoint: .bottom,
-                    ),
+                        endPoint: .bottom
+                    )
                 )
             }
         }
@@ -299,7 +299,7 @@ extension Features.GoalsAndReports {
                 Features.GoalsAndReports.EnhancedReportsSection(
                     transactions: self.transactions,
                     budgets: self.budgets,
-                    categories: self.categories,
+                    categories: self.categories
                 )
             }
         }

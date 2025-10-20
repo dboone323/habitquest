@@ -7,8 +7,8 @@
 //  Provides quantum advantage over classical Markowitz optimization
 //
 
-import Foundation
 import Accelerate
+import Foundation
 import OSLog
 
 // MARK: - Complex Number Support
@@ -23,7 +23,8 @@ public final class QuantumFinanceEngine {
     // MARK: - Properties
 
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "QuantumFinanceEngine")
+        subsystem: "com.quantum.workspace", category: "QuantumFinanceEngine"
+    )
 
     private let assets: [Asset]
     private let constraints: MarketConstraints
@@ -56,7 +57,7 @@ public final class QuantumFinanceEngine {
         // Create uniform superposition state
         var amplitudes = [ComplexNumber](repeating: ComplexNumber(real: 0, imaginary: 0), count: totalStates)
         let uniformAmplitude = ComplexNumber(real: 1.0 / sqrt(Double(totalStates)), imaginary: 0)
-        for stateIndex in 0..<totalStates {
+        for stateIndex in 0 ..< totalStates {
             amplitudes[stateIndex] = uniformAmplitude
         }
 
@@ -68,13 +69,13 @@ public final class QuantumFinanceEngine {
         var bestObjective: Double = .infinity
 
         // VQE iterations
-        for iteration in 0..<100 {
+        for iteration in 0 ..< 100 {
             iterations = iteration + 1
 
             // Create circuit parameters for this iteration
             let circuitParams = QuantumCircuitParameters(
                 numQubits: numQubits,
-                depth: 3,  // Circuit depth
+                depth: 3, // Circuit depth
                 ansatzType: "EfficientSU2",
                 entanglementPattern: "full"
             )
@@ -92,8 +93,8 @@ public final class QuantumFinanceEngine {
 
             // Objective function: minimize risk for given return, or maximize Sharpe ratio
             let objective = targetReturn != nil ?
-                metrics.volatility :  // Minimize volatility for target return
-                -metrics.sharpeRatio   // Maximize Sharpe ratio
+                metrics.volatility : // Minimize volatility for target return
+                -metrics.sharpeRatio // Maximize Sharpe ratio
 
             if objective < bestObjective {
                 bestObjective = objective
@@ -128,7 +129,7 @@ public final class QuantumFinanceEngine {
         }
 
         // Apply quantum ansatz (simplified VQE circuit)
-        for _ in 0..<params.depth {
+        for _ in 0 ..< params.depth {
             // Entangling layer
             state = applyEntanglingGates(state)
 
@@ -148,8 +149,8 @@ public final class QuantumFinanceEngine {
         let amplitudeCount = newAmplitudes.count
 
         // Simplified CNOT-like entangling operations
-        for qubitIndex in 0..<amplitudeCount/2 {
-            let targetQubit = qubitIndex + amplitudeCount/2
+        for qubitIndex in 0 ..< amplitudeCount / 2 {
+            let targetQubit = qubitIndex + amplitudeCount / 2
             // Entangle portfolio components
             let temp = newAmplitudes[qubitIndex]
             newAmplitudes[qubitIndex] = (newAmplitudes[qubitIndex] + newAmplitudes[targetQubit]) / sqrt(2)
@@ -168,8 +169,8 @@ public final class QuantumFinanceEngine {
         var newAmplitudes = state.amplitudes
 
         // Apply rotation gates (simplified)
-        for amplitudeIndex in 0..<newAmplitudes.count {
-            let angle = Double.random(in: 0...(2 * .pi))
+        for amplitudeIndex in 0 ..< newAmplitudes.count {
+            let angle = Double.random(in: 0 ... (2 * .pi))
             let rotation = ComplexNumber(real: cos(angle), imaginary: -sin(angle))
             newAmplitudes[amplitudeIndex] = newAmplitudes[amplitudeIndex] * rotation
         }
@@ -184,13 +185,13 @@ public final class QuantumFinanceEngine {
     /// Measure quantum state to get portfolio weights
     private func measurePortfolioWeights(from state: QuantumPortfolioState, assetCount: Int) -> [String: Double] {
         var weights: [String: Double] = [:]
-        let probabilities = state.amplitudes.map { $0.magnitudeSquared }
+        let probabilities = state.amplitudes.map(\.magnitudeSquared)
 
         // Sample from quantum distribution
-        for assetIndex in 0..<assetCount {
+        for assetIndex in 0 ..< assetCount {
             let symbol = assets[assetIndex].symbol
             // Use quantum amplitudes to determine weights
-            let weight = probabilities[assetIndex % probabilities.count] * Double.random(in: 0.5...2.0)
+            let weight = probabilities[assetIndex % probabilities.count] * Double.random(in: 0.5 ... 2.0)
             weights[symbol] = weight
         }
 
@@ -203,7 +204,7 @@ public final class QuantumFinanceEngine {
         guard var state = quantumState else { return }
 
         // Adjust amplitudes based on objective function feedback
-        let adjustment = objective * 0.01  // Learning rate
+        let adjustment = objective * 0.01 // Learning rate
         state.amplitudes = state.amplitudes.map { amplitude in
             ComplexNumber(real: amplitude.real * (1.0 - adjustment), imaginary: amplitude.imaginary * (1.0 - adjustment))
         }
@@ -222,8 +223,8 @@ public final class QuantumFinanceEngine {
     /// Calculate comprehensive risk metrics for a portfolio
     public func calculateRiskMetrics(for weights: PortfolioWeights) -> RiskMetrics {
         let normalizedWeights = weights.normalized()
-        _ = assets.map { $0.expectedReturn }
-        _ = assets.map { $0.volatility }
+        _ = assets.map(\.expectedReturn)
+        _ = assets.map(\.volatility)
 
         // Calculate portfolio expected return
         var expectedReturn = 0.0
@@ -243,7 +244,7 @@ public final class QuantumFinanceEngine {
         let sharpeRatio = (expectedReturn - constraints.riskFreeRate) / portfolioVolatility
 
         // Simplified VaR calculation (95% confidence)
-        let valueAtRisk = -1.645 * portfolioVolatility * sqrt(252)  // 252 trading days
+        let valueAtRisk = -1.645 * portfolioVolatility * sqrt(252) // 252 trading days
 
         // Conditional VaR (simplified)
         let conditionalVaR = -2.326 * portfolioVolatility * sqrt(252)
@@ -319,7 +320,7 @@ public final class QuantumFinanceEngine {
         var payoffSquaredSum = 0.0
 
         // Process in batches to reduce memory usage
-        for batch in 0..<numBatches {
+        for batch in 0 ..< numBatches {
             let currentBatchSize = min(batchSize, numPaths - batch * batchSize)
 
             // Create smaller quantum superposition for this batch
@@ -377,8 +378,8 @@ public final class QuantumFinanceEngine {
             delta: delta,
             gamma: 0.0, // Simplified
             theta: 0.0, // Simplified
-            vega: 0.0,  // Simplified
-            rho: 0.0,   // Simplified
+            vega: 0.0, // Simplified
+            rho: 0.0, // Simplified
             computationTime: computationTime,
             quantumAdvantage: quantumAdvantage,
             confidenceInterval: confidenceInterval
@@ -404,7 +405,7 @@ public final class QuantumFinanceEngine {
         var allProbabilities: [Double] = []
 
         // Process in batches to reduce memory usage
-        for batch in 0..<numBatches {
+        for batch in 0 ..< numBatches {
             // Create smaller quantum superposition for this batch
             let uniformAmplitude = ComplexNumber(real: 1.0 / sqrt(Double(totalStates)), imaginary: 0)
             let amplitudes = [ComplexNumber](repeating: uniformAmplitude, count: totalStates)
@@ -459,16 +460,16 @@ public final class QuantumFinanceEngine {
         var payoffs = [Double]()
 
         // Use quantum state to generate random paths more efficiently
-        for _ in 0..<batchSize {
+        for _ in 0 ..< batchSize {
             // Generate random path using quantum superposition with different phases
-            let randomValue = Double.random(in: 0..<1)
+            let randomValue = Double.random(in: 0 ..< 1)
             let quantumIndex = Int(randomValue * Double(quantumState.amplitudes.count))
             let amplitude = quantumState.amplitudes[quantumIndex]
 
             // Use both real and imaginary parts with additional randomness for diversity
-            let phaseRandom = Double.random(in: 0..<2 * .pi)
+            let phaseRandom = Double.random(in: 0 ..< 2 * .pi)
             let quantumNoise = amplitude.real * cos(phaseRandom) + amplitude.imaginary * sin(phaseRandom)
-            let additionalRandom = Double.random(in: -1..<1) // Add classical randomness
+            let additionalRandom = Double.random(in: -1 ..< 1) // Add classical randomness
 
             // Combine quantum and classical randomness
             let combinedRandom = (quantumNoise + additionalRandom) / sqrt(2.0)
@@ -497,7 +498,7 @@ public final class QuantumFinanceEngine {
         currentPrice: Double
     ) -> Double {
         let d1 = (log(currentPrice / strikePrice) + (riskFreeRate + 0.5 * volatility * volatility) * timeToExpiry) /
-                 (volatility * sqrt(timeToExpiry))
+            (volatility * sqrt(timeToExpiry))
 
         switch optionType {
         case .call:
@@ -520,12 +521,12 @@ public final class QuantumFinanceEngine {
     /// Normal cumulative distribution function approximation
     private func normalCDF(_ x: Double) -> Double {
         // Abramowitz & Stegun approximation
-        let a1 =  0.254829592
+        let a1 = 0.254829592
         let a2 = -0.284496736
-        let a3 =  1.421413741
+        let a3 = 1.421413741
         let a4 = -1.453152027
-        let a5 =  1.061405429
-        let p  =  0.3275911
+        let a5 = 1.061405429
+        let p = 0.3275911
 
         let sign = x < 0 ? -1.0 : 1.0
         let absX = abs(x)
@@ -549,7 +550,7 @@ public final class QuantumFinanceEngine {
 
         let normalizedWeights = portfolioWeights.normalized()
 
-        for i in 0..<batchSize {
+        for i in 0 ..< batchSize {
             // Use quantum state to generate correlated loss scenarios
             let scenarioIndex = batchOffset + i
             let quantumRandom = Double(scenarioIndex) / Double(quantumState.amplitudes.count * 4) * 2.0 - 1.0
@@ -589,7 +590,7 @@ public final class QuantumFinanceEngine {
         let valueAtRisk = scenarios[targetIndex].0
 
         // Calculate Conditional VaR (average of losses beyond VaR)
-        let tailScenarios = scenarios[0...targetIndex]
+        let tailScenarios = scenarios[0 ... targetIndex]
         var totalWeightedLoss = 0.0
         var totalWeight = 0.0
 
@@ -623,8 +624,8 @@ public final class QuantumFinanceEngine {
     private func calculateQuantumAdvantage(_ numAssets: Int, _ time: TimeInterval) -> Double {
         // Classical complexity: O(2^n) for exhaustive search
         // Quantum complexity: O(n) with VQE
-        let classicalComplexity = Double(1 << min(numAssets, 20))  // Cap at reasonable size
-        let quantumComplexity = Double(numAssets * 100)  // VQE iterations
+        let classicalComplexity = Double(1 << min(numAssets, 20)) // Cap at reasonable size
+        let quantumComplexity = Double(numAssets * 100) // VQE iterations
 
         return classicalComplexity / quantumComplexity
     }
@@ -739,7 +740,7 @@ public final class QuantumFinanceEngine {
         ])
 
         // Simulator
-        hardware.append(QuantumHardwareConfig(provider: .simulator, backend: "qasm_simulator", maxShots: 100000))
+        hardware.append(QuantumHardwareConfig(provider: .simulator, backend: "qasm_simulator", maxShots: 100_000))
 
         return hardware
     }
@@ -925,12 +926,12 @@ public final class QuantumFinanceEngine {
         let status: QuantumJobStatus = Bool.random() ? .completed : .running
 
         if status == .completed {
-            let counts = ["0000": Int.random(in: 400...600), "0001": Int.random(in: 200...300)]
+            let counts = ["0000": Int.random(in: 400 ... 600), "0001": Int.random(in: 200 ... 300)]
             return QuantumHardwareResult(
                 jobId: jobId,
                 status: status,
                 counts: counts,
-                executionTime: Double.random(in: 10...60),
+                executionTime: Double.random(in: 10 ... 60),
                 submittedAt: Date().addingTimeInterval(-60),
                 completedAt: Date()
             )
@@ -951,12 +952,12 @@ public final class QuantumFinanceEngine {
         let status: QuantumJobStatus = Bool.random() ? .completed : .queued
 
         if status == .completed {
-            let counts = ["00": Int.random(in: 800...1000), "01": Int.random(in: 100...200)]
+            let counts = ["00": Int.random(in: 800 ... 1000), "01": Int.random(in: 100 ... 200)]
             return QuantumHardwareResult(
                 jobId: jobId,
                 status: status,
                 counts: counts,
-                executionTime: Double.random(in: 5...30),
+                executionTime: Double.random(in: 5 ... 30),
                 submittedAt: Date().addingTimeInterval(-45),
                 completedAt: Date()
             )
@@ -977,12 +978,12 @@ public final class QuantumFinanceEngine {
         let status: QuantumJobStatus = Bool.random() ? .completed : .running
 
         if status == .completed {
-            let counts = ["0": Int.random(in: 900...1100), "1": Int.random(in: 50...150)]
+            let counts = ["0": Int.random(in: 900 ... 1100), "1": Int.random(in: 50 ... 150)]
             return QuantumHardwareResult(
                 jobId: jobId,
                 status: status,
                 counts: counts,
-                executionTime: Double.random(in: 2...15),
+                executionTime: Double.random(in: 2 ... 15),
                 submittedAt: Date().addingTimeInterval(-20),
                 completedAt: Date()
             )
@@ -1000,7 +1001,7 @@ public final class QuantumFinanceEngine {
         config: QuantumHardwareConfig
     ) async throws -> QuantumHardwareResult {
         // Simulator jobs complete immediately
-        let counts = ["000": Int.random(in: 600...800), "001": Int.random(in: 200...400)]
+        let counts = ["000": Int.random(in: 600 ... 800), "001": Int.random(in: 200 ... 400)]
 
         return QuantumHardwareResult(
             jobId: jobId,
@@ -1022,11 +1023,11 @@ public enum QuantumFinanceError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .optimizationFailed(let message):
+        case let .optimizationFailed(message):
             return "Portfolio optimization failed: \(message)"
-        case .invalidState(let message):
+        case let .invalidState(message):
             return "Invalid quantum state: \(message)"
-        case .insufficientAssets(let message):
+        case let .insufficientAssets(message):
             return "Insufficient assets: \(message)"
         }
     }

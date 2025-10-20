@@ -11,6 +11,7 @@ import Foundation
 /// Provides methods to add, retrieve, and clear high scores for the AvoidObstaclesGame.
 class HighScoreManager {
     /// Shared singleton instance for global access.
+    @MainActor
     static let shared = HighScoreManager()
 
     /// UserDefaults key for storing high scores.
@@ -31,10 +32,8 @@ class HighScoreManager {
     /// Retrieves all high scores sorted from highest to lowest (async version).
     /// - Returns: An array of high scores in descending order.
     func getHighScoresAsync() async -> [Int] {
-        await Task.detached {
-            let scores = UserDefaults.standard.array(forKey: self.highScoresKey) as? [Int] ?? []
-            return scores.sorted(by: >)
-        }.value
+        let scores = UserDefaults.standard.array(forKey: self.highScoresKey) as? [Int] ?? []
+        return scores.sorted(by: >)
     }
 
     /// Adds a new score to the high scores list.
@@ -61,22 +60,20 @@ class HighScoreManager {
     /// - Parameter score: The score to add.
     /// - Returns: True if the score is in the top 10 after adding, false otherwise.
     func addScoreAsync(_ score: Int) async -> Bool {
-        await Task.detached {
-            var scores = await self.getHighScoresAsync()
-            scores.append(score)
-            scores.sort(by: >)
+        var scores = await self.getHighScoresAsync()
+        scores.append(score)
+        scores.sort(by: >)
 
-            // Keep only top 10 scores
-            if scores.count > self.maxScores {
-                scores = Array(scores.prefix(self.maxScores))
-            }
+        // Keep only top 10 scores
+        if scores.count > self.maxScores {
+            scores = Array(scores.prefix(self.maxScores))
+        }
 
-            UserDefaults.standard.set(scores, forKey: self.highScoresKey)
-            UserDefaults.standard.synchronize()
+        UserDefaults.standard.set(scores, forKey: self.highScoresKey)
+        UserDefaults.standard.synchronize()
 
-            // Return true if this score is in the top 10
-            return scores.contains(score)
-        }.value
+        // Return true if this score is in the top 10
+        return scores.contains(score)
     }
 
     /// Retrieves the highest score from the high scores list.
@@ -116,20 +113,20 @@ class HighScoreManager {
 
     /// Clears all high scores from persistent storage (async version). Useful for testing or resetting.
     func clearHighScoresAsync() async {
-        await Task.detached {
-            UserDefaults.standard.removeObject(forKey: self.highScoresKey)
-            UserDefaults.standard.synchronize()
-        }.value
+        UserDefaults.standard.removeObject(forKey: self.highScoresKey)
+        UserDefaults.standard.synchronize()
     }
 }
 
 // MARK: - Object Pooling
 
 /// Object pool for performance optimization
+@MainActor
 private var objectPool: [Any] = []
 private let maxPoolSize = 50
 
 /// Get an object from the pool or create new one
+@MainActor
 private func getPooledObject<T>() -> T? {
     if let pooled = objectPool.popLast() as? T {
         return pooled
@@ -138,6 +135,7 @@ private func getPooledObject<T>() -> T? {
 }
 
 /// Return an object to the pool
+@MainActor
 private func returnToPool(_ object: Any) {
     if objectPool.count < maxPoolSize {
         objectPool.append(object)

@@ -16,16 +16,16 @@ extension Features.Transactions {
 
         // Query transactions but we'll filter in computed property
         #if canImport(SwiftData)
-        #if canImport(SwiftData)
-        private var transactions: [FinancialTransaction] = []
-        private var categories: [ExpenseCategory] = []
+            #if canImport(SwiftData)
+                private var transactions: [FinancialTransaction] = []
+                private var categories: [ExpenseCategory] = []
+            #else
+                private var transactions: [FinancialTransaction] = []
+                private var categories: [ExpenseCategory] = []
+            #endif
         #else
-        private var transactions: [FinancialTransaction] = []
-        private var categories: [ExpenseCategory] = []
-        #endif
-        #else
-        private var transactions: [FinancialTransaction] = []
-        private var categories: [ExpenseCategory] = []
+            private var transactions: [FinancialTransaction] = []
+            private var categories: [ExpenseCategory] = []
         #endif
 
         // Get the specific category
@@ -77,7 +77,7 @@ extension Features.Transactions {
                         .background(
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(self.platformBackgroundColor)
-                                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
+                                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                         )
                         .padding(.horizontal)
                     }
@@ -101,7 +101,7 @@ extension Features.Transactions {
                     ContentUnavailableView(
                         "Category Not Found",
                         systemImage: "tag.slash",
-                        description: Text("The selected category could not be found"),
+                        description: Text("The selected category could not be found")
                     )
                 }
             }
@@ -141,11 +141,11 @@ extension Features.Transactions {
         // Cross-platform background color
         private var platformBackgroundColor: Color {
             #if canImport(UIKit)
-            return Color(uiColor: .systemBackground)
+                return Color(uiColor: .systemBackground)
             #elseif canImport(AppKit)
-            return Color(nsColor: .windowBackgroundColor)
+                return Color(nsColor: .windowBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
     }

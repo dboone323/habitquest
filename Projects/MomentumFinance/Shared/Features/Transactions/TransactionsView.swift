@@ -1,6 +1,6 @@
-import UIKit
 import SwiftData
 import SwiftUI
+import UIKit
 
 #if canImport(AppKit)
 #endif

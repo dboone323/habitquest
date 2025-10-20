@@ -9,11 +9,14 @@
 import Foundation
 
 /// Protocol for game state change notifications
+@MainActor
 protocol GameStateDelegate: AnyObject {
-    func gameStateDidChange(from oldState: GameState, to newState: GameState)
-    func scoreDidChange(to newScore: Int)
-    func difficultyDidIncrease(to level: Int)
-    func gameDidEnd(withScore finalScore: Int, survivalTime: TimeInterval)
+    func gameStateDidChange(from oldState: GameState, to newState: GameState) async
+    func scoreDidChange(to newScore: Int) async
+    func difficultyDidIncrease(to level: Int) async
+    func gameDidEnd(withScore finalScore: Int, survivalTime: TimeInterval) async
+    func gameModeDidChange(to mode: GameMode) async
+    func winConditionMet(result: GameResult) async
 }
 
 /// Represents the current state of the game
@@ -25,6 +28,7 @@ enum GameState {
 }
 
 /// Manages the core game state and logic
+@MainActor
 class GameStateManager {
     // MARK: - Properties
 
@@ -34,14 +38,18 @@ class GameStateManager {
     /// Current game state
     private(set) var currentState: GameState = .waitingToStart {
         didSet {
-            self.delegate?.gameStateDidChange(from: oldValue, to: self.currentState)
+            Task { @MainActor in
+                await self.delegate?.gameStateDidChange(from: oldValue, to: self.currentState)
+            }
         }
     }
 
     /// Current score
     private(set) var score: Int = 0 {
         didSet {
-            self.delegate?.scoreDidChange(to: self.score)
+            Task { @MainActor in
+                await self.delegate?.scoreDidChange(to: self.score)
+            }
             self.updateDifficultyIfNeeded()
         }
     }
@@ -52,11 +60,33 @@ class GameStateManager {
     /// Current difficulty settings
     private(set) var currentDifficulty: GameDifficulty = .getDifficulty(for: 0)
 
+    /// Current game mode
+    private(set) var currentGameMode: GameMode = .classic {
+        didSet {
+            Task { @MainActor in
+                await self.delegate?.gameModeDidChange(to: self.currentGameMode)
+            }
+            self.updateDifficultyForGameMode()
+        }
+    }
+
+    /// Game mode statistics
+    private var gameModeStats: [GameMode: GameModeStats] = [:]
+
+    /// Current game objectives (for challenge/puzzle modes)
+    private(set) var currentObjectives: [GameObjective] = []
+
+    /// Win condition checker
+    private var winConditionChecker: WinConditionChecker?
+
     /// Game start time for survival tracking
     private var gameStartTime: Date?
 
     /// Total survival time in current game
     private(set) var survivalTime: TimeInterval = 0
+
+    /// Current score multiplier (for power-ups)
+    private(set) var scoreMultiplier: Int = 1
 
     /// Statistics tracking with security
     private var gamesPlayed: Int = 0
@@ -101,6 +131,7 @@ class GameStateManager {
         self.currentDifficulty = GameDifficulty.getDifficulty(for: 0)
         self.gameStartTime = Date()
         self.survivalTime = 0
+        self.scoreMultiplier = 1 // Reset score multiplier
         self.gamesPlayed += 1
         self.updateDataHash()
         self.saveStatisticsSecurely()
@@ -131,7 +162,9 @@ class GameStateManager {
 
         self.updateDataHash()
         self.saveStatisticsSecurely()
-        self.delegate?.gameDidEnd(withScore: self.score, survivalTime: self.survivalTime)
+        Task { @MainActor in
+            await self.delegate?.gameDidEnd(withScore: self.score, survivalTime: self.survivalTime)
+        }
     }
 
     /// Pauses the game
@@ -169,7 +202,9 @@ class GameStateManager {
             return
         }
 
-        self.score += points
+        // Apply score multiplier
+        let multipliedPoints = points * self.scoreMultiplier
+        self.score += multipliedPoints
 
         // Verify score integrity
         if !self.verifyScoreIntegrity() {
@@ -183,6 +218,31 @@ class GameStateManager {
         self.score
     }
 
+    /// Sets the score multiplier for power-ups
+    /// - Parameter multiplier: The multiplier value (1 = normal, 2 = double score, etc.)
+    func setScoreMultiplier(_ multiplier: Int) {
+        guard multiplier >= 1 && multiplier <= 10 else { return } // Reasonable bounds
+        self.scoreMultiplier = multiplier
+    }
+
+    /// Resets the score multiplier to default (1x)
+    func resetScoreMultiplier() {
+        self.scoreMultiplier = 1
+    }
+
+    /// Gets the current score multiplier
+    /// - Returns: Current multiplier value
+    func getScoreMultiplier() -> Int {
+        self.scoreMultiplier
+    }
+
+    /// Adds bonus time to the survival time (for time bonus power-ups)
+    /// - Parameter seconds: Number of seconds to add
+    func addBonusTime(_ seconds: TimeInterval) {
+        guard self.currentState == .playing, seconds > 0 else { return }
+        self.survivalTime += seconds
+    }
+
     // MARK: - Difficulty Management
 
     /// Updates difficulty based on current score
@@ -193,7 +253,9 @@ class GameStateManager {
         if newLevel > self.currentDifficultyLevel {
             self.currentDifficultyLevel = newLevel
             self.currentDifficulty = newDifficulty
-            self.delegate?.difficultyDidIncrease(to: newLevel)
+            Task { @MainActor in
+                await self.delegate?.difficultyDidIncrease(to: newLevel)
+            }
         }
     }
 
@@ -247,13 +309,11 @@ class GameStateManager {
 
     /// Resets all statistics (async version)
     func resetStatisticsAsync() async {
-        await Task.detached {
-            self.gamesPlayed = 0
-            self.totalScore = 0
-            self.bestSurvivalTime = 0
-            UserDefaults.standard.removeObject(forKey: "gameStatistics")
-            UserDefaults.standard.synchronize()
-        }.value
+        self.gamesPlayed = 0
+        self.totalScore = 0
+        self.bestSurvivalTime = 0
+        UserDefaults.standard.removeObject(forKey: "gameStatistics")
+        UserDefaults.standard.synchronize()
     }
 
     // MARK: - Secure Persistence
@@ -337,6 +397,127 @@ class GameStateManager {
     func isGamePaused() -> Bool {
         self.currentState == .paused
     }
+
+    // MARK: - Game Mode Management
+
+    /// Sets the current game mode
+    /// - Parameter mode: The game mode to set
+    func setGameMode(_ mode: GameMode) {
+        self.currentGameMode = mode
+        self.setupWinConditionChecker()
+        self.setupObjectivesForGameMode()
+    }
+
+    /// Gets the current game mode
+    /// - Returns: The current game mode
+    func getCurrentGameMode() -> GameMode {
+        self.currentGameMode
+    }
+
+    /// Updates difficulty based on game mode progression
+    private func updateDifficultyForGameMode() {
+        switch self.currentGameMode.difficultyProgression {
+        case .scoreBased:
+            // Standard score-based progression (already implemented)
+            break
+        case let .timeBased(accelerateAfter):
+            if let startTime = self.gameStartTime,
+               Date().timeIntervalSince(startTime) > accelerateAfter
+            {
+                // Accelerate difficulty after time threshold
+                let acceleratedLevel = self.currentDifficultyLevel + 1
+                self.currentDifficulty = GameDifficulty.getDifficulty(for: acceleratedLevel * 25)
+            }
+        case .waveBased:
+            // Wave-based progression handled by win condition checker
+            break
+        case let .static(level):
+            self.currentDifficulty = GameDifficulty.getDifficulty(for: level * 25)
+        case .objectiveBased:
+            // Objective-based progression
+            break
+        case .custom:
+            // Custom progression logic
+            break
+        }
+    }
+
+    /// Sets up the win condition checker for the current game mode
+    private func setupWinConditionChecker() {
+        self.winConditionChecker = WinConditionChecker(winCondition: self.currentGameMode.winCondition)
+    }
+
+    /// Sets up objectives for the current game mode
+    private func setupObjectivesForGameMode() {
+        switch self.currentGameMode {
+        case .puzzle:
+            self.currentObjectives = [
+                GameObjective(description: "Solve 5 obstacle patterns", type: .patternsSolved(count: 5), progress: 0),
+                GameObjective(description: "Complete within time limit", type: .timeLimit(seconds: 120), progress: 0),
+            ]
+        case .challenge:
+            self.currentObjectives = [
+                GameObjective(description: "Avoid obstacles for 60 seconds", type: .surviveTime(seconds: 60), progress: 0),
+                GameObjective(description: "Collect 10 power-ups", type: .powerUpsCollected(count: 10), progress: 0),
+            ]
+        case .survival:
+            self.currentObjectives = [
+                GameObjective(description: "Complete 10 waves", type: .wavesCompleted(count: 10), progress: 0),
+            ]
+        default:
+            self.currentObjectives = []
+        }
+    }
+
+    /// Checks if win condition is met and handles game completion
+    func checkWinCondition() -> Bool {
+        guard let checker = self.winConditionChecker else { return false }
+
+        if checker.isMet(with: self) {
+            self.completeGame(success: true)
+            return true
+        }
+        return false
+    }
+
+    /// Completes the game with success/failure status
+    /// - Parameter success: Whether the game was completed successfully
+    private func completeGame(success: Bool) {
+        let result = GameResult(
+            finalScore: self.score,
+            survivalTime: self.survivalTime,
+            completed: success,
+            gameMode: self.currentGameMode,
+            difficultyLevel: self.currentDifficultyLevel,
+            achievements: [] // Would be populated by achievement system
+        )
+
+        // Update statistics
+        self.updateGameModeStats(with: result)
+
+        // Notify delegate
+        Task { @MainActor in
+            await self.delegate?.winConditionMet(result: result)
+        }
+
+        // End game
+        self.endGame()
+    }
+
+    /// Updates game mode statistics
+    /// - Parameter result: The game result to record
+    private func updateGameModeStats(with result: GameResult) {
+        var stats = self.gameModeStats[result.gameMode] ?? GameModeStats()
+        stats.update(with: result)
+        self.gameModeStats[result.gameMode] = stats
+    }
+
+    /// Gets statistics for a specific game mode
+    /// - Parameter mode: The game mode to get stats for
+    /// - Returns: Statistics for the game mode
+    func getGameModeStats(for mode: GameMode) -> GameModeStats {
+        self.gameModeStats[mode] ?? GameModeStats()
+    }
 }
 
 // MARK: - Supporting Types
@@ -354,5 +535,93 @@ private struct GameStatistics: Codable {
         let dataString = "\(gamesPlayed)\(totalScore)\(bestSurvivalTime)"
         let currentHash = SecurityFramework.Crypto.sha256(dataString)
         return storedHash == currentHash
+    }
+}
+
+/// Win condition checker for different game modes
+class WinConditionChecker {
+    let winCondition: GameWinCondition
+
+    init(winCondition: GameWinCondition) {
+        self.winCondition = winCondition
+    }
+
+    @MainActor
+    func isMet(with gameState: GameStateManager) -> Bool {
+        switch self.winCondition {
+        case let .survivalTime(minimum):
+            if let minimum {
+                return gameState.survivalTime >= minimum
+            }
+            return false // Endless mode never "wins"
+        case let .wavesCompleted(count):
+            // Would need wave tracking - for now return false
+            return false
+        case let .patternsSolved(count):
+            // Would need pattern tracking - for now return false
+            return false
+        case .objectivesCompleted:
+            return gameState.currentObjectives.allSatisfy(\.isCompleted)
+        case let .scoreReached(target):
+            return gameState.score >= target
+        case .custom:
+            // Custom condition logic
+            return false
+        }
+    }
+}
+
+/// Game objective for challenge and puzzle modes
+struct GameObjective {
+    let description: String
+    let type: ObjectiveType
+    var progress: Double
+
+    var isCompleted: Bool {
+        switch self.type {
+        case let .surviveTime(seconds):
+            return self.progress >= seconds
+        case let .powerUpsCollected(count):
+            return self.progress >= Double(count)
+        case let .patternsSolved(count):
+            return self.progress >= Double(count)
+        case let .wavesCompleted(count):
+            return self.progress >= Double(count)
+        case let .timeLimit(seconds):
+            return self.progress <= seconds
+        case let .scoreReached(target):
+            return self.progress >= Double(target)
+        }
+    }
+
+    mutating func updateProgress(_ newProgress: Double) {
+        self.progress = newProgress
+    }
+}
+
+/// Types of game objectives
+enum ObjectiveType {
+    case surviveTime(seconds: Double)
+    case powerUpsCollected(count: Int)
+    case patternsSolved(count: Int)
+    case wavesCompleted(count: Int)
+    case timeLimit(seconds: Double)
+    case scoreReached(target: Int)
+
+    var targetValue: Double {
+        switch self {
+        case let .surviveTime(seconds):
+            return seconds
+        case let .powerUpsCollected(count):
+            return Double(count)
+        case let .patternsSolved(count):
+            return Double(count)
+        case let .wavesCompleted(count):
+            return Double(count)
+        case let .timeLimit(seconds):
+            return seconds
+        case let .scoreReached(target):
+            return Double(target)
+        }
     }
 }

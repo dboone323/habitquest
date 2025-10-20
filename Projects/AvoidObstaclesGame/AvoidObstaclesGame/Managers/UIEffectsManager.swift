@@ -9,6 +9,7 @@
 import SpriteKit
 
 /// Manages UI effects and animations
+@MainActor
 class UIEffectsManager {
     // MARK: - Properties
 

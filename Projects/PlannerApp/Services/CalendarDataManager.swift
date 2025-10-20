@@ -27,7 +27,7 @@ final class CalendarDataManager: CalendarDataManaging {
     /// Loads all calendar events from CloudKitManager.
     /// - Returns: Array of `CalendarEvent` objects.
     func load() -> [CalendarEvent] {
-        return cloudKitManager.loadCalendarEvents()
+        cloudKitManager.loadCalendarEvents()
     }
 
     /// Saves the provided calendar events using CloudKitManager.
@@ -58,7 +58,7 @@ final class CalendarDataManager: CalendarDataManaging {
     /// - Parameter id: The UUID of the calendar event to find.
     /// - Returns: The `CalendarEvent` if found, otherwise nil.
     func find(by id: UUID) -> CalendarEvent? {
-        return cloudKitManager.findCalendarEvent(by: id)
+        cloudKitManager.findCalendarEvent(by: id)
     }
 
     /// Gets calendar events for a specific date.
@@ -77,7 +77,7 @@ final class CalendarDataManager: CalendarDataManaging {
     ///   - endDate: The end date of the range.
     /// - Returns: Array of events within the date range.
     func events(between startDate: Date, and endDate: Date) -> [CalendarEvent] {
-        return cloudKitManager.calendarEvents.filter { event in
+        cloudKitManager.calendarEvents.filter { event in
             event.date >= startDate && event.date <= endDate
         }
     }
@@ -85,7 +85,7 @@ final class CalendarDataManager: CalendarDataManaging {
     /// Gets calendar events sorted by date.
     /// - Returns: Array of events sorted by date (soonest first).
     func eventsSortedByDate() -> [CalendarEvent] {
-        return cloudKitManager.calendarEvents.sorted { $0.date < $1.date }
+        cloudKitManager.calendarEvents.sorted { $0.date < $1.date }
     }
 
     /// Gets upcoming calendar events within a specified number of days.

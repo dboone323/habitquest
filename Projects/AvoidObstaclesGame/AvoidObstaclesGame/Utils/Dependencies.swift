@@ -6,7 +6,8 @@
 import Foundation
 
 /// Dependency injection container
-public struct Dependencies {
+@MainActor
+public struct Dependencies: Sendable {
     public let performanceManager: PerformanceManager
     public let logger: Logger
 
@@ -23,13 +24,17 @@ public struct Dependencies {
 }
 
 /// Logger for debugging and analytics
+@MainActor
 public final class Logger {
+    @MainActor
     public static let shared = Logger()
 
+    @MainActor
     private static let defaultOutputHandler: @Sendable (String) -> Void = { message in
         print(message)
     }
 
+    @MainActor
     private static let isoFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]

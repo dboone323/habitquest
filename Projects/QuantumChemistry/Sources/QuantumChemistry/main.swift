@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import QuantumChemistryKit
 import OllamaIntegrationFramework
+import QuantumChemistryKit
 
 @main
 struct QuantumChemistryDemo {
@@ -39,7 +39,7 @@ struct QuantumChemistryDemo {
             ("Water Molecule", CommonMolecules.water),
             ("Methane Molecule", CommonMolecules.methane),
             ("Benzene Molecule", CommonMolecules.benzene),
-            ("Caffeine Molecule", CommonMolecules.caffeine)
+            ("Caffeine Molecule", CommonMolecules.caffeine),
         ]
 
         let methods: [QuantumChemistryEngine.QuantumMethod] = [
@@ -47,7 +47,7 @@ struct QuantumChemistryDemo {
             .densityFunctionalTheory,
             .coupledCluster,
             .quantumMonteCarlo,
-            .variationalQuantumEigensolver
+            .variationalQuantumEigensolver,
         ]
 
         for (name, molecule) in molecules {
@@ -244,9 +244,9 @@ struct QuantumChemistryDemo {
     static func generateScalingMolecules() -> [(Int, Molecule)] {
         var molecules: [(Int, Molecule)] = []
 
-        for size in 2...8 {
+        for size in 2 ... 8 {
             var atoms: [Atom] = []
-            for i in 0..<size {
+            for i in 0 ..< size {
                 let position = SIMD3<Double>(Double(i) * 1.5, 0, 0)
                 let atom = Atom(symbol: "H", atomicNumber: 1, position: position, mass: 1.00784)
                 atoms.append(atom)
@@ -281,7 +281,7 @@ extension SIMD3<Double> {
 }
 
 extension String {
-    static func *(lhs: String, rhs: Int) -> String {
+    static func * (lhs: String, rhs: Int) -> String {
         String(repeating: lhs, count: rhs)
     }
 }

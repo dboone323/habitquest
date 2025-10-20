@@ -15,6 +15,7 @@ enum DisplayOverlayType {
 }
 
 /// Manages all UI display overlays including statistics and performance monitoring
+@MainActor
 class UIDisplayManager {
     // MARK: - Properties
 
@@ -172,7 +173,9 @@ class UIDisplayManager {
     /// Starts periodic performance updates
     private func startPerformanceUpdates() {
         self.performanceUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
-            self?.updatePerformanceDisplay()
+            Task { [weak self] in
+                await self?.updatePerformanceDisplay()
+            }
         }
     }
 
@@ -183,6 +186,7 @@ class UIDisplayManager {
     }
 
     /// Updates the performance display with current stats
+    @MainActor
     private func updatePerformanceDisplay() {
         // TODO: Integrate with PerformanceManager when available
         // For now, show placeholder values

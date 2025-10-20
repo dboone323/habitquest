@@ -51,7 +51,7 @@ public final class ServiceLocator {
         // Try to create from factory
         if let factory = serviceFactories[key] {
             let service = factory() as? T
-            if let service = service {
+            if let service {
                 services[key] = service
                 return service
             }

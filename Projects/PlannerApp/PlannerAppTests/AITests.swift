@@ -5,9 +5,9 @@
 //  Created by Daniel Stevens on 2025
 //
 
-import XCTest
 import Foundation
 @testable import PlannerApp
+import XCTest
 
 @available(iOS 13.0, macOS 10.15, *)
 final class AITests: XCTestCase {
@@ -95,16 +95,16 @@ final class AITests: XCTestCase {
             PlannerTask(title: "High priority task", priority: .high),
             PlannerTask(title: "High priority task 2", priority: .high),
             PlannerTask(title: "High priority task 3", priority: .high),
-            PlannerTask(title: "Medium priority task", priority: .medium)
+            PlannerTask(title: "Medium priority task", priority: .medium),
         ]
 
         let activities = [
             ActivityRecord(id: "1", type: .taskCompleted, timestamp: Date()),
-            ActivityRecord(id: "2", type: .taskCompleted, timestamp: Date().addingTimeInterval(-3600))
+            ActivityRecord(id: "2", type: .taskCompleted, timestamp: Date().addingTimeInterval(-3600)),
         ]
 
         let goals = [
-            Goal(title: "Test Goal", description: "A test goal", targetDate: Date().addingTimeInterval(86400))
+            Goal(title: "Test Goal", description: "A test goal", targetDate: Date().addingTimeInterval(86400)),
         ]
 
         let suggestions = aiService.generateTaskSuggestions(
@@ -154,16 +154,16 @@ final class AITests: XCTestCase {
 
         let tasks = [
             PlannerTask(title: "Completed task", isCompleted: true),
-            PlannerTask(title: "Incomplete task", isCompleted: false)
+            PlannerTask(title: "Incomplete task", isCompleted: false),
         ]
 
         let activities = [
             ActivityRecord(id: "1", type: .taskCompleted, timestamp: Date()),
-            ActivityRecord(id: "2", type: .taskCreated, timestamp: Date().addingTimeInterval(-3600))
+            ActivityRecord(id: "2", type: .taskCreated, timestamp: Date().addingTimeInterval(-3600)),
         ]
 
         let goals = [
-            Goal(title: "Test Goal", description: "A test goal", targetDate: Date().addingTimeInterval(86400))
+            Goal(title: "Test Goal", description: "A test goal", targetDate: Date().addingTimeInterval(86400)),
         ]
 
         let insights = aiService.generateProductivityInsights(
@@ -242,14 +242,14 @@ final class AITests: XCTestCase {
             PlannerTask(title: "High priority task 1", priority: .high),
             PlannerTask(title: "High priority task 2", priority: .high),
             PlannerTask(title: "High priority task 3", priority: .high),
-            PlannerTask(title: "Medium priority task", priority: .medium)
+            PlannerTask(title: "Medium priority task", priority: .medium),
         ]
         let testGoals = [
-            Goal(title: "Test goal", description: "Test description", targetDate: Date().addingTimeInterval(86400))
+            Goal(title: "Test goal", description: "Test description", targetDate: Date().addingTimeInterval(86400)),
         ]
         let mockActivities = [
             ActivityRecord(id: "1", type: .taskCreated, timestamp: Date()),
-            ActivityRecord(id: "2", type: .taskCompleted, timestamp: Date().addingTimeInterval(-3600))
+            ActivityRecord(id: "2", type: .taskCompleted, timestamp: Date().addingTimeInterval(-3600)),
         ]
 
         let aiService = AITaskPrioritizationService.shared
@@ -316,7 +316,7 @@ final class AITests: XCTestCase {
         let tasks = [
             PlannerTask(title: "High priority task 1", priority: .high),
             PlannerTask(title: "High priority task 2", priority: .high),
-            PlannerTask(title: "Completed task", isCompleted: true)
+            PlannerTask(title: "Completed task", isCompleted: true),
         ]
         tasks.forEach { TaskDataManager.shared.add($0) }
 
@@ -352,7 +352,7 @@ final class AITests: XCTestCase {
         let tasks = [
             PlannerTask(title: "High priority task 1", priority: .high),
             PlannerTask(title: "High priority task 2", priority: .high),
-            PlannerTask(title: "High priority task 3", priority: .high)
+            PlannerTask(title: "High priority task 3", priority: .high),
         ]
         tasks.forEach { TaskDataManager.shared.add($0) }
 
@@ -383,17 +383,17 @@ final class AITests: XCTestCase {
         let tasks = [
             PlannerTask(title: "High priority task", priority: .high),
             PlannerTask(title: "Medium priority task", priority: .medium),
-            PlannerTask(title: "Low priority task", priority: .low)
+            PlannerTask(title: "Low priority task", priority: .low),
         ]
 
         let goals = [
             Goal(title: "Urgent goal", description: "Needs attention", targetDate: Date().addingTimeInterval(86400)),
-            Goal(title: "Long term goal", description: "Future focus", targetDate: Date().addingTimeInterval(604800))
+            Goal(title: "Long term goal", description: "Future focus", targetDate: Date().addingTimeInterval(604_800)),
         ]
 
         let events = [
             CalendarEvent(title: "Meeting today", date: Date()),
-            CalendarEvent(title: "Future event", date: Date().addingTimeInterval(86400))
+            CalendarEvent(title: "Future event", date: Date().addingTimeInterval(86400)),
         ]
 
         // Add all test data
@@ -427,9 +427,9 @@ final class AITests: XCTestCase {
         // Setup
         aiService = AITaskPrioritizationService.shared
 
-        let tasks = (1...100).map { PlannerTask(title: "Task \($0)", priority: .medium) }
-        let activities = (1...50).map { ActivityRecord(id: "\($0)", type: .taskCompleted, timestamp: Date()) }
-        let goals = (1...20).map { Goal(title: "Goal \($0)", description: "Description \($0)", targetDate: Date().addingTimeInterval(86400)) }
+        let tasks = (1 ... 100).map { PlannerTask(title: "Task \($0)", priority: .medium) }
+        let activities = (1 ... 50).map { ActivityRecord(id: "\($0)", type: .taskCompleted, timestamp: Date()) }
+        let goals = (1 ... 20).map { Goal(title: "Goal \($0)", description: "Description \($0)", targetDate: Date().addingTimeInterval(86400)) }
 
         measure {
             _ = aiService.generateTaskSuggestions(
@@ -448,10 +448,10 @@ final class AITests: XCTestCase {
         // Setup
         dashboardViewModel = DashboardViewModel()
 
-        let tasks = (1...50).map { PlannerTask(title: "Task \($0)", priority: .medium) }
+        let tasks = (1 ... 50).map { PlannerTask(title: "Task \($0)", priority: .medium) }
         tasks.forEach { TaskDataManager.shared.add($0) }
 
-        let goals = (1...10).map { Goal(title: "Goal \($0)", description: "Description \($0)", targetDate: Date().addingTimeInterval(86400)) }
+        let goals = (1 ... 10).map { Goal(title: "Goal \($0)", description: "Description \($0)", targetDate: Date().addingTimeInterval(86400)) }
         goals.forEach { GoalDataManager.shared.add($0) }
 
         let startTime = Date()

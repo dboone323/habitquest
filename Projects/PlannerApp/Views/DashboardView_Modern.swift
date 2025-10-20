@@ -54,9 +54,9 @@ public struct DashboardView: View {
         NavigationStack {
             ScrollView {
                 #if os(iOS)
-                PullToRefresh(coordinateSpaceName: "pullToRefresh") {
-                    await self.refreshDataWithDelay()
-                }
+                    PullToRefresh(coordinateSpaceName: "pullToRefresh") {
+                        await self.refreshDataWithDelay()
+                    }
                 #endif
 
                 LazyVStack(spacing: 20) {
@@ -329,8 +329,8 @@ public struct DashboardView: View {
     private func handleQuickAction(_ action: QuickAction) {
         // Add haptic feedback for better UX
         #if os(iOS)
-        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedback.impactOccurred()
+            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+            impactFeedback.impactOccurred()
         #endif
 
         switch action {

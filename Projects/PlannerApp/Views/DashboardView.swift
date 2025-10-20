@@ -10,22 +10,24 @@ public struct DashboardView: View {
 
     // Avoid @AppStorage during testing to prevent UserDefaults access crashes
     #if DEBUG
-    private var userName: String {
-        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? "" :
-        UserDefaults.standard.string(forKey: AppSettingKeys.userName) ?? ""
-    }
-    private var use24HourTime: Bool {
-        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? false :
-        UserDefaults.standard.bool(forKey: AppSettingKeys.use24HourTime)
-    }
-    private var dashboardItemLimit: Int {
-        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? 3 :
-        UserDefaults.standard.integer(forKey: AppSettingKeys.dashboardItemLimit)
-    }
+        private var userName: String {
+            ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? "" :
+                UserDefaults.standard.string(forKey: AppSettingKeys.userName) ?? ""
+        }
+
+        private var use24HourTime: Bool {
+            ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? false :
+                UserDefaults.standard.bool(forKey: AppSettingKeys.use24HourTime)
+        }
+
+        private var dashboardItemLimit: Int {
+            ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil ? 3 :
+                UserDefaults.standard.integer(forKey: AppSettingKeys.dashboardItemLimit)
+        }
     #else
-    @AppStorage(AppSettingKeys.userName) private var userName: String = ""
-    @AppStorage(AppSettingKeys.use24HourTime) private var use24HourTime: Bool = false
-    @AppStorage(AppSettingKeys.dashboardItemLimit) private var dashboardItemLimit: Int = 3
+        @AppStorage(AppSettingKeys.userName) private var userName: String = ""
+        @AppStorage(AppSettingKeys.use24HourTime) private var use24HourTime: Bool = false
+        @AppStorage(AppSettingKeys.dashboardItemLimit) private var dashboardItemLimit: Int = 3
     #endif
 
     // Loading and refresh state
@@ -247,13 +249,13 @@ public struct DashboardView: View {
                                     .padding(.vertical, 4)
                                     .background(
                                         suggestion.urgency == "High" ? Color.red.opacity(0.2) :
-                                        suggestion.urgency == "Medium" ? Color.orange.opacity(0.2) :
-                                        Color.green.opacity(0.2)
+                                            suggestion.urgency == "Medium" ? Color.orange.opacity(0.2) :
+                                            Color.green.opacity(0.2)
                                     )
                                     .foregroundColor(
                                         suggestion.urgency == "High" ? .red :
-                                        suggestion.urgency == "Medium" ? .orange :
-                                        .green
+                                            suggestion.urgency == "Medium" ? .orange :
+                                            .green
                                     )
                                     .cornerRadius(8)
                             }
@@ -454,8 +456,8 @@ public struct DashboardView: View {
     private func handleQuickAction(_ action: QuickAction) {
         // Add haptic feedback for better UX
         #if os(iOS)
-        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedback.impactOccurred()
+            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+            impactFeedback.impactOccurred()
         #endif
 
         switch action {

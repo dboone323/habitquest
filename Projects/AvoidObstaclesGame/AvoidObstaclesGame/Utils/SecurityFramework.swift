@@ -79,7 +79,7 @@ public enum SecurityFramework {
 
             // Check scheme
             guard let scheme = url.scheme?.lowercased(),
-                ["http", "https"].contains(scheme)
+                  ["http", "https"].contains(scheme)
             else {
                 return .failure(.invalidURLScheme)
             }
@@ -146,7 +146,7 @@ public enum SecurityFramework {
             let status = SecItemCopyMatching(query as CFDictionary, &result)
 
             guard status == errSecSuccess,
-                let data = result as? Data
+                  let data = result as? Data
             else {
                 throw SecurityError.keychainError(status: status)
             }
@@ -220,7 +220,8 @@ public enum SecurityFramework {
     /// Security monitoring and logging
     public enum Monitoring {
         private static let logger = SecurityLogger(
-            subsystem: "com.quantum.security", category: "SecurityFramework")
+            subsystem: "com.quantum.security", category: "SecurityFramework"
+        )
 
         /// Logs security events
         public static func logSecurityEvent(_ event: SecurityEvent, details: [String: Any]? = nil) {
@@ -249,7 +250,8 @@ public enum SecurityFramework {
                     "severity": incident.severity.rawValue,
                     "description": incident.description,
                     "timestamp": incident.timestamp.ISO8601Format(),
-                ])
+                ]
+            )
         }
     }
 
@@ -258,8 +260,7 @@ public enum SecurityFramework {
     /// Vulnerability scanning utilities
     public enum VulnerabilityScanner {
         /// Scans code for common vulnerabilities
-        public static func scanForVulnerabilities(code: String, language: String) -> [Vulnerability]
-        {
+        public static func scanForVulnerabilities(code: String, language: String) -> [Vulnerability] {
             var vulnerabilities: [Vulnerability] = []
 
             // SQL Injection patterns
@@ -291,7 +292,7 @@ public enum SecurityFramework {
                                 description: "Potential XSS vulnerability detected",
                                 line: findLineNumber(code: code, pattern: pattern),
                                 recommendation:
-                                    "Use safe DOM manipulation methods or sanitize input"
+                                "Use safe DOM manipulation methods or sanitize input"
                             ))
                     }
                 }
@@ -302,7 +303,7 @@ public enum SecurityFramework {
             for pattern in secretPatterns {
                 if code.lowercased().contains(pattern) && code.contains("\"")
                     && !code.contains("//")
-                {  // Ignore comments
+                { // Ignore comments
                     vulnerabilities.append(
                         Vulnerability(
                             type: .hardcodedSecret,
@@ -310,7 +311,7 @@ public enum SecurityFramework {
                             description: "Potential hardcoded secret detected",
                             line: findLineNumber(code: code, pattern: pattern),
                             recommendation:
-                                "Move secrets to environment variables or secure storage"
+                            "Move secrets to environment variables or secure storage"
                         ))
                 }
             }
@@ -360,7 +361,7 @@ public enum ValidationResult {
     public var error: ValidationError? {
         switch self {
         case .success: return nil
-        case .failure(let error): return error
+        case let .failure(error): return error
         }
     }
 }
@@ -381,15 +382,15 @@ public enum ValidationError: Error, LocalizedError {
         switch self {
         case .emptyInput:
             return "Input cannot be empty"
-        case .inputTooLong(let maxLength):
+        case let .inputTooLong(maxLength):
             return "Input exceeds maximum length of \(maxLength) characters"
         case .maliciousContent:
             return "Input contains potentially malicious content"
         case .invalidCharacters:
             return "Input contains invalid characters"
-        case .valueTooLow(let minimum):
+        case let .valueTooLow(minimum):
             return "Value is below minimum allowed value of \(minimum)"
-        case .valueTooHigh(let maximum):
+        case let .valueTooHigh(maximum):
             return "Value is above maximum allowed value of \(maximum)"
         case .invalidURL:
             return "Invalid URL format"
@@ -410,7 +411,7 @@ public enum SecurityError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .keychainError(let status):
+        case let .keychainError(status):
             return "Keychain operation failed with status: \(status)"
         case .randomGenerationFailed:
             return "Failed to generate secure random data"
@@ -432,15 +433,15 @@ public enum SecurityEvent {
 
     public var description: String {
         switch self {
-        case .inputValidationFailed(let type):
+        case let .inputValidationFailed(type):
             return "Input validation failed for type: \(type)"
-        case .keychainOperationFailed(let operation):
+        case let .keychainOperationFailed(operation):
             return "Keychain operation failed: \(operation)"
         case .encryptionOperationFailed:
             return "Encryption operation failed"
-        case .vulnerabilityDetected(let type):
+        case let .vulnerabilityDetected(type):
             return "Vulnerability detected: \(type.rawValue)"
-        case .incidentDetected(let type):
+        case let .incidentDetected(type):
             return "Security incident detected: \(type)"
         }
     }
@@ -458,7 +459,7 @@ public enum SecurityEvent {
 }
 
 /// Log levels
-public enum LogLevel: String {
+public enum LogLevel: String, Sendable {
     case debug, info, warning, error, critical
 }
 

@@ -22,17 +22,17 @@ public struct ThemeSettingsView: View {
             .navigationTitle("Appearance")
             .toolbar {
                 #if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
-                        self.dismiss()
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
+                            self.dismiss()
+                        }
                     }
-                }
                 #else
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
-                        self.dismiss()
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
+                            self.dismiss()
+                        }
                     }
-                }
                 #endif
             }
             .onAppear {
@@ -122,7 +122,7 @@ public struct ThemeSettingsView: View {
                 .frame(height: 60)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .strokeBorder(Color.gray.opacity(0.2), lineWidth: 1),
+                        .strokeBorder(Color.gray.opacity(0.2), lineWidth: 1)
                 )
 
             Text(name)

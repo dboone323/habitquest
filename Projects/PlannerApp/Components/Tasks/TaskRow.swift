@@ -1,7 +1,7 @@
 import SwiftUI
 
 #if os(iOS)
-import UIKit
+    import UIKit
 #endif
 
 // Type alias to resolve conflict between Swift's built-in Task and our custom Task model
@@ -58,12 +58,12 @@ public struct TaskRow: View {
         // Find the index of this task in the main array
         if let index = tasks.firstIndex(where: { $0.id == taskItem.id }) {
             #if os(iOS)
-            // Add haptic feedback for task completion
-            if self.tasks[index].isCompleted {
-                HapticManager.lightImpact()
-            } else {
-                HapticManager.notificationSuccess()
-            }
+                // Add haptic feedback for task completion
+                if self.tasks[index].isCompleted {
+                    HapticManager.lightImpact()
+                } else {
+                    HapticManager.notificationSuccess()
+                }
             #endif
 
             // Toggle the boolean state

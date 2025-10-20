@@ -64,39 +64,45 @@ enum CSVParser {
                 normalizedHeader.contains("title") ||
                 normalizedHeader.contains("merchant") ||
                 normalizedHeader.contains("payee") ||
-                normalizedHeader == "name" {
+                normalizedHeader == "name"
+            {
                 mapping.titleIndex = index
             }
 
             // Amount column mapping
             else if normalizedHeader.contains("amount") ||
                 normalizedHeader.contains("value") ||
-                normalizedHeader == "sum" {
+                normalizedHeader == "sum"
+            {
                 mapping.amountIndex = index
             }
 
             // Type column mapping
             else if normalizedHeader.contains("type") ||
-                normalizedHeader.contains("transaction") {
+                normalizedHeader.contains("transaction")
+            {
                 mapping.typeIndex = index
             }
 
             // Category column mapping
             else if normalizedHeader.contains("category") ||
-                normalizedHeader.contains("tag") {
+                normalizedHeader.contains("tag")
+            {
                 mapping.categoryIndex = index
             }
 
             // Account column mapping
             else if normalizedHeader.contains("account") ||
-                normalizedHeader.contains("bank") {
+                normalizedHeader.contains("bank")
+            {
                 mapping.accountIndex = index
             }
 
             // Notes column mapping
             else if normalizedHeader.contains("note") ||
                 normalizedHeader.contains("memo") ||
-                normalizedHeader.contains("comment") {
+                normalizedHeader.contains("comment")
+            {
                 mapping.notesIndex = index
             }
         }

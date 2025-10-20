@@ -114,7 +114,9 @@ class PerformanceOverlayManager {
     /// Starts periodic performance updates
     private func startPerformanceUpdates() {
         self.performanceUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
-            self?.updatePerformanceDisplay()
+            Task { @MainActor in
+                self?.updatePerformanceDisplay()
+            }
         }
     }
 
@@ -125,6 +127,7 @@ class PerformanceOverlayManager {
     }
 
     /// Updates the performance display with current stats
+    @MainActor
     private func updatePerformanceDisplay() {
         let stats = PerformanceManager.shared.getPerformanceStats()
 

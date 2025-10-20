@@ -70,15 +70,16 @@ public struct ImportExportSection: View {
 
     private func shareExportedFile(_ url: URL) {
         #if os(iOS)
-        let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first,
-           let rootVC = window.rootViewController {
-            rootVC.present(activityVC, animated: true)
-        }
+            let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first,
+               let rootVC = window.rootViewController
+            {
+                rootVC.present(activityVC, animated: true)
+            }
         #else
-        // On macOS, you might want to show a save panel or open the file
-        NSWorkspace.shared.open(url)
+            // On macOS, you might want to show a save panel or open the file
+            NSWorkspace.shared.open(url)
         #endif
     }
 }

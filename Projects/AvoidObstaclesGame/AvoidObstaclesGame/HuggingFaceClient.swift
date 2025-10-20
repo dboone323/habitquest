@@ -18,6 +18,7 @@ public enum HuggingFaceError: LocalizedError {
     case modelNotSupported(String)
     case quotaExceeded
     case serverOverloaded
+    case invalidResponseFormat
 
     public var errorDescription: String? {
         switch self {
@@ -41,6 +42,8 @@ public enum HuggingFaceError: LocalizedError {
             "API quota exceeded. Please upgrade your plan or try again later."
         case .serverOverloaded:
             "Servers are overloaded. Please try again in a few minutes."
+        case .invalidResponseFormat:
+            "Invalid response format from Hugging Face API"
         }
     }
 
@@ -64,12 +67,14 @@ public enum HuggingFaceError: LocalizedError {
 
 import Foundation
 import OSLog
+
 // import SharedKit // Will be available when integrated into package
 
 /// Enhanced Hugging Face API Client with Quantum Performance
 /// Provides access to Hugging Face's free inference API with advanced features
 /// Enhanced by AI System v2.1 on 9/12/25
 
+@MainActor
 public class HuggingFaceClient {
     public static let shared = HuggingFaceClient()
 
@@ -116,7 +121,7 @@ public class HuggingFaceClient {
         }
 
         // Use retry manager with circuit breaker integration
-        let result = try await retryManager.retry(operation: "generate") {
+        let result = try await retryManager.retry(operation: "generate") { @Sendable in
             try await self.performGenerateRequest(
                 prompt: prompt,
                 model: model,
@@ -136,9 +141,8 @@ public class HuggingFaceClient {
         maxTokens: Int,
         temperature: Double
     ) async throws -> String {
-        let endpoint = "/models/\(model)"
-
-        guard let url = URL(string: baseURL + endpoint) else {
+        let urlString = "\(baseURL)/models/\(model)"
+        guard let url = URL(string: urlString) else {
             throw HuggingFaceError.invalidURL
         }
 
@@ -146,48 +150,52 @@ public class HuggingFaceClient {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        // Add authorization header if token is available
-        if let token = getToken() {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
-
-        let payload: [String: Any] = [
+        let body: [String: Any] = [
             "inputs": prompt,
             "parameters": [
-                "max_length": min(maxTokens, 100), // Free tier limit
+                "max_new_tokens": maxTokens,
                 "temperature": temperature,
-                "do_sample": true,
                 "return_full_text": false,
-            ],
-            "options": [
-                "wait_for_model": true,
-                "use_cache": true,
             ],
         ]
 
-        request.httpBody = try JSONSerialization.data(withJSONObject: payload)
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
         let (data, response) = try await session.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse else {
-            throw HuggingFaceError.networkError("Invalid response type")
+            throw HuggingFaceError.networkError("Invalid response")
         }
 
         switch httpResponse.statusCode {
         case 200:
             return try parseSuccessResponse(data)
-        case 404:
-            throw HuggingFaceError.apiError("Model not found or not available on free tier")
         case 429:
-            await circuitBreaker.recordFailure(operation: "generate")
             throw HuggingFaceError.rateLimited
         case 503:
-            await circuitBreaker.recordFailure(operation: "generate")
-            throw HuggingFaceError.modelLoading
+            throw HuggingFaceError.serverOverloaded
         default:
             let errorMessage = try? parseErrorResponse(data)
-            throw HuggingFaceError.apiError("HTTP \(httpResponse.statusCode): \(errorMessage ?? "Unknown error")")
+            throw HuggingFaceError.apiError(errorMessage ?? "HTTP \(httpResponse.statusCode)")
         }
+    }
+
+    private func parseSuccessResponse(_ data: Data) throws -> String {
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let generatedText = json["generated_text"] as? String ?? json["response"] as? String
+        else {
+            throw HuggingFaceError.parsingError("Invalid response format from Hugging Face API")
+        }
+        return generatedText
+    }
+
+    private func parseErrorResponse(_ data: Data) throws -> String? {
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let error = json["error"] as? String
+        else {
+            return nil
+        }
+        return error
     }
 
     /// Analyze code using a code-specific model
@@ -400,7 +408,7 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
     // MARK: - AITextGenerationService Implementation
 
     public func generateText(prompt: String, maxTokens: Int, temperature: Double) async throws -> String {
-        return try await generate(
+        try await generate(
             prompt: prompt,
             model: "gpt2",
             maxTokens: maxTokens,
@@ -431,10 +439,11 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
 
         for line in lines {
             if line.lowercased().contains("error") ||
-               line.lowercased().contains("bug") ||
-               line.lowercased().contains("issue") ||
-               line.lowercased().contains("problem") ||
-               line.lowercased().contains("warning") {
+                line.lowercased().contains("bug") ||
+                line.lowercased().contains("issue") ||
+                line.lowercased().contains("problem") ||
+                line.lowercased().contains("warning")
+            {
                 issues.append(CodeIssue(description: line.trimmingCharacters(in: .whitespaces), severity: .medium))
             }
         }
@@ -446,10 +455,10 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
         let lines = analysis.components(separatedBy: "\n")
         return lines.filter { line in
             line.lowercased().contains("suggest") ||
-            line.lowercased().contains("recommend") ||
-            line.lowercased().contains("improve") ||
-            line.lowercased().contains("consider") ||
-            line.lowercased().contains("should")
+                line.lowercased().contains("recommend") ||
+                line.lowercased().contains("improve") ||
+                line.lowercased().contains("consider") ||
+                line.lowercased().contains("should")
         }.map { $0.trimmingCharacters(in: .whitespaces) }
     }
 
@@ -532,14 +541,14 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
 
     // MARK: - AICachingService Implementation
 
-    public func cacheResponse(key: String, response: String, metadata: [String: Any]?) async {
+    public func cacheResponse(key: String, response: String, metadata: [String: any Sendable]?) async {
         // Convert metadata to string for storage
         let metadataString = metadata?.description ?? ""
         cache.set(key, response: response, prompt: key, model: "huggingface")
     }
 
     public func getCachedResponse(key: String) async -> String? {
-        return cache.get(key)
+        cache.get(key)
     }
 
     public func clearCache() async {
@@ -548,7 +557,7 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
 
     public func getCacheStats() async -> CacheStats {
         // Simplified cache stats - could be enhanced
-        return CacheStats(
+        CacheStats(
             totalEntries: 0, // Not tracked in current implementation
             hitRate: 0.0,
             averageResponseTime: 0.0,
@@ -559,15 +568,15 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
 
     // MARK: - AIPerformanceMonitoring Implementation
 
-    public func recordOperation(operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?) async {
+    public func recordOperation(operation: String, duration: TimeInterval, success: Bool, metadata: [String: any Sendable]?) async {
         let errorType = metadata?["error"] as? String
         metrics.recordRequest(startTime: Date().addingTimeInterval(-duration), success: success, errorType: errorType)
     }
 
     public func getPerformanceMetrics() async -> PerformanceMetrics {
-        let metricsData = getPerformanceMetrics()
+        let metricsData = self.metrics.getMetrics()
         return PerformanceMetrics(
-            totalOperations: metricsData.totalOperations,
+            totalOperations: metricsData.totalRequests,
             successRate: metricsData.successRate,
             averageResponseTime: metricsData.averageResponseTime,
             errorBreakdown: metricsData.errorBreakdown,
@@ -592,7 +601,8 @@ private actor CircuitBreaker {
 
     func canExecute(operation: String) -> Bool {
         guard let failureCount = failureCounts[operation],
-              let lastFailure = lastFailureTimes[operation] else {
+              let lastFailure = lastFailureTimes[operation]
+        else {
             return true
         }
 
@@ -622,7 +632,7 @@ private actor RetryManager {
 
     func retry<T>(
         operation: String,
-        _ block: @escaping () async throws -> T
+        _ block: @escaping @Sendable () async throws -> T
     ) async throws -> T {
         var lastError: Error?
         var attempt = 0
@@ -667,7 +677,7 @@ private actor RetryManager {
 
     private func calculateDelay(for attempt: Int) -> TimeInterval {
         let exponentialDelay = baseDelay * pow(2.0, Double(attempt - 1))
-        let jitter = Double.random(in: 0...0.1) * exponentialDelay
+        let jitter = Double.random(in: 0 ... 0.1) * exponentialDelay
         return min(exponentialDelay + jitter, 30.0) // Cap at 30 seconds
     }
 }

@@ -11,11 +11,13 @@ public final class BudgetsViewModel {
     private var modelContext: ModelContext?
 
     // MARK: - AI Insights Properties
+
     var budgetInsights: [BudgetInsight] = []
     var spendingPredictions: [SpendingPrediction] = []
     var isAnalyzingInsights = false
 
     // MARK: - Private Properties
+
     private let insightsService: FinancialInsightsService
 
     public init() {
@@ -153,7 +155,7 @@ public final class BudgetsViewModel {
             totalSpent: totalSpent,
             onTrackCount: onTrackCount,
             overBudgetCount: overBudgetCount,
-            totalBudgets: monthBudgets.count,
+            totalBudgets: monthBudgets.count
         )
     }
 
@@ -176,7 +178,7 @@ public final class BudgetsViewModel {
             let monthSpending = MonthlySpending(
                 month: monthDate,
                 amount: spent,
-                categoryName: category.name,
+                categoryName: category.name
             )
             trend.insert(monthSpending, at: 0)
         }
@@ -341,12 +343,12 @@ public final class BudgetsViewModel {
 
     /// Get optimization recommendations
     var optimizationRecommendations: [String] {
-        budgetInsights.flatMap { $0.recommendations }
+        budgetInsights.flatMap(\.recommendations)
     }
 
     /// Get risk alerts
     var riskAlerts: [BudgetAlert] {
-        budgetInsights.flatMap { $0.alerts }
+        budgetInsights.flatMap(\.alerts)
     }
 
     /// Get budgets at risk (over 80% utilization)

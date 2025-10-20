@@ -299,7 +299,7 @@ final class AnalyticsServiceTests: XCTestCase {
         // Test basic initialization
         let moodStats = [
             MoodStats(mood: .good, completionRate: 0.85, averageXP: 12),
-            MoodStats(mood: .neutral, completionRate: 0.7, averageXP: 8)
+            MoodStats(mood: .neutral, completionRate: 0.7, averageXP: 8),
         ]
 
         let moodCorrelation = MoodCorrelation(
@@ -315,7 +315,7 @@ final class AnalyticsServiceTests: XCTestCase {
         // Test property access and validation
         let moodStats = [
             MoodStats(mood: .excellent, completionRate: 0.95, averageXP: 15),
-            MoodStats(mood: .bad, completionRate: 0.4, averageXP: 5)
+            MoodStats(mood: .bad, completionRate: 0.4, averageXP: 5),
         ]
 
         let moodCorrelation = MoodCorrelation(

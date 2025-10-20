@@ -1,8 +1,8 @@
+import class HabitQuest.Habit
+import enum HabitQuest.HabitCategory
+import class HabitQuest.HabitLog
 import SwiftData
 import SwiftUI
-import class HabitQuest.Habit
-import class HabitQuest.HabitLog
-import enum HabitQuest.HabitCategory
 
 // Import model types
 /// Service responsible for productivity metrics and performance analysis

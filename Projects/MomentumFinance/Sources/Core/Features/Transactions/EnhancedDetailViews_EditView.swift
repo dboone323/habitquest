@@ -28,7 +28,7 @@ struct EnhancedTransactionDetailEditView: View {
 
                     TextField("Transaction name", text: Binding(
                         get: { self.editedTransaction?.name ?? self.transaction.name },
-                        set: { self.editedTransaction?.name = $0 },
+                        set: { self.editedTransaction?.name = $0 }
                     ))
                     .textFieldStyle(.roundedBorder)
                 }
@@ -41,7 +41,7 @@ struct EnhancedTransactionDetailEditView: View {
                     HStack {
                         TextField("Amount", value: Binding(
                             get: { self.editedTransaction?.amount ?? self.transaction.amount },
-                            set: { self.editedTransaction?.amount = $0 },
+                            set: { self.editedTransaction?.amount = $0 }
                         ), format: .currency(code: self.transaction.currencyCode))
                             .textFieldStyle(.roundedBorder)
                             .frame(width: 150)
@@ -52,7 +52,7 @@ struct EnhancedTransactionDetailEditView: View {
                                 if let amount = editedTransaction?.amount {
                                     self.editedTransaction?.amount = isIncome ? abs(amount) : -abs(amount)
                                 }
-                            },
+                            }
                         )) {
                             Text("Expense").tag(false)
                             Text("Income").tag(true)
@@ -68,7 +68,7 @@ struct EnhancedTransactionDetailEditView: View {
 
                     DatePicker("Date", selection: Binding(
                         get: { self.editedTransaction?.date ?? self.transaction.date },
-                        set: { self.editedTransaction?.date = $0 },
+                        set: { self.editedTransaction?.date = $0 }
                     ))
                     .datePickerStyle(.compact)
                     .labelsHidden()
@@ -82,7 +82,7 @@ struct EnhancedTransactionDetailEditView: View {
                     VStack {
                         Picker("Category", selection: Binding(
                             get: { self.editedTransaction?.categoryId ?? self.transaction.category?.id ?? "" },
-                            set: { self.editedTransaction?.categoryId = $0 },
+                            set: { self.editedTransaction?.categoryId = $0 }
                         )) {
                             Text("None").tag("")
                             ForEach(self.categories) { category in
@@ -96,7 +96,7 @@ struct EnhancedTransactionDetailEditView: View {
                                 "Subcategory (optional)",
                                 text: Binding(
                                     get: { subcategory },
-                                    set: { self.editedTransaction?.subcategory = $0 },
+                                    set: { self.editedTransaction?.subcategory = $0 }
                                 )
                             )
                             .textFieldStyle(.roundedBorder)
@@ -111,7 +111,7 @@ struct EnhancedTransactionDetailEditView: View {
 
                     Picker("Account", selection: Binding(
                         get: { self.editedTransaction?.accountId ?? self.transaction.account?.id ?? "" },
-                        set: { self.editedTransaction?.accountId = $0 },
+                        set: { self.editedTransaction?.accountId = $0 }
                     )) {
                         Text("None").tag("")
                         // This would be populated with accounts
@@ -129,7 +129,7 @@ struct EnhancedTransactionDetailEditView: View {
 
                     Picker("Status", selection: Binding(
                         get: { self.editedTransaction?.isReconciled ?? self.transaction.isReconciled },
-                        set: { self.editedTransaction?.isReconciled = $0 },
+                        set: { self.editedTransaction?.isReconciled = $0 }
                     )) {
                         Text("Pending").tag(false)
                         Text("Reconciled").tag(true)
@@ -145,7 +145,7 @@ struct EnhancedTransactionDetailEditView: View {
 
                     Toggle("This transaction repeats regularly", isOn: Binding(
                         get: { self.editedTransaction?.isRecurring ?? self.transaction.isRecurring },
-                        set: { self.editedTransaction?.isRecurring = $0 },
+                        set: { self.editedTransaction?.isRecurring = $0 }
                     ))
                 }
 
@@ -156,7 +156,7 @@ struct EnhancedTransactionDetailEditView: View {
 
                     TextField("Transaction location", text: Binding(
                         get: { self.editedTransaction?.location ?? self.transaction.location ?? "" },
-                        set: { self.editedTransaction?.location = $0 },
+                        set: { self.editedTransaction?.location = $0 }
                     ))
                     .textFieldStyle(.roundedBorder)
                 }
@@ -167,7 +167,7 @@ struct EnhancedTransactionDetailEditView: View {
 
             TextEditor(text: Binding(
                 get: { self.editedTransaction?.notes ?? self.transaction.notes },
-                set: { self.editedTransaction?.notes = $0 },
+                set: { self.editedTransaction?.notes = $0 }
             ))
             .font(.body)
             .frame(minHeight: 100)

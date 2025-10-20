@@ -27,7 +27,7 @@ struct CategorySpendingChart: View {
                 ForEach(self.monthlyData, id: \.month) { item in
                     BarMark(
                         x: .value("Month", item.month),
-                        y: .value("Amount", item.amount),
+                        y: .value("Amount", item.amount)
                     )
                     .foregroundStyle(Color.blue.gradient)
                 }
@@ -94,7 +94,7 @@ struct MerchantSpendingChart: View {
                 ForEach(self.transactions, id: \.date) { item in
                     LineMark(
                         x: .value("Date", item.date),
-                        y: .value("Amount", item.amount),
+                        y: .value("Amount", item.amount)
                     )
                     .symbol(Circle().strokeBorder(lineWidth: 2))
                     .foregroundStyle(.blue)
@@ -103,7 +103,7 @@ struct MerchantSpendingChart: View {
                 ForEach(self.transactions, id: \.date) { item in
                     PointMark(
                         x: .value("Date", item.date),
-                        y: .value("Amount", item.amount),
+                        y: .value("Amount", item.amount)
                     )
                     .foregroundStyle(.blue)
                 }

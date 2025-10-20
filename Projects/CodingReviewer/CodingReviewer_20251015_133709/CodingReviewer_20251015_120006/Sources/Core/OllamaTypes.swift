@@ -224,6 +224,7 @@ public enum OllamaError: LocalizedError {
 }
 
 // MARK: - Integration Result Models
+
 // Note: ServiceHealth is defined in AIServiceProtocols.swift
 
 // Note: CodeComplexity, AnalysisType, CodeGenerationResult, CodeAnalysisResult, CodeIssue,

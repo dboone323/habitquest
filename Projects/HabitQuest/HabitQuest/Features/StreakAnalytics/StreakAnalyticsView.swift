@@ -34,75 +34,75 @@ public struct StreakAnalyticsView: View {
             }
             .navigationTitle("Streak Analytics")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.large)
+                .navigationBarTitleDisplayMode(.large)
             #endif
-            .toolbar {
-                #if os(iOS)
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    if self.viewModel.analyticsData != nil {
-                        Menu {
-                            Button("Export Data", systemImage: "square.and.arrow.up") {
-                                Task { await self.viewModel.exportAnalytics() }
-                            }
-                            .accessibilityLabel("Export Data")
+                .toolbar {
+                    #if os(iOS)
+                        ToolbarItemGroup(placement: .navigationBarTrailing) {
+                            if self.viewModel.analyticsData != nil {
+                                Menu {
+                                    Button("Export Data", systemImage: "square.and.arrow.up") {
+                                        Task { await self.viewModel.exportAnalytics() }
+                                    }
+                                    .accessibilityLabel("Export Data")
 
-                            Button("Share Report", systemImage: "square.and.arrow.up.fill") {
-                                self.viewModel.shareAnalyticsReport()
-                            }
-                            .accessibilityLabel("Share Report")
+                                    Button("Share Report", systemImage: "square.and.arrow.up.fill") {
+                                        self.viewModel.shareAnalyticsReport()
+                                    }
+                                    .accessibilityLabel("Share Report")
 
-                            Divider()
+                                    Divider()
 
-                            Button("Refresh", systemImage: "arrow.clockwise") {
-                                Task { await self.viewModel.refreshAnalytics() }
+                                    Button("Refresh", systemImage: "arrow.clockwise") {
+                                        Task { await self.viewModel.refreshAnalytics() }
+                                    }
+                                    .accessibilityLabel("Refresh")
+                                } label: {
+                                    Image(systemName: "ellipsis.circle")
+                                }
+                                .disabled(self.viewModel.isLoading)
+                            } else {
+                                Button("Refresh") {
+                                    Task { await self.viewModel.refreshAnalytics() }
+                                }
+                                .accessibilityLabel("Refresh")
+                                .disabled(self.viewModel.isLoading)
                             }
-                            .accessibilityLabel("Refresh")
-                        } label: {
-                            Image(systemName: "ellipsis.circle")
                         }
-                        .disabled(self.viewModel.isLoading)
-                    } else {
-                        Button("Refresh") {
-                            Task { await self.viewModel.refreshAnalytics() }
+                    #else
+                        ToolbarItem {
+                            if self.viewModel.analyticsData != nil {
+                                Menu {
+                                    Button("Export Data", systemImage: "square.and.arrow.up") {
+                                        Task { await self.viewModel.exportAnalytics() }
+                                    }
+                                    .accessibilityLabel("Export Data")
+
+                                    Button("Share Report", systemImage: "square.and.arrow.up.fill") {
+                                        self.viewModel.shareAnalyticsReport()
+                                    }
+                                    .accessibilityLabel("Share Report")
+
+                                    Divider()
+
+                                    Button("Refresh", systemImage: "arrow.clockwise") {
+                                        Task { await self.viewModel.refreshAnalytics() }
+                                    }
+                                    .accessibilityLabel("Refresh")
+                                } label: {
+                                    Image(systemName: "ellipsis.circle")
+                                }
+                                .disabled(self.viewModel.isLoading)
+                            } else {
+                                Button("Refresh") {
+                                    Task { await self.viewModel.refreshAnalytics() }
+                                }
+                                .accessibilityLabel("Refresh")
+                                .disabled(self.viewModel.isLoading)
+                            }
                         }
-                        .accessibilityLabel("Refresh")
-                        .disabled(self.viewModel.isLoading)
-                    }
+                    #endif
                 }
-                #else
-                ToolbarItem {
-                    if self.viewModel.analyticsData != nil {
-                        Menu {
-                            Button("Export Data", systemImage: "square.and.arrow.up") {
-                                Task { await self.viewModel.exportAnalytics() }
-                            }
-                            .accessibilityLabel("Export Data")
-
-                            Button("Share Report", systemImage: "square.and.arrow.up.fill") {
-                                self.viewModel.shareAnalyticsReport()
-                            }
-                            .accessibilityLabel("Share Report")
-
-                            Divider()
-
-                            Button("Refresh", systemImage: "arrow.clockwise") {
-                                Task { await self.viewModel.refreshAnalytics() }
-                            }
-                            .accessibilityLabel("Refresh")
-                        } label: {
-                            Image(systemName: "ellipsis.circle")
-                        }
-                        .disabled(self.viewModel.isLoading)
-                    } else {
-                        Button("Refresh") {
-                            Task { await self.viewModel.refreshAnalytics() }
-                        }
-                        .accessibilityLabel("Refresh")
-                        .disabled(self.viewModel.isLoading)
-                    }
-                }
-                #endif
-            }
         }
     }
 

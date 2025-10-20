@@ -1,8 +1,8 @@
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @MainActor
 @Observable
@@ -70,7 +70,7 @@ final class AccountDetailViewModel: ViewModelProtocol {
     @MainActor
     private func handleAsync(_ action: Action) async {
         switch action {
-        case .loadAccount(let account):
+        case let .loadAccount(account):
             loadAccount(account)
         case .filterTransactions:
             filterTransactions()
@@ -78,7 +78,7 @@ final class AccountDetailViewModel: ViewModelProtocol {
             toggleAddTransaction()
         case .loadAIInsights:
             await loadAIInsights()
-        case .setError(let message):
+        case let .setError(message):
             self.state.errorMessage = message
         }
     }
@@ -140,7 +140,7 @@ final class AccountDetailViewModel: ViewModelProtocol {
             // Generate personalized insights
             let insights = try await insightsService.generatePersonalizedInsights(for: account.id.uuidString)
             self.state.financialInsights = insights
-            self.state.actionableInsightsCount = insights.filter { $0.actionable }.count
+            self.state.actionableInsightsCount = insights.filter(\.actionable).count
 
             // Get expense predictions
             let predictions = try await insightsService.predictFutureExpenses(for: account.id.uuidString, months: 3)

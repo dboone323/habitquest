@@ -7,13 +7,13 @@ import SwiftUI
 extension Features.Transactions {
     struct AccountsListView: View {
         #if canImport(SwiftData)
-        #if canImport(SwiftData)
-        private var accounts: [FinancialAccount] = []
+            #if canImport(SwiftData)
+                private var accounts: [FinancialAccount] = []
+            #else
+                private var accounts: [FinancialAccount] = []
+            #endif
         #else
-        private var accounts: [FinancialAccount] = []
-        #endif
-        #else
-        private var accounts: [FinancialAccount] = []
+            private var accounts: [FinancialAccount] = []
         #endif
 
         let categories: [ExpenseCategory]
@@ -44,7 +44,7 @@ extension Features.Transactions {
                     .background(
                         RoundedRectangle(cornerRadius: 12)
                             .fill(self.backgroundColorForPlatform())
-                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
+                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                     )
 
                     // Account Cards
@@ -95,7 +95,7 @@ extension Features.Transactions {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(self.backgroundColorForPlatform())
-                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2),
+                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
             )
         }
 
@@ -105,9 +105,9 @@ extension Features.Transactions {
 
         private func backgroundColorForPlatform() -> Color {
             #if os(iOS)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #else
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #endif
         }
 

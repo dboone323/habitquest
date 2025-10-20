@@ -30,7 +30,7 @@ let package = Package(
                 "Features",
                 "App",
                 "Shared",
-                "Sources"
+                "Sources",
             ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),

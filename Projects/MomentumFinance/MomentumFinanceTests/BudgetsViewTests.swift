@@ -22,7 +22,7 @@ final class BudgetsViewTests: XCTestCase {
         let schema = Schema([
             Budget.self,
             ExpenseCategory.self,
-            FinancialTransaction.self
+            FinancialTransaction.self,
         ])
         self.modelContainer = try ModelContainer(
             for: schema,

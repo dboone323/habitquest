@@ -104,16 +104,16 @@ public struct TopPerformerRow: View {
 
     private func hapticFeedback(_ style: HapticStyle) {
         #if canImport(UIKit)
-        let uiStyle: UIImpactFeedbackGenerator.FeedbackStyle
-        switch style {
-        case .light: uiStyle = .light
-        case .medium: uiStyle = .medium
-        case .heavy: uiStyle = .heavy
-        case .soft: uiStyle = .soft
-        case .rigid: uiStyle = .rigid
-        }
-        let generator = UIImpactFeedbackGenerator(style: uiStyle)
-        generator.impactOccurred()
+            let uiStyle: UIImpactFeedbackGenerator.FeedbackStyle
+            switch style {
+            case .light: uiStyle = .light
+            case .medium: uiStyle = .medium
+            case .heavy: uiStyle = .heavy
+            case .soft: uiStyle = .soft
+            case .rigid: uiStyle = .rigid
+            }
+            let generator = UIImpactFeedbackGenerator(style: uiStyle)
+            generator.impactOccurred()
         #endif
     }
 }

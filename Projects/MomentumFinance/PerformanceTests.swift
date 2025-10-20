@@ -97,7 +97,7 @@ func runPerformanceTests() {
         let duration = endTime.timeIntervalSince(startTime)
 
         assert(duration < 0.1, "Transaction filtering should be fast")
-        assert(expenseTransactions.count > 0)
+        assert(!expenseTransactions.isEmpty)
         print("Transaction filtering performance: \(duration) seconds for \(transactions.count) transactions")
     }
 

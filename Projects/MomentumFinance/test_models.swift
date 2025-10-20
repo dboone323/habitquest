@@ -13,24 +13,24 @@ func testModels() {
         title: "Test Transaction",
         amount: 50.0,
         date: Date(),
-        transactionType: .expense,
+        transactionType: .expense
     )
     let category = Category(name: "Test Category", color: "blue", icon: "star")
     let subscription = Subscription(
         name: "Test Sub",
         amount: 10.0,
         frequency: .monthly,
-        nextDueDate: Date(),
+        nextDueDate: Date()
     )
     let budget = Budget(
         category: category,
         monthlyLimit: 200.0,
-        month: Date(),
+        month: Date()
     )
     let goal = SavingsGoal(
         name: "Test Goal",
         targetAmount: 1000.0,
         currentAmount: 0.0,
-        targetDate: Date(),
+        targetDate: Date()
     )
 }

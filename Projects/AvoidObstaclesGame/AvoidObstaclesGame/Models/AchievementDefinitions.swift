@@ -10,8 +10,8 @@ import Foundation
 
 /// Protocol for achievement-related events
 public protocol AchievementDelegate: AnyObject {
-    func achievementUnlocked(_ achievement: Achievement)
-    func achievementProgressUpdated(_ achievement: Achievement, progress: Float)
+    func achievementUnlocked(_ achievement: Achievement) async
+    func achievementProgressUpdated(_ achievement: Achievement, progress: Float) async
 }
 
 /// Represents an achievement in the game

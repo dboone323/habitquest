@@ -1,0 +1,36 @@
+import XCTest
+@testable import AvoidObstaclesGame
+
+class ObstaclePoolTests: XCTestCase {
+
+    override func setUp() {
+        super.setUp()
+        // Put setup code here
+    }
+
+    override func tearDown() {
+        // Put teardown code here
+        super.tearDown()
+    }
+
+
+    // MARK: - classObstaclePool{ Tests
+
+    func testclassObstaclePool{Initialization() {
+        // Test basic initialization
+        // TODO: Implement initialization test for classObstaclePool{
+        XCTAssertTrue(true, "Placeholder test for classObstaclePool{")
+    }
+
+    func testclassObstaclePool{Properties() {
+        // Test property access and validation
+        // TODO: Implement property tests for classObstaclePool{
+        XCTAssertTrue(true, "Placeholder test for classObstaclePool{ properties")
+    }
+
+    func testclassObstaclePool{Methods() {
+        // Test method functionality
+        // TODO: Implement method tests for classObstaclePool{
+        XCTAssertTrue(true, "Placeholder test for classObstaclePool{ methods")
+    }
+}

@@ -15,7 +15,7 @@ struct IntegratedMacOSContentView: View {
                 self.navigationCoordinator.selectedSidebarItem = $0
                 // Clear detail selection when changing main navigation
                 self.navigationCoordinator.clearDetailSelection()
-            },
+            }
         )
     }
 
@@ -23,7 +23,7 @@ struct IntegratedMacOSContentView: View {
     private var selectedListItemBinding: Binding<ListableItem?> {
         Binding(
             get: { self.navigationCoordinator.selectedListItem },
-            set: { self.navigationCoordinator.navigateToDetail(item: $0) },
+            set: { self.navigationCoordinator.navigateToDetail(item: $0) }
         )
     }
 
@@ -31,7 +31,7 @@ struct IntegratedMacOSContentView: View {
     private var columnVisibilityBinding: Binding<NavigationSplitViewVisibility> {
         Binding(
             get: { self.navigationCoordinator.columnVisibility },
-            set: { self.navigationCoordinator.columnVisibility = $0 },
+            set: { self.navigationCoordinator.columnVisibility = $0 }
         )
     }
 

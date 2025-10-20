@@ -20,13 +20,13 @@ struct EnhancedPlatformNavigation<Content: View>: View {
 
     var body: some View {
         #if os(macOS)
-        self.macOSNavigation
+            self.macOSNavigation
         #elseif os(iOS)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            self.iPadNavigation
-        } else {
-            self.iPhoneNavigation
-        }
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                self.iPadNavigation
+            } else {
+                self.iPhoneNavigation
+            }
         #endif
     }
 
@@ -58,13 +58,13 @@ struct EnhancedPlatformNavigation<Content: View>: View {
             self.content
                 .toolbar {
                     #if os(iOS)
-                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                        IPadToolbarButtons()
-                    }
+                        ToolbarItemGroup(placement: .navigationBarTrailing) {
+                            IPadToolbarButtons()
+                        }
                     #else
-                    ToolbarItemGroup {
-                        IPadToolbarButtons()
-                    }
+                        ToolbarItemGroup {
+                            IPadToolbarButtons()
+                        }
                     #endif
                 }
         }
@@ -77,13 +77,13 @@ struct EnhancedPlatformNavigation<Content: View>: View {
             self.content
                 .toolbar {
                     #if os(iOS)
-                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                        IPhoneToolbarButtons()
-                    }
+                        ToolbarItemGroup(placement: .navigationBarTrailing) {
+                            IPhoneToolbarButtons()
+                        }
                     #else
-                    ToolbarItemGroup {
-                        IPhoneToolbarButtons()
-                    }
+                        ToolbarItemGroup {
+                            IPhoneToolbarButtons()
+                        }
                     #endif
                 }
         }
@@ -185,8 +185,8 @@ public struct IPadSidebarView: View {
                         self.selectedTab = tab.0
                         // Add haptic feedback
                         #if os(iOS)
-                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                        impactFeedback.impactOccurred()
+                            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                            impactFeedback.impactOccurred()
                         #endif
                     }
                 }

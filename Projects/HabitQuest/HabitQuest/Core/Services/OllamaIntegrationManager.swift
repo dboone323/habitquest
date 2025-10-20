@@ -1,4 +1,5 @@
 import Foundation
+
 // import SharedKit // Will be available when integrated into package
 
 /// Unified Ollama Integration Framework
@@ -52,7 +53,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             "operation": "generateText",
             "model": "llama2",
             "maxTokens": maxTokens,
-            "temperature": temperature
+            "temperature": temperature,
         ])
 
         await performanceMonitor.recordOperation(
@@ -77,12 +78,12 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         let codellamaAvailable = await client.checkModelAvailability("codellama")
         let availableModels = llama2Available && codellamaAvailable
 
-        let health = ServiceHealth(
+        let health = await ServiceHealth(
             serviceName: "Ollama",
             isRunning: serverStatus.running,
             modelsAvailable: availableModels,
             responseTime: Date().timeIntervalSince(startTime),
-            errorRate: await performanceMonitor.getErrorRate(for: "ollama"),
+            errorRate: performanceMonitor.getErrorRate(for: "ollama"),
             lastChecked: Date(),
             recommendations: generateHealthRecommendations(serverStatus, availableModels)
         )
@@ -137,7 +138,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         await cache.cacheResponse(key: cacheKey, response: jsonString, metadata: [
             "operation": "analyzeCode",
             "language": language,
-            "analysisType": analysisType.rawValue
+            "analysisType": analysisType.rawValue,
         ])
 
         await performanceMonitor.recordOperation(
@@ -169,7 +170,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 
             await cache.cacheResponse(key: cacheKey, response: result, metadata: [
                 "operation": "generateDocumentation",
-                "language": language
+                "language": language,
             ])
 
             await performanceMonitor.recordOperation(
@@ -210,7 +211,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 
             await cache.cacheResponse(key: cacheKey, response: result, metadata: [
                 "operation": "generateTests",
-                "language": language
+                "language": language,
             ])
 
             await performanceMonitor.recordOperation(
@@ -270,7 +271,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             await cache.cacheResponse(key: cacheKey, response: jsonString, metadata: [
                 "operation": "generateCode",
                 "language": language,
-                "context": context ?? ""
+                "context": context ?? "",
             ])
 
             await performanceMonitor.recordOperation(
@@ -446,7 +447,8 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 
         for line in lines {
             if line.lowercased().contains("error") || line.lowercased().contains("bug") ||
-                line.lowercased().contains("issue") || line.lowercased().contains("problem") {
+                line.lowercased().contains("issue") || line.lowercased().contains("problem")
+            {
                 issues.append(CodeIssue(description: line.trimmingCharacters(in: .whitespaces), severity: .medium))
             }
         }
@@ -745,6 +747,7 @@ private class IntegrationLogger {
 }
 
 // MARK: - Service Availability
+
 extension OllamaIntegrationManager {
     /// Check if any free AI service is available
     func checkAnyServiceAvailable() async -> Bool {
@@ -770,11 +773,11 @@ extension OllamaIntegrationManager {
         let codellamaAvailable = await client.checkModelAvailability("codellama")
         let availableModels = llama2Available && codellamaAvailable
 
-        return OllamaHealthStatus(
+        return await OllamaHealthStatus(
             ollamaRunning: serverStatus.running,
             modelsAvailable: availableModels,
             responseTime: Date().timeIntervalSince(Date()),
-            errorRate: await performanceMonitor.getErrorRate(for: "ollama")
+            errorRate: performanceMonitor.getErrorRate(for: "ollama")
         )
     }
 
@@ -948,13 +951,14 @@ private actor RetryManager {
 
     private func calculateDelay(for attempt: Int) -> TimeInterval {
         let exponentialDelay = baseDelay * pow(2.0, Double(attempt - 1))
-        let jitter = Double.random(in: 0...0.1) * exponentialDelay
+        let jitter = Double.random(in: 0 ... 0.1) * exponentialDelay
         return min(exponentialDelay + jitter, 30.0) // Cap at 30 seconds
     }
 
     private func isCircuitBreakerOpen(for key: String) -> Bool {
         guard let failureCount = failureCounts[key],
-              let lastFailure = lastFailureTimes[key] else {
+              let lastFailure = lastFailureTimes[key]
+        else {
             return false
         }
 
@@ -1120,7 +1124,7 @@ private actor AIResponseCache {
 private actor AIOperationMonitor {
     private var operations: [String: [OperationRecord]] = [:]
     private let maxHistorySize = 1000
-    private var startTime: Date = Date()
+    private var startTime: Date = .init()
 
     struct OperationRecord {
         let duration: TimeInterval
@@ -1148,10 +1152,10 @@ private actor AIOperationMonitor {
     func getPerformanceMetrics() -> PerformanceMetrics {
         let allRecords = operations.values.flatMap { $0 }
         let totalOperations = allRecords.count
-        let successfulOperations = allRecords.filter { $0.success }.count
+        let successfulOperations = allRecords.filter(\.success).count
         let successRate = totalOperations > 0 ? Double(successfulOperations) / Double(totalOperations) : 0.0
 
-        let durations = allRecords.map { $0.duration }
+        let durations = allRecords.map(\.duration)
         let averageResponseTime = durations.isEmpty ? 0.0 : durations.reduce(0, +) / Double(durations.count)
 
         let errorBreakdown = operations.mapValues { records in

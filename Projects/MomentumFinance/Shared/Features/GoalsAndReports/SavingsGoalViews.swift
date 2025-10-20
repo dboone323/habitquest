@@ -1,6 +1,6 @@
-import UIKit
 import SwiftData
 import SwiftUI
+import UIKit
 
 #if canImport(AppKit)
 #endif
@@ -22,7 +22,7 @@ public struct SavingsGoalsSection: View {
             ContentUnavailableView(
                 "No Savings Goals",
                 systemImage: "target",
-                description: Text("Create your first savings goal to start building your future"),
+                description: Text("Create your first savings goal to start building your future")
             )
         } else {
             ScrollView {
@@ -46,11 +46,11 @@ public struct SavingsGoalCard: View {
     // Cross-platform color support
     private var backgroundColor: Color {
         #if canImport(UIKit)
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #elseif canImport(AppKit)
-        return Color(NSColor.controlBackgroundColor)
+            return Color(NSColor.controlBackgroundColor)
         #else
-        return Color.white
+            return Color.white
         #endif
     }
 

@@ -12,9 +12,9 @@ import SwiftUI
 public struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     #if canImport(SwiftData)
-    @Query private var items: [Item]
+        @Query private var items: [Item]
     #else
-    private var items: [Item] = []
+        private var items: [Item] = []
     #endif
 
     public var body: some View {
@@ -119,22 +119,22 @@ public struct ItemListView: View {
         }
         .toolbar {
             #if os(iOS)
-            ToolbarItem(placement: .navigationBarTrailing) {
-                EditButton()
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                        .accessibilityLabel("Edit Items")
+                        .accessibilityHint("Toggle edit mode to delete items")
+                }
+            #else
+                ToolbarItem {
+                    Button(action: {
+                        // For macOS, we could implement custom edit mode
+                        // For now, just show a placeholder
+                    }) {
+                        Label("Edit", systemImage: "pencil")
+                    }
                     .accessibilityLabel("Edit Items")
                     .accessibilityHint("Toggle edit mode to delete items")
-            }
-            #else
-            ToolbarItem {
-                Button(action: {
-                    // For macOS, we could implement custom edit mode
-                    // For now, just show a placeholder
-                }) {
-                    Label("Edit", systemImage: "pencil")
                 }
-                .accessibilityLabel("Edit Items")
-                .accessibilityHint("Toggle edit mode to delete items")
-            }
             #endif
             ToolbarItem {
                 Button(action: self.onAdd) {
@@ -267,10 +267,10 @@ public struct ItemDetailView: View {
         .padding()
         .navigationTitle("Quest Details")
         #if os(iOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Detailed view of quest entry")
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Detailed view of quest entry")
     }
 }
 

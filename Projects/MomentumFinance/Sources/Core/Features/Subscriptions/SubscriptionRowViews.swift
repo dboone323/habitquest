@@ -25,11 +25,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -37,7 +37,8 @@ extension Features.Subscriptions {
             if !self.subscription.isActive {
                 .red
             } else if let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date()),
-                      subscription.nextDueDate <= weekFromNow {
+                      subscription.nextDueDate <= weekFromNow
+            {
                 .orange
             } else {
                 .green
@@ -48,7 +49,8 @@ extension Features.Subscriptions {
             if !self.subscription.isActive {
                 "Inactive"
             } else if let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date()),
-                      subscription.nextDueDate <= weekFromNow {
+                      subscription.nextDueDate <= weekFromNow
+            {
                 "Due Soon"
             } else {
                 "Active"
@@ -69,15 +71,15 @@ extension Features.Subscriptions {
                         LinearGradient(
                             gradient: Gradient(colors: [.blue, .blue.opacity(0.7)]),
                             startPoint: .topLeading,
-                            endPoint: .bottomTrailing,
-                        ),
+                            endPoint: .bottomTrailing
+                        )
                     )
                     .frame(width: 44, height: 44)
                     .overlay(
                         Text(String(self.subscription.name.prefix(2).uppercased()))
                             .font(.headline)
                             .fontWeight(.bold)
-                            .foregroundColor(.white),
+                            .foregroundColor(.white)
                     )
 
                 // Main Content
@@ -99,7 +101,7 @@ extension Features.Subscriptions {
                             .padding(.vertical, 4)
                             .background(
                                 Capsule()
-                                    .fill(self.statusColor),
+                                    .fill(self.statusColor)
                             )
                     }
 
@@ -182,7 +184,7 @@ extension Features.Subscriptions {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(self.backgroundColor)
-                    .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 1),
+                    .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 1)
             )
         }
     }
@@ -195,11 +197,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemGroupedBackground)
+                return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -237,7 +239,7 @@ extension Features.Subscriptions {
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(self.backgroundColor),
+                    .fill(self.backgroundColor)
             )
         }
     }

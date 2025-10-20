@@ -1,5 +1,5 @@
-import UIKit
 import SwiftUI
+import UIKit
 
 #if canImport(AppKit)
 #endif
@@ -44,9 +44,9 @@ public struct AddSavingsGoalView: View {
                             "Target Date",
                             selection: Binding(
                                 get: { self.targetDate ?? Date() },
-                                set: { self.targetDate = $0 },
+                                set: { self.targetDate = $0 }
                             ),
-                            displayedComponents: .date,
+                            displayedComponents: .date
                         )
                     }
                 }
@@ -65,9 +65,9 @@ public struct AddSavingsGoalView: View {
                     ToolbarItem(
                         placement: {
                             #if canImport(UIKit)
-                            return .navigationBarLeading
+                                return .navigationBarLeading
                             #else
-                            return .cancellationAction
+                                return .cancellationAction
                             #endif
                         }()
                     ) {
@@ -80,9 +80,9 @@ public struct AddSavingsGoalView: View {
                     ToolbarItem(
                         placement: {
                             #if canImport(UIKit)
-                            return .navigationBarTrailing
+                                return .navigationBarTrailing
                             #else
-                            return .primaryAction
+                                return .primaryAction
                             #endif
                         }()
                     ) {
@@ -103,7 +103,7 @@ public struct AddSavingsGoalView: View {
             name: name,
             targetAmount: targetAmount,
             targetDate: hasTargetDate ? self.targetDate : nil,
-            notes: self.notes.isEmpty ? nil : self.notes,
+            notes: self.notes.isEmpty ? nil : self.notes
         )
 
         self.modelContext.insert(goal)
@@ -156,7 +156,7 @@ public struct SavingsGoalDetailView: View {
                         .trim(from: 0, to: self.goal.progressPercentage)
                         .stroke(
                             self.goal.isCompleted ? Color.green : Color.blue,
-                            style: StrokeStyle(lineWidth: 12, lineCap: .round),
+                            style: StrokeStyle(lineWidth: 12, lineCap: .round)
                         )
                         .frame(width: 150, height: 150)
                         .rotationEffect(.degrees(-90))
@@ -305,9 +305,9 @@ public struct SavingsGoalDetailView: View {
                     ToolbarItem(
                         placement: {
                             #if canImport(UIKit)
-                            return .navigationBarTrailing
+                                return .navigationBarTrailing
                             #else
-                            return .primaryAction
+                                return .primaryAction
                             #endif
                         }()
                     ) {

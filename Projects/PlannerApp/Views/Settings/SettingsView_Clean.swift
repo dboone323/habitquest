@@ -4,7 +4,7 @@ import LocalAuthentication
 import SwiftUI
 import UserNotifications
 #if os(macOS)
-import AppKit
+    import AppKit
 #endif
 import Foundation
 
@@ -117,9 +117,9 @@ public struct SettingsView: View {
 
     private func openAppSettings() {
         #if os(macOS)
-        NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Notifications")!)
+            NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Notifications")!)
         #else
-        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         #endif
     }
 }

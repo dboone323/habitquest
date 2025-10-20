@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 import SwiftData
 import SwiftUI
 
@@ -28,9 +28,9 @@ public class HabitViewModel: BaseViewModel {
         case loadHabits
         /// Create a new habit with the given parameters.
         case createHabit(
-                name: String, description: String, frequency: HabitFrequency, category: HabitCategory,
-                difficulty: HabitDifficulty
-             )
+            name: String, description: String, frequency: HabitFrequency, category: HabitCategory,
+            difficulty: HabitDifficulty
+        )
         /// Mark a habit as completed for today.
         case completeHabit(Habit)
         /// Delete a habit (soft delete).

@@ -1,5 +1,5 @@
-import Foundation
 import CryptoKit
+import Foundation
 import Security
 
 //
@@ -86,10 +86,11 @@ public enum SecurityFramework {
 
             // Check for localhost/internal addresses in production
             #if !DEBUG
-            if url.host?.lowercased() == "localhost" || url.host?.hasPrefix("127.") == true
-                || url.host?.hasPrefix("192.168.") == true || url.host?.hasPrefix("10.") == true {
-                return .failure(.internalURLNotAllowed)
-            }
+                if url.host?.lowercased() == "localhost" || url.host?.hasPrefix("127.") == true
+                    || url.host?.hasPrefix("192.168.") == true || url.host?.hasPrefix("10.") == true
+                {
+                    return .failure(.internalURLNotAllowed)
+                }
             #endif
 
             return .success
@@ -101,7 +102,7 @@ public enum SecurityFramework {
                 "<script", "</script>", "javascript:", "data:",
                 "vbscript:", "onload=", "onerror=", "onclick=",
                 "<iframe", "<object", "<embed", "eval(",
-                "document.cookie", "document.location", "window.location"
+                "document.cookie", "document.location", "window.location",
             ]
 
             let lowercased = input.lowercased()
@@ -119,7 +120,7 @@ public enum SecurityFramework {
                 kSecClass as String: kSecClassGenericPassword,
                 kSecAttrAccount as String: key,
                 kSecValueData as String: data,
-                kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+                kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
             ]
 
             // Delete existing item
@@ -138,7 +139,7 @@ public enum SecurityFramework {
                 kSecClass as String: kSecClassGenericPassword,
                 kSecAttrAccount as String: key,
                 kSecReturnData as String: true,
-                kSecMatchLimit as String: kSecMatchLimitOne
+                kSecMatchLimit as String: kSecMatchLimitOne,
             ]
 
             var result: AnyObject?
@@ -206,7 +207,8 @@ public enum SecurityFramework {
 
         /// Decrypts data using AES-GCM
         public static func decryptAESGCM(ciphertext: Data, nonce: Data, tag: Data, key: Data) throws
-        -> Data {
+            -> Data
+        {
             let nonce = try AES.GCM.Nonce(data: nonce)
             let sealedBox = try AES.GCM.SealedBox(nonce: nonce, ciphertext: ciphertext, tag: tag)
             return try AES.GCM.open(sealedBox, using: .init(data: key))
@@ -218,7 +220,8 @@ public enum SecurityFramework {
     /// Security monitoring and logging
     public enum Monitoring {
         private static let logger = SecurityLogger(
-            subsystem: "com.quantum.security", category: "SecurityFramework")
+            subsystem: "com.quantum.security", category: "SecurityFramework"
+        )
 
         /// Logs security events
         public static func logSecurityEvent(_ event: SecurityEvent, details: [String: Any]? = nil) {
@@ -244,8 +247,9 @@ public enum SecurityFramework {
                 details: [
                     "severity": incident.severity.rawValue,
                     "description": incident.description,
-                    "timestamp": incident.timestamp.ISO8601Format()
-                ])
+                    "timestamp": incident.timestamp.ISO8601Format(),
+                ]
+            )
         }
     }
 
@@ -286,7 +290,7 @@ public enum SecurityFramework {
                                 description: "Potential XSS vulnerability detected",
                                 line: findLineNumber(code: code, pattern: pattern),
                                 recommendation:
-                                    "Use safe DOM manipulation methods or sanitize input"
+                                "Use safe DOM manipulation methods or sanitize input"
                             ))
                     }
                 }
@@ -296,7 +300,8 @@ public enum SecurityFramework {
             let secretPatterns = ["password", "secret", "key", "token"]
             for pattern in secretPatterns {
                 if code.lowercased().contains(pattern) && code.contains("\"")
-                    && !code.contains("//") {  // Ignore comments
+                    && !code.contains("//")
+                { // Ignore comments
                     vulnerabilities.append(
                         Vulnerability(
                             type: .hardcodedSecret,
@@ -304,7 +309,7 @@ public enum SecurityFramework {
                             description: "Potential hardcoded secret detected",
                             line: findLineNumber(code: code, pattern: pattern),
                             recommendation:
-                                "Move secrets to environment variables or secure storage"
+                            "Move secrets to environment variables or secure storage"
                         ))
                 }
             }
@@ -354,7 +359,7 @@ public enum ValidationResult {
     public var error: ValidationError? {
         switch self {
         case .success: return nil
-        case .failure(let error): return error
+        case let .failure(error): return error
         }
     }
 }
@@ -375,15 +380,15 @@ public enum ValidationError: Error, LocalizedError {
         switch self {
         case .emptyInput:
             return "Input cannot be empty"
-        case .inputTooLong(let maxLength):
+        case let .inputTooLong(maxLength):
             return "Input exceeds maximum length of \(maxLength) characters"
         case .maliciousContent:
             return "Input contains potentially malicious content"
         case .invalidCharacters:
             return "Input contains invalid characters"
-        case .valueTooLow(let minimum):
+        case let .valueTooLow(minimum):
             return "Value is below minimum allowed value of \(minimum)"
-        case .valueTooHigh(let maximum):
+        case let .valueTooHigh(maximum):
             return "Value is above maximum allowed value of \(maximum)"
         case .invalidURL:
             return "Invalid URL format"
@@ -404,7 +409,7 @@ public enum SecurityError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .keychainError(let status):
+        case let .keychainError(status):
             return "Keychain operation failed with status: \(status)"
         case .randomGenerationFailed:
             return "Failed to generate secure random data"
@@ -426,15 +431,15 @@ public enum SecurityEvent {
 
     public var description: String {
         switch self {
-        case .inputValidationFailed(let type):
+        case let .inputValidationFailed(type):
             return "Input validation failed for type: \(type)"
-        case .keychainOperationFailed(let operation):
+        case let .keychainOperationFailed(operation):
             return "Keychain operation failed: \(operation)"
         case .encryptionOperationFailed:
             return "Encryption operation failed"
-        case .vulnerabilityDetected(let type):
+        case let .vulnerabilityDetected(type):
             return "Vulnerability detected: \(type.rawValue)"
-        case .incidentDetected(let type):
+        case let .incidentDetected(type):
             return "Security incident detected: \(type)"
         }
     }

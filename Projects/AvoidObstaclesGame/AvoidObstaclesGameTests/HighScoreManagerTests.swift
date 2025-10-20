@@ -15,12 +15,14 @@ final class HighScoreManagerTests: XCTestCase {
 
     // MARK: - HighScoreManager Tests
 
+    @MainActor
     func testHighScoreManagerInitialization() {
         // Test basic initialization
         let manager = HighScoreManager.shared
         XCTAssertNotNil(manager, "HighScoreManager shared instance should exist")
     }
 
+    @MainActor
     func testHighScoreManagerProperties() {
         // Test property access and validation
         let manager = HighScoreManager.shared
@@ -29,6 +31,7 @@ final class HighScoreManagerTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(highScores.count, 0, "High scores count should be non-negative")
     }
 
+    @MainActor
     func testHighScoreManagerMethods() {
         // Test method functionality
         let manager = HighScoreManager.shared
@@ -47,6 +50,7 @@ final class HighScoreManagerTests: XCTestCase {
         XCTAssertTrue(isHighScore || !isHighScore, "isHighScore should return a boolean")
     }
 
+    @MainActor
     func testHighScoreManagerScoreOperations() {
         // Test score operations
         let manager = HighScoreManager.shared

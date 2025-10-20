@@ -19,28 +19,28 @@ public enum Logger {
 
     static let ui = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
-        category: "UI",
+        category: "UI"
     )
     static let data = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
-        category: "Data",
+        category: "Data"
     )
     static let business = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
-        category: "Business",
+        category: "Business"
     )
     static let network = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
-        category: "Network",
+        category: "Network"
     )
     static let performance = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
-        category: "Performance",
+        category: "Performance"
     )
 
     public static let defaultLog = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance",
-        category: "General",
+        category: "General"
     )
 }
 
@@ -53,7 +53,7 @@ public extension Logger {
         context: String = "",
         file: String = #file,
         function: String = #function,
-        line: Int = #line,
+        line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
         let message =
@@ -67,11 +67,11 @@ public extension Logger {
         category: OSLog = defaultLog,
         file: String = #file,
         function: String = #function,
-        line: Int = #line,
+        line: Int = #line
     ) {
         #if DEBUG
-        let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
-        os_log("[DEBUG] %@ [%@]", log: category, type: .debug, message, source)
+            let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
+            os_log("[DEBUG] %@ [%@]", log: category, type: .debug, message, source)
         #endif
     }
 
@@ -171,26 +171,26 @@ public extension Logger {
     /// Write log to file for debugging purposes
     static func writeToFile(_ message: String, fileName: String = "momentum_finance.log") {
         #if DEBUG
-        guard
-            let documentsPath = FileManager.default.urls(
-                for: .documentDirectory,
-                in: .userDomainMask,
-            ).first
-        else { return }
-        let logURL = documentsPath.appendingPathComponent(fileName)
+            guard
+                let documentsPath = FileManager.default.urls(
+                    for: .documentDirectory,
+                    in: .userDomainMask
+                ).first
+            else { return }
+            let logURL = documentsPath.appendingPathComponent(fileName)
 
-        let timestamp = DateFormatter.logFormatter.string(from: Date())
-        let logEntry = "[\(timestamp)] \(message)\n"
+            let timestamp = DateFormatter.logFormatter.string(from: Date())
+            let logEntry = "[\(timestamp)] \(message)\n"
 
-        if FileManager.default.fileExists(atPath: logURL.path) {
-            if let fileHandle = try? FileHandle(forWritingTo: logURL) {
-                fileHandle.seekToEndOfFile()
-                fileHandle.write(logEntry.data(using: .utf8) ?? Data())
-                fileHandle.closeFile()
+            if FileManager.default.fileExists(atPath: logURL.path) {
+                if let fileHandle = try? FileHandle(forWritingTo: logURL) {
+                    fileHandle.seekToEndOfFile()
+                    fileHandle.write(logEntry.data(using: .utf8) ?? Data())
+                    fileHandle.closeFile()
+                }
+            } else {
+                try? logEntry.write(to: logURL, atomically: true, encoding: .utf8)
             }
-        } else {
-            try? logEntry.write(to: logURL, atomically: true, encoding: .utf8)
-        }
         #endif
     }
 }
@@ -207,7 +207,7 @@ public struct PerformanceMeasurement {
         let timeElapsed = CFAbsoluteTimeGetCurrent() - self.startTime
         Logger.logInfo(
             "[PERFORMANCE] \(self.operation) completed in \(String(format: "%.4f", timeElapsed)) seconds",
-            category: Logger.performance,
+            category: Logger.performance
         )
     }
 }

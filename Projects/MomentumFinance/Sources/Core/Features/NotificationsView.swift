@@ -41,47 +41,47 @@ public struct NotificationsView: View {
             #endif
                 .toolbar {
                     #if os(iOS)
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(
-                            "Clear All",
-                            action: {
-                                self.clearAllNotifications()
-                            }
-                        )
-                        .accessibilityLabel("Button")
-                        .foregroundColor(.red)
-                    }
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(
+                                "Clear All",
+                                action: {
+                                    self.clearAllNotifications()
+                                }
+                            )
+                            .accessibilityLabel("Button")
+                            .foregroundColor(.red)
+                        }
 
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(
-                            "Done",
-                            action: {
-                                self.dismiss()
-                            }
-                        )
-                        .accessibilityLabel("Button")
-                    }
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(
+                                "Done",
+                                action: {
+                                    self.dismiss()
+                                }
+                            )
+                            .accessibilityLabel("Button")
+                        }
                     #else
-                    ToolbarItem {
-                        Button(
-                            "Clear All",
-                            action: {
-                                self.clearAllNotifications()
-                            }
-                        )
-                        .accessibilityLabel("Button")
-                        .foregroundColor(.red)
-                    }
+                        ToolbarItem {
+                            Button(
+                                "Clear All",
+                                action: {
+                                    self.clearAllNotifications()
+                                }
+                            )
+                            .accessibilityLabel("Button")
+                            .foregroundColor(.red)
+                        }
 
-                    ToolbarItem {
-                        Button(
-                            "Done",
-                            action: {
-                                self.dismiss()
-                            }
-                        )
-                        .accessibilityLabel("Button")
-                    }
+                        ToolbarItem {
+                            Button(
+                                "Done",
+                                action: {
+                                    self.dismiss()
+                                }
+                            )
+                            .accessibilityLabel("Button")
+                        }
                     #endif
                 }
                 .task {
@@ -99,7 +99,7 @@ public struct NotificationsView: View {
                     FilterButton(
                         filter: filter,
                         isSelected: self.selectedFilter == filter,
-                        count: self.getNotificationCount(for: filter),
+                        count: self.getNotificationCount(for: filter)
                     ) {
                         self.selectedFilter = filter
                     }
@@ -124,7 +124,7 @@ public struct NotificationsView: View {
                         },
                         onDismiss: {
                             self.dismissNotification(notification)
-                        },
+                        }
                     )
                 }
             }
@@ -278,10 +278,10 @@ public struct FilterButton: View {
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
             .background(
-                self.isSelected ? Color.blue : Color.gray.opacity(0.2),
+                self.isSelected ? Color.blue : Color.gray.opacity(0.2)
             )
             .foregroundColor(
-                self.isSelected ? .white : .primary,
+                self.isSelected ? .white : .primary
             )
             .cornerRadius(20)
         }

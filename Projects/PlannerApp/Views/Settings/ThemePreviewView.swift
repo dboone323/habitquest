@@ -77,8 +77,8 @@ public struct ThemePreviewView: View {
                     self.selectedTheme = theme
                     // Apply haptic feedback if enabled
                     #if os(iOS)
-                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                    impactFeedback.impactOccurred()
+                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                        impactFeedback.impactOccurred()
                     #endif
                 }
             }

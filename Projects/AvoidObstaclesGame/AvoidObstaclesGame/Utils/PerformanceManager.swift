@@ -7,12 +7,15 @@
 //
 
 import Foundation
-import UIKit
+#if os(iOS) || os(tvOS)
+    import UIKit
+#endif
+import QuartzCore
 
 /// Protocol for performance-related events
 protocol PerformanceDelegate: AnyObject {
-    func performanceWarningTriggered(_ warning: PerformanceWarning)
-    func frameRateDropped(below targetFPS: Int)
+    func performanceWarningTriggered(_ warning: PerformanceWarning) async
+    func frameRateDropped(below targetFPS: Int) async
 }
 
 /// Performance warning types
@@ -62,6 +65,7 @@ enum TextureQuality {
 }
 
 /// Manages performance optimization and monitoring
+@MainActor
 public class PerformanceManager {
     // MARK: - Properties
 
@@ -108,8 +112,8 @@ public class PerformanceManager {
     // MARK: - Device Capability Detection
 
     /// Detects the current device's performance capability
+    @MainActor
     private static func detectDeviceCapability() -> DeviceCapability {
-        let device = UIDevice.current
         let processInfo = ProcessInfo.processInfo
 
         // Check processor count and device type
@@ -117,17 +121,23 @@ public class PerformanceManager {
         let isModernDevice = processorCount >= 6
 
         #if targetEnvironment(simulator)
-        // Simulator - assume high capability
-        return .high
+            // Simulator - assume high capability
+            return .high
         #else
-        // Physical device
-        if device.userInterfaceIdiom == .pad {
-            return .high
-        } else if isModernDevice {
-            return .high
-        } else {
-            return .medium
-        }
+            // Physical device
+            #if os(iOS) || os(tvOS)
+                let device = UIDevice.current
+                if device.userInterfaceIdiom == .pad {
+                    return .high
+                } else if isModernDevice {
+                    return .high
+                } else {
+                    return .medium
+                }
+            #else
+                // macOS - assume high capability
+                return .high
+            #endif
         #endif
     }
 
@@ -135,13 +145,20 @@ public class PerformanceManager {
 
     /// Sets up performance monitoring
     private func setupPerformanceMonitoring() {
-        // Monitor frame rate using CADisplayLink
-        let displayLink = CADisplayLink(target: self, selector: #selector(self.frameUpdate))
-        displayLink.add(to: .main, forMode: .common)
+        #if os(iOS) || os(tvOS)
+            // Monitor frame rate using CADisplayLink
+            let displayLink = CADisplayLink(target: self, selector: #selector(self.frameUpdate))
+            displayLink.add(to: .main, forMode: .common)
+        #else
+            // For macOS, use a timer-based approach
+            Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true) { [weak self] _ in
+                self?.frameUpdate()
+            }
+        #endif
     }
 
     /// Called on each frame update
-    @objc private func frameUpdate(displayLink _: CADisplayLink) {
+    @objc private func frameUpdate(displayLink: CADisplayLink? = nil) {
         self.frameCount += 1
         let currentTime = CACurrentMediaTime()
         let deltaTime = currentTime - self.lastFrameTime
@@ -167,7 +184,9 @@ public class PerformanceManager {
     /// Checks frame rate and triggers warnings if needed
     private func checkFrameRate() {
         if self.currentFPS < self.lowFPSThreshold {
-            self.delegate?.frameRateDropped(below: Int(self.lowFPSThreshold))
+            Task { @MainActor in
+                await self.delegate?.frameRateDropped(below: Int(self.lowFPSThreshold))
+            }
 
             if self.adaptiveQualityEnabled {
                 self.reduceQuality()
@@ -184,7 +203,9 @@ public class PerformanceManager {
 
         if memoryUsage > self.highMemoryThreshold {
             self.memoryWarningCount += 1
-            self.delegate?.performanceWarningTriggered(.highMemoryUsage)
+            Task { @MainActor in
+                await self.delegate?.performanceWarningTriggered(.highMemoryUsage)
+            }
 
             if self.adaptiveQualityEnabled, self.memoryWarningCount >= 2 {
                 self.reduceQuality()
@@ -214,21 +235,23 @@ public class PerformanceManager {
 
     /// Sets up memory pressure handling
     private func setupMemoryPressureHandling() {
-        #if os(iOS)
-        if #available(iOS 13.0, *) {
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(handleMemoryPressure),
-                name: UIApplication.didReceiveMemoryWarningNotification,
-                object: nil
-            )
-        }
+        #if os(iOS) || os(tvOS)
+            if #available(iOS 13.0, *) {
+                NotificationCenter.default.addObserver(
+                    self,
+                    selector: #selector(handleMemoryPressure),
+                    name: UIApplication.didReceiveMemoryWarningNotification,
+                    object: nil
+                )
+            }
         #endif
     }
 
     /// Handles memory pressure warnings
     @objc private func handleMemoryPressure() {
-        self.delegate?.performanceWarningTriggered(.memoryPressure)
+        Task { @MainActor in
+            await self.delegate?.performanceWarningTriggered(.memoryPressure)
+        }
 
         // Aggressive cleanup
         self.forceCleanup()
@@ -303,9 +326,105 @@ public class PerformanceManager {
         self.performanceStats
     }
 
+    /// Gets detailed performance report
+    func getDetailedPerformanceReport() -> PerformanceReport {
+        PerformanceReport(
+            currentStats: self.performanceStats,
+            deviceCapability: self.deviceCapability,
+            recommendations: generatePerformanceRecommendations(),
+            bottlenecks: identifyBottlenecks(),
+            optimizationOpportunities: suggestOptimizations()
+        )
+    }
+
+    /// Generates performance recommendations based on current stats
+    private func generatePerformanceRecommendations() -> [String] {
+        var recommendations: [String] = []
+
+        if self.performanceStats.averageFPS < 50.0 {
+            recommendations.append("Consider reducing particle effects or texture quality")
+        }
+
+        if self.performanceStats.currentMemoryUsage > 150 * 1024 * 1024 { // 150MB
+            recommendations.append("Memory usage is high - consider implementing object pooling")
+        }
+
+        if self.performanceStats.cleanupCount > 10 {
+            recommendations.append("Frequent cleanup suggests memory management issues")
+        }
+
+        if self.currentQualityLevel != .low && self.performanceStats.averageFPS < 45.0 {
+            recommendations.append("Automatically reduce quality to improve performance")
+        }
+
+        return recommendations
+    }
+
+    /// Identifies performance bottlenecks
+    private func identifyBottlenecks() -> [PerformanceBottleneck] {
+        var bottlenecks: [PerformanceBottleneck] = []
+
+        if self.performanceStats.averageFPS < self.targetFPS * 0.8 {
+            bottlenecks.append(.frameRate)
+        }
+
+        if self.performanceStats.currentMemoryUsage > self.highMemoryThreshold {
+            bottlenecks.append(.memory)
+        }
+
+        if self.performanceStats.minFPS < 30.0 {
+            bottlenecks.append(.cpu)
+        }
+
+        return bottlenecks
+    }
+
+    /// Suggests optimization opportunities
+    private func suggestOptimizations() -> [OptimizationSuggestion] {
+        var suggestions: [OptimizationSuggestion] = []
+
+        if self.deviceCapability == .low {
+            suggestions.append(.reduceEffects)
+            suggestions.append(.lowerTextures)
+        }
+
+        if self.performanceStats.averageFPS < 50.0 {
+            suggestions.append(.optimizeRendering)
+        }
+
+        if self.performanceStats.currentMemoryUsage > 100 * 1024 * 1024 {
+            suggestions.append(.implementPooling)
+        }
+
+        return suggestions
+    }
+
     /// Resets performance statistics
     func resetStats() {
         self.performanceStats = PerformanceStats()
+    }
+
+    /// Gets performance trend analysis
+    func getPerformanceTrend() -> PerformanceTrend {
+        // Analyze performance trends over time
+        let currentFPS = self.performanceStats.averageFPS
+        let memoryUsage = self.performanceStats.currentMemoryUsage
+
+        return PerformanceTrend(
+            fpsTrend: currentFPS >= self.targetFPS ? .stable : .degrading,
+            memoryTrend: memoryUsage <= self.highMemoryThreshold ? .stable : .degrading,
+            overallHealth: calculateOverallHealth()
+        )
+    }
+
+    /// Calculates overall performance health score
+    private func calculateOverallHealth() -> Double {
+        let fpsScore = min(self.performanceStats.averageFPS / self.targetFPS, 1.0)
+        let memoryScore = self.performanceStats.currentMemoryUsage <= self.highMemoryThreshold ? 1.0 :
+            max(0.0, 1.0 - Double(Int(self.performanceStats.currentMemoryUsage) - self.highMemoryThreshold) / Double(100 * 1024 * 1024))
+        let stabilityScore = self.performanceStats.minFPS / self.targetFPS
+
+        return (fpsScore + memoryScore + stabilityScore) / 3.0
     }
 }
 
@@ -323,25 +442,59 @@ struct PoolSizes {
     let effectPoolSize: Int
 }
 
+/// Performance bottleneck types
+enum PerformanceBottleneck {
+    case frameRate
+    case memory
+    case cpu
+    case gpu
+}
+
+/// Optimization suggestion types
+enum OptimizationSuggestion {
+    case reduceEffects
+    case lowerTextures
+    case optimizeRendering
+    case implementPooling
+    case reduceParticles
+}
+
+/// Performance trend analysis
+struct PerformanceTrend {
+    let fpsTrend: TrendDirection
+    let memoryTrend: TrendDirection
+    let overallHealth: Double
+}
+
+/// Trend direction
+enum TrendDirection {
+    case improving
+    case stable
+    case degrading
+    case critical
+}
+
+/// Comprehensive performance report
+struct PerformanceReport {
+    let currentStats: PerformanceStats
+    let deviceCapability: DeviceCapability
+    let recommendations: [String]
+    let bottlenecks: [PerformanceBottleneck]
+    let optimizationOpportunities: [OptimizationSuggestion]
+}
+
 /// Performance statistics tracking
 struct PerformanceStats {
-    private(set) var averageFPS: Double = 60.0
-    private(set) var minFPS: Double = 60.0
-    private(set) var maxFPS: Double = 60.0
-    private(set) var currentMemoryUsage: UInt64 = 0
-    private(set) var peakMemoryUsage: UInt64 = 0
-    private(set) var cleanupCount: Int = 0
+    var averageFPS: Double = 60.0
+    var minFPS: Double = 60.0
+    var maxFPS: Double = 60.0
+    var currentMemoryUsage: UInt64 = 0
+    var peakMemoryUsage: UInt64 = 0
+    var cleanupCount: Int = 0
     var currentQualityLevel: QualityLevel = .high
 
-    private var fpsSamples: [Double] = []
-
     mutating func updateFPS(_ fps: Double) {
-        self.fpsSamples.append(fps)
-        if self.fpsSamples.count > 60 { // Keep last 60 samples
-            self.fpsSamples.removeFirst()
-        }
-
-        self.averageFPS = self.fpsSamples.reduce(0, +) / Double(self.fpsSamples.count)
+        self.averageFPS = fps
         self.minFPS = min(self.minFPS, fps)
         self.maxFPS = max(self.maxFPS, fps)
     }
@@ -353,38 +506,5 @@ struct PerformanceStats {
 
     mutating func recordCleanup() {
         self.cleanupCount += 1
-    }
-
-    func toDictionary() -> [String: Any] {
-        [
-            "averageFPS": self.averageFPS,
-            "minFPS": self.minFPS,
-            "maxFPS": self.maxFPS,
-            "currentMemoryUsage": self.currentMemoryUsage,
-            "peakMemoryUsage": self.peakMemoryUsage,
-            "cleanupCount": self.cleanupCount,
-            "qualityLevel": self.currentQualityLevel,
-        ]
-    }
-}
-
-// MARK: - Object Pooling
-
-/// Object pool for performance optimization
-private var objectPool: [Any] = []
-private let maxPoolSize = 50
-
-/// Get an object from the pool or create new one
-private func getPooledObject<T>() -> T? {
-    if let pooled = objectPool.popLast() as? T {
-        return pooled
-    }
-    return nil
-}
-
-/// Return an object to the pool
-private func returnToPool(_ object: Any) {
-    if objectPool.count < maxPoolSize {
-        objectPool.append(object)
     }
 }

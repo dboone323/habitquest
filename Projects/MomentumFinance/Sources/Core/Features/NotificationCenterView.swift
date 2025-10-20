@@ -18,19 +18,19 @@ public struct NotificationCenterView: View {
     @StateObject private var notificationManager = NotificationManager.shared
 
     #if canImport(SwiftData)
-    #if canImport(SwiftData)
-    private var budgets: [Budget] = []
-    private var subscriptions: [Subscription] = []
-    private var accounts: [FinancialAccount] = []
+        #if canImport(SwiftData)
+            private var budgets: [Budget] = []
+            private var subscriptions: [Subscription] = []
+            private var accounts: [FinancialAccount] = []
+        #else
+            private var budgets: [Budget] = []
+            private var subscriptions: [Subscription] = []
+            private var accounts: [FinancialAccount] = []
+        #endif
     #else
-    private var budgets: [Budget] = []
-    private var subscriptions: [Subscription] = []
-    private var accounts: [FinancialAccount] = []
-    #endif
-    #else
-    private var budgets: [Budget] = []
-    private var subscriptions: [Subscription] = []
-    private var accounts: [FinancialAccount] = []
+        private var budgets: [Budget] = []
+        private var subscriptions: [Subscription] = []
+        private var accounts: [FinancialAccount] = []
     #endif
 
     var body: some View {
@@ -79,7 +79,7 @@ public struct NotificationCenterView: View {
                     notification: notification,
                     onDismiss: {
                         self.dismissNotification(notification)
-                    },
+                    }
                 )
             }
         }
@@ -132,7 +132,7 @@ public struct ScheduledNotificationRow: View {
                 .frame(width: 32, height: 32)
                 .background(
                     Circle()
-                        .fill(self.colorForType(self.notification.type).opacity(0.1)),
+                        .fill(self.colorForType(self.notification.type).opacity(0.1))
                 )
 
             // Notification Content
@@ -169,7 +169,7 @@ public struct ScheduledNotificationRow: View {
         .padding(.vertical, 8)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(self.isHighPriority ? Color.red.opacity(0.05) : Color.clear),
+                .fill(self.isHighPriority ? Color.red.opacity(0.05) : Color.clear)
         )
     }
 

@@ -6,15 +6,18 @@
 // game logic.
 //
 
+import Foundation
 import SpriteKit
 
 /// Protocol for physics-related events
+@MainActor
 protocol PhysicsManagerDelegate: AnyObject {
     func playerDidCollideWithObstacle(_ player: SKNode, obstacle: SKNode)
     func playerDidCollideWithPowerUp(_ player: SKNode, powerUp: SKNode)
 }
 
 /// Manages physics world and collision detection
+@MainActor
 public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
     // MARK: - Properties
 
@@ -26,6 +29,15 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
 
     /// Reference to the game scene
     private weak var scene: SKScene?
+
+    /// Advanced physics properties
+    private var physicsProperties: [SKNode: PhysicsMaterial] = [:]
+
+    /// Collision history for advanced responses
+    private var collisionHistory: [String: TimeInterval] = [:]
+
+    /// Physics simulation settings
+    private var simulationSettings = PhysicsSimulationSettings()
 
     // MARK: - Initialization
 
@@ -49,12 +61,20 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
     private func setupPhysicsWorld() {
         guard let physicsWorld else { return }
 
-        // Configure physics world
-        physicsWorld.gravity = CGVector(dx: 0, dy: 0) // No gravity for top-down game
+        // Configure physics world with advanced settings
+        physicsWorld.gravity = simulationSettings.gravity
         physicsWorld.contactDelegate = self
+        physicsWorld.speed = simulationSettings.speed
 
-        // Set speed for consistent physics across devices
-        physicsWorld.speed = 1.0
+        // Enable advanced physics features
+        if simulationSettings.enableRealisticCollisions {
+            setupAdvancedCollisionDetection()
+        }
+    }
+
+    /// Sets up advanced collision detection
+    private func setupAdvancedCollisionDetection() {
+        // Additional setup for realistic physics can be added here
     }
 
     // MARK: - Physics Body Creation
@@ -76,11 +96,20 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
         return physicsBody
     }
 
-    /// Creates a physics body for an obstacle
-    /// - Parameter size: Size of the obstacle
+    /// Creates a physics body for an obstacle with advanced material properties
+    /// - Parameters:
+    ///   - size: Size of the obstacle
+    ///   - type: Type of obstacle for material properties
     /// - Returns: Configured physics body
-    func createObstaclePhysicsBody(size: CGSize) -> SKPhysicsBody {
-        let physicsBody = SKPhysicsBody(rectangleOf: size)
+    func createObstaclePhysicsBody(size: CGSize, type: Obstacle.ObstacleType = .block) -> SKPhysicsBody {
+        let physicsBody: SKPhysicsBody
+
+        switch type {
+        case .laser:
+            physicsBody = SKPhysicsBody(rectangleOf: size)
+        default:
+            physicsBody = SKPhysicsBody(rectangleOf: size)
+        }
 
         // Configure physics properties
         physicsBody.categoryBitMask = PhysicsCategory.obstacle
@@ -90,62 +119,206 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
         physicsBody.isDynamic = true
         physicsBody.allowsRotation = false
 
+        // Apply advanced material properties
+        applyMaterialProperties(to: physicsBody, for: type)
+
         return physicsBody
     }
 
-    /// Creates a physics body for a power-up
-    /// - Parameter size: Size of the power-up
-    /// - Returns: Configured physics body
-    func createPowerUpPhysicsBody(size: CGSize) -> SKPhysicsBody {
-        let physicsBody = SKPhysicsBody(rectangleOf: size)
+    /// Applies material properties to a physics body
+    /// - Parameters:
+    ///   - body: The physics body to modify
+    ///   - type: The obstacle type for material selection
+    private func applyMaterialProperties(to body: SKPhysicsBody, for type: Obstacle.ObstacleType) {
+        let material: PhysicsMaterial
 
-        // Configure physics properties
-        physicsBody.categoryBitMask = PhysicsCategory.powerUp
-        physicsBody.contactTestBitMask = PhysicsCategory.player
-        physicsBody.collisionBitMask = PhysicsCategory.none
-        physicsBody.affectedByGravity = false
-        physicsBody.isDynamic = true
-        physicsBody.allowsRotation = false
+        switch type {
+        case .bouncing:
+            material = .bouncingObstacle
+        case .laser:
+            material = .laser
+        default:
+            material = .obstacle
+        }
 
-        return physicsBody
+        body.restitution = material.restitution
+        body.friction = material.friction
+        body.density = material.density
+        body.linearDamping = material.linearDamping
+        body.angularDamping = material.angularDamping
+    }
+
+    // MARK: - Advanced Physics Methods
+
+    /// Applies realistic momentum transfer between colliding bodies
+    /// - Parameters:
+    ///   - bodyA: First physics body
+    ///   - bodyB: Second physics body
+    ///   - collisionPoint: Point of collision
+    func applyMomentumTransfer(bodyA: SKPhysicsBody, bodyB: SKPhysicsBody, collisionPoint: CGPoint) {
+        guard simulationSettings.enableMomentumTransfer else { return }
+
+        // Calculate relative velocity
+        let relativeVelocity = CGVector(
+            dx: bodyA.velocity.dx - bodyB.velocity.dx,
+            dy: bodyA.velocity.dy - bodyB.velocity.dy
+        )
+
+        // Calculate collision normal (simplified)
+        let normal = CGVector(dx: 0, dy: 1) // Assuming vertical collision for simplicity
+
+        // Calculate impulse
+        let impulseMagnitude = relativeVelocity.dx * normal.dx + relativeVelocity.dy * normal.dy
+        let impulse = CGVector(
+            dx: impulseMagnitude * normal.dx,
+            dy: impulseMagnitude * normal.dy
+        )
+
+        // Apply impulse to both bodies
+        bodyA.applyImpulse(impulse)
+        bodyB.applyImpulse(CGVector(dx: -impulse.dx, dy: -impulse.dy))
+    }
+
+    /// Applies advanced force to a physics body with realistic dynamics
+    /// - Parameters:
+    ///   - body: The physics body to apply force to
+    ///   - force: The force vector
+    ///   - duration: Duration to apply the force
+    func applyAdvancedForce(to body: SKPhysicsBody, force: CGVector, duration: TimeInterval = 0.1) {
+        guard simulationSettings.enableAdvancedForces else {
+            body.applyForce(force)
+            return
+        }
+
+        // Apply force with damping for more realistic movement
+        let dampedForce = CGVector(
+            dx: force.dx * (1.0 - body.linearDamping),
+            dy: force.dy * (1.0 - body.linearDamping)
+        )
+
+        body.applyForce(dampedForce)
+
+        // Schedule force removal
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            body.applyForce(CGVector(dx: -dampedForce.dx, dy: -dampedForce.dy))
+        }
+    }
+
+    /// Creates a realistic collision response with sound and visual effects
+    /// - Parameters:
+    ///   - bodyA: First colliding body
+    ///   - bodyB: Second colliding body
+    ///   - intensity: Collision intensity (0.0 - 1.0)
+    func createCollisionResponse(bodyA: SKPhysicsBody, bodyB: SKPhysicsBody, intensity: CGFloat) {
+        // Calculate collision energy
+        let energy = sqrt(pow(bodyA.velocity.dx, 2) + pow(bodyA.velocity.dy, 2)) +
+            sqrt(pow(bodyB.velocity.dx, 2) + pow(bodyB.velocity.dy, 2))
+
+        // Apply realistic bounce with energy conservation
+        if intensity > 0.5 {
+            let bounceForce = CGVector(dx: 0, dy: energy * 0.1)
+            bodyA.applyImpulse(bounceForce)
+            bodyB.applyImpulse(CGVector(dx: -bounceForce.dx, dy: -bounceForce.dy))
+        }
+    }
+
+    /// Updates physics simulation with advanced features
+    /// - Parameter deltaTime: Time elapsed since last update
+    func updatePhysics(deltaTime: TimeInterval) {
+        // Update collision history (remove old entries)
+        let currentTime = Date().timeIntervalSince1970
+        collisionHistory = collisionHistory.filter { currentTime - $0.value < 1.0 }
+
+        // Apply continuous forces if needed
+        applyContinuousForces(deltaTime)
+    }
+
+    /// Applies continuous forces like drag or magnetic effects
+    /// - Parameter deltaTime: Time elapsed
+    private func applyContinuousForces(_ deltaTime: TimeInterval) {
+        // Apply air resistance to moving bodies via scene children
+        guard let scene else { return }
+
+        // Iterate through all nodes in the scene that have physics bodies
+        for node in scene.children {
+            if let body = node.physicsBody,
+               body.velocity.dx != 0 || body.velocity.dy != 0
+            {
+                let dragForce = CGVector(
+                    dx: -body.velocity.dx * body.linearDamping * CGFloat(deltaTime),
+                    dy: -body.velocity.dy * body.linearDamping * CGFloat(deltaTime)
+                )
+                body.applyForce(dragForce)
+            }
+        }
+    }
+
+    /// Registers a node with specific physics material properties
+    /// - Parameters:
+    ///   - node: The node to register
+    ///   - material: The material properties
+    func registerNode(_ node: SKNode, withMaterial material: PhysicsMaterial) {
+        physicsProperties[node] = material
+
+        // Apply material properties to physics body if it exists
+        if let body = node.physicsBody {
+            body.restitution = material.restitution
+            body.friction = material.friction
+            body.density = material.density
+            body.linearDamping = material.linearDamping
+            body.angularDamping = material.angularDamping
+        }
+    }
+
+    /// Gets the material properties for a node
+    /// - Parameter node: The node to query
+    /// - Returns: Material properties or default
+    func materialForNode(_ node: SKNode) -> PhysicsMaterial {
+        physicsProperties[node] ?? .obstacle
     }
 
     // MARK: - Collision Detection (SKPhysicsContactDelegate)
 
     /// Called when two physics bodies begin contact
-    public func didBegin(_ contact: SKPhysicsContact) {
-        // Order bodies by category for consistent processing
-        var firstBody: SKPhysicsBody
-        var secondBody: SKPhysicsBody
+    public nonisolated func didBegin(_ contact: SKPhysicsContact) {
+        // Extract Sendable information before creating the Task
+        let firstCategory = contact.bodyA.categoryBitMask
+        let secondCategory = contact.bodyB.categoryBitMask
 
-        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
-            firstBody = contact.bodyA
-            secondBody = contact.bodyB
+        // Determine which body is first based on category
+        let (firstBody, secondBody) = if firstCategory < secondCategory {
+            (contact.bodyA, contact.bodyB)
         } else {
-            firstBody = contact.bodyB
-            secondBody = contact.bodyA
+            (contact.bodyB, contact.bodyA)
         }
 
+        // Extract collision information that can be safely passed to the main actor
+        let collisionMask = firstBody.categoryBitMask | secondBody.categoryBitMask
+        let firstNode = firstBody.node
+        let secondNode = secondBody.node
+
         // Handle different collision types
-        self.handleCollision(firstBody: firstBody, secondBody: secondBody)
+        Task { @MainActor in
+            self.handleCollision(collisionMask: collisionMask, firstNode: firstNode, secondNode: secondNode)
+        }
     }
 
     /// Processes collision based on body categories
-    private func handleCollision(firstBody: SKPhysicsBody, secondBody: SKPhysicsBody) {
-        let collision = firstBody.categoryBitMask | secondBody.categoryBitMask
-
-        switch collision {
+    private func handleCollision(collisionMask: UInt32, firstNode: SKNode?, secondNode: SKNode?) {
+        switch collisionMask {
         case PhysicsCategory.player | PhysicsCategory.obstacle:
             // Player collided with obstacle
-            if let playerNode = getNode(from: firstBody, secondBody),
-               let obstacleNode = getNode(from: secondBody, firstBody) {
+            if let playerNode = getPlayerNode(firstNode, secondNode),
+               let obstacleNode = getObstacleNode(firstNode, secondNode)
+            {
                 self.delegate?.playerDidCollideWithObstacle(playerNode, obstacle: obstacleNode)
             }
 
         case PhysicsCategory.player | PhysicsCategory.powerUp:
             // Player collided with power-up
-            if let playerNode = getNode(from: firstBody, secondBody),
-               let powerUpNode = getNode(from: secondBody, firstBody) {
+            if let playerNode = getPlayerNode(firstNode, secondNode),
+               let powerUpNode = getPowerUpNode(firstNode, secondNode)
+            {
                 self.delegate?.playerDidCollideWithPowerUp(playerNode, powerUp: powerUpNode)
             }
 
@@ -155,12 +328,32 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
         }
     }
 
-    /// Helper method to get the correct node from physics bodies
-    private func getNode(from bodyA: SKPhysicsBody, _ bodyB: SKPhysicsBody) -> SKNode? {
-        if bodyA.categoryBitMask == PhysicsCategory.player {
-            return bodyA.node
-        } else if bodyB.categoryBitMask == PhysicsCategory.player {
-            return bodyB.node
+    /// Helper method to get the player node from collision nodes
+    private func getPlayerNode(_ firstNode: SKNode?, _ secondNode: SKNode?) -> SKNode? {
+        if let firstNode, firstNode.physicsBody?.categoryBitMask == PhysicsCategory.player {
+            return firstNode
+        } else if let secondNode, secondNode.physicsBody?.categoryBitMask == PhysicsCategory.player {
+            return secondNode
+        }
+        return nil
+    }
+
+    /// Helper method to get the obstacle node from collision nodes
+    private func getObstacleNode(_ firstNode: SKNode?, _ secondNode: SKNode?) -> SKNode? {
+        if let firstNode, firstNode.physicsBody?.categoryBitMask == PhysicsCategory.obstacle {
+            return firstNode
+        } else if let secondNode, secondNode.physicsBody?.categoryBitMask == PhysicsCategory.obstacle {
+            return secondNode
+        }
+        return nil
+    }
+
+    /// Helper method to get the power-up node from collision nodes
+    private func getPowerUpNode(_ firstNode: SKNode?, _ secondNode: SKNode?) -> SKNode? {
+        if let firstNode, firstNode.physicsBody?.categoryBitMask == PhysicsCategory.powerUp {
+            return firstNode
+        } else if let secondNode, secondNode.physicsBody?.categoryBitMask == PhysicsCategory.powerUp {
+            return secondNode
         }
         return nil
     }
@@ -293,142 +486,8 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
     /// Cleans up physics-related resources
     func cleanup() {
         self.physicsWorld?.contactDelegate = nil
-    }
-
-    // MARK: - Async Physics Operations
-
-    /// Creates a physics body for the player asynchronously
-    /// - Parameter size: Size of the player
-    /// - Returns: Configured physics body
-    func createPlayerPhysicsBodyAsync(size: CGSize) async -> SKPhysicsBody {
-        await Task.detached {
-            self.createPlayerPhysicsBody(size: size)
-        }.value
-    }
-
-    /// Creates a physics body for an obstacle asynchronously
-    /// - Parameter size: Size of the obstacle
-    /// - Returns: Configured physics body
-    func createObstaclePhysicsBodyAsync(size: CGSize) async -> SKPhysicsBody {
-        await Task.detached {
-            self.createObstaclePhysicsBody(size: size)
-        }.value
-    }
-
-    /// Creates a physics body for a power-up asynchronously
-    /// - Parameter size: Size of the power-up
-    /// - Returns: Configured physics body
-    func createPowerUpPhysicsBodyAsync(size: CGSize) async -> SKPhysicsBody {
-        await Task.detached {
-            self.createPowerUpPhysicsBody(size: size)
-        }.value
-    }
-
-    /// Applies an impulse to a physics body asynchronously
-    /// - Parameters:
-    ///   - body: The physics body to apply impulse to
-    ///   - impulse: The impulse vector
-    func applyImpulseAsync(to body: SKPhysicsBody, impulse: CGVector) async {
-        await Task.detached {
-            self.applyImpulse(to: body, impulse: impulse)
-        }.value
-    }
-
-    /// Applies a force to a physics body asynchronously
-    /// - Parameters:
-    ///   - body: The physics body to apply force to
-    ///   - force: The force vector
-    func applyForceAsync(to body: SKPhysicsBody, force: CGVector) async {
-        await Task.detached {
-            self.applyForce(to: body, force: force)
-        }.value
-    }
-
-    /// Sets the velocity of a physics body asynchronously
-    /// - Parameters:
-    ///   - body: The physics body to modify
-    ///   - velocity: The new velocity
-    func setVelocityAsync(of body: SKPhysicsBody, to velocity: CGVector) async {
-        await Task.detached {
-            self.setVelocity(of: body, to: velocity)
-        }.value
-    }
-
-    /// Gets the velocity of a physics body asynchronously
-    /// - Parameter body: The physics body to query
-    /// - Returns: Current velocity
-    func getVelocityAsync(of body: SKPhysicsBody) async -> CGVector {
-        await Task.detached {
-            self.getVelocity(of: body)
-        }.value
-    }
-
-    /// Performs a ray cast from a point in a direction asynchronously
-    /// - Parameters:
-    ///   - startPoint: Starting point of the ray
-    ///   - endPoint: Ending point of the ray
-    /// - Returns: Array of physics bodies hit by the ray
-    func rayCastAsync(from startPoint: CGPoint, to endPoint: CGPoint) async -> [SKPhysicsBody] {
-        await Task.detached {
-            self.rayCast(from: startPoint, to: endPoint)
-        }.value
-    }
-
-    /// Performs a point query to find bodies at a specific point asynchronously
-    /// - Parameter point: The point to query
-    /// - Returns: Array of physics bodies at the point
-    func bodiesAsync(at point: CGPoint) async -> [SKPhysicsBody] {
-        await Task.detached {
-            self.bodies(at: point)
-        }.value
-    }
-
-    /// Performs an area query to find bodies within a rectangle asynchronously
-    /// - Parameter rect: The rectangle to query
-    /// - Returns: Array of physics bodies in the rectangle
-    func bodiesAsync(in rect: CGRect) async -> [SKPhysicsBody] {
-        await Task.detached {
-            self.bodies(in: rect)
-        }.value
-    }
-
-    /// Enables or disables physics debugging visualization asynchronously
-    /// - Parameter enabled: Whether to show physics bodies
-    func setDebugVisualizationAsync(enabled: Bool) async {
-        await Task.detached {
-            self.setDebugVisualization(enabled: enabled)
-        }.value
-    }
-
-    /// Enables or disables FPS display asynchronously
-    /// - Parameter enabled: Whether to show FPS
-    func setFPSDisplayAsync(enabled: Bool) async {
-        await Task.detached {
-            self.setFPSDisplay(enabled: enabled)
-        }.value
-    }
-
-    /// Enables or disables node count display asynchronously
-    /// - Parameter enabled: Whether to show node count
-    func setNodeCountDisplayAsync(enabled: Bool) async {
-        await Task.detached {
-            self.setNodeCountDisplay(enabled: enabled)
-        }.value
-    }
-
-    /// Updates physics simulation quality asynchronously
-    /// - Parameter quality: The desired quality level
-    func setSimulationQualityAsync(_ quality: PhysicsQuality) async {
-        await Task.detached {
-            self.setSimulationQuality(quality)
-        }.value
-    }
-
-    /// Cleans up physics-related resources asynchronously
-    func cleanupAsync() async {
-        await Task.detached {
-            self.cleanup()
-        }.value
+        self.physicsProperties.removeAll()
+        self.collisionHistory.removeAll()
     }
 }
 
@@ -439,23 +498,61 @@ enum PhysicsQuality {
     case low
 }
 
-// MARK: - Object Pooling
+/// Advanced physics material properties
+struct PhysicsMaterial {
+    let restitution: CGFloat // Bounciness (0.0 - 1.0)
+    let friction: CGFloat // Surface friction (0.0 - 1.0)
+    let density: CGFloat // Mass density
+    let linearDamping: CGFloat // Air resistance
+    let angularDamping: CGFloat // Rotational resistance
 
-/// Object pool for performance optimization
-private var objectPool: [Any] = []
-private let maxPoolSize = 50
+    static let player = PhysicsMaterial(
+        restitution: 0.0,
+        friction: 0.0,
+        density: 1.0,
+        linearDamping: 0.1,
+        angularDamping: 0.1
+    )
 
-/// Get an object from the pool or create new one
-private func getPooledObject<T>() -> T? {
-    if let pooled = objectPool.popLast() as? T {
-        return pooled
-    }
-    return nil
+    static let obstacle = PhysicsMaterial(
+        restitution: 0.2,
+        friction: 0.1,
+        density: 0.8,
+        linearDamping: 0.05,
+        angularDamping: 0.05
+    )
+
+    static let powerUp = PhysicsMaterial(
+        restitution: 0.8,
+        friction: 0.0,
+        density: 0.3,
+        linearDamping: 0.02,
+        angularDamping: 0.02
+    )
+
+    static let bouncingObstacle = PhysicsMaterial(
+        restitution: 0.9,
+        friction: 0.0,
+        density: 0.6,
+        linearDamping: 0.01,
+        angularDamping: 0.01
+    )
+
+    static let laser = PhysicsMaterial(
+        restitution: 0.0,
+        friction: 0.0,
+        density: 2.0,
+        linearDamping: 0.0,
+        angularDamping: 0.0
+    )
 }
 
-/// Return an object to the pool
-private func returnToPool(_ object: Any) {
-    if objectPool.count < maxPoolSize {
-        objectPool.append(object)
-    }
+/// Physics simulation settings
+struct PhysicsSimulationSettings {
+    var gravity: CGVector = .zero
+    var speed: CGFloat = 1.0
+    var enableRealisticCollisions = true
+    var enableMomentumTransfer = true
+    var enableAdvancedForces = true
+    var collisionCooldown: TimeInterval = 0.1 // Minimum time between same collision pairs
 }

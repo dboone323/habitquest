@@ -25,11 +25,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemBackground)
+                return Color(UIColor.systemBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -74,8 +74,8 @@ extension Features.Subscriptions {
                                 .fill(Color.blue.opacity(0.1))
                                 .overlay(
                                     Capsule()
-                                        .stroke(Color.blue.opacity(0.3), lineWidth: 1),
-                                ),
+                                        .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                                )
                         )
                 }
 
@@ -104,8 +104,8 @@ extension Features.Subscriptions {
                             .fill(Color.blue.opacity(0.05))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.blue.opacity(0.2), lineWidth: 1),
-                            ),
+                                    .stroke(Color.blue.opacity(0.2), lineWidth: 1)
+                            )
                     )
 
                     // Yearly Total
@@ -126,8 +126,8 @@ extension Features.Subscriptions {
                             .fill(Color.green.opacity(0.05))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.green.opacity(0.2), lineWidth: 1),
-                            ),
+                                    .stroke(Color.green.opacity(0.2), lineWidth: 1)
+                            )
                     )
                 }
 
@@ -168,8 +168,8 @@ extension Features.Subscriptions {
                             .fill(Color.orange.opacity(0.05))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.orange.opacity(0.2), lineWidth: 1),
-                            ),
+                                    .stroke(Color.orange.opacity(0.2), lineWidth: 1)
+                            )
                     )
                 }
             }
@@ -177,7 +177,7 @@ extension Features.Subscriptions {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(self.backgroundColor)
-                    .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1),
+                    .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
             )
         }
     }
@@ -190,11 +190,11 @@ extension Features.Subscriptions {
         // Cross-platform color support
         private var backgroundColor: Color {
             #if canImport(UIKit)
-            return Color(UIColor.systemGroupedBackground)
+                return Color(UIColor.systemGroupedBackground)
             #elseif canImport(AppKit)
-            return Color(NSColor.controlBackgroundColor)
+                return Color(NSColor.controlBackgroundColor)
             #else
-            return Color.white
+                return Color.white
             #endif
         }
 
@@ -235,7 +235,7 @@ extension Features.Subscriptions {
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(self.backgroundColor),
+                    .fill(self.backgroundColor)
             )
         }
     }

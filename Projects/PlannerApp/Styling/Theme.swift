@@ -10,9 +10,9 @@
 
 import SwiftUI
 #if os(macOS)
-import AppKit
+    import AppKit
 #else
-import UIKit
+    import UIKit
 #endif
 
 // Defines the properties of a visual theme
@@ -67,37 +67,37 @@ public struct Theme: Identifiable, Equatable, Sendable { // Added Equatable for 
     // Platform-specific default colors
     private static var defaultPrimaryBackgroundColor: Color {
         #if os(macOS)
-        return Color(nsColor: .windowBackgroundColor)
+            return Color(nsColor: .windowBackgroundColor)
         #else
-        return Color(UIColor.systemBackground)
+            return Color(UIColor.systemBackground)
         #endif
     }
 
     private static var defaultSecondaryBackgroundColor: Color {
         #if os(macOS)
-        return Color(nsColor: .controlBackgroundColor)
+            return Color(nsColor: .controlBackgroundColor)
         #else
-        return Color(UIColor.secondarySystemBackground)
+            return Color(UIColor.secondarySystemBackground)
         #endif
     }
 
     private static var defaultPrimaryTextColor: Color {
         #if os(macOS)
-        return Color(nsColor: .labelColor)
+            return Color(nsColor: .labelColor)
         #else
-        return Color(UIColor.label)
+            return Color(UIColor.label)
         #endif
     }
 
     private static var defaultSecondaryTextColor: Color {
         #if os(macOS)
-        return Color(nsColor: .secondaryLabelColor)
+            return Color(nsColor: .secondaryLabelColor)
         #else
-        return Color(UIColor.secondaryLabel)
+            return Color(UIColor.secondaryLabel)
         #endif
     }
 
-        // Ocean Blue Theme
+    // Ocean Blue Theme
     // Removed @MainActor to allow access during testing
     static let oceanBlue = Theme(
         name: "Ocean Blue",
@@ -113,7 +113,7 @@ public struct Theme: Identifiable, Equatable, Sendable { // Added Equatable for 
         secondaryFontName: nil
     )
 
-        // Forest Green Theme
+    // Forest Green Theme
     // Removed @MainActor to allow access during testing
     static let forestGreen = Theme(
         name: "Forest Green",
@@ -129,7 +129,7 @@ public struct Theme: Identifiable, Equatable, Sendable { // Added Equatable for 
         secondaryFontName: nil
     )
 
-        // Sunset Orange Theme
+    // Sunset Orange Theme
     // Removed @MainActor to allow access during testing
     static let sunsetOrange = Theme(
         name: "Sunset Orange",

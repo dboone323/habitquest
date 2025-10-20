@@ -3,7 +3,7 @@ import Foundation
 import SwiftUI
 
 #if os(iOS)
-import UIKit
+    import UIKit
 #endif
 
 public struct TaskManagerHeaderView: View {
@@ -14,7 +14,7 @@ public struct TaskManagerHeaderView: View {
         HStack {
             Button("Done") {
                 #if os(iOS)
-                HapticManager.lightImpact()
+                    HapticManager.lightImpact()
                 #endif
                 self.dismiss()
             }
