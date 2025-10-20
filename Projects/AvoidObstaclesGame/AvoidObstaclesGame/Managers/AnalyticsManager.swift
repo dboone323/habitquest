@@ -265,12 +265,12 @@ final class AnalyticsManager: NSObject, Sendable {
 
     private func getCurrentPlayerPosition() -> CGPoint? {
         // Get player position from GameCoordinator
-        return GameCoordinator.shared.getCurrentPlayerPosition()
+        GameCoordinator.shared.getCurrentPlayerPosition()
     }
 
     private func getCurrentGameState() -> String {
         // Get game state from GameCoordinator
-        return GameCoordinator.shared.getCurrentGameState()
+        GameCoordinator.shared.getCurrentGameState()
     }
 
     // MARK: - Data Storage Keys
@@ -376,7 +376,7 @@ final class AnalyticsManager: NSObject, Sendable {
     private func calculateEngagementLevel(_ sessions: ArraySlice<SessionAnalytics>) -> EngagementLevel {
         if sessions.isEmpty { return .low }
 
-        let avgDuration = sessions.map { $0.duration }.reduce(0, +) / Double(sessions.count)
+        let avgDuration = sessions.map(\.duration).reduce(0, +) / Double(sessions.count)
         let avgScore = sessions.map { Double($0.totalScore) }.reduce(0, +) / Double(sessions.count)
 
         // Engagement based on session duration and score
@@ -445,8 +445,8 @@ final class AnalyticsManager: NSObject, Sendable {
         let recentSessions = sessions.suffix(3)
         let olderSessions = sessions.prefix(max(1, sessions.count - 3))
 
-        let recentAvgDuration = recentSessions.map { $0.duration }.reduce(0, +) / Double(recentSessions.count)
-        let olderAvgDuration = olderSessions.map { $0.duration }.reduce(0, +) / Double(olderSessions.count)
+        let recentAvgDuration = recentSessions.map(\.duration).reduce(0, +) / Double(recentSessions.count)
+        let olderAvgDuration = olderSessions.map(\.duration).reduce(0, +) / Double(olderSessions.count)
 
         // If recent sessions are significantly shorter, higher retention risk
         let durationChange = recentAvgDuration / max(1.0, olderAvgDuration)
@@ -487,7 +487,7 @@ final class AnalyticsManager: NSObject, Sendable {
     private func calculateAverageFrameRate() -> Double {
         // Get current FPS from PerformanceManager if available
         // For now, return a reasonable estimate based on system performance
-        return 60.0 // Default to 60 FPS
+        60.0 // Default to 60 FPS
     }
 
     private func getCurrentMemoryUsage() -> UInt64 {
@@ -551,7 +551,7 @@ final class AnalyticsManager: NSObject, Sendable {
         if sessions.count < 2 { return 1.0 }
 
         // Calculate variance in session durations and scores
-        let durations = sessions.map { $0.duration }
+        let durations = sessions.map(\.duration)
         let scores = sessions.map { Double($0.totalScore) }
 
         let avgDuration = durations.reduce(0, +) / Double(durations.count)
@@ -604,7 +604,6 @@ final class AnalyticsManager: NSObject, Sendable {
             if let position = event.playerPosition {
                 updateHeatMapData(position: position, action: .move)
             }
-            break
         }
     }
 

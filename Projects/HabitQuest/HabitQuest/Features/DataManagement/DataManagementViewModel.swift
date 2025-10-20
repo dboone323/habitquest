@@ -168,23 +168,17 @@ public class DataManagementViewModel: ObservableObject {
     func clearAllData() {
         guard let modelContext else { return }
 
-        Task {
-            do {
-                // Delete all data using the service
-                try await self.clearAllDataFromService(modelContext)
+        do {
+            // Delete all data using the service
+            try self.clearAllDataFromService(modelContext)
 
-                await MainActor.run {
-                    self.loadDataStatistics() // Refresh stats
-                    self.lastBackupDate = "Never"
-                }
+            self.loadDataStatistics() // Refresh stats
+            self.lastBackupDate = "Never"
 
-                self.logger.info("All data cleared successfully")
+            self.logger.info("All data cleared successfully")
 
-            } catch {
-                await MainActor.run {
-                    self.handleError(error)
-                }
-            }
+        } catch {
+            self.handleError(error)
         }
     }
 
@@ -255,7 +249,7 @@ public class DataManagementViewModel: ObservableObject {
     }
 
     /// Clear all data using a background task
-    private func clearAllDataFromService(_ modelContext: ModelContext) async throws {
+    private func clearAllDataFromService(_ modelContext: ModelContext) throws {
         // Delete all existing data
         let profileDescriptor = FetchDescriptor<PlayerProfile>()
         let profiles = try modelContext.fetch(profileDescriptor)

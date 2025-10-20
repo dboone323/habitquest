@@ -50,7 +50,7 @@ final class StreakAnalyticsViewModel: ObservableObject {
         self.streakService = StreakService(modelContext: modelContext)
     }
 
-    func loadAnalytics() async {
+    func loadAnalytics() {
         self.isLoading = true
         self.errorMessage = nil
         defer { isLoading = false }
@@ -65,18 +65,18 @@ final class StreakAnalyticsViewModel: ObservableObject {
             let habitDescriptor = FetchDescriptor<Habit>()
             let habits = try modelContext.fetch(habitDescriptor)
 
-            let analytics = await generateAnalyticsData(habits: habits, service: service)
+            let analytics = generateAnalyticsData(habits: habits, service: service)
             self.analyticsData = analytics
         } catch {
             self.errorMessage = "Failed to load analytics: \(error.localizedDescription)"
         }
     }
 
-    func refreshAnalytics() async {
-        await self.loadAnalytics()
+    func refreshAnalytics() {
+        self.loadAnalytics()
     }
 
-    func exportAnalytics() async {
+    func exportAnalytics() {
         // Export logic here - placeholder for future implementation
         print("Exporting analytics data...")
     }
@@ -87,14 +87,14 @@ final class StreakAnalyticsViewModel: ObservableObject {
         print("Sharing analytics report...")
     }
 
-    private func generateAnalyticsData(habits: [Habit], service: StreakService) async
+    private func generateAnalyticsData(habits: [Habit], service: StreakService)
         -> StreakAnalyticsData
     {
         var streakAnalytics: [StreakAnalytics] = []
         var topPerformers: [TopPerformer] = []
 
         for habit in habits {
-            let analytics = await service.getStreakAnalytics(for: habit)
+            let analytics = service.getStreakAnalytics(for: habit)
             streakAnalytics.append(analytics)
 
             if analytics.currentStreak > 0 {
@@ -112,7 +112,7 @@ final class StreakAnalyticsViewModel: ObservableObject {
         // Sort top performers by current streak
         topPerformers.sort { $0.currentStreak > $1.currentStreak }
 
-        return await StreakAnalyticsData(
+        return StreakAnalyticsData(
             totalActiveStreaks: streakAnalytics.count(where: { $0.currentStreak > 0 }),
             longestOverallStreak: streakAnalytics.map(\.longestStreak).max() ?? 0,
             averageConsistency: self.calculateAverageConsistency(streakAnalytics),
@@ -182,7 +182,7 @@ final class StreakAnalyticsViewModel: ObservableObject {
         return insights
     }
 
-    private func generateWeeklyPatterns(habits _: [Habit], service _: StreakService) async
+    private func generateWeeklyPatterns(habits _: [Habit], service _: StreakService)
         -> [WeeklyPattern]
     {
         // Simplified weekly pattern generation

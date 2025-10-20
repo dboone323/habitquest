@@ -10,9 +10,9 @@ final class HabitSuggestionService {
     }
 
     /// Generate personalized habit suggestions using ML
-    func generateHabitSuggestions() async -> [AnalyticsHabitSuggestion] {
-        let existingHabits = await fetchAllHabits()
-        let userProfile = await analyzeUserProfile(from: existingHabits)
+    func generateHabitSuggestions() -> [AnalyticsHabitSuggestion] {
+        let existingHabits = self.fetchAllHabits()
+        let userProfile = self.analyzeUserProfile(from: existingHabits)
 
         return [
             self.generateCategoryBasedSuggestions(profile: userProfile),
@@ -226,12 +226,12 @@ final class HabitSuggestionService {
 
     // MARK: - Private Helper Methods
 
-    private func fetchAllHabits() async -> [Habit] {
+    private func fetchAllHabits() -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
         return (try? self.modelContext.fetch(descriptor)) ?? []
     }
 
-    private func analyzeUserProfile(from habits: [Habit]) async -> UserProfile {
+    private func analyzeUserProfile(from habits: [Habit]) -> UserProfile {
         let totalCompletions = habits.reduce(0) { $0 + $1.logs.filter(\.isCompleted).count }
         let totalLogs = habits.reduce(0) { $0 + $1.logs.count }
         let averageConsistency = totalLogs > 0 ? Double(totalCompletions) / Double(totalLogs) : 0.0

@@ -11,7 +11,7 @@ import Foundation
 // MARK: - AI Service Protocols (Simplified for Standalone Demo)
 
 public protocol AITextGenerationService {
-    func generateText(prompt: String, maxTokens: Int) async throws -> String
+    func generateText(prompt: String, maxTokens: Int) -> String
 }
 
 public protocol OllamaClient {
@@ -68,27 +68,27 @@ public final class QuantumChemistryEngine {
 
     /// Perform quantum chemistry simulation demonstrating quantum supremacy
     /// This solves the molecular Schrödinger equation using quantum algorithms
-    public func simulateQuantumChemistry(parameters: SimulationParameters) async throws -> SimulationResult {
+    public func simulateQuantumChemistry(parameters: SimulationParameters) throws -> SimulationResult {
         print("🚀 Starting Quantum Chemistry Simulation")
         print("📊 Molecule: \(parameters.molecule.name)")
         print("🔬 Method: \(parameters.method)")
         print("⚛️  Basis Set: \(parameters.basisSet)")
 
         // Step 1: Generate molecular orbitals using quantum algorithms
-        let orbitals = try await generateMolecularOrbitals(for: parameters.molecule)
+        let orbitals = try generateMolecularOrbitals(for: parameters.molecule)
 
         // Step 2: Solve quantum many-body problem
-        let hamiltonian = try await constructHamiltonian(molecule: parameters.molecule, orbitals: orbitals)
+        let hamiltonian = try constructHamiltonian(molecule: parameters.molecule, orbitals: orbitals)
 
         // Step 3: Apply quantum algorithm (demonstrates quantum advantage)
-        let energy = try await solveQuantumSchrodingerEquation(
+        let energy = try solveQuantumSchrodingerEquation(
             hamiltonian: hamiltonian,
             method: parameters.method,
             parameters: parameters
         )
 
         // Step 4: Calculate molecular properties
-        let properties = try await calculateMolecularProperties(
+        let properties = try calculateMolecularProperties(
             energy: energy,
             orbitals: orbitals,
             molecule: parameters.molecule
@@ -114,17 +114,17 @@ public final class QuantumChemistryEngine {
 
     /// Generate molecular orbitals using quantum algorithms
     /// This demonstrates quantum advantage over classical Hartree-Fock
-    private func generateMolecularOrbitals(for molecule: Molecule) async throws -> [MolecularOrbital] {
+    private func generateMolecularOrbitals(for molecule: Molecule) throws -> [MolecularOrbital] {
         print("🔬 Generating molecular orbitals using quantum algorithms...")
 
-        // Use AI to optimize orbital generation
+        // Use AI to optimize orbital generation (synchronous for architecture compliance)
         let prompt = """
         Generate optimized molecular orbitals for \(molecule.name) with \(molecule.atoms.count) atoms.
         Provide quantum-accurate orbital coefficients that minimize computational complexity.
         Focus on core and valence orbitals for quantum supremacy demonstration.
         """
 
-        let aiResponse = try await aiService.generateText(prompt: prompt, maxTokens: 1000)
+        let aiResponse = aiService.generateText(prompt: prompt, maxTokens: 1000)
         print("🤖 AI Optimization: \(aiResponse.prefix(50))...")
 
         // Simulate quantum orbital generation (in real implementation, this would use actual quantum algorithms)
@@ -149,7 +149,7 @@ public final class QuantumChemistryEngine {
     }
 
     /// Construct molecular Hamiltonian using quantum principles
-    private func constructHamiltonian(molecule: Molecule, orbitals: [MolecularOrbital]) async throws -> Hamiltonian {
+    private func constructHamiltonian(molecule: Molecule, orbitals: [MolecularOrbital]) throws -> Hamiltonian {
         print("🔧 Constructing molecular Hamiltonian...")
 
         let kineticEnergy = calculateKineticEnergy(molecule: molecule)
@@ -173,20 +173,20 @@ public final class QuantumChemistryEngine {
         hamiltonian: Hamiltonian,
         method: QuantumMethod,
         parameters: SimulationParameters
-    ) async throws -> Double {
+    ) throws -> Double {
         print("🔬 Solving quantum Schrödinger equation using \(method)...")
 
         switch method {
         case .hartreeFock:
-            return try await solveHartreeFock(hamiltonian: hamiltonian, parameters: parameters)
+            return try solveHartreeFock(hamiltonian: hamiltonian, parameters: parameters)
         case .densityFunctionalTheory:
-            return try await solveDFT(hamiltonian: hamiltonian, parameters: parameters)
+            return try solveDFT(hamiltonian: hamiltonian, parameters: parameters)
         case .coupledCluster:
-            return try await solveCoupledCluster(hamiltonian: hamiltonian, parameters: parameters)
+            return try solveCoupledCluster(hamiltonian: hamiltonian, parameters: parameters)
         case .quantumMonteCarlo:
-            return try await solveQMC(hamiltonian: hamiltonian, parameters: parameters)
+            return try solveQMC(hamiltonian: hamiltonian, parameters: parameters)
         case .variationalQuantumEigensolver:
-            return try await solveVQE(hamiltonian: hamiltonian, parameters: parameters)
+            return try solveVQE(hamiltonian: hamiltonian, parameters: parameters)
         }
     }
 

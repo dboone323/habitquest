@@ -11,12 +11,12 @@ final class BehavioralAdaptationService {
     }
 
     /// Learn from user interaction patterns and adjust timing
-    func adaptToUserBehavior(habitId: UUID, interactionType: NotificationInteraction) async {
-        let habit = await fetchHabit(id: habitId)
+    func adaptToUserBehavior(habitId: UUID, interactionType: NotificationInteraction) {
+        let habit = fetchHabit(id: habitId)
         guard let habit else { return }
 
         // Log interaction for machine learning
-        await self.logNotificationInteraction(
+        self.logNotificationInteraction(
             habit: habit,
             interaction: interactionType,
             timestamp: Date()
@@ -25,36 +25,36 @@ final class BehavioralAdaptationService {
         // Adjust future notifications based on response
         switch interactionType {
         case .dismissed:
-            await self.adjustNotificationTiming(for: habit, direction: .later)
+            self.adjustNotificationTiming(for: habit, direction: .later)
         case .completed:
-            await self.reinforceCurrentTiming(for: habit)
+            self.reinforceCurrentTiming(for: habit)
         case .ignored:
-            await self.adjustNotificationTiming(for: habit, direction: .earlier)
+            self.adjustNotificationTiming(for: habit, direction: .earlier)
         case .snoozed:
-            await self.adjustNotificationFrequency(for: habit, factor: 0.8) // Reduce frequency
+            self.adjustNotificationFrequency(for: habit, factor: 0.8) // Reduce frequency
         }
     }
 
     /// Dynamically adjust notification frequency based on success patterns
-    func optimizeNotificationFrequency() async {
-        let habits = await fetchActiveHabits()
+    func optimizeNotificationFrequency() {
+        let habits = fetchActiveHabits()
 
         for habit in habits {
-            let recentSuccess = await calculateRecentSuccessRate(habit: habit)
+            let recentSuccess = calculateRecentSuccessRate(habit: habit)
 
             if recentSuccess > 0.8 {
                 // Reduce frequency for well-established habits
-                await self.adjustNotificationFrequency(for: habit, factor: 0.7)
+                self.adjustNotificationFrequency(for: habit, factor: 0.7)
             } else if recentSuccess < 0.3 {
                 // Increase support for struggling habits
-                await self.adjustNotificationFrequency(for: habit, factor: 1.3)
+                self.adjustNotificationFrequency(for: habit, factor: 1.3)
             }
         }
     }
 
     /// Analyze user response patterns to determine optimal notification strategies
-    func analyzeUserResponsePatterns(habitId: UUID) async -> UserResponseAnalysis {
-        let habit = await fetchHabit(id: habitId)
+    func analyzeUserResponsePatterns(habitId: UUID) -> UserResponseAnalysis {
+        let habit = fetchHabit(id: habitId)
         guard let habit else {
             return UserResponseAnalysis(
                 bestResponseTime: 9,
@@ -64,7 +64,7 @@ final class BehavioralAdaptationService {
             )
         }
 
-        let interactions = await fetchNotificationInteractions(for: habit)
+        let interactions = fetchNotificationInteractions(for: habit)
 
         // Analyze response patterns
         let successRateByTime = self.calculateSuccessRateByTime(interactions: interactions)
@@ -81,8 +81,8 @@ final class BehavioralAdaptationService {
     }
 
     /// Get behavioral insights for notification optimization
-    func getBehavioralInsights(habitId: UUID) async -> NotificationBehavioralInsights {
-        let habit = await fetchHabit(id: habitId)
+    func getBehavioralInsights(habitId: UUID) -> NotificationBehavioralInsights {
+        let habit = fetchHabit(id: habitId)
         guard let habit else {
             return NotificationBehavioralInsights(
                 engagementScore: 0.0,
@@ -92,7 +92,7 @@ final class BehavioralAdaptationService {
             )
         }
 
-        let interactions = await fetchNotificationInteractions(for: habit)
+        let interactions = fetchNotificationInteractions(for: habit)
         let recentInteractions = interactions.filter { $0.timestamp > Date().addingTimeInterval(-7 * 24 * 3600) }
 
         let engagementScore = self.calculateEngagementScore(interactions: recentInteractions)
@@ -110,19 +110,19 @@ final class BehavioralAdaptationService {
 
     // MARK: - Private Methods
 
-    private func fetchActiveHabits() async -> [Habit] {
+    private func fetchActiveHabits() -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
         let allHabits = (try? self.modelContext.fetch(descriptor)) ?? []
         return allHabits.filter(\.isActive)
     }
 
-    private func fetchHabit(id: UUID) async -> Habit? {
+    private func fetchHabit(id: UUID) -> Habit? {
         let descriptor = FetchDescriptor<Habit>()
         let allHabits = (try? self.modelContext.fetch(descriptor)) ?? []
         return allHabits.first { $0.id == id }
     }
 
-    private func calculateRecentSuccessRate(habit: Habit) async -> Double {
+    private func calculateRecentSuccessRate(habit: Habit) -> Double {
         let recentLogs = habit.logs.suffix(7)
         guard !recentLogs.isEmpty else { return 0.5 }
 
@@ -134,28 +134,28 @@ final class BehavioralAdaptationService {
         habit _: Habit,
         interaction _: NotificationInteraction,
         timestamp _: Date
-    ) async {
+    ) {
         // Store interaction data for ML learning
         // Implementation would save to analytics database
         // For now, this is a placeholder for future implementation
     }
 
-    private func adjustNotificationTiming(for _: Habit, direction _: TimingAdjustment) async {
+    private func adjustNotificationTiming(for _: Habit, direction _: TimingAdjustment) {
         // Implement smart timing adjustment logic
         // This would modify stored preferences for the habit
     }
 
-    private func reinforceCurrentTiming(for _: Habit) async {
+    private func reinforceCurrentTiming(for _: Habit) {
         // Strengthen current timing preference
         // This would increase confidence in current timing choice
     }
 
-    private func adjustNotificationFrequency(for _: Habit, factor _: Double) async {
+    private func adjustNotificationFrequency(for _: Habit, factor _: Double) {
         // Modify notification frequency based on success patterns
         // This would update frequency settings in habit preferences
     }
 
-    private func fetchNotificationInteractions(for _: Habit) async -> [NotificationInteractionData] {
+    private func fetchNotificationInteractions(for _: Habit) -> [NotificationInteractionData] {
         // Fetch stored interaction data from database
         // For now, return empty array as placeholder
         []

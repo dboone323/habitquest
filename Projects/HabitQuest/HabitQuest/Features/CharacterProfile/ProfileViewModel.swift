@@ -49,12 +49,8 @@ public class ProfileViewModel: ObservableObject {
 
     /// Load analytics data
     private func loadAnalytics() {
-        Task {
-            let newAnalytics = await analyticsService?.getAnalytics()
-            await MainActor.run {
-                self.analytics = newAnalytics ?? HabitAnalytics.empty
-            }
-        }
+        let newAnalytics = analyticsService?.getAnalytics() ?? HabitAnalytics.empty
+        self.analytics = newAnalytics
     }
 
     /// Load player profile data from SwiftData

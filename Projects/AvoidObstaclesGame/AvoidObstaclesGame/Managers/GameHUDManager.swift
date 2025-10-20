@@ -642,7 +642,7 @@ class GameHUDManager: ThemeDelegate {
     /// Checks if the system is in dark mode
     /// - Returns: True if system is in dark mode
     private func isSystemInDarkMode() -> Bool {
-        return themeManager.isSystemInDarkMode()
+        themeManager.isSystemInDarkMode()
     }
 
     /// Updates UI elements to match the current theme
@@ -657,7 +657,7 @@ class GameHUDManager: ThemeDelegate {
         settingsButton?.fontColor = theme.colors.accentColor
 
         // Update game over screen colors
-                        gameOverLabel?.fontColor = theme.colors.dangerColor
+        gameOverLabel?.fontColor = theme.colors.dangerColor
         finalScoreLabel?.fontColor = theme.colors.textPrimary
         restartLabel?.fontColor = theme.colors.textSecondary
 
@@ -712,6 +712,7 @@ class GameHUDManager: ThemeDelegate {
             self.showSettings()
         }
     }
+
     /// Handles touches within the theme selector overlay
     /// - Parameters:
     ///   - location: Touch location
@@ -724,12 +725,14 @@ class GameHUDManager: ThemeDelegate {
         // Check if a theme button was tapped
         for child in overlay.children {
             if child.name?.hasPrefix("themeButton_") == true,
-               child.contains(overlayLocation) {
+               child.contains(overlayLocation)
+            {
 
                 // Extract theme mode from button name
                 if let name = child.name,
                    let modeString = name.components(separatedBy: "_").last,
-                   let themeMode = ThemeMode(rawValue: modeString) {
+                   let themeMode = ThemeMode(rawValue: modeString)
+                {
 
                     // Apply the selected theme
                     themeManager.setThemeMode(themeMode)
@@ -737,7 +740,7 @@ class GameHUDManager: ThemeDelegate {
                     // Close theme selector
                     overlay.run(SKAction.sequence([
                         SKAction.fadeOut(withDuration: 0.3),
-                        SKAction.removeFromParent()
+                        SKAction.removeFromParent(),
                     ]))
                 }
                 return
@@ -747,7 +750,7 @@ class GameHUDManager: ThemeDelegate {
         // If tapped outside buttons, close the selector
         overlay.run(SKAction.sequence([
             SKAction.fadeOut(withDuration: 0.3),
-            SKAction.removeFromParent()
+            SKAction.removeFromParent(),
         ]))
     }
 

@@ -19,7 +19,7 @@ class StreakService {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    func calculateCurrentStreak(for habit: Habit) async -> Int {
+    func calculateCurrentStreak(for habit: Habit) -> Int {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
 
@@ -52,7 +52,7 @@ class StreakService {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    func calculateLongestStreak(for habit: Habit) async -> Int {
+    func calculateLongestStreak(for habit: Habit) -> Int {
         let calendar = Calendar.current
 
         // Direct relationship navigation - eliminates predicate complexity
@@ -93,7 +93,7 @@ class StreakService {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    func getStreakData(for habit: Habit, days: Int = 29) async -> [StreakDayData] {
+    func getStreakData(for habit: Habit, days: Int = 29) -> [StreakDayData] {
         let calendar = Calendar.current
         let today = Date()
         let startDate = calendar.date(byAdding: .day, value: -days, to: today) ?? today
@@ -130,8 +130,8 @@ class StreakService {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    func checkForNewMilestone(habit: Habit, previousStreak: Int) async -> StreakMilestone? {
-        let newStreak = await calculateCurrentStreak(for: habit)
+    func checkForNewMilestone(habit: Habit, previousStreak: Int) -> StreakMilestone? {
+        let newStreak = calculateCurrentStreak(for: habit)
 
         if StreakMilestone.isNewMilestone(streakCount: newStreak, previousCount: previousStreak) {
             return StreakMilestone.milestone(for: newStreak)
@@ -147,8 +147,8 @@ class StreakService {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    func getCurrentMilestone(for habit: Habit) async -> StreakMilestone? {
-        let currentStreak = await calculateCurrentStreak(for: habit)
+    func getCurrentMilestone(for habit: Habit) -> StreakMilestone? {
+        let currentStreak = calculateCurrentStreak(for: habit)
         return StreakMilestone.milestone(for: currentStreak)
     }
 
@@ -159,8 +159,8 @@ class StreakService {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    func getNextMilestone(for habit: Habit) async -> StreakMilestone? {
-        let currentStreak = await calculateCurrentStreak(for: habit)
+    func getNextMilestone(for habit: Habit) -> StreakMilestone? {
+        let currentStreak = calculateCurrentStreak(for: habit)
         return StreakMilestone.nextMilestone(for: currentStreak)
     }
 
@@ -171,8 +171,8 @@ class StreakService {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    func getProgressToNextMilestone(for habit: Habit) async -> Double {
-        let currentStreak = await calculateCurrentStreak(for: habit)
+    func getProgressToNextMilestone(for habit: Habit) -> Double {
+        let currentStreak = calculateCurrentStreak(for: habit)
         guard let nextMilestone = StreakMilestone.nextMilestone(for: currentStreak) else {
             return 1.0 // Already at max milestone
         }
@@ -194,20 +194,21 @@ class StreakService {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    func getStreakAnalytics(for habit: Habit) async -> StreakAnalytics {
-        let currentStreak = await calculateCurrentStreak(for: habit)
-        let longestStreak = await calculateLongestStreak(for: habit)
-        let currentMilestone = await getCurrentMilestone(for: habit)
-        let nextMilestone = await getNextMilestone(for: habit)
-        let progressToNext = await getProgressToNextMilestone(for: habit)
+    func getStreakAnalytics(for habit: Habit) -> StreakAnalytics {
+        let currentStreak = calculateCurrentStreak(for: habit)
+        let longestStreak = calculateLongestStreak(for: habit)
+        let currentMilestone = getCurrentMilestone(for: habit)
+        let nextMilestone = getNextMilestone(for: habit)
+        let progressToNextMilestone = getProgressToNextMilestone(for: habit)
+        let streakPercentile = calculateStreakPercentile(currentStreak)
 
         return StreakAnalytics(
             currentStreak: currentStreak,
             longestStreak: longestStreak,
             currentMilestone: currentMilestone,
             nextMilestone: nextMilestone,
-            progressToNextMilestone: progressToNext,
-            streakPercentile: self.calculateStreakPercentile(currentStreak)
+            progressToNextMilestone: progressToNextMilestone,
+            streakPercentile: streakPercentile
         )
     }
 

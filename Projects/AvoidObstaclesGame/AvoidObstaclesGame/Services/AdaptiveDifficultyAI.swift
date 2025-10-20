@@ -194,9 +194,9 @@ public enum DifficultyAdjustment: Equatable, Sendable {
 
     var description: String {
         switch self {
-        case .increase(let magnitude):
+        case let .increase(magnitude):
             return "Increase difficulty by \(String(format: "%.1f", magnitude))"
-        case .decrease(let magnitude):
+        case let .decrease(magnitude):
             return "Decrease difficulty by \(String(format: "%.1f", magnitude))"
         case .maintain:
             return "Maintain current difficulty"

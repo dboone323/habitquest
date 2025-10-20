@@ -63,20 +63,16 @@ public final class SmartHabitManager: BaseViewModel {
     /// - Parameter context: The SwiftData model context to use
     func setModelContext(_ context: ModelContext) {
         self.modelContext = context
-        Task {
-            await self.handle(.loadHabits)
-        }
+        self.handle(.loadHabits)
     }
 
     // MARK: - BaseViewModel Protocol
 
     public func handle(_ action: Action) {
-        Task {
-            await self.handleAsync(action)
-        }
+        self.handleSync(action)
     }
 
-    private func handleAsync(_ action: Action) async {
+    private func handleSync(_ action: Action) {
         switch action {
         case .loadHabits:
             loadHabits()

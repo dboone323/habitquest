@@ -8,7 +8,7 @@ final class StreakServiceTests: XCTestCase {
     var streakService: StreakService!
     var testHabit: Habit!
 
-    override func setUp() async throws {
+    override func setUp() throws {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Habit.self, HabitLog.self, configurations: config)
         self.modelContext = ModelContext(container)
@@ -26,7 +26,7 @@ final class StreakServiceTests: XCTestCase {
         self.modelContext.insert(self.testHabit)
     }
 
-    override func tearDown() async throws {
+    override func tearDown() throws {
         self.modelContext = nil
         self.streakService = nil
         self.testHabit = nil
@@ -39,59 +39,57 @@ final class StreakServiceTests: XCTestCase {
         XCTAssertNotNil(self.streakService, "StreakService should initialize successfully")
     }
 
-    func testCalculateCurrentStreak_NoCompletions() async {
+    func testCalculateCurrentStreak_NoCompletions() {
         // Test with no completion logs
-        let streak = await streakService.calculateCurrentStreak(for: self.testHabit)
+        let streak = streakService.calculateCurrentStreak(for: self.testHabit)
         XCTAssertEqual(streak, 0, "Streak should be 0 with no completions")
     }
 
-    func testCalculateCurrentStreak_SingleCompletionToday() async {
+    func testCalculateCurrentStreak_SingleCompletionToday() {
         // Add a completion for today
         let todayLog = HabitLog(habit: testHabit, completionDate: Date(), isCompleted: true)
         self.testHabit.logs.append(todayLog)
 
-        let streak = await streakService.calculateCurrentStreak(for: self.testHabit)
+        let streak = streakService.calculateCurrentStreak(for: self.testHabit)
         XCTAssertEqual(streak, 1, "Streak should be 1 with today's completion")
     }
 
-    func testCalculateCurrentStreak_ConsecutiveDays() async {
+    func testCalculateCurrentStreak_ConsecutiveDays() {
         let calendar = Calendar.current
 
-        // Add completions for today and yesterday
-        let today = Date()
-        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
-
-        let todayLog = HabitLog(habit: testHabit, completionDate: today, isCompleted: true)
+        // Add completions for yesterday and today
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: Date())!
         let yesterdayLog = HabitLog(habit: testHabit, completionDate: yesterday, isCompleted: true)
+        let todayLog = HabitLog(habit: testHabit, completionDate: Date(), isCompleted: true)
 
-        self.testHabit.logs.append(contentsOf: [todayLog, yesterdayLog])
+        self.testHabit.logs.append(yesterdayLog)
+        self.testHabit.logs.append(todayLog)
 
-        let streak = await streakService.calculateCurrentStreak(for: self.testHabit)
+        let streak = streakService.calculateCurrentStreak(for: self.testHabit)
         XCTAssertEqual(streak, 2, "Streak should be 2 with consecutive completions")
     }
 
-    func testCalculateCurrentStreak_WithGap() async {
+    func testCalculateCurrentStreak_WithGap() {
         let calendar = Calendar.current
 
-        // Add completions for today and 2 days ago (gap yesterday)
-        let today = Date()
-        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: today)!
-
-        let todayLog = HabitLog(habit: testHabit, completionDate: today, isCompleted: true)
+        // Add completion for 2 days ago, skip yesterday, complete today
+        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: Date())!
         let twoDaysAgoLog = HabitLog(habit: testHabit, completionDate: twoDaysAgo, isCompleted: true)
+        let todayLog = HabitLog(habit: testHabit, completionDate: Date(), isCompleted: true)
 
-        self.testHabit.logs.append(contentsOf: [todayLog, twoDaysAgoLog])
+        self.testHabit.logs.append(twoDaysAgoLog)
+        self.testHabit.logs.append(todayLog)
 
-        let streak = await streakService.calculateCurrentStreak(for: self.testHabit)
-        XCTAssertEqual(streak, 1, "Streak should be 1 due to gap in completions")
+        let streak = streakService.calculateCurrentStreak(for: self.testHabit)
+        XCTAssertEqual(streak, 1, "Streak should be 1 due to gap yesterday")
     }
 
-    func testCalculateLongestStreak_NoCompletions() async {
-        let longestStreak = await streakService.calculateLongestStreak(for: self.testHabit)
+    func testCalculateLongestStreak_NoCompletions() {
+        let longestStreak = streakService.calculateLongestStreak(for: self.testHabit)
         XCTAssertEqual(longestStreak, 0, "Longest streak should be 0 with no completions")
     }
 
-    func testCalculateLongestStreak_SingleStreak() async {
+    func testCalculateLongestStreak_SingleStreak() {
         let calendar = Calendar.current
 
         // Add 3 consecutive completions
@@ -101,11 +99,11 @@ final class StreakServiceTests: XCTestCase {
             self.testHabit.logs.append(log)
         }
 
-        let longestStreak = await streakService.calculateLongestStreak(for: self.testHabit)
+        let longestStreak = streakService.calculateLongestStreak(for: self.testHabit)
         XCTAssertEqual(longestStreak, 3, "Longest streak should be 3")
     }
 
-    func testCalculateLongestStreak_MultipleStreaks() async {
+    func testCalculateLongestStreak_MultipleStreaks() {
         let calendar = Calendar.current
 
         // Add 3 consecutive completions (first streak)
@@ -122,28 +120,28 @@ final class StreakServiceTests: XCTestCase {
             self.testHabit.logs.append(log)
         }
 
-        let longestStreak = await streakService.calculateLongestStreak(for: self.testHabit)
+        let longestStreak = streakService.calculateLongestStreak(for: self.testHabit)
         XCTAssertEqual(longestStreak, 5, "Longest streak should be 5")
     }
 
-    func testGetStreakData_DefaultDays() async {
-        let streakData = await streakService.getStreakData(for: self.testHabit)
+    func testGetStreakData_DefaultDays() {
+        let streakData = streakService.getStreakData(for: self.testHabit)
         XCTAssertEqual(streakData.count, 30, "Should return 30 days of data by default")
     }
 
-    func testGetStreakData_CustomDays() async {
-        let streakData = await streakService.getStreakData(for: self.testHabit, days: 7)
+    func testGetStreakData_CustomDays() {
+        let streakData = streakService.getStreakData(for: self.testHabit, days: 7)
         XCTAssertEqual(streakData.count, 8, "Should return 8 days of data (7 days back + today)")
     }
 
-    func testGetStreakData_WithCompletions() async {
+    func testGetStreakData_WithCompletions() {
         let calendar = Calendar.current
 
         // Add completion for today
         let todayLog = HabitLog(habit: testHabit, completionDate: Date(), isCompleted: true)
         self.testHabit.logs.append(todayLog)
 
-        let streakData = await streakService.getStreakData(for: self.testHabit, days: 7)
+        let streakData = streakService.getStreakData(for: self.testHabit, days: 7)
 
         // Find today's data
         let today = calendar.startOfDay(for: Date())
@@ -154,12 +152,12 @@ final class StreakServiceTests: XCTestCase {
         XCTAssertEqual(todayData!.intensity, 1.0, "Completed day should have full intensity")
     }
 
-    func testCheckForNewMilestone_NoMilestone() async {
-        let milestone = await streakService.checkForNewMilestone(habit: self.testHabit, previousStreak: 0)
+    func testCheckForNewMilestone_NoMilestone() {
+        let milestone = streakService.checkForNewMilestone(habit: self.testHabit, previousStreak: 0)
         XCTAssertNil(milestone, "Should not have new milestone with 0 streak")
     }
 
-    func testCheckForNewMilestone_NewMilestone() async {
+    func testCheckForNewMilestone_NewMilestone() {
         // Add 3 completions to reach first milestone
         let calendar = Calendar.current
         for i in 0 ..< 3 {
@@ -168,18 +166,18 @@ final class StreakServiceTests: XCTestCase {
             self.testHabit.logs.append(log)
         }
 
-        let milestone = await streakService.checkForNewMilestone(habit: self.testHabit, previousStreak: 2)
+        let milestone = streakService.checkForNewMilestone(habit: self.testHabit, previousStreak: 2)
         XCTAssertNotNil(milestone, "Should have new milestone at streak 3")
         XCTAssertEqual(milestone?.streakCount, 3, "Should be the 3-day milestone")
         XCTAssertEqual(milestone?.title, "Getting Started", "Should be the correct milestone title")
     }
 
-    func testGetCurrentMilestone_NoCompletions() async {
-        let milestone = await streakService.getCurrentMilestone(for: self.testHabit)
+    func testGetCurrentMilestone_NoCompletions() {
+        let milestone = streakService.getCurrentMilestone(for: self.testHabit)
         XCTAssertNil(milestone, "Should not have current milestone with no completions")
     }
 
-    func testGetCurrentMilestone_WithStreak() async {
+    func testGetCurrentMilestone_WithStreak() {
         // Add 7 completions to reach milestone
         let calendar = Calendar.current
         for i in 0 ..< 7 {
@@ -188,19 +186,19 @@ final class StreakServiceTests: XCTestCase {
             self.testHabit.logs.append(log)
         }
 
-        let milestone = await streakService.getCurrentMilestone(for: self.testHabit)
+        let milestone = streakService.getCurrentMilestone(for: self.testHabit)
         XCTAssertNotNil(milestone, "Should have current milestone")
         XCTAssertEqual(milestone?.streakCount, 7, "Should be the 7-day milestone")
         XCTAssertEqual(milestone?.title, "One Week Warrior", "Should be the correct milestone title")
     }
 
-    func testGetNextMilestone_NoCompletions() async {
-        let milestone = await streakService.getNextMilestone(for: self.testHabit)
+    func testGetNextMilestone_NoCompletions() {
+        let milestone = streakService.getNextMilestone(for: self.testHabit)
         XCTAssertNotNil(milestone, "Should have next milestone even with no completions")
         XCTAssertEqual(milestone?.streakCount, 3, "Next milestone should be 3 days")
     }
 
-    func testGetNextMilestone_WithStreak() async {
+    func testGetNextMilestone_WithStreak() {
         // Add 3 completions
         let calendar = Calendar.current
         for i in 0 ..< 3 {
@@ -209,12 +207,12 @@ final class StreakServiceTests: XCTestCase {
             self.testHabit.logs.append(log)
         }
 
-        let milestone = await streakService.getNextMilestone(for: self.testHabit)
+        let milestone = streakService.getNextMilestone(for: self.testHabit)
         XCTAssertNotNil(milestone, "Should have next milestone")
         XCTAssertEqual(milestone?.streakCount, 7, "Next milestone should be 7 days")
     }
 
-    func testGetProgressToNextMilestone() async {
+    func testGetProgressToNextMilestone() {
         // Add 5 completions (between 3 and 7 day milestones)
         let calendar = Calendar.current
         for i in 0 ..< 5 {
@@ -223,11 +221,11 @@ final class StreakServiceTests: XCTestCase {
             self.testHabit.logs.append(log)
         }
 
-        let progress = await streakService.getProgressToNextMilestone(for: self.testHabit)
+        let progress = streakService.getProgressToNextMilestone(for: self.testHabit)
         XCTAssertEqual(progress, 0.5, "Progress should be 0.5 (2 out of 4 days toward next milestone)")
     }
 
-    func testGetStreakAnalytics() async {
+    func testGetStreakAnalytics() {
         // Add 3 completions
         let calendar = Calendar.current
         for i in 0 ..< 3 {
@@ -236,7 +234,7 @@ final class StreakServiceTests: XCTestCase {
             self.testHabit.logs.append(log)
         }
 
-        let analytics = await streakService.getStreakAnalytics(for: self.testHabit)
+        let analytics = streakService.getStreakAnalytics(for: self.testHabit)
 
         XCTAssertEqual(analytics.currentStreak, 3, "Current streak should be 3")
         XCTAssertEqual(analytics.longestStreak, 3, "Longest streak should be 3")

@@ -90,11 +90,11 @@ public class GestureManager {
 
     /// Multi-touch tracking (iOS/tvOS only)
     #if os(iOS) || os(tvOS)
-    private var activeTouches: [UITouch: CGPoint] = [:]
-    private var touchStartTimes: [UITouch: TimeInterval] = [:]
+        private var activeTouches: [UITouch: CGPoint] = [:]
+        private var touchStartTimes: [UITouch: TimeInterval] = [:]
     #else
-    private var activeTouches: [AnyHashable: CGPoint] = [:]
-    private var touchStartTimes: [AnyHashable: TimeInterval] = [:]
+        private var activeTouches: [AnyHashable: CGPoint] = [:]
+        private var touchStartTimes: [AnyHashable: TimeInterval] = [:]
     #endif
 
     /// Force touch support

@@ -6,9 +6,9 @@
 // and coordinating between different game systems and managers.
 //
 
+import Combine
 import Foundation
 import SpriteKit
-import Combine
 
 /// Protocol for objects that can be coordinated
 protocol Coordinatable: AnyObject {
@@ -326,7 +326,7 @@ final class GameCoordinator {
     private func startAdvancedAIUpdates() {
         // Update context every 2 seconds during gameplay
         Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] timer in
-            guard let self = self else {
+            guard let self else {
                 timer.invalidate()
                 return
             }

@@ -45,7 +45,7 @@ public final class QuantumFinanceEngine {
 
     /// Optimize portfolio using Variational Quantum Eigensolver (VQE)
     /// This provides quantum advantage over classical optimization for large portfolios
-    public func optimizePortfolioQuantum(targetReturn: Double? = nil) async throws -> QuantumOptimizationResult {
+    public func optimizePortfolioQuantum(targetReturn: Double? = nil) throws -> QuantumOptimizationResult {
         startTime = Date()
         iterations = 0
 
@@ -81,7 +81,7 @@ public final class QuantumFinanceEngine {
             )
 
             // Generate candidate portfolio using quantum ansatz
-            let candidateWeights = try await generateQuantumPortfolio(circuitParams)
+            let candidateWeights = try generateQuantumPortfolio(circuitParams)
 
             // Evaluate portfolio performance
             let metrics = calculateRiskMetrics(for: candidateWeights)
@@ -103,7 +103,7 @@ public final class QuantumFinanceEngine {
             }
 
             // Update quantum parameters (simplified VQE update)
-            try await updateQuantumParameters(objective)
+            try updateQuantumParameters(objective)
         }
 
         guard let optimalWeights = bestWeights, let riskMetrics = bestMetrics else {
@@ -123,7 +123,7 @@ public final class QuantumFinanceEngine {
     }
 
     /// Generate portfolio weights using quantum superposition
-    private func generateQuantumPortfolio(_ params: QuantumCircuitParameters) async throws -> PortfolioWeights {
+    private func generateQuantumPortfolio(_ params: QuantumCircuitParameters) throws -> PortfolioWeights {
         guard var state = quantumState else {
             throw QuantumFinanceError.invalidState("Quantum state not initialized")
         }
@@ -199,7 +199,7 @@ public final class QuantumFinanceEngine {
     }
 
     /// Update quantum parameters using classical optimization feedback
-    private func updateQuantumParameters(_ objective: Double) async throws {
+    private func updateQuantumParameters(_ objective: Double) throws {
         // Simplified parameter update (in real VQE, this would use classical optimizer)
         guard var state = quantumState else { return }
 
@@ -304,7 +304,7 @@ public final class QuantumFinanceEngine {
         volatility: Double = 0.2,
         currentPrice: Double = 100.0,
         numPaths: Int = 1000
-    ) async throws -> OptionPriceResult {
+    ) throws -> OptionPriceResult {
 
         let startTime = Date()
 
@@ -392,7 +392,7 @@ public final class QuantumFinanceEngine {
         portfolioWeights: PortfolioWeights,
         confidenceLevel: Double = 0.95,
         timeHorizon: Double = 1.0
-    ) async throws -> QuantumRiskEstimationResult {
+    ) throws -> QuantumRiskEstimationResult {
 
         let startTime = Date()
 
@@ -642,13 +642,13 @@ public final class QuantumFinanceEngine {
         currentPrice: Double = 100.0,
         numPaths: Int = 1000,
         hardware: QuantumHardwareConfig
-    ) async throws -> QuantumHardwareResult {
+    ) throws -> QuantumHardwareResult {
 
         let startTime = Date()
         logger.info("🔬 Submitting quantum Monte Carlo to \(hardware.provider.rawValue) hardware")
 
         // Create quantum circuit for Monte Carlo simulation
-        let circuit = try await createMonteCarloCircuit(
+        let circuit = try createMonteCarloCircuit(
             optionType: optionType,
             strikePrice: strikePrice,
             timeToExpiry: timeToExpiry,
@@ -659,7 +659,7 @@ public final class QuantumFinanceEngine {
         )
 
         // Submit to quantum hardware
-        let result = try await submitToQuantumHardware(circuit, config: hardware)
+        let result = try submitToQuantumHardware(circuit, config: hardware)
 
         let executionTime = Date().timeIntervalSince(startTime)
         logger.info("✅ Quantum Monte Carlo submitted - Job ID: \(result.jobId)")
@@ -673,20 +673,20 @@ public final class QuantumFinanceEngine {
         confidenceLevel: Double = 0.95,
         timeHorizon: Double = 1.0,
         hardware: QuantumHardwareConfig
-    ) async throws -> QuantumHardwareResult {
+    ) throws -> QuantumHardwareResult {
 
         let startTime = Date()
         logger.info("🎯 Submitting quantum amplitude estimation to \(hardware.provider.rawValue) hardware")
 
         // Create quantum circuit for amplitude estimation
-        let circuit = try await createAmplitudeEstimationCircuit(
+        let circuit = try createAmplitudeEstimationCircuit(
             portfolioWeights: portfolioWeights,
             confidenceLevel: confidenceLevel,
             timeHorizon: timeHorizon
         )
 
         // Submit to quantum hardware
-        let result = try await submitToQuantumHardware(circuit, config: hardware)
+        let result = try submitToQuantumHardware(circuit, config: hardware)
 
         let executionTime = Date().timeIntervalSince(startTime)
         logger.info("✅ Quantum amplitude estimation submitted - Job ID: \(result.jobId)")
@@ -698,24 +698,24 @@ public final class QuantumFinanceEngine {
     public func getQuantumHardwareJobStatus(
         jobId: String,
         hardware: QuantumHardwareConfig
-    ) async throws -> QuantumHardwareResult {
+    ) throws -> QuantumHardwareResult {
 
         logger.info("📊 Checking job status: \(jobId)")
 
         switch hardware.provider {
         case .ibm:
-            return try await getIBMQuantumJobStatus(jobId: jobId, config: hardware)
+            return try getIBMQuantumJobStatus(jobId: jobId, config: hardware)
         case .rigetti:
-            return try await getRigettiJobStatus(jobId: jobId, config: hardware)
+            return try getRigettiJobStatus(jobId: jobId, config: hardware)
         case .ionq:
-            return try await getIonQJobStatus(jobId: jobId, config: hardware)
+            return try getIonQJobStatus(jobId: jobId, config: hardware)
         case .simulator:
-            return try await getSimulatorJobStatus(jobId: jobId, config: hardware)
+            return try getSimulatorJobStatus(jobId: jobId, config: hardware)
         }
     }
 
     /// Get available quantum hardware backends
-    public func getAvailableQuantumHardware() async throws -> [QuantumHardwareConfig] {
+    public func getAvailableQuantumHardware() throws -> [QuantumHardwareConfig] {
         logger.info("🔍 Discovering available quantum hardware")
 
         var hardware: [QuantumHardwareConfig] = []
@@ -755,7 +755,7 @@ public final class QuantumFinanceEngine {
         volatility: Double,
         currentPrice: Double,
         numPaths: Int
-    ) async throws -> String {
+    ) throws -> String {
         // Create Qiskit circuit for quantum Monte Carlo
         let numQubits = min(10, Int(ceil(log2(Double(numPaths)))))
         let circuit = """
@@ -789,7 +789,7 @@ public final class QuantumFinanceEngine {
         portfolioWeights: PortfolioWeights,
         confidenceLevel: Double,
         timeHorizon: Double
-    ) async throws -> String {
+    ) throws -> String {
         // Create Qiskit circuit for quantum amplitude estimation
         let numQubits = 8
         let circuit = """
@@ -828,18 +828,18 @@ public final class QuantumFinanceEngine {
     private func submitToQuantumHardware(
         _ circuit: String,
         config: QuantumHardwareConfig
-    ) async throws -> QuantumHardwareResult {
+    ) throws -> QuantumHardwareResult {
         let jobId = UUID().uuidString
 
         switch config.provider {
         case .ibm:
-            return try await submitToIBMQuantum(circuit, config: config, jobId: jobId)
+            return try submitToIBMQuantum(circuit, config: config, jobId: jobId)
         case .rigetti:
-            return try await submitToRigetti(circuit, config: config, jobId: jobId)
+            return try submitToRigetti(circuit, config: config, jobId: jobId)
         case .ionq:
-            return try await submitToIonQ(circuit, config: config, jobId: jobId)
+            return try submitToIonQ(circuit, config: config, jobId: jobId)
         case .simulator:
-            return try await submitToSimulator(circuit, config: config, jobId: jobId)
+            return try submitToSimulator(circuit, config: config, jobId: jobId)
         }
     }
 
@@ -847,12 +847,12 @@ public final class QuantumFinanceEngine {
         _ circuit: String,
         config: QuantumHardwareConfig,
         jobId: String
-    ) async throws -> QuantumHardwareResult {
+    ) throws -> QuantumHardwareResult {
         // Simulate IBM Quantum submission (would use qiskit-ibm-runtime in real implementation)
         logger.info("📡 Submitting to IBM Quantum backend: \(config.backend)")
 
         // Simulate job submission delay
-        try await Task.sleep(for: .seconds(0.1))
+        Thread.sleep(forTimeInterval: 0.1)
 
         return QuantumHardwareResult(
             jobId: jobId,
@@ -865,11 +865,11 @@ public final class QuantumFinanceEngine {
         _ circuit: String,
         config: QuantumHardwareConfig,
         jobId: String
-    ) async throws -> QuantumHardwareResult {
+    ) throws -> QuantumHardwareResult {
         // Simulate Rigetti submission
         logger.info("🔬 Submitting to Rigetti backend: \(config.backend)")
 
-        try await Task.sleep(for: .seconds(0.1))
+        Thread.sleep(forTimeInterval: 0.1)
 
         return QuantumHardwareResult(
             jobId: jobId,
@@ -882,11 +882,11 @@ public final class QuantumFinanceEngine {
         _ circuit: String,
         config: QuantumHardwareConfig,
         jobId: String
-    ) async throws -> QuantumHardwareResult {
+    ) throws -> QuantumHardwareResult {
         // Simulate IonQ submission
         logger.info("⚛️ Submitting to IonQ backend: \(config.backend)")
 
-        try await Task.sleep(for: .seconds(0.1))
+        Thread.sleep(forTimeInterval: 0.1)
 
         return QuantumHardwareResult(
             jobId: jobId,
@@ -899,11 +899,11 @@ public final class QuantumFinanceEngine {
         _ circuit: String,
         config: QuantumHardwareConfig,
         jobId: String
-    ) async throws -> QuantumHardwareResult {
+    ) throws -> QuantumHardwareResult {
         // Simulate local simulator execution
         logger.info("🖥️ Running on simulator: \(config.backend)")
 
-        try await Task.sleep(for: .seconds(0.5))
+        Thread.sleep(forTimeInterval: 0.5)
 
         // Generate simulated results
         let counts = ["0000": 512, "0001": 256, "0010": 128, "0011": 64, "0100": 32, "0101": 8]
@@ -921,7 +921,7 @@ public final class QuantumFinanceEngine {
     private func getIBMQuantumJobStatus(
         jobId: String,
         config: QuantumHardwareConfig
-    ) async throws -> QuantumHardwareResult {
+    ) throws -> QuantumHardwareResult {
         // Simulate status check (would query IBM Quantum API)
         let status: QuantumJobStatus = Bool.random() ? .completed : .running
 
@@ -947,7 +947,7 @@ public final class QuantumFinanceEngine {
     private func getRigettiJobStatus(
         jobId: String,
         config: QuantumHardwareConfig
-    ) async throws -> QuantumHardwareResult {
+    ) throws -> QuantumHardwareResult {
         // Simulate Rigetti status check
         let status: QuantumJobStatus = Bool.random() ? .completed : .queued
 
@@ -973,7 +973,7 @@ public final class QuantumFinanceEngine {
     private func getIonQJobStatus(
         jobId: String,
         config: QuantumHardwareConfig
-    ) async throws -> QuantumHardwareResult {
+    ) throws -> QuantumHardwareResult {
         // Simulate IonQ status check
         let status: QuantumJobStatus = Bool.random() ? .completed : .running
 
@@ -999,7 +999,7 @@ public final class QuantumFinanceEngine {
     private func getSimulatorJobStatus(
         jobId: String,
         config: QuantumHardwareConfig
-    ) async throws -> QuantumHardwareResult {
+    ) throws -> QuantumHardwareResult {
         // Simulator jobs complete immediately
         let counts = ["000": Int.random(in: 600 ... 800), "001": Int.random(in: 200 ... 400)]
 

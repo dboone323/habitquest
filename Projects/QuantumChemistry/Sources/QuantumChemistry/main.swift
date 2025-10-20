@@ -12,7 +12,7 @@ import QuantumChemistryKit
 
 @main
 struct QuantumChemistryDemo {
-    static func main() async {
+    static func main() {
         print("🚀 Quantum Chemistry Simulation - Quantum Supremacy Prototype")
         print("=================================================================")
 
@@ -24,16 +24,16 @@ struct QuantumChemistryDemo {
         let engine = QuantumChemistryEngine(aiService: aiService, ollamaClient: ollamaClient)
 
         // Demonstrate quantum supremacy with various molecules
-        await demonstrateQuantumSupremacy(with: engine)
+        demonstrateQuantumSupremacy(with: engine)
 
         // Demonstrate quantum hardware integration
-        await demonstrateQuantumHardwareIntegration(with: engine)
+        demonstrateQuantumHardwareIntegration(with: engine)
 
         print("\n✅ Quantum Supremacy Demonstration Complete")
         print("=================================================================")
     }
 
-    static func demonstrateQuantumSupremacy(with engine: QuantumChemistryEngine) async {
+    static func demonstrateQuantumSupremacy(with engine: QuantumChemistryEngine) {
         let molecules = [
             ("Hydrogen Molecule", CommonMolecules.hydrogen),
             ("Water Molecule", CommonMolecules.water),
@@ -65,7 +65,7 @@ struct QuantumChemistryDemo {
 
                 do {
                     let startTime = Date()
-                    let result = try await engine.simulateQuantumChemistry(parameters: parameters)
+                    let result = try engine.simulateQuantumChemistry(parameters: parameters)
                     let endTime = Date()
 
                     print("  \(method.displayName):")
@@ -90,10 +90,10 @@ struct QuantumChemistryDemo {
         }
 
         // Demonstrate scaling with system size
-        await demonstrateScalingAnalysis(with: engine)
+        demonstrateScalingAnalysis(with: engine)
     }
 
-    static func demonstrateScalingAnalysis(with engine: QuantumChemistryEngine) async {
+    static func demonstrateScalingAnalysis(with engine: QuantumChemistryEngine) {
         print("\n📈 Quantum Supremacy Scaling Analysis")
         print("─" * 60)
 
@@ -110,7 +110,7 @@ struct QuantumChemistryDemo {
 
             do {
                 let startTime = Date()
-                let result = try await engine.simulateQuantumChemistry(parameters: parameters)
+                let result = try engine.simulateQuantumChemistry(parameters: parameters)
                 let endTime = Date()
 
                 let classicalTime = pow(2.0, Double(size)) // Exponential scaling for classical
@@ -129,7 +129,7 @@ struct QuantumChemistryDemo {
         }
     }
 
-    static func demonstrateQuantumHardwareIntegration(with engine: QuantumChemistryEngine) async {
+    static func demonstrateQuantumHardwareIntegration(with engine: QuantumChemistryEngine) {
         print("\n🚀 Quantum Hardware Integration Demonstration")
         print("─" * 60)
 
@@ -150,7 +150,7 @@ struct QuantumChemistryDemo {
             do {
                 // Test VQE molecular ground state
                 print("  📊 VQE Molecular Ground State...")
-                let vqeResult = try await engine.submitVQEMolecularGroundState(molecule: molecule, config: config)
+                let vqeResult = try engine.submitVQEMolecularGroundState(molecule: molecule, config: config)
                 print("    ✅ Job ID: \(vqeResult.jobId)")
                 print("    ⚡ Ground State Energy: \(String(format: "%.6f", vqeResult.expectationValue)) Hartree")
                 print("    ⏱️  Execution Time: \(String(format: "%.2f", vqeResult.executionTime))s")
@@ -158,7 +158,7 @@ struct QuantumChemistryDemo {
 
                 // Test QMC molecular properties
                 print("  🎲 QMC Molecular Properties...")
-                let qmcResult = try await engine.submitQMCMolecularProperties(molecule: molecule, config: config)
+                let qmcResult = try engine.submitQMCMolecularProperties(molecule: molecule, config: config)
                 print("    ✅ Job ID: \(qmcResult.jobId)")
                 print("    ⚡ Average Energy: \(String(format: "%.6f", qmcResult.expectationValue)) Hartree")
                 print("    📊 Error Rate: \(String(format: "%.2f", qmcResult.errorRate * 100))%")
@@ -168,7 +168,7 @@ struct QuantumChemistryDemo {
 
                 for property in properties {
                     print("  🔬 Quantum \(property.displayName)...")
-                    let propertyResult = try await engine.submitQuantumMolecularProperty(
+                    let propertyResult = try engine.submitQuantumMolecularProperty(
                         molecule: molecule,
                         property: property,
                         config: config
@@ -178,7 +178,7 @@ struct QuantumChemistryDemo {
 
                 // Test multiple state calculation
                 print("  🔄 VQD Multiple States...")
-                let statesResults = try await engine.submitVQDMultipleStates(molecule: molecule, config: config, numStates: 3)
+                let statesResults = try engine.submitVQDMultipleStates(molecule: molecule, config: config, numStates: 3)
                 for (index, stateResult) in statesResults.enumerated() {
                     print("    State \(index + 1): \(String(format: "%.6f", stateResult.expectationValue)) Hartree")
                 }
@@ -191,10 +191,10 @@ struct QuantumChemistryDemo {
         }
 
         // Demonstrate quantum advantage comparison
-        await demonstrateQuantumAdvantageComparison(with: engine)
+        demonstrateQuantumAdvantageComparison(with: engine)
     }
 
-    static func demonstrateQuantumAdvantageComparison(with engine: QuantumChemistryEngine) async {
+    static func demonstrateQuantumAdvantageComparison(with engine: QuantumChemistryEngine) {
         print("\n📊 Quantum Advantage Comparison")
         print("─" * 60)
 
@@ -213,12 +213,12 @@ struct QuantumChemistryDemo {
                 convergenceThreshold: 1e-6,
                 maxIterations: 20
             )
-            let classicalResult = try await engine.simulateQuantumChemistry(parameters: classicalParams)
+            let classicalResult = try engine.simulateQuantumChemistry(parameters: classicalParams)
             let classicalTime = Date().timeIntervalSince(classicalStart)
 
             // Quantum hardware simulation
             let quantumStart = Date()
-            let quantumResult = try await engine.submitVQEMolecularGroundState(molecule: molecule, config: config)
+            let quantumResult = try engine.submitVQEMolecularGroundState(molecule: molecule, config: config)
             let quantumTime = Date().timeIntervalSince(quantumStart)
 
             print("  🖥️  Classical HF:")
