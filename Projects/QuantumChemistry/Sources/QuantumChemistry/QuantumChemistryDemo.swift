@@ -11,7 +11,7 @@ import QuantumChemistryKit
 
 @main
 struct QuantumChemistryDemo {
-    static func main() async {
+    static func main() {
         print("🚀 Quantum Chemistry Simulation - Quantum Supremacy Prototype")
         print("=================================================================")
         print("Note: This demo uses simplified quantum algorithms for demonstration")
@@ -25,13 +25,13 @@ struct QuantumChemistryDemo {
         let engine = QuantumChemistryEngine(aiService: mockAIService, ollamaClient: mockOllamaClient)
 
         // Demonstrate quantum supremacy with various molecules
-        await demonstrateQuantumSupremacy(with: engine)
+        demonstrateQuantumSupremacy(with: engine)
 
         print("\n✅ Quantum Supremacy Demonstration Complete")
         print("=================================================================")
     }
 
-    static func demonstrateQuantumSupremacy(with engine: QuantumChemistryEngine) async {
+    static func demonstrateQuantumSupremacy(with engine: QuantumChemistryEngine) {
         let molecules = [
             ("Hydrogen Molecule", CommonMolecules.hydrogen),
             ("Water Molecule", CommonMolecules.water),
@@ -59,7 +59,7 @@ struct QuantumChemistryDemo {
 
                 do {
                     let startTime = Date()
-                    let result = try await engine.simulateQuantumChemistry(parameters: parameters)
+                    let result = try engine.simulateQuantumChemistry(parameters: parameters)
                     let endTime = Date()
 
                     print("  \(method.displayName):")
@@ -82,10 +82,45 @@ struct QuantumChemistryDemo {
         }
 
         // Demonstrate scaling advantage
-        await demonstrateScalingAdvantage(with: engine)
+        demonstrateScalingAdvantage(with: engine)
     }
 
-    static func demonstrateScalingAdvantage(with engine: QuantumChemistryEngine) async {
+    static func demonstrateScalingAdvantage(with engine: QuantumChemistryEngine) {
+        print("\n📈 Quantum Supremacy Scaling Demonstration")
+        print("─" * 60)
+        print("Classical methods scale exponentially, quantum methods scale polynomially")
+        print("─" * 60)
+
+        for size in 2 ... 6 {
+            let molecule = createHydrogenChain(size: size)
+            let parameters = QuantumChemistryEngine.SimulationParameters(
+                molecule: molecule,
+                method: .variationalQuantumEigensolver,
+                convergenceThreshold: 1e-6,
+                maxIterations: 20
+            )
+
+            do {
+                let startTime = Date()
+                let result = try engine.simulateQuantumChemistry(parameters: parameters)
+                let endTime = Date()
+
+                // Calculate theoretical classical complexity (exponential)
+                let classicalComplexity = pow(2.0, Double(size))
+                let quantumTime = endTime.timeIntervalSince(startTime)
+                let speedup = classicalComplexity / quantumTime
+
+                print("  H\(size) Chain:")
+                print("    ⚡ Quantum Time: \(String(format: "%.3f", quantumTime))s")
+                print("    🖥️  Classical Complexity: \(String(format: "%.0f", classicalComplexity)) operations")
+                print("    🚀 Theoretical Speedup: \(String(format: "%.1e", speedup))x")
+                print("    ✨ Supremacy: ACHIEVED (Energy: \(String(format: "%.3f", result.totalEnergy)))")
+
+            } catch {
+                print("    ❌ Error for H\(size): \(error.localizedDescription)")
+            }
+        }
+    }
         print("\n📈 Quantum Supremacy Scaling Demonstration")
         print("─" * 60)
         print("Classical methods scale exponentially, quantum methods scale polynomially")
@@ -136,8 +171,9 @@ struct QuantumChemistryDemo {
 // MARK: - Mock Services for Demonstration
 
 class MockAIService: AITextGenerationService {
-    func generateText(prompt: String, maxTokens: Int) async throws -> String {
-        // Return mock AI response for demonstration
+    func generateText(prompt: String, maxTokens: Int) -> String {
+        // Simulate synchronous AI response for demonstration
+        // In a real implementation, this would use background queues
         "Quantum algorithm optimized for \(prompt.split(separator: " ").first ?? "molecule")"
     }
 }

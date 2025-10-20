@@ -310,7 +310,7 @@ public class ThemeManager {
         self.preferredMode = .system
         self.currentTheme = Self.lightTheme
         #if os(iOS) || os(tvOS)
-        self.appearanceObserver = nil
+            self.appearanceObserver = nil
         #endif
         self.delegate = nil
 
@@ -357,13 +357,13 @@ public class ThemeManager {
     /// Gets all available themes
     /// - Returns: Array of available themes
     public func getAvailableThemes() -> [Theme] {
-        return [
+        [
             Self.lightTheme,
             Self.darkTheme,
             Self.blueTheme,
             Self.purpleTheme,
             Self.greenTheme,
-            Self.highContrastTheme
+            Self.highContrastTheme,
         ]
     }
 
@@ -504,11 +504,11 @@ public class ThemeManager {
     /// - Parameter theme: Theme to get preview for
     /// - Returns: Array of representative colors
     public func getThemePreviewColors(for theme: Theme) -> [SKColor] {
-        return [
+        [
             theme.colors.backgroundPrimary,
             theme.colors.primaryColor,
             theme.colors.accentColor,
-            theme.colors.textPrimary
+            theme.colors.textPrimary,
         ]
     }
 

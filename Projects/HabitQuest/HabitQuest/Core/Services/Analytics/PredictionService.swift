@@ -12,8 +12,8 @@ final class PredictionService {
     }
 
     /// Predict streak continuation probability using behavioral patterns
-    func predictStreakSuccess(for habit: Habit, days _: Int = 7) async -> StreakPrediction {
-        let patterns = await analyzeHabitPatterns(habit)
+    func predictStreakSuccess(for habit: Habit, days _: Int = 7) -> StreakPrediction {
+        let patterns = self.analyzeHabitPatterns(habit)
         let timeFactors = self.analyzeTimeFactors(habit)
         let streakMomentum = self.calculateStreakMomentum(habit)
 
@@ -36,7 +36,7 @@ final class PredictionService {
     }
 
     /// Generate optimal habit scheduling recommendations
-    func generateOptimalScheduling(for habit: Habit) async -> SchedulingRecommendation {
+    func generateOptimalScheduling(for habit: Habit) -> SchedulingRecommendation {
         let completionTimes = habit.logs.compactMap { log in
             log.isCompleted ? Calendar.current.dateComponents([.hour], from: log.completionDate).hour : nil
         }
@@ -54,7 +54,7 @@ final class PredictionService {
 
     // MARK: - Private Methods
 
-    private func analyzeHabitPatterns(_ habit: Habit) async -> HabitPatterns {
+    private func analyzeHabitPatterns(_ habit: Habit) -> HabitPatterns {
         let recentLogs = habit.logs.suffix(30).sorted { $0.completionDate < $1.completionDate }
 
         let consistency = self.calculateConsistency(from: ArraySlice(recentLogs))

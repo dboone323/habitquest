@@ -68,24 +68,22 @@ public class HabitViewModel: BaseViewModel {
     /// Handles actions dispatched to the ViewModel, updating state as needed.
     /// - Parameter action: The action to handle.
     public func handle(_ action: Action) {
-        Task {
-            await self.handleAsync(action)
-        }
+        self.handleSync(action)
     }
 
-    private func handleAsync(_ action: Action) async {
+    private func handleSync(_ action: Action) {
         switch action {
         case .loadHabits:
-            await self.loadHabits()
+            self.loadHabits()
         case let .createHabit(name, description, frequency, category, difficulty):
-            await self.createHabit(
+            self.createHabit(
                 name: name, description: description, frequency: frequency, category: category,
                 difficulty: difficulty
             )
         case let .completeHabit(habit):
-            await self.completeHabit(habit)
+            self.completeHabit(habit)
         case let .deleteHabit(habit):
-            await self.deleteHabit(habit)
+            self.deleteHabit(habit)
         case let .setSearchText(text):
             self.state.searchText = text
         case let .setCategory(category):
@@ -94,7 +92,7 @@ public class HabitViewModel: BaseViewModel {
     }
 
     /// Loads all active habits from the data store and updates state.
-    private func loadHabits() async {
+    private func loadHabits() {
         guard let context = modelContext else { return }
         self.isLoading = true
         self.errorMessage = nil
@@ -120,7 +118,7 @@ public class HabitViewModel: BaseViewModel {
     private func createHabit(
         name: String, description: String, frequency: HabitFrequency, category: HabitCategory,
         difficulty: HabitDifficulty
-    ) async {
+    ) {
         guard let context = modelContext else { return }
         let xpValue = self.calculateXPValue(for: difficulty, frequency: frequency)
         let newHabit = Habit(
@@ -134,7 +132,7 @@ public class HabitViewModel: BaseViewModel {
         context.insert(newHabit)
         do {
             try context.save()
-            await self.loadHabits()
+            self.loadHabits()
         } catch {
             setError(AppError.dataError("Failed to create habit: \(error.localizedDescription)"))
         }
@@ -142,7 +140,7 @@ public class HabitViewModel: BaseViewModel {
 
     /// Marks a habit as completed for today and updates streaks.
     /// - Parameter habit: The habit to mark as completed.
-    private func completeHabit(_ habit: Habit) async {
+    private func completeHabit(_ habit: Habit) {
         guard let context = modelContext else { return }
         if habit.isCompletedToday { return }
         let log = HabitLog(habit: habit, isCompleted: true)
@@ -150,7 +148,7 @@ public class HabitViewModel: BaseViewModel {
         self.updateStreak(for: habit)
         do {
             try context.save()
-            await self.loadHabits()
+            self.loadHabits()
         } catch {
             setError(AppError.dataError("Failed to complete habit: \(error.localizedDescription)"))
         }
@@ -158,12 +156,12 @@ public class HabitViewModel: BaseViewModel {
 
     /// Soft deletes a habit (marks as inactive).
     /// - Parameter habit: The habit to delete.
-    private func deleteHabit(_ habit: Habit) async {
+    private func deleteHabit(_ habit: Habit) {
         guard let context = modelContext else { return }
         habit.isActive = false
         do {
             try context.save()
-            await self.loadHabits()
+            self.loadHabits()
         } catch {
             setError(AppError.dataError("Failed to delete habit: \(error.localizedDescription)"))
         }

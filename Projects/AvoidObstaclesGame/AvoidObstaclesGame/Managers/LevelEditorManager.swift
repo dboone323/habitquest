@@ -234,6 +234,7 @@ extension PlacedLevelElement: Equatable {
 }
 
 // MARK: - Level Editor Types
+
 @MainActor
 protocol LevelEditorDelegate: AnyObject {
     func levelEditorDidSaveLevel(_ level: CustomLevel)

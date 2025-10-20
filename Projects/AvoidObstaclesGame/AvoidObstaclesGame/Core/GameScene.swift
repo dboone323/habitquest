@@ -395,7 +395,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         // Track level start event
         AnalyticsManager.shared.trackEvent(.levelStart, parameters: [
             "game_mode": self.gameModeManager.currentMode.displayName,
-            "difficulty": String(self.gameStateManager.getCurrentDifficultyLevel())
+            "difficulty": String(self.gameStateManager.getCurrentDifficultyLevel()),
         ])
     }
 
@@ -699,7 +699,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
             "final_score": String(finalScore),
             "difficulty_level": String(difficultyLevel),
             "game_mode": gameMode,
-            "survival_time": String(self.currentGameStats.survivalTime)
+            "survival_time": String(self.currentGameStats.survivalTime),
         ])
 
         // End analytics session
@@ -821,7 +821,7 @@ extension GameScene: PlayerDelegate {
         self.replayManager.recordPlayerAction(position: position, action: .move)
 
         // Track player movement for analytics (sample every few movements to avoid spam)
-        if Int.random(in: 0...10) == 0 { // Track ~10% of movements
+        if Int.random(in: 0 ... 10) == 0 { // Track ~10% of movements
             AnalyticsManager.shared.updateHeatMapData(position: position, action: .move)
         }
     }
@@ -939,7 +939,7 @@ extension GameScene: GameStateDelegate {
         AnalyticsManager.shared.trackEvent(.scoreUpdate, parameters: [
             "score": String(newScore),
             "game_mode": self.gameStateManager.getCurrentGameMode().displayName,
-            "difficulty": String(self.gameStateManager.getCurrentDifficultyLevel())
+            "difficulty": String(self.gameStateManager.getCurrentDifficultyLevel()),
         ])
     }
 
@@ -959,7 +959,7 @@ extension GameScene: GameStateDelegate {
         AnalyticsManager.shared.trackEvent(.levelComplete, parameters: [
             "level": String(level),
             "game_mode": self.gameStateManager.getCurrentGameMode().displayName,
-            "score": String(self.gameStateManager.getCurrentScore())
+            "score": String(self.gameStateManager.getCurrentScore()),
         ])
     }
 
@@ -988,7 +988,7 @@ extension GameScene: AchievementDelegate {
             "achievement_id": achievement.id,
             "achievement_title": achievement.title,
             "achievement_description": achievement.description,
-            "points": String(achievement.points)
+            "points": String(achievement.points),
         ])
     }
 
@@ -1224,7 +1224,7 @@ extension GameScene: PowerUpDelegate {
         AnalyticsManager.shared.trackEvent(.powerUpUsed, parameters: [
             "powerup_type": powerUp.type.rawValue,
             "position_x": String(describing: powerUp.node.position.x),
-            "position_y": String(describing: powerUp.node.position.y)
+            "position_y": String(describing: powerUp.node.position.y),
         ])
         AnalyticsManager.shared.updateHeatMapData(position: powerUp.node.position, action: .usePowerUp)
 
@@ -1700,7 +1700,7 @@ extension GameScene: TutorialManagerDelegate {
         // Track tutorial completion for analytics
         AnalyticsManager.shared.trackEvent(.tutorialCompleted, parameters: [
             "completion_time": String(Date().timeIntervalSince1970),
-            "game_mode": self.gameModeManager.currentMode.displayName
+            "game_mode": self.gameModeManager.currentMode.displayName,
         ])
     }
 

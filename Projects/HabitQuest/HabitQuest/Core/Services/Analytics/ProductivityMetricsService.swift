@@ -14,8 +14,8 @@ final class ProductivityMetricsService {
     }
 
     /// Get productivity metrics for a specific time period
-    func getProductivityMetrics(for period: TimePeriod) async -> ProductivityMetrics {
-        let habits = await fetchAllHabits()
+    func getProductivityMetrics(for period: TimePeriod) -> ProductivityMetrics {
+        let habits = self.fetchAllHabits()
         let startDate = period.startDate
         let logs = habits.flatMap(\.logs).filter { $0.completionDate >= startDate }
 
@@ -32,9 +32,9 @@ final class ProductivityMetricsService {
     }
 
     /// Calculate productivity score based on various metrics
-    func calculateProductivityScore() async -> ProductivityScore {
-        let habits = await fetchAllHabits()
-        let logs = await fetchAllLogs()
+    func calculateProductivityScore() -> ProductivityScore {
+        let habits = self.fetchAllHabits()
+        let logs = self.fetchAllLogs()
 
         // Calculate completion consistency
         let completionRate = self.calculateOverallCompletionRate(logs: logs)
@@ -68,16 +68,16 @@ final class ProductivityMetricsService {
     }
 
     /// Get productivity insights and recommendations
-    func getProductivityInsights() async -> ProductivityInsights {
-        let score = await calculateProductivityScore()
-        let habits = await fetchAllHabits()
-        let recentLogs = await fetchRecentLogs(days: 7)
+    func getProductivityInsights() -> ProductivityInsights {
+        let score = self.calculateProductivityScore()
+        let habits = self.fetchAllHabits()
+        let recentLogs = self.fetchRecentLogs(days: 7)
 
         let weeklyCompletionRate = Double(recentLogs.filter(\.isCompleted).count) / Double(max(recentLogs.count, 1))
         let activeStreaks = self.calculateActiveStreaks(habits: habits)
         let totalXPThisWeek = recentLogs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned }
 
-        return await ProductivityInsights(
+        return ProductivityInsights(
             currentScore: score,
             weeklyCompletionRate: weeklyCompletionRate,
             activeStreaks: activeStreaks,
@@ -89,13 +89,13 @@ final class ProductivityMetricsService {
     }
 
     /// Calculate productivity trends over time
-    func calculateProductivityTrends(days: Int = 30) async -> ProductivityTrends {
+    func calculateProductivityTrends(days: Int = 30) -> ProductivityTrends {
         var dailyScores: [Date: Double] = [:]
         let calendar = Calendar.current
 
         for dayOffset in 0 ..< days {
             guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
-            let dayLogs = await fetchLogs(for: date)
+            let dayLogs = self.fetchLogs(for: date)
 
             if !dayLogs.isEmpty {
                 let dayCompletionRate = Double(dayLogs.filter(\.isCompleted).count) / Double(dayLogs.count)
@@ -134,24 +134,24 @@ final class ProductivityMetricsService {
 
     // MARK: - Private Methods
 
-    private func fetchAllHabits() async -> [Habit] {
+    private func fetchAllHabits() -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
         return (try? self.modelContext.fetch(descriptor)) ?? []
     }
 
-    private func fetchAllLogs() async -> [HabitLog] {
+    private func fetchAllLogs() -> [HabitLog] {
         let descriptor = FetchDescriptor<HabitLog>()
         return (try? self.modelContext.fetch(descriptor)) ?? []
     }
 
-    private func fetchRecentLogs(days: Int) async -> [HabitLog] {
+    private func fetchRecentLogs(days: Int) -> [HabitLog] {
         let startDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
-        let logs = await fetchAllLogs()
+        let logs = self.fetchAllLogs()
         return logs.filter { $0.completionDate >= startDate }
     }
 
-    private func fetchLogs(for date: Date) async -> [HabitLog] {
-        let logs = await fetchAllLogs()
+    private func fetchLogs(for date: Date) -> [HabitLog] {
+        let logs = self.fetchAllLogs()
         return logs.filter { Calendar.current.isDate($0.completionDate, inSameDayAs: date) }
     }
 
@@ -230,8 +230,8 @@ final class ProductivityMetricsService {
         return recommendations
     }
 
-    private func getTopPerformingCategories() async -> [AnalyticsHabitCategory] {
-        let habits = await fetchAllHabits()
+    private func getTopPerformingCategories() -> [AnalyticsHabitCategory] {
+        let habits = self.fetchAllHabits()
         let categoryPerformance = Dictionary(grouping: habits, by: \.category).mapValues { categoryHabits in
             let allLogs = categoryHabits.flatMap(\.logs)
             return Double(allLogs.filter(\.isCompleted).count) / Double(max(allLogs.count, 1))

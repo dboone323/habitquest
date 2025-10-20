@@ -10,8 +10,8 @@ final class BehavioralInsightsService {
     }
 
     /// Analyze comprehensive behavioral patterns and correlations
-    func analyzeBehavioralPatterns(for habit: Habit) async -> BehavioralInsights {
-        let moodCorrelation = await calculateMoodCorrelation(habit)
+    func analyzeBehavioralPatterns(for habit: Habit) -> BehavioralInsights {
+        let moodCorrelation = self.calculateMoodCorrelation(habit)
         let dayOfWeekPattern = self.analyzeDayOfWeekPattern(habit)
         let streakBreakFactors = self.analyzeStreakBreakFactors(habit)
         let motivationTriggers = self.identifyMotivationTriggers(habit)
@@ -26,7 +26,7 @@ final class BehavioralInsightsService {
     }
 
     /// Calculate correlation between mood and habit completion
-    func calculateMoodCorrelation(_ habit: Habit) async -> Double {
+    func calculateMoodCorrelation(_ habit: Habit) -> Double {
         // This would integrate with mood tracking data
         // For now, return a placeholder based on completion patterns
         let recentCompletions = habit.logs.suffix(14).filter(\.isCompleted)

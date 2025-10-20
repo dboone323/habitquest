@@ -47,23 +47,23 @@ final class SmartNotificationService {
     // MARK: - Behavioral Adaptation
 
     /// Learn from user interaction patterns and adjust timing
-    func adaptToUserBehavior(habitId: UUID, interactionType: NotificationInteraction) async {
-        await self.adaptationService.adaptToUserBehavior(habitId: habitId, interactionType: interactionType)
+    func adaptToUserBehavior(habitId: UUID, interactionType: NotificationInteraction) {
+        self.adaptationService.adaptToUserBehavior(habitId: habitId, interactionType: interactionType)
     }
 
     /// Dynamically adjust notification frequency based on success patterns
-    func optimizeNotificationFrequency() async {
-        await self.adaptationService.optimizeNotificationFrequency()
+    func optimizeNotificationFrequency() {
+        self.adaptationService.optimizeNotificationFrequency()
     }
 
     /// Analyze user response patterns to determine optimal notification strategies
-    func analyzeUserResponsePatterns(habitId: UUID) async -> UserResponseAnalysis {
-        await self.adaptationService.analyzeUserResponsePatterns(habitId: habitId)
+    func analyzeUserResponsePatterns(habitId: UUID) -> UserResponseAnalysis {
+        self.adaptationService.analyzeUserResponsePatterns(habitId: habitId)
     }
 
     /// Get behavioral insights for notification optimization
-    func getBehavioralInsights(habitId: UUID) async -> NotificationBehavioralInsights {
-        await self.adaptationService.getBehavioralInsights(habitId: habitId)
+    func getBehavioralInsights(habitId: UUID) -> NotificationBehavioralInsights {
+        self.adaptationService.getBehavioralInsights(habitId: habitId)
     }
 
     // MARK: - Context-Aware Features

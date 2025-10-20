@@ -31,7 +31,7 @@ enum MockAIService {
 @main
 struct QuantumFinanceDemo {
 
-    static func main() async {
+    static func main() {
         print("🚀 Quantum Finance Portfolio Optimization Demo")
         print("==============================================\n")
 
@@ -81,7 +81,7 @@ struct QuantumFinanceDemo {
             print("")
 
             let startTime = Date()
-            let result = try await engine.optimizePortfolioQuantum()
+            let result = try engine.optimizePortfolioQuantum()
             let totalTime = Date().timeIntervalSince(startTime)
 
             print("✅ Quantum Optimization Complete!")
@@ -130,17 +130,17 @@ struct QuantumFinanceDemo {
 
             // Risk analysis demonstration
             print("🛡️  Risk Analysis Demonstration:")
-            await demonstrateRiskAnalysis(engine, result.optimalWeights)
+            demonstrateRiskAnalysis(engine, result.optimalWeights)
             print("")
 
             // Advanced quantum algorithms demonstration
             print("🔬 Advanced Quantum Financial Algorithms Demonstration")
             print(String(repeating: "=", count: 55))
-            await demonstrateAdvancedAlgorithms(engine, result.optimalWeights)
+            demonstrateAdvancedAlgorithms(engine, result.optimalWeights)
             print("")
 
             // Quantum hardware integration demonstration
-            await demonstrateQuantumHardwareIntegration(engine)
+            demonstrateQuantumHardwareIntegration(engine)
             print("")
 
             print("🎯 Quantum Supremacy Achieved!")
@@ -174,7 +174,7 @@ struct QuantumFinanceDemo {
     }
 
     // Demonstrate risk analysis capabilities
-    private static func demonstrateRiskAnalysis(_ engine: QuantumFinanceEngine, _ weights: PortfolioWeights) async {
+    private static func demonstrateRiskAnalysis(_ engine: QuantumFinanceEngine, _ weights: PortfolioWeights) {
         print("  Analyzing portfolio risk under different market scenarios...")
 
         // Simulate different market conditions
@@ -205,11 +205,11 @@ struct QuantumFinanceDemo {
     }
 
     // Demonstrate advanced quantum financial algorithms
-    private static func demonstrateAdvancedAlgorithms(_ engine: QuantumFinanceEngine, _ weights: PortfolioWeights) async {
+    private static func demonstrateAdvancedAlgorithms(_ engine: QuantumFinanceEngine, _ weights: PortfolioWeights) {
         // Demonstrate Quantum Monte Carlo for option pricing
         print("\n📈 Quantum Monte Carlo Option Pricing:")
         do {
-            let optionResult = try await engine.priceEuropeanOptionQuantum(
+            let optionResult = try engine.priceEuropeanOptionQuantum(
                 optionType: .call,
                 strikePrice: 105.0,
                 timeToExpiry: 0.25, // 3 months
@@ -232,7 +232,7 @@ struct QuantumFinanceDemo {
         // Demonstrate Quantum Amplitude Estimation for risk
         print("\n🎯 Quantum Amplitude Estimation for Risk:")
         do {
-            let riskResult = try await engine.estimatePortfolioRiskQuantum(
+            let riskResult = try engine.estimatePortfolioRiskQuantum(
                 portfolioWeights: weights,
                 confidenceLevel: 0.95,
                 timeHorizon: 1.0
@@ -250,13 +250,13 @@ struct QuantumFinanceDemo {
     }
 
     // Demonstrate quantum hardware integration
-    private static func demonstrateQuantumHardwareIntegration(_ engine: QuantumFinanceEngine) async {
+    private static func demonstrateQuantumHardwareIntegration(_ engine: QuantumFinanceEngine) {
         print("\n🖥️ Quantum Hardware Integration Demonstration:")
         print("  Submitting quantum algorithms to real quantum computers...")
 
         do {
             // Get available hardware
-            let availableHardware = try await engine.getAvailableQuantumHardware()
+            let availableHardware = try engine.getAvailableQuantumHardware()
             print("  Available Quantum Hardware:")
             for hardware in availableHardware {
                 print("    • \(hardware.provider.rawValue) - \(hardware.backend) (max \(hardware.maxShots) shots)")
@@ -266,7 +266,7 @@ struct QuantumFinanceDemo {
             let simulatorConfig = availableHardware.first { $0.provider == .simulator }!
             print("\n  📡 Submitting Quantum Monte Carlo to Simulator...")
 
-            let monteCarloJob = try await engine.submitQuantumMonteCarloToHardware(
+            let monteCarloJob = try engine.submitQuantumMonteCarloToHardware(
                 optionType: .call,
                 strikePrice: 105.0,
                 timeToExpiry: 0.25,
@@ -291,8 +291,8 @@ struct QuantumFinanceDemo {
             print("\n  🎯 Submitting Quantum Amplitude Estimation to Simulator...")
 
             // First get optimal weights for risk estimation
-            let portfolioResult = try await engine.optimizePortfolioQuantum()
-            let amplitudeJob = try await engine.submitQuantumAmplitudeEstimationToHardware(
+            let portfolioResult = try engine.optimizePortfolioQuantum()
+            let amplitudeJob = try engine.submitQuantumAmplitudeEstimationToHardware(
                 portfolioWeights: portfolioResult.optimalWeights,
                 hardware: simulatorConfig
             )

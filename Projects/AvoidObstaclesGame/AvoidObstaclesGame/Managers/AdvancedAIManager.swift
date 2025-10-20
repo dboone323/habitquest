@@ -6,9 +6,9 @@
 // dynamic content generation, and intelligent game adaptation.
 //
 
+import Combine
 import Foundation
 import SpriteKit
-import Combine
 
 /// Advanced AI manager for sophisticated game intelligence
 @MainActor
@@ -83,7 +83,7 @@ final class AdvancedAIManager: @unchecked Sendable {
     /// - Returns: Generated content suggestions
     @MainActor
     func generateDynamicContent(for playerProfile: PlayerProfile) async -> DynamicContentPackage {
-        return await contentGenerator.generateContent(for: playerProfile)
+        await contentGenerator.generateContent(for: playerProfile)
     }
 
     /// Analyzes player emotion from behavior patterns
@@ -91,7 +91,7 @@ final class AdvancedAIManager: @unchecked Sendable {
     /// - Returns: Emotion analysis result
     @MainActor
     func analyzePlayerEmotion(from behaviorData: BehaviorData) async -> EmotionAnalysisResult {
-        return await emotionAnalyzer.analyzeEmotion(from: behaviorData)
+        await emotionAnalyzer.analyzeEmotion(from: behaviorData)
     }
 
     /// Learns from player interaction using reinforcement learning
@@ -217,7 +217,7 @@ final class AdvancedAIManager: @unchecked Sendable {
 
     @MainActor
     private func getCurrentPlayerProfile() async -> PlayerProfile? {
-        return PlayerAnalyticsAI.shared.getCurrentPlayerProfile()
+        PlayerAnalyticsAI.shared.getCurrentPlayerProfile()
     }
 
     // MARK: - Adaptation Application Methods
@@ -445,7 +445,7 @@ class PredictiveGameStateAnalyzer {
 
     private func analyzeEngagementPatterns() -> EngagementPattern {
         let recentStates = historicalStates.suffix(10)
-        let avgSessionTime = recentStates.map { $0.sessionTime }.reduce(0, +) / Double(recentStates.count)
+        let avgSessionTime = recentStates.map(\.sessionTime).reduce(0, +) / Double(recentStates.count)
 
         return EngagementPattern(
             averageSessionTime: avgSessionTime,
@@ -513,8 +513,8 @@ class PredictiveGameStateAnalyzer {
 
         // Adjust based on prediction consistency
         let adjustmentCount = predictions.difficultyAdjustments.count +
-                             predictions.contentSuggestions.count +
-                             predictions.performanceOptimizations.count
+            predictions.contentSuggestions.count +
+            predictions.performanceOptimizations.count
 
         let consistencyFactor = adjustmentCount > 3 ? 0.9 : adjustmentCount > 1 ? 0.95 : 1.0
 
@@ -524,7 +524,7 @@ class PredictiveGameStateAnalyzer {
     private func calculateEffectiveness(_ predictions: PredictiveAnalysisData) -> Double {
         // Simplified effectiveness calculation
         // In production, this would compare predictions against actual outcomes
-        return 0.75 // Placeholder
+        0.75 // Placeholder
     }
 
     func reset() {
@@ -815,7 +815,7 @@ class ReinforcementLearningAgent {
     }
 
     private func getMaxQValue(for state: String) -> Double {
-        return qTable[state]?.values.max() ?? 0.0
+        qTable[state]?.values.max() ?? 0.0
     }
 
     private func getTopActions() -> [LearnedAction] {
@@ -872,9 +872,10 @@ class MultimodalAICoordinator {
     private weak var reinforcementLearner: ReinforcementLearningAgent?
 
     func connectSystems(predictive: PredictiveGameStateAnalyzer,
-                       content: DynamicContentGenerator,
-                       emotion: EmotionRecognitionSystem,
-                       reinforcement: ReinforcementLearningAgent) {
+                        content: DynamicContentGenerator,
+                        emotion: EmotionRecognitionSystem,
+                        reinforcement: ReinforcementLearningAgent)
+    {
         self.predictiveAnalyzer = predictive
         self.contentGenerator = content
         self.emotionAnalyzer = emotion

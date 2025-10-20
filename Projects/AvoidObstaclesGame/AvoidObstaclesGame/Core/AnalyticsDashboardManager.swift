@@ -296,7 +296,7 @@ final class AnalyticsDashboardManager {
         let performanceMetrics = analytics.getPerformanceMetrics()
         let performanceDisplayMetrics = [
             "FPS: \(String(format: "%.0f", performanceMetrics.averageFrameRate))",
-            "Memory: \(String(format: "%.1f", Double(performanceMetrics.memoryUsage) / (1024*1024)))MB",
+            "Memory: \(String(format: "%.1f", Double(performanceMetrics.memoryUsage) / (1024 * 1024)))MB",
             "Stability: \(String(format: "%.1f%%", performanceMetrics.sessionStability * 100))",
         ]
         self.analyticsPanels[2].updateMetrics(performanceDisplayMetrics)

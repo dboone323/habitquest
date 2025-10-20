@@ -10,8 +10,8 @@ final class TrendAnalysisService {
     }
 
     /// Get habit trends for specific habit over time period
-    func getHabitTrends(for habitId: UUID, days: Int = 30) async -> HabitTrendData {
-        let habit = await fetchHabit(id: habitId)
+    func getHabitTrends(for habitId: UUID, days: Int = 30) -> HabitTrendData {
+        let habit = self.fetchHabit(id: habitId)
         guard let habit else {
             return HabitTrendData(habitId: habitId, completionRates: [], streaks: [], xpEarned: [])
         }
@@ -29,7 +29,7 @@ final class TrendAnalysisService {
     }
 
     /// Calculate weekly progress metrics
-    func calculateWeeklyProgress(logs: [HabitLog]) async -> WeeklyProgress {
+    func calculateWeeklyProgress(logs: [HabitLog]) -> WeeklyProgress {
         let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let weekLogs = logs.filter { $0.completionDate >= weekAgo }
         let completedThisWeek = weekLogs.filter(\.isCompleted).count
@@ -43,7 +43,7 @@ final class TrendAnalysisService {
     }
 
     /// Calculate monthly trends over time
-    func calculateMonthlyTrends(logs: [HabitLog]) async -> [MonthlyTrend] {
+    func calculateMonthlyTrends(logs: [HabitLog]) -> [MonthlyTrend] {
         let monthGroups = Dictionary(grouping: logs) {
             Calendar.current.component(.month, from: $0.completionDate)
         }
@@ -59,7 +59,7 @@ final class TrendAnalysisService {
     }
 
     /// Calculate habit trend direction
-    func calculateHabitTrends(logs: [HabitLog]) async -> HabitTrend {
+    func calculateHabitTrends(logs: [HabitLog]) -> HabitTrend {
         let recentLogs = logs.suffix(30)
         let olderLogs = logs.dropLast(30).suffix(30)
 
@@ -77,7 +77,7 @@ final class TrendAnalysisService {
 
     // MARK: - Private Methods
 
-    private func fetchHabit(id: UUID) async -> Habit? {
+    private func fetchHabit(id: UUID) -> Habit? {
         let descriptor = FetchDescriptor<Habit>()
         let habits = try? self.modelContext.fetch(descriptor)
         return habits?.first { $0.id == id }

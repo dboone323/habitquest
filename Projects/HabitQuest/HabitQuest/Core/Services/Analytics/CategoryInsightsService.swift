@@ -10,8 +10,8 @@ final class CategoryInsightsService {
     }
 
     /// Get insights for all habit categories
-    func getCategoryInsights() async -> [CategoryInsight] {
-        let habits = await fetchAllHabits()
+    func getCategoryInsights() -> [CategoryInsight] {
+        let habits = self.fetchAllHabits()
         let categories = Dictionary(grouping: habits) { $0.category }
 
         return categories.map { category, categoryHabits in
@@ -29,7 +29,7 @@ final class CategoryInsightsService {
     }
 
     /// Calculate category breakdown statistics
-    func calculateCategoryBreakdown(habits: [Habit]) async -> [CategoryStats] {
+    func calculateCategoryBreakdown(habits: [Habit]) -> [CategoryStats] {
         let categories = Dictionary(grouping: habits) { $0.category }
         return categories.map { category, categoryHabits in
             let completedLogs = categoryHabits.flatMap(\.logs).filter(\.isCompleted)
@@ -43,8 +43,8 @@ final class CategoryInsightsService {
     }
 
     /// Get detailed category performance metrics
-    func getCategoryPerformance(category: HabitCategory) async -> CategoryPerformance {
-        let habits = await fetchHabits(for: category)
+    func getCategoryPerformance(category: HabitCategory) -> CategoryPerformance {
+        let habits = self.fetchHabits(for: category)
         let allLogs = habits.flatMap(\.logs)
         let completedLogs = allLogs.filter(\.isCompleted)
 
@@ -85,20 +85,20 @@ final class CategoryInsightsService {
     }
 
     /// Get category distribution across all habits
-    func getCategoryDistribution() async -> [HabitCategory: Int] {
-        let habits = await fetchAllHabits()
+    func getCategoryDistribution() -> [HabitCategory: Int] {
+        let habits = self.fetchAllHabits()
         return Dictionary(grouping: habits, by: \.category).mapValues { $0.count }
     }
 
     // MARK: - Private Methods
 
-    private func fetchAllHabits() async -> [Habit] {
+    private func fetchAllHabits() -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
         return (try? self.modelContext.fetch(descriptor)) ?? []
     }
 
-    private func fetchHabits(for category: HabitCategory) async -> [Habit] {
-        let habits = await fetchAllHabits()
+    private func fetchHabits(for category: HabitCategory) -> [Habit] {
+        let habits = self.fetchAllHabits()
         return habits.filter { $0.category == category }
     }
 

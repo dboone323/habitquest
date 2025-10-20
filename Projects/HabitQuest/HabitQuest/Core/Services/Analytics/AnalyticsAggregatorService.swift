@@ -21,11 +21,11 @@ final class AnalyticsAggregatorService {
     }
 
     /// Get comprehensive analytics data
-    func getAnalytics() async -> HabitAnalytics {
-        let habits = await fetchAllHabits()
-        let logs = await fetchAllLogs()
+    func getAnalytics() -> HabitAnalytics {
+        let habits = self.fetchAllHabits()
+        let logs = self.fetchAllLogs()
 
-        return await HabitAnalytics(
+        return HabitAnalytics(
             overallStats: self.calculateOverallStats(habits: habits, logs: logs),
             streakAnalytics: self.calculateStreakAnalytics(habits: habits),
             categoryBreakdown: self.categoryInsightsService.calculateCategoryBreakdown(habits: habits),
@@ -39,12 +39,12 @@ final class AnalyticsAggregatorService {
 
     // MARK: - Private Methods
 
-    private func fetchAllHabits() async -> [Habit] {
+    private func fetchAllHabits() -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
         return (try? self.modelContext.fetch(descriptor)) ?? []
     }
 
-    private func fetchAllLogs() async -> [HabitLog] {
+    private func fetchAllLogs() -> [HabitLog] {
         let descriptor = FetchDescriptor<HabitLog>()
         return (try? self.modelContext.fetch(descriptor)) ?? []
     }
@@ -112,7 +112,7 @@ final class AnalyticsAggregatorService {
         return weekdayGroups.mapValues { $0.count }
     }
 
-    private func calculateHabitPerformance(habits: [Habit]) async -> [HabitPerformance] {
+    private func calculateHabitPerformance(habits: [Habit]) -> [HabitPerformance] {
         // Since all services are MainActor-isolated, process sequentially on main actor
         var performances: [HabitPerformance] = []
 
@@ -124,7 +124,7 @@ final class AnalyticsAggregatorService {
             let habitLogs = Array(habit.logs) // Create a copy of the logs
 
             let completedLogs = habitLogs.filter(\.isCompleted)
-            let trends = await trendAnalysisService.calculateHabitTrends(logs: habitLogs)
+            let trends = trendAnalysisService.calculateHabitTrends(logs: habitLogs)
 
             let performance = HabitPerformance(
                 habitId: habitId,

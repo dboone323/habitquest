@@ -7,7 +7,7 @@
 
 import SpriteKit
 #if os(iOS) || os(tvOS)
-import UIKit
+    import UIKit
 #endif
 
 /// Types of weather conditions
@@ -117,26 +117,26 @@ class EffectsManager {
 
         // Create particle texture programmatically
         #if os(iOS) || os(tvOS)
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 8, height: 8))
-        let sparkImage = renderer.image { context in
-            context.cgContext.setFillColor(UIColor.white.cgColor)
-            context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 8, height: 8)))
-        }
+            let renderer = UIGraphicsImageRenderer(size: CGSize(width: 8, height: 8))
+            let sparkImage = renderer.image { context in
+                context.cgContext.setFillColor(UIColor.white.cgColor)
+                context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 8, height: 8)))
+            }
         #else
-        // For macOS, create a simple colored rectangle texture
-        let coreImageContext = CIContext()
-        let filter = CIFilter(name: "CIConstantColorGenerator")!
-        filter.setValue(CIColor(color: SKColor.white), forKey: kCIInputColorKey)
-        let ciImage = filter.outputImage!
+            // For macOS, create a simple colored rectangle texture
+            let coreImageContext = CIContext()
+            let filter = CIFilter(name: "CIConstantColorGenerator")!
+            filter.setValue(CIColor(color: SKColor.white), forKey: kCIInputColorKey)
+            let ciImage = filter.outputImage!
 
-        // Create a crop filter to get the desired size
-        let cropFilter = CIFilter(name: "CICrop")!
-        cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
-        cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 8, height: 8))), forKey: "inputRectangle")
-        let croppedImage = cropFilter.outputImage!
+            // Create a crop filter to get the desired size
+            let cropFilter = CIFilter(name: "CICrop")!
+            cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
+            cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 8, height: 8))), forKey: "inputRectangle")
+            let croppedImage = cropFilter.outputImage!
 
-        let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
-        let sparkImage = NSImage(cgImage: cgImage, size: CGSize(width: 8, height: 8))
+            let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
+            let sparkImage = NSImage(cgImage: cgImage, size: CGSize(width: 8, height: 8))
         #endif
 
         // Configure explosion particles
@@ -175,26 +175,26 @@ class EffectsManager {
 
         // Create particle texture
         #if os(iOS) || os(tvOS)
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 4, height: 4))
-        let particleImage = renderer.image { context in
-            context.cgContext.setFillColor(UIColor.cyan.cgColor)
-            context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 4, height: 4)))
-        }
+            let renderer = UIGraphicsImageRenderer(size: CGSize(width: 4, height: 4))
+            let particleImage = renderer.image { context in
+                context.cgContext.setFillColor(UIColor.cyan.cgColor)
+                context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 4, height: 4)))
+            }
         #else
-        // For macOS, create a simple colored rectangle texture
-        let coreImageContext = CIContext()
-        let filter = CIFilter(name: "CIConstantColorGenerator")!
-        filter.setValue(CIColor(color: SKColor.cyan), forKey: kCIInputColorKey)
-        let ciImage = filter.outputImage!
+            // For macOS, create a simple colored rectangle texture
+            let coreImageContext = CIContext()
+            let filter = CIFilter(name: "CIConstantColorGenerator")!
+            filter.setValue(CIColor(color: SKColor.cyan), forKey: kCIInputColorKey)
+            let ciImage = filter.outputImage!
 
-        // Create a crop filter to get the desired size
-        let cropFilter = CIFilter(name: "CICrop")!
-        cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
-        cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 4, height: 4))), forKey: "inputRectangle")
-        let croppedImage = cropFilter.outputImage!
+            // Create a crop filter to get the desired size
+            let cropFilter = CIFilter(name: "CICrop")!
+            cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
+            cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 4, height: 4))), forKey: "inputRectangle")
+            let croppedImage = cropFilter.outputImage!
 
-        let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
-        let particleImage = NSImage(cgImage: cgImage, size: CGSize(width: 4, height: 4))
+            let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
+            let particleImage = NSImage(cgImage: cgImage, size: CGSize(width: 4, height: 4))
         #endif
 
         // Configure trail particles
@@ -222,26 +222,26 @@ class EffectsManager {
 
         // Create particle texture
         #if os(iOS) || os(tvOS)
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 6, height: 6))
-        let sparkleImage = renderer.image { context in
-            context.cgContext.setFillColor(UIColor.yellow.cgColor)
-            context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 6, height: 6)))
-        }
+            let renderer = UIGraphicsImageRenderer(size: CGSize(width: 6, height: 6))
+            let sparkleImage = renderer.image { context in
+                context.cgContext.setFillColor(UIColor.yellow.cgColor)
+                context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 6, height: 6)))
+            }
         #else
-        // For macOS, create a simple colored rectangle texture
-        let coreImageContext = CIContext()
-        let filter = CIFilter(name: "CIConstantColorGenerator")!
-        filter.setValue(CIColor(color: SKColor.yellow), forKey: kCIInputColorKey)
-        let ciImage = filter.outputImage!
+            // For macOS, create a simple colored rectangle texture
+            let coreImageContext = CIContext()
+            let filter = CIFilter(name: "CIConstantColorGenerator")!
+            filter.setValue(CIColor(color: SKColor.yellow), forKey: kCIInputColorKey)
+            let ciImage = filter.outputImage!
 
-        // Create a crop filter to get the desired size
-        let cropFilter = CIFilter(name: "CICrop")!
-        cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
-        cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 6, height: 6))), forKey: "inputRectangle")
-        let croppedImage = cropFilter.outputImage!
+            // Create a crop filter to get the desired size
+            let cropFilter = CIFilter(name: "CICrop")!
+            cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
+            cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 6, height: 6))), forKey: "inputRectangle")
+            let croppedImage = cropFilter.outputImage!
 
-        let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
-        let sparkleImage = NSImage(cgImage: cgImage, size: CGSize(width: 6, height: 6))
+            let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
+            let sparkleImage = NSImage(cgImage: cgImage, size: CGSize(width: 6, height: 6))
         #endif
 
         // Configure sparkle particles
@@ -269,26 +269,26 @@ class EffectsManager {
 
         // Create raindrop texture
         #if os(iOS) || os(tvOS)
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 2, height: 8))
-        let rainImage = renderer.image { context in
-            context.cgContext.setFillColor(UIColor.blue.withAlphaComponent(0.6).cgColor)
-            context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 2, height: 8)))
-        }
+            let renderer = UIGraphicsImageRenderer(size: CGSize(width: 2, height: 8))
+            let rainImage = renderer.image { context in
+                context.cgContext.setFillColor(UIColor.blue.withAlphaComponent(0.6).cgColor)
+                context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 2, height: 8)))
+            }
         #else
-        // For macOS, create a simple colored rectangle texture
-        let coreImageContext = CIContext()
-        let filter = CIFilter(name: "CIConstantColorGenerator")!
-        filter.setValue(CIColor(color: SKColor.blue.withAlphaComponent(0.6)), forKey: kCIInputColorKey)
-        let ciImage = filter.outputImage!
+            // For macOS, create a simple colored rectangle texture
+            let coreImageContext = CIContext()
+            let filter = CIFilter(name: "CIConstantColorGenerator")!
+            filter.setValue(CIColor(color: SKColor.blue.withAlphaComponent(0.6)), forKey: kCIInputColorKey)
+            let ciImage = filter.outputImage!
 
-        // Create a crop filter to get the desired size
-        let cropFilter = CIFilter(name: "CICrop")!
-        cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
-        cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 2, height: 8))), forKey: "inputRectangle")
-        let croppedImage = cropFilter.outputImage!
+            // Create a crop filter to get the desired size
+            let cropFilter = CIFilter(name: "CICrop")!
+            cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
+            cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 2, height: 8))), forKey: "inputRectangle")
+            let croppedImage = cropFilter.outputImage!
 
-        let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
-        let rainImage = NSImage(cgImage: cgImage, size: CGSize(width: 2, height: 8))
+            let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
+            let rainImage = NSImage(cgImage: cgImage, size: CGSize(width: 2, height: 8))
         #endif
 
         // Configure rain particles
@@ -316,26 +316,26 @@ class EffectsManager {
 
         // Create snowflake texture
         #if os(iOS) || os(tvOS)
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 6, height: 6))
-        let snowImage = renderer.image { context in
-            context.cgContext.setFillColor(UIColor.white.cgColor)
-            context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 6, height: 6)))
-        }
+            let renderer = UIGraphicsImageRenderer(size: CGSize(width: 6, height: 6))
+            let snowImage = renderer.image { context in
+                context.cgContext.setFillColor(UIColor.white.cgColor)
+                context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 6, height: 6)))
+            }
         #else
-        // For macOS, create a simple colored rectangle texture
-        let coreImageContext = CIContext()
-        let filter = CIFilter(name: "CIConstantColorGenerator")!
-        filter.setValue(CIColor(color: SKColor.white), forKey: kCIInputColorKey)
-        let ciImage = filter.outputImage!
+            // For macOS, create a simple colored rectangle texture
+            let coreImageContext = CIContext()
+            let filter = CIFilter(name: "CIConstantColorGenerator")!
+            filter.setValue(CIColor(color: SKColor.white), forKey: kCIInputColorKey)
+            let ciImage = filter.outputImage!
 
-        // Create a crop filter to get the desired size
-        let cropFilter = CIFilter(name: "CICrop")!
-        cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
-        cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 6, height: 6))), forKey: "inputRectangle")
-        let croppedImage = cropFilter.outputImage!
+            // Create a crop filter to get the desired size
+            let cropFilter = CIFilter(name: "CICrop")!
+            cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
+            cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 6, height: 6))), forKey: "inputRectangle")
+            let croppedImage = cropFilter.outputImage!
 
-        let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
-        let snowImage = NSImage(cgImage: cgImage, size: CGSize(width: 6, height: 6))
+            let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
+            let snowImage = NSImage(cgImage: cgImage, size: CGSize(width: 6, height: 6))
         #endif
 
         // Configure snow particles
@@ -366,39 +366,39 @@ class EffectsManager {
 
         // Create fog texture
         #if os(iOS) || os(tvOS)
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 40, height: 40))
-        let fogImage = renderer.image { context in
-            let colors = [UIColor.gray.withAlphaComponent(0.1), UIColor.white.withAlphaComponent(0.3)]
-            let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
-                                      colors: colors as CFArray,
-                                      locations: [0.0, 1.0])!
-            context.cgContext.drawRadialGradient(gradient,
-                                                 startCenter: CGPoint(x: 20, y: 20),
-                                                 startRadius: 0,
-                                                 endCenter: CGPoint(x: 20, y: 20),
-                                                 endRadius: 20,
-                                                 options: [])
-        }
+            let renderer = UIGraphicsImageRenderer(size: CGSize(width: 40, height: 40))
+            let fogImage = renderer.image { context in
+                let colors = [UIColor.gray.withAlphaComponent(0.1), UIColor.white.withAlphaComponent(0.3)]
+                let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                                          colors: colors as CFArray,
+                                          locations: [0.0, 1.0])!
+                context.cgContext.drawRadialGradient(gradient,
+                                                     startCenter: CGPoint(x: 20, y: 20),
+                                                     startRadius: 0,
+                                                     endCenter: CGPoint(x: 20, y: 20),
+                                                     endRadius: 20,
+                                                     options: [])
+            }
         #else
-        // For macOS, create a simple colored rectangle texture with gradient effect
-        let coreImageContext = CIContext()
-        let filter = CIFilter(name: "CIRadialGradient")!
-        filter.setValue(CIVector(x: 20, y: 20), forKey: "inputCenter")
-        filter.setValue(CIColor(color: SKColor.gray.withAlphaComponent(0.1)), forKey: "inputColor0")
-        filter.setValue(CIColor(color: SKColor.white.withAlphaComponent(0.3)), forKey: "inputColor1")
-        filter.setValue(0.0, forKey: "inputRadius0")
-        filter.setValue(20.0, forKey: "inputRadius1")
+            // For macOS, create a simple colored rectangle texture with gradient effect
+            let coreImageContext = CIContext()
+            let filter = CIFilter(name: "CIRadialGradient")!
+            filter.setValue(CIVector(x: 20, y: 20), forKey: "inputCenter")
+            filter.setValue(CIColor(color: SKColor.gray.withAlphaComponent(0.1)), forKey: "inputColor0")
+            filter.setValue(CIColor(color: SKColor.white.withAlphaComponent(0.3)), forKey: "inputColor1")
+            filter.setValue(0.0, forKey: "inputRadius0")
+            filter.setValue(20.0, forKey: "inputRadius1")
 
-        let ciImage = filter.outputImage!
+            let ciImage = filter.outputImage!
 
-        // Create a crop filter to get the desired size
-        let cropFilter = CIFilter(name: "CICrop")!
-        cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
-        cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 40, height: 40))), forKey: "inputRectangle")
-        let croppedImage = cropFilter.outputImage!
+            // Create a crop filter to get the desired size
+            let cropFilter = CIFilter(name: "CICrop")!
+            cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
+            cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 40, height: 40))), forKey: "inputRectangle")
+            let croppedImage = cropFilter.outputImage!
 
-        let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
-        let fogImage = NSImage(cgImage: cgImage, size: CGSize(width: 40, height: 40))
+            let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
+            let fogImage = NSImage(cgImage: cgImage, size: CGSize(width: 40, height: 40))
         #endif
 
         // Configure fog particles
@@ -427,26 +427,26 @@ class EffectsManager {
 
         // Create wind particle texture
         #if os(iOS) || os(tvOS)
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 20))
-        let windImage = renderer.image { context in
-            context.cgContext.setFillColor(UIColor.white.withAlphaComponent(0.2).cgColor)
-            context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 1, height: 20)))
-        }
+            let renderer = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 20))
+            let windImage = renderer.image { context in
+                context.cgContext.setFillColor(UIColor.white.withAlphaComponent(0.2).cgColor)
+                context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 1, height: 20)))
+            }
         #else
-        // For macOS, create a simple colored rectangle texture
-        let coreImageContext = CIContext()
-        let filter = CIFilter(name: "CIConstantColorGenerator")!
-        filter.setValue(CIColor(color: SKColor.white.withAlphaComponent(0.2)), forKey: kCIInputColorKey)
-        let ciImage = filter.outputImage!
+            // For macOS, create a simple colored rectangle texture
+            let coreImageContext = CIContext()
+            let filter = CIFilter(name: "CIConstantColorGenerator")!
+            filter.setValue(CIColor(color: SKColor.white.withAlphaComponent(0.2)), forKey: kCIInputColorKey)
+            let ciImage = filter.outputImage!
 
-        // Create a crop filter to get the desired size
-        let cropFilter = CIFilter(name: "CICrop")!
-        cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
-        cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 1, height: 20))), forKey: "inputRectangle")
-        let croppedImage = cropFilter.outputImage!
+            // Create a crop filter to get the desired size
+            let cropFilter = CIFilter(name: "CICrop")!
+            cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
+            cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 1, height: 20))), forKey: "inputRectangle")
+            let croppedImage = cropFilter.outputImage!
 
-        let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
-        let windImage = NSImage(cgImage: cgImage, size: CGSize(width: 1, height: 20))
+            let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
+            let windImage = NSImage(cgImage: cgImage, size: CGSize(width: 1, height: 20))
         #endif
 
         // Configure wind particles
@@ -474,26 +474,26 @@ class EffectsManager {
 
         // Create lightning spark texture
         #if os(iOS) || os(tvOS)
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 4, height: 4))
-        let lightningImage = renderer.image { context in
-            context.cgContext.setFillColor(UIColor.white.cgColor)
-            context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 4, height: 4)))
-        }
+            let renderer = UIGraphicsImageRenderer(size: CGSize(width: 4, height: 4))
+            let lightningImage = renderer.image { context in
+                context.cgContext.setFillColor(UIColor.white.cgColor)
+                context.cgContext.fill(CGRect(origin: .zero, size: CGSize(width: 4, height: 4)))
+            }
         #else
-        // For macOS, create a simple colored rectangle texture
-        let coreImageContext = CIContext()
-        let filter = CIFilter(name: "CIConstantColorGenerator")!
-        filter.setValue(CIColor(color: SKColor.white), forKey: kCIInputColorKey)
-        let ciImage = filter.outputImage!
+            // For macOS, create a simple colored rectangle texture
+            let coreImageContext = CIContext()
+            let filter = CIFilter(name: "CIConstantColorGenerator")!
+            filter.setValue(CIColor(color: SKColor.white), forKey: kCIInputColorKey)
+            let ciImage = filter.outputImage!
 
-        // Create a crop filter to get the desired size
-        let cropFilter = CIFilter(name: "CICrop")!
-        cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
-        cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 4, height: 4))), forKey: "inputRectangle")
-        let croppedImage = cropFilter.outputImage!
+            // Create a crop filter to get the desired size
+            let cropFilter = CIFilter(name: "CICrop")!
+            cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
+            cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: CGSize(width: 4, height: 4))), forKey: "inputRectangle")
+            let croppedImage = cropFilter.outputImage!
 
-        let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
-        let lightningImage = NSImage(cgImage: cgImage, size: CGSize(width: 4, height: 4))
+            let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
+            let lightningImage = NSImage(cgImage: cgImage, size: CGSize(width: 4, height: 4))
         #endif
 
         // Configure lightning particles
@@ -1087,27 +1087,27 @@ class EffectsManager {
     /// - Returns: A platform-appropriate image for use as particle texture
     func createParticleTexture(color: SKColor, size: CGSize) -> SKTexture {
         #if os(iOS) || os(tvOS)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        let image = renderer.image { context in
-            context.cgContext.setFillColor(color.cgColor)
-            context.cgContext.fill(CGRect(origin: .zero, size: size))
-        }
-        return SKTexture(image: image)
+            let renderer = UIGraphicsImageRenderer(size: size)
+            let image = renderer.image { context in
+                context.cgContext.setFillColor(color.cgColor)
+                context.cgContext.fill(CGRect(origin: .zero, size: size))
+            }
+            return SKTexture(image: image)
         #else
-        // For macOS, create a simple colored rectangle texture
-        let coreImageContext = CIContext()
-        let filter = CIFilter(name: "CIConstantColorGenerator")!
-        filter.setValue(CIColor(color: color), forKey: kCIInputColorKey)
-        let ciImage = filter.outputImage!
+            // For macOS, create a simple colored rectangle texture
+            let coreImageContext = CIContext()
+            let filter = CIFilter(name: "CIConstantColorGenerator")!
+            filter.setValue(CIColor(color: color), forKey: kCIInputColorKey)
+            let ciImage = filter.outputImage!
 
-        // Create a crop filter to get the desired size
-        let cropFilter = CIFilter(name: "CICrop")!
-        cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
-        cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: size)), forKey: "inputRectangle")
-        let croppedImage = cropFilter.outputImage!
+            // Create a crop filter to get the desired size
+            let cropFilter = CIFilter(name: "CICrop")!
+            cropFilter.setValue(ciImage, forKey: kCIInputImageKey)
+            cropFilter.setValue(CIVector(cgRect: CGRect(origin: .zero, size: size)), forKey: "inputRectangle")
+            let croppedImage = cropFilter.outputImage!
 
-        let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
-        return SKTexture(cgImage: cgImage)
+            let cgImage = coreImageContext.createCGImage(croppedImage, from: croppedImage.extent)!
+            return SKTexture(cgImage: cgImage)
         #endif
     }
 
@@ -1313,7 +1313,7 @@ class EffectsManager {
         guard let scene else { return }
 
         // Create multiple explosion particles
-        for _ in 0..<8 {
+        for _ in 0 ..< 8 {
             let explosion = self.getExplosionEffect()
             explosion.position = position
             explosion.particleBirthRate = 200
@@ -1459,7 +1459,7 @@ class EffectsManager {
         guard let scene else { return }
 
         // Create multiple concentric shockwaves
-        for i in 0..<3 {
+        for i in 0 ..< 3 {
             let delay = Double(i) * 0.1
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 let shockwave = SKShapeNode(circleOfRadius: 5)
