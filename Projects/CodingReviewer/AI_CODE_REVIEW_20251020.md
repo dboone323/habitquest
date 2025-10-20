@@ -1,20 +1,5 @@
 # AI Code Review for CodingReviewer
-Generated: Mon Oct 20 14:57:21 CDT 2025
-
-
-## AICodeReviewerTests.swift
-
-
-## PackageTests.swift
-
-
-## runnerTests.swift
-
-
-## CodingReviewerTests.swift
-
-
-## OllamaTypesTests.swift
+Generated: Mon Oct 20 15:35:07 CDT 2025
 
 
 ## runner.swift
@@ -30,4 +15,19 @@ Generated: Mon Oct 20 14:57:21 CDT 2025
 
 
 ## AICodeReviewer.swift
+
+
+## AIServiceProtocolsTests.swift
+
+
+## PackageTests.swift
+
+
+## runnerTests.swift
+
+
+## CodeReviewViewTests.swift
+
+
+## SidebarViewTests.swift
 
