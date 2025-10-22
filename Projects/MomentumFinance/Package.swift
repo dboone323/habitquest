@@ -24,7 +24,7 @@ let package = Package(
             name: "MomentumFinance",
             dependencies: ["SharedKit"],
             path: ".",
-            exclude: ["UI/macOS", "UI/iOS", "Sources/UI/macOS", "Sources/UI/iOS"], // Exclude platform-specific UI for now
+            exclude: ["Sources/UI/macOS", "Sources/UI/iOS"], // Exclude platform-specific UI for now
             sources: [
                 "Core",
                 "Features",
