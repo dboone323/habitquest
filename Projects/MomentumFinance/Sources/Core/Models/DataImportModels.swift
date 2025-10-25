@@ -92,7 +92,7 @@ public enum EntityType: String, CaseIterable, Codable {
 // MARK: - Validation Error
 
 /// Represents a data validation error during import
-public struct ValidationError: Identifiable, Codable {
+public struct ValidationError: Identifiable, Codable, Hashable, CustomStringConvertible {
     public let id: UUID
     public let field: String
     public let message: String
@@ -110,6 +110,10 @@ public struct ValidationError: Identifiable, Codable {
         self.severity = severity
     }
 
+    public var description: String {
+        "[\(field)] \(message)"
+    }
+
     public enum Severity: String, Codable {
         case warning
         case error
@@ -122,6 +126,14 @@ public struct ValidationError: Identifiable, Codable {
                 "Error"
             }
         }
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    public static func == (lhs: ValidationError, rhs: ValidationError) -> Bool {
+        lhs.id == rhs.id
     }
 }
 
@@ -136,6 +148,10 @@ public struct ImportResult: Codable {
     public let duplicatesSkipped: Int
     public let errors: [ValidationError]
     public let warnings: [ValidationError]
+
+    public var itemsImported: Int {
+        transactionsImported + accountsImported + categoriesImported
+    }
 
     public init(
         success: Bool,

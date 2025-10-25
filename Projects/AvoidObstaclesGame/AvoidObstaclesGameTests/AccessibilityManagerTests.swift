@@ -16,19 +16,19 @@ class AccessibilityManagerTests: XCTestCase {
 
     // MARK: - classAccessibilityManager{ Tests
 
-    func testclassAccessibilityManager{Initialization() {
+    func testclassAccessibilityManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classAccessibilityManager{
         XCTAssertTrue(true, "Placeholder test for classAccessibilityManager{")
     }
 
-    func testclassAccessibilityManager{Properties() {
+    func testclassAccessibilityManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classAccessibilityManager{
         XCTAssertTrue(true, "Placeholder test for classAccessibilityManager{ properties")
     }
 
-    func testclassAccessibilityManager{Methods() {
+    func testclassAccessibilityManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classAccessibilityManager{
         XCTAssertTrue(true, "Placeholder test for classAccessibilityManager{ methods")
@@ -36,19 +36,19 @@ class AccessibilityManagerTests: XCTestCase {
 
     // MARK: - structAccessibilitySettings:Equatable{ Tests
 
-    func teststructAccessibilitySettings:Equatable{Initialization() {
+    func teststructAccessibilitySettingsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structAccessibilitySettings:Equatable{
         XCTAssertTrue(true, "Placeholder test for structAccessibilitySettings:Equatable{")
     }
 
-    func teststructAccessibilitySettings:Equatable{Properties() {
+    func teststructAccessibilitySettingsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structAccessibilitySettings:Equatable{
         XCTAssertTrue(true, "Placeholder test for structAccessibilitySettings:Equatable{ properties")
     }
 
-    func teststructAccessibilitySettings:Equatable{Methods() {
+    func teststructAccessibilitySettingsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structAccessibilitySettings:Equatable{
         XCTAssertTrue(true, "Placeholder test for structAccessibilitySettings:Equatable{ methods")
@@ -56,19 +56,19 @@ class AccessibilityManagerTests: XCTestCase {
 
     // MARK: - structUIColors{ Tests
 
-    func teststructUIColors{Initialization() {
+    func teststructUIColorsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structUIColors{
         XCTAssertTrue(true, "Placeholder test for structUIColors{")
     }
 
-    func teststructUIColors{Properties() {
+    func teststructUIColorsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structUIColors{
         XCTAssertTrue(true, "Placeholder test for structUIColors{ properties")
     }
 
-    func teststructUIColors{Methods() {
+    func teststructUIColorsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structUIColors{
         XCTAssertTrue(true, "Placeholder test for structUIColors{ methods")

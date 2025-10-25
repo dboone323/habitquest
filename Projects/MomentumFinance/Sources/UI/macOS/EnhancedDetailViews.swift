@@ -2,6 +2,7 @@
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
 import Charts
+import MomentumFinanceCore
 import SwiftData
 import SwiftUI
 
@@ -76,24 +77,15 @@ import SwiftUI
 
                                     Menu {
                                         Button("Duplicate Transaction", action: self.duplicateTransaction).accessibilityLabel("Button")
-                                            .accessibilityLabel("Button")
-                                        Button(
-                                            "Mark as \(transaction.isReconciled ? "Unreconciled" : "Reconciled").accessibilityLabel("Button")",
-                                            action: self.toggleReconciled
-                                        )
                                         Divider()
                                         Button("Find Similar Transactions", action: { self.showRelatedTransactions = true })
                                             .accessibilityLabel("Button")
-                                            .accessibilityLabel("Button")
                                         Button("Show in Account", action: self.navigateToAccount).accessibilityLabel("Button")
-                                            .accessibilityLabel("Button")
                                         Divider()
                                         Button("Export as CSV", action: { self.showingExportOptions = true }).accessibilityLabel("Button")
-                                            .accessibilityLabel("Button")
-                                        Button("Print", action: self.printTransaction).accessibilityLabel("Button").accessibilityLabel("Button")
+                                        Button("Print", action: self.printTransaction).accessibilityLabel("Button")
                                         Divider()
                                         Button("Delete Transaction", role: .destructive, action: { self.showingDeleteConfirmation = true })
-                                            .accessibilityLabel("Button")
                                             .accessibilityLabel("Button")
                                     } label: {
                                         Image(systemName: "ellipsis.circle")
@@ -120,11 +112,6 @@ import SwiftUI
                                     self.analysisView(for: transaction)
                                         .tag("analysis")
 
-                                    if transaction.isRecurring {
-                                        self.seriesView(for: transaction)
-                                            .tag("series")
-                                    }
-
                                     self.notesView(for: transaction)
                                         .tag("notes")
                                 }
@@ -134,8 +121,8 @@ import SwiftUI
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .alert("Delete Transaction", isPresented: self.$showingDeleteConfirmation) {
-                            Button("Cancel", role: .cancel).accessibilityLabel("Button").accessibilityLabel("Button") {}
-                            Button("Delete", role: .destructive).accessibilityLabel("Button").accessibilityLabel("Button") {
+                            Button("Cancel", role: .cancel) {}
+                            Button("Delete", role: .destructive) {
                                 self.deleteTransaction(transaction)
                             }
                         } message: {
@@ -171,7 +158,7 @@ import SwiftUI
                         // Header with transaction name and amount
                         HStack(alignment: .center) {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text(transaction.name)
+                                Text(transaction.title)
                                     .font(.system(size: 28, weight: .bold))
 
                                 if let category = transaction.category {
@@ -191,7 +178,7 @@ import SwiftUI
                             Spacer()
 
                             VStack(alignment: .trailing, spacing: 4) {
-                                Text(transaction.amount.formatted(.currency(code: transaction.currencyCode)))
+                                Text(transaction.amount.formatted(.currency(code: "USD")))
                                     .font(.system(size: 32, weight: .bold))
                                     .foregroundStyle(transaction.amount < 0 ? .red : .green)
 
@@ -218,19 +205,17 @@ import SwiftUI
                             }
 
                             GridRow {
-                                DetailField(label: "Status", value: transaction.isReconciled ? "Reconciled" : "Pending")
-                                    .foregroundStyle(transaction.isReconciled ? .green : .orange)
+                                DetailField(label: "Status", value: "Active")
+                                    .foregroundStyle(.green)
 
-                                DetailField(label: "Method", value: transaction.paymentMethod ?? "Not specified")
+                                DetailField(label: "Method", value: "Not specified")
                             }
 
-                            if transaction.isRecurring {
+                            if transaction.amount < 0 {
                                 GridRow {
-                                    DetailField(label: "Recurrence", value: "Monthly")
+                                    DetailField(label: "Recurrence", value: "One-time")
 
-                                    if let nextDate = transaction.date.addingTimeInterval(30 * 24 * 60 * 60) {
-                                        DetailField(label: "Next Due", value: nextDate.formatted(date: .abbreviated, time: .omitted))
-                                    }
+                                    DetailField(label: "Category", value: transaction.category?.name ?? "Uncategorized")
                                 }
                             }
 
@@ -246,34 +231,16 @@ import SwiftUI
                         .cornerRadius(8)
 
                         // Notes section
-                        if !transaction.notes.isEmpty {
+                        if let notes = transaction.notes, !notes.isEmpty {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Notes")
                                     .font(.headline)
 
-                                Text(transaction.notes)
+                                Text(notes)
                                     .padding()
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .background(Color(.windowBackgroundColor).opacity(0.3))
                                     .cornerRadius(8)
-                            }
-                        }
-
-                        // Attachments (if any)
-                        if let attachments = transaction.attachments, !attachments.isEmpty {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Attachments")
-                                    .font(.headline)
-
-                                ScrollView(.horizontal) {
-                                    HStack(spacing: 12) {
-                                        ForEach(attachments, id: \.self) { attachment in
-                                            AttachmentThumbnail(attachment: attachment)
-                                        }
-                                    }
-                                    .padding(.horizontal, 4)
-                                }
-                                .frame(height: 120)
                             }
                         }
 
@@ -321,19 +288,9 @@ import SwiftUI
                                 GridRow {
                                     Text("Frequency:")
                                         .gridColumnAlignment(.trailing)
-                                    Text("Monthly")
-                                    Text("(Last seen 32 days ago)")
+                                    Text("One-time")
+                                    Text("(Single transaction)")
                                         .foregroundStyle(.secondary)
-                                }
-
-                                if transaction.isRecurring {
-                                    GridRow {
-                                        Text("Annual cost:")
-                                            .gridColumnAlignment(.trailing)
-                                        Text("\((transaction.amount * 12).formatted(.currency(code: transaction.currencyCode)))")
-                                        Text("(2.5% of yearly expenses)")
-                                            .foregroundStyle(.secondary)
-                                    }
                                 }
 
                                 GridRow {
@@ -355,11 +312,11 @@ import SwiftUI
                         // Merchant analysis
                         if transaction.amount < 0 {
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Merchant Analysis: \(transaction.name)")
+                                Text("Merchant Analysis: \(transaction.title)")
                                     .font(.headline)
 
                                 // Placeholder for merchant spending chart
-                                MerchantSpendingChart(merchantName: transaction.name)
+                                MerchantSpendingChart(merchantName: transaction.title)
                                     .frame(height: 180)
 
                                 Grid {
@@ -406,7 +363,7 @@ import SwiftUI
                                     .foregroundStyle(.blue)
 
                                 VStack(alignment: .leading) {
-                                    Text(transaction.name)
+                                    Text(transaction.title)
                                         .font(.headline)
 
                                     Text(Calendar.current.date(byAdding: .month, value: i - 2, to: transaction.date)?.formatted(
@@ -418,7 +375,7 @@ import SwiftUI
 
                                 Spacer()
 
-                                Text(transaction.amount.formatted(.currency(code: transaction.currencyCode)))
+                                Text(transaction.amount.formatted(.currency(code: "USD")))
                                     .foregroundStyle(transaction.amount < 0 ? .red : .green)
 
                                 Image(systemName: i == 2 ? "checkmark.circle.fill" : "circle")
@@ -431,7 +388,7 @@ import SwiftUI
                     Spacer()
 
                     HStack {
-                        Text("Total series value: \((transaction.amount * 5).formatted(.currency(code: transaction.currencyCode)))")
+                        Text("Total series value: \((transaction.amount * 5).formatted(.currency(code: "USD")))")
                             .font(.headline)
 
                         Spacer()
@@ -451,14 +408,14 @@ import SwiftUI
                         .font(.title2)
                         .padding(.bottom, 10)
 
-                    if transaction.notes.isEmpty {
+                    if let notes = transaction.notes, notes.isEmpty {
                         Text("No notes have been added to this transaction.")
                             .foregroundStyle(.secondary)
                             .padding()
                             .frame(maxWidth: .infinity, alignment: .center)
                     } else {
                         ScrollView {
-                            Text(transaction.notes)
+                            Text(transaction.notes ?? "")
                                 .padding()
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .background(Color(.windowBackgroundColor).opacity(0.3))
@@ -493,7 +450,7 @@ import SwiftUI
                                 .gridColumnAlignment(.trailing)
 
                             TextField("Transaction name", text: Binding(
-                                get: { self.editedTransaction?.name ?? transaction.name },
+                                get: { self.editedTransaction?.name ?? transaction.title },
                                 set: { self.editedTransaction?.name = $0 }
                             ))
                             .textFieldStyle(.roundedBorder)
@@ -508,7 +465,7 @@ import SwiftUI
                                 TextField("Amount", value: Binding(
                                     get: { self.editedTransaction?.amount ?? transaction.amount },
                                     set: { self.editedTransaction?.amount = $0 }
-                                ), format: .currency(code: transaction.currencyCode))
+                                ), format: .currency(code: "USD"))
                                     .textFieldStyle(.roundedBorder)
                                     .frame(width: 150)
 
@@ -547,84 +504,16 @@ import SwiftUI
 
                             VStack {
                                 Picker("Category", selection: Binding(
-                                    get: { self.editedTransaction?.categoryId ?? transaction.category?.id ?? "" },
+                                    get: { self.editedTransaction?.categoryId ?? transaction.category?.id.uuidString ?? "" },
                                     set: { self.editedTransaction?.categoryId = $0 }
                                 )) {
                                     Text("None").tag("")
                                     ForEach(self.categories) { category in
-                                        Text(category.name).tag(category.id)
+                                        Text(category.name).tag(category.id.uuidString)
                                     }
                                 }
                                 .labelsHidden()
-
-                                if let subcategory = editedTransaction?.subcategory {
-                                    TextField(
-                                        "Subcategory (optional).accessibilityLabel("Text Field").accessibilityLabel("Text Field")",
-                                        text: Binding(
-                                            get: { subcategory },
-                                            set: { self.editedTransaction?.subcategory = $0 }
-                                        )
-                                    )
-                                    .textFieldStyle(.roundedBorder)
-                                }
                             }
-                        }
-
-                        // Account field
-                        GridRow {
-                            Text("Account:")
-                                .gridColumnAlignment(.trailing)
-
-                            Picker("Account", selection: Binding(
-                                get: { self.editedTransaction?.accountId ?? transaction.account?.id ?? "" },
-                                set: { self.editedTransaction?.accountId = $0 }
-                            )) {
-                                Text("None").tag("")
-                                // This would be populated with accounts
-                                Text("Checking Account").tag("checking1")
-                                Text("Savings Account").tag("savings1")
-                                Text("Credit Card").tag("credit1")
-                            }
-                            .labelsHidden()
-                        }
-
-                        // Status field
-                        GridRow {
-                            Text("Status:")
-                                .gridColumnAlignment(.trailing)
-
-                            Picker("Status", selection: Binding(
-                                get: { self.editedTransaction?.isReconciled ?? transaction.isReconciled },
-                                set: { self.editedTransaction?.isReconciled = $0 }
-                            )) {
-                                Text("Pending").tag(false)
-                                Text("Reconciled").tag(true)
-                            }
-                            .pickerStyle(.segmented)
-                            .frame(width: 200)
-                        }
-
-                        // Recurring field
-                        GridRow {
-                            Text("Recurring:")
-                                .gridColumnAlignment(.trailing)
-
-                            Toggle("This transaction repeats regularly", isOn: Binding(
-                                get: { self.editedTransaction?.isRecurring ?? transaction.isRecurring },
-                                set: { self.editedTransaction?.isRecurring = $0 }
-                            ))
-                        }
-
-                        // Location field
-                        GridRow {
-                            Text("Location:")
-                                .gridColumnAlignment(.trailing)
-
-                            TextField("Transaction location", text: Binding(
-                                get: { self.editedTransaction?.location ?? transaction.location ?? "" },
-                                set: { self.editedTransaction?.location = $0 }
-                            ))
-                            .textFieldStyle(.roundedBorder)
                         }
                     }
 
@@ -632,7 +521,7 @@ import SwiftUI
                         .padding(.top, 10)
 
                     TextEditor(text: Binding(
-                        get: { self.editedTransaction?.notes ?? transaction.notes },
+                        get: { self.editedTransaction?.notes ?? transaction.notes ?? "" },
                         set: { self.editedTransaction?.notes = $0 }
                     ))
                     .font(.body)
@@ -640,34 +529,6 @@ import SwiftUI
                     .padding(4)
                     .background(Color(.textBackgroundColor))
                     .cornerRadius(4)
-
-                    // Attachments section
-                    HStack {
-                        Text("Attachments:")
-                            .padding(.top, 10)
-
-                        Spacer()
-
-                        Button("Add Attachment").accessibilityLabel("Button").accessibilityLabel("Button") {
-                            // Logic to add attachment
-                        }
-                        .buttonStyle(.bordered)
-                    }
-
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 10) {
-                            if let attachments = transaction.attachments, !attachments.isEmpty {
-                                ForEach(attachments, id: \.self) { attachment in
-                                    AttachmentThumbnail(attachment: attachment, showDeleteButton: true)
-                                }
-                            } else {
-                                Text("No attachments")
-                                    .foregroundStyle(.secondary)
-                                    .padding()
-                            }
-                        }
-                    }
-                    .frame(height: 100)
                 }
             }
 
@@ -694,8 +555,8 @@ import SwiftUI
 
                 var body: some View {
                     HStack(spacing: 4) {
-                        Circle()
-                            .fill(self.getCategoryColor(self.category.colorHex))
+                        Image(systemName: category.iconName)
+                            .foregroundStyle(.blue)
                             .frame(width: 10, height: 10)
 
                         Text(self.category.name)
@@ -703,49 +564,8 @@ import SwiftUI
                     }
                     .padding(.horizontal, 8)
                     .padding(.vertical, 2)
-                    .background(self.getCategoryColor(self.category.colorHex).opacity(0.1))
+                    .background(Color.blue.opacity(0.1))
                     .cornerRadius(4)
-                }
-
-                private func getCategoryColor(_ hex: String?) -> Color {
-                    guard let hex else { return .gray }
-                    // This would parse the hex color string
-                    return .blue
-                }
-            }
-
-            private struct AttachmentThumbnail: View {
-                let attachment: String
-                var showDeleteButton: Bool = false
-
-                var body: some View {
-                    ZStack(alignment: .topTrailing) {
-                        VStack {
-                            Image(systemName: "doc.fill")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 40, height: 40)
-                                .padding(.bottom, 4)
-
-                            Text(self.attachment)
-                                .font(.caption)
-                                .lineLimit(1)
-                        }
-                        .padding(8)
-                        .frame(width: 100, height: 90)
-                        .background(Color(.windowBackgroundColor).opacity(0.5))
-                        .cornerRadius(8)
-
-                        if self.showDeleteButton {
-                            Button(action: {}).accessibilityLabel("Button").accessibilityLabel("Button") {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundStyle(.red)
-                                    .background(Color.white.clipShape(Circle()))
-                            }
-                            .buttonStyle(.borderless)
-                            .offset(x: 5, y: -5)
-                        }
-                    }
                 }
             }
 
@@ -943,14 +763,14 @@ import SwiftUI
                         // Export options and controls would go here
 
                         HStack {
-                            Button("Cancel").accessibilityLabel("Button").accessibilityLabel("Button") {
+                            Button("Cancel") {
                                 self.dismiss()
                             }
                             .buttonStyle(.bordered)
 
                             Spacer()
 
-                            Button("Export").accessibilityLabel("Button").accessibilityLabel("Button") {
+                            Button("Export") {
                                 // Export logic
                                 self.dismiss()
                             }
@@ -978,7 +798,7 @@ import SwiftUI
 
                 var body: some View {
                     VStack {
-                        Text("Transactions Similar to '\(self.transaction.name)'")
+                        Text("Transactions Similar to '\(self.transaction.title)'")
                             .font(.headline)
                             .padding()
 
@@ -1010,22 +830,16 @@ import SwiftUI
                 var notes: String
                 var categoryId: String
                 var accountId: String
-                var isReconciled: Bool
-                var isRecurring: Bool
-                var location: String?
-                var subcategory: String?
+                var transactionType: TransactionType
 
                 init(from transaction: FinancialTransaction) {
-                    self.name = transaction.name
+                    self.name = transaction.title
                     self.amount = transaction.amount
                     self.date = transaction.date
-                    self.notes = transaction.notes
-                    self.categoryId = transaction.category?.id ?? ""
-                    self.accountId = transaction.account?.id ?? ""
-                    self.isReconciled = transaction.isReconciled
-                    self.isRecurring = transaction.isRecurring
-                    self.location = transaction.location
-                    self.subcategory = transaction.subcategory
+                    self.notes = transaction.notes ?? ""
+                    self.categoryId = transaction.category?.id.uuidString ?? ""
+                    self.accountId = transaction.account?.persistentModelID.description ?? ""
+                    self.transactionType = transaction.transactionType
                 }
             }
 
@@ -1038,14 +852,11 @@ import SwiftUI
                 }
 
                 // Update transaction with edited values
-                transaction.name = editData.name
+                transaction.title = editData.name
                 transaction.amount = editData.amount
                 transaction.date = editData.date
                 transaction.notes = editData.notes
-                transaction.isReconciled = editData.isReconciled
-                transaction.isRecurring = editData.isRecurring
-                transaction.location = editData.location
-                transaction.subcategory = editData.subcategory
+                transaction.transactionType = editData.transactionType
 
                 // Category and account relationships would be handled here
 
@@ -1065,31 +876,22 @@ import SwiftUI
                 guard let original = transaction else { return }
 
                 let duplicate = FinancialTransaction(
-                    name: "Copy of \(original.name)",
+                    title: "Copy of \(original.title)",
                     amount: original.amount,
                     date: Date(),
-                    notes: original.notes,
-                    isReconciled: false
+                    transactionType: original.transactionType,
+                    notes: original.notes
                 )
 
                 // Copy other properties and relationships
-                duplicate.isRecurring = original.isRecurring
-                duplicate.location = original.location
-                duplicate.subcategory = original.subcategory
                 // Category and account would be set here
 
                 self.modelContext.insert(duplicate)
                 try? self.modelContext.save()
             }
 
-            private func toggleReconciled() {
-                guard let transaction else { return }
-                transaction.isReconciled.toggle()
-                try? self.modelContext.save()
-            }
-
             private func navigateToAccount() {
-                guard let transaction, let accountId = transaction.account?.id else { return }
+                guard let transaction, let accountId = transaction.account?.persistentModelID else { return }
                 // Navigate to account detail
             }
 

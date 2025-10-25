@@ -16,19 +16,19 @@ class GameObjectPoolTests: XCTestCase {
 
     // MARK: - classGameObjectPool<T:Poolable&Hashable>{ Tests
 
-    func testclassGameObjectPool<T:Poolable&Hashable>{Initialization() {
+    func testclassGameObjectPoolInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classGameObjectPool<T:Poolable&Hashable>{
         XCTAssertTrue(true, "Placeholder test for classGameObjectPool<T:Poolable&Hashable>{")
     }
 
-    func testclassGameObjectPool<T:Poolable&Hashable>{Properties() {
+    func testclassGameObjectPoolProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classGameObjectPool<T:Poolable&Hashable>{
         XCTAssertTrue(true, "Placeholder test for classGameObjectPool<T:Poolable&Hashable>{ properties")
     }
 
-    func testclassGameObjectPool<T:Poolable&Hashable>{Methods() {
+    func testclassGameObjectPoolMethods() {
         // Test method functionality
         // TODO: Implement method tests for classGameObjectPool<T:Poolable&Hashable>{
         XCTAssertTrue(true, "Placeholder test for classGameObjectPool<T:Poolable&Hashable>{ methods")

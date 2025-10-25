@@ -1,7 +1,7 @@
 // Momentum Finance - Transaction Views for Enhanced Account Detail View
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
-import Shared
+import SharedKit
 import SwiftUI
 
 #if os(macOS)

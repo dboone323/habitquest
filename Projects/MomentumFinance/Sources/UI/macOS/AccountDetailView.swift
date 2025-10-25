@@ -2,7 +2,7 @@
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
 import Charts
-import Shared
+import MomentumFinanceCore
 import SwiftData
 import SwiftUI
 
@@ -577,25 +577,29 @@ import SwiftUI
             .padding(.vertical, 4)
             .tag(transaction.id)
             .contextMenu {
-                Button("View Details").accessibilityLabel("Button").accessibilityLabel("Button") {
+                Button("View Details") {
                     // Navigate to transaction detail
                 }
+                .accessibilityLabel("Button")
 
-                Button("Edit").accessibilityLabel("Button").accessibilityLabel("Button") {
+                Button("Edit") {
                     // Edit transaction
                 }
+                .accessibilityLabel("Button")
 
                 Button(
-                    "Mark as \(transaction.isReconciled ? "Unreconciled" : "Reconciled").accessibilityLabel("Button").accessibilityLabel("Button")"
+                    "Mark as \(transaction.isReconciled ? "Unreconciled" : "Reconciled")"
                 ) {
                     self.toggleTransactionStatus(transaction)
                 }
+                .accessibilityLabel("Button")
 
                 Divider()
 
-                Button("Delete", role: .destructive).accessibilityLabel("Button").accessibilityLabel("Button") {
+                Button("Delete", role: .destructive) {
                     self.deleteTransaction(transaction)
                 }
+                .accessibilityLabel("Button")
             }
         }
 
@@ -1081,18 +1085,20 @@ import SwiftUI
                     Spacer()
 
                     HStack {
-                        Button("Cancel").accessibilityLabel("Button").accessibilityLabel("Button") {
+                        Button("Cancel") {
                             self.dismiss()
                         }
                         .buttonStyle(.bordered)
+                        .accessibilityLabel("Button")
 
                         Spacer()
 
-                        Button("Export").accessibilityLabel("Button").accessibilityLabel("Button") {
+                        Button("Export") {
                             self.performExport()
                             self.dismiss()
                         }
                         .buttonStyle(.borderedProminent)
+                        .accessibilityLabel("Button")
                     }
                     .padding(.top)
                 }

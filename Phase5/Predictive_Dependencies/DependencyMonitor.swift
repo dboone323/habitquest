@@ -18,7 +18,8 @@ public class DependencyMonitor: ObservableObject {
 
     private let fileManager = FileManager.default
     private var monitoringQueue = DispatchQueue(
-        label: "com.quantum.dependency-monitor", qos: .background)
+        label: "com.quantum.dependency-monitor", qos: .background
+    )
 
     /// Published properties for SwiftUI
     @Published public var alerts: [DependencyAlert] = []
@@ -27,9 +28,9 @@ public class DependencyMonitor: ObservableObject {
 
     /// Monitoring configuration
     public struct MonitoringConfig {
-        public var monitoringInterval: TimeInterval = 30.0  // seconds
+        public var monitoringInterval: TimeInterval = 30.0 // seconds
         public var enableRealTimeAlerts: Bool = true
-        public var alertThresholds: AlertThresholds = AlertThresholds()
+        public var alertThresholds: AlertThresholds = .init()
         public var notificationEnabled: Bool = true
         public var maxStoredAlerts: Int = 1000
 
@@ -102,7 +103,7 @@ public class DependencyMonitor: ObservableObject {
     /// Get monitoring status
     public func getMonitoringStatus() -> MonitoringStatus {
         let activeAlerts = alerts.filter { !$0.isResolved }
-        let recentAlerts = alerts.filter { Date().timeIntervalSince($0.timestamp) < 3600 }  // Last hour
+        let recentAlerts = alerts.filter { Date().timeIntervalSince($0.timestamp) < 3600 } // Last hour
 
         return MonitoringStatus(
             isActive: isMonitoringActive,
@@ -126,7 +127,7 @@ public class DependencyMonitor: ObservableObject {
 
         let alertsByType = Dictionary(grouping: recentAlerts, by: { $0.type })
         let trendsByType = alertsByType.mapValues { alerts in
-            let resolved = alerts.filter { $0.isResolved }.count
+            let resolved = alerts.filter(\.isResolved).count
             let unresolved = alerts.filter { !$0.isResolved }.count
             return AlertTypeTrend(count: alerts.count, resolved: resolved, unresolved: unresolved)
         }
@@ -173,7 +174,7 @@ public class DependencyMonitor: ObservableObject {
     // MARK: - Private Methods
 
     private func performMonitoringCycle(for projectPath: String) {
-        guard let analyzer = analyzer else { return }
+        guard let analyzer else { return }
 
         Task {
             do {
@@ -235,7 +236,7 @@ public class DependencyMonitor: ObservableObject {
         // Check for circular dependencies
         if !project.circularDependencies.isEmpty
             && project.circularDependencies.count
-                > config.alertThresholds.circularDependencyThreshold
+            > config.alertThresholds.circularDependencyThreshold
         {
             let alert = DependencyAlert(
                 id: UUID(),
@@ -280,7 +281,7 @@ public class DependencyMonitor: ObservableObject {
 
         // Check stability degradation
         if let baseline = baselineMetrics,
-            metrics.stabilityIndex < config.alertThresholds.stabilityThreshold
+           metrics.stabilityIndex < config.alertThresholds.stabilityThreshold
         {
             let degradation = baseline.stabilityIndex - metrics.stabilityIndex
             let alert = DependencyAlert(
@@ -289,7 +290,8 @@ public class DependencyMonitor: ObservableObject {
                 title: "Stability Degradation",
                 message: String(
                     format: "Stability index decreased by %.2f (current: %.2f)", degradation,
-                    metrics.stabilityIndex),
+                    metrics.stabilityIndex
+                ),
                 severity: degradation > 0.2 ? .high : .medium,
                 affectedFiles: [],
                 suggestedActions: [
@@ -304,10 +306,11 @@ public class DependencyMonitor: ObservableObject {
         }
 
         // Check for prediction opportunities
-        if let predictor = predictor {
+        if let predictor {
             let context = PredictionContext(projectSize: project.fileDependencies.count)
             let predictions = try await predictor.predictProjectDependencies(
-                for: project, context: context)
+                for: project, context: context
+            )
 
             let highConfidencePredictions = predictions.values.flatMap { $0 }.filter {
                 $0.confidence > config.alertThresholds.predictionConfidenceThreshold
@@ -319,7 +322,7 @@ public class DependencyMonitor: ObservableObject {
                     type: .predictionOpportunity,
                     title: "Dependency Prediction Opportunity",
                     message:
-                        "Found \(highConfidencePredictions.count) high-confidence dependency predictions",
+                    "Found \(highConfidencePredictions.count) high-confidence dependency predictions",
                     severity: .low,
                     affectedFiles: [],
                     suggestedActions: [
@@ -354,14 +357,15 @@ public class DependencyMonitor: ObservableObject {
             let dependencyIncrease =
                 Double(latest.totalDependencies) / Double(max(previous.totalDependencies, 1)) - 1.0
 
-            if dependencyIncrease > 0.5 {  // 50% increase
+            if dependencyIncrease > 0.5 { // 50% increase
                 let alert = DependencyAlert(
                     id: UUID(),
                     type: .dependencySpike,
                     title: "Dependency Spike Detected",
                     message: String(
                         format: "Dependencies increased by %.1f%% in recent monitoring cycle",
-                        dependencyIncrease * 100),
+                        dependencyIncrease * 100
+                    ),
                     severity: .medium,
                     affectedFiles: [],
                     suggestedActions: [
@@ -490,13 +494,15 @@ public struct MonitoringExportData: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         alerts = try container.decode([DependencyAlert].self, forKey: .alerts)
         baselineMetrics = try container.decodeIfPresent(
-            DependencyMetrics.self, forKey: .baselineMetrics)
+            DependencyMetrics.self, forKey: .baselineMetrics
+        )
         monitoringStatus = try container.decode(MonitoringStatus.self, forKey: .monitoringStatus)
         exportTimestamp = try container.decode(Date.self, forKey: .exportTimestamp)
 
         // Handle date-keyed dictionary
         let metricsContainer = try container.nestedContainer(
-            keyedBy: DateCodingKey.self, forKey: .historicalMetrics)
+            keyedBy: DateCodingKey.self, forKey: .historicalMetrics
+        )
         var metrics: [Date: DependencyMetrics] = [:]
         for key in metricsContainer.allKeys {
             let metric = try metricsContainer.decode(DependencyMetrics.self, forKey: key)
@@ -513,7 +519,8 @@ public struct MonitoringExportData: Codable {
         try container.encode(exportTimestamp, forKey: .exportTimestamp)
 
         var metricsContainer = container.nestedContainer(
-            keyedBy: DateCodingKey.self, forKey: .historicalMetrics)
+            keyedBy: DateCodingKey.self, forKey: .historicalMetrics
+        )
         for (date, metric) in historicalMetrics {
             try metricsContainer.encode(metric, forKey: DateCodingKey(date: date))
         }
@@ -580,10 +587,12 @@ public struct MonitoringDashboardView: View {
             HStack(spacing: 16) {
                 StatusCardView(title: "Active Alerts", value: "\(status.activeAlerts)", color: .red)
                 StatusCardView(
-                    title: "Recent Alerts", value: "\(status.recentAlerts)", color: .orange)
+                    title: "Recent Alerts", value: "\(status.recentAlerts)", color: .orange
+                )
                 StatusCardView(title: "Total Alerts", value: "\(status.totalAlerts)", color: .blue)
                 StatusCardView(
-                    title: "Interval", value: "\(Int(status.monitoringInterval))s", color: .green)
+                    title: "Interval", value: "\(Int(status.monitoringInterval))s", color: .green
+                )
             }
             .padding(.horizontal)
 
@@ -605,7 +614,7 @@ public struct MonitoringDashboardView: View {
                 Button("Clear Resolved") {
                     monitor.clearResolvedAlerts()
                 }
-                .disabled(monitor.alerts.filter { $0.isResolved }.isEmpty)
+                .disabled(monitor.alerts.filter(\.isResolved).isEmpty)
             }
             .padding(.horizontal)
 

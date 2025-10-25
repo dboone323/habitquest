@@ -16,19 +16,19 @@ class AudioManagerTests: XCTestCase {
 
     // MARK: - enumHapticStyle{ Tests
 
-    func testenumHapticStyle{Initialization() {
+    func testenumHapticStyleInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumHapticStyle{
         XCTAssertTrue(true, "Placeholder test for enumHapticStyle{")
     }
 
-    func testenumHapticStyle{Properties() {
+    func testenumHapticStyleProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumHapticStyle{
         XCTAssertTrue(true, "Placeholder test for enumHapticStyle{ properties")
     }
 
-    func testenumHapticStyle{Methods() {
+    func testenumHapticStyleMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumHapticStyle{
         XCTAssertTrue(true, "Placeholder test for enumHapticStyle{ methods")

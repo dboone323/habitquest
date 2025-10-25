@@ -16,19 +16,19 @@ class GameHUDManagerTests: XCTestCase {
 
     // MARK: - classGameHUDManager:ThemeDelegate{ Tests
 
-    func testclassGameHUDManager:ThemeDelegate{Initialization() {
+    func testclassGameHUDManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classGameHUDManager:ThemeDelegate{
         XCTAssertTrue(true, "Placeholder test for classGameHUDManager:ThemeDelegate{")
     }
 
-    func testclassGameHUDManager:ThemeDelegate{Properties() {
+    func testclassGameHUDManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classGameHUDManager:ThemeDelegate{
         XCTAssertTrue(true, "Placeholder test for classGameHUDManager:ThemeDelegate{ properties")
     }
 
-    func testclassGameHUDManager:ThemeDelegate{Methods() {
+    func testclassGameHUDManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classGameHUDManager:ThemeDelegate{
         XCTAssertTrue(true, "Placeholder test for classGameHUDManager:ThemeDelegate{ methods")

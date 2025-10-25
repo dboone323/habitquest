@@ -6,7 +6,7 @@ LOG_FILE="${WORKSPACE_DIR}/resource_usage.log"
 
 # Log current resource usage
 log_resources() {
-    echo "$(date): $(du -sh "$WORKSPACE_DIR" | cut -f1) workspace, $(ps aux | grep -E "(python|mcp|ollama|agent)" | grep -v grep | wc -l) processes" >> "$LOG_FILE"
+    echo "$(date): $(du -sh "$WORKSPACE_DIR" | cut -f1) workspace, $(pgrep -f "(python|mcp|ollama|agent)" | wc -l | tr -d ' ') processes" >> "$LOG_FILE"
 }
 
 # Cleanup old backups automatically

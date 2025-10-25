@@ -36,9 +36,11 @@ final class DistributedBuildIntegrationTests: XCTestCase {
         cacheDirectory = testDirectory.appendingPathComponent("Cache")
 
         try FileManager.default.createDirectory(
-            at: testDirectory, withIntermediateDirectories: true)
+            at: testDirectory, withIntermediateDirectories: true
+        )
         try FileManager.default.createDirectory(
-            at: cacheDirectory, withIntermediateDirectories: true)
+            at: cacheDirectory, withIntermediateDirectories: true
+        )
 
         // Initialize components
         let cacheConfig = BuildCache.Configuration(cacheDirectory: cacheDirectory)
@@ -143,13 +145,14 @@ final class DistributedBuildIntegrationTests: XCTestCase {
 
         // Verify cache invalidation worked
         let cachedArtifacts = try buildCache.retrieve(
-            for: result2.tasks.first!, dependencies: ["Package.swift"])
+            for: result2.tasks.first!, dependencies: ["Package.swift"]
+        )
         XCTAssertNil(cachedArtifacts, "Cache should be invalidated due to dependency change")
     }
 
     func testMultiNodeTaskDistribution() async throws {
         // Register additional test nodes
-        for i in 1...3 {
+        for i in 1 ... 3 {
             let node = BuildNode(
                 id: UUID(),
                 name: "TestNode\(i)",
@@ -183,9 +186,10 @@ final class DistributedBuildIntegrationTests: XCTestCase {
         // Verify tasks were distributed across nodes
         let taskAssignments =
             try await coordinator.getBuildSession(sessionId)?.taskAssignments ?? []
-        let uniqueNodes = Set(taskAssignments.map { $0.nodeId })
+        let uniqueNodes = Set(taskAssignments.map(\.nodeId))
         XCTAssertGreaterThan(
-            uniqueNodes.count, 1, "Tasks should be distributed across multiple nodes")
+            uniqueNodes.count, 1, "Tasks should be distributed across multiple nodes"
+        )
     }
 
     func testBuildFailureHandling() async throws {
@@ -210,7 +214,8 @@ final class DistributedBuildIntegrationTests: XCTestCase {
         XCTAssertFalse(result.success, "Build should fail")
         XCTAssertNotNil(result.error, "Should have error information")
         XCTAssertTrue(
-            result.error?.contains("Build failed") ?? false, "Error should indicate build failure")
+            result.error?.contains("Build failed") ?? false, "Error should indicate build failure"
+        )
     }
 
     func testLoadBalancing() async throws {
@@ -262,7 +267,8 @@ final class DistributedBuildIntegrationTests: XCTestCase {
         let lowCapacityTasks = taskAssignments.filter { $0.nodeId == lowCapacityNode.id }.count
 
         XCTAssertGreaterThan(
-            highCapacityTasks, lowCapacityTasks, "High capacity node should get more tasks")
+            highCapacityTasks, lowCapacityTasks, "High capacity node should get more tasks"
+        )
     }
 
     func testNetworkCommunication() async throws {
@@ -308,7 +314,8 @@ final class DistributedBuildIntegrationTests: XCTestCase {
             type: .object
         )
         try "test".write(
-            to: URL(fileURLWithPath: testArtifact.path), atomically: true, encoding: .utf8)
+            to: URL(fileURLWithPath: testArtifact.path), atomically: true, encoding: .utf8
+        )
 
         let testTask = BuildTask(
             id: UUID(),
@@ -373,11 +380,12 @@ final class DistributedBuildIntegrationTests: XCTestCase {
                 }
             }
 
-            try await Task.sleep(nanoseconds: 1_000_000_000)  // 1 second
+            try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
         }
 
         throw NSError(
-            domain: "TestError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Build timeout"])
+            domain: "TestError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Build timeout"]
+        )
     }
 
     private func createTestProject(at url: URL) throws {
@@ -385,35 +393,37 @@ final class DistributedBuildIntegrationTests: XCTestCase {
 
         // Create Package.swift
         let packageSwift = """
-            // swift-tools-version:5.7
-            import PackageDescription
+        // swift-tools-version:5.7
+        import PackageDescription
 
-            let package = Package(
-                name: "TestProject",
-                platforms: [.macOS(.v12)],
-                dependencies: [],
-                targets: [
-                    .executableTarget(
-                        name: "TestProject",
-                        dependencies: []
-                    )
-                ]
-            )
-            """
+        let package = Package(
+            name: "TestProject",
+            platforms: [.macOS(.v12)],
+            dependencies: [],
+            targets: [
+                .executableTarget(
+                    name: "TestProject",
+                    dependencies: []
+                )
+            ]
+        )
+        """
 
         try packageSwift.write(
-            to: url.appendingPathComponent("Package.swift"), atomically: true, encoding: .utf8)
+            to: url.appendingPathComponent("Package.swift"), atomically: true, encoding: .utf8
+        )
 
         // Create main.swift
         let mainSwift = """
-            import Foundation
+        import Foundation
 
-            print("Hello, World!")
-            """
+        print("Hello, World!")
+        """
 
         try mainSwift.write(
             to: url.appendingPathComponent("Sources/TestProject/main.swift"), atomically: true,
-            encoding: .utf8)
+            encoding: .utf8
+        )
     }
 
     private func createMultiTaskProject(at url: URL) throws {
@@ -421,243 +431,256 @@ final class DistributedBuildIntegrationTests: XCTestCase {
 
         // Create Package.swift with multiple targets
         let packageSwift = """
-            // swift-tools-version:5.7
-            import PackageDescription
+        // swift-tools-version:5.7
+        import PackageDescription
 
-            let package = Package(
-                name: "MultiTaskProject",
-                platforms: [.macOS(.v12)],
-                dependencies: [],
-                targets: [
-                    .executableTarget(
-                        name: "MultiTaskProject",
-                        dependencies: ["LibA", "LibB", "LibC"]
-                    ),
-                    .target(name: "LibA"),
-                    .target(name: "LibB"),
-                    .target(name: "LibC")
-                ]
-            )
-            """
+        let package = Package(
+            name: "MultiTaskProject",
+            platforms: [.macOS(.v12)],
+            dependencies: [],
+            targets: [
+                .executableTarget(
+                    name: "MultiTaskProject",
+                    dependencies: ["LibA", "LibB", "LibC"]
+                ),
+                .target(name: "LibA"),
+                .target(name: "LibB"),
+                .target(name: "LibC")
+            ]
+        )
+        """
 
         try packageSwift.write(
-            to: url.appendingPathComponent("Package.swift"), atomically: true, encoding: .utf8)
+            to: url.appendingPathComponent("Package.swift"), atomically: true, encoding: .utf8
+        )
 
         // Create multiple source files
         for lib in ["LibA", "LibB", "LibC"] {
             let sourceDir = url.appendingPathComponent("Sources/\(lib)")
             try FileManager.default.createDirectory(
-                at: sourceDir, withIntermediateDirectories: true)
+                at: sourceDir, withIntermediateDirectories: true
+            )
 
             let sourceFile = """
-                import Foundation
+            import Foundation
 
-                public func \(lib.lowercased())Function() -> String {
-                    return "Hello from \(lib)"
-                }
-                """
+            public func \(lib.lowercased())Function() -> String {
+                return "Hello from \(lib)"
+            }
+            """
 
             try sourceFile.write(
                 to: sourceDir.appendingPathComponent("\(lib).swift"), atomically: true,
-                encoding: .utf8)
+                encoding: .utf8
+            )
         }
 
         // Create main
         let mainSwift = """
-            import LibA
-            import LibB
-            import LibC
+        import LibA
+        import LibB
+        import LibC
 
-            print(LibA.libAFunction())
-            print(LibB.libBFunction())
-            print(LibC.libCFunction())
-            """
+        print(LibA.libAFunction())
+        print(LibB.libBFunction())
+        print(LibC.libCFunction())
+        """
 
         try mainSwift.write(
             to: url.appendingPathComponent("Sources/MultiTaskProject/main.swift"), atomically: true,
-            encoding: .utf8)
+            encoding: .utf8
+        )
     }
 
     private func createFailingProject(at url: URL) throws {
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
 
         let packageSwift = """
-            // swift-tools-version:5.7
-            import PackageDescription
+        // swift-tools-version:5.7
+        import PackageDescription
 
-            let package = Package(
-                name: "FailingProject",
-                platforms: [.macOS(.v12)],
-                dependencies: [],
-                targets: [
-                    .executableTarget(
-                        name: "FailingProject",
-                        dependencies: []
-                    )
-                ]
-            )
-            """
+        let package = Package(
+            name: "FailingProject",
+            platforms: [.macOS(.v12)],
+            dependencies: [],
+            targets: [
+                .executableTarget(
+                    name: "FailingProject",
+                    dependencies: []
+                )
+            ]
+        )
+        """
 
         try packageSwift.write(
-            to: url.appendingPathComponent("Package.swift"), atomically: true, encoding: .utf8)
+            to: url.appendingPathComponent("Package.swift"), atomically: true, encoding: .utf8
+        )
 
         // Create main.swift with syntax error
         let mainSwift = """
-            import Foundation
+        import Foundation
 
-            print("This will fail"
-            // Missing closing parenthesis
-            """
+        print("This will fail"
+        // Missing closing parenthesis
+        """
 
         try mainSwift.write(
             to: url.appendingPathComponent("Sources/FailingProject/main.swift"), atomically: true,
-            encoding: .utf8)
+            encoding: .utf8
+        )
     }
 
     private func createLoadTestProject(at url: URL) throws {
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
 
         let packageSwift = """
-            // swift-tools-version:5.7
-            import PackageDescription
+        // swift-tools-version:5.7
+        import PackageDescription
 
-            let package = Package(
-                name: "LoadTestProject",
-                platforms: [.macOS(.v12)],
-                dependencies: [],
-                targets: [
-                    .executableTarget(
-                        name: "LoadTestProject",
-                        dependencies: (1...20).map { "Lib\($0)" }
-                    )
-                ] + (1...20).map { .target(name: "Lib\($0)") }
-            )
-            """
+        let package = Package(
+            name: "LoadTestProject",
+            platforms: [.macOS(.v12)],
+            dependencies: [],
+            targets: [
+                .executableTarget(
+                    name: "LoadTestProject",
+                    dependencies: (1...20).map { "Lib\($0)" }
+                )
+            ] + (1...20).map { .target(name: "Lib\($0)") }
+        )
+        """
 
         try packageSwift.write(
-            to: url.appendingPathComponent("Package.swift"), atomically: true, encoding: .utf8)
+            to: url.appendingPathComponent("Package.swift"), atomically: true, encoding: .utf8
+        )
 
         // Create 20 library targets
-        for i in 1...20 {
+        for i in 1 ... 20 {
             let sourceDir = url.appendingPathComponent("Sources/Lib\(i)")
             try FileManager.default.createDirectory(
-                at: sourceDir, withIntermediateDirectories: true)
+                at: sourceDir, withIntermediateDirectories: true
+            )
 
             let sourceFile = """
-                import Foundation
+            import Foundation
 
-                public func lib\(i)Function() -> String {
-                    return "Library \(i)"
-                }
-                """
+            public func lib\(i)Function() -> String {
+                return "Library \(i)"
+            }
+            """
 
             try sourceFile.write(
                 to: sourceDir.appendingPathComponent("Lib\(i).swift"), atomically: true,
-                encoding: .utf8)
+                encoding: .utf8
+            )
         }
 
         // Create main
-        let imports = (1...20).map { "import Lib\($0)" }.joined(separator: "\n")
-        let calls = (1...20).map { "print(Lib\($0).lib\($0)Function())" }.joined(separator: "\n")
+        let imports = (1 ... 20).map { "import Lib\($0)" }.joined(separator: "\n")
+        let calls = (1 ... 20).map { "print(Lib\($0).lib\($0)Function())" }.joined(separator: "\n")
 
         let mainSwift = """
-            \(imports)
+        \(imports)
 
-            \(calls)
-            """
+        \(calls)
+        """
 
         try mainSwift.write(
             to: url.appendingPathComponent("Sources/LoadTestProject/main.swift"), atomically: true,
-            encoding: .utf8)
+            encoding: .utf8
+        )
     }
 
     private func createPerformanceTestProject(at url: URL) throws {
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
 
         let packageSwift = """
-            // swift-tools-version:5.7
-            import PackageDescription
+        // swift-tools-version:5.7
+        import PackageDescription
 
-            let package = Package(
-                name: "PerfTestProject",
-                platforms: [.macOS(.v12)],
-                dependencies: [],
-                targets: [
-                    .executableTarget(
-                        name: "PerfTestProject",
-                        dependencies: ["PerfLib"]
-                    ),
-                    .target(name: "PerfLib")
-                ]
-            )
-            """
+        let package = Package(
+            name: "PerfTestProject",
+            platforms: [.macOS(.v12)],
+            dependencies: [],
+            targets: [
+                .executableTarget(
+                    name: "PerfTestProject",
+                    dependencies: ["PerfLib"]
+                ),
+                .target(name: "PerfLib")
+            ]
+        )
+        """
 
         try packageSwift.write(
-            to: url.appendingPathComponent("Package.swift"), atomically: true, encoding: .utf8)
+            to: url.appendingPathComponent("Package.swift"), atomically: true, encoding: .utf8
+        )
 
         // Create performance library with computationally intensive code
         let perfLibDir = url.appendingPathComponent("Sources/PerfLib")
         try FileManager.default.createDirectory(at: perfLibDir, withIntermediateDirectories: true)
 
         let perfLibSwift = """
-            import Foundation
+        import Foundation
 
-            public class PerfLib {
-                public static func heavyComputation() -> Int {
-                    var result = 0
-                    for i in 0..<1000000 {
-                        result += i * i
-                    }
-                    return result
+        public class PerfLib {
+            public static func heavyComputation() -> Int {
+                var result = 0
+                for i in 0..<1000000 {
+                    result += i * i
                 }
+                return result
+            }
 
-                public static func matrixMultiplication(size: Int) -> [[Double]] {
-                    let matrix = (0..<size).map { _ in (0..<size).map { _ in Double.random(in: 0...1) } }
+            public static func matrixMultiplication(size: Int) -> [[Double]] {
+                let matrix = (0..<size).map { _ in (0..<size).map { _ in Double.random(in: 0...1) } }
 
-                    // Simple matrix multiplication for demonstration
-                    var result = [[Double]](repeating: [Double](repeating: 0, count: size), count: size)
-                    for i in 0..<size {
-                        for j in 0..<size {
-                            for k in 0..<size {
-                                result[i][j] += matrix[i][k] * matrix[k][j]
-                            }
+                // Simple matrix multiplication for demonstration
+                var result = [[Double]](repeating: [Double](repeating: 0, count: size), count: size)
+                for i in 0..<size {
+                    for j in 0..<size {
+                        for k in 0..<size {
+                            result[i][j] += matrix[i][k] * matrix[k][j]
                         }
                     }
-
-                    return result
                 }
+
+                return result
             }
-            """
+        }
+        """
 
         try perfLibSwift.write(
             to: perfLibDir.appendingPathComponent("PerfLib.swift"), atomically: true,
-            encoding: .utf8)
+            encoding: .utf8
+        )
 
         // Create main
         let mainSwift = """
-            import PerfLib
-            import Foundation
+        import PerfLib
+        import Foundation
 
-            let startTime = Date()
+        let startTime = Date()
 
-            print("Starting performance test...")
+        print("Starting performance test...")
 
-            // Run heavy computation
-            let result1 = PerfLib.heavyComputation()
-            print("Heavy computation result: \\(result1)")
+        // Run heavy computation
+        let result1 = PerfLib.heavyComputation()
+        print("Heavy computation result: \\(result1)")
 
-            // Run matrix multiplication
-            let matrix = PerfLib.matrixMultiplication(size: 50)
-            print("Matrix multiplication completed, size: \\(matrix.count)x\\(matrix[0].count)")
+        // Run matrix multiplication
+        let matrix = PerfLib.matrixMultiplication(size: 50)
+        print("Matrix multiplication completed, size: \\(matrix.count)x\\(matrix[0].count)")
 
-            let endTime = Date()
-            let duration = endTime.timeIntervalSince(startTime)
+        let endTime = Date()
+        let duration = endTime.timeIntervalSince(startTime)
 
-            print("Performance test completed in \\(String(format: "%.2f", duration)) seconds")
-            """
+        print("Performance test completed in \\(String(format: "%.2f", duration)) seconds")
+        """
 
         try mainSwift.write(
             to: url.appendingPathComponent("Sources/PerfTestProject/main.swift"), atomically: true,
-            encoding: .utf8)
+            encoding: .utf8
+        )
     }
 }

@@ -25,12 +25,12 @@ public class BuildCache {
 
     /// Configuration for build caching
     public struct Configuration {
-        public var maxCacheSize: Int64 = 10 * 1024 * 1024 * 1024  // 10GB
+        public var maxCacheSize: Int64 = 10 * 1024 * 1024 * 1024 // 10GB
         public var cacheDirectory: URL
-        public var cleanupInterval: TimeInterval = 3600.0  // 1 hour
+        public var cleanupInterval: TimeInterval = 3600.0 // 1 hour
         public var enableCompression: Bool = true
         public var enableEncryption: Bool = false
-        public var maxEntryAge: TimeInterval = 7 * 24 * 3600.0  // 7 days
+        public var maxEntryAge: TimeInterval = 7 * 24 * 3600.0 // 7 days
         public var dependencyTrackingEnabled: Bool = true
 
         public init(
@@ -71,8 +71,7 @@ public class BuildCache {
         self.dependencyTracker = DependencyTracker()
 
         // Start cleanup timer
-        cleanupTimer = Timer.scheduledTimer(withTimeInterval: config.cleanupInterval, repeats: true)
-        { [weak self] _ in
+        cleanupTimer = Timer.scheduledTimer(withTimeInterval: config.cleanupInterval, repeats: true) { [weak self] _ in
             self?.performCleanup()
         }
 
@@ -93,13 +92,13 @@ public class BuildCache {
         let cacheKey = try createCacheKey(for: task, dependencies: dependencies)
 
         // Create cache entry
-        let entry = CacheEntry(
+        let entry = try CacheEntry(
             key: cacheKey,
             artifacts: artifacts,
             task: task,
             dependencies: dependencies,
             created: Date(),
-            size: try calculateArtifactsSize(artifacts)
+            size: calculateArtifactsSize(artifacts)
         )
 
         try await cacheQueue.sync {
@@ -206,7 +205,7 @@ public class BuildCache {
                 let age = Date().timeIntervalSince(entry.created)
                 if age < 3600 { return "hour" }
                 if age < 86400 { return "day" }
-                if age < 604800 { return "week" }
+                if age < 604_800 { return "week" }
                 return "older"
             }.mapValues { $0.count }
 
@@ -227,7 +226,7 @@ public class BuildCache {
     /// Optimize cache (remove old/unused entries)
     public func optimizeCache() async throws {
         try await cacheQueue.sync {
-            let keysToRemove = cacheIndex.filter { (_, entry) in
+            let keysToRemove = cacheIndex.filter { _, entry in
                 !isEntryValid(entry) || shouldEvictEntry(entry)
             }.keys
 
@@ -298,11 +297,11 @@ public class BuildCache {
     private func shouldEvictEntry(_ entry: CacheEntry) -> Bool {
         // LRU-style eviction based on access time
         guard let lastAccess = accessLog[entry.key] else {
-            return true  // Never accessed
+            return true // Never accessed
         }
 
         let timeSinceAccess = Date().timeIntervalSince(lastAccess)
-        return timeSinceAccess > config.maxEntryAge / 2  // Evict if not accessed recently
+        return timeSinceAccess > config.maxEntryAge / 2 // Evict if not accessed recently
     }
 
     private func removeEntry(_ key: CacheKey) throws {
@@ -323,7 +322,7 @@ public class BuildCache {
         let indexURL = config.cacheDirectory.appendingPathComponent("cache_index.json")
 
         guard FileManager.default.fileExists(atPath: indexURL.path) else {
-            return  // No existing index
+            return // No existing index
         }
 
         let data = try Data(contentsOf: indexURL)
@@ -345,7 +344,7 @@ public class BuildCache {
         // Calculate how much space is saved by caching vs rebuilding
         // This is a simplified calculation
         let cachedSize = cacheSize
-        let estimatedRebuildSize = Int64(cacheIndex.count) * 1024 * 1024  // Assume 1MB per rebuild
+        let estimatedRebuildSize = Int64(cacheIndex.count) * 1024 * 1024 // Assume 1MB per rebuild
 
         guard estimatedRebuildSize > 0 else { return 0 }
 
@@ -432,7 +431,8 @@ private class CacheStorage {
 
     func clear() throws {
         let contents = try fileManager.contentsOfDirectory(
-            at: directory, includingPropertiesForKeys: nil)
+            at: directory, includingPropertiesForKeys: nil
+        )
         for item in contents {
             try fileManager.removeItem(at: item)
         }

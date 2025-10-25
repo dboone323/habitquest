@@ -37,12 +37,12 @@ import SwiftUI
 
                     Section("Recent Transactions") {
                         ForEach(self.recentTransactions.prefix(5)) { transaction in
-                            NavigationLink(value: ListableItem(id: transaction.id, name: transaction.name, type: .transaction)) {
+                            NavigationLink(value: ListableItem(id: transaction.id, name: transaction.title, type: .transaction)) {
                                 HStack {
                                     Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
                                         .foregroundStyle(transaction.amount < 0 ? .red : .green)
                                     VStack(alignment: .leading) {
-                                        Text(transaction.name)
+                                        Text(transaction.title)
                                             .font(.headline)
                                         Text(transaction.amount.formatted(.currency(code: "USD")))
                                             .font(.subheadline)
@@ -54,7 +54,7 @@ import SwiftUI
                                 }
                                 .padding(.vertical, 4)
                             }
-                            .tag(ListableItem(id: transaction.id, name: transaction.name, type: .transaction))
+                            .tag(ListableItem(id: transaction.id, name: transaction.title, type: .transaction))
                         }
                     }
 

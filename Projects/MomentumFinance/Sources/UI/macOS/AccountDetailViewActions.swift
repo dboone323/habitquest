@@ -1,8 +1,9 @@
-// Momentum Finance - Action Methods for Enhanced Account Detail View
+// Momentum Finance - Account Detail View Actions for macOS
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
-import Shared
+import MomentumFinanceCore
 import SwiftData
+import SwiftUI
 
 #if os(macOS)
     /// Action methods for the enhanced account detail view

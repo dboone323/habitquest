@@ -19,14 +19,14 @@ func exampleBasicTestGeneration() async {
 
     // Sample code to test
     let code = """
-        func calculateArea(width: Double, height: Double) -> Double {
-            return width * height
-        }
+    func calculateArea(width: Double, height: Double) -> Double {
+        return width * height
+    }
 
-        func isPositive(_ number: Int) -> Bool {
-            return number > 0
-        }
-        """
+    func isPositive(_ number: Int) -> Bool {
+        return number > 0
+    }
+    """
 
     do {
         // Generate comprehensive tests
@@ -55,21 +55,21 @@ func exampleMutationTesting() async {
     let mutationEngine = MutationEngine()
 
     let code = """
-        func findMax(_ array: [Int]) -> Int? {
-            guard !array.isEmpty else { return nil }
-            return array.max()
-        }
-        """
+    func findMax(_ array: [Int]) -> Int? {
+        guard !array.isEmpty else { return nil }
+        return array.max()
+    }
+    """
 
     // Create a test suite to validate
     let testSuite = """
-        func testFindMax() {
-            XCTAssertEqual(findMax([1, 2, 3]), 3)
-            XCTAssertEqual(findMax([5]), 5)
-            XCTAssertNil(findMax([]))
-            XCTAssertEqual(findMax([-1, -2, -3]), -1)
-        }
-        """
+    func testFindMax() {
+        XCTAssertEqual(findMax([1, 2, 3]), 3)
+        XCTAssertEqual(findMax([5]), 5)
+        XCTAssertNil(findMax([]))
+        XCTAssertEqual(findMax([-1, -2, -3]), -1)
+    }
+    """
 
     do {
         let results = try await mutationEngine.runMutationTesting(on: code, testSuite: testSuite)
@@ -99,22 +99,22 @@ func examplePropertyBasedTesting() async {
     let propertyTester = PropertyTester()
 
     let code = """
-        struct Queue<T> {
-            private var elements: [T] = []
+    struct Queue<T> {
+        private var elements: [T] = []
 
-            mutating func enqueue(_ element: T) {
-                elements.append(element)
-            }
-
-            mutating func dequeue() -> T? {
-                guard !elements.isEmpty else { return nil }
-                return elements.removeFirst()
-            }
-
-            var count: Int { elements.count }
-            var isEmpty: Bool { elements.isEmpty }
+        mutating func enqueue(_ element: T) {
+            elements.append(element)
         }
-        """
+
+        mutating func dequeue() -> T? {
+            guard !elements.isEmpty else { return nil }
+            return elements.removeFirst()
+        }
+
+        var count: Int { elements.count }
+        var isEmpty: Bool { elements.isEmpty }
+    }
+    """
 
     do {
         let results = try await propertyTester.runPropertyTests(on: code)
@@ -180,25 +180,25 @@ func exampleAdvancedConfiguration() async {
     let propertyTester = PropertyTester(configuration: propertyConfig)
 
     let code = """
-        func binarySearch<T: Comparable>(_ array: [T], _ target: T) -> Int? {
-            var left = 0
-            var right = array.count - 1
+    func binarySearch<T: Comparable>(_ array: [T], _ target: T) -> Int? {
+        var left = 0
+        var right = array.count - 1
 
-            while left <= right {
-                let mid = left + (right - left) / 2
+        while left <= right {
+            let mid = left + (right - left) / 2
 
-                if array[mid] == target {
-                    return mid
-                } else if array[mid] < target {
-                    left = mid + 1
-                } else {
-                    right = mid - 1
-                }
+            if array[mid] == target {
+                return mid
+            } else if array[mid] < target {
+                left = mid + 1
+            } else {
+                right = mid - 1
             }
-
-            return nil
         }
-        """
+
+        return nil
+    }
+    """
 
     do {
         // Generate optimized tests
@@ -207,7 +207,8 @@ func exampleAdvancedConfiguration() async {
 
         // Run comprehensive mutation testing
         let mutationResults = try await mutationEngine.runMutationTesting(
-            on: code, testSuite: "// Tests")
+            on: code, testSuite: "// Tests"
+        )
         print("Mutation score: \(String(format: "%.1f%%", mutationResults.mutationScore * 100))")
 
         // Run property-based tests
@@ -231,19 +232,19 @@ func exampleCIIntegration() async {
 
     // Simulate CI pipeline testing
     let code = """
-        func validateEmail(_ email: String) -> Bool {
-            let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-            let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-            return emailPredicate.evaluate(with: email)
-        }
+    func validateEmail(_ email: String) -> Bool {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        return emailPredicate.evaluate(with: email)
+    }
 
-        func calculateDiscount(price: Double, discountPercent: Double) -> Double {
-            guard discountPercent >= 0 && discountPercent <= 100 else {
-                return price
-            }
-            return price * (1 - discountPercent / 100)
+    func calculateDiscount(price: Double, discountPercent: Double) -> Double {
+        guard discountPercent >= 0 && discountPercent <= 100 else {
+            return price
         }
-        """
+        return price * (1 - discountPercent / 100)
+    }
+    """
 
     let testGenerator = TestGenerator()
     let mutationEngine = MutationEngine()
@@ -258,7 +259,8 @@ func exampleCIIntegration() async {
         // Step 2: Validate with mutation testing
         print("Step 2: Running mutation testing...")
         let mutationResults = try await mutationEngine.runMutationTesting(
-            on: code, testSuite: "// Generated tests")
+            on: code, testSuite: "// Generated tests"
+        )
         print("✓ Mutation score: \(String(format: "%.1f%%", mutationResults.mutationScore * 100))")
 
         // Step 3: Run property-based tests
@@ -274,7 +276,7 @@ func exampleCIIntegration() async {
         let coverage = try await testGenerator.predictCoverage(for: testCases, code: code)
         let qualityPassed =
             coverage >= 0.80 && mutationResults.mutationScore >= 0.75
-            && propertyResults.summary.passRate >= 0.90
+                && propertyResults.summary.passRate >= 0.90
 
         if qualityPassed {
             print("✓ All quality gates passed!")
@@ -308,15 +310,15 @@ func exampleRealWorldUsage() async {
     do {
         // In real usage, you would read from file
         let code = """
-            @MainActor
-            protocol BaseViewModel: ObservableObject {
-                associatedtype State
-                associatedtype Action
-                var state: State { get set }
-                var isLoading: Bool { get set }
-                func handle(_ action: Action)
-            }
-            """
+        @MainActor
+        protocol BaseViewModel: ObservableObject {
+            associatedtype State
+            associatedtype Action
+            var state: State { get set }
+            var isLoading: Bool { get set }
+            func handle(_ action: Action)
+        }
+        """
 
         let context = TestGenerator.CodeContext(
             filePath: filePath,
@@ -332,7 +334,8 @@ func exampleRealWorldUsage() async {
 
         // Run mutation testing
         let mutationResults = try await mutationEngine.runMutationTesting(
-            on: code, testSuite: "// Protocol tests")
+            on: code, testSuite: "// Protocol tests"
+        )
         print(
             "Mutation analysis complete - Score: \(String(format: "%.1f%%", mutationResults.mutationScore * 100))"
         )

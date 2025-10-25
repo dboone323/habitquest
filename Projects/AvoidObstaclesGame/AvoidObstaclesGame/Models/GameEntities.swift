@@ -82,6 +82,7 @@ class Player: GameComponent, Renderable, Collidable {
 
         setupPhysics()
         setupTrailEffect()
+        reset()
     }
 
     private func setupPhysics() {
@@ -602,8 +603,8 @@ class Boss: GameComponent, Renderable, Collidable, Hashable {
         node.run(flashAction)
 
         // Become temporarily invulnerable
-        isInvulnerable = true
-        invulnerabilityTimer = 0.5
+        // isInvulnerable = true
+        // invulnerabilityTimer = 0.5
 
         // Check for phase transitions
         updatePhase()

@@ -16,19 +16,19 @@ class SkillTreeManagerTests: XCTestCase {
 
     // MARK: - structSkill:Codable,Hashable{ Tests
 
-    func teststructSkill:Codable,Hashable{Initialization() {
+    func teststructSkillInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structSkill:Codable,Hashable{
         XCTAssertTrue(true, "Placeholder test for structSkill:Codable,Hashable{")
     }
 
-    func teststructSkill:Codable,Hashable{Properties() {
+    func teststructSkillProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structSkill:Codable,Hashable{
         XCTAssertTrue(true, "Placeholder test for structSkill:Codable,Hashable{ properties")
     }
 
-    func teststructSkill:Codable,Hashable{Methods() {
+    func teststructSkillMethods() {
         // Test method functionality
         // TODO: Implement method tests for structSkill:Codable,Hashable{
         XCTAssertTrue(true, "Placeholder test for structSkill:Codable,Hashable{ methods")
@@ -36,19 +36,19 @@ class SkillTreeManagerTests: XCTestCase {
 
     // MARK: - classSkillTreeManager:GameComponent{ Tests
 
-    func testclassSkillTreeManager:GameComponent{Initialization() {
+    func testclassSkillTreeManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classSkillTreeManager:GameComponent{
         XCTAssertTrue(true, "Placeholder test for classSkillTreeManager:GameComponent{")
     }
 
-    func testclassSkillTreeManager:GameComponent{Properties() {
+    func testclassSkillTreeManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classSkillTreeManager:GameComponent{
         XCTAssertTrue(true, "Placeholder test for classSkillTreeManager:GameComponent{ properties")
     }
 
-    func testclassSkillTreeManager:GameComponent{Methods() {
+    func testclassSkillTreeManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classSkillTreeManager:GameComponent{
         XCTAssertTrue(true, "Placeholder test for classSkillTreeManager:GameComponent{ methods")
@@ -56,19 +56,19 @@ class SkillTreeManagerTests: XCTestCase {
 
     // MARK: - structSkillTreeProgress:Codable{ Tests
 
-    func teststructSkillTreeProgress:Codable{Initialization() {
+    func teststructSkillTreeProgressInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structSkillTreeProgress:Codable{
         XCTAssertTrue(true, "Placeholder test for structSkillTreeProgress:Codable{")
     }
 
-    func teststructSkillTreeProgress:Codable{Properties() {
+    func teststructSkillTreeProgressProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structSkillTreeProgress:Codable{
         XCTAssertTrue(true, "Placeholder test for structSkillTreeProgress:Codable{ properties")
     }
 
-    func teststructSkillTreeProgress:Codable{Methods() {
+    func teststructSkillTreeProgressMethods() {
         // Test method functionality
         // TODO: Implement method tests for structSkillTreeProgress:Codable{
         XCTAssertTrue(true, "Placeholder test for structSkillTreeProgress:Codable{ methods")

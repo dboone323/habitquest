@@ -16,19 +16,19 @@ class GameStateManagerTests: XCTestCase {
 
     // MARK: - enumGameState{ Tests
 
-    func testenumGameState{Initialization() {
+    func testenumGameStateInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumGameState{
         XCTAssertTrue(true, "Placeholder test for enumGameState{")
     }
 
-    func testenumGameState{Properties() {
+    func testenumGameStateProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumGameState{
         XCTAssertTrue(true, "Placeholder test for enumGameState{ properties")
     }
 
-    func testenumGameState{Methods() {
+    func testenumGameStateMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumGameState{
         XCTAssertTrue(true, "Placeholder test for enumGameState{ methods")
@@ -36,19 +36,19 @@ class GameStateManagerTests: XCTestCase {
 
     // MARK: - classGameStateManager{ Tests
 
-    func testclassGameStateManager{Initialization() {
+    func testclassGameStateManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classGameStateManager{
         XCTAssertTrue(true, "Placeholder test for classGameStateManager{")
     }
 
-    func testclassGameStateManager{Properties() {
+    func testclassGameStateManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classGameStateManager{
         XCTAssertTrue(true, "Placeholder test for classGameStateManager{ properties")
     }
 
-    func testclassGameStateManager{Methods() {
+    func testclassGameStateManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classGameStateManager{
         XCTAssertTrue(true, "Placeholder test for classGameStateManager{ methods")
@@ -56,19 +56,19 @@ class GameStateManagerTests: XCTestCase {
 
     // MARK: - classWinConditionChecker{ Tests
 
-    func testclassWinConditionChecker{Initialization() {
+    func testclassWinConditionCheckerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classWinConditionChecker{
         XCTAssertTrue(true, "Placeholder test for classWinConditionChecker{")
     }
 
-    func testclassWinConditionChecker{Properties() {
+    func testclassWinConditionCheckerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classWinConditionChecker{
         XCTAssertTrue(true, "Placeholder test for classWinConditionChecker{ properties")
     }
 
-    func testclassWinConditionChecker{Methods() {
+    func testclassWinConditionCheckerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classWinConditionChecker{
         XCTAssertTrue(true, "Placeholder test for classWinConditionChecker{ methods")
@@ -76,19 +76,19 @@ class GameStateManagerTests: XCTestCase {
 
     // MARK: - structGameObjective{ Tests
 
-    func teststructGameObjective{Initialization() {
+    func teststructGameObjectiveInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structGameObjective{
         XCTAssertTrue(true, "Placeholder test for structGameObjective{")
     }
 
-    func teststructGameObjective{Properties() {
+    func teststructGameObjectiveProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structGameObjective{
         XCTAssertTrue(true, "Placeholder test for structGameObjective{ properties")
     }
 
-    func teststructGameObjective{Methods() {
+    func teststructGameObjectiveMethods() {
         // Test method functionality
         // TODO: Implement method tests for structGameObjective{
         XCTAssertTrue(true, "Placeholder test for structGameObjective{ methods")
@@ -96,19 +96,19 @@ class GameStateManagerTests: XCTestCase {
 
     // MARK: - enumObjectiveType{ Tests
 
-    func testenumObjectiveType{Initialization() {
+    func testenumObjectiveTypeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumObjectiveType{
         XCTAssertTrue(true, "Placeholder test for enumObjectiveType{")
     }
 
-    func testenumObjectiveType{Properties() {
+    func testenumObjectiveTypeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumObjectiveType{
         XCTAssertTrue(true, "Placeholder test for enumObjectiveType{ properties")
     }
 
-    func testenumObjectiveType{Methods() {
+    func testenumObjectiveTypeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumObjectiveType{
         XCTAssertTrue(true, "Placeholder test for enumObjectiveType{ methods")

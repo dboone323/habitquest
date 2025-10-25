@@ -16,19 +16,19 @@ class UIManagerTests: XCTestCase {
 
     // MARK: - classUIManager{ Tests
 
-    func testclassUIManager{Initialization() {
+    func testclassUIManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classUIManager{
         XCTAssertTrue(true, "Placeholder test for classUIManager{")
     }
 
-    func testclassUIManager{Properties() {
+    func testclassUIManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classUIManager{
         XCTAssertTrue(true, "Placeholder test for classUIManager{ properties")
     }
 
-    func testclassUIManager{Methods() {
+    func testclassUIManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classUIManager{
         XCTAssertTrue(true, "Placeholder test for classUIManager{ methods")

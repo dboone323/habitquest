@@ -5,6 +5,7 @@
 //  Transactions list view components for macOS three-column layout
 //
 
+import SharedKit
 import SwiftData
 import SwiftUI
 
@@ -48,12 +49,12 @@ import SwiftUI
             var body: some View {
                 List(selection: self.$selectedItem) {
                     ForEach(self.filteredTransactions) { transaction in
-                        NavigationLink(value: ListableItem(id: transaction.id, name: transaction.name, type: .transaction)) {
+                        NavigationLink(value: ListableItem(id: transaction.id, name: transaction.title, type: .transaction)) {
                             HStack {
                                 Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
                                     .foregroundStyle(transaction.amount < 0 ? .red : .green)
                                 VStack(alignment: .leading) {
-                                    Text(transaction.name)
+                                    Text(transaction.title)
                                         .font(.headline)
                                     if let category = transaction.category {
                                         Text(category.name)
@@ -73,7 +74,7 @@ import SwiftUI
                             }
                             .padding(.vertical, 4)
                         }
-                        .tag(ListableItem(id: transaction.id, name: transaction.name, type: .transaction))
+                        .tag(ListableItem(id: transaction.id, name: transaction.title, type: .transaction))
                     }
                 }
                 .navigationTitle("Transactions")
@@ -90,7 +91,7 @@ import SwiftUI
                     }
 
                     ToolbarItem {
-                        Button(action: {}).accessibilityLabel("Button").accessibilityLabel("Button") {
+                        Button(action: {}).accessibilityLabel("Add New Transaction Button") {
                             Image(systemName: "plus")
                         }
                         .help("Add New Transaction")
@@ -117,7 +118,7 @@ import SwiftUI
                             VStack(alignment: .leading, spacing: 20) {
                                 HStack {
                                     VStack(alignment: .leading) {
-                                        Text(transaction.name)
+                                        Text(transaction.title)
                                             .font(.largeTitle)
                                             .bold()
 
@@ -201,18 +202,18 @@ import SwiftUI
                         }
                         .toolbar {
                             ToolbarItem {
-                                Button(action: { self.isEditing.toggle().accessibilityLabel("Button").accessibilityLabel("Button") }) {
+                                Button(action: { self.isEditing.toggle() }).accessibilityLabel("Edit Button") {
                                     Text(self.isEditing ? "Done" : "Edit")
                                 }
                             }
 
                             ToolbarItem {
                                 Menu {
-                                    Button("Duplicate", action: {}).accessibilityLabel("Button").accessibilityLabel("Button")
-                                    Button("Export as CSV", action: {}).accessibilityLabel("Button").accessibilityLabel("Button")
-                                    Button("Print", action: {}).accessibilityLabel("Button").accessibilityLabel("Button")
+                                    Button("Duplicate", action: {}).accessibilityLabel("Duplicate Button")
+                                    Button("Export as CSV", action: {}).accessibilityLabel("Export CSV Button")
+                                    Button("Print", action: {}).accessibilityLabel("Print Button")
                                     Divider()
-                                    Button("Delete", action: {}).accessibilityLabel("Button").accessibilityLabel("Button")
+                                    Button("Delete", action: {}).accessibilityLabel("Delete Button")
                                         .foregroundStyle(.red)
                                 } label: {
                                     Image(systemName: "ellipsis.circle")

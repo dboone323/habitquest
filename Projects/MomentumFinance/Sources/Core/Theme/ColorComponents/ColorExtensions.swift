@@ -6,7 +6,6 @@
 //  Copyright © 2025 Daniel Stevens. All rights reserved.
 //
 
-import SharedKit
 import SwiftUI
 
 /// Project-specific Color extensions for MomentumFinance

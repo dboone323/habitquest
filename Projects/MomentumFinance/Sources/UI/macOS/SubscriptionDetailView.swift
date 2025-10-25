@@ -2,11 +2,12 @@
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
 import Charts
-import Shared
+import SharedKit
 import SwiftData
 import SwiftUI
 
-#if os(macOS)
+import MomentumFinanceCore
+import SharedKit
     extension Features.Subscriptions {
         /// Subscription detail view optimized for macOS screen real estate
         struct SubscriptionDetailView: View {
@@ -76,7 +77,7 @@ import SwiftUI
                         }
                         .frame(width: 150)
 
-                        Button(action: { self.isEditing.toggle().accessibilityLabel("Button").accessibilityLabel("Button") }) {
+                        Button(action: { self.isEditing.toggle() }) {
                             Text(self.isEditing ? "Done" : "Edit")
                         }
                         .keyboardShortcut("e", modifiers: .command)
@@ -610,7 +611,7 @@ import SwiftUI
 
                     Divider()
 
-                    Button("Mark as \(transaction.isReconciled ? "Unpaid" : "Paid").accessibilityLabel("Button").accessibilityLabel("Button")") {
+                    Button("Mark as \(transaction.isReconciled ? "Unpaid" : "Paid")") {
                         self.toggleTransactionStatus(transaction)
                     }
                 }
@@ -888,7 +889,7 @@ import SwiftUI
                                         .font(.headline)
 
                                     if let provider = subscription?.provider {
-                                        Button("\(provider).accessibilityLabel("Button").accessibilityLabel("Button") Account Page") {
+                                        Button("\(provider) Account Page") {
                                             // Open the website
                                         }
                                         .buttonStyle(.bordered)
@@ -948,7 +949,7 @@ import SwiftUI
 
                         if let provider = subscription?.provider {
                             HStack(spacing: 20) {
-                                Button("Call \(provider).accessibilityLabel("Button").accessibilityLabel("Button")") {
+                                Button("Call \(provider)") {
                                     // Call action
                                 }
                                 .buttonStyle(.bordered)

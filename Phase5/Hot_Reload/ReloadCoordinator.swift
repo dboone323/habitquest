@@ -19,8 +19,9 @@ public class ReloadCoordinator {
     private var reloadHistory: [ReloadRecord] = []
 
     private let coordinationQueue = DispatchQueue(
-        label: "com.quantum.reload-coordinator", qos: .userInitiated)
-    private let semaphore = DispatchSemaphore(value: 1)  // Control concurrent reloads
+        label: "com.quantum.reload-coordinator", qos: .userInitiated
+    )
+    private let semaphore = DispatchSemaphore(value: 1) // Control concurrent reloads
 
     /// Configuration for reload coordination
     public struct Configuration {
@@ -50,7 +51,7 @@ public class ReloadCoordinator {
 
     /// Request a reload operation
     public func requestReload(_ request: ReloadRequest) async throws -> ReloadSession {
-        return try await coordinationQueue.sync {
+        try await coordinationQueue.sync {
             // Check queue limits
             guard reloadQueue.count < config.queueSizeLimit else {
                 throw CoordinationError.queueFull
@@ -185,7 +186,7 @@ public class ReloadCoordinator {
     public func getReloadHistory(limit: Int? = nil) -> [ReloadRecord] {
         coordinationQueue.sync {
             let history = reloadHistory.sorted { $0.timestamp > $1.timestamp }
-            if let limit = limit {
+            if let limit {
                 return Array(history.prefix(limit))
             }
             return history
@@ -196,17 +197,17 @@ public class ReloadCoordinator {
     public func getReloadStatistics() -> ReloadStatistics {
         coordinationQueue.sync {
             let total = reloadHistory.count
-            let successful = reloadHistory.filter { $0.result.isSuccess }.count
-            let failed = reloadHistory.filter { $0.result.isFailure }.count
-            let cancelled = reloadHistory.filter { $0.result.isCancelled }.count
+            let successful = reloadHistory.filter(\.result.isSuccess).count
+            let failed = reloadHistory.filter(\.result.isFailure).count
+            let cancelled = reloadHistory.filter(\.result.isCancelled).count
 
             let successRate = total > 0 ? Double(successful) / Double(total) : 0
 
             let averageDuration =
                 reloadHistory
-                .filter { $0.result.isSuccess }
-                .compactMap { $0.session.duration }
-                .reduce(0, +) / Double(max(successful, 1))
+                    .filter(\.result.isSuccess)
+                    .compactMap(\.session.duration)
+                    .reduce(0, +) / Double(max(successful, 1))
 
             return ReloadStatistics(
                 totalReloads: total,
@@ -358,7 +359,7 @@ public struct ReloadSession: Hashable {
     public var error: Error?
 
     public var duration: TimeInterval? {
-        guard let endTime = endTime else { return nil }
+        guard let endTime else { return nil }
         return endTime.timeIntervalSince(startTime)
     }
 
@@ -451,9 +452,9 @@ public enum CoordinationError: Error, LocalizedError {
             return "Another reload is currently in progress"
         case .sessionNotFound:
             return "Reload session not found"
-        case .cannotCancel(let status):
+        case let .cannotCancel(status):
             return "Cannot cancel reload with status: \(status)"
-        case .dependencyResolutionFailed(let reason):
+        case let .dependencyResolutionFailed(reason):
             return "Dependency resolution failed: \(reason)"
         }
     }

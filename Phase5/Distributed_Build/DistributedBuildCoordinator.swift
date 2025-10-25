@@ -6,8 +6,8 @@
 //  task distribution, caching, and load balancing.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 /// Coordinates distributed build operations across multiple machines
 @available(macOS 12.0, *)
@@ -74,7 +74,7 @@ public class DistributedBuildCoordinator {
 
     /// Submit a build request
     public func submitBuild(_ request: BuildRequest) async throws -> BuildSession {
-        return try await coordinatorQueue.sync {
+        try await coordinatorQueue.sync {
             // Check cache first
             if config.cacheEnabled, let cachedResult = taskCache.getCachedResult(for: request) {
                 return BuildSession(
@@ -253,15 +253,15 @@ public class DistributedBuildCoordinator {
     }
 
     private func aggregateResults(_ results: [TaskResult]) -> BuildResult {
-        let success = results.allSatisfy { $0.success }
+        let success = results.allSatisfy(\.success)
         let totalDuration = results.reduce(0) { $0 + $1.duration }
-        let allErrors = results.flatMap { $0.errors }
+        let allErrors = results.flatMap(\.errors)
 
         return BuildResult(
             success: success,
             duration: totalDuration,
             errors: allErrors,
-            artifacts: results.flatMap { $0.artifacts }
+            artifacts: results.flatMap(\.artifacts)
         )
     }
 
@@ -585,7 +585,7 @@ private class TaskCache {
     }
 
     private func cacheKey(for request: BuildRequest) -> String {
-        let taskIds = request.tasks.map { $0.id }.sorted().joined(separator: ",")
+        let taskIds = request.tasks.map(\.id).sorted().joined(separator: ",")
         return "\(request.project)-\(request.target)-\(request.configuration)-\(taskIds)"
     }
 }
@@ -598,7 +598,7 @@ private class BuildAnalyzer {
         var dependencies: [String: [String]] = [:]
 
         // Create compilation tasks
-        for file in request.tasks.flatMap({ $0.files }) {
+        for file in request.tasks.flatMap(\.files) {
             let task = BuildTask(
                 id: "compile_\(file)",
                 type: .compile,
@@ -612,10 +612,10 @@ private class BuildAnalyzer {
             id: "link",
             type: .link,
             files: [],
-            dependencies: tasks.map { $0.id }
+            dependencies: tasks.map(\.id)
         )
         tasks.append(linkTask)
-        dependencies[linkTask.id] = tasks.dropLast().map { $0.id }
+        dependencies[linkTask.id] = tasks.dropLast().map(\.id)
 
         return BuildPlan(
             tasks: tasks,
@@ -639,7 +639,7 @@ public enum BuildError: Error, LocalizedError {
             return "Build session not found"
         case .nodeNotFound:
             return "Build node not found"
-        case .taskFailed(let reason):
+        case let .taskFailed(reason):
             return "Task failed: \(reason)"
         case .networkError:
             return "Network communication error"

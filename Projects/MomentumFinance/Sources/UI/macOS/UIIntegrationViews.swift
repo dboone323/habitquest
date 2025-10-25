@@ -1,5 +1,10 @@
 // MARK: - Main macOS Content View with Integration
 
+import MomentumFinanceCore
+import SharedKit
+import SwiftData
+import SwiftUI
+
 /// Main macOS content view with integrated navigation
 struct IntegratedMacOSContentView: View {
     @Environment(\.modelContext) private var modelContext

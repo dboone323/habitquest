@@ -1,7 +1,9 @@
 // Momentum Finance - Drag & Drop Support for macOS
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
+import MomentumFinanceCore
 import OSLog
+import SharedKit
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -327,7 +329,7 @@ import UniformTypeIdentifiers
                     .foregroundStyle(self.transaction.amount < 0 ? .red : .green)
 
                 VStack(alignment: .leading) {
-                    Text(self.transaction.name)
+                    Text(self.transaction.title)
                         .font(.headline)
 
                     Text(self.transaction.amount.formatted(.currency(code: "USD")))
@@ -347,7 +349,7 @@ import UniformTypeIdentifiers
             .droppable(acceptedTypes: [.budget, .account], isTargeted: self.$isTargeted) { (items: [Budget], _) in
                 if let budget = items.first {
                     // Associate transaction with this budget
-                    self.logger.info("Transaction \(self.transaction.name) associated with budget \(budget.name)")
+                    self.logger.info("Transaction \(self.transaction.title) associated with budget \(budget.name)")
                     return true
                 }
                 return false
@@ -414,10 +416,9 @@ import UniformTypeIdentifiers
                                 ForEach(self.associatedTransactions) { transaction in
                                     TransactionItemView(transaction: transaction)
                                         .contextMenu {
-                                            Button("Remove from Budget", role: .destructive).accessibilityLabel("Button")
-                                                .accessibilityLabel("Button") {
-                                                    self.removeTransaction(transaction)
-                                                }
+                                            Button("Remove from Budget", role: .destructive).accessibilityLabel("Remove from Budget Button") {
+                                                self.removeTransaction(transaction)
+                                            }
                                         }
                                 }
                                 .onDelete(perform: self.deleteTransactions)

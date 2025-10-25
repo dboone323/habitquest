@@ -14,223 +14,223 @@ class PerformanceManagerTests: XCTestCase {
     }
 
 
-    // MARK: - enumPerformanceWarning{ Tests
+    // MARK: - enumPerformanceWarning Tests
 
-    func testenumPerformanceWarning{Initialization() {
+    func testenumPerformanceWarningInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumPerformanceWarning{
-        XCTAssertTrue(true, "Placeholder test for enumPerformanceWarning{")
+        // TODO: Implement initialization test for enumPerformanceWarning
+        XCTAssertTrue(true, "Placeholder test for enumPerformanceWarning")
     }
 
-    func testenumPerformanceWarning{Properties() {
+    func testenumPerformanceWarningProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumPerformanceWarning{
-        XCTAssertTrue(true, "Placeholder test for enumPerformanceWarning{ properties")
+        // TODO: Implement property tests for enumPerformanceWarning
+        XCTAssertTrue(true, "Placeholder test for enumPerformanceWarning properties")
     }
 
-    func testenumPerformanceWarning{Methods() {
+    func testenumPerformanceWarningMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumPerformanceWarning{
-        XCTAssertTrue(true, "Placeholder test for enumPerformanceWarning{ methods")
+        // TODO: Implement method tests for enumPerformanceWarning
+        XCTAssertTrue(true, "Placeholder test for enumPerformanceWarning methods")
     }
 
-    // MARK: - enumDeviceCapability{ Tests
+    // MARK: - enumDeviceCapability Tests
 
-    func testenumDeviceCapability{Initialization() {
+    func testenumDeviceCapabilityInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumDeviceCapability{
-        XCTAssertTrue(true, "Placeholder test for enumDeviceCapability{")
+        // TODO: Implement initialization test for enumDeviceCapability
+        XCTAssertTrue(true, "Placeholder test for enumDeviceCapability")
     }
 
-    func testenumDeviceCapability{Properties() {
+    func testenumDeviceCapabilityProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumDeviceCapability{
-        XCTAssertTrue(true, "Placeholder test for enumDeviceCapability{ properties")
+        // TODO: Implement property tests for enumDeviceCapability
+        XCTAssertTrue(true, "Placeholder test for enumDeviceCapability properties")
     }
 
-    func testenumDeviceCapability{Methods() {
+    func testenumDeviceCapabilityMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumDeviceCapability{
-        XCTAssertTrue(true, "Placeholder test for enumDeviceCapability{ methods")
+        // TODO: Implement method tests for enumDeviceCapability
+        XCTAssertTrue(true, "Placeholder test for enumDeviceCapability methods")
     }
 
-    // MARK: - enumTextureQuality{ Tests
+    // MARK: - enumTextureQuality Tests
 
-    func testenumTextureQuality{Initialization() {
+    func testenumTextureQualityInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumTextureQuality{
-        XCTAssertTrue(true, "Placeholder test for enumTextureQuality{")
+        // TODO: Implement initialization test for enumTextureQuality
+        XCTAssertTrue(true, "Placeholder test for enumTextureQuality")
     }
 
-    func testenumTextureQuality{Properties() {
+    func testenumTextureQualityProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumTextureQuality{
-        XCTAssertTrue(true, "Placeholder test for enumTextureQuality{ properties")
+        // TODO: Implement property tests for enumTextureQuality
+        XCTAssertTrue(true, "Placeholder test for enumTextureQuality properties")
     }
 
-    func testenumTextureQuality{Methods() {
+    func testenumTextureQualityMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumTextureQuality{
-        XCTAssertTrue(true, "Placeholder test for enumTextureQuality{ methods")
+        // TODO: Implement method tests for enumTextureQuality
+        XCTAssertTrue(true, "Placeholder test for enumTextureQuality methods")
     }
 
-    // MARK: - enumQualityLevel{ Tests
+    // MARK: - enumQualityLevel Tests
 
-    func testenumQualityLevel{Initialization() {
+    func testenumQualityLevelInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumQualityLevel{
-        XCTAssertTrue(true, "Placeholder test for enumQualityLevel{")
+        // TODO: Implement initialization test for enumQualityLevel
+        XCTAssertTrue(true, "Placeholder test for enumQualityLevel")
     }
 
-    func testenumQualityLevel{Properties() {
+    func testenumQualityLevelProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumQualityLevel{
-        XCTAssertTrue(true, "Placeholder test for enumQualityLevel{ properties")
+        // TODO: Implement property tests for enumQualityLevel
+        XCTAssertTrue(true, "Placeholder test for enumQualityLevel properties")
     }
 
-    func testenumQualityLevel{Methods() {
+    func testenumQualityLevelMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumQualityLevel{
-        XCTAssertTrue(true, "Placeholder test for enumQualityLevel{ methods")
+        // TODO: Implement method tests for enumQualityLevel
+        XCTAssertTrue(true, "Placeholder test for enumQualityLevel methods")
     }
 
-    // MARK: - structPoolSizes{ Tests
+    // MARK: - structPoolSizes Tests
 
-    func teststructPoolSizes{Initialization() {
+    func teststructPoolSizesInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structPoolSizes{
-        XCTAssertTrue(true, "Placeholder test for structPoolSizes{")
+        // TODO: Implement initialization test for structPoolSizes
+        XCTAssertTrue(true, "Placeholder test for structPoolSizes")
     }
 
-    func teststructPoolSizes{Properties() {
+    func teststructPoolSizesProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structPoolSizes{
-        XCTAssertTrue(true, "Placeholder test for structPoolSizes{ properties")
+        // TODO: Implement property tests for structPoolSizes
+        XCTAssertTrue(true, "Placeholder test for structPoolSizes properties")
     }
 
-    func teststructPoolSizes{Methods() {
+    func teststructPoolSizesMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structPoolSizes{
-        XCTAssertTrue(true, "Placeholder test for structPoolSizes{ methods")
+        // TODO: Implement method tests for structPoolSizes
+        XCTAssertTrue(true, "Placeholder test for structPoolSizes methods")
     }
 
-    // MARK: - enumPerformanceBottleneck{ Tests
+    // MARK: - enumPerformanceBottleneck Tests
 
-    func testenumPerformanceBottleneck{Initialization() {
+    func testenumPerformanceBottleneckInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumPerformanceBottleneck{
-        XCTAssertTrue(true, "Placeholder test for enumPerformanceBottleneck{")
+        // TODO: Implement initialization test for enumPerformanceBottleneck
+        XCTAssertTrue(true, "Placeholder test for enumPerformanceBottleneck")
     }
 
-    func testenumPerformanceBottleneck{Properties() {
+    func testenumPerformanceBottleneckProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumPerformanceBottleneck{
-        XCTAssertTrue(true, "Placeholder test for enumPerformanceBottleneck{ properties")
+        // TODO: Implement property tests for enumPerformanceBottleneck
+        XCTAssertTrue(true, "Placeholder test for enumPerformanceBottleneck properties")
     }
 
-    func testenumPerformanceBottleneck{Methods() {
+    func testenumPerformanceBottleneckMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumPerformanceBottleneck{
-        XCTAssertTrue(true, "Placeholder test for enumPerformanceBottleneck{ methods")
+        // TODO: Implement method tests for enumPerformanceBottleneck
+        XCTAssertTrue(true, "Placeholder test for enumPerformanceBottleneck methods")
     }
 
-    // MARK: - enumOptimizationSuggestion{ Tests
+    // MARK: - enumOptimizationSuggestion Tests
 
-    func testenumOptimizationSuggestion{Initialization() {
+    func testenumOptimizationSuggestionInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumOptimizationSuggestion{
-        XCTAssertTrue(true, "Placeholder test for enumOptimizationSuggestion{")
+        // TODO: Implement initialization test for enumOptimizationSuggestion
+        XCTAssertTrue(true, "Placeholder test for enumOptimizationSuggestion")
     }
 
-    func testenumOptimizationSuggestion{Properties() {
+    func testenumOptimizationSuggestionProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumOptimizationSuggestion{
-        XCTAssertTrue(true, "Placeholder test for enumOptimizationSuggestion{ properties")
+        // TODO: Implement property tests for enumOptimizationSuggestion
+        XCTAssertTrue(true, "Placeholder test for enumOptimizationSuggestion properties")
     }
 
-    func testenumOptimizationSuggestion{Methods() {
+    func testenumOptimizationSuggestionMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumOptimizationSuggestion{
-        XCTAssertTrue(true, "Placeholder test for enumOptimizationSuggestion{ methods")
+        // TODO: Implement method tests for enumOptimizationSuggestion
+        XCTAssertTrue(true, "Placeholder test for enumOptimizationSuggestion methods")
     }
 
-    // MARK: - structPerformanceTrend{ Tests
+    // MARK: - structPerformanceTrend Tests
 
-    func teststructPerformanceTrend{Initialization() {
+    func teststructPerformanceTrendInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structPerformanceTrend{
-        XCTAssertTrue(true, "Placeholder test for structPerformanceTrend{")
+        // TODO: Implement initialization test for structPerformanceTrend
+        XCTAssertTrue(true, "Placeholder test for structPerformanceTrend")
     }
 
-    func teststructPerformanceTrend{Properties() {
+    func teststructPerformanceTrendProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structPerformanceTrend{
-        XCTAssertTrue(true, "Placeholder test for structPerformanceTrend{ properties")
+        // TODO: Implement property tests for structPerformanceTrend
+        XCTAssertTrue(true, "Placeholder test for structPerformanceTrend properties")
     }
 
-    func teststructPerformanceTrend{Methods() {
+    func teststructPerformanceTrendMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structPerformanceTrend{
-        XCTAssertTrue(true, "Placeholder test for structPerformanceTrend{ methods")
+        // TODO: Implement method tests for structPerformanceTrend
+        XCTAssertTrue(true, "Placeholder test for structPerformanceTrend methods")
     }
 
-    // MARK: - enumTrendDirection{ Tests
+    // MARK: - enumTrendDirection Tests
 
-    func testenumTrendDirection{Initialization() {
+    func testenumTrendDirectionInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumTrendDirection{
-        XCTAssertTrue(true, "Placeholder test for enumTrendDirection{")
+        // TODO: Implement initialization test for enumTrendDirection
+        XCTAssertTrue(true, "Placeholder test for enumTrendDirection")
     }
 
-    func testenumTrendDirection{Properties() {
+    func testenumTrendDirectionProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumTrendDirection{
-        XCTAssertTrue(true, "Placeholder test for enumTrendDirection{ properties")
+        // TODO: Implement property tests for enumTrendDirection
+        XCTAssertTrue(true, "Placeholder test for enumTrendDirection properties")
     }
 
-    func testenumTrendDirection{Methods() {
+    func testenumTrendDirectionMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumTrendDirection{
-        XCTAssertTrue(true, "Placeholder test for enumTrendDirection{ methods")
+        // TODO: Implement method tests for enumTrendDirection
+        XCTAssertTrue(true, "Placeholder test for enumTrendDirection methods")
     }
 
-    // MARK: - structPerformanceReport{ Tests
+    // MARK: - structPerformanceReport Tests
 
-    func teststructPerformanceReport{Initialization() {
+    func teststructPerformanceReportInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structPerformanceReport{
-        XCTAssertTrue(true, "Placeholder test for structPerformanceReport{")
+        // TODO: Implement initialization test for structPerformanceReport
+        XCTAssertTrue(true, "Placeholder test for structPerformanceReport")
     }
 
-    func teststructPerformanceReport{Properties() {
+    func teststructPerformanceReportProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structPerformanceReport{
-        XCTAssertTrue(true, "Placeholder test for structPerformanceReport{ properties")
+        // TODO: Implement property tests for structPerformanceReport
+        XCTAssertTrue(true, "Placeholder test for structPerformanceReport properties")
     }
 
-    func teststructPerformanceReport{Methods() {
+    func teststructPerformanceReportMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structPerformanceReport{
-        XCTAssertTrue(true, "Placeholder test for structPerformanceReport{ methods")
+        // TODO: Implement method tests for structPerformanceReport
+        XCTAssertTrue(true, "Placeholder test for structPerformanceReport methods")
     }
 
-    // MARK: - structPerformanceStats{ Tests
+    // MARK: - structPerformanceStats Tests
 
-    func teststructPerformanceStats{Initialization() {
+    func teststructPerformanceStatsInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structPerformanceStats{
-        XCTAssertTrue(true, "Placeholder test for structPerformanceStats{")
+        // TODO: Implement initialization test for structPerformanceStats
+        XCTAssertTrue(true, "Placeholder test for structPerformanceStats")
     }
 
-    func teststructPerformanceStats{Properties() {
+    func teststructPerformanceStatsProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structPerformanceStats{
-        XCTAssertTrue(true, "Placeholder test for structPerformanceStats{ properties")
+        // TODO: Implement property tests for structPerformanceStats
+        XCTAssertTrue(true, "Placeholder test for structPerformanceStats properties")
     }
 
-    func teststructPerformanceStats{Methods() {
+    func teststructPerformanceStatsMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structPerformanceStats{
-        XCTAssertTrue(true, "Placeholder test for structPerformanceStats{ methods")
+        // TODO: Implement method tests for structPerformanceStats
+        XCTAssertTrue(true, "Placeholder test for structPerformanceStats methods")
     }
 }

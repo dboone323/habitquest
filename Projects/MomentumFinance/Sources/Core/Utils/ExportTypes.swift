@@ -95,6 +95,7 @@ public enum ExportFormat: String, CaseIterable, Sendable {
 // MARK: - Date Range
 
 public enum DateRange: String, CaseIterable, Sendable {
+    case lastWeek
     case lastMonth
     case lastThreeMonths
     case lastSixMonths
@@ -104,6 +105,8 @@ public enum DateRange: String, CaseIterable, Sendable {
 
     public var displayName: String {
         switch self {
+        case .lastWeek:
+            "Last Week"
         case .lastMonth:
             "Last Month"
         case .lastThreeMonths:

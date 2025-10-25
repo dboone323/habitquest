@@ -16,19 +16,19 @@ class ModernUIManagerTests: XCTestCase {
 
     // MARK: - enumModernUITheme{ Tests
 
-    func testenumModernUITheme{Initialization() {
+    func testenumModernUIThemeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumModernUITheme{
         XCTAssertTrue(true, "Placeholder test for enumModernUITheme{")
     }
 
-    func testenumModernUITheme{Properties() {
+    func testenumModernUIThemeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumModernUITheme{
         XCTAssertTrue(true, "Placeholder test for enumModernUITheme{ properties")
     }
 
-    func testenumModernUITheme{Methods() {
+    func testenumModernUIThemeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumModernUITheme{
         XCTAssertTrue(true, "Placeholder test for enumModernUITheme{ methods")
@@ -36,19 +36,19 @@ class ModernUIManagerTests: XCTestCase {
 
     // MARK: - classModernUICard:SKNode{ Tests
 
-    func testclassModernUICard:SKNode{Initialization() {
+    func testclassModernUICardInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classModernUICard:SKNode{
         XCTAssertTrue(true, "Placeholder test for classModernUICard:SKNode{")
     }
 
-    func testclassModernUICard:SKNode{Properties() {
+    func testclassModernUICardProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classModernUICard:SKNode{
         XCTAssertTrue(true, "Placeholder test for classModernUICard:SKNode{ properties")
     }
 
-    func testclassModernUICard:SKNode{Methods() {
+    func testclassModernUICardMethods() {
         // Test method functionality
         // TODO: Implement method tests for classModernUICard:SKNode{
         XCTAssertTrue(true, "Placeholder test for classModernUICard:SKNode{ methods")
@@ -56,19 +56,19 @@ class ModernUIManagerTests: XCTestCase {
 
     // MARK: - classModernUIProgressBar:SKNode{ Tests
 
-    func testclassModernUIProgressBar:SKNode{Initialization() {
+    func testclassModernUIProgressBarInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classModernUIProgressBar:SKNode{
         XCTAssertTrue(true, "Placeholder test for classModernUIProgressBar:SKNode{")
     }
 
-    func testclassModernUIProgressBar:SKNode{Properties() {
+    func testclassModernUIProgressBarProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classModernUIProgressBar:SKNode{
         XCTAssertTrue(true, "Placeholder test for classModernUIProgressBar:SKNode{ properties")
     }
 
-    func testclassModernUIProgressBar:SKNode{Methods() {
+    func testclassModernUIProgressBarMethods() {
         // Test method functionality
         // TODO: Implement method tests for classModernUIProgressBar:SKNode{
         XCTAssertTrue(true, "Placeholder test for classModernUIProgressBar:SKNode{ methods")
@@ -76,19 +76,19 @@ class ModernUIManagerTests: XCTestCase {
 
     // MARK: - classModernUIButton:SKNode{ Tests
 
-    func testclassModernUIButton:SKNode{Initialization() {
+    func testclassModernUIButtonInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classModernUIButton:SKNode{
         XCTAssertTrue(true, "Placeholder test for classModernUIButton:SKNode{")
     }
 
-    func testclassModernUIButton:SKNode{Properties() {
+    func testclassModernUIButtonProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classModernUIButton:SKNode{
         XCTAssertTrue(true, "Placeholder test for classModernUIButton:SKNode{ properties")
     }
 
-    func testclassModernUIButton:SKNode{Methods() {
+    func testclassModernUIButtonMethods() {
         // Test method functionality
         // TODO: Implement method tests for classModernUIButton:SKNode{
         XCTAssertTrue(true, "Placeholder test for classModernUIButton:SKNode{ methods")
@@ -96,19 +96,19 @@ class ModernUIManagerTests: XCTestCase {
 
     // MARK: - classModernUIManager:ThemeDelegate{ Tests
 
-    func testclassModernUIManager:ThemeDelegate{Initialization() {
+    func testclassModernUIManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classModernUIManager:ThemeDelegate{
         XCTAssertTrue(true, "Placeholder test for classModernUIManager:ThemeDelegate{")
     }
 
-    func testclassModernUIManager:ThemeDelegate{Properties() {
+    func testclassModernUIManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classModernUIManager:ThemeDelegate{
         XCTAssertTrue(true, "Placeholder test for classModernUIManager:ThemeDelegate{ properties")
     }
 
-    func testclassModernUIManager:ThemeDelegate{Methods() {
+    func testclassModernUIManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classModernUIManager:ThemeDelegate{
         XCTAssertTrue(true, "Placeholder test for classModernUIManager:ThemeDelegate{ methods")
@@ -116,19 +116,19 @@ class ModernUIManagerTests: XCTestCase {
 
     // MARK: - enumNotificationType{ Tests
 
-    func testenumNotificationType{Initialization() {
+    func testenumNotificationTypeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumNotificationType{
         XCTAssertTrue(true, "Placeholder test for enumNotificationType{")
     }
 
-    func testenumNotificationType{Properties() {
+    func testenumNotificationTypeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumNotificationType{
         XCTAssertTrue(true, "Placeholder test for enumNotificationType{ properties")
     }
 
-    func testenumNotificationType{Methods() {
+    func testenumNotificationTypeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumNotificationType{
         XCTAssertTrue(true, "Placeholder test for enumNotificationType{ methods")

@@ -17,7 +17,8 @@ public class StatePreserver {
     private var preservedState: [StateIdentifier: Any] = [:]
     private var stateObservers: [StateObserver] = []
     private var preservationQueue = DispatchQueue(
-        label: "com.quantum.state-preserver", qos: .userInitiated)
+        label: "com.quantum.state-preserver", qos: .userInitiated
+    )
 
     /// Configuration for state preservation
     public struct Configuration {
@@ -124,7 +125,7 @@ public class StatePreserver {
                     identifier: observer.identifier,
                     hasPreservedState: preservedState[observer.identifier] != nil,
                     stateType: observer.stateType,
-                    lastCaptureTime: nil  // Would need to track this
+                    lastCaptureTime: nil // Would need to track this
                 )
             }
         }
@@ -168,7 +169,8 @@ public class StatePreserver {
             ]
 
             return try JSONSerialization.data(
-                withJSONObject: encodableData, options: .prettyPrinted)
+                withJSONObject: encodableData, options: .prettyPrinted
+            )
         }
     }
 
@@ -256,7 +258,7 @@ private class UserDefaultsStateObserver: StateObserver {
 
     func captureState() throws -> Any {
         // Capture all UserDefaults (simplified - would need filtering)
-        return UserDefaults.standard.dictionaryRepresentation()
+        UserDefaults.standard.dictionaryRepresentation()
     }
 
     func restoreState(_ state: Any) throws {
@@ -277,7 +279,7 @@ private class ApplicationStateObserver: StateObserver {
     let stateType: StateType = .application
 
     func captureState() throws -> Any {
-        return ApplicationState(
+        ApplicationState(
             launchDate: Date(),
             uptime: ProcessInfo.processInfo.systemUptime,
             memoryUsage: getMemoryUsage()
@@ -312,7 +314,7 @@ private class ApplicationStateObserver: StateObserver {
         func captureState() throws -> Any {
             // This would capture the view controller hierarchy
             // Simplified implementation
-            return ["viewControllers": []]
+            ["viewControllers": []]
         }
 
         func restoreState(_ state: Any) throws {
@@ -330,7 +332,7 @@ private class ApplicationStateObserver: StateObserver {
 
         func captureState() throws -> Any {
             // Similar to UIViewController but for macOS
-            return ["viewControllers": []]
+            ["viewControllers": []]
         }
 
         func restoreState(_ state: Any) throws {
@@ -347,7 +349,7 @@ private class CustomObjectStateObserver: StateObserver {
     func captureState() throws -> Any {
         // This would capture state of registered custom objects
         // Requires a registration system for objects that want state preservation
-        return ["customObjects": []]
+        ["customObjects": []]
     }
 
     func restoreState(_ state: Any) throws {
@@ -379,7 +381,7 @@ private struct ExportedState {
     init(identifier: StateIdentifier, state: Any) {
         self.identifier = StateIdentifier(category: identifier.category, name: identifier.name)
         self.state = state
-        self.stateType = .customObject  // Default, would need to be passed
+        self.stateType = .customObject // Default, would need to be passed
     }
 }
 
@@ -392,13 +394,13 @@ public enum StateError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .captureFailed(let reason):
+        case let .captureFailed(reason):
             return "State capture failed: \(reason)"
-        case .restoreFailed(let errors):
+        case let .restoreFailed(errors):
             return "State restore failed with \(errors.count) errors"
         case .invalidStateType:
             return "Invalid state type for restoration"
-        case .observerNotFound(let identifier):
+        case let .observerNotFound(identifier):
             return "State observer not found: \(identifier.category).\(identifier.name)"
         }
     }

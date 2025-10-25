@@ -16,19 +16,19 @@ class AIBehaviorModelsTests: XCTestCase {
 
     // MARK: - structGameSessionData{ Tests
 
-    func teststructGameSessionData{Initialization() {
+    func teststructGameSessionDataInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structGameSessionData{
         XCTAssertTrue(true, "Placeholder test for structGameSessionData{")
     }
 
-    func teststructGameSessionData{Properties() {
+    func teststructGameSessionDataProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structGameSessionData{
         XCTAssertTrue(true, "Placeholder test for structGameSessionData{ properties")
     }
 
-    func teststructGameSessionData{Methods() {
+    func teststructGameSessionDataMethods() {
         // Test method functionality
         // TODO: Implement method tests for structGameSessionData{
         XCTAssertTrue(true, "Placeholder test for structGameSessionData{ methods")
@@ -36,19 +36,19 @@ class AIBehaviorModelsTests: XCTestCase {
 
     // MARK: - structPlayerActionData{ Tests
 
-    func teststructPlayerActionData{Initialization() {
+    func teststructPlayerActionDataInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structPlayerActionData{
         XCTAssertTrue(true, "Placeholder test for structPlayerActionData{")
     }
 
-    func teststructPlayerActionData{Properties() {
+    func teststructPlayerActionDataProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structPlayerActionData{
         XCTAssertTrue(true, "Placeholder test for structPlayerActionData{ properties")
     }
 
-    func teststructPlayerActionData{Methods() {
+    func teststructPlayerActionDataMethods() {
         // Test method functionality
         // TODO: Implement method tests for structPlayerActionData{
         XCTAssertTrue(true, "Placeholder test for structPlayerActionData{ methods")
@@ -56,19 +56,19 @@ class AIBehaviorModelsTests: XCTestCase {
 
     // MARK: - structObstacleInteraction{ Tests
 
-    func teststructObstacleInteraction{Initialization() {
+    func teststructObstacleInteractionInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structObstacleInteraction{
         XCTAssertTrue(true, "Placeholder test for structObstacleInteraction{")
     }
 
-    func teststructObstacleInteraction{Properties() {
+    func teststructObstacleInteractionProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structObstacleInteraction{
         XCTAssertTrue(true, "Placeholder test for structObstacleInteraction{ properties")
     }
 
-    func teststructObstacleInteraction{Methods() {
+    func teststructObstacleInteractionMethods() {
         // Test method functionality
         // TODO: Implement method tests for structObstacleInteraction{
         XCTAssertTrue(true, "Placeholder test for structObstacleInteraction{ methods")
@@ -76,19 +76,19 @@ class AIBehaviorModelsTests: XCTestCase {
 
     // MARK: - structPlayerBehaviorAnalysis{ Tests
 
-    func teststructPlayerBehaviorAnalysis{Initialization() {
+    func teststructPlayerBehaviorAnalysisInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structPlayerBehaviorAnalysis{
         XCTAssertTrue(true, "Placeholder test for structPlayerBehaviorAnalysis{")
     }
 
-    func teststructPlayerBehaviorAnalysis{Properties() {
+    func teststructPlayerBehaviorAnalysisProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structPlayerBehaviorAnalysis{
         XCTAssertTrue(true, "Placeholder test for structPlayerBehaviorAnalysis{ properties")
     }
 
-    func teststructPlayerBehaviorAnalysis{Methods() {
+    func teststructPlayerBehaviorAnalysisMethods() {
         // Test method functionality
         // TODO: Implement method tests for structPlayerBehaviorAnalysis{
         XCTAssertTrue(true, "Placeholder test for structPlayerBehaviorAnalysis{ methods")
@@ -96,19 +96,19 @@ class AIBehaviorModelsTests: XCTestCase {
 
     // MARK: - enumRiskLevel:String,Codable,Sendable{ Tests
 
-    func testenumRiskLevel:String,Codable,Sendable{Initialization() {
+    func testenumRiskLevelInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumRiskLevel:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumRiskLevel:String,Codable,Sendable{")
     }
 
-    func testenumRiskLevel:String,Codable,Sendable{Properties() {
+    func testenumRiskLevelProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumRiskLevel:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumRiskLevel:String,Codable,Sendable{ properties")
     }
 
-    func testenumRiskLevel:String,Codable,Sendable{Methods() {
+    func testenumRiskLevelMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumRiskLevel:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumRiskLevel:String,Codable,Sendable{ methods")
@@ -116,19 +116,19 @@ class AIBehaviorModelsTests: XCTestCase {
 
     // MARK: - enumConsistencyLevel:String,Codable,Sendable{ Tests
 
-    func testenumConsistencyLevel:String,Codable,Sendable{Initialization() {
+    func testenumConsistencyLevelInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumConsistencyLevel:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumConsistencyLevel:String,Codable,Sendable{")
     }
 
-    func testenumConsistencyLevel:String,Codable,Sendable{Properties() {
+    func testenumConsistencyLevelProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumConsistencyLevel:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumConsistencyLevel:String,Codable,Sendable{ properties")
     }
 
-    func testenumConsistencyLevel:String,Codable,Sendable{Methods() {
+    func testenumConsistencyLevelMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumConsistencyLevel:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumConsistencyLevel:String,Codable,Sendable{ methods")
@@ -136,19 +136,19 @@ class AIBehaviorModelsTests: XCTestCase {
 
     // MARK: - enumFatigueIndicator:String,Codable,Sendable{ Tests
 
-    func testenumFatigueIndicator:String,Codable,Sendable{Initialization() {
+    func testenumFatigueIndicatorInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumFatigueIndicator:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumFatigueIndicator:String,Codable,Sendable{")
     }
 
-    func testenumFatigueIndicator:String,Codable,Sendable{Properties() {
+    func testenumFatigueIndicatorProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumFatigueIndicator:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumFatigueIndicator:String,Codable,Sendable{ properties")
     }
 
-    func testenumFatigueIndicator:String,Codable,Sendable{Methods() {
+    func testenumFatigueIndicatorMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumFatigueIndicator:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumFatigueIndicator:String,Codable,Sendable{ methods")
@@ -156,19 +156,19 @@ class AIBehaviorModelsTests: XCTestCase {
 
     // MARK: - structAIInsights{ Tests
 
-    func teststructAIInsights{Initialization() {
+    func teststructAIInsightsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structAIInsights{
         XCTAssertTrue(true, "Placeholder test for structAIInsights{")
     }
 
-    func teststructAIInsights{Properties() {
+    func teststructAIInsightsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structAIInsights{
         XCTAssertTrue(true, "Placeholder test for structAIInsights{ properties")
     }
 
-    func teststructAIInsights{Methods() {
+    func teststructAIInsightsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structAIInsights{
         XCTAssertTrue(true, "Placeholder test for structAIInsights{ methods")

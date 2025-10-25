@@ -20,11 +20,11 @@ public class LeakDetector {
 
     /// Configuration for leak detection
     public struct Configuration {
-        public var growthThreshold: Double = 0.1  // MB per minute
+        public var growthThreshold: Double = 0.1 // MB per minute
         public var cycleDetectionEnabled: Bool = true
         public var allocationTrackingEnabled: Bool = true
         public var patternAnalysisEnabled: Bool = true
-        public var minimumLeakSize: UInt64 = 1024 * 1024  // 1MB
+        public var minimumLeakSize: UInt64 = 1024 * 1024 // 1MB
         public var confidenceThreshold: Double = 0.7
 
         public init() {}
@@ -70,7 +70,7 @@ public class LeakDetector {
         let totalLeakSize = suspectedLeaks.reduce(0) { $0 + $1.size }
         let averageConfidence =
             suspectedLeaks.isEmpty
-            ? 0 : suspectedLeaks.map { $0.confidence }.reduce(0, +) / Double(suspectedLeaks.count)
+                ? 0 : suspectedLeaks.map(\.confidence).reduce(0, +) / Double(suspectedLeaks.count)
 
         return LeakDetection(
             suspectedLeaks: suspectedLeaks,
@@ -88,12 +88,12 @@ public class LeakDetector {
 
     /// Check for potential leaks in tracked objects
     public func checkTrackedObjects() -> [SuspectedLeak] {
-        return allocationTracker.findPotentialLeaks()
+        allocationTracker.findPotentialLeaks()
     }
 
     /// Analyze memory usage patterns for leak indicators
     public func analyzeUsagePatterns(_ snapshots: [MemorySnapshot]) -> LeakPatternAnalysis {
-        return patternAnalyzer.analyzePatterns(snapshots)
+        patternAnalyzer.analyzePatterns(snapshots)
     }
 
     /// Detect reference cycles using allocation patterns
@@ -112,8 +112,8 @@ public class LeakDetector {
         // Look for patterns that might indicate reference cycles
         var cycleLeaks: [SuspectedLeak] = []
 
-        for i in 10..<smoothedUsages.count {
-            let recentWindow = Array(smoothedUsages[(i - 10)...i])
+        for i in 10 ..< smoothedUsages.count {
+            let recentWindow = Array(smoothedUsages[(i - 10) ... i])
             let trend = calculateTrend(recentWindow)
 
             // If memory is consistently growing with small fluctuations,
@@ -140,7 +140,7 @@ public class LeakDetector {
     // MARK: - Private Methods
 
     private func detectGrowthPatternLeak(_ snapshots: [MemorySnapshot]) -> SuspectedLeak? {
-        let usages = snapshots.map { Double($0.usedMemory) / (1024 * 1024) }  // Convert to MB
+        let usages = snapshots.map { Double($0.usedMemory) / (1024 * 1024) } // Convert to MB
 
         guard usages.count >= 10 else { return nil }
 
@@ -148,13 +148,13 @@ public class LeakDetector {
         let firstUsage = usages.first!
         let lastUsage = usages.last!
         let totalGrowth = lastUsage - firstUsage
-        let growthRate = totalGrowth / Double(usages.count - 1)  // MB per snapshot
+        let growthRate = totalGrowth / Double(usages.count - 1) // MB per snapshot
 
         // Convert to MB per minute (assuming snapshots are taken regularly)
-        let growthRatePerMinute = growthRate * 60  // Rough estimate
+        let growthRatePerMinute = growthRate * 60 // Rough estimate
 
         if growthRatePerMinute > config.growthThreshold {
-            let estimatedLeakSize = UInt64(totalGrowth * 1024 * 1024)  // Convert back to bytes
+            let estimatedLeakSize = UInt64(totalGrowth * 1024 * 1024) // Convert back to bytes
             let confidence = min(1.0, growthRatePerMinute / (config.growthThreshold * 2))
 
             if confidence >= config.confidenceThreshold
@@ -199,7 +199,7 @@ public class LeakDetector {
 
         // Analyze sustained high usage
         if let sustainedHigh = patternAnalysis.sustainedHighUsage {
-            if sustainedHigh.duration > 300 {  // 5 minutes
+            if sustainedHigh.duration > 300 { // 5 minutes
                 let leakSize = UInt64(sustainedHigh.averageUsage * 1024 * 1024)
                 if leakSize >= config.minimumLeakSize {
                     let leak = SuspectedLeak(
@@ -223,10 +223,10 @@ public class LeakDetector {
 
         var smoothed: [Double] = []
 
-        for i in 0..<data.count {
+        for i in 0 ..< data.count {
             let start = max(0, i - windowSize / 2)
             let end = min(data.count, i + windowSize / 2 + 1)
-            let window = Array(data[start..<end])
+            let window = Array(data[start ..< end])
             let average = window.reduce(0, +) / Double(window.count)
             smoothed.append(average)
         }
@@ -254,7 +254,7 @@ public class LeakDetector {
         var growthCount = 0
         var totalCount = 0
 
-        for i in 1..<data.count {
+        for i in 1 ..< data.count {
             if data[i] > data[i - 1] {
                 growthCount += 1
             }
@@ -356,7 +356,7 @@ public struct AllocationSpike {
 public struct SustainedHighUsage {
     public let startTime: Date
     public let duration: TimeInterval
-    public let averageUsage: Double  // MB
+    public let averageUsage: Double // MB
 
     public init(startTime: Date, duration: TimeInterval, averageUsage: Double) {
         self.startTime = startTime
@@ -384,7 +384,8 @@ public struct PeriodicPattern {
 private class AllocationTracker {
     private var trackedObjects: [ObjectIdentifier: TrackedObject] = [:]
     private let queue = DispatchQueue(
-        label: "com.quantum.allocation-tracker", attributes: .concurrent)
+        label: "com.quantum.allocation-tracker", attributes: .concurrent
+    )
 
     func track(_ object: AnyObject, context: String) {
         let id = ObjectIdentifier(object)
@@ -398,7 +399,7 @@ private class AllocationTracker {
     func findPotentialLeaks() -> [SuspectedLeak] {
         var leaks: [SuspectedLeak] = []
         let now = Date()
-        let threshold: TimeInterval = 300  // 5 minutes
+        let threshold: TimeInterval = 300 // 5 minutes
 
         queue.sync {
             for (id, tracked) in self.trackedObjects {
@@ -408,7 +409,7 @@ private class AllocationTracker {
                     // or other mechanisms to detect if the object is still alive
                     let leak = SuspectedLeak(
                         allocationSite: tracked.context,
-                        size: 0,  // Unknown size
+                        size: 0, // Unknown size
                         allocationTime: tracked.allocationTime,
                         stackTrace: [],
                         confidence: 0.5,
@@ -433,8 +434,8 @@ private class ReferenceCycleDetector {
 private class LeakPatternAnalyzer {
 
     func analyzePatterns(_ snapshots: [MemorySnapshot]) -> LeakPatternAnalysis {
-        let usages = snapshots.map { Double($0.usedMemory) / (1024 * 1024) }  // MB
-        let timestamps = snapshots.map { $0.timestamp }
+        let usages = snapshots.map { Double($0.usedMemory) / (1024 * 1024) } // MB
+        let timestamps = snapshots.map(\.timestamp)
 
         let spikes = detectAllocationSpikes(usages, timestamps: timestamps)
         let sustained = detectSustainedHighUsage(usages, timestamps: timestamps)
@@ -447,15 +448,14 @@ private class LeakPatternAnalyzer {
         )
     }
 
-    private func detectAllocationSpikes(_ usages: [Double], timestamps: [Date]) -> [AllocationSpike]
-    {
+    private func detectAllocationSpikes(_ usages: [Double], timestamps: [Date]) -> [AllocationSpike] {
         guard usages.count >= 3 else { return [] }
 
         var spikes: [AllocationSpike] = []
         let mean = usages.reduce(0, +) / Double(usages.count)
         let stdDev = sqrt(usages.map { pow($0 - mean, 2) }.reduce(0, +) / Double(usages.count))
 
-        for i in 1..<(usages.count - 1) {
+        for i in 1 ..< (usages.count - 1) {
             let current = usages[i]
             let prev = usages[i - 1]
             let next = usages[i + 1]
@@ -464,7 +464,7 @@ private class LeakPatternAnalyzer {
             if current > prev && current > next && (current - prev) > (2 * stdDev) {
                 let spike = AllocationSpike(
                     timestamp: timestamps[i],
-                    size: UInt64((current - prev) * 1024 * 1024),  // Convert to bytes
+                    size: UInt64((current - prev) * 1024 * 1024), // Convert to bytes
                     confidence: min(1.0, (current - prev) / (3 * stdDev))
                 )
                 spikes.append(spike)
@@ -480,12 +480,12 @@ private class LeakPatternAnalyzer {
         guard usages.count >= 10 else { return nil }
 
         let mean = usages.reduce(0, +) / Double(usages.count)
-        let threshold = mean * 1.5  // 150% of average
+        let threshold = mean * 1.5 // 150% of average
 
         var startIndex: Int?
         var endIndex: Int?
 
-        for i in 0..<usages.count {
+        for i in 0 ..< usages.count {
             if usages[i] > threshold {
                 if startIndex == nil {
                     startIndex = i
@@ -495,9 +495,9 @@ private class LeakPatternAnalyzer {
                 // End of sustained period
                 if let start = startIndex, let end = endIndex {
                     let duration = timestamps[end].timeIntervalSince(timestamps[start])
-                    if duration > 60 {  // At least 1 minute
+                    if duration > 60 { // At least 1 minute
                         let averageUsage =
-                            usages[start...end].reduce(0, +) / Double(end - start + 1)
+                            usages[start ... end].reduce(0, +) / Double(end - start + 1)
                         return SustainedHighUsage(
                             startTime: timestamps[start],
                             duration: duration,
@@ -514,7 +514,7 @@ private class LeakPatternAnalyzer {
         if let start = startIndex, let end = endIndex {
             let duration = timestamps[end].timeIntervalSince(timestamps[start])
             if duration > 60 {
-                let averageUsage = usages[start...end].reduce(0, +) / Double(end - start + 1)
+                let averageUsage = usages[start ... end].reduce(0, +) / Double(end - start + 1)
                 return SustainedHighUsage(
                     startTime: timestamps[start],
                     duration: duration,
@@ -526,8 +526,7 @@ private class LeakPatternAnalyzer {
         return nil
     }
 
-    private func detectPeriodicPatterns(_ usages: [Double], timestamps: [Date]) -> [PeriodicPattern]
-    {
+    private func detectPeriodicPatterns(_ usages: [Double], timestamps: [Date]) -> [PeriodicPattern] {
         // Simplified periodic pattern detection using autocorrelation
         // This is a basic implementation - production systems would use more sophisticated methods
         guard usages.count >= 20 else { return [] }
@@ -536,7 +535,7 @@ private class LeakPatternAnalyzer {
         let normalized = usages.map { $0 - mean }
 
         // Check for common periods (in indices)
-        let testPeriods = [5, 10, 15, 20]  // Different window sizes
+        let testPeriods = [5, 10, 15, 20] // Different window sizes
 
         var patterns: [PeriodicPattern] = []
 
@@ -546,17 +545,17 @@ private class LeakPatternAnalyzer {
             var correlation = 0.0
             var count = 0
 
-            for i in 0..<(usages.count - period) {
+            for i in 0 ..< (usages.count - period) {
                 correlation += normalized[i] * normalized[i + period]
                 count += 1
             }
 
             if count > 0 {
                 correlation /= Double(count)
-                let amplitude = sqrt(abs(correlation))  // Rough amplitude estimate
+                let amplitude = sqrt(abs(correlation)) // Rough amplitude estimate
 
-                if correlation > 0.3 {  // Significant correlation
-                    let timePeriod = Double(period) * 60.0  // Assuming 1 minute intervals
+                if correlation > 0.3 { // Significant correlation
+                    let timePeriod = Double(period) * 60.0 // Assuming 1 minute intervals
                     patterns.append(
                         PeriodicPattern(
                             period: timePeriod,

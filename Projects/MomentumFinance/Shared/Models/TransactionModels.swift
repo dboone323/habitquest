@@ -18,23 +18,6 @@ public enum TransactionFilter: String, CaseIterable, Sendable {
 
 // MARK: - Navigation Types
 
-public struct BreadcrumbItem: Identifiable, Sendable {
-    public let id = UUID()
-    public let title: String
-    public let destination: String?
+// BreadcrumbItem moved to Navigation/BreadcrumbNavigation.swift to avoid duplication
 
-    public init(title: String, destination: String? = nil) {
-        self.title = title
-        self.destination = destination
-    }
-}
-
-public struct DeepLink: Sendable {
-    public let path: String
-    public let parameters: [String: String]
-
-    public init(path: String, parameters: [String: String] = [:]) {
-        self.path = path
-        self.parameters = parameters
-    }
-}
+// DeepLink moved to Navigation/BreadcrumbNavigation.swift to avoid duplication

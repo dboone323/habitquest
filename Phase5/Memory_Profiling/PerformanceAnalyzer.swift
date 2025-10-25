@@ -19,10 +19,10 @@ public class PerformanceAnalyzer {
 
     /// Configuration for performance analysis
     public struct Configuration {
-        public var memoryPressureThreshold: Double = 0.8  // 80% memory usage
-        public var pageFaultThreshold: UInt64 = 1000  // Page faults per minute
+        public var memoryPressureThreshold: Double = 0.8 // 80% memory usage
+        public var pageFaultThreshold: UInt64 = 1000 // Page faults per minute
         public var fragmentationThreshold: Double = 0.3
-        public var analysisWindow: TimeInterval = 300  // 5 minutes
+        public var analysisWindow: TimeInterval = 300 // 5 minutes
         public var enableRealTimeAnalysis: Bool = true
 
         public init() {}
@@ -73,7 +73,8 @@ public class PerformanceAnalyzer {
 
         let pressureLevel = calculateMemoryPressure(currentSnapshot)
         let optimizationOpportunities = identifyImmediateOptimizations(
-            currentSnapshot, analysis: analysis)
+            currentSnapshot, analysis: analysis
+        )
 
         return RealTimeAnalysis(
             currentPressure: pressureLevel,
@@ -86,7 +87,7 @@ public class PerformanceAnalyzer {
     public func generateOptimizationStrategies(_ analysis: PerformanceAnalysis)
         -> [OptimizationStrategy]
     {
-        return optimizationEngine.generateStrategies(analysis)
+        optimizationEngine.generateStrategies(analysis)
     }
 
     /// Calculate memory pressure level
@@ -152,7 +153,7 @@ public class PerformanceAnalyzer {
         }
 
         let usages = snapshots.map { Double($0.usedMemory) }
-        let timestamps = snapshots.map { $0.timestamp.timeIntervalSince1970 }
+        let timestamps = snapshots.map(\.timestamp.timeIntervalSince1970)
 
         // Simple linear regression for prediction
         let (slope, intercept) = linearRegression(timestamps, usages)
@@ -167,7 +168,7 @@ public class PerformanceAnalyzer {
             predictedPeakUsage: predictedUsage,
             timeToPeak: predictionHorizon,
             confidence: confidence,
-            recommendedBuffer: predictedUsage * 0.1  // 10% buffer
+            recommendedBuffer: predictedUsage * 0.1 // 10% buffer
         )
     }
 
@@ -443,7 +444,7 @@ public class PerformanceAnalyzer {
         // In a real system, this would use more sophisticated analysis
         guard pageFaults.count >= 2 else { return 0.9 }
 
-        let totalAccesses = pageFaults.last! + 10000  // Assume some cache hits
+        let totalAccesses = pageFaults.last! + 10000 // Assume some cache hits
         let hitRate = 1.0 - (pageFaults.last! / totalAccesses)
 
         return max(0, min(1, hitRate))
@@ -475,7 +476,7 @@ public class PerformanceAnalyzer {
         guard pageFaults.count >= 2 else { return 0.8 }
 
         let faultRate = calculateRate(pageFaults)
-        let maxExpectedFaults = 1000.0  // Baseline
+        let maxExpectedFaults = 1000.0 // Baseline
 
         return max(0, min(1, 1 - (faultRate / maxExpectedFaults)))
     }
@@ -504,7 +505,7 @@ public class PerformanceAnalyzer {
         let yMean = usages.reduce(0, +) / Double(usages.count)
         let totalSumSquares = usages.map { pow($0 - yMean, 2) }.reduce(0, +)
 
-        let residuals = usages.enumerated().map { (index, usage) in
+        let residuals = usages.enumerated().map { index, usage in
             let predicted = slope * Double(index) + intercept
             return pow(usage - predicted, 2)
         }
@@ -775,7 +776,7 @@ private class OptimizationEngine {
                         "Implement memory-mapped files for large datasets",
                     ],
                     estimatedImprovement: 0.4,
-                    implementationTime: 3600 * 24 * 7,  // 1 week
+                    implementationTime: 3600 * 24 * 7, // 1 week
                     riskLevel: .medium
                 ))
         }
@@ -794,7 +795,7 @@ private class OptimizationEngine {
                         "Add cache performance monitoring and metrics",
                     ],
                     estimatedImprovement: 0.3,
-                    implementationTime: 3600 * 24 * 5,  // 5 days
+                    implementationTime: 3600 * 24 * 5, // 5 days
                     riskLevel: .low
                 ))
         }
@@ -813,7 +814,7 @@ private class OptimizationEngine {
                         "Add fallback to system allocator when pools are exhausted",
                     ],
                     estimatedImprovement: 0.25,
-                    implementationTime: 3600 * 24 * 10,  // 10 days
+                    implementationTime: 3600 * 24 * 10, // 10 days
                     riskLevel: .high
                 ))
         }

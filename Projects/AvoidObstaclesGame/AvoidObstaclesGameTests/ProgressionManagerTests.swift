@@ -16,19 +16,19 @@ class ProgressionManagerTests: XCTestCase {
 
     // MARK: - classProgressionManager{ Tests
 
-    func testclassProgressionManager{Initialization() {
+    func testclassProgressionManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classProgressionManager{
         XCTAssertTrue(true, "Placeholder test for classProgressionManager{")
     }
 
-    func testclassProgressionManager{Properties() {
+    func testclassProgressionManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classProgressionManager{
         XCTAssertTrue(true, "Placeholder test for classProgressionManager{ properties")
     }
 
-    func testclassProgressionManager{Methods() {
+    func testclassProgressionManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classProgressionManager{
         XCTAssertTrue(true, "Placeholder test for classProgressionManager{ methods")

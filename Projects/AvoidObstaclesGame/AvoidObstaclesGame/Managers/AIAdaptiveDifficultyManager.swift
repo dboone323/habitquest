@@ -246,10 +246,10 @@ class AIAdaptiveDifficultyManager: @unchecked Sendable {
         print("AI Difficulty Adjusted: \(oldDifficulty.description) → \(newDifficulty.description) (Reason: \(reason.description))")
     }
 
-    // MARK: - Cleanup
-
-    deinit {
+    /// Stops the periodic analysis timer (for testing)
+    func stopPeriodicAnalysis() {
         analysisTimer?.invalidate()
+        analysisTimer = nil
     }
 }
 

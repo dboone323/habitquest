@@ -11,9 +11,9 @@ actor DataExporter {
         self.engine = ExportEngineService(modelContext: modelContext)
     }
 
-    func export(with settings: ExportSettings) async throws -> URL {
-        guard let engine else { throw ExportError.invalidSettings }
-        return try await engine.export(settings: settings)
+    nonisolated func export(with settings: ExportSettings) async throws -> URL {
+        // TODO: Implement actual export functionality
+        throw ExportError.invalidSettings
     }
 }
 

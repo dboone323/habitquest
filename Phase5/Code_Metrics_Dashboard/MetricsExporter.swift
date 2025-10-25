@@ -50,7 +50,8 @@ public class MetricsExporter {
         // Create export directory if needed
         if let directory = config.exportDirectory {
             try? FileManager.default.createDirectory(
-                at: directory, withIntermediateDirectories: true)
+                at: directory, withIntermediateDirectories: true
+            )
         }
     }
 
@@ -89,7 +90,8 @@ public class MetricsExporter {
         -> URL
     {
         let analysisResults = analysisEngine.getAnalysisResults(
-            from: timeRange.start, to: timeRange.end)
+            from: timeRange.start, to: timeRange.end
+        )
         let trendAnalysis = analysisEngine.analyzeQualityTrends()
 
         let report = TrendReport(
@@ -127,7 +129,7 @@ public class MetricsExporter {
     public func exportHealthReport(format: ExportFormat = .html) async throws -> URL {
         let currentMetrics = collector.getAggregateMetrics()
         let analysis = try await analysisEngine.performAnalysis()
-        let predictions = try analysisEngine.predictMetrics(for: 7 * 24 * 3600)  // 7 days
+        let predictions = try analysisEngine.predictMetrics(for: 7 * 24 * 3600) // 7 days
 
         let healthScore = calculateHealthScore(metrics: currentMetrics, analysis: analysis)
         let healthReport = HealthReport(
@@ -200,10 +202,10 @@ public class MetricsExporter {
         return contents.sorted(by: { url1, url2 in
             let date1 =
                 (try? url1.resourceValues(forKeys: [.creationDateKey]))?.creationDate
-                ?? Date.distantPast
+                    ?? Date.distantPast
             let date2 =
                 (try? url2.resourceValues(forKeys: [.creationDateKey]))?.creationDate
-                ?? Date.distantPast
+                    ?? Date.distantPast
             return date1 > date2
         })
     }
@@ -237,7 +239,7 @@ public class MetricsExporter {
         let filename = filename ?? generateFilename(prefix: "metrics", format: format)
         let url =
             config.exportDirectory?.appendingPathComponent(filename)
-            ?? FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+                ?? FileManager.default.temporaryDirectory.appendingPathComponent(filename)
 
         switch format {
         case .json:
@@ -261,7 +263,7 @@ public class MetricsExporter {
         let filename = generateFilename(prefix: report.reportType, format: format)
         let url =
             config.exportDirectory?.appendingPathComponent(filename)
-            ?? FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+                ?? FileManager.default.temporaryDirectory.appendingPathComponent(filename)
 
         switch format {
         case .json:
@@ -458,7 +460,7 @@ public class MetricsExporter {
         let (_, response) = try await URLSession.shared.data(for: request)
 
         if let httpResponse = response as? HTTPURLResponse,
-            !(200...299).contains(httpResponse.statusCode)
+           !(200 ... 299).contains(httpResponse.statusCode)
         {
             throw ExportError.monitoringSystemError(httpResponse.statusCode)
         }
@@ -466,18 +468,18 @@ public class MetricsExporter {
 
     private func generateFilename(prefix: String, format: ExportFormat) -> String {
         let timestamp = ISO8601DateFormatter().string(from: Date()).replacingOccurrences(
-            of: ":", with: "-")
+            of: ":", with: "-"
+        )
         return "\(prefix)_\(timestamp).\(format.fileExtension)"
     }
 
     private func getHistoricalData() -> [Date: AggregateMetrics]? {
         // This would collect historical data from the analysis engine
         // For now, return nil
-        return nil
+        nil
     }
 
-    private func calculateHealthScore(metrics: AggregateMetrics, analysis: AnalysisReport) -> Double
-    {
+    private func calculateHealthScore(metrics: AggregateMetrics, analysis: AnalysisReport) -> Double {
         var score = 0.0
         var weights = 0.0
 
@@ -497,7 +499,7 @@ public class MetricsExporter {
         // Trend direction (20% weight)
         let trendBonus =
             analysis.trendAnalysis.complexityTrend.slope < 0
-            ? 1.0 : analysis.trendAnalysis.complexityTrend.slope > 0.1 ? 0.5 : 0.8
+                ? 1.0 : analysis.trendAnalysis.complexityTrend.slope > 0.1 ? 0.5 : 0.8
         score += trendBonus * 0.2
         weights += 0.2
 

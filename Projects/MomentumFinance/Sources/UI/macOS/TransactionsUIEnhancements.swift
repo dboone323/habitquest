@@ -1,6 +1,8 @@
 // Momentum Finance - macOS Transactions UI Enhancements
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
+import MomentumFinanceCore
+import SharedKit
 import SwiftData
 import SwiftUI
 
@@ -42,12 +44,12 @@ import SwiftUI
             var body: some View {
                 List(selection: self.$selectedItem) {
                     ForEach(self.filteredTransactions) { transaction in
-                        NavigationLink(value: ListableItem(id: transaction.id, name: transaction.name, type: .transaction)) {
+                        NavigationLink(value: ListableItem(id: transaction.id, name: transaction.title, type: .transaction)) {
                             HStack {
                                 Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
                                     .foregroundStyle(transaction.amount < 0 ? .red : .green)
                                 VStack(alignment: .leading) {
-                                    Text(transaction.name)
+                                    Text(transaction.title)
                                         .font(.headline)
                                     if let category = transaction.category {
                                         Text(category.name)
@@ -67,7 +69,7 @@ import SwiftUI
                             }
                             .padding(.vertical, 4)
                         }
-                        .tag(ListableItem(id: transaction.id, name: transaction.name, type: .transaction))
+                        .tag(ListableItem(id: transaction.id, name: transaction.title, type: .transaction))
                     }
                 }
                 .navigationTitle("Transactions")
@@ -111,7 +113,7 @@ import SwiftUI
                             VStack(alignment: .leading, spacing: 20) {
                                 HStack {
                                     VStack(alignment: .leading) {
-                                        Text(transaction.name)
+                                        Text(transaction.title)
                                             .font(.largeTitle)
                                             .bold()
 

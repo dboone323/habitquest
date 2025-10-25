@@ -155,8 +155,7 @@ public struct DataImportView: View {
                 self.importProgress = Double(i) / 10.0
             }
 
-            let content = try String(contentsOf: fileURL, encoding: .utf8)
-            let result = try await importer.importFromCSV(content)
+            let result = try await importer.importFromCSV(fileURL: fileURL)
             self.importResult = result
             self.showingResult = true
             #if os(iOS)

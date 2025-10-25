@@ -19,7 +19,8 @@ public class MetricsCollector {
 
     private let fileManager = FileManager.default
     private let metricsQueue = DispatchQueue(
-        label: "com.quantum.metrics-collector", qos: .userInitiated)
+        label: "com.quantum.metrics-collector", qos: .userInitiated
+    )
 
     private var collectedMetrics: [String: CodeMetrics] = [:]
     private var metricHistory: [String: [Date: CodeMetrics]] = [:]
@@ -29,7 +30,7 @@ public class MetricsCollector {
 
     /// Configuration for metrics collection
     public struct Configuration {
-        public var analysisInterval: TimeInterval = 30.0  // 30 seconds
+        public var analysisInterval: TimeInterval = 30.0 // 30 seconds
         public var enableRealTimeAnalysis: Bool = true
         public var maxHistorySize: Int = 100
         public var analysisTimeout: TimeInterval = 60.0
@@ -193,22 +194,22 @@ public class MetricsCollector {
 
             // Calculate quality scores
             let complexityScore = calculateComplexityScore(allMetrics)
-            let coverageScore = 0.0  // Would be calculated from test coverage data
+            let coverageScore = 0.0 // Would be calculated from test coverage data
             let maintainabilityScore = calculateMaintainabilityScore(allMetrics)
 
             // Identify hotspots
             let complexityHotspots =
                 allMetrics
-                .filter {
-                    $0.averageComplexity
-                        > Double(config.complexityThresholds.maxCyclomaticComplexity)
-                }
-                .map { $0.filePath }
+                    .filter {
+                        $0.averageComplexity
+                            > Double(config.complexityThresholds.maxCyclomaticComplexity)
+                    }
+                    .map(\.filePath)
 
             let largeFiles =
                 allMetrics
-                .filter { $0.linesOfCode > config.complexityThresholds.maxFileLength }
-                .map { $0.filePath }
+                    .filter { $0.linesOfCode > config.complexityThresholds.maxFileLength }
+                    .map(\.filePath)
 
             return AggregateMetrics(
                 totalFiles: allMetrics.count,
@@ -288,7 +289,7 @@ public class MetricsCollector {
 
     private func calculateCyclomaticComplexity(_ functions: [FunctionInfo]) -> [Int] {
         functions.map { function in
-            var complexity = 1  // Base complexity
+            var complexity = 1 // Base complexity
 
             // Count control flow statements
             let controlFlowKeywords = [
@@ -340,8 +341,8 @@ public class MetricsCollector {
 
         for (index, line) in lines.enumerated() {
             let trimmed = line.trimmingCharacters(in: .whitespaces)
-            if trimmed.count > 10 {  // Only check substantial lines
-                for otherIndex in (index + 1)..<lines.count {
+            if trimmed.count > 10 { // Only check substantial lines
+                for otherIndex in (index + 1) ..< lines.count {
                     if lines[otherIndex].trimmingCharacters(in: .whitespaces) == trimmed {
                         duplicateLines += 1
                         break
@@ -426,9 +427,9 @@ public class MetricsCollector {
     }
 
     private func calculateComplexityScore(_ metrics: [CodeMetrics]) -> Double {
-        let violations = metrics.flatMap { $0.complexityViolations }
+        let violations = metrics.flatMap(\.complexityViolations)
         let totalViolations = violations.count
-        let maxExpectedViolations = metrics.count * 2  // Allow 2 violations per file
+        let maxExpectedViolations = metrics.count * 2 // Allow 2 violations per file
 
         if maxExpectedViolations == 0 { return 1.0 }
 
@@ -438,9 +439,9 @@ public class MetricsCollector {
 
     private func calculateMaintainabilityScore(_ metrics: [CodeMetrics]) -> Double {
         let averageComplexity =
-            metrics.map { $0.averageComplexity }.reduce(0, +) / Double(metrics.count)
+            metrics.map(\.averageComplexity).reduce(0, +) / Double(metrics.count)
         let averageCommentRatio =
-            metrics.map { $0.commentRatio }.reduce(0, +) / Double(metrics.count)
+            metrics.map(\.commentRatio).reduce(0, +) / Double(metrics.count)
 
         // Maintainability index formula (simplified)
         let complexityFactor = max(0, 1.0 - averageComplexity / 20.0)
@@ -452,7 +453,8 @@ public class MetricsCollector {
     private func findFiles(in directory: URL, withExtensions extensions: [String]) throws -> [URL] {
         let resourceKeys: [URLResourceKey] = [.isRegularFileKey, .isDirectoryKey]
         let enumerator = fileManager.enumerator(
-            at: directory, includingPropertiesForKeys: resourceKeys)!
+            at: directory, includingPropertiesForKeys: resourceKeys
+        )!
 
         var files: [URL] = []
 
@@ -532,50 +534,50 @@ public class MetricsCollector {
 
     private func exportAsHTML(_ metrics: AggregateMetrics, to path: String) throws {
         let html = """
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Code Metrics Dashboard</title>
-                <style>
-                    body { font-family: Arial, sans-serif; margin: 20px; }
-                    .metric { margin: 10px 0; padding: 10px; border: 1px solid #ddd; }
-                    .score { font-weight: bold; }
-                    .good { color: green; }
-                    .warning { color: orange; }
-                    .bad { color: red; }
-                </style>
-            </head>
-            <body>
-                <h1>Code Metrics Dashboard</h1>
-                <p>Analysis Timestamp: \(metrics.analysisTimestamp)</p>
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Code Metrics Dashboard</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                .metric { margin: 10px 0; padding: 10px; border: 1px solid #ddd; }
+                .score { font-weight: bold; }
+                .good { color: green; }
+                .warning { color: orange; }
+                .bad { color: red; }
+            </style>
+        </head>
+        <body>
+            <h1>Code Metrics Dashboard</h1>
+            <p>Analysis Timestamp: \(metrics.analysisTimestamp)</p>
 
-                <div class="metric">
-                    <h3>Overview</h3>
-                    <p>Total Files: \(metrics.totalFiles)</p>
-                    <p>Total Lines of Code: \(metrics.totalLinesOfCode)</p>
-                    <p>Total Functions: \(metrics.totalFunctions)</p>
-                    <p>Total Classes: \(metrics.totalClasses)</p>
-                </div>
+            <div class="metric">
+                <h3>Overview</h3>
+                <p>Total Files: \(metrics.totalFiles)</p>
+                <p>Total Lines of Code: \(metrics.totalLinesOfCode)</p>
+                <p>Total Functions: \(metrics.totalFunctions)</p>
+                <p>Total Classes: \(metrics.totalClasses)</p>
+            </div>
 
-                <div class="metric">
-                    <h3>Complexity Analysis</h3>
-                    <p>Average Complexity: \(String(format: "%.2f", metrics.averageComplexity))</p>
-                    <p>Complexity Score: <span class="score \(metrics.complexityScore > 0.7 ? "good" : metrics.complexityScore > 0.4 ? "warning" : "bad")">\(String(format: "%.2f", metrics.complexityScore))</span></p>
-                </div>
+            <div class="metric">
+                <h3>Complexity Analysis</h3>
+                <p>Average Complexity: \(String(format: "%.2f", metrics.averageComplexity))</p>
+                <p>Complexity Score: <span class="score \(metrics.complexityScore > 0.7 ? "good" : metrics.complexityScore > 0.4 ? "warning" : "bad")">\(String(format: "%.2f", metrics.complexityScore))</span></p>
+            </div>
 
-                <div class="metric">
-                    <h3>Quality Metrics</h3>
-                    <p>Maintainability Score: <span class="score \(metrics.maintainabilityScore > 0.7 ? "good" : metrics.maintainabilityScore > 0.4 ? "warning" : "bad")">\(String(format: "%.2f", metrics.maintainabilityScore))</span></p>
-                </div>
+            <div class="metric">
+                <h3>Quality Metrics</h3>
+                <p>Maintainability Score: <span class="score \(metrics.maintainabilityScore > 0.7 ? "good" : metrics.maintainabilityScore > 0.4 ? "warning" : "bad")">\(String(format: "%.2f", metrics.maintainabilityScore))</span></p>
+            </div>
 
-                <div class="metric">
-                    <h3>Hotspots</h3>
-                    <p>Complexity Hotspots: \(metrics.complexityHotspots.count)</p>
-                    <p>Large Files: \(metrics.largeFiles.count)</p>
-                </div>
-            </body>
-            </html>
-            """
+            <div class="metric">
+                <h3>Hotspots</h3>
+                <p>Complexity Hotspots: \(metrics.complexityHotspots.count)</p>
+                <p>Large Files: \(metrics.largeFiles.count)</p>
+            </div>
+        </body>
+        </html>
+        """
 
         try html.write(to: URL(fileURLWithPath: path), atomically: true, encoding: .utf8)
     }

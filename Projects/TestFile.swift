@@ -23,7 +23,7 @@ class TestValidator {
 
         // Issue 4: Complex nested logic
         if result {
-            if firstComponent.count > 0 {
+            if !firstComponent.isEmpty {
                 if firstComponent.contains("valid") {
                     return true
                 }

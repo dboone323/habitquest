@@ -8,22 +8,6 @@
 
 import Foundation
 
-// MARK: - Dark Mode Preferences
+// MARK: - Settings Types
 
-/// Dark mode preference options
-public enum DarkModePreference: String, CaseIterable {
-    case light
-    case dark
-    case system
-
-    public var displayName: String {
-        switch self {
-        case .light:
-            "Light"
-        case .dark:
-            "Dark"
-        case .system:
-            "System"
-        }
-    }
-}
+// DarkModePreference is defined in Theme.swift to avoid duplication

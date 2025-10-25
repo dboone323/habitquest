@@ -22,9 +22,9 @@ public class CIIntegration {
     /// CI configuration
     public struct CIConfig {
         public var enablePerformanceGates: Bool = true
-        public var performanceGateThreshold: Double = 80.0  // Minimum score
+        public var performanceGateThreshold: Double = 80.0 // Minimum score
         public var enableRegressionDetection: Bool = true
-        public var regressionThreshold: Double = 5.0  // 5% degradation allowed
+        public var regressionThreshold: Double = 5.0 // 5% degradation allowed
         public var enableTrendAnalysis: Bool = true
         public var baselineUpdateStrategy: BaselineUpdateStrategy = .manual
         public var notificationChannels: [NotificationChannel] = [.console]
@@ -61,7 +61,7 @@ public class CIIntegration {
         baselinePath: String? = nil,
         outputPath: String? = nil
     ) async throws -> CIResult {
-        return try await ciQueue.async {
+        try await ciQueue.async {
             self.currentStatus = .running
 
             defer {
@@ -70,7 +70,7 @@ public class CIIntegration {
 
             do {
                 // Load baseline if provided
-                if let baselinePath = baselinePath {
+                if let baselinePath {
                     try self.loadBaselineFromPath(baselinePath)
                 }
 
@@ -102,7 +102,7 @@ public class CIIntegration {
                 let report = try await reportGenerator.generatePerformanceReport(analysis)
 
                 // Export results
-                if let outputPath = outputPath {
+                if let outputPath {
                     try await reportGenerator.exportReport(report, to: outputPath)
                 }
 
@@ -139,7 +139,8 @@ public class CIIntegration {
         guard config.enablePerformanceGates else {
             return GateResult(
                 passed: true, score: analysis.overallScore,
-                threshold: config.performanceGateThreshold, violations: [])
+                threshold: config.performanceGateThreshold, violations: []
+            )
         }
 
         var violations: [GateViolation] = []
@@ -150,7 +151,7 @@ public class CIIntegration {
                 GateViolation(
                     type: .overallScore,
                     description:
-                        "Overall performance score \(String(format: "%.1f", analysis.overallScore)) below threshold \(config.performanceGateThreshold)",
+                    "Overall performance score \(String(format: "%.1f", analysis.overallScore)) below threshold \(config.performanceGateThreshold)",
                     severity: .high
                 ))
         }
@@ -202,7 +203,8 @@ public class CIIntegration {
     public func detectRegressions(_ results: [BenchmarkResult]) throws -> RegressionResult {
         guard config.enableRegressionDetection else {
             return RegressionResult(
-                regressions: [], improvements: [], threshold: config.regressionThreshold)
+                regressions: [], improvements: [], threshold: config.regressionThreshold
+            )
         }
 
         var regressions: [PerformanceRegression] = []
@@ -338,7 +340,7 @@ public class CIIntegration {
                 for violation in result.gateResult.violations {
                     let severityEmoji =
                         violation.severity == .critical
-                        ? "🚨" : violation.severity == .high ? "⚠️" : "ℹ️"
+                            ? "🚨" : violation.severity == .high ? "⚠️" : "ℹ️"
                     summary += "- \(severityEmoji) \(violation.description)\n"
                 }
                 summary += "\n"
@@ -377,10 +379,10 @@ public class CIIntegration {
         // Recommendations
         if !result.report.recommendations.isEmpty {
             summary += "### 💡 Recommendations\n"
-            for recommendation in result.report.recommendations.prefix(3) {  // Show top 3
+            for recommendation in result.report.recommendations.prefix(3) { // Show top 3
                 let priorityEmoji =
                     recommendation.priority == .critical
-                    ? "🚨" : recommendation.priority == .high ? "⚠️" : "ℹ️"
+                        ? "🚨" : recommendation.priority == .high ? "⚠️" : "ℹ️"
                 summary += "- \(priorityEmoji) \(recommendation.description)\n"
             }
 
@@ -499,7 +501,7 @@ public class CIIntegration {
     private func notifyResult(_ result: CIResult) {
         let message =
             result.status == .success
-            ? "✅ Performance tests completed successfully" : "❌ Performance tests failed"
+                ? "✅ Performance tests completed successfully" : "❌ Performance tests failed"
 
         notify(.info, message)
 

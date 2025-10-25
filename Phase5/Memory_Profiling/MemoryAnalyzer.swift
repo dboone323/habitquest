@@ -19,10 +19,10 @@ public class MemoryAnalyzer {
 
     /// Configuration for memory analysis
     public struct Configuration {
-        public var anomalyThreshold: Double = 2.0  // Standard deviations
+        public var anomalyThreshold: Double = 2.0 // Standard deviations
         public var trendWindowSize: Int = 50
         public var fragmentationThreshold: Double = 0.3
-        public var growthRateThreshold: Double = 0.1  // MB per minute
+        public var growthRateThreshold: Double = 0.1 // MB per minute
 
         public init() {}
     }
@@ -41,16 +41,16 @@ public class MemoryAnalyzer {
 
     /// Analyze a single memory snapshot
     public func analyzeSnapshot(_ snapshot: MemorySnapshot) -> MemoryStats {
-        let usage = Double(snapshot.usedMemory) / (1024 * 1024)  // Convert to MB
+        let usage = Double(snapshot.usedMemory) / (1024 * 1024) // Convert to MB
 
         // Calculate basic statistics (would need historical data for full analysis)
         return MemoryStats(
             averageUsage: usage,
             peakUsage: usage,
-            growthRate: 0,  // Would need previous snapshots
+            growthRate: 0, // Would need previous snapshots
             fragmentationRatio: calculateFragmentationRatio(snapshot),
-            allocationEfficiency: 0.8,  // Placeholder
-            deallocationEfficiency: 0.9  // Placeholder
+            allocationEfficiency: 0.8, // Placeholder
+            deallocationEfficiency: 0.9 // Placeholder
         )
     }
 
@@ -106,7 +106,7 @@ public class MemoryAnalyzer {
         let growthRate = calculateGrowthRate(usages)
 
         // Simple leak detection: consistent growth over time
-        let leakThreshold = config.growthRateThreshold * 1024 * 1024  // Convert MB to bytes
+        let leakThreshold = config.growthRateThreshold * 1024 * 1024 // Convert MB to bytes
         let isLeaking = growthRate > leakThreshold
 
         if isLeaking {
@@ -120,7 +120,7 @@ public class MemoryAnalyzer {
                         size: estimatedLeakSize,
                         allocationTime: snapshots.first!.timestamp,
                         stackTrace: []
-                    )
+                    ),
                 ],
                 confidence: confidence,
                 estimatedLeakSize: estimatedLeakSize
@@ -170,7 +170,7 @@ public class MemoryAnalyzer {
                     type: .memoryLeak,
                     severity: .high,
                     description:
-                        "Memory usage is rapidly increasing, indicating a potential memory leak",
+                    "Memory usage is rapidly increasing, indicating a potential memory leak",
                     recommendation: "Review object lifecycles and ensure proper deallocation"
                 ))
         }
@@ -194,7 +194,7 @@ public class MemoryAnalyzer {
                     severity: .medium,
                     description: "High number of page faults indicating memory pressure",
                     recommendation:
-                        "Consider increasing available memory or optimizing memory usage"
+                    "Consider increasing available memory or optimizing memory usage"
                 ))
         }
 
@@ -222,7 +222,7 @@ public class MemoryAnalyzer {
             guard isAnomaly else { return nil }
 
             let snapshot = snapshots[index]
-            let usage = Double(snapshot.usedMemory) / (1024 * 1024)  // MB
+            let usage = Double(snapshot.usedMemory) / (1024 * 1024) // MB
 
             return MemoryAnomaly(
                 timestamp: snapshot.timestamp,
@@ -309,7 +309,7 @@ public class MemoryAnalyzer {
     private func calculateDeallocationEfficiency(_ usages: [Double]) -> Double {
         // Simplified deallocation efficiency
         // Would need more sophisticated analysis in production
-        return 0.85
+        0.85
     }
 
     private func determineAllocationPattern(_ usages: [Double]) -> AllocationPattern {

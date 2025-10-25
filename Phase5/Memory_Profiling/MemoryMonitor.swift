@@ -85,7 +85,7 @@ public class MemoryMonitor {
     public func getMemoryTrend() -> MemoryTrend {
         guard snapshots.count >= 2 else { return .insufficientData }
 
-        let recentSnapshots = snapshots.suffix(10)  // Last 10 snapshots
+        let recentSnapshots = snapshots.suffix(10) // Last 10 snapshots
         let usages = recentSnapshots.map { Double($0.usedMemory) }
 
         let first = usages.first!

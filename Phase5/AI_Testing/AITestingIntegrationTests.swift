@@ -35,21 +35,21 @@ final class AITestingIntegrationTests: XCTestCase {
     func testCompleteAITestingWorkflow() async throws {
         // Sample code to test
         let code = """
-            func add(_ a: Int, _ b: Int) -> Int {
-                return a + b
-            }
+        func add(_ a: Int, _ b: Int) -> Int {
+            return a + b
+        }
 
-            func multiply(_ a: Int, _ b: Int) -> Int {
-                return a * b
-            }
+        func multiply(_ a: Int, _ b: Int) -> Int {
+            return a * b
+        }
 
-            func factorial(_ n: Int) -> Int {
-                if n <= 1 {
-                    return 1
-                }
-                return n * factorial(n - 1)
+        func factorial(_ n: Int) -> Int {
+            if n <= 1 {
+                return 1
             }
-            """
+            return n * factorial(n - 1)
+        }
+        """
 
         let context = TestGenerator.CodeContext(
             filePath: "MathUtils.swift",
@@ -63,11 +63,14 @@ final class AITestingIntegrationTests: XCTestCase {
 
         // Step 2: Run mutation testing to validate test effectiveness
         let mutationResults = try await mutationEngine.runMutationTesting(
-            on: code, testSuite: "// Generated test suite")
+            on: code, testSuite: "// Generated test suite"
+        )
         XCTAssertGreaterThanOrEqual(
-            mutationResults.mutationScore, 0.0, "Should calculate mutation score")
+            mutationResults.mutationScore, 0.0, "Should calculate mutation score"
+        )
         XCTAssertLessThanOrEqual(
-            mutationResults.mutationScore, 1.0, "Mutation score should be between 0 and 1")
+            mutationResults.mutationScore, 1.0, "Mutation score should be between 0 and 1"
+        )
 
         // Step 3: Run property-based testing
         let propertyResults = try await propertyTester.runPropertyTests(on: code)
@@ -89,30 +92,30 @@ final class AITestingIntegrationTests: XCTestCase {
     /// Test AI testing on a data structure implementation
     func testDataStructureTesting() async throws {
         let code = """
-            struct Stack<T> {
-                private var elements: [T] = []
+        struct Stack<T> {
+            private var elements: [T] = []
 
-                mutating func push(_ element: T) {
-                    elements.append(element)
-                }
-
-                mutating func pop() -> T? {
-                    return elements.popLast()
-                }
-
-                func peek() -> T? {
-                    return elements.last
-                }
-
-                var count: Int {
-                    return elements.count
-                }
-
-                var isEmpty: Bool {
-                    return elements.isEmpty
-                }
+            mutating func push(_ element: T) {
+                elements.append(element)
             }
-            """
+
+            mutating func pop() -> T? {
+                return elements.popLast()
+            }
+
+            func peek() -> T? {
+                return elements.last
+            }
+
+            var count: Int {
+                return elements.count
+            }
+
+            var isEmpty: Bool {
+                return elements.isEmpty
+            }
+        }
+        """
 
         // Generate tests for the Stack implementation
         let testCases = try await testGenerator.generateTests(for: code)
@@ -126,33 +129,35 @@ final class AITestingIntegrationTests: XCTestCase {
         let structuralProperties = propertyResults.properties.filter { $0.category == .structural }
         XCTAssertGreaterThan(
             structuralProperties.count, 0,
-            "Should identify structural properties for data structures")
+            "Should identify structural properties for data structures"
+        )
     }
 
     /// Test mutation testing effectiveness
     func testMutationTestingEffectiveness() async throws {
         let code = """
-            func isEven(_ number: Int) -> Bool {
-                return number % 2 == 0
-            }
-            """
+        func isEven(_ number: Int) -> Bool {
+            return number % 2 == 0
+        }
+        """
 
         // Create a basic test suite
         let testSuite = """
-            func testIsEven() {
-                XCTAssertTrue(isEven(2))
-                XCTAssertFalse(isEven(1))
-                XCTAssertTrue(isEven(0))
-                XCTAssertFalse(isEven(-1))
-            }
-            """
+        func testIsEven() {
+            XCTAssertTrue(isEven(2))
+            XCTAssertFalse(isEven(1))
+            XCTAssertTrue(isEven(0))
+            XCTAssertFalse(isEven(-1))
+        }
+        """
 
         let results = try await mutationEngine.runMutationTesting(on: code, testSuite: testSuite)
 
         // The mutation score should be reasonable for this simple function
         XCTAssertGreaterThan(
             results.mutationScore, 0.5,
-            "Should achieve reasonable mutation score for simple function")
+            "Should achieve reasonable mutation score for simple function"
+        )
 
         // Should have some killed mutations
         let killedCount = results.mutations.filter { $0.status == .killed }.count
@@ -162,21 +167,22 @@ final class AITestingIntegrationTests: XCTestCase {
     /// Test property-based testing on mathematical functions
     func testPropertyBasedTesting() async throws {
         let code = """
-            func max(_ a: Int, _ b: Int) -> Int {
-                return a > b ? a : b
-            }
+        func max(_ a: Int, _ b: Int) -> Int {
+            return a > b ? a : b
+        }
 
-            func min(_ a: Int, _ b: Int) -> Int {
-                return a < b ? a : b
-            }
-            """
+        func min(_ a: Int, _ b: Int) -> Int {
+            return a < b ? a : b
+        }
+        """
 
         let results = try await propertyTester.runPropertyTests(on: code)
 
         // Should identify mathematical properties
         let mathematicalProperties = results.properties.filter { $0.category == .mathematical }
         XCTAssertGreaterThan(
-            mathematicalProperties.count, 0, "Should identify mathematical properties")
+            mathematicalProperties.count, 0, "Should identify mathematical properties"
+        )
 
         // Should have test results
         XCTAssertGreaterThan(results.results.count, 0, "Should generate test results")
@@ -189,14 +195,14 @@ final class AITestingIntegrationTests: XCTestCase {
     /// Test coverage prediction accuracy
     func testCoveragePrediction() async throws {
         let code = """
-            func absoluteValue(_ x: Int) -> Int {
-                if x < 0 {
-                    return -x
-                } else {
-                    return x
-                }
+        func absoluteValue(_ x: Int) -> Int {
+            if x < 0 {
+                return -x
+            } else {
+                return x
             }
-            """
+        }
+        """
 
         // Generate test cases
         let testCases = try await testGenerator.generateTests(for: code)
@@ -215,13 +221,13 @@ final class AITestingIntegrationTests: XCTestCase {
     /// Test test suite optimization
     func testTestSuiteOptimization() async throws {
         let code = """
-            func fibonacci(_ n: Int) -> Int {
-                if n <= 1 {
-                    return n
-                }
-                return fibonacci(n - 1) + fibonacci(n - 2)
+        func fibonacci(_ n: Int) -> Int {
+            if n <= 1 {
+                return n
             }
-            """
+            return fibonacci(n - 1) + fibonacci(n - 2)
+        }
+        """
 
         // Generate initial test cases
         var testCases = try await testGenerator.generateTests(for: code)
@@ -232,17 +238,18 @@ final class AITestingIntegrationTests: XCTestCase {
 
         // Optimization should not drastically reduce test count for this function
         XCTAssertGreaterThan(
-            testCases.count, initialCount / 2, "Optimization should preserve most tests")
+            testCases.count, initialCount / 2, "Optimization should preserve most tests"
+        )
     }
 
     /// Test edge case generation
     func testEdgeCaseGeneration() async throws {
         let code = """
-            func divide(_ a: Double, _ b: Double) -> Double? {
-                guard b != 0 else { return nil }
-                return a / b
-            }
-            """
+        func divide(_ a: Double, _ b: Double) -> Double? {
+            guard b != 0 else { return nil }
+            return a / b
+        }
+        """
 
         let testGenerator = TestGenerator(
             configuration: TestGenerator.Configuration(
@@ -254,24 +261,25 @@ final class AITestingIntegrationTests: XCTestCase {
         let testCases = try await testGenerator.generateTests(for: code)
 
         // Should include edge cases for division by zero
-        let edgeCaseDescriptions = testCases.map { $0.code }.joined(separator: " ")
+        let edgeCaseDescriptions = testCases.map(\.code).joined(separator: " ")
         XCTAssertTrue(
             edgeCaseDescriptions.contains("0") || edgeCaseDescriptions.contains("zero"),
-            "Should include division by zero edge cases")
+            "Should include division by zero edge cases"
+        )
     }
 
     /// Performance test for AI testing components
     func testPerformance() async throws {
         let code = """
-            func sum(_ array: [Int]) -> Int {
-                return array.reduce(0, +)
-            }
+        func sum(_ array: [Int]) -> Int {
+            return array.reduce(0, +)
+        }
 
-            func average(_ array: [Int]) -> Double {
-                guard !array.isEmpty else { return 0 }
-                return Double(sum(array)) / Double(array.count)
-            }
-            """
+        func average(_ array: [Int]) -> Double {
+            guard !array.isEmpty else { return 0 }
+            return Double(sum(array)) / Double(array.count)
+        }
+        """
 
         let context = TestGenerator.CodeContext(
             filePath: "ArrayUtils.swift",
@@ -284,7 +292,8 @@ final class AITestingIntegrationTests: XCTestCase {
 
         let testCases = try await testGenerator.generateTests(for: code, context: context)
         let mutationResults = try await mutationEngine.runMutationTesting(
-            on: code, testSuite: "// Tests")
+            on: code, testSuite: "// Tests"
+        )
         let propertyResults = try await propertyTester.runPropertyTests(on: code)
 
         let endTime = Date()
@@ -311,7 +320,7 @@ extension AITestingIntegrationTests {
 
     /// Helper to create a simple test context
     func createTestContext(fileName: String = "TestFile.swift") -> TestGenerator.CodeContext {
-        return TestGenerator.CodeContext(
+        TestGenerator.CodeContext(
             filePath: fileName,
             dependencies: ["Foundation"],
             existingTests: []
@@ -323,14 +332,16 @@ extension AITestingIntegrationTests {
         XCTAssertFalse(testCase.name.isEmpty, "Test case should have a name")
         XCTAssertFalse(testCase.code.isEmpty, "Test case should have code")
         XCTAssertGreaterThanOrEqual(
-            testCase.estimatedCoverage, 0.0, "Coverage should be non-negative")
+            testCase.estimatedCoverage, 0.0, "Coverage should be non-negative"
+        )
         XCTAssertLessThanOrEqual(testCase.estimatedCoverage, 1.0, "Coverage should not exceed 1.0")
     }
 
     /// Helper to validate mutation results
     func validateMutationResults(_ results: MutationEngine.MutationResults) {
         XCTAssertGreaterThanOrEqual(
-            results.mutationScore, 0.0, "Mutation score should be non-negative")
+            results.mutationScore, 0.0, "Mutation score should be non-negative"
+        )
         XCTAssertLessThanOrEqual(results.mutationScore, 1.0, "Mutation score should not exceed 1.0")
         XCTAssertFalse(results.summary.isEmpty, "Should have a summary")
     }
@@ -338,11 +349,14 @@ extension AITestingIntegrationTests {
     /// Helper to validate property test results
     func validatePropertyResults(_ results: PropertyTester.PropertyTestResults) {
         XCTAssertGreaterThanOrEqual(
-            results.summary.passRate, 0.0, "Pass rate should be non-negative")
+            results.summary.passRate, 0.0, "Pass rate should be non-negative"
+        )
         XCTAssertLessThanOrEqual(results.summary.passRate, 1.0, "Pass rate should not exceed 1.0")
         XCTAssertGreaterThanOrEqual(
-            results.summary.coverageEstimate, 0.0, "Coverage estimate should be non-negative")
+            results.summary.coverageEstimate, 0.0, "Coverage estimate should be non-negative"
+        )
         XCTAssertLessThanOrEqual(
-            results.summary.coverageEstimate, 1.0, "Coverage estimate should not exceed 1.0")
+            results.summary.coverageEstimate, 1.0, "Coverage estimate should not exceed 1.0"
+        )
     }
 }

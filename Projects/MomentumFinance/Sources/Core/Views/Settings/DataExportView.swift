@@ -242,15 +242,16 @@ public struct DataExportView: View {
 
             let exportSettings = ExportSettings(
                 format: exportFormat,
-                dateRange: dateRange,
-                includeCategories: includeTransactions,
+                startDate: start,
+                endDate: end,
+                includeTransactions: includeTransactions,
                 includeAccounts: includeAccounts,
                 includeBudgets: includeBudgets,
-                startDate: start,
-                endDate: end
+                includeSubscriptions: includeSubscriptions,
+                includeGoals: includeGoals
             )
 
-            let fileURL = try await exporter.exportData(settings: exportSettings)
+            let fileURL = try await exporter.export(with: exportSettings)
             self.exportedFileURL = fileURL
             self.showingShareSheet = true
             #if os(iOS)

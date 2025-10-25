@@ -1,6 +1,5 @@
 import Foundation
-import struct Shared.CoreFinancialModels.FinancialTransaction
-import enum Shared.TransactionModels.TransactionFilter
+import SwiftData
 import SwiftUI
 
 // Import transaction types

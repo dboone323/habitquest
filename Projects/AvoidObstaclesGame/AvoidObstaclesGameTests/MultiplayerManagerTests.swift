@@ -16,19 +16,19 @@ class MultiplayerManagerTests: XCTestCase {
 
     // MARK: - enumMultiplayerMode{ Tests
 
-    func testenumMultiplayerMode{Initialization() {
+    func testenumMultiplayerModeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumMultiplayerMode{
         XCTAssertTrue(true, "Placeholder test for enumMultiplayerMode{")
     }
 
-    func testenumMultiplayerMode{Properties() {
+    func testenumMultiplayerModeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumMultiplayerMode{
         XCTAssertTrue(true, "Placeholder test for enumMultiplayerMode{ properties")
     }
 
-    func testenumMultiplayerMode{Methods() {
+    func testenumMultiplayerModeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumMultiplayerMode{
         XCTAssertTrue(true, "Placeholder test for enumMultiplayerMode{ methods")
@@ -36,19 +36,19 @@ class MultiplayerManagerTests: XCTestCase {
 
     // MARK: - structMultiplayerPlayer:Identifiable,Hashable,Codable{ Tests
 
-    func teststructMultiplayerPlayer:Identifiable,Hashable,Codable{Initialization() {
+    func teststructMultiplayerPlayerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structMultiplayerPlayer:Identifiable,Hashable,Codable{
         XCTAssertTrue(true, "Placeholder test for structMultiplayerPlayer:Identifiable,Hashable,Codable{")
     }
 
-    func teststructMultiplayerPlayer:Identifiable,Hashable,Codable{Properties() {
+    func teststructMultiplayerPlayerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structMultiplayerPlayer:Identifiable,Hashable,Codable{
         XCTAssertTrue(true, "Placeholder test for structMultiplayerPlayer:Identifiable,Hashable,Codable{ properties")
     }
 
-    func teststructMultiplayerPlayer:Identifiable,Hashable,Codable{Methods() {
+    func teststructMultiplayerPlayerMethods() {
         // Test method functionality
         // TODO: Implement method tests for structMultiplayerPlayer:Identifiable,Hashable,Codable{
         XCTAssertTrue(true, "Placeholder test for structMultiplayerPlayer:Identifiable,Hashable,Codable{ methods")
@@ -56,19 +56,19 @@ class MultiplayerManagerTests: XCTestCase {
 
     // MARK: - structPlayerMove:Codable{ Tests
 
-    func teststructPlayerMove:Codable{Initialization() {
+    func teststructPlayerMoveInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structPlayerMove:Codable{
         XCTAssertTrue(true, "Placeholder test for structPlayerMove:Codable{")
     }
 
-    func teststructPlayerMove:Codable{Properties() {
+    func teststructPlayerMoveProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structPlayerMove:Codable{
         XCTAssertTrue(true, "Placeholder test for structPlayerMove:Codable{ properties")
     }
 
-    func teststructPlayerMove:Codable{Methods() {
+    func teststructPlayerMoveMethods() {
         // Test method functionality
         // TODO: Implement method tests for structPlayerMove:Codable{
         XCTAssertTrue(true, "Placeholder test for structPlayerMove:Codable{ methods")
@@ -76,19 +76,19 @@ class MultiplayerManagerTests: XCTestCase {
 
     // MARK: - enumMultiplayerAction:Codable{ Tests
 
-    func testenumMultiplayerAction:Codable{Initialization() {
+    func testenumMultiplayerActionInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumMultiplayerAction:Codable{
         XCTAssertTrue(true, "Placeholder test for enumMultiplayerAction:Codable{")
     }
 
-    func testenumMultiplayerAction:Codable{Properties() {
+    func testenumMultiplayerActionProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumMultiplayerAction:Codable{
         XCTAssertTrue(true, "Placeholder test for enumMultiplayerAction:Codable{ properties")
     }
 
-    func testenumMultiplayerAction:Codable{Methods() {
+    func testenumMultiplayerActionMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumMultiplayerAction:Codable{
         XCTAssertTrue(true, "Placeholder test for enumMultiplayerAction:Codable{ methods")
@@ -96,19 +96,19 @@ class MultiplayerManagerTests: XCTestCase {
 
     // MARK: - structMultiplayerGameResults:Codable{ Tests
 
-    func teststructMultiplayerGameResults:Codable{Initialization() {
+    func teststructMultiplayerGameResultsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structMultiplayerGameResults:Codable{
         XCTAssertTrue(true, "Placeholder test for structMultiplayerGameResults:Codable{")
     }
 
-    func teststructMultiplayerGameResults:Codable{Properties() {
+    func teststructMultiplayerGameResultsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structMultiplayerGameResults:Codable{
         XCTAssertTrue(true, "Placeholder test for structMultiplayerGameResults:Codable{ properties")
     }
 
-    func teststructMultiplayerGameResults:Codable{Methods() {
+    func teststructMultiplayerGameResultsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structMultiplayerGameResults:Codable{
         XCTAssertTrue(true, "Placeholder test for structMultiplayerGameResults:Codable{ methods")
@@ -116,19 +116,19 @@ class MultiplayerManagerTests: XCTestCase {
 
     // MARK: - classMultiplayerManager{ Tests
 
-    func testclassMultiplayerManager{Initialization() {
+    func testclassMultiplayerManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classMultiplayerManager{
         XCTAssertTrue(true, "Placeholder test for classMultiplayerManager{")
     }
 
-    func testclassMultiplayerManager{Properties() {
+    func testclassMultiplayerManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classMultiplayerManager{
         XCTAssertTrue(true, "Placeholder test for classMultiplayerManager{ properties")
     }
 
-    func testclassMultiplayerManager{Methods() {
+    func testclassMultiplayerManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classMultiplayerManager{
         XCTAssertTrue(true, "Placeholder test for classMultiplayerManager{ methods")
@@ -136,19 +136,19 @@ class MultiplayerManagerTests: XCTestCase {
 
     // MARK: - enumMultiplayerGameState{ Tests
 
-    func testenumMultiplayerGameState{Initialization() {
+    func testenumMultiplayerGameStateInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumMultiplayerGameState{
         XCTAssertTrue(true, "Placeholder test for enumMultiplayerGameState{")
     }
 
-    func testenumMultiplayerGameState{Properties() {
+    func testenumMultiplayerGameStateProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumMultiplayerGameState{
         XCTAssertTrue(true, "Placeholder test for enumMultiplayerGameState{ properties")
     }
 
-    func testenumMultiplayerGameState{Methods() {
+    func testenumMultiplayerGameStateMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumMultiplayerGameState{
         XCTAssertTrue(true, "Placeholder test for enumMultiplayerGameState{ methods")
@@ -156,19 +156,19 @@ class MultiplayerManagerTests: XCTestCase {
 
     // MARK: - enumMultiplayerError:Error{ Tests
 
-    func testenumMultiplayerError:Error{Initialization() {
+    func testenumMultiplayerErrorInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumMultiplayerError:Error{
         XCTAssertTrue(true, "Placeholder test for enumMultiplayerError:Error{")
     }
 
-    func testenumMultiplayerError:Error{Properties() {
+    func testenumMultiplayerErrorProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumMultiplayerError:Error{
         XCTAssertTrue(true, "Placeholder test for enumMultiplayerError:Error{ properties")
     }
 
-    func testenumMultiplayerError:Error{Methods() {
+    func testenumMultiplayerErrorMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumMultiplayerError:Error{
         XCTAssertTrue(true, "Placeholder test for enumMultiplayerError:Error{ methods")

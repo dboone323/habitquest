@@ -16,19 +16,19 @@ class GameCoordinatorTests: XCTestCase {
 
     // MARK: - enumAppState{ Tests
 
-    func testenumAppState{Initialization() {
+    func testenumAppStateInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumAppState{
         XCTAssertTrue(true, "Placeholder test for enumAppState{")
     }
 
-    func testenumAppState{Properties() {
+    func testenumAppStateProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumAppState{
         XCTAssertTrue(true, "Placeholder test for enumAppState{ properties")
     }
 
-    func testenumAppState{Methods() {
+    func testenumAppStateMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumAppState{
         XCTAssertTrue(true, "Placeholder test for enumAppState{ methods")
@@ -36,19 +36,19 @@ class GameCoordinatorTests: XCTestCase {
 
     // MARK: - enumSceneType{ Tests
 
-    func testenumSceneType{Initialization() {
+    func testenumSceneTypeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumSceneType{
         XCTAssertTrue(true, "Placeholder test for enumSceneType{")
     }
 
-    func testenumSceneType{Properties() {
+    func testenumSceneTypeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumSceneType{
         XCTAssertTrue(true, "Placeholder test for enumSceneType{ properties")
     }
 
-    func testenumSceneType{Methods() {
+    func testenumSceneTypeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumSceneType{
         XCTAssertTrue(true, "Placeholder test for enumSceneType{ methods")
@@ -56,19 +56,19 @@ class GameCoordinatorTests: XCTestCase {
 
     // MARK: - enumUserAction{ Tests
 
-    func testenumUserAction{Initialization() {
+    func testenumUserActionInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumUserAction{
         XCTAssertTrue(true, "Placeholder test for enumUserAction{")
     }
 
-    func testenumUserAction{Properties() {
+    func testenumUserActionProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumUserAction{
         XCTAssertTrue(true, "Placeholder test for enumUserAction{ properties")
     }
 
-    func testenumUserAction{Methods() {
+    func testenumUserActionMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumUserAction{
         XCTAssertTrue(true, "Placeholder test for enumUserAction{ methods")

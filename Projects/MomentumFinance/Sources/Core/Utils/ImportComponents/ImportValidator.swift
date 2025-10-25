@@ -33,7 +33,7 @@ struct ImportValidator {
     /// Validates required fields are present and not empty
     static func validateRequiredFields(
         fields: [String],
-        columnMapping: CSVColumnMapping
+        columnMapping: CSVIndexMapping
     ) throws {
         // Validate date field
         guard let dateIndex = columnMapping.dateIndex,

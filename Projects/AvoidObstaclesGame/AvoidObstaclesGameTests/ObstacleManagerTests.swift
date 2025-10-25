@@ -16,19 +16,19 @@ class ObstacleManagerTests: XCTestCase {
 
     // MARK: - enumObstacleType{ Tests
 
-    func testenumObstacleType{Initialization() {
+    func testenumObstacleTypeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumObstacleType{
         XCTAssertTrue(true, "Placeholder test for enumObstacleType{")
     }
 
-    func testenumObstacleType{Properties() {
+    func testenumObstacleTypeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumObstacleType{
         XCTAssertTrue(true, "Placeholder test for enumObstacleType{ properties")
     }
 
-    func testenumObstacleType{Methods() {
+    func testenumObstacleTypeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumObstacleType{
         XCTAssertTrue(true, "Placeholder test for enumObstacleType{ methods")
@@ -36,19 +36,19 @@ class ObstacleManagerTests: XCTestCase {
 
     // MARK: - structObstacleConfiguration{ Tests
 
-    func teststructObstacleConfiguration{Initialization() {
+    func teststructObstacleConfigurationInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structObstacleConfiguration{
         XCTAssertTrue(true, "Placeholder test for structObstacleConfiguration{")
     }
 
-    func teststructObstacleConfiguration{Properties() {
+    func teststructObstacleConfigurationProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structObstacleConfiguration{
         XCTAssertTrue(true, "Placeholder test for structObstacleConfiguration{ properties")
     }
 
-    func teststructObstacleConfiguration{Methods() {
+    func teststructObstacleConfigurationMethods() {
         // Test method functionality
         // TODO: Implement method tests for structObstacleConfiguration{
         XCTAssertTrue(true, "Placeholder test for structObstacleConfiguration{ methods")
@@ -56,19 +56,19 @@ class ObstacleManagerTests: XCTestCase {
 
     // MARK: - enumObstaclePatternType:CaseIterable{ Tests
 
-    func testenumObstaclePatternType:CaseIterable{Initialization() {
+    func testenumObstaclePatternTypeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumObstaclePatternType:CaseIterable{
         XCTAssertTrue(true, "Placeholder test for enumObstaclePatternType:CaseIterable{")
     }
 
-    func testenumObstaclePatternType:CaseIterable{Properties() {
+    func testenumObstaclePatternTypeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumObstaclePatternType:CaseIterable{
         XCTAssertTrue(true, "Placeholder test for enumObstaclePatternType:CaseIterable{ properties")
     }
 
-    func testenumObstaclePatternType:CaseIterable{Methods() {
+    func testenumObstaclePatternTypeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumObstaclePatternType:CaseIterable{
         XCTAssertTrue(true, "Placeholder test for enumObstaclePatternType:CaseIterable{ methods")
@@ -76,19 +76,19 @@ class ObstacleManagerTests: XCTestCase {
 
     // MARK: - structObstacleGenerationPattern{ Tests
 
-    func teststructObstacleGenerationPattern{Initialization() {
+    func teststructObstacleGenerationPatternInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structObstacleGenerationPattern{
         XCTAssertTrue(true, "Placeholder test for structObstacleGenerationPattern{")
     }
 
-    func teststructObstacleGenerationPattern{Properties() {
+    func teststructObstacleGenerationPatternProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structObstacleGenerationPattern{
         XCTAssertTrue(true, "Placeholder test for structObstacleGenerationPattern{ properties")
     }
 
-    func teststructObstacleGenerationPattern{Methods() {
+    func teststructObstacleGenerationPatternMethods() {
         // Test method functionality
         // TODO: Implement method tests for structObstacleGenerationPattern{
         XCTAssertTrue(true, "Placeholder test for structObstacleGenerationPattern{ methods")
@@ -96,19 +96,19 @@ class ObstacleManagerTests: XCTestCase {
 
     // MARK: - classDynamicObstacleGenerator{ Tests
 
-    func testclassDynamicObstacleGenerator{Initialization() {
+    func testclassDynamicObstacleGeneratorInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classDynamicObstacleGenerator{
         XCTAssertTrue(true, "Placeholder test for classDynamicObstacleGenerator{")
     }
 
-    func testclassDynamicObstacleGenerator{Properties() {
+    func testclassDynamicObstacleGeneratorProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classDynamicObstacleGenerator{
         XCTAssertTrue(true, "Placeholder test for classDynamicObstacleGenerator{ properties")
     }
 
-    func testclassDynamicObstacleGenerator{Methods() {
+    func testclassDynamicObstacleGeneratorMethods() {
         // Test method functionality
         // TODO: Implement method tests for classDynamicObstacleGenerator{
         XCTAssertTrue(true, "Placeholder test for classDynamicObstacleGenerator{ methods")
@@ -116,19 +116,19 @@ class ObstacleManagerTests: XCTestCase {
 
     // MARK: - structObstacleMetrics{ Tests
 
-    func teststructObstacleMetrics{Initialization() {
+    func teststructObstacleMetricsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structObstacleMetrics{
         XCTAssertTrue(true, "Placeholder test for structObstacleMetrics{")
     }
 
-    func teststructObstacleMetrics{Properties() {
+    func teststructObstacleMetricsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structObstacleMetrics{
         XCTAssertTrue(true, "Placeholder test for structObstacleMetrics{ properties")
     }
 
-    func teststructObstacleMetrics{Methods() {
+    func teststructObstacleMetricsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structObstacleMetrics{
         XCTAssertTrue(true, "Placeholder test for structObstacleMetrics{ methods")

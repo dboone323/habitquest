@@ -6,8 +6,8 @@
 //  Specification: user_authentication_service
 //
 
-import Foundation
 import CryptoKit
+import Foundation
 
 /// Secure user authentication service with quantum-enhanced security
 @MainActor
@@ -24,7 +24,8 @@ public final class UserAuthenticationService {
     public init(userStore: UserStore = .shared,
                 tokenManager: JWTTokenManager = .shared,
                 passwordHasher: PasswordHasher = .shared,
-                rateLimiter: RateLimiter = RateLimiter()) {
+                rateLimiter: RateLimiter = RateLimiter())
+    {
         self.userStore = userStore
         self.tokenManager = tokenManager
         self.passwordHasher = passwordHasher
@@ -122,7 +123,8 @@ public struct User: Codable, Identifiable, Sendable {
                 email: String,
                 passwordHash: String,
                 createdAt: Date = Date(),
-                isActive: Bool = true) {
+                isActive: Bool = true)
+    {
         self.id = id
         self.username = username
         self.email = email

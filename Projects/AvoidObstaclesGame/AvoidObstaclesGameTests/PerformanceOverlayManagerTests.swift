@@ -16,19 +16,19 @@ class PerformanceOverlayManagerTests: XCTestCase {
 
     // MARK: - classPerformanceOverlayManager{ Tests
 
-    func testclassPerformanceOverlayManager{Initialization() {
+    func testclassPerformanceOverlayManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classPerformanceOverlayManager{
         XCTAssertTrue(true, "Placeholder test for classPerformanceOverlayManager{")
     }
 
-    func testclassPerformanceOverlayManager{Properties() {
+    func testclassPerformanceOverlayManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classPerformanceOverlayManager{
         XCTAssertTrue(true, "Placeholder test for classPerformanceOverlayManager{ properties")
     }
 
-    func testclassPerformanceOverlayManager{Methods() {
+    func testclassPerformanceOverlayManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classPerformanceOverlayManager{
         XCTAssertTrue(true, "Placeholder test for classPerformanceOverlayManager{ methods")

@@ -16,19 +16,19 @@ class PowerUpManagerTests: XCTestCase {
 
     // MARK: - classAdaptiveSpawningConfig{ Tests
 
-    func testclassAdaptiveSpawningConfig{Initialization() {
+    func testclassAdaptiveSpawningConfigInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classAdaptiveSpawningConfig{
         XCTAssertTrue(true, "Placeholder test for classAdaptiveSpawningConfig{")
     }
 
-    func testclassAdaptiveSpawningConfig{Properties() {
+    func testclassAdaptiveSpawningConfigProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classAdaptiveSpawningConfig{
         XCTAssertTrue(true, "Placeholder test for classAdaptiveSpawningConfig{ properties")
     }
 
-    func testclassAdaptiveSpawningConfig{Methods() {
+    func testclassAdaptiveSpawningConfigMethods() {
         // Test method functionality
         // TODO: Implement method tests for classAdaptiveSpawningConfig{
         XCTAssertTrue(true, "Placeholder test for classAdaptiveSpawningConfig{ methods")
@@ -36,19 +36,19 @@ class PowerUpManagerTests: XCTestCase {
 
     // MARK: - structPowerUpSpawningStats{ Tests
 
-    func teststructPowerUpSpawningStats{Initialization() {
+    func teststructPowerUpSpawningStatsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structPowerUpSpawningStats{
         XCTAssertTrue(true, "Placeholder test for structPowerUpSpawningStats{")
     }
 
-    func teststructPowerUpSpawningStats{Properties() {
+    func teststructPowerUpSpawningStatsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structPowerUpSpawningStats{
         XCTAssertTrue(true, "Placeholder test for structPowerUpSpawningStats{ properties")
     }
 
-    func teststructPowerUpSpawningStats{Methods() {
+    func teststructPowerUpSpawningStatsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structPowerUpSpawningStats{
         XCTAssertTrue(true, "Placeholder test for structPowerUpSpawningStats{ methods")
@@ -56,19 +56,19 @@ class PowerUpManagerTests: XCTestCase {
 
     // MARK: - classPowerUp{ Tests
 
-    func testclassPowerUp{Initialization() {
+    func testclassPowerUpInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classPowerUp{
         XCTAssertTrue(true, "Placeholder test for classPowerUp{")
     }
 
-    func testclassPowerUp{Properties() {
+    func testclassPowerUpProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classPowerUp{
         XCTAssertTrue(true, "Placeholder test for classPowerUp{ properties")
     }
 
-    func testclassPowerUp{Methods() {
+    func testclassPowerUpMethods() {
         // Test method functionality
         // TODO: Implement method tests for classPowerUp{
         XCTAssertTrue(true, "Placeholder test for classPowerUp{ methods")

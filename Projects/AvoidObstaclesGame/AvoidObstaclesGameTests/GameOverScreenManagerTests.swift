@@ -16,19 +16,19 @@ class GameOverScreenManagerTests: XCTestCase {
 
     // MARK: - classGameOverScreenManager{ Tests
 
-    func testclassGameOverScreenManager{Initialization() {
+    func testclassGameOverScreenManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classGameOverScreenManager{
         XCTAssertTrue(true, "Placeholder test for classGameOverScreenManager{")
     }
 
-    func testclassGameOverScreenManager{Properties() {
+    func testclassGameOverScreenManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classGameOverScreenManager{
         XCTAssertTrue(true, "Placeholder test for classGameOverScreenManager{ properties")
     }
 
-    func testclassGameOverScreenManager{Methods() {
+    func testclassGameOverScreenManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classGameOverScreenManager{
         XCTAssertTrue(true, "Placeholder test for classGameOverScreenManager{ methods")

@@ -1977,14 +1977,14 @@ array_to_json() {
 
     # Use eval to safely access the array
     local array_length
-    eval "array_length=\${#$array_name[@]}"
+    eval "array_length=\${#${array_name}[@]}"
 
     for ((i = 0; i < array_length; i++)); do
         if [[ $i -gt 0 ]]; then
             json+=", "
         fi
         local value
-        eval "value=\${$array_name[$i]}"
+        eval "value=\${${array_name}[$i]}"
         json+="\"$value\""
     done
 
@@ -1995,7 +1995,7 @@ array_to_json() {
 array_length() {
     local array_name="$1"
     local length
-    eval "length=\${#$array_name[@]}"
+    eval "length=\${#${array_name}[@]}"
     echo "$length"
 }
 

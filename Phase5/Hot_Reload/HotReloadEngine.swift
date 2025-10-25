@@ -161,7 +161,7 @@ public class HotReloadEngine {
 
     /// Get current reload status
     public func getStatus() -> ReloadStatus {
-        return ReloadStatus(
+        ReloadStatus(
             isEnabled: isEnabled,
             compilationStatus: compilationStatus.value,
             activeReloads: reloadCoordinator.activeReloads,
@@ -197,7 +197,7 @@ public class HotReloadEngine {
 
         // Bind compilation status updates
         incrementalCompiler.compilationProgress
-            .sink { [weak self] progress in
+            .sink { [weak self] _ in
                 self?.compilationStatus.send(.compiling)
             }
             .store(in: &cancellables)
@@ -219,8 +219,8 @@ public class HotReloadEngine {
     private func handleFileChanges(_ changes: [FileChange]) {
         let reloadableFiles =
             changes
-            .filter { canReload(file: $0.url) }
-            .map { $0.url }
+                .filter { canReload(file: $0.url) }
+                .map(\.url)
 
         guard !reloadableFiles.isEmpty else { return }
 
@@ -270,19 +270,19 @@ public enum ReloadError: Error, LocalizedError {
         switch self {
         case .engineDisabled:
             return "Hot reload engine is disabled"
-        case .compilationFailed(let reason):
+        case let .compilationFailed(reason):
             return "Compilation failed: \(reason)"
-        case .patchingFailed(let reason):
+        case let .patchingFailed(reason):
             return "Runtime patching failed: \(reason)"
-        case .statePreservationFailed(let reason):
+        case let .statePreservationFailed(reason):
             return "State preservation failed: \(reason)"
-        case .fileNotFound(let url):
+        case let .fileNotFound(url):
             return "File not found: \(url.path)"
-        case .unsupportedFileType(let type):
+        case let .unsupportedFileType(type):
             return "Unsupported file type: \(type)"
-        case .timeout(let seconds):
+        case let .timeout(seconds):
             return "Operation timed out after \(seconds) seconds"
-        case .unknown(let error):
+        case let .unknown(error):
             return "Unknown error: \(error.localizedDescription)"
         }
     }

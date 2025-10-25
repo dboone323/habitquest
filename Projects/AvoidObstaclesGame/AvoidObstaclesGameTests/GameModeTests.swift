@@ -16,19 +16,19 @@ class GameModeTests: XCTestCase {
 
     // MARK: - enumGameMode:Hashable{ Tests
 
-    func testenumGameMode:Hashable{Initialization() {
+    func testenumGameModeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumGameMode:Hashable{
         XCTAssertTrue(true, "Placeholder test for enumGameMode:Hashable{")
     }
 
-    func testenumGameMode:Hashable{Properties() {
+    func testenumGameModeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumGameMode:Hashable{
         XCTAssertTrue(true, "Placeholder test for enumGameMode:Hashable{ properties")
     }
 
-    func testenumGameMode:Hashable{Methods() {
+    func testenumGameModeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumGameMode:Hashable{
         XCTAssertTrue(true, "Placeholder test for enumGameMode:Hashable{ methods")
@@ -36,19 +36,19 @@ class GameModeTests: XCTestCase {
 
     // MARK: - enumGameWinCondition:Hashable{ Tests
 
-    func testenumGameWinCondition:Hashable{Initialization() {
+    func testenumGameWinConditionInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumGameWinCondition:Hashable{
         XCTAssertTrue(true, "Placeholder test for enumGameWinCondition:Hashable{")
     }
 
-    func testenumGameWinCondition:Hashable{Properties() {
+    func testenumGameWinConditionProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumGameWinCondition:Hashable{
         XCTAssertTrue(true, "Placeholder test for enumGameWinCondition:Hashable{ properties")
     }
 
-    func testenumGameWinCondition:Hashable{Methods() {
+    func testenumGameWinConditionMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumGameWinCondition:Hashable{
         XCTAssertTrue(true, "Placeholder test for enumGameWinCondition:Hashable{ methods")
@@ -56,19 +56,19 @@ class GameModeTests: XCTestCase {
 
     // MARK: - enumGameScoringSystem:Hashable{ Tests
 
-    func testenumGameScoringSystem:Hashable{Initialization() {
+    func testenumGameScoringSystemInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumGameScoringSystem:Hashable{
         XCTAssertTrue(true, "Placeholder test for enumGameScoringSystem:Hashable{")
     }
 
-    func testenumGameScoringSystem:Hashable{Properties() {
+    func testenumGameScoringSystemProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumGameScoringSystem:Hashable{
         XCTAssertTrue(true, "Placeholder test for enumGameScoringSystem:Hashable{ properties")
     }
 
-    func testenumGameScoringSystem:Hashable{Methods() {
+    func testenumGameScoringSystemMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumGameScoringSystem:Hashable{
         XCTAssertTrue(true, "Placeholder test for enumGameScoringSystem:Hashable{ methods")
@@ -76,19 +76,19 @@ class GameModeTests: XCTestCase {
 
     // MARK: - enumDifficultyProgression:Hashable{ Tests
 
-    func testenumDifficultyProgression:Hashable{Initialization() {
+    func testenumDifficultyProgressionInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumDifficultyProgression:Hashable{
         XCTAssertTrue(true, "Placeholder test for enumDifficultyProgression:Hashable{")
     }
 
-    func testenumDifficultyProgression:Hashable{Properties() {
+    func testenumDifficultyProgressionProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumDifficultyProgression:Hashable{
         XCTAssertTrue(true, "Placeholder test for enumDifficultyProgression:Hashable{ properties")
     }
 
-    func testenumDifficultyProgression:Hashable{Methods() {
+    func testenumDifficultyProgressionMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumDifficultyProgression:Hashable{
         XCTAssertTrue(true, "Placeholder test for enumDifficultyProgression:Hashable{ methods")
@@ -96,19 +96,19 @@ class GameModeTests: XCTestCase {
 
     // MARK: - structCustomGameConfig:Hashable{ Tests
 
-    func teststructCustomGameConfig:Hashable{Initialization() {
+    func teststructCustomGameConfigInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structCustomGameConfig:Hashable{
         XCTAssertTrue(true, "Placeholder test for structCustomGameConfig:Hashable{")
     }
 
-    func teststructCustomGameConfig:Hashable{Properties() {
+    func teststructCustomGameConfigProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structCustomGameConfig:Hashable{
         XCTAssertTrue(true, "Placeholder test for structCustomGameConfig:Hashable{ properties")
     }
 
-    func teststructCustomGameConfig:Hashable{Methods() {
+    func teststructCustomGameConfigMethods() {
         // Test method functionality
         // TODO: Implement method tests for structCustomGameConfig:Hashable{
         XCTAssertTrue(true, "Placeholder test for structCustomGameConfig:Hashable{ methods")
@@ -116,19 +116,19 @@ class GameModeTests: XCTestCase {
 
     // MARK: - structGameModeStats{ Tests
 
-    func teststructGameModeStats{Initialization() {
+    func teststructGameModeStatsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structGameModeStats{
         XCTAssertTrue(true, "Placeholder test for structGameModeStats{")
     }
 
-    func teststructGameModeStats{Properties() {
+    func teststructGameModeStatsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structGameModeStats{
         XCTAssertTrue(true, "Placeholder test for structGameModeStats{ properties")
     }
 
-    func teststructGameModeStats{Methods() {
+    func teststructGameModeStatsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structGameModeStats{
         XCTAssertTrue(true, "Placeholder test for structGameModeStats{ methods")
@@ -136,19 +136,19 @@ class GameModeTests: XCTestCase {
 
     // MARK: - structGameResult{ Tests
 
-    func teststructGameResult{Initialization() {
+    func teststructGameResultInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structGameResult{
         XCTAssertTrue(true, "Placeholder test for structGameResult{")
     }
 
-    func teststructGameResult{Properties() {
+    func teststructGameResultProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structGameResult{
         XCTAssertTrue(true, "Placeholder test for structGameResult{ properties")
     }
 
-    func teststructGameResult{Methods() {
+    func teststructGameResultMethods() {
         // Test method functionality
         // TODO: Implement method tests for structGameResult{
         XCTAssertTrue(true, "Placeholder test for structGameResult{ methods")

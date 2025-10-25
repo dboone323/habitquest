@@ -90,7 +90,8 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
             let benchmarkResults = historicalResults.filter { $0.benchmark.id == benchmark.id }
             if benchmarkResults.count >= 3 {
                 let trend = try await performanceAnalyzer.analyzeTrends(
-                    for: benchmark.id, results: benchmarkResults)
+                    for: benchmark.id, results: benchmarkResults
+                )
                 trendAnalyses.append(trend)
             }
         }
@@ -101,7 +102,8 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
         for trend in trendAnalyses {
             XCTAssertEqual(
                 trend.dataPoints,
-                historicalResults.filter { $0.benchmark.id == trend.benchmarkId }.count)
+                historicalResults.filter { $0.benchmark.id == trend.benchmarkId }.count
+            )
             XCTAssertNotNil(trend.timeSeries.trendType)
             XCTAssertGreaterThanOrEqual(trend.timeSeries.trend.rSquared, 0)
             XCTAssertLessThanOrEqual(trend.timeSeries.trend.rSquared, 1)
@@ -112,17 +114,18 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
     func testVersionComparisonWorkflow() async throws {
         // Given: Baseline and current results
         let baselineResults = testResults
-        let currentResults = createModifiedResults(from: baselineResults, modificationFactor: 0.9)  // 10% improvement
+        let currentResults = createModifiedResults(from: baselineResults, modificationFactor: 0.9) // 10% improvement
 
         // When: Compare versions
         let comparison = try await performanceAnalyzer.compareVersions(
-            baseline: baselineResults, current: currentResults)
+            baseline: baselineResults, current: currentResults
+        )
 
         // Then: Validate comparison
         XCTAssertEqual(comparison.baselineResults.count, baselineResults.count)
         XCTAssertEqual(comparison.currentResults.count, currentResults.count)
         XCTAssertEqual(comparison.comparisons.count, testBenchmarks.count)
-        XCTAssertLessThan(comparison.averageTimeChange, 0)  // Should be negative (improvement)
+        XCTAssertLessThan(comparison.averageTimeChange, 0) // Should be negative (improvement)
         XCTAssertEqual(comparison.overallChange, .improvement)
     }
 
@@ -155,7 +158,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
         let insights = await performanceAnalyzer.generateInsights(from: analysis)
 
         // Then: Validate insights
-        XCTAssertGreaterThanOrEqual(insights.count, 1)  // At least overall assessment
+        XCTAssertGreaterThanOrEqual(insights.count, 1) // At least overall assessment
 
         for insight in insights {
             XCTAssertFalse(insight.title.isEmpty)
@@ -213,7 +216,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
         // Given: CI configuration and benchmarks
         let ciConfig = CIIntegration.CIConfig(
             enablePerformanceGates: true,
-            performanceGateThreshold: 50.0,  // Low threshold for testing
+            performanceGateThreshold: 50.0, // Low threshold for testing
             enableRegressionDetection: true,
             regressionThreshold: 1.0,
             enableTrendAnalysis: true
@@ -250,7 +253,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
     func testRegressionDetection() async throws {
         // Given: Current results and baseline
         let baselineResults = testResults
-        let currentResults = createModifiedResults(from: baselineResults, modificationFactor: 1.1)  // 10% regression
+        let currentResults = createModifiedResults(from: baselineResults, modificationFactor: 1.1) // 10% regression
 
         // When: Detect regressions
         let regressionResult = try ciIntegration.detectRegressions(currentResults)
@@ -264,7 +267,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
     /// Test concurrent analysis
     func testConcurrentAnalysis() async throws {
         // Given: Multiple benchmark sets
-        let benchmarkSets = (0..<3).map { _ in createTestBenchmarks() }
+        let benchmarkSets = (0 ..< 3).map { _ in createTestBenchmarks() }
 
         // When: Run concurrent analyses
         async let analysis1 = performanceAnalyzer.analyzeResults(
@@ -316,7 +319,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
     /// Test performance under load
     func testPerformanceUnderLoad() async throws {
         // Given: Large number of benchmarks
-        let largeBenchmarkSet = (0..<50).map { index in
+        let largeBenchmarkSet = (0 ..< 50).map { index in
             Benchmark(
                 id: "load_test_\(index)",
                 name: "Load Test \(index)",
@@ -326,7 +329,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
                     // Simulate some work
                     let start = Date()
                     var sum = 0
-                    for i in 0..<1000 {
+                    for i in 0 ..< 1000 {
                         sum += i * i
                     }
                     let end = Date()
@@ -347,7 +350,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
         let avgTimePerBenchmark = totalTime / Double(results.count)
 
         // Should complete within reasonable time (adjust threshold as needed)
-        XCTAssertLessThan(avgTimePerBenchmark, 1.0)  // Less than 1 second per benchmark
+        XCTAssertLessThan(avgTimePerBenchmark, 1.0) // Less than 1 second per benchmark
     }
 
     /// Test memory management
@@ -365,7 +368,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
             if let memoryStats = result.memoryStats {
                 XCTAssertGreaterThan(memoryStats.peakUsage, 0)
                 XCTAssertGreaterThanOrEqual(memoryStats.averageUsage, 0)
-                XCTAssertGreaterThanOrEqual(memoryStats.averageUsage, memoryStats.peakUsage * 0.1)  // At least 10% of peak
+                XCTAssertGreaterThanOrEqual(memoryStats.averageUsage, memoryStats.peakUsage * 0.1) // At least 10% of peak
             }
         }
     }
@@ -382,7 +385,8 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
         defer { try? FileManager.default.removeItem(at: tempDir) }
 
         try performanceAnalyzer.exportAnalysis(
-            analysis, to: tempDir.appendingPathComponent("analysis.json").path)
+            analysis, to: tempDir.appendingPathComponent("analysis.json").path
+        )
 
         // Then: Validate file was created and contains expected data
         let exportedURL = tempDir.appendingPathComponent("analysis.json")
@@ -399,7 +403,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
     // MARK: - Helper Methods
 
     private func createTestBenchmarks() -> [Benchmark] {
-        return [
+        [
             Benchmark(
                 id: "simple_calculation",
                 name: "Simple Calculation",
@@ -408,7 +412,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
                 execution: { context in
                     let start = Date()
                     var result = 0
-                    for i in 0..<10000 {
+                    for i in 0 ..< 10000 {
                         result += i * i
                     }
                     let end = Date()
@@ -425,7 +429,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
                     let start = Date()
                     let testString = String(repeating: "test", count: 1000)
                     var processed = ""
-                    for _ in 0..<100 {
+                    for _ in 0 ..< 100 {
                         processed = testString.uppercased().lowercased()
                     }
                     let end = Date()
@@ -441,7 +445,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
                 execution: { context in
                     let start = Date()
                     var array = [Int]()
-                    for i in 0..<10000 {
+                    for i in 0 ..< 10000 {
                         array.append(i)
                     }
                     array.sort()
@@ -458,15 +462,15 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
         var results: [BenchmarkResult] = []
 
         // Create 5 data points for each benchmark over time
-        for i in 0..<5 {
-            let timestamp = Date().addingTimeInterval(-Double(i) * 24 * 60 * 60)  // Days ago
+        for i in 0 ..< 5 {
+            let timestamp = Date().addingTimeInterval(-Double(i) * 24 * 60 * 60) // Days ago
 
             for benchmark in testBenchmarks {
                 var result = testResults.first { $0.benchmark.id == benchmark.id }!
                 result.executionTimestamp = timestamp
 
                 // Add some variation
-                let variation = Double.random(in: 0.9...1.1)
+                let variation = Double.random(in: 0.9 ... 1.1)
                 result.measurements = result.measurements.map { measurement in
                     var modified = measurement
                     modified.executionTime *= variation
@@ -483,7 +487,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
     private func createModifiedResults(from results: [BenchmarkResult], modificationFactor: Double)
         -> [BenchmarkResult]
     {
-        return results.map { result in
+        results.map { result in
             var modified = result
             modified.measurements = result.measurements.map { measurement in
                 var modifiedMeasurement = measurement
@@ -502,7 +506,7 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
             // Add an extremely slow measurement
             let normalTime = firstResult.averageTime
             let anomalousMeasurement = BenchmarkMeasurement(
-                executionTime: normalTime * 10,  // 10x slower
+                executionTime: normalTime * 10, // 10x slower
                 timestamp: Date(),
                 metadata: ["anomalous": "true"]
             )
@@ -523,7 +527,8 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
             }
             if historicalResults.count >= 3 {
                 let trend = try await performanceAnalyzer.analyzeTrends(
-                    for: benchmark.id, results: historicalResults)
+                    for: benchmark.id, results: historicalResults
+                )
                 trends.append(trend)
             }
         }
@@ -533,14 +538,15 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
 
     private func createComparisonData() async throws -> VersionComparison {
         let baselineResults = testResults
-        let currentResults = createModifiedResults(from: baselineResults, modificationFactor: 0.95)  // 5% improvement
+        let currentResults = createModifiedResults(from: baselineResults, modificationFactor: 0.95) // 5% improvement
 
         return try await performanceAnalyzer.compareVersions(
-            baseline: baselineResults, current: currentResults)
+            baseline: baselineResults, current: currentResults
+        )
     }
 
     private func createMemoryIntensiveBenchmarks() -> [Benchmark] {
-        return [
+        [
             Benchmark(
                 id: "memory_allocation",
                 name: "Memory Allocation Test",
@@ -549,15 +555,15 @@ final class PerformanceBenchmarkingIntegrationTests: XCTestCase {
                 execution: { context in
                     let start = Date()
                     var arrays = [[Int]]()
-                    for _ in 0..<100 {
-                        arrays.append(Array(0..<1000))
+                    for _ in 0 ..< 100 {
+                        arrays.append(Array(0 ..< 1000))
                     }
-                    _ = arrays  // Prevent optimization
+                    _ = arrays // Prevent optimization
                     let end = Date()
                     context.measurement = end.timeIntervalSince(start)
                 },
                 teardown: {}
-            )
+            ),
         ]
     }
 }

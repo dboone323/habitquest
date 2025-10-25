@@ -19,7 +19,8 @@ public class NetworkCommunicator {
     private var listener: NWListener?
     private var connections: [UUID: NWConnection] = [:]
     private var connectionQueue = DispatchQueue(
-        label: "com.quantum.network-communicator", qos: .userInitiated)
+        label: "com.quantum.network-communicator", qos: .userInitiated
+    )
 
     private let messageEncoder = JSONEncoder()
     private let messageDecoder = JSONDecoder()
@@ -89,18 +90,20 @@ public class NetworkCommunicator {
                 if config.enableEncryption {
                     parameters.includePeerToPeer = true
                     sec_protocol_options_set_tls_ocsp_enabled(
-                        parameters.defaultProtocolStack.tls?.options, true)
+                        parameters.defaultProtocolStack.tls?.options, true
+                    )
                 }
 
                 listener = try NWListener(
-                    using: parameters, on: NWEndpoint.Port(rawValue: config.port)!)
+                    using: parameters, on: NWEndpoint.Port(rawValue: config.port)!
+                )
 
                 listener?.stateUpdateHandler = { [weak self] state in
                     switch state {
                     case .ready:
                         self?.isRunning = true
                         continuation.resume()
-                    case .failed(let error):
+                    case let .failed(error):
                         continuation.resume(throwing: error)
                     default:
                         break
@@ -164,7 +167,7 @@ public class NetworkCommunicator {
                         )
                     }
                     continuation.resume(returning: connectionId)
-                case .failed(let error):
+                case let .failed(error):
                     continuation.resume(throwing: error)
                 default:
                     break
@@ -242,8 +245,7 @@ public class NetworkCommunicator {
     }
 
     /// Register a message handler
-    public func registerHandler(for type: MessageType, handler: @escaping (NetworkMessage) -> Void)
-    {
+    public func registerHandler(for type: MessageType, handler: @escaping (NetworkMessage) -> Void) {
         messageHandlers[type] = handler
     }
 
@@ -251,9 +253,9 @@ public class NetworkCommunicator {
     public func getNetworkStatistics() -> NetworkStatistics {
         connectionQueue.sync {
             let totalConnections = connections.count
-            let totalMessagesSent = 0  // Would track this in real implementation
-            let totalMessagesReceived = 0  // Would track this in real implementation
-            let averageLatency = 0.0  // Would measure this in real implementation
+            let totalMessagesSent = 0 // Would track this in real implementation
+            let totalMessagesReceived = 0 // Would track this in real implementation
+            let averageLatency = 0.0 // Would measure this in real implementation
 
             let connectionsByAge = Dictionary(grouping: connectedPeers.values) { peer in
                 let age = Date().timeIntervalSince(peer.connectedAt)
@@ -311,12 +313,12 @@ public class NetworkCommunicator {
     private func receiveMessages(on connection: NWConnection, connectionId: UUID) {
         connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) {
             [weak self] data, _, isComplete, error in
-            if let error = error {
+            if let error {
                 print("Network error: \(error)")
                 return
             }
 
-            if let data = data {
+            if let data {
                 Task {
                     await self?.handleReceivedData(data, from: connectionId)
                 }
@@ -365,12 +367,13 @@ public class NetworkCommunicator {
             connection.send(
                 content: data,
                 completion: .contentProcessed { error in
-                    if let error = error {
+                    if let error {
                         continuation.resume(throwing: error)
                     } else {
                         continuation.resume()
                     }
-                })
+                }
+            )
         }
     }
 
@@ -406,12 +409,12 @@ public class NetworkCommunicator {
     private func compressData(_ data: Data) throws -> Data {
         // Simple compression using zlib
         // In a real implementation, you'd use a proper compression library
-        return data  // Placeholder
+        data // Placeholder
     }
 
     private func decompressData(_ data: Data) throws -> Data {
         // Simple decompression
-        return data  // Placeholder
+        data // Placeholder
     }
 }
 
@@ -423,7 +426,7 @@ public enum MessageType: String, Codable {
     case buildResponse = "build_response"
     case taskAssignment = "task_assignment"
     case taskResult = "task_result"
-    case heartbeat = "heartbeat"
+    case heartbeat
     case nodeStatus = "node_status"
     case cacheSync = "cache_sync"
 }

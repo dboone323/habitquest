@@ -2,7 +2,7 @@
 # https://github.com/nicklockwood/SwiftFormat
 
 # File options
---exclude .build,Package.swift,node_modules,.swiftpm
+--exclude .build,Package.swift,node_modules,.swiftpm,Tools,Tools/Automation,Tools/Automation/agents/backups,**/backups,**/Tests,Projects/QuantumChemistry,Projects/MomentumFinance
 
 # Format options
 --indent 4

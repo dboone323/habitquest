@@ -1,5 +1,8 @@
 // MARK: - Placeholder Detail Views
 
+import MomentumFinanceCore
+import SwiftUI
+
 struct EnhancedAccountDetailView: View {
     let accountId: String
 

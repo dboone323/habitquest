@@ -16,19 +16,19 @@ class EffectsManagerTests: XCTestCase {
 
     // MARK: - enumWeatherType{ Tests
 
-    func testenumWeatherType{Initialization() {
+    func testenumWeatherTypeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumWeatherType{
         XCTAssertTrue(true, "Placeholder test for enumWeatherType{")
     }
 
-    func testenumWeatherType{Properties() {
+    func testenumWeatherTypeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumWeatherType{
         XCTAssertTrue(true, "Placeholder test for enumWeatherType{ properties")
     }
 
-    func testenumWeatherType{Methods() {
+    func testenumWeatherTypeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumWeatherType{
         XCTAssertTrue(true, "Placeholder test for enumWeatherType{ methods")
@@ -36,19 +36,19 @@ class EffectsManagerTests: XCTestCase {
 
     // MARK: - enumLightingType{ Tests
 
-    func testenumLightingType{Initialization() {
+    func testenumLightingTypeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumLightingType{
         XCTAssertTrue(true, "Placeholder test for enumLightingType{")
     }
 
-    func testenumLightingType{Properties() {
+    func testenumLightingTypeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumLightingType{
         XCTAssertTrue(true, "Placeholder test for enumLightingType{ properties")
     }
 
-    func testenumLightingType{Methods() {
+    func testenumLightingTypeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumLightingType{
         XCTAssertTrue(true, "Placeholder test for enumLightingType{ methods")
@@ -56,19 +56,19 @@ class EffectsManagerTests: XCTestCase {
 
     // MARK: - enumEnvironmentalHazard{ Tests
 
-    func testenumEnvironmentalHazard{Initialization() {
+    func testenumEnvironmentalHazardInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumEnvironmentalHazard{
         XCTAssertTrue(true, "Placeholder test for enumEnvironmentalHazard{")
     }
 
-    func testenumEnvironmentalHazard{Properties() {
+    func testenumEnvironmentalHazardProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumEnvironmentalHazard{
         XCTAssertTrue(true, "Placeholder test for enumEnvironmentalHazard{ properties")
     }
 
-    func testenumEnvironmentalHazard{Methods() {
+    func testenumEnvironmentalHazardMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumEnvironmentalHazard{
         XCTAssertTrue(true, "Placeholder test for enumEnvironmentalHazard{ methods")
@@ -76,19 +76,19 @@ class EffectsManagerTests: XCTestCase {
 
     // MARK: - classEffectsManager{ Tests
 
-    func testclassEffectsManager{Initialization() {
+    func testclassEffectsManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classEffectsManager{
         XCTAssertTrue(true, "Placeholder test for classEffectsManager{")
     }
 
-    func testclassEffectsManager{Properties() {
+    func testclassEffectsManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classEffectsManager{
         XCTAssertTrue(true, "Placeholder test for classEffectsManager{ properties")
     }
 
-    func testclassEffectsManager{Methods() {
+    func testclassEffectsManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classEffectsManager{
         XCTAssertTrue(true, "Placeholder test for classEffectsManager{ methods")

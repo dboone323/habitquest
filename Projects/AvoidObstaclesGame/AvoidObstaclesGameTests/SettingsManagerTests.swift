@@ -16,19 +16,19 @@ class SettingsManagerTests: XCTestCase {
 
     // MARK: - enumSettingsSection:String,CaseIterable{ Tests
 
-    func testenumSettingsSection:String,CaseIterable{Initialization() {
+    func testenumSettingsSectionInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumSettingsSection:String,CaseIterable{
         XCTAssertTrue(true, "Placeholder test for enumSettingsSection:String,CaseIterable{")
     }
 
-    func testenumSettingsSection:String,CaseIterable{Properties() {
+    func testenumSettingsSectionProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumSettingsSection:String,CaseIterable{
         XCTAssertTrue(true, "Placeholder test for enumSettingsSection:String,CaseIterable{ properties")
     }
 
-    func testenumSettingsSection:String,CaseIterable{Methods() {
+    func testenumSettingsSectionMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumSettingsSection:String,CaseIterable{
         XCTAssertTrue(true, "Placeholder test for enumSettingsSection:String,CaseIterable{ methods")
@@ -36,19 +36,19 @@ class SettingsManagerTests: XCTestCase {
 
     // MARK: - enumSettingsOptionType{ Tests
 
-    func testenumSettingsOptionType{Initialization() {
+    func testenumSettingsOptionTypeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumSettingsOptionType{
         XCTAssertTrue(true, "Placeholder test for enumSettingsOptionType{")
     }
 
-    func testenumSettingsOptionType{Properties() {
+    func testenumSettingsOptionTypeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumSettingsOptionType{
         XCTAssertTrue(true, "Placeholder test for enumSettingsOptionType{ properties")
     }
 
-    func testenumSettingsOptionType{Methods() {
+    func testenumSettingsOptionTypeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumSettingsOptionType{
         XCTAssertTrue(true, "Placeholder test for enumSettingsOptionType{ methods")
@@ -56,19 +56,19 @@ class SettingsManagerTests: XCTestCase {
 
     // MARK: - structSettingsOption{ Tests
 
-    func teststructSettingsOption{Initialization() {
+    func teststructSettingsOptionInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structSettingsOption{
         XCTAssertTrue(true, "Placeholder test for structSettingsOption{")
     }
 
-    func teststructSettingsOption{Properties() {
+    func teststructSettingsOptionProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structSettingsOption{
         XCTAssertTrue(true, "Placeholder test for structSettingsOption{ properties")
     }
 
-    func teststructSettingsOption{Methods() {
+    func teststructSettingsOptionMethods() {
         // Test method functionality
         // TODO: Implement method tests for structSettingsOption{
         XCTAssertTrue(true, "Placeholder test for structSettingsOption{ methods")
@@ -76,19 +76,19 @@ class SettingsManagerTests: XCTestCase {
 
     // MARK: - structSettingsData:Codable{ Tests
 
-    func teststructSettingsData:Codable{Initialization() {
+    func teststructSettingsDataInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structSettingsData:Codable{
         XCTAssertTrue(true, "Placeholder test for structSettingsData:Codable{")
     }
 
-    func teststructSettingsData:Codable{Properties() {
+    func teststructSettingsDataProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structSettingsData:Codable{
         XCTAssertTrue(true, "Placeholder test for structSettingsData:Codable{ properties")
     }
 
-    func teststructSettingsData:Codable{Methods() {
+    func teststructSettingsDataMethods() {
         // Test method functionality
         // TODO: Implement method tests for structSettingsData:Codable{
         XCTAssertTrue(true, "Placeholder test for structSettingsData:Codable{ methods")
@@ -96,19 +96,19 @@ class SettingsManagerTests: XCTestCase {
 
     // MARK: - classSettingsManager{ Tests
 
-    func testclassSettingsManager{Initialization() {
+    func testclassSettingsManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classSettingsManager{
         XCTAssertTrue(true, "Placeholder test for classSettingsManager{")
     }
 
-    func testclassSettingsManager{Properties() {
+    func testclassSettingsManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classSettingsManager{
         XCTAssertTrue(true, "Placeholder test for classSettingsManager{ properties")
     }
 
-    func testclassSettingsManager{Methods() {
+    func testclassSettingsManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classSettingsManager{
         XCTAssertTrue(true, "Placeholder test for classSettingsManager{ methods")

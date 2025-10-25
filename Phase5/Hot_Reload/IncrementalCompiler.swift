@@ -95,7 +95,7 @@ public class IncrementalCompiler {
 
     /// Get dependency information for a file
     public func getDependencies(for file: URL) -> [URL] {
-        return dependencyGraph.getDependencies(for: file)
+        dependencyGraph.getDependencies(for: file)
     }
 
     /// Check if a file needs recompilation
@@ -158,7 +158,7 @@ public class IncrementalCompiler {
             "-target", buildSettings.target,
             "-sdk", buildSettings.sdkPath,
             "-I", buildSettings.includePath,
-            "-L", buildSettings.libraryPath
+            "-L", buildSettings.libraryPath,
         ]
 
         // Add framework paths
@@ -175,13 +175,13 @@ public class IncrementalCompiler {
         arguments.append(contentsOf: ["-o", tempDir.appendingPathComponent("output.o").path])
 
         // Add source files
-        arguments.append(contentsOf: files.map { $0.path })
+        arguments.append(contentsOf: files.map(\.path))
 
         return arguments
     }
 
     private func executeCompilation(arguments: [String]) async throws -> IncrementalCompilationResult {
-        return try await withCheckedThrowingContinuation { continuation in
+        try await withCheckedThrowingContinuation { continuation in
             processQueue.async {
                 let process = Process()
                 process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
@@ -260,8 +260,8 @@ public class IncrementalCompiler {
         var swiftFiles: [URL] = []
 
         let enumerator = fileManager.enumerator(at: workspaceURL,
-                                              includingPropertiesForKeys: [.isRegularFileKey],
-                                              options: [.skipsHiddenFiles])
+                                                includingPropertiesForKeys: [.isRegularFileKey],
+                                                options: [.skipsHiddenFiles])
 
         while let fileURL = enumerator?.nextObject() as? URL {
             if fileURL.pathExtension == "swift" {
@@ -274,7 +274,7 @@ public class IncrementalCompiler {
 
     private func findObjectFiles(in directory: URL) throws -> [URL] {
         let contents = try fileManager.contentsOfDirectory(at: directory,
-                                                         includingPropertiesForKeys: nil)
+                                                           includingPropertiesForKeys: nil)
         return contents.filter { $0.pathExtension == "o" }
     }
 
@@ -315,11 +315,11 @@ public enum CompilationError: Error, LocalizedError {
         switch self {
         case .concurrentCompilation:
             return "Another compilation is already in progress"
-        case .compilationFailed(let reason):
+        case let .compilationFailed(reason):
             return "Compilation failed: \(reason)"
-        case .invalidArguments(let reason):
+        case let .invalidArguments(reason):
             return "Invalid compilation arguments: \(reason)"
-        case .missingDependencies(let reason):
+        case let .missingDependencies(reason):
             return "Missing dependencies: \(reason)"
         }
     }
@@ -363,10 +363,10 @@ private struct BuildSettings {
             includePath: "\(sdkPath)/usr/include",
             libraryPath: "\(sdkPath)/usr/lib",
             frameworks: [
-                URL(fileURLWithPath: "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks")
+                URL(fileURLWithPath: "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks"),
             ],
             modulePaths: [
-                URL(fileURLWithPath: "\(sdkPath)/usr/lib/swift")
+                URL(fileURLWithPath: "\(sdkPath)/usr/lib/swift"),
             ]
         )
     }

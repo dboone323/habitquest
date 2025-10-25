@@ -1,7 +1,7 @@
 // Momentum Finance - Transaction Views for Enhanced Account Detail View
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
-import Shared
+import MomentumFinanceCore
 import SwiftUI
 
 #if os(macOS)
@@ -14,7 +14,7 @@ import SwiftUI
         var body: some View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(self.transaction.name)
+                    Text(self.transaction.title)
                         .font(.headline)
 
                     Text(self.transaction.date.formatted(date: .abbreviated, time: .omitted))

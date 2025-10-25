@@ -16,19 +16,19 @@ class LevelEditorManagerTests: XCTestCase {
 
     // MARK: - structCustomLevel:Codable,Identifiable{ Tests
 
-    func teststructCustomLevel:Codable,Identifiable{Initialization() {
+    func teststructCustomLevelInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structCustomLevel:Codable,Identifiable{
         XCTAssertTrue(true, "Placeholder test for structCustomLevel:Codable,Identifiable{")
     }
 
-    func teststructCustomLevel:Codable,Identifiable{Properties() {
+    func teststructCustomLevelProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structCustomLevel:Codable,Identifiable{
         XCTAssertTrue(true, "Placeholder test for structCustomLevel:Codable,Identifiable{ properties")
     }
 
-    func teststructCustomLevel:Codable,Identifiable{Methods() {
+    func teststructCustomLevelMethods() {
         // Test method functionality
         // TODO: Implement method tests for structCustomLevel:Codable,Identifiable{
         XCTAssertTrue(true, "Placeholder test for structCustomLevel:Codable,Identifiable{ methods")
@@ -36,19 +36,19 @@ class LevelEditorManagerTests: XCTestCase {
 
     // MARK: - structLevelSettings:Codable{ Tests
 
-    func teststructLevelSettings:Codable{Initialization() {
+    func teststructLevelSettingsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structLevelSettings:Codable{
         XCTAssertTrue(true, "Placeholder test for structLevelSettings:Codable{")
     }
 
-    func teststructLevelSettings:Codable{Properties() {
+    func teststructLevelSettingsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structLevelSettings:Codable{
         XCTAssertTrue(true, "Placeholder test for structLevelSettings:Codable{ properties")
     }
 
-    func teststructLevelSettings:Codable{Methods() {
+    func teststructLevelSettingsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structLevelSettings:Codable{
         XCTAssertTrue(true, "Placeholder test for structLevelSettings:Codable{ methods")
@@ -56,19 +56,19 @@ class LevelEditorManagerTests: XCTestCase {
 
     // MARK: - enumBackgroundTheme:String,Codable,CaseIterable{ Tests
 
-    func testenumBackgroundTheme:String,Codable,CaseIterable{Initialization() {
+    func testenumBackgroundThemeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumBackgroundTheme:String,Codable,CaseIterable{
         XCTAssertTrue(true, "Placeholder test for enumBackgroundTheme:String,Codable,CaseIterable{")
     }
 
-    func testenumBackgroundTheme:String,Codable,CaseIterable{Properties() {
+    func testenumBackgroundThemeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumBackgroundTheme:String,Codable,CaseIterable{
         XCTAssertTrue(true, "Placeholder test for enumBackgroundTheme:String,Codable,CaseIterable{ properties")
     }
 
-    func testenumBackgroundTheme:String,Codable,CaseIterable{Methods() {
+    func testenumBackgroundThemeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumBackgroundTheme:String,Codable,CaseIterable{
         XCTAssertTrue(true, "Placeholder test for enumBackgroundTheme:String,Codable,CaseIterable{ methods")
@@ -76,19 +76,19 @@ class LevelEditorManagerTests: XCTestCase {
 
     // MARK: - structLevelElement:Identifiable{ Tests
 
-    func teststructLevelElement:Identifiable{Initialization() {
+    func teststructLevelElementInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structLevelElement:Identifiable{
         XCTAssertTrue(true, "Placeholder test for structLevelElement:Identifiable{")
     }
 
-    func teststructLevelElement:Identifiable{Properties() {
+    func teststructLevelElementProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structLevelElement:Identifiable{
         XCTAssertTrue(true, "Placeholder test for structLevelElement:Identifiable{ properties")
     }
 
-    func teststructLevelElement:Identifiable{Methods() {
+    func teststructLevelElementMethods() {
         // Test method functionality
         // TODO: Implement method tests for structLevelElement:Identifiable{
         XCTAssertTrue(true, "Placeholder test for structLevelElement:Identifiable{ methods")
@@ -96,19 +96,19 @@ class LevelEditorManagerTests: XCTestCase {
 
     // MARK: - enumLevelElementType:Codable,Hashable,Equatable{ Tests
 
-    func testenumLevelElementType:Codable,Hashable,Equatable{Initialization() {
+    func testenumLevelElementTypeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumLevelElementType:Codable,Hashable,Equatable{
         XCTAssertTrue(true, "Placeholder test for enumLevelElementType:Codable,Hashable,Equatable{")
     }
 
-    func testenumLevelElementType:Codable,Hashable,Equatable{Properties() {
+    func testenumLevelElementTypeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumLevelElementType:Codable,Hashable,Equatable{
         XCTAssertTrue(true, "Placeholder test for enumLevelElementType:Codable,Hashable,Equatable{ properties")
     }
 
-    func testenumLevelElementType:Codable,Hashable,Equatable{Methods() {
+    func testenumLevelElementTypeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumLevelElementType:Codable,Hashable,Equatable{
         XCTAssertTrue(true, "Placeholder test for enumLevelElementType:Codable,Hashable,Equatable{ methods")
@@ -116,19 +116,19 @@ class LevelEditorManagerTests: XCTestCase {
 
     // MARK: - structPlacedLevelElement:Codable,Identifiable{ Tests
 
-    func teststructPlacedLevelElement:Codable,Identifiable{Initialization() {
+    func teststructPlacedLevelElementInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structPlacedLevelElement:Codable,Identifiable{
         XCTAssertTrue(true, "Placeholder test for structPlacedLevelElement:Codable,Identifiable{")
     }
 
-    func teststructPlacedLevelElement:Codable,Identifiable{Properties() {
+    func teststructPlacedLevelElementProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structPlacedLevelElement:Codable,Identifiable{
         XCTAssertTrue(true, "Placeholder test for structPlacedLevelElement:Codable,Identifiable{ properties")
     }
 
-    func teststructPlacedLevelElement:Codable,Identifiable{Methods() {
+    func teststructPlacedLevelElementMethods() {
         // Test method functionality
         // TODO: Implement method tests for structPlacedLevelElement:Codable,Identifiable{
         XCTAssertTrue(true, "Placeholder test for structPlacedLevelElement:Codable,Identifiable{ methods")
@@ -136,19 +136,19 @@ class LevelEditorManagerTests: XCTestCase {
 
     // MARK: - enumLevelEditorState{ Tests
 
-    func testenumLevelEditorState{Initialization() {
+    func testenumLevelEditorStateInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumLevelEditorState{
         XCTAssertTrue(true, "Placeholder test for enumLevelEditorState{")
     }
 
-    func testenumLevelEditorState{Properties() {
+    func testenumLevelEditorStateProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumLevelEditorState{
         XCTAssertTrue(true, "Placeholder test for enumLevelEditorState{ properties")
     }
 
-    func testenumLevelEditorState{Methods() {
+    func testenumLevelEditorStateMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumLevelEditorState{
         XCTAssertTrue(true, "Placeholder test for enumLevelEditorState{ methods")
@@ -156,19 +156,19 @@ class LevelEditorManagerTests: XCTestCase {
 
     // MARK: - enumLevelEditorError:Error{ Tests
 
-    func testenumLevelEditorError:Error{Initialization() {
+    func testenumLevelEditorErrorInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumLevelEditorError:Error{
         XCTAssertTrue(true, "Placeholder test for enumLevelEditorError:Error{")
     }
 
-    func testenumLevelEditorError:Error{Properties() {
+    func testenumLevelEditorErrorProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumLevelEditorError:Error{
         XCTAssertTrue(true, "Placeholder test for enumLevelEditorError:Error{ properties")
     }
 
-    func testenumLevelEditorError:Error{Methods() {
+    func testenumLevelEditorErrorMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumLevelEditorError:Error{
         XCTAssertTrue(true, "Placeholder test for enumLevelEditorError:Error{ methods")
@@ -176,19 +176,19 @@ class LevelEditorManagerTests: XCTestCase {
 
     // MARK: - classLevelEditorOverlay:SKNode{ Tests
 
-    func testclassLevelEditorOverlay:SKNode{Initialization() {
+    func testclassLevelEditorOverlayInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classLevelEditorOverlay:SKNode{
         XCTAssertTrue(true, "Placeholder test for classLevelEditorOverlay:SKNode{")
     }
 
-    func testclassLevelEditorOverlay:SKNode{Properties() {
+    func testclassLevelEditorOverlayProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classLevelEditorOverlay:SKNode{
         XCTAssertTrue(true, "Placeholder test for classLevelEditorOverlay:SKNode{ properties")
     }
 
-    func testclassLevelEditorOverlay:SKNode{Methods() {
+    func testclassLevelEditorOverlayMethods() {
         // Test method functionality
         // TODO: Implement method tests for classLevelEditorOverlay:SKNode{
         XCTAssertTrue(true, "Placeholder test for classLevelEditorOverlay:SKNode{ methods")
@@ -196,19 +196,19 @@ class LevelEditorManagerTests: XCTestCase {
 
     // MARK: - classLevelEditorToolbar:SKNode{ Tests
 
-    func testclassLevelEditorToolbar:SKNode{Initialization() {
+    func testclassLevelEditorToolbarInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classLevelEditorToolbar:SKNode{
         XCTAssertTrue(true, "Placeholder test for classLevelEditorToolbar:SKNode{")
     }
 
-    func testclassLevelEditorToolbar:SKNode{Properties() {
+    func testclassLevelEditorToolbarProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classLevelEditorToolbar:SKNode{
         XCTAssertTrue(true, "Placeholder test for classLevelEditorToolbar:SKNode{ properties")
     }
 
-    func testclassLevelEditorToolbar:SKNode{Methods() {
+    func testclassLevelEditorToolbarMethods() {
         // Test method functionality
         // TODO: Implement method tests for classLevelEditorToolbar:SKNode{
         XCTAssertTrue(true, "Placeholder test for classLevelEditorToolbar:SKNode{ methods")
@@ -216,19 +216,19 @@ class LevelEditorManagerTests: XCTestCase {
 
     // MARK: - classLevelEditorButton:SKNode{ Tests
 
-    func testclassLevelEditorButton:SKNode{Initialization() {
+    func testclassLevelEditorButtonInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classLevelEditorButton:SKNode{
         XCTAssertTrue(true, "Placeholder test for classLevelEditorButton:SKNode{")
     }
 
-    func testclassLevelEditorButton:SKNode{Properties() {
+    func testclassLevelEditorButtonProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classLevelEditorButton:SKNode{
         XCTAssertTrue(true, "Placeholder test for classLevelEditorButton:SKNode{ properties")
     }
 
-    func testclassLevelEditorButton:SKNode{Methods() {
+    func testclassLevelEditorButtonMethods() {
         // Test method functionality
         // TODO: Implement method tests for classLevelEditorButton:SKNode{
         XCTAssertTrue(true, "Placeholder test for classLevelEditorButton:SKNode{ methods")

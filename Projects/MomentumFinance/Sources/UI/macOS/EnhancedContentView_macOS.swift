@@ -2,6 +2,8 @@
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
+import MomentumFinanceCore
+import SharedKit
 import SwiftData
 import SwiftUI
 
@@ -129,72 +131,6 @@ import SwiftUI
                 .tag(item)
         }
 
-        // Toggle the macOS sidebar
-        private func toggleSidebar() {
-            NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
-        }
-    }
-
-    // Sidebar navigation items
-    enum SidebarItem: Hashable {
-        case dashboard
-        case transactions
-        case budgets
-        case subscriptions
-        case goalsAndReports
-    }
-
-    // Listable items for the content column
-    struct ListableItem: Identifiable, Hashable {
-        let id: String?
-        let name: String
-        let type: ListItemType
-
-        // Hashable conformance
-        /// <#Description#>
-        /// - Returns: <#description#>
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(self.id)
-            hasher.combine(self.type)
-        }
-
-        static func == (lhs: ListableItem, rhs: ListableItem) -> Bool {
-            lhs.id == rhs.id && lhs.type == rhs.type
-        }
-    }
-
-    // Types of items that can be displayed in the content column
-    enum ListItemType: Hashable {
-        case account
-        case transaction
-        case budget
-        case subscription
-        case goal
-        case report
-    }
-
-    // macOS-specific UI components and helpers
-    enum macOSSpecificViews {
-        /// macOS window configuration
-        static func configureWindow() {
-            // Configure macOS-specific window settings
-            NSApp.appearance = NSAppearance(named: .aqua)
-        }
-
-        /// macOS toolbar configuration
-        static func configureToolbar() -> some ToolbarContent {
-            ToolbarItemGroup(placement: .automatic) {
-                Button(action: {}, label: {
-                    Image(systemName: "gear")
-                })
-                .help("Settings")
-
-                Button(action: {}, label: {
-                    Image(systemName: "square.and.arrow.up")
-                })
-                .help("Export Data")
-            }
-        }
     }
 
     // macOS-specific view extensions

@@ -24,12 +24,6 @@ public struct SettingsView: View {
     @AppStorage("highContrastMode") private var highContrastMode = false
     @AppStorage("animationsEnabled") private var animationsEnabled = true
     @AppStorage("darkModePreference") private var darkModePreferenceRaw: String = "system"
-    @AppStorage("dataRetentionDays") private var dataRetentionDays: Double = 365.0
-
-    @State private var deleteAllProgress = false
-    @State private var showDeleteAlert = false
-    @State private var showDeleteAllAlert = false
-    @State private var showingDeleteConfirmation = false
 
     private var darkModePreference: Binding<DarkModePreference> {
         Binding(
@@ -41,6 +35,13 @@ public struct SettingsView: View {
             }
         )
     }
+
+    @AppStorage("dataRetentionDays") private var dataRetentionDays: Double = 365.0
+
+    @State private var deleteAllProgress = false
+    @State private var showDeleteAlert = false
+    @State private var showDeleteAllAlert = false
+    @State private var showingDeleteConfirmation = false
 
     public var body: some View {
         NavigationView {

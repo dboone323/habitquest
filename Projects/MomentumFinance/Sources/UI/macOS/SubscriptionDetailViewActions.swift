@@ -2,11 +2,12 @@
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
 import Charts
-import Shared
+import SharedKit
 import SwiftData
 import SwiftUI
 
-#if os(macOS)
+import MomentumFinanceCore
+import SharedKit
     /// Action methods for the enhanced subscription detail view
     extension Features.Subscriptions.EnhancedSubscriptionDetailView {
         func saveChanges() {

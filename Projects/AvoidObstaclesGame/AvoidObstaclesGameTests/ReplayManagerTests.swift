@@ -16,19 +16,19 @@ class ReplayManagerTests: XCTestCase {
 
     // MARK: - structGameRecording:Codable{ Tests
 
-    func teststructGameRecording:Codable{Initialization() {
+    func teststructGameRecordingInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structGameRecording:Codable{
         XCTAssertTrue(true, "Placeholder test for structGameRecording:Codable{")
     }
 
-    func teststructGameRecording:Codable{Properties() {
+    func teststructGameRecordingProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structGameRecording:Codable{
         XCTAssertTrue(true, "Placeholder test for structGameRecording:Codable{ properties")
     }
 
-    func teststructGameRecording:Codable{Methods() {
+    func teststructGameRecordingMethods() {
         // Test method functionality
         // TODO: Implement method tests for structGameRecording:Codable{
         XCTAssertTrue(true, "Placeholder test for structGameRecording:Codable{ methods")
@@ -36,19 +36,19 @@ class ReplayManagerTests: XCTestCase {
 
     // MARK: - classReplayManager:GameComponent{ Tests
 
-    func testclassReplayManager:GameComponent{Initialization() {
+    func testclassReplayManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classReplayManager:GameComponent{
         XCTAssertTrue(true, "Placeholder test for classReplayManager:GameComponent{")
     }
 
-    func testclassReplayManager:GameComponent{Properties() {
+    func testclassReplayManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classReplayManager:GameComponent{
         XCTAssertTrue(true, "Placeholder test for classReplayManager:GameComponent{ properties")
     }
 
-    func testclassReplayManager:GameComponent{Methods() {
+    func testclassReplayManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classReplayManager:GameComponent{
         XCTAssertTrue(true, "Placeholder test for classReplayManager:GameComponent{ methods")

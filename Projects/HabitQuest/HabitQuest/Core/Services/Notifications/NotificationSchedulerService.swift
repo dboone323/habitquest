@@ -18,18 +18,18 @@ final class NotificationSchedulerService {
     }
 
     /// Schedule AI-optimized notifications for all habits
-    func scheduleSmartNotifications() {
+    func scheduleSmartNotifications() async {
         let habits = self.fetchActiveHabits()
 
         for habit in habits {
-            self.scheduleOptimalNotification(for: habit)
+            await self.scheduleOptimalNotification(for: habit)
         }
     }
 
     /// Schedule notification at optimal time based on user behavior
-    func scheduleOptimalNotification(for habit: Habit) {
-        let scheduling = analyticsEngine.generateOptimalScheduling(for: habit)
-        let prediction = analyticsEngine.predictStreakSuccess(for: habit)
+    func scheduleOptimalNotification(for habit: Habit) async {
+        let scheduling = await analyticsEngine.generateOptimalScheduling(for: habit)
+        let prediction = await analyticsEngine.predictStreakSuccess(for: habit)
 
         let content = self.generateSmartContent(
             for: habit,

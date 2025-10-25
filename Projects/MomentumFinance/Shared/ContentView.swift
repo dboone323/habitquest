@@ -12,6 +12,83 @@ public struct DashboardView: View {
     }
 }
 
+// MARK: - Tab Content Views
+
+private struct DashboardTabView: View {
+    @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
+
+    var body: some View {
+        NavigationStack(
+            path: Binding(
+                get: { self.navigationCoordinator.dashboardNavPath },
+                set: { self.navigationCoordinator.dashboardNavPath = $0 }
+            )
+        ) {
+            DashboardView()
+        }
+    }
+}
+
+private struct TransactionsTabView: View {
+    @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
+
+    var body: some View {
+        NavigationStack(
+            path: Binding(
+                get: { self.navigationCoordinator.transactionsNavPath },
+                set: { self.navigationCoordinator.transactionsNavPath = $0 }
+            )
+        ) {
+            Features.Transactions.TransactionsView()
+        }
+    }
+}
+
+private struct BudgetsTabView: View {
+    @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
+
+    var body: some View {
+        NavigationStack(
+            path: Binding(
+                get: { self.navigationCoordinator.budgetsNavPath },
+                set: { self.navigationCoordinator.budgetsNavPath = $0 }
+            )
+        ) {
+            Features.Budgets.BudgetsView()
+        }
+    }
+}
+
+private struct SubscriptionsTabView: View {
+    @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
+
+    var body: some View {
+        NavigationStack(
+            path: Binding(
+                get: { self.navigationCoordinator.subscriptionsNavPath },
+                set: { self.navigationCoordinator.subscriptionsNavPath = $0 }
+            )
+        ) {
+            Features.Subscriptions.SubscriptionsView()
+        }
+    }
+}
+
+private struct GoalsAndReportsTabView: View {
+    @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
+
+    var body: some View {
+        NavigationStack(
+            path: Binding(
+                get: { self.navigationCoordinator.goalsAndReportsNavPath },
+                set: { self.navigationCoordinator.goalsAndReportsNavPath = $0 }
+            )
+        ) {
+            Features.GoalsAndReports.GoalsAndReportsView()
+        }
+    }
+}
+
 public struct ContentView: View {
     @StateObject private var navigationCoordinator = NavigationCoordinator.shared
     @State private var isGlobalSearchPresented = false
@@ -23,87 +100,52 @@ public struct ContentView: View {
                 set: { self.navigationCoordinator.selectedTab = $0 }
             )
         ) {
-            NavigationStack(
-                path: Binding(
-                    get: { self.navigationCoordinator.dashboardNavPath },
-                    set: { self.navigationCoordinator.dashboardNavPath = $0 }
-                )
-            ) {
-                DashboardView()
-            }
-            .tabItem {
-                Image(systemName: self.navigationCoordinator.selectedTab == 0 ? "house.fill" : "house")
-                Text("Dashboard")
-            }
-            .tag(0)
+            DashboardTabView()
+                .tabItem {
+                    Image(systemName: self.navigationCoordinator.selectedTab == 0 ? "house.fill" : "house")
+                    Text("Dashboard")
+                }
+                .tag(0)
 
-            NavigationStack(
-                path: Binding(
-                    get: { self.navigationCoordinator.transactionsNavPath },
-                    set: { self.navigationCoordinator.transactionsNavPath = $0 }
-                )
-            ) {
-                Features.Transactions.TransactionsView()
-            }
-            .tabItem {
-                Image(
-                    systemName: self.navigationCoordinator.selectedTab == 1
-                        ? "creditcard.fill" : "creditcard"
-                )
-                Text("Transactions")
-            }
-            .tag(1)
+            TransactionsTabView()
+                .tabItem {
+                    Image(
+                        systemName: self.navigationCoordinator.selectedTab == 1
+                            ? "creditcard.fill" : "creditcard"
+                    )
+                    Text("Transactions")
+                }
+                .tag(1)
 
-            NavigationStack(
-                path: Binding(
-                    get: { self.navigationCoordinator.budgetsNavPath },
-                    set: { self.navigationCoordinator.budgetsNavPath = $0 }
-                )
-            ) {
-                Features.Budgets.BudgetsView()
-            }
-            .tabItem {
-                Image(
-                    systemName: self.navigationCoordinator.selectedTab == 2
-                        ? "chart.pie.fill" : "chart.pie"
-                )
-                Text("Budgets")
-            }
-            .tag(2)
+            BudgetsTabView()
+                .tabItem {
+                    Image(
+                        systemName: self.navigationCoordinator.selectedTab == 2
+                            ? "chart.pie.fill" : "chart.pie"
+                    )
+                    Text("Budgets")
+                }
+                .tag(2)
 
-            NavigationStack(
-                path: Binding(
-                    get: { self.navigationCoordinator.subscriptionsNavPath },
-                    set: { self.navigationCoordinator.subscriptionsNavPath = $0 }
-                )
-            ) {
-                Features.Subscriptions.SubscriptionsView()
-            }
-            .tabItem {
-                Image(
-                    systemName: self.navigationCoordinator.selectedTab == 3
-                        ? "calendar.badge.clock.fill" : "calendar.badge.clock"
-                )
-                Text("Subscriptions")
-            }
-            .tag(3)
+            SubscriptionsTabView()
+                .tabItem {
+                    Image(
+                        systemName: self.navigationCoordinator.selectedTab == 3
+                            ? "calendar.badge.clock.fill" : "calendar.badge.clock"
+                    )
+                    Text("Subscriptions")
+                }
+                .tag(3)
 
-            NavigationStack(
-                path: Binding(
-                    get: { self.navigationCoordinator.goalsAndReportsNavPath },
-                    set: { self.navigationCoordinator.goalsAndReportsNavPath = $0 }
-                )
-            ) {
-                Features.GoalsAndReports.GoalsAndReportsView()
-            }
-            .tabItem {
-                Image(
-                    systemName: self.navigationCoordinator.selectedTab == 4
-                        ? "chart.bar.fill" : "chart.bar"
-                )
-                Text("Goals & Reports")
-            }
-            .tag(4)
+            GoalsAndReportsTabView()
+                .tabItem {
+                    Image(
+                        systemName: self.navigationCoordinator.selectedTab == 4
+                            ? "chart.bar.fill" : "chart.bar"
+                    )
+                    Text("Goals & Reports")
+                }
+                .tag(4)
         }
         .sheet(isPresented: self.$isGlobalSearchPresented) {
             Features.GlobalSearch.GlobalSearchView()

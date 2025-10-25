@@ -16,19 +16,19 @@ class PhysicsManagerTests: XCTestCase {
 
     // MARK: - enumPhysicsQuality{ Tests
 
-    func testenumPhysicsQuality{Initialization() {
+    func testenumPhysicsQualityInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumPhysicsQuality{
         XCTAssertTrue(true, "Placeholder test for enumPhysicsQuality{")
     }
 
-    func testenumPhysicsQuality{Properties() {
+    func testenumPhysicsQualityProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumPhysicsQuality{
         XCTAssertTrue(true, "Placeholder test for enumPhysicsQuality{ properties")
     }
 
-    func testenumPhysicsQuality{Methods() {
+    func testenumPhysicsQualityMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumPhysicsQuality{
         XCTAssertTrue(true, "Placeholder test for enumPhysicsQuality{ methods")
@@ -36,19 +36,19 @@ class PhysicsManagerTests: XCTestCase {
 
     // MARK: - structPhysicsMaterial{ Tests
 
-    func teststructPhysicsMaterial{Initialization() {
+    func teststructPhysicsMaterialInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structPhysicsMaterial{
         XCTAssertTrue(true, "Placeholder test for structPhysicsMaterial{")
     }
 
-    func teststructPhysicsMaterial{Properties() {
+    func teststructPhysicsMaterialProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structPhysicsMaterial{
         XCTAssertTrue(true, "Placeholder test for structPhysicsMaterial{ properties")
     }
 
-    func teststructPhysicsMaterial{Methods() {
+    func teststructPhysicsMaterialMethods() {
         // Test method functionality
         // TODO: Implement method tests for structPhysicsMaterial{
         XCTAssertTrue(true, "Placeholder test for structPhysicsMaterial{ methods")
@@ -56,19 +56,19 @@ class PhysicsManagerTests: XCTestCase {
 
     // MARK: - structPhysicsSimulationSettings{ Tests
 
-    func teststructPhysicsSimulationSettings{Initialization() {
+    func teststructPhysicsSimulationSettingsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structPhysicsSimulationSettings{
         XCTAssertTrue(true, "Placeholder test for structPhysicsSimulationSettings{")
     }
 
-    func teststructPhysicsSimulationSettings{Properties() {
+    func teststructPhysicsSimulationSettingsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structPhysicsSimulationSettings{
         XCTAssertTrue(true, "Placeholder test for structPhysicsSimulationSettings{ properties")
     }
 
-    func teststructPhysicsSimulationSettings{Methods() {
+    func teststructPhysicsSimulationSettingsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structPhysicsSimulationSettings{
         XCTAssertTrue(true, "Placeholder test for structPhysicsSimulationSettings{ methods")

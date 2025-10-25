@@ -22,7 +22,8 @@ public class FileWatcher {
 
     private let watcherQueue = DispatchQueue(label: "com.quantum.file-watcher", qos: .userInitiated)
     private let debounceQueue = DispatchQueue(
-        label: "com.quantum.file-debounce", qos: .userInitiated)
+        label: "com.quantum.file-debounce", qos: .userInitiated
+    )
 
     /// Configuration for file watching
     public struct Configuration {
@@ -154,7 +155,7 @@ public class FileWatcher {
 
     private func handleFileChanges(_ changes: [FileChange]) {
         debounceQueue.async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
 
             // Filter changes
             let filteredChanges = changes.filter { self.shouldWatchFile($0.fileURL) }
@@ -186,7 +187,7 @@ public class FileWatcher {
 
     private func emitBatchedChanges() {
         debounceQueue.async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
 
             guard !self.pendingChanges.isEmpty else { return }
 
@@ -323,7 +324,7 @@ private class DirectoryWatcher {
             while let fileURL = enumerator?.nextObject() as? URL {
                 guard
                     config.watchedExtensions.contains(fileURL.pathExtension)
-                        || fileURL.pathExtension.isEmpty
+                    || fileURL.pathExtension.isEmpty
                 else {
                     continue
                 }
@@ -341,11 +342,12 @@ private class DirectoryWatcher {
                 } else {
                     // Check if modified
                     if let attributes = try? fileManager.attributesOfItem(atPath: fileURL.path),
-                        let modDate = attributes[.modificationDate] as? Date,
-                        let lastModDate =
-                            (try? fileManager.attributesOfItem(atPath: fileURL.path))?[
-                                .modificationDate] as? Date,
-                        modDate > lastModDate ?? Date.distantPast
+                       let modDate = attributes[.modificationDate] as? Date,
+                       let lastModDate =
+                       (try? fileManager.attributesOfItem(atPath: fileURL.path))?[
+                           .modificationDate
+                       ] as? Date,
+                       modDate > lastModDate ?? Date.distantPast
                     {
                         changes.append(
                             FileChange(
@@ -388,11 +390,11 @@ public enum WatcherError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .cannotOpenDirectory(let url):
+        case let .cannotOpenDirectory(url):
             return "Cannot open directory for watching: \(url.path)"
-        case .invalidPath(let url):
+        case let .invalidPath(url):
             return "Invalid path: \(url.path)"
-        case .permissionDenied(let url):
+        case let .permissionDenied(url):
             return "Permission denied for path: \(url.path)"
         }
     }
@@ -418,7 +420,7 @@ extension FileChange: CustomStringConvertible {
 extension FileChange: Equatable {
     public static func == (lhs: FileChange, rhs: FileChange) -> Bool {
         lhs.fileURL == rhs.fileURL && lhs.changeType == rhs.changeType
-            && abs(lhs.timestamp.timeIntervalSince(rhs.timestamp)) < 0.1  // Within 100ms
+            && abs(lhs.timestamp.timeIntervalSince(rhs.timestamp)) < 0.1 // Within 100ms
     }
 }
 
@@ -426,6 +428,6 @@ extension FileChange: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(fileURL)
         hasher.combine(changeType)
-        hasher.combine(Int(timestamp.timeIntervalSince1970 * 1000))  // Hash timestamp with second precision
+        hasher.combine(Int(timestamp.timeIntervalSince1970 * 1000)) // Hash timestamp with second precision
     }
 }

@@ -1,5 +1,10 @@
 // MARK: - Dashboard List View
 
+import MomentumFinanceCore
+import SharedKit
+import SwiftData
+import SwiftUI
+
 struct DashboardListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var accounts: [FinancialAccount]
@@ -33,12 +38,12 @@ struct DashboardListView: View {
 
             Section("Recent Transactions") {
                 ForEach(self.recentTransactions.prefix(5)) { transaction in
-                    NavigationLink(value: ListableItem(id: transaction.id, name: transaction.name, type: .transaction)) {
+                    NavigationLink(value: ListableItem(id: transaction.id, name: transaction.title, type: .transaction)) {
                         HStack {
                             Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
                                 .foregroundStyle(transaction.amount < 0 ? .red : .green)
                             VStack(alignment: .leading) {
-                                Text(transaction.name)
+                                Text(transaction.title)
                                     .font(.headline)
                                 Text(transaction.amount.formatted(.currency(code: "USD")))
                                     .font(.subheadline)
@@ -50,7 +55,7 @@ struct DashboardListView: View {
                         }
                         .padding(.vertical, 4)
                     }
-                    .tag(ListableItem(id: transaction.id, name: transaction.name, type: .transaction))
+                    .tag(ListableItem(id: transaction.id, name: transaction.title, type: .transaction))
                 }
             }
 
@@ -79,11 +84,11 @@ struct DashboardListView: View {
             }
 
             Section("Quick Actions") {
-                Button("Add New Account").accessibilityLabel("Button").accessibilityLabel("Button") {
+                Button("Add New Account").accessibilityLabel("Add New Account Button") {
                     // Action to add new account
                 }
 
-                Button("Add New Transaction").accessibilityLabel("Button").accessibilityLabel("Button") {
+                Button("Add New Transaction").accessibilityLabel("Add New Transaction Button") {
                     // Action to add new transaction
                 }
             }
@@ -177,12 +182,12 @@ struct TransactionsListView: View {
 
                 Section("Transactions") {
                     ForEach(self.filteredTransactions) { transaction in
-                        NavigationLink(value: ListableItem(id: transaction.id, name: transaction.name, type: .transaction)) {
+                        NavigationLink(value: ListableItem(id: transaction.id, name: transaction.title, type: .transaction)) {
                             HStack {
                                 Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
                                     .foregroundStyle(transaction.amount < 0 ? .red : .green)
                                 VStack(alignment: .leading) {
-                                    Text(transaction.name)
+                                    Text(transaction.title)
                                         .font(.headline)
                                     if let category = transaction.category {
                                         Text(category.name)
@@ -202,7 +207,7 @@ struct TransactionsListView: View {
                             }
                             .padding(.vertical, 4)
                         }
-                        .tag(ListableItem(id: transaction.id, name: transaction.name, type: .transaction))
+                        .tag(ListableItem(id: transaction.id, name: transaction.title, type: .transaction))
                     }
                 }
             }

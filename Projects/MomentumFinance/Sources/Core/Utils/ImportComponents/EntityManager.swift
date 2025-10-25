@@ -16,7 +16,7 @@ struct EntityManager {
     /// Gets existing account or creates a new one from CSV data
     func getOrCreateAccount(
         from fields: [String],
-        columnMapping: CSVColumnMapping
+        columnMapping: CSVIndexMapping
     ) async throws -> FinancialAccount {
         let accountName: String = if let accountIndex = columnMapping.accountIndex,
                                      accountIndex < fields.count
@@ -51,7 +51,7 @@ struct EntityManager {
     /// Gets existing category or creates a new one from CSV data
     func getOrCreateCategory(
         from fields: [String],
-        columnMapping: CSVColumnMapping,
+        columnMapping: CSVIndexMapping,
         transactionType: TransactionType
     ) async throws -> ExpenseCategory {
         let categoryName: String = if let categoryIndex = columnMapping.categoryIndex,
@@ -87,11 +87,18 @@ struct EntityManager {
 // MARK: - Object Pooling
 
 /// Object pool for performance optimization
+@MainActor
 private var objectPool: [Any] = []
+@MainActor
 private let maxPoolSize = 50
+@MainActor
+private let poolLock = NSLock()
 
 /// Get an object from the pool or create new one
+@MainActor
 private func getPooledObject<T>() -> T? {
+    poolLock.lock()
+    defer { poolLock.unlock() }
     if let pooled = objectPool.popLast() as? T {
         return pooled
     }
@@ -99,7 +106,10 @@ private func getPooledObject<T>() -> T? {
 }
 
 /// Return an object to the pool
+@MainActor
 private func returnToPool(_ object: Any) {
+    poolLock.lock()
+    defer { poolLock.unlock() }
     if objectPool.count < maxPoolSize {
         objectPool.append(object)
     }

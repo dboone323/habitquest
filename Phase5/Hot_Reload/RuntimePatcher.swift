@@ -20,7 +20,8 @@ public class RuntimePatcher {
     private var backupMethods: [MethodIdentifier: IMP] = [:]
 
     private let patchQueue = DispatchQueue(
-        label: "com.quantum.runtime-patcher", qos: .userInitiated)
+        label: "com.quantum.runtime-patcher", qos: .userInitiated
+    )
 
     /// Configuration for runtime patching
     public struct Configuration {
@@ -188,12 +189,12 @@ public class RuntimePatcher {
 
         // For demonstration, we'll patch a known method if it exists
         guard let targetClass = NSClassFromString("TestClass") else {
-            return  // No test class to patch
+            return // No test class to patch
         }
 
         let selector = NSSelectorFromString("testMethod")
         guard let method = class_getInstanceMethod(targetClass, selector) else {
-            return  // Method doesn't exist
+            return // Method doesn't exist
         }
 
         // Create patch identifier
@@ -211,7 +212,7 @@ public class RuntimePatcher {
             identifier: identifier,
             type: .method,
             originalImplementation: method_getImplementation(method),
-            patchedImplementation: unsafeBitCast(0, to: IMP.self),  // Placeholder
+            patchedImplementation: unsafeBitCast(0, to: IMP.self), // Placeholder
             timestamp: Date()
         )
 
@@ -228,16 +229,17 @@ public class RuntimePatcher {
 
         // Example: Add a new method to the class
         let newSelector = NSSelectorFromString("hotReloadedMethod")
-        let newMethod: @convention(c) (AnyObject, Selector) -> Void = { (self, _cmd) in
+        let newMethod: @convention(c) (AnyObject, Selector) -> Void = { _, _ in
             print("This method was added via hot reload!")
         }
 
         let methodIMP = imp_implementationWithBlock(newMethod)
-        let encoding = "v@:"  // void return, self, _cmd
+        let encoding = "v@:" // void return, self, _cmd
 
         if class_addMethod(targetClass, newSelector, methodIMP, encoding) {
             let identifier = PatchIdentifier(
-                className: "TestClass", methodName: "hotReloadedMethod")
+                className: "TestClass", methodName: "hotReloadedMethod"
+            )
             let patchInfo = PatchInfo(
                 identifier: identifier,
                 type: .classAddition,
@@ -268,7 +270,7 @@ public class RuntimePatcher {
 
             case .classAddition:
                 // Validate class additions
-                break  // Simplified validation
+                break // Simplified validation
             }
         }
     }
@@ -411,17 +413,17 @@ public enum PatchingError: Error, LocalizedError {
         switch self {
         case .patchingDisabled:
             return "Runtime patching is disabled"
-        case .objectFileLoadFailed(let reason):
+        case let .objectFileLoadFailed(reason):
             return "Failed to load object file: \(reason)"
-        case .patchNotFound(let identifier):
+        case let .patchNotFound(identifier):
             return "Patch not found: \(identifier.className).\(identifier.methodName)"
-        case .validationFailed(let reason):
+        case let .validationFailed(reason):
             return "Patch validation failed: \(reason)"
-        case .revertFailed(let reason):
+        case let .revertFailed(reason):
             return "Patch revert failed: \(reason)"
-        case .methodNotFound(let method):
+        case let .methodNotFound(method):
             return "Method not found: \(method)"
-        case .classNotFound(let className):
+        case let .classNotFound(className):
             return "Class not found: \(className)"
         }
     }

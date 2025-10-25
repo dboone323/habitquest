@@ -20,7 +20,8 @@ public class DependencyPredictor {
 
     private let fileManager = FileManager.default
     private var predictionQueue = DispatchQueue(
-        label: "com.quantum.dependency-prediction", qos: .userInitiated)
+        label: "com.quantum.dependency-prediction", qos: .userInitiated
+    )
 
     /// Prediction model
     private var predictionModel: MLModel?
@@ -74,7 +75,7 @@ public class DependencyPredictor {
                     try await self.trainNeuralNetworkModel()
                 case .randomForest:
                     try await self.trainRandomForestModel()
-                case .custom(let modelName):
+                case let .custom(modelName):
                     try await self.trainCustomModel(named: modelName)
                 }
             } catch {
@@ -103,7 +104,8 @@ public class DependencyPredictor {
             for candidate in candidateDependencies {
                 do {
                     let prediction = try self.predictSingleDependency(
-                        candidate, features: features, using: model)
+                        candidate, features: features, using: model
+                    )
                     if prediction.confidence >= self.config.minConfidenceThreshold {
                         predictions.append(prediction)
                     }
@@ -128,7 +130,8 @@ public class DependencyPredictor {
             for (filePath, fileDeps) in project.fileDependencies {
                 group.addTask {
                     let predictions = try await self.predictDependencies(
-                        for: fileDeps, context: context)
+                        for: fileDeps, context: context
+                    )
                     return (filePath, predictions)
                 }
             }
@@ -157,14 +160,17 @@ public class DependencyPredictor {
 
             for sample in testData {
                 let features = self.extractFeatures(
-                    from: sample.fileDependencies, context: sample.context)
+                    from: sample.fileDependencies, context: sample.context
+                )
                 let candidateDependencies = self.getCandidateDependencies(
-                    for: sample.fileDependencies, context: sample.context)
+                    for: sample.fileDependencies, context: sample.context
+                )
 
                 for candidate in candidateDependencies {
                     do {
                         let prediction = try self.predictSingleDependency(
-                            candidate, features: features, using: model)
+                            candidate, features: features, using: model
+                        )
                         let actualDependency = sample.actualDependencies.contains(candidate)
 
                         if prediction.confidence >= self.config.minConfidenceThreshold {
@@ -228,7 +234,7 @@ public class DependencyPredictor {
     /// Get model insights and statistics
     public func getModelInsights() -> ModelInsights {
         let trainingSamples = trainingData.count
-        let featuresUsed = 15  // Number of features we extract
+        let featuresUsed = 15 // Number of features we extract
         let modelType = config.modelType
         let lastTrained = trainingData.last?.timestamp ?? Date.distantPast
         let performanceMetrics = getPerformanceMetrics()
@@ -274,7 +280,8 @@ public class DependencyPredictor {
         for sample in trainingData {
             let features = extractFeatures(from: sample.fileDependencies, context: sample.context)
             let candidateDeps = getCandidateDependencies(
-                for: sample.fileDependencies, context: sample.context)
+                for: sample.fileDependencies, context: sample.context
+            )
 
             for candidate in candidateDeps {
                 var row = features
@@ -302,7 +309,8 @@ public class DependencyPredictor {
         for sample in trainingData {
             let features = extractFeatures(from: sample.fileDependencies, context: sample.context)
             let candidateDeps = getCandidateDependencies(
-                for: sample.fileDependencies, context: sample.context)
+                for: sample.fileDependencies, context: sample.context
+            )
 
             for candidate in candidateDeps {
                 var row = features
@@ -333,7 +341,8 @@ public class DependencyPredictor {
         for sample in trainingData {
             let features = extractFeatures(from: sample.fileDependencies, context: sample.context)
             let candidateDeps = getCandidateDependencies(
-                for: sample.fileDependencies, context: sample.context)
+                for: sample.fileDependencies, context: sample.context
+            )
 
             for candidate in candidateDeps {
                 var row = features
@@ -400,7 +409,7 @@ public class DependencyPredictor {
 
         // Add commonly used dependencies from the project
         if let projectDeps = context.projectDependencies {
-            let allDeps = projectDeps.fileDependencies.values.flatMap { $0.dependencies }
+            let allDeps = projectDeps.fileDependencies.values.flatMap(\.dependencies)
             let commonDeps = Dictionary(grouping: allDeps, by: { $0 }).filter { $0.value.count > 2 }
                 .keys
             candidates.formUnion(commonDeps)
@@ -431,7 +440,8 @@ public class DependencyPredictor {
             dependency: dependency,
             confidence: probability,
             reasoning: generateReasoning(
-                for: dependency, confidence: probability, features: features),
+                for: dependency, confidence: probability, features: features
+            ),
             features: features,
             predictionTimestamp: Date()
         )
@@ -466,7 +476,7 @@ public class DependencyPredictor {
     private func getPerformanceMetrics() -> ModelPerformance? {
         // This would return cached performance metrics
         // For now, return nil
-        return nil
+        nil
     }
 }
 

@@ -57,11 +57,11 @@ public class TestGenerator {
 
         // Step 3: Enhance with edge cases and boundary conditions
         if config.includeEdgeCases {
-            testCases.append(contentsOf: try await generateEdgeCaseTests(for: codeAnalysis))
+            try await testCases.append(contentsOf: generateEdgeCaseTests(for: codeAnalysis))
         }
 
         if config.includeBoundaryTests {
-            testCases.append(contentsOf: try await generateBoundaryTests(for: codeAnalysis))
+            try await testCases.append(contentsOf: generateBoundaryTests(for: codeAnalysis))
         }
 
         // Step 4: Optimize the test suite
@@ -70,7 +70,7 @@ public class TestGenerator {
         // Step 5: Validate coverage
         let coverage = try await coverageAnalyzer.estimateCoverage(for: testCases, code: code)
         if coverage < config.coverageTarget {
-            testCases.append(contentsOf: try await generateAdditionalTests(to: config.coverageTarget, currentCoverage: coverage, codeAnalysis: codeAnalysis))
+            try await testCases.append(contentsOf: generateAdditionalTests(to: config.coverageTarget, currentCoverage: coverage, codeAnalysis: codeAnalysis))
         }
 
         return testCases
@@ -82,14 +82,14 @@ public class TestGenerator {
     ///   - code: The code being tested
     /// - Returns: Estimated coverage percentage (0.0 to 1.0)
     public func predictCoverage(for testCases: [TestCase], code: String) async throws -> Double {
-        return try await coverageAnalyzer.estimateCoverage(for: testCases, code: code)
+        try await coverageAnalyzer.estimateCoverage(for: testCases, code: code)
     }
 
     /// Optimize an existing test suite for better coverage and efficiency
     /// - Parameter testCases: The test cases to optimize
     /// - Returns: Optimized test suite
     public func optimizeTestSuite(_ testCases: [TestCase]) async throws -> [TestCase] {
-        return try await testOptimizer.optimize(testCases, for: nil)
+        try await testOptimizer.optimize(testCases, for: nil)
     }
 
     // MARK: - Private Methods
@@ -210,8 +210,8 @@ public class TestGenerator {
         let prompt = """
         For the following code analysis, generate boundary condition tests:
 
-        Functions: \(codeAnalysis.functions.map { $0.name }.joined(separator: ", "))
-        Classes: \(codeAnalysis.classes.map { $0.name }.joined(separator: ", "))
+        Functions: \(codeAnalysis.functions.map(\.name).joined(separator: ", "))
+        Classes: \(codeAnalysis.classes.map(\.name).joined(separator: ", "))
 
         Focus on:
         - Empty collections and nil values
@@ -235,8 +235,8 @@ public class TestGenerator {
         Coverage gap: \(String(format: "%.1f%%", coverageGap * 100))
 
         Generate additional test cases to close this coverage gap for:
-        Functions: \(codeAnalysis.functions.map { $0.name }.joined(separator: ", "))
-        Classes: \(codeAnalysis.classes.map { $0.name }.joined(separator: ", "))
+        Functions: \(codeAnalysis.functions.map(\.name).joined(separator: ", "))
+        Classes: \(codeAnalysis.classes.map(\.name).joined(separator: ", "))
 
         Focus on uncovered code paths and branches.
         """
@@ -250,7 +250,8 @@ public class TestGenerator {
     private func parseCodeAnalysis(from response: String) throws -> CodeAnalysis {
         // Parse JSON response from AI model
         guard let data = response.data(using: .utf8),
-              let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+              let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+        else {
             throw TestGenerationError.invalidResponse
         }
 
@@ -391,7 +392,7 @@ private class OllamaClient {
     func generate(prompt: String, model: String) async throws -> String {
         // This would integrate with the actual Ollama client
         // For now, return a placeholder response
-        return "// Generated test code would go here"
+        "// Generated test code would go here"
     }
 }
 
@@ -400,7 +401,7 @@ private class CoverageAnalyzer {
     func estimateCoverage(for testCases: [TestCase], code: String) async throws -> Double {
         // This would analyze actual code coverage
         // For now, return a placeholder estimate
-        return Double(testCases.count) * 0.1 // Rough estimate
+        Double(testCases.count) * 0.1 // Rough estimate
     }
 }
 
@@ -409,7 +410,7 @@ private class TestOptimizer {
     func optimize(_ testCases: [TestCase], for codeAnalysis: CodeAnalysis?) async throws -> [TestCase] {
         // This would optimize the test suite for better coverage and efficiency
         // For now, return the original test cases
-        return testCases
+        testCases
     }
-}</content>
-<parameter name="filePath">/Users/danielstevens/Desktop/Quantum-workspace/Phase5/AI_Testing/TestGenerator.swift
+} </ content>
+<parameter name = "filePath" >/ Users / danielstevens / Desktop / Quantum - workspace / Phase5 / AI_Testing / TestGenerator.swift

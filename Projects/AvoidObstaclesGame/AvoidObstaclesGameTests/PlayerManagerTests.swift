@@ -16,19 +16,19 @@ class PlayerManagerTests: XCTestCase {
 
     // MARK: - classPlayerManager{ Tests
 
-    func testclassPlayerManager{Initialization() {
+    func testclassPlayerManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classPlayerManager{
         XCTAssertTrue(true, "Placeholder test for classPlayerManager{")
     }
 
-    func testclassPlayerManager{Properties() {
+    func testclassPlayerManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classPlayerManager{
         XCTAssertTrue(true, "Placeholder test for classPlayerManager{ properties")
     }
 
-    func testclassPlayerManager{Methods() {
+    func testclassPlayerManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classPlayerManager{
         XCTAssertTrue(true, "Placeholder test for classPlayerManager{ methods")

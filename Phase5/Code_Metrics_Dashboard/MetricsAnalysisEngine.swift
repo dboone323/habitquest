@@ -19,7 +19,8 @@ public class MetricsAnalysisEngine {
 
     private let metricsCollector: MetricsCollector
     private var analysisQueue = DispatchQueue(
-        label: "com.quantum.metrics-analysis", qos: .userInitiated)
+        label: "com.quantum.metrics-analysis", qos: .userInitiated
+    )
 
     private var historicalMetrics: [Date: AggregateMetrics] = [:]
     private var predictionModels: [String: MLModel] = [:]
@@ -29,10 +30,10 @@ public class MetricsAnalysisEngine {
 
     /// Analysis configuration
     public struct Configuration {
-        public var predictionHorizon: TimeInterval = 7 * 24 * 3600  // 7 days
+        public var predictionHorizon: TimeInterval = 7 * 24 * 3600 // 7 days
         public var confidenceThreshold: Double = 0.7
         public var enableMachineLearning: Bool = true
-        public var analysisInterval: TimeInterval = 3600  // 1 hour
+        public var analysisInterval: TimeInterval = 3600 // 1 hour
         public var maxHistoricalData: Int = 1000
 
         public init() {}
@@ -53,7 +54,7 @@ public class MetricsAnalysisEngine {
 
     /// Perform comprehensive analysis
     public func performAnalysis() async throws -> AnalysisReport {
-        return try await analysisQueue.sync {
+        try await analysisQueue.sync {
             // Collect current metrics
             let currentMetrics = metricsCollector.getAggregateMetrics()
 
@@ -124,7 +125,8 @@ public class MetricsAnalysisEngine {
             // Predict complexity
             if let complexityModel = predictionModels["complexity"] {
                 let complexityPrediction = try predictComplexity(
-                    complexityModel, horizon: timeHorizon)
+                    complexityModel, horizon: timeHorizon
+                )
                 predictions.append(complexityPrediction)
             }
 
@@ -137,7 +139,8 @@ public class MetricsAnalysisEngine {
             // Predict performance
             if let performanceModel = predictionModels["performance"] {
                 let performancePrediction = try predictPerformance(
-                    performanceModel, horizon: timeHorizon)
+                    performanceModel, horizon: timeHorizon
+                )
                 predictions.append(performancePrediction)
             }
 
@@ -190,22 +193,22 @@ public class MetricsAnalysisEngine {
 
             // Check for complexity anomalies
             if let complexityAnomaly = detectComplexityAnomaly(
-                currentMetrics, historicalData: historicalData)
-            {
+                currentMetrics, historicalData: historicalData
+            ) {
                 anomalies.append(complexityAnomaly)
             }
 
             // Check for file size anomalies
             if let fileSizeAnomaly = detectFileSizeAnomaly(
-                currentMetrics, historicalData: historicalData)
-            {
+                currentMetrics, historicalData: historicalData
+            ) {
                 anomalies.append(fileSizeAnomaly)
             }
 
             // Check for rapid changes
             if let changeAnomaly = detectRapidChangeAnomaly(
-                currentMetrics, historicalData: historicalData)
-            {
+                currentMetrics, historicalData: historicalData
+            ) {
                 anomalies.append(changeAnomaly)
             }
 
@@ -217,20 +220,20 @@ public class MetricsAnalysisEngine {
 
     private func performTrendAnalysis() throws -> TrendAnalysis {
         let sortedData = historicalMetrics.sorted(by: { $0.key < $1.key })
-        let values = sortedData.map { $0.value }
+        let values = sortedData.map(\.value)
 
         guard values.count >= 2 else {
             throw AnalysisError.insufficientData
         }
 
         // Calculate trends for key metrics
-        let complexityTrend = calculateLinearTrend(values.map { $0.complexityScore })
-        let maintainabilityTrend = calculateLinearTrend(values.map { $0.maintainabilityScore })
+        let complexityTrend = calculateLinearTrend(values.map(\.complexityScore))
+        let maintainabilityTrend = calculateLinearTrend(values.map(\.maintainabilityScore))
         let fileGrowthTrend = calculateLinearTrend(values.map { Double($0.totalFiles) })
 
         // Calculate volatility
-        let complexityVolatility = calculateVolatility(values.map { $0.complexityScore })
-        let maintainabilityVolatility = calculateVolatility(values.map { $0.maintainabilityScore })
+        let complexityVolatility = calculateVolatility(values.map(\.complexityScore))
+        let maintainabilityVolatility = calculateVolatility(values.map(\.maintainabilityScore))
 
         return TrendAnalysis(
             complexityTrend: complexityTrend,
@@ -247,7 +250,7 @@ public class MetricsAnalysisEngine {
 
         // Analyze prediction confidence
         let averageConfidence =
-            predictions.map { $0.confidence }.reduce(0, +) / Double(predictions.count)
+            predictions.map(\.confidence).reduce(0, +) / Double(predictions.count)
 
         // Identify risk areas
         let highRiskPredictions = predictions.filter {
@@ -257,7 +260,7 @@ public class MetricsAnalysisEngine {
         return PredictiveAnalysis(
             predictions: predictions,
             averageConfidence: averageConfidence,
-            highRiskAreas: highRiskPredictions.map { $0.metricType },
+            highRiskAreas: highRiskPredictions.map(\.metricType),
             predictionHorizon: config.predictionHorizon
         )
     }
@@ -285,18 +288,18 @@ public class MetricsAnalysisEngine {
 
         // Calculate correlations between metrics
         let complexityMaintainabilityCorr = calculateCorrelation(
-            metrics.map { $0.complexityScore },
-            metrics.map { $0.maintainabilityScore }
+            metrics.map(\.complexityScore),
+            metrics.map(\.maintainabilityScore)
         )
 
         let fileSizeComplexityCorr = calculateCorrelation(
             metrics.map { Double($0.totalFiles) },
-            metrics.map { $0.complexityScore }
+            metrics.map(\.complexityScore)
         )
 
         let linesCodeQualityCorr = calculateCorrelation(
             metrics.map { Double($0.totalLinesOfCode) },
-            metrics.map { $0.maintainabilityScore }
+            metrics.map(\.maintainabilityScore)
         )
 
         return CorrelationAnalysis(
@@ -356,7 +359,7 @@ public class MetricsAnalysisEngine {
                     type: .size,
                     title: "Large Files Detected",
                     description:
-                        "\(currentMetrics.largeFiles.count) files exceed recommended size limits",
+                    "\(currentMetrics.largeFiles.count) files exceed recommended size limits",
                     severity: .medium,
                     suggestions: [
                         "Split large files into smaller modules",
@@ -412,14 +415,14 @@ public class MetricsAnalysisEngine {
         }
 
         // Anomaly-based recommendations
-        if anomalyDetection.criticalAnomalies.count > 0 {
+        if !anomalyDetection.criticalAnomalies.isEmpty {
             recommendations.append(
                 Recommendation(
                     priority: .critical,
                     category: .investigation,
                     title: "Investigate Critical Anomalies",
                     description:
-                        "\(anomalyDetection.criticalAnomalies.count) critical anomalies detected",
+                    "\(anomalyDetection.criticalAnomalies.count) critical anomalies detected",
                     actions: [
                         "Review recent code changes",
                         "Analyze anomaly causes",
@@ -462,7 +465,7 @@ public class MetricsAnalysisEngine {
     {
         // Simplified prediction - in reality would use the ML model
         let currentMetrics = metricsCollector.getAggregateMetrics()
-        let predictedValue = currentMetrics.complexityScore * 1.05  // 5% increase prediction
+        let predictedValue = currentMetrics.complexityScore * 1.05 // 5% increase prediction
 
         return MetricPrediction(
             metricType: .complexity,
@@ -473,8 +476,7 @@ public class MetricsAnalysisEngine {
         )
     }
 
-    private func predictQuality(_ model: MLModel, horizon: TimeInterval) throws -> MetricPrediction
-    {
+    private func predictQuality(_ model: MLModel, horizon: TimeInterval) throws -> MetricPrediction {
         let currentMetrics = metricsCollector.getAggregateMetrics()
         let predictedValue = min(1.0, currentMetrics.maintainabilityScore * 1.02)
 
@@ -510,10 +512,10 @@ public class MetricsAnalysisEngine {
         }
 
         let n = Double(values.count)
-        let sumX = (0..<values.count).map { Double($0) }.reduce(0, +)
+        let sumX = (0 ..< values.count).map { Double($0) }.reduce(0, +)
         let sumY = values.reduce(0, +)
-        let sumXY = (0..<values.count).map { Double($0) * values[$0] }.reduce(0, +)
-        let sumXX = (0..<values.count).map { Double($0) * Double($0) }.reduce(0, +)
+        let sumXY = (0 ..< values.count).map { Double($0) * values[$0] }.reduce(0, +)
+        let sumXX = (0 ..< values.count).map { Double($0) * Double($0) }.reduce(0, +)
         let sumYY = values.map { $0 * $0 }.reduce(0, +)
 
         let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX)
@@ -527,7 +529,7 @@ public class MetricsAnalysisEngine {
     private func calculateVolatility(_ values: [Double]) -> Double {
         guard values.count >= 2 else { return 0 }
 
-        let returns = (1..<values.count).map { (values[$0] - values[$0 - 1]) / values[$0 - 1] }
+        let returns = (1 ..< values.count).map { (values[$0] - values[$0 - 1]) / values[$0 - 1] }
         let mean = returns.reduce(0, +) / Double(returns.count)
         let variance = returns.map { pow($0 - mean, 2) }.reduce(0, +) / Double(returns.count)
 
@@ -540,7 +542,7 @@ public class MetricsAnalysisEngine {
         let n = Double(x.count)
         let sumX = x.reduce(0, +)
         let sumY = y.reduce(0, +)
-        let sumXY = (0..<x.count).map { x[$0] * y[$0] }.reduce(0, +)
+        let sumXY = (0 ..< x.count).map { x[$0] * y[$0] }.reduce(0, +)
         let sumXX = x.map { $0 * $0 }.reduce(0, +)
         let sumYY = y.map { $0 * $0 }.reduce(0, +)
 
@@ -553,7 +555,7 @@ public class MetricsAnalysisEngine {
     private func calculateRSquared(values: [Double], slope: Double, intercept: Double) -> Double {
         let mean = values.reduce(0, +) / Double(values.count)
         let totalSumSquares = values.map { pow($0 - mean, 2) }.reduce(0, +)
-        let residualSumSquares = (0..<values.count).map { index in
+        let residualSumSquares = (0 ..< values.count).map { index in
             let predicted = slope * Double(index) + intercept
             return pow(values[index] - predicted, 2)
         }.reduce(0, +)
@@ -563,7 +565,7 @@ public class MetricsAnalysisEngine {
 
     private func calculateTrendSlope(_ trend: [Date: Double]) -> Double {
         let sortedEntries = trend.sorted(by: { $0.key < $1.key })
-        let values = sortedEntries.map { $0.value }
+        let values = sortedEntries.map(\.value)
         return calculateLinearTrend(values).slope
     }
 
@@ -572,14 +574,14 @@ public class MetricsAnalysisEngine {
     private func detectComplexityAnomaly(
         _ current: AggregateMetrics, historicalData: [AggregateMetrics]
     ) -> MetricAnomaly? {
-        let historicalComplexities = historicalData.map { $0.complexityScore }
+        let historicalComplexities = historicalData.map(\.complexityScore)
         guard let mean = historicalComplexities.mean(),
-            let stdDev = historicalComplexities.standardDeviation()
+              let stdDev = historicalComplexities.standardDeviation()
         else {
             return nil
         }
 
-        let threshold = mean - 2 * stdDev  // 2 standard deviations below mean
+        let threshold = mean - 2 * stdDev // 2 standard deviations below mean
         if current.complexityScore < threshold {
             return MetricAnomaly(
                 type: .complexity,
@@ -599,12 +601,12 @@ public class MetricsAnalysisEngine {
     ) -> MetricAnomaly? {
         let historicalFileCounts = historicalData.map { Double($0.totalFiles) }
         guard let mean = historicalFileCounts.mean(),
-            let stdDev = historicalFileCounts.standardDeviation()
+              let stdDev = historicalFileCounts.standardDeviation()
         else {
             return nil
         }
 
-        let threshold = mean + 3 * stdDev  // 3 standard deviations above mean
+        let threshold = mean + 3 * stdDev // 3 standard deviations above mean
         if Double(current.totalFiles) > threshold {
             return MetricAnomaly(
                 type: .fileSize,
@@ -627,20 +629,20 @@ public class MetricsAnalysisEngine {
         let recent = historicalData.suffix(3)
         let older = historicalData.prefix(historicalData.count - 3)
 
-        guard let recentAvg = recent.map({ $0.complexityScore }).mean(),
-            let olderAvg = older.map({ $0.complexityScore }).mean()
+        guard let recentAvg = recent.map(\.complexityScore).mean(),
+              let olderAvg = older.map(\.complexityScore).mean()
         else {
             return nil
         }
 
         let change = abs(recentAvg - olderAvg) / olderAvg
-        if change > 0.5 {  // 50% change
+        if change > 0.5 { // 50% change
             return MetricAnomaly(
                 type: .rapidChange,
                 description: "Rapid change in complexity metrics detected",
                 severity: .high,
                 detectedValue: change,
-                expectedRange: 0.0...0.2,
+                expectedRange: 0.0 ... 0.2,
                 timestamp: Date()
             )
         }
@@ -657,11 +659,11 @@ public class MetricsAnalysisEngine {
             Task {
                 do {
                     let result = try await self?.performAnalysis()
-                    if let result = result {
+                    if let result {
                         self?.analysisResults.append(
                             AnalysisResult(
                                 timestamp: result.timestamp,
-                                summary: result.insights.map { $0.title }.joined(separator: ", "),
+                                summary: result.insights.map(\.title).joined(separator: ", "),
                                 keyMetrics: [
                                     "complexity": result.currentMetrics.complexityScore,
                                     "maintainability": result.currentMetrics.maintainabilityScore,
@@ -693,16 +695,15 @@ public class MetricsAnalysisEngine {
         x: Double, y: Double
     )] {
         let sortedData = historicalMetrics.sorted(by: { $0.key < $1.key })
-        return sortedData.enumerated().map { (index, element) in
+        return sortedData.enumerated().map { index, element in
             (x: Double(index), y: element.value[keyPath: keyPath])
         }
     }
 
-    private func createLinearRegressionModel(from data: [(x: Double, y: Double)]) throws -> MLModel
-    {
+    private func createLinearRegressionModel(from data: [(x: Double, y: Double)]) throws -> MLModel {
         // Simplified model creation - in reality would use CreateML
         // This is a placeholder implementation
-        return try MLModel()
+        try MLModel()
     }
 
     private func determineQualityDirection(
@@ -880,7 +881,7 @@ public enum AnalysisError: Error {
 
 // MARK: - Extensions
 
-extension Array where Element == Double {
+extension [Double] {
     func mean() -> Double? {
         guard !isEmpty else { return nil }
         return reduce(0, +) / Double(count)
@@ -897,6 +898,6 @@ extension Array where Element == Double {
 
 extension ClosedRange where Bound == Double {
     static func ± (lhs: Double, rhs: Double) -> ClosedRange<Double> {
-        (lhs - rhs)...(lhs + rhs)
+        (lhs - rhs) ... (lhs + rhs)
     }
 }

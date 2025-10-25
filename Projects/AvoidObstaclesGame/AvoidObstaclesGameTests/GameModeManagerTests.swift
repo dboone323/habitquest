@@ -16,19 +16,19 @@ class GameModeManagerTests: XCTestCase {
 
     // MARK: - classGameModeManager{ Tests
 
-    func testclassGameModeManager{Initialization() {
+    func testclassGameModeManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classGameModeManager{
         XCTAssertTrue(true, "Placeholder test for classGameModeManager{")
     }
 
-    func testclassGameModeManager{Properties() {
+    func testclassGameModeManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classGameModeManager{
         XCTAssertTrue(true, "Placeholder test for classGameModeManager{ properties")
     }
 
-    func testclassGameModeManager{Methods() {
+    func testclassGameModeManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classGameModeManager{
         XCTAssertTrue(true, "Placeholder test for classGameModeManager{ methods")

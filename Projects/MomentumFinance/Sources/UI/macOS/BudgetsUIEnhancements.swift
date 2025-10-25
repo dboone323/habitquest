@@ -1,6 +1,8 @@
 // Momentum Finance - macOS Budgets UI Enhancements
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
+import MomentumFinanceCore
+import SharedKit
 import SwiftData
 import SwiftUI
 

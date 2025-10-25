@@ -21,7 +21,8 @@ public class TaskScheduler {
     private var waitingTasks: [String: ScheduledTask] = [:]
 
     private let schedulerQueue = DispatchQueue(
-        label: "com.quantum.task-scheduler", qos: .userInitiated)
+        label: "com.quantum.task-scheduler", qos: .userInitiated
+    )
     private let semaphore = DispatchSemaphore(value: 1)
 
     /// Configuration for task scheduling
@@ -122,7 +123,7 @@ public class TaskScheduler {
 
         if let selectedTask = suitableTasks.first {
             selectedTask.status = .running
-            selectedTask.assignedNodeId = UUID().uuidString  // Would be actual node ID
+            selectedTask.assignedNodeId = UUID().uuidString // Would be actual node ID
             runningTasks[selectedTask.id] = selectedTask
             return selectedTask
         }
@@ -250,13 +251,13 @@ public class TaskScheduler {
         // Check if node supports the required platform
         switch task.type {
         case .compile, .link:
-            return nodeCapabilities.supportedPlatforms.contains("macOS")  // Simplified check
+            return nodeCapabilities.supportedPlatforms.contains("macOS") // Simplified check
         case .test:
-            return nodeCapabilities.supportedPlatforms.contains("iOS")  // Simplified check
+            return nodeCapabilities.supportedPlatforms.contains("iOS") // Simplified check
         case .archive:
-            return nodeCapabilities.cores >= 2  // Archiving needs more cores
+            return nodeCapabilities.cores >= 2 // Archiving needs more cores
         case .analyze:
-            return nodeCapabilities.memoryGB >= 4  // Analysis needs more memory
+            return nodeCapabilities.memoryGB >= 4 // Analysis needs more memory
         }
     }
 
@@ -277,12 +278,12 @@ public class TaskScheduler {
     }
 
     private func shouldRetryTask(_ task: ScheduledTask) -> Bool {
-        return task.retryCount < 3 && isRetryableError(task.error)
+        task.retryCount < 3 && isRetryableError(task.error)
     }
 
     private func isRetryableError(_ error: Error?) -> Bool {
         // Determine if an error is retryable
-        guard let error = error else { return false }
+        guard let error else { return false }
 
         let errorString = String(describing: error).lowercased()
         return errorString.contains("timeout") || errorString.contains("network")
@@ -306,12 +307,12 @@ public class TaskScheduler {
 
     private func analyzePerformanceData() -> PerformanceData {
         // Analyze historical performance data
-        let taskTimes = completedTasks.values.map { $0.duration }
+        let taskTimes = completedTasks.values.map(\.duration)
         let averageTime = taskTimes.reduce(0, +) / Double(taskTimes.count)
 
         let nodePerformance = Dictionary(grouping: completedTasks.values) { $0.nodeId ?? "unknown" }
             .mapValues { tasks in
-                let avgTime = tasks.map { $0.duration }.reduce(0, +) / Double(tasks.count)
+                let avgTime = tasks.map(\.duration).reduce(0, +) / Double(tasks.count)
                 return avgTime
             }
 
@@ -325,9 +326,9 @@ public class TaskScheduler {
     private func identifyBottlenecks() -> [String] {
         // Identify tasks that take significantly longer than average
         let averageTime = calculateAverageTaskTime()
-        let threshold = averageTime * 2.0  // Tasks taking 2x average are bottlenecks
+        let threshold = averageTime * 2.0 // Tasks taking 2x average are bottlenecks
 
-        return completedTasks.compactMap { (taskId, result) in
+        return completedTasks.compactMap { taskId, result in
             result.duration > threshold ? taskId : nil
         }
     }
@@ -458,7 +459,7 @@ private struct PriorityQueue<Element: Comparable> {
 
     mutating func enqueue(_ element: Element) {
         elements.append(element)
-        elements.sort(by: >)  // Sort in descending order (highest priority first)
+        elements.sort(by: >) // Sort in descending order (highest priority first)
     }
 
     mutating func dequeue() -> Element? {

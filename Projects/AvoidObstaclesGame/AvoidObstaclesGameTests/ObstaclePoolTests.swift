@@ -16,19 +16,19 @@ class ObstaclePoolTests: XCTestCase {
 
     // MARK: - classObstaclePool{ Tests
 
-    func testclassObstaclePool{Initialization() {
+    func testclassObstaclePoolInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classObstaclePool{
         XCTAssertTrue(true, "Placeholder test for classObstaclePool{")
     }
 
-    func testclassObstaclePool{Properties() {
+    func testclassObstaclePoolProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classObstaclePool{
         XCTAssertTrue(true, "Placeholder test for classObstaclePool{ properties")
     }
 
-    func testclassObstaclePool{Methods() {
+    func testclassObstaclePoolMethods() {
         // Test method functionality
         // TODO: Implement method tests for classObstaclePool{
         XCTAssertTrue(true, "Placeholder test for classObstaclePool{ methods")

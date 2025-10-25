@@ -212,8 +212,8 @@ public final class FinancialInsight {
     public var id: UUID
     public var title: String
     public var insightDescription: String // Renamed from 'description' to avoid SwiftData conflict
-    public var priority: InsightPriority
-    public var type: InsightType
+    public var priorityRaw: String
+    public var typeRaw: String
     public var confidence: Double // 0.0 to 1.0
     public var createdAt: Date
     public var isRead: Bool
@@ -227,11 +227,27 @@ public final class FinancialInsight {
     public var impactScore: Double // 0.0 to 10.0 - measures potential financial impact
     public var actionRecommendations: [String] // AI-generated action items
     public var potentialSavings: Double? // Estimated savings if action is taken
-    public var riskLevel: RiskLevel // Associated risk level
+    public var riskLevelRaw: String // Associated risk level
     public var aiAnalysisVersion: String // Version of AI model used for analysis
     public var contextualTags: [String] // Tags for better categorization
     public var followUpDate: Date? // When to follow up on this insight
     public var isUserFeedbackPositive: Bool? // User feedback for ML improvement
+
+    // Computed properties for enum access
+    public var priority: InsightPriority {
+        get { InsightPriority(rawValue: priorityRaw) ?? .medium }
+        set { priorityRaw = newValue.rawValue }
+    }
+
+    public var type: InsightType {
+        get { InsightType(rawValue: typeRaw) ?? .spendingPattern }
+        set { typeRaw = newValue.rawValue }
+    }
+
+    public var riskLevel: RiskLevel {
+        get { RiskLevel(rawValue: riskLevelRaw) ?? .medium }
+        set { riskLevelRaw = newValue.rawValue }
+    }
 
     public init(
         title: String,
@@ -251,8 +267,8 @@ public final class FinancialInsight {
         self.id = UUID()
         self.title = title
         self.insightDescription = description
-        self.priority = priority
-        self.type = type
+        self.priorityRaw = priority.rawValue
+        self.typeRaw = type.rawValue
         self.confidence = confidence
         self.createdAt = Date()
         self.isRead = false
@@ -264,7 +280,7 @@ public final class FinancialInsight {
         self.impactScore = impactScore
         self.actionRecommendations = actionRecommendations
         self.potentialSavings = potentialSavings
-        self.riskLevel = riskLevel
+        self.riskLevelRaw = riskLevel.rawValue
         self.aiAnalysisVersion = "v2.1"
         self.contextualTags = []
         self.followUpDate = nil

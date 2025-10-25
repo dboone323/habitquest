@@ -1,7 +1,7 @@
 // Momentum Finance - Validation Methods for Enhanced Account Detail View
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
-import Shared
+import SharedKit
 import SwiftData
 
 #if os(macOS)

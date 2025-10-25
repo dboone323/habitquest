@@ -76,7 +76,8 @@ public class ErrorHandler {
         // Attempt recovery if enabled
         if config.enableAutoRecovery {
             let recoveryResult = await attemptRecovery(
-                for: errorType, error: error, context: context)
+                for: errorType, error: error, context: context
+            )
 
             switch recoveryResult {
             case .recovered:
@@ -124,7 +125,7 @@ public class ErrorHandler {
         errorQueue.sync {
             var filtered = errorHistory
 
-            if let filter = filter {
+            if let filter {
                 filtered = filtered.filter { record in
                     if let errorType = filter.errorType, classifyError(record.error) != errorType {
                         return false
@@ -142,7 +143,7 @@ public class ErrorHandler {
             }
 
             let sorted = filtered.sorted { $0.timestamp > $1.timestamp }
-            if let limit = limit {
+            if let limit {
                 return Array(sorted.prefix(limit))
             }
             return sorted
@@ -163,8 +164,8 @@ public class ErrorHandler {
 
             let recentErrors =
                 errorHistory
-                .filter { Date().timeIntervalSince($0.timestamp) < 3600 }  // Last hour
-                .count
+                    .filter { Date().timeIntervalSince($0.timestamp) < 3600 } // Last hour
+                    .count
 
             return ErrorStatistics(
                 totalErrors: total,
@@ -483,7 +484,7 @@ public struct RetryWithCleanBuildStrategy: RecoveryStrategy {
         // Implementation would trigger a clean build
         print("Executing clean build retry strategy")
         // Simulate clean build process
-        try await Task.sleep(nanoseconds: 1_000_000_000)  // 1 second
+        try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
     }
 }
 
@@ -550,7 +551,7 @@ public struct RetryOperationStrategy: RecoveryStrategy {
     public func execute(error: Error, context: ErrorContext) async throws {
         // Implementation would retry the operation
         print("Executing operation retry strategy")
-        try await Task.sleep(nanoseconds: 500_000_000)  // 0.5 seconds
+        try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
     }
 }
 
@@ -584,7 +585,7 @@ public struct RetryWithBackoffStrategy: RecoveryStrategy {
     public func execute(error: Error, context: ErrorContext) async throws {
         // Implementation would retry with backoff
         print("Executing backoff retry strategy")
-        try await Task.sleep(nanoseconds: 2_000_000_000)  // 2 seconds
+        try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
     }
 }
 

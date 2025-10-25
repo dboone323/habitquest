@@ -16,19 +16,19 @@ class UIDisplayManagerTests: XCTestCase {
 
     // MARK: - enumDisplayOverlayType{ Tests
 
-    func testenumDisplayOverlayType{Initialization() {
+    func testenumDisplayOverlayTypeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumDisplayOverlayType{
         XCTAssertTrue(true, "Placeholder test for enumDisplayOverlayType{")
     }
 
-    func testenumDisplayOverlayType{Properties() {
+    func testenumDisplayOverlayTypeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumDisplayOverlayType{
         XCTAssertTrue(true, "Placeholder test for enumDisplayOverlayType{ properties")
     }
 
-    func testenumDisplayOverlayType{Methods() {
+    func testenumDisplayOverlayTypeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumDisplayOverlayType{
         XCTAssertTrue(true, "Placeholder test for enumDisplayOverlayType{ methods")
@@ -36,19 +36,19 @@ class UIDisplayManagerTests: XCTestCase {
 
     // MARK: - classUIDisplayManager{ Tests
 
-    func testclassUIDisplayManager{Initialization() {
+    func testclassUIDisplayManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classUIDisplayManager{
         XCTAssertTrue(true, "Placeholder test for classUIDisplayManager{")
     }
 
-    func testclassUIDisplayManager{Properties() {
+    func testclassUIDisplayManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classUIDisplayManager{
         XCTAssertTrue(true, "Placeholder test for classUIDisplayManager{ properties")
     }
 
-    func testclassUIDisplayManager{Methods() {
+    func testclassUIDisplayManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classUIDisplayManager{
         XCTAssertTrue(true, "Placeholder test for classUIDisplayManager{ methods")

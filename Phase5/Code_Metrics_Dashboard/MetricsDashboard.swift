@@ -137,7 +137,8 @@ public struct MetricsDashboard: View {
                 Button(action: { showAlerts.toggle() }) {
                     Label(
                         showAlerts ? "Hide Alerts" : "Show Alerts",
-                        systemImage: showAlerts ? "eye.slash" : "eye")
+                        systemImage: showAlerts ? "eye.slash" : "eye"
+                    )
                 }
             }
 
@@ -260,8 +261,8 @@ public struct MetricsDashboard: View {
     private func colorForScore(_ score: Double) -> Color {
         switch score {
         case 0.8...: return .green
-        case 0.6..<0.8: return .yellow
-        case 0.4..<0.6: return .orange
+        case 0.6 ..< 0.8: return .yellow
+        case 0.4 ..< 0.6: return .orange
         default: return .red
         }
     }
@@ -295,7 +296,7 @@ struct MetricCard: View {
 
             Spacer()
 
-            if let trend = trend {
+            if let trend {
                 TrendArrow(trend: trend)
             }
         }
@@ -388,7 +389,7 @@ struct TrendIndicator: View {
             Text(title)
                 .font(.headline)
 
-            if let trend = trend {
+            if let trend {
                 HStack {
                     Text(String(format: "%.1f%%", trend))
                         .font(.title2)
@@ -540,7 +541,7 @@ class MetricsDashboardViewModel: ObservableObject {
         let values = Array(
             historicalData.values.sorted(by: { $0.analysisTimestamp < $1.analysisTimestamp })
         )
-        .suffix(10)  // Last 10 data points
+        .suffix(10) // Last 10 data points
         .map { Double($0[keyPath: keyPath]) }
 
         guard values.count >= 2 else { return nil }
@@ -548,7 +549,7 @@ class MetricsDashboardViewModel: ObservableObject {
         let recent = values.suffix(5).reduce(0, +) / Double(values.suffix(5).count)
         let previous =
             values.prefix(values.count - 5).reduce(0, +)
-            / Double(values.prefix(values.count - 5).count)
+                / Double(values.prefix(values.count - 5).count)
 
         if previous == 0 { return nil }
 
@@ -556,12 +557,12 @@ class MetricsDashboardViewModel: ObservableObject {
     }
 
     func calculateComplexityTrend() -> Double? {
-        calculateTrend(for: \.totalFunctions)  // Simplified - would use actual complexity data
+        calculateTrend(for: \.totalFunctions) // Simplified - would use actual complexity data
     }
 
     func calculateMaintainabilityTrend() -> Double? {
         // Would calculate based on maintainability score history
-        nil  // Placeholder
+        nil // Placeholder
     }
 
     func calculateFileGrowthTrend() -> Double? {
@@ -570,7 +571,7 @@ class MetricsDashboardViewModel: ObservableObject {
 
     func calculateQualityTrend() -> Double? {
         // Would calculate based on quality metrics history
-        nil  // Placeholder
+        nil // Placeholder
     }
 
     // MARK: - Private Methods
@@ -581,7 +582,7 @@ class MetricsDashboardViewModel: ObservableObject {
 
     private func updateChartData() {
         // Generate chart data from historical metrics
-        chartData = historicalData.map { (timestamp, metrics) in
+        chartData = historicalData.map { timestamp, metrics in
             ChartDataPoint(
                 timestamp: timestamp,
                 metric: "Complexity",
@@ -601,7 +602,7 @@ class MetricsDashboardViewModel: ObservableObject {
             DetailedMetric(
                 title: "Code Coverage",
                 value: aggregateMetrics.coverageScore * 100,
-                change: nil,  // Would calculate from coverage history
+                change: nil, // Would calculate from coverage history
                 description: "Test coverage percentage"
             ),
             DetailedMetric(
@@ -647,7 +648,7 @@ class MetricsDashboardViewModel: ObservableObject {
                     id: UUID(),
                     title: "Complexity Hotspots",
                     message:
-                        "\(aggregateMetrics.complexityHotspots.count) files have high complexity",
+                    "\(aggregateMetrics.complexityHotspots.count) files have high complexity",
                     severity: .medium,
                     timestamp: Date()
                 ))

@@ -1,7 +1,7 @@
 #!/usr/bin/env swift
 
-import Foundation
 import CloudKit
+import Foundation
 
 // Define the TaskPriority enum
 enum TaskPriority: String, CaseIterable, Codable {

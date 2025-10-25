@@ -26,7 +26,7 @@ final class MemoryProfilingTests: XCTestCase {
 
         // Initialize components with test configuration
         let config = MemoryProfiler.Configuration(
-            monitoringInterval: 0.1,  // Fast for testing
+            monitoringInterval: 0.1, // Fast for testing
             snapshotRetentionPeriod: 3600,
             anomalyDetectionEnabled: true,
             leakDetectionEnabled: true,
@@ -138,7 +138,7 @@ final class MemoryProfilingTests: XCTestCase {
 
         let trends = memoryMonitor.analyzeTrends(snapshots)
 
-        XCTAssertEqual(trends.count, snapshots.count - 1)  // One less trend than snapshots
+        XCTAssertEqual(trends.count, snapshots.count - 1) // One less trend than snapshots
         XCTAssertTrue(trends.contains { $0 == .increasing })
     }
 
@@ -153,11 +153,11 @@ final class MemoryProfilingTests: XCTestCase {
     // MARK: - MemoryAnalyzer Tests
 
     func testMemoryAnalyzerSnapshotAnalysis() {
-        let snapshot = createMockSnapshot(usedMemory: 512 * 1024 * 1024)  // 512MB
+        let snapshot = createMockSnapshot(usedMemory: 512 * 1024 * 1024) // 512MB
         let stats = memoryAnalyzer.analyzeSnapshot(snapshot)
 
         XCTAssertGreaterThan(stats.averageUsage, 0)
-        XCTAssertEqual(stats.averageUsage, stats.peakUsage)  // Single snapshot
+        XCTAssertEqual(stats.averageUsage, stats.peakUsage) // Single snapshot
     }
 
     func testMemoryAnalyzerTrendDetection() {
@@ -165,7 +165,7 @@ final class MemoryProfilingTests: XCTestCase {
         let analysis = memoryAnalyzer.analyzeSnapshots(snapshots)
 
         XCTAssertEqual(analysis.trend, .increasing)
-        XCTAssertFalse(analysis.anomalies.isEmpty)  // Should detect some anomalies
+        XCTAssertFalse(analysis.anomalies.isEmpty) // Should detect some anomalies
     }
 
     func testMemoryAnalyzerFragmentationCalculation() {
@@ -195,7 +195,8 @@ final class MemoryProfilingTests: XCTestCase {
     func testLeakDetectorGrowthPatternLeak() {
         // Create snapshots with steady growth indicating a leak
         let snapshots = createMockSnapshots(
-            count: 20, trend: .increasing, growthRate: 10 * 1024 * 1024)  // 10MB per snapshot
+            count: 20, trend: .increasing, growthRate: 10 * 1024 * 1024
+        ) // 10MB per snapshot
 
         let leakDetection = leakDetector.analyzeForLeaks(snapshots)
 
@@ -220,7 +221,7 @@ final class MemoryProfilingTests: XCTestCase {
         leakDetector.trackAllocation(testObject, context: "Test object")
 
         let potentialLeaks = leakDetector.checkTrackedObjects()
-        XCTAssertFalse(potentialLeaks.isEmpty)  // Object should be flagged as potential leak
+        XCTAssertFalse(potentialLeaks.isEmpty) // Object should be flagged as potential leak
     }
 
     func testLeakDetectorPatternAnalysis() {
@@ -240,13 +241,13 @@ final class MemoryProfilingTests: XCTestCase {
 
         XCTAssertGreaterThanOrEqual(analysis.performanceScore, 0)
         XCTAssertLessThanOrEqual(analysis.performanceScore, 1)
-        XCTAssertFalse(analysis.bottlenecks.isEmpty)  // Should identify some bottlenecks
+        XCTAssertFalse(analysis.bottlenecks.isEmpty) // Should identify some bottlenecks
     }
 
     func testPerformanceAnalyzerMemoryPressure() {
         let snapshot = createMockSnapshot(
-            usedMemory: 900 * 1024 * 1024,  // 900MB used
-            totalMemory: 1024 * 1024 * 1024  // 1GB total
+            usedMemory: 900 * 1024 * 1024, // 900MB used
+            totalMemory: 1024 * 1024 * 1024 // 1GB total
         )
 
         let pressure = performanceAnalyzer.calculateMemoryPressure(snapshot)
@@ -326,7 +327,7 @@ final class MemoryProfilingTests: XCTestCase {
         // Create memory pressure by allocating objects
         var testObjects: [NSObject] = []
 
-        for _ in 0..<1000 {
+        for _ in 0 ..< 1000 {
             testObjects.append(NSObject())
         }
 
@@ -341,7 +342,7 @@ final class MemoryProfilingTests: XCTestCase {
 
             // Should detect memory usage increase
             let analysis = self.memoryAnalyzer.analyzeSnapshots(snapshots)
-            XCTAssertGreaterThan(analysis.trend.rawValue, 0)  // Some trend detected
+            XCTAssertGreaterThan(analysis.trend.rawValue, 0) // Some trend detected
 
             // Clean up
             testObjects.removeAll()
@@ -390,8 +391,8 @@ final class MemoryProfilingTests: XCTestCase {
 
     func testSnapshotCapturePerformance() {
         measure {
-            for _ in 0..<100 {
-                let _ = memoryMonitor.captureSnapshot()
+            for _ in 0 ..< 100 {
+                _ = memoryMonitor.captureSnapshot()
             }
         }
     }
@@ -407,7 +408,7 @@ final class MemoryProfilingTests: XCTestCase {
         pageIns: UInt64 = 500,
         pageOuts: UInt64 = 200
     ) -> MemorySnapshot {
-        return MemorySnapshot(
+        MemorySnapshot(
             timestamp: Date(),
             totalMemory: totalMemory,
             usedMemory: usedMemory,
@@ -423,11 +424,11 @@ final class MemoryProfilingTests: XCTestCase {
         count: Int, trend: MemoryAnalysis.MemoryTrend, growthRate: UInt64 = 0
     ) -> [MemorySnapshot] {
         var snapshots: [MemorySnapshot] = []
-        let baseMemory: UInt64 = 128 * 1024 * 1024  // 128MB base
-        let totalMemory: UInt64 = 1024 * 1024 * 1024  // 1GB total
+        let baseMemory: UInt64 = 128 * 1024 * 1024 // 128MB base
+        let totalMemory: UInt64 = 1024 * 1024 * 1024 // 1GB total
 
-        for i in 0..<count {
-            let timestamp = Date().addingTimeInterval(Double(i) * 60)  // 1 minute intervals
+        for i in 0 ..< count {
+            let timestamp = Date().addingTimeInterval(Double(i) * 60) // 1 minute intervals
 
             var usedMemory = baseMemory
             switch trend {
@@ -436,7 +437,7 @@ final class MemoryProfilingTests: XCTestCase {
             case .decreasing:
                 usedMemory = max(baseMemory, baseMemory + UInt64(count - i) * growthRate)
             case .stable:
-                usedMemory = baseMemory + UInt64.random(in: 0...10 * 1024 * 1024)  // Small random variation
+                usedMemory = baseMemory + UInt64.random(in: 0 ... 10 * 1024 * 1024) // Small random variation
             }
 
             usedMemory = min(usedMemory, totalMemory)
@@ -445,8 +446,8 @@ final class MemoryProfilingTests: XCTestCase {
                 timestamp: timestamp,
                 totalMemory: totalMemory,
                 usedMemory: usedMemory,
-                residentSize: usedMemory * 8 / 10,  // 80% resident
-                virtualSize: usedMemory * 12 / 10,  // 120% virtual
+                residentSize: usedMemory * 8 / 10, // 80% resident
+                virtualSize: usedMemory * 12 / 10, // 120% virtual
                 pageFaults: UInt64(i * 10),
                 pageIns: UInt64(i * 5),
                 pageOuts: UInt64(i * 2)

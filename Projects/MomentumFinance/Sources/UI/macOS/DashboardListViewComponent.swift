@@ -5,6 +5,8 @@
 //  Dashboard list view component for macOS three-column layout
 //
 
+import MomentumFinanceCore
+import SharedKit
 import SwiftData
 import SwiftUI
 
@@ -59,13 +61,13 @@ import SwiftUI
 
                     Section("Recent Transactions") {
                         ForEach(self.transactions.sorted { $0.date > $1.date }.prefix(10)) { transaction in
-                            NavigationLink(value: ListableItem(id: transaction.id, name: transaction.name, type: .transaction)) {
+                            NavigationLink(value: ListableItem(id: transaction.id, name: transaction.title, type: .transaction)) {
                                 HStack {
                                     Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
                                         .foregroundStyle(transaction.amount < 0 ? .red : .green)
 
                                     VStack(alignment: .leading) {
-                                        Text(transaction.name)
+                                        Text(transaction.title)
                                             .font(.headline)
 
                                         if let account = transaction.account {
@@ -89,14 +91,14 @@ import SwiftUI
                                 }
                                 .padding(.vertical, 4)
                             }
-                            .tag(ListableItem(id: transaction.id, name: transaction.name, type: .transaction))
+                            .tag(ListableItem(id: transaction.id, name: transaction.title, type: .transaction))
                         }
                     }
                 }
                 .navigationTitle("Dashboard")
                 .toolbar {
                     ToolbarItem {
-                        Button(action: {}).accessibilityLabel("Button").accessibilityLabel("Button") {
+                        Button(action: {}).accessibilityLabel("Add New Account Button") {
                             Image(systemName: "plus")
                         }
                         .help("Add New Account")

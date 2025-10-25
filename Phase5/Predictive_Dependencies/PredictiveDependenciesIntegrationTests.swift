@@ -32,37 +32,37 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
 
         // Create test Swift file
         let testCode = """
-            import Foundation
-            import UIKit
+        import Foundation
+        import UIKit
 
-            class TestViewController: UIViewController {
-                private let networkManager = NetworkManager()
-                private let dataProcessor = DataProcessor()
+        class TestViewController: UIViewController {
+            private let networkManager = NetworkManager()
+            private let dataProcessor = DataProcessor()
 
-                func loadData() {
-                    networkManager.fetchData { [weak self] result in
-                        switch result {
-                        case .success(let data):
-                            self?.dataProcessor.process(data: data)
-                        case .failure(let error):
-                            print("Error: \\(error)")
-                        }
+            func loadData() {
+                networkManager.fetchData { [weak self] result in
+                    switch result {
+                    case .success(let data):
+                        self?.dataProcessor.process(data: data)
+                    case .failure(let error):
+                        print("Error: \\(error)")
                     }
                 }
             }
+        }
 
-            class NetworkManager {
-                func fetchData(completion: @escaping (Result<Data, Error>) -> Void) {
-                    // Network implementation
-                }
+        class NetworkManager {
+            func fetchData(completion: @escaping (Result<Data, Error>) -> Void) {
+                // Network implementation
             }
+        }
 
-            class DataProcessor {
-                func process(data: Data) {
-                    // Processing implementation
-                }
+        class DataProcessor {
+            func process(data: Data) {
+                // Processing implementation
             }
-            """
+        }
+        """
         try testCode.write(toFile: testFilePath, atomically: true, encoding: .utf8)
 
         // Initialize components
@@ -109,7 +109,7 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
 
         XCTAssertGreaterThan(metrics.totalDependencies, 0)
         XCTAssertGreaterThan(metrics.averageDependenciesPerFile, 0)
-        XCTAssertEqual(metrics.circularDependenciesCount, 0)  // No circular deps in test
+        XCTAssertEqual(metrics.circularDependenciesCount, 0) // No circular deps in test
 
         // 4. Get optimization suggestions
         let suggestions = analyzer.suggestOptimizations(for: projectDependencies)
@@ -138,7 +138,7 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
         let trainingSample = DependencyTrainingSample(
             fileDependencies: fileDeps,
             context: context,
-            actualDependencies: ["Foundation", "UIKit", "Combine"],  // Include a dependency that might be predicted
+            actualDependencies: ["Foundation", "UIKit", "Combine"], // Include a dependency that might be predicted
             timestamp: Date()
         )
 
@@ -148,7 +148,7 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
         // 3. Make predictions
         let predictions = try await predictor.predictDependencies(for: fileDeps, context: context)
 
-        XCTAssertGreaterThanOrEqual(predictions.count, 0)  // May predict dependencies
+        XCTAssertGreaterThanOrEqual(predictions.count, 0) // May predict dependencies
 
         // 4. Evaluate model (with same data for testing)
         let performance = try await predictor.evaluateModel(with: [trainingSample])
@@ -183,7 +183,8 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
 
         // 3. Generate HTML report
         let predictions = try await predictor.predictProjectDependencies(
-            for: project, context: PredictionContext())
+            for: project, context: PredictionContext()
+        )
         let htmlReport = visualizer.generateHTMLReport(
             project: project,
             predictions: predictions,
@@ -201,10 +202,11 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
 
         // 1. Start monitoring
         monitor.startMonitoring(
-            analyzer: analyzer, predictor: predictor, projectPath: testProjectPath)
+            analyzer: analyzer, predictor: predictor, projectPath: testProjectPath
+        )
 
         // Wait a bit for initial analysis
-        try await Task.sleep(nanoseconds: 1_000_000_000)  // 1 second
+        try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
 
         // 2. Check monitoring status
         let status = monitor.getMonitoringStatus()
@@ -216,7 +218,7 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
         monitor.triggerMonitoringCycle(for: testProjectPath)
 
         // Wait for cycle to complete
-        try await Task.sleep(nanoseconds: 500_000_000)  // 0.5 seconds
+        try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
 
         // 4. Check for alerts
         let updatedStatus = monitor.getMonitoringStatus()
@@ -256,17 +258,17 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
 
         // Create files with circular dependency
         let fileAContent = """
-            import Foundation
-            class A {
-                let b = B()
-            }
-            """
+        import Foundation
+        class A {
+            let b = B()
+        }
+        """
         let fileBContent = """
-            import Foundation
-            class B {
-                let a = A()
-            }
-            """
+        import Foundation
+        class B {
+            let a = A()
+        }
+        """
 
         let fileAPath = "\(testProjectPath)/A.swift"
         let fileBPath = "\(testProjectPath)/B.swift"
@@ -291,17 +293,17 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
         // Test system performance with multiple files
 
         // Create multiple test files
-        for i in 1...10 {
+        for i in 1 ... 10 {
             let content = """
-                import Foundation
-                import UIKit
+            import Foundation
+            import UIKit
 
-                class TestClass\(i): UIViewController {
-                    func testMethod() {
-                        print("Test \(i)")
-                    }
+            class TestClass\(i): UIViewController {
+                func testMethod() {
+                    print("Test \(i)")
                 }
-                """
+            }
+            """
             let path = "\(testProjectPath)/Test\(i).swift"
             try content.write(toFile: path, atomically: true, encoding: .utf8)
         }
@@ -317,7 +319,7 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
         XCTAssertLessThan(analysisTime, 5.0)
 
         // Should analyze all files
-        XCTAssertEqual(project.fileDependencies.count, 11)  // 10 new + 1 original
+        XCTAssertEqual(project.fileDependencies.count, 11) // 10 new + 1 original
 
         // Get metrics
         let metrics = analyzer.getDependencyMetrics(for: project)
@@ -368,8 +370,9 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
 
         // 1. Start monitoring and generate some data
         monitor.startMonitoring(
-            analyzer: analyzer, predictor: predictor, projectPath: testProjectPath)
-        try await Task.sleep(nanoseconds: 1_000_000_000)  // 1 second
+            analyzer: analyzer, predictor: predictor, projectPath: testProjectPath
+        )
+        try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
 
         // 2. Export monitoring data
         let exportPath = "/tmp/monitoring_export.json"
@@ -397,7 +400,7 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
         // Test concurrent analysis operations
 
         // Create multiple projects
-        let projectPaths = (1...3).map { "/tmp/ConcurrentTestProject\($0)" }
+        let projectPaths = (1 ... 3).map { "/tmp/ConcurrentTestProject\($0)" }
 
         for path in projectPaths {
             let fileManager = FileManager.default
@@ -405,11 +408,11 @@ final class PredictiveDependenciesIntegrationTests: XCTestCase {
             try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true)
 
             let content = """
-                import Foundation
-                class TestClass {
-                    func test() {}
-                }
-                """
+            import Foundation
+            class TestClass {
+                func test() {}
+            }
+            """
             try content.write(toFile: "\(path)/Test.swift", atomically: true, encoding: .utf8)
         }
 
@@ -525,7 +528,7 @@ extension PredictiveDependenciesIntegrationTests {
         fileDeps[mockFile.filePath] = mockFile
 
         let graph = DependencyGraph()
-        graph.addDependency(from: mockFile.filePath, to: mockFile.filePath)  // Self-dependency for testing
+        graph.addDependency(from: mockFile.filePath, to: mockFile.filePath) // Self-dependency for testing
 
         return ProjectDependencies(
             fileDependencies: fileDeps,
@@ -561,7 +564,7 @@ extension PredictiveDependenciesIntegrationTests {
                 context: context,
                 actualDependencies: ["Foundation", "Combine"],
                 timestamp: Date()
-            )
+            ),
         ]
     }
 }
@@ -617,7 +620,7 @@ class PredictiveDependenciesUITests: XCTestCase {
     }
 
     private func createMockMetrics() -> DependencyMetrics {
-        return DependencyMetrics(
+        DependencyMetrics(
             totalDependencies: 0,
             averageDependenciesPerFile: 0,
             maxDependenciesPerFile: 0,

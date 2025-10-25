@@ -124,13 +124,13 @@ public class BuildNodeManager {
         managerQueue.sync {
             nodes.values.filter { node in
                 switch capability {
-                case .platform(let platform):
+                case let .platform(platform):
                     return node.capabilities.supportedPlatforms.contains(platform)
-                case .minCores(let cores):
+                case let .minCores(cores):
                     return node.capabilities.cores >= cores
-                case .minMemory(let memory):
+                case let .minMemory(memory):
                     return node.capabilities.memoryGB >= memory
-                case .minStorage(let storage):
+                case let .minStorage(storage):
                     return node.capabilities.storageGB >= storage
                 }
             }
@@ -149,14 +149,14 @@ public class BuildNodeManager {
             // Sort by available capacity (descending) and load
             return
                 suitableNodes
-                .sorted { (node1, node2) -> Bool in
-                    if node1.availableCapacity != node2.availableCapacity {
-                        return node1.availableCapacity > node2.availableCapacity
+                    .sorted { node1, node2 -> Bool in
+                        if node1.availableCapacity != node2.availableCapacity {
+                            return node1.availableCapacity > node2.availableCapacity
+                        }
+                        return node1.capabilities.cores > node2.capabilities.cores
                     }
-                    return node1.capabilities.cores > node2.capabilities.cores
-                }
-                .prefix(count)
-                .map { $0 }
+                    .prefix(count)
+                    .map { $0 }
         }
     }
 
@@ -225,15 +225,15 @@ public class BuildNodeManager {
             let overloadedNodes = activeNodes.filter { node in
                 let utilization =
                     Double(node.capabilities.cores - node.availableCapacity)
-                    / Double(node.capabilities.cores)
-                return utilization > averageUtilization + 0.2  // 20% above average
+                        / Double(node.capabilities.cores)
+                return utilization > averageUtilization + 0.2 // 20% above average
             }
 
             let underloadedNodes = activeNodes.filter { node in
                 let utilization =
                     Double(node.capabilities.cores - node.availableCapacity)
-                    / Double(node.capabilities.cores)
-                return utilization < averageUtilization - 0.2  // 20% below average
+                        / Double(node.capabilities.cores)
+                return utilization < averageUtilization - 0.2 // 20% below average
             }
 
             // Perform load balancing (simplified)
@@ -359,7 +359,7 @@ private class NodeHealthMonitor {
 
         // Simulate network health check
         do {
-            try await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
+            try await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
             lastHeartbeat = Date()
             return true
         } catch {
@@ -393,14 +393,14 @@ private class NodeDiscoveryService {
         Task {
             while isRunning {
                 // Simulate discovering a node every 60 seconds
-                try? await Task.sleep(nanoseconds: 60_000_000_000)  // 60 seconds
+                try? await Task.sleep(nanoseconds: 60_000_000_000) // 60 seconds
 
                 let discoveredNode = DiscoveredNode(
                     id: "discovered_node_\(UUID().uuidString.prefix(8))",
-                    host: "192.168.1.\(Int.random(in: 100...200))",
-                    cores: Int.random(in: 4...16),
-                    memoryGB: Int.random(in: 8...64),
-                    storageGB: Int.random(in: 100...1000),
+                    host: "192.168.1.\(Int.random(in: 100 ... 200))",
+                    cores: Int.random(in: 4 ... 16),
+                    memoryGB: Int.random(in: 8 ... 64),
+                    storageGB: Int.random(in: 100 ... 1000),
                     platforms: ["macOS", "iOS"]
                 )
 

@@ -16,19 +16,19 @@ class AnalyticsDashboardManagerTests: XCTestCase {
 
     // MARK: - structAIPerformanceMetrics{ Tests
 
-    func teststructAIPerformanceMetrics{Initialization() {
+    func teststructAIPerformanceMetricsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structAIPerformanceMetrics{
         XCTAssertTrue(true, "Placeholder test for structAIPerformanceMetrics{")
     }
 
-    func teststructAIPerformanceMetrics{Properties() {
+    func teststructAIPerformanceMetricsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structAIPerformanceMetrics{
         XCTAssertTrue(true, "Placeholder test for structAIPerformanceMetrics{ properties")
     }
 
-    func teststructAIPerformanceMetrics{Methods() {
+    func teststructAIPerformanceMetricsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structAIPerformanceMetrics{
         XCTAssertTrue(true, "Placeholder test for structAIPerformanceMetrics{ methods")
@@ -36,19 +36,19 @@ class AnalyticsDashboardManagerTests: XCTestCase {
 
     // MARK: - structPowerUpMetrics{ Tests
 
-    func teststructPowerUpMetrics{Initialization() {
+    func teststructPowerUpMetricsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structPowerUpMetrics{
         XCTAssertTrue(true, "Placeholder test for structPowerUpMetrics{")
     }
 
-    func teststructPowerUpMetrics{Properties() {
+    func teststructPowerUpMetricsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structPowerUpMetrics{
         XCTAssertTrue(true, "Placeholder test for structPowerUpMetrics{ properties")
     }
 
-    func teststructPowerUpMetrics{Methods() {
+    func teststructPowerUpMetricsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structPowerUpMetrics{
         XCTAssertTrue(true, "Placeholder test for structPowerUpMetrics{ methods")

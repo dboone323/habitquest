@@ -79,35 +79,36 @@ public class PropertyTester {
         async throws -> [Property]
     {
         let prompt = """
-            Analyze the following Swift code and identify properties that should hold true for all valid inputs.
-            Properties are mathematical or logical statements about the behavior of functions and types.
+        Analyze the following Swift code and identify properties that should hold true for all valid inputs.
+        Properties are mathematical or logical statements about the behavior of functions and types.
 
-            Examples of properties:
-            - For a sorting function: "The output should be sorted in ascending order"
-            - For a mathematical function: "f(a + b) = f(a) + f(b)" (commutativity)
-            - For a data structure: "After adding an element, the count increases by 1"
-            - For a validation function: "Valid inputs should return true, invalid should return false"
+        Examples of properties:
+        - For a sorting function: "The output should be sorted in ascending order"
+        - For a mathematical function: "f(a + b) = f(a) + f(b)" (commutativity)
+        - For a data structure: "After adding an element, the count increases by 1"
+        - For a validation function: "Valid inputs should return true, invalid should return false"
 
-            Code:
-            \(code)
+        Code:
+        \(code)
 
-            Context: \(context?.description ?? "No additional context")
+        Context: \(context?.description ?? "No additional context")
 
-            Identify 5-10 key properties and provide them in JSON format:
-            {
-                "properties": [
-                    {
-                        "description": "Property description",
-                        "category": "mathematical|behavioral|structural|invariant",
-                        "function": "function_name_if_applicable",
-                        "complexity": "simple|medium|complex"
-                    }
-                ]
-            }
-            """
+        Identify 5-10 key properties and provide them in JSON format:
+        {
+            "properties": [
+                {
+                    "description": "Property description",
+                    "category": "mathematical|behavioral|structural|invariant",
+                    "function": "function_name_if_applicable",
+                    "complexity": "simple|medium|complex"
+                }
+            ]
+        }
+        """
 
         let response = try await ollamaClient.generate(
-            prompt: prompt, model: "codellama:13b-instruct")
+            prompt: prompt, model: "codellama:13b-instruct"
+        )
         return try parseProperties(from: response)
     }
 
@@ -141,14 +142,14 @@ public class PropertyTester {
 
         switch property.category {
         case .mathematical:
-            testCases.append(
-                contentsOf: try generateMathematicalTestCases(for: property, code: code))
+            try testCases.append(
+                contentsOf: generateMathematicalTestCases(for: property, code: code))
         case .behavioral:
-            testCases.append(contentsOf: try generateBehavioralTestCases(for: property, code: code))
+            try testCases.append(contentsOf: generateBehavioralTestCases(for: property, code: code))
         case .structural:
-            testCases.append(contentsOf: try generateStructuralTestCases(for: property, code: code))
+            try testCases.append(contentsOf: generateStructuralTestCases(for: property, code: code))
         case .invariant:
-            testCases.append(contentsOf: try generateInvariantTestCases(for: property, code: code))
+            try testCases.append(contentsOf: generateInvariantTestCases(for: property, code: code))
         }
 
         // Limit the number of test cases
@@ -164,15 +165,15 @@ public class PropertyTester {
         let numericValues = [-100, -10, -1, 0, 1, 10, 100]
 
         // Generate pairs for commutative/associative properties
-        for i in 0..<numericValues.count {
-            for j in 0..<numericValues.count {
+        for i in 0 ..< numericValues.count {
+            for j in 0 ..< numericValues.count {
                 let input1 = numericValues[i]
                 let input2 = numericValues[j]
 
                 testCases.append(
                     PropertyTestCase(
                         inputs: ["a": input1, "b": input2],
-                        expectedOutput: nil,  // Property-based, no specific expected output
+                        expectedOutput: nil, // Property-based, no specific expected output
                         description: "Test with inputs: a=\(input1), b=\(input2)"
                     ))
             }
@@ -217,7 +218,7 @@ public class PropertyTester {
         let arraySizes = [0, 1, 2, 10, 100]
 
         for size in arraySizes {
-            let array = Array(0..<size)
+            let array = Array(0 ..< size)
             testCases.append(
                 PropertyTestCase(
                     inputs: ["array": array],
@@ -259,7 +260,7 @@ public class PropertyTester {
     private func runTestCasesInParallel(_ testCases: [PropertyTestCase], for property: Property)
         async throws -> [PropertyTestResult]
     {
-        return try await withThrowingTaskGroup(of: PropertyTestResult.self) { group in
+        try await withThrowingTaskGroup(of: PropertyTestResult.self) { group in
             for testCase in testCases {
                 group.addTask {
                     try await self.runPropertyTestCase(testCase, for: property)
@@ -296,7 +297,8 @@ public class PropertyTester {
             // Attempt to shrink the failing case
             if config.maxShrinksPerFailure > 0 {
                 _ = try await shrinkFailingCase(
-                    testCase, for: property, originalFailure: testResult)
+                    testCase, for: property, originalFailure: testResult
+                )
                 // Could update testCase with shrunk version
             }
         }
@@ -327,18 +329,18 @@ public class PropertyTester {
         }.joined(separator: "\n")
 
         return """
-            import XCTest
+        import XCTest
 
-            class PropertyTest: XCTestCase {
-                func testProperty() {
-                    \(inputs)
+        class PropertyTest: XCTestCase {
+            func testProperty() {
+                \(inputs)
 
-                    // Property assertion would go here
-                    // This is a placeholder for the actual property test
-                    XCTAssertTrue(true, "Property test placeholder")
-                }
+                // Property assertion would go here
+                // This is a placeholder for the actual property test
+                XCTAssertTrue(true, "Property test placeholder")
             }
-            """
+        }
+        """
     }
 
     private func shrinkFailingCase(
@@ -389,7 +391,7 @@ public class PropertyTester {
 
         // Calculate average execution time
         let avgExecutionTime =
-            results.map { $0.executionTime }.reduce(0, +) / Double(max(results.count, 1))
+            results.map(\.executionTime).reduce(0, +) / Double(max(results.count, 1))
 
         return PropertyTestSummary(
             totalTests: totalTests,
@@ -405,7 +407,7 @@ public class PropertyTester {
     private func estimateCoverage(_ results: [PropertyTestResult]) -> Double {
         // Estimate code coverage based on test results
         // This is a simplified estimation
-        let uniqueProperties = Set(results.map { $0.property.description }).count
+        let uniqueProperties = Set(results.map(\.property.description)).count
         let totalProperties = results.count
 
         if totalProperties == 0 { return 0.0 }
@@ -418,18 +420,18 @@ public class PropertyTester {
 
     private func parseProperties(from response: String) throws -> [Property] {
         guard let data = response.data(using: .utf8),
-            let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-            let propertiesArray = json["properties"] as? [[String: Any]]
+              let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let propertiesArray = json["properties"] as? [[String: Any]]
         else {
             throw PropertyTestError.invalidResponse
         }
 
         return propertiesArray.compactMap { propDict -> Property? in
             guard let description = propDict["description"] as? String,
-                let categoryString = propDict["category"] as? String,
-                let category = PropertyCategory(rawValue: categoryString),
-                let complexityString = propDict["complexity"] as? String,
-                let complexity = PropertyComplexity(rawValue: complexityString)
+                  let categoryString = propDict["category"] as? String,
+                  let category = PropertyCategory(rawValue: categoryString),
+                  let complexityString = propDict["complexity"] as? String,
+                  let complexity = PropertyComplexity(rawValue: complexityString)
             else {
                 return nil
             }
@@ -520,24 +522,24 @@ private class OllamaClient {
     func generate(prompt: String, model: String) async throws -> String {
         // This would integrate with the actual Ollama client
         // For now, return a placeholder response
-        return """
-            {
-                "properties": [
-                    {
-                        "description": "Function should handle valid inputs correctly",
-                        "category": "behavioral",
-                        "function": null,
-                        "complexity": "simple"
-                    },
-                    {
-                        "description": "Data structure maintains invariants after operations",
-                        "category": "invariant",
-                        "function": null,
-                        "complexity": "medium"
-                    }
-                ]
-            }
-            """
+        """
+        {
+            "properties": [
+                {
+                    "description": "Function should handle valid inputs correctly",
+                    "category": "behavioral",
+                    "function": null,
+                    "complexity": "simple"
+                },
+                {
+                    "description": "Data structure maintains invariants after operations",
+                    "category": "invariant",
+                    "function": null,
+                    "complexity": "medium"
+                }
+            ]
+        }
+        """
     }
 }
 
@@ -546,7 +548,7 @@ private class TestRunner {
     func runTest(_ testCode: String, timeout: TimeInterval) async throws -> TestResult {
         // This would integrate with the actual test runner
         // For now, return a placeholder result
-        return TestResult(
+        TestResult(
             passed: true,
             failureMessage: nil,
             executionTime: 0.5

@@ -20,13 +20,14 @@ public class PerformanceAnalyzer {
 
     private let fileManager = FileManager.default
     private var analysisQueue = DispatchQueue(
-        label: "com.quantum.performance-analysis", qos: .userInitiated)
+        label: "com.quantum.performance-analysis", qos: .userInitiated
+    )
 
     /// Analysis configuration
     public struct AnalysisConfig {
-        public var anomalyDetectionThreshold: Double = 2.0  // Standard deviations
-        public var trendAnalysisWindow: Int = 10  // Data points
-        public var predictionHorizon: Int = 5  // Future data points
+        public var anomalyDetectionThreshold: Double = 2.0 // Standard deviations
+        public var trendAnalysisWindow: Int = 10 // Data points
+        public var predictionHorizon: Int = 5 // Future data points
         public var statisticalConfidence: Double = 0.95
         public var enablePredictiveAnalysis: Bool = true
         public var enableRegressionAnalysis: Bool = true
@@ -53,7 +54,7 @@ public class PerformanceAnalyzer {
 
     /// Analyze benchmark results
     public func analyzeResults(_ results: [BenchmarkResult]) async throws -> PerformanceAnalysis {
-        return try await analysisQueue.async {
+        try await analysisQueue.async {
             var analysisResults: [String: BenchmarkAnalysis] = [:]
 
             for result in results {
@@ -87,7 +88,7 @@ public class PerformanceAnalyzer {
     public func analyzeTrends(for benchmarkId: String, results: [BenchmarkResult]) async throws
         -> TrendAnalysis
     {
-        return try await analysisQueue.async {
+        try await analysisQueue.async {
             guard results.count >= 3 else {
                 throw AnalysisError.insufficientData(
                     "Need at least 3 data points for trend analysis")
@@ -97,15 +98,15 @@ public class PerformanceAnalyzer {
             )
 
             // Extract time series data
-            let timestamps = sortedResults.map { $0.executionTimestamp.timeIntervalSince1970 }
-            let executionTimes = sortedResults.map { $0.averageTime }
+            let timestamps = sortedResults.map(\.executionTimestamp.timeIntervalSince1970)
+            let executionTimes = sortedResults.map(\.averageTime)
             let memoryUsages = sortedResults.compactMap { $0.memoryStats?.peakUsage }
 
             // Calculate trends
             let timeTrend = self.calculateTrend(timestamps, executionTimes)
             let memoryTrend =
                 memoryUsages.count >= 3
-                ? self.calculateTrend(timestamps, memoryUsages.map { Double($0) }) : nil
+                    ? self.calculateTrend(timestamps, memoryUsages.map { Double($0) }) : nil
 
             // Detect anomalies
             let timeAnomalies = self.detectAnomalies(executionTimes)
@@ -114,12 +115,14 @@ public class PerformanceAnalyzer {
 
             // Predict future performance
             let timePredictions = try self.predictFuturePerformance(
-                timestamps, executionTimes, horizon: self.config.predictionHorizon)
+                timestamps, executionTimes, horizon: self.config.predictionHorizon
+            )
             let memoryPredictions =
                 memoryUsages.count >= 3
-                ? try self.predictFuturePerformance(
-                    timestamps, memoryUsages.map { Double($0) },
-                    horizon: self.config.predictionHorizon) : nil
+                    ? try self.predictFuturePerformance(
+                        timestamps, memoryUsages.map { Double($0) },
+                        horizon: self.config.predictionHorizon
+                    ) : nil
 
             // Trend classification
             let timeTrendType = self.classifyTrend(timeTrend.slope, timeTrend.rSquared)
@@ -155,7 +158,7 @@ public class PerformanceAnalyzer {
     public func compareVersions(baseline: [BenchmarkResult], current: [BenchmarkResult])
         async throws -> VersionComparison
     {
-        return try await analysisQueue.async {
+        try await analysisQueue.async {
             var comparisons: [String: BenchmarkComparison] = [:]
 
             // Match benchmarks by ID
@@ -172,8 +175,8 @@ public class PerformanceAnalyzer {
             }
 
             // Calculate overall metrics
-            let timeChanges = comparisons.values.map { $0.timeChangePercent }
-            let memoryChanges = comparisons.values.compactMap { $0.memoryChangePercent }
+            let timeChanges = comparisons.values.map(\.timeChangePercent)
+            let memoryChanges = comparisons.values.compactMap(\.memoryChangePercent)
 
             let averageTimeChange =
                 timeChanges.isEmpty ? 0 : timeChanges.reduce(0, +) / Double(timeChanges.count)
@@ -212,9 +215,8 @@ public class PerformanceAnalyzer {
     }
 
     /// Detect performance anomalies
-    public func detectAnomalies(in results: [BenchmarkResult]) async throws -> [PerformanceAnomaly]
-    {
-        return try await analysisQueue.async {
+    public func detectAnomalies(in results: [BenchmarkResult]) async throws -> [PerformanceAnomaly] {
+        try await analysisQueue.async {
             var anomalies: [PerformanceAnomaly] = []
 
             for result in results {
@@ -239,7 +241,7 @@ public class PerformanceAnalyzer {
 
     /// Generate performance insights
     public func generateInsights(from analysis: PerformanceAnalysis) async -> [PerformanceInsight] {
-        return await analysisQueue.async {
+        await analysisQueue.async {
             var insights: [PerformanceInsight] = []
 
             // Analyze correlations
@@ -248,7 +250,7 @@ public class PerformanceAnalyzer {
                     type: .correlation,
                     title: "Strong Performance Correlation",
                     description:
-                        "\(correlation.benchmarkA) and \(correlation.benchmarkB) show strong correlation (\(String(format: "%.2f", correlation.coefficient)))",
+                    "\(correlation.benchmarkA) and \(correlation.benchmarkB) show strong correlation (\(String(format: "%.2f", correlation.coefficient)))",
                     severity: .medium,
                     affectedBenchmarks: [correlation.benchmarkA, correlation.benchmarkB],
                     suggestedActions: [
@@ -265,7 +267,7 @@ public class PerformanceAnalyzer {
                     type: .bottleneck,
                     title: "Performance Bottleneck Identified",
                     description:
-                        "\(bottleneck.benchmarkId) shows consistent performance degradation",
+                    "\(bottleneck.benchmarkId) shows consistent performance degradation",
                     severity: bottleneck.severity,
                     affectedBenchmarks: [bottleneck.benchmarkId],
                     suggestedActions: [
@@ -296,7 +298,7 @@ public class PerformanceAnalyzer {
                 type: .assessment,
                 title: "Overall Performance Assessment",
                 description:
-                    "Performance grade: \(analysis.performanceGrade.rawValue) (Score: \(String(format: "%.1f", analysis.overallScore)))",
+                "Performance grade: \(analysis.performanceGrade.rawValue) (Score: \(String(format: "%.1f", analysis.overallScore)))",
                 severity: analysis.performanceGrade == .a
                     ? .low : (analysis.performanceGrade == .f ? .high : .medium),
                 affectedBenchmarks: [],
@@ -344,7 +346,8 @@ public class PerformanceAnalyzer {
         var memoryAnalysis: MemoryAnalysis?
         if let memoryStats = result.memoryStats {
             let memoryEfficiency = calculateMemoryEfficiency(
-                memoryStats.peakUsage, result.benchmark.category)
+                memoryStats.peakUsage, result.benchmark.category
+            )
             memoryAnalysis = MemoryAnalysis(
                 peakUsage: memoryStats.peakUsage,
                 averageUsage: memoryStats.averageUsage,
@@ -364,7 +367,7 @@ public class PerformanceAnalyzer {
         }
 
         // Stability assessment
-        let stability = assessStability(result.measurements.map { $0.executionTime })
+        let stability = assessStability(result.measurements.map(\.executionTime))
 
         return BenchmarkAnalysis(
             benchmarkId: result.benchmark.id,
@@ -377,20 +380,19 @@ public class PerformanceAnalyzer {
         )
     }
 
-    private func analyzeCorrelations(_ results: [BenchmarkResult]) throws -> [BenchmarkCorrelation]
-    {
+    private func analyzeCorrelations(_ results: [BenchmarkResult]) throws -> [BenchmarkCorrelation] {
         guard results.count >= 2 else { return [] }
 
         var correlations: [BenchmarkCorrelation] = []
 
-        for i in 0..<results.count {
-            for j in (i + 1)..<results.count {
+        for i in 0 ..< results.count {
+            for j in (i + 1) ..< results.count {
                 let resultA = results[i]
                 let resultB = results[j]
 
                 // Calculate correlation coefficient
-                let timesA = resultA.measurements.map { $0.executionTime }
-                let timesB = resultB.measurements.map { $0.executionTime }
+                let timesA = resultA.measurements.map(\.executionTime)
+                let timesB = resultB.measurements.map(\.executionTime)
 
                 if let correlation = calculateCorrelation(timesA, timesB) {
                     correlations.append(
@@ -407,8 +409,7 @@ public class PerformanceAnalyzer {
         return correlations.sorted(by: { abs($0.coefficient) > abs($1.coefficient) })
     }
 
-    private func identifyBottlenecks(_ results: [BenchmarkResult]) throws -> [PerformanceBottleneck]
-    {
+    private func identifyBottlenecks(_ results: [BenchmarkResult]) throws -> [PerformanceBottleneck] {
         var bottlenecks: [PerformanceBottleneck] = []
 
         for result in results {
@@ -446,12 +447,12 @@ public class PerformanceAnalyzer {
 
         for result in results {
             // Memory optimization opportunities
-            if let memoryStats = result.memoryStats, memoryStats.peakUsage > 100 * 1024 * 1024 {  // 100MB
+            if let memoryStats = result.memoryStats, memoryStats.peakUsage > 100 * 1024 * 1024 { // 100MB
                 opportunities.append(
                     OptimizationOpportunity(
                         type: .memory,
                         description:
-                            "\(result.benchmark.id) uses high memory (\(memoryStats.peakUsage / 1024 / 1024)MB)",
+                        "\(result.benchmark.id) uses high memory (\(memoryStats.peakUsage / 1024 / 1024)MB)",
                         affectedBenchmarks: [result.benchmark.id],
                         suggestedActions: [
                             "Profile memory usage", "Implement memory pooling",
@@ -466,7 +467,7 @@ public class PerformanceAnalyzer {
                     OptimizationOpportunity(
                         type: .concurrency,
                         description:
-                            "\(result.benchmark.id) creates many threads (\(threadStats.peakThreadCount))",
+                        "\(result.benchmark.id) creates many threads (\(threadStats.peakThreadCount))",
                         affectedBenchmarks: [result.benchmark.id],
                         suggestedActions: [
                             "Use thread pools", "Implement async/await", "Reduce thread contention",
@@ -475,7 +476,7 @@ public class PerformanceAnalyzer {
             }
 
             // Algorithm optimization opportunities
-            if result.standardDeviation / result.averageTime > 0.5 {  // High variance
+            if result.standardDeviation / result.averageTime > 0.5 { // High variance
                 opportunities.append(
                     OptimizationOpportunity(
                         type: .algorithm,
@@ -507,10 +508,10 @@ public class PerformanceAnalyzer {
 
     private func assignPerformanceGrade(_ score: Double) -> PerformanceGrade {
         switch score {
-        case 90...100: return .a
-        case 80..<90: return .b
-        case 70..<80: return .c
-        case 60..<70: return .d
+        case 90 ... 100: return .a
+        case 80 ..< 90: return .b
+        case 70 ..< 80: return .c
+        case 60 ..< 70: return .d
         default: return .f
         }
     }
@@ -527,12 +528,13 @@ public class PerformanceAnalyzer {
 
         // Calculate R-squared
         let yMean = sumY / n
-        let ssRes = zip(y, x).map { (y, x) in pow(y - (slope * x + intercept), 2) }.reduce(0, +)
+        let ssRes = zip(y, x).map { y, x in pow(y - (slope * x + intercept), 2) }.reduce(0, +)
         let ssTot = y.map { pow($0 - yMean, 2) }.reduce(0, +)
         let rSquared = 1 - (ssRes / ssTot)
 
         return LinearTrend(
-            slope: slope, intercept: intercept, rSquared: rSquared.isNaN ? 0 : rSquared)
+            slope: slope, intercept: intercept, rSquared: rSquared.isNaN ? 0 : rSquared
+        )
     }
 
     private func detectAnomalies(_ values: [Double]) -> [Int] {
@@ -561,13 +563,13 @@ public class PerformanceAnalyzer {
         let lastTimestamp = timestamps.last!
         let timeStep =
             timestamps.count > 1
-            ? (timestamps.last! - timestamps.first!) / Double(timestamps.count - 1) : 1.0
+                ? (timestamps.last! - timestamps.first!) / Double(timestamps.count - 1) : 1.0
 
         var predictions: [PredictionPoint] = []
-        for i in 1...horizon {
+        for i in 1 ... horizon {
             let futureTime = lastTimestamp + timeStep * Double(i)
             let predictedValue = trend.slope * futureTime + trend.intercept
-            let confidence = max(0, trend.rSquared)  // Use R-squared as confidence measure
+            let confidence = max(0, trend.rSquared) // Use R-squared as confidence measure
 
             predictions.append(
                 PredictionPoint(
@@ -599,7 +601,7 @@ public class PerformanceAnalyzer {
                 benchmarkId: result.benchmark.id,
                 type: .timing,
                 description:
-                    "Execution time (\(String(format: "%.6f", result.averageTime))s) exceeds threshold (\(String(format: "%.6f", threshold))s)",
+                "Execution time (\(String(format: "%.6f", result.averageTime))s) exceeds threshold (\(String(format: "%.6f", threshold))s)",
                 severity: .high,
                 timestamp: result.executionTimestamp
             )
@@ -610,13 +612,13 @@ public class PerformanceAnalyzer {
     private func detectMemoryAnomaly(_ result: BenchmarkResult) -> PerformanceAnomaly? {
         guard let memoryStats = result.memoryStats else { return nil }
 
-        let threshold: UInt64 = 500 * 1024 * 1024  // 500MB
+        let threshold: UInt64 = 500 * 1024 * 1024 // 500MB
         if memoryStats.peakUsage > threshold {
             return PerformanceAnomaly(
                 benchmarkId: result.benchmark.id,
                 type: .memory,
                 description:
-                    "Memory usage (\(memoryStats.peakUsage / 1024 / 1024)MB) exceeds threshold (500MB)",
+                "Memory usage (\(memoryStats.peakUsage / 1024 / 1024)MB) exceeds threshold (500MB)",
                 severity: .high,
                 timestamp: result.executionTimestamp
             )
@@ -625,15 +627,15 @@ public class PerformanceAnalyzer {
     }
 
     private func detectMeasurementInconsistency(_ result: BenchmarkResult) -> PerformanceAnomaly? {
-        let times = result.measurements.map { $0.executionTime }
+        let times = result.measurements.map(\.executionTime)
         let coefficientOfVariation = result.standardDeviation / result.averageTime
 
-        if coefficientOfVariation > 1.0 {  // Very high variance
+        if coefficientOfVariation > 1.0 { // Very high variance
             return PerformanceAnomaly(
                 benchmarkId: result.benchmark.id,
                 type: .consistency,
                 description:
-                    "High measurement variance (CV = \(String(format: "%.2f", coefficientOfVariation))) indicates inconsistent performance",
+                "High measurement variance (CV = \(String(format: "%.2f", coefficientOfVariation))) indicates inconsistent performance",
                 severity: .medium,
                 timestamp: result.executionTimestamp
             )
@@ -666,20 +668,20 @@ public class PerformanceAnalyzer {
 
         switch ratio {
         case ..<0.5: return .excellent
-        case 0.5..<0.8: return .good
-        case 0.8..<1.2: return .acceptable
-        case 1.2..<2.0: return .poor
+        case 0.5 ..< 0.8: return .good
+        case 0.8 ..< 1.2: return .acceptable
+        case 1.2 ..< 2.0: return .poor
         default: return .unacceptable
         }
     }
 
     private func getPerformanceThreshold(_ category: Benchmark.BenchmarkCategory) -> TimeInterval {
         switch category {
-        case .performance: return 0.001  // 1ms
-        case .memory: return 0.01  // 10ms
-        case .concurrency: return 0.1  // 100ms
-        case .io: return 1.0  // 1s
-        case .custom: return 0.1  // 100ms
+        case .performance: return 0.001 // 1ms
+        case .memory: return 0.01 // 10ms
+        case .concurrency: return 0.1 // 100ms
+        case .io: return 1.0 // 1s
+        case .custom: return 0.1 // 100ms
         }
     }
 
@@ -695,12 +697,13 @@ public class PerformanceAnalyzer {
 
     private func calculateBenchmarkScore(_ result: BenchmarkResult) -> Double {
         let timeScore = max(
-            0, 100 - (result.averageTime / getPerformanceThreshold(result.benchmark.category)) * 50)
+            0, 100 - (result.averageTime / getPerformanceThreshold(result.benchmark.category)) * 50
+        )
         let consistencyScore = max(0, 100 - (result.standardDeviation / result.averageTime) * 100)
         let memoryScore =
             result.memoryStats.map { max(0, 100 - Double($0.peakUsage) / 100_000_000 * 10) } ?? 100
 
-        return (timeScore * 0.5 + consistencyScore * 0.3 + memoryScore * 0.2)
+        return timeScore * 0.5 + consistencyScore * 0.3 + memoryScore * 0.2
     }
 
     private func calculateMemoryEfficiency(_ usage: UInt64, _ category: Benchmark.BenchmarkCategory)
@@ -712,11 +715,11 @@ public class PerformanceAnalyzer {
 
     private func getMemoryBaseline(_ category: Benchmark.BenchmarkCategory) -> UInt64 {
         switch category {
-        case .performance: return 50 * 1024 * 1024  // 50MB
-        case .memory: return 200 * 1024 * 1024  // 200MB
-        case .concurrency: return 100 * 1024 * 1024  // 100MB
-        case .io: return 20 * 1024 * 1024  // 20MB
-        case .custom: return 50 * 1024 * 1024  // 50MB
+        case .performance: return 50 * 1024 * 1024 // 50MB
+        case .memory: return 200 * 1024 * 1024 // 200MB
+        case .concurrency: return 100 * 1024 * 1024 // 100MB
+        case .io: return 20 * 1024 * 1024 // 20MB
+        case .custom: return 50 * 1024 * 1024 // 50MB
         }
     }
 
@@ -730,15 +733,16 @@ public class PerformanceAnalyzer {
         let firstAvg = firstHalf.map { Double($0.usage) }.reduce(0, +) / Double(firstHalf.count)
         let secondAvg = secondHalf.map { Double($0.usage) }.reduce(0, +) / Double(secondHalf.count)
 
-        return secondAvg > firstAvg * 1.2  // 20% increase
+        return secondAvg > firstAvg * 1.2 // 20% increase
     }
 
     private func calculateThreadEfficiency(_ stats: ThreadStatistics) -> Double {
         // Efficiency based on thread count vs performance
         // Lower thread counts are generally more efficient
-        let optimalThreads = 4.0  // Assume 4 is optimal
+        let optimalThreads = 4.0 // Assume 4 is optimal
         let efficiency = max(
-            0, 1.0 - abs(Double(stats.averageThreadCount) - optimalThreads) / optimalThreads)
+            0, 1.0 - abs(Double(stats.averageThreadCount) - optimalThreads) / optimalThreads
+        )
         return efficiency
     }
 
@@ -748,9 +752,9 @@ public class PerformanceAnalyzer {
 
         switch coefficientOfVariation {
         case ..<0.1: return .excellent
-        case 0.1..<0.2: return .good
-        case 0.2..<0.5: return .moderate
-        case 0.5..<1.0: return .poor
+        case 0.1 ..< 0.2: return .good
+        case 0.2 ..< 0.5: return .moderate
+        case 0.5 ..< 1.0: return .poor
         default: return .unstable
         }
     }
@@ -1029,13 +1033,13 @@ extension VersionComparison: CustomStringConvertible {
         let memoryChange = String(format: "%+.1f%%", averageMemoryChange)
 
         return """
-            Version Comparison:
-            - Benchmarks Compared: \(comparisons.count)
-            - Average Time Change: \(timeChange)
-            - Average Memory Change: \(memoryChange)
-            - Significant Regressions: \(significantRegressions)
-            - Significant Improvements: \(significantImprovements)
-            - Overall Change: \(overallChange)
-            """
+        Version Comparison:
+        - Benchmarks Compared: \(comparisons.count)
+        - Average Time Change: \(timeChange)
+        - Average Memory Change: \(memoryChange)
+        - Significant Regressions: \(significantRegressions)
+        - Significant Improvements: \(significantImprovements)
+        - Overall Change: \(overallChange)
+        """
     }
 }

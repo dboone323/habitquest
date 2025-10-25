@@ -18,9 +18,10 @@ public class DependencyAnalyzer {
 
     private let fileManager = FileManager.default
     private var analysisQueue = DispatchQueue(
-        label: "com.quantum.dependency-analysis", qos: .userInitiated)
+        label: "com.quantum.dependency-analysis", qos: .userInitiated
+    )
 
-    private var dependencyGraph: DependencyGraph = DependencyGraph()
+    private var dependencyGraph: DependencyGraph = .init()
     private var historicalDependencies: [Date: DependencySnapshot] = [:]
 
     /// Analysis configuration
@@ -105,10 +106,10 @@ public class DependencyAnalyzer {
 
         // Simple prediction based on historical patterns
         var predictedDependencies: [PredictedDependency] = []
-        var confidence: Double = 0.0
+        var confidence = 0.0
 
         for pattern in historicalPatterns {
-            if pattern.frequency > 0.3 {  // Dependencies that appear in more than 30% of historical snapshots
+            if pattern.frequency > 0.3 { // Dependencies that appear in more than 30% of historical snapshots
                 let prediction = PredictedDependency(
                     dependency: pattern.dependency,
                     confidence: pattern.frequency,
@@ -176,16 +177,16 @@ public class DependencyAnalyzer {
             Double(totalDependencies) / Double(project.fileDependencies.count)
 
         let maxDependencies =
-            project.fileDependencies.values.map { $0.dependencies.count }.max() ?? 0
+            project.fileDependencies.values.map(\.dependencies.count).max() ?? 0
         let minDependencies =
-            project.fileDependencies.values.map { $0.dependencies.count }.min() ?? 0
+            project.fileDependencies.values.map(\.dependencies.count).min() ?? 0
 
         // Calculate dependency density
         let totalPossibleDependencies =
             project.fileDependencies.count * (project.fileDependencies.count - 1)
         let dependencyDensity =
             totalPossibleDependencies > 0
-            ? Double(totalDependencies) / Double(totalPossibleDependencies) : 0
+                ? Double(totalDependencies) / Double(totalPossibleDependencies) : 0
 
         // Calculate modularity metrics
         let stronglyConnectedComponents = project.stronglyConnectedComponents
@@ -200,7 +201,7 @@ public class DependencyAnalyzer {
 
         let stabilityIndex =
             totalDependencies > 0
-            ? 1.0 - Double(unstableDependencies) / Double(totalDependencies) : 1.0
+                ? 1.0 - Double(unstableDependencies) / Double(totalDependencies) : 1.0
 
         return DependencyMetrics(
             totalDependencies: totalDependencies,
@@ -227,7 +228,7 @@ public class DependencyAnalyzer {
                     type: .breakCircularDependencies,
                     title: "Break Circular Dependencies",
                     description:
-                        "Found \(project.circularDependencies.count) circular dependency cycles",
+                    "Found \(project.circularDependencies.count) circular dependency cycles",
                     affectedFiles: project.circularDependencies.flatMap { $0 },
                     estimatedEffort: .high,
                     expectedBenefit: .high
@@ -236,14 +237,14 @@ public class DependencyAnalyzer {
 
         // Check for over-coupled files
         let overCoupledFiles = project.fileDependencies.filter { $0.value.dependencies.count > 10 }
-            .map { $0.key }
+            .map(\.key)
         if !overCoupledFiles.isEmpty {
             suggestions.append(
                 DependencyOptimization(
                     type: .reduceCoupling,
                     title: "Reduce High Coupling",
                     description:
-                        "Found \(overCoupledFiles.count) files with high dependency counts",
+                    "Found \(overCoupledFiles.count) files with high dependency counts",
                     affectedFiles: overCoupledFiles,
                     estimatedEffort: .medium,
                     expectedBenefit: .medium
@@ -258,8 +259,8 @@ public class DependencyAnalyzer {
                     type: .removeUnusedDependencies,
                     title: "Remove Unused Dependencies",
                     description:
-                        "Found \(unusedDependencies.count) potentially unused dependencies",
-                    affectedFiles: unusedDependencies.map { $0.file },
+                    "Found \(unusedDependencies.count) potentially unused dependencies",
+                    affectedFiles: unusedDependencies.map(\.file),
                     estimatedEffort: .low,
                     expectedBenefit: .low
                 ))
@@ -273,7 +274,7 @@ public class DependencyAnalyzer {
                     type: .applyDependencyInversion,
                     title: "Apply Dependency Inversion",
                     description:
-                        "Found \(inversionOpportunities.count) opportunities for dependency inversion",
+                    "Found \(inversionOpportunities.count) opportunities for dependency inversion",
                     affectedFiles: inversionOpportunities,
                     estimatedEffort: .high,
                     expectedBenefit: .high
@@ -285,8 +286,7 @@ public class DependencyAnalyzer {
 
     // MARK: - Private Methods
 
-    private func analyzeSource(_ source: String, filePath: String) async throws -> FileDependencies
-    {
+    private func analyzeSource(_ source: String, filePath: String) async throws -> FileDependencies {
         // Parse Swift syntax
         let sourceFile = try Parser.parse(source: source)
 
@@ -314,7 +314,8 @@ public class DependencyAnalyzer {
         // Calculate dependency metrics
         let dependencyCount = allDependencies.count
         let complexityScore = calculateDependencyComplexity(
-            internalDependencies, externalDependencies)
+            internalDependencies, externalDependencies
+        )
 
         return FileDependencies(
             filePath: filePath,
@@ -397,8 +398,8 @@ public class DependencyAnalyzer {
             for dependency in dependencies.internalDependencies {
                 // Try to resolve the dependency to a file path
                 if let resolvedPath = resolveDependencyPath(
-                    dependency, from: filePath, in: fileDependencies)
-                {
+                    dependency, from: filePath, in: fileDependencies
+                ) {
                     graph.addDependency(from: filePath, to: resolvedPath)
                 }
             }
@@ -502,8 +503,7 @@ public class DependencyAnalyzer {
         return (internalCount * 0.7 + externalCount * 0.3) / totalCount
     }
 
-    private func calculateRiskScore(for files: [String], in project: ProjectDependencies) -> Double
-    {
+    private func calculateRiskScore(for files: [String], in project: ProjectDependencies) -> Double {
         var totalRisk = 0.0
 
         for file in files {
@@ -535,7 +535,7 @@ public class DependencyAnalyzer {
             DependencyPattern(
                 dependency: dependency,
                 frequency: Double(count) / Double(totalSnapshots),
-                lastSeen: Date()  // Simplified
+                lastSeen: Date() // Simplified
             )
         }
     }
@@ -543,13 +543,13 @@ public class DependencyAnalyzer {
     private func findUnusedDependencies(in project: ProjectDependencies) -> [UnusedDependency] {
         // This would require more sophisticated analysis
         // For now, return empty array
-        return []
+        []
     }
 
     private func findDependencyInversionOpportunities(in project: ProjectDependencies) -> [String] {
         // This would analyze the dependency graph for DIP opportunities
         // For now, return empty array
-        return []
+        []
     }
 
     private func findSwiftFiles(in directory: URL) throws -> [URL] {

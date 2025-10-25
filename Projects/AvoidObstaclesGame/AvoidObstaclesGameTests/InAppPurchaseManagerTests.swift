@@ -16,19 +16,19 @@ class InAppPurchaseManagerTests: XCTestCase {
 
     // MARK: - classPurchaseButton:SKNode{ Tests
 
-    func testclassPurchaseButton:SKNode{Initialization() {
+    func testclassPurchaseButtonInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classPurchaseButton:SKNode{
         XCTAssertTrue(true, "Placeholder test for classPurchaseButton:SKNode{")
     }
 
-    func testclassPurchaseButton:SKNode{Properties() {
+    func testclassPurchaseButtonProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classPurchaseButton:SKNode{
         XCTAssertTrue(true, "Placeholder test for classPurchaseButton:SKNode{ properties")
     }
 
-    func testclassPurchaseButton:SKNode{Methods() {
+    func testclassPurchaseButtonMethods() {
         // Test method functionality
         // TODO: Implement method tests for classPurchaseButton:SKNode{
         XCTAssertTrue(true, "Placeholder test for classPurchaseButton:SKNode{ methods")
@@ -36,19 +36,19 @@ class InAppPurchaseManagerTests: XCTestCase {
 
     // MARK: - classPurchaseUI{ Tests
 
-    func testclassPurchaseUI{Initialization() {
+    func testclassPurchaseUIInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classPurchaseUI{
         XCTAssertTrue(true, "Placeholder test for classPurchaseUI{")
     }
 
-    func testclassPurchaseUI{Properties() {
+    func testclassPurchaseUIProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classPurchaseUI{
         XCTAssertTrue(true, "Placeholder test for classPurchaseUI{ properties")
     }
 
-    func testclassPurchaseUI{Methods() {
+    func testclassPurchaseUIMethods() {
         // Test method functionality
         // TODO: Implement method tests for classPurchaseUI{
         XCTAssertTrue(true, "Placeholder test for classPurchaseUI{ methods")

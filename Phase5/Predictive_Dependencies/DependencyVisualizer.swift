@@ -60,8 +60,7 @@ public struct DependencyVisualizer {
     }
 
     /// Create a prediction visualization view
-    public func createPredictionView(for predictions: [String: [DependencyPrediction]]) -> some View
-    {
+    public func createPredictionView(for predictions: [String: [DependencyPrediction]]) -> some View {
         PredictionVisualizationView(predictions: predictions, config: config)
     }
 
@@ -108,54 +107,54 @@ public struct DependencyVisualizer {
         metrics: DependencyMetrics
     ) -> String {
         var html = """
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Dependency Analysis Report</title>
-                <style>
-                    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 20px; }
-                    .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
-                    .metric { display: inline-block; margin: 10px; padding: 10px; background: #f0f0f0; border-radius: 4px; }
-                    .warning { color: #d73a49; }
-                    .success { color: #28a745; }
-                    table { border-collapse: collapse; width: 100%; }
-                    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                    th { background-color: #f2f2f2; }
-                </style>
-            </head>
-            <body>
-                <h1>Dependency Analysis Report</h1>
-                <p>Generated on \(Date().formatted())</p>
-            """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Dependency Analysis Report</title>
+            <style>
+                body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 20px; }
+                .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+                .metric { display: inline-block; margin: 10px; padding: 10px; background: #f0f0f0; border-radius: 4px; }
+                .warning { color: #d73a49; }
+                .success { color: #28a745; }
+                table { border-collapse: collapse; width: 100%; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+            </style>
+        </head>
+        <body>
+            <h1>Dependency Analysis Report</h1>
+            <p>Generated on \(Date().formatted())</p>
+        """
 
         // Project Overview
         html += """
-                <div class="section">
-                    <h2>Project Overview</h2>
-                    <div class="metric">Files: \(project.fileDependencies.count)</div>
-                    <div class="metric">Total Dependencies: \(project.projectGraph.allDependencies.count)</div>
-                    <div class="metric">Circular Dependencies: \(project.circularDependencies.count)</div>
-                </div>
-            """
+            <div class="section">
+                <h2>Project Overview</h2>
+                <div class="metric">Files: \(project.fileDependencies.count)</div>
+                <div class="metric">Total Dependencies: \(project.projectGraph.allDependencies.count)</div>
+                <div class="metric">Circular Dependencies: \(project.circularDependencies.count)</div>
+            </div>
+        """
 
         // Metrics
         html += """
-                <div class="section">
-                    <h2>Dependency Metrics</h2>
-                    <div class="metric">Average Dependencies/File: \(String(format: "%.1f", metrics.averageDependenciesPerFile))</div>
-                    <div class="metric">Dependency Density: \(String(format: "%.3f", metrics.dependencyDensity))</div>
-                    <div class="metric">Stability Index: \(String(format: "%.2f", metrics.stabilityIndex))</div>
-                </div>
-            """
+            <div class="section">
+                <h2>Dependency Metrics</h2>
+                <div class="metric">Average Dependencies/File: \(String(format: "%.1f", metrics.averageDependenciesPerFile))</div>
+                <div class="metric">Dependency Density: \(String(format: "%.3f", metrics.dependencyDensity))</div>
+                <div class="metric">Stability Index: \(String(format: "%.2f", metrics.stabilityIndex))</div>
+            </div>
+        """
 
         // Circular Dependencies
         if !project.circularDependencies.isEmpty {
             html += """
-                    <div class="section">
-                        <h2 class="warning">Circular Dependencies</h2>
-                        <table>
-                            <tr><th>Cycle</th><th>Files</th></tr>
-                """
+                <div class="section">
+                    <h2 class="warning">Circular Dependencies</h2>
+                    <table>
+                        <tr><th>Cycle</th><th>Files</th></tr>
+            """
 
             for (index, cycle) in project.circularDependencies.enumerated() {
                 html += "<tr><td>\(index + 1)</td><td>\(cycle.joined(separator: " → "))</td></tr>"
@@ -170,37 +169,37 @@ public struct DependencyVisualizer {
         }
         if !highConfidencePredictions.isEmpty {
             html += """
-                    <div class="section">
-                        <h2>High Confidence Predictions</h2>
-                        <table>
-                            <tr><th>Dependency</th><th>Confidence</th><th>Reasoning</th></tr>
-                """
+                <div class="section">
+                    <h2>High Confidence Predictions</h2>
+                    <table>
+                        <tr><th>Dependency</th><th>Confidence</th><th>Reasoning</th></tr>
+            """
 
             for prediction in highConfidencePredictions.sorted(by: { $0.confidence > $1.confidence }
             ) {
                 html += """
-                        <tr>
-                            <td>\(prediction.dependency)</td>
-                            <td>\(String(format: "%.2f", prediction.confidence))</td>
-                            <td>\(prediction.reasoning)</td>
-                        </tr>
-                    """
+                    <tr>
+                        <td>\(prediction.dependency)</td>
+                        <td>\(String(format: "%.2f", prediction.confidence))</td>
+                        <td>\(prediction.reasoning)</td>
+                    </tr>
+                """
             }
 
             html += "</table></div>"
         }
 
         // Impact Analysis
-        if let impact = impact {
+        if let impact {
             html += """
-                    <div class="section">
-                        <h2>Change Impact Analysis</h2>
-                        <div class="metric">Direct Impact: \(impact.directImpact)</div>
-                        <div class="metric">Indirect Impact: \(impact.indirectImpact)</div>
-                        <div class="metric">Total Impact: \(impact.totalImpact)</div>
-                        <div class="metric">Risk Score: \(String(format: "%.2f", impact.riskScore))</div>
-                    </div>
-                """
+                <div class="section">
+                    <h2>Change Impact Analysis</h2>
+                    <div class="metric">Direct Impact: \(impact.directImpact)</div>
+                    <div class="metric">Indirect Impact: \(impact.indirectImpact)</div>
+                    <div class="metric">Total Impact: \(impact.totalImpact)</div>
+                    <div class="metric">Risk Score: \(String(format: "%.2f", impact.riskScore))</div>
+                </div>
+            """
         }
 
         html += "</body></html>"
@@ -269,7 +268,7 @@ struct DependencyGraphView: View {
                     }
             )
 
-            if let selectedNode = selectedNode {
+            if let selectedNode {
                 NodeDetailView(node: selectedNode, project: project)
                     .padding()
                     .background(Color(.windowBackgroundColor).opacity(0.9))
@@ -329,11 +328,11 @@ struct DependencyNodeView: View {
 
     private var nodeColor: Color {
         if dependencies.count > 5 {
-            return .red  // High outgoing dependencies
+            return .red // High outgoing dependencies
         } else if dependents.count > 5 {
-            return .orange  // High incoming dependencies
+            return .orange // High incoming dependencies
         } else {
-            return .blue  // Normal dependencies
+            return .blue // Normal dependencies
         }
     }
 }
@@ -351,7 +350,8 @@ struct DependencyEdgeView: View {
             path.addLine(to: to)
         }
         .stroke(
-            isHighlighted ? Color.blue : Color.gray.opacity(0.5), lineWidth: isHighlighted ? 2 : 1)
+            isHighlighted ? Color.blue : Color.gray.opacity(0.5), lineWidth: isHighlighted ? 2 : 1
+        )
     }
 }
 
@@ -424,7 +424,7 @@ struct PredictionVisualizationView: View {
             .pickerStyle(.menu)
             .padding(.horizontal)
 
-            if let selectedFile = selectedFile, let filePredictions = predictions[selectedFile] {
+            if let selectedFile, let filePredictions = predictions[selectedFile] {
                 PredictionChartView(predictions: filePredictions)
             } else {
                 // Show aggregated predictions
@@ -480,11 +480,13 @@ struct ImpactAnalysisView: View {
             HStack(spacing: 20) {
                 ImpactMetricView(title: "Direct Impact", value: impact.directImpact, color: .red)
                 ImpactMetricView(
-                    title: "Indirect Impact", value: impact.indirectImpact, color: .orange)
+                    title: "Indirect Impact", value: impact.indirectImpact, color: .orange
+                )
                 ImpactMetricView(title: "Total Impact", value: impact.totalImpact, color: .blue)
                 ImpactMetricView(
                     title: "Risk Score", value: Int(impact.riskScore * 100), color: .purple,
-                    isPercentage: true)
+                    isPercentage: true
+                )
             }
             .padding()
 
@@ -552,16 +554,20 @@ struct MetricsDashboardView: View {
                 )
                 MetricCardView(
                     title: "Dependency Density",
-                    value: String(format: "%.3f", metrics.dependencyDensity), color: .orange)
+                    value: String(format: "%.3f", metrics.dependencyDensity), color: .orange
+                )
                 MetricCardView(
                     title: "Stability Index", value: String(format: "%.2f", metrics.stabilityIndex),
-                    color: .purple)
+                    color: .purple
+                )
                 MetricCardView(
                     title: "Circular Dependencies", value: "\(metrics.circularDependenciesCount)",
-                    color: .red)
+                    color: .red
+                )
                 MetricCardView(
                     title: "Strongly Connected Components",
-                    value: "\(metrics.stronglyConnectedComponents)", color: .teal)
+                    value: "\(metrics.stronglyConnectedComponents)", color: .teal
+                )
             }
             .padding()
         }
@@ -626,7 +632,7 @@ struct CombinedAnalysisView: View {
                 }
                 .tag(2)
 
-            if let impact = impact {
+            if let impact {
                 ImpactAnalysisView(impact: impact, config: config)
                     .tabItem {
                         Label("Impact", systemImage: "exclamationmark.triangle")
@@ -714,7 +720,7 @@ struct DependencyVisualizer_Previews: PreviewProvider {
     }
 
     static func createSampleMetrics() -> DependencyMetrics {
-        return DependencyMetrics(
+        DependencyMetrics(
             totalDependencies: 3,
             averageDependenciesPerFile: 1.5,
             maxDependenciesPerFile: 2,

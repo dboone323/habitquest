@@ -16,19 +16,19 @@ class HUDManagerTests: XCTestCase {
 
     // MARK: - classHUDManager{ Tests
 
-    func testclassHUDManager{Initialization() {
+    func testclassHUDManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classHUDManager{
         XCTAssertTrue(true, "Placeholder test for classHUDManager{")
     }
 
-    func testclassHUDManager{Properties() {
+    func testclassHUDManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classHUDManager{
         XCTAssertTrue(true, "Placeholder test for classHUDManager{ properties")
     }
 
-    func testclassHUDManager{Methods() {
+    func testclassHUDManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classHUDManager{
         XCTAssertTrue(true, "Placeholder test for classHUDManager{ methods")

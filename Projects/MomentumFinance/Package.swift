@@ -13,7 +13,7 @@ let package = Package(
     products: [
         .library(
             name: "MomentumFinance",
-            targets: ["MomentumFinance"]
+            targets: ["MomentumFinanceCore", "MomentumFinanceUI"]
         ),
     ],
     dependencies: [
@@ -21,16 +21,44 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "MomentumFinance",
-            dependencies: ["SharedKit"],
-            path: ".",
-            exclude: ["Sources/UI/macOS", "Sources/UI/iOS"], // Exclude platform-specific UI for now
-            sources: [
-                "Core",
-                "Features",
-                "App",
-                "Shared",
-                "Sources",
+            name: "MomentumFinanceCore",
+            dependencies: [
+                .product(name: "SharedKit", package: "Shared"),
+            ],
+            path: "Sources/Core",
+            exclude: [
+                "README.md",
+                "Utils/HapticManager.swift.backup",
+                "Animations/AnimationManager.swift.backup",
+                "Theme/ThemeManager.swift.backup",
+                "Utilities/NotificationManager.swift.backup",
+                "Utils/ImportComponents/EntityManager.swift.backup",
+                // Exclude subdirectories with duplicate files
+                "Components/",
+                "Animations/",
+                "Features/",
+                "Intelligence/",
+                "Navigation/",
+                "Utilities/",
+                "Services/",
+                "Export/",
+                "Bridging/",
+                "Theme/",
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+            ]
+        ),
+        .target(
+            name: "MomentumFinanceUI",
+            dependencies: [
+                "MomentumFinanceCore",
+                .product(name: "SharedKit", package: "Shared"),
+            ],
+            path: "Sources/UI",
+            exclude: [
+                "macOS/KeyboardShortcutManager.swift.backup",
+                "macOS/MomentumFinance.entitlements",
             ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
@@ -38,7 +66,7 @@ let package = Package(
         ),
         .testTarget(
             name: "MomentumFinanceTests",
-            dependencies: ["MomentumFinance"],
+            dependencies: ["MomentumFinanceCore"],
             path: "Tests/MomentumFinanceTests"
         ),
     ]

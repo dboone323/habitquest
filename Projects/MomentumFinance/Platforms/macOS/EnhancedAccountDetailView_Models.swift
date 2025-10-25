@@ -1,7 +1,7 @@
 // Momentum Finance - Enhanced Account Detail Models for macOS
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
-import Shared
+import SharedKit
 import SwiftData
 import SwiftUI
 

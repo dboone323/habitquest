@@ -16,19 +16,19 @@ class AchievementManagerTests: XCTestCase {
 
     // MARK: - classAchievementManager:Sendable{ Tests
 
-    func testclassAchievementManager:Sendable{Initialization() {
+    func testclassAchievementManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classAchievementManager:Sendable{
         XCTAssertTrue(true, "Placeholder test for classAchievementManager:Sendable{")
     }
 
-    func testclassAchievementManager:Sendable{Properties() {
+    func testclassAchievementManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classAchievementManager:Sendable{
         XCTAssertTrue(true, "Placeholder test for classAchievementManager:Sendable{ properties")
     }
 
-    func testclassAchievementManager:Sendable{Methods() {
+    func testclassAchievementManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classAchievementManager:Sendable{
         XCTAssertTrue(true, "Placeholder test for classAchievementManager:Sendable{ methods")
@@ -36,19 +36,19 @@ class AchievementManagerTests: XCTestCase {
 
     // MARK: - enumAchievementEvent{ Tests
 
-    func testenumAchievementEvent{Initialization() {
+    func testenumAchievementEventInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumAchievementEvent{
         XCTAssertTrue(true, "Placeholder test for enumAchievementEvent{")
     }
 
-    func testenumAchievementEvent{Properties() {
+    func testenumAchievementEventProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumAchievementEvent{
         XCTAssertTrue(true, "Placeholder test for enumAchievementEvent{ properties")
     }
 
-    func testenumAchievementEvent{Methods() {
+    func testenumAchievementEventMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumAchievementEvent{
         XCTAssertTrue(true, "Placeholder test for enumAchievementEvent{ methods")

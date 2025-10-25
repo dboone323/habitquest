@@ -25,8 +25,8 @@ public class MemoryProfiler {
     public struct Configuration {
         public var monitoringInterval: TimeInterval = 0.1
         public var enableRealTimeMonitoring: Bool = true
-        public var leakDetectionThreshold: Double = 0.1  // MB
-        public var performanceAlertThreshold: Double = 100.0  // MB
+        public var leakDetectionThreshold: Double = 0.1 // MB
+        public var performanceAlertThreshold: Double = 100.0 // MB
         public var maxSnapshots: Int = 1000
         public var enableAutomaticCleanup: Bool = false
 
@@ -133,7 +133,7 @@ public class MemoryProfiler {
         // Connect monitor to analyzer
         monitor.memoryUsagePublisher
             .sink { [weak self] snapshot in
-                guard let self = self else { return }
+                guard let self else { return }
                 let stats = self.analyzer.analyzeSnapshot(snapshot)
 
                 // Check for performance issues
@@ -145,7 +145,7 @@ public class MemoryProfiler {
         monitor.memoryUsagePublisher
             .buffer(size: 100, prefetch: .byRequest, whenFull: .dropOldest)
             .sink { [weak self] snapshots in
-                guard let self = self else { return }
+                guard let self else { return }
                 self.leakDetector.analyzeSnapshots(snapshots)
             }
             .store(in: &cancellables)

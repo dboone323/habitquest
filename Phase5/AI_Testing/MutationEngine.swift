@@ -108,21 +108,21 @@ public class MutationEngine {
 
         switch operatorType {
         case .arithmeticOperatorReplacement:
-            mutations.append(contentsOf: try applyArithmeticReplacement(to: code))
+            try mutations.append(contentsOf: applyArithmeticReplacement(to: code))
         case .relationalOperatorReplacement:
-            mutations.append(contentsOf: try applyRelationalReplacement(to: code))
+            try mutations.append(contentsOf: applyRelationalReplacement(to: code))
         case .logicalOperatorReplacement:
-            mutations.append(contentsOf: try applyLogicalReplacement(to: code))
+            try mutations.append(contentsOf: applyLogicalReplacement(to: code))
         case .constantReplacement:
-            mutations.append(contentsOf: try applyConstantReplacement(to: code))
+            try mutations.append(contentsOf: applyConstantReplacement(to: code))
         case .statementDeletion:
-            mutations.append(contentsOf: try applyStatementDeletion(to: code))
+            try mutations.append(contentsOf: applyStatementDeletion(to: code))
         case .variableReplacement:
-            mutations.append(contentsOf: try applyVariableReplacement(to: code))
+            try mutations.append(contentsOf: applyVariableReplacement(to: code))
         case .returnValueReplacement:
-            mutations.append(contentsOf: try applyReturnValueReplacement(to: code))
+            try mutations.append(contentsOf: applyReturnValueReplacement(to: code))
         case .methodCallReplacement:
-            mutations.append(contentsOf: try applyMethodCallReplacement(to: code))
+            try mutations.append(contentsOf: applyMethodCallReplacement(to: code))
         }
 
         return mutations
@@ -142,7 +142,8 @@ public class MutationEngine {
         for (pattern, replacement, description) in patterns {
             let regex = try NSRegularExpression(pattern: pattern, options: [])
             let matches = regex.matches(
-                in: code, options: [], range: NSRange(location: 0, length: code.count))
+                in: code, options: [], range: NSRange(location: 0, length: code.count)
+            )
 
             for match in matches {
                 let range = Range(match.range, in: code)!
@@ -179,7 +180,8 @@ public class MutationEngine {
         for (original, replacement, description) in replacements {
             let regex = try NSRegularExpression(pattern: "\\\(original)", options: [])
             let matches = regex.matches(
-                in: code, options: [], range: NSRange(location: 0, length: code.count))
+                in: code, options: [], range: NSRange(location: 0, length: code.count)
+            )
 
             for match in matches {
                 let range = Range(match.range, in: code)!
@@ -212,7 +214,8 @@ public class MutationEngine {
         for (original, replacement, description) in replacements {
             let regex = try NSRegularExpression(pattern: original, options: [])
             let matches = regex.matches(
-                in: code, options: [], range: NSRange(location: 0, length: code.count))
+                in: code, options: [], range: NSRange(location: 0, length: code.count)
+            )
 
             for match in matches {
                 let range = Range(match.range, in: code)!
@@ -240,7 +243,8 @@ public class MutationEngine {
         let numberPattern = "\\b\\d+\\b"
         let regex = try NSRegularExpression(pattern: numberPattern, options: [])
         let matches = regex.matches(
-            in: code, options: [], range: NSRange(location: 0, length: code.count))
+            in: code, options: [], range: NSRange(location: 0, length: code.count)
+        )
 
         for match in matches {
             let range = Range(match.range, in: code)!
@@ -308,7 +312,7 @@ public class MutationEngine {
     private func applyVariableReplacement(to code: String) throws -> [Mutation] {
         // This would require more sophisticated AST parsing
         // For now, return empty array as placeholder
-        return []
+        []
     }
 
     private func applyReturnValueReplacement(to code: String) throws -> [Mutation] {
@@ -318,13 +322,14 @@ public class MutationEngine {
         let returnPattern = "\\breturn\\s+([^;]+);"
         let regex = try NSRegularExpression(pattern: returnPattern, options: [])
         let matches = regex.matches(
-            in: code, options: [], range: NSRange(location: 0, length: code.count))
+            in: code, options: [], range: NSRange(location: 0, length: code.count)
+        )
 
         for match in matches {
             guard match.numberOfRanges > 1 else { continue }
 
             let returnValueRange = Range(match.range(at: 1), in: code)!
-            _ = String(code[returnValueRange])  // Extract but don't use for now
+            _ = String(code[returnValueRange]) // Extract but don't use for now
 
             // Replace return value with nil or modified value
             let replacements = ["nil", "0", "\"\""]
@@ -350,7 +355,7 @@ public class MutationEngine {
     private func applyMethodCallReplacement(to code: String) throws -> [Mutation] {
         // This would require AST parsing to identify method calls
         // For now, return empty array as placeholder
-        return []
+        []
     }
 
     private func runTestsAgainstMutations(_ mutations: [Mutation], testSuite: String) async throws
@@ -374,7 +379,7 @@ public class MutationEngine {
     private func runMutationsInParallel(_ mutations: [Mutation], testSuite: String) async throws
         -> [MutationResult]
     {
-        return try await withThrowingTaskGroup(of: MutationResult.self) { group in
+        try await withThrowingTaskGroup(of: MutationResult.self) { group in
             for mutation in mutations {
                 group.addTask {
                     try await self.runTestAgainstMutation(mutation, testSuite: testSuite)
@@ -394,7 +399,8 @@ public class MutationEngine {
     {
         // Compile and run tests against the mutated code
         let testResult = try await testRunner.runTests(
-            testSuite, against: mutation.mutatedCode, timeout: config.timeoutPerMutation)
+            testSuite, against: mutation.mutatedCode, timeout: config.timeoutPerMutation
+        )
 
         let status: MutationStatus
         if testResult.failedTests.isEmpty {
@@ -458,12 +464,12 @@ public class MutationEngine {
         let survived = results.filter { $0.status == .survived }.count
 
         return """
-            Mutation Testing Summary:
-            - Total Mutations: \(total)
-            - Killed: \(killed)
-            - Survived: \(survived)
-            - Mutation Score: \(String(format: "%.1f%%", score * 100))
-            """
+        Mutation Testing Summary:
+        - Total Mutations: \(total)
+        - Killed: \(killed)
+        - Survived: \(survived)
+        - Mutation Score: \(String(format: "%.1f%%", score * 100))
+        """
     }
 }
 
@@ -518,7 +524,7 @@ private class TestRunner {
     {
         // This would integrate with the actual test runner
         // For now, return a placeholder result
-        return TestRunResult(
+        TestRunResult(
             passedTests: [],
             failedTests: [],
             executionTime: 1.0,

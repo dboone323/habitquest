@@ -18,7 +18,8 @@ public class ReportGenerator {
 
     private let fileManager = FileManager.default
     private var reportQueue = DispatchQueue(
-        label: "com.quantum.report-generation", qos: .userInitiated)
+        label: "com.quantum.report-generation", qos: .userInitiated
+    )
 
     /// Report configuration
     public struct ReportConfig {
@@ -52,7 +53,7 @@ public class ReportGenerator {
         anomalies: [PerformanceAnomaly]? = nil,
         insights: [PerformanceInsight]? = nil
     ) async throws -> PerformanceReport {
-        return try await reportQueue.async {
+        try await reportQueue.async {
             let reportId = UUID().uuidString
             let generationTimestamp = Date()
 
@@ -80,7 +81,8 @@ public class ReportGenerator {
 
             // Generate recommendations
             let recommendations = self.generateRecommendations(
-                analysis, trends, comparison, anomalies, insights)
+                analysis, trends, comparison, anomalies, insights
+            )
 
             // Generate charts
             let charts = try self.generateCharts(analysis, trends, comparison)
@@ -107,7 +109,7 @@ public class ReportGenerator {
 
     /// Generate trend analysis report
     public func generateTrendReport(_ trends: [TrendAnalysis]) async throws -> TrendReport {
-        return try await reportQueue.async {
+        try await reportQueue.async {
             let reportId = UUID().uuidString
             let generationTimestamp = Date()
 
@@ -143,7 +145,7 @@ public class ReportGenerator {
     public func generateComparisonReport(_ comparison: VersionComparison) async throws
         -> ComparisonReport
     {
-        return try await reportQueue.async {
+        try await reportQueue.async {
             let reportId = UUID().uuidString
             let generationTimestamp = Date()
 
@@ -210,148 +212,148 @@ public class ReportGenerator {
         trends: [TrendAnalysis]? = nil,
         comparison: VersionComparison? = nil
     ) async throws -> String {
-        return try await reportQueue.async {
+        try await reportQueue.async {
             let report = try await self.generatePerformanceReport(analysis, trends, comparison)
 
             var html = """
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Performance Dashboard</title>
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                    <style>
-                        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
-                        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-                        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 8px 8px 0 0; }
-                        .section { padding: 30px; border-bottom: 1px solid #eee; }
-                        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
-                        .metric-card { background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; }
-                        .metric-value { font-size: 2em; font-weight: bold; color: #333; }
-                        .metric-label { color: #666; margin-top: 5px; }
-                        .chart-container { margin: 20px 0; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-                        .status-good { color: #28a745; }
-                        .status-warning { color: #ffc107; }
-                        .status-danger { color: #dc3545; }
-                        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-                        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-                        th { background: #f8f9fa; font-weight: 600; }
-                        .recommendations { background: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0; }
-                        .recommendation-item { margin: 10px 0; padding: 10px; background: white; border-radius: 4px; }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <div class="header">
-                            <h1>🚀 Performance Dashboard</h1>
-                            <p>Generated on \(self.formatDate(report.generationTimestamp))</p>
-                        </div>
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Performance Dashboard</title>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <style>
+                    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+                    .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 8px 8px 0 0; }
+                    .section { padding: 30px; border-bottom: 1px solid #eee; }
+                    .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
+                    .metric-card { background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; }
+                    .metric-value { font-size: 2em; font-weight: bold; color: #333; }
+                    .metric-label { color: #666; margin-top: 5px; }
+                    .chart-container { margin: 20px 0; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+                    .status-good { color: #28a745; }
+                    .status-warning { color: #ffc107; }
+                    .status-danger { color: #dc3545; }
+                    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+                    th { background: #f8f9fa; font-weight: 600; }
+                    .recommendations { background: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0; }
+                    .recommendation-item { margin: 10px 0; padding: 10px; background: white; border-radius: 4px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>🚀 Performance Dashboard</h1>
+                        <p>Generated on \(self.formatDate(report.generationTimestamp))</p>
+                    </div>
 
-                        <div class="section">
-                            <h2>📊 Executive Summary</h2>
-                            <div class="metric-grid">
-                                <div class="metric-card">
-                                    <div class="metric-value">\(String(format: "%.1f", analysis.overallScore))</div>
-                                    <div class="metric-label">Overall Score</div>
-                                </div>
-                                <div class="metric-card">
-                                    <div class="metric-value \(self.getGradeClass(analysis.performanceGrade))">\(analysis.performanceGrade.rawValue)</div>
-                                    <div class="metric-label">Performance Grade</div>
-                                </div>
-                                <div class="metric-card">
-                                    <div class="metric-value">\(analysis.benchmarkAnalyses.count)</div>
-                                    <div class="metric-label">Benchmarks Analyzed</div>
-                                </div>
-                                <div class="metric-card">
-                                    <div class="metric-value">\(analysis.bottlenecks.count)</div>
-                                    <div class="metric-label">Bottlenecks Found</div>
-                                </div>
+                    <div class="section">
+                        <h2>📊 Executive Summary</h2>
+                        <div class="metric-grid">
+                            <div class="metric-card">
+                                <div class="metric-value">\(String(format: "%.1f", analysis.overallScore))</div>
+                                <div class="metric-label">Overall Score</div>
                             </div>
-                            <p>\(report.executiveSummary)</p>
+                            <div class="metric-card">
+                                <div class="metric-value \(self.getGradeClass(analysis.performanceGrade))">\(analysis.performanceGrade.rawValue)</div>
+                                <div class="metric-label">Performance Grade</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">\(analysis.benchmarkAnalyses.count)</div>
+                                <div class="metric-label">Benchmarks Analyzed</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">\(analysis.bottlenecks.count)</div>
+                                <div class="metric-label">Bottlenecks Found</div>
+                            </div>
                         </div>
-                """
+                        <p>\(report.executiveSummary)</p>
+                    </div>
+            """
 
             // Add benchmark details
             html += """
-                        <div class="section">
-                            <h2>📈 Benchmark Results</h2>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Benchmark</th>
-                                        <th>Average Time</th>
-                                        <th>Performance Class</th>
-                                        <th>Stability</th>
-                                        <th>Memory Usage</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                """
+                    <div class="section">
+                        <h2>📈 Benchmark Results</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Benchmark</th>
+                                    <th>Average Time</th>
+                                    <th>Performance Class</th>
+                                    <th>Stability</th>
+                                    <th>Memory Usage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            """
 
             for (id, analysis) in analysis.benchmarkAnalyses {
                 let memoryUsage =
                     analysis.memoryAnalysis.map { "\($0.peakUsage / 1024 / 1024)MB" } ?? "N/A"
                 html += """
-                                    <tr>
-                                        <td>\(id)</td>
-                                        <td>\(String(format: "%.6f", analysis.timeStats.mean))s</td>
-                                        <td>\(analysis.performanceClass)</td>
-                                        <td>\(analysis.stability)</td>
-                                        <td>\(memoryUsage)</td>
-                                    </tr>
-                    """
+                                <tr>
+                                    <td>\(id)</td>
+                                    <td>\(String(format: "%.6f", analysis.timeStats.mean))s</td>
+                                    <td>\(analysis.performanceClass)</td>
+                                    <td>\(analysis.stability)</td>
+                                    <td>\(memoryUsage)</td>
+                                </tr>
+                """
             }
 
             html += """
-                                </tbody>
-                            </table>
-                        </div>
-                """
+                            </tbody>
+                        </table>
+                    </div>
+            """
 
             // Add recommendations
             if !report.recommendations.isEmpty {
                 html += """
-                            <div class="section">
-                                <h2>💡 Recommendations</h2>
-                                <div class="recommendations">
-                    """
+                        <div class="section">
+                            <h2>💡 Recommendations</h2>
+                            <div class="recommendations">
+                """
 
                 for recommendation in report.recommendations {
                     html += """
-                                    <div class="recommendation-item">
-                                        <strong>\(recommendation.priority.rawValue.capitalized): </strong>\(recommendation.description)
-                                    </div>
-                        """
+                                <div class="recommendation-item">
+                                    <strong>\(recommendation.priority.rawValue.capitalized): </strong>\(recommendation.description)
+                                </div>
+                    """
                 }
 
                 html += """
-                                </div>
                             </div>
-                    """
+                        </div>
+                """
             }
 
             // Add charts placeholder
             if config.includeCharts {
                 html += """
-                            <div class="section">
-                                <h2>📊 Performance Charts</h2>
-                                <div id="charts-container">
-                                    <p>Charts will be rendered here when JavaScript loads.</p>
-                                </div>
+                        <div class="section">
+                            <h2>📊 Performance Charts</h2>
+                            <div id="charts-container">
+                                <p>Charts will be rendered here when JavaScript loads.</p>
                             </div>
-                    """
+                        </div>
+                """
             }
 
             html += """
-                    </div>
-                    <script>
-                        // Chart.js integration would go here
-                        console.log('Performance Dashboard loaded');
-                    </script>
-                </body>
-                </html>
-                """
+                </div>
+                <script>
+                    // Chart.js integration would go here
+                    console.log('Performance Dashboard loaded');
+                </script>
+            </body>
+            </html>
+            """
 
             return html
         }
@@ -368,7 +370,7 @@ public class ReportGenerator {
         summary +=
             "Analyzed \(analysis.benchmarkAnalyses.count) benchmarks, identifying \(analysis.bottlenecks.count) performance bottlenecks and \(analysis.optimizationOpportunities.count) optimization opportunities."
 
-        if let comparison = comparison {
+        if let comparison {
             let changeDesc = comparison.averageTimeChange >= 0 ? "increase" : "decrease"
             summary +=
                 " Compared to baseline, performance shows a \(String(format: "%.1f", abs(comparison.averageTimeChange)))% \(changeDesc) in execution time."
@@ -418,7 +420,7 @@ public class ReportGenerator {
             for correlation in correlations {
                 let strength =
                     abs(correlation.coefficient) > 0.7
-                    ? "Strong" : abs(correlation.coefficient) > 0.5 ? "Moderate" : "Weak"
+                        ? "Strong" : abs(correlation.coefficient) > 0.5 ? "Moderate" : "Weak"
                 content +=
                     "- **\(correlation.benchmarkA)** ↔ **\(correlation.benchmarkB)**: \(strength) correlation (\(String(format: "%.2f", correlation.coefficient)))\n"
             }
@@ -440,7 +442,7 @@ public class ReportGenerator {
             for bottleneck in bottlenecks {
                 let severityEmoji =
                     bottleneck.severity == .critical
-                    ? "🚨" : bottleneck.severity == .high ? "⚠️" : "ℹ️"
+                        ? "🚨" : bottleneck.severity == .high ? "⚠️" : "ℹ️"
                 content += "## \(severityEmoji) \(bottleneck.benchmarkId)\n\n"
                 content +=
                     "- **Average Time**: \(String(format: "%.6f", bottleneck.averageTime))s\n"
@@ -476,7 +478,8 @@ public class ReportGenerator {
         }
 
         return ReportSection(
-            title: "Optimization Opportunities", content: content, type: .recommendations)
+            title: "Optimization Opportunities", content: content, type: .recommendations
+        )
     }
 
     private func generateTrendSection(_ trends: [TrendAnalysis]) throws -> ReportSection {
@@ -498,8 +501,7 @@ public class ReportGenerator {
         return ReportSection(title: "Performance Trends", content: content, type: .analysis)
     }
 
-    private func generateComparisonSection(_ comparison: VersionComparison) throws -> ReportSection
-    {
+    private func generateComparisonSection(_ comparison: VersionComparison) throws -> ReportSection {
         var content = "# Version Comparison\n\n"
 
         content += "## Summary\n\n"
@@ -592,7 +594,7 @@ public class ReportGenerator {
                     priority: .low,
                     category: .maintenance,
                     description:
-                        "Maintain current performance standards and monitor for regressions"
+                    "Maintain current performance standards and monitor for regressions"
                 ))
         case .b:
             recommendations.append(
@@ -607,7 +609,7 @@ public class ReportGenerator {
                     priority: .high,
                     category: .optimization,
                     description:
-                        "Identify performance bottlenecks and implement targeted optimizations"
+                    "Identify performance bottlenecks and implement targeted optimizations"
                 ))
         case .d:
             recommendations.append(
@@ -615,7 +617,7 @@ public class ReportGenerator {
                     priority: .high,
                     category: .optimization,
                     description:
-                        "Conduct comprehensive performance audit and implement major optimizations"
+                    "Conduct comprehensive performance audit and implement major optimizations"
                 ))
         case .f:
             recommendations.append(
@@ -623,7 +625,7 @@ public class ReportGenerator {
                     priority: .critical,
                     category: .architecture,
                     description:
-                        "Immediate performance investigation required - consider architectural changes"
+                    "Immediate performance investigation required - consider architectural changes"
                 ))
         }
 
@@ -634,12 +636,12 @@ public class ReportGenerator {
                     priority: bottleneck.severity == .critical ? .critical : .high,
                     category: .optimization,
                     description:
-                        "Address \(bottleneck.severity.rawValue) bottleneck in \(bottleneck.benchmarkId)"
+                    "Address \(bottleneck.severity.rawValue) bottleneck in \(bottleneck.benchmarkId)"
                 ))
         }
 
         // Trend-based recommendations
-        if let trends = trends {
+        if let trends {
             for trend in trends {
                 if trend.timeSeries.trendType == .increasing {
                     recommendations.append(
@@ -647,14 +649,14 @@ public class ReportGenerator {
                             priority: .medium,
                             category: .monitoring,
                             description:
-                                "Monitor increasing performance trend for \(trend.benchmarkId)"
+                            "Monitor increasing performance trend for \(trend.benchmarkId)"
                         ))
                 }
             }
         }
 
         // Comparison-based recommendations
-        if let comparison = comparison, comparison.overallChange == .regression {
+        if let comparison, comparison.overallChange == .regression {
             recommendations.append(
                 Recommendation(
                     priority: .high,
@@ -683,7 +685,7 @@ public class ReportGenerator {
             charts.append(benchmarkChart)
 
             // Trend charts
-            if let trends = trends {
+            if let trends {
                 for trend in trends {
                     let trendChart = try generateTrendChart(trend)
                     charts.append(trendChart)
@@ -691,7 +693,7 @@ public class ReportGenerator {
             }
 
             // Comparison chart
-            if let comparison = comparison {
+            if let comparison {
                 let comparisonChart = try generateComparisonChart(comparison)
                 charts.append(comparisonChart)
             }
@@ -812,7 +814,7 @@ public class ReportGenerator {
     private func generateDetailedComparisons(_ comparison: VersionComparison) throws
         -> [DetailedComparison]
     {
-        comparison.comparisons.map { (id, comp) in
+        comparison.comparisons.map { id, comp in
             DetailedComparison(
                 benchmarkId: id,
                 timeChangePercent: comp.timeChangePercent,
@@ -860,8 +862,7 @@ public class ReportGenerator {
     private func generateHTMLReport(_ report: PerformanceReport) throws -> String {
         // HTML generation logic would be extensive
         // For now, return a placeholder
-        return
-            "<html><body><h1>Performance Report</h1><p>Report generation completed.</p></body></html>"
+        "<html><body><h1>Performance Report</h1><p>Report generation completed.</p></body></html>"
     }
 
     private func generateJSONReport(_ report: PerformanceReport) throws -> Data {
@@ -911,7 +912,7 @@ public class ReportGenerator {
 
     private func calculateBenchmarkScore(_ analysis: BenchmarkAnalysis) -> Double {
         // Simplified scoring logic
-        let timeScore = max(0, 100 - analysis.timeStats.mean * 1000)  // Rough approximation
+        let timeScore = max(0, 100 - analysis.timeStats.mean * 1000) // Rough approximation
         let stabilityScore =
             analysis.stability == .excellent ? 100 : analysis.stability == .good ? 80 : 60
         return (timeScore + Double(stabilityScore)) / 2
@@ -990,7 +991,7 @@ public struct ChartData {
     public let id: String
     public let title: String
     public let type: ChartType
-    public let data: [(String, Double)]  // Simplified data structure
+    public let data: [(String, Double)] // Simplified data structure
     public let xAxisLabel: String
     public let yAxisLabel: String
     public let config: ChartConfig

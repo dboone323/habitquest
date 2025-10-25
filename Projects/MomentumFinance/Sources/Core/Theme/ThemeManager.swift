@@ -153,9 +153,12 @@ final class ThemeManager {
 /// Object pool for performance optimization
 private var objectPool: [Any] = []
 private let maxPoolSize = 50
+private let poolLock = NSLock()
 
 /// Get an object from the pool or create new one
 private func getPooledObject<T>() -> T? {
+    poolLock.lock()
+    defer { poolLock.unlock() }
     if let pooled = objectPool.popLast() as? T {
         return pooled
     }
@@ -164,6 +167,8 @@ private func getPooledObject<T>() -> T? {
 
 /// Return an object to the pool
 private func returnToPool(_ object: Any) {
+    poolLock.lock()
+    defer { poolLock.unlock() }
     if objectPool.count < maxPoolSize {
         objectPool.append(object)
     }

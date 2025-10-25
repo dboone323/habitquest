@@ -16,19 +16,19 @@ class PlatformDetectorTests: XCTestCase {
 
     // MARK: - enumPlatform{ Tests
 
-    func testenumPlatform{Initialization() {
+    func testenumPlatformInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumPlatform{
         XCTAssertTrue(true, "Placeholder test for enumPlatform{")
     }
 
-    func testenumPlatform{Properties() {
+    func testenumPlatformProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumPlatform{
         XCTAssertTrue(true, "Placeholder test for enumPlatform{ properties")
     }
 
-    func testenumPlatform{Methods() {
+    func testenumPlatformMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumPlatform{
         XCTAssertTrue(true, "Placeholder test for enumPlatform{ methods")
@@ -36,19 +36,19 @@ class PlatformDetectorTests: XCTestCase {
 
     // MARK: - enumInputMethod{ Tests
 
-    func testenumInputMethod{Initialization() {
+    func testenumInputMethodInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumInputMethod{
         XCTAssertTrue(true, "Placeholder test for enumInputMethod{")
     }
 
-    func testenumInputMethod{Properties() {
+    func testenumInputMethodProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumInputMethod{
         XCTAssertTrue(true, "Placeholder test for enumInputMethod{ properties")
     }
 
-    func testenumInputMethod{Methods() {
+    func testenumInputMethodMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumInputMethod{
         XCTAssertTrue(true, "Placeholder test for enumInputMethod{ methods")
@@ -56,19 +56,19 @@ class PlatformDetectorTests: XCTestCase {
 
     // MARK: - structPlatformConfig{ Tests
 
-    func teststructPlatformConfig{Initialization() {
+    func teststructPlatformConfigInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structPlatformConfig{
         XCTAssertTrue(true, "Placeholder test for structPlatformConfig{")
     }
 
-    func teststructPlatformConfig{Properties() {
+    func teststructPlatformConfigProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structPlatformConfig{
         XCTAssertTrue(true, "Placeholder test for structPlatformConfig{ properties")
     }
 
-    func teststructPlatformConfig{Methods() {
+    func teststructPlatformConfigMethods() {
         // Test method functionality
         // TODO: Implement method tests for structPlatformConfig{
         XCTAssertTrue(true, "Placeholder test for structPlatformConfig{ methods")

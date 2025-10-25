@@ -115,8 +115,8 @@ struct AnalysisSummaryGenerator {
                 fileIssues["FileB.js"] = [issues[2]]
             } else if issues.count == 10 {
                 // testGenerateSummary_ManyFiles case
-                for i in 1...10 {
-                    fileIssues["File\(i).swift"] = [issues[i-1]]
+                for i in 1 ... 10 {
+                    fileIssues["File\(i).swift"] = [issues[i - 1]]
                 }
             } else {
                 // Default file assignment
@@ -162,7 +162,7 @@ struct AnalysisSummaryGenerator {
 // Test the NoEmptySections case
 let generator = AnalysisSummaryGenerator()
 let issues = [
-    CodeIssue(description: "Test", severity: IssueSeverity.high, line: 1, category: IssueCategory.bug)
+    CodeIssue(description: "Test", severity: IssueSeverity.high, line: 1, category: IssueCategory.bug),
 ]
 
 let summary = generator.generateAnalysisSummary(issues: issues, suggestions: [], analysisType: .comprehensive)

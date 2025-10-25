@@ -39,7 +39,8 @@ final class HotReloadIntegrationTests: XCTestCase {
             .appendingPathComponent(UUID().uuidString)
 
         try FileManager.default.createDirectory(
-            at: tempDirectory, withIntermediateDirectories: true)
+            at: tempDirectory, withIntermediateDirectories: true
+        )
 
         // Initialize components
         await setupComponents()
@@ -86,44 +87,44 @@ final class HotReloadIntegrationTests: XCTestCase {
         // Create test Swift files
         let testClassURL = tempDirectory.appendingPathComponent("TestClass.swift")
         let testClassContent = """
-            import Foundation
+        import Foundation
 
-            @objc public class TestClass: NSObject {
-                @objc public var name: String = "Test"
+        @objc public class TestClass: NSObject {
+            @objc public var name: String = "Test"
 
-                @objc public func greet() -> String {
-                    return "Hello, \\(name)!"
-                }
-
-                @objc public func calculate(_ a: Int, _ b: Int) -> Int {
-                    return a + b
-                }
+            @objc public func greet() -> String {
+                return "Hello, \\(name)!"
             }
-            """
+
+            @objc public func calculate(_ a: Int, _ b: Int) -> Int {
+                return a + b
+            }
+        }
+        """
         try testClassContent.write(to: testClassURL, atomically: true, encoding: .utf8)
         testFiles.append(testClassURL)
 
         let viewModelURL = tempDirectory.appendingPathComponent("TestViewModel.swift")
         let viewModelContent = """
-            import Foundation
-            import Combine
+        import Foundation
+        import Combine
 
-            @MainActor
-            public class TestViewModel: ObservableObject {
-                @Published public var count: Int = 0
-                @Published public var message: String = "Initial"
+        @MainActor
+        public class TestViewModel: ObservableObject {
+            @Published public var count: Int = 0
+            @Published public var message: String = "Initial"
 
-                public func increment() {
-                    count += 1
-                    message = "Count: \\(count)"
-                }
-
-                public func reset() {
-                    count = 0
-                    message = "Reset"
-                }
+            public func increment() {
+                count += 1
+                message = "Count: \\(count)"
             }
-            """
+
+            public func reset() {
+                count = 0
+                message = "Reset"
+            }
+        }
+        """
         try viewModelContent.write(to: viewModelURL, atomically: true, encoding: .utf8)
         testFiles.append(viewModelURL)
     }
@@ -143,7 +144,7 @@ final class HotReloadIntegrationTests: XCTestCase {
         fileWatcher.fileChanges
             .sink { change in
                 detectedChanges.append(change)
-                if detectedChanges.count >= 2 {  // Expect changes for both files
+                if detectedChanges.count >= 2 { // Expect changes for both files
                     changeExpectation.fulfill()
                 }
             }
@@ -203,13 +204,13 @@ final class HotReloadIntegrationTests: XCTestCase {
         // 1. Create a file with syntax errors
         let errorFileURL = tempDirectory.appendingPathComponent("ErrorFile.swift")
         let errorContent = """
-            import Foundation
+        import Foundation
 
-            public class ErrorClass {
-                public func brokenMethod() {
-                    // Missing closing brace and syntax error
-                    return "broken"
-            """
+        public class ErrorClass {
+            public func brokenMethod() {
+                // Missing closing brace and syntax error
+                return "broken"
+        """
         try errorContent.write(to: errorFileURL, atomically: true, encoding: .utf8)
 
         // 2. Attempt compilation (should fail)
@@ -253,7 +254,7 @@ final class HotReloadIntegrationTests: XCTestCase {
         // Test handling multiple concurrent reload requests
 
         // 1. Create multiple reload requests
-        let requests = (0..<5).map { index in
+        let requests = (0 ..< 5).map { index in
             ReloadRequest(
                 files: [testFiles[index % testFiles.count]],
                 priority: index % 2 == 0 ? .high : .normal,
@@ -281,12 +282,13 @@ final class HotReloadIntegrationTests: XCTestCase {
 
         // 3. Verify queuing behavior (only one should be active initially)
         let activeReloads = reloadCoordinator.getActiveReloads()
-        XCTAssertEqual(activeReloads.count, 1)  // Max concurrent is 1
+        XCTAssertEqual(activeReloads.count, 1) // Max concurrent is 1
 
         // 4. Complete the active reload and check queue processing
         let firstSession = activeReloads.first!
         await reloadCoordinator.completeReload(
-            firstSession, result: .success(CompilationResult(success: true)))
+            firstSession, result: .success(CompilationResult(success: true))
+        )
 
         // Should now have another active reload
         let newActive = reloadCoordinator.getActiveReloads()
@@ -313,7 +315,7 @@ final class HotReloadIntegrationTests: XCTestCase {
         try await statePreserver.restoreState(stateId, for: complexObject)
 
         // 5. Verify restoration
-        XCTAssertEqual(complexObject.counter, 0)  // Should be restored to initial value
+        XCTAssertEqual(complexObject.counter, 0) // Should be restored to initial value
         XCTAssertEqual(complexObject.data, ["initial"])
         XCTAssertEqual(complexObject.nested.value, 10.0)
     }
@@ -362,17 +364,19 @@ final class HotReloadIntegrationTests: XCTestCase {
         )
 
         // Perform multiple reloads
-        for i in 0..<3 {
+        for i in 0 ..< 3 {
             let session = try await reloadCoordinator.requestReload(request)
             try await reloadCoordinator.startReload(session)
 
             // Alternate between success and failure
             if i % 2 == 0 {
                 await reloadCoordinator.completeReload(
-                    session, result: .success(CompilationResult(success: true)))
+                    session, result: .success(CompilationResult(success: true))
+                )
             } else {
                 await reloadCoordinator.failReload(
-                    session, error: CompilationError.unknown("Test error"))
+                    session, error: CompilationError.unknown("Test error")
+                )
             }
         }
 
@@ -435,7 +439,7 @@ private enum CompilationError: Error {
 private class ComplexTestObject: ObservableObject {
     @Published var counter: Int = 0
     @Published var data: [String] = []
-    @Published var nested: NestedObject = NestedObject()
+    @Published var nested: NestedObject = .init()
 
     func configure() {
         counter = 0
@@ -545,15 +549,15 @@ public class HotReloadUsageExample {
             try await hotReloadEngine.reload(files: [])
         } catch let error as HotReloadError {
             switch error {
-            case .compilationFailed(let errors):
+            case let .compilationFailed(errors):
                 print("Compilation failed with \(errors.count) errors")
             // Show errors to user or attempt recovery
-            case .patchingFailed(let reason):
+            case let .patchingFailed(reason):
                 print("Runtime patching failed: \(reason)")
             // Fallback to full restart
             case .statePreservationFailed:
                 print("State preservation failed")
-            // Continue without state preservation
+                // Continue without state preservation
             }
         } catch {
             print("Unexpected error: \(error)")
@@ -577,13 +581,13 @@ final class HotReloadPerformanceTests: XCTestCase {
 
         // Create multiple test files
         var testFiles: [URL] = []
-        for i in 0..<10 {
+        for i in 0 ..< 10 {
             let fileURL = tempDir.appendingPathComponent("Test\(i).swift")
             let content = """
-                public class Test\(i) {
-                    public func method() -> Int { return \(i) }
-                }
-                """
+            public class Test\(i) {
+                public func method() -> Int { return \(i) }
+            }
+            """
             try content.write(to: fileURL, atomically: true, encoding: .utf8)
             testFiles.append(fileURL)
         }
@@ -602,7 +606,7 @@ final class HotReloadPerformanceTests: XCTestCase {
 
         let coordinator = ReloadCoordinator()
 
-        let requests = (0..<5).map { index in
+        let requests = (0 ..< 5).map { index in
             ReloadRequest(
                 files: [URL(fileURLWithPath: "/tmp/test\(index).swift")],
                 priority: .normal,

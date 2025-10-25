@@ -1,6 +1,8 @@
 // Momentum Finance - Budget Detail Action Methods for macOS
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
+import MomentumFinanceCore
+import SharedKit
 import SwiftData
 import SwiftUI
 

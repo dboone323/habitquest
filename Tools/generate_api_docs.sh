@@ -10,9 +10,7 @@ TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
 # Colors
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-RED='\033[0;31m'
 NC='\033[0m'
 
 echo -e "${BLUE}📚 Generating API Documentation${NC}"
@@ -278,7 +276,7 @@ EOF
 
 for api_file in "${DOCS_DIR}"/*_API.md; do
     if [ -f "$api_file" ]; then
-        local project_name=$(basename "$api_file" _API.md)
+        project_name=$(basename "$api_file" _API.md)
         echo "- [${project_name}](./${project_name}_API.md)" >>"${DOCS_DIR}/README.md"
     fi
 done

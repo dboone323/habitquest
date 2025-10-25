@@ -24,8 +24,8 @@ class MemoryProfilingExamples {
     private func setupComponents() {
         // Configure memory profiler for real-time monitoring
         let config = MemoryProfiler.Configuration(
-            monitoringInterval: 1.0,  // 1 second intervals
-            snapshotRetentionPeriod: 3600,  // 1 hour retention
+            monitoringInterval: 1.0, // 1 second intervals
+            snapshotRetentionPeriod: 3600, // 1 hour retention
             anomalyDetectionEnabled: true,
             leakDetectionEnabled: true,
             performanceAnalysisEnabled: true
@@ -128,12 +128,13 @@ class MemoryProfilingExamples {
 
             // Phase 2: Start leaking memory
             print("Phase 2: Simulating memory leak...")
-            for i in 0..<100 {
+            for i in 0 ..< 100 {
                 leakingObjects.append(NSObject())
                 // Track some objects for leak detection
                 if i % 10 == 0 {
                     self.leakDetector.trackAllocation(
-                        leakingObjects.last!, context: "Example leak object \(i)")
+                        leakingObjects.last!, context: "Example leak object \(i)"
+                    )
                 }
             }
 
@@ -249,7 +250,8 @@ class MemoryProfilingExamples {
 
             // Memory prediction
             let prediction = self.performanceAnalyzer.predictMemoryRequirements(
-                snapshots, predictionHorizon: 3600)
+                snapshots, predictionHorizon: 3600
+            )
             print("  Memory Prediction (1 hour):")
             print("    Predicted Peak: \(self.formatBytes(UInt64(prediction.predictedPeakUsage)))")
             print("    Confidence: \(String(format: "%.2f", prediction.confidence))")
@@ -266,15 +268,15 @@ class MemoryProfilingExamples {
 
         // Create custom configuration
         let customConfig = MemoryProfiler.Configuration(
-            monitoringInterval: 0.5,  // 500ms intervals
-            snapshotRetentionPeriod: 7200,  // 2 hours
+            monitoringInterval: 0.5, // 500ms intervals
+            snapshotRetentionPeriod: 7200, // 2 hours
             anomalyDetectionEnabled: true,
             leakDetectionEnabled: true,
             performanceAnalysisEnabled: true,
             alertThresholds: MemoryProfiler.AlertThresholds(
-                memoryUsageThreshold: 0.8,  // 80%
-                leakGrowthThreshold: 50 * 1024 * 1024,  // 50MB
-                anomalyThreshold: 3.0  // 3 standard deviations
+                memoryUsageThreshold: 0.8, // 80%
+                leakGrowthThreshold: 50 * 1024 * 1024, // 50MB
+                anomalyThreshold: 3.0 // 3 standard deviations
             )
         )
 
@@ -347,7 +349,8 @@ class MemoryProfilingExamples {
 
                     // Cleanup
                     self.exportMemoryData(
-                        snapshots, filename: "application_lifecycle_analysis.json")
+                        snapshots, filename: "application_lifecycle_analysis.json"
+                    )
                     print("Application lifecycle analysis complete.")
                 }
             }
@@ -361,14 +364,14 @@ class MemoryProfilingExamples {
 
         // Phase 1: Light usage
         DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-            for _ in 0..<50 {
+            for _ in 0 ..< 50 {
                 objects.append(NSObject())
             }
         }
 
         // Phase 2: Heavy usage
         DispatchQueue.global().asyncAfter(deadline: .now() + 6) {
-            for _ in 0..<200 {
+            for _ in 0 ..< 200 {
                 objects.append(NSObject())
             }
         }
@@ -384,8 +387,8 @@ class MemoryProfilingExamples {
 
         // Sequential access pattern
         DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
-            for i in 0..<100 {
-                data.append(Array(0..<1000))
+            for i in 0 ..< 100 {
+                data.append(Array(0 ..< 1000))
                 // Access sequentially
                 if let last = data.last {
                     _ = last.reduce(0, +)
@@ -395,10 +398,10 @@ class MemoryProfilingExamples {
 
         // Random access pattern
         DispatchQueue.global().asyncAfter(deadline: .now() + 6) {
-            for _ in 0..<50 {
-                let randomIndex = Int.random(in: 0..<data.count)
+            for _ in 0 ..< 50 {
+                let randomIndex = Int.random(in: 0 ..< data.count)
                 if randomIndex < data.count {
-                    let randomElement = Int.random(in: 0..<data[randomIndex].count)
+                    let randomElement = Int.random(in: 0 ..< data[randomIndex].count)
                     _ = data[randomIndex][randomElement]
                 }
             }
@@ -411,7 +414,7 @@ class MemoryProfilingExamples {
             print("Memory warning received!")
             let currentSnapshot =
                 self.memoryProfiler.snapshots.last
-                ?? self.memoryProfiler.memoryMonitor.captureSnapshot()
+                    ?? self.memoryProfiler.memoryMonitor.captureSnapshot()
             let realTimeAnalysis = self.performanceAnalyzer.analyzeRealTimePerformance(
                 currentSnapshot,
                 historicalSnapshots: self.memoryProfiler.snapshots
@@ -432,7 +435,7 @@ class MemoryProfilingExamples {
         DispatchQueue.global().async {
             var cache: [String: NSObject] = [:]
 
-            for i in 0..<100 {
+            for i in 0 ..< 100 {
                 let key = "object_\(i)"
                 cache[key] = NSObject()
 
@@ -490,9 +493,9 @@ class MemoryProfilingExamples {
 
     private func getSystemInfo() -> SystemInfo {
         // This would gather actual system information
-        return SystemInfo(
+        SystemInfo(
             osVersion: "macOS 12.0",
-            totalMemory: 16 * 1024 * 1024 * 1024,  // 16GB
+            totalMemory: 16 * 1024 * 1024 * 1024, // 16GB
             processorCount: 8
         )
     }
@@ -503,12 +506,12 @@ class MemoryProfilingExamples {
     }
 
     private func peakMemoryUsage(_ snapshots: [MemorySnapshot]) -> UInt64 {
-        return snapshots.map { $0.usedMemory }.max() ?? 0
+        snapshots.map(\.usedMemory).max() ?? 0
     }
 
     private func totalMonitoringTime(_ snapshots: [MemorySnapshot]) -> TimeInterval {
         guard let first = snapshots.first?.timestamp,
-            let last = snapshots.last?.timestamp
+              let last = snapshots.last?.timestamp
         else { return 0 }
         return last.timeIntervalSince(first)
     }

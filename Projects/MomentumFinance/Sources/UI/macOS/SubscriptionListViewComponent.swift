@@ -11,7 +11,8 @@ import SwiftUI
 // This file contains the Subscriptions list view components
 // Extracted from MacOS_UI_Enhancements.swift to reduce file size
 
-#if os(macOS)
+import MomentumFinanceCore
+import SharedKit
     // Subscriptions list view for the middle column
     extension Features.Subscriptions {
         struct SubscriptionListView: View {

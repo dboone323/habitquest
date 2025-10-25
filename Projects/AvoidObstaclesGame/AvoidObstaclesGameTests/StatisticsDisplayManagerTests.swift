@@ -16,19 +16,19 @@ class StatisticsDisplayManagerTests: XCTestCase {
 
     // MARK: - classStatisticsDisplayManager{ Tests
 
-    func testclassStatisticsDisplayManager{Initialization() {
+    func testclassStatisticsDisplayManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classStatisticsDisplayManager{
         XCTAssertTrue(true, "Placeholder test for classStatisticsDisplayManager{")
     }
 
-    func testclassStatisticsDisplayManager{Properties() {
+    func testclassStatisticsDisplayManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classStatisticsDisplayManager{
         XCTAssertTrue(true, "Placeholder test for classStatisticsDisplayManager{ properties")
     }
 
-    func testclassStatisticsDisplayManager{Methods() {
+    func testclassStatisticsDisplayManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classStatisticsDisplayManager{
         XCTAssertTrue(true, "Placeholder test for classStatisticsDisplayManager{ methods")

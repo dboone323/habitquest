@@ -19,11 +19,11 @@ class TestClass {
     }
 
     func forceUnwrap(value: String?) -> String {
-        return value! // Force unwrap - potential crash
+        value! // Force unwrap - potential crash
     }
 
     func longLineFunction(parameter1: String, parameter2: String, parameter3: String, parameter4: String, parameter5: String) -> String {
-        return parameter1 + parameter2 + parameter3 + parameter4 + parameter5 // This line is intentionally very long to test line length detection
+        parameter1 + parameter2 + parameter3 + parameter4 + parameter5 // This line is intentionally very long to test line length detection
     }
 
     func arrayOperations() {

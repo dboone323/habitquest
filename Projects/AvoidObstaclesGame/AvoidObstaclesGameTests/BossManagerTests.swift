@@ -16,19 +16,19 @@ class BossManagerTests: XCTestCase {
 
     // MARK: - classBossManager:GameComponent{ Tests
 
-    func testclassBossManager:GameComponent{Initialization() {
+    func testclassBossManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classBossManager:GameComponent{
         XCTAssertTrue(true, "Placeholder test for classBossManager:GameComponent{")
     }
 
-    func testclassBossManager:GameComponent{Properties() {
+    func testclassBossManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classBossManager:GameComponent{
         XCTAssertTrue(true, "Placeholder test for classBossManager:GameComponent{ properties")
     }
 
-    func testclassBossManager:GameComponent{Methods() {
+    func testclassBossManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classBossManager:GameComponent{
         XCTAssertTrue(true, "Placeholder test for classBossManager:GameComponent{ methods")
@@ -36,19 +36,19 @@ class BossManagerTests: XCTestCase {
 
     // MARK: - classBossAttackNode:GameComponent{ Tests
 
-    func testclassBossAttackNode:GameComponent{Initialization() {
+    func testclassBossAttackNodeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classBossAttackNode:GameComponent{
         XCTAssertTrue(true, "Placeholder test for classBossAttackNode:GameComponent{")
     }
 
-    func testclassBossAttackNode:GameComponent{Properties() {
+    func testclassBossAttackNodeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classBossAttackNode:GameComponent{
         XCTAssertTrue(true, "Placeholder test for classBossAttackNode:GameComponent{ properties")
     }
 
-    func testclassBossAttackNode:GameComponent{Methods() {
+    func testclassBossAttackNodeMethods() {
         // Test method functionality
         // TODO: Implement method tests for classBossAttackNode:GameComponent{
         XCTAssertTrue(true, "Placeholder test for classBossAttackNode:GameComponent{ methods")

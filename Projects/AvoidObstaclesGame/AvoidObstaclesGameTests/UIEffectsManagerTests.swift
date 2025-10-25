@@ -16,19 +16,19 @@ class UIEffectsManagerTests: XCTestCase {
 
     // MARK: - classUIEffectsManager{ Tests
 
-    func testclassUIEffectsManager{Initialization() {
+    func testclassUIEffectsManagerInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for classUIEffectsManager{
         XCTAssertTrue(true, "Placeholder test for classUIEffectsManager{")
     }
 
-    func testclassUIEffectsManager{Properties() {
+    func testclassUIEffectsManagerProperties() {
         // Test property access and validation
         // TODO: Implement property tests for classUIEffectsManager{
         XCTAssertTrue(true, "Placeholder test for classUIEffectsManager{ properties")
     }
 
-    func testclassUIEffectsManager{Methods() {
+    func testclassUIEffectsManagerMethods() {
         // Test method functionality
         // TODO: Implement method tests for classUIEffectsManager{
         XCTAssertTrue(true, "Placeholder test for classUIEffectsManager{ methods")

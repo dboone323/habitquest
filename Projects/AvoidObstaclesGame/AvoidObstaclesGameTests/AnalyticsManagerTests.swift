@@ -16,19 +16,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - enumAnalyticsEvent:String,Codable,Sendable{ Tests
 
-    func testenumAnalyticsEvent:String,Codable,Sendable{Initialization() {
+    func testenumAnalyticsEventInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumAnalyticsEvent:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumAnalyticsEvent:String,Codable,Sendable{")
     }
 
-    func testenumAnalyticsEvent:String,Codable,Sendable{Properties() {
+    func testenumAnalyticsEventProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumAnalyticsEvent:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumAnalyticsEvent:String,Codable,Sendable{ properties")
     }
 
-    func testenumAnalyticsEvent:String,Codable,Sendable{Methods() {
+    func testenumAnalyticsEventMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumAnalyticsEvent:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumAnalyticsEvent:String,Codable,Sendable{ methods")
@@ -36,19 +36,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - enumAnalyticsPlayerAction:String,Codable,Sendable{ Tests
 
-    func testenumAnalyticsPlayerAction:String,Codable,Sendable{Initialization() {
+    func testenumAnalyticsPlayerActionInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumAnalyticsPlayerAction:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumAnalyticsPlayerAction:String,Codable,Sendable{")
     }
 
-    func testenumAnalyticsPlayerAction:String,Codable,Sendable{Properties() {
+    func testenumAnalyticsPlayerActionProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumAnalyticsPlayerAction:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumAnalyticsPlayerAction:String,Codable,Sendable{ properties")
     }
 
-    func testenumAnalyticsPlayerAction:String,Codable,Sendable{Methods() {
+    func testenumAnalyticsPlayerActionMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumAnalyticsPlayerAction:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumAnalyticsPlayerAction:String,Codable,Sendable{ methods")
@@ -56,19 +56,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - enumAnalyticsGameMode:String,Codable,Sendable{ Tests
 
-    func testenumAnalyticsGameMode:String,Codable,Sendable{Initialization() {
+    func testenumAnalyticsGameModeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumAnalyticsGameMode:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumAnalyticsGameMode:String,Codable,Sendable{")
     }
 
-    func testenumAnalyticsGameMode:String,Codable,Sendable{Properties() {
+    func testenumAnalyticsGameModeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumAnalyticsGameMode:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumAnalyticsGameMode:String,Codable,Sendable{ properties")
     }
 
-    func testenumAnalyticsGameMode:String,Codable,Sendable{Methods() {
+    func testenumAnalyticsGameModeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumAnalyticsGameMode:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumAnalyticsGameMode:String,Codable,Sendable{ methods")
@@ -76,19 +76,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - enumEngagementLevel:String,Codable,Sendable{ Tests
 
-    func testenumEngagementLevel:String,Codable,Sendable{Initialization() {
+    func testenumEngagementLevelInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumEngagementLevel:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumEngagementLevel:String,Codable,Sendable{")
     }
 
-    func testenumEngagementLevel:String,Codable,Sendable{Properties() {
+    func testenumEngagementLevelProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumEngagementLevel:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumEngagementLevel:String,Codable,Sendable{ properties")
     }
 
-    func testenumEngagementLevel:String,Codable,Sendable{Methods() {
+    func testenumEngagementLevelMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumEngagementLevel:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumEngagementLevel:String,Codable,Sendable{ methods")
@@ -96,19 +96,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - enumPlayStyle:String,Codable,Sendable{ Tests
 
-    func testenumPlayStyle:String,Codable,Sendable{Initialization() {
+    func testenumPlayStyleInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumPlayStyle:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumPlayStyle:String,Codable,Sendable{")
     }
 
-    func testenumPlayStyle:String,Codable,Sendable{Properties() {
+    func testenumPlayStyleProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumPlayStyle:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumPlayStyle:String,Codable,Sendable{ properties")
     }
 
-    func testenumPlayStyle:String,Codable,Sendable{Methods() {
+    func testenumPlayStyleMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumPlayStyle:String,Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumPlayStyle:String,Codable,Sendable{ methods")
@@ -116,19 +116,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - structSessionAnalytics:Codable,Sendable{ Tests
 
-    func teststructSessionAnalytics:Codable,Sendable{Initialization() {
+    func teststructSessionAnalyticsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structSessionAnalytics:Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for structSessionAnalytics:Codable,Sendable{")
     }
 
-    func teststructSessionAnalytics:Codable,Sendable{Properties() {
+    func teststructSessionAnalyticsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structSessionAnalytics:Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for structSessionAnalytics:Codable,Sendable{ properties")
     }
 
-    func teststructSessionAnalytics:Codable,Sendable{Methods() {
+    func teststructSessionAnalyticsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structSessionAnalytics:Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for structSessionAnalytics:Codable,Sendable{ methods")
@@ -136,19 +136,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - structDeviceInfo:Codable,Sendable{ Tests
 
-    func teststructDeviceInfo:Codable,Sendable{Initialization() {
+    func teststructDeviceInfoInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structDeviceInfo:Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for structDeviceInfo:Codable,Sendable{")
     }
 
-    func teststructDeviceInfo:Codable,Sendable{Properties() {
+    func teststructDeviceInfoProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structDeviceInfo:Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for structDeviceInfo:Codable,Sendable{ properties")
     }
 
-    func teststructDeviceInfo:Codable,Sendable{Methods() {
+    func teststructDeviceInfoMethods() {
         // Test method functionality
         // TODO: Implement method tests for structDeviceInfo:Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for structDeviceInfo:Codable,Sendable{ methods")
@@ -156,19 +156,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - structTrackedEvent:Sendable{ Tests
 
-    func teststructTrackedEvent:Sendable{Initialization() {
+    func teststructTrackedEventInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structTrackedEvent:Sendable{
         XCTAssertTrue(true, "Placeholder test for structTrackedEvent:Sendable{")
     }
 
-    func teststructTrackedEvent:Sendable{Properties() {
+    func teststructTrackedEventProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structTrackedEvent:Sendable{
         XCTAssertTrue(true, "Placeholder test for structTrackedEvent:Sendable{ properties")
     }
 
-    func teststructTrackedEvent:Sendable{Methods() {
+    func teststructTrackedEventMethods() {
         // Test method functionality
         // TODO: Implement method tests for structTrackedEvent:Sendable{
         XCTAssertTrue(true, "Placeholder test for structTrackedEvent:Sendable{ methods")
@@ -176,19 +176,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - structAnalyticsBehaviorAnalysis:Sendable{ Tests
 
-    func teststructAnalyticsBehaviorAnalysis:Sendable{Initialization() {
+    func teststructAnalyticsBehaviorAnalysisInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structAnalyticsBehaviorAnalysis:Sendable{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsBehaviorAnalysis:Sendable{")
     }
 
-    func teststructAnalyticsBehaviorAnalysis:Sendable{Properties() {
+    func teststructAnalyticsBehaviorAnalysisProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structAnalyticsBehaviorAnalysis:Sendable{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsBehaviorAnalysis:Sendable{ properties")
     }
 
-    func teststructAnalyticsBehaviorAnalysis:Sendable{Methods() {
+    func teststructAnalyticsBehaviorAnalysisMethods() {
         // Test method functionality
         // TODO: Implement method tests for structAnalyticsBehaviorAnalysis:Sendable{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsBehaviorAnalysis:Sendable{ methods")
@@ -196,19 +196,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - structAnalyticsBehaviorPattern:Codable,Sendable{ Tests
 
-    func teststructAnalyticsBehaviorPattern:Codable,Sendable{Initialization() {
+    func teststructAnalyticsBehaviorPatternInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structAnalyticsBehaviorPattern:Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsBehaviorPattern:Codable,Sendable{")
     }
 
-    func teststructAnalyticsBehaviorPattern:Codable,Sendable{Properties() {
+    func teststructAnalyticsBehaviorPatternProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structAnalyticsBehaviorPattern:Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsBehaviorPattern:Codable,Sendable{ properties")
     }
 
-    func teststructAnalyticsBehaviorPattern:Codable,Sendable{Methods() {
+    func teststructAnalyticsBehaviorPatternMethods() {
         // Test method functionality
         // TODO: Implement method tests for structAnalyticsBehaviorPattern:Codable,Sendable{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsBehaviorPattern:Codable,Sendable{ methods")
@@ -216,19 +216,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - structHeatMapData:Sendable{ Tests
 
-    func teststructHeatMapData:Sendable{Initialization() {
+    func teststructHeatMapDataInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structHeatMapData:Sendable{
         XCTAssertTrue(true, "Placeholder test for structHeatMapData:Sendable{")
     }
 
-    func teststructHeatMapData:Sendable{Properties() {
+    func teststructHeatMapDataProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structHeatMapData:Sendable{
         XCTAssertTrue(true, "Placeholder test for structHeatMapData:Sendable{ properties")
     }
 
-    func teststructHeatMapData:Sendable{Methods() {
+    func teststructHeatMapDataMethods() {
         // Test method functionality
         // TODO: Implement method tests for structHeatMapData:Sendable{
         XCTAssertTrue(true, "Placeholder test for structHeatMapData:Sendable{ methods")
@@ -236,19 +236,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - structPeriodicAnalytics:Sendable{ Tests
 
-    func teststructPeriodicAnalytics:Sendable{Initialization() {
+    func teststructPeriodicAnalyticsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structPeriodicAnalytics:Sendable{
         XCTAssertTrue(true, "Placeholder test for structPeriodicAnalytics:Sendable{")
     }
 
-    func teststructPeriodicAnalytics:Sendable{Properties() {
+    func teststructPeriodicAnalyticsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structPeriodicAnalytics:Sendable{
         XCTAssertTrue(true, "Placeholder test for structPeriodicAnalytics:Sendable{ properties")
     }
 
-    func teststructPeriodicAnalytics:Sendable{Methods() {
+    func teststructPeriodicAnalyticsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structPeriodicAnalytics:Sendable{
         XCTAssertTrue(true, "Placeholder test for structPeriodicAnalytics:Sendable{ methods")
@@ -256,19 +256,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - structAnalyticsInsight:Sendable{ Tests
 
-    func teststructAnalyticsInsight:Sendable{Initialization() {
+    func teststructAnalyticsInsightInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structAnalyticsInsight:Sendable{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsInsight:Sendable{")
     }
 
-    func teststructAnalyticsInsight:Sendable{Properties() {
+    func teststructAnalyticsInsightProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structAnalyticsInsight:Sendable{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsInsight:Sendable{ properties")
     }
 
-    func teststructAnalyticsInsight:Sendable{Methods() {
+    func teststructAnalyticsInsightMethods() {
         // Test method functionality
         // TODO: Implement method tests for structAnalyticsInsight:Sendable{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsInsight:Sendable{ methods")
@@ -276,19 +276,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - enumInsightType:String,Sendable{ Tests
 
-    func testenumInsightType:String,Sendable{Initialization() {
+    func testenumInsightTypeInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for enumInsightType:String,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumInsightType:String,Sendable{")
     }
 
-    func testenumInsightType:String,Sendable{Properties() {
+    func testenumInsightTypeProperties() {
         // Test property access and validation
         // TODO: Implement property tests for enumInsightType:String,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumInsightType:String,Sendable{ properties")
     }
 
-    func testenumInsightType:String,Sendable{Methods() {
+    func testenumInsightTypeMethods() {
         // Test method functionality
         // TODO: Implement method tests for enumInsightType:String,Sendable{
         XCTAssertTrue(true, "Placeholder test for enumInsightType:String,Sendable{ methods")
@@ -296,19 +296,19 @@ class AnalyticsManagerTests: XCTestCase {
 
     // MARK: - structAnalyticsPerformanceMetrics:Sendable{ Tests
 
-    func teststructAnalyticsPerformanceMetrics:Sendable{Initialization() {
+    func teststructAnalyticsPerformanceMetricsInitialization() {
         // Test basic initialization
         // TODO: Implement initialization test for structAnalyticsPerformanceMetrics:Sendable{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsPerformanceMetrics:Sendable{")
     }
 
-    func teststructAnalyticsPerformanceMetrics:Sendable{Properties() {
+    func teststructAnalyticsPerformanceMetricsProperties() {
         // Test property access and validation
         // TODO: Implement property tests for structAnalyticsPerformanceMetrics:Sendable{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsPerformanceMetrics:Sendable{ properties")
     }
 
-    func teststructAnalyticsPerformanceMetrics:Sendable{Methods() {
+    func teststructAnalyticsPerformanceMetricsMethods() {
         // Test method functionality
         // TODO: Implement method tests for structAnalyticsPerformanceMetrics:Sendable{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsPerformanceMetrics:Sendable{ methods")

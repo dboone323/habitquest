@@ -2,7 +2,7 @@
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
 import Charts
-import Shared
+import SharedKit
 import SwiftData
 import SwiftUI
 

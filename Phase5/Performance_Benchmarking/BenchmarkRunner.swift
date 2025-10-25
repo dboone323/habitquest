@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import QuartzCore
 import os
+import QuartzCore
 
 /// Automated benchmark runner with comprehensive performance measurement
 @available(macOS 12.0, *)
@@ -18,13 +18,14 @@ public class BenchmarkRunner {
 
     private let fileManager = FileManager.default
     private var benchmarkQueue = DispatchQueue(
-        label: "com.quantum.benchmark-runner", qos: .userInitiated)
+        label: "com.quantum.benchmark-runner", qos: .userInitiated
+    )
 
     /// Benchmark configuration
     public struct BenchmarkConfig {
         public var iterations: Int = 10
         public var warmupIterations: Int = 3
-        public var timeout: TimeInterval = 300.0  // 5 minutes
+        public var timeout: TimeInterval = 300.0 // 5 minutes
         public var memorySamplingInterval: TimeInterval = 0.1
         public var enableMemoryTracking: Bool = true
         public var enableCPUTimeTracking: Bool = true
@@ -54,9 +55,10 @@ public class BenchmarkRunner {
     public func runBenchmark(_ benchmark: Benchmark, context: BenchmarkContext = BenchmarkContext())
         async throws -> BenchmarkResult
     {
-        return try await benchmarkQueue.async {
+        try await benchmarkQueue.async {
             let execution = BenchmarkExecution(
-                benchmark: benchmark, config: self.config, context: context)
+                benchmark: benchmark, config: self.config, context: context
+            )
 
             // Store active benchmark
             self.activeBenchmarks[benchmark.id] = execution
@@ -109,7 +111,7 @@ public class BenchmarkRunner {
         // Calculate suite-level metrics
         let totalIterations = results.reduce(0) { $0 + $1.iterations }
         let averageTimePerIteration =
-            results.map { $0.averageTime }.reduce(0, +) / Double(results.count)
+            results.map(\.averageTime).reduce(0, +) / Double(results.count)
         let totalMemoryUsed = results.compactMap { $0.memoryStats?.peakUsage }.reduce(0, +)
 
         return BenchmarkSuiteResult(
@@ -136,16 +138,16 @@ public class BenchmarkRunner {
             (current.memoryStats?.peakUsage ?? 0) - (baseline.memoryStats?.peakUsage ?? 0)
         let memoryChangePercent =
             (baseline.memoryStats?.peakUsage ?? 0) > 0
-            ? (memoryDifference / (baseline.memoryStats?.peakUsage ?? 0)) * 100 : 0
+                ? (memoryDifference / (baseline.memoryStats?.peakUsage ?? 0)) * 100 : 0
 
         // Statistical significance test (simplified t-test)
-        let isSignificantTimeChange = abs(timeChangePercent) > 5.0  // 5% threshold
-        let isSignificantMemoryChange = abs(memoryChangePercent) > 10.0  // 10% threshold
+        let isSignificantTimeChange = abs(timeChangePercent) > 5.0 // 5% threshold
+        let isSignificantMemoryChange = abs(memoryChangePercent) > 10.0 // 10% threshold
 
         var changeType: PerformanceChange = .noChange
-        if timeChangePercent < -5.0 {  // 5% improvement
+        if timeChangePercent < -5.0 { // 5% improvement
             changeType = .improvement
-        } else if timeChangePercent > 5.0 {  // 5% regression
+        } else if timeChangePercent > 5.0 { // 5% regression
             changeType = .regression
         }
 
@@ -165,7 +167,7 @@ public class BenchmarkRunner {
 
     /// Get benchmark history
     public func getBenchmarkHistory(for benchmarkId: String, limit: Int = 50) -> [BenchmarkResult] {
-        return resultsStorage[benchmarkId]?.sorted(by: {
+        resultsStorage[benchmarkId]?.sorted(by: {
             $0.executionTimestamp > $1.executionTimestamp
         }).prefix(limit).reversed() ?? []
     }
@@ -179,8 +181,8 @@ public class BenchmarkRunner {
         guard recentResults.count >= 2 else { return nil }
 
         // Calculate trend using linear regression
-        let times = recentResults.map { $0.executionTimestamp.timeIntervalSince1970 }
-        let values = recentResults.map { $0.averageTime }
+        let times = recentResults.map(\.executionTimestamp.timeIntervalSince1970)
+        let values = recentResults.map(\.averageTime)
 
         let trend = calculateLinearTrend(x: times, y: values)
 
@@ -210,7 +212,7 @@ public class BenchmarkRunner {
 
     /// Get active benchmarks
     public func getActiveBenchmarks() -> [String: BenchmarkExecution] {
-        return activeBenchmarks
+        activeBenchmarks
     }
 
     // MARK: - Private Methods
@@ -220,7 +222,7 @@ public class BenchmarkRunner {
         let config = execution.config
 
         // Warmup phase
-        for _ in 0..<config.warmupIterations {
+        for _ in 0 ..< config.warmupIterations {
             _ = try benchmark.block()
         }
 
@@ -231,7 +233,7 @@ public class BenchmarkRunner {
 
         let startTime = CACurrentMediaTime()
 
-        for iteration in 0..<config.iterations {
+        for iteration in 0 ..< config.iterations {
             let iterationStart = CACurrentMediaTime()
 
             // Memory sampling
@@ -275,15 +277,15 @@ public class BenchmarkRunner {
         let totalTime = endTime - startTime
 
         // Calculate statistics
-        let executionTimes = measurements.map { $0.executionTime }
+        let executionTimes = measurements.map(\.executionTime)
         let stats = calculateStatistics(executionTimes)
 
         // Memory statistics
         var memoryStats: MemoryStatistics?
         if config.enableMemoryTracking && !memorySamples.isEmpty {
-            let peakUsage = memorySamples.map { $0.usage }.max() ?? 0
+            let peakUsage = memorySamples.map(\.usage).max() ?? 0
             let averageUsage =
-                memorySamples.map { $0.usage }.reduce(0, +) / Double(memorySamples.count)
+                memorySamples.map(\.usage).reduce(0, +) / Double(memorySamples.count)
 
             memoryStats = MemoryStatistics(
                 peakUsage: peakUsage,
@@ -295,9 +297,9 @@ public class BenchmarkRunner {
         // Thread statistics
         var threadStats: ThreadStatistics?
         if config.enableThreadTracking && !threadSamples.isEmpty {
-            let peakThreadCount = threadSamples.map { $0.threadCount }.max() ?? 0
+            let peakThreadCount = threadSamples.map(\.threadCount).max() ?? 0
             let averageThreadCount =
-                threadSamples.map { $0.threadCount }.reduce(0, +) / Double(threadSamples.count)
+                threadSamples.map(\.threadCount).reduce(0, +) / Double(threadSamples.count)
 
             threadStats = ThreadStatistics(
                 peakThreadCount: peakThreadCount,
@@ -348,7 +350,8 @@ public class BenchmarkRunner {
             // Clean up thread array
             vm_deallocate(
                 mach_task_self_, vm_address_t(bitPattern: threads),
-                vm_size_t(Int(threadCount) * MemoryLayout<thread_act_t>.size))
+                vm_size_t(Int(threadCount) * MemoryLayout<thread_act_t>.size)
+            )
         }
 
         return ThreadSample(
@@ -395,12 +398,13 @@ public class BenchmarkRunner {
 
         // Calculate R-squared
         let yMean = sumY / n
-        let ssRes = zip(y, x).map { (y, x) in pow(y - (slope * x + intercept), 2) }.reduce(0, +)
+        let ssRes = zip(y, x).map { y, x in pow(y - (slope * x + intercept), 2) }.reduce(0, +)
         let ssTot = y.map { pow($0 - yMean, 2) }.reduce(0, +)
         let rSquared = 1 - (ssRes / ssTot)
 
         return LinearTrend(
-            slope: slope, intercept: intercept, rSquared: rSquared.isNaN ? 0 : rSquared)
+            slope: slope, intercept: intercept, rSquared: rSquared.isNaN ? 0 : rSquared
+        )
     }
 
     private func storeResult(_ result: BenchmarkResult, for benchmarkId: String) {
@@ -651,12 +655,12 @@ extension BenchmarkComparison: CustomStringConvertible {
         let memoryChange = String(format: "%+.1f%%", memoryChangePercent)
 
         return """
-            Performance Comparison:
-            - Time Change: \(timeChange)
-            - Memory Change: \(memoryChange)
-            - Change Type: \(changeType)
-            - Significant: Time=\(isSignificantTimeChange), Memory=\(isSignificantMemoryChange)
-            """
+        Performance Comparison:
+        - Time Change: \(timeChange)
+        - Memory Change: \(memoryChange)
+        - Change Type: \(changeType)
+        - Significant: Time=\(isSignificantTimeChange), Memory=\(isSignificantMemoryChange)
+        """
     }
 }
 
@@ -665,11 +669,11 @@ extension PerformanceTrend: CustomStringConvertible {
         let slopeDesc = String(format: "%.6f", trendSlope)
 
         return """
-            Performance Trend (\(periodDays) days):
-            - Direction: \(trendDirection)
-            - Slope: \(slopeDesc)
-            - R²: \(String(format: "%.3f", rSquared))
-            - Data Points: \(dataPoints)
-            """
+        Performance Trend (\(periodDays) days):
+        - Direction: \(trendDirection)
+        - Slope: \(slopeDesc)
+        - R²: \(String(format: "%.3f", rSquared))
+        - Data Points: \(dataPoints)
+        """
     }
 }
