@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class UIEffectsManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class UIEffectsManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - classUIEffectsManager{ Tests
 

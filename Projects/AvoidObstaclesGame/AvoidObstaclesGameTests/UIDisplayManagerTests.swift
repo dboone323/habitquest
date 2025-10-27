@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class UIDisplayManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class UIDisplayManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - enumDisplayOverlayType{ Tests
 

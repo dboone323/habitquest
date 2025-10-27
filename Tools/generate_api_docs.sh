@@ -45,29 +45,36 @@ This document provides comprehensive API reference for ${project_name}.
 EOF
 
     # Find all Swift files
-    local swift_files=$(find "${project_path}" -name "*.swift" -type f | grep -v "Tests" | grep -v ".build")
+    local swift_files
+    swift_files=$(find "${project_path}" -name "*.swift" -type f | grep -v "Tests" | grep -v ".build")
 
     local file_count=0
 
     # Process each Swift file
     for swift_file in $swift_files; do
-        local filename=$(basename "${swift_file}")
-        local relative_path="${swift_file#${project_path}/}"
+        local filename
+        filename=$(basename "${swift_file}")
+        local relative_path="${swift_file#"${project_path}"/}"
 
         # Extract protocols
-        local protocols=$(grep -E "^protocol\s+\w+" "${swift_file}" 2>/dev/null || true)
+        local protocols
+        protocols=$(grep -E "^protocol\s+\w+" "${swift_file}" 2>/dev/null || true)
 
         # Extract classes
-        local classes=$(grep -E "^class\s+\w+" "${swift_file}" 2>/dev/null || true)
+        local classes
+        classes=$(grep -E "^class\s+\w+" "${swift_file}" 2>/dev/null || true)
 
         # Extract structs
-        local structs=$(grep -E "^struct\s+\w+" "${swift_file}" 2>/dev/null || true)
+        local structs
+        structs=$(grep -E "^struct\s+\w+" "${swift_file}" 2>/dev/null || true)
 
         # Extract enums
-        local enums=$(grep -E "^enum\s+\w+" "${swift_file}" 2>/dev/null || true)
+        local enums
+        enums=$(grep -E "^enum\s+\w+" "${swift_file}" 2>/dev/null || true)
 
         # Extract actors
-        local actors=$(grep -E "^actor\s+\w+" "${swift_file}" 2>/dev/null || true)
+        local actors
+        actors=$(grep -E "^actor\s+\w+" "${swift_file}" 2>/dev/null || true)
 
         # If file contains any public API elements, document it
         if [ -n "$protocols" ] || [ -n "$classes" ] || [ -n "$structs" ] || [ -n "$enums" ] || [ -n "$actors" ]; then
@@ -79,7 +86,8 @@ EOF
             echo "" >>"${output_file}"
 
             # Extract file-level documentation
-            local file_doc=$(awk '/^\/\/\// && !found {print; getline; while (/^\/\/\//) {print; getline} found=1}' "${swift_file}" 2>/dev/null | sed 's/^\/\/\/ *//' || true)
+            local file_doc
+            file_doc=$(awk '/^\/\/\// && !found {print; getline; while (/^\/\/\//) {print; getline} found=1}' "${swift_file}" 2>/dev/null | sed 's/^\/\/\/ *//' || true)
 
             if [ -n "$file_doc" ]; then
                 echo "### Description" >>"${output_file}"
@@ -94,12 +102,14 @@ EOF
                 echo "" >>"${output_file}"
 
                 while IFS= read -r proto_line; do
-                    local proto_name=$(echo "$proto_line" | awk '{print $2}' | cut -d':' -f1)
+                    local proto_name
+                    proto_name=$(echo "$proto_line" | awk '{print $2}' | cut -d':' -f1)
                     echo "#### \`${proto_name}\`" >>"${output_file}"
                     echo "" >>"${output_file}"
 
                     # Extract protocol documentation
-                    local proto_doc=$(grep -B 10 "^protocol ${proto_name}" "${swift_file}" | grep "^///" | sed 's/^\/\/\/ *//' || true)
+                    local proto_doc
+                    proto_doc=$(grep -B 10 "^protocol ${proto_name}" "${swift_file}" | grep "^///" | sed 's/^\/\/\/ *//' || true)
                     if [ -n "$proto_doc" ]; then
                         echo "$proto_doc" >>"${output_file}"
                         echo "" >>"${output_file}"
@@ -119,7 +129,8 @@ EOF
                             fi
 
                             if [[ "$line" =~ ^[[:space:]]*(func|var|associatedtype) ]]; then
-                                local member=$(echo "$line" | sed 's/^[[:space:]]*//' | sed 's/{.*//')
+                                local member
+                                member=$(echo "$line" | sed 's/^[[:space:]]*//' | sed 's/{.*//')
                                 echo "- \`${member}\`" >>"${output_file}"
                             fi
 
@@ -142,12 +153,14 @@ EOF
                 echo "" >>"${output_file}"
 
                 while IFS= read -r class_line; do
-                    local class_name=$(echo "$class_line" | awk '{print $2}' | cut -d':' -f1 | cut -d'<' -f1)
+                    local class_name
+                    class_name=$(echo "$class_line" | awk '{print $2}' | cut -d':' -f1 | cut -d'<' -f1)
                     echo "#### \`${class_name}\`" >>"${output_file}"
                     echo "" >>"${output_file}"
 
                     # Extract class documentation
-                    local class_doc=$(grep -B 10 "^class ${class_name}" "${swift_file}" | grep "^///" | sed 's/^\/\/\/ *//' || true)
+                    local class_doc
+                    class_doc=$(grep -B 10 "^class ${class_name}" "${swift_file}" | grep "^///" | sed 's/^\/\/\/ *//' || true)
                     if [ -n "$class_doc" ]; then
                         echo "$class_doc" >>"${output_file}"
                         echo "" >>"${output_file}"
@@ -163,12 +176,14 @@ EOF
                 echo "" >>"${output_file}"
 
                 while IFS= read -r struct_line; do
-                    local struct_name=$(echo "$struct_line" | awk '{print $2}' | cut -d':' -f1 | cut -d'<' -f1)
+                    local struct_name
+                    struct_name=$(echo "$struct_line" | awk '{print $2}' | cut -d':' -f1 | cut -d'<' -f1)
                     echo "#### \`${struct_name}\`" >>"${output_file}"
                     echo "" >>"${output_file}"
 
                     # Extract struct documentation
-                    local struct_doc=$(grep -B 10 "^struct ${struct_name}" "${swift_file}" | grep "^///" | sed 's/^\/\/\/ *//' || true)
+                    local struct_doc
+                    struct_doc=$(grep -B 10 "^struct ${struct_name}" "${swift_file}" | grep "^///" | sed 's/^\/\/\/ *//' || true)
                     if [ -n "$struct_doc" ]; then
                         echo "$struct_doc" >>"${output_file}"
                         echo "" >>"${output_file}"
@@ -184,12 +199,14 @@ EOF
                 echo "" >>"${output_file}"
 
                 while IFS= read -r enum_line; do
-                    local enum_name=$(echo "$enum_line" | awk '{print $2}' | cut -d':' -f1)
+                    local enum_name
+                    enum_name=$(echo "$enum_line" | awk '{print $2}' | cut -d':' -f1)
                     echo "#### \`${enum_name}\`" >>"${output_file}"
                     echo "" >>"${output_file}"
 
                     # Extract enum documentation
-                    local enum_doc=$(grep -B 10 "^enum ${enum_name}" "${swift_file}" | grep "^///" | sed 's/^\/\/\/ *//' || true)
+                    local enum_doc
+                    enum_doc=$(grep -B 10 "^enum ${enum_name}" "${swift_file}" | grep "^///" | sed 's/^\/\/\/ *//' || true)
                     if [ -n "$enum_doc" ]; then
                         echo "$enum_doc" >>"${output_file}"
                         echo "" >>"${output_file}"
@@ -205,12 +222,14 @@ EOF
                 echo "" >>"${output_file}"
 
                 while IFS= read -r actor_line; do
-                    local actor_name=$(echo "$actor_line" | awk '{print $2}' | cut -d':' -f1)
+                    local actor_name
+                    actor_name=$(echo "$actor_line" | awk '{print $2}' | cut -d':' -f1)
                     echo "#### \`${actor_name}\`" >>"${output_file}"
                     echo "" >>"${output_file}"
 
                     # Extract actor documentation
-                    local actor_doc=$(grep -B 10 "^actor ${actor_name}" "${swift_file}" | grep "^///" | sed 's/^\/\/\/ *//' || true)
+                    local actor_doc
+                    actor_doc=$(grep -B 10 "^actor ${actor_name}" "${swift_file}" | grep "^///" | sed 's/^\/\/\/ *//' || true)
                     if [ -n "$actor_doc" ]; then
                         echo "$actor_doc" >>"${output_file}"
                         echo "" >>"${output_file}"

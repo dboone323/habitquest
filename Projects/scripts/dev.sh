@@ -6,7 +6,6 @@ set -e
 # Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
@@ -69,9 +68,9 @@ cmd_build() {
     ;;
   "xcode")
     if [[ -f "*.xcworkspace" ]]; then
-      xcodebuild -workspace *.xcworkspace -scheme "${PROJECT_NAME}" build
+      xcodebuild -workspace "*.xcworkspace" -scheme "${PROJECT_NAME}" build
     else
-      xcodebuild -project *.xcodeproj -scheme "${PROJECT_NAME}" build
+      xcodebuild -project "*.xcodeproj" -scheme "${PROJECT_NAME}" build
     fi
     ;;
   "node")
@@ -98,9 +97,9 @@ cmd_test() {
     ;;
   "xcode")
     if [[ -f "*.xcworkspace" ]]; then
-      xcodebuild test -workspace *.xcworkspace -scheme "${PROJECT_NAME}" -destination 'platform=macOS'
+      xcodebuild test -workspace "*.xcworkspace" -scheme "${PROJECT_NAME}" -destination 'platform=macOS'
     else
-      xcodebuild test -project *.xcodeproj -scheme "${PROJECT_NAME}" -destination 'platform=macOS'
+      xcodebuild test -project "*.xcodeproj" -scheme "${PROJECT_NAME}" -destination 'platform=macOS'
     fi
     ;;
   "node")
@@ -168,7 +167,7 @@ cmd_clean() {
   "python")
     rm -rf build/
     rm -rf dist/
-    rm -rf *.egg-info/
+    rm -rf "*.egg-info/"
     find . -type d -name __pycache__ -delete
     ;;
   esac

@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class ModernUIManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class ModernUIManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - enumModernUITheme{ Tests
 

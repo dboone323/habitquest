@@ -120,12 +120,13 @@ resolve_simulator_id() {
   fi
   local udid
   udid=$(
-    printf '%s' "${json_output}" | ${PYTHON_BIN} - "$runtime" "$device_name" <<'PY'
+    ${PYTHON_BIN} - "$runtime" "$device_name" <<PY
 import json, sys
 runtime = sys.argv[1]
 device_name = sys.argv[2]
+json_data = """${json_output}"""
 try:
-    data = json.load(sys.stdin)
+    data = json.loads(json_data)
 except Exception:
     sys.exit(0)
 for device in data.get("devices", {}).get(runtime, []):

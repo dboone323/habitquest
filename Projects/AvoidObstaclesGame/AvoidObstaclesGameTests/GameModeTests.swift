@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class GameModeTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class GameModeTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - enumGameMode:Hashable{ Tests
 

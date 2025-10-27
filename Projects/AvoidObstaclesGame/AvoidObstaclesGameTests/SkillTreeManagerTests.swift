@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class SkillTreeManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class SkillTreeManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - structSkill:Codable,Hashable{ Tests
 

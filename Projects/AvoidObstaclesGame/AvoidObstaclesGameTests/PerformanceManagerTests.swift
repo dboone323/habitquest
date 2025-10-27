@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class PerformanceManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class PerformanceManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - enumPerformanceWarning Tests
 

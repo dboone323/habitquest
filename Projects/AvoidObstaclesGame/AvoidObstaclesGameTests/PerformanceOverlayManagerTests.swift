@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class PerformanceOverlayManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class PerformanceOverlayManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - classPerformanceOverlayManager{ Tests
 

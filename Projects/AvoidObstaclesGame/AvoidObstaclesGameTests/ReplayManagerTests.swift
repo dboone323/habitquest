@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class ReplayManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class ReplayManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - structGameRecording:Codable{ Tests
 

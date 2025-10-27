@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class GameObjectPoolTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class GameObjectPoolTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - classGameObjectPool<T:Poolable&Hashable>{ Tests
 

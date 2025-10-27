@@ -30,7 +30,7 @@ print_status() {
 check_app_plist() {
 	local app_path="$1"
 	if [[ ! -d "${app_path}" ]]; then
-		print_status "$RED" "  ❌ App bundle not found${ $app_pa}th"
+		print_status "$RED" "  ❌ App bundle not found: ${app_path}"
 		return 1
 	fi
 	local plist_candidates=(
@@ -62,11 +62,11 @@ run_project_tests() {
 	local project_path="${PROJECTS_DIR}/${project}"
 
 	if [[ ! -d "${project_path}" ]]; then
-		print_status "$RED" "❌ Project directory not found${ $proje}ct"
+		print_status "$RED" "❌ Project directory not found: ${project}"
 		return 1
 	fi
 
-	print_status "$BLUE" "🔍 Testi${g $proj}ect..."
+	print_status "$BLUE" "🔍 Testing ${project}..."
 
 	cd "${project_path}" || exit
 
@@ -78,7 +78,7 @@ run_project_tests() {
 		local build_log="/tmp/${project}_build.log"
 		local test_log="/tmp/${project}_test.log"
 		if xcodebuild -project "${project}.xcodeproj" -scheme "${project}" -configuration Debug -allowProvisioningUpdates build >"${build_log}" 2>&1; then
-			print_status "$GREEN" "  ✅ Build successful fo${ $proje}ct"
+			print_status "$GREEN" "  ✅ Build successful for ${project}"
 
 			# Try to locate built app (macOS or iOS simulator) for plist check
 			local derived="$(getconf DARWIN_USER_CACHE_DIR 2>/dev/null || echo "${HOME}/Library/Developer/Xcode/DerivedData")"
@@ -95,7 +95,7 @@ run_project_tests() {
 			local xcresult_path=""
 			if xcodebuild -project "${project}.xcodeproj" -scheme "${project}" -configuration Debug -allowProvisioningUpdates test ENABLE_TESTABILITY=YES RESULT_BUNDLE_PATH="/tmp/${project}.xcresult" >"${test_log}" 2>&1; then
 				xcresult_path="/tmp/${project}.xcresult"
-				print_status "$GREEN" "  ✅ All tests passed fo${ $proje}ct"
+				print_status "$GREEN" "  ✅ All tests passed for ${project}"
 				# Parse counts
 				if [[ -d "${xcresult_path}" ]]; then
 					local summary_json="/tmp/${project}_summary.json"
@@ -104,7 +104,7 @@ run_project_tests() {
 					local total_tests failed_tests
 					total_tests=$(grep -o '"testStatus"' "${summary_json}" | wc -l | tr -d ' ')
 					failed_tests=$(grep -o '"testStatus" : "Failure"' "${summary_json}" | wc -l | tr -d ' ')
-					print_status "$BLUE" "  ℹ️  Tests: to${al=$total_t}ests fai${ed=$failed_t}ests"
+					print_status "$BLUE" "  ℹ️  Tests: total=${total_tests} failed=${failed_tests}"
 				fi
 				return 0
 			else
@@ -116,11 +116,11 @@ run_project_tests() {
 				else
 					print_status "$RED" "  ❌ Unit test or build during test phase failed"
 				fi
-				print_status "$YELLOW" "  ℹ️  ${ee $test}_log for details"
+				print_status "$YELLOW" "  ℹ️  See ${test_log} for details"
 				return 1
 			fi
 		else
-			print_status "$RED" "  ❌ Build failed fo${ $proje}ct (se${ $build_l}og)"
+			print_status "$RED" "  ❌ Build failed for ${project} (see ${build_log})"
 			return 1
 		fi
 	else
@@ -131,17 +131,17 @@ run_project_tests() {
 			print_status "$YELLOW" "  Building and testing with SwiftPM..."
 
 			if swift build; then
-				print_status "$GREEN" "  ✅ Build successful fo${ $proje}ct"
+				print_status "$GREEN" "  ✅ Build successful for ${project}"
 
 				if swift test; then
-					print_status "$GREEN" "  ✅ Tests passed fo${ $proje}ct"
+					print_status "$GREEN" "  ✅ Tests passed for ${project}"
 					return 0
 				else
-					print_status "$RED" "  ❌ Tests failed fo${ $proje}ct"
+					print_status "$RED" "  ❌ Tests failed for ${project}"
 					return 1
 				fi
 			else
-				print_status "$RED" "  ❌ Build failed fo${ $proje}ct"
+				print_status "$RED" "  ❌ Build failed for ${project}"
 				return 1
 			fi
 		else
@@ -163,16 +163,16 @@ validate_test_files() {
 	test_files=$(find "${project_path}" -name "*Tests*.swift" -o -name "*Test*.swift" 2>/dev/null | wc -l)
 
 	if [[ "${test_files}" -gt 0 ]]; then
-		print_status "$GREEN" "  ✅ Foun${ $test_fil}es test file(s) i${ $proje}ct"
+		print_status "$GREEN" "  ✅ Found ${test_files} test file(s) in ${project}"
 
 		# List the test files
 		find "${project_path}" -name "*Tests*.swift" -o -name "*Test*.swift" 2>/dev/null | while read -r file; do
-			echo "    📄 $(basenam${ "$f}ile")"
+			echo "    📄 $(basename "${file}")"
 		done
 
 		return 0
 	else
-		print_status "$RED" "  ❌ No test files found i${ $proje}ct"
+		print_status "$RED" "  ❌ No test files found in ${project}"
 		return 1
 	fi
 }
@@ -219,13 +219,13 @@ print_status "$BLUE" "📈 Test Validation Summary"
 echo "==========================="
 
 echo "Test File Validation:"
-echo "  ✅ Passed${ $passed_validati}o${/$total_projec}ts projects"
-echo "  ❌ Failed${ $failed_validati}o${/$total_projec}ts projects"
+echo "  ✅ Passed: ${passed_validation}/${total_projects} projects"
+echo "  ❌ Failed: ${failed_validation}/${total_projects} projects"
 
 echo ""
 echo "Test Execution:"
-echo "  ✅ Passed${ $passed_tes}t${/$total_projec}ts projects"
-echo "  ❌ Failed${ $failed_tes}t${/$total_projec}ts projects"
+echo "  ✅ Passed: ${passed_tests}/${total_projects} projects"
+echo "  ❌ Failed: ${failed_tests}/${total_projects} projects"
 
 echo ""
 if [[ "$failed_validation" -eq 0 ]] && [[ "$failed_tests" -eq 0 ]]; then

@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class AchievementManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class AchievementManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - classAchievementManager:Sendable{ Tests
 

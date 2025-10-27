@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class MultiplayerManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class MultiplayerManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - enumMultiplayerMode{ Tests
 

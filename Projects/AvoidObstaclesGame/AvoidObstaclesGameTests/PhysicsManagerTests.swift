@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class PhysicsManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class PhysicsManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - enumPhysicsQuality{ Tests
 

@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class LevelEditorManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class LevelEditorManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - structCustomLevel:Codable,Identifiable{ Tests
 

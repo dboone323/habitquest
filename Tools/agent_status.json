@@ -4,6 +4,16 @@
       "status": "active",
       "last_seen": 1759539959,
       "tasks_completed": 0
+    },
+    "agent_codegen.sh": {
+      "status": "stopped",
+      "last_seen": 1761501615,
+      "pid": 6522
+    },
+    "agent_debug.sh": {
+      "status": "stopped",
+      "last_seen": 1761505520,
+      "pid": 76555
     }
   },
   "orchestrator": {
@@ -15,5 +25,5 @@
     "tasks_in_progress": 0,
     "tasks_completed": 0
   },
-  "last_update": 1759539959
+  "last_update": 1761505520
 }

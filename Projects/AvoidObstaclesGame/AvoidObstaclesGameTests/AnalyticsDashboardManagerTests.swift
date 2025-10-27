@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class AnalyticsDashboardManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class AnalyticsDashboardManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - structAIPerformanceMetrics{ Tests
 

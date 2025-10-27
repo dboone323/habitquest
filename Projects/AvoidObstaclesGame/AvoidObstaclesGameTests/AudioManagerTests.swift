@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class AudioManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class AudioManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - enumHapticStyle{ Tests
 

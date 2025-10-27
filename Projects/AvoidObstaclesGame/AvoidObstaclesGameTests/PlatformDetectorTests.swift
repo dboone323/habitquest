@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class PlatformDetectorTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class PlatformDetectorTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - enumPlatform{ Tests
 

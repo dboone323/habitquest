@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class TutorialManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class TutorialManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - structTutorialStep{ Tests
 

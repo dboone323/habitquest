@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class HUDManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class HUDManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - classHUDManager{ Tests
 

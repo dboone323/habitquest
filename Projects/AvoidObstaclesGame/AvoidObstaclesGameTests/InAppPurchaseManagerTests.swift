@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class InAppPurchaseManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class InAppPurchaseManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - classPurchaseButton:SKNode{ Tests
 

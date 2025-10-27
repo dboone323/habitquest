@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class BossManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class BossManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - classBossManager:GameComponent{ Tests
 

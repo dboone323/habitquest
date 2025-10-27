@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class AIBehaviorModelsTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class AIBehaviorModelsTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - structGameSessionData{ Tests
 

@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class SettingsManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class SettingsManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - enumSettingsSection:String,CaseIterable{ Tests
 

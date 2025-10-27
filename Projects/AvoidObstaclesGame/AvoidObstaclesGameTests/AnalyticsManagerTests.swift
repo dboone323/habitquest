@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class AnalyticsManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class AnalyticsManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - enumAnalyticsEvent:String,Codable,Sendable{ Tests
 

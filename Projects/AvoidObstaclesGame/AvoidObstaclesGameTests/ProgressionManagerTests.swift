@@ -1,5 +1,5 @@
-import XCTest
 @testable import AvoidObstaclesGame
+import XCTest
 
 class ProgressionManagerTests: XCTestCase {
 
@@ -12,7 +12,6 @@ class ProgressionManagerTests: XCTestCase {
         // Put teardown code here
         super.tearDown()
     }
-
 
     // MARK: - classProgressionManager{ Tests
 
