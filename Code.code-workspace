@@ -95,7 +95,7 @@
         "github.copilot.chat.languageContext.fix.typescript.enabled": true,
         "chat.mcp.autostart": "newAndOutdated",
         "chat.agent.maxRequests": 1000,
-        "chatgpt.commentCodeLensEnabled": false,
+        "chatgpt.commentCodeLensEnabled": true,
         "workbench.editor.enablePreview": false,
         "workbench.tree.renderIndentGuides": "always",
         "explorer.fileNesting.enabled": true,
