@@ -32,4 +32,47 @@ platform :ios do
       export_method: 'app-store'
     )
   end
+
+  desc 'Take screenshots'
+  lane :screenshots do
+    capture_ios_screenshots(
+      scheme: 'AvoidObstaclesGame'
+    )
+  end
+
+  desc 'Upload to TestFlight'
+  lane :beta do
+    build_release
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
+  end
+
+  desc 'Deploy to App Store'
+  lane :release do
+    screenshots
+    build_release
+    upload_to_app_store(
+      force: true,
+      skip_metadata: false,
+      skip_screenshots: false,
+      submit_for_review: true,
+      automatic_release: true,
+      submission_information: {
+        add_id_info_uses_idfa: false
+      }
+    )
+  end
+
+  desc 'Complete release process'
+  lane :complete_release do
+    # Run tests
+    test
+
+    # Take screenshots
+    screenshots
+
+    # Build and upload to App Store
+    release
+  end
 end

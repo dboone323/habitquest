@@ -1,891 +1,245 @@
-# MomentumFinance API Reference
+# MomentumFinance API Documentation
+**Generated:** Tue Oct 28 14:23:54 CDT 2025
+**Framework:** AI-Powered Documentation
 
-**Generated:** Sun Oct 12 09:52:58 CDT 2025
-**Type:** Manual Documentation
+## Overview
 
-## Public API Overview
+This document provides comprehensive API documentation for the MomentumFinance application.
+Documentation is automatically generated from code analysis and AI-enhanced descriptions.
 
-### Public Classes
+## Table of Contents
 
-- `public class TransactionsDataGenerator: DataGenerator `
-- `public class SubscriptionsDataGenerator: DataGenerator `
-- `public class HapticManager: ObservableObject `
-- `public class NotificationManager: ObservableObject `
-- `public class AdvancedFinancialIntelligence: ObservableObject `
-- `public class FinancialIntelligenceService: ObservableObject `
-- `public class AdvancedFinancialIntelligence: ObservableObject `
-- `public class FinancialIntelligenceService: ObservableObject `
-- `public class HapticManager: ObservableObject `
-- `public class TransactionsDataGenerator: DataGenerator `
-- `public class SubscriptionsDataGenerator: DataGenerator `
-- `public class NotificationManager: ObservableObject `
-- `public class CSVParser `
-- `public class DataParser `
-- `public class DefaultEntityManager: EntityManager `
-- `public class DataExporter `
-- `public class DataImporter `
-- `public class AdvancedFinancialIntelligence: ObservableObject `
-- `public class FinancialIntelligenceService: ObservableObject `
-- `public class HapticManager: ObservableObject `
-- `public class TransactionsDataGenerator: DataGenerator `
-- `public class SubscriptionsDataGenerator: DataGenerator `
-- `public class NotificationManager: ObservableObject `
-- `public class CSVParser `
-- `public class DataParser `
-- `public class DefaultEntityManager: EntityManager `
-- `public class DataExporter `
-- `public class DataImporter `
+- [Public API Reference](#public-api-reference)
+- [Class Hierarchy](#class-hierarchy)
+- [Protocols](#protocols)
+- [Usage Examples](#usage-examples)
+- [Error Handling](#error-handling)
 
-### Public Structs
+## Public API Reference
 
-- `public struct ColumnMapping: Codable `
-- `public struct ValidationError: Identifiable, Codable `
-- `public struct ImportResult: Codable `
-- `public struct CSVColumnMapping: Sendable `
-- `public struct FinancialInsight: Identifiable, Sendable `
-- `public struct ForecastData: Identifiable, Sendable `
-- `public struct BreadcrumbItem: Identifiable, Sendable `
-- `public struct DeepLink: Sendable `
-- `public struct Transaction: Identifiable, Codable `
-- `public struct FinancialAccount: Identifiable, Codable, Sendable `
-- `public struct ExpenseCategory: Identifiable, Codable, Sendable `
-- `public struct FinancialTransaction: Identifiable, Codable, Sendable `
-- `public struct Budget: Identifiable, Codable, Sendable `
-- `public struct GoalNotificationScheduler `
-- `public struct PerformanceMeasurement `
-- `public struct HapticFeedbackModifier: ViewModifier `
-- `public struct SelectionHapticModifier: ViewModifier `
-- `public struct SuccessHapticModifier: ViewModifier `
-- `public struct BudgetNotificationScheduler `
-- `public struct ErrorRecoveryOption: Identifiable `
-- `public struct ErrorAlert: ViewModifier `
-- `public struct ExportSettings: Sendable `
-- `public struct Query<Value> `
-- `public struct NotificationPermissionManager `
-- `public struct ScheduledNotification: Identifiable `
-- `public struct NotificationPermissionManager `
-- `public struct BudgetNotificationScheduler `
-- `public struct SubscriptionNotificationScheduler `
-- `public struct GoalNotificationScheduler `
-- `public struct SubscriptionNotificationScheduler `
-- `public struct Query<Value> `
-- `public struct FinancialInsightModels `
-- `public struct SearchResult: Identifiable, Hashable `
-- `public struct Transaction `
-- `public struct Account `
-- `public struct Budget `
-- `public struct AIBudget `
-- `public struct SpendingPattern `
-- `public struct TransactionAnomaly `
-- `public struct TransactionPattern `
-- `public struct CategorySuggestion `
-- `public struct Investment `
-- `public struct AdvancedFinancialDomainSnapshot `
-- `public struct EnhancedFinancialInsight: Identifiable, Hashable `
-- `public struct RiskAssessment `
-- `public struct PredictiveAnalytics `
-- `public struct SpendingVelocity `
-- `public struct CategoryTrend `
-- `public struct Subscription `
-- `public struct InvestmentRecommendation `
-- `public struct CashFlowPrediction `
-- `public struct TransactionAnomaly `
-- `public struct Transaction `
-- `public struct Account `
-- `public struct Budget `
-- `public struct AIBudget `
-- `public struct EnhancedFinancialInsight: Identifiable, Hashable `
-- `public struct RiskAssessment `
-- `public struct PredictiveAnalytics `
-- `public struct SpendingVelocity `
-- `public struct CategoryTrend `
-- `public struct Subscription `
-- `public struct InvestmentRecommendation `
-- `public struct CashFlowPrediction `
-- `public struct TransactionAnomaly `
-- `public struct Investment `
-- `public struct AdvancedFinancialDomainSnapshot `
-- `public struct DashboardView: View `
-- `public struct ContentView: View `
-- `public struct MomentumFinanceApp: App `
-- `public struct Dependencies `
-- `public struct TestApp: App `
-- `public struct SpendingPatternAnalysis `
-- `public struct CategoryAnalysis `
-- `public struct FinancialInsight `
-- `public struct ExpensePrediction `
-- `public struct BudgetSearchView: View `
-- `public struct ThemeSelectorCard: View `
-- `public struct ThemeFinancialSummaryCard: View `
-- `public struct ThemeAccountsList: View `
-- `public struct ThemeBudgetProgress: View `
-- `public struct ThemeSubscriptionsList: View `
-- `public struct ThemeTypographyShowcase: View `
-- `public struct ThemeButtonStylesShowcase: View `
-- `public struct ThemeSettingsSheet: View `
-- `public struct FinancialInsightModels `
-- `public struct Transaction `
-- `public struct Account `
-- `public struct Budget `
-- `public struct AIBudget `
-- `public struct Investment `
-- `public struct AdvancedFinancialDomainSnapshot `
-- `public struct EnhancedFinancialInsight: Identifiable, Hashable `
-- `public struct RiskAssessment `
-- `public struct PredictiveAnalytics `
-- `public struct SpendingVelocity `
-- `public struct CategoryTrend `
-- `public struct Subscription `
-- `public struct InvestmentRecommendation `
-- `public struct CashFlowPrediction `
-- `public struct TransactionAnomaly `
-- `public struct Transaction `
-- `public struct Account `
-- `public struct Budget `
-- `public struct AIBudget `
-- `public struct EnhancedFinancialInsight: Identifiable, Hashable `
-- `public struct RiskAssessment `
-- `public struct PredictiveAnalytics `
-- `public struct SpendingVelocity `
-- `public struct CategoryTrend `
-- `public struct Subscription `
-- `public struct InvestmentRecommendation `
-- `public struct CashFlowPrediction `
-- `public struct TransactionAnomaly `
-- `public struct Investment `
-- `public struct AdvancedFinancialDomainSnapshot `
-- `public struct BreadcrumbItem: Identifiable, Hashable `
-- `public struct SearchResult: Identifiable, Hashable `
-- `public struct SavingsGoalsSection: View `
-- `public struct SavingsGoalCard: View `
-- `public struct ReportsSection: View `
-- `public struct FinancialSummaryCard: View `
-- `public struct SpendingByCategoryCard: View `
-- `public struct BudgetPerformanceCard: View `
-- `public struct RecentTransactionsCard: View `
-- `public struct AddSavingsGoalView: View `
-- `public struct SavingsGoalDetailView: View `
-- `public struct SubscriptionDetailRow: View `
-- `public struct SubscriptionHeaderView: View `
-- `public struct SubscriptionSummaryCard: View `
-- `public struct AddSubscriptionView: View `
-- `public struct InsightRowView: View `
-- `public struct DashboardSubscriptionsSection: View `
-- `public struct SimpleDashboardView: View `
-- `public struct InsightsWidget: View `
-- `public struct CompactInsightRow: View `
-- `public struct InsightsFilterBar: View `
-- `public struct InsightsEmptyStateView: View `
-- `public struct InsightDetailView: View `
-- `public struct DashboardQuickActions: View `
-- `public struct QuickActionButton: View `
-- `public struct InsightsSummaryWidget: View `
-- `public struct InsightsView: View `
-- `public struct DashboardSubscriptionsSection: View `
-- `public struct DashboardAccountsSummary: View `
-- `public struct DashboardBudgetProgress: View `
-- `public struct DashboardInsights: View `
-- `public struct DashboardQuickActions: View `
-- `public struct InsightsLoadingView: View `
-- `public struct DashboardInsights: View `
-- `public struct InsightItem: View `
-- `public struct AccountDetailView: View `
-- `public struct StatView: View `
-- `public struct ActivityChartView: View `
-- `public struct TransactionEmptyStateView: View `
-- `public struct TransactionListView: View `
-- `public struct TransactionRowView: View `
-- `public struct AddTransactionView: View `
-- `public struct TransactionDetailView: View `
-- `public struct TransactionStatsCard: View `
-- `public struct SearchAndFilterSection: View `
-- `public struct GlobalSearchView: View `
-- `public struct BudgetSearchView: View `
-- `public struct BreadcrumbItem: Identifiable, Hashable `
-- `public struct NavigationContext `
-- `public struct ListableItem: Identifiable, Hashable `
-- `public struct ListableItem: Identifiable, Hashable `
-- `public struct HapticFeedbackModifier: ViewModifier `
-- `public struct SelectionHapticModifier: ViewModifier `
-- `public struct SuccessHapticModifier: ViewModifier `
-- `public struct ColumnMapping: Codable `
-- `public struct ValidationError: Identifiable, Codable `
-- `public struct ImportResult: Codable `
-- `public struct CSVColumnMapping: Sendable `
-- `public struct FinancialInsight: Identifiable, Sendable `
-- `public struct ForecastData: Identifiable, Sendable `
-- `public struct BreadcrumbItem: Identifiable, Sendable `
-- `public struct DeepLink: Sendable `
-- `public struct Transaction: Identifiable, Codable `
-- `public struct FinancialAccount: Identifiable, Codable, Sendable `
-- `public struct ExpenseCategory: Identifiable, Codable, Sendable `
-- `public struct FinancialTransaction: Identifiable, Codable, Sendable `
-- `public struct Budget: Identifiable, Codable, Sendable `
-- `public struct SearchResult: Identifiable, Hashable `
-- `public struct CoreMarker `
-- `public struct GoalNotificationScheduler `
-- `public struct PerformanceMeasurement `
-- `public struct BudgetNotificationScheduler `
-- `public struct ErrorRecoveryOption: Identifiable `
-- `public struct ErrorAlert: ViewModifier `
-- `public struct Query<Value> `
-- `public struct NotificationPermissionManager `
-- `public struct ScheduledNotification: Identifiable `
-- `public struct NotificationPermissionManager `
-- `public struct BudgetNotificationScheduler `
-- `public struct SubscriptionNotificationScheduler `
-- `public struct GoalNotificationScheduler `
-- `public struct SubscriptionNotificationScheduler `
-- `public struct Query<Value> `
-- `public struct MomentumFinanceApp: App `
-- `public struct ThemeDemoView: View `
-- `public struct GlobalSearchView: View `
-- `public struct PrimaryButtonStyle: ButtonStyle `
-- `public struct SecondaryButtonStyle: ButtonStyle `
-- `public struct TextButtonStyle: ButtonStyle `
-- `public struct DestructiveButtonStyle: ButtonStyle `
-- `public struct ThemeSettingsView: View `
-- `public struct ThemeModeOption: View `
-- `public struct NavigationContext `
-- `public struct CSVColumnMapping `
-- `public struct ExportSettings `
-- `public struct ImportResult `
-- `public struct ListableItem: Identifiable, Hashable `
-- `public struct SettingsView: View `
-- `public struct DataImportHeaderComponent: View `
-- `public struct FileSelectionComponent: View `
-- `public struct ImportProgressComponent: View `
-- `public struct ImportButtonComponent: View `
-- `public struct ImportInstructionsComponent: View `
-- `public struct ImportResultView: View `
-- `public struct DataExportView: View `
-- `public struct DataImportView: View `
-- `public struct ThemeComponents: @unchecked Sendable `
-- `public struct DashboardView: View `
-- `public struct ContentView: View `
-- `public struct ListableItem: Identifiable, Hashable `
-- `public struct DescribedAnimation: CustomStringConvertible `
-- `public struct CardFlipModifier: ViewModifier `
-- `public struct scaleopacityTransitionModifier: ViewModifier, CustomStringConvertible `
-- `public struct LoadingIndicator: View `
-- `public struct AnimatedProgressBar: View `
-- `public struct CategoryTrendSummary `
-- `public struct SubscriptionSummary `
-- `public struct DescribedAnimation: CustomStringConvertible `
-- `public struct CardFlipModifier: ViewModifier `
-- `public struct scaleopacityTransitionModifier: ViewModifier, CustomStringConvertible `
-- `public struct LoadingIndicator: View `
-- `public struct AnimatedProgressBar: View `
-- `public struct CategoryTrendSummary `
-- `public struct SubscriptionSummary `
-- `public struct Transaction: Identifiable, Equatable, Sendable `
-- `public struct Account: Identifiable, Equatable, Sendable `
-- `public struct AIBudget: Identifiable, Equatable, Sendable `
-- `public struct EnhancedFinancialInsight: Identifiable, Equatable, Sendable `
-- `public struct RiskAssessment: Equatable, Sendable `
-- `public struct PredictiveAnalytics: Equatable, Sendable `
-- `public struct SpendingVelocity: Equatable, Sendable `
-- `public struct CategoryTrend: Equatable, Sendable `
-- `public struct Subscription: Equatable, Sendable `
-- `public struct Investment: Equatable, Sendable `
-- `public struct InvestmentRecommendation: Identifiable, Equatable, Sendable `
-- `public struct TransactionAnomaly: Identifiable, Equatable, Sendable `
-- `public struct CashFlowPrediction: Identifiable, Equatable, Sendable `
-- `public struct PrimaryButtonStyle: ThemedButtonStyle `
-- `public struct SecondaryButtonStyle: ThemedButtonStyle `
-- `public struct TextButtonStyle: ThemedButtonStyle `
-- `public struct DestructiveButtonStyle: ThemedButtonStyle `
-- `public struct FinancialInsight: Identifiable, Equatable, Sendable `
-- `public struct AnimatedCard: View `
-- `public struct AnimatedButton: View `
-- `public struct AnimatedBudgetProgress: View `
-- `public struct AnimatedCounter: View `
-- `public struct FloatingActionButton: View `
-- `public struct BudgetProgressSummary: Equatable `
-- `public struct Transaction: Identifiable, Equatable, Sendable `
-- `public struct Account: Identifiable, Equatable, Sendable `
-- `public struct AIBudget: Identifiable, Equatable, Sendable `
-- `public struct EnhancedFinancialInsight: Identifiable, Equatable, Sendable `
-- `public struct RiskAssessment: Equatable, Sendable `
-- `public struct PredictiveAnalytics: Equatable, Sendable `
-- `public struct SpendingVelocity: Equatable, Sendable `
-- `public struct CategoryTrend: Equatable, Sendable `
-- `public struct Subscription: Equatable, Sendable `
-- `public struct Investment: Equatable, Sendable `
-- `public struct InvestmentRecommendation: Identifiable, Equatable, Sendable `
-- `public struct TransactionAnomaly: Identifiable, Equatable, Sendable `
-- `public struct CashFlowPrediction: Identifiable, Equatable, Sendable `
-- `public struct PrimaryButtonStyle: ThemedButtonStyle `
-- `public struct SecondaryButtonStyle: ThemedButtonStyle `
-- `public struct TextButtonStyle: ThemedButtonStyle `
-- `public struct DestructiveButtonStyle: ThemedButtonStyle `
-- `public struct FinancialInsight: Identifiable, Equatable, Sendable `
-- `public struct AnimatedCard: View `
-- `public struct AnimatedButton: View `
-- `public struct AnimatedBudgetProgress: View `
-- `public struct AnimatedCounter: View `
-- `public struct FloatingActionButton: View `
-- `public struct BudgetProgressSummary: Equatable `
-- `public struct ModelContext: Sendable `
-- `public struct MomentumFinanceApp: App `
-- `public struct FinancialInsightModels `
-- `public struct FinancialInsight: Identifiable, Hashable `
-- `public struct Transaction `
-- `public struct Account `
-- `public struct Budget `
-- `public struct AIBudget `
-- `public struct Investment `
-- `public struct AdvancedFinancialDomainSnapshot `
-- `public struct EnhancedFinancialInsight: Identifiable, Hashable `
-- `public struct RiskAssessment `
-- `public struct PredictiveAnalytics `
-- `public struct SpendingVelocity `
-- `public struct CategoryTrend `
-- `public struct Subscription `
-- `public struct InvestmentRecommendation `
-- `public struct CashFlowPrediction `
-- `public struct TransactionAnomaly `
-- `public struct Transaction `
-- `public struct Account `
-- `public struct Budget `
-- `public struct AIBudget `
-- `public struct EnhancedFinancialInsight: Identifiable, Hashable `
-- `public struct RiskAssessment `
-- `public struct PredictiveAnalytics `
-- `public struct SpendingVelocity `
-- `public struct CategoryTrend `
-- `public struct Subscription `
-- `public struct InvestmentRecommendation `
-- `public struct CashFlowPrediction `
-- `public struct TransactionAnomaly `
-- `public struct Investment `
-- `public struct AdvancedFinancialDomainSnapshot `
-- `public struct SearchResult: Identifiable, Hashable `
-- `public struct NotificationCenterView: View `
-- `public struct EmptyNotificationsView: View `
-- `public struct ScheduledNotificationRow: View `
-- `public struct SavingsGoalsSection: View `
-- `public struct SavingsGoalCard: View `
-- `public struct ReportsSection: View `
-- `public struct FinancialSummaryCard: View `
-- `public struct SpendingByCategoryCard: View `
-- `public struct BudgetPerformanceCard: View `
-- `public struct RecentTransactionsCard: View `
-- `public struct AddSavingsGoalView: View `
-- `public struct SavingsGoalDetailView: View `
-- `public struct SubscriptionDetailRow: View `
-- `public struct SubscriptionHeaderView: View `
-- `public struct SubscriptionSummaryCard: View `
-- `public struct AddSubscriptionView: View `
-- `public struct InsightRowView: View `
-- `public struct DashboardSubscriptionsSection: View `
-- `public struct SimpleDashboardView: View `
-- `public struct InsightsWidget: View `
-- `public struct CompactInsightRow: View `
-- `public struct InsightsFilterBar: View `
-- `public struct InsightsEmptyStateView: View `
-- `public struct InsightDetailView: View `
-- `public struct DashboardQuickActions: View `
-- `public struct QuickActionButton: View `
-- `public struct InsightsSummaryWidget: View `
-- `public struct InsightsView: View `
-- `public struct DashboardSubscriptionsSection: View `
-- `public struct DashboardAccountsSummary: View `
-- `public struct DashboardBudgetProgress: View `
-- `public struct DashboardInsights: View `
-- `public struct DashboardQuickActions: View `
-- `public struct InsightsLoadingView: View `
-- `public struct DashboardInsights: View `
-- `public struct InsightItem: View `
-- `public struct AccountDetailView: View `
-- `public struct StatView: View `
-- `public struct ActivityChartView: View `
-- `public struct TransactionEmptyStateView: View `
-- `public struct TransactionListView: View `
-- `public struct TransactionRowView: View `
-- `public struct AddTransactionView: View `
-- `public struct TransactionDetailView: View `
-- `public struct TransactionStatsCard: View `
-- `public struct SearchAndFilterSection: View `
-- `public struct GlobalSearchView: View `
-- `public struct BudgetSearchView: View `
-- `public struct NotificationsView: View `
-- `public struct FilterButton: View `
-- `public struct NotificationRow: View `
-- `public struct SearchResultsComponent: View `
-- `public struct SearchHeaderComponent: View `
-- `public struct GlobalSearchView: View `
-- `public struct SearchResultRow: View `
-- `public struct SearchResultDetailView: View `
-- `public struct DetailRow: View `
-- `public struct BreadcrumbItem: Identifiable, Hashable `
-- `public struct NavigationContext `
-- `public struct ListableItem: Identifiable, Hashable `
-- `public struct ListableItem: Identifiable, Hashable `
-- `public struct HapticFeedbackModifier: ViewModifier `
-- `public struct SelectionHapticModifier: ViewModifier `
-- `public struct SuccessHapticModifier: ViewModifier `
-- `public struct ExportSettings: Sendable `
-- `public struct ColumnMapping: Codable `
-- `public struct ValidationError: Identifiable, Codable `
-- `public struct ImportResult: Codable `
-- `public struct CSVColumnMapping: Sendable `
-- `public struct FinancialInsight: Identifiable, Sendable `
-- `public struct ForecastData: Identifiable, Sendable `
-- `public struct BreadcrumbItem: Identifiable, Sendable `
-- `public struct DeepLink: Sendable `
-- `public struct Transaction: Identifiable, Codable `
-- `public struct FinancialAccount: Identifiable, Codable, Sendable `
-- `public struct ExpenseCategory: Identifiable, Codable, Sendable `
-- `public struct FinancialTransaction: Identifiable, Codable, Sendable `
-- `public struct Budget: Identifiable, Codable, Sendable `
-- `public struct CoreMarker `
-- `public struct GoalNotificationScheduler `
-- `public struct PerformanceMeasurement `
-- `public struct BudgetNotificationScheduler `
-- `public struct ErrorRecoveryOption: Identifiable `
-- `public struct ErrorAlert: ViewModifier `
-- `public struct Query<Value> `
-- `public struct NotificationPermissionManager `
-- `public struct ScheduledNotification: Identifiable `
-- `public struct NotificationPermissionManager `
-- `public struct BudgetNotificationScheduler `
-- `public struct SubscriptionNotificationScheduler `
-- `public struct GoalNotificationScheduler `
-- `public struct SubscriptionNotificationScheduler `
-- `public struct Query<Value> `
-- `public struct MomentumFinanceApp: App `
-- `public struct SecuritySettingsSection: View `
-- `public struct ExportDataView: View `
-- `public struct AppearanceSettingsSection: View `
-- `public struct DataManagementSection: View `
-- `public struct ImportDataView: View `
-- `public struct ImportResultView: View `
-- `public struct AccessibilitySettingsSection: View `
-- `public struct ImportExportSection: View `
-- `public struct AboutSection: View `
-- `public struct ThemeSelectorCard: View `
-- `public struct ThemeFinancialSummaryCard: View `
-- `public struct ThemeAccountsList: View `
-- `public struct TransactionEmptyStateView: View `
-- `public struct TransactionListView: View `
-- `public struct TransactionRowView: View `
-- `public struct AddTransactionView: View `
-- `public struct TransactionDetailView: View `
-- `public struct TransactionStatsCard: View `
-- `public struct SearchAndFilterSection: View `
-- `public struct DashboardWelcomeHeader: View `
-- `public struct DashboardAccountsSummary: View `
-- `public struct AccountSummaryCard: View `
-- `public struct DashboardMetricsCards: View `
-- `public struct MetricCard: View `
-- `public struct AnimatedCard: View `
-- `public struct AnimatedButton: View `
-- `public struct AnimatedTransactionItem: View `
-- `public struct AnimatedBudgetProgress: View `
-- `public struct AnimatedCounter: View `
-- `public struct FloatingActionButton: View `
-- `public struct PrimaryButtonStyle: ButtonStyle `
-- `public struct SecondaryButtonStyle: ButtonStyle `
-- `public struct TextButtonStyle: ButtonStyle `
-- `public struct DestructiveButtonStyle: ButtonStyle `
-- `public struct ImportButtonComponent: View `
-- `public struct ImportProgressComponent: View `
-- `public struct DataImportHeaderComponent: View `
-- `public struct ImportInstructionsComponent: View `
-- `public struct ImportResultView: View `
-- `public struct FileSelectionComponent: View `
-- `public struct InsightsLoadingView: View `
-- `public struct InsightsEmptyStateView: View `
-- `public struct InsightRowView: View `
-- `public struct InsightsFilterBar: View `
-- `public struct FilterChip: View `
-- `public struct InsightDetailView: View `
-- `public struct DataImportHeaderComponent: View `
-- `public struct FileSelectionComponent: View `
-- `public struct ImportProgressComponent: View `
-- `public struct ImportButtonComponent: View `
-- `public struct ImportInstructionsComponent: View `
-- `public struct ThemeBudgetProgress: View `
-- `public struct ThemeSubscriptionsList: View `
-- `public struct ThemeTypographyShowcase: View `
-- `public struct ThemeButtonStylesShowcase: View `
-- `public struct ThemeSettingsSheet: View `
-- `public struct SectionHeader: View `
-- `public struct ThemeSelectorCard: View `
-- `public struct ThemeFinancialSummaryCard: View `
-- `public struct ThemeAccountsList: View `
-- `public struct ThemeBudgetProgress: View `
-- `public struct ThemeSubscriptionsList: View `
-- `public struct ThemeTypographyShowcase: View `
-- `public struct ThemeButtonStylesShowcase: View `
-- `public struct ThemeSettingsSheet: View `
-- `public struct ThemeDemoView: View `
-- `public struct PrimaryButtonStyle: ButtonStyle `
-- `public struct SecondaryButtonStyle: ButtonStyle `
-- `public struct TextButtonStyle: ButtonStyle `
-- `public struct DestructiveButtonStyle: ButtonStyle `
-- `public struct ThemeSettingsView: View `
-- `public struct ThemeModeOption: View `
-- `public struct ThemeComponents: @unchecked Sendable `
-- `public struct ThemeEnums `
-- `public struct BreadcrumbItem: Identifiable, Hashable `
-- `public struct CSVColumnMapping `
-- `public struct ExportSettings `
-- `public struct ImportResult `
-- `public struct SettingsView: View `
-- `public struct DataImportHeaderComponent: View `
-- `public struct FileSelectionComponent: View `
-- `public struct ImportProgressComponent: View `
-- `public struct ImportButtonComponent: View `
-- `public struct ImportInstructionsComponent: View `
-- `public struct ImportResultView: View `
-- `public struct DataExportView: View `
-- `public struct DataImportView: View `
-- `public struct DashboardView: View `
-- `public struct ContentView: View `
-- `public struct SpendingPattern `
-- `public struct TransactionAnomaly `
-- `public struct TransactionPattern `
-- `public struct CategorySuggestion `
-- `public struct CardFlipModifier: ViewModifier `
-- `public struct LoadingIndicator: View `
-- `public struct AnimatedProgressBar: View `
-- `public struct AnimatedCard: View `
-- `public struct AnimatedButton: View `
-- `public struct AnimatedTransactionItem: View `
-- `public struct AnimatedBudgetProgress: View `
-- `public struct AnimatedCounter: View `
-- `public struct FloatingActionButton: View `
-- `public struct CoreMarker `
+### Manual API Documentation Required
 
-### Public Enums
+AI generation failed. Please document the following manually:
 
-- `public enum AccountType: String, CaseIterable, Codable `
-- `public enum BillingCycle: String, CaseIterable, Codable `
-- `public enum DataType: String, CaseIterable, Codable `
-- `public enum EntityType: String, CaseIterable, Codable `
-- `public enum Severity: String, Codable `
-- `public enum InsightType: Sendable `
-- `public enum InsightPriority: Int, CaseIterable, Sendable, Comparable `
-- `public enum TransactionFilter: String, CaseIterable, Sendable `
-- `public enum AccountType: String, Codable, Sendable `
-- `public enum TransactionType: String, Codable, Sendable `
-- `public enum BudgetPeriod: String, Codable, Sendable `
-- `public enum TransactionType: String, CaseIterable, Codable `
-- `public enum Logger `
-- `public enum AppError: LocalizedError, Identifiable `
-- `public enum ExportFormat: String, CaseIterable, Sendable `
-- `public enum DateRange: String, CaseIterable, Sendable `
-- `public enum ExportConstants `
-- `public enum ExportError: Error `
-- `public enum ImportError: Error `
-- `public enum NotificationUrgency `
-- `public enum RiskLevel: String, CaseIterable, Identifiable `
-- `public enum InsightPriority: String, CaseIterable, Comparable, Identifiable `
-- `public enum InsightType: String, CaseIterable, Identifiable `
-- `public enum InsightCategory: String, CaseIterable, Identifiable `
-- `public enum AIConfidenceLevel: String, CaseIterable `
-- `public enum VisualizationType: String, CaseIterable `
-- `public enum FinancialAnalysisType: String, CaseIterable `
-- `public enum SearchFilter: String, CaseIterable, Hashable `
-- `public enum SearchConfiguration `
-- `public enum AccountType `
-- `public enum Trend `
-- `public enum AnomalyType `
-- `public enum Severity `
-- `public enum BudgetPeriod `
-- `public enum RiskTolerance `
-- `public enum TimeHorizon `
-- `public enum InsightPriority: Int, CaseIterable, Hashable `
-- `public enum InsightType: Hashable `
-- `public enum RiskLevel `
-- `public enum AnomalyType `
-- `public enum AccountType `
-- `public enum InsightPriority: Int, CaseIterable, Hashable `
-- `public enum InsightType: Hashable `
-- `public enum RiskLevel `
-- `public enum AnomalyType `
-- `public enum RiskTolerance `
-- `public enum TimeHorizon `
-- `public enum BudgetPeriod `
-- `public enum LogLevel: String `
-- `public enum InsightType `
-- `public enum InsightCategory `
-- `public enum RiskLevel: String, CaseIterable, Identifiable `
-- `public enum InsightPriority: String, CaseIterable, Comparable, Identifiable `
-- `public enum InsightType: String, CaseIterable, Identifiable `
-- `public enum InsightCategory: String, CaseIterable, Identifiable `
-- `public enum AIConfidenceLevel: String, CaseIterable `
-- `public enum VisualizationType: String, CaseIterable `
-- `public enum FinancialAnalysisType: String, CaseIterable `
-- `public enum AccountType `
-- `public enum BudgetPeriod `
-- `public enum RiskTolerance `
-- `public enum TimeHorizon `
-- `public enum InsightPriority: Int, CaseIterable, Hashable `
-- `public enum InsightType: Hashable `
-- `public enum RiskLevel `
-- `public enum AnomalyType `
-- `public enum AccountType `
-- `public enum InsightPriority: Int, CaseIterable, Hashable `
-- `public enum InsightType: Hashable `
-- `public enum RiskLevel `
-- `public enum AnomalyType `
-- `public enum RiskTolerance `
-- `public enum TimeHorizon `
-- `public enum BudgetPeriod `
-- `public enum DeepLink: Hashable `
-- `public enum SearchFilter: String, CaseIterable, Hashable `
-- `public enum SearchConfiguration `
-- `public enum ColorDefinitions `
-- `public enum AppTabSection: String, CaseIterable, Hashable `
-- `public enum SubscriptionFilter: String, CaseIterable `
-- `public enum TransactionFilter: String, CaseIterable, Identifiable `
-- `public enum Features `
-- `public enum ColorScheme `
-- `public enum TextStyle `
-- `public enum AccentType `
-- `public enum BudgetType `
-- `public enum DeepLink: Hashable `
-- `public enum AppTabSection: String, CaseIterable, Hashable `
-- `public enum TransactionsDestination: Hashable `
-- `public enum BudgetsDestination: Hashable `
-- `public enum SubscriptionsDestination: Hashable `
-- `public enum GoalsDestination: Hashable `
-- `public enum SidebarItem: Hashable `
-- `public enum ListItemType: Hashable `
-- `public enum SidebarItem: Hashable `
-- `public enum ListItemType: Hashable `
-- `public enum AccountType: String, CaseIterable, Codable `
-- `public enum BillingCycle: String, CaseIterable, Codable `
-- `public enum DataType: String, CaseIterable, Codable `
-- `public enum EntityType: String, CaseIterable, Codable `
-- `public enum Severity: String, Codable `
-- `public enum InsightType: Sendable `
-- `public enum InsightPriority: Int, CaseIterable, Sendable, Comparable `
-- `public enum TransactionFilter: String, CaseIterable, Sendable `
-- `public enum AccountType: String, Codable, Sendable `
-- `public enum TransactionType: String, Codable, Sendable `
-- `public enum BudgetPeriod: String, Codable, Sendable `
-- `public enum TransactionType: String, CaseIterable, Codable `
-- `public enum SearchFilter: String, CaseIterable, Hashable `
-- `public enum SearchConfiguration `
-- `public enum Logger `
-- `public enum AppError: LocalizedError, Identifiable `
-- `public enum NotificationUrgency `
-- `public enum Features `
-- `public enum ThemeMode: String, CaseIterable, Identifiable, Hashable `
-- `public enum DarkModePreference: String, CaseIterable `
-- `public enum ThemeScheme `
-- `public enum TextLevel `
-- `public enum AccentLevel `
-- `public enum FinancialType `
-- `public enum BudgetStatus `
-- `public enum TransactionsDestination: Hashable `
-- `public enum BudgetsDestination: Hashable `
-- `public enum SubscriptionsDestination: Hashable `
-- `public enum GoalsDestination: Hashable `
-- `public enum ImportError: Error `
-- `public enum ExportFormat: String, CaseIterable `
-- `public enum DateRange: String, CaseIterable `
-- `public enum SidebarItem: Hashable `
-- `public enum ListItemType: Hashable `
-- `public enum DarkModePreference: String, CaseIterable `
-- `public enum SidebarItem: Hashable `
-- `public enum ListItemType: Hashable `
-- `public enum Duration `
-- `public enum Springs `
-- `public enum Easing `
-- `public enum Style `
-- `public enum FinancialAnalyticsAccountKind `
-- `public enum FinancialAnalyticsBudgetPeriod `
-- `public enum FinancialAnalyticsSharedCore `
-- `public enum Duration `
-- `public enum Springs `
-- `public enum Easing `
-- `public enum Style `
-- `public enum FinancialAnalyticsAccountKind `
-- `public enum FinancialAnalyticsBudgetPeriod `
-- `public enum FinancialAnalyticsSharedCore `
-- `public enum BudgetPeriod: CaseIterable, Sendable `
-- `public enum AccountType: Sendable `
-- `public enum Level: Sendable `
-- `public enum RiskTolerance: Sendable `
-- `public enum TimeHorizon: Sendable `
-- `public enum ThemeMode `
-- `public enum InsightPriority: Int, Comparable, Sendable `
-- `public enum InsightType: Sendable `
-- `public enum AnimatedCardComponent `
-- `public enum AnimatedButtonComponent `
-- `public enum AnimatedProgressComponents `
-- `public enum FloatingActionButtonComponent `
-- `public enum LogLevel: CaseIterable, Sendable `
-- `public enum Category: CaseIterable, Sendable `
-- `public enum TransactionType `
-- `public enum BudgetPeriod: CaseIterable, Sendable `
-- `public enum AccountType: Sendable `
-- `public enum Level: Sendable `
-- `public enum RiskTolerance: Sendable `
-- `public enum TimeHorizon: Sendable `
-- `public enum ThemeMode `
-- `public enum InsightPriority: Int, Comparable, Sendable `
-- `public enum InsightType: Sendable `
-- `public enum AnimatedCardComponent `
-- `public enum AnimatedButtonComponent `
-- `public enum AnimatedProgressComponents `
-- `public enum FloatingActionButtonComponent `
-- `public enum LogLevel: CaseIterable, Sendable `
-- `public enum Category: CaseIterable, Sendable `
-- `public enum TransactionType `
-- `public enum InsightType: Sendable `
-- `public enum RiskLevel: String, CaseIterable, Identifiable `
-- `public enum InsightPriority: String, CaseIterable, Comparable, Identifiable `
-- `public enum InsightType: String, CaseIterable, Identifiable `
-- `public enum InsightCategory: String, CaseIterable, Identifiable `
-- `public enum AIConfidenceLevel: String, CaseIterable `
-- `public enum VisualizationType: String, CaseIterable `
-- `public enum FinancialAnalysisType: String, CaseIterable `
-- `public enum FinancialInsightType: String, CaseIterable, Identifiable, Hashable `
-- `public enum AccountType `
-- `public enum BudgetPeriod `
-- `public enum RiskTolerance `
-- `public enum TimeHorizon `
-- `public enum InsightPriority: Int, CaseIterable, Hashable `
-- `public enum InsightType: Hashable `
-- `public enum RiskLevel `
-- `public enum AnomalyType `
-- `public enum AccountType `
-- `public enum InsightPriority: Int, CaseIterable, Hashable `
-- `public enum InsightType: Hashable `
-- `public enum RiskLevel `
-- `public enum AnomalyType `
-- `public enum RiskTolerance `
-- `public enum TimeHorizon `
-- `public enum BudgetPeriod `
-- `public enum SearchFilter: String, CaseIterable, Hashable `
-- `public enum SearchConfiguration `
-- `public enum SubscriptionFilter: String, CaseIterable `
-- `public enum TransactionFilter: String, CaseIterable `
-- `public enum TransactionFilter: String, CaseIterable, Identifiable `
-- `public enum Features `
-- `public enum NotificationFilter: String, CaseIterable `
-- `public enum DeepLink: Hashable `
-- `public enum AppTabSection: String, CaseIterable, Hashable `
-- `public enum TransactionsDestination: Hashable `
-- `public enum BudgetsDestination: Hashable `
-- `public enum SubscriptionsDestination: Hashable `
-- `public enum GoalsDestination: Hashable `
-- `public enum SidebarItem: Hashable `
-- `public enum ListItemType: Hashable `
-- `public enum SidebarItem: Hashable `
-- `public enum ListItemType: Hashable `
-- `public enum ExportFormat: String, CaseIterable, Sendable `
-- `public enum DateRange: String, CaseIterable, Sendable `
-- `public enum ExportConstants `
-- `public enum ExportError: Error `
-- `public enum ImportError: Error `
-- `public enum AccountType: String, CaseIterable, Codable `
-- `public enum BillingCycle: String, CaseIterable, Codable `
-- `public enum DataType: String, CaseIterable, Codable `
-- `public enum EntityType: String, CaseIterable, Codable `
-- `public enum Severity: String, Codable `
-- `public enum InsightType: Sendable `
-- `public enum InsightPriority: Int, CaseIterable, Sendable, Comparable `
-- `public enum TransactionFilter: String, CaseIterable, Sendable `
-- `public enum AccountType: String, Codable, Sendable `
-- `public enum TransactionType: String, Codable, Sendable `
-- `public enum BudgetPeriod: String, Codable, Sendable `
-- `public enum TransactionType: String, CaseIterable, Codable `
-- `public enum Logger `
-- `public enum AppError: LocalizedError, Identifiable `
-- `public enum NotificationUrgency `
-- `public enum AnimatedCardComponent `
-- `public enum AnimatedButtonComponent `
-- `public enum AnimatedTransactionComponent `
-- `public enum AnimatedProgressComponents `
-- `public enum FloatingActionButtonComponent `
-- `public enum ColorDefinitions `
-- `public enum ColorScheme `
-- `public enum TextStyle `
-- `public enum AccentType `
-- `public enum BudgetType `
-- `public enum ThemeMode: String, CaseIterable, Identifiable, Hashable `
-- `public enum ThemeScheme `
-- `public enum TextLevel `
-- `public enum AccentLevel `
-- `public enum FinancialType `
-- `public enum BudgetStatus `
-- `public enum DeepLink `
-- `public enum ThemeMode: String, CaseIterable, Identifiable, Hashable `
-- `public enum DarkModePreference: String, CaseIterable `
-- `public enum ThemeScheme `
-- `public enum TextLevel `
-- `public enum AccentLevel `
-- `public enum FinancialType `
-- `public enum BudgetStatus `
-- `public enum ImportError: Error `
-- `public enum ExportFormat: String, CaseIterable `
-- `public enum DateRange: String, CaseIterable `
-- `public enum DarkModePreference: String, CaseIterable `
-- `public enum Trend `
-- `public enum AnomalyType `
-- `public enum Severity `
-- `public enum AnimatedCardComponent `
-- `public enum AnimatedButtonComponent `
-- `public enum AnimatedTransactionComponent `
-- `public enum AnimatedProgressComponents `
-- `public enum FloatingActionButtonComponent `
+#### Functions
+```swift
+// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/.build/arm64-apple-macosx/debug/MomentumFinancePackageTests.derived/runner.swift\n41:    public func testBundleWillStart(_ testBundle: Bundle) {
+46:    public func testSuiteWillStart(_ testSuite: XCTestSuite) {
+51:    public func testCaseWillStart(_ testCase: XCTestCase) {
+57:    public func testCase(_ testCase: XCTestCase, didRecord issue: XCTIssue) {
+62:    public func testCase(_ testCase: XCTestCase, didRecord expectedFailure: XCTExpectedFailure) {
+67:    public func testCase(_ testCase: XCTestCase, didFailWithDescription description: String, inFile filePath: String?, atLine lineNumber: Int) {
+74:    public func testCaseDidFinish(_ testCase: XCTestCase) {
+80:    public func testSuite(_ testSuite: XCTestSuite, didRecord issue: XCTIssue) {
+85:    public func testSuite(_ testSuite: XCTestSuite, didRecord expectedFailure: XCTExpectedFailure) {
+90:    public func testSuite(_ testSuite: XCTestSuite, didFailWithDescription description: String, inFile filePath: String?, atLine lineNumber: Int) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/PerformanceManager.swift\n51:    public func recordFrame() {
+64:    public func getCurrentFPS() -> Double {
+79:    public func getCurrentFPS(completion: @escaping (Double) -> Void) {
+99:    public func getMemoryUsage() -> Double {
+107:    public func getMemoryUsage(completion: @escaping (Double) -> Void) {
+117:    public func isPerformanceDegraded() -> Bool {
+135:    public func isPerformanceDegraded(completion: @escaping (Bool) -> Void) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Models/ExpenseCategory.swift\n44:    public func totalSpent(for month: Date) -> Double {
+64:    public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Models/FinancialAccount.swift\n73:    public func updateBalance(for transaction: FinancialTransaction) {
+89:    public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Models/SavingsGoal.swift\n84:    public func addFunds(_ amount: Double) {
+90:    public func removeFunds(_ amount: Double) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Models/Subscription.swift\n43:    public func nextDueDate(from date: Date) -> Date {
+147:    public func processPayment(modelContext: ModelContext) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Models/Budget.swift\n99:    public func calculateRolloverAmount() -> Double {
+109:    public func applyRollover(_ amount: Double) {
+114:    public func resetRollover() {
+121:    public func createNextPeriodBudget(for nextMonth: Date) -> Budget {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Utilities/GoalNotificationScheduler.swift\n18:    public func scheduleProgressReminders(for goals: [SavingsGoal]) {
+25:    public func checkMilestones(for goals: [SavingsGoal]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Utilities/HapticManager.swift\n243:    public func body(content: Content) -> some View {
+258:    public func body(content: Content) -> some View {
+271:    public func body(content: Content) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Utilities/BudgetNotificationScheduler.swift\n18:    public func scheduleWarningNotifications(for budgets: [Budget]) {
+338:    public func scheduleRolloverNotifications(for budgets: [Budget]) {
+349:    public func scheduleSpendingPredictionNotifications(for budgets: [Budget]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Utilities/ErrorHandler.swift\n426:    public func body(content: Content) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Utilities/FinancialUtilities.swift\n5:public func formatCurrency(_ amount: Double) -> String {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Utilities/NotificationPermissionManager.swift\n19:    public func requestNotificationPermission() async -> Bool {
+41:    public func checkNotificationPermissionAsync() async -> Bool {
+47:    public func setupNotificationCategories() {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Utilities/NotificationTypes.swift\n67:    public func requestNotificationPermission() async -> Bool {
+89:    public func checkNotificationPermissionAsync() async -> Bool {
+95:    public func setupNotificationCategories() {
+132:    public func scheduleWarningNotifications(for budgets: [Budget]) {
+452:    public func scheduleRolloverNotifications(for budgets: [Budget]) {
+463:    public func scheduleSpendingPredictionNotifications(for budgets: [Budget]) {
+480:    public func scheduleDueDateReminders(for subscriptions: [Subscription]) {
+487:    public func scheduleNotifications(for subscriptions: [Subscription]) {
+565:    public func scheduleProgressReminders(for goals: [SavingsGoal]) {
+572:    public func checkMilestones(for goals: [SavingsGoal]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Utilities/SubscriptionNotificationScheduler.swift\n18:    public func scheduleDueDateReminders(for subscriptions: [Subscription]) {
+25:    public func scheduleNotifications(for subscriptions: [Subscription]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Services/SearchEngineService.swift\n21:    public func setModelContext(_ context: ModelContext) {
+30:    public func search(query: String, filter: SearchFilter) -> [SearchResult] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Services/SearchTypes.swift\n36:    public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Services/FinancialServices.swift\n26:    public func save() async throws {
+30:    public func delete(_ entity: some Any) async throws {
+35:    public func fetch<T>(_: T.Type) async throws -> [T] {
+40:    public func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping)
+75:    public func getOrCreateCategory(
+149:    public func exportToCSV() async throws -> URL {
+159:    public func export(settings: [String: Any]) async throws -> URL {
+228:    public func predictSpending(for category: ExpenseCategory? = nil, daysAhead: Int = 30) async -> Double {
+252:    public func analyzeSpendingPatterns() async -> [SpendingPattern] {
+275:    public func detectAnomalies() async -> [TransactionAnomaly] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Services/FinancialIntelligenceEngines.swift\n16:    public func generateInvestmentRecommendations(
+26:    public func detectAnomalies(in transactions: [Transaction]) -> [TransactionAnomaly] {
+35:    public func predictCashFlow(transactions: [Transaction], monthsAhead: Int) -> [CashFlowPrediction] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Services/AdvancedFinancialIntelligence.swift\n64:    public func generateInsights(
+100:    public func getInvestmentRecommendations(
+113:    public func predictCashFlow(
+124:    public func detectAnomalies(in transactions: [Transaction]) -> [TransactionAnomaly] {
+621:        public func makeSnapshot() async throws -> AdvancedFinancialDomainSnapshot {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Services/FinancialIntelligenceDataProvider.swift\n54:        public func makeSnapshot() async throws -> AdvancedFinancialDomainSnapshot {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Dependencies.swift\n44:    public func log(_ message: String, level: LogLevel = .info) {
+50:    public func logSync(_ message: String, level: LogLevel = .info) {
+57:    public func error(_ message: String) {
+62:    public func warning(_ message: String) {
+67:    public func info(_ message: String) {
+71:    public func setOutputHandler(_ handler: @escaping @Sendable (String) -> Void) {
+77:    public func resetOutputHandler() {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Features/Shared/Services/FinancialInsightsService.swift\n51:    public func initialize() async throws {
+57:    public func cleanup() async {
+66:    public func healthCheck() async -> ServiceHealthStatus {
+86:    public func createTransaction(_ transaction: EnhancedFinancialTransaction) async throws -> EnhancedFinancialTransaction {
+100:    public func calculateAccountBalance(_ accountId: UUID, asOf: Date? = nil) async throws -> Double {
+114:    public func getBudgetInsights(for budgetId: UUID, timeRange: DateInterval) async throws -> BudgetInsights {
+155:    public func calculateNetWorth(for userId: String, asOf: Date? = nil) async throws -> NetWorthSummary {
+200:    public func generateFinancialRecommendations(for userId: String) async throws -> [FinancialRecommendation] {
+267:    public func categorizeTransaction(_ transaction: EnhancedFinancialTransaction) async throws -> TransactionCategory {
+301:    public func analyzeSpendingPatterns(for userId: String) async throws -> SpendingPatternAnalysis {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Features/Shared/Services/ServiceLocator.swift\n29:    public func register<T>(_ service: T, for type: T.Type) {
+35:    public func registerFactory<T>(_ factory: @escaping () -> T, for type: T.Type) {
+43:    public func resolve<T>(_ type: T.Type) -> T? {
+64:    public func resolve<T>(_ type: T.Type) -> T {
+74:    public func setup(with modelContext: ModelContext) {
+85:    public func reset() {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Features/Budgets/BudgetsViewModel.swift\n380:    public func scheduleBudgetNotifications(for _: [Budget]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/SearchEngineService.swift\n21:    public func setModelContext(_ context: ModelContext) {
+30:    public func search(query: String, filter: SearchFilter) -> [SearchResult] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceEngines.swift\n16:    public func generateInvestmentRecommendations(
+26:    public func detectAnomalies(in transactions: [Transaction]) -> [TransactionAnomaly] {
+35:    public func predictCashFlow(transactions: [Transaction], monthsAhead: Int) -> [CashFlowPrediction] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Intelligence/AdvancedFinancialIntelligence.swift\n64:    public func generateInsights(
+100:    public func getInvestmentRecommendations(
+113:    public func predictCashFlow(
+124:    public func detectAnomalies(in transactions: [Transaction]) -> [TransactionAnomaly] {
+621:        public func makeSnapshot() async throws -> AdvancedFinancialDomainSnapshot {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Intelligence/FinancialIntelligenceDataProvider.swift\n54:        public func makeSnapshot() async throws -> AdvancedFinancialDomainSnapshot {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/SearchTypes.swift\n36:    public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Navigation/MacOSNavigationTypes.swift\n30:        public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Navigation/NavigationCoordinator.swift\n34:        public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Utils/HapticManager.swift\n243:    public func body(content: Content) -> some View {
+258:    public func body(content: Content) -> some View {
+271:    public func body(content: Content) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Models/ExpenseCategory.swift\n44:    public func totalSpent(for month: Date) -> Double {
+64:    public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Models/FinancialAccount.swift\n73:    public func updateBalance(for transaction: FinancialTransaction) {
+89:    public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Models/SavingsGoal.swift\n84:    public func addFunds(_ amount: Double) {
+90:    public func removeFunds(_ amount: Double) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Models/Subscription.swift\n43:    public func nextDueDate(from date: Date) -> Date {
+147:    public func processPayment(modelContext: ModelContext) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Models/Budget.swift\n99:    public func calculateRolloverAmount() -> Double {
+109:    public func applyRollover(_ amount: Double) {
+114:    public func resetRollover() {
+121:    public func createNextPeriodBudget(for nextMonth: Date) -> Budget {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Search/SearchEngineService.swift\n21:    public func setModelContext(_ context: ModelContext) {
+30:    public func search(query: String, filter: SearchFilter) -> [SearchResult] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Search/SearchTypes.swift\n36:    public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Utilities/GoalNotificationScheduler.swift\n18:    public func scheduleProgressReminders(for goals: [SavingsGoal]) {
+25:    public func checkMilestones(for goals: [SavingsGoal]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Utilities/BudgetNotificationScheduler.swift\n18:    public func scheduleWarningNotifications(for budgets: [Budget]) {
+338:    public func scheduleRolloverNotifications(for budgets: [Budget]) {
+349:    public func scheduleSpendingPredictionNotifications(for budgets: [Budget]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Utilities/ErrorHandler.swift\n426:    public func body(content: Content) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Utilities/FinancialUtilities.swift\n5:public func formatCurrency(_ amount: Double) -> String {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Utilities/NotificationPermissionManager.swift\n19:    public func requestNotificationPermission() async -> Bool {
+41:    public func checkNotificationPermissionAsync() async -> Bool {
+47:    public func setupNotificationCategories() {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Utilities/NotificationTypes.swift\n67:    public func requestNotificationPermission() async -> Bool {
+89:    public func checkNotificationPermissionAsync() async -> Bool {
+95:    public func setupNotificationCategories() {
+132:    public func scheduleWarningNotifications(for budgets: [Budget]) {
+452:    public func scheduleRolloverNotifications(for budgets: [Budget]) {
+463:    public func scheduleSpendingPredictionNotifications(for budgets: [Budget]) {
+480:    public func scheduleDueDateReminders(for subscriptions: [Subscription]) {
+487:    public func scheduleNotifications(for subscriptions: [Subscription]) {
+565:    public func scheduleProgressReminders(for goals: [SavingsGoal]) {
+572:    public func checkMilestones(for goals: [SavingsGoal]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Utilities/SubscriptionNotificationScheduler.swift\n18:    public func scheduleDueDateReminders(for subscriptions: [Subscription]) {
+25:    public func scheduleNotifications(for subscriptions: [Subscription]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/ButtonStyles.swift\n17:    public func makeBody(configuration: Configuration) -> some View {
+35:    public func makeBody(configuration: Configuration) -> some View {
+57:    public func makeBody(configuration: Configuration) -> some View {
+71:    public func makeBody(configuration: Configuration) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/ImportExport.swift\n91:    public func getOrCreateAccount(from _: [String], columnMapping _: CSVColumnMapping)
+97:    public func getOrCreateCategory(
+176:    public func exportData(settings: ExportSettings) async throws -> URL {
+212:    public func importFromCSV(_ content: String) async throws -> ImportResult {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/MacOSNavigationTypes.swift\n30:        public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/NavigationCoordinator.swift\n34:        public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/SPMSources/AnimationManager.swift\n116:    public func body(content: Content) -> some View {
+136:    public func body(content: Content) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/SPMSources/MF_SPMSources_backup/AnimationManager.swift\n116:    public func body(content: Content) -> some View {
+136:    public func body(content: Content) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/SPMSources/MF_SPMSources_backup/AdvancedFinancialIntelligence.swift\n245:    public func generateInsights(
+276:    public func getInvestmentRecommendations(
+288:    public func predictCashFlow(
+295:    public func detectAnomalies(in transactions: [Transaction]) -> [TransactionAnomaly] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/SPMSources/MF_SPMSources_backup/ButtonStyles.swift\n16:    public func setThemeMode(_ mode: ThemeMode) {
+32:    public func makeBody(configuration: Configuration) -> some View {
+50:    public func makeBody(configuration: Configuration) -> some View {
+67:    public func makeBody(configuration: Configuration) -> some View {
+81:    public func makeBody(configuration: Configuration) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/SPMSources/MF_SPMSources_backup/FinancialInsights.swift\n47:public func fi_findBudgetRecommendations(
+109:public func fi_detectCategoryOutliers(_ transactions: [FinancialTransaction]) -> [FinancialInsight] {
+136:public func fi_detectRecentFrequencyAnomalies(
+169:public func fi_suggestDuplicatePaymentInsights(transactions: [FinancialTransaction]) -> [FinancialInsight] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/SPMSources/MF_SPMSources_backup/AppLogger.swift\n28:    public func log(_ message: String, level: LogLevel, category: Category) {
+32:    public func debug(_ message: String) {
+36:    public func logWarning(_ message: String) {
+40:    public func logError(_ error: Error) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/SPMSources/MF_SPMSources_backup/BudgetsViewModel.swift\n81:    public func budgetsForMonth(_ budgets: [Budget], month: Date) -> [Budget] {
+85:    public func totalBudgetedAmount(_ budgets: [Budget], for month: Date) -> Double {
+89:    public func remainingBudget(_ budgets: [Budget], for month: Date) -> Double {
+96:    public func hasOverBudgetCategories(_ budgets: [Budget], for month: Date) -> Bool {
+100:    public func overBudgetCategories(_ budgets: [Budget], for month: Date) -> [Budget] {
+104:    public func budgetProgressSummary(_ budgets: [Budget], for month: Date) -> BudgetProgressSummary {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/SPMSources/AdvancedFinancialIntelligence.swift\n245:    public func generateInsights(
+276:    public func getInvestmentRecommendations(
+288:    public func predictCashFlow(
+295:    public func detectAnomalies(in transactions: [Transaction]) -> [TransactionAnomaly] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/SPMSources/ButtonStyles.swift\n16:    public func setThemeMode(_ mode: ThemeMode) {
+32:    public func makeBody(configuration: Configuration) -> some View {
+50:    public func makeBody(configuration: Configuration) -> some View {
+67:    public func makeBody(configuration: Configuration) -> some View {
+81:    public func makeBody(configuration: Configuration) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/SPMSources/FinancialInsights.swift\n47:public func fi_findBudgetRecommendations(
+109:public func fi_detectCategoryOutliers(_ transactions: [FinancialTransaction]) -> [FinancialInsight] {
+136:public func fi_detectRecentFrequencyAnomalies(
+169:public func fi_suggestDuplicatePaymentInsights(transactions: [FinancialTransaction]) -> [FinancialInsight] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/SPMSources/AppLogger.swift\n28:    public func log(_ message: String, level: LogLevel, category: Category) {
+32:    public func debug(_ message: String) {
+36:    public func logWarning(_ message: String) {
+40:    public func logError(_ error: Error) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/SPMSources/BudgetsViewModel.swift\n81:    public func budgetsForMonth(_ budgets: [Budget], month: Date) -> [Budget] {
+85:    public func totalBudgetedAmount(_ budgets: [Budget], for month: Date) -> Double {
+89:    public func remainingBudget(_ budgets: [Budget], for month: Date) -> Double {
+96:    public func hasOverBudgetCategories(_ budgets: [Budget], for month: Date) -> Bool {
+100:    public func overBudgetCategories(_ budgets: [Budget], for month: Date) -> [Budget] {
+104:    public func budgetProgressSummary(_ budgets: [Budget], for month: Date) -> BudgetProgressSummary {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/SearchEngineService.swift\n21:    public func setModelContext(_ context: ModelContext) {
+30:    public func search(query: String, filter: SearchFilter) -> [SearchResult] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Intelligence/FinancialIntelligenceEngines.swift\n16:    public func generateInvestmentRecommendations(
+26:    public func detectAnomalies(in transactions: [Transaction]) -> [TransactionAnomaly] {
+35:    public func predictCashFlow(transactions: [Transaction], monthsAhead: Int) -> [CashFlowPrediction] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Intelligence/AdvancedFinancialIntelligence.swift\n64:    public func generateInsights(
+100:    public func getInvestmentRecommendations(
+113:    public func predictCashFlow(
+124:    public func detectAnomalies(in transactions: [Transaction]) -> [TransactionAnomaly] {
+621:        public func makeSnapshot() async throws -> AdvancedFinancialDomainSnapshot {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Intelligence/FinancialIntelligenceDataProvider.swift\n54:        public func makeSnapshot() async throws -> AdvancedFinancialDomainSnapshot {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/SearchTypes.swift\n36:    public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Features/GlobalSearch/SearchEngineService.swift\n14:    public func setModelContext(_ context: ModelContext) {
+18:    public func search(query: String, filter: SearchFilter = .all) -> [SearchResult] {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Navigation/MacOSNavigationTypes.swift\n30:        public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Navigation/NavigationCoordinator.swift\n34:        public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Utils/HapticManager.swift\n243:    public func body(content: Content) -> some View {
+258:    public func body(content: Content) -> some View {
+271:    public func body(content: Content) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Models/ExpenseCategory.swift\n44:    public func totalSpent(for month: Date) -> Double {
+64:    public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Models/FinancialAccount.swift\n73:    public func updateBalance(for transaction: FinancialTransaction) {
+89:    public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Models/SavingsGoal.swift\n84:    public func addFunds(_ amount: Double) {
+90:    public func removeFunds(_ amount: Double) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Models/Subscription.swift\n43:    public func nextDueDate(from date: Date) -> Date {
+147:    public func processPayment(modelContext: ModelContext) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Models/DataImportModels.swift\n131:    public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Models/Budget.swift\n99:    public func calculateRolloverAmount() -> Double {
+109:    public func applyRollover(_ amount: Double) {
+114:    public func resetRollover() {
+121:    public func createNextPeriodBudget(for nextMonth: Date) -> Budget {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Utilities/GoalNotificationScheduler.swift\n18:    public func scheduleProgressReminders(for goals: [SavingsGoal]) {
+25:    public func checkMilestones(for goals: [SavingsGoal]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Utilities/BudgetNotificationScheduler.swift\n18:    public func scheduleWarningNotifications(for budgets: [Budget]) {
+338:    public func scheduleRolloverNotifications(for budgets: [Budget]) {
+349:    public func scheduleSpendingPredictionNotifications(for budgets: [Budget]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Utilities/ErrorHandler.swift\n426:    public func body(content: Content) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Utilities/FinancialUtilities.swift\n5:public func formatCurrency(_ amount: Double) -> String {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Utilities/NotificationPermissionManager.swift\n19:    public func requestNotificationPermission() async -> Bool {
+41:    public func checkNotificationPermissionAsync() async -> Bool {
+47:    public func setupNotificationCategories() {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Utilities/NotificationTypes.swift\n67:    public func requestNotificationPermission() async -> Bool {
+89:    public func checkNotificationPermissionAsync() async -> Bool {
+95:    public func setupNotificationCategories() {
+132:    public func scheduleWarningNotifications(for budgets: [Budget]) {
+452:    public func scheduleRolloverNotifications(for budgets: [Budget]) {
+463:    public func scheduleSpendingPredictionNotifications(for budgets: [Budget]) {
+480:    public func scheduleDueDateReminders(for subscriptions: [Subscription]) {
+487:    public func scheduleNotifications(for subscriptions: [Subscription]) {
+565:    public func scheduleProgressReminders(for goals: [SavingsGoal]) {
+572:    public func checkMilestones(for goals: [SavingsGoal]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Utilities/SubscriptionNotificationScheduler.swift\n18:    public func scheduleDueDateReminders(for subscriptions: [Subscription]) {
+25:    public func scheduleNotifications(for subscriptions: [Subscription]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Components/ButtonStyles.swift\n13:    public func makeBody(configuration: Configuration) -> some View {
+30:    public func makeBody(configuration: Configuration) -> some View {
+47:    public func makeBody(configuration: Configuration) -> some View {
+62:    public func makeBody(configuration: Configuration) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Theme/ButtonStyles.swift\n17:    public func makeBody(configuration: Configuration) -> some View {
+35:    public func makeBody(configuration: Configuration) -> some View {
+57:    public func makeBody(configuration: Configuration) -> some View {
+71:    public func makeBody(configuration: Configuration) -> some View {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/ImportExport.swift\n16:    public func exportToCSV(settings: ExportSettings) async throws -> URL {
+51:    public func importFromCSV(_ content: String) async throws -> ImportResult {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/NavigationCoordinator.swift\n44:        public func hash(into hasher: inout Hasher) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/BudgetsViewModel.swift\n246:    public func scheduleBudgetNotifications(for _: [Budget]) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Services/FinancialServices.swift\n26:    public func save() async throws {
+30:    public func delete(_ entity: some Any) async throws {
+35:    public func fetch<T>(_: T.Type) async throws -> [T] {
+40:    public func getOrCreateAccount(from fields: [String], columnMapping: CSVColumnMapping)
+75:    public func getOrCreateCategory(
+149:    public func exportToCSV() async throws -> URL {
+159:    public func export(settings: [String: Any]) async throws -> URL {
+228:    public func predictSpending(for category: ExpenseCategory? = nil, daysAhead: Int = 30) async -> Double {
+252:    public func analyzeSpendingPatterns() async -> [SpendingPattern] {
+275:    public func detectAnomalies() async -> [TransactionAnomaly] {\n\n
+```
 
-### Public Protocols
+#### Classes
+```swift
+// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Models/SampleData.swift\n11:class SampleDataGenerator {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Models/SampleData.swift\n11:class SampleDataGenerator {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/UI/macOS/KeyboardShortcutManager.swift\n9:    class KeyboardShortcutManager {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Models/SampleData.swift\n11:class SampleDataGenerator {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Components/Settings/ImportDataView.swift\n142:    class DocumentPickerDelegate: NSObject, UIDocumentPickerDelegate {\n\n
+```
 
-- `public protocol EntityManager: Sendable `
-- `public protocol AdvancedFinancialDataProvider: AnyObject `
-- `public protocol AdvancedFinancialDataProvider: AnyObject `
-- `public protocol AdvancedFinancialDataProvider: AnyObject `
-- `public protocol AdvancedFinancialDataProvider: AnyObject `
-- `public protocol EntityManager `
-- `public protocol AccountDetailDisplayable `
-- `public protocol AccountDetailRoutable `
-- `public protocol TransactionDisplayable `
-- `public protocol TransactionFilterable `
-- `public protocol BudgetDisplayable `
-- `public protocol BudgetManageable `
-- `public protocol AccountServiceProtocol `
-- `public protocol TransactionServiceProtocol `
-- `public protocol BudgetServiceProtocol `
-- `public protocol ViewModelProtocol: ObservableObject `
-- `public protocol RefreshableViewModel `
-- `public protocol SearchableViewModel `
-- `public protocol CoordinatorProtocol `
-- `public protocol Exportable `
-- `public protocol ExportFormatter `
-- `public protocol FinancialAnalyticsTransactionConvertible `
-- `public protocol FinancialAnalyticsAccountConvertible `
-- `public protocol FinancialAnalyticsBudgetConvertible `
-- `public protocol FinancialAnalyticsTransactionConvertible `
-- `public protocol FinancialAnalyticsAccountConvertible `
-- `public protocol FinancialAnalyticsBudgetConvertible `
-- `public protocol ThemedButtonStyle: ButtonStyle `
-- `public protocol ThemedButtonStyle: ButtonStyle `
-- `public protocol AdvancedFinancialDataProvider: AnyObject `
-- `public protocol AdvancedFinancialDataProvider: AnyObject `
-- `public protocol EntityManager `
-- `public protocol EntityManager: Sendable `
-
-
-## Usage
-
-For detailed usage examples, see the source files in:
-`/Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/`
-
-## Architecture Notes
-
-This project follows the Quantum Workspace architecture patterns. See [ARCHITECTURE.md](../../ARCHITECTURE.md) for details.
+#### Protocols
+```swift
+// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Models/SampleDataGenerators.swift\n14:protocol LegacyDataGenerator {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Core/Services/FinancialAnalyticsSharedCore.swift\n3:protocol FinancialAnalyticsTransactionConvertible {
+10:protocol FinancialAnalyticsAccountConvertible {
+15:protocol FinancialAnalyticsBudgetConvertible {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Intelligence/FinancialAnalyticsSharedCore.swift\n3:protocol FinancialAnalyticsTransactionConvertible {
+10:protocol FinancialAnalyticsAccountConvertible {
+15:protocol FinancialAnalyticsBudgetConvertible {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Models/SampleDataGenerators.swift\n14:protocol LegacyDataGenerator {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Shared/Models/Generators/CategoriesGenerator.swift\n6:protocol DataGenerator {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/UI/macOS/DragAndDropSupport.swift\n17:    protocol DraggableFinanceItem: Identifiable, Codable {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Intelligence/FinancialAnalyticsSharedCore.swift\n3:protocol FinancialAnalyticsTransactionConvertible {
+10:protocol FinancialAnalyticsAccountConvertible {
+15:protocol FinancialAnalyticsBudgetConvertible {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Models/SampleDataGenerators.swift\n14:protocol LegacyDataGenerator {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/MomentumFinance/Sources/Core/Models/Generators/CategoriesGenerator.swift\n6:protocol DataGenerator {\n\n
+```
 
 ---
-
-*For full HTML documentation, run:*
-```bash
-jazzy --module MomentumFinance --output Documentation/API/MomentumFinance
-```
+*Generated by AI Documentation Agent*

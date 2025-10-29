@@ -1,234 +1,80 @@
-# HabitQuest API Reference
+# HabitQuest API Documentation
+**Generated:** Tue Oct 28 14:24:01 CDT 2025
+**Framework:** AI-Powered Documentation
 
-**Generated:** Sun Oct 12 09:52:58 CDT 2025
-**Type:** Manual Documentation
+## Overview
 
-## Public API Overview
+This document provides comprehensive API documentation for the HabitQuest application.
+Documentation is automatically generated from code analysis and AI-enhanced descriptions.
 
-### Public Classes
+## Table of Contents
 
-- `public class HabitViewModel: BaseViewModel `
-- `public class OllamaClient: ObservableObject `
-- `public class HuggingFaceClient `
-- `public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisService, AICodeGenerationService `
-- `public class AIHealthMonitor `
-- `public class QuestLogViewModel: ObservableObject `
-- `public class DataManagementViewModel: ObservableObject `
-- `public class ProfileViewModel: ObservableObject `
-- `public class TodaysQuestsViewModel: ObservableObject `
+- [Public API Reference](#public-api-reference)
+- [Class Hierarchy](#class-hierarchy)
+- [Protocols](#protocols)
+- [Usage Examples](#usage-examples)
+- [Error Handling](#error-handling)
 
-### Public Structs
+## Public API Reference
 
-- `public struct Dependencies `
-- `public struct State `
-- `public struct State `
-- `public struct AIHabitInsight: Identifiable `
-- `public struct AIHabitPrediction: Identifiable `
-- `public struct AIHabitSuggestion: Identifiable `
-- `public struct AIHabit: Identifiable `
-- `public struct AIHabitLog `
-- `public struct OllamaConfig `
-- `public struct OllamaMessage: Codable `
-- `public struct OllamaGenerateResponse: Codable `
-- `public struct OllamaServerStatus `
-- `public struct DocumentationResult `
-- `public struct TestGenerationResult `
-- `public struct AutomationTask `
-- `public struct TaskResult: Sendable `
-- `public struct StreakMilestone: Identifiable, @unchecked Sendable `
-- `public struct ErrorHandler: Sendable `
-- `public struct SecurityIncident `
-- `public struct Vulnerability `
-- `public struct WeeklyPatternChartView: View `
-- `public struct StreakDistributionChartView: View `
-- `public struct AnalyticsCard: View `
-- `public struct TopPerformerRow: View `
-- `public struct HabitDetailSheet: View `
-- `public struct AnalyticsExportView: View `
-- `public struct ConsistencyInsightView: View `
-- `public struct InsightCard: View `
-- `public struct AIHabitInsightsView: View `
-- `public struct JournalAnalysisView: View `
-- `public struct HabitRecommendation `
-- `public struct HabitSuggestion `
-- `public struct StreakDayData: Identifiable `
-- `public struct DataExportService: Sendable `
-- `public struct HabitAnalytics `
-- `public struct OverallStats `
-- `public struct AnalyticsStreakData `
-- `public struct CategoryStats `
-- `public struct MoodCorrelation `
-- `public struct MoodStats `
-- `public struct TimePatterns `
-- `public struct WeeklyProgress `
-- `public struct MonthlyTrend `
-- `public struct HabitPerformance `
-- `public struct HabitTrendData `
-- `public struct CategoryInsight `
-- `public struct ServiceHealth: Codable, Sendable `
-- `public struct CodeAnalysisResult: Codable, Sendable `
-- `public struct CodeIssue: Codable, Sendable `
-- `public struct CodeGenerationResult: Codable, Sendable `
-- `public struct CacheStats: Codable, Sendable `
-- `public struct PerformanceMetrics: Codable, Sendable `
-- `public struct AIServiceInfo: Codable, Sendable `
-- `public struct AIOperation: Codable, Sendable `
-- `public struct AIOperationResult: Codable, Sendable `
-- `public struct ServiceHealthOverview: Codable, Sendable `
-- `public struct AIServiceConfiguration: Codable, Sendable `
-- `public struct RateLimit: Codable, Sendable `
-- `public struct AnyCodable: Codable, Sendable `
-- `public struct HealthStats `
-- `public struct CurrentHealth `
-- `public struct OllamaHealthStatus `
-- `public struct AnalyticsHabit `
-- `public struct AnalyticsHabitLog `
-- `public struct ProductivityMetrics `
-- `public struct ProductivityScore `
-- `public struct ProductivityInsights `
-- `public struct ProductivityTrends `
-- `public struct ProductivityMilestone `
-- `public struct SchedulingRecommendation `
-- `public struct HabitPatterns `
-- `public struct TimeFactors `
-- `public struct StreakMomentum `
-- `public struct BehavioralInsights `
-- `public struct AnalyticsHabitSuggestion: Identifiable `
-- `public struct UserProfile `
-- `public struct CategoryPerformance `
-- `public struct HabitPerformanceSummary `
-- `public struct QuestLogView: View `
-- `public struct StreakVisualizationView: View `
-- `public struct StreakCelebrationView: View `
-- `public struct HeatMapDay: View `
-- `public struct StreakHeatMapView: View `
-- `public struct MetricCard: View `
-- `public struct PredictionCard: View `
-- `public struct DataManagementView: View `
-- `public struct AlertModifier: ViewModifier `
-- `public struct FileHandlerModifier: ViewModifier `
-- `public struct HabitQuestBackupDocument: FileDocument `
-- `public struct CharacterAvatarSection: View `
-- `public struct ProgressSection: View `
-- `public struct ProfileView: View `
-- `public struct AnalyticsTabView: View `
-- `public struct TrendsView: View `
-- `public struct PatternsView: View `
-- `public struct InsightsView: View `
-- `public struct AdvancedAnalyticsView: View `
-- `public struct AnalyticsInsightsCard: View `
-- `public struct InsightRow: View `
-- `public struct PredictiveAnalyticsCard: View `
-- `public struct PredictionRow: View `
-- `public struct BehavioralPatternsCard: View `
-- `public struct PatternRow: View `
-- `public struct StatsSection: View `
-- `public struct StatCard: View `
-- `public struct AchievementsSection: View `
-- `public struct AchievementBadge: View `
-- `public struct AnalyticsTestView: View `
-- `public struct TestResultsView: View `
-- `public struct TestResultRow: View `
-- `public struct StatItem: View `
-- `public struct TodaysQuestsView: View `
-- `public struct StreakAnalyticsView: View `
-- `public struct StreakAnalyticsTopPerformersView: View `
-- `public struct StreakAnalyticsOverviewView: View `
-- `public struct StreakAnalyticsInsightsView: View `
-- `public struct StreakAnalyticsWeeklyView: View `
-- `public struct StreakAnalyticsDistributionView: View `
-- `public struct AppMainView: View `
-- `public struct ContentView: View `
-- `public struct HeaderView: View `
-- `public struct ItemListView: View `
-- `public struct ItemRowView: View `
-- `public struct ItemDetailView: View `
-- `public struct DetailRow: View `
-- `public struct FooterStatsView: View `
-- `public struct DetailView: View `
-- `public struct HabitQuestApp: App `
+### Manual API Documentation Required
 
-### Public Enums
+AI generation failed. Please document the following manually:
 
-- `public enum LogLevel: String `
-- `public enum Action `
-- `public enum Action `
-- `public enum AIProcessingStatus `
-- `public enum AIMotivationLevel `
-- `public enum AIInsightCategory `
-- `public enum AIPriority `
-- `public enum AISuggestionCategory `
-- `public enum AIHabitFrequency `
-- `public enum AIHabitCategory `
-- `public enum AIHabitDifficulty `
-- `public enum MoodRating: String, CaseIterable, Codable `
-- `public enum OllamaError: LocalizedError `
-- `public enum TaskType `
-- `public enum IntegrationError: Error `
-- `public enum AchievementCategory: String, CaseIterable, Codable `
-- `public enum AchievementRequirement: @preconcurrency Codable, @unchecked Sendable `
-- `public enum HabitFrequency: String, CaseIterable, Codable `
-- `public enum HabitCategory: String, CaseIterable, Codable `
-- `public enum HabitDifficulty: String, CaseIterable, Codable `
-- `public enum AppError: LocalizedError `
-- `public enum SecurityFramework `
-- `public enum Validation `
-- `public enum DataSecurity `
-- `public enum Crypto `
-- `public enum Monitoring `
-- `public enum VulnerabilityScanner `
-- `public enum ValidationResult `
-- `public enum ValidationError: Error, LocalizedError `
-- `public enum SecurityError: Error, LocalizedError `
-- `public enum SecurityEvent `
-- `public enum LogLevel `
-- `public enum IncidentSeverity: String `
-- `public enum VulnerabilityType: String `
-- `public enum RecommendationCategory `
-- `public enum HuggingFaceError: LocalizedError `
-- `public enum TaskType `
-- `public enum DataExportError: LocalizedError, @unchecked Sendable `
-- `public enum HabitTrend: String, Codable `
-- `public enum IssueSeverity: String, Codable, Sendable `
-- `public enum AnalysisType: String, Codable, Sendable `
-- `public enum CodeComplexity: String, Codable, Sendable `
-- `public enum AIServiceType: String, Codable, Sendable `
-- `public enum AICapability: String, Codable, Sendable `
-- `public enum AIOperationType: String, Codable, Sendable `
-- `public enum OperationPriority: String, Codable, Sendable `
-- `public enum AIError: Error, LocalizedError `
-- `public enum AnalyticsHabitCategory: String, CaseIterable, Codable `
-- `public enum AnalyticsHabitDifficulty: String, CaseIterable, Codable `
-- `public enum TimePeriod `
-- `public enum ProductivityTrend `
-- `public enum ProductivityArea `
-- `public enum MilestoneType `
-- `public enum CategoryTrend `
+#### Functions
+```swift
+// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/Dependencies.swift\n44:    public func log(_ message: String, level: LogLevel = .info) {
+50:    public func logSync(_ message: String, level: LogLevel = .info) {
+57:    public func error(_ message: String) {
+62:    public func warning(_ message: String) {
+67:    public func info(_ message: String) {
+71:    public func setOutputHandler(_ handler: @escaping @Sendable (String) -> Void) {
+77:    public func resetOutputHandler() {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuest/Core/ViewModels/SmartHabitManager.swift\n71:    public func handle(_ action: Action) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuest/Core/ViewModels/HabitViewModel.swift\n70:    public func handle(_ action: Action) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuest/Core/Utilities/SharedArchitecture.swift\n21:    public func resetError() {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuest/Core/Utilities/PerformanceManager.swift\n51:    public func recordFrame() {
+64:    public func getCurrentFPS() -> Double {
+79:    public func getCurrentFPS(completion: @escaping (Double) -> Void) {
+99:    public func getMemoryUsage() -> Double {
+107:    public func getMemoryUsage(completion: @escaping (Double) -> Void) {
+117:    public func isPerformanceDegraded() -> Bool {
+135:    public func isPerformanceDegraded(completion: @escaping (Bool) -> Void) {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuest/Core/Services/OllamaClient.swift\n124:    public func generate(
+184:    public func generateWithProgress(
+204:    public func quantumChat(
+304:    public func generateAdvanced(
+337:    public func chat(
+362:    public func listModels() async throws -> [String] {
+368:    public func pullModel(_ modelName: String) async throws {
+377:    public func checkModelAvailability(_ model: String) async -> Bool {
+388:    public func isServerRunning() async -> Bool {
+397:    public func getServerStatus() async -> OllamaServerStatus {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuest/Core/Services/HuggingFaceClient.swift\n101:    public func generate(
+232:    public func analyzeCode(
+267:    public func generateDocumentation(
+302:    public func generateWithFallback(
+391:    public func getPerformanceMetrics() -> PerformanceMetrics {
+402:    public func isAvailable() async -> Bool {
+414:    public func getHealthStatus() async -> ServiceHealth {
+435:    public func generateText(prompt: String, maxTokens: Int, temperature: Double) async throws -> String {
+446:    public func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws -> CodeAnalysisResult {
+492:    public func generateCode(description: String, language: String, context: String?) async throws -> CodeGenerationResult {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuest/Core/Services/AIServiceProtocols.swift\n531:    public func encode(to encoder: Encoder) throws {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuest/Core/Services/OllamaIntegrationManager.swift\n26:    public func generateText(prompt: String, maxTokens: Int, temperature: Double) async throws -> String {
+69:    public func isAvailable() async -> Bool {
+74:    public func getHealthStatus() async -> ServiceHealth {
+114:    public func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws -> CodeAnalysisResult {
+154:    public func generateDocumentation(code: String, language: String) async throws -> String {
+195:    public func generateTests(code: String, language: String) async throws -> String {
+238:    public func generateCode(description: String, language: String, context: String?) async throws -> CodeGenerationResult {
+296:    public func generateCodeWithFallback(description: String, language: String, context: String?) async throws -> CodeGenerationResult {
+371:    public func analyzeCodebase(
+469:    public func generateDocumentation(\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuest/Features/DataManagement/DataManagementView.swift\n71:    public func body(content: Content) -> some View {
+77:    public func body(content: Content) -> some View {\n\n
+```
 
-### Public Protocols
+#### Classes
+```swift
+// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuest/Core/Services/StreakService.swift\n6:class StreakService {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/test_ai_service.swift\n23:class MockAIHabitRecommender {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuestTests/StreakAnalyticsDataTests.swift\n4:class StreakAnalyticsDataTests: XCTestCase {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuestTests/ContextAwarenessServiceTests.swift\n4:class ContextAwarenessServiceTests: XCTestCase {\n\n// /Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/HabitQuestTests/BehavioralAdaptationServiceTests.swift\n4:class BehavioralAdaptationServiceTests: XCTestCase {\n\n
+```
 
-- `public protocol BaseViewModel: ObservableObject `
-- `public protocol AITextGenerationService `
-- `public protocol AICodeAnalysisService `
-- `public protocol AICodeGenerationService `
-- `public protocol AICachingService `
-- `public protocol AIPerformanceMonitoring `
-- `public protocol AIServiceCoordinator `
-- `public protocol AIConfigurationService `
+#### Protocols
+```swift
 
-
-## Usage
-
-For detailed usage examples, see the source files in:
-`/Users/danielstevens/Desktop/Quantum-workspace/Projects/HabitQuest/`
-
-## Architecture Notes
-
-This project follows the Quantum Workspace architecture patterns. See [ARCHITECTURE.md](../../ARCHITECTURE.md) for details.
+```
 
 ---
-
-*For full HTML documentation, run:*
-```bash
-jazzy --module HabitQuest --output Documentation/API/HabitQuest
-```
+*Generated by AI Documentation Agent*

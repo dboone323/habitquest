@@ -3,9 +3,8 @@
 // This file contains XCTest skeletons generated from discovered Swift types.
 // Add this file to your Test target in Xcode to activate.
 
-import XCTest
 @testable import PlannerApp
-
+import XCTest
 
 final class AICapabilityTests: XCTestCase {
     override func setUp() {

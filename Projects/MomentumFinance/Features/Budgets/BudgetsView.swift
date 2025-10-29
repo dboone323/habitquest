@@ -10,7 +10,9 @@ import SwiftData
 import SwiftUI
 
 #if canImport(UIKit)
-import UIKit
+#if canImport(UIKit)
+    import UIKit
+#endif
 #endif
 
 extension Features.Budgets {

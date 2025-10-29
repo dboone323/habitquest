@@ -1,5 +1,5 @@
-import XCTest
 @testable import HabitQuest
+import XCTest
 
 class ContextAwarenessServiceTests: XCTestCase {
 
@@ -13,164 +13,163 @@ class ContextAwarenessServiceTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - HabitContext Tests
 
-    // MARK: - enumHabitContext{ Tests
-
-    func testenumHabitContext{Initialization() {
+    func testHabitContextInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumHabitContext{
-        XCTAssertTrue(true, "Placeholder test for enumHabitContext{")
+        // TODO: Implement initialization test for HabitContext
+        XCTAssertTrue(true, "Placeholder test for HabitContext")
     }
 
-    func testenumHabitContext{Properties() {
+    func testHabitContextProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumHabitContext{
-        XCTAssertTrue(true, "Placeholder test for enumHabitContext{ properties")
+        // TODO: Implement property tests for HabitContext
+        XCTAssertTrue(true, "Placeholder test for HabitContext properties")
     }
 
-    func testenumHabitContext{Methods() {
+    func testHabitContextMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumHabitContext{
-        XCTAssertTrue(true, "Placeholder test for enumHabitContext{ methods")
+        // TODO: Implement method tests for HabitContext
+        XCTAssertTrue(true, "Placeholder test for HabitContext methods")
     }
 
-    // MARK: - enumRiskLevel{ Tests
+    // MARK: - RiskLevel Tests
 
-    func testenumRiskLevel{Initialization() {
+    func testRiskLevelInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumRiskLevel{
-        XCTAssertTrue(true, "Placeholder test for enumRiskLevel{")
+        // TODO: Implement initialization test for RiskLevel
+        XCTAssertTrue(true, "Placeholder test for RiskLevel")
     }
 
-    func testenumRiskLevel{Properties() {
+    func testRiskLevelProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumRiskLevel{
-        XCTAssertTrue(true, "Placeholder test for enumRiskLevel{ properties")
+        // TODO: Implement property tests for RiskLevel
+        XCTAssertTrue(true, "Placeholder test for RiskLevel properties")
     }
 
-    func testenumRiskLevel{Methods() {
+    func testRiskLevelMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumRiskLevel{
-        XCTAssertTrue(true, "Placeholder test for enumRiskLevel{ methods")
+        // TODO: Implement method tests for RiskLevel
+        XCTAssertTrue(true, "Placeholder test for RiskLevel methods")
     }
 
-    // MARK: - structContextualInsights{ Tests
+    // MARK: - ContextualInsights Tests
 
-    func teststructContextualInsights{Initialization() {
+    func testContextualInsightsInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structContextualInsights{
-        XCTAssertTrue(true, "Placeholder test for structContextualInsights{")
+        // TODO: Implement initialization test for ContextualInsights
+        XCTAssertTrue(true, "Placeholder test for ContextualInsights")
     }
 
-    func teststructContextualInsights{Properties() {
+    func testContextualInsightsProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structContextualInsights{
-        XCTAssertTrue(true, "Placeholder test for structContextualInsights{ properties")
+        // TODO: Implement property tests for ContextualInsights
+        XCTAssertTrue(true, "Placeholder test for ContextualInsights properties")
     }
 
-    func teststructContextualInsights{Methods() {
+    func testContextualInsightsMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structContextualInsights{
-        XCTAssertTrue(true, "Placeholder test for structContextualInsights{ methods")
+        // TODO: Implement method tests for ContextualInsights
+        XCTAssertTrue(true, "Placeholder test for ContextualInsights methods")
     }
 
-    // MARK: - structContextualOpportunity{ Tests
+    // MARK: - ContextualOpportunity Tests
 
-    func teststructContextualOpportunity{Initialization() {
+    func testContextualOpportunityInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structContextualOpportunity{
-        XCTAssertTrue(true, "Placeholder test for structContextualOpportunity{")
+        // TODO: Implement initialization test for ContextualOpportunity
+        XCTAssertTrue(true, "Placeholder test for ContextualOpportunity")
     }
 
-    func teststructContextualOpportunity{Properties() {
+    func testContextualOpportunityProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structContextualOpportunity{
-        XCTAssertTrue(true, "Placeholder test for structContextualOpportunity{ properties")
+        // TODO: Implement property tests for ContextualOpportunity
+        XCTAssertTrue(true, "Placeholder test for ContextualOpportunity properties")
     }
 
-    func teststructContextualOpportunity{Methods() {
+    func testContextualOpportunityMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structContextualOpportunity{
-        XCTAssertTrue(true, "Placeholder test for structContextualOpportunity{ methods")
+        // TODO: Implement method tests for ContextualOpportunity
+        XCTAssertTrue(true, "Placeholder test for ContextualOpportunity methods")
     }
 
-    // MARK: - enumOpportunityType{ Tests
+    // MARK: - OpportunityType Tests
 
-    func testenumOpportunityType{Initialization() {
+    func testOpportunityTypeInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumOpportunityType{
-        XCTAssertTrue(true, "Placeholder test for enumOpportunityType{")
+        // TODO: Implement initialization test for OpportunityType
+        XCTAssertTrue(true, "Placeholder test for OpportunityType")
     }
 
-    func testenumOpportunityType{Properties() {
+    func testOpportunityTypeProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumOpportunityType{
-        XCTAssertTrue(true, "Placeholder test for enumOpportunityType{ properties")
+        // TODO: Implement property tests for OpportunityType
+        XCTAssertTrue(true, "Placeholder test for OpportunityType properties")
     }
 
-    func testenumOpportunityType{Methods() {
+    func testOpportunityTypeMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumOpportunityType{
-        XCTAssertTrue(true, "Placeholder test for enumOpportunityType{ methods")
+        // TODO: Implement method tests for OpportunityType
+        XCTAssertTrue(true, "Placeholder test for OpportunityType methods")
     }
 
-    // MARK: - structContextualRecommendation{ Tests
+    // MARK: - ContextualRecommendation Tests
 
-    func teststructContextualRecommendation{Initialization() {
+    func testContextualRecommendationInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structContextualRecommendation{
-        XCTAssertTrue(true, "Placeholder test for structContextualRecommendation{")
+        // TODO: Implement initialization test for ContextualRecommendation
+        XCTAssertTrue(true, "Placeholder test for ContextualRecommendation")
     }
 
-    func teststructContextualRecommendation{Properties() {
+    func testContextualRecommendationProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structContextualRecommendation{
-        XCTAssertTrue(true, "Placeholder test for structContextualRecommendation{ properties")
+        // TODO: Implement property tests for ContextualRecommendation
+        XCTAssertTrue(true, "Placeholder test for ContextualRecommendation properties")
     }
 
-    func teststructContextualRecommendation{Methods() {
+    func testContextualRecommendationMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structContextualRecommendation{
-        XCTAssertTrue(true, "Placeholder test for structContextualRecommendation{ methods")
+        // TODO: Implement method tests for ContextualRecommendation
+        XCTAssertTrue(true, "Placeholder test for ContextualRecommendation methods")
     }
 
-    // MARK: - enumRecommendationType{ Tests
+    // MARK: - RecommendationType Tests
 
-    func testenumRecommendationType{Initialization() {
+    func testRecommendationTypeInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumRecommendationType{
-        XCTAssertTrue(true, "Placeholder test for enumRecommendationType{")
+        // TODO: Implement initialization test for RecommendationType
+        XCTAssertTrue(true, "Placeholder test for RecommendationType")
     }
 
-    func testenumRecommendationType{Properties() {
+    func testRecommendationTypeProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumRecommendationType{
-        XCTAssertTrue(true, "Placeholder test for enumRecommendationType{ properties")
+        // TODO: Implement property tests for RecommendationType
+        XCTAssertTrue(true, "Placeholder test for RecommendationType properties")
     }
 
-    func testenumRecommendationType{Methods() {
+    func testRecommendationTypeMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumRecommendationType{
-        XCTAssertTrue(true, "Placeholder test for enumRecommendationType{ methods")
+        // TODO: Implement method tests for RecommendationType
+        XCTAssertTrue(true, "Placeholder test for RecommendationType methods")
     }
 
-    // MARK: - enumRecommendationPriority{ Tests
+    // MARK: - RecommendationPriority Tests
 
-    func testenumRecommendationPriority{Initialization() {
+    func testRecommendationPriorityInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumRecommendationPriority{
-        XCTAssertTrue(true, "Placeholder test for enumRecommendationPriority{")
+        // TODO: Implement initialization test for RecommendationPriority
+        XCTAssertTrue(true, "Placeholder test for RecommendationPriority")
     }
 
-    func testenumRecommendationPriority{Properties() {
+    func testRecommendationPriorityProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumRecommendationPriority{
-        XCTAssertTrue(true, "Placeholder test for enumRecommendationPriority{ properties")
+        // TODO: Implement property tests for RecommendationPriority
+        XCTAssertTrue(true, "Placeholder test for RecommendationPriority properties")
     }
 
-    func testenumRecommendationPriority{Methods() {
+    func testRecommendationPriorityMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumRecommendationPriority{
-        XCTAssertTrue(true, "Placeholder test for enumRecommendationPriority{ methods")
+        // TODO: Implement method tests for RecommendationPriority
+        XCTAssertTrue(true, "Placeholder test for RecommendationPriority methods")
     }
 }
