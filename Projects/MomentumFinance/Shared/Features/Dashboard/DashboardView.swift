@@ -1,6 +1,8 @@
 import SwiftData
 import SwiftUI
-import UIKit
+#if canImport(UIKit)
+    import UIKit
+#endif
 
 // AppKit is only available on macOS
 #if canImport(AppKit)

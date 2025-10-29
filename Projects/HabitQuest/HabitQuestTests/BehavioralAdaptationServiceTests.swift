@@ -1,5 +1,5 @@
-import XCTest
 @testable import HabitQuest
+import XCTest
 
 class BehavioralAdaptationServiceTests: XCTestCase {
 
@@ -13,164 +13,163 @@ class BehavioralAdaptationServiceTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - NotificationInteraction Tests
 
-    // MARK: - enumNotificationInteraction:String,Codable,CaseIterable,Sendable{ Tests
-
-    func testenumNotificationInteraction:String,Codable,CaseIterable,Sendable{Initialization() {
+    func testNotificationInteractionInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumNotificationInteraction:String,Codable,CaseIterable,Sendable{
-        XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction:String,Codable,CaseIterable,Sendable{")
+        // TODO: Implement initialization test for NotificationInteraction
+        XCTAssertTrue(true, "Placeholder test for NotificationInteraction")
     }
 
-    func testenumNotificationInteraction:String,Codable,CaseIterable,Sendable{Properties() {
+    func testNotificationInteractionProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumNotificationInteraction:String,Codable,CaseIterable,Sendable{
-        XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction:String,Codable,CaseIterable,Sendable{ properties")
+        // TODO: Implement property tests for NotificationInteraction
+        XCTAssertTrue(true, "Placeholder test for NotificationInteraction properties")
     }
 
-    func testenumNotificationInteraction:String,Codable,CaseIterable,Sendable{Methods() {
+    func testNotificationInteractionMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumNotificationInteraction:String,Codable,CaseIterable,Sendable{
-        XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction:String,Codable,CaseIterable,Sendable{ methods")
+        // TODO: Implement method tests for NotificationInteraction
+        XCTAssertTrue(true, "Placeholder test for NotificationInteraction methods")
     }
 
-    // MARK: - enumTimingAdjustment{ Tests
+    // MARK: - TimingAdjustment Tests
 
-    func testenumTimingAdjustment{Initialization() {
+    func testTimingAdjustmentInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumTimingAdjustment{
-        XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{")
+        // TODO: Implement initialization test for TimingAdjustment
+        XCTAssertTrue(true, "Placeholder test for TimingAdjustment")
     }
 
-    func testenumTimingAdjustment{Properties() {
+    func testTimingAdjustmentProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumTimingAdjustment{
-        XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{ properties")
+        // TODO: Implement property tests for TimingAdjustment
+        XCTAssertTrue(true, "Placeholder test for TimingAdjustment properties")
     }
 
-    func testenumTimingAdjustment{Methods() {
+    func testTimingAdjustmentMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumTimingAdjustment{
-        XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{ methods")
+        // TODO: Implement method tests for TimingAdjustment
+        XCTAssertTrue(true, "Placeholder test for TimingAdjustment methods")
     }
 
-    // MARK: - structUserResponseAnalysis{ Tests
+    // MARK: - UserResponseAnalysis Tests
 
-    func teststructUserResponseAnalysis{Initialization() {
+    func testUserResponseAnalysisInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structUserResponseAnalysis{
-        XCTAssertTrue(true, "Placeholder test for structUserResponseAnalysis{")
+        // TODO: Implement initialization test for UserResponseAnalysis
+        XCTAssertTrue(true, "Placeholder test for UserResponseAnalysis")
     }
 
-    func teststructUserResponseAnalysis{Properties() {
+    func testUserResponseAnalysisProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structUserResponseAnalysis{
-        XCTAssertTrue(true, "Placeholder test for structUserResponseAnalysis{ properties")
+        // TODO: Implement property tests for UserResponseAnalysis
+        XCTAssertTrue(true, "Placeholder test for UserResponseAnalysis properties")
     }
 
-    func teststructUserResponseAnalysis{Methods() {
+    func testUserResponseAnalysisMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structUserResponseAnalysis{
-        XCTAssertTrue(true, "Placeholder test for structUserResponseAnalysis{ methods")
+        // TODO: Implement method tests for UserResponseAnalysis
+        XCTAssertTrue(true, "Placeholder test for UserResponseAnalysis methods")
     }
 
-    // MARK: - structNotificationBehavioralInsights{ Tests
+    // MARK: - NotificationBehavioralInsights Tests
 
-    func teststructNotificationBehavioralInsights{Initialization() {
+    func testNotificationBehavioralInsightsInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structNotificationBehavioralInsights{
-        XCTAssertTrue(true, "Placeholder test for structNotificationBehavioralInsights{")
+        // TODO: Implement initialization test for NotificationBehavioralInsights
+        XCTAssertTrue(true, "Placeholder test for NotificationBehavioralInsights")
     }
 
-    func teststructNotificationBehavioralInsights{Properties() {
+    func testNotificationBehavioralInsightsProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structNotificationBehavioralInsights{
-        XCTAssertTrue(true, "Placeholder test for structNotificationBehavioralInsights{ properties")
+        // TODO: Implement property tests for NotificationBehavioralInsights
+        XCTAssertTrue(true, "Placeholder test for NotificationBehavioralInsights properties")
     }
 
-    func teststructNotificationBehavioralInsights{Methods() {
+    func testNotificationBehavioralInsightsMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structNotificationBehavioralInsights{
-        XCTAssertTrue(true, "Placeholder test for structNotificationBehavioralInsights{ methods")
+        // TODO: Implement method tests for NotificationBehavioralInsights
+        XCTAssertTrue(true, "Placeholder test for NotificationBehavioralInsights methods")
     }
 
-    // MARK: - enumResponsivenessPattern{ Tests
+    // MARK: - ResponsivenessPattern Tests
 
-    func testenumResponsivenessPattern{Initialization() {
+    func testResponsivenessPatternInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumResponsivenessPattern{
-        XCTAssertTrue(true, "Placeholder test for enumResponsivenessPattern{")
+        // TODO: Implement initialization test for ResponsivenessPattern
+        XCTAssertTrue(true, "Placeholder test for ResponsivenessPattern")
     }
 
-    func testenumResponsivenessPattern{Properties() {
+    func testResponsivenessPatternProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumResponsivenessPattern{
-        XCTAssertTrue(true, "Placeholder test for enumResponsivenessPattern{ properties")
+        // TODO: Implement property tests for ResponsivenessPattern
+        XCTAssertTrue(true, "Placeholder test for ResponsivenessPattern properties")
     }
 
-    func testenumResponsivenessPattern{Methods() {
+    func testResponsivenessPatternMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumResponsivenessPattern{
-        XCTAssertTrue(true, "Placeholder test for enumResponsivenessPattern{ methods")
+        // TODO: Implement method tests for ResponsivenessPattern
+        XCTAssertTrue(true, "Placeholder test for ResponsivenessPattern methods")
     }
 
-    // MARK: - structFatigueIndicator{ Tests
+    // MARK: - FatigueIndicator Tests
 
-    func teststructFatigueIndicator{Initialization() {
+    func testFatigueIndicatorInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structFatigueIndicator{
-        XCTAssertTrue(true, "Placeholder test for structFatigueIndicator{")
+        // TODO: Implement initialization test for FatigueIndicator
+        XCTAssertTrue(true, "Placeholder test for FatigueIndicator")
     }
 
-    func teststructFatigueIndicator{Properties() {
+    func testFatigueIndicatorProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structFatigueIndicator{
-        XCTAssertTrue(true, "Placeholder test for structFatigueIndicator{ properties")
+        // TODO: Implement property tests for FatigueIndicator
+        XCTAssertTrue(true, "Placeholder test for FatigueIndicator properties")
     }
 
-    func teststructFatigueIndicator{Methods() {
+    func testFatigueIndicatorMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structFatigueIndicator{
-        XCTAssertTrue(true, "Placeholder test for structFatigueIndicator{ methods")
+        // TODO: Implement method tests for FatigueIndicator
+        XCTAssertTrue(true, "Placeholder test for FatigueIndicator methods")
     }
 
-    // MARK: - enumFatigueType{ Tests
+    // MARK: - FatigueType Tests
 
-    func testenumFatigueType{Initialization() {
+    func testFatigueTypeInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for enumFatigueType{
-        XCTAssertTrue(true, "Placeholder test for enumFatigueType{")
+        // TODO: Implement initialization test for FatigueType
+        XCTAssertTrue(true, "Placeholder test for FatigueType")
     }
 
-    func testenumFatigueType{Properties() {
+    func testFatigueTypeProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for enumFatigueType{
-        XCTAssertTrue(true, "Placeholder test for enumFatigueType{ properties")
+        // TODO: Implement property tests for FatigueType
+        XCTAssertTrue(true, "Placeholder test for FatigueType properties")
     }
 
-    func testenumFatigueType{Methods() {
+    func testFatigueTypeMethods() {
         // Test method functionality
-        // TODO: Implement method tests for enumFatigueType{
-        XCTAssertTrue(true, "Placeholder test for enumFatigueType{ methods")
+        // TODO: Implement method tests for FatigueType
+        XCTAssertTrue(true, "Placeholder test for FatigueType methods")
     }
 
-    // MARK: - structNotificationInteractionData{ Tests
+    // MARK: - NotificationInteractionData Tests
 
-    func teststructNotificationInteractionData{Initialization() {
+    func testNotificationInteractionDataInitialization() {
         // Test basic initialization
-        // TODO: Implement initialization test for structNotificationInteractionData{
-        XCTAssertTrue(true, "Placeholder test for structNotificationInteractionData{")
+        // TODO: Implement initialization test for NotificationInteractionData
+        XCTAssertTrue(true, "Placeholder test for NotificationInteractionData")
     }
 
-    func teststructNotificationInteractionData{Properties() {
+    func testNotificationInteractionDataProperties() {
         // Test property access and validation
-        // TODO: Implement property tests for structNotificationInteractionData{
-        XCTAssertTrue(true, "Placeholder test for structNotificationInteractionData{ properties")
+        // TODO: Implement property tests for NotificationInteractionData
+        XCTAssertTrue(true, "Placeholder test for NotificationInteractionData properties")
     }
 
-    func teststructNotificationInteractionData{Methods() {
+    func testNotificationInteractionDataMethods() {
         // Test method functionality
-        // TODO: Implement method tests for structNotificationInteractionData{
-        XCTAssertTrue(true, "Placeholder test for structNotificationInteractionData{ methods")
+        // TODO: Implement method tests for NotificationInteractionData
+        XCTAssertTrue(true, "Placeholder test for NotificationInteractionData methods")
     }
 }
