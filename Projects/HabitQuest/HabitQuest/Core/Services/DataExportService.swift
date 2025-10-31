@@ -6,7 +6,7 @@ import SwiftData
 /// Service for exporting and importing HabitQuest user data
 /// Handles backup, restore, and data portability features
 public struct DataExportService: Sendable {
-    private static let logger = Logger(category: Logger.Category.dataModel)
+    private static let logger = Logger.shared
 
     /// Structure for exported data
     struct ExportedData: @preconcurrency Codable, @unchecked Sendable {

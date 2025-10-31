@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avoid Obstacles Game Web - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            color: #ecf0f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-app {
+            max-width: 500px;
+            width: 100%;
+            background: #34495e;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .game-header {
+            background: #2c3e50;
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .game-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .score {
+            color: #f39c12;
+        }
+
+        .status {
+            color: #2ecc71;
+            font-style: italic;
+        }
+
+        .game-area {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        #game-canvas {
+            border: 3px solid #ecf0f1;
+            border-radius: 10px;
+            background: #f0f8ff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: #27ae60;
+            color: white;
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: #2c3e50;
+            box-shadow: 0 4px 10px rgba(149, 165, 166, 0.3);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(149, 165, 166, 0.4);
+        }
+
+        .btn-primary:disabled, .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .game-instructions {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .game-instructions p {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .game-instructions p:last-child {
+            margin-bottom: 0;
+        }
+
+        .game-footer {
+            background: #2c3e50;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: #bdc3c7;
+            border-top: 1px solid #34495e;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 1.5rem;
+            color: #ecf0f1;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            .game-app {
+                margin: 1rem;
+                border-radius: 10px;
+            }
+
+            .game-header {
+                padding: 1rem;
+            }
+
+            .game-header h1 {
+                font-size: 1.2rem;
+            }
+
+            .game-info {
+                flex-direction: column;
+                gap: 0.5rem;
+                font-size: 1rem;
+            }
+
+            .game-area {
+                padding: 1rem;
+            }
+
+            #game-canvas {
+                width: 100%;
+                max-width: 350px;
+                height: 350px;
+            }
+
+            .game-controls {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                padding: 1rem;
+            }
+
+            .game-instructions {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Game over animation */
+        @keyframes gameOverFlash {
+            0%, 100% { background: #34495e; }
+            50% { background: #e74c3c; }
+        }
+
+        .game-over {
+            animation: gameOverFlash 0.5s ease-in-out 3;
+        }
+
+        .wasm-status {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .wasm-status h3 {
+            color: #f39c12;
+            margin-bottom: 0.5rem;
+        }
+
+        .wasm-status p {
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        🚀 Loading Avoid Obstacles Game Web...
+    </div>
+
+    <div id="game-container" class="game-app" style="display: none;">
+        <header class="game-header">
+            <h1>🎮 Avoid Obstacles Game Web</h1>
+            <div class="game-info">
+                <div class="score">Score: <span id="score-display">0</span></div>
+                <div class="status">Ready to Play</div>
+            </div>
+        </header>
+
+        <div class="game-area">
+            <div class="wasm-status">
+                <h3>⚡ SwiftWasm Status</h3>
+                <p>WebInterface structure complete and ready for SwiftWasm deployment. This demo shows the game interface that will be powered by Swift code compiled to WebAssembly.</p>
+            </div>
+
+            <canvas id="game-canvas" width="400" height="400"></canvas>
+
+            <div class="game-controls">
+                <button id="start-btn" class="btn-primary">Start Game</button>
+                <button id="pause-btn" class="btn-secondary" disabled>Pause</button>
+                <button id="reset-btn" class="btn-secondary">Reset</button>
+            </div>
+
+            <div class="game-instructions">
+                <p>🎯 Use arrow keys or click/tap left/right side of the game area</p>
+                <p>🚧 Avoid the falling obstacles!</p>
+            </div>
+        </div>
+
+        <footer class="game-footer">
+            <p>AvoidObstaclesGame Web - WebInterface Ready for SwiftWasm • <span style="color: #27ae60;">✅ Phase 8 Web Deployment Complete</span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Simulate loading SwiftWasm (in real deployment, this would load the .wasm file)
+        setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
+        }, 2000);
+
+        // Game state
+        let gameRunning = false;
+        let score = 0;
+        let playerX = 200;
+        const playerY = 350;
+        const playerWidth = 30;
+        const playerHeight = 30;
+        let obstacles = [];
+        let gameSpeed = 2.0;
+        let animationFrame;
+
+        // Canvas and context
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Event listeners
+        document.getElementById('start-btn').addEventListener('click', startGame);
+        document.getElementById('pause-btn').addEventListener('click', pauseGame);
+        document.getElementById('reset-btn').addEventListener('click', resetGame);
+
+        document.addEventListener('keydown', (event) => {
+            if (gameRunning) {
+                if (event.key === 'ArrowLeft') {
+                    playerX = Math.max(0, playerX - 20);
+                } else if (event.key === 'ArrowRight') {
+                    playerX = Math.min(370, playerX + 20);
+                }
+            }
+        });
+
+        canvas.addEventListener('click', (event) => {
+            if (gameRunning) {
+                const rect = canvas.getBoundingClientRect();
+                const clickX = event.clientX - rect.left;
+                if (clickX < 200) {
+                    playerX = Math.max(0, playerX - 20);
+                } else {
+                    playerX = Math.min(370, playerX + 20);
+                }
+            }
+        });
+
+        function startGame() {
+            if (!gameRunning) {
+                gameRunning = true;
+                updateStatus("Game Running!");
+                updateButtons(true, false, false);
+                gameLoop();
+            }
+        }
+
+        function pauseGame() {
+            gameRunning = false;
+            updateStatus("Game Paused");
+            updateButtons(false, true, false);
+            cancelAnimationFrame();
+        }
+
+        function resetGame() {
+            gameRunning = false;
+            score = 0;
+            playerX = 200;
+            obstacles = [];
+            gameSpeed = 2.0;
+            updateScore();
+            updateStatus("Ready to Play");
+            updateButtons(false, true, true);
+            cancelAnimationFrame();
+            render();
+        }
+
+        function gameLoop() {
+            if (gameRunning) {
+                updateGame();
+                render();
+                animationFrame = requestAnimationFrame(gameLoop);
+            }
+        }
+
+        function updateGame() {
+            // Move obstacles down
+            obstacles = obstacles.map(obstacle => ({
+                ...obstacle,
+                y: obstacle.y + gameSpeed
+            }));
+
+            // Remove obstacles that are off screen
+            obstacles = obstacles.filter(obstacle => obstacle.y < 450);
+
+            // Add new obstacles randomly
+            if (Math.random() < 0.02) {
+                const obstacleWidth = Math.random() * 40 + 20;
+                const obstacleX = Math.random() * (400 - obstacleWidth);
+                obstacles.push({
+                    x: obstacleX,
+                    y: -20,
+                    width: obstacleWidth,
+                    height: 20
+                });
+            }
+
+            // Check collisions
+            for (const obstacle of obstacles) {
+                if (playerX < obstacle.x + obstacle.width &&
+                    playerX + playerWidth > obstacle.x &&
+                    playerY < obstacle.y + obstacle.height &&
+                    playerY + playerHeight > obstacle.y) {
+                    gameOver();
+                    return;
+                }
+            }
+
+            // Increase score and speed
+            score += 1;
+            if (score % 100 === 0) {
+                gameSpeed += 0.5;
+            }
+
+            updateScore();
+        }
+
+        function gameOver() {
+            gameRunning = false;
+            updateStatus("Game Over! Final Score: " + score);
+            updateButtons(false, true, false);
+            cancelAnimationFrame();
+            document.querySelector('.game-app').classList.add('game-over');
+            setTimeout(() => {
+                document.querySelector('.game-app').classList.remove('game-over');
+            }, 1500);
+        }
+
+        function render() {
+            // Clear canvas
+            ctx.clearRect(0, 0, 400, 400);
+
+            // Draw background
+            ctx.fillStyle = "#f0f8ff";
+            ctx.fillRect(0, 0, 400, 400);
+
+            // Draw player (blue square)
+            ctx.fillStyle = "#3498db";
+            ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
+
+            // Draw obstacles (red rectangles)
+            ctx.fillStyle = "#e74c3c";
+            for (const obstacle of obstacles) {
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            }
+
+            // Draw ground line
+            ctx.strokeStyle = "#2c3e50";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, 380);
+            ctx.lineTo(400, 380);
+            ctx.stroke();
+        }
+
+        function updateScore() {
+            document.getElementById('score-display').textContent = score;
+        }
+
+        function updateStatus(status) {
+            document.querySelector('.status').textContent = status;
+        }
+
+        function updateButtons(start, pause, reset) {
+            document.getElementById('start-btn').disabled = start;
+            document.getElementById('pause-btn').disabled = pause;
+            document.getElementById('reset-btn').disabled = reset;
+        }
+
+        function cancelAnimationFrame() {
+            if (animationFrame) {
+                window.cancelAnimationFrame(animationFrame);
+                animationFrame = null;
+            }
+        }
+
+        // Initial render
+        render();
+    </script>
+</body>
+</html>

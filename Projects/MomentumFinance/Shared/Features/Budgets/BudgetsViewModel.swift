@@ -8,8 +8,90 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class BudgetsViewModel {
+final class BudgetsViewModel: BaseViewModel {
+    // MARK: - State and Action Types
+
+    struct State {
+        var budgets: [Budget] = []
+        var selectedMonth: Date = Date()
+        var budgetProgressSummary: BudgetProgressSummary?
+        var spendingTrends: [MonthlySpending] = []
+    }
+
+    enum Action {
+        case loadBudgets
+        case createBudget(category: ExpenseCategory, limitAmount: Double, month: Date)
+        case updateBudgetLimit(Budget, Double)
+        case deleteBudget(Budget)
+        case updateRolloverSettings(Budget, Bool, Double)
+        case applyRollover(Budget)
+        case selectMonth(Date)
+        case refreshData
+    }
+
+    // MARK: - BaseViewModel Properties
+
+    var state = State()
+    var isLoading = false
+    var errorMessage: String?
+
+    // MARK: - Private Properties
+
     private var modelContext: ModelContext?
+
+    // MARK: - BaseViewModel Protocol
+
+    func handle(_ action: Action) async {
+        switch action {
+        case .loadBudgets:
+            await loadBudgets()
+        case let .createBudget(category, limitAmount, month):
+            createBudget(category: category, limitAmount: limitAmount, month: month)
+        case let .updateBudgetLimit(budget, newLimit):
+            updateBudgetLimit(budget, newLimit: newLimit)
+        case let .deleteBudget(budget):
+            deleteBudget(budget)
+        case let .updateRolloverSettings(budget, enabled, maxPercentage):
+            updateBudgetRolloverSettings(budget, enabled: enabled, maxPercentage: maxPercentage)
+        case let .applyRollover(budget):
+            applyRolloverToNextPeriod(for: budget)
+        case let .selectMonth(month):
+            state.selectedMonth = month
+            await loadBudgets()
+        case .refreshData:
+            await loadBudgets()
+        }
+    }
+
+    func resetError() {
+        errorMessage = nil
+    }
+
+    func validateState() -> Bool {
+        return true
+    }
+
+    // MARK: - Legacy Properties (for backward compatibility)
+
+    var budgets: [Budget] {
+        get { state.budgets }
+        set { state.budgets = newValue }
+    }
+
+    var selectedMonth: Date {
+        get { state.selectedMonth }
+        set { state.selectedMonth = newValue }
+    }
+
+    var budgetProgressSummary: BudgetProgressSummary? {
+        get { state.budgetProgressSummary }
+        set { state.budgetProgressSummary = newValue }
+    }
+
+    var spendingTrends: [MonthlySpending] {
+        get { state.spendingTrends }
+        set { state.spendingTrends = newValue }
+    }
 
     /// <#Description#>
     /// - Returns: <#description#>
@@ -93,6 +175,7 @@ final class BudgetsViewModel {
 
         do {
             try modelContext.save()
+            Task { await loadBudgets() }
         } catch {
             Logger.logError(error, context: "Creating budget")
         }
@@ -121,6 +204,7 @@ final class BudgetsViewModel {
 
         do {
             try modelContext.save()
+            Task { await loadBudgets() }
         } catch {
             Logger.logError(error, context: "Deleting budget")
         }
@@ -247,6 +331,25 @@ final class BudgetsViewModel {
         // NotificationManager.shared.schedulebudgetWarningNotifications(for: budgets)
         // NotificationManager.shared.scheduleRolloverNotifications(for: budgets)
         // NotificationManager.shared.scheduleSpendingPredictionNotifications(for: budgets)
+    }
+
+    // MARK: - Data Loading Methods
+
+    private func loadBudgets() async {
+        guard let modelContext else { return }
+
+        isLoading = true
+        errorMessage = nil
+
+        do {
+            let descriptor = FetchDescriptor<Budget>()
+            state.budgets = try modelContext.fetch(descriptor)
+            state.budgetProgressSummary = budgetProgressSummary(state.budgets, for: state.selectedMonth)
+        } catch {
+            errorMessage = "Failed to load budgets: \(error.localizedDescription)"
+        }
+
+        isLoading = false
     }
 }
 

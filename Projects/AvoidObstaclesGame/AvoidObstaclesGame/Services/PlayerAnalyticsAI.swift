@@ -114,6 +114,12 @@ public final class PlayerAnalyticsAI: Sendable {
     /// Last analysis timestamp
     private var lastAnalysisTime: TimeInterval = 0
 
+    /// Security services
+    private let auditLogger = AuditLogger.shared
+    private let encryptionService = EncryptionService.shared
+    private let securityMonitor = SecurityMonitor.shared
+    private let privacyManager = PrivacyManager.shared
+
     // MARK: - Initialization
 
     private init() {
@@ -142,13 +148,16 @@ public final class PlayerAnalyticsAI: Sendable {
 
     // MARK: - Public Interface
 
-    /// Records player action for analysis
+    /// Records player action for analysis with security monitoring
     /// - Parameters:
     ///   - action: The player action to record
     ///   - context: Additional context about the action
     public func recordPlayerAction(_ action: PlayerAction, context: ActionContext? = nil) {
         let timestampedAction = TimestampedAction(action: action, timestamp: Date(), context: context)
         analyticsData.recordAction(timestampedAction)
+
+        // Monitor analytics data access
+        securityMonitor.monitorAnalyticsAccess(analyticsType: "player_actions", playerId: "current_player")
 
         // Trigger immediate analysis for significant actions
         if action.isSignificant {
@@ -210,6 +219,77 @@ public final class PlayerAnalyticsAI: Sendable {
         lastAnalysisTime = 0
         behaviorAnalyzer.reset()
         personalizationEngine.reset()
+
+        // Log data deletion
+        auditLogger.logDataAccess(operation: .delete, entityType: "analytics_data", dataCount: 1)
+    }
+
+    /// Exports player analytics data for GDPR compliance
+    /// - Parameter playerId: Player identifier
+    /// - Returns: JSON string containing player analytics data
+    /// - Throws: PrivacyError if export fails
+    public func exportAnalyticsData(for playerId: String) throws -> String {
+        // Check privacy permissions
+        guard privacyManager.isAnalyticsAllowed(for: playerId) else {
+            throw PrivacyError.exportFailed("Analytics export not permitted by privacy settings")
+        }
+
+        // Monitor analytics access
+        securityMonitor.monitorAnalyticsAccess(analyticsType: "data_export", playerId: playerId)
+
+        var exportData: [String: Any] = [:]
+
+        // Export current profile
+        if let profile = currentProfile {
+            exportData["playerProfile"] = [
+                "playerType": profile.playerType.rawValue,
+                "skillLevel": profile.skillLevel.rawValue,
+                "engagementStyle": profile.engagementStyle.rawValue,
+                "difficultyPreference": profile.difficultyPreference.rawValue,
+                "lastUpdated": profile.lastUpdated.ISO8601Format(),
+            ]
+        }
+
+        // Export behavior patterns (anonymized)
+        exportData["behaviorPatterns"] = [
+            "movementStyle": currentProfile?.behaviorPatterns.movementStyle ?? "unknown",
+            "riskTolerance": currentProfile?.behaviorPatterns.riskTolerance ?? "unknown",
+            "engagementLevel": currentProfile?.behaviorPatterns.engagementLevel ?? "unknown",
+            "averageSessionLength": currentProfile?.behaviorPatterns.averageSessionLength ?? 0,
+        ]
+
+        // Export personalization settings
+        if let profile = currentProfile {
+            exportData["personalizationSettings"] = [
+                "obstacleDensity": profile.personalizationSettings.obstacle_density,
+                "powerUpFrequency": profile.personalizationSettings.powerup_frequency,
+                "visualEffects": profile.personalizationSettings.visual_effects,
+                "audioIntensity": profile.personalizationSettings.audio_intensity,
+                "challengeVariety": profile.personalizationSettings.challenge_variety,
+            ]
+        }
+
+        // Add metadata
+        exportData["metadata"] = [
+            "exportDate": Date().ISO8601Format(),
+            "playerId": playerId,
+            "dataType": "analytics_profile",
+            "gdprCompliant": true,
+        ]
+
+        let jsonData = try JSONSerialization.data(withJSONObject: exportData, options: .prettyPrinted)
+        guard let jsonString = String(data: jsonData, encoding: .utf8) else {
+            throw PrivacyError.exportFailed("Failed to encode analytics data")
+        }
+
+        // Log export event
+        auditLogger.logSecurityEvent(.gdprDataExport, details: [
+            "playerId": playerId,
+            "dataType": "analytics",
+            "exportSize": jsonData.count,
+        ], playerId: playerId)
+
+        return jsonString
     }
 
     // MARK: - AI Analysis
@@ -320,6 +400,9 @@ public final class PlayerAnalyticsAI: Sendable {
     // MARK: - Persistence
 
     private func loadPersistedData() {
+        // Monitor data access
+        securityMonitor.monitorDataAccess(operation: .read, entityType: "player_profile", dataCount: 1)
+
         // Load player profile only (analytics data is not persisted)
         if let data = UserDefaults.standard.data(forKey: "PlayerProfile"),
            let decoded = try? JSONDecoder().decode(PlayerProfile.self, from: data)
@@ -335,7 +418,14 @@ public final class PlayerAnalyticsAI: Sendable {
             guard let self,
                   let profile = self.currentProfile,
                   let data = try? JSONEncoder().encode(profile) else { return }
+
+            // Monitor data modification
+            self.securityMonitor.monitorDataAccess(operation: .update, entityType: "player_profile", dataCount: 1)
+
             UserDefaults.standard.set(data, forKey: "PlayerProfile")
+
+            // Log security event
+            self.auditLogger.logDataAccess(operation: .update, entityType: "player_profile", dataCount: 1)
         }
     }
 }

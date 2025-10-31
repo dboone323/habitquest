@@ -28,6 +28,11 @@ class AchievementManager: Sendable {
     /// Total points earned from achievements
     private(set) var totalPoints: Int = 0
 
+    /// Security Framework Integration
+    private lazy var auditLogger = AuditLogger.shared
+    private lazy var securityMonitor = SecurityMonitor.shared
+    private lazy var privacyManager = PrivacyManager.shared
+
     // MARK: - Initialization
 
     private init() {
@@ -165,6 +170,13 @@ class AchievementManager: Sendable {
 
         // Trigger haptic feedback
         AudioManager.shared.triggerHapticFeedback(style: .success)
+
+        // Security: Log achievement unlock
+        auditLogger.logSecurityEvent(.gameDataModified, details: [
+            "achievement_unlocked": id,
+            "points_earned": achievement.points,
+            "total_points": totalPoints,
+        ])
     }
 
     // MARK: - Data Persistence
@@ -194,6 +206,9 @@ class AchievementManager: Sendable {
                 }
             }
         }
+
+        // Security: Monitor data access
+        securityMonitor.monitorDataAccess(operation: .read, entityType: "achievements", dataCount: achievements.count)
     }
 
     /// Saves achievement progress to UserDefaults
@@ -219,6 +234,9 @@ class AchievementManager: Sendable {
         defaults.set(progressData, forKey: self.achievementProgressKey)
 
         defaults.synchronize()
+
+        // Security: Monitor data modification
+        securityMonitor.monitorDataAccess(operation: .update, entityType: "achievements", dataCount: achievements.count)
     }
 
     // MARK: - Achievement Queries

@@ -481,6 +481,12 @@ public class PhysicsManager: NSObject, SKPhysicsContactDelegate {
         }
     }
 
+    /// Test helper: Checks if physics world is properly initialized
+    /// - Returns: True if physics world is available
+    func hasPhysicsWorld() -> Bool {
+        physicsWorld != nil
+    }
+
     // MARK: - Cleanup
 
     /// Cleans up physics-related resources
@@ -499,7 +505,7 @@ enum PhysicsQuality {
 }
 
 /// Advanced physics material properties
-struct PhysicsMaterial {
+struct PhysicsMaterial: Equatable {
     let restitution: CGFloat // Bounciness (0.0 - 1.0)
     let friction: CGFloat // Surface friction (0.0 - 1.0)
     let density: CGFloat // Mass density
@@ -548,7 +554,7 @@ struct PhysicsMaterial {
 }
 
 /// Physics simulation settings
-struct PhysicsSimulationSettings {
+struct PhysicsSimulationSettings: Equatable {
     var gravity: CGVector = .zero
     var speed: CGFloat = 1.0
     var enableRealisticCollisions = true

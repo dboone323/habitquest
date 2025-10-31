@@ -14,6 +14,11 @@ public class AIHealthMonitor: @unchecked Sendable {
     private var healthStatus: [String: ServiceHealth] = [:]
     private let queue = DispatchQueue(label: "com.quantum.aihealthmonitor", attributes: .concurrent)
 
+    /// Security Framework Integration
+    private lazy var auditLogger = AuditLogger.shared
+    private lazy var securityMonitor = SecurityMonitor.shared
+    private lazy var privacyManager = PrivacyManager.shared
+
     private init() {}
 
     /// Record service health
@@ -21,6 +26,9 @@ public class AIHealthMonitor: @unchecked Sendable {
         queue.async(flags: .barrier) {
             self.healthStatus[service] = status
         }
+
+        // Security: Monitor health data recording
+        securityMonitor.monitorDataAccess(operation: .update, entityType: "ai_health", dataCount: 1)
     }
 
     /// Get health status for service
@@ -63,5 +71,8 @@ public class AIHealthMonitor: @unchecked Sendable {
         queue.async(flags: .barrier) {
             self.healthStatus.removeValue(forKey: service)
         }
+
+        // Security: Log health data reset
+        auditLogger.logDataAccess(operation: .delete, entityType: "ai_health", dataCount: 1)
     }
 }

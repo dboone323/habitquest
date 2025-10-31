@@ -12,8 +12,11 @@ actor DataExporter {
     }
 
     nonisolated func export(with settings: ExportSettings) async throws -> URL {
-        // TODO: Implement actual export functionality
-        throw ExportError.invalidSettings
+        guard let engine = await engine else {
+            throw ExportError.dataFetchFailed
+        }
+
+        return try await engine.export(settings: settings)
     }
 }
 

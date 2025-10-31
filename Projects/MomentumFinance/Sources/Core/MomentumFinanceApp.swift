@@ -3,6 +3,9 @@ import os
 import SwiftData
 import SwiftUI
 
+// Import Security Framework for comprehensive security
+import SecurityFramework
+
 // Import KeychainHelper for secure storage
 // import KeychainHelper
 
@@ -46,6 +49,9 @@ public struct MomentumFinanceApp: App {
     public init() {
         print("MomentumFinanceApp: init started")
 
+        // Initialize Security Framework first (critical for all subsequent operations)
+        SecurityFramework.initialize()
+
         // Initialize app launch analytics
         self.trackAppLaunch()
 
@@ -54,6 +60,9 @@ public struct MomentumFinanceApp: App {
 
         // Initialize user preferences
         self.initializeUserPreferences()
+
+        // Setup security monitoring for the app session
+        self.setupSecurityMonitoring()
     }
 
     // MARK: - Secure Settings Access
@@ -83,8 +92,72 @@ public struct MomentumFinanceApp: App {
         // Log analytics event
         print("MomentumFinanceApp: App launched #\(launchCount) at \(launchTime)")
 
+        // Log security event for app launch
+        AuditLogger.shared.logSecurityEvent(
+            eventType: .system,
+            userId: "system",
+            details: [
+                "action": "app_launch",
+                "launch_count": launchCount,
+                "platform": platformInfo()
+            ],
+            severity: .low
+        )
+
         // In a real app, this would send to analytics service
         // Analytics.track(event: "app_launch", properties: ["launch_count": launchCount])
+    }
+
+    private func setupSecurityMonitoring() {
+        // Subscribe to security alerts
+        let cancellable = SecurityFramework.securityAlertsPublisher()
+            .sink { alert in
+                print("🔒 Security Alert: \(alert.type) - \(alert.message)")
+                // In a real app, this would trigger UI notifications or alerts
+                self.handleSecurityAlert(alert)
+            }
+
+        // Store cancellable to prevent deallocation
+        // Note: In a real app, store this in a Set<AnyCancellable>
+        _ = cancellable
+
+        // Log security framework initialization
+        AuditLogger.shared.logSecurityEvent(
+            eventType: .system,
+            userId: "system",
+            details: [
+                "action": "security_framework_initialized",
+                "framework_version": SecurityFramework.version
+            ],
+            severity: .low
+        )
+    }
+
+    private func handleSecurityAlert(_ alert: SecurityAlert) {
+        // Handle security alerts (in a real app, this would show UI alerts)
+        switch alert.severity {
+        case .critical, .high:
+            print("🚨 CRITICAL SECURITY ALERT: \(alert.message)")
+            // Could trigger emergency UI, data backup, etc.
+        case .medium:
+            print("⚠️ Security Warning: \(alert.message)")
+        case .low:
+            print("ℹ️ Security Info: \(alert.message)")
+        }
+    }
+
+    private func platformInfo() -> String {
+        #if os(iOS)
+        return "iOS"
+        #elseif os(macOS)
+        return "macOS"
+        #elseif os(tvOS)
+        return "tvOS"
+        #elseif os(watchOS)
+        return "watchOS"
+        #else
+        return "unknown"
+        #endif
     }
 
     private func setupCrashReporting() {

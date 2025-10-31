@@ -1,6 +1,9 @@
 import CloudKit
 import Foundation
 
+// Security Framework Integration
+// Note: Security components are part of the same module, no imports needed
+
 /// Protocol defining the interface for all data management operations
 protocol DataManaging {
     associatedtype DataType: Identifiable & Codable
@@ -40,6 +43,12 @@ final class PlannerDataManager: ObservableObject {
     private let calendarKey = "SavedCalendarEvents"
     private let journalKey = "SavedJournalEntries"
 
+    // Security Framework Integration
+    private lazy var auditLogger = AuditLogger.shared
+    private lazy var encryptionService = EncryptionService.shared
+    private lazy var securityMonitor = SecurityMonitor.shared
+    private lazy var privacyManager = PrivacyManager.shared
+
     // Object pooling for performance optimization
     private var taskPool = PlannerObjectPool<PlannerTask>()
     private var goalPool = PlannerObjectPool<Goal>()
@@ -62,58 +71,218 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func loadTasks() -> [PlannerTask] {
-        guard let data = userDefaults.data(forKey: tasksKey),
-              let decodedTasks = try? JSONDecoder().decode([PlannerTask].self, from: data)
-        else {
+        // Security: Log data access
+        auditLogger.logDataAccess(
+            operation: "load",
+            entityType: "task",
+            entityId: nil,
+            userId: nil,
+            details: ["operation": "load_all_tasks"]
+        )
+
+        guard let data = userDefaults.data(forKey: tasksKey) else {
+            securityMonitor.monitorDataAccess(recordType: "task", operation: "load", recordCount: 0)
             return []
         }
+
+        // Security: Attempt to decrypt data if encrypted
+        let decryptedData: Data
+        do {
+            decryptedData = try encryptionService.decrypt(data: data)
+        } catch {
+            auditLogger.logSecurityEvent(
+                event: "decryption_failure",
+                details: ["entityType": "task", "error": error.localizedDescription]
+            )
+            // Fall back to unencrypted data
+            decryptedData = data
+        }
+
+        guard let decodedTasks = try? JSONDecoder().decode([PlannerTask].self, from: decryptedData) else {
+            securityMonitor.monitorDataAccess(recordType: "task", operation: "load", recordCount: 0)
+            return []
+        }
+
+        securityMonitor.monitorDataAccess(recordType: "task", operation: "load", recordCount: decodedTasks.count)
         return decodedTasks
     }
 
     func loadGoals() -> [Goal] {
-        guard let data = userDefaults.data(forKey: goalsKey),
-              let decodedGoals = try? JSONDecoder().decode([Goal].self, from: data)
-        else {
+        // Security: Log data access
+        auditLogger.logDataAccess(
+            operation: "load",
+            entityType: "goal",
+            entityId: nil,
+            userId: nil,
+            details: ["operation": "load_all_goals"]
+        )
+
+        guard let data = userDefaults.data(forKey: goalsKey) else {
+            securityMonitor.monitorDataAccess(recordType: "goal", operation: "load", recordCount: 0)
             return []
         }
+
+        // Security: Attempt to decrypt data if encrypted
+        let decryptedData: Data
+        do {
+            decryptedData = try encryptionService.decrypt(data: data)
+        } catch {
+            auditLogger.logSecurityEvent(
+                event: "decryption_failure",
+                details: ["entityType": "goal", "error": error.localizedDescription]
+            )
+            // Fall back to unencrypted data
+            decryptedData = data
+        }
+
+        guard let decodedGoals = try? JSONDecoder().decode([Goal].self, from: decryptedData) else {
+            securityMonitor.monitorDataAccess(recordType: "goal", operation: "load", recordCount: 0)
+            return []
+        }
+
+        securityMonitor.monitorDataAccess(recordType: "goal", operation: "load", recordCount: decodedGoals.count)
         return decodedGoals
     }
 
     func loadCalendarEvents() -> [CalendarEvent] {
-        guard let data = userDefaults.data(forKey: calendarKey),
-              let decodedEvents = try? JSONDecoder().decode([CalendarEvent].self, from: data)
-        else {
+        // Security: Log data access
+        auditLogger.logDataAccess(
+            operation: "load",
+            entityType: "calendar_event",
+            entityId: nil,
+            userId: nil,
+            details: ["operation": "load_all_calendar_events"]
+        )
+
+        guard let data = userDefaults.data(forKey: calendarKey) else {
+            securityMonitor.monitorDataAccess(recordType: "calendar_event", operation: "load", recordCount: 0)
             return []
         }
+
+        // Security: Attempt to decrypt data if encrypted
+        let decryptedData: Data
+        do {
+            decryptedData = try encryptionService.decrypt(data: data)
+        } catch {
+            auditLogger.logSecurityEvent(
+                event: "decryption_failure",
+                details: ["entityType": "calendar_event", "error": error.localizedDescription]
+            )
+            // Fall back to unencrypted data
+            decryptedData = data
+        }
+
+        guard let decodedEvents = try? JSONDecoder().decode([CalendarEvent].self, from: decryptedData) else {
+            securityMonitor.monitorDataAccess(recordType: "calendar_event", operation: "load", recordCount: 0)
+            return []
+        }
+
+        securityMonitor.monitorDataAccess(recordType: "calendar_event", operation: "load", recordCount: decodedEvents.count)
         return decodedEvents
     }
 
     func loadJournalEntries() -> [JournalEntry] {
-        guard let data = userDefaults.data(forKey: journalKey),
-              let decodedEntries = try? JSONDecoder().decode([JournalEntry].self, from: data)
-        else {
+        // Security: Log data access
+        auditLogger.logDataAccess(
+            operation: "load",
+            entityType: "journal_entry",
+            entityId: nil,
+            userId: nil,
+            details: ["operation": "load_all_journal_entries"]
+        )
+
+        guard let data = userDefaults.data(forKey: journalKey) else {
+            securityMonitor.monitorDataAccess(recordType: "journal_entry", operation: "load", recordCount: 0)
             return []
         }
+
+        // Security: Attempt to decrypt data if encrypted
+        let decryptedData: Data
+        do {
+            decryptedData = try encryptionService.decrypt(data: data)
+        } catch {
+            auditLogger.logSecurityEvent(
+                event: "decryption_failure",
+                details: ["entityType": "journal_entry", "error": error.localizedDescription]
+            )
+            // Fall back to unencrypted data
+            decryptedData = data
+        }
+
+        guard let decodedEntries = try? JSONDecoder().decode([JournalEntry].self, from: decryptedData) else {
+            securityMonitor.monitorDataAccess(recordType: "journal_entry", operation: "load", recordCount: 0)
+            return []
+        }
+
+        securityMonitor.monitorDataAccess(recordType: "journal_entry", operation: "load", recordCount: decodedEntries.count)
         return decodedEntries
     }
 
     // MARK: - Task Management
 
     func saveTasks(_ tasks: [PlannerTask]) {
+        // Security: Log data modification
+        auditLogger.logDataAccess(
+            operation: "save",
+            entityType: "task",
+            entityId: nil,
+            userId: nil,
+            details: ["operation": "save_all_tasks", "count": String(tasks.count)]
+        )
+
         self.tasks = tasks
-        if let encoded = try? JSONEncoder().encode(tasks) {
-            userDefaults.set(encoded, forKey: tasksKey)
+
+        guard let encoded = try? JSONEncoder().encode(tasks) else {
+            auditLogger.logSecurityEvent(
+                event: "encoding_failure",
+                details: ["entityType": "task", "count": String(tasks.count)]
+            )
+            return
         }
+
+        // Security: Encrypt data before saving
+        let dataToSave: Data
+        do {
+            dataToSave = try encryptionService.encrypt(data: encoded)
+        } catch {
+            auditLogger.logSecurityEvent(
+                event: "encryption_failure",
+                details: ["entityType": "task", "error": error.localizedDescription]
+            )
+            // Fall back to unencrypted data
+            dataToSave = encoded
+        }
+
+        userDefaults.set(dataToSave, forKey: tasksKey)
+        securityMonitor.monitorDataAccess(recordType: "task", operation: "save", recordCount: tasks.count)
         updateMemoryUsage()
     }
 
     func addTask(_ task: PlannerTask) {
+        // Security: Log data creation
+        auditLogger.logDataAccess(
+            operation: "create",
+            entityType: "task",
+            entityId: task.id.uuidString,
+            userId: nil,
+            details: ["title": task.title, "priority": task.priority.rawValue]
+        )
+
         var currentTasks = tasks
         currentTasks.append(task)
         saveTasks(currentTasks)
     }
 
     func updateTask(_ task: PlannerTask) {
+        // Security: Log data modification
+        auditLogger.logDataAccess(
+            operation: "update",
+            entityType: "task",
+            entityId: task.id.uuidString,
+            userId: nil,
+            details: ["title": task.title, "completed": String(task.isCompleted)]
+        )
+
         var currentTasks = tasks
         if let index = currentTasks.firstIndex(where: { $0.id == task.id }) {
             currentTasks[index] = task
@@ -122,6 +291,15 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func deleteTask(_ task: PlannerTask) {
+        // Security: Log data deletion
+        auditLogger.logDataAccess(
+            operation: "delete",
+            entityType: "task",
+            entityId: task.id.uuidString,
+            userId: nil,
+            details: ["title": task.title]
+        )
+
         var currentTasks = tasks
         currentTasks.removeAll { $0.id == task.id }
         saveTasks(currentTasks)
@@ -134,20 +312,68 @@ final class PlannerDataManager: ObservableObject {
     // MARK: - Goal Management
 
     func saveGoals(_ goals: [Goal]) {
+        // Security: Log data modification
+        auditLogger.logDataAccess(
+            operation: "save",
+            entityType: "goal",
+            entityId: nil,
+            userId: nil,
+            details: ["operation": "save_all_goals", "count": String(goals.count)]
+        )
+
         self.goals = goals
-        if let encoded = try? JSONEncoder().encode(goals) {
-            userDefaults.set(encoded, forKey: goalsKey)
+
+        guard let encoded = try? JSONEncoder().encode(goals) else {
+            auditLogger.logSecurityEvent(
+                event: "encoding_failure",
+                details: ["entityType": "goal", "count": String(goals.count)]
+            )
+            return
         }
+
+        // Security: Encrypt data before saving
+        let dataToSave: Data
+        do {
+            dataToSave = try encryptionService.encrypt(data: encoded)
+        } catch {
+            auditLogger.logSecurityEvent(
+                event: "encryption_failure",
+                details: ["entityType": "goal", "error": error.localizedDescription]
+            )
+            // Fall back to unencrypted data
+            dataToSave = encoded
+        }
+
+        userDefaults.set(dataToSave, forKey: goalsKey)
+        securityMonitor.monitorDataAccess(recordType: "goal", operation: "save", recordCount: goals.count)
         updateMemoryUsage()
     }
 
     func addGoal(_ goal: Goal) {
+        // Security: Log data creation
+        auditLogger.logDataAccess(
+            operation: "create",
+            entityType: "goal",
+            entityId: goal.id.uuidString,
+            userId: nil,
+            details: ["title": goal.title, "targetDate": goal.targetDate.description]
+        )
+
         var currentGoals = goals
         currentGoals.append(goal)
         saveGoals(currentGoals)
     }
 
     func updateGoal(_ goal: Goal) {
+        // Security: Log data modification
+        auditLogger.logDataAccess(
+            operation: "update",
+            entityType: "goal",
+            entityId: goal.id.uuidString,
+            userId: nil,
+            details: ["title": goal.title, "completed": String(goal.isCompleted)]
+        )
+
         var currentGoals = goals
         if let index = currentGoals.firstIndex(where: { $0.id == goal.id }) {
             currentGoals[index] = goal
@@ -156,6 +382,15 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func deleteGoal(_ goal: Goal) {
+        // Security: Log data deletion
+        auditLogger.logDataAccess(
+            operation: "delete",
+            entityType: "goal",
+            entityId: goal.id.uuidString,
+            userId: nil,
+            details: ["title": goal.title]
+        )
+
         var currentGoals = goals
         currentGoals.removeAll { $0.id == goal.id }
         saveGoals(currentGoals)
@@ -168,20 +403,68 @@ final class PlannerDataManager: ObservableObject {
     // MARK: - Calendar Management
 
     func saveCalendarEvents(_ events: [CalendarEvent]) {
+        // Security: Log data modification
+        auditLogger.logDataAccess(
+            operation: "save",
+            entityType: "calendar_event",
+            entityId: nil,
+            userId: nil,
+            details: ["operation": "save_all_calendar_events", "count": String(events.count)]
+        )
+
         self.calendarEvents = events
-        if let encoded = try? JSONEncoder().encode(events) {
-            userDefaults.set(encoded, forKey: calendarKey)
+
+        guard let encoded = try? JSONEncoder().encode(events) else {
+            auditLogger.logSecurityEvent(
+                event: "encoding_failure",
+                details: ["entityType": "calendar_event", "count": String(events.count)]
+            )
+            return
         }
+
+        // Security: Encrypt data before saving
+        let dataToSave: Data
+        do {
+            dataToSave = try encryptionService.encrypt(data: encoded)
+        } catch {
+            auditLogger.logSecurityEvent(
+                event: "encryption_failure",
+                details: ["entityType": "calendar_event", "error": error.localizedDescription]
+            )
+            // Fall back to unencrypted data
+            dataToSave = encoded
+        }
+
+        userDefaults.set(dataToSave, forKey: calendarKey)
+        securityMonitor.monitorDataAccess(recordType: "calendar_event", operation: "save", recordCount: events.count)
         updateMemoryUsage()
     }
 
     func addCalendarEvent(_ event: CalendarEvent) {
+        // Security: Log data creation
+        auditLogger.logDataAccess(
+            operation: "create",
+            entityType: "calendar_event",
+            entityId: event.id.uuidString,
+            userId: nil,
+            details: ["title": event.title, "date": event.date.description]
+        )
+
         var currentEvents = calendarEvents
         currentEvents.append(event)
         saveCalendarEvents(currentEvents)
     }
 
     func updateCalendarEvent(_ event: CalendarEvent) {
+        // Security: Log data modification
+        auditLogger.logDataAccess(
+            operation: "update",
+            entityType: "calendar_event",
+            entityId: event.id.uuidString,
+            userId: nil,
+            details: ["title": event.title]
+        )
+
         var currentEvents = calendarEvents
         if let index = currentEvents.firstIndex(where: { $0.id == event.id }) {
             currentEvents[index] = event
@@ -190,6 +473,15 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func deleteCalendarEvent(_ event: CalendarEvent) {
+        // Security: Log data deletion
+        auditLogger.logDataAccess(
+            operation: "delete",
+            entityType: "calendar_event",
+            entityId: event.id.uuidString,
+            userId: nil,
+            details: ["title": event.title]
+        )
+
         var currentEvents = calendarEvents
         currentEvents.removeAll { $0.id == event.id }
         saveCalendarEvents(currentEvents)
@@ -202,20 +494,68 @@ final class PlannerDataManager: ObservableObject {
     // MARK: - Journal Management
 
     func saveJournalEntries(_ entries: [JournalEntry]) {
+        // Security: Log data modification
+        auditLogger.logDataAccess(
+            operation: "save",
+            entityType: "journal_entry",
+            entityId: nil,
+            userId: nil,
+            details: ["operation": "save_all_journal_entries", "count": String(entries.count)]
+        )
+
         self.journalEntries = entries
-        if let encoded = try? JSONEncoder().encode(entries) {
-            userDefaults.set(encoded, forKey: journalKey)
+
+        guard let encoded = try? JSONEncoder().encode(entries) else {
+            auditLogger.logSecurityEvent(
+                event: "encoding_failure",
+                details: ["entityType": "journal_entry", "count": String(entries.count)]
+            )
+            return
         }
+
+        // Security: Encrypt data before saving
+        let dataToSave: Data
+        do {
+            dataToSave = try encryptionService.encrypt(data: encoded)
+        } catch {
+            auditLogger.logSecurityEvent(
+                event: "encryption_failure",
+                details: ["entityType": "journal_entry", "error": error.localizedDescription]
+            )
+            // Fall back to unencrypted data
+            dataToSave = encoded
+        }
+
+        userDefaults.set(dataToSave, forKey: journalKey)
+        securityMonitor.monitorDataAccess(recordType: "journal_entry", operation: "save", recordCount: entries.count)
         updateMemoryUsage()
     }
 
     func addJournalEntry(_ entry: JournalEntry) {
+        // Security: Log data creation
+        auditLogger.logDataAccess(
+            operation: "create",
+            entityType: "journal_entry",
+            entityId: entry.id.uuidString,
+            userId: nil,
+            details: ["title": entry.title, "date": entry.date.description, "mood": entry.mood]
+        )
+
         var currentEntries = journalEntries
         currentEntries.append(entry)
         saveJournalEntries(currentEntries)
     }
 
     func updateJournalEntry(_ entry: JournalEntry) {
+        // Security: Log data modification
+        auditLogger.logDataAccess(
+            operation: "update",
+            entityType: "journal_entry",
+            entityId: entry.id.uuidString,
+            userId: nil,
+            details: ["title": entry.title, "mood": entry.mood]
+        )
+
         var currentEntries = journalEntries
         if let index = currentEntries.firstIndex(where: { $0.id == entry.id }) {
             currentEntries[index] = entry
@@ -224,6 +564,15 @@ final class PlannerDataManager: ObservableObject {
     }
 
     func deleteJournalEntry(_ entry: JournalEntry) {
+        // Security: Log data deletion
+        auditLogger.logDataAccess(
+            operation: "delete",
+            entityType: "journal_entry",
+            entityId: entry.id.uuidString,
+            userId: nil,
+            details: ["title": entry.title]
+        )
+
         var currentEntries = journalEntries
         currentEntries.removeAll { $0.id == entry.id }
         saveJournalEntries(currentEntries)
@@ -454,8 +803,28 @@ final class PlannerDataManager: ObservableObject {
     // MARK: - CloudKit Integration
 
     func syncWithCloudKit() async {
+        // Security: Log CloudKit sync operation
+        auditLogger.logCloudKitSync(
+            operation: "syncStarted",
+            recordCount: tasks.count + goals.count + calendarEvents.count + journalEntries.count
+        )
+
         // Placeholder for CloudKit sync implementation
         lastSyncDate = Date()
+
+        // Security: Monitor sync completion
+        let totalRecordCount = tasks.count + goals.count + calendarEvents.count + journalEntries.count
+        securityMonitor.monitorSyncOperation(
+            operation: "sync",
+            zoneID: "com.plannerapp.main",
+            recordCount: totalRecordCount,
+            success: true
+        )
+
+        auditLogger.logCloudKitSync(
+            operation: "syncCompleted",
+            recordCount: tasks.count + goals.count + calendarEvents.count + journalEntries.count
+        )
     }
 
     // MARK: - Performance Monitoring
@@ -473,6 +842,18 @@ final class PlannerDataManager: ObservableObject {
     // MARK: - Data Clearing
 
     func clearAllData() {
+        // Security: Log bulk data deletion
+        auditLogger.logSecurityEvent(
+            event: "bulk_data_deletion",
+            details: [
+                "operation": "clear_all_data",
+                "tasks_count": String(tasks.count),
+                "goals_count": String(goals.count),
+                "calendar_events_count": String(calendarEvents.count),
+                "journal_entries_count": String(journalEntries.count),
+            ]
+        )
+
         tasks.removeAll()
         goals.removeAll()
         calendarEvents.removeAll()

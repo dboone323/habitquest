@@ -45,7 +45,7 @@ public struct ErrorHandler: Sendable {
         }
     }
 
-    private static let logger = Logger(category: .general)
+    private static let logger = Logger.shared
 
     /// Handle an error with logging and optional user notification
     static func handle(
@@ -56,11 +56,11 @@ public struct ErrorHandler: Sendable {
         line: Int = #line
     ) {
         // Log the error
-        self.logger.error("Error occurred: \(error.localizedDescription)", file: file, function: function, line: line)
+        self.logger.error("Error occurred: \(error.localizedDescription)")
 
         // Additional logging for HabitQuestError
         if let habitError = error as? HabitQuestError {
-            self.logger.error("HabitQuest Error Type: \(habitError)", file: file, function: function, line: line)
+            self.logger.error("HabitQuest Error Type: \(habitError)")
         }
 
         // Handle user notification if needed

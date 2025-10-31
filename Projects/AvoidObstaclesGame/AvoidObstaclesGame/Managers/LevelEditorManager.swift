@@ -685,6 +685,62 @@ enum LevelEditorError: Error {
     case invalidLevelData
 }
 
+// MARK: - Equatable Extensions
+
+extension LevelEditorState: Equatable {
+    static func == (lhs: LevelEditorState, rhs: LevelEditorState) -> Bool {
+        switch (lhs, rhs) {
+        case (.started, .started),
+             (.stopped, .stopped),
+             (.testingStopped, .testingStopped):
+            return true
+        case let (.levelCreated(l), .levelCreated(r)):
+            return l == r
+        case let (.levelLoaded(l), .levelLoaded(r)):
+            return l == r
+        case let (.levelSaved(l), .levelSaved(r)):
+            return l == r
+        case let (.levelDeleted(l), .levelDeleted(r)):
+            return l == r
+        case let (.elementSelected(l), .elementSelected(r)):
+            return l == r
+        case let (.elementPlaced(l), .elementPlaced(r)):
+            return l == r
+        case let (.elementRemoved(l), .elementRemoved(r)):
+            return l == r
+        case let (.testingStarted(l), .testingStarted(r)):
+            return l == r
+        case let (.error(l), .error(r)):
+            return l == r
+        default:
+            return false
+        }
+    }
+}
+
+extension LevelEditorError: Equatable {
+    static func == (lhs: LevelEditorError, rhs: LevelEditorError) -> Bool {
+        switch (lhs, rhs) {
+        case (.invalidLevelData, .invalidLevelData):
+            return true
+        case let (.saveFailed(l), .saveFailed(r)):
+            let ln = l as NSError
+            let rn = r as NSError
+            return ln.domain == rn.domain && ln.code == rn.code
+        case let (.loadFailed(l), .loadFailed(r)):
+            let ln = l as NSError
+            let rn = r as NSError
+            return ln.domain == rn.domain && ln.code == rn.code
+        case let (.deleteFailed(l), .deleteFailed(r)):
+            let ln = l as NSError
+            let rn = r as NSError
+            return ln.domain == rn.domain && ln.code == rn.code
+        default:
+            return false
+        }
+    }
+}
+
 /// UI overlay for the level editor
 @MainActor
 class LevelEditorOverlay: SKNode {

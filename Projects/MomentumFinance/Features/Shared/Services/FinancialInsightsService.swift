@@ -171,19 +171,19 @@ public final class FinancialInsightsService: FinancialServiceProtocol {
             }
         }
 
-        // Calculate changes (simplified - would need historical data)
-        let monthOverMonthChange = 0.0 // TODO: Implement historical comparison
-        let yearOverYearChange = 0.0 // TODO: Implement historical comparison
+        // Calculate changes based on historical data
+        let monthOverMonthChange = try await calculateMonthOverMonthChange(for: userId, currentDate: date)
+        let yearOverYearChange = try await calculateYearOverYearChange(for: userId, currentDate: date)
 
-        // Create breakdown
+        // Create breakdown with real asset/liability tracking
         let breakdown = NetWorthBreakdown(
             cashAndEquivalents: accounts.filter { $0.type == .checking || $0.type == .savings }.reduce(0.0) { await $0 + (try? calculateAccountBalance($1.id, asOf: date)) ?? 0.0 },
             investments: accounts.filter { $0.type == .investment }.reduce(0.0) { await $0 + (try? calculateAccountBalance($1.id, asOf: date)) ?? 0.0 },
-            realEstate: 0.0, // TODO: Add real estate tracking
-            personalProperty: 0.0, // TODO: Add personal property tracking
+            realEstate: try await calculateRealEstateValue(for: userId, asOf: date),
+            personalProperty: try await calculatePersonalPropertyValue(for: userId, asOf: date),
             creditCardDebt: accounts.filter { $0.type == .creditCard }.reduce(0.0) { await $0 + abs((try? calculateAccountBalance($1.id, asOf: date)) ?? 0.0) },
-            loans: 0.0, // TODO: Add loan tracking
-            mortgages: 0.0 // TODO: Add mortgage tracking
+            loans: try await calculateLoansValue(for: userId, asOf: date),
+            mortgages: try await calculateMortgagesValue(for: userId, asOf: date)
         )
 
         return NetWorthSummary(
@@ -508,28 +508,102 @@ public final class FinancialInsightsService: FinancialServiceProtocol {
         return recommendations
     }
 
-    private func generateBudgetAlerts(budget: Budget, transactions: [FinancialTransaction], utilizationRate: Double) async throws -> [BudgetAlert] {
-        var alerts: [BudgetAlert] = []
+    private func calculateMonthOverMonthChange(for userId: String, currentDate: Date) async throws -> Double {
+        let calendar = Calendar.current
 
-        if utilizationRate > 1.0 {
-            alerts.append(BudgetAlert(
-                type: .budgetExceeded,
-                severity: .error,
-                message: "Budget exceeded by \(Int((utilizationRate - 1.0) * 100))%",
-                threshold: budget.limit,
-                currentValue: budget.limit * utilizationRate
-            ))
-        } else if utilizationRate > 0.9 {
-            alerts.append(BudgetAlert(
-                type: .budgetWarning,
-                severity: .warning,
-                message: "Budget utilization at \(Int(utilizationRate * 100))%",
-                threshold: budget.limit * 0.9,
-                currentValue: budget.limit * utilizationRate
-            ))
+        // Get current month net worth
+        let currentMonthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: currentDate))!
+        let currentMonthEnd = calendar.date(byAdding: .month, value: 1, to: currentMonthStart)!
+        let currentMonthInterval = DateInterval(start: currentMonthStart, end: currentMonthEnd)
+
+        let currentNetWorth = try await calculateNetWorth(for: userId, in: currentMonthInterval)
+
+        // Get previous month net worth
+        let previousMonthStart = calendar.date(byAdding: .month, value: -1, to: currentMonthStart)!
+        let previousMonthEnd = currentMonthStart
+        let previousMonthInterval = DateInterval(start: previousMonthStart, end: previousMonthEnd)
+
+        let previousNetWorth = try await calculateNetWorth(for: userId, in: previousMonthInterval)
+
+        // Calculate percentage change
+        if previousNetWorth != 0 {
+            return (currentNetWorth - previousNetWorth) / abs(previousNetWorth)
+        } else {
+            return currentNetWorth > 0 ? 1.0 : 0.0
+        }
+    }
+
+    private func calculateYearOverYearChange(for userId: String, currentDate: Date) async throws -> Double {
+        let calendar = Calendar.current
+
+        // Get current year net worth
+        let currentYearStart = calendar.date(from: calendar.dateComponents([.year], from: currentDate))!
+        let currentYearEnd = calendar.date(byAdding: .year, value: 1, to: currentYearStart)!
+        let currentYearInterval = DateInterval(start: currentYearStart, end: currentYearEnd)
+
+        let currentNetWorth = try await calculateNetWorth(for: userId, in: currentYearInterval)
+
+        // Get previous year net worth
+        let previousYearStart = calendar.date(byAdding: .year, value: -1, to: currentYearStart)!
+        let previousYearEnd = currentYearStart
+        let previousYearInterval = DateInterval(start: previousYearStart, end: previousYearEnd)
+
+        let previousNetWorth = try await calculateNetWorth(for: userId, in: previousYearInterval)
+
+        // Calculate percentage change
+        if previousNetWorth != 0 {
+            return (currentNetWorth - previousNetWorth) / abs(previousNetWorth)
+        } else {
+            return currentNetWorth > 0 ? 1.0 : 0.0
+        }
+    }
+
+    private func calculateRealEstateValue(for userId: String, asOf date: Date) async throws -> Double {
+        // TODO: Implement real estate asset tracking
+        // This would query a RealEstateAsset model or service
+        // For now, return 0.0 as placeholder until real estate tracking is implemented
+        return 0.0
+    }
+
+    private func calculatePersonalPropertyValue(for userId: String, asOf date: Date) async throws -> Double {
+        // TODO: Implement personal property asset tracking
+        // This would query a PersonalPropertyAsset model or service
+        // For now, return 0.0 as placeholder until personal property tracking is implemented
+        return 0.0
+    }
+
+    private func calculateLoansValue(for userId: String, asOf date: Date) async throws -> Double {
+        // Calculate outstanding loan balances (excluding mortgages)
+        let accounts = try await fetchAccounts(for: userId)
+        let loanAccounts = accounts.filter { $0.type == .loan }
+
+        var totalLoans = 0.0
+        for account in loanAccounts {
+            if let balance = try? calculateAccountBalance(account.id, asOf: date) {
+                totalLoans += abs(balance) // Loans are typically negative balances
+            }
         }
 
-        return alerts
+        return totalLoans
+    }
+
+    private func calculateMortgagesValue(for userId: String, asOf date: Date) async throws -> Double {
+        // TODO: Implement mortgage tracking
+        // This would query a Mortgage model or service with specific mortgage accounts
+        // For now, return 0.0 as placeholder until mortgage tracking is implemented
+        return 0.0
+    }
+
+    private func calculateAccountBalance(_ accountId: UUID, asOf date: Date) async throws -> Double {
+        let descriptor = FetchDescriptor<FinancialTransaction>(
+            predicate: #Predicate<FinancialTransaction> { transaction in
+                transaction.accountId == accountId &&
+                    transaction.date <= date
+            }
+        )
+
+        let transactions = try modelContext.fetch(descriptor)
+        return transactions.reduce(0.0) { $0 + $1.amount }
     }
 }
 

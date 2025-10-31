@@ -509,11 +509,18 @@ class AdaptiveSpawningConfig {
 }
 
 /// Statistics for power-up spawning
-struct PowerUpSpawningStats {
+struct PowerUpSpawningStats: Equatable {
     let totalSpawned: Int
     let totalCollected: Int
     let collectionRate: Double
     let typeStats: [(PowerUpType, Double)]
+
+    static func == (lhs: PowerUpSpawningStats, rhs: PowerUpSpawningStats) -> Bool {
+        lhs.totalSpawned == rhs.totalSpawned &&
+            lhs.totalCollected == rhs.totalCollected &&
+            lhs.collectionRate == rhs.collectionRate &&
+            lhs.typeStats.elementsEqual(rhs.typeStats) { $0.0 == $1.0 && $0.1 == $1.1 }
+    }
 }
 
 /// Represents a power-up in the game

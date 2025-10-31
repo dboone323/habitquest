@@ -19,67 +19,19 @@ struct DashboardListView: View {
         )) {
             Section("Accounts") {
                 ForEach(self.accounts) { account in
-                    NavigationLink(value: ListableItem(id: account.id, name: account.name, type: .account)) {
-                        HStack {
-                            Image(systemName: account.type == .checking ? "banknote" : "creditcard")
-                                .foregroundStyle(account.type == .checking ? .green : .blue)
-                            VStack(alignment: .leading) {
-                                Text(account.name)
-                                    .font(.headline)
-                                Text(account.balance.formatted(.currency(code: "USD")))
-                                    .font(.subheadline)
-                            }
-                        }
-                        .padding(.vertical, 4)
-                    }
-                    .tag(ListableItem(id: account.id, name: account.name, type: .account))
+                    ReusableListItemView(account: account)
                 }
             }
 
             Section("Recent Transactions") {
                 ForEach(self.recentTransactions.prefix(5)) { transaction in
-                    NavigationLink(value: ListableItem(id: transaction.id, name: transaction.title, type: .transaction)) {
-                        HStack {
-                            Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
-                                .foregroundStyle(transaction.amount < 0 ? .red : .green)
-                            VStack(alignment: .leading) {
-                                Text(transaction.title)
-                                    .font(.headline)
-                                Text(transaction.amount.formatted(.currency(code: "USD")))
-                                    .font(.subheadline)
-                            }
-                            Spacer()
-                            Text(transaction.date.formatted(date: .abbreviated, time: .omitted))
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding(.vertical, 4)
-                    }
-                    .tag(ListableItem(id: transaction.id, name: transaction.title, type: .transaction))
+                    ReusableListItemView(transaction: transaction)
                 }
             }
 
             Section("Upcoming Subscriptions") {
                 ForEach(self.upcomingSubscriptions) { subscription in
-                    NavigationLink(value: ListableItem(id: subscription.id, name: subscription.name, type: .subscription)) {
-                        HStack {
-                            Image(systemName: "calendar.badge.clock")
-                                .foregroundStyle(.purple)
-                            VStack(alignment: .leading) {
-                                Text(subscription.name)
-                                    .font(.headline)
-                                if let nextDate = subscription.nextPaymentDate {
-                                    Text("Due \(nextDate.formatted(date: .abbreviated, time: .omitted))")
-                                        .font(.caption)
-                                }
-                            }
-                            Spacer()
-                            Text(subscription.amount.formatted(.currency(code: "USD")))
-                                .foregroundStyle(.red)
-                        }
-                        .padding(.vertical, 4)
-                    }
-                    .tag(ListableItem(id: subscription.id, name: subscription.name, type: .subscription))
+                    ReusableListItemView(subscription: subscription)
                 }
             }
 
@@ -161,53 +113,13 @@ struct TransactionsListView: View {
             )) {
                 Section("Accounts") {
                     ForEach(self.accounts) { account in
-                        NavigationLink(value: ListableItem(id: account.id, name: account.name, type: .account)) {
-                            HStack {
-                                Image(systemName: account.type == .checking ? "banknote" : "creditcard")
-                                    .foregroundStyle(account.type == .checking ? .green : .blue)
-
-                                Text(account.name)
-                                    .font(.headline)
-
-                                Spacer()
-
-                                Text(account.balance.formatted(.currency(code: "USD")))
-                                    .font(.subheadline)
-                            }
-                            .padding(.vertical, 4)
-                        }
-                        .tag(ListableItem(id: account.id, name: account.name, type: .account))
+                        ReusableListItemView(account: account)
                     }
                 }
 
                 Section("Transactions") {
                     ForEach(self.filteredTransactions) { transaction in
-                        NavigationLink(value: ListableItem(id: transaction.id, name: transaction.title, type: .transaction)) {
-                            HStack {
-                                Image(systemName: transaction.amount < 0 ? "arrow.down" : "arrow.up")
-                                    .foregroundStyle(transaction.amount < 0 ? .red : .green)
-                                VStack(alignment: .leading) {
-                                    Text(transaction.title)
-                                        .font(.headline)
-                                    if let category = transaction.category {
-                                        Text(category.name)
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                }
-                                Spacer()
-                                VStack(alignment: .trailing) {
-                                    Text(transaction.amount.formatted(.currency(code: "USD")))
-                                        .font(.subheadline)
-                                        .foregroundStyle(transaction.amount < 0 ? .red : .green)
-                                    Text(transaction.date.formatted(date: .abbreviated, time: .omitted))
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                            .padding(.vertical, 4)
-                        }
-                        .tag(ListableItem(id: transaction.id, name: transaction.title, type: .transaction))
+                        ReusableListItemView(transaction: transaction)
                     }
                 }
             }
@@ -250,24 +162,7 @@ struct BudgetListView: View {
                 set: { self.navigationCoordinator.navigateToDetail(item: $0) }
             )) {
                 ForEach(self.budgets) { budget in
-                    NavigationLink(value: ListableItem(id: budget.id, name: budget.name, type: .budget)) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text(budget.name)
-                                    .font(.headline)
-                                Spacer()
-                                Text(
-                                    "\(budget.spent.formatted(.currency(code: "USD"))) of \(budget.amount.formatted(.currency(code: "USD")))"
-                                )
-                                .font(.subheadline)
-                            }
-
-                            ProgressView(value: budget.spent, total: budget.amount)
-                                .tint(self.getBudgetColor(spent: budget.spent, total: budget.amount))
-                        }
-                        .padding(.vertical, 4)
-                    }
-                    .tag(ListableItem(id: budget.id, name: budget.name, type: .budget))
+                    ReusableListItemView(budget: budget)
                 }
             }
             .listStyle(.inset)
@@ -332,34 +227,7 @@ struct SubscriptionListView: View {
                 ForEach(self.getGroupedSubscriptions()) { group in
                     Section(header: Text(group.title)) {
                         ForEach(group.items) { subscription in
-                            NavigationLink(value: ListableItem(id: subscription.id, name: subscription.name, type: .subscription)) {
-                                HStack {
-                                    Image(systemName: "calendar.badge.clock")
-                                        .foregroundStyle(.purple)
-
-                                    VStack(alignment: .leading) {
-                                        Text(subscription.name)
-                                            .font(.headline)
-
-                                        Text(subscription.provider)
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                    }
-
-                                    Spacer()
-
-                                    VStack(alignment: .trailing) {
-                                        Text(subscription.amount.formatted(.currency(code: subscription.currencyCode)))
-                                            .font(.subheadline)
-
-                                        Text(subscription.billingCycle.capitalized)
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                }
-                                .padding(.vertical, 4)
-                            }
-                            .tag(ListableItem(id: subscription.id, name: subscription.name, type: .subscription))
+                            ReusableListItemView(subscription: subscription)
                         }
                     }
                 }
@@ -478,41 +346,7 @@ struct GoalsListView: View {
             set: { self.navigationCoordinator.navigateToDetail(item: $0) }
         )) {
             ForEach(self.goals) { goal in
-                NavigationLink(value: ListableItem(id: goal.id, name: goal.name, type: .goal)) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text(goal.name)
-                                .font(.headline)
-
-                            Spacer()
-
-                            Text(
-                                "\(goal.currentAmount.formatted(.currency(code: "USD"))) of \(goal.targetAmount.formatted(.currency(code: "USD")))"
-                            )
-                            .font(.subheadline)
-                        }
-
-                        ProgressView(value: goal.currentAmount, total: goal.targetAmount)
-                            .tint(.blue)
-
-                        HStack {
-                            if let targetDate = goal.targetDate {
-                                Text("Target: \(targetDate.formatted(date: .abbreviated, time: .omitted))")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-
-                            Spacer()
-
-                            let percentage = Int((goal.currentAmount / goal.targetAmount) * 100)
-                            Text("\(percentage)%")
-                                .font(.caption)
-                                .bold()
-                        }
-                    }
-                    .padding(.vertical, 4)
-                }
-                .tag(ListableItem(id: goal.id, name: goal.name, type: .goal))
+                ReusableListItemView(goal: goal)
             }
         }
         .listStyle(.inset)
@@ -523,45 +357,10 @@ struct GoalsListView: View {
             get: { self.navigationCoordinator.selectedListItem },
             set: { self.navigationCoordinator.navigateToDetail(item: $0) }
         )) {
-            NavigationLink(value: ListableItem(id: "spending", name: "Spending by Category", type: .report)) {
-                HStack {
-                    Image(systemName: "chart.pie")
-                        .foregroundStyle(.orange)
-                    Text("Spending by Category")
-                }
-                .padding(.vertical, 8)
-            }
-            .tag(ListableItem(id: "spending", name: "Spending by Category", type: .report))
-
-            NavigationLink(value: ListableItem(id: "income", name: "Income vs Expenses", type: .report)) {
-                HStack {
-                    Image(systemName: "chart.bar")
-                        .foregroundStyle(.green)
-                    Text("Income vs Expenses")
-                }
-                .padding(.vertical, 8)
-            }
-            .tag(ListableItem(id: "income", name: "Income vs Expenses", type: .report))
-
-            NavigationLink(value: ListableItem(id: "trends", name: "Monthly Spending Trends", type: .report)) {
-                HStack {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                        .foregroundStyle(.blue)
-                    Text("Monthly Spending Trends")
-                }
-                .padding(.vertical, 8)
-            }
-            .tag(ListableItem(id: "trends", name: "Monthly Spending Trends", type: .report))
-
-            NavigationLink(value: ListableItem(id: "cashflow", name: "Cash Flow Analysis", type: .report)) {
-                HStack {
-                    Image(systemName: "arrow.left.arrow.right")
-                        .foregroundStyle(.purple)
-                    Text("Cash Flow Analysis")
-                }
-                .padding(.vertical, 8)
-            }
-            .tag(ListableItem(id: "cashflow", name: "Cash Flow Analysis", type: .report))
+            ReportListItemView(reportId: "spending", title: "Spending by Category", iconName: "chart.pie", iconColor: .orange)
+            ReportListItemView(reportId: "income", title: "Income vs Expenses", iconName: "chart.bar", iconColor: .green)
+            ReportListItemView(reportId: "trends", title: "Monthly Spending Trends", iconName: "chart.line.uptrend.xyaxis", iconColor: .blue)
+            ReportListItemView(reportId: "cashflow", title: "Cash Flow Analysis", iconName: "arrow.left.arrow.right", iconColor: .purple)
         }
         .listStyle(.inset)
     }

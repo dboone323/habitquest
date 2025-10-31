@@ -4,53 +4,68 @@ import SwiftUI
 
 /// ViewModel for ProfileView handling player profile data and statistics
 @MainActor
-public class ProfileViewModel: ObservableObject {
-    @Published var level: Int = 1
-    @Published var currentXP: Int = 0
-    @Published var xpForNextLevel: Int = 100
-    @Published var xpProgress: Float = 0.0
-    @Published var longestStreak: Int = 0
-    @Published var totalHabits: Int = 0
-    @Published var completedToday: Int = 0
-    @Published var achievements: [Achievement] = []
-    @Published var analytics: HabitAnalytics = .empty
+public class ProfileViewModel: ObservableObject, BaseViewModel {
+    // MARK: - State
+
+    struct State {
+        var level: Int = 1
+        var currentXP: Int = 0
+        var xpForNextLevel: Int = 100
+        var xpProgress: Float = 0.0
+        var longestStreak: Int = 0
+        var totalHabits: Int = 0
+        var completedToday: Int = 0
+        var achievements: [Achievement] = []
+        var analytics: HabitAnalytics = .empty
+        var isLoading = false
+        var errorMessage: String?
+    }
+
+    // MARK: - Actions
+
+    enum Action {
+        case setModelContext(ModelContext)
+        case refreshProfile
+        case loadAnalytics
+    }
+
+    // MARK: - Properties
+
+    @Published var state = State()
+
+    var isLoading: Bool { state.isLoading }
 
     private var modelContext: ModelContext?
-    private let logger = Logger(category: .uiCategory)
+    private let logger = Logger.shared
     private var analyticsService: AnalyticsService?
 
-    /// Set the model context and load profile data
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func setModelContext(_ context: ModelContext) {
-        self.modelContext = context
-        // self.analyticsService = AnalyticsService(modelContext: context) // Temporarily commented out
-        self.loadProfile()
-        self.loadStatistics()
-        self.loadAchievements()
-        // self.loadAnalytics() // Temporarily commented out for testing
+    // MARK: - BaseViewModel Protocol
+
+    func handle(_ action: Action) {
+        switch action {
+        case let .setModelContext(context):
+            self.modelContext = context
+            // self.analyticsService = AnalyticsService(modelContext: context) // Temporarily commented out
+            self.handle(.refreshProfile)
+
+        case .refreshProfile:
+            self.loadProfile()
+            self.loadStatistics()
+            self.loadAchievements()
+            self.updateAchievements()
+            self.handle(.loadAnalytics)
+
+        case .loadAnalytics:
+            self.loadAnalytics()
+        }
     }
 
-    /// Refresh all profile data
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func refreshProfile() {
-        self.loadProfile()
-        self.loadStatistics()
-        self.updateAchievements()
-        self.loadAnalytics()
-    }
+    // MARK: - Private Methods
 
     /// Load analytics data
     private func loadAnalytics() {
         let newAnalytics = analyticsService?.getAnalytics() ?? HabitAnalytics.empty
-        self.analytics = newAnalytics
+        self.state.analytics = newAnalytics
     }
 
     /// Load player profile data from SwiftData
@@ -77,11 +92,11 @@ public class ProfileViewModel: ObservableObject {
 
     /// Update published properties from PlayerProfile model
     private func updateProfileData(from profile: PlayerProfile) {
-        self.level = profile.level
-        self.currentXP = profile.currentXP
-        self.xpForNextLevel = GameRules.calculateXPForNextLevel(forLevel: profile.level)
-        self.xpProgress = profile.xpProgress
-        self.longestStreak = profile.longestStreak
+        self.state.level = profile.level
+        self.state.currentXP = profile.currentXP
+        self.state.xpForNextLevel = GameRules.calculateXPForNextLevel(forLevel: profile.level)
+        self.state.xpProgress = profile.xpProgress
+        self.state.longestStreak = profile.longestStreak
     }
 
     /// Create a default player profile
@@ -110,13 +125,13 @@ public class ProfileViewModel: ObservableObject {
             // Load all habits
             let habitFetchDescriptor = FetchDescriptor<Habit>()
             let allHabits = try modelContext.fetch(habitFetchDescriptor)
-            self.totalHabits = allHabits.count
+            self.state.totalHabits = allHabits.count
 
             // Calculate completed today
             let calendar = Calendar.current
             let today = Date()
 
-            self.completedToday = allHabits.reduce(0) { count, habit in
+            self.state.completedToday = allHabits.reduce(0) { count, habit in
                 let logs = habit.logs // Remove optional binding since logs is not optional
                 let todayCompletions = logs.filter { log in
                     calendar.isDate(log.completionDate, inSameDayAs: today)
@@ -124,7 +139,7 @@ public class ProfileViewModel: ObservableObject {
                 return count + (todayCompletions.isEmpty ? 0 : 1)
             }
 
-            self.logger.info("Loaded statistics - Total habits: \(self.totalHabits), Completed today: \(self.completedToday)")
+            self.logger.info("Loaded statistics - Total habits: \(self.state.totalHabits), Completed today: \(self.state.completedToday)")
 
         } catch {
             self.logger.error("Failed to load statistics: \(error.localizedDescription)")
@@ -147,10 +162,10 @@ public class ProfileViewModel: ObservableObject {
                     modelContext.insert(achievement)
                 }
                 try modelContext.save()
-                self.achievements = defaultAchievements
+                self.state.achievements = defaultAchievements
                 self.logger.info("Created \(defaultAchievements.count) default achievements")
             } else {
-                self.achievements = existingAchievements
+                self.state.achievements = existingAchievements
                 self.logger.info("Loaded \(existingAchievements.count) existing achievements")
             }
 

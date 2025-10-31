@@ -1,0 +1,3 @@
+qwen3-coder-480b-cloud:0
+llama3.2:3b-cloud|0
+qwen2.5-coder:7b-cloud|0

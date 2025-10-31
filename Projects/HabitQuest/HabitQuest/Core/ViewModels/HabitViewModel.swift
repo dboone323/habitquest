@@ -5,8 +5,10 @@ import SwiftUI
 
 /// Main ViewModel for managing habits using the MVVM pattern in HabitQuest.
 /// Provides separation of concerns, testable business logic, and enhanced state management.
+/// Includes comprehensive security and privacy compliance features.
 
 /// MVVM ViewModel for managing habits with enhanced features and AI-Enhanced Architecture Implementation.
+/// Includes enterprise-grade security, audit logging, and GDPR compliance.
 
 /// ViewModel for managing habit data, user actions, and state in HabitQuest.
 @MainActor
@@ -48,6 +50,12 @@ public class HabitViewModel: BaseViewModel {
     // MARK: - Private Properties
 
     private var modelContext: ModelContext?
+    private let auditLogger = AuditLogger.shared
+    private let securityMonitor = SecurityMonitor.shared
+    private let privacyManager = PrivacyManager.shared
+
+    // Current user ID for audit logging (would be set from authentication)
+    private var currentUserId: String? = "demo_user" // TODO: Integrate with authentication system
 
     // MARK: - Initialization
 
@@ -94,18 +102,40 @@ public class HabitViewModel: BaseViewModel {
     /// Loads all active habits from the data store and updates state.
     private func loadHabits() {
         guard let context = modelContext else { return }
-        self.isLoading = true
-        self.errorMessage = nil
-        do {
-            let descriptor = FetchDescriptor<Habit>(
-                predicate: #Predicate { $0.isActive },
-                sortBy: [SortDescriptor(\.creationDate, order: .reverse)]
+
+        // Check privacy compliance before data access
+        Task {
+            guard await privacyManager.validateGDPRCompliance(
+                userId: currentUserId ?? "unknown",
+                operation: "load_habits"
+            ) else {
+                setError(ErrorHandler.HabitQuestError.validationError("Privacy compliance check failed"))
+                return
+            }
+
+            // Monitor data access
+            await securityMonitor.monitorDataAccess(
+                resourceType: "habits",
+                resourceId: "all_habits",
+                userId: currentUserId,
+                operation: "load"
             )
-            self.state.habits = try context.fetch(descriptor)
-        } catch {
-            setError(AppError.dataError("Failed to load habits: \(error.localizedDescription)"))
+
+            self.isLoading = true
+            self.errorMessage = nil
+
+            do {
+                let descriptor = FetchDescriptor<Habit>(
+                    predicate: #Predicate { $0.isActive },
+                    sortBy: [SortDescriptor(\.creationDate, order: .reverse)]
+                )
+                self.state.habits = try context.fetch(descriptor)
+            } catch {
+                setError(ErrorHandler.HabitQuestError.dataModelError("Failed to load habits: \(error.localizedDescription)"))
+            }
+
+            self.isLoading = false
         }
-        self.isLoading = false
     }
 
     /// Creates a new habit and saves it to the data store.
@@ -120,21 +150,43 @@ public class HabitViewModel: BaseViewModel {
         difficulty: HabitDifficulty
     ) {
         guard let context = modelContext else { return }
-        let xpValue = self.calculateXPValue(for: difficulty, frequency: frequency)
-        let newHabit = Habit(
-            name: name,
-            habitDescription: description,
-            frequency: frequency,
-            xpValue: xpValue,
-            category: category,
-            difficulty: difficulty
-        )
-        context.insert(newHabit)
-        do {
-            try context.save()
-            self.loadHabits()
-        } catch {
-            setError(AppError.dataError("Failed to create habit: \(error.localizedDescription)"))
+
+        Task {
+            // Check privacy compliance
+            guard await privacyManager.validateGDPRCompliance(
+                userId: currentUserId ?? "unknown",
+                operation: "create_habit"
+            ) else {
+                setError(ErrorHandler.HabitQuestError.validationError("Privacy compliance check failed"))
+                return
+            }
+
+            let xpValue = self.calculateXPValue(for: difficulty, frequency: frequency)
+            let newHabit = Habit(
+                name: name,
+                habitDescription: description,
+                frequency: frequency,
+                xpValue: xpValue,
+                category: category,
+                difficulty: difficulty
+            )
+
+            context.insert(newHabit)
+
+            do {
+                try context.save()
+
+                // Audit log the habit creation
+                await auditLogger.logHabitCreation(
+                    habitId: newHabit.id.uuidString,
+                    habitName: name,
+                    userId: currentUserId
+                )
+
+                self.loadHabits()
+            } catch {
+                setError(ErrorHandler.HabitQuestError.dataModelError("Failed to create habit: \(error.localizedDescription)"))
+            }
         }
     }
 
@@ -142,15 +194,52 @@ public class HabitViewModel: BaseViewModel {
     /// - Parameter habit: The habit to mark as completed.
     private func completeHabit(_ habit: Habit) {
         guard let context = modelContext else { return }
-        if habit.isCompletedToday { return }
-        let log = HabitLog(habit: habit, isCompleted: true)
-        context.insert(log)
-        self.updateStreak(for: habit)
-        do {
-            try context.save()
-            self.loadHabits()
-        } catch {
-            setError(AppError.dataError("Failed to complete habit: \(error.localizedDescription)"))
+
+        Task {
+            // Check privacy compliance
+            guard await privacyManager.validateGDPRCompliance(
+                userId: currentUserId ?? "unknown",
+                operation: "complete_habit"
+            ) else {
+                setError(ErrorHandler.HabitQuestError.validationError("Privacy compliance check failed"))
+                return
+            }
+
+            if habit.isCompletedToday { return }
+
+            let log = HabitLog(habit: habit, isCompleted: true)
+            context.insert(log)
+            self.updateStreak(for: habit)
+
+            do {
+                try context.save()
+
+                // Audit log the habit completion
+                await auditLogger.logHabitCompletion(
+                    habitId: habit.id.uuidString,
+                    habitName: habit.name,
+                    streakCount: habit.streak,
+                    userId: currentUserId
+                )
+
+                // Monitor habit completion activity
+                await securityMonitor.monitorHabitCompletion(
+                    habitId: habit.id.uuidString,
+                    userId: currentUserId
+                )
+
+                // Audit log the habit log creation
+                await auditLogger.logHabitLogCreation(
+                    logId: log.id.uuidString,
+                    habitId: habit.id.uuidString,
+                    completionDate: log.completionDate,
+                    userId: currentUserId
+                )
+
+                self.loadHabits()
+            } catch {
+                setError(ErrorHandler.HabitQuestError.dataModelError("Failed to complete habit: \(error.localizedDescription)"))
+            }
         }
     }
 
@@ -158,12 +247,33 @@ public class HabitViewModel: BaseViewModel {
     /// - Parameter habit: The habit to delete.
     private func deleteHabit(_ habit: Habit) {
         guard let context = modelContext else { return }
-        habit.isActive = false
-        do {
-            try context.save()
-            self.loadHabits()
-        } catch {
-            setError(AppError.dataError("Failed to delete habit: \(error.localizedDescription)"))
+
+        Task {
+            // Check privacy compliance
+            guard await privacyManager.validateGDPRCompliance(
+                userId: currentUserId ?? "unknown",
+                operation: "delete_habit"
+            ) else {
+                setError(ErrorHandler.HabitQuestError.validationError("Privacy compliance check failed"))
+                return
+            }
+
+            habit.isActive = false
+
+            do {
+                try context.save()
+
+                // Audit log the habit deletion
+                await auditLogger.logHabitDeletion(
+                    habitId: habit.id.uuidString,
+                    habitName: habit.name,
+                    userId: currentUserId
+                )
+
+                self.loadHabits()
+            } catch {
+                setError(ErrorHandler.HabitQuestError.dataModelError("Failed to delete habit: \(error.localizedDescription)"))
+            }
         }
     }
 
@@ -232,10 +342,23 @@ public class HabitViewModel: BaseViewModel {
             Calendar.current.isDate(log.completionDate, inSameDayAs: yesterday) && log.isCompleted
         }
 
+        let oldStreak = habit.streak
+
         if wasCompletedYesterday || habit.streak == 0 {
             habit.streak += 1
         } else {
             habit.streak = 1 // Reset streak if there was a gap
+        }
+
+        // Monitor streak changes for security
+        if habit.streak != oldStreak {
+            Task {
+                await securityMonitor.monitorStreakUpdate(
+                    habitId: habit.id.uuidString,
+                    newStreak: habit.streak,
+                    userId: currentUserId
+                )
+            }
         }
     }
 

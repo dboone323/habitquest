@@ -10,9 +10,102 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class DashboardViewModel {
+final class DashboardViewModel: BaseViewModel {
+    // MARK: - State and Action Types
+
+    struct State {
+        var accounts: [FinancialAccount] = []
+        var transactions: [FinancialTransaction] = []
+        var budgets: [Budget] = []
+        var subscriptions: [Subscription] = []
+        var totalBalance: Double = 0
+        var recentTransactions: [FinancialTransaction] = []
+        var spendingByCategory: [String: Double] = [:]
+        var netIncomeThisMonth: Double = 0
+    }
+
+    enum Action {
+        case loadData
+        case refreshData
+        case processOverdueSubscriptions
+        case updateMetrics
+    }
+
+    // MARK: - BaseViewModel Properties
+
+    var state = State()
+    var isLoading = false
+    var errorMessage: String?
+
+    // MARK: - Private Properties
+
     private var modelContext: ModelContext?
     private let logger = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "MomentumFinance", category: "Dashboard")
+
+    // MARK: - BaseViewModel Protocol
+
+    func handle(_ action: Action) async {
+        switch action {
+        case .loadData:
+            await loadData()
+        case .refreshData:
+            await refreshData()
+        case .processOverdueSubscriptions:
+            await processOverdueSubscriptions()
+        case .updateMetrics:
+            updateMetrics()
+        }
+    }
+
+    func resetError() {
+        errorMessage = nil
+    }
+
+    func validateState() -> Bool {
+        return true
+    }
+
+    // MARK: - Legacy Properties (for backward compatibility)
+
+    var accounts: [FinancialAccount] {
+        get { state.accounts }
+        set { state.accounts = newValue }
+    }
+
+    var transactions: [FinancialTransaction] {
+        get { state.transactions }
+        set { state.transactions = newValue }
+    }
+
+    var budgets: [Budget] {
+        get { state.budgets }
+        set { state.budgets = newValue }
+    }
+
+    var subscriptions: [Subscription] {
+        get { state.subscriptions }
+        set { state.subscriptions = newValue }
+    }
+
+    var totalBalance: Double {
+        get { state.totalBalance }
+        set { state.totalBalance = newValue }
+    }
+
+    var recentTransactions: [FinancialTransaction] {
+        get { state.recentTransactions }
+        set { state.recentTransactions = newValue }
+    }
+
+    var spendingByCategory: [String: Double] {
+        get { state.spendingByCategory }
+        set { state.spendingByCategory = newValue }
+    }
+
+    var netIncomeThisMonth: Double {
+        get { state.netIncomeThisMonth }
+        set { state.netIncomeThisMonth = newValue }
+    }
 
     /// <#Description#>
     /// - Returns: <#description#>
@@ -131,4 +224,22 @@ final class DashboardViewModel {
 
         return income - expenses
     }
-}
+
+    // MARK: - Data Loading Methods
+
+    private func loadData() async {
+        // Implementation for loading data
+        // This would load accounts, transactions, budgets, subscriptions
+        updateMetrics()
+    }
+
+    private func refreshData() async {
+        await loadData()
+    }
+
+    private func updateMetrics() {
+        state.totalBalance = totalBalance(state.accounts)
+        state.recentTransactions = recentTransactions(state.transactions)
+        state.spendingByCategory = spendingByCategory(state.transactions)
+        state.netIncomeThisMonth = netIncomeThisMonth(state.transactions)
+    }

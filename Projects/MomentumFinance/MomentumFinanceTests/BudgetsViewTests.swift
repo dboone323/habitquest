@@ -254,15 +254,25 @@ final class BudgetsViewTests: XCTestCase {
     func testBudgetsViewModelHandlesSaveErrorsGracefully() throws {
         // Given: View model without model context
         let viewModelWithoutContext = BudgetsViewModel()
-        // Don't set model context
+        // Don't set model context - this simulates a configuration error
 
         let category = ExpenseCategory(name: "Food", iconName: "fork.knife")
 
-        // When: Attempting operations without context
+        // Capture initial state to verify no changes occur
+        let initialInsightsCount = viewModelWithoutContext.budgetInsights.count
+        let initialPredictionsCount = viewModelWithoutContext.spendingPredictions.count
+        let initialAnalyzingState = viewModelWithoutContext.isAnalyzingInsights
+
+        // When: Attempting to create a budget without model context
         viewModelWithoutContext.createBudget(category: category, limitAmount: 500.0, month: Date())
 
-        // Then: Should handle error gracefully (no crash)
-        XCTAssertTrue(true) // Test passes if no exception thrown
+        // Then: Should handle error gracefully without crashing
+        // The method should return early when modelContext is nil, preventing any database operations
+        // Verify no observable state changes occurred (no budgets created, no insights loaded, etc.)
+        XCTAssertEqual(viewModelWithoutContext.budgetInsights.count, initialInsightsCount, "Budget insights should not change when model context is nil")
+        XCTAssertEqual(viewModelWithoutContext.spendingPredictions.count, initialPredictionsCount, "Spending predictions should not change when model context is nil")
+        XCTAssertEqual(viewModelWithoutContext.isAnalyzingInsights, initialAnalyzingState, "Analyzing state should not change when model context is nil")
+        // Test passes if no exception thrown and no state changes occurred
     }
 
     // MARK: - Performance Tests

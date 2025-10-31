@@ -4,14 +4,34 @@ import SwiftUI
 
 /// ViewModel for StreakAnalyticsView handling business logic and data management
 @MainActor
-final class StreakAnalyticsViewModel: ObservableObject {
-    let objectWillChange = ObservableObjectPublisher()
+final class StreakAnalyticsViewModel: ObservableObject, BaseViewModel {
+    // MARK: - State
 
-    @Published var showingExportSheet = false
-    @Published var isLoading = false
-    @Published var errorMessage: String?
-    @Published var analyticsData: StreakAnalyticsData?
-    @Published var selectedTimeframe: Timeframe = .month
+    struct State {
+        var showingExportSheet = false
+        var isLoading = false
+        var errorMessage: String?
+        var analyticsData: StreakAnalyticsData?
+        var selectedTimeframe: Timeframe = .month
+    }
+
+    // MARK: - Actions
+
+    enum Action {
+        case setupService(ModelContext)
+        case loadAnalytics
+        case refreshAnalytics
+        case exportAnalytics
+        case shareAnalyticsReport
+        case setTimeframe(Timeframe)
+        case setShowingExportSheet(Bool)
+    }
+
+    // MARK: - Properties
+
+    @Published var state = State()
+
+    var isLoading: Bool { state.isLoading }
 
     enum Timeframe: String, CaseIterable, Equatable {
         case week = "7D"
@@ -41,22 +61,44 @@ final class StreakAnalyticsViewModel: ObservableObject {
     private var modelContext: ModelContext?
     private var streakService: StreakService?
 
-    init() {
-        // ModelContext will be set up later via setupService
+    // MARK: - BaseViewModel Protocol
+
+    func handle(_ action: Action) {
+        switch action {
+        case let .setupService(context):
+            self.modelContext = context
+            self.streakService = StreakService(modelContext: context)
+
+        case .loadAnalytics:
+            self.loadAnalytics()
+
+        case .refreshAnalytics:
+            self.handle(.loadAnalytics)
+
+        case .exportAnalytics:
+            self.exportAnalytics()
+
+        case .shareAnalyticsReport:
+            self.shareAnalyticsReport()
+
+        case let .setTimeframe(timeframe):
+            self.state.selectedTimeframe = timeframe
+            self.handle(.loadAnalytics)
+
+        case let .setShowingExportSheet(showing):
+            self.state.showingExportSheet = showing
+        }
     }
 
-    func setupService(modelContext: ModelContext) {
-        self.modelContext = modelContext
-        self.streakService = StreakService(modelContext: modelContext)
-    }
+    // MARK: - Private Methods
 
     func loadAnalytics() {
-        self.isLoading = true
-        self.errorMessage = nil
-        defer { isLoading = false }
+        self.state.isLoading = true
+        self.state.errorMessage = nil
+        defer { self.state.isLoading = false }
 
         guard let modelContext, let service = streakService else {
-            self.errorMessage = "Failed to initialize services"
+            self.state.errorMessage = "Failed to initialize services"
             return
         }
 
@@ -66,9 +108,9 @@ final class StreakAnalyticsViewModel: ObservableObject {
             let habits = try modelContext.fetch(habitDescriptor)
 
             let analytics = generateAnalyticsData(habits: habits, service: service)
-            self.analyticsData = analytics
+            self.state.analyticsData = analytics
         } catch {
-            self.errorMessage = "Failed to load analytics: \(error.localizedDescription)"
+            self.state.errorMessage = "Failed to load analytics: \(error.localizedDescription)"
         }
     }
 

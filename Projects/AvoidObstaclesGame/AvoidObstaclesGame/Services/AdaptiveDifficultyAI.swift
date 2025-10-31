@@ -40,6 +40,11 @@ public class AdaptiveDifficultyAI {
     /// Last analysis timestamp
     private var lastAnalysisTime: TimeInterval = 0
 
+    /// Security Framework Integration
+    private lazy var auditLogger = AuditLogger.shared
+    private lazy var securityMonitor = SecurityMonitor.shared
+    private lazy var privacyManager = PrivacyManager.shared
+
     // MARK: - Initialization
 
     private init() {
@@ -69,6 +74,9 @@ public class AdaptiveDifficultyAI {
         playerProfile: PlayerProfile? = nil
     ) {
         metricsCollector.recordSession(session, playerProfile: playerProfile)
+
+        // Security: Monitor game session data recording
+        securityMonitor.monitorDataAccess(operation: .update, entityType: "game_session", dataCount: 1)
 
         // Trigger immediate analysis for significant events
         if session.wasHighScore || session.survivalTime > 120 {
@@ -104,6 +112,9 @@ public class AdaptiveDifficultyAI {
         metricsCollector.reset()
         currentAnalysis = nil
         lastAnalysisTime = 0
+
+        // Security: Log analysis data reset
+        auditLogger.logDataAccess(operation: .delete, entityType: "ai_analysis", dataCount: 1)
     }
 
     // MARK: - AI Analysis

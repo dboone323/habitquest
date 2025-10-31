@@ -12,25 +12,64 @@ import SwiftData
 /// ViewModel managing today's quest display and completion logic
 /// Handles filtering habits due today and managing completion flow
 @MainActor
-public class TodaysQuestsViewModel: ObservableObject {
-    @Published var todaysHabits: [Habit] = []
-    @Published var showingAddQuest = false
-    @Published var showingCompletionAlert = false
-    @Published var completionMessage = ""
+public class TodaysQuestsViewModel: ObservableObject, BaseViewModel {
+    // MARK: - State
+
+    struct State {
+        var todaysHabits: [Habit] = []
+        var showingAddQuest = false
+        var showingCompletionAlert = false
+        var completionMessage = ""
+        var isLoading = false
+        var errorMessage: String?
+    }
+
+    // MARK: - Actions
+
+    enum Action {
+        case setModelContext(ModelContext)
+        case loadTodaysHabits
+        case completeHabit(Habit)
+        case addNewHabit(Habit)
+        case setShowingAddQuest(Bool)
+        case dismissCompletionAlert
+    }
+
+    // MARK: - Properties
+
+    @Published var state = State()
+
+    var isLoading: Bool { state.isLoading }
 
     private var modelContext: ModelContext?
 
-    /// Set the model context for data operations
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func setModelContext(_ context: ModelContext) {
-        self.modelContext = context
-        self.loadTodaysHabits()
+    // MARK: - BaseViewModel Protocol
+
+    func handle(_ action: Action) {
+        switch action {
+        case let .setModelContext(context):
+            self.modelContext = context
+            self.handle(.loadTodaysHabits)
+
+        case .loadTodaysHabits:
+            self.loadTodaysHabits()
+
+        case let .completeHabit(habit):
+            self.completeHabit(habit)
+
+        case let .addNewHabit(habit):
+            self.addNewHabit(habit)
+
+        case let .setShowingAddQuest(showing):
+            self.state.showingAddQuest = showing
+
+        case .dismissCompletionAlert:
+            self.state.showingCompletionAlert = false
+            self.state.completionMessage = ""
+        }
     }
+
+    // MARK: - Private Methods
 
     /// Load habits that are due today based on their frequency
     private func loadTodaysHabits() {
@@ -40,7 +79,7 @@ public class TodaysQuestsViewModel: ObservableObject {
 
         do {
             let allHabits = try context.fetch(request)
-            self.todaysHabits = allHabits.filter { habit in
+            self.state.todaysHabits = allHabits.filter { habit in
                 self.isDueToday(habit)
             }
         } catch {
@@ -73,11 +112,11 @@ public class TodaysQuestsViewModel: ObservableObject {
         self.awardXP(earnedExperiencePoints)
 
         // Show completion message
-        self.completionMessage = "Quest completed! +\(earnedExperiencePoints) XP"
-        self.showingCompletionAlert = true
+        self.state.completionMessage = "Quest completed! +\(earnedExperiencePoints) XP"
+        self.state.showingCompletionAlert = true
 
         // Refresh today's habits
-        self.loadTodaysHabits()
+        self.handle(.loadTodaysHabits)
 
         // Save context
         do {
@@ -129,7 +168,7 @@ public class TodaysQuestsViewModel: ObservableObject {
 
         do {
             try context.save()
-            self.loadTodaysHabits()
+            self.handle(.loadTodaysHabits)
         } catch {
             print("Error adding habit: \(error)")
         }

@@ -307,34 +307,46 @@ class GameModeManager {
                 }
             }
 
-            if let backButton = menu.childNode(withName: "backButton"),
-               backButton.contains(location)
-            {
-                self.hideModeSelectionMenu()
-                return true
+            if let backButton = menu.childNode(withName: "backButton") as? SKLabelNode {
+                // Calculate the button's position in scene coordinates
+                let buttonScenePosition = menu.convert(backButton.position, to: self.scene!)
+                // Check if touch is within a reasonable distance of the button (50 points)
+                let distance = hypot(location.x - buttonScenePosition.x, location.y - buttonScenePosition.y)
+                if distance <= 50 {
+                    self.hideModeSelectionMenu()
+                    return true
+                }
             }
         }
 
         // Check mode start screen
         if let startScreen = self.modeStartScreen {
-            if let startButton = startScreen.childNode(withName: "startModeButton"),
-               startButton.contains(location)
-            {
-                self.hideModeStartScreen()
-                Task { @MainActor in
-                    await self.delegate?.showGameModeStartScreen(for: self.currentMode)
+            if let startButton = startScreen.childNode(withName: "startModeButton") as? SKLabelNode {
+                // Calculate the button's position in scene coordinates
+                let buttonScenePosition = startScreen.convert(startButton.position, to: self.scene!)
+                // Check if touch is within a reasonable distance of the button (50 points)
+                let distance = hypot(location.x - buttonScenePosition.x, location.y - buttonScenePosition.y)
+                if distance <= 50 {
+                    self.hideModeStartScreen()
+                    Task { @MainActor in
+                        await self.delegate?.showGameModeStartScreen(for: self.currentMode)
+                    }
+                    return true
                 }
-                return true
             }
         }
 
         // Check mode complete screen
         if let completeScreen = self.modeCompleteScreen {
-            if let continueButton = completeScreen.childNode(withName: "continueModeButton"),
-               continueButton.contains(location)
-            {
-                self.hideModeCompleteScreen()
-                return true
+            if let continueButton = completeScreen.childNode(withName: "continueModeButton") as? SKLabelNode {
+                // Calculate the button's position in scene coordinates
+                let buttonScenePosition = completeScreen.convert(continueButton.position, to: self.scene!)
+                // Check if touch is within a reasonable distance of the button (50 points)
+                let distance = hypot(location.x - buttonScenePosition.x, location.y - buttonScenePosition.y)
+                if distance <= 50 {
+                    self.hideModeCompleteScreen()
+                    return true
+                }
             }
         }
 

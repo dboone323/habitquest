@@ -27,7 +27,7 @@ public class DataManagementViewModel: ObservableObject {
     }
 
     private var modelContext: ModelContext?
-    private let logger = Logger(category: .dataModel)
+    private let logger = Logger.shared
 
     /// Set the model context and load data statistics
     /// <#Description#>

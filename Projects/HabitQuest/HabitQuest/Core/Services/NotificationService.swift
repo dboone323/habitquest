@@ -5,7 +5,7 @@ import SwiftData
 /// Service for managing push notifications and habit reminders
 /// Handles notification scheduling, permission requests, and reminder management
 enum NotificationService {
-    private static let logger = Logger(category: .general)
+    private static let logger = Logger.shared
 
     /// Notification categories for different types of reminders
     enum NotificationCategory: String, CaseIterable {
@@ -109,7 +109,7 @@ enum NotificationService {
 
             do {
                 try await center.add(request)
-                self.logger.debug("Scheduled reminder for habit: \(habit.name)")
+                self.logger.log("Scheduled reminder for habit: \(habit.name)", level: .debug)
             } catch {
                 self.logger.error("Failed to schedule reminder for \(habit.name): \(error)")
             }
@@ -223,7 +223,7 @@ enum NotificationService {
 
         do {
             try await center.add(request)
-            self.logger.debug("Scheduled streak motivation for: \(habit.name)")
+            self.logger.log("Scheduled streak motivation for: \(habit.name)", level: .debug)
         } catch {
             self.logger.error("Failed to schedule streak motivation: \(error)")
         }

@@ -38,7 +38,7 @@ public class OllamaClient: ObservableObject {
         self.session = URLSession(configuration: configuration)
 
         // Enhanced logging
-        self.logger = Logger()
+        self.logger = Logger.shared
 
         // Cache and metrics
         self.cache = OllamaCache(enabled: config.enableCaching, expiryTime: config.cacheExpiryTime)

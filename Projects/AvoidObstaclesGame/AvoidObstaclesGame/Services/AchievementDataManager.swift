@@ -2,13 +2,13 @@
 // AchievementDataManager.swift
 // AvoidObstaclesGame
 //
-// Handles data persistence for achievements.
+// Handles data persistence for achievements with security integration.
 // Component extracted from AchievementManager.swift
 //
 
 import Foundation
 
-/// Manages persistence of achievement data
+/// Manages persistence of achievement data with security features
 public class AchievementDataManager: @unchecked Sendable {
     // MARK: - Properties
 
@@ -19,19 +19,27 @@ public class AchievementDataManager: @unchecked Sendable {
     /// Shared instance
     public static let shared = AchievementDataManager()
 
+    /// Security services
+    private let auditLogger = AuditLogger.shared
+    private let encryptionService = EncryptionService.shared
+    private let securityMonitor = SecurityMonitor.shared
+
     // MARK: - Initialization
 
     private init() {}
 
     // MARK: - Data Loading
 
-    /// Loads achievement progress from UserDefaults
+    /// Loads achievement progress from UserDefaults with security monitoring
     /// - Parameter achievements: The achievements dictionary to update
     /// - Returns: Updated achievements dictionary and total points
     public func loadProgress(for achievements: [String: Achievement]) -> ([String: Achievement], Int) {
         var updatedAchievements = achievements
         var totalPoints = 0
         let defaults = UserDefaults.standard
+
+        // Monitor data access
+        securityMonitor.monitorDataAccess(operation: .read, entityType: "achievements", dataCount: 2)
 
         // Load unlocked achievements
         if let unlockedIds = defaults.array(forKey: unlockedAchievementsKey) as? [String] {
@@ -60,14 +68,24 @@ public class AchievementDataManager: @unchecked Sendable {
 
     // MARK: - Data Saving
 
-    /// Saves achievement progress to UserDefaults
+    /// Saves achievement progress to UserDefaults with security monitoring
     /// - Parameter achievements: The achievements to save
     public func saveProgress(for achievements: [String: Achievement]) {
         let defaults = UserDefaults.standard
 
-        // Save unlocked achievements
+        // Prepare data for saving
         let unlockedIds = achievements.values.filter(\.isUnlocked).map(\.id)
-        defaults.set(unlockedIds, forKey: self.unlockedAchievementsKey)
+        var progressData: [String: Int] = [:]
+
+        for achievement in achievements.values where !achievement.isUnlocked && achievement.currentValue > 0 {
+            progressData[achievement.id] = achievement.currentValue
+        }
+
+        // Monitor data access
+        securityMonitor.monitorDataAccess(operation: .update, entityType: "achievements", dataCount: unlockedIds.count + progressData.count)
+
+        // Save unlocked achievements
+        defaults.set(unlockedIds, forKey: unlockedAchievementsKey)
 
         // Save unlock dates
         for achievement in achievements.values where achievement.isUnlocked {
@@ -77,13 +95,12 @@ public class AchievementDataManager: @unchecked Sendable {
         }
 
         // Save progress for incomplete achievements
-        var progressData: [String: Int] = [:]
-        for achievement in achievements.values where !achievement.isUnlocked && achievement.currentValue > 0 {
-            progressData[achievement.id] = achievement.currentValue
-        }
-        defaults.set(progressData, forKey: self.achievementProgressKey)
+        defaults.set(progressData, forKey: achievementProgressKey)
 
         defaults.synchronize()
+
+        // Log security event
+        auditLogger.logDataAccess(operation: .update, entityType: "achievements", dataCount: unlockedIds.count + progressData.count)
     }
 
     // MARK: - Achievement Updates
@@ -157,15 +174,23 @@ public class AchievementDataManager: @unchecked Sendable {
 
     // MARK: - Utility
 
-    /// Clears all achievement data from UserDefaults
+    /// Clears all achievement data from UserDefaults with security logging
     public func clearAllData() {
         let defaults = UserDefaults.standard
 
+        // Count data before deletion for logging
+        let unlockedCount = (defaults.array(forKey: unlockedAchievementsKey) as? [String])?.count ?? 0
+        let progressCount = (defaults.dictionary(forKey: achievementProgressKey) as? [String: Int])?.count ?? 0
+        let totalDataCount = unlockedCount + progressCount
+
+        // Monitor data deletion
+        securityMonitor.monitorDataAccess(operation: .delete, entityType: "achievements", dataCount: totalDataCount)
+
         // Remove unlocked achievements
-        defaults.removeObject(forKey: self.unlockedAchievementsKey)
+        defaults.removeObject(forKey: unlockedAchievementsKey)
 
         // Remove progress data
-        defaults.removeObject(forKey: self.achievementProgressKey)
+        defaults.removeObject(forKey: achievementProgressKey)
 
         // Remove all unlock dates
         let allKeys = defaults.dictionaryRepresentation().keys
@@ -174,5 +199,8 @@ public class AchievementDataManager: @unchecked Sendable {
         }
 
         defaults.synchronize()
+
+        // Log security event
+        auditLogger.logDataAccess(operation: .delete, entityType: "achievements", dataCount: totalDataCount)
     }
 }

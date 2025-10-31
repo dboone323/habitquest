@@ -36,6 +36,11 @@ class ProgressionManager {
     private let highScoresKey = "AvoidObstaclesHighScores"
     private let maxHighScores = 10
 
+    /// Security Framework Integration
+    private lazy var auditLogger = AuditLogger.shared
+    private lazy var securityMonitor = SecurityMonitor.shared
+    private lazy var privacyManager = PrivacyManager.shared
+
     // MARK: - Initialization
 
     private init() {
@@ -163,6 +168,13 @@ class ProgressionManager {
         // Play achievement sound and haptic feedback
         AudioManager.shared.playLevelUpSound()
         AudioManager.shared.triggerHapticFeedback(style: .success)
+
+        // Security: Log achievement unlock
+        auditLogger.logSecurityEvent(.gameDataModified, details: [
+            "achievement_unlocked": id,
+            "points_earned": achievement.points,
+            "total_points": totalAchievementPoints,
+        ])
     }
 
     // MARK: - High Score System
@@ -170,6 +182,10 @@ class ProgressionManager {
     /// Retrieves all high scores sorted from highest to lowest
     func getHighScores() -> [Int] {
         let scores = UserDefaults.standard.array(forKey: self.highScoresKey) as? [Int] ?? []
+
+        // Security: Monitor high score data access
+        securityMonitor.monitorDataAccess(operation: .read, entityType: "high_scores", dataCount: scores.count)
+
         return scores.sorted(by: >)
     }
 
@@ -188,6 +204,9 @@ class ProgressionManager {
 
         UserDefaults.standard.set(scores, forKey: self.highScoresKey)
         UserDefaults.standard.synchronize()
+
+        // Security: Monitor high score data modification
+        securityMonitor.monitorDataAccess(operation: .update, entityType: "high_scores", dataCount: scores.count)
 
         // Notify if this became a high score
         if wasHighScore, let rank = scores.firstIndex(of: score) {
@@ -288,6 +307,9 @@ class ProgressionManager {
                 }
             }
         }
+
+        // Security: Monitor data access
+        securityMonitor.monitorDataAccess(operation: .read, entityType: "achievements", dataCount: achievements.count)
     }
 
     /// Saves achievement progress to UserDefaults
@@ -313,6 +335,9 @@ class ProgressionManager {
         defaults.set(progressData, forKey: self.achievementProgressKey)
 
         defaults.synchronize()
+
+        // Security: Monitor data modification
+        securityMonitor.monitorDataAccess(operation: .update, entityType: "achievements", dataCount: achievements.count)
     }
 
     // MARK: - Reset Functions

@@ -3,6 +3,9 @@ import Combine
 import Foundation
 import SwiftUI // Needed for @AppStorage
 
+// Security Framework Integration
+// Note: Security components are part of the same module, no imports needed
+
 // MARK: - Shared View Model Protocol
 
 /// Protocol for standardized MVVM pattern across all projects
@@ -174,6 +177,11 @@ public class DashboardViewModel: BaseViewModel, ObservableObject {
     // AI Service
     private let aiService = AITaskPrioritizationService.shared
 
+    // Security Framework Integration
+    private lazy var auditLogger = AuditLogger.shared
+    private lazy var securityMonitor = SecurityMonitor.shared
+    private lazy var privacyManager = PrivacyManager.shared
+
     // Performance Optimization: Data Caching
     private struct CachedData<T> {
         let data: T
@@ -216,6 +224,29 @@ public class DashboardViewModel: BaseViewModel, ObservableObject {
     @MainActor
     func fetchDashboardData() {
         print("Fetching dashboard data...") // Debugging log
+
+        // Security: Log dashboard data access
+        auditLogger.logDataAccess(
+            operation: "dashboard_fetch",
+            entityType: "dashboard_data",
+            entityId: nil,
+            userId: nil,
+            details: ["operation": "fetch_dashboard_data"]
+        )
+
+        // Security: Check privacy compliance before data access
+        Task {
+            do {
+                try await privacyManager.performComplianceCheck()
+            } catch {
+                self.setError("Privacy compliance check failed: \(error.localizedDescription)")
+                auditLogger.logSecurityEvent(
+                    event: "privacy_compliance_failure",
+                    details: ["operation": "dashboard_fetch", "error": error.localizedDescription]
+                )
+                return
+            }
+        }
 
         // Load all data from the respective data managers.
         let allEvents = CalendarDataManager.shared.load()
@@ -292,11 +323,27 @@ public class DashboardViewModel: BaseViewModel, ObservableObject {
         print(
             "Dashboard data fetched. Limit: \(limit). Today: \(self.state.totalTodaysEventsCount), Tasks: \(self.state.totalIncompleteTasksCount), Goals: \(self.state.totalUpcomingGoalsCount)"
         ) // Debugging log
+
+        // Security: Monitor dashboard access patterns
+        securityMonitor.monitorDataAccess(
+            recordType: "dashboard",
+            operation: "fetch",
+            recordCount: self.state.totalTodaysEventsCount + self.state.totalIncompleteTasksCount + self.state.totalUpcomingGoalsCount
+        )
     }
 
     // New method for modern dashboard
     @MainActor
     func refreshData() async {
+        // Security: Log dashboard refresh operation
+        auditLogger.logDataAccess(
+            operation: "dashboard_refresh",
+            entityType: "dashboard_data",
+            entityId: nil,
+            userId: nil,
+            details: ["operation": "refresh_dashboard_data"]
+        )
+
         // Call existing method
         self.fetchDashboardData()
 
@@ -308,6 +355,13 @@ public class DashboardViewModel: BaseViewModel, ObservableObject {
 
         // Generate upcoming items
         self.generateUpcomingItems()
+
+        // Security: Monitor refresh operation
+        securityMonitor.monitorDataAccess(
+            recordType: "dashboard",
+            operation: "refresh",
+            recordCount: self.state.totalTodaysEventsCount + self.state.totalIncompleteTasksCount + self.state.totalUpcomingGoalsCount
+        )
 
         print("Dashboard refresh completed") // Debugging log
     }

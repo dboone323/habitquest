@@ -26,17 +26,19 @@ final class AvoidObstaclesGameTests: XCTestCase {
     func testPlayerMovement() throws {
         // Test basic player movement mechanics with GameScene
         // Note: Full SpriteKit scene testing requires UI testing, so we test the core logic
-        let scene = GameScene(size: CGSize(width: 375, height: 667))
+        XCTAssertNoThrow({
+            let scene = GameScene(size: CGSize(width: 375, height: 667))
 
-        // Test that scene was created successfully
-        XCTAssertNotNil(scene)
-        XCTAssertEqual(scene.size.width, 375)
-        XCTAssertEqual(scene.size.height, 667)
+            // Test that scene was created successfully
+            XCTAssertNotNil(scene)
+            XCTAssertEqual(scene.size.width, 375)
+            XCTAssertEqual(scene.size.height, 667)
 
-        // Test that the scene has the expected structure (physics world setup requires didMove(to:))
-        // We can test that the scene exists and has proper dimensions
-        XCTAssertTrue(scene.size.width > 0)
-        XCTAssertTrue(scene.size.height > 0)
+            // Test that the scene has the expected structure (physics world setup requires didMove(to:))
+            // We can test that the scene exists and has proper dimensions
+            XCTAssertTrue(scene.size.width > 0)
+            XCTAssertTrue(scene.size.height > 0)
+        }, "GameScene should initialize successfully for player movement testing")
     }
 
     @MainActor
@@ -61,15 +63,23 @@ final class AvoidObstaclesGameTests: XCTestCase {
     }
 
     func testCollisionDetection() throws {
-        // Test collision detection between player and obstacles
-        // let player = Player(position: CGPoint(x: 100, y: 200))
-        // let obstacle = Obstacle(type: .wall, position: CGPoint(x: 100, y: 200))
+        // Test collision detection between player and obstacles using physics categories
+        let playerCategory: UInt32 = PhysicsCategory.player
+        let obstacleCategory: UInt32 = PhysicsCategory.obstacle
+        let powerUpCategory: UInt32 = PhysicsCategory.powerUp
 
-        // let collision = player.collidesWith(obstacle)
-        // XCTAssertTrue(collision)
+        // Test that physics categories are properly defined and distinct
+        XCTAssertNotEqual(playerCategory, obstacleCategory, "Player and obstacle categories should be different")
+        XCTAssertNotEqual(playerCategory, powerUpCategory, "Player and power-up categories should be different")
+        XCTAssertNotEqual(obstacleCategory, powerUpCategory, "Obstacle and power-up categories should be different")
 
-        // Placeholder until collision system is defined
-        XCTAssertTrue(true, "Collision detection test framework ready")
+        // Test collision bit mask logic
+        let playerCollisionMask = PhysicsCategory.obstacle | PhysicsCategory.powerUp
+        let obstacleCollisionMask = PhysicsCategory.none
+
+        XCTAssertEqual(playerCollisionMask & obstacleCategory, obstacleCategory, "Player should collide with obstacles")
+        XCTAssertEqual(playerCollisionMask & powerUpCategory, powerUpCategory, "Player should collide with power-ups")
+        XCTAssertEqual(obstacleCollisionMask, PhysicsCategory.none, "Obstacles should not collide with anything")
     }
 
     // MARK: - Score System Tests
@@ -113,42 +123,57 @@ final class AvoidObstaclesGameTests: XCTestCase {
 
     // MARK: - Game State Tests
 
+    @MainActor
     func testGameStartState() throws {
-        // Test initial game state
-        // let game = Game()
-        // XCTAssertEqual(game.state, .ready)
-        // XCTAssertEqual(game.score, 0)
-        // XCTAssertEqual(game.lives, 3)
+        // Test initial game state using GameStateManager
+        let gameStateManager = GameStateManager()
 
-        // Placeholder until Game model is defined
-        XCTAssertTrue(true, "Game start state test framework ready")
+        // Test initial state
+        XCTAssertEqual(gameStateManager.currentState, .waitingToStart, "Game should start in waitingToStart state")
+        XCTAssertEqual(gameStateManager.getCurrentScore(), 0, "Initial score should be 0")
+        XCTAssertEqual(gameStateManager.getCurrentDifficultyLevel(), 1, "Initial difficulty level should be 1")
+        XCTAssertFalse(gameStateManager.isGameActive(), "Game should not be active initially")
+        XCTAssertFalse(gameStateManager.isGameOver(), "Game should not be over initially")
+        XCTAssertFalse(gameStateManager.isGamePaused(), "Game should not be paused initially")
     }
 
+    @MainActor
     func testGameOverCondition() throws {
-        // Test game over conditions
-        // let game = Game()
-        // game.lives = 0
+        // Test game over conditions using GameStateManager
+        let gameStateManager = GameStateManager()
 
-        // XCTAssertTrue(game.isGameOver)
-        // XCTAssertEqual(game.state, .gameOver)
+        // Start game
+        gameStateManager.startGame()
+        XCTAssertEqual(gameStateManager.currentState, .playing, "Game should be in playing state after start")
+        XCTAssertTrue(gameStateManager.isGameActive(), "Game should be active when playing")
 
-        // Placeholder until Game model is defined
-        XCTAssertTrue(true, "Game over condition test framework ready")
+        // End game
+        gameStateManager.endGame()
+        XCTAssertEqual(gameStateManager.currentState, .gameOver, "Game should be in gameOver state after end")
+        XCTAssertTrue(gameStateManager.isGameOver(), "Game should be over after endGame()")
+        XCTAssertFalse(gameStateManager.isGameActive(), "Game should not be active when over")
     }
 
+    @MainActor
     func testPauseResumeFunctionality() throws {
-        // Test pause and resume functionality
-        // let game = Game()
-        // game.state = .playing
+        // Test pause and resume functionality using GameStateManager
+        let gameStateManager = GameStateManager()
 
-        // game.pause()
-        // XCTAssertEqual(game.state, .paused)
+        // Start game
+        gameStateManager.startGame()
+        XCTAssertEqual(gameStateManager.currentState, .playing, "Game should be playing after start")
 
-        // game.resume()
-        // XCTAssertEqual(game.state, .playing)
+        // Pause game
+        gameStateManager.pauseGame()
+        XCTAssertEqual(gameStateManager.currentState, .paused, "Game should be paused after pauseGame()")
+        XCTAssertTrue(gameStateManager.isGamePaused(), "Game should be paused")
+        XCTAssertFalse(gameStateManager.isGameActive(), "Game should not be active when paused")
 
-        // Placeholder until Game model is defined
-        XCTAssertTrue(true, "Pause/resume test framework ready")
+        // Resume game
+        gameStateManager.resumeGame()
+        XCTAssertEqual(gameStateManager.currentState, .playing, "Game should be playing after resumeGame()")
+        XCTAssertFalse(gameStateManager.isGamePaused(), "Game should not be paused after resume")
+        XCTAssertTrue(gameStateManager.isGameActive(), "Game should be active when resumed")
     }
 
     // MARK: - Level System Tests
@@ -195,27 +220,53 @@ final class AvoidObstaclesGameTests: XCTestCase {
     // MARK: - Power-up Tests
 
     func testPowerUpActivation() throws {
-        // Test power-up activation and effects
-        // let player = Player()
-        // let shieldPowerUp = PowerUp(type: .shield, duration: 10.0)
+        // Test power-up activation and properties using PowerUpType enum
+        let shieldPowerUp = PowerUpType.shield
+        let speedPowerUp = PowerUpType.speed
+        let laserPowerUp = PowerUpType.laser
 
-        // player.activatePowerUp(shieldPowerUp)
-        // XCTAssertTrue(player.hasShield)
-        // XCTAssertEqual(player.shieldDuration, 10.0)
+        // Test power-up colors
+        XCTAssertEqual(shieldPowerUp.color, SKColor.blue, "Shield power-up should be blue")
+        XCTAssertEqual(speedPowerUp.color, SKColor.green, "Speed power-up should be green")
+        XCTAssertEqual(laserPowerUp.color, SKColor.red, "Laser power-up should be red")
 
-        // Placeholder until PowerUp system is defined
-        XCTAssertTrue(true, "Power-up activation test framework ready")
+        // Test power-up durations
+        XCTAssertEqual(shieldPowerUp.duration, 8.0, "Shield duration should be 8 seconds")
+        XCTAssertEqual(speedPowerUp.duration, 6.0, "Speed duration should be 6 seconds")
+        XCTAssertEqual(laserPowerUp.duration, 3.0, "Laser duration should be 3 seconds")
+
+        // Test power-up descriptions
+        XCTAssertEqual(shieldPowerUp.description, "Temporary invincibility", "Shield description should match")
+        XCTAssertEqual(speedPowerUp.description, "Increased movement speed", "Speed description should match")
+
+        // Test power-up rarities
+        XCTAssertEqual(shieldPowerUp.rarity, .common, "Shield should be common rarity")
+        XCTAssertEqual(laserPowerUp.rarity, .rare, "Laser should be rare rarity")
     }
 
     func testPowerUpExpiration() throws {
-        // Test power-up expiration
-        // let powerUp = PowerUp(type: .speedBoost, duration: 5.0)
-        // powerUp.startTime = Date().addingTimeInterval(-6.0) // 6 seconds ago
+        // Test power-up expiration logic using PowerUpType durations and rarities
+        let instantPowerUp = PowerUpType.multiBall // 0.0 duration (instant)
+        let shortPowerUp = PowerUpType.laser // 3.0 duration
+        let longPowerUp = PowerUpType.magnet // 10.0 duration
 
-        // XCTAssertTrue(powerUp.isExpired)
+        // Test that instant power-ups have zero duration
+        XCTAssertEqual(instantPowerUp.duration, 0.0, "Instant power-ups should have zero duration")
 
-        // Placeholder until PowerUp system is defined
-        XCTAssertTrue(true, "Power-up expiration test framework ready")
+        // Test duration ranges
+        XCTAssertGreaterThan(shortPowerUp.duration, 0.0, "Non-instant power-ups should have positive duration")
+        XCTAssertGreaterThan(longPowerUp.duration, shortPowerUp.duration, "Longer power-ups should have greater duration")
+
+        // Test rarity spawn weights
+        let commonRarity = PowerUpRarity.common
+        let legendaryRarity = PowerUpRarity.legendary
+
+        XCTAssertGreaterThan(commonRarity.spawnWeight, legendaryRarity.spawnWeight, "Common power-ups should spawn more frequently than legendary")
+        XCTAssertEqual(commonRarity.spawnWeight, 1.0, "Common rarity should have spawn weight of 1.0")
+        XCTAssertEqual(legendaryRarity.spawnWeight, 0.05, "Legendary rarity should have spawn weight of 0.05")
+
+        // Test glow intensity
+        XCTAssertGreaterThan(legendaryRarity.glowIntensity, commonRarity.glowIntensity, "Legendary power-ups should have higher glow intensity")
     }
 
     // MARK: - Performance Tests

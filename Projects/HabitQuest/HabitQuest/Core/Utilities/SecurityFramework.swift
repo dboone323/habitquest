@@ -235,8 +235,8 @@ public enum SecurityFramework {
                 logger.warning("\(message) - \(metadata)")
             case .error:
                 logger.error("\(message) - \(metadata)")
-            case .critical:
-                logger.critical("\(message) - \(metadata)")
+            case .debug:
+                logger.info("\(message) - \(metadata)") // Map debug to info for security logger
             }
         }
 
@@ -451,14 +451,9 @@ public enum SecurityEvent {
         case .keychainOperationFailed, .encryptionOperationFailed:
             return .error
         case .vulnerabilityDetected, .incidentDetected:
-            return .critical
+            return .error
         }
     }
-}
-
-/// Log levels
-public enum LogLevel {
-    case info, warning, error, critical
 }
 
 /// Security incident types

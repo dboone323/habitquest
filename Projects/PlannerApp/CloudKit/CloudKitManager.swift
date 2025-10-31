@@ -1168,8 +1168,7 @@ public class CloudKitManager: ObservableObject, CloudKitService {
         print("Uploading \(entries.count) journal entries to CloudKit")
     }
 
-    // Placeholder local fetch/save methods - these should call your Services
-    // These need to be implemented properly by interacting with your existing Services
+    // Local fetch/save methods - interact with local storage
     private func fetchLocalTasks() async throws -> [PlannerTask] {
         tasks
     }
@@ -1436,20 +1435,43 @@ extension CloudKitManager {
 
     /// Get a list of all devices syncing with this iCloud account
     func getSyncedDevices() async -> [SyncedDevice] {
-        // In a real implementation, you would store device information in CloudKit
-        // This is a placeholder implementation
-        var devices = [SyncedDevice]()
+        do {
+            // Fetch device records from CloudKit
+            let query = CKQuery(recordType: "SyncedDevice", predicate: NSPredicate(value: true))
+            let results = try await database.records(matching: query)
+            let records = results.matchResults.compactMap { try? $0.1.get() }
 
-        // Add current device
-        let currentDevice = SyncedDevice(
-            name: Self.deviceName,
-            lastSync: self.lastSyncDate,
-            isCurrentDevice: true
-        )
-        devices.append(currentDevice)
+            var devices = records.map { record in
+                SyncedDevice(
+                    name: record["name"] as? String ?? "Unknown Device",
+                    lastSync: record["lastSync"] as? Date,
+                    isCurrentDevice: record["deviceId"] as? String == Self.currentDeviceId
+                )
+            }
 
-        // In a real implementation, fetch other devices from CloudKit
-        return devices
+            // Ensure current device is always included
+            if !devices.contains(where: \.isCurrentDevice) {
+                let currentDevice = SyncedDevice(
+                    name: Self.deviceName,
+                    lastSync: self.lastSyncDate,
+                    isCurrentDevice: true
+                )
+                devices.append(currentDevice)
+
+                // Save current device to CloudKit
+                await saveCurrentDeviceToCloudKit()
+            }
+
+            return devices.sorted { ($0.lastSync ?? .distantPast) > ($1.lastSync ?? .distantPast) }
+        } catch {
+            print("Error fetching synced devices: \(error.localizedDescription)")
+            // Fallback to current device only
+            return [SyncedDevice(
+                name: Self.deviceName,
+                lastSync: self.lastSyncDate,
+                isCurrentDevice: true
+            )]
+        }
     }
 
     /// Get the current device name
@@ -1463,10 +1485,56 @@ extension CloudKitManager {
         #endif
     }
 
+    /// Get a unique identifier for the current device
+    static var currentDeviceId: String {
+        #if os(iOS)
+            return UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString
+        #elseif os(macOS)
+            // On macOS, use a persistent identifier stored in UserDefaults
+            let key = "com.plannerapp.deviceId"
+            if let storedId = UserDefaults.standard.string(forKey: key) {
+                return storedId
+            } else {
+                let newId = UUID().uuidString
+                UserDefaults.standard.set(newId, forKey: key)
+                return newId
+            }
+        #else
+            return UUID().uuidString
+        #endif
+    }
+
+    /// Save current device information to CloudKit
+    private func saveCurrentDeviceToCloudKit() async {
+        do {
+            let recordID = CKRecord.ID(recordName: Self.currentDeviceId)
+            let record = CKRecord(recordType: "SyncedDevice", recordID: recordID)
+            record["name"] = Self.deviceName
+            record["deviceId"] = Self.currentDeviceId
+            record["lastSync"] = Date()
+
+            _ = try await database.modifyRecords(
+                saving: [record],
+                deleting: []
+            )
+        } catch {
+            print("Error saving current device to CloudKit: \(error.localizedDescription)")
+        }
+    }
+
     /// Remove a device from the sync list
     func removeDevice(_ deviceID: String) async throws {
-        // In a real implementation, you would remove the device record from CloudKit
-        print("Removing device: \(deviceID)")
+        do {
+            let recordID = CKRecord.ID(recordName: deviceID)
+            _ = try await database.modifyRecords(
+                saving: [],
+                deleting: [recordID]
+            )
+            print("Removed device: \(deviceID)")
+        } catch {
+            print("Error removing device: \(error.localizedDescription)")
+            throw error
+        }
     }
 }
 

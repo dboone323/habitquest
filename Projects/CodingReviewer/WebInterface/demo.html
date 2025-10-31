@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodingReviewer Web - AI-Powered Code Review Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .app-container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            margin: 20px;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .app-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .app-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .app-content {
+            padding: 2rem;
+        }
+
+        .file-upload {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: #f8f9ff;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: #764ba2;
+            background: #f0f2ff;
+        }
+
+        .file-upload.dragover {
+            border-color: #27ae60;
+            background: #f0fff0;
+        }
+
+        .file-upload h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .file-upload p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .analysis-results {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .analysis-results h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .result-item {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #27ae60;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .result-item.warning {
+            border-left-color: #f39c12;
+        }
+
+        .result-item.error {
+            border-left-color: #e74c3c;
+        }
+
+        .result-item h4 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .result-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .status-ready {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-analyzing {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-complete {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .wasm-status {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .wasm-status h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .wasm-status p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .app-footer {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 1.5rem;
+            color: white;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .app-container {
+                margin: 10px;
+            }
+
+            .app-header {
+                padding: 1.5rem;
+            }
+
+            .app-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .app-content {
+                padding: 1rem;
+            }
+
+            .file-upload {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        🚀 Loading CodingReviewer Web...
+    </div>
+
+    <div id="app-container" class="app-container" style="display: none;">
+        <header class="app-header">
+            <h1>🤖 CodingReviewer Web</h1>
+            <p>AI-Powered Code Review for Swift Projects</p>
+        </header>
+
+        <div class="app-content">
+            <div class="wasm-status">
+                <h3>⚡ SwiftWasm Status</h3>
+                <p>WebInterface structure complete and ready for SwiftWasm deployment. This demo shows the code review interface that will be powered by Swift code compiled to WebAssembly.</p>
+            </div>
+
+            <div class="status-indicator status-ready">Ready for Code Review</div>
+
+            <div class="file-upload" id="file-upload">
+                <h3>📁 Select Swift Files for Review</h3>
+                <p>Drag and drop .swift files here or click to browse</p>
+                <input type="file" id="file-input" class="file-input" multiple accept=".swift">
+                <button class="upload-btn" onclick="document.getElementById('file-input').click()">Choose Files</button>
+            </div>
+
+            <div class="analysis-results" id="analysis-results" style="display: none;">
+                <h3>🔍 Analysis Results</h3>
+                <div id="results-container">
+                    <div class="result-item">
+                        <h4>✅ Code Quality Check</h4>
+                        <p>Analyzing Swift code for best practices, performance issues, and potential bugs...</p>
+                    </div>
+                    <div class="result-item warning">
+                        <h4>⚠️ Style Guide Compliance</h4>
+                        <p>Checking adherence to Swift style guidelines and naming conventions...</p>
+                    </div>
+                    <div class="result-item">
+                        <h4>✅ Security Analysis</h4>
+                        <p>Scanning for potential security vulnerabilities and unsafe patterns...</p>
+                    </div>
+                    <div class="result-item">
+                        <h4>✅ Performance Review</h4>
+                        <p>Evaluating code efficiency and optimization opportunities...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <p>CodingReviewer Web - WebInterface Ready for SwiftWasm • <span style="color: #27ae60;">✅ Phase 8 Web Deployment Complete</span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Simulate loading SwiftWasm
+        setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('app-container').style.display = 'block';
+        }, 2000);
+
+        // File upload handling
+        const fileUpload = document.getElementById('file-upload');
+        const fileInput = document.getElementById('file-input');
+        const analysisResults = document.getElementById('analysis-results');
+        const statusIndicator = document.querySelector('.status-indicator');
+
+        // Drag and drop functionality
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUpload.classList.add('dragover');
+        });
+
+        fileUpload.addEventListener('dragleave', () => {
+            fileUpload.classList.remove('dragover');
+        });
+
+        fileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                // Update status
+                statusIndicator.textContent = 'Analyzing Files...';
+                statusIndicator.className = 'status-indicator status-analyzing';
+
+                // Show results after a delay (simulating analysis)
+                setTimeout(() => {
+                    analysisResults.style.display = 'block';
+                    statusIndicator.textContent = 'Analysis Complete';
+                    statusIndicator.className = 'status-indicator status-complete';
+
+                    // Add file names to results
+                    const resultsContainer = document.getElementById('results-container');
+                    const fileList = document.createElement('div');
+                    fileList.className = 'result-item';
+                    fileList.innerHTML = `
+                        <h4>📋 Files Analyzed</h4>
+                        <p>Processed ${files.length} file(s): ${Array.from(files).map(f => f.name).join(', ')}</p>
+                    `;
+                    resultsContainer.insertBefore(fileList, resultsContainer.firstChild);
+                }, 3000);
+            }
+        }
+
+        // Click to upload
+        fileUpload.addEventListener('click', () => {
+            fileInput.click();
+        });
+    </script>
+</body>
+</html>

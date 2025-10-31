@@ -21,7 +21,7 @@ class AIAdaptiveDifficultyManager: @unchecked Sendable {
     // MARK: - Properties
 
     /// Delegate for difficulty adjustment events
-    weak var delegate: AIAdaptiveDifficultyDelegate?
+    var delegate: AIAdaptiveDifficultyDelegate?
 
     /// Current adaptive difficulty settings
     private(set) var currentDifficulty: AIAdaptiveDifficulty
@@ -84,7 +84,9 @@ class AIAdaptiveDifficultyManager: @unchecked Sendable {
         sessionData.actions.append(actionData)
 
         // Real-time analysis for immediate adjustments
-        analyzeAndAdjustIfNeeded()
+        Task {
+            await analyzeAndAdjustIfNeeded()
+        }
     }
 
     /// Records game state changes
@@ -116,8 +118,8 @@ class AIAdaptiveDifficultyManager: @unchecked Sendable {
     }
 
     /// Manually triggers difficulty analysis and adjustment
-    func forceDifficultyAnalysis() {
-        analyzeAndAdjustIfNeeded()
+    func forceDifficultyAnalysis() async {
+        await analyzeAndAdjustIfNeeded()
     }
 
     /// Resets the session data and difficulty
@@ -132,38 +134,45 @@ class AIAdaptiveDifficultyManager: @unchecked Sendable {
 
     private func setupPeriodicAnalysis() {
         analysisTimer = Timer.scheduledTimer(withTimeInterval: analysisInterval, repeats: true) { [weak self] _ in
-            self?.analyzeAndAdjustIfNeeded()
+            Task {
+                await self?.analyzeAndAdjustIfNeeded()
+            }
         }
     }
 
-    private func analyzeAndAdjustIfNeeded() {
-        Task {
-            do {
-                // Analyze player behavior
-                let analysis = try await behaviorAnalyzer.analyzeBehavior(sessionData: sessionData)
+    private func analyzeAndAdjustIfNeeded() async {
+        do {
+            // Analyze player behavior
+            let analysis = try await behaviorAnalyzer.analyzeBehavior(sessionData: sessionData)
 
-                // Get AI insights from Ollama
-                let aiInsights = try await getAIInsights(for: analysis)
+            // Get AI insights from Ollama
+            let aiInsights = try await getAIInsights(for: analysis)
 
-                // Calculate optimal difficulty
-                let optimalDifficulty = adjustmentEngine.calculateOptimalDifficulty(
-                    analysis: analysis,
-                    aiInsights: aiInsights,
-                    currentDifficulty: currentDifficulty
-                )
+            // Calculate optimal difficulty
+            let optimalDifficulty = adjustmentEngine.calculateOptimalDifficulty(
+                analysis: analysis,
+                aiInsights: aiInsights,
+                currentDifficulty: currentDifficulty
+            )
 
-                // Check if adjustment is needed
-                if shouldAdjustDifficulty(from: currentDifficulty, to: optimalDifficulty) {
-                    await applyDifficultyAdjustment(to: optimalDifficulty, reason: analysis.primaryReason)
-                }
+            print("DEBUG: analyzeAndAdjustIfNeeded - current: \(currentDifficulty), optimal: \(optimalDifficulty)")
 
-                // Update performance metrics
-                performanceMonitor.recordAnalysis(success: true, duration: Date().timeIntervalSince(analysis.startTime))
-
-            } catch {
-                print("AI Difficulty Analysis Error: \(error.localizedDescription)")
-                performanceMonitor.recordAnalysis(success: false, duration: 0)
+            // Check if adjustment is needed
+            if shouldAdjustDifficulty(from: currentDifficulty, to: optimalDifficulty) {
+                print("DEBUG: Should adjust difficulty - calling applyDifficultyAdjustment")
+                await applyDifficultyAdjustment(to: optimalDifficulty, reason: analysis.primaryReason)
+            } else {
+                print("DEBUG: Should NOT adjust difficulty")
+                let confidence = adjustmentEngine.getLastAdjustmentConfidence()
+                print("DEBUG: Confidence: \(confidence), threshold: \(minConfidenceThreshold)")
             }
+
+            // Update performance metrics
+            performanceMonitor.recordAnalysis(success: true, duration: Date().timeIntervalSince(analysis.startTime))
+
+        } catch {
+            print("AI Difficulty Analysis Error: \(error.localizedDescription)")
+            performanceMonitor.recordAnalysis(success: false, duration: 0)
         }
     }
 
@@ -199,11 +208,14 @@ class AIAdaptiveDifficultyManager: @unchecked Sendable {
     }
 
     private func parseAIInsights(from response: String) throws -> AIInsights {
+        print("DEBUG: parseAIInsights - response: \(response)")
         // Simple JSON parsing - in production, use proper JSON parsing
         let recommendedDifficulty = extractValue(from: response, key: "recommended_difficulty") ?? "normal"
         let confidenceString = extractValue(from: response, key: "confidence") ?? "0.5"
         let confidence = Double(confidenceString) ?? 0.5
         let reasoning = extractValue(from: response, key: "reasoning") ?? "AI analysis"
+
+        print("DEBUG: parsed - difficulty: \(recommendedDifficulty), confidence: \(confidence)")
 
         return AIInsights(
             recommendedDifficulty: AIAdaptiveDifficulty.fromString(recommendedDifficulty),
@@ -214,14 +226,24 @@ class AIAdaptiveDifficultyManager: @unchecked Sendable {
     }
 
     private func extractValue(from jsonString: String, key: String) -> String? {
-        let pattern = "\"\(key)\"\\s*:\\s*\"([^\"]+)\""
-        let regex = try? NSRegularExpression(pattern: pattern, options: [])
-        let range = NSRange(location: 0, length: jsonString.utf16.count)
-        if let match = regex?.firstMatch(in: jsonString, options: [], range: range) {
-            if let valueRange = Range(match.range(at: 1), in: jsonString) {
-                return String(jsonString[valueRange])
-            }
+        // Try to match quoted string first
+        let stringPattern = "\"\(key)\"\\s*:\\s*\"([^\"]+)\""
+        if let stringRegex = try? NSRegularExpression(pattern: stringPattern, options: []),
+           let match = stringRegex.firstMatch(in: jsonString, options: [], range: NSRange(location: 0, length: jsonString.utf16.count)),
+           let valueRange = Range(match.range(at: 1), in: jsonString)
+        {
+            return String(jsonString[valueRange])
         }
+
+        // Try to match number
+        let numberPattern = "\"\(key)\"\\s*:\\s*([0-9.]+)"
+        if let numberRegex = try? NSRegularExpression(pattern: numberPattern, options: []),
+           let match = numberRegex.firstMatch(in: jsonString, options: [], range: NSRange(location: 0, length: jsonString.utf16.count)),
+           let valueRange = Range(match.range(at: 1), in: jsonString)
+        {
+            return String(jsonString[valueRange])
+        }
+
         return nil
     }
 
@@ -237,10 +259,12 @@ class AIAdaptiveDifficultyManager: @unchecked Sendable {
         let oldDifficulty = currentDifficulty
         currentDifficulty = newDifficulty
 
+        print("DEBUG: applyDifficultyAdjustment called - old: \(oldDifficulty), new: \(newDifficulty), reason: \(reason)")
+
         // Notify delegate
-        Task { @MainActor in
-            await delegate?.difficultyDidAdjust(to: newDifficulty, reason: reason)
-        }
+        await delegate?.difficultyDidAdjust(to: newDifficulty, reason: reason)
+
+        print("DEBUG: delegate call completed")
 
         // Log the adjustment
         print("AI Difficulty Adjusted: \(oldDifficulty.description) → \(newDifficulty.description) (Reason: \(reason.description))")
@@ -525,6 +549,8 @@ class PlayerBehaviorAnalyzer {
         fatigueIndicators: [FatigueIndicator],
         predictions: PlayerBehaviorPredictions
     ) -> DifficultyAdjustmentReason {
+        print("DEBUG: determineAdjustmentReason - successRate: \(successRate), reactionTime: \(averageReactionTime)")
+
         // Fatigue takes priority
         if !fatigueIndicators.isEmpty {
             return .fatigueDetected
@@ -549,7 +575,8 @@ class PlayerBehaviorAnalyzer {
         }
 
         // Excelling player
-        if successRate > 0.9 && averageReactionTime < 0.5 {
+        if successRate > 0.9 && averageReactionTime <= 0.5 {
+            print("DEBUG: Player excelling detected")
             return .playerExcelling
         }
 
@@ -589,12 +616,12 @@ class DifficultyAdjustmentEngine {
         // Calculate difficulty score based on performance
         var difficultyScore = 0.0
 
-        // Success rate contribution (lower success = easier difficulty)
-        difficultyScore += (1.0 - analysis.successRate) * successWeight
+        // Success rate contribution (higher success = harder difficulty)
+        difficultyScore += analysis.successRate * successWeight
 
-        // Reaction time contribution (slower reactions = easier difficulty)
+        // Reaction time contribution (faster reactions = harder difficulty)
         let normalizedReactionTime = min(analysis.averageReactionTime / 2.0, 1.0) // Cap at 2 seconds
-        difficultyScore += normalizedReactionTime * reactionWeight
+        difficultyScore += (1.0 - normalizedReactionTime) * reactionWeight
 
         // Prediction-based adjustments
         let predictionAdjustment = calculatePredictionAdjustment(predictions: analysis.predictions)
@@ -1071,4 +1098,13 @@ struct AIPerformanceData {
     let predictionAccuracy: Double
     let adaptationRate: Double
     let learningProgress: Double
+}
+
+// MARK: - Extensions
+
+extension Array where Element: BinaryFloatingPoint {
+    var average: Element {
+        guard !isEmpty else { return 0 }
+        return reduce(0, +) / Element(count)
+    }
 }

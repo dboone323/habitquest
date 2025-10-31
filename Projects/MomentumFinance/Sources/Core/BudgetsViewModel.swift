@@ -4,6 +4,7 @@
 import Foundation
 import Observation
 import SwiftData
+import SecurityFramework
 
 @MainActor
 @Observable
@@ -94,6 +95,8 @@ public final class BudgetsViewModel {
 
         do {
             try modelContext.save()
+            // Log budget creation for audit trail
+            logBudgetCreation(budget)
         } catch {
             Logger.logError(error, context: "Creating budget")
         }
@@ -103,10 +106,13 @@ public final class BudgetsViewModel {
     /// <#Description#>
     /// - Returns: <#description#>
     func updateBudgetLimit(_ budget: Budget, newLimit: Double) {
+        let oldLimit = budget.limitAmount
         budget.limitAmount = newLimit
 
         do {
             try self.modelContext?.save()
+            // Log budget limit update for audit trail
+            logBudgetUpdate(budget, oldLimit: oldLimit, newLimit: newLimit)
         } catch {
             Logger.logError(error, context: "Updating budget")
         }
@@ -117,6 +123,9 @@ public final class BudgetsViewModel {
     /// - Returns: <#description#>
     func deleteBudget(_ budget: Budget) {
         guard let modelContext else { return }
+
+        // Log budget deletion before removing
+        logBudgetDeletion(budget)
 
         modelContext.delete(budget)
 
@@ -248,6 +257,53 @@ public final class BudgetsViewModel {
         // NotificationManager.shared.schedulebudgetWarningNotifications(for: budgets)
         // NotificationManager.shared.scheduleRolloverNotifications(for: budgets)
         // NotificationManager.shared.scheduleSpendingPredictionNotifications(for: budgets)
+    }
+
+    // MARK: - Security & Audit Logging
+
+    /// Log budget creation for audit trail
+    private func logBudgetCreation(_ budget: Budget) {
+        let details = [
+            "budgetId": budget.id.uuidString,
+            "category": budget.category?.name ?? "Unknown",
+            "limitAmount": String(budget.limitAmount),
+            "month": budget.month.ISO8601Format(),
+            "operation": "create"
+        ]
+        AuditLogger.shared.logEvent(.budgetOperation, details: details, userId: getCurrentUserId())
+    }
+
+    /// Log budget limit update for audit trail
+    private func logBudgetUpdate(_ budget: Budget, oldLimit: Double, newLimit: Double) {
+        let details = [
+            "budgetId": budget.id.uuidString,
+            "category": budget.category?.name ?? "Unknown",
+            "oldLimit": String(oldLimit),
+            "newLimit": String(newLimit),
+            "month": budget.month.ISO8601Format(),
+            "operation": "update"
+        ]
+        AuditLogger.shared.logEvent(.budgetOperation, details: details, userId: getCurrentUserId())
+    }
+
+    /// Log budget deletion for audit trail
+    private func logBudgetDeletion(_ budget: Budget) {
+        let details = [
+            "budgetId": budget.id.uuidString,
+            "category": budget.category?.name ?? "Unknown",
+            "limitAmount": String(budget.limitAmount),
+            "spentAmount": String(budget.spentAmount),
+            "month": budget.month.ISO8601Format(),
+            "operation": "delete"
+        ]
+        AuditLogger.shared.logEvent(.budgetOperation, details: details, userId: getCurrentUserId())
+    }
+
+    /// Get current user ID for audit logging
+    private func getCurrentUserId() -> String {
+        // In a real app, this would get the actual user ID from authentication
+        // For now, return a placeholder that indicates local user
+        return "local_user_\(ProcessInfo.processInfo.hostName)"
     }
 }
 

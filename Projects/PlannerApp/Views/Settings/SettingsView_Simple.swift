@@ -271,19 +271,8 @@ public struct SettingsView: View {
             .onAppear(perform: self.initializeSettings)
             // Simplified sheet presentations
             .sheet(isPresented: self.$showingCloudKitSheet) {
-                // Placeholder for CloudKit sync view
-                VStack {
-                    Text("CloudKit Sync")
-                        .font(.title)
-                        .padding()
-                    Text("CloudKit integration coming soon...")
-                        .foregroundColor(.secondary)
-                    Button("Done").accessibilityLabel("Button").accessibilityLabel("Button") {
-                        self.showingCloudKitSheet = false
-                    }
-                    .padding()
-                }
-                .frame(minWidth: 400, minHeight: 300)
+                CloudKitSyncView()
+                    .environmentObject(self.themeManager)
             }
             .sheet(isPresented: self.$showingThemePreview) {
                 // Placeholder for theme preview

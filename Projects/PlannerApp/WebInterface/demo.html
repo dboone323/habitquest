@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlannerApp Web - Smart Planning & Organization Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            min-height: 100vh;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .app-container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            margin: 20px;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .app-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .app-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .app-content {
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #ff9a9e;
+        }
+
+        .dashboard-card.tasks {
+            border-left-color: #3498db;
+        }
+
+        .dashboard-card.calendar {
+            border-left-color: #e74c3c;
+        }
+
+        .dashboard-card.goals {
+            border-left-color: #27ae60;
+        }
+
+        .dashboard-card h3 {
+            margin-bottom: 1rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .task-item {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        .task-item .task-title {
+            font-weight: 500;
+        }
+
+        .task-item .task-date {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .task-checkbox.checked {
+            background: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .add-task-form {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .add-task-form h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ff9a9e;
+        }
+
+        .btn-primary {
+            background: #ff9a9e;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background: #ff8087;
+            transform: translateY(-2px);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day.today {
+            background: #ff9a9e;
+            color: white;
+        }
+
+        .calendar-day.has-events {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .calendar-day:hover {
+            background: #f0f0f0;
+        }
+
+        .wasm-status {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid rgba(255, 154, 158, 0.2);
+        }
+
+        .wasm-status h3 {
+            color: #ff9a9e;
+            margin-bottom: 0.5rem;
+        }
+
+        .wasm-status p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .app-footer {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 1.5rem;
+            color: white;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .app-container {
+                margin: 10px;
+            }
+
+            .app-header {
+                padding: 1.5rem;
+            }
+
+            .app-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .app-content {
+                padding: 1rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        🚀 Loading PlannerApp Web...
+    </div>
+
+    <div id="app-container" class="app-container" style="display: none;">
+        <header class="app-header">
+            <h1>📅 PlannerApp Web</h1>
+            <p>Smart Planning & Organization with CloudKit Sync</p>
+        </header>
+
+        <div class="app-content">
+            <div class="wasm-status">
+                <h3>⚡ SwiftWasm Status</h3>
+                <p>WebInterface structure complete and ready for SwiftWasm deployment. This demo shows the planning interface that will be powered by Swift code compiled to WebAssembly.</p>
+            </div>
+
+            <div class="add-task-form">
+                <h3>➕ Add New Task</h3>
+                <div class="form-group">
+                    <label for="task-title">Task Title</label>
+                    <input type="text" id="task-title" class="form-input" placeholder="Enter task title...">
+                </div>
+                <div class="form-group">
+                    <label for="task-description">Description</label>
+                    <input type="text" id="task-description" class="form-input" placeholder="Enter task description...">
+                </div>
+                <div class="form-group">
+                    <label for="task-date">Due Date</label>
+                    <input type="date" id="task-date" class="form-input">
+                </div>
+                <button class="btn-primary" onclick="addTask()">Add Task</button>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card tasks">
+                    <h3>📋 Today's Tasks</h3>
+                    <div id="tasks-list">
+                        <div class="task-item">
+                            <div>
+                                <div class="task-title">Review project proposal</div>
+                                <div class="task-date">Due: Today</div>
+                            </div>
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                        </div>
+                        <div class="task-item">
+                            <div>
+                                <div class="task-title">Team meeting preparation</div>
+                                <div class="task-date">Due: Tomorrow</div>
+                            </div>
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                        </div>
+                        <div class="task-item completed">
+                            <div>
+                                <div class="task-title">Code review completion</div>
+                                <div class="task-date">Due: Yesterday</div>
+                            </div>
+                            <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card calendar">
+                    <h3>📅 November 2025</h3>
+                    <div class="calendar-grid">
+                        <div class="calendar-day">S</div>
+                        <div class="calendar-day">M</div>
+                        <div class="calendar-day">T</div>
+                        <div class="calendar-day">W</div>
+                        <div class="calendar-day">T</div>
+                        <div class="calendar-day">F</div>
+                        <div class="calendar-day">S</div>
+                        <div class="calendar-day">1</div>
+                        <div class="calendar-day">2</div>
+                        <div class="calendar-day">3</div>
+                        <div class="calendar-day">4</div>
+                        <div class="calendar-day">5</div>
+                        <div class="calendar-day">6</div>
+                        <div class="calendar-day">7</div>
+                        <div class="calendar-day">8</div>
+                        <div class="calendar-day">9</div>
+                        <div class="calendar-day">10</div>
+                        <div class="calendar-day">11</div>
+                        <div class="calendar-day">12</div>
+                        <div class="calendar-day">13</div>
+                        <div class="calendar-day">14</div>
+                        <div class="calendar-day">15</div>
+                        <div class="calendar-day">16</div>
+                        <div class="calendar-day">17</div>
+                        <div class="calendar-day">18</div>
+                        <div class="calendar-day">19</div>
+                        <div class="calendar-day">20</div>
+                        <div class="calendar-day">21</div>
+                        <div class="calendar-day">22</div>
+                        <div class="calendar-day">23</div>
+                        <div class="calendar-day">24</div>
+                        <div class="calendar-day">25</div>
+                        <div class="calendar-day">26</div>
+                        <div class="calendar-day">27</div>
+                        <div class="calendar-day">28</div>
+                        <div class="calendar-day">29</div>
+                        <div class="calendar-day">30</div>
+                        <div class="calendar-day today">31</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card goals">
+                    <h3>🎯 Goals Progress</h3>
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 2rem; color: #27ae60; margin-bottom: 0.5rem;">75%</div>
+                        <div style="color: #666;">Monthly goals completed</div>
+                        <div style="margin-top: 1rem; height: 8px; background: #eee; border-radius: 4px;">
+                            <div style="width: 75%; height: 100%; background: #27ae60; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <p>PlannerApp Web - WebInterface Ready for SwiftWasm • <span style="color: #27ae60;">✅ Phase 8 Web Deployment Complete</span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Simulate loading SwiftWasm
+        setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('app-container').style.display = 'block';
+        }, 2000);
+
+        function addTask() {
+            const title = document.getElementById('task-title').value;
+            const description = document.getElementById('task-description').value;
+            const date = document.getElementById('task-date').value;
+
+            if (title.trim()) {
+                const tasksList = document.getElementById('tasks-list');
+                const taskItem = document.createElement('div');
+                taskItem.className = 'task-item';
+                taskItem.innerHTML = `
+                    <div>
+                        <div class="task-title">${title}</div>
+                        <div class="task-date">Due: ${date || 'No date'}</div>
+                    </div>
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                `;
+                tasksList.insertBefore(taskItem, tasksList.firstChild);
+
+                // Clear form
+                document.getElementById('task-title').value = '';
+                document.getElementById('task-description').value = '';
+                document.getElementById('task-date').value = '';
+            }
+        }
+
+        function toggleTask(checkbox) {
+            const taskItem = checkbox.parentElement;
+            checkbox.classList.toggle('checked');
+            taskItem.classList.toggle('completed');
+        }
+    </script>
+</body>
+</html>

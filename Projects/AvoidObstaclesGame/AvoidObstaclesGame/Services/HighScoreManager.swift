@@ -2,16 +2,15 @@
 // HighScoreManager.swift
 // AvoidObstaclesGame
 //
-// Manages high scores with persistent storage using UserDefaults
+// Manages high scores with persistent storage and security integration
 //
 
 import Foundation
 
-/// Manages high scores with persistent storage using UserDefaults.
+/// Manages high scores with persistent storage and security features.
 /// Provides methods to add, retrieve, and clear high scores for the AvoidObstaclesGame.
-class HighScoreManager {
+class HighScoreManager: @unchecked Sendable {
     /// Shared singleton instance for global access.
-    @MainActor
     static let shared = HighScoreManager()
 
     /// UserDefaults key for storing high scores.
@@ -19,13 +18,21 @@ class HighScoreManager {
     /// Maximum number of high scores to keep.
     private let maxScores = 10
 
+    /// Security services
+    private let auditLogger = AuditLogger.shared
+    private let securityMonitor = SecurityMonitor.shared
+
     /// Private initializer to enforce singleton usage.
     private init() {}
 
-    /// Retrieves all high scores sorted from highest to lowest.
+    /// Retrieves all high scores sorted from highest to lowest with security monitoring.
     /// - Returns: An array of high scores in descending order.
     func getHighScores() -> [Int] {
-        let scores = UserDefaults.standard.array(forKey: self.highScoresKey) as? [Int] ?? []
+        let scores = UserDefaults.standard.array(forKey: highScoresKey) as? [Int] ?? []
+
+        // Monitor data access
+        securityMonitor.monitorDataAccess(operation: .read, entityType: "highscores", dataCount: scores.count)
+
         return scores.sorted(by: >)
     }
 
@@ -36,21 +43,27 @@ class HighScoreManager {
         return scores.sorted(by: >)
     }
 
-    /// Adds a new score to the high scores list.
+    /// Adds a new score to the high scores list with security monitoring.
     /// - Parameter score: The score to add.
     /// - Returns: True if the score is in the top 10 after adding, false otherwise.
     func addScore(_ score: Int) -> Bool {
-        var scores = self.getHighScores()
+        var scores = getHighScores()
         scores.append(score)
         scores.sort(by: >)
 
         // Keep only top 10 scores
-        if scores.count > self.maxScores {
-            scores = Array(scores.prefix(self.maxScores))
+        if scores.count > maxScores {
+            scores = Array(scores.prefix(maxScores))
         }
 
-        UserDefaults.standard.set(scores, forKey: self.highScoresKey)
+        // Monitor data modification
+        securityMonitor.monitorDataAccess(operation: .update, entityType: "highscores", dataCount: scores.count)
+
+        UserDefaults.standard.set(scores, forKey: highScoresKey)
         UserDefaults.standard.synchronize()
+
+        // Log security event
+        auditLogger.logDataAccess(operation: .update, entityType: "highscores", dataCount: scores.count)
 
         // Return true if this score is in the top 10
         return scores.contains(score)
@@ -105,10 +118,18 @@ class HighScoreManager {
         return scores.count < self.maxScores || score > (scores.last ?? 0)
     }
 
-    /// Clears all high scores from persistent storage. Useful for testing or resetting.
+    /// Clears all high scores from persistent storage with security logging.
     func clearHighScores() {
-        UserDefaults.standard.removeObject(forKey: self.highScoresKey)
+        let scores = getHighScores()
+
+        // Monitor data deletion
+        securityMonitor.monitorDataAccess(operation: .delete, entityType: "highscores", dataCount: scores.count)
+
+        UserDefaults.standard.removeObject(forKey: highScoresKey)
         UserDefaults.standard.synchronize()
+
+        // Log security event
+        auditLogger.logDataAccess(operation: .delete, entityType: "highscores", dataCount: scores.count)
     }
 
     /// Clears all high scores from persistent storage (async version). Useful for testing or resetting.

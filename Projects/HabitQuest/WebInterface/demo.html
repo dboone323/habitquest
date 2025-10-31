@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitQuest Web - Smart Habit Tracking Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            min-height: 100vh;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .app-container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            margin: 20px;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #333;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .app-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .app-header p {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+
+        .app-content {
+            padding: 2rem;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-card.streak {
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .stat-card.completed {
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .stat-card.total {
+            border-left: 4px solid #45b7d1;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .habits-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .habits-section h3 {
+            margin-bottom: 1rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .add-habit-form {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-input {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #fcb69f;
+        }
+
+        .btn-primary {
+            background: #fcb69f;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background: #ff9a8d;
+            transform: translateY(-2px);
+        }
+
+        .habit-item {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .habit-item.completed {
+            opacity: 0.7;
+            background: #f0fff0;
+        }
+
+        .habit-info {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .habit-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .habit-meta {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .habit-streak {
+            background: #ffecd2;
+            color: #ff6b6b;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .habit-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .habit-checkbox {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .habit-checkbox.completed {
+            background: #4ecdc4;
+            border-color: #4ecdc4;
+            color: white;
+        }
+
+        .progress-bar {
+            background: #eee;
+            border-radius: 10px;
+            height: 8px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fcb69f 0%, #ffecd2 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .achievements-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .achievements-section h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .achievement-item {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .achievement-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #fcb69f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .achievement-info h4 {
+            margin-bottom: 0.25rem;
+            color: #333;
+        }
+
+        .achievement-info p {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .wasm-status {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid rgba(252, 182, 159, 0.2);
+        }
+
+        .wasm-status h3 {
+            color: #fcb69f;
+            margin-bottom: 0.5rem;
+        }
+
+        .wasm-status p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .app-footer {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 1.5rem;
+            color: white;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .app-container {
+                margin: 10px;
+            }
+
+            .app-header {
+                padding: 1.5rem;
+            }
+
+            .app-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .app-content {
+                padding: 1rem;
+            }
+
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        🚀 Loading HabitQuest Web...
+    </div>
+
+    <div id="app-container" class="app-container" style="display: none;">
+        <header class="app-header">
+            <h1>🎯 HabitQuest Web</h1>
+            <p>Smart Habit Tracking & Personal Growth</p>
+        </header>
+
+        <div class="app-content">
+            <div class="wasm-status">
+                <h3>⚡ SwiftWasm Status</h3>
+                <p>WebInterface structure complete and ready for SwiftWasm deployment. This demo shows the habit tracking interface that will be powered by Swift code compiled to WebAssembly.</p>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card streak">
+                    <div class="stat-value">7</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="stat-card completed">
+                    <div class="stat-value">23</div>
+                    <div class="stat-label">Habits Completed</div>
+                </div>
+                <div class="stat-card total">
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 85%;"></div>
+            </div>
+
+            <div class="habits-section">
+                <h3>📝 Add New Habit</h3>
+                <div class="add-habit-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="habit-name">Habit Name</label>
+                            <input type="text" id="habit-name" class="form-input" placeholder="e.g., Drink 8 glasses of water">
+                        </div>
+                        <div class="form-group">
+                            <label for="habit-frequency">Frequency</label>
+                            <select id="habit-frequency" class="form-input">
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="habit-description">Description</label>
+                            <input type="text" id="habit-description" class="form-input" placeholder="Optional description...">
+                        </div>
+                        <div class="form-group" style="justify-content: flex-end; align-items: flex-end;">
+                            <button class="btn-primary" onclick="addHabit()">Create Habit</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>🎯 Today's Habits</h3>
+                <div id="habits-list">
+                    <div class="habit-item">
+                        <div class="habit-info">
+                            <div class="habit-title">Drink 8 glasses of water</div>
+                            <div class="habit-meta">Daily • Health</div>
+                        </div>
+                        <div class="habit-streak">🔥 7</div>
+                        <div class="habit-actions">
+                            <div class="habit-checkbox completed" onclick="toggleHabit(this)">✓</div>
+                        </div>
+                    </div>
+                    <div class="habit-item">
+                        <div class="habit-info">
+                            <div class="habit-title">Read for 30 minutes</div>
+                            <div class="habit-meta">Daily • Learning</div>
+                        </div>
+                        <div class="habit-streak">🔥 12</div>
+                        <div class="habit-actions">
+                            <div class="habit-checkbox completed" onclick="toggleHabit(this)">✓</div>
+                        </div>
+                    </div>
+                    <div class="habit-item">
+                        <div class="habit-info">
+                            <div class="habit-title">Exercise for 45 minutes</div>
+                            <div class="habit-meta">Daily • Fitness</div>
+                        </div>
+                        <div class="habit-streak">🔥 5</div>
+                        <div class="habit-actions">
+                            <div class="habit-checkbox" onclick="toggleHabit(this)"></div>
+                        </div>
+                    </div>
+                    <div class="habit-item">
+                        <div class="habit-info">
+                            <div class="habit-title">Meditate for 10 minutes</div>
+                            <div class="habit-meta">Daily • Mindfulness</div>
+                        </div>
+                        <div class="habit-streak">🔥 3</div>
+                        <div class="habit-actions">
+                            <div class="habit-checkbox" onclick="toggleHabit(this)"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="achievements-section">
+                <h3>🏆 Recent Achievements</h3>
+                <div class="achievement-item">
+                    <div class="achievement-icon">🔥</div>
+                    <div class="achievement-info">
+                        <h4>7-Day Streak Master</h4>
+                        <p>Maintained a habit streak for 7 consecutive days</p>
+                    </div>
+                </div>
+                <div class="achievement-item">
+                    <div class="achievement-icon">📚</div>
+                    <div class="achievement-info">
+                        <h4>Knowledge Seeker</h4>
+                        <p>Completed reading habit 30 times</p>
+                    </div>
+                </div>
+                <div class="achievement-item">
+                    <div class="achievement-icon">💪</div>
+                    <div class="achievement-info">
+                        <h4>Fitness Champion</h4>
+                        <p>Completed 50 workout sessions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <p>HabitQuest Web - WebInterface Ready for SwiftWasm • <span style="color: #27ae60;">✅ Phase 8 Web Deployment Complete</span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Simulate loading SwiftWasm
+        setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('app-container').style.display = 'block';
+        }, 2000);
+
+        function addHabit() {
+            const name = document.getElementById('habit-name').value;
+            const frequency = document.getElementById('habit-frequency').value;
+            const description = document.getElementById('habit-description').value;
+
+            if (name.trim()) {
+                const habitsList = document.getElementById('habits-list');
+                const habitItem = document.createElement('div');
+                habitItem.className = 'habit-item';
+
+                habitItem.innerHTML = `
+                    <div class="habit-info">
+                        <div class="habit-title">${name}</div>
+                        <div class="habit-meta">${frequency.charAt(0).toUpperCase() + frequency.slice(1)} • Personal</div>
+                    </div>
+                    <div class="habit-streak">🔥 0</div>
+                    <div class="habit-actions">
+                        <div class="habit-checkbox" onclick="toggleHabit(this)"></div>
+                    </div>
+                `;
+
+                habitsList.appendChild(habitItem);
+
+                // Clear form
+                document.getElementById('habit-name').value = '';
+                document.getElementById('habit-description').value = '';
+            }
+        }
+
+        function toggleHabit(checkbox) {
+            const habitItem = checkbox.closest('.habit-item');
+            const isCompleted = checkbox.classList.contains('completed');
+
+            if (isCompleted) {
+                checkbox.classList.remove('completed');
+                checkbox.textContent = '';
+                habitItem.classList.remove('completed');
+            } else {
+                checkbox.classList.add('completed');
+                checkbox.textContent = '✓';
+                habitItem.classList.add('completed');
+            }
+
+            // Update stats (simplified)
+            updateStats();
+        }
+
+        function updateStats() {
+            // This would be handled by SwiftWasm in the real implementation
+            const completedHabits = document.querySelectorAll('.habit-checkbox.completed').length;
+            const totalHabits = document.querySelectorAll('.habit-checkbox').length;
+            const completionRate = Math.round((completedHabits / totalHabits) * 100);
+
+            // Update progress bar
+            document.querySelector('.progress-fill').style.width = completionRate + '%';
+
+            // Update stats cards (simplified)
+            document.querySelector('.stat-card.completed .stat-value').textContent = completedHabits;
+            document.querySelector('.stat-card.total .stat-value').textContent = completionRate + '%';
+        }
+    </script>
+</body>
+</html>
