@@ -105,10 +105,9 @@ jobs:
         with:
           name: quality-baseline-results
           path: |
-            test_results/
-            performance_history/
             baseline-report.md
           retention-days: 365
+          if-no-files-found: warn
 
       - name: Create Baseline Summary Comment
         uses: actions/github-script@v6
