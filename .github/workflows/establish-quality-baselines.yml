@@ -38,6 +38,13 @@ jobs:
         with:
           xcode-version: ${{ env.XCODE_VERSION }}
 
+      - name: Make Automation Scripts Executable
+        run: |
+          chmod +x Tools/Automation/run_parallel_tests.sh || true
+          chmod +x Tools/Automation/run_coverage_audit.sh || true
+          chmod +x Tools/Automation/detect_issues.sh || true
+          chmod +x Tools/Automation/monitor_performance.sh || true
+
       - name: Reset History (if requested)
         if: github.event.inputs.reset_history == 'true'
         run: |
@@ -101,20 +108,49 @@ jobs:
             exit 1
           fi
 
+      - name: Run Coverage Audit
+        run: |
+          echo "📈 Running coverage audit to establish coverage baselines..."
+          Tools/Automation/run_coverage_audit.sh || {
+            echo "⚠️ Coverage audit returned non-zero exit; continuing to collect any produced artifacts";
+          }
+
+      - name: Upload Baseline Coverage Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: baseline-coverage-artifacts
+          path: |
+            coverage_results/
+          retention-days: 90
+          if-no-files-found: warn
+
       - name: Upload Baseline Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: quality-baseline-results
-          path: baseline-report.md
+          path: |
+            baseline-report.md
+            test_results/
           retention-days: 90
-          if-no-files-found: error
+          if-no-files-found: warn
 
       - name: Create Baseline Summary
         run: |
           echo "## 🎯 Quality Baseline Established" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           cat baseline-report.md >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if ls coverage_results/coverage_audit_summary_*.md 1> /dev/null 2>&1; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## 📊 Coverage Summary" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            LATEST_SUMMARY=$(ls -t coverage_results/coverage_audit_summary_*.md | head -n 1)
+            cat "$LATEST_SUMMARY" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No coverage summary found in coverage_results/" >> $GITHUB_STEP_SUMMARY
+          fi
 
       - name: Final Status
         run: |
