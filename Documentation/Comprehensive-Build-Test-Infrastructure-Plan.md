@@ -1,4 +1,4 @@
----
+--
 name: Comprehensive Build & Test Infrastructure Plan
 description: Complete testing strategy with parallel execution, timeout guards, automated fallbacks, and performance monitoring. Enforces 85% minimum coverage (90-100% ideal), parallel PR validation, sequential release builds, with flaky test detection and auto-remediation.
 ---
