@@ -10,12 +10,12 @@
     },
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/runner/work/Quantum-workspace/Quantum-workspace"],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "${workspaceFolder}"],
       "description": "File system operations for the workspace"
     },
     "git": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-git", "/home/runner/work/Quantum-workspace/Quantum-workspace"],
+      "args": ["-y", "@modelcontextprotocol/server-git", "${workspaceFolder}"],
       "description": "Git operations and repository management"
     },
     "shell": {
