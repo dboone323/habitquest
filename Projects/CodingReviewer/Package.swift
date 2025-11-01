@@ -40,7 +40,7 @@ let package = Package(
                 "WelcomeViewTests.swift",
                 "SidebarViewTests.swift",
                 "CodeReviewViewTests.swift",
-                "PackageTests.swift"
+                "PackageTests.swift",
             ]
         ),
     ]

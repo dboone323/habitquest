@@ -121,3 +121,19 @@ Reports/**/*.xcresult
 Reports/Coverage/**/*.json
 Reports/Coverage/**/*.html
 Reports/Coverage/**/*.xml
+
+# Test artifacts and reports
+**/test-results/
+**/coverage/
+**/.coverage
+**/htmlcov/
+**/*.lcov
+**/*.profdata
+
+# Linting and formatting caches
+**/.swiftlint_cache/
+**/.swiftformat_cache/
+
+# Temporary split files
+/tmp/
+*.swift.tmp
