@@ -144,20 +144,11 @@ jobs:
 
   # Phase 3: Comprehensive Testing (< 10 minutes)
   comprehensive-testing:
-    name: Test ${{ matrix.project.name }}
+    name: Sequential Test Execution
     runs-on: macos-latest
     needs: build-verification
     if: github.event.inputs.skip_tests != 'true'
     timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      max-parallel: 1  # Sequential testing
-      matrix:
-        project:
-          - { name: 'AvoidObstaclesGame', path: 'Projects/AvoidObstaclesGame', scheme: 'AvoidObstaclesGame', testplan: 'AvoidObstaclesGame' }
-          - { name: 'PlannerApp', path: 'Projects/PlannerApp', scheme: 'PlannerApp', testplan: 'PlannerApp' }
-          - { name: 'MomentumFinance', path: 'Projects/MomentumFinance', scheme: 'MomentumFinance', testplan: 'MomentumFinance' }
-          - { name: 'HabitQuest', path: 'Projects/HabitQuest', scheme: 'HabitQuest', testplan: 'HabitQuest' }
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -167,84 +158,41 @@ jobs:
         with:
           xcode-version: ${{ env.XCODE_VERSION }}
 
-      - name: Run Tests with Coverage
-        working-directory: ${{ matrix.project.path }}
+      - name: Make Automation Scripts Executable
         run: |
-          echo "Testing ${{ matrix.project.name }} with coverage..."
-          
-          xcodebuild test \
-            -project ${{ matrix.project.name }}.xcodeproj \
-            -scheme ${{ matrix.project.scheme }} \
-            -testPlan ${{ matrix.project.testplan }} \
-            -destination "platform=iOS Simulator,name=${{ env.IOS_SIMULATOR }}" \
-            -enableCodeCoverage YES \
-            -parallel-testing-enabled YES \
-            -maximum-parallel-testing-workers 4 \
-            -resultBundlePath test-results.xcresult \
-            | tee test-log.txt \
-            | xcpretty --color --report html --report junit --output test-results.xml
+          chmod +x Tools/Automation/run_parallel_tests.sh
+          chmod +x Tools/Automation/detect_issues.sh
+          chmod +x Tools/Automation/monitor_performance.sh
 
-      - name: Extract and Validate Coverage
-        working-directory: ${{ matrix.project.path }}
+      - name: Run Sequential Tests with New Framework
         run: |
-          if [ -d "test-results.xcresult" ]; then
-            xcrun xccov view --report --json test-results.xcresult > coverage.json
-            
-            COVERAGE=$(jq -r '.lineCoverage' coverage.json | awk '{printf "%.2f", $1 * 100}')
-            echo "Code Coverage: ${COVERAGE}%"
-            
-            # Enforce thresholds
-            if (( $(echo "${COVERAGE} < ${{ env.COVERAGE_MINIMUM }}" | bc -l) )); then
-              echo "❌ BLOCKED: Coverage ${COVERAGE}% is below minimum ${{ env.COVERAGE_MINIMUM }}%"
-              exit 1
-            elif (( $(echo "${COVERAGE} < ${{ env.COVERAGE_TARGET }}" | bc -l) )); then
-              echo "⚠️  WARNING: Coverage ${COVERAGE}% is below target ${{ env.COVERAGE_TARGET }}%"
-            elif (( $(echo "${COVERAGE} >= ${{ env.COVERAGE_ASPIRATIONAL }}" | bc -l) )); then
-              echo "🎉 EXCELLENT: Coverage ${COVERAGE}% meets aspirational ${{ env.COVERAGE_ASPIRATIONAL }}%!"
-            else
-              echo "✅ Coverage ${COVERAGE}% meets target ${{ env.COVERAGE_TARGET }}%"
-            fi
-            
-            # Save for aggregate report
-            echo "${COVERAGE}" > coverage-percentage.txt
-          else
-            echo "⚠️  No test results found"
-            echo "0.00" > coverage-percentage.txt
-          fi
+          echo "Running sequential tests using new automation framework..."
+          # Override parallel settings for sequential execution
+          export MAX_PARALLEL_JOBS=1
+          Tools/Automation/run_parallel_tests.sh
 
-      - name: Run Flaky Test Detection
+      - name: Run Issue Detection
         if: always()
-        working-directory: ${{ matrix.project.path }}
         run: |
-          FLAKY_SCRIPT="../../Tools/Testing/testing_flaky_detection.sh"
-          if [ -x "${FLAKY_SCRIPT}" ]; then
-            echo "Running flaky test detection (5 iterations)..."
-            bash "${FLAKY_SCRIPT}" "$(pwd)" 5 || {
-              echo "⚠️  Flaky test detection completed with warnings"
-            }
-          else
-            echo "⚠️  Flaky test detection script not found"
-          fi
+          echo "Running automated issue detection..."
+          Tools/Automation/detect_issues.sh
+
+      - name: Run Performance Monitoring
+        if: always()
+        run: |
+          echo "Running performance regression monitoring..."
+          Tools/Automation/monitor_performance.sh
 
       - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.project.name }}-test-results
+          name: sequential-test-results
           path: |
-            ${{ matrix.project.path }}/test-results.xcresult
-            ${{ matrix.project.path }}/coverage.json
-            ${{ matrix.project.path }}/test-results.xml
+            test_results/
+            performance_history/
+            test_results/issues/
           retention-days: 90
-
-      - name: Publish Test Report
-        if: always()
-        uses: dorny/test-reporter@v1
-        with:
-          name: ${{ matrix.project.name }} Tests
-          path: ${{ matrix.project.path }}/test-results.xml
-          reporter: java-junit
-          fail-on-error: true
 
   # Phase 4: Swift Package Testing (CodingReviewer)
   test-swift-packages:
@@ -262,17 +210,18 @@ jobs:
         with:
           xcode-version: ${{ env.XCODE_VERSION }}
 
-      - name: Make CI scripts executable
+      - name: Make Automation Scripts Executable
         run: |
-          chmod +x Tools/Automation/ci/ci_orchestrator.sh
-          chmod +x Tools/Testing/test_timeout_wrapper.sh
-          chmod +x Tools/Testing/testing_flaky_detection.sh
-          chmod +x Tools/Automation/performance_monitor_advanced.sh
-          chmod +x Tools/Automation/ci/create_issue.sh
+          chmod +x Tools/Automation/run_parallel_tests.sh
+          chmod +x Tools/Automation/detect_issues.sh
+          chmod +x Tools/Automation/monitor_performance.sh
 
-      - name: Run CI Orchestrator for CodingReviewer
+      - name: Run CodingReviewer Tests with New Framework
         run: |
-          Tools/Automation/ci/ci_orchestrator.sh CodingReviewer full
+          echo "Running CodingReviewer tests using new automation framework..."
+          # Test only CodingReviewer
+          export TEST_PROJECTS="CodingReviewer"
+          Tools/Automation/run_parallel_tests.sh
 
       - name: Upload Test Results
         if: always()
@@ -280,9 +229,9 @@ jobs:
         with:
           name: coding-reviewer-test-results
           path: |
-            Projects/CodingReviewer/test-output.txt
-            Projects/CodingReviewer/test-results.xml
-            Tools/Automation/.metrics/
+            test_results/
+            performance_history/
+            test_results/issues/
           retention-days: 90
 
   # Phase 5: Performance Regression Testing
@@ -340,12 +289,13 @@ jobs:
           echo "" >> release-report.md
           echo "| Project | Coverage | Status |" >> release-report.md
           echo "|---------|----------|--------|" >> release-report.md
-          
-          for coverage_file in all-test-results/*/coverage-percentage.txt; do
+
+          # Parse coverage from unified test results
+          for coverage_file in all-test-results/*/test_results/*_coverage.json; do
             if [ -f "$coverage_file" ]; then
-              PROJECT=$(basename $(dirname "$coverage_file"))
-              COVERAGE=$(cat "$coverage_file")
-              
+              PROJECT=$(basename "$coverage_file" | sed 's/_coverage\.json//')
+              COVERAGE=$(jq -r '.coverage_percent // 0' "$coverage_file" 2>/dev/null || echo "0")
+
               if (( $(echo "${COVERAGE} >= ${{ env.COVERAGE_ASPIRATIONAL }}" | bc -l) )); then
                 STATUS="🎉 Excellent"
               elif (( $(echo "${COVERAGE} >= ${{ env.COVERAGE_TARGET }}" | bc -l) )); then
@@ -355,18 +305,34 @@ jobs:
               else
                 STATUS="❌ Below Minimum"
               fi
-              
+
               echo "| ${PROJECT} | ${COVERAGE}% | ${STATUS} |" >> release-report.md
             fi
           done
-          
+
           echo "" >> release-report.md
           echo "## Quality Gates" >> release-report.md
           echo "- ✅ Build verification passed" >> release-report.md
-          echo "- ✅ All tests passed" >> release-report.md
-          echo "- ✅ Coverage thresholds met" >> release-report.md
-          echo "- ✅ Performance regression tests passed" >> release-report.md
-          
+          echo "- ✅ Sequential test execution completed" >> release-report.md
+          echo "- ✅ Automated issue detection completed" >> release-report.md
+          echo "- ✅ Performance monitoring completed" >> release-report.md
+
+          # Check for issues
+          ISSUE_COUNT=$(find all-test-results -name "*.json" -path "*/issues/*" | wc -l)
+          if [ "$ISSUE_COUNT" -gt 0 ]; then
+            echo "- ⚠️  Issues detected: $ISSUE_COUNT (review reports)" >> release-report.md
+          else
+            echo "- ✅ No issues detected" >> release-report.md
+          fi
+
+          # Check for performance regressions
+          REGRESSION_COUNT=$(find all-test-results -name "*_trend_*.json" -exec jq -r '.regression_detected' {} \; 2>/dev/null | grep -c "true" || echo "0")
+          if [ "$REGRESSION_COUNT" -gt 0 ]; then
+            echo "- 🚨 Performance regressions detected: $REGRESSION_COUNT" >> release-report.md
+          else
+            echo "- ✅ No performance regressions detected" >> release-report.md
+          fi
+
           cat release-report.md
 
       - name: Upload Release Report

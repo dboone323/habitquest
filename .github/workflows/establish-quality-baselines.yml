@@ -1,0 +1,194 @@
+name: Establish Quality Baselines
+
+on:
+  workflow_dispatch:
+    inputs:
+      baseline_type:
+        description: 'Type of baseline to establish'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - coverage-only
+          - performance-only
+      reset_history:
+        description: 'Reset existing history before establishing new baseline'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  XCODE_VERSION: '15.0'
+  IOS_SIMULATOR: 'iPhone 15'
+
+jobs:
+  establish-baselines:
+    name: Establish Quality Baselines
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for comprehensive baseline
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+
+      - name: Reset History (if requested)
+        if: github.event.inputs.reset_history == 'true'
+        run: |
+          echo "🗑️  Resetting existing quality history..."
+          rm -rf test_results performance_history
+          echo "✅ History reset complete"
+
+      - name: Make Automation Scripts Executable
+        run: |
+          chmod +x Tools/Automation/run_parallel_tests.sh
+          chmod +x Tools/Automation/detect_issues.sh
+          chmod +x Tools/Automation/monitor_performance.sh
+          chmod +x Tools/Automation/infrastructure_status.sh
+
+      - name: Run Full Test Suite for Baseline
+        if: github.event.inputs.baseline_type == 'full' || github.event.inputs.baseline_type == 'coverage-only'
+        run: |
+          echo "🧪 Running full test suite to establish coverage baseline..."
+          Tools/Automation/run_parallel_tests.sh
+
+      - name: Establish Performance Baseline
+        if: github.event.inputs.baseline_type == 'full' || github.event.inputs.baseline_type == 'performance-only'
+        run: |
+          echo "📊 Establishing performance baseline..."
+
+          # Run multiple iterations to establish stable baseline
+          for i in {1..3}; do
+            echo "Performance baseline iteration $i/3..."
+            Tools/Automation/monitor_performance.sh
+            sleep 5  # Brief pause between runs
+          done
+
+      - name: Run Issue Detection Baseline
+        if: github.event.inputs.baseline_type == 'full'
+        run: |
+          echo "🔍 Establishing issue detection baseline..."
+          Tools/Automation/detect_issues.sh
+
+      - name: Generate Baseline Report
+        run: |
+          echo "# Quality Baseline Establishment Report" > baseline-report.md
+          echo "" >> baseline-report.md
+          echo "**Date**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> baseline-report.md
+          echo "**Baseline Type**: ${{ github.event.inputs.baseline_type }}" >> baseline-report.md
+          echo "**History Reset**: ${{ github.event.inputs.reset_history }}" >> baseline-report.md
+          echo "**Commit**: ${{ github.sha }}" >> baseline-report.md
+          echo "" >> baseline-report.md
+
+          # Coverage baseline
+          if [ -d "test_results" ]; then
+            echo "## Coverage Baseline" >> baseline-report.md
+            echo "" >> baseline-report.md
+            echo "| Project | Coverage | Status |" >> baseline-report.md
+            echo "|---------|----------|--------|" >> baseline-report.md
+
+            for coverage_file in test_results/*_coverage.json; do
+              if [ -f "$coverage_file" ]; then
+                PROJECT=$(basename "$coverage_file" | sed 's/_coverage\.json//')
+                COVERAGE=$(jq -r '.coverage_percent // 0' "$coverage_file" 2>/dev/null || echo "0")
+
+                if (( $(echo "$COVERAGE >= 85" | bc -l 2>/dev/null || echo "0") )); then
+                  STATUS="✅ Meets Minimum"
+                else
+                  STATUS="⚠️  Below Minimum"
+                fi
+
+                echo "| $PROJECT | ${COVERAGE}% | $STATUS |" >> baseline-report.md
+              fi
+            done
+            echo "" >> baseline-report.md
+          fi
+
+          # Performance baseline
+          if [ -d "performance_history" ]; then
+            echo "## Performance Baseline" >> baseline-report.md
+            echo "" >> baseline-report.md
+
+            LATEST_DASHBOARD=$(ls -t performance_history/performance_dashboard_*.json | head -1)
+            if [ -f "$LATEST_DASHBOARD" ]; then
+              AVG_TIME=$(jq -r '.summary.total_test_execution_time' "$LATEST_DASHBOARD" 2>/dev/null || echo "N/A")
+              AVG_PASS_RATE=$(jq -r '.summary.average_pass_rate' "$LATEST_DASHBOARD" 2>/dev/null || echo "N/A")
+
+              echo "- **Average Execution Time**: ${AVG_TIME}s" >> baseline-report.md
+              echo "- **Average Pass Rate**: ${AVG_PASS_RATE}%" >> baseline-report.md
+              echo "- **Projects Monitored**: $(jq -r '.summary.total_projects' "$LATEST_DASHBOARD" 2>/dev/null || echo "N/A")" >> baseline-report.md
+            fi
+            echo "" >> baseline-report.md
+          fi
+
+          # Issues baseline
+          if [ -d "test_results/issues" ]; then
+            ISSUE_COUNT=$(find test_results/issues -name "*.json" | wc -l)
+            echo "## Issues Baseline" >> baseline-report.md
+            echo "- **Total Issues Detected**: $ISSUE_COUNT" >> baseline-report.md
+            echo "" >> baseline-report.md
+          fi
+
+          # Infrastructure status
+          echo "## Infrastructure Status" >> baseline-report.md
+          echo "\`\`\`" >> baseline-report.md
+          Tools/Automation/infrastructure_status.sh >> baseline-report.md 2>&1 || echo "Infrastructure status check failed"
+          echo "\`\`\`" >> baseline-report.md
+          echo "" >> baseline-report.md
+
+          # Recommendations
+          echo "## Baseline Recommendations" >> baseline-report.md
+          echo "" >> baseline-report.md
+          echo "### Coverage Targets" >> baseline-report.md
+          echo "- Maintain 85% minimum coverage across all projects" >> baseline-report.md
+          echo "- Target 90%+ coverage for new code" >> baseline-report.md
+          echo "- Aim for 90-100% coverage in critical modules" >> baseline-report.md
+          echo "" >> baseline-report.md
+          echo "### Performance Targets" >> baseline-report.md
+          echo "- Keep test execution under 120s per project" >> baseline-report.md
+          echo "- Maintain pass rates above 95%" >> baseline-report.md
+          echo "- Monitor for regressions >10% slowdown" >> baseline-report.md
+          echo "" >> baseline-report.md
+          echo "### Quality Gates" >> baseline-report.md
+          echo "- Block PRs below 85% coverage" >> baseline-report.md
+          echo "- Alert on flaky tests (>3 failures in 5 runs)" >> baseline-report.md
+          echo "- Monitor issue trends weekly" >> baseline-report.md
+
+          cat baseline-report.md
+
+      - name: Upload Baseline Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: quality-baseline-results
+          path: |
+            test_results/
+            performance_history/
+            baseline-report.md
+          retention-days: 365
+
+      - name: Create Baseline Summary Comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('baseline-report.md', 'utf8');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🎯 Quality Baseline Established\n\n${report}`
+            });
+
+      - name: Final Status
+        run: |
+          echo "✅ Quality baseline establishment completed"
+          echo "📊 Results available in baseline artifacts"
+          echo "🔄 Regular monitoring will now use this baseline for comparison"
