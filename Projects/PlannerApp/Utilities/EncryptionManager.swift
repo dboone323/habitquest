@@ -9,21 +9,21 @@ import Security
 // MARK: - Data Classification
 
 enum DataClassification: String {
-    case public = "public" // No encryption required
-    case = "internal" // AES128 encryption
-    case confidential = "confidential" // AES256 encryption
-    case restricted = "restricted" // AES256 + HSM protection
+    case publicData = "public" // No encryption required
+    case internalData = "internal" // AES128 encryption
+    case confidential // AES256 encryption
+    case restricted // AES256 + HSM protection
 
     var encryptionAlgorithm: EncryptionAlgorithm {
         switch self {
-        case .public: return .none
-        case .internal: return .aes128
+        case .publicData: return .none
+        case .internalData: return .aes128
         case .confidential, .restricted: return .aes256
         }
     }
 
     var requiresSecureStorage: Bool {
-        self != .public
+        self != .publicData
     }
 }
 

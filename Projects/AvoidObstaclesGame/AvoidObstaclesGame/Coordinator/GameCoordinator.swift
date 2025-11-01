@@ -561,7 +561,11 @@ final class GameCoordinator {
     /// Handle advanced AI performance metrics
     private func handleAdvancedAIPerformance(_ metrics: AdvancedAIPerformanceData) {
         // Log advanced AI performance
-        print("Advanced AI Performance - Analysis: \(String(format: "%.2f", metrics.analysisTime))s, Prediction: \(String(format: "%.2f", metrics.predictionAccuracy)), Generation: \(String(format: "%.2f", metrics.contentGenerationRate)), Effectiveness: \(String(format: "%.2f", metrics.adaptationEffectiveness))")
+        let analysisTime = String(format: "%.2f", metrics.analysisTime)
+        let predictionAccuracy = String(format: "%.2f", metrics.predictionAccuracy)
+        let generationRate = String(format: "%.2f", metrics.contentGenerationRate)
+        let adaptationEffectiveness = String(format: "%.2f", metrics.adaptationEffectiveness)
+        print("Advanced AI Performance - Analysis: \(analysisTime)s, Prediction: \(predictionAccuracy), Generation: \(generationRate), Effectiveness: \(adaptationEffectiveness)")
 
         // Could trigger UI updates or performance optimizations based on metrics
         if metrics.adaptationEffectiveness < 0.5 {

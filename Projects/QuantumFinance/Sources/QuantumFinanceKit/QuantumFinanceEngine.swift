@@ -172,7 +172,7 @@ public final class QuantumFinanceEngine {
         for amplitudeIndex in 0 ..< newAmplitudes.count {
             let angle = Double.random(in: 0 ... (2 * .pi))
             let rotation = ComplexNumber(real: cos(angle), imaginary: -sin(angle))
-            newAmplitudes[amplitudeIndex] = newAmplitudes[amplitudeIndex] * rotation
+            newAmplitudes[amplitudeIndex] *= rotation
         }
 
         return QuantumPortfolioState(

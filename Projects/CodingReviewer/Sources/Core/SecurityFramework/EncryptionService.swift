@@ -137,7 +137,7 @@ final class EncryptionService: Sendable {
         return try await encrypt(data: combinedData)
     }
 
-    @MainActor internal func decryptAnalysisResult(_ encryptedData: Data) async throws -> (metadata: AnalysisMetadata, data: Data) {
+    @MainActor func decryptAnalysisResult(_ encryptedData: Data) async throws -> (metadata: AnalysisMetadata, data: Data) {
         let combinedData = try await decrypt(data: encryptedData)
 
         // Extract length prefix (4 bytes)
@@ -155,7 +155,7 @@ final class EncryptionService: Sendable {
             throw EncryptionError.invalidEncryptedData
         }
 
-        let metadataData = combinedData[metadataStart..<metadataEnd]
+        let metadataData = combinedData[metadataStart ..< metadataEnd]
         let metadata = try JSONDecoder().decode(AnalysisMetadata.self, from: metadataData)
 
         // Extract result data
@@ -199,7 +199,7 @@ final class EncryptionService: Sendable {
 
 // MARK: - Supporting Types
 
-internal struct AnalysisMetadata: Codable {
+struct AnalysisMetadata: Codable {
     let version: String
     let timestamp: Date
     let dataType: String

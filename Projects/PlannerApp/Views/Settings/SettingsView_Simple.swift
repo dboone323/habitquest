@@ -5,7 +5,7 @@ import LocalAuthentication
 import SwiftUI
 import UserNotifications
 #if os(macOS)
-import AppKit
+    import AppKit
 #endif
 import Foundation
 
@@ -88,6 +88,7 @@ public struct SettingsView: View {
         return context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
     }
 
+    public var body: some View {
         NavigationStack {
             Form {
                 // --- Profile Section ---

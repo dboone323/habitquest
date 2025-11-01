@@ -41,7 +41,6 @@ final class AITests: XCTestCase {
         aiService = nil
     }
 
-
     @MainActor func testParseNaturalLanguageTaskWithPriority() async throws {
         // Setup
         aiService = AITaskPrioritizationService.shared
@@ -63,7 +62,6 @@ final class AITests: XCTestCase {
         aiService = nil
     }
 
-
     @MainActor func testParseNaturalLanguageTaskWithDate() async throws {
         // Setup
         aiService = AITaskPrioritizationService.shared
@@ -84,7 +82,6 @@ final class AITests: XCTestCase {
         // Cleanup
         aiService = nil
     }
-
 
     @MainActor func testGenerateTaskSuggestions() {
         // Setup
@@ -121,7 +118,6 @@ final class AITests: XCTestCase {
         aiService = nil
     }
 
-
     @MainActor func testGenerateTaskSuggestionsWithOverdueTasks() {
         // Setup
         aiService = AITaskPrioritizationService.shared
@@ -146,7 +142,6 @@ final class AITests: XCTestCase {
         // Cleanup
         aiService = nil
     }
-
 
     @MainActor func testGenerateProductivityInsights() {
         // Setup
@@ -180,7 +175,6 @@ final class AITests: XCTestCase {
         aiService = nil
     }
 
-
     @MainActor func testGenerateProductivityInsightsWithOverdueTasks() {
         // Setup
         aiService = AITaskPrioritizationService.shared
@@ -204,7 +198,6 @@ final class AITests: XCTestCase {
         // Cleanup
         aiService = nil
     }
-
 
     @MainActor func testAIServiceProcessingState() {
         // Setup
@@ -234,7 +227,6 @@ final class AITests: XCTestCase {
     }
 
     // MARK: - DashboardViewModel Async Tests
-
 
     @MainActor func testGenerateAISuggestionsAsync() async {
         // Test the AI service directly first with test data
@@ -284,7 +276,6 @@ final class AITests: XCTestCase {
         XCTAssertTrue(true, "AI service integration test completed without crashing")
     }
 
-
     @MainActor func testGenerateProductivityInsightsAsync() async {
         // Test the AI service directly without DashboardViewModel
         let aiService = AITaskPrioritizationService.shared
@@ -312,7 +303,6 @@ final class AITests: XCTestCase {
         // Verify productivity insights were generated
         XCTAssertFalse(insights.isEmpty)
     }
-
 
     @MainActor func testRefreshDataAsync() async {
         // Test the AI service directly instead of DashboardViewModel
@@ -352,7 +342,6 @@ final class AITests: XCTestCase {
         XCTAssertFalse(suggestions.isEmpty)
         XCTAssertFalse(insights.isEmpty)
     }
-
 
     @MainActor func testAICaching() async {
         // Setup
@@ -409,7 +398,6 @@ final class AITests: XCTestCase {
 
     // MARK: - Integration Tests
 
-
     @MainActor func testAIDashboardIntegration() async {
         // Simplified test to isolate the issue
         // Just test that we can access the AI service without data managers
@@ -432,7 +420,6 @@ final class AITests: XCTestCase {
 
     // MARK: - Performance Tests
 
-
     @MainActor func testAIPerformance() {
         // Setup
         aiService = AITaskPrioritizationService.shared
@@ -452,7 +439,6 @@ final class AITests: XCTestCase {
         // Cleanup
         aiService = nil
     }
-
 
     @MainActor func testAsyncAIPerformance() async {
         // Setup
@@ -480,7 +466,6 @@ final class AITests: XCTestCase {
 
     // MARK: - Edge Cases
 
-
     @MainActor func testEmptyDataAI() {
         // Setup
         aiService = AITaskPrioritizationService.shared
@@ -504,7 +489,6 @@ final class AITests: XCTestCase {
         // Cleanup
         aiService = nil
     }
-
 
     @MainActor func testMalformedDataAI() async throws {
         // Setup

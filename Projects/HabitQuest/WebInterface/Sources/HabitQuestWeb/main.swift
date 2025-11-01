@@ -38,7 +38,7 @@ struct Habit: Codable {
 
     private func daysSinceCreation() -> Int {
         // Simplified calculation
-        return 30 // Assume 30 days for demo
+        30 // Assume 30 days for demo
     }
 }
 
@@ -172,7 +172,8 @@ class HabitQuestWeb {
               let descriptionInput = document.getElementById("habit-description"),
               let frequencySelect = document.getElementById("habit-frequency"),
               let targetInput = document.getElementById("target-days"),
-              let colorInput = document.getElementById("habit-color") else {
+              let colorInput = document.getElementById("habit-color")
+        else {
             return
         }
 
@@ -247,8 +248,8 @@ class HabitQuestWeb {
 
     private func updateStats() {
         let activeHabits = habits.count
-        let longestStreak = habits.map { $0.currentStreak }.max() ?? 0
-        let totalCompletions = habitEntries.filter { $0.completed }.count
+        let longestStreak = habits.map(\.currentStreak).max() ?? 0
+        let totalCompletions = habitEntries.filter(\.completed).count
         let totalPossible = habits.count * 30 // Simplified
         let completionRate = totalPossible > 0 ? Int(Double(totalCompletions) / Double(totalPossible) * 100) : 0
         let todayCompleted = habitEntries.filter { $0.date == getCurrentDateString() && $0.completed }.count
@@ -260,7 +261,7 @@ class HabitQuestWeb {
     }
 
     private func updateHabitList() {
-        guard let habitList = habitList else { return }
+        guard let habitList else { return }
 
         var html = ""
         for habit in habits {
@@ -293,13 +294,13 @@ class HabitQuestWeb {
     }
 
     private func updateCalendar() {
-        guard let calendarView = calendarView else { return }
+        guard let calendarView else { return }
 
         // Simple 7-day calendar view
         let today = getCurrentDateString()
         var dates = [String]()
 
-        for i in 0..<7 {
+        for i in 0 ..< 7 {
             dates.append(getDateString(daysFromToday: -i))
         }
 
@@ -313,7 +314,8 @@ class HabitQuestWeb {
             var habitStatuses = ""
             for habit in habits {
                 let isCompleted = habit.completedDates.contains(date)
-                habitStatuses += "<div class=\"habit-dot\" style=\"background-color: \(isCompleted ? habit.color : "#e0e0e0\")\" title=\"\(habit.name)\"></div>"
+                let bgColor = isCompleted ? habit.color : "#e0e0e0"
+                habitStatuses += "<div class=\"habit-dot\" style=\"background-color: \(bgColor)\" title=\"\(habit.name)\"></div>"
             }
 
             html += """
@@ -369,25 +371,29 @@ class HabitQuestWeb {
         // Load from localStorage
         if let storedHabits = JSObject.global.localStorage.getItem("habitquest_habits").string,
            let data = storedHabits.data(using: .utf8),
-           let decoded = try? JSONDecoder().decode([Habit].self, from: data) {
+           let decoded = try? JSONDecoder().decode([Habit].self, from: data)
+        {
             habits = decoded
         }
 
         if let storedEntries = JSObject.global.localStorage.getItem("habitquest_entries").string,
            let data = storedEntries.data(using: .utf8),
-           let decoded = try? JSONDecoder().decode([HabitEntry].self, from: data) {
+           let decoded = try? JSONDecoder().decode([HabitEntry].self, from: data)
+        {
             habitEntries = decoded
         }
     }
 
     private func saveData() {
         if let habitData = try? JSONEncoder().encode(habits),
-           let habitJson = String(data: habitData, encoding: .utf8) {
+           let habitJson = String(data: habitData, encoding: .utf8)
+        {
             JSObject.global.localStorage.setItem("habitquest_habits", habitJson)
         }
 
         if let entryData = try? JSONEncoder().encode(habitEntries),
-           let entryJson = String(data: entryData, encoding: .utf8) {
+           let entryJson = String(data: entryData, encoding: .utf8)
+        {
             JSObject.global.localStorage.setItem("habitquest_entries", entryJson)
         }
     }
@@ -411,7 +417,8 @@ struct HabitQuestWebApp {
         JSObject.global.toggleHabit = JSClosure { args in
             if args.count >= 2,
                let habitId = args[0].string,
-               let date = args[1].string {
+               let date = args[1].string
+            {
                 toggleHabit(habitId, date)
             }
             return .undefined
