@@ -20,7 +20,7 @@ on:
 
 env:
   XCODE_VERSION: '16.0'
-  IOS_SIMULATOR: 'iPhone 15'
+  IOS_SIMULATOR: 'iPhone 17'
 
 jobs:
   establish-baselines:

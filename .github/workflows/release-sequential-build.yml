@@ -19,8 +19,8 @@ concurrency:
   cancel-in-progress: false  # Never cancel release builds
 
 env:
-  XCODE_VERSION: '15.0'
-  IOS_SIMULATOR: 'iPhone 15'
+  XCODE_VERSION: '16.0'
+  IOS_SIMULATOR: 'iPhone 17'
   MACOS_TARGET: '14.0'
   COVERAGE_MINIMUM: 85
   COVERAGE_TARGET: 90

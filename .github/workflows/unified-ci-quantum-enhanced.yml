@@ -171,7 +171,7 @@ jobs:
             echo "::warning title=Skipping Xcode build::Project file $PROJECT_FILE missing";
             exit 0
           fi
-          xcodebuild -project "$PROJECT_FILE" -scheme "$SCHEME" -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15' build test | xcpretty || EXIT_CODE=$?
+          xcodebuild -project "$PROJECT_FILE" -scheme "$SCHEME" -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17' build test | xcpretty || EXIT_CODE=$?
           mkdir -p artifacts/${{ matrix.project }}
           echo "$SCHEME" > artifacts/${{ matrix.project }}/scheme.txt
           if [ -n "${EXIT_CODE:-}" ]; then

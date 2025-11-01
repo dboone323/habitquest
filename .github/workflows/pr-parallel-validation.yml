@@ -16,8 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  XCODE_VERSION: '15.0'
-  IOS_SIMULATOR: 'iPhone 15'
+  XCODE_VERSION: '16.0'
+  IOS_SIMULATOR: 'iPhone 17'
   MACOS_TARGET: '14.0'
 
 jobs:
