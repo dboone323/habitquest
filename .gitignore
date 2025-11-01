@@ -76,7 +76,9 @@ yarn-debug.log*
 yarn-error.log*
 
 # IDE
-.vscode/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/mcp-settings.json
 .idea/
 
 # Husky

@@ -93,7 +93,8 @@
         },
         "github.copilot.chat.codesearch.enabled": true,
         "github.copilot.chat.languageContext.fix.typescript.enabled": true,
-        "chat.mcp.autostart": "newAndOutdated",
+        "chat.mcp.autostart": "always",
+        "chat.mcp.enabled": true,
         "chat.agent.maxRequests": 1000,
         "chatgpt.commentCodeLensEnabled": true,
         "workbench.editor.enablePreview": false,
@@ -105,6 +106,24 @@
             "Package.swift": "Package.resolved, Package.pins",
             "*.xcodeproj": "*.xcworkspace",
             "README.md": "CHANGELOG.md, LICENSE, CODE_OF_CONDUCT.md, CONTRIBUTING.md"
+        },
+        "mcp.servers": {
+            "github": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-github"],
+                "env": {
+                    "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}"
+                }
+            },
+            "filesystem": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-filesystem", "${workspaceFolder}"]
+            },
+            "git": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-git", "${workspaceFolder}"]
+            }
+        }
         }
     },
     "extensions": {
