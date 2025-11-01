@@ -114,3 +114,10 @@ Workspace_Backup_*/
 **/*.tar
 **/*.tar.gz
 **/*.zip
+
+# Xcode test artifacts and reports
+*.xcresult
+Reports/**/*.xcresult
+Reports/Coverage/**/*.json
+Reports/Coverage/**/*.html
+Reports/Coverage/**/*.xml

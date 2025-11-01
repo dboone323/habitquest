@@ -24,37 +24,37 @@ struct CloudKitSyncView: View {
             }
             .background(Color.gray.opacity(0.1))
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Done") {
+                            dismiss()
+                        }
                     }
                 }
-            }
             #else
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    Button("Done") {
-                        dismiss()
+                .toolbar {
+                        ToolbarItem(placement: .automatic) {
+                            Button("Done") {
+                                dismiss()
+                            }
+                        }
                     }
-                }
-            }
             #endif
-            .sheet(isPresented: $showingDeviceList) {
-                DeviceManagementView()
-                    .environmentObject(themeManager)
-            }
-            .alert("Reset CloudKit Data", isPresented: $showingResetAlert) {
-                Button("Cancel", role: .cancel) {}
-                Button("Reset", role: .destructive) {
-                    Task {
-                        await cloudKit.resetCloudKitData()
+                    .sheet(isPresented: $showingDeviceList) {
+                        DeviceManagementView()
+                            .environmentObject(themeManager)
                     }
-                }
-            } message: {
-                Text("This will remove all data from iCloud and cannot be undone. Your local data will remain intact.")
-            }
+                    .alert("Reset CloudKit Data", isPresented: $showingResetAlert) {
+                        Button("Cancel", role: .cancel) {}
+                        Button("Reset", role: .destructive) {
+                            Task {
+                                await cloudKit.resetCloudKitData()
+                            }
+                        }
+                    } message: {
+                        Text("This will remove all data from iCloud and cannot be undone. Your local data will remain intact.")
+                    }
         }
     }
 
@@ -288,29 +288,29 @@ struct DeviceManagementView: View {
             }
             .navigationTitle("Synced Devices")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Done") {
+                            dismiss()
+                        }
                     }
                 }
-            }
             #else
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    Button("Done") {
-                        dismiss()
+                .toolbar {
+                        ToolbarItem(placement: .automatic) {
+                            Button("Done") {
+                                dismiss()
+                            }
+                        }
                     }
-                }
-            }
             #endif
-            .task {
-                await loadDevices()
-            }
-            .refreshable {
-                await loadDevices()
-            }
+                    .task {
+                        await loadDevices()
+                    }
+                    .refreshable {
+                        await loadDevices()
+                    }
         }
     }
 
