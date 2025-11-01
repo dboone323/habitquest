@@ -56,9 +56,12 @@ Quantum-workspace/
 
 ### 🤖 AI-Powered Development
 
+- **MCP Integration**: Model Context Protocol servers for AI tools (migrated Nov 2025)
+- GitHub Copilot with enhanced context via MCP servers
 - Intelligent code review and enhancement
 - Automated testing and validation
 - Smart build and deployment systems
+- See [MCP Migration Guide](Documentation/MCP_MIGRATION_GUIDE.md)
 
 ### 🔄 Advanced Automation
 
@@ -74,9 +77,11 @@ Quantum-workspace/
 
 ### 🛠️ Development Excellence
 
-- SwiftFormat & SwiftLint integration
+- SwiftFormat & SwiftLint integration (command-line tools)
 - Pre-commit hooks for code quality
 - Cross-platform build support
+- MCP servers for AI-enhanced workflows
+- See [MCP Quick Reference](MCP_QUICK_REFERENCE.md)
 
 ## 📚 Documentation
 

@@ -53,14 +53,32 @@
         },
         "github.copilot.chat.codesearch.enabled": true,
         "github.copilot.chat.languageContext.fix.typescript.enabled": true,
-        "chat.mcp.autostart": "newAndOutdated",
+        "chat.mcp.autostart": "always",
+        "chat.mcp.enabled": true,
         "chat.agent.maxRequests": 1000,
-        "chatgpt.commentCodeLensEnabled": false
+        "chatgpt.commentCodeLensEnabled": false,
+        "mcp.servers": {
+            "github": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-github"],
+                "env": {
+                    "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}"
+                }
+            },
+            "filesystem": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-filesystem", "${workspaceFolder}"]
+            },
+            "git": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-git", "${workspaceFolder}"]
+            }
+        }
     },
     "extensions": {
         "recommendations": [
-            "ms-python.python",
-            "ms-vscode.vscode-json"
+            "github.copilot",
+            "github.copilot-chat"
         ]
     },
     "tasks": {
