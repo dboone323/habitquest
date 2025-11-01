@@ -99,6 +99,8 @@ jobs:
           else
             echo "❌ Failed to create baseline-report.md"
             exit 1
+          fi
+
       - name: Upload Baseline Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -107,17 +109,7 @@ jobs:
           path: baseline-report.md
           retention-days: 90
           if-no-files-found: error
-      - name: Upload Baseline Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: quality-baseline-results
-          path: |
-            baseline-report.md
-          retention-days: 365
-          if-no-files-found: warn
 
-      - name: Create Baseline Summary Comment
       - name: Create Baseline Summary
         run: |
           echo "## 🎯 Quality Baseline Established" >> $GITHUB_STEP_SUMMARY
@@ -125,6 +117,7 @@ jobs:
           cat baseline-report.md >> $GITHUB_STEP_SUMMARY
 
       - name: Final Status
+        run: |
           echo "✅ Quality baseline establishment completed"
           echo "📊 Results available in baseline artifacts"
           echo "🔄 Regular monitoring will now use this baseline for comparison"
