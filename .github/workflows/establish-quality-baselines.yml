@@ -53,7 +53,7 @@ jobs:
           mkdir -p test_results performance_history
 
           # Create basic baseline report
-          cat > baseline-report.md << 'EOF'
+          cat > baseline-report.md << EOF
           # Quality Baseline Establishment Report
 
           **Date**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')
@@ -91,14 +91,22 @@ jobs:
           EOF
 
           echo "✅ Basic quality baseline established"
-
-      - name: Generate Baseline Report
-        run: |
-          echo "📊 Generating baseline report..."
-
-          # The baseline report is already created in the previous step
-          cat baseline-report.md
-
+          
+          # Verify the file was created
+          if [ -f baseline-report.md ]; then
+            echo "✅ baseline-report.md created successfully"
+            ls -lh baseline-report.md
+          else
+            echo "❌ Failed to create baseline-report.md"
+            exit 1
+      - name: Upload Baseline Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-baseline-results
+          path: baseline-report.md
+          retention-days: 90
+          if-no-files-found: error
       - name: Upload Baseline Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -110,21 +118,13 @@ jobs:
           if-no-files-found: warn
 
       - name: Create Baseline Summary Comment
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const fs = require('fs');
-            const report = fs.readFileSync('baseline-report.md', 'utf8');
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `## 🎯 Quality Baseline Established\n\n${report}`
-            });
+      - name: Create Baseline Summary
+        run: |
+          echo "## 🎯 Quality Baseline Established" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          cat baseline-report.md >> $GITHUB_STEP_SUMMARY
 
       - name: Final Status
-        run: |
           echo "✅ Quality baseline establishment completed"
           echo "📊 Results available in baseline artifacts"
           echo "🔄 Regular monitoring will now use this baseline for comparison"
