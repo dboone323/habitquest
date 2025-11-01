@@ -1112,7 +1112,7 @@ final class PlannerAppTests: XCTestCase {
     }
 
     // MARK: - CalendarDataManager wrapper (delegates to CloudKitManager.shared)
-
+    #if INTEGRATION_TESTS
     @MainActor
     func testRealCalendarDataManagerLoadAndSave() {
         // Ensure a clean slate
@@ -1200,6 +1200,7 @@ final class PlannerAppTests: XCTestCase {
         XCTAssertEqual(stats["total"], 2)
         XCTAssertGreaterThanOrEqual(stats["eventsThisWeek"] ?? 0, 1)
     }
+    #endif
 
     // MARK: - Goal Model Tests
 

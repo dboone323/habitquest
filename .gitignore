@@ -139,3 +139,15 @@ Reports/Coverage/**/*.xml
 # Temporary split files
 /tmp/
 *.swift.tmp
+
+# Build/test artifacts
+coverage_results/
+coverage_results/**
+test_results/
+performance_history/
+*.xcresult
+DerivedData/
+.xcworkspace/xcuserdata/
+**/*.xcuserstate
+**/*.xcuserdatad
+

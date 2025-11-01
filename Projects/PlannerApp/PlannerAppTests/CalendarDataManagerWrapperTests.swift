@@ -15,6 +15,7 @@ import XCTest
 final class CalendarDataManagerWrapperTests: XCTestCase {
     // MARK: - CalendarDataManager wrapper (delegates to CloudKitManager.shared)
 
+    #if INTEGRATION_TESTS
     @MainActor
     func testRealCalendarDataManagerLoadAndSave() {
         // Test that CalendarDataManager delegates correctly to CloudKitManager
@@ -97,4 +98,5 @@ final class CalendarDataManagerWrapperTests: XCTestCase {
         XCTAssertEqual(stats["total"], 2)
         XCTAssertGreaterThanOrEqual(stats["eventsThisWeek"] ?? 0, 1)
     }
+    #endif
 }
