@@ -19,7 +19,7 @@ on:
         type: boolean
 
 env:
-  XCODE_VERSION: '15.0'
+  XCODE_VERSION: '16.0'
   IOS_SIMULATOR: 'iPhone 15'
 
 jobs:
