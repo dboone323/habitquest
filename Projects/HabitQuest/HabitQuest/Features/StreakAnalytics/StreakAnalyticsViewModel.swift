@@ -31,7 +31,25 @@ final class StreakAnalyticsViewModel: ObservableObject, BaseViewModel {
 
     @Published var state = State()
 
-    var isLoading: Bool { state.isLoading }
+    var isLoading: Bool {
+        get { state.isLoading }
+        set { state.isLoading = newValue }
+    }
+
+    var errorMessage: String? {
+        get { state.errorMessage }
+        set { state.errorMessage = newValue }
+    }
+
+    var analyticsData: StreakAnalyticsData? {
+        get { state.analyticsData }
+        set { state.analyticsData = newValue }
+    }
+
+    var selectedTimeframe: Timeframe {
+        get { state.selectedTimeframe }
+        set { state.selectedTimeframe = newValue }
+    }
 
     enum Timeframe: String, CaseIterable, Equatable {
         case week = "7D"
@@ -90,7 +108,7 @@ final class StreakAnalyticsViewModel: ObservableObject, BaseViewModel {
         }
     }
 
-    // MARK: - Private Methods
+    // MARK: - Public Methods
 
     func loadAnalytics() {
         self.state.isLoading = true

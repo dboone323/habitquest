@@ -12,7 +12,7 @@ import CryptoKit
 
 // MARK: - Supporting Types
 
-public enum TransactionType: String, Codable, Sendable {
+public enum AuditTransactionType: String, Codable, Sendable {
     case deposit
     case withdrawal
     case transfer
@@ -40,6 +40,8 @@ public enum SecurityEventType: String, Codable, Sendable {
     case unauthorizedAccess = "unauthorized_access"
     case complianceViolation = "compliance_violation"
     case systemCompromise = "system_compromise"
+    case system = "system"
+    case dataAccess = "data_access"
 }
 
 public enum SecuritySeverity: String, Codable, Sendable {
@@ -139,15 +141,15 @@ public struct ComplianceReport {
 /// Comprehensive audit logging system for financial data operations
 /// Implements Phase 6 Security requirements with encrypted audit trails
 @available(iOS 15.0, macOS 12.0, *)
-public final class AuditLogger {
+public final class AuditLogger: @unchecked Sendable {
 
     // MARK: - Singleton
 
+    @MainActor
     public static let shared = AuditLogger()
 
     // MARK: - Properties
 
-    private let logger: Logger
     private let auditQueue: DispatchQueue
     private var auditBuffer: [AuditEntry] = []
     private let bufferFlushInterval: TimeInterval = 30.0 // Flush every 30 seconds
@@ -159,7 +161,6 @@ public final class AuditLogger {
     // MARK: - Initialization
 
     private init() {
-        self.logger = Logger(subsystem: "com.momentumfinance.audit", category: "AuditLogger")
         self.auditQueue = DispatchQueue(label: "com.momentumfinance.audit.queue", qos: .utility)
 
         // Generate or retrieve encryption key
@@ -170,7 +171,7 @@ public final class AuditLogger {
         self.auditFileURL = documentsURL.appendingPathComponent("audit_trail.enc")
 
         setupPeriodicFlush()
-        logger.info("AuditLogger initialized with encrypted audit trail")
+        Logger.logInfo("AuditLogger initialized with encrypted audit trail")
     }
 
     // MARK: - Public API
@@ -186,7 +187,7 @@ public final class AuditLogger {
     public func logTransaction(
         transactionId: String,
         amount: Decimal,
-        type: TransactionType,
+        type: AuditTransactionType,
         accountId: String,
         userId: String,
         metadata: [String: Any]? = nil
@@ -304,11 +305,11 @@ public final class AuditLogger {
         // Log to system logger with appropriate level
         switch severity {
         case .low:
-            logger.info("Security event: \(eventType.rawValue)")
+            os_log(.info, log: .default, "Security event: %{public}@", eventType.rawValue)
         case .medium:
-            logger.warning("Security event: \(eventType.rawValue)")
+            os_log(.default, log: .default, "Security event: %{public}@", eventType.rawValue)
         case .high, .critical:
-            logger.error("Security event: \(eventType.rawValue)")
+            os_log(.error, log: .default, "Security event: %{public}@", eventType.rawValue)
         }
     }
 
@@ -369,7 +370,7 @@ public final class AuditLogger {
             self.auditBuffer.append(entry)
 
             // Immediate logging to system logger
-            self.logger.info("Audit: \(entry.eventType.rawValue) - \(entry.action) by \(entry.userId)")
+            os_log(.info, log: .default, "Audit: %{public}@ - %{public}@ by %{public}@", entry.eventType.rawValue, entry.action, entry.userId)
 
             // Flush if buffer is getting large
             if self.auditBuffer.count >= 100 {
@@ -399,9 +400,9 @@ public final class AuditLogger {
             // Encrypt and persist audit entries
             try persistAuditEntries(entriesToFlush)
 
-            logger.info("Flushed \(entriesToFlush.count) audit entries to encrypted storage")
+            os_log(.info, log: .default, "Flushed %d audit entries to encrypted storage", entriesToFlush.count)
         } catch {
-            logger.error("Failed to flush audit buffer: \(error.localizedDescription)")
+            os_log(.error, log: .default, "Failed to flush audit buffer: %{public}@", error.localizedDescription)
             // Re-add entries to buffer for retry
             auditBuffer.insert(contentsOf: auditBuffer, at: 0)
         }

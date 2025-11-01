@@ -75,6 +75,14 @@ public class HabitViewModel: BaseViewModel {
 
     /// Handles actions dispatched to the ViewModel, updating state as needed.
     /// - Parameter action: The action to handle.
+    public func handle(_ action: Action) async {
+        await MainActor.run {
+            self.handleSync(action)
+        }
+    }
+
+    /// Handles actions dispatched to the ViewModel, updating state as needed.
+    /// - Parameter action: The action to handle.
     public func handle(_ action: Action) {
         self.handleSync(action)
     }

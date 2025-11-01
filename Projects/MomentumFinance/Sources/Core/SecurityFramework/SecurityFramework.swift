@@ -50,6 +50,7 @@ public struct SecurityFramework {
 
     /// Initialize the security framework
     /// This should be called early in the application lifecycle
+    @MainActor
     public static func initialize() {
         // Initialize all security services
         _ = AuditLogger.shared
@@ -61,24 +62,28 @@ public struct SecurityFramework {
 
     /// Perform a complete security health check
     /// - Returns: Security assessment report
+    @MainActor
     public static func performSecurityHealthCheck() -> SecurityAssessment {
         return SecurityMonitor.shared.performSecurityAssessment()
     }
 
     /// Validate compliance with regulatory requirements
     /// - Returns: Compliance validation result
+    @MainActor
     public static func validateCompliance() -> ComplianceValidation {
         return SecurityMonitor.shared.validateCompliance()
     }
 
     /// Get security monitoring alerts publisher
     /// - Returns: Publisher for security alerts
+    @MainActor
     public static func securityAlertsPublisher() -> AnyPublisher<SecurityAlert, Never> {
         return SecurityMonitor.shared.securityAlertsPublisher.eraseToAnyPublisher()
     }
 
     /// Get compliance status publisher
     /// - Returns: Publisher for compliance status updates
+    @MainActor
     public static func complianceStatusPublisher() -> AnyPublisher<ComplianceStatus, Never> {
         return SecurityMonitor.shared.complianceStatusPublisher.eraseToAnyPublisher()
     }
@@ -92,12 +97,14 @@ extension AuditLogger {
     ///   - userId: User identifier
     ///   - success: Whether login was successful
     ///   - method: Authentication method used
+    @MainActor
     public static func logLogin(userId: String, success: Bool, method: AuthenticationMethod = .password) {
         shared.logAuthentication(userId: userId, success: success, method: method)
     }
 
     /// Convenience method to log user logout
     /// - Parameter userId: User identifier
+    @MainActor
     public static func logLogout(userId: String) {
         shared.logSecurityEvent(
             eventType: .unauthorizedAccess,
@@ -127,6 +134,7 @@ extension EncryptionService {
 extension SecurityMonitor {
     /// Convenience method to report failed login attempt
     /// - Parameter userId: User identifier
+    @MainActor
     public static func reportFailedLogin(userId: String) {
         let event = SecurityEvent(
             type: .unauthorizedAccess,
@@ -141,6 +149,7 @@ extension SecurityMonitor {
     /// - Parameters:
     ///   - userId: User identifier
     ///   - activity: Description of suspicious activity
+    @MainActor
     public static func reportSuspiciousActivity(userId: String, activity: String) {
         let event = SecurityEvent(
             type: .suspiciousActivity,

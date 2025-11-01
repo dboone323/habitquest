@@ -3,8 +3,8 @@ import os
 import SwiftData
 import SwiftUI
 
-// Import Security Framework for comprehensive security
-import SecurityFramework
+// Import SharedKit for comprehensive security
+import SharedKit
 
 // Import KeychainHelper for secure storage
 // import KeychainHelper

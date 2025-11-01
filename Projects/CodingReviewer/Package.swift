@@ -30,7 +30,8 @@ let package = Package(
         ),
         .executableTarget(
             name: "CodingReviewer",
-            dependencies: ["CodingReviewerLib"]
+            dependencies: ["CodingReviewerLib"],
+            path: "Sources/CodingReviewer"
         ),
         .testTarget(
             name: "CodingReviewerTests",

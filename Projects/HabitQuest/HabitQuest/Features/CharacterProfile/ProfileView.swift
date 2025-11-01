@@ -11,31 +11,31 @@ public struct ProfileView: View {
                 VStack(spacing: 20) {
                     // Character Avatar Section
                     CharacterAvatarSection(
-                        level: self.viewModel.level,
-                        currentXP: self.viewModel.currentXP,
-                        xpToNextLevel: self.viewModel.xpForNextLevel,
+                        level: self.viewModel.state.level,
+                        currentXP: self.viewModel.state.currentXP,
+                        xpToNextLevel: self.viewModel.state.xpForNextLevel,
                         avatarImageName: "person.circle.fill"
                     )
 
                     // Progress Section
                     ProgressSection(
-                        currentXP: self.viewModel.currentXP,
-                        xpToNextLevel: self.viewModel.xpForNextLevel,
-                        totalXP: self.viewModel.currentXP
+                        currentXP: self.viewModel.state.currentXP,
+                        xpToNextLevel: self.viewModel.state.xpForNextLevel,
+                        totalXP: self.viewModel.state.currentXP
                     )
 
                     // Stats Section
                     StatsSection(
-                        totalHabits: self.viewModel.totalHabits,
+                        totalHabits: self.viewModel.state.totalHabits,
                         activeStreaks: 0,
-                        completedToday: self.viewModel.completedToday,
-                        longestStreak: self.viewModel.longestStreak,
+                        completedToday: self.viewModel.state.completedToday,
+                        longestStreak: self.viewModel.state.longestStreak,
                         perfectDays: 0,
                         weeklyCompletion: 0.0
                     )
 
                     // Achievements Section
-                    AchievementsSection(achievements: self.viewModel.achievements)
+                    AchievementsSection(achievements: self.viewModel.state.achievements)
 
                     // Advanced Analytics Button
                     Button(action: {

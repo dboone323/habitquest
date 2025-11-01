@@ -4,7 +4,6 @@
 import Foundation
 import Observation
 import SwiftData
-import SecurityFramework
 
 @MainActor
 @Observable
@@ -270,7 +269,12 @@ public final class BudgetsViewModel {
             "month": budget.month.ISO8601Format(),
             "operation": "create"
         ]
-        AuditLogger.shared.logEvent(.budgetOperation, details: details, userId: getCurrentUserId())
+        AuditLogger.shared.logSecurityEvent(
+            eventType: .system,
+            userId: getCurrentUserId(),
+            details: details,
+            severity: .low
+        )
     }
 
     /// Log budget limit update for audit trail
@@ -283,7 +287,12 @@ public final class BudgetsViewModel {
             "month": budget.month.ISO8601Format(),
             "operation": "update"
         ]
-        AuditLogger.shared.logEvent(.budgetOperation, details: details, userId: getCurrentUserId())
+        AuditLogger.shared.logSecurityEvent(
+            eventType: .system,
+            userId: getCurrentUserId(),
+            details: details,
+            severity: .low
+        )
     }
 
     /// Log budget deletion for audit trail
@@ -296,7 +305,12 @@ public final class BudgetsViewModel {
             "month": budget.month.ISO8601Format(),
             "operation": "delete"
         ]
-        AuditLogger.shared.logEvent(.budgetOperation, details: details, userId: getCurrentUserId())
+        AuditLogger.shared.logSecurityEvent(
+            eventType: .system,
+            userId: getCurrentUserId(),
+            details: details,
+            severity: .low
+        )
     }
 
     /// Get current user ID for audit logging

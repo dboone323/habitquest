@@ -13,7 +13,7 @@ import Security
 /// Comprehensive encryption service for financial data protection
 /// Implements AES-256-GCM encryption with secure key management
 @available(iOS 15.0, macOS 12.0, *)
-public final class EncryptionService {
+public final class EncryptionService: Sendable {
 
     // MARK: - Singleton
 

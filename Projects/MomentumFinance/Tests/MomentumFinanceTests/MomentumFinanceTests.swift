@@ -1,7 +1,7 @@
 import SwiftData
 import XCTest
 
-@testable import MomentumFinance
+@testable import MomentumFinanceCore
 
 final class MomentumFinanceTests: XCTestCase {
     var modelContainer: ModelContainer!

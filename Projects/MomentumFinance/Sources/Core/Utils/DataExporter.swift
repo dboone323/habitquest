@@ -1,21 +1,10 @@
 import Foundation
 import SwiftData
 
-/// Slim coordinator for backward compatibility. Delegates to `ExportEngineService` for heavy lifting.
 @ModelActor
 actor DataExporter {
-    private var engine: ExportEngineService?
-
-    /// Initialize engine asynchronously when a ModelContext is available
-    func configure(with modelContext: ModelContext) async {
-        self.engine = ExportEngineService(modelContext: modelContext)
-    }
-
-    nonisolated func export(with settings: ExportSettings) async throws -> URL {
-        guard let engine = await engine else {
-            throw ExportError.dataFetchFailed
-        }
-
+    func export(with settings: ExportSettings) async throws -> URL {
+        let engine = ExportEngineService(modelContext: self.modelContext)
         return try await engine.export(settings: settings)
     }
 }

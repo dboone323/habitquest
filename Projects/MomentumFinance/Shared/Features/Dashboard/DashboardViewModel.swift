@@ -5,6 +5,18 @@ import OSLog
 import SwiftData
 import SwiftUI
 
+// MARK: - Base View Model Protocol
+
+/// Protocol for standardized MVVM pattern
+@MainActor
+public protocol BaseViewModel: ObservableObject {
+    associatedtype State
+    associatedtype Action
+    var state: State { get set }
+    var isLoading: Bool { get set }
+    func handle(_ action: Action) async
+}
+
 // Momentum Finance - Personal Finance App
 // Copyright © 2025 Momentum Finance. All rights reserved.
 
@@ -51,7 +63,7 @@ final class DashboardViewModel: BaseViewModel {
         case .refreshData:
             await refreshData()
         case .processOverdueSubscriptions:
-            await processOverdueSubscriptions()
+            await processOverdueSubscriptions(state.subscriptions)
         case .updateMetrics:
             updateMetrics()
         }

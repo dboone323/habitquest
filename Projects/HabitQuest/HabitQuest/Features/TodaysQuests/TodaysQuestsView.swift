@@ -12,11 +12,11 @@ public struct TodaysQuestsView: View {
     public var body: some View {
         NavigationView {
             VStack {
-                if self.viewModel.todaysHabits.isEmpty {
+                if self.viewModel.state.todaysHabits.isEmpty {
                     EmptyStateView()
                 } else {
                     QuestListView(
-                        habits: self.viewModel.todaysHabits,
+                        habits: self.viewModel.state.todaysHabits,
                         habitAnalytics: self.habitAnalytics,
                         onComplete: self.viewModel.completeHabit
                     )
@@ -27,32 +27,38 @@ public struct TodaysQuestsView: View {
                 #if os(iOS)
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button("Add Quest") {
-                            self.viewModel.showingAddQuest = true
+                            self.viewModel.handle(.setShowingAddQuest(true))
                         }
                         .accessibilityLabel("Add Quest")
                     }
                 #else
                     ToolbarItem(placement: .primaryAction) {
                         Button("Add Quest") {
-                            self.viewModel.showingAddQuest = true
+                            self.viewModel.handle(.setShowingAddQuest(true))
                         }
                         .accessibilityLabel("Add Quest")
                     }
                 #endif
             }
-            .sheet(isPresented: self.$viewModel.showingAddQuest) {
+            .sheet(isPresented: Binding(
+                get: { self.viewModel.state.showingAddQuest },
+                set: { self.viewModel.handle(.setShowingAddQuest($0)) }
+            )) {
                 AddQuestView { habit in
                     self.viewModel.addNewHabit(habit)
                 }
             }
-            .alert("Quest Completed!", isPresented: self.$viewModel.showingCompletionAlert) {
+            .alert("Quest Completed!", isPresented: Binding(
+                get: { self.viewModel.state.showingCompletionAlert },
+                set: { if !$0 { self.viewModel.handle(.dismissCompletionAlert) } }
+            )) {
                 Button("Awesome!") {}
                     .accessibilityLabel("Awesome")
             } message: {
-                Text(self.viewModel.completionMessage)
+                Text(self.viewModel.state.completionMessage)
             }
             .onAppear {
-                self.viewModel.setModelContext(self.modelContext)
+                self.viewModel.handle(.setModelContext(self.modelContext))
                 self.setupStreakService()
             }
             .task {
@@ -70,7 +76,7 @@ public struct TodaysQuestsView: View {
 
         var analytics: [UUID: StreakAnalytics] = [:]
 
-        for habit in self.viewModel.todaysHabits {
+        for habit in self.viewModel.state.todaysHabits {
             let habitAnalytics = await streakService.getStreakAnalytics(for: habit)
             analytics[habit.id] = habitAnalytics
         }

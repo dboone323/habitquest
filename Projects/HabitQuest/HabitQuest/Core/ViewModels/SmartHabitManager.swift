@@ -68,6 +68,12 @@ public final class SmartHabitManager: BaseViewModel {
 
     // MARK: - BaseViewModel Protocol
 
+    public func handle(_ action: Action) async {
+        await MainActor.run {
+            self.handleSync(action)
+        }
+    }
+
     public func handle(_ action: Action) {
         self.handleSync(action)
     }

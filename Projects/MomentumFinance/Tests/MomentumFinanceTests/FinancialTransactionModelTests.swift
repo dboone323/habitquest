@@ -2,7 +2,7 @@ import SwiftData
 import XCTest
 
 // Unit tests for FinancialTransaction model in MomentumFinance
-@testable import MomentumFinance
+@testable import MomentumFinanceCore
 
 final class FinancialTransactionModelTests: XCTestCase {
     var modelContainer: ModelContainer!

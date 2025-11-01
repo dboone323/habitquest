@@ -1,6 +1,10 @@
 @preconcurrency import Foundation
 @preconcurrency import SwiftData
 
+// MARK: - Supporting Types
+
+// ValidationError and ValidationSeverity moved to DataImportModels.swift
+
 // MARK: - Data Import Coordinator
 
 // This file coordinates the data import process using focused component modules.
@@ -74,17 +78,17 @@ actor DataImporter {
             } catch let error as ImportError {
                 let validationError = ValidationError(
                     id: UUID(),
+                    field: "import",
                     message: "Row \(rowIndex + 2): \(error.localizedDescription)",
-                    severity: .error,
-                    field: nil
+                    severity: .error
                 )
                 errors.append(validationError)
             } catch {
                 let validationError = ValidationError(
                     id: UUID(),
+                    field: "import",
                     message: "Row \(rowIndex + 2): Unexpected error - \(error.localizedDescription)",
-                    severity: .error,
-                    field: nil
+                    severity: .error
                 )
                 errors.append(validationError)
             }
@@ -101,7 +105,7 @@ actor DataImporter {
         )
     }
 
-    private func parseCSV(_ content: String) -> [[String]] {
+    private nonisolated func parseCSV(_ content: String) -> [[String]] {
         var rows: [[String]] = []
         var currentRow: [String] = []
         var currentField = ""
@@ -141,7 +145,7 @@ actor DataImporter {
         return rows
     }
 
-    private func parseTransaction(from row: [String], headers: [String], dateIndex: Int, amountIndex: Int, descriptionIndex: Int) throws -> FinancialTransaction {
+    private nonisolated func parseTransaction(from row: [String], headers: [String], dateIndex: Int, amountIndex: Int, descriptionIndex: Int) throws -> FinancialTransaction {
         guard row.count > max(dateIndex, amountIndex, descriptionIndex) else {
             throw ImportError.invalidFormat("Row has insufficient columns")
         }

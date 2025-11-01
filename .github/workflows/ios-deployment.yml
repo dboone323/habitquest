@@ -80,7 +80,7 @@ jobs:
             -scheme ${{ matrix.scheme }} \
             -sdk iphonesimulator \
             -configuration ${{ github.event.inputs.build_type || 'Debug' }} \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
+            -destination 'platform=iOS Simulator,name=iPhone 16 Test,OS=latest' \
             build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
@@ -95,7 +95,7 @@ jobs:
           xcodebuild \
             -scheme ${{ matrix.scheme }} \
             -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
+            -destination 'platform=iOS Simulator,name=iPhone 16 Test,OS=latest' \
             test \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \

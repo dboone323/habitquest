@@ -13,15 +13,15 @@ import Combine
 /// Security monitoring and compliance validation system
 /// Implements real-time security monitoring for financial applications
 @available(iOS 15.0, macOS 12.0, *)
-public final class SecurityMonitor {
+public final class SecurityMonitor: @unchecked Sendable {
 
     // MARK: - Singleton
 
+    @MainActor
     public static let shared = SecurityMonitor()
 
     // MARK: - Properties
 
-    private let logger: Logger
     private let monitorQueue: DispatchQueue
     private var securityChecks: [SecurityCheck] = []
     private var monitoringTimer: Timer?
@@ -44,12 +44,11 @@ public final class SecurityMonitor {
     // MARK: - Initialization
 
     private init() {
-        self.logger = Logger(subsystem: "com.momentumfinance.security", category: "SecurityMonitor")
         self.monitorQueue = DispatchQueue(label: "com.momentumfinance.security.monitor", qos: .background)
 
         setupSecurityChecks()
         startMonitoring()
-        logger.info("SecurityMonitor initialized with real-time monitoring")
+        os_log(.info, log: .default, "SecurityMonitor initialized with real-time monitoring")
     }
 
     deinit {
@@ -198,6 +197,7 @@ public final class SecurityMonitor {
         }
     }
 
+    @MainActor
     private func processSecurityEvent(_ event: SecurityEvent) {
         switch event.type {
         case .unauthorizedAccess:
@@ -210,6 +210,10 @@ public final class SecurityMonitor {
             handleComplianceViolation(event)
         case .systemCompromise:
             handleSystemCompromise(event)
+        case .system:
+            handleSystemEvent(event)
+        case .dataAccess:
+            handleDataAccessEvent(event)
         }
 
         // Log all security events
@@ -293,6 +297,16 @@ public final class SecurityMonitor {
             timestamp: Date()
         )
         securityAlertsPublisher.send(alert)
+    }
+
+    private func handleSystemEvent(_ event: SecurityEvent) {
+        // Log system events without generating alerts unless critical
+        os_log(.info, log: .default, "System event: %{public}@", event.details)
+    }
+
+    private func handleDataAccessEvent(_ event: SecurityEvent) {
+        // Monitor data access patterns
+        os_log(.info, log: .default, "Data access event for user: %{public}@", event.userId ?? "unknown")
     }
 
     private func checkForSecurityAlerts(_ assessment: SecurityAssessment) {
@@ -439,18 +453,19 @@ public final class SecurityMonitor {
 
 // MARK: - Supporting Types
 
-public struct SecurityEvent {
+public struct SecurityEvent: Sendable {
     public let type: SecurityEventType
     public let userId: String?
     public let severity: SecuritySeverity
-    public let details: [String: Any]
+    public let details: [String: String]
     public let timestamp: Date
 
     public init(type: SecurityEventType, userId: String?, severity: SecuritySeverity, details: [String: Any]) {
         self.type = type
         self.userId = userId
         self.severity = severity
-        self.details = details
+        // Convert Any to String for Sendable compliance
+        self.details = details.mapValues { String(describing: $0) }
         self.timestamp = Date()
     }
 }

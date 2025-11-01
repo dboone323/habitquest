@@ -7,7 +7,7 @@ import SwiftUI
 public class ProfileViewModel: ObservableObject, BaseViewModel {
     // MARK: - State
 
-    struct State {
+    public struct State {
         var level: Int = 1
         var currentXP: Int = 0
         var xpForNextLevel: Int = 100
@@ -23,7 +23,7 @@ public class ProfileViewModel: ObservableObject, BaseViewModel {
 
     // MARK: - Actions
 
-    enum Action {
+    public enum Action {
         case setModelContext(ModelContext)
         case refreshProfile
         case loadAnalytics
@@ -31,9 +31,21 @@ public class ProfileViewModel: ObservableObject, BaseViewModel {
 
     // MARK: - Properties
 
-    @Published var state = State()
+    @Published public var state = State()
 
-    var isLoading: Bool { state.isLoading }
+    public var isLoading: Bool {
+        get { state.isLoading }
+        set { state.isLoading = newValue }
+    }
+
+    public var errorMessage: String? {
+        get { state.errorMessage }
+        set { state.errorMessage = newValue }
+    }
+
+    var achievements: [Achievement] {
+        state.achievements
+    }
 
     private var modelContext: ModelContext?
     private let logger = Logger.shared
@@ -41,22 +53,24 @@ public class ProfileViewModel: ObservableObject, BaseViewModel {
 
     // MARK: - BaseViewModel Protocol
 
-    func handle(_ action: Action) {
-        switch action {
-        case let .setModelContext(context):
-            self.modelContext = context
-            // self.analyticsService = AnalyticsService(modelContext: context) // Temporarily commented out
-            self.handle(.refreshProfile)
+    public func handle(_ action: Action) {
+        Task {
+            switch action {
+            case let .setModelContext(context):
+                self.modelContext = context
+                // self.analyticsService = AnalyticsService(modelContext: context) // Temporarily commented out
+                await self.handle(.refreshProfile)
 
-        case .refreshProfile:
-            self.loadProfile()
-            self.loadStatistics()
-            self.loadAchievements()
-            self.updateAchievements()
-            self.handle(.loadAnalytics)
+            case .refreshProfile:
+                self.loadProfile()
+                self.loadStatistics()
+                self.loadAchievements()
+                self.updateAchievements()
+                await self.handle(.loadAnalytics)
 
-        case .loadAnalytics:
-            self.loadAnalytics()
+            case .loadAnalytics:
+                self.loadAnalytics()
+            }
         }
     }
 

@@ -3,7 +3,7 @@ import PDFKit
 import SwiftData
 import SwiftUI
 
-final class ExportEngineService {
+final class ExportEngineService: @unchecked Sendable {
     private let modelContext: ModelContext
 
     init(modelContext: ModelContext) {

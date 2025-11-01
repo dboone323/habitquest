@@ -2,7 +2,7 @@ import SwiftData
 import XCTest
 
 // Unit tests for ExpenseCategory model in MomentumFinance
-@testable import MomentumFinance
+@testable import MomentumFinanceCore
 
 final class ExpenseCategoryModelTests: XCTestCase {
     var modelContainer: ModelContainer!

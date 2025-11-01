@@ -15,7 +15,7 @@ import SwiftData
 public class TodaysQuestsViewModel: ObservableObject, BaseViewModel {
     // MARK: - State
 
-    struct State {
+    public struct State {
         var todaysHabits: [Habit] = []
         var showingAddQuest = false
         var showingCompletionAlert = false
@@ -26,7 +26,7 @@ public class TodaysQuestsViewModel: ObservableObject, BaseViewModel {
 
     // MARK: - Actions
 
-    enum Action {
+    public enum Action {
         case setModelContext(ModelContext)
         case loadTodaysHabits
         case completeHabit(Habit)
@@ -37,15 +37,23 @@ public class TodaysQuestsViewModel: ObservableObject, BaseViewModel {
 
     // MARK: - Properties
 
-    @Published var state = State()
+    @Published public var state = State()
 
-    var isLoading: Bool { state.isLoading }
+    public var isLoading: Bool {
+        get { state.isLoading }
+        set { state.isLoading = newValue }
+    }
+
+    public var errorMessage: String? {
+        get { state.errorMessage }
+        set { state.errorMessage = newValue }
+    }
 
     private var modelContext: ModelContext?
 
     // MARK: - BaseViewModel Protocol
 
-    func handle(_ action: Action) {
+    public func handle(_ action: Action) {
         switch action {
         case let .setModelContext(context):
             self.modelContext = context

@@ -5,7 +5,6 @@ import SwiftUI
     import AppKit
 #endif
 
-@main
 struct CodingReviewerApp: App {
     var body: some Scene {
         WindowGroup {
@@ -13,3 +12,5 @@ struct CodingReviewerApp: App {
         }
     }
 }
+
+CodingReviewerApp.main()
