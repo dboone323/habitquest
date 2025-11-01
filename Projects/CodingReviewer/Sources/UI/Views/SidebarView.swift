@@ -135,7 +135,10 @@ class SidebarViewModel: ObservableObject, BaseViewModel {
     // MARK: - Initialization
 
     init() {
-        handle(.loadItems)
+        // Kick off async state loading from a non-async initializer
+        Task { [weak self] in
+            await self?.handle(.loadItems)
+        }
     }
 
     private func setupItems() {

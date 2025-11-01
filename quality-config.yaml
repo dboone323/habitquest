@@ -1,14 +1,25 @@
 # Quality Gates Configuration
 quality_gates:
   code_coverage:
-    minimum: 70
-    target: 85
+    minimum: 85  # Hard requirement - CI blocks below this
+    target: 90   # Ideal target
+    aspirational: 100
+    block_ci: true
+    incremental_requirement: 90  # New code must have 90%+
+    regression_threshold: 2  # Alert on coverage drops >2%
 
   test_performance:
     max_duration_seconds: 30
+    unit_tests_max: 60
+    integration_tests_max: 120
+    ui_tests_max: 180
 
   build_performance:
     max_duration_seconds: 120
+    per_project_max: 180  # 50% buffer
+    total_sequential_max: 600
+    pr_parallel_max: 600  # 10 minutes
+    release_sequential_max: 900  # 15 minutes
 
   code_quality:
     max_warnings: 5
@@ -21,6 +32,21 @@ quality_gates:
   complexity:
     max_cyclomatic_complexity: 10
     max_cognitive_complexity: 15
+
+  test_reliability:
+    flaky_test_threshold: 3  # Auto-skip after 3 failures in 5 runs
+    critical_failure_threshold: 5  # Block CI after 5 consecutive failures
+    max_retry_attempts: 3
+    retry_backoff_seconds: [1, 2, 4]  # Exponential backoff
+    flaky_skip_max_days: 7  # Maximum days a test can be skipped
+
+  ci_strategy:
+    pr_validation: "parallel"  # Fast feedback for pull requests
+    release_builds: "sequential"  # Stable, comprehensive validation
+    
+  performance_regression:
+    alert_threshold_percent: 10  # Alert on >10% slowdown
+    auto_block: true
 
 project_specific:
   CodingReviewer:

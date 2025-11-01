@@ -78,6 +78,10 @@ final class SecurityMonitor: Sendable {
     func monitorAnalysisResultStorage(dataType: String, recordCount: Int) {
         guard monitoringEnabled else { return }
 
+        // Update stored record count
+        let key = "stored_\(dataType)"
+        accessCounts[key, default: 0] += recordCount
+
         auditLogger.logDataStorage(dataType: dataType, recordCount: recordCount)
 
         // Check storage limits
@@ -88,6 +92,10 @@ final class SecurityMonitor: Sendable {
         guard monitoringEnabled else { return }
 
         auditLogger.logDataDeletion(dataType: dataType, recordCount: recordCount)
+
+        // Track deletion event in access counts
+        let key = "deletion_\(dataType)"
+        accessCounts[key, default: 0] += recordCount
 
         // Check for unusual deletion patterns
         checkDeletionPatterns(dataType, recordCount)

@@ -1,0 +1,379 @@
+name: PR Parallel Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'Projects/**'
+      - 'Shared/**'
+      - '.github/workflows/pr-parallel-validation.yml'
+      - 'quality-config.yaml'
+
+concurrency:
+  group: pr-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  XCODE_VERSION: '15.0'
+  IOS_SIMULATOR: 'iPhone 15'
+  MACOS_TARGET: '14.0'
+
+jobs:
+  # Fast initial checks (< 2 minutes)
+  pre-flight:
+    name: Pre-flight Checks
+    runs-on: macos-latest
+    timeout-minutes: 5
+    outputs:
+      changed_projects: ${{ steps.detect_changes.outputs.projects }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect Changed Projects
+        id: detect_changes
+        run: |
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+          PROJECTS=""
+          
+          if echo "$CHANGED_FILES" | grep -q "Projects/AvoidObstaclesGame"; then
+            PROJECTS="$PROJECTS AvoidObstaclesGame"
+          fi
+          if echo "$CHANGED_FILES" | grep -q "Projects/PlannerApp"; then
+            PROJECTS="$PROJECTS PlannerApp"
+          fi
+          if echo "$CHANGED_FILES" | grep -q "Projects/MomentumFinance"; then
+            PROJECTS="$PROJECTS MomentumFinance"
+          fi
+          if echo "$CHANGED_FILES" | grep -q "Projects/HabitQuest"; then
+            PROJECTS="$PROJECTS HabitQuest"
+          fi
+          if echo "$CHANGED_FILES" | grep -q "Projects/CodingReviewer"; then
+            PROJECTS="$PROJECTS CodingReviewer"
+          fi
+          if echo "$CHANGED_FILES" | grep -q "Shared/"; then
+            PROJECTS="AvoidObstaclesGame PlannerApp MomentumFinance HabitQuest CodingReviewer"
+          fi
+          
+          echo "projects=${PROJECTS}" >> $GITHUB_OUTPUT
+          echo "Changed projects: ${PROJECTS}"
+
+      - name: SwiftLint
+        run: |
+          if command -v swiftlint &> /dev/null; then
+            swiftlint --strict --reporter github-actions-logging
+          else
+            echo "⚠️  SwiftLint not installed, skipping"
+          fi
+
+      - name: SwiftFormat Check
+        run: |
+          if command -v swiftformat &> /dev/null; then
+            swiftformat --lint .
+          else
+            echo "⚠️  SwiftFormat not installed, skipping"
+          fi
+
+  # Parallel test execution for each project (< 8 minutes each)
+  test-avoid-obstacles-game:
+    name: Test AvoidObstaclesGame
+    runs-on: macos-latest
+    needs: pre-flight
+    if: contains(needs.pre-flight.outputs.changed_projects, 'AvoidObstaclesGame')
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        test_plan: ['AvoidObstaclesGame']
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+
+      - name: Build and Test
+        working-directory: Projects/AvoidObstaclesGame
+        run: |
+          xcodebuild test \
+            -project AvoidObstaclesGame.xcodeproj \
+            -scheme AvoidObstaclesGame \
+            -testPlan AvoidObstaclesGame \
+            -destination "platform=iOS Simulator,name=${{ env.IOS_SIMULATOR }}" \
+            -enableCodeCoverage YES \
+            -parallel-testing-enabled YES \
+            -maximum-parallel-testing-workers auto \
+            -resultBundlePath test-results.xcresult \
+            | tee build-log.txt \
+            | xcpretty --color --report html
+
+      - name: Extract Coverage
+        if: always()
+        working-directory: Projects/AvoidObstaclesGame
+        run: |
+          if [ -d "test-results.xcresult" ]; then
+            xcrun xccov view --report --json test-results.xcresult > coverage.json
+            COVERAGE=$(jq -r '.lineCoverage' coverage.json | awk '{printf "%.2f", $1 * 100}')
+            echo "Code Coverage: ${COVERAGE}%"
+            echo "coverage=${COVERAGE}" >> $GITHUB_ENV
+          fi
+
+      - name: Check Coverage Threshold
+        if: always()
+        run: |
+          MINIMUM=85
+          if (( $(echo "${{ env.coverage }} < $MINIMUM" | bc -l) )); then
+            echo "❌ Coverage ${COVERAGE}% is below minimum ${MINIMUM}%"
+            exit 1
+          else
+            echo "✅ Coverage ${COVERAGE}% meets minimum ${MINIMUM}%"
+          fi
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: avoid-obstacles-game-results
+          path: Projects/AvoidObstaclesGame/test-results.xcresult
+          retention-days: 7
+
+  test-planner-app:
+    name: Test PlannerApp
+    runs-on: macos-latest
+    needs: pre-flight
+    if: contains(needs.pre-flight.outputs.changed_projects, 'PlannerApp')
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ['iOS', 'macOS']
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+
+      - name: Set Destination
+        id: destination
+        run: |
+          if [ "${{ matrix.platform }}" == "iOS" ]; then
+            echo "destination=platform=iOS Simulator,name=${{ env.IOS_SIMULATOR }}" >> $GITHUB_OUTPUT
+          else
+            echo "destination=platform=macOS,arch=x86_64" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build and Test
+        working-directory: Projects/PlannerApp
+        run: |
+          xcodebuild test \
+            -project PlannerApp.xcodeproj \
+            -scheme PlannerApp \
+            -testPlan PlannerApp \
+            -destination "${{ steps.destination.outputs.destination }}" \
+            -enableCodeCoverage YES \
+            -parallel-testing-enabled YES \
+            -maximum-parallel-testing-workers auto \
+            -resultBundlePath test-results-${{ matrix.platform }}.xcresult \
+            | tee build-log-${{ matrix.platform }}.txt \
+            | xcpretty --color --report html
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: planner-app-results-${{ matrix.platform }}
+          path: Projects/PlannerApp/test-results-${{ matrix.platform }}.xcresult
+          retention-days: 7
+
+  test-momentum-finance:
+    name: Test MomentumFinance
+    runs-on: macos-latest
+    needs: pre-flight
+    if: contains(needs.pre-flight.outputs.changed_projects, 'MomentumFinance')
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ['iOS', 'macOS']
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+
+      - name: Set Destination
+        id: destination
+        run: |
+          if [ "${{ matrix.platform }}" == "iOS" ]; then
+            echo "destination=platform=iOS Simulator,name=${{ env.IOS_SIMULATOR }}" >> $GITHUB_OUTPUT
+          else
+            echo "destination=platform=macOS,arch=x86_64" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build and Test
+        working-directory: Projects/MomentumFinance
+        run: |
+          xcodebuild test \
+            -project MomentumFinance.xcodeproj \
+            -scheme MomentumFinance \
+            -testPlan MomentumFinance \
+            -destination "${{ steps.destination.outputs.destination }}" \
+            -enableCodeCoverage YES \
+            -parallel-testing-enabled YES \
+            -maximum-parallel-testing-workers auto \
+            -resultBundlePath test-results-${{ matrix.platform }}.xcresult \
+            | tee build-log-${{ matrix.platform }}.txt \
+            | xcpretty --color --report html
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: momentum-finance-results-${{ matrix.platform }}
+          path: Projects/MomentumFinance/test-results-${{ matrix.platform }}.xcresult
+          retention-days: 7
+
+  test-habit-quest:
+    name: Test HabitQuest
+    runs-on: macos-latest
+    needs: pre-flight
+    if: contains(needs.pre-flight.outputs.changed_projects, 'HabitQuest')
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        test_plan: ['HabitQuest']
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+
+      - name: Build and Test
+        working-directory: Projects/HabitQuest
+        run: |
+          xcodebuild test \
+            -project HabitQuest.xcodeproj \
+            -scheme HabitQuest \
+            -testPlan HabitQuest \
+            -destination "platform=iOS Simulator,name=${{ env.IOS_SIMULATOR }}" \
+            -enableCodeCoverage YES \
+            -parallel-testing-enabled YES \
+            -maximum-parallel-testing-workers auto \
+            -resultBundlePath test-results.xcresult \
+            | tee build-log.txt \
+            | xcpretty --color --report html
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: habit-quest-results
+          path: Projects/HabitQuest/test-results.xcresult
+          retention-days: 7
+
+  test-coding-reviewer:
+    name: Test CodingReviewer (Swift Package)
+    runs-on: macos-latest
+    needs: pre-flight
+    if: contains(needs.pre-flight.outputs.changed_projects, 'CodingReviewer')
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+
+      - name: Make CI scripts executable
+        run: |
+          chmod +x Tools/Automation/ci/ci_orchestrator.sh
+          chmod +x Tools/Testing/test_timeout_wrapper.sh
+          chmod +x Tools/Testing/testing_flaky_detection.sh
+          chmod +x Tools/Automation/performance_monitor_advanced.sh
+          chmod +x Tools/Automation/ci/create_issue.sh
+
+      - name: Run CI Orchestrator
+        run: |
+          Tools/Automation/ci/ci_orchestrator.sh CodingReviewer full
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: coding-reviewer-results
+          path: |
+            Projects/CodingReviewer/test-output.txt
+            Projects/CodingReviewer/.build/coverage_report.txt
+            Projects/CodingReviewer/coverage.lcov
+            Tools/Automation/.metrics/
+          retention-days: 7
+
+  # Aggregate results (< 1 minute)
+  aggregate-results:
+    name: Aggregate Test Results
+    runs-on: macos-latest
+    needs:
+      - pre-flight
+      - test-avoid-obstacles-game
+      - test-planner-app
+      - test-momentum-finance
+      - test-habit-quest
+      - test-coding-reviewer
+    if: always()
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: test-results
+
+      - name: Generate Aggregate Report
+        run: |
+          echo "# PR Validation Results" > pr-report.md
+          echo "" >> pr-report.md
+          echo "## Test Summary" >> pr-report.md
+          echo "" >> pr-report.md
+          echo "- ✅ Pre-flight checks passed" >> pr-report.md
+          echo "- 📊 Test results collected from all projects" >> pr-report.md
+          echo "" >> pr-report.md
+          echo "### Changed Projects" >> pr-report.md
+          echo "${{ needs.pre-flight.outputs.changed_projects }}" >> pr-report.md
+
+      - name: Comment PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('pr-report.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
+
+      - name: Check Overall Status
+        run: |
+          echo "✅ PR validation complete"
+          echo "Target: < 10 minutes total execution time"

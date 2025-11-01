@@ -1,0 +1,63 @@
+{
+  "configurations" : [
+    {
+      "id" : "6CAD7E5F-4G3H-6F8E-BD0C-9G8H7E6F5D4C",
+      "name" : "Test Scheme Action",
+      "options" : {
+        "codeCoverage" : {
+          "targets" : [
+            {
+              "containerPath" : "container:MomentumFinance.xcodeproj",
+              "identifier" : "MomentumFinance",
+              "name" : "MomentumFinance"
+            },
+            {
+              "containerPath" : "container:MomentumFinance.xcodeproj",
+              "identifier" : "MomentumFinanceCore",
+              "name" : "MomentumFinanceCore"
+            }
+          ]
+        },
+        "commandLineArgumentEntries" : [
+        ],
+        "environmentVariableEntries" : [
+        ],
+        "language" : "en",
+        "region" : "US",
+        "testExecutionOrdering" : "random",
+        "testTimeoutsEnabled" : true,
+        "maximumTestExecutionTimeAllowance" : 120,
+        "targetForVariableExpansion" : {
+          "containerPath" : "container:MomentumFinance.xcodeproj",
+          "identifier" : "MomentumFinance",
+          "name" : "MomentumFinance"
+        }
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : true,
+    "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true,
+    "maximumTestExecutionTimeAllowance" : 120
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:MomentumFinance.xcodeproj",
+        "identifier" : "MomentumFinanceTests",
+        "name" : "MomentumFinanceTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:MomentumFinance.xcodeproj",
+        "identifier" : "MomentumFinanceUITests",
+        "name" : "MomentumFinanceUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

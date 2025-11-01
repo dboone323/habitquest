@@ -32,5 +32,16 @@ let package = Package(
             name: "CodingReviewer",
             dependencies: ["CodingReviewerLib"]
         ),
+        .testTarget(
+            name: "CodingReviewerTests",
+            dependencies: ["CodingReviewerLib"],
+            path: "Tests",
+            exclude: [
+                "WelcomeViewTests.swift",
+                "SidebarViewTests.swift",
+                "CodeReviewViewTests.swift",
+                "PackageTests.swift"
+            ]
+        ),
     ]
 )

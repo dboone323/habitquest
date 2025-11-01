@@ -12,160 +12,18 @@ struct CloudKitSyncView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Header
-                    VStack(spacing: 8) {
-                        Image(systemName: "icloud")
-                            .font(.system(size: 48))
-                            .foregroundColor(.blue)
-                        Text("iCloud Sync")
-                            .font(.title)
-                            .fontWeight(.bold)
-                        Text("Keep your data synchronized across all your devices")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding(.top)
-
-                    // iCloud Status
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Status")
-                            .font(.headline)
-
-                        if cloudKit.isSignedInToiCloud {
-                            HStack {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
-                                Text("Signed in to iCloud")
-                                    .foregroundColor(.green)
-                                Spacer()
-                            }
-                        } else {
-                            HStack {
-                                Image(systemName: "exclamationmark.triangle.fill")
-                                    .foregroundColor(.orange)
-                                VStack(alignment: .leading) {
-                                    Text("Not signed in to iCloud")
-                                        .foregroundColor(.orange)
-                                    Text("Sign in to iCloud to enable sync")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                                Spacer()
-                            }
-                        }
-                    }
-                    .padding()
-                    .background(Color(.systemBackground))
-                    .cornerRadius(12)
-                    .shadow(color: Color.black.opacity(0.1), radius: 2)
-
-                    // Sync Status
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Sync Status")
-                            .font(.headline)
-
-                        EnhancedSyncStatusView(showLabel: true)
-                            .padding(.vertical, 8)
-
-                        if let lastSync = cloudKit.lastSyncDate {
-                            HStack {
-                                Text("Last sync:")
-                                Text(lastSync, style: .relative)
-                                    .foregroundColor(.secondary)
-                            }
-                            .font(.caption)
-                        }
-                    }
-                    .padding()
-                    .background(Color(.systemBackground))
-                    .cornerRadius(12)
-                    .shadow(color: Color.black.opacity(0.1), radius: 2)
-
-                    // Manual Sync
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Manual Sync")
-                            .font(.headline)
-
-                        Button(action: {
-                            Task {
-                                await cloudKit.performFullSync()
-                            }
-                        }) {
-                            HStack {
-                                Image(systemName: "arrow.triangle.2.circlepath")
-                                Text("Sync Now")
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                        }
-                        .disabled(!cloudKit.isSignedInToiCloud || cloudKit.syncStatus.isActive)
-                    }
-                    .padding()
-                    .background(Color(.systemBackground))
-                    .cornerRadius(12)
-                    .shadow(color: Color.black.opacity(0.1), radius: 2)
-
-                    // Device Management
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Device Management")
-                            .font(.headline)
-
-                        Button(action: {
-                            showingDeviceList = true
-                        }) {
-                            HStack {
-                                Image(systemName: "iphone")
-                                Text("Manage Synced Devices")
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding()
-                            .background(Color(.systemBackground))
-                            .cornerRadius(8)
-                        }
-                    }
-                    .padding()
-                    .background(Color(.systemBackground))
-                    .cornerRadius(12)
-                    .shadow(color: Color.black.opacity(0.1), radius: 2)
-
-                    // Advanced Options
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Advanced")
-                            .font(.headline)
-
-                        Button(action: {
-                            showingResetAlert = true
-                        }) {
-                            HStack {
-                                Image(systemName: "trash")
-                                    .foregroundColor(.red)
-                                Text("Reset CloudKit Data")
-                                    .foregroundColor(.red)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding()
-                            .background(Color(.systemBackground))
-                            .cornerRadius(8)
-                        }
-                    }
-                    .padding()
-                    .background(Color(.systemBackground))
-                    .cornerRadius(12)
-                    .shadow(color: Color.black.opacity(0.1), radius: 2)
-
+                    headerSection
+                    icloudStatusSection
+                    syncStatusSection
+                    manualSyncSection
+                    deviceManagementSection
+                    advancedOptionsSection
                     Spacer()
                 }
                 .padding()
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Color.gray.opacity(0.1))
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -174,6 +32,15 @@ struct CloudKitSyncView: View {
                     }
                 }
             }
+            #else
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+            #endif
             .sheet(isPresented: $showingDeviceList) {
                 DeviceManagementView()
                     .environmentObject(themeManager)
@@ -189,6 +56,161 @@ struct CloudKitSyncView: View {
                 Text("This will remove all data from iCloud and cannot be undone. Your local data will remain intact.")
             }
         }
+    }
+
+    private var headerSection: some View {
+        VStack(spacing: 8) {
+            Image(systemName: "icloud")
+                .font(.system(size: 48))
+                .foregroundColor(.blue)
+            Text("iCloud Sync")
+                .font(.title)
+                .fontWeight(.bold)
+            Text("Keep your data synchronized across all your devices")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.top)
+    }
+
+    private var icloudStatusSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Status")
+                .font(.headline)
+
+            if cloudKit.isSignedInToiCloud {
+                HStack {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.green)
+                    Text("Signed in to iCloud")
+                        .foregroundColor(.green)
+                    Spacer()
+                }
+            } else {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.orange)
+                    VStack(alignment: .leading) {
+                        Text("Not signed in to iCloud")
+                            .foregroundColor(.orange)
+                        Text("Sign in to iCloud to enable sync")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer()
+                }
+            }
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.1), radius: 2)
+    }
+
+    private var syncStatusSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Sync Status")
+                .font(.headline)
+
+            EnhancedSyncStatusView(showLabel: true)
+                .padding(.vertical, 8)
+
+            if let lastSync = cloudKit.lastSyncDate {
+                HStack {
+                    Text("Last sync:")
+                    Text(lastSync, style: .relative)
+                        .foregroundColor(.secondary)
+                }
+                .font(.caption)
+            }
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.1), radius: 2)
+    }
+
+    private var manualSyncSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Manual Sync")
+                .font(.headline)
+
+            Button(action: {
+                Task {
+                    await cloudKit.performFullSync()
+                }
+            }) {
+                HStack {
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                    Text("Sync Now")
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+            }
+            .disabled(!cloudKit.isSignedInToiCloud || cloudKit.syncStatus.isActive)
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.1), radius: 2)
+    }
+
+    private var deviceManagementSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Device Management")
+                .font(.headline)
+
+            Button(action: {
+                showingDeviceList = true
+            }) {
+                HStack {
+                    Image(systemName: "iphone")
+                    Text("Manage Synced Devices")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.secondary)
+                }
+                .padding()
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(8)
+            }
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.1), radius: 2)
+    }
+
+    private var advancedOptionsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Advanced")
+                .font(.headline)
+
+            Button(action: {
+                showingResetAlert = true
+            }) {
+                HStack {
+                    Image(systemName: "trash")
+                        .foregroundColor(.red)
+                    Text("Reset CloudKit Data")
+                        .foregroundColor(.red)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.secondary)
+                }
+                .padding()
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(8)
+            }
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.1), radius: 2)
     }
 }
 
@@ -265,6 +287,7 @@ struct DeviceManagementView: View {
                 }
             }
             .navigationTitle("Synced Devices")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -273,6 +296,15 @@ struct DeviceManagementView: View {
                     }
                 }
             }
+            #else
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+            #endif
             .task {
                 await loadDevices()
             }

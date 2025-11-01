@@ -65,7 +65,8 @@ final class LanguageDetector: Sendable {
         )
 
         // Simple content-based detection
-        if content.contains("func ") && content.contains(":") {
+        // Swift heuristics: 'func ' with return arrow or common Swift imports
+        if content.contains("func ") && (content.contains("->") || content.contains("{") ) {
             return .swift
         } else if content.contains("def ") && content.contains(":") {
             return .python

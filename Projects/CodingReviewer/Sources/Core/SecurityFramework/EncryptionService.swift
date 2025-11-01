@@ -130,23 +130,36 @@ final class EncryptionService: Sendable {
         )
 
         let metadataData = try JSONEncoder().encode(metadata)
-        let combinedData = metadataData + result
+        var metadataLength = UInt32(metadataData.count).bigEndian
+        let lengthData = Data(bytes: &metadataLength, count: 4)
+        let combinedData = lengthData + metadataData + result
 
         return try await encrypt(data: combinedData)
     }
 
-    fileprivate func decryptAnalysisResult(_ encryptedData: Data) async throws -> (metadata: AnalysisMetadata, data: Data) {
+    @MainActor internal func decryptAnalysisResult(_ encryptedData: Data) async throws -> (metadata: AnalysisMetadata, data: Data) {
         let combinedData = try await decrypt(data: encryptedData)
 
-        // Extract metadata (assume first 256 bytes for metadata, rest for data)
-        guard combinedData.count > 256 else {
+        // Extract length prefix (4 bytes)
+        guard combinedData.count >= 4 else {
             throw EncryptionError.invalidEncryptedData
         }
 
-        let metadataData = combinedData.prefix(256)
-        let resultData = combinedData.suffix(from: 256)
+        let lengthData = combinedData.prefix(4)
+        let metadataLength = UInt32(bigEndian: lengthData.withUnsafeBytes { $0.load(as: UInt32.self) })
 
+        // Extract metadata
+        let metadataStart = 4
+        let metadataEnd = metadataStart + Int(metadataLength)
+        guard combinedData.count >= metadataEnd else {
+            throw EncryptionError.invalidEncryptedData
+        }
+
+        let metadataData = combinedData[metadataStart..<metadataEnd]
         let metadata = try JSONDecoder().decode(AnalysisMetadata.self, from: metadataData)
+
+        // Extract result data
+        let resultData = combinedData.suffix(from: metadataEnd)
 
         return (metadata, resultData)
     }
@@ -186,7 +199,7 @@ final class EncryptionService: Sendable {
 
 // MARK: - Supporting Types
 
-private struct AnalysisMetadata: Codable {
+internal struct AnalysisMetadata: Codable {
     let version: String
     let timestamp: Date
     let dataType: String

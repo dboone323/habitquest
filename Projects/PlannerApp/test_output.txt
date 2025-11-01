@@ -1,0 +1,394 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild test -scheme PlannerApp -destination platform=macOS -enableCodeCoverage YES -resultBundlePath TestResults.xcresult
+
+Writing result bundle at path:
+	/Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/TestResults.xcresult
+
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:macOS, arch:arm64, id:00006000-001649660AE2801E, name:My Mac }
+{ platform:macOS, arch:x86_64, id:00006000-001649660AE2801E, name:My Mac }
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (3 targets)
+    Target 'PlannerAppUITests' in project 'PlannerApp'
+        ➜ Explicit dependency on target 'PlannerApp' in project 'PlannerApp'
+    Target 'PlannerAppTests' in project 'PlannerApp'
+        ➜ Explicit dependency on target 'PlannerApp' in project 'PlannerApp'
+    Target 'PlannerApp' in project 'PlannerApp' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: edd314a68eebfa447f46aa36b316b773
+Build description path: /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/XCBuildData/edd314a68eebfa447f46aa36b316b773.xcbuilddata
+ClangStatCache /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B5042i-3885c01c3e6b6a337905948deab2002ed77eb18e28310dc39e4af1f069d89823.sdkstatcache
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/PlannerApp.xcodeproj
+    /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -o /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B5042i-3885c01c3e6b6a337905948deab2002ed77eb18e28310dc39e4af1f069d89823.sdkstatcache
+
+SwiftDriver PlannerAppTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-SwiftDriver -- /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PlannerAppTests -Onone -enforce-exclusivity\=checked @/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -target arm64-apple-macos26.0 -g -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug -Isystem /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug -F /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B5042i-3885c01c3e6b6a337905948deab2002ed77eb18e28310dc39e4af1f069d89823.sdkstatcache -output-file-map /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests_const_extract_protocols.json -Xcc -iquote -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests-generated-files.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests-own-target-headers.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests-all-target-headers.hmap -Xcc -iquote -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests-project-headers.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/DerivedSources-normal/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/DerivedSources/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests-Swift.h -working-directory /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp -experimental-emit-module-separately -disable-cmo
+
+CopySwiftLibs /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app (in target 'PlannerApp' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-swiftStdLibTool --copy --verbose --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 --scan-executable /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/MacOS/PlannerApp.debug.dylib --scan-folder /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/Frameworks --scan-folder /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns --scan-folder /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/Library/SystemExtensions --scan-folder /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/Extensions --platform macosx --toolchain /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.5025.6.aG7Flw/Metal.xctoolchain --toolchain /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ProcessInfoPlistFile /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/Info.plist /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/empty-PlannerApp.plist (in target 'PlannerApp' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-infoPlistUtility /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/empty-PlannerApp.plist -producttype com.apple.product-type.application -genpkginfo /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PkgInfo -expandbuildsettings -platform macosx -additionalcontentfile /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/assetcatalog_generated_info.plist -o /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/Info.plist
+
+ProcessInfoPlistFile /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest/Contents/Info.plist /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/empty-PlannerAppTests.plist (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-infoPlistUtility /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/empty-PlannerAppTests.plist -producttype com.apple.product-type.bundle.unit-test -expandbuildsettings -platform macosx -o /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest/Contents/Info.plist
+
+SwiftCompile normal arm64 Compiling\ PlannerAppTests.swift /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/PlannerAppTests/PlannerAppTests.swift (in target 'PlannerAppTests' from project 'PlannerApp')
+
+SwiftCompile normal arm64 /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/PlannerAppTests/PlannerAppTests.swift (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ PlannerAppTests (in target 'PlannerAppTests' from project 'PlannerApp')
+
+EmitSwiftModule normal arm64 (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for PlannerAppTests (in target 'PlannerAppTests' from project 'PlannerApp')
+
+SwiftDriver\ Compilation\ Requirements PlannerAppTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PlannerAppTests -Onone -enforce-exclusivity\=checked @/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -target arm64-apple-macos26.0 -g -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug -Isystem /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug -F /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B5042i-3885c01c3e6b6a337905948deab2002ed77eb18e28310dc39e4af1f069d89823.sdkstatcache -output-file-map /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests_const_extract_protocols.json -Xcc -iquote -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests-generated-files.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests-own-target-headers.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests-all-target-headers.hmap -Xcc -iquote -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests-project-headers.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/DerivedSources-normal/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/DerivedSources/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests-Swift.h -working-directory /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp -experimental-emit-module-separately -disable-cmo
+
+Copy /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppTests.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.swiftsourceinfo (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.swiftsourceinfo /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppTests.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo
+
+Copy /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppTests.swiftmodule/arm64-apple-macos.swiftmodule /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.swiftmodule (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.swiftmodule /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppTests.swiftmodule/arm64-apple-macos.swiftmodule
+
+Copy /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppTests.swiftmodule/arm64-apple-macos.abi.json /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.abi.json (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.abi.json /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppTests.swiftmodule/arm64-apple-macos.abi.json
+
+SwiftDriverJobDiscovery normal arm64 Compiling PlannerAppTests.swift (in target 'PlannerAppTests' from project 'PlannerApp')
+
+SwiftDriver\ Compilation PlannerAppTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-Swift-Compilation -- /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PlannerAppTests -Onone -enforce-exclusivity\=checked @/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -target arm64-apple-macos26.0 -g -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug -Isystem /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug -F /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B5042i-3885c01c3e6b6a337905948deab2002ed77eb18e28310dc39e4af1f069d89823.sdkstatcache -output-file-map /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests_const_extract_protocols.json -Xcc -iquote -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests-generated-files.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests-own-target-headers.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests-all-target-headers.hmap -Xcc -iquote -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests-project-headers.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/DerivedSources-normal/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/DerivedSources/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests-Swift.h -working-directory /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp -experimental-emit-module-separately -disable-cmo
+
+Ld /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest/Contents/MacOS/PlannerAppTests normal (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.0 -bundle -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -O0 -L/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -L/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug -L/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug -iframework /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -filelist /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.LinkFileList -Xlinker -rpath -Xlinker @loader_path/../Frameworks -Xlinker -rpath -Xlinker @executable_path/../Frameworks -bundle_loader /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/MacOS/PlannerApp -Xlinker -object_path_lto -Xlinker /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests_dependency_info.dat -fobjc-link-runtime -fprofile-instr-generate -L/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.swiftmodule @/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests-linker-args.resp -Xlinker -needed_framework -Xlinker XCTest -framework XCTest -Xlinker -needed-lXCTestSwiftSupport -lXCTestSwiftSupport /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/MacOS/PlannerApp.debug.dylib -Xlinker -no_adhoc_codesign -o /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest/Contents/MacOS/PlannerAppTests
+
+ExtractAppIntentsMetadata (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.5025.6.aG7Flw/Metal.xctoolchain --module-name PlannerAppTests --sdk-root /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk --xcode-version 17B5025f --platform-family macOS --deployment-target 26.0 --bundle-identifier com.DanielStevens.PlannerAppTests --output /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest/Contents/Resources --target-triple arm64-apple-macos26.0 --binary-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest/Contents/MacOS/PlannerAppTests --dependency-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests_dependency_info.dat --stringsdata-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.SwiftFileList --metadata-file-list /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests.DependencyMetadataFileList --static-metadata-file-list /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/PlannerAppTests.DependencyStaticMetadataFileList --swift-const-vals-list /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/Objects-normal/arm64/PlannerAppTests.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2025-10-31 19:59:49.916 appintentsmetadataprocessor[79477:6955500] Starting appintentsmetadataprocessor export
+2025-10-31 19:59:49.918 appintentsmetadataprocessor[79477:6955500] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+CopySwiftLibs /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-swiftStdLibTool --copy --verbose --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 --scan-executable /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest/Contents/MacOS/PlannerAppTests --scan-folder /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest/Contents/Frameworks --scan-folder /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest/Contents/PlugIns --scan-folder /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest/Contents/Library/SystemExtensions --scan-folder /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest/Contents/Extensions --platform macosx --toolchain /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.5025.6.aG7Flw/Metal.xctoolchain --toolchain /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest/Contents/Frameworks --strip-bitcode --scan-executable /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppTests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+CodeSign /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest (in target 'PlannerAppTests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    
+    Signing Identity:     "Apple Development: dboone9@msn.com (72RDLR687H)"
+    
+    /usr/bin/codesign --force --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 --timestamp\=none --generate-entitlement-der /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/PlugIns/PlannerAppTests.xctest
+
+CodeSign /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/MacOS/PlannerApp.debug.dylib (in target 'PlannerApp' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    
+    Signing Identity:     "Apple Development: dboone9@msn.com (72RDLR687H)"
+    
+    /usr/bin/codesign --force --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 -o runtime --timestamp\=none --generate-entitlement-der /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/MacOS/PlannerApp.debug.dylib
+/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/MacOS/PlannerApp.debug.dylib: replacing existing signature
+
+CodeSign /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/MacOS/__preview.dylib (in target 'PlannerApp' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    
+    Signing Identity:     "Apple Development: dboone9@msn.com (72RDLR687H)"
+    
+    /usr/bin/codesign --force --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 -o runtime --timestamp\=none --generate-entitlement-der /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/MacOS/__preview.dylib
+/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app/Contents/MacOS/__preview.dylib: replacing existing signature
+
+CodeSign /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app (in target 'PlannerApp' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    
+    Signing Identity:     "Apple Development: dboone9@msn.com (72RDLR687H)"
+    
+    /usr/bin/codesign --force --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 -o runtime --entitlements /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerApp.build/PlannerApp.app.xcent --timestamp\=none --generate-entitlement-der /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app
+/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app: replacing existing signature
+
+Validate /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app (in target 'PlannerApp' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-validationUtility /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app -no-validate-extension -infoplist-subpath Contents/Info.plist
+
+RegisterWithLaunchServices /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app (in target 'PlannerApp' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    /System/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/LaunchServices.framework/Versions/Current/Support/lsregister -f -R -trusted /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerApp.app
+
+CopySwiftLibs /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app/Contents/PlugIns/PlannerAppUITests.xctest (in target 'PlannerAppUITests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-swiftStdLibTool --copy --verbose --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 --scan-executable /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app/Contents/PlugIns/PlannerAppUITests.xctest/Contents/MacOS/PlannerAppUITests --scan-folder /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app/Contents/PlugIns/PlannerAppUITests.xctest/Contents/Frameworks --scan-folder /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app/Contents/PlugIns/PlannerAppUITests.xctest/Contents/PlugIns --scan-folder /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app/Contents/PlugIns/PlannerAppUITests.xctest/Contents/Library/SystemExtensions --scan-folder /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app/Contents/PlugIns/PlannerAppUITests.xctest/Contents/Extensions --platform macosx --toolchain /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.5025.6.aG7Flw/Metal.xctoolchain --toolchain /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app/Contents/PlugIns/PlannerAppUITests.xctest/Contents/Frameworks --strip-bitcode --scan-executable /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppUITests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ProcessInfoPlistFile /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app/Contents/PlugIns/PlannerAppUITests.xctest/Contents/Info.plist /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppUITests.build/empty-PlannerAppUITests.plist (in target 'PlannerAppUITests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    builtin-infoPlistUtility /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppUITests.build/empty-PlannerAppUITests.plist -producttype com.apple.product-type.bundle.ui-testing -expandbuildsettings -platform macosx -additionalcontentfile /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppUITests.build/ProductTypeInfoPlistAdditions.plist -o /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app/Contents/PlugIns/PlannerAppUITests.xctest/Contents/Info.plist
+
+CodeSign /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app/Contents/PlugIns/PlannerAppUITests.xctest (in target 'PlannerAppUITests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    
+    Signing Identity:     "Apple Development: dboone9@msn.com (72RDLR687H)"
+    
+    /usr/bin/codesign --force --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 --entitlements /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppUITests.build/PlannerAppUITests.xctest.xcent --timestamp\=none --generate-entitlement-der /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app/Contents/PlugIns/PlannerAppUITests.xctest
+/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app/Contents/PlugIns/PlannerAppUITests.xctest: replacing existing signature
+
+CodeSign /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app (in target 'PlannerAppUITests' from project 'PlannerApp')
+    cd /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp
+    
+    Signing Identity:     "Apple Development: dboone9@msn.com (72RDLR687H)"
+    
+    /usr/bin/codesign --force --sign C8FE4D15A7DE881CE3CCAEC52B7CC5E2DC30C6C1 --entitlements /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Intermediates.noindex/PlannerApp.build/Debug/PlannerAppUITests.build/PlannerAppUITests.xctest.xcent --timestamp\=none --generate-entitlement-der /Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app
+/Users/danielstevens/Library/Developer/Xcode/DerivedData/PlannerApp-heradwbodfsvinbjborvlnuefezw/Build/Products/Debug/PlannerAppUITests-Runner.app: replacing existing signature
+
+warning: Skipping duplicate build file in Compile Sources build phase: /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/PlannerApp/Core/SecurityFramework/AuditLogger.swift (in target 'PlannerApp' from project 'PlannerApp')
+warning: Skipping duplicate build file in Compile Sources build phase: /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/PlannerApp/Core/SecurityFramework/EncryptionService.swift (in target 'PlannerApp' from project 'PlannerApp')
+warning: Skipping duplicate build file in Compile Sources build phase: /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/PlannerApp/Core/SecurityFramework/SecurityMonitor.swift (in target 'PlannerApp' from project 'PlannerApp')
+warning: Skipping duplicate build file in Compile Sources build phase: /Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/PlannerApp/Core/SecurityFramework/PrivacyManager.swift (in target 'PlannerApp' from project 'PlannerApp')
+2025-10-31 20:00:16.192269-0500 PlannerAppUITests-Runner[79538:6956450] [Default] Running tests...
+Test Suite 'All tests' started at 2025-10-31 20:00:16.348.
+Test Suite 'PlannerAppUITests.xctest' started at 2025-10-31 20:00:16.349.
+Test Suite 'PlannerAppUITests' started at 2025-10-31 20:00:16.349.
+Test Case '-[PlannerAppUITests.PlannerAppUITests testExample]' started.
+    t =     0.00s Start Test at 2025-10-31 20:00:16.350
+    t =     0.22s Set Up
+    t =     0.22s Open com.DanielStevens.PlannerApp
+    t =     0.22s     Launch com.DanielStevens.PlannerApp
+    t =     0.68s         Wait for accessibility to load
+    t =     0.75s         Setting up automation session
+    t =     0.77s         Wait for com.DanielStevens.PlannerApp to idle
+    t =     0.78s Tear Down
+Test Case '-[PlannerAppUITests.PlannerAppUITests testExample]' passed (1.092 seconds).
+Test Case '-[PlannerAppUITests.PlannerAppUITests testLaunchPerformance]' started.
+    t =     0.00s Start Test at 2025-10-31 20:00:17.444
+    t =     0.16s Set Up
+    t =     0.16s Open com.DanielStevens.PlannerApp
+    t =     0.16s     Launch com.DanielStevens.PlannerApp
+    t =     0.16s         Terminate com.DanielStevens.PlannerApp:79544
+    t =     1.69s         Wait for accessibility to load
+    t =     1.84s         Setting up automation session
+    t =     1.85s         Wait for com.DanielStevens.PlannerApp to idle
+    t =     3.07s Open com.DanielStevens.PlannerApp
+    t =     3.07s     Launch com.DanielStevens.PlannerApp
+    t =     3.07s         Terminate com.DanielStevens.PlannerApp:79551
+    t =     4.82s         Wait for accessibility to load
+    t =     4.87s         Setting up automation session
+    t =     4.88s         Wait for com.DanielStevens.PlannerApp to idle
+    t =     5.81s Open com.DanielStevens.PlannerApp
+    t =     5.81s     Launch com.DanielStevens.PlannerApp
+    t =     5.81s         Terminate com.DanielStevens.PlannerApp:79559
+    t =     7.28s         Wait for accessibility to load
+    t =     7.39s         Setting up automation session
+    t =     7.42s         Wait for com.DanielStevens.PlannerApp to idle
+    t =     8.18s Open com.DanielStevens.PlannerApp
+    t =     8.18s     Launch com.DanielStevens.PlannerApp
+    t =     8.18s         Terminate com.DanielStevens.PlannerApp:79567
+    t =     9.63s         Wait for accessibility to load
+    t =     9.71s         Setting up automation session
+    t =     9.73s         Wait for com.DanielStevens.PlannerApp to idle
+    t =    10.52s Open com.DanielStevens.PlannerApp
+    t =    10.52s     Launch com.DanielStevens.PlannerApp
+    t =    10.52s         Terminate com.DanielStevens.PlannerApp:79571
+    t =    12.10s         Wait for accessibility to load
+    t =    12.20s         Setting up automation session
+    t =    12.21s         Wait for com.DanielStevens.PlannerApp to idle
+    t =    13.16s Open com.DanielStevens.PlannerApp
+    t =    13.16s     Launch com.DanielStevens.PlannerApp
+    t =    13.16s         Terminate com.DanielStevens.PlannerApp:79574
+    t =    15.00s         Wait for accessibility to load
+    t =    15.11s         Setting up automation session
+    t =    15.14s         Wait for com.DanielStevens.PlannerApp to idle
+/Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/PlannerAppUITests/PlannerAppUITests.swift:37: Test Case '-[PlannerAppUITests.PlannerAppUITests testLaunchPerformance]' measured [Duration (ApplicationLaunch), s] average: 0.588, relative standard deviation: 23.466%, values: [0.578022, 0.513695, 0.441969, 0.558415, 0.847513], performanceMetricID:com.apple.dt.XCTMetric_ApplicationLaunch-ApplicationLaunch.duration, baselineName: "", baselineAverage: , polarity: prefers smaller, maxPercentRegression: 10.000%, maxPercentRelativeStandardDeviation: 10.000%, maxRegression: 0.000, maxStandardDeviation: 0.000
+    t =    16.34s Tear Down
+Test Case '-[PlannerAppUITests.PlannerAppUITests testLaunchPerformance]' passed (16.786 seconds).
+Test Suite 'PlannerAppUITests' passed at 2025-10-31 20:00:34.229.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 17.878 (17.880) seconds
+Test Suite 'PlannerAppUITestsLaunchTests' started at 2025-10-31 20:00:34.234.
+Test Case '-[PlannerAppUITests.PlannerAppUITestsLaunchTests testLaunch]' started.
+    t =     0.00s Setting appearance mode to Light
+    t =     0.89s     Wait for com.DanielStevens.PlannerApp to idle
+    t =     0.93s Start Test at 2025-10-31 20:00:35.164
+    t =     1.17s Set Up
+    t =     1.17s Open com.DanielStevens.PlannerApp
+    t =     1.17s     Launch com.DanielStevens.PlannerApp
+    t =     1.17s         Terminate com.DanielStevens.PlannerApp:79575
+    t =     2.66s         Wait for accessibility to load
+    t =     2.75s         Setting up automation session
+    t =     2.76s         Wait for com.DanielStevens.PlannerApp to idle
+    t =     2.76s Find the Target Application 'com.DanielStevens.PlannerApp'
+    t =     3.10s Added attachment named 'Launch Screen'
+    t =     3.10s Tear Down
+Test Case '-[PlannerAppUITests.PlannerAppUITestsLaunchTests testLaunch]' passed (3.398 seconds).
+Test Case '-[PlannerAppUITests.PlannerAppUITestsLaunchTests testLaunch]' started.
+    t =     0.00s Setting appearance mode to Dark
+    t =     0.37s     Wait for com.DanielStevens.PlannerApp to idle
+    t =     0.39s Start Test at 2025-10-31 20:00:38.029
+    t =     0.61s Set Up
+    t =     0.61s Open com.DanielStevens.PlannerApp
+    t =     0.61s     Launch com.DanielStevens.PlannerApp
+    t =     0.61s         Terminate com.DanielStevens.PlannerApp:79582
+    t =     2.12s         Wait for accessibility to load
+    t =     2.22s         Setting up automation session
+    t =     2.24s         Wait for com.DanielStevens.PlannerApp to idle
+    t =     2.24s Find the Target Application 'com.DanielStevens.PlannerApp'
+    t =     2.60s Added attachment named 'Launch Screen'
+    t =     2.60s Tear Down
+Test Case '-[PlannerAppUITests.PlannerAppUITestsLaunchTests testLaunch]' passed (2.876 seconds).
+Test Suite 'PlannerAppUITestsLaunchTests' passed at 2025-10-31 20:00:40.511.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 6.274 (6.277) seconds
+Test Suite 'PlannerAppUITests.xctest' passed at 2025-10-31 20:00:40.513.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 24.152 (24.164) seconds
+Test Suite 'All tests' passed at 2025-10-31 20:00:40.515.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 24.152 (24.167) seconds
+2025-10-31 20:00:40.840 xcodebuild[79452:6955199] [MT] IDETestOperationsObserverDebug: 50.398 elapsed -- Testing started completed.
+2025-10-31 20:00:40.840 xcodebuild[79452:6955199] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2025-10-31 20:00:40.840 xcodebuild[79452:6955199] [MT] IDETestOperationsObserverDebug: 50.398 sec, +50.398 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/danielstevens/Desktop/Quantum-workspace/Projects/PlannerApp/TestResults.xcresult
+
+** TEST SUCCEEDED **
+
+Testing started
+Test suite 'AITests' started on 'My Mac - PlannerApp (79487)'
+Test case 'AITests.testAICaching()' passed on 'My Mac - PlannerApp (79487)' (0.003 seconds)
+Test case 'AITests.testAIDashboardIntegration()' passed on 'My Mac - PlannerApp (79487)' (0.001 seconds)
+Test case 'AITests.testAIPerformance()' passed on 'My Mac - PlannerApp (79487)' (0.477 seconds)
+Test case 'AITests.testAIServiceProcessingState()' passed on 'My Mac - PlannerApp (79487)' (0.001 seconds)
+Test case 'AITests.testAsyncAIPerformance()' passed on 'My Mac - PlannerApp (79487)' (0.103 seconds)
+Test case 'AITests.testEmptyDataAI()' passed on 'My Mac - PlannerApp (79487)' (0.001 seconds)
+Test case 'AITests.testGenerateAISuggestionsAsync()' passed on 'My Mac - PlannerApp (79487)' (0.108 seconds)
+Test case 'AITests.testGenerateProductivityInsights()' passed on 'My Mac - PlannerApp (79487)' (0.001 seconds)
+Test suite 'PlannerAppTests' started on 'My Mac - PlannerApp (79491)'
+Test case 'PlannerAppTests.testAdvancedFiltering()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testBulkOperationsPerformance()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testCalendarDataManagerAdd()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testCalendarDataManagerClearAllEvents()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testCalendarDataManagerDelete()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testCalendarDataManagerEventsBetweenDates()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testCalendarDataManagerEventsForDate()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testCalendarDataManagerEventsSortedByDate()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testCalendarDataManagerFindById()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testCalendarDataManagerStatistics()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testCalendarDataManagerUpcomingEvents()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testCalendarDataManagerUpdate()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testCalendarEventCreation()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testCategoryTaskIntegration()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testConcurrentAccess()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testContentViewDataBinding()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testContentViewInitialization()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testDashboardViewModelBaseViewModelMethods()' passed on 'My Mac - PlannerApp (79491)' (0.002 seconds)
+Test case 'PlannerAppTests.testDashboardViewModelDataFiltering()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testDashboardViewModelDataProcessing()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'AITests.testGenerateProductivityInsightsAsync()' passed on 'My Mac - PlannerApp (79487)' (0.103 seconds)
+Test case 'AITests.testGenerateProductivityInsightsWithOverdueTasks()' passed on 'My Mac - PlannerApp (79487)' (0.002 seconds)
+Test case 'PlannerAppTests.testDashboardViewModelFetchData()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testDashboardViewModelHandleActions()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'AITests.testGenerateTaskSuggestions()' passed on 'My Mac - PlannerApp (79487)' (0.002 seconds)
+Test case 'PlannerAppTests.testDashboardViewModelInitialization()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testDashboardViewModelItemLimit()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testDashboardViewModelRefreshData()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testDataBackupAndRestore()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'AITests.testGenerateTaskSuggestionsWithOverdueTasks()' passed on 'My Mac - PlannerApp (79487)' (0.001 seconds)
+Test case 'PlannerAppTests.testDataExport()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testDataExportServiceInitialization()' passed on 'My Mac - PlannerApp (79491)' (0.014 seconds)
+Test case 'PlannerAppTests.testDataMigration()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testDataPersistence()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testDateCalculations()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testDateDisplayFormatting()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testDueDateValidation()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testEmptyTaskValidation()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testExportFormats()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testFullWorkflowIntegration()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testGoalCodable()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testGoalCompletion()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testGoalCreation()' passed on 'My Mac - PlannerApp (79491)' (0.004 seconds)
+Test case 'PlannerAppTests.testGoalDataManagerStatistics()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testGoalFromCKRecord()' passed on 'My Mac - PlannerApp (79491)' (0.002 seconds)
+Test case 'PlannerAppTests.testGoalFromCKRecordFailure()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testGoalFromCKRecordWithDefaults()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testGoalInitialization()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testGoalInitializationWithAllParameters()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testGoalPriorityAllCases()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testGoalPriorityComparison()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testGoalPriorityDisplayNames()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testGoalPrioritySortOrder()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testGoalProgressRange()' passed on 'My Mac - PlannerApp (79491)' (0.005 seconds)
+Test case 'PlannerAppTests.testGoalToCKRecord()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testInvalidDateHandling()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testLargeDataSets()' passed on 'My Mac - PlannerApp (79491)' (0.004 seconds)
+Test case 'PlannerAppTests.testPriorityColorMapping()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testSearchPerformance()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskCompletionToggle()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskCreation()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskCreationPerformance()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskDataManagerAdd()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskDataManagerDelete()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskDataManagerDueDateFiltering()' passed on 'My Mac - PlannerApp (79491)' (0.006 seconds)
+Test case 'PlannerAppTests.testTaskDataManagerFiltering()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskDataManagerFindById()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskDataManagerIntegration()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskDataManagerOverdueTasks()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test suite 'ContentViewTests' started on 'My Mac - PlannerApp (79492)'
+Test case 'ContentViewTests.testContentViewInitialization()' passed on 'My Mac - PlannerApp (79492)' (0.002 seconds)
+Test case 'ContentViewTests.testContentViewMethods()' passed on 'My Mac - PlannerApp (79492)' (0.001 seconds)
+Test case 'ContentViewTests.testContentViewProperties()' passed on 'My Mac - PlannerApp (79492)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskDataManagerSaveAndLoad()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskDataManagerSorting()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskDataManagerStatistics()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskDataManagerUpdate()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskDisplayFormatting()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskDueDate()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskEquality()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskFiltering()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskOverdueDetection()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskPriority()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskProjectIntegration()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'PlannerAppTests.testTaskSearch()' passed on 'My Mac - PlannerApp (79491)' (0.001 seconds)
+Test case 'AITests.testMalformedDataAI()' passed on 'My Mac - PlannerApp (79487)' (0.103 seconds)
+Test case 'AITests.testParseNaturalLanguageTask()' passed on 'My Mac - PlannerApp (79487)' (0.005 seconds)
+Test case 'AITests.testParseNaturalLanguageTaskWithDate()' passed on 'My Mac - PlannerApp (79487)' (0.012 seconds)
+Test case 'AITests.testParseNaturalLanguageTaskWithPriority()' passed on 'My Mac - PlannerApp (79487)' (0.004 seconds)
+Test case 'AITests.testRefreshDataAsync()' passed on 'My Mac - PlannerApp (79487)' (0.032 seconds)
+Test suite 'SimpleTest' started on 'My Mac - PlannerApp (79493)'
+Test case 'SimpleTest.testSimple()' passed on 'My Mac - PlannerApp (79493)' (0.001 seconds)
+Test suite 'All tests' started on 'My Mac - PlannerAppUITests-Runner (79538)'
+Test suite 'PlannerAppUITests.xctest' started on 'My Mac - PlannerAppUITests-Runner (79538)'
+Test suite 'PlannerAppUITests' started on 'My Mac - PlannerAppUITests-Runner (79538)'
+Test case 'PlannerAppUITests.testExample()' passed on 'My Mac - PlannerAppUITests-Runner (79538)' (1.092 seconds)
+Test case 'PlannerAppUITests.testLaunchPerformance()' passed on 'My Mac - PlannerAppUITests-Runner (79538)' (16.786 seconds)
+Test suite 'PlannerAppUITestsLaunchTests' started on 'My Mac - PlannerAppUITests-Runner (79538)'
+Test case 'PlannerAppUITestsLaunchTests.testLaunch()' passed on 'My Mac - PlannerAppUITests-Runner (79538)' (3.398 seconds)
+Test case 'PlannerAppUITestsLaunchTests.testLaunch()' passed on 'My Mac - PlannerAppUITests-Runner (79538)' (2.876 seconds)

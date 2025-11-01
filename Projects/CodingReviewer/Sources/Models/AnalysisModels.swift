@@ -181,12 +181,14 @@ struct CodeMetrics: Codable, Sendable {
 // MARK: - Enums
 
 enum IssueSeverity: String, Codable, Sendable {
+    case critical
     case error
     case warning
     case info
 
     var priority: Int {
         switch self {
+        case .critical: return 4
         case .error: return 3
         case .warning: return 2
         case .info: return 1
@@ -196,11 +198,16 @@ enum IssueSeverity: String, Codable, Sendable {
 
 enum IssueCategory: String, Codable, Sendable {
     case general
+    case codeQuality
     case performance
     case security
+    case bestPractices
+    case maintainability
     case style
     case complexity
     case documentation
     case naming
     case structure
 }
+
+// ProgrammingLanguage is defined in Services/LanguageDetector.swift

@@ -245,6 +245,7 @@ private struct IssueRowView: View {
 
     private func severityColor(for severity: IssueSeverity) -> Color {
         switch severity {
+        case .critical: return .red.opacity(0.9)
         case .error: return .red
         case .warning: return .orange
         case .info: return .blue

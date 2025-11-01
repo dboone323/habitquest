@@ -1,0 +1,58 @@
+{
+  "configurations" : [
+    {
+      "id" : "4A8B5C3D-2E1F-4D6C-9B8A-7E6F5C4D3B2A",
+      "name" : "Test Scheme Action",
+      "options" : {
+        "codeCoverage" : {
+          "targets" : [
+            {
+              "containerPath" : "container:AvoidObstaclesGame.xcodeproj",
+              "identifier" : "AvoidObstaclesGame",
+              "name" : "AvoidObstaclesGame"
+            }
+          ]
+        },
+        "commandLineArgumentEntries" : [
+        ],
+        "environmentVariableEntries" : [
+        ],
+        "language" : "en",
+        "region" : "US",
+        "testExecutionOrdering" : "random",
+        "testTimeoutsEnabled" : true,
+        "maximumTestExecutionTimeAllowance" : 120,
+        "targetForVariableExpansion" : {
+          "containerPath" : "container:AvoidObstaclesGame.xcodeproj",
+          "identifier" : "AvoidObstaclesGame",
+          "name" : "AvoidObstaclesGame"
+        }
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : true,
+    "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true,
+    "maximumTestExecutionTimeAllowance" : 120
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AvoidObstaclesGame.xcodeproj",
+        "identifier" : "AvoidObstaclesGameTests",
+        "name" : "AvoidObstaclesGameTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AvoidObstaclesGame.xcodeproj",
+        "identifier" : "AvoidObstaclesGameUITests",
+        "name" : "AvoidObstaclesGameUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

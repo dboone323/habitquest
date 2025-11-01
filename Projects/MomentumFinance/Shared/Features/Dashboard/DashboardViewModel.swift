@@ -243,3 +243,5 @@ final class DashboardViewModel: BaseViewModel {
         state.spendingByCategory = spendingByCategory(state.transactions)
         state.netIncomeThisMonth = netIncomeThisMonth(state.transactions)
     }
+
+}
