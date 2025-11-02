@@ -18,7 +18,6 @@ disabled_rules:
   - force_cast
   - force_try
   - inclusive_language
-  - large_tuple
   - function_parameter_count
   - shorthand_operator
   # Remove identifier_name from disabled_rules since we configure it below
