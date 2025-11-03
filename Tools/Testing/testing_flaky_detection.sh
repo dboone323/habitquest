@@ -18,7 +18,7 @@ mkdir -p "${METRICS_DIR}"
 if [[ ! -f "${FLAKY_REGISTRY}" ]]; then
     echo '{
   "tests": {},
-  "last_updated": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+  "last_updated": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"
 }' >"${FLAKY_REGISTRY}"
 fi
 
@@ -74,7 +74,7 @@ analyze_flaky_patterns() {
         local test_names
         test_names=$(jq -r '.summaries[].tests[]?.identifier // empty' "${result_json}" 2>/dev/null || echo "")
 
-        for test_name in ${test_names}; do
+        for test_name in ${test_names:-}; do
             # Track test outcomes
             local test_status
             test_status=$(jq -r ".summaries[].tests[] | select(.identifier==\"${test_name}\") | .testStatus" "${result_json}" 2>/dev/null || echo "Unknown")
@@ -245,7 +245,7 @@ detect_flaky_tests() {
                 -scheme "${scheme}" \
                 -destination 'platform=iOS Simulator,name=iPhone 15' \
                 -resultBundlePath "${results_dir}/iteration_${i}.xcresult" \
-                2>&1 >"${results_dir}/output_${i}.log" || true
+                >"${results_dir}/output_${i}.log" 2>&1 || true
         fi
 
         # Parse results
