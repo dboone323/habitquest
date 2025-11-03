@@ -1,8 +1,8 @@
 {
   "project": "CodingReviewer",
-  "status": "PASSED",
+  "status": "FAILED",
   "coverage": "0.00",
-  "duration": "6",
-  "timestamp": "2025-11-01T23:36:25Z",
-  "tests": []
+  "duration": "-52505",
+  "timestamp": "2025-11-02T14:11:50Z",
+  "tests": [{"name":"CodingReviewerTests.EncryptionServiceTests testRotateEncryptionKey","status":"failed"}]
 }

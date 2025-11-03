@@ -1,8 +1,8 @@
 {
   "project": "HabitQuest",
-  "status": "PASSED",
+  "status": "FAILED",
   "coverage": "0.00",
-  "duration": "12",
-  "timestamp": "2025-11-01T23:36:25Z",
+  "duration": "-52515",
+  "timestamp": "2025-11-02T14:11:51Z",
   "tests": []
 }
