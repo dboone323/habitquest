@@ -75,19 +75,19 @@ start_web_server() {
     cd "$WORKSPACE_ROOT"
 
     # Kill any existing server on this port
-    lsof -ti:$WEB_SERVER_PORT | xargs kill -9 2>/dev/null || true
+    lsof -ti:"$WEB_SERVER_PORT" | xargs kill -9 2>/dev/null || true
 
     # Start Python web server in background
-    python3 -m http.server $WEB_SERVER_PORT &
+    python3 -m http.server "$WEB_SERVER_PORT" &
     SERVER_PID=$!
 
     # Wait for server to start
     sleep 2
 
     # Verify server is running
-    if curl -s http://localhost:$WEB_SERVER_PORT >/dev/null; then
+    if curl -s "http://localhost:$WEB_SERVER_PORT" >/dev/null; then
         log_success "Web server started successfully (PID: $SERVER_PID)"
-        echo $SERVER_PID >"$WEB_TESTING_DIR/server.pid"
+        echo "$SERVER_PID" >"$WEB_TESTING_DIR/server.pid"
     else
         log_error "Failed to start web server"
         exit 1
@@ -98,7 +98,7 @@ start_web_server() {
 stop_web_server() {
     if [[ -f "$WEB_TESTING_DIR/server.pid" ]]; then
         SERVER_PID=$(cat "$WEB_TESTING_DIR/server.pid")
-        kill $SERVER_PID 2>/dev/null || true
+        kill "$SERVER_PID" 2>/dev/null || true
         rm -f "$WEB_TESTING_DIR/server.pid"
         log_info "Web server stopped"
     fi
@@ -115,7 +115,7 @@ run_cypress_tests() {
     mkdir -p "$TEST_RESULTS_DIR"
 
     # Run tests with specified browser
-    if npx cypress run --browser $browser --config video=true,screenshotOnRunFailure=true; then
+    if npx cypress run --browser "$browser" --config video=true,screenshotOnRunFailure=true; then
         log_success "Cypress tests completed successfully in $browser"
         return 0
     else
@@ -132,10 +132,10 @@ run_all_browser_tests() {
     local failed_browsers=()
 
     for browser in "${browsers[@]}"; do
-        if command -v $browser &>/dev/null || [[ "$browser" == "edge" && -d "/Applications/Microsoft Edge.app" ]]; then
+        if command -v "$browser" &>/dev/null || [[ "$browser" == "edge" && -d "/Applications/Microsoft Edge.app" ]]; then
             log_info "Testing $browser..."
-            if ! run_cypress_tests $browser; then
-                failed_browsers+=($browser)
+            if ! run_cypress_tests "$browser"; then
+                failed_browsers+=("$browser")
             fi
         else
             log_warning "$browser not available on this system"

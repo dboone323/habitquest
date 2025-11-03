@@ -8,9 +8,6 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-# Load quality config
-QUALITY_CONFIG="$WORKSPACE_ROOT/quality-config.yaml"
-
 # Timeout defaults (can be overridden)
 BUILD_TIMEOUT=${BUILD_TIMEOUT:-180}
 UNIT_TEST_TIMEOUT=${UNIT_TEST_TIMEOUT:-60}
@@ -23,7 +20,6 @@ RETRY_BACKOFF=(1 2 4) # Exponential backoff in seconds
 
 # Circuit breaker state file
 CIRCUIT_BREAKER_STATE="$WORKSPACE_ROOT/.circuit_breaker_state"
-CIRCUIT_BREAKER_FAILURES=0
 CIRCUIT_BREAKER_THRESHOLD=3
 CIRCUIT_BREAKER_RESET_MINUTES=5
 
@@ -43,9 +39,12 @@ init_circuit_breaker() {
 
 # Check circuit breaker state
 check_circuit_breaker() {
-    local state=$(jq -r '.state' "$CIRCUIT_BREAKER_STATE" 2>/dev/null || echo "closed")
-    local last_failure=$(jq -r '.last_failure' "$CIRCUIT_BREAKER_STATE" 2>/dev/null || echo "0")
-    local current_time=$(date +%s)
+    local state
+    state=$(jq -r '.state' "$CIRCUIT_BREAKER_STATE" 2>/dev/null || echo "closed")
+    local last_failure
+    last_failure=$(jq -r '.last_failure' "$CIRCUIT_BREAKER_STATE" 2>/dev/null || echo "0")
+    local current_time
+    current_time=$(date +%s)
     local time_since_failure=$((current_time - last_failure))
 
     if [[ "$state" == "open" ]]; then
@@ -66,9 +65,11 @@ check_circuit_breaker() {
 
 # Record circuit breaker failure
 record_failure() {
-    local failures=$(jq -r '.failures' "$CIRCUIT_BREAKER_STATE" 2>/dev/null || echo "0")
+    local failures
+    failures=$(jq -r '.failures' "$CIRCUIT_BREAKER_STATE" 2>/dev/null || echo "0")
     failures=$((failures + 1))
-    local current_time=$(date +%s)
+    local current_time
+    current_time=$(date +%s)
 
     if [[ $failures -ge $CIRCUIT_BREAKER_THRESHOLD ]]; then
         echo -e "${RED}🚨 Circuit breaker TRIPPED after $failures consecutive failures${NC}"
@@ -89,7 +90,7 @@ execute_with_timeout() {
     local timeout=$1
     local command_type=$2
     shift 2
-    local command="$@"
+    local command="$*"
 
     echo -e "${BLUE}⏱️  Executing with ${timeout}s timeout: $command_type${NC}"
 
@@ -120,7 +121,7 @@ execute_with_retry() {
     local timeout=$1
     local command_type=$2
     shift 2
-    local command="$@"
+    local command="$*"
 
     local attempt=1
     local exit_code=0
@@ -160,7 +161,7 @@ run_with_protection() {
     local operation_type=$1
     local timeout=$2
     shift 2
-    local command="$@"
+    local command="$*"
 
     init_circuit_breaker
 
@@ -174,19 +175,24 @@ run_with_protection() {
     echo -e "${BLUE}║  Timeout: ${timeout}s | Retries: $MAX_RETRIES${NC}"
     echo -e "${BLUE}╚════════════════════════════════════════════════╝${NC}\n"
 
-    local start_time=$(date +%s)
+    local start_time
+    start_time=$(date +%s)
 
     if execute_with_retry "$timeout" "$operation_type" "$command"; then
-        local end_time=$(date +%s)
-        local duration=$((end_time - start_time))
+        local end_time
+        end_time=$(date +%s)
+        local duration
+        duration=$((end_time - start_time))
 
         echo -e "${GREEN}✅ Success in ${duration}s${NC}"
         record_success
         return 0
     else
         local exit_code=$?
-        local end_time=$(date +%s)
-        local duration=$((end_time - start_time))
+        local end_time
+        end_time=$(date +%s)
+        local duration
+        duration=$((end_time - start_time))
 
         echo -e "${RED}❌ Failed after ${duration}s${NC}"
         record_failure

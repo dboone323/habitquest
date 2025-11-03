@@ -49,7 +49,8 @@ extract_coverage() {
     echo -e "${BLUE}Analyzing $project_name...${NC}"
 
     # Find the xcodeproj file
-    local xcodeproj=$(find "$project_path" -name "*.xcodeproj" -maxdepth 2 | head -n 1)
+    local xcodeproj
+    xcodeproj=$(find "$project_path" -name "*.xcodeproj" -maxdepth 2 | head -n 1)
 
     if [[ -z "$xcodeproj" ]]; then
         echo -e "${YELLOW}⚠️  No Xcode project found for $project_name${NC}"
@@ -57,30 +58,33 @@ extract_coverage() {
     fi
 
     # Find test target
-    local test_targets=$(xcodebuild -project "$xcodeproj" -list | grep -i "test" || echo "")
+    local test_targets
+    test_targets=$(xcodebuild -project "$xcodeproj" -list | grep -i "test" || echo "")
 
     if [[ -z "$test_targets" ]]; then
         echo -e "${YELLOW}⚠️  No test targets found for $project_name${NC}"
 
         # Add to report as missing tests
-        cat <<<$(jq --arg project "$project_name" \
+        jq --arg project "$project_name" \
             '.projects[$project] = {
                 "status": "no_tests",
                 "coverage_percent": 0,
                 "test_targets": [],
                 "test_files_count": 0,
                 "gap_analysis": "No test targets found - needs test infrastructure"
-            }' "$REPORT_FILE") >"$REPORT_FILE"
+            }' "$REPORT_FILE" >"${REPORT_FILE}.tmp" && mv "${REPORT_FILE}.tmp" "$REPORT_FILE"
 
         return 1
     fi
 
     # Count test files
-    local test_files_count=$(find "$project_path" -name "*Tests.swift" | wc -l | tr -d ' ')
+    local test_files_count
+    test_files_count=$(find "$project_path" -name "*Tests.swift" | wc -l | tr -d ' ')
 
     # Try to get coverage from most recent DerivedData
     local derived_data="$HOME/Library/Developer/Xcode/DerivedData"
-    local coverage_file=$(find "$derived_data" -name "*.xccovreport" -mtime -7 | head -n 1)
+    local coverage_file
+    coverage_file=$(find "$derived_data" -name "*.xccovreport" -mtime -7 | head -n 1)
 
     local coverage_percent=0
     local has_coverage=false
@@ -117,20 +121,27 @@ extract_coverage() {
     fi
 
     # Add to report
-    cat <<<$(jq --arg project "$project_name" \
+    local xcodeproj_basename
+    xcodeproj_basename=$(basename "$xcodeproj")
+    local test_targets_json
+    test_targets_json=$(echo "$test_targets" | jq -R . | jq -s .)
+
+    jq --arg project "$project_name" \
         --arg coverage "$coverage_percent" \
         --arg test_count "$test_files_count" \
         --arg gap "$gap_analysis" \
         --arg meets "$meets_minimum" \
+        --arg xcproj "$xcodeproj_basename" \
+        --argjson targets "$test_targets_json" \
         '.projects[$project] = {
             "status": "analyzed",
             "coverage_percent": ($coverage | tonumber),
             "meets_minimum": ($meets == "true"),
             "test_files_count": ($test_count | tonumber),
             "gap_analysis": $gap,
-            "xcodeproj": "'"$(basename "$xcodeproj")"'",
-            "test_targets": '"$(echo "$test_targets" | jq -R . | jq -s .)"'
-        }' "$REPORT_FILE") >"$REPORT_FILE"
+            "xcodeproj": $xcproj,
+            "test_targets": $targets
+        }' "$REPORT_FILE" >"${REPORT_FILE}.tmp" && mv "${REPORT_FILE}.tmp" "$REPORT_FILE"
 
     echo ""
 }
@@ -143,13 +154,13 @@ done
 # Calculate aggregate statistics
 echo -e "${BLUE}📊 Calculating Aggregate Statistics...${NC}"
 
-total_projects=$(echo "${#PROJECTS[@]}")
+total_projects=${#PROJECTS[@]}
 projects_with_tests=$(jq '[.projects[] | select(.status == "analyzed")] | length' "$REPORT_FILE")
 projects_meeting_minimum=$(jq '[.projects[] | select(.meets_minimum == true)] | length' "$REPORT_FILE")
 average_coverage=$(jq '[.projects[] | select(.coverage_percent > 0) | .coverage_percent] | add / length' "$REPORT_FILE" || echo "0")
 
 # Add summary to report
-cat <<<$(jq --arg total "$total_projects" \
+jq --arg total "$total_projects" \
     --arg with_tests "$projects_with_tests" \
     --arg meeting_min "$projects_meeting_minimum" \
     --arg avg_coverage "$average_coverage" \
@@ -159,7 +170,7 @@ cat <<<$(jq --arg total "$total_projects" \
         "projects_meeting_minimum": ($meeting_min | tonumber),
         "average_coverage": ($avg_coverage | tonumber),
         "compliance_rate": (($meeting_min | tonumber) / ($total | tonumber) * 100)
-    }' "$REPORT_FILE") >"$REPORT_FILE"
+    }' "$REPORT_FILE" >"${REPORT_FILE}.tmp" && mv "${REPORT_FILE}.tmp" "$REPORT_FILE"
 
 # Print summary
 echo -e "${BLUE}═════════════════════════════════════════════════${NC}"
