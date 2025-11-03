@@ -1,8 +1,8 @@
 {
   "project": "AvoidObstaclesGame",
-  "status": "PASSED",
+  "status": "FAILED",
   "coverage": "0.00",
-  "duration": "62",
-  "timestamp": "2025-11-02T14:11:50Z",
-  "tests": [{"name":"AvoidObstaclesGameUITests.AvoidObstaclesGameUITests testExample","status":"passed"},{"name":"AvoidObstaclesGameUITests.AvoidObstaclesGameUITests testLaunchPerformance","status":"passed"},{"name":"AvoidObstaclesGameUITests.AvoidObstaclesGameUITestsLaunchTests testLaunch","status":"passed"},{"name":"AvoidObstaclesGameUITests.AvoidObstaclesGameUITestsLaunchTests testLaunch","status":"passed"},{"name":"AvoidObstaclesGameUITests.AvoidObstaclesGameUITestsLaunchTests testLaunch","status":"passed"},{"name":"AvoidObstaclesGameUITests.AvoidObstaclesGameUITestsLaunchTests testLaunch","status":"passed"}]
+  "duration": "-103271",
+  "timestamp": "2025-11-03T18:52:58Z",
+  "tests": []
 }
