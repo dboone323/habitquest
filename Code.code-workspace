@@ -94,7 +94,6 @@
         "github.copilot.chat.codesearch.enabled": true,
         "github.copilot.chat.languageContext.fix.typescript.enabled": true,
         "chat.mcp.autostart": "onlyNew",
-        "chat.mcp.enabled": true,
         "chat.agent.maxRequests": 1000,
         "chatgpt.commentCodeLensEnabled": true,
         "workbench.editor.enablePreview": false,
@@ -134,7 +133,8 @@
                     "${workspaceFolder}"
                 ]
             }
-        }
+        },
+        "chat.mcp.access": "all"
     },
     "extensions": {
         "recommendations": [

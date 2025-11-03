@@ -1,8 +1,8 @@
 {
   "project": "PlannerApp",
-  "status": "PASSED",
+  "status": "FAILED",
   "coverage": "0.00",
-  "duration": "69",
-  "timestamp": "2025-11-02T14:11:50Z",
-  "tests": [{"name":"PlannerAppUITests.PlannerAppUITests testExample","status":"passed"},{"name":"PlannerAppUITests.PlannerAppUITests testLaunchPerformance","status":"passed"},{"name":"PlannerAppUITests.PlannerAppUITestsLaunchTests testLaunch","status":"passed"},{"name":"PlannerAppUITests.PlannerAppUITestsLaunchTests testLaunch","status":"passed"}]
+  "duration": "-103264",
+  "timestamp": "2025-11-03T18:52:58Z",
+  "tests": []
 }
