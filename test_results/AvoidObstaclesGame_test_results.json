@@ -2,7 +2,7 @@
   "project": "AvoidObstaclesGame",
   "status": "PASSED",
   "coverage": "0.00",
-  "duration": "48",
-  "timestamp": "2025-11-01T23:36:25Z",
+  "duration": "62",
+  "timestamp": "2025-11-02T14:11:50Z",
   "tests": [{"name":"AvoidObstaclesGameUITests.AvoidObstaclesGameUITests testExample","status":"passed"},{"name":"AvoidObstaclesGameUITests.AvoidObstaclesGameUITests testLaunchPerformance","status":"passed"},{"name":"AvoidObstaclesGameUITests.AvoidObstaclesGameUITestsLaunchTests testLaunch","status":"passed"},{"name":"AvoidObstaclesGameUITests.AvoidObstaclesGameUITestsLaunchTests testLaunch","status":"passed"},{"name":"AvoidObstaclesGameUITests.AvoidObstaclesGameUITestsLaunchTests testLaunch","status":"passed"},{"name":"AvoidObstaclesGameUITests.AvoidObstaclesGameUITestsLaunchTests testLaunch","status":"passed"}]
 }
