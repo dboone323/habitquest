@@ -86,7 +86,7 @@ jobs:
           cat pipeline_analytics/run_metrics.json
 
       - name: Upload analytics
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: pipeline-analytics
           path: pipeline_analytics/

@@ -23,7 +23,7 @@ jobs:
           mkdir -p artifacts
           printf '%s' '{}' > artifacts/placeholder.json
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: backup-reports
           path: artifacts

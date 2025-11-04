@@ -67,7 +67,7 @@ jobs:
 
       - name: Upload quality report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: quality-report
           path: |
@@ -131,7 +131,7 @@ jobs:
 
       - name: Upload recovery artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: recovery-report
           path: |
