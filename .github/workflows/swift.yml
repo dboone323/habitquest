@@ -60,7 +60,7 @@ jobs:
 
       - name: Assign Copilot agent and label PR
         if: github.event_name == 'pull_request' && env.QUIET_MODE == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const label = 'agent:copilot'
@@ -75,7 +75,7 @@ jobs:
 
       - name: Request review and assign reviewer (dboone323 second)
         if: github.event_name == 'pull_request' && env.QUIET_MODE == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const reviewer = process.env.REVIEW_REQUESTEE || 'dboone323'
