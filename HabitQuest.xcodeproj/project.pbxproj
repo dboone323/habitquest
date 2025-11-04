@@ -271,6 +271,9 @@
 			productRefGroup = 68581EB92E0F1EA600E5AADA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
+			packageReferences = (
+				E629EA2CB70C495DB4625EC9 /* XCRemoteSwiftPackageReference "shared-kit" */,
+			);
 			targets = (
 				68581EB72E0F1EA600E5AADA /* HabitQuest */,
 				68581EC62E0F1EA800E5AADA /* HabitQuestTests */,
@@ -278,6 +281,16 @@
 			);
 		};
 /* End PBXProject section */
+/* Begin XCRemoteSwiftPackageReference section */
+	E629EA2CB70C495DB4625EC9 /* XCRemoteSwiftPackageReference "shared-kit" */ = {
+		isa = XCRemoteSwiftPackageReference;
+		repositoryURL = "https://github.com/dboone323/shared-kit.git";
+		requirement = {
+			kind = exact;
+			productVersion = 1.0.0;
+		};
+	};
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin PBXResourcesBuildPhase section */
 		68581EB62E0F1EA600E5AADA /* Resources */ = {
