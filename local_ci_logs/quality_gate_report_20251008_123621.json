@@ -1,9 +1,0 @@
-{
-  "timestamp": "2025-10-08T12:36:21-05:00",
-  "quality_gates": {
-    "code_coverage": {"target": 85, "minimum": 70},
-    "build_performance": {"maximum_seconds": 120},
-    "test_performance": {"maximum_seconds": 30},
-    "lint_compliance": {"maximum_violations": 50}
-  },
-  "projects": {

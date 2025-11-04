@@ -25,10 +25,12 @@ import re
 import subprocess
 import sys
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
+
+import requests
 
 # Configure logging
 logging.basicConfig(
@@ -538,7 +540,7 @@ Timestamp: {datetime.now().isoformat()}"""
                 logger.info("🎉 Quality check passed! Recovery successful!")
                 return True
 
-            logger.info("❌ Quality check failed, analyzing failure...")
+            logger.info(f"❌ Quality check failed, analyzing failure...")
 
             # Analyze failure
             failure = self.analyze_workflow_failure(output)
