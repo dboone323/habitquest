@@ -35,7 +35,7 @@ jobs:
       recovery-plan: ${{ steps.quality.outputs.recovery-plan }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
@@ -82,7 +82,7 @@ jobs:
     if: needs.ai-quality-check.outputs.needs-recovery == 'true' && github.event_name == 'push'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
@@ -147,7 +147,7 @@ jobs:
     if: always()
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
@@ -180,7 +180,7 @@ jobs:
     if: needs.ai-recovery.outputs.recovery-success == 'true' && needs.verification.result == 'failure'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 

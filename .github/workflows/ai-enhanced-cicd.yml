@@ -23,7 +23,7 @@ jobs:
       should-continue: ${{ steps.decision.outputs.continue }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: MCP Failure Prediction (placeholder)
         id: prediction
@@ -49,7 +49,7 @@ jobs:
     if: needs.predictive-analysis.outputs.should-continue == 'true'
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Auto-Fix Common Issues (placeholder)
         run: |
@@ -66,7 +66,7 @@ jobs:
     if: always()
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Collect Pipeline Metrics (placeholder)
         run: |
@@ -98,7 +98,7 @@ jobs:
     if: failure() || needs.self-healing-build.result == 'failure'
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Create Automated Issue for Failures (placeholder)
         uses: actions/github-script@v7
