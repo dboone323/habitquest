@@ -46,7 +46,7 @@ run_project_automation() {
 	local project_path="${PROJECTS_DIR}/${project_name}"
 
 	if [[ ! -d ${project_path} ]]; then
-		echo "❌ Projec${ $project_na}me not found"
+		echo "❌ Project $project_name not found"
 		return 1
 	fi
 
@@ -68,7 +68,7 @@ format_code() {
 	if [[ -n ${project_name} ]]; then
 		local project_path="${PROJECTS_DIR}/${project_name}"
 		if [[ ! -d ${project_path} ]]; then
-			echo "❌ Projec${ $project_na}me not found"
+			echo "❌ Project $project_name not found"
 			return 1
 		fi
 		print_status "Formatting Swift code in ${project_name}..."
@@ -94,7 +94,7 @@ lint_code() {
 	if [[ -n ${project_name} ]]; then
 		local project_path="${PROJECTS_DIR}/${project_name}"
 		if [[ ! -d ${project_path} ]]; then
-			echo "❌ Projec${ $project_na}me not found"
+			echo "❌ Project $project_name not found"
 			return 1
 		fi
 		print_status "Linting Swift code in ${project_name}..."
@@ -119,7 +119,7 @@ init_pods() {
 	local project_path="${PROJECTS_DIR}/${project_name}"
 
 	if [[ ! -d ${project_path} ]]; then
-		echo "❌ Projec${ $project_na}me not found"
+		echo "❌ Project $project_name not found"
 		return 1
 	fi
 
@@ -143,7 +143,7 @@ init_fastlane() {
 	local project_path="${PROJECTS_DIR}/${project_name}"
 
 	if [[ ! -d ${project_path} ]]; then
-		echo "❌ Projec${ $project_na}me not found"
+		echo "❌ Project $project_name not found"
 		return 1
 	fi
 
@@ -164,8 +164,8 @@ show_status() {
 	print_status "Unified Code Architecture Status"
 	echo ""
 
-	echo "📍 Locatio${: $CODE_}DIR"
-	echo "📊 Projects: $(fin${ "$PROJECTS_}DIR" -maxdepth 1 -type d | tail -n +2 | wc -l | tr -d ' ')"
+	echo "📍 Location: $CODE_DIR"
+	echo "📊 Projects: $(find "${PROJECTS_DIR}" -maxdepth 1 -type d | tail -n +2 | wc -l | tr -d ' ')"
 
 	# Check tool availability
 	echo ""
@@ -188,9 +188,9 @@ check_tool() {
 	local tool="$1"
 	local description="$2"
 	if command -v "${tool}" &>/dev/null; then
-		echo "  �${ $descripti}on"
+		echo "  ✅ $description"
 	else
-		echo "  �${ $descripti}on (not installed)"
+		echo "  ❌ $description (not installed)"
 	fi
 }
 
