@@ -13,9 +13,9 @@ from datetime import datetime
 from typing import Dict, List, Optional
 
 # Import Phase 3 components
-from working_automation_engine import get_engine
-from working_jwt_auth import get_auth_manager
-from working_performance_optimizer import get_optimizer
+from .automation_engine import get_engine
+from .jwt_auth import get_auth_manager
+from .performance_optimizer import get_optimizer
 
 logger = logging.getLogger(__name__)
 
