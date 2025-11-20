@@ -3,56 +3,56 @@ import os
 import OSLog
 import SwiftData
 
+/// Structure for exported data
+struct ExportedData: @preconcurrency Codable, @unchecked Sendable {
+    let exportDate: Date
+    let appVersion: String
+    let playerProfile: ExportedPlayerProfile
+    let habits: [ExportedHabit]
+    let habitLogs: [ExportedHabitLog]
+    let achievements: [ExportedAchievement]
+
+    struct ExportedPlayerProfile: @preconcurrency Codable, @unchecked Sendable {
+        let level: Int
+        let currentXP: Int
+        let xpForNextLevel: Int
+        let longestStreak: Int
+        let creationDate: Date
+    }
+
+    struct ExportedHabit: @preconcurrency Codable, @unchecked Sendable {
+        let id: String
+        let name: String
+        let habitDescription: String
+        let frequency: String
+        let creationDate: Date
+        let xpValue: Int
+        let streak: Int
+    }
+
+    struct ExportedHabitLog: @preconcurrency Codable, @unchecked Sendable {
+        let completionDate: Date
+        let habitId: String
+    }
+
+    struct ExportedAchievement: @preconcurrency Codable, @unchecked Sendable {
+        let id: String
+        let name: String
+        let achievementDescription: String
+        let iconName: String
+        let category: String
+        let xpReward: Int
+        let isHidden: Bool
+        let unlockedDate: Date?
+        let progress: Float
+        let requirement: String // JSON string of requirement
+    }
+}
+
 /// Service for exporting and importing HabitQuest user data
 /// Handles backup, restore, and data portability features
 public struct DataExportService: Sendable {
     private static let logger = Logger(category: Logger.Category.dataModel)
-
-    /// Structure for exported data
-    struct ExportedData: @preconcurrency Codable, @unchecked Sendable {
-        let exportDate: Date
-        let appVersion: String
-        let playerProfile: ExportedPlayerProfile
-        let habits: [ExportedHabit]
-        let habitLogs: [ExportedHabitLog]
-        let achievements: [ExportedAchievement]
-
-        struct ExportedPlayerProfile: @preconcurrency Codable, @unchecked Sendable {
-            let level: Int
-            let currentXP: Int
-            let xpForNextLevel: Int
-            let longestStreak: Int
-            let creationDate: Date
-        }
-
-        struct ExportedHabit: @preconcurrency Codable, @unchecked Sendable {
-            let id: String
-            let name: String
-            let habitDescription: String
-            let frequency: String
-            let creationDate: Date
-            let xpValue: Int
-            let streak: Int
-        }
-
-        struct ExportedHabitLog: @preconcurrency Codable, @unchecked Sendable {
-            let completionDate: Date
-            let habitId: String
-        }
-
-        struct ExportedAchievement: @preconcurrency Codable, @unchecked Sendable {
-            let id: String
-            let name: String
-            let achievementDescription: String
-            let iconName: String
-            let category: String
-            let xpReward: Int
-            let isHidden: Bool
-            let unlockedDate: Date?
-            let progress: Float
-            let requirement: String // JSON string of requirement
-        }
-    }
 
     /// Export all user data to JSON
     /// - Parameter modelContext: SwiftData model context
@@ -286,7 +286,7 @@ public enum DataExportError: LocalizedError, @unchecked Sendable {
     case encodingFailed(Error)
     case decodingFailed(Error)
 
-    public nonisolated var errorDescription: String? {
+    nonisolated public var errorDescription: String? {
         switch self {
         case .noProfileFound:
             "No player profile found to export"

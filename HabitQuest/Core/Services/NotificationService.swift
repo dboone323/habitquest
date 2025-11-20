@@ -87,7 +87,7 @@ enum NotificationService {
         content.categoryIdentifier = NotificationCategory.habitReminder.identifier
         content.userInfo = [
             "habitId": habit.id.uuidString,
-            "habitName": habit.name,
+            "habitName": habit.name
         ]
 
         // Schedule based on habit frequency
@@ -199,7 +199,7 @@ enum NotificationService {
         content.categoryIdentifier = NotificationCategory.streakMotivation.identifier
         content.userInfo = [
             "habitId": habit.id.uuidString,
-            "streak": habit.streak,
+            "streak": habit.streak
         ]
 
         // Schedule for evening if not completed today
@@ -294,7 +294,7 @@ enum NotificationService {
             habitReminderCategory,
             streakCategory,
             levelUpCategory,
-            achievementCategory,
+            achievementCategory
         ])
 
         logger.info("Setup notification categories")

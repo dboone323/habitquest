@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck shell=ksh
 
 # HabitQuest Analytics Verification Script
 # Validates the complete analytics implementation and file structure
@@ -25,14 +26,14 @@ check_file() {
 
 	if [[ -f "${file}" ]]; then
 		if [[ -s "${file}" ]]; then
-			echo -e "${GREEN}‚ú${ $descripti}on${NC}"
+			echo -e "${GREEN}ÔøΩ${ $descripti}on${NC}"
 			((PASSED++))
 		else
-			echo -e "${YELLOW}‚ö†Ô${è  $descrip}tion (empty file)${NC}"
+			echo -e "${YELLOW}‚ö†ÔøΩ${ÔøΩ  $descrip}tion (empty file)${NC}"
 			((WARNINGS++))
 		fi
 	else
-		echo -e "${RED}‚ù${ $descripti}on (missing)${NC}"
+		echo -e "${RED}ÔøΩ${ $descripti}on (missing)${NC}"
 		((FAILED++))
 	fi
 }
@@ -43,10 +44,10 @@ check_directory() {
 	local description="$2"
 
 	if [[ -d "${dir}" ]]; then
-		echo -e "${GREEN}‚ú${ $descripti}on${NC}"
+		echo -e "${GREEN}ÔøΩ${ $descripti}on${NC}"
 		((PASSED++))
 	else
-		echo -e "${RED}‚ù${ $descripti}on (missing)${NC}"
+		echo -e "${RED}ÔøΩ${ $descripti}on (missing)${NC}"
 		((FAILED++))
 	fi
 }
@@ -202,7 +203,7 @@ ANALYTICS_FEATURES=(
 )
 
 for feature in "${ANALYTICS_FEATURES[@]}"; do
-	echo -e "${GREEN}‚ú${ $featu}re${NC}"
+	echo -e "${GREEN}ÔøΩ${ $featu}re${NC}"
 	((PASSED++))
 done
 

@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck shell=ksh
 # Smart Multi-Platform Builder for Xcode Projects
 # Automatically detects platform support and builds accordingly
 

@@ -103,7 +103,7 @@ final class NotificationSchedulerService {
             "habitId": habit.id.uuidString,
             "optimalTime": scheduling.optimalTime,
             "successProbability": prediction.probability,
-            "schedulingVersion": "smart_v2",
+            "schedulingVersion": "smart_v2"
         ]
 
         return content

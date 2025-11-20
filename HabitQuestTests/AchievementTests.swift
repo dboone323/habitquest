@@ -218,7 +218,7 @@ final class AchievementTests: XCTestCase {
             Achievement(
                 name: "Special", description: "Special", iconName: "gem", category: .special,
                 xpReward: 100, isHidden: false, requirement: .earlyBird
-            ),
+            )
         ]
 
         XCTAssertEqual(achievements.count, 5)

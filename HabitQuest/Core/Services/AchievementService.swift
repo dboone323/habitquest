@@ -1,12 +1,11 @@
 import Foundation
 import SwiftData
 
-/// Service for managing achievements and badge unlocking logic
 /// Handles progress tracking, achievement unlocking, and reward distribution
 enum AchievementService {
     private static let logger = Logger(category: .gameLogic)
 
-    /// Initialize default achievements for new users
+    // Initialize default achievements for new users
     // swiftlint:disable function_body_length
     static func createDefaultAchievements() -> [Achievement] {
         [
@@ -140,7 +139,7 @@ enum AchievementService {
                 category: .special,
                 xpReward: 300,
                 requirement: .weekendWarrior
-            ),
+            )
         ]
     }
 
