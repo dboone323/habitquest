@@ -193,7 +193,7 @@ public struct AnalyticsTestView: View {
                 xpValue: 10,
                 category: .mindfulness,
                 difficulty: .easy
-            ),
+            )
         ]
 
         // Add habits to context
@@ -205,11 +205,17 @@ public struct AnalyticsTestView: View {
         let calendar = Calendar.current
         let today = Date()
 
+        struct CompletionPattern {
+            let habit: Habit
+            let dayOffset: Int
+            let shouldComplete: Bool
+        }
+
         // Pre-calculate completion patterns to avoid nested loops
-        let completionPatterns: [(habit: Habit, dayOffset: Int, shouldComplete: Bool)] = sampleHabits.flatMap { habit in
+        let completionPatterns: [CompletionPattern] = sampleHabits.flatMap { habit in
             (0 ..< 7).map { dayOffset in
                 let shouldComplete = (dayOffset % 2 == 0) || (habit.category == .mindfulness && dayOffset < 3)
-                return (habit: habit, dayOffset: dayOffset, shouldComplete: shouldComplete)
+                return CompletionPattern(habit: habit, dayOffset: dayOffset, shouldComplete: shouldComplete)
             }
         }
 

@@ -37,20 +37,23 @@ public struct ProfileView: View {
                     AchievementsSection(achievements: self.viewModel.achievements)
 
                     // Advanced Analytics Button
-                    Button(action: {
-                        self.showingAdvancedAnalytics = true
-                    }) {
-                        HStack {
-                            Image(systemName: "chart.bar.xaxis")
-                            Text("Advanced Analytics")
-                            Spacer()
-                            Image(systemName: "chevron.right")
+                    Button(
+                        action: {
+                            self.showingAdvancedAnalytics = true
+                        },
+                        label: {
+                            HStack {
+                                Image(systemName: "chart.bar.xaxis")
+                                Text("Advanced Analytics")
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                            }
+                            .padding()
+                            .background(Color.blue.opacity(0.1))
+                            .foregroundColor(.blue)
+                            .cornerRadius(12)
                         }
-                        .padding()
-                        .background(Color.blue.opacity(0.1))
-                        .foregroundColor(.blue)
-                        .cornerRadius(12)
-                    }
+                    )
 
                     // Analytics Tab View
                     AnalyticsTabView()

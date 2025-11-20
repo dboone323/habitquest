@@ -14,13 +14,12 @@ Auto-fix Strategy: Create comprehensive quality check script
 Cross-repository applicable: Yes (HabitQuest, MomentumFinance)
 """
 
-import json
 import os
 import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 
 class WorkflowQualityChecker:

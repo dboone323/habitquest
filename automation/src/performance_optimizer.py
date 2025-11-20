@@ -3,9 +3,8 @@
 Working Performance Optimizer for Phase 3 Testing
 """
 
-import os
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from typing import Dict, List, Optional
 
 import psutil

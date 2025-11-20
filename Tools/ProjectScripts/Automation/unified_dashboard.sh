@@ -21,24 +21,29 @@ print_header() {
 }
 
 print_project_status() {
-	local project_name="$1"
-	local project_path="${PROJECTS_DIR}/${project_name}"
+	local project_name
+	project_name="$1"
+	local project_path
+	project_path="${PROJECTS_DIR}/${project_name}"
 
 	echo -e "${CYAN}📁 ${project_name}${NC}"
 	echo "   📍 Location: $project_path"
 
 	# Count Swift files
-	local swift_files=$(find "${project_path}" -name "*.swift" 2>/dev/null | wc -l | tr -d ' ')
+	local swift_files
+	swift_files=$(find "${project_path}" -name "*.swift" 2>/dev/null | wc -l | tr -d ' ')
 	echo "   📄 Swift files: $swift_files"
 
 	# Check GitHub workflows
 	if [[ -d "${project_path}/.github/workflows" ]]; then
-		local workflow_count=$(find "${project_path}/.github/workflows" -name "*.yml" -o -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
+		local workflow_count
+		workflow_count=$(find "${project_path}/.github/workflows" -name "*.yml" -o -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
 		echo -e "   🔄 GitHub workflows: ${GREEN}$workflow_count files${NC}"
 
 		# List workflows
 		find "${project_path}/.github/workflows" -name "*.yml" -o -name "*.yaml" 2>/dev/null | while read workflow; do
-			local workflow_name=$(basename "${workflow}" .yml)
+			local workflow_name
+			workflow_name=$(basename "${workflow}" .yml)
 			echo "      📋 $workflow_name"
 		done
 	else
@@ -105,13 +110,18 @@ print_summary() {
 	echo -e "${PURPLE}📊 WORKFLOW IMPLEMENTATION SUMMARY${NC}"
 	echo ""
 
-	local total_projects=0
-	local projects_with_workflows=0
-	local projects_with_ci_passing=0
+	local total_projects
+
+	total_projects=0
+	local projects_with_workflows
+	projects_with_workflows=0
+	local projects_with_ci_passing
+	projects_with_ci_passing=0
 
 	for project in "${PROJECTS_DIR}"/*; do
 		if [[ -d ${project} ]]; then
-			local project_name=$(basename "${project}")
+			local project_name
+			project_name=$(basename "${project}")
 			total_projects=$((total_projects + 1))
 
 			if [[ -d "${project}/.github/workflows" ]]; then
@@ -151,7 +161,8 @@ main() {
 	# Process each project
 	for project in "${PROJECTS_DIR}"/*; do
 		if [[ -d ${project} ]]; then
-			local project_name=$(basename "${project}")
+			local project_name
+			project_name=$(basename "${project}")
 			print_project_status "${project_name}"
 		fi
 	done

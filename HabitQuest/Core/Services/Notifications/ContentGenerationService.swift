@@ -39,7 +39,7 @@ final class ContentGenerationService {
             "habitId": habit.id.uuidString,
             "optimalTime": scheduling.optimalTime,
             "successProbability": prediction.probability,
-            "schedulingVersion": "smart_v2",
+            "schedulingVersion": "smart_v2"
         ]
 
         return content
@@ -56,7 +56,7 @@ final class ContentGenerationService {
         content.userInfo = [
             "habitId": habit.id.uuidString,
             "milestoneStreak": milestone.streakCount,
-            "notificationType": "milestone",
+            "notificationType": "milestone"
         ]
 
         return content
@@ -73,7 +73,7 @@ final class ContentGenerationService {
 
         content.userInfo = [
             "habitId": habit.id.uuidString,
-            "notificationType": "recovery",
+            "notificationType": "recovery"
         ]
 
         return content

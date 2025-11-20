@@ -16,13 +16,14 @@ public struct DataManagementView: View {
                             .font(.subheadline)
                             .foregroundColor(.secondary)
 
-                        Button(action: {}) {
-                            HStack {
-                                Image(systemName: "square.and.arrow.up")
-                                Text("Export Data")
-                                Spacer()
+                        Button(
+                            action: {
+                                // viewModel.exportData() // Assuming viewModel would be introduced
+                            },
+                            label: {
+                                Label("Export Data", systemImage: "square.and.arrow.up")
                             }
-                        }
+                        )
                         .accessibilityLabel("Button")
                     }
                     .padding(.vertical, 4)
@@ -34,13 +35,14 @@ public struct DataManagementView: View {
                             .font(.subheadline)
                             .foregroundColor(.secondary)
 
-                        Button(action: {}) {
-                            HStack {
-                                Image(systemName: "square.and.arrow.down")
-                                Text("Import Data")
-                                Spacer()
+                        Button(
+                            action: {
+                                // isImporting = true // Assuming isImporting would be introduced
+                            },
+                            label: {
+                                Label("Import Data", systemImage: "square.and.arrow.down")
                             }
-                        }
+                        )
                         .accessibilityLabel("Button")
                     }
                     .padding(.vertical, 4)
@@ -96,7 +98,7 @@ private struct DataInfoRow: View {
 
 /// Document type for file export
 public struct HabitQuestBackupDocument: FileDocument {
-    public nonisolated static var readableContentTypes: [UTType] { [.json] }
+    nonisolated public static var readableContentTypes: [UTType] { [.json] }
 
     var data: Data
 
@@ -104,7 +106,7 @@ public struct HabitQuestBackupDocument: FileDocument {
         self.data = data
     }
 
-    public nonisolated init(configuration: ReadConfiguration) throws {
+    nonisolated public init(configuration: ReadConfiguration) throws {
         guard let data = configuration.file.regularFileContents else {
             throw CocoaError(.fileReadCorruptFile)
         }
@@ -117,7 +119,7 @@ public struct HabitQuestBackupDocument: FileDocument {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    public nonisolated func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
+    nonisolated public func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
         FileWrapper(regularFileWithContents: data)
     }
 }

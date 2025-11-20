@@ -27,9 +27,12 @@ list_projects() {
 	print_status "Available projects in unified Code architecture:"
 	for project in "${PROJECTS_DIR}"/*; do
 		if [[ -d ${project} ]]; then
-			local project_name=$(basename "${project}")
-			local swift_files=$(find "${project}" -name "*.swift" 2>/dev/null | wc -l | tr -d ' ')
-			local has_automation=""
+			local project_name
+			project_name=$(basename "${project}")
+			local swift_files
+			swift_files=$(find "${project}" -name "*.swift" 2>/dev/null | wc -l | tr -d ' ')
+			local has_automation
+			has_automation=""
 			if [[ -d "${project}/automation" ]]; then
 				has_automation=" (✅ automation)"
 			else
@@ -42,8 +45,10 @@ list_projects() {
 
 # Run automation for specific project
 run_project_automation() {
-	local project_name="$1"
-	local project_path="${PROJECTS_DIR}/${project_name}"
+	local project_name
+	project_name="$1"
+	local project_path
+	project_path="${PROJECTS_DIR}/${project_name}"
 
 	if [[ ! -d ${project_path} ]]; then
 		echo "❌ Project $project_name not found"
@@ -63,10 +68,12 @@ run_project_automation() {
 
 # Format code using SwiftFormat
 format_code() {
-	local project_name="${1-}"
+	local project_name
+	project_name="${1-}"
 
 	if [[ -n ${project_name} ]]; then
-		local project_path="${PROJECTS_DIR}/${project_name}"
+		local project_path
+		project_path="${PROJECTS_DIR}/${project_name}"
 		if [[ ! -d ${project_path} ]]; then
 			echo "❌ Project $project_name not found"
 			return 1
@@ -78,7 +85,8 @@ format_code() {
 		print_status "Formatting Swift code in all projects..."
 		for project in "${PROJECTS_DIR}"/*; do
 			if [[ -d ${project} ]]; then
-				local project_name=$(basename "${project}")
+				local project_name
+				project_name=$(basename "${project}")
 				print_status "Formatting ${project_name}..."
 				swiftformat "${project}" --exclude "*.backup" 2>/dev/null
 			fi
@@ -89,10 +97,12 @@ format_code() {
 
 # Lint code using SwiftLint
 lint_code() {
-	local project_name="${1-}"
+	local project_name
+	project_name="${1-}"
 
 	if [[ -n ${project_name} ]]; then
-		local project_path="${PROJECTS_DIR}/${project_name}"
+		local project_path
+		project_path="${PROJECTS_DIR}/${project_name}"
 		if [[ ! -d ${project_path} ]]; then
 			echo "❌ Project $project_name not found"
 			return 1
@@ -104,7 +114,8 @@ lint_code() {
 		print_status "Linting Swift code in all projects..."
 		for project in "${PROJECTS_DIR}"/*; do
 			if [[ -d ${project} ]]; then
-				local project_name=$(basename "${project}")
+				local project_name
+				project_name=$(basename "${project}")
 				print_status "Linting ${project_name}..."
 				cd "${project}" && swiftlint
 			fi
@@ -115,8 +126,10 @@ lint_code() {
 
 # Initialize CocoaPods for a project
 init_pods() {
-	local project_name="$1"
-	local project_path="${PROJECTS_DIR}/${project_name}"
+	local project_name
+	project_name="$1"
+	local project_path
+	project_path="${PROJECTS_DIR}/${project_name}"
 
 	if [[ ! -d ${project_path} ]]; then
 		echo "❌ Project $project_name not found"
@@ -139,8 +152,10 @@ init_pods() {
 
 # Setup Fastlane for iOS deployment
 init_fastlane() {
-	local project_name="$1"
-	local project_path="${PROJECTS_DIR}/${project_name}"
+	local project_name
+	project_name="$1"
+	local project_path
+	project_path="${PROJECTS_DIR}/${project_name}"
 
 	if [[ ! -d ${project_path} ]]; then
 		echo "❌ Project $project_name not found"
@@ -185,8 +200,10 @@ show_status() {
 
 # Check if a tool is available
 check_tool() {
-	local tool="$1"
-	local description="$2"
+	local tool
+	tool="$1"
+	local description
+	description="$2"
 	if command -v "${tool}" &>/dev/null; then
 		echo "  ✅ $description"
 	else

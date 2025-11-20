@@ -96,7 +96,7 @@ public struct StreakMilestone: Identifiable, @unchecked Sendable {
             description: "365 days! You are a legend among legends!",
             emoji: "🔥🔥🔥🔥🔥",
             celebrationLevel: .legendary
-        ),
+        )
     ]
 
     /// Get the milestone for a specific streak count

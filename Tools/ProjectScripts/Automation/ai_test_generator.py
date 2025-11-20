@@ -5,7 +5,6 @@ Creates diverse test scenarios to validate AI learning capabilities
 """
 
 import json
-import os
 import random
 import sys
 from datetime import datetime, timedelta
@@ -199,10 +198,10 @@ class AILearningTestGenerator:
             else:
                 print(f"❌ {project} validation failed")
 
-        print(f"\n📈 Test Suite Summary:")
+        print("\n📈 Test Suite Summary:")
         print(f"   - Total scenarios generated: {total_scenarios}")
         print(f"   - Projects tested: {len(self.projects)}")
-        print(f"   - Expected learning improvements: Immediate")
+        print("   - Expected learning improvements: Immediate")
 
         return total_scenarios
 

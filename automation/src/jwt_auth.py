@@ -13,7 +13,9 @@ import jwt
 
 class JWTAuthManager:
     def __init__(self, secret_key: str = None):
-        self.secret_key = secret_key or os.getenv("JWT_SECRET", "dev_secret_key_123")
+        # Prefer the environment variable for secrets. Do not provide a default secret.
+        # For local testing, set JWT_SECRET in your environment or pass it explicitly.
+        self.secret_key = secret_key or os.getenv("JWT_SECRET")
         self.algorithm = "HS256"
         self.token_expiry = timedelta(hours=24)
 
@@ -96,7 +98,7 @@ def main():
     # Test login
     token = auth.login("admin", "admin")
     if token:
-        print(f"Login successful! Token generated")
+        print("Login successful! Token generated")
 
         # Test verification
         payload = auth.verify_token(token)

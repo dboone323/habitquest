@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck shell=ksh
 # Convert Xcode project from newer format (Xcode 16+) to older format (Xcode 15 compatible)
 
 set -e # Exit on any error

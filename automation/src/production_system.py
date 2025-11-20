@@ -10,7 +10,7 @@ import logging
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict
 
 # Import Phase 3 components
 from .automation_engine import get_engine
@@ -233,7 +233,7 @@ async def main():
 
         # Show status
         status = prod_system.get_status()
-        print(f"\n📊 Production Status:")
+        print("\n📊 Production Status:")
         print(f"   Running: {status['running']}")
         print(f"   Total Requests: {status['metrics']['total_requests']}")
         print(f"   Success Rate: {status['success_rate']}%")
@@ -244,7 +244,7 @@ async def main():
         with open("phase4_production_status.json", "w") as f:
             json.dump(status, f, indent=2)
 
-        print(f"\n📄 Status report: phase4_production_status.json")
+        print("\n📄 Status report: phase4_production_status.json")
 
     finally:
         await prod_system.shutdown()
