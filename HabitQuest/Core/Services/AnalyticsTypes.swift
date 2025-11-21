@@ -1,7 +1,7 @@
 import Foundation
 
 // Supporting types for analytics extracted to reduce AdvancedAnalyticsEngine file size
-struct HabitPatterns {
+struct HabitPatterns: Sendable {
     let consistency: Double
     let momentum: Double
     let volatility: Double
@@ -9,27 +9,27 @@ struct HabitPatterns {
     let timePreference: Int
 }
 
-struct TimeFactors {
+struct TimeFactors: Sendable {
     let currentHourSuccessRate: Double
     let currentDaySuccessRate: Double
     let timesSinceLastCompletion: TimeInterval
     let optimalTimeWindow: ClosedRange<Int>
 }
 
-struct StreakMomentum {
+struct StreakMomentum: Sendable {
     let weeklyMomentum: Double
     let longestRecentStreak: Int
     let acceleration: Double
 }
 
-struct SchedulingRecommendation {
+struct SchedulingRecommendation: Sendable {
     let optimalTime: Int
     let successRateAtTime: Double
     let reasoning: String
     let alternativeTimes: [Int]
 }
 
-struct BehavioralInsights {
+struct BehavioralInsights: Sendable {
     let moodCorrelation: Double
     let strongestDays: [String]
     let weakestDays: [String]
@@ -38,7 +38,7 @@ struct BehavioralInsights {
     let personalityInsights: [String]
 }
 
-struct HabitSuggestion {
+struct HabitSuggestion: Sendable {
     let name: String
     let description: String
     let category: HabitCategory
