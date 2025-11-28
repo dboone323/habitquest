@@ -11,6 +11,7 @@ import SwiftUI
 
 public struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject var themeManager: ThemeManager
     #if canImport(SwiftData)
         @Query private var items: [Item]
     #else
@@ -57,21 +58,24 @@ public struct ContentView: View {
 // MARK: - View Components (Extracted for better architecture)
 
 public struct HeaderView: View {
+    @EnvironmentObject var themeManager: ThemeManager
+    
     public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "sparkles")
-                    .foregroundColor(.blue)
+                    .foregroundColor(themeManager.currentTheme.primaryColor)
                     .font(.title2)
 
                 VStack(alignment: .leading) {
                     Text("HabitQuest")
                         .font(.headline)
                         .fontWeight(.bold)
+                        .foregroundColor(themeManager.currentTheme.textColor)
 
                     Text("Your Journey Awaits")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                 }
 
                 Spacer()
@@ -80,6 +84,7 @@ public struct HeaderView: View {
 
             Divider()
         }
+        .background(themeManager.currentTheme.backgroundColor)
     }
 }
 

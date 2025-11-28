@@ -12,6 +12,7 @@ import SwiftUI
 public struct HabitQuestApp: App {
     @State private var showDatabaseError = false
     @State private var databaseError: Error?
+    @StateObject private var themeManager = ThemeManager()
 
     public init() {}
 
@@ -45,6 +46,7 @@ public struct HabitQuestApp: App {
             if let container = sharedModelContainer {
                 AppMainView()
                     .modelContainer(container)
+                    .environmentObject(themeManager)
             } else {
                 // Show error view when database initialization fails
                 VStack(spacing: 20) {
