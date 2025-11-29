@@ -33,20 +33,10 @@ class ShareManager {
     
     // MARK: - Share Milestone
     
+    // MARK: - Share Milestone
+    
     func shareMilestone(_ milestone: StreakMilestone, completion: @escaping (Bool) -> Void) {
-        let text: String
-        
-        switch milestone {
-        case .week:
-            text = "🎉 Completed a 7-day streak! #HabitQuest"
-        case .month:
-            text = "🚀 30-day streak achieved! Building habits that last. #HabitQuest"
-        case .hundredDays:
-            text = "💯 100 days strong! Consistency is key. #HabitQuest"
-        case .year:
-            text = "🏆 365-day streak! A full year of dedication! #HabitQuest"
-        }
-        
+        let text = "🎉 \(milestone.title)! \(milestone.description) #HabitQuest"
         let image = generateMilestoneImage(milestone)
         
         share(text: text, image: image, completion: completion)
@@ -71,7 +61,12 @@ class ShareManager {
         }
         
         // Present from top view controller
-        if let topVC = UIApplication.shared.windows.first?.rootViewController {
+        if let topVC = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive })?
+            .windows
+            .first(where: { $0.isKeyWindow })?
+            .rootViewController {
             topVC.present(activityVC, animated: true)
         }
     }
@@ -153,35 +148,18 @@ class ShareManager {
     }
     
     private func generateMilestoneImage(_ milestone: StreakMilestone) -> UIImage? {
-        generateStreakImage(streak: milestoneValue(milestone), habit: "Achievement")
+        generateStreakImage(streak: milestone.streakCount, habit: "Achievement")
     }
     
     private func generateAchievementText(_ achievement: Achievement) -> String {
         """
         🏆 Achievement Unlocked: \(achievement.name)
         
-        \(achievement.description)
+        \(achievement.achievementDescription)
         
         #HabitQuest #Productivity #Goals
         """
     }
-    
-    private func milestoneValue(_ milestone: StreakMilestone) -> Int {
-        switch milestone {
-        case .week: return 7
-        case .month: return 30
-        case .hundredDays: return 100
-        case .year: return 365
-        }
-    }
 }
 
-// Supporting types
-struct Achievement {
-    let name: String
-    let description: String
-}
 
-enum StreakMilestone {
-    case week, month, hundredDays, year
-}

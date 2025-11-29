@@ -1,6 +1,7 @@
 @testable import HabitQuest
 import XCTest
 
+@MainActor
 final class StreakManagerTests: XCTestCase {
     
     var streakManager: StreakManager!
@@ -91,22 +92,22 @@ final class StreakManagerTests: XCTestCase {
         }
         
         let milestone = streakManager.checkMilestone(streak: 7)
-        XCTAssertEqual(milestone, .week)
+        XCTAssertEqual(milestone?.streakCount, 7)
     }
     
     func testMilestoneDetection_30Days() {
         let milestone = streakManager.checkMilestone(streak: 30)
-        XCTAssertEqual(milestone, .month)
+        XCTAssertEqual(milestone?.streakCount, 30)
     }
     
     func testMilestoneDetection_100Days() {
         let milestone = streakManager.checkMilestone(streak: 100)
-        XCTAssertEqual(milestone, .hundredDays)
+        XCTAssertEqual(milestone?.streakCount, 100)
     }
     
     func testMilestoneDetection_365Days() {
         let milestone = streakManager.checkMilestone(streak: 365)
-        XCTAssertEqual(milestone, .year)
+        XCTAssertEqual(milestone?.streakCount, 365)
     }
     
     func testMilestoneDetection_NoMilestone() {
@@ -140,14 +141,4 @@ final class StreakManagerTests: XCTestCase {
         
         XCTAssertEqual(percentage, 66.67, accuracy: 0.1)
     }
-}
-
-enum StreakMilestone {
-    case week, month, hundredDays, year
-}
-
-struct StreakStatistics {
-    let currentStreak: Int
-    let longestStreak: Int
-    let totalCompletions: Int
 }
