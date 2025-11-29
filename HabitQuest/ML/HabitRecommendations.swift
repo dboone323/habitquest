@@ -6,13 +6,13 @@ class HabitRecommendationService {
     
     // MARK: - Pattern Analysis
     
-    func suggestHabits(based on completionHistory: [HabitCompletion]) -> [HabitSuggestion] {
-        var suggestions: [HabitSuggestion] = []
+    func suggestHabits(basedOn completionHistory: [HabitCompletion]) -> [MLHabitSuggestion] {
+        var suggestions: [MLHabitSuggestion] = []
         
         // Analyze time patterns
         let timePatterns = analyzeTimePatterns(completionHistory)
         if let bestTime = timePatterns.mostConsistentTime {
-            suggestions.append(HabitSuggestion(
+            suggestions.append(MLHabitSuggestion(
                 title: "Morning Routine",
                 description: "You're most consistent at \(bestTime)",
                 confidence: timePatterns.confidence,
@@ -23,7 +23,7 @@ class HabitRecommendationService {
         // Analyze category patterns
         let categories = analyzeCategoryPatterns(completionHistory)
         for category in categories.topCategories {
-            suggestions.append(HabitSuggestion(
+            suggestions.append(MLHabitSuggestion(
                 title: "More \(category)",
                 description: "You excel at \(category) habits",
                 confidence: categories.confidenceFor(category),
@@ -99,9 +99,9 @@ class HabitRecommendationService {
     
     // MARK: - Complementary Habits
     
-    private func suggestComplementaryHabits(_ history: [HabitCompletion]) -> [HabitSuggestion] {
+    private func suggestComplementaryHabits(_ history: [HabitCompletion]) -> [MLHabitSuggestion] {
         let existingCategories = Set(history.map { $0.habitCategory })
-        var suggestions: [HabitSuggestion] = []
+        var suggestions: [MLHabitSuggestion] = []
         
         // Complementary pairs
         let pairs: [(String, String, String)] = [
@@ -113,7 +113,7 @@ class HabitRecommendationService {
         
         for (category1, category2, reason) in pairs {
             if existingCategories.contains(category1) && !existingCategories.contains(category2) {
-                suggestions.append(HabitSuggestion(
+                suggestions.append(MLHabitSuggestion(
                     title: category2,
                     description: reason,
                     confidence: 0.7,
@@ -127,7 +127,7 @@ class HabitRecommendationService {
     
     // MARK: - Collaborative Filtering
     
-    private func suggestCollaborativeHabits(_ history: [HabitCompletion]) -> [HabitSuggestion] {
+    private func suggestCollaborativeHabits(_ history: [HabitCompletion]) -> [MLHabitSuggestion] {
         // Simulated collaborative filtering
         // In production, would query backend for similar user patterns
         let popularHabits = [
@@ -141,7 +141,7 @@ class HabitRecommendationService {
         
         return popularHabits.compactMap { name, confidence in
             if !existingHabits.contains(name) {
-                return HabitSuggestion(
+                return MLHabitSuggestion(
                     title: name,
                     description: "Popular among similar users",
                     confidence: confidence,
@@ -164,7 +164,7 @@ class HabitRecommendationService {
 
 // MARK: - Supporting Types
 
-struct HabitSuggestion {
+struct MLHabitSuggestion {
     let title: String
     let description: String
     let confidence: Double
