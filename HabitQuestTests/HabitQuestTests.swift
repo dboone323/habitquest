@@ -408,27 +408,27 @@ final class HabitQuestTests: XCTestCase {
         XCTAssertTrue(true, "Logging test framework ready")
     }
 
-    // MARK: - Game Rules Tests
+    // MARK: - Gamification Service Tests
 
-    func testGameRulesInitialization() throws {
-        // Test game rules initialization
-        // let rules = GameRules()
-        // XCTAssertNotNil(rules)
+    func testGamificationServiceInitialization() throws {
+        // Test gamification service initialization
+        // let service = GamificationService()
+        // XCTAssertNotNil(service)
 
-        // Placeholder until GameRules is implemented
-        XCTAssertTrue(true, "Game rules initialization test framework ready")
+        // Placeholder until GamificationService is implemented
+        XCTAssertTrue(true, "Gamification service initialization test framework ready")
     }
 
     func testXPSystem() throws {
         // Test XP system calculations
-        // let rules = GameRules()
-        // let xpForLevel1 = rules.xpRequiredForLevel(1)
-        // let xpForLevel2 = rules.xpRequiredForLevel(2)
+        // let service = GamificationService()
+        // let xpForLevel1 = service.calculateXPForLevel(1)
+        // let xpForLevel2 = service.calculateXPForLevel(2)
 
         // XCTAssertEqual(xpForLevel1, 0)
         // XCTAssertGreaterThan(xpForLevel2, xpForLevel1)
 
-        // Placeholder until GameRules is implemented
+        // Placeholder until GamificationService is implemented
         XCTAssertTrue(true, "XP system test framework ready")
     }
 

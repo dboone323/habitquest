@@ -7,60 +7,310 @@ import SwiftUI
 //
 //  Created by Daniel Stevens on 6/27/25.
 //  Enhanced: 9/12/25 - Improved architecture with better separation of concerns
+//  Redesigned: 12/05/25 - Modern Card UI
 //
 
 public struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var themeManager: ThemeManager
-    #if canImport(SwiftData)
-        @Query private var items: [Item]
-    #else
-        private var items: [Item] = []
-    #endif
+
+    // Query Habits instead of Items
+    @Query(sort: \Habit.creationDate, order: .reverse) private var habits: [Habit]
+
+    // Gamification Queries
+    @Query private var profiles: [PlayerProfile]
+    @Query private var achievements: [Achievement]
+    @Query(sort: \HabitLog.completionDate, order: .reverse) private var logs: [HabitLog]
+
+    private var playerProfile: PlayerProfile? { profiles.first }
+
+    @State private var showAddSheet = false
+
+    // Alert State
+    @State private var showLevelUpAlert = false
+    @State private var newLevel = 0
+    @State private var showAchievementAlert = false
+    @State private var unlockedAchievementName = ""
+
+    private let gamificationService = GamificationService()
+
+    public init() {}
 
     public var body: some View {
-        NavigationSplitView {
-            // MARK: - Sidebar with Enhanced Navigation
+        NavigationStack {
+            ZStack {
+                // Background
+                themeManager.currentTheme.backgroundColor
+                    .ignoresSafeArea()
 
-            VStack(alignment: .leading, spacing: 0) {
-                // Header Section
-                HeaderView()
+                VStack(spacing: 0) {
+                    // Custom Header
+                    if let profile = playerProfile {
+                        HeaderView(profile: profile)
+                    } else {
+                        HeaderView(profile: PlayerProfile()) // Fallback
+                    }
 
-                // Main Content List
-                ItemListView(items: self.items, onDelete: self.deleteItems, onAdd: self.addItem)
-
-                // Footer with Stats
-                FooterStatsView(itemCount: self.items.count)
+                    if habits.isEmpty {
+                        HabitListEmptyStateView {
+                            addItem() // For testing, adds a dummy habit
+                        }
+                    } else {
+                        ScrollView {
+                            LazyVStack(spacing: 20) {
+                                ForEach(habits) { habit in
+                                    HabitCardView(habit: habit) {
+                                        toggleHabitCompletion(habit)
+                                    }
+                                    .contextMenu {
+                                        Button(role: .destructive) {
+                                            deleteHabit(habit)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    }
+                                }
+                            }
+                            .padding(.top)
+                        }
+                    }
+                }
             }
-        } detail: {
-            DetailView()
+            .navigationBarHidden(true)
+            .overlay(alignment: .bottomTrailing) {
+                // Floating Action Button
+                Button(action: {
+                    addItem() // Will open sheet later
+                }) {
+                    Image(systemName: "plus")
+                        .font(.title.weight(.semibold))
+                        .foregroundColor(.white)
+                        .frame(width: 60, height: 60)
+                        .background(Color.blue)
+                        .clipShape(Circle())
+                        .shadow(radius: 4, y: 3)
+                }
+                .padding()
+            }
+        }
+        .onAppear {
+             initializeGamification()
+        }
+        .alert("Level Up!", isPresented: $showLevelUpAlert) {
+            Button("Awesome!", role: .cancel) { }
+        } message: {
+            Text("Congratulations! You've reached Level \(newLevel). Keep up the great work!")
+        }
+        .alert("Achievement Unlocked!", isPresented: $showAchievementAlert) {
+            Button("Nice!", role: .cancel) { }
+        } message: {
+            Text("You've unlocked: '\(unlockedAchievementName)'")
         }
     }
 
-    // MARK: - Business Logic (moved to separate functions for better organization)
+    private func initializeGamification() {
+        if profiles.isEmpty {
+            modelContext.insert(PlayerProfile())
+        }
+
+        if achievements.isEmpty {
+            let defaults = AchievementService.createDefaultAchievements()
+            for achievement in defaults {
+                modelContext.insert(achievement)
+            }
+        }
+    }
+
+    // MARK: - Business Logic
 
     private func addItem() {
         withAnimation {
-            let newItem = Item(timestamp: Date())
-            self.modelContext.insert(newItem)
+            let newHabit = Habit(
+                name: "New Quest \(Int.random(in: 1...100))",
+                habitDescription: "Daily task",
+                frequency: .daily,
+                category: HabitCategory.allCases.randomElement() ?? .health
+            )
+            modelContext.insert(newHabit)
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
+    private func deleteHabit(_ habit: Habit) {
         withAnimation {
-            for index in offsets {
-                self.modelContext.delete(self.items[index])
+            modelContext.delete(habit)
+        }
+    }
+
+    private func toggleHabitCompletion(_ habit: Habit) {
+        // Check if completed today
+        let today = Date()
+        let calendar = Calendar.current
+
+        if let existingLog = habit.logs.first(where: { calendar.isDate($0.completionDate, inSameDayAs: today) }) {
+            // Already completed, toggle off (delete log)
+            modelContext.delete(existingLog)
+            if habit.streak > 0 { habit.streak -= 1 }
+        } else {
+            // Not completed, create log
+            let log = HabitLog(habit: habit, completionDate: today, isCompleted: true)
+            habit.logs.append(log)
+            modelContext.insert(log)
+            habit.streak += 1
+
+            // Gamification Logic
+            if let profile = playerProfile {
+                let result = gamificationService.processHabitCompletion(habit: habit, profile: profile)
+                if result.leveledUp {
+                    self.newLevel = result.newLevel
+                    self.showLevelUpAlert = true
+                }
+
+                // Update Achievements
+                let unlocked = AchievementService.updateAchievementProgress(
+                    achievements: achievements,
+                    player: profile,
+                    habits: habits,
+                    recentLogs: logs
+                )
+
+                if let first = unlocked.first {
+                    self.unlockedAchievementName = first.name
+                    self.showAchievementAlert = true
+                }
             }
         }
     }
 }
 
-// MARK: - View Components (Extracted for better architecture)
+// MARK: - Subviews
 
-public struct HeaderView: View {
+struct HabitListEmptyStateView: View {
+    var onAdd: () -> Void
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Spacer()
+            Image(systemName: "checklist")
+                .font(.system(size: 80))
+                .foregroundColor(.gray.opacity(0.5))
+            Text("No Active Quests")
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(.gray)
+            Text("Start your journey by adding a new habit quest.")
+                .font(.body)
+                .foregroundColor(.gray)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+
+            Button("Create First Quest", action: onAdd)
+                .buttonStyle(.borderedProminent)
+            Spacer()
+        }
+    }
+}
+
+// MARK: - Extensions
+
+extension HabitCategory {
+    var viewColor: Color {
+        switch self {
+        case .health: return .red
+        case .fitness: return .orange
+        case .learning: return .blue
+        case .productivity: return .green
+        case .social: return .purple
+        case .creativity: return .yellow
+        case .mindfulness: return .indigo
+        case .other: return .gray
+        }
+    }
+}
+
+// MARK: - HabitCardView
+
+struct HabitCardView: View {
+    @Bindable var habit: Habit
+    var onToggle: () -> Void
+
+    // Animation state
+    @State private var isAnimating = false
+
+    var body: some View {
+        HStack(spacing: 16) {
+            // Category Icon
+            ZStack {
+                Circle()
+                    .fill(habit.category.viewColor.opacity(0.2))
+                    .frame(width: 50, height: 50)
+
+                Text(habit.category.emoji)
+                    .font(.system(size: 24))
+            }
+
+            // Text Content
+            VStack(alignment: .leading, spacing: 4) {
+                Text(habit.name)
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                    .strikethrough(habit.isCompletedToday, color: .secondary)
+
+                HStack(spacing: 4) {
+                    Image(systemName: "flame.fill")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                    Text("\(habit.streak) day streak")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+
+            Spacer()
+
+            // Completion Button
+            Button(action: {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                    isAnimating = true
+                    onToggle()
+                }
+                // Reset animation state
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    isAnimating = false
+                }
+            }) {
+                ZStack {
+                    Circle()
+                        .stroke(Color.gray.opacity(0.3), lineWidth: 3)
+                        .frame(width: 44, height: 44)
+
+                    if habit.isCompletedToday {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 44))
+                            .foregroundColor(.green)
+                            .transition(.scale)
+                    }
+                }
+            }
+            .scaleEffect(isAnimating ? 1.2 : 1.0)
+            .buttonStyle(PlainButtonStyle())
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.secondarySystemBackground))
+                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+        )
+        .padding(.horizontal)
+    }
+}
+
+// MARK: - HeaderView
+
+struct HeaderView: View {
     @EnvironmentObject var themeManager: ThemeManager
-    
-    public var body: some View {
+    let profile: PlayerProfile
+
+    var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "sparkles")
@@ -82,217 +332,68 @@ public struct HeaderView: View {
             }
             .padding()
 
+            LevelProgressView(level: profile.level, xpProgress: profile.xpProgress)
+                .padding(.horizontal)
+                .padding(.bottom, 8)
+
             Divider()
         }
         .background(themeManager.currentTheme.backgroundColor)
     }
 }
 
-public struct ItemListView: View {
-    let items: [Item]
-    let onDelete: (IndexSet) -> Void
-    let onAdd: () -> Void
-
-    public var body: some View {
-        List {
-            ForEach(self.items) { item in
-                NavigationLink {
-                    ItemDetailView(item: item)
-                } label: {
-                    ItemRowView(item: item)
-                }
-            }
-            .onDelete(perform: self.onDelete)
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                EditButton()
-                    .accessibilityLabel("Edit Items")
-            }
-            ToolbarItem {
-                Button(action: self.onAdd) {
-                    Label("Add Item", systemImage: "plus")
-                }
-                .accessibilityLabel("Add New Item")
-            }
-        }
-    }
-}
-
-public struct ItemRowView: View {
-    let item: Item
-
-    public var body: some View {
-        HStack {
-            // Icon based on time of day
-            Image(systemName: self.timeBasedIcon)
-                .foregroundColor(self.timeBasedColor)
-                .frame(width: 24, height: 24)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Quest Entry")
-                    .font(.headline)
-
-                Text(self.item.timestamp, format: Date.FormatStyle(date: .abbreviated, time: .shortened))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-
-            Spacer()
-
-            // Status indicator
-            Circle()
-                .fill(Color.green.opacity(0.7))
-                .frame(width: 8, height: 8)
-        }
-        .padding(.vertical, 2)
-    }
-
-    private var timeBasedIcon: String {
-        let hour = Calendar.current.component(.hour, from: self.item.timestamp)
-        switch hour {
-        case 6 ..< 12: return "sunrise.fill"
-        case 12 ..< 18: return "sun.max.fill"
-        case 18 ..< 22: return "sunset.fill"
-        default: return "moon.stars.fill"
-        }
-    }
-
-    private var timeBasedColor: Color {
-        let hour = Calendar.current.component(.hour, from: self.item.timestamp)
-        switch hour {
-        case 6 ..< 12: return .orange
-        case 12 ..< 18: return .yellow
-        case 18 ..< 22: return .red
-        default: return .purple
-        }
-    }
-}
-
-public struct ItemDetailView: View {
-    let item: Item
-
-    public var body: some View {
-        VStack(spacing: 20) {
-            // Header
-            VStack(spacing: 8) {
-                Image(systemName: "sparkles")
-                    .font(.system(size: 40))
-                    .foregroundColor(.blue)
-
-                Text("Quest Entry Details")
-                    .font(.title2)
-                    .fontWeight(.bold)
-            }
-
-            // Details Card
-            VStack(alignment: .leading, spacing: 12) {
-                DetailRow(
-                    title: "Created",
-                    value: self.item.timestamp.formatted(date: .complete, time: .shortened)
-                )
-
-                DetailRow(
-                    title: "Type",
-                    value: "Quest Log Entry"
-                )
-
-                DetailRow(
-                    title: "Status",
-                    value: "Completed"
-                )
-            }
-            .padding()
-            .background(Color(.systemGray6))
-            .cornerRadius(12)
-
-            Spacer()
-        }
-        .padding()
-        .navigationTitle("Quest Details")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-public struct DetailRow: View {
-    let title: String
-    let value: String
-
-    public var body: some View {
-        HStack {
-            Text(self.title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .frame(width: 80, alignment: .leading)
-
-            Text(self.value)
-                .font(.body)
-
-            Spacer()
-        }
-    }
-}
-
-public struct FooterStatsView: View {
-    let itemCount: Int
-
-    public var body: some View {
-        VStack(spacing: 4) {
-            Divider()
-
-            HStack {
-                Label("\(self.itemCount) entries", systemImage: "list.bullet")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                Spacer()
-
-                // Status indicator
-                HStack(spacing: 4) {
-                    Circle()
-                        .fill(Color.green)
-                        .frame(width: 6, height: 6)
-
-                    Text("Active")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .padding(.horizontal)
-            .padding(.bottom, 8)
-        }
-    }
-}
-
-public struct DetailView: View {
-    public var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "sparkles")
-                .font(.system(size: 60))
-                .foregroundColor(.blue.opacity(0.7))
-
-            VStack(spacing: 8) {
-                Text("Welcome to HabitQuest")
-                    .font(.title2)
-                    .fontWeight(.bold)
-
-                Text("Select an item from the sidebar to view details")
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-
-            Spacer()
-        }
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.gray.opacity(0.1))
-    }
-}
-
-// MARK: - Preview
-
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Habit.self, inMemory: true)
+        .environmentObject(ThemeManager())
+}
+
+// MARK: - Widget Support (Verification)
+
+struct HabitWidgetView: View {
+    let habits: [Habit]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Today's Quests")
+                .font(.caption)
+                .fontWeight(.bold)
+                .foregroundColor(.secondary)
+
+            if habits.isEmpty {
+                Text("No quests active")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            } else {
+                ForEach(habits.prefix(4)) { habit in
+                    HStack {
+                        Circle()
+                            .fill(habit.category.viewColor.opacity(0.3))
+                            .frame(width: 8, height: 8)
+                        Text(habit.name)
+                            .font(.caption2)
+                            .lineLimit(1)
+                        Spacer()
+                        if habit.isCompletedToday {
+                            Image(systemName: "checkmark")
+                                .font(.caption2)
+                                .foregroundColor(.green)
+                        }
+                    }
+                }
+            }
+            Spacer()
+        }
+        .padding()
+        .background(Color(UIColor.systemBackground))
+    }
+}
+
+#Preview("Widget") {
+    HabitWidgetView(habits: [
+        Habit(name: "Read", habitDescription: "", frequency: .daily, category: .learning),
+        Habit(name: "Run", habitDescription: "", frequency: .daily, category: .fitness)
+    ])
+    .frame(width: 170, height: 170)
+    .cornerRadius(20)
 }

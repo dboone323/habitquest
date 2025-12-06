@@ -12,7 +12,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let month = TimePeriod.month
         let quarter = TimePeriod.quarter
         let year = TimePeriod.year
-        
+
         // Then - All cases should be accessible
         XCTAssertNotNil(week)
         XCTAssertNotNil(month)
@@ -22,7 +22,7 @@ final class AnalyticsServiceTests: XCTestCase {
 
     func testTimePeriodProperties() {
         // Given - Test dayCount property for each period
-        
+
         // Then - Verify day counts
         XCTAssertEqual(TimePeriod.week.dayCount, 7)
         XCTAssertEqual(TimePeriod.month.dayCount, 30)
@@ -34,25 +34,25 @@ final class AnalyticsServiceTests: XCTestCase {
         // Given - Test startDate calculation
         let now = Date()
         let calendar = Calendar.current
-        
+
         // When - Get start dates for each period
         let weekStart = TimePeriod.week.startDate
         let monthStart = TimePeriod.month.startDate
         let quarterStart = TimePeriod.quarter.startDate
         let yearStart = TimePeriod.year.startDate
-        
+
         // Then - Verify dates are in the past
         XCTAssertLessThan(weekStart, now)
         XCTAssertLessThan(monthStart, now)
         XCTAssertLessThan(quarterStart, now)
         XCTAssertLessThan(yearStart, now)
-        
+
         // Verify approximate day differences (allowing for some tolerance)
         let weekDiff = calendar.dateComponents([.day], from: weekStart, to: now).day ?? 0
         let monthDiff = calendar.dateComponents([.day], from: monthStart, to: now).day ?? 0
         let quarterDiff = calendar.dateComponents([.day], from: quarterStart, to: now).day ?? 0
         let yearDiff = calendar.dateComponents([.day], from: yearStart, to: now).day ?? 0
-        
+
         XCTAssertGreaterThanOrEqual(weekDiff, 6)
         XCTAssertLessThanOrEqual(weekDiff, 8)
         XCTAssertGreaterThanOrEqual(monthDiff, 29)
@@ -75,7 +75,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let weeklyProgress = WeeklyProgress(completedHabits: 20, totalOpportunities: 30, xpEarned: 200, dailyBreakdown: [:])
         let monthlyTrends: [MonthlyTrend] = []
         let habitPerformance: [HabitPerformance] = []
-        
+
         // When
         let analytics = HabitAnalytics(
             overallStats: overallStats,
@@ -87,7 +87,7 @@ final class AnalyticsServiceTests: XCTestCase {
             monthlyTrends: monthlyTrends,
             habitPerformance: habitPerformance
         )
-        
+
         // Then
         XCTAssertEqual(analytics.overallStats.totalHabits, 5)
         XCTAssertEqual(analytics.streakAnalytics.longestStreak, 10)
@@ -97,7 +97,7 @@ final class AnalyticsServiceTests: XCTestCase {
     func testHabitAnalyticsProperties() {
         // Given - Test the empty static property
         let empty = HabitAnalytics.empty
-        
+
         // Then - Verify all properties are zeroed out
         XCTAssertEqual(empty.overallStats.totalHabits, 0)
         XCTAssertEqual(empty.overallStats.activeHabits, 0)
@@ -116,7 +116,7 @@ final class AnalyticsServiceTests: XCTestCase {
     func testHabitAnalyticsMethods() {
         // Given - HabitAnalytics is a struct with no methods, only properties
         let analytics = HabitAnalytics.empty
-        
+
         // Then - Verify struct can be accessed
         XCTAssertNotNil(analytics.overallStats)
         XCTAssertNotNil(analytics.streakAnalytics)
@@ -133,7 +133,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let completionRate = 0.85
         let totalXPEarned = 1500
         let averageStreak = 12
-        
+
         // When
         let stats = OverallStats(
             totalHabits: totalHabits,
@@ -143,7 +143,7 @@ final class AnalyticsServiceTests: XCTestCase {
             totalXPEarned: totalXPEarned,
             averageStreak: averageStreak
         )
-        
+
         // Then
         XCTAssertEqual(stats.totalHabits, totalHabits)
         XCTAssertEqual(stats.activeHabits, activeHabits)
@@ -163,7 +163,7 @@ final class AnalyticsServiceTests: XCTestCase {
             totalXPEarned: 0,
             averageStreak: 0
         )
-        
+
         // Then
         XCTAssertEqual(stats.totalHabits, 0)
         XCTAssertEqual(stats.completionRate, 0.0)
@@ -179,7 +179,7 @@ final class AnalyticsServiceTests: XCTestCase {
             totalXPEarned: 500,
             averageStreak: 7
         )
-        
+
         // Then - Verify all properties are accessible
         XCTAssertGreaterThan(stats.totalHabits, 0)
         XCTAssertGreaterThan(stats.completionRate, 0.0)
@@ -193,7 +193,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let longestStreak = 15
         let averageStreak = 6
         let activeStreaks = 4
-        
+
         // When
         let data = AnalyticsStreakData(
             currentStreaks: currentStreaks,
@@ -201,7 +201,7 @@ final class AnalyticsServiceTests: XCTestCase {
             averageStreak: averageStreak,
             activeStreaks: activeStreaks
         )
-        
+
         // Then
         XCTAssertEqual(data.currentStreaks, currentStreaks)
         XCTAssertEqual(data.longestStreak, longestStreak)
@@ -217,7 +217,7 @@ final class AnalyticsServiceTests: XCTestCase {
             averageStreak: 0,
             activeStreaks: 0
         )
-        
+
         // Then
         XCTAssertTrue(data.currentStreaks.isEmpty)
         XCTAssertEqual(data.longestStreak, 0)
@@ -232,7 +232,7 @@ final class AnalyticsServiceTests: XCTestCase {
             averageStreak: 3,
             activeStreaks: 5
         )
-        
+
         // Then - Verify count matches activeStreaks
         XCTAssertEqual(data.currentStreaks.count, data.activeStreaks)
     }
@@ -245,7 +245,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let habitCount = 5
         let completionRate = 0.80
         let totalXP = 400
-        
+
         // When
         let stats = CategoryStats(
             category: category,
@@ -253,7 +253,7 @@ final class AnalyticsServiceTests: XCTestCase {
             completionRate: completionRate,
             totalXP: totalXP
         )
-        
+
         // Then
         XCTAssertEqual(stats.category, category)
         XCTAssertEqual(stats.habitCount, habitCount)
@@ -265,7 +265,7 @@ final class AnalyticsServiceTests: XCTestCase {
         // Given - Test different categories
         let healthStats = CategoryStats(category: .health, habitCount: 3, completionRate: 0.9, totalXP: 300)
         let productivityStats = CategoryStats(category: .productivity, habitCount: 5, completionRate: 0.7, totalXP: 500)
-        
+
         // Then
         XCTAssertEqual(healthStats.category, .health)
         XCTAssertEqual(productivityStats.category, .productivity)
@@ -275,7 +275,7 @@ final class AnalyticsServiceTests: XCTestCase {
     func testCategoryStatsMethods() {
         // Given - Test completion rate validation
         let stats = CategoryStats(category: .mindfulness, habitCount: 2, completionRate: 1.0, totalXP: 200)
-        
+
         // Then - Verify completion rate is valid percentage
         XCTAssertGreaterThanOrEqual(stats.completionRate, 0.0)
         XCTAssertLessThanOrEqual(stats.completionRate, 1.0)
@@ -290,13 +290,13 @@ final class AnalyticsServiceTests: XCTestCase {
             MoodStats(mood: .good, completionRate: 0.8, averageXP: 80)
         ]
         let strongestCorrelation = MoodRating.excellent
-        
+
         // When
         let correlation = MoodCorrelation(
             moodStats: moodStats,
             strongestCorrelation: strongestCorrelation
         )
-        
+
         // Then
         XCTAssertEqual(correlation.moodStats.count, 2)
         XCTAssertEqual(correlation.strongestCorrelation, strongestCorrelation)
@@ -305,7 +305,7 @@ final class AnalyticsServiceTests: XCTestCase {
     func testMoodCorrelationProperties() {
         // Given - Test with empty mood stats
         let correlation = MoodCorrelation(moodStats: [], strongestCorrelation: .neutral)
-        
+
         // Then
         XCTAssertTrue(correlation.moodStats.isEmpty)
         XCTAssertEqual(correlation.strongestCorrelation, .neutral)
@@ -321,7 +321,7 @@ final class AnalyticsServiceTests: XCTestCase {
             MoodStats(mood: .excellent, completionRate: 0.95, averageXP: 95)
         ]
         let correlation = MoodCorrelation(moodStats: allMoods, strongestCorrelation: .excellent)
-        
+
         // Then
         XCTAssertEqual(correlation.moodStats.count, 5)
     }
@@ -333,14 +333,14 @@ final class AnalyticsServiceTests: XCTestCase {
         let mood = MoodRating.excellent
         let completionRate = 0.92
         let averageXP = 150
-        
+
         // When
         let stats = MoodStats(
             mood: mood,
             completionRate: completionRate,
             averageXP: averageXP
         )
-        
+
         // Then
         XCTAssertEqual(stats.mood, mood)
         XCTAssertEqual(stats.completionRate, completionRate)
@@ -351,7 +351,7 @@ final class AnalyticsServiceTests: XCTestCase {
         // Given - Test all mood ratings
         let terribleStats = MoodStats(mood: .terrible, completionRate: 0.2, averageXP: 20)
         let greatStats = MoodStats(mood: .excellent, completionRate: 0.95, averageXP: 95)
-        
+
         // Then
         XCTAssertEqual(terribleStats.mood, .terrible)
         XCTAssertEqual(greatStats.mood, .excellent)
@@ -361,7 +361,7 @@ final class AnalyticsServiceTests: XCTestCase {
     func testMoodStatsMethods() {
         // Given - Test completion rate bounds
         let stats = MoodStats(mood: .good, completionRate: 0.85, averageXP: 85)
-        
+
         // Then - Verify valid percentage
         XCTAssertGreaterThanOrEqual(stats.completionRate, 0.0)
         XCTAssertLessThanOrEqual(stats.completionRate, 1.0)
@@ -375,14 +375,14 @@ final class AnalyticsServiceTests: XCTestCase {
         let peakHours = 14
         let hourlyDistribution = [9: 5, 14: 10, 18: 7]
         let weekdayPatterns = [1: 8, 2: 10, 3: 9, 4: 7, 5: 6]
-        
+
         // When
         let patterns = TimePatterns(
             peakHours: peakHours,
             hourlyDistribution: hourlyDistribution,
             weekdayPatterns: weekdayPatterns
         )
-        
+
         // Then
         XCTAssertEqual(patterns.peakHours, peakHours)
         XCTAssertEqual(patterns.hourlyDistribution.count, 3)
@@ -396,7 +396,7 @@ final class AnalyticsServiceTests: XCTestCase {
             hourlyDistribution: [:],
             weekdayPatterns: [:]
         )
-        
+
         // Then
         XCTAssertEqual(patterns.peakHours, 0)
         XCTAssertTrue(patterns.hourlyDistribution.isEmpty)
@@ -410,7 +410,7 @@ final class AnalyticsServiceTests: XCTestCase {
             hourlyDistribution: [9: 15, 10: 12, 11: 8],
             weekdayPatterns: [1: 10, 5: 8]
         )
-        
+
         // Then - Verify peak hours is valid (0-23)
         XCTAssertGreaterThanOrEqual(patterns.peakHours, 0)
         XCTAssertLessThan(patterns.peakHours, 24)
@@ -424,7 +424,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let totalOpportunities = 35
         let xpEarned = 500
         let dailyBreakdown = ["Monday": 5, "Tuesday": 4, "Wednesday": 6]
-        
+
         // When
         let progress = WeeklyProgress(
             completedHabits: completedHabits,
@@ -432,7 +432,7 @@ final class AnalyticsServiceTests: XCTestCase {
             xpEarned: xpEarned,
             dailyBreakdown: dailyBreakdown
         )
-        
+
         // Then
         XCTAssertEqual(progress.completedHabits, completedHabits)
         XCTAssertEqual(progress.totalOpportunities, totalOpportunities)
@@ -448,7 +448,7 @@ final class AnalyticsServiceTests: XCTestCase {
             xpEarned: 400,
             dailyBreakdown: [:]
         )
-        
+
         // Then - Verify completed is less than or equal to total
         XCTAssertLessThanOrEqual(progress.completedHabits, progress.totalOpportunities)
     }
@@ -465,7 +465,7 @@ final class AnalyticsServiceTests: XCTestCase {
             xpEarned: 580,
             dailyBreakdown: fullWeek
         )
-        
+
         // Then
         XCTAssertEqual(progress.dailyBreakdown.count, 7)
     }
@@ -478,7 +478,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let completions = 120
         let xpEarned = 2400
         let averageDaily = 4.0
-        
+
         // When
         let trend = MonthlyTrend(
             month: month,
@@ -486,7 +486,7 @@ final class AnalyticsServiceTests: XCTestCase {
             xpEarned: xpEarned,
             averageDaily: averageDaily
         )
-        
+
         // Then
         XCTAssertEqual(trend.month, month)
         XCTAssertEqual(trend.completions, completions)
@@ -498,7 +498,7 @@ final class AnalyticsServiceTests: XCTestCase {
         // Given - Test month validation
         let januaryTrend = MonthlyTrend(month: 1, completions: 90, xpEarned: 1800, averageDaily: 3.0)
         let decemberTrend = MonthlyTrend(month: 12, completions: 100, xpEarned: 2000, averageDaily: 3.3)
-        
+
         // Then - Verify months are valid (1-12)
         XCTAssertGreaterThanOrEqual(januaryTrend.month, 1)
         XCTAssertLessThanOrEqual(januaryTrend.month, 12)
@@ -509,7 +509,7 @@ final class AnalyticsServiceTests: XCTestCase {
     func testMonthlyTrendMethods() {
         // Given - Test average daily calculation consistency
         let trend = MonthlyTrend(month: 3, completions: 93, xpEarned: 1860, averageDaily: 3.1)
-        
+
         // Then - Verify averageDaily is reasonable (completions / ~30 days)
         XCTAssertGreaterThan(trend.averageDaily, 0.0)
         XCTAssertLessThan(trend.averageDaily, Double(trend.completions))
@@ -525,7 +525,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let currentStreak = 12
         let xpEarned = 600
         let trend = HabitTrend.improving
-        
+
         // When
         let performance = HabitPerformance(
             habitId: habitId,
@@ -535,7 +535,7 @@ final class AnalyticsServiceTests: XCTestCase {
             xpEarned: xpEarned,
             trend: trend
         )
-        
+
         // Then
         XCTAssertEqual(performance.habitId, habitId)
         XCTAssertEqual(performance.habitName, habitName)
@@ -549,7 +549,7 @@ final class AnalyticsServiceTests: XCTestCase {
         // Given - Test different trends
         let improving = HabitPerformance(habitId: UUID(), habitName: "Reading", completionRate: 0.9, currentStreak: 15, xpEarned: 750, trend: .improving)
         let declining = HabitPerformance(habitId: UUID(), habitName: "Meditation", completionRate: 0.5, currentStreak: 2, xpEarned: 100, trend: .declining)
-        
+
         // Then
         XCTAssertEqual(improving.trend, .improving)
         XCTAssertEqual(declining.trend, .declining)
@@ -566,7 +566,7 @@ final class AnalyticsServiceTests: XCTestCase {
             xpEarned: 1500,
             trend: .stable
         )
-        
+
         // Then - Verify completion rate is valid percentage
         XCTAssertGreaterThanOrEqual(performance.completionRate, 0.0)
         XCTAssertLessThanOrEqual(performance.completionRate, 1.0)
@@ -580,7 +580,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let completionRates = [0.8, 0.85, 0.9, 0.88]
         let streaks = [5, 7, 10, 12]
         let xpEarned = [100, 120, 150, 140]
-        
+
         // When
         let trendData = HabitTrendData(
             habitId: habitId,
@@ -588,7 +588,7 @@ final class AnalyticsServiceTests: XCTestCase {
             streaks: streaks,
             xpEarned: xpEarned
         )
-        
+
         // Then
         XCTAssertEqual(trendData.habitId, habitId)
         XCTAssertEqual(trendData.completionRates, completionRates)
@@ -604,7 +604,7 @@ final class AnalyticsServiceTests: XCTestCase {
             streaks: [],
             xpEarned: []
         )
-        
+
         // Then
         XCTAssertTrue(trendData.completionRates.isEmpty)
         XCTAssertTrue(trendData.streaks.isEmpty)
@@ -619,7 +619,7 @@ final class AnalyticsServiceTests: XCTestCase {
             streaks: [3, 5, 7],
             xpEarned: [70, 80, 90]
         )
-        
+
         // Then - Verify all arrays have same length
         XCTAssertEqual(trendData.completionRates.count, trendData.streaks.count)
         XCTAssertEqual(trendData.streaks.count, trendData.xpEarned.count)
@@ -634,7 +634,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let completionRate = 0.82
         let averageStreak = 9
         let totalXPEarned = 1600
-        
+
         // When
         let insight = CategoryInsight(
             category: category,
@@ -643,7 +643,7 @@ final class AnalyticsServiceTests: XCTestCase {
             averageStreak: averageStreak,
             totalXPEarned: totalXPEarned
         )
-        
+
         // Then
         XCTAssertEqual(insight.category, category)
         XCTAssertEqual(insight.totalHabits, totalHabits)
@@ -656,7 +656,7 @@ final class AnalyticsServiceTests: XCTestCase {
         // Given - Test different categories
         let healthInsight = CategoryInsight(category: .health, totalHabits: 5, completionRate: 0.9, averageStreak: 12, totalXPEarned: 1200)
         let mindfulnessInsight = CategoryInsight(category: .mindfulness, totalHabits: 3, completionRate: 0.75, averageStreak: 8, totalXPEarned: 600)
-        
+
         // Then
         XCTAssertEqual(healthInsight.category, .health)
         XCTAssertEqual(mindfulnessInsight.category, .mindfulness)
@@ -672,7 +672,7 @@ final class AnalyticsServiceTests: XCTestCase {
             averageStreak: 15,
             totalXPEarned: 1900
         )
-        
+
         // Then - Verify completion rate is valid percentage
         XCTAssertGreaterThanOrEqual(insight.completionRate, 0.0)
         XCTAssertLessThanOrEqual(insight.completionRate, 1.0)
@@ -687,7 +687,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let streakCount = 6
         let xpEarned = 1560
         let missedOpportunities = 15
-        
+
         // When
         let metrics = ProductivityMetrics(
             period: period,
@@ -696,7 +696,7 @@ final class AnalyticsServiceTests: XCTestCase {
             xpEarned: xpEarned,
             missedOpportunities: missedOpportunities
         )
-        
+
         // Then
         XCTAssertEqual(metrics.period.dayCount, 30)
         XCTAssertEqual(metrics.completionRate, completionRate)
@@ -709,7 +709,7 @@ final class AnalyticsServiceTests: XCTestCase {
         // Given - Test different time periods
         let weekMetrics = ProductivityMetrics(period: .week, completionRate: 0.85, streakCount: 3, xpEarned: 350, missedOpportunities: 5)
         let yearMetrics = ProductivityMetrics(period: .year, completionRate: 0.72, streakCount: 25, xpEarned: 18000, missedOpportunities: 120)
-        
+
         // Then
         XCTAssertEqual(weekMetrics.period.dayCount, 7)
         XCTAssertEqual(yearMetrics.period.dayCount, 365)
@@ -725,7 +725,7 @@ final class AnalyticsServiceTests: XCTestCase {
             xpEarned: 4500,
             missedOpportunities: 0
         )
-        
+
         // Then - Verify completion rate is valid percentage
         XCTAssertGreaterThanOrEqual(metrics.completionRate, 0.0)
         XCTAssertLessThanOrEqual(metrics.completionRate, 1.0)
@@ -740,7 +740,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let improving = HabitTrend.improving
         let stable = HabitTrend.stable
         let declining = HabitTrend.declining
-        
+
         // Then - All cases should be accessible
         XCTAssertNotNil(improving)
         XCTAssertNotNil(stable)
@@ -749,7 +749,7 @@ final class AnalyticsServiceTests: XCTestCase {
 
     func testHabitTrendProperties() {
         // Given - Test raw values
-        
+
         // Then - Verify raw values match expected strings
         XCTAssertEqual(HabitTrend.improving.rawValue, "improving")
         XCTAssertEqual(HabitTrend.stable.rawValue, "stable")
@@ -762,7 +762,7 @@ final class AnalyticsServiceTests: XCTestCase {
         let stableFromRaw = HabitTrend(rawValue: "stable")
         let decliningFromRaw = HabitTrend(rawValue: "declining")
         let invalidFromRaw = HabitTrend(rawValue: "invalid")
-        
+
         // Then - Verify initialization works correctly
         XCTAssertEqual(improvingFromRaw, .improving)
         XCTAssertEqual(stableFromRaw, .stable)

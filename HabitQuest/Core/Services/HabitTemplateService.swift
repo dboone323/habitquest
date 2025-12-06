@@ -19,7 +19,7 @@ struct HabitTemplate: Identifiable {
 
 class HabitTemplateService {
     static let shared = HabitTemplateService()
-    
+
     func getTemplates() -> [HabitTemplate] {
         return [
             HabitTemplate(
@@ -64,7 +64,7 @@ class HabitTemplateService {
             )
         ]
     }
-    
+
     func getTemplates(for category: HabitCategory) -> [HabitTemplate] {
         return getTemplates().filter { $0.category == category }
     }

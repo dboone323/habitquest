@@ -12,7 +12,7 @@ final class AnalyticsTypesTests: XCTestCase {
         let volatility = 0.15
         let weekdayPreference = 3
         let timePreference = 9
-        
+
         // When
         let patterns = HabitPatterns(
             consistency: consistency,
@@ -21,7 +21,7 @@ final class AnalyticsTypesTests: XCTestCase {
             weekdayPreference: weekdayPreference,
             timePreference: timePreference
         )
-        
+
         // Then
         XCTAssertEqual(patterns.consistency, consistency)
         XCTAssertEqual(patterns.momentum, momentum)
@@ -39,7 +39,7 @@ final class AnalyticsTypesTests: XCTestCase {
             weekdayPreference: 1,
             timePreference: 8
         )
-        
+
         // Then - Test that all properties are accessible and correct
         XCTAssertGreaterThanOrEqual(patterns.consistency, 0.0)
         XCTAssertLessThanOrEqual(patterns.consistency, 1.0)
@@ -62,7 +62,7 @@ final class AnalyticsTypesTests: XCTestCase {
             weekdayPreference: 7,
             timePreference: 0
         )
-        
+
         // Then - Verify edge case values are handled correctly
         XCTAssertEqual(edgeCasePatterns.consistency, 0.0, accuracy: 0.001)
         XCTAssertEqual(edgeCasePatterns.momentum, 1.0, accuracy: 0.001)
@@ -79,7 +79,7 @@ final class AnalyticsTypesTests: XCTestCase {
         let currentDaySuccessRate = 0.82
         let timesSinceLastCompletion: TimeInterval = 86400 // 1 day
         let optimalTimeWindow: ClosedRange<Int> = 8...10
-        
+
         // When
         let timeFactors = TimeFactors(
             currentHourSuccessRate: currentHourSuccessRate,
@@ -87,7 +87,7 @@ final class AnalyticsTypesTests: XCTestCase {
             timesSinceLastCompletion: timesSinceLastCompletion,
             optimalTimeWindow: optimalTimeWindow
         )
-        
+
         // Then
         XCTAssertEqual(timeFactors.currentHourSuccessRate, currentHourSuccessRate)
         XCTAssertEqual(timeFactors.currentDaySuccessRate, currentDaySuccessRate)
@@ -103,7 +103,7 @@ final class AnalyticsTypesTests: XCTestCase {
             timesSinceLastCompletion: 43200, // 12 hours
             optimalTimeWindow: 14...16
         )
-        
+
         // Then - Test that all properties are accessible and within valid ranges
         XCTAssertGreaterThanOrEqual(timeFactors.currentHourSuccessRate, 0.0)
         XCTAssertLessThanOrEqual(timeFactors.currentHourSuccessRate, 1.0)
@@ -122,7 +122,7 @@ final class AnalyticsTypesTests: XCTestCase {
             timesSinceLastCompletion: 0,
             optimalTimeWindow: 0...23
         )
-        
+
         // Then - Verify edge case values are handled correctly
         XCTAssertEqual(edgeCaseTimeFactors.currentHourSuccessRate, 1.0, accuracy: 0.001)
         XCTAssertEqual(edgeCaseTimeFactors.currentDaySuccessRate, 0.0, accuracy: 0.001)
@@ -138,14 +138,14 @@ final class AnalyticsTypesTests: XCTestCase {
         let weeklyMomentum = 0.86
         let longestRecentStreak = 15
         let acceleration = 0.12
-        
+
         // When
         let streakMomentum = StreakMomentum(
             weeklyMomentum: weeklyMomentum,
             longestRecentStreak: longestRecentStreak,
             acceleration: acceleration
         )
-        
+
         // Then
         XCTAssertEqual(streakMomentum.weeklyMomentum, weeklyMomentum)
         XCTAssertEqual(streakMomentum.longestRecentStreak, longestRecentStreak)
@@ -159,7 +159,7 @@ final class AnalyticsTypesTests: XCTestCase {
             longestRecentStreak: 30,
             acceleration: 0.05
         )
-        
+
         // Then - Test that all properties are accessible and within valid ranges
         XCTAssertGreaterThanOrEqual(streakMomentum.weeklyMomentum, 0.0)
         XCTAssertLessThanOrEqual(streakMomentum.weeklyMomentum, 1.0)
@@ -175,7 +175,7 @@ final class AnalyticsTypesTests: XCTestCase {
             longestRecentStreak: 0,
             acceleration: -0.5
         )
-        
+
         // Then - Verify edge case values are handled correctly
         XCTAssertEqual(edgeCaseStreakMomentum.weeklyMomentum, 0.0, accuracy: 0.001)
         XCTAssertEqual(edgeCaseStreakMomentum.longestRecentStreak, 0)
@@ -190,7 +190,7 @@ final class AnalyticsTypesTests: XCTestCase {
         let successRateAtTime = 0.87
         let reasoning = "Morning routines show highest success rate"
         let alternativeTimes = [7, 8, 10]
-        
+
         // When
         let recommendation = SchedulingRecommendation(
             optimalTime: optimalTime,
@@ -198,7 +198,7 @@ final class AnalyticsTypesTests: XCTestCase {
             reasoning: reasoning,
             alternativeTimes: alternativeTimes
         )
-        
+
         // Then
         XCTAssertEqual(recommendation.optimalTime, optimalTime)
         XCTAssertEqual(recommendation.successRateAtTime, successRateAtTime)
@@ -214,7 +214,7 @@ final class AnalyticsTypesTests: XCTestCase {
             reasoning: "Afternoon energy peak detected",
             alternativeTimes: [13, 15, 16]
         )
-        
+
         // Then - Test that all properties are accessible and within valid ranges
         XCTAssertGreaterThanOrEqual(recommendation.optimalTime, 0)
         XCTAssertLessThanOrEqual(recommendation.optimalTime, 23)
@@ -232,7 +232,7 @@ final class AnalyticsTypesTests: XCTestCase {
             reasoning: "Late night productivity",
             alternativeTimes: []
         )
-        
+
         // Then - Verify edge case values are handled correctly
         XCTAssertEqual(edgeCaseRecommendation.optimalTime, 0)
         XCTAssertEqual(edgeCaseRecommendation.successRateAtTime, 1.0, accuracy: 0.001)
@@ -250,7 +250,7 @@ final class AnalyticsTypesTests: XCTestCase {
         let streakBreakFactors = ["Stress", "Travel"]
         let motivationTriggers = ["Morning routine", "Social accountability"]
         let personalityInsights = ["Highly disciplined", "Morning person"]
-        
+
         // When
         let insights = BehavioralInsights(
             moodCorrelation: moodCorrelation,
@@ -260,7 +260,7 @@ final class AnalyticsTypesTests: XCTestCase {
             motivationTriggers: motivationTriggers,
             personalityInsights: personalityInsights
         )
-        
+
         // Then
         XCTAssertEqual(insights.moodCorrelation, moodCorrelation)
         XCTAssertEqual(insights.strongestDays, strongestDays)
@@ -280,7 +280,7 @@ final class AnalyticsTypesTests: XCTestCase {
             motivationTriggers: ["Habit stacking"],
             personalityInsights: ["Consistent performer"]
         )
-        
+
         // Then - Test that all properties are accessible and within valid ranges
         XCTAssertGreaterThanOrEqual(insights.moodCorrelation, -1.0)
         XCTAssertLessThanOrEqual(insights.moodCorrelation, 1.0)
@@ -301,7 +301,7 @@ final class AnalyticsTypesTests: XCTestCase {
             motivationTriggers: [],
             personalityInsights: []
         )
-        
+
         // Then - Verify edge case values are handled correctly
         XCTAssertEqual(edgeCaseInsights.moodCorrelation, 0.0, accuracy: 0.001)
         XCTAssertEqual(edgeCaseInsights.strongestDays.count, 0)
@@ -321,7 +321,7 @@ final class AnalyticsTypesTests: XCTestCase {
         let difficulty = HabitDifficulty.easy
         let reasoning = "Morning routines build strong foundations"
         let expectedSuccess = 0.85
-        
+
         // When
         let suggestion = HabitSuggestion(
             name: name,
@@ -331,7 +331,7 @@ final class AnalyticsTypesTests: XCTestCase {
             reasoning: reasoning,
             expectedSuccess: expectedSuccess
         )
-        
+
         // Then
         XCTAssertEqual(suggestion.name, name)
         XCTAssertEqual(suggestion.description, description)
@@ -351,7 +351,7 @@ final class AnalyticsTypesTests: XCTestCase {
             reasoning: "Evening activity combats stress",
             expectedSuccess: 0.80
         )
-        
+
         // Then - Test that all properties are accessible and within valid ranges
         XCTAssertFalse(suggestion.name.isEmpty)
         XCTAssertFalse(suggestion.description.isEmpty)
@@ -372,7 +372,7 @@ final class AnalyticsTypesTests: XCTestCase {
             reasoning: "Builds problem-solving skills",
             expectedSuccess: 0.35
         )
-        
+
         // Then - Verify edge case values are handled correctly
         XCTAssertEqual(edgeCaseSuggestion.name, "Advanced Coding Challenge")
         XCTAssertEqual(edgeCaseSuggestion.category, .learning)

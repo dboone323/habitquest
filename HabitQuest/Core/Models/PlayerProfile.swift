@@ -31,8 +31,9 @@ final class PlayerProfile {
 
     /// Calculate progress toward next level as a percentage (0.0 to 1.0)
     var xpProgress: Float {
-        let previousLevelXP = self.level > 1 ? GameRules.calculateXPForLevel(self.level - 1) : 0
-        let currentLevelXP = GameRules.calculateXPForLevel(self.level)
+        let gamificationService = GamificationService()
+        let previousLevelXP = self.level > 1 ? gamificationService.calculateXPForLevel(self.level - 1) : 0
+        let currentLevelXP = gamificationService.calculateXPForLevel(self.level)
         let progressInCurrentLevel = self.currentXP - previousLevelXP
         let xpNeededForCurrentLevel = currentLevelXP - previousLevelXP
 

@@ -10,7 +10,7 @@ import SwiftUI
 
 class CategoryManager {
     static let shared = CategoryManager()
-    
+
     struct CategoryInfo: Identifiable {
         let id: String
         let name: String
@@ -18,7 +18,7 @@ class CategoryManager {
         let color: Color
         let description: String
     }
-    
+
     func getAllCategories() -> [CategoryInfo] {
         return HabitCategory.allCases.map { category in
             CategoryInfo(
@@ -30,11 +30,11 @@ class CategoryManager {
             )
         }
     }
-    
+
     func getCategory(by id: String) -> HabitCategory? {
         return HabitCategory(rawValue: id)
     }
-    
+
     func getSuggestedTags(for category: HabitCategory) -> [String] {
         switch category {
         case .health: return ["hydration", "nutrition", "sleep", "medication"]
