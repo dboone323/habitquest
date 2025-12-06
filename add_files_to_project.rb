@@ -18,11 +18,24 @@ end
 # Get the main group
 main_group = project.main_group
 
+# Prune missing files
+project.files.each do |file|
+  next if file.path.nil?
+  
+  full_path = file.real_path
+  if !File.exist?(full_path)
+    puts "🗑️ Removing missing file: #{file.path}"
+    file.remove_from_project
+  end
+end
+
 # Find all Swift files
 swift_files = []
 Find.find('.') do |path|
   if path.end_with?('.swift') && !path.include?('Pods/') && !path.include?('Carthage/') && !path.include?('.xcodeproj/') && !path.include?('DerivedData/')
-    swift_files << path
+    # Remove leading ./ if present
+    clean_path = path.start_with?('./') ? path[2..-1] : path
+    swift_files << clean_path
   end
 end
 
@@ -32,7 +45,8 @@ puts "📋 Found #{swift_files.count} Swift files to add"
 added_count = 0
 swift_files.each do |file_path|
   # Skip if already in project
-  next if project.files.find { |f| f.path == file_path }
+  abs_file_path = File.expand_path(file_path)
+  next if project.files.find { |f| f.real_path.to_s == abs_file_path }
 
   # Add file reference
   file_ref = project.new_file(file_path)

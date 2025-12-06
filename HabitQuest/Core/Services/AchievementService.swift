@@ -223,7 +223,8 @@ enum AchievementService {
         achievement.progress = 1.0
 
         // Award XP bonus
-        let levelUpResult = GameRules.processXPGain(
+        let gamificationService = GamificationService()
+        let levelUpResult = gamificationService.processXPGain(
             experiencePoints: achievement.xpReward,
             for: player
         )

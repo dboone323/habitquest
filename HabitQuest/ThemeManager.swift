@@ -5,11 +5,11 @@ import Combine
 /// Provides centralized theme management with support for multiple themes
 public class ThemeManager: ObservableObject {
     @Published public var currentTheme: Theme
-    
+
     public init(theme: Theme = .default) {
         self.currentTheme = theme
     }
-    
+
     /// Switch to a different theme
     public func setTheme(_ theme: Theme) {
         withAnimation(.easeInOut) {
@@ -28,7 +28,7 @@ public struct Theme {
     public let secondaryBackgroundColor: Color
     public let textColor: Color
     public let secondaryTextColor: Color
-    
+
     /// Default light theme
     public static let `default` = Theme(
         name: "Default",
@@ -40,7 +40,7 @@ public struct Theme {
         textColor: .black,
         secondaryTextColor: .gray
     )
-    
+
     /// Dark theme
     public static let dark = Theme(
         name: "Dark",
@@ -52,7 +52,7 @@ public struct Theme {
         textColor: .white,
         secondaryTextColor: Color(white: 0.7)
     )
-    
+
     /// Sunset theme
     public static let sunset = Theme(
         name: "Sunset",
@@ -89,7 +89,7 @@ extension Color {
             .sRGB,
             red: Double(r) / 255,
             green: Double(g) / 255,
-            blue:  Double(b) / 255,
+            blue: Double(b) / 255,
             opacity: Double(a) / 255
         )
     }

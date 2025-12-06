@@ -3,12 +3,12 @@ import CoreML
 
 /// ML-based habit suggestion engine
 class HabitRecommendationService {
-    
+
     // MARK: - Pattern Analysis
-    
+
     func suggestHabits(basedOn completionHistory: [HabitCompletion]) -> [MLHabitSuggestion] {
         var suggestions: [MLHabitSuggestion] = []
-        
+
         // Analyze time patterns
         let timePatterns = analyzeTimePatterns(completionHistory)
         if let bestTime = timePatterns.mostConsistentTime {
@@ -19,7 +19,7 @@ class HabitRecommendationService {
                 reason: .timePattern
             ))
         }
-        
+
         // Analyze category patterns
         let categories = analyzeCategoryPatterns(completionHistory)
         for category in categories.topCategories {
@@ -30,45 +30,45 @@ class HabitRecommendationService {
                 reason: .categorySuccess
             ))
         }
-        
+
         // Complementary habits
         let complementary = suggestComplementaryHabits(completionHistory)
         suggestions.append(contentsOf: complementary)
-        
+
         // Popular habits among similar users (collaborative filtering)
         let collaborative = suggestCollaborativeHabits(completionHistory)
         suggestions.append(contentsOf: collaborative)
-        
+
         return suggestions.sorted { $0.confidence > $1.confidence }
     }
-    
+
     // MARK: - Time Pattern Analysis
-    
+
     private func analyzeTimePatterns(_ history: [HabitCompletion]) -> TimePatternAnalysis {
         var hourCounts: [Int: Int] = [:]
-        
+
         for completion in history {
             let hour = Calendar.current.component(.hour, from: completion.date)
             hourCounts[hour, default: 0] += 1
         }
-        
+
         guard let mostFrequentHour = hourCounts.max(by: { $0.value < $1.value })?.key else {
             return TimePatternAnalysis(mostConsistentTime: nil, confidence: 0)
         }
-        
+
         let totalCompletions = history.count
         let consistencyCount = hourCounts[mostFrequentHour] ?? 0
         let confidence = Double(consistencyCount) / Double(totalCompletions)
-        
+
         let timeString = formatHour(mostFrequentHour)
         return TimePatternAnalysis(mostConsistentTime: timeString, confidence: confidence)
     }
-    
+
     // MARK: - Category Pattern Analysis
-    
+
     private func analyzeCategoryPatterns(_ history: [HabitCompletion]) -> CategoryPatternAnalysis {
         var categorySuccess: [String: (completed: Int, total: Int)] = [:]
-        
+
         for completion in history {
             let category = completion.habitCategory
             var stats = categorySuccess[category] ?? (0, 0)
@@ -78,7 +78,7 @@ class HabitRecommendationService {
             }
             categorySuccess[category] = stats
         }
-        
+
         // Calculate success rates
         var successRates: [(category: String, rate: Double)] = []
         for (category, stats) in categorySuccess {
@@ -87,22 +87,22 @@ class HabitRecommendationService {
                 successRates.append((category, rate))
             }
         }
-        
+
         successRates.sort { $0.rate > $1.rate }
         let topCategories = successRates.prefix(3).map { $0.category }
-        
+
         return CategoryPatternAnalysis(
             topCategories: Array(topCategories),
             successRates: Dictionary(uniqueKeysWithValues: successRates)
         )
     }
-    
+
     // MARK: - Complementary Habits
-    
+
     private func suggestComplementaryHabits(_ history: [HabitCompletion]) -> [MLHabitSuggestion] {
         let existingCategories = Set(history.map { $0.habitCategory })
         var suggestions: [MLHabitSuggestion] = []
-        
+
         // Complementary pairs
         let pairs: [(String, String, String)] = [
             ("Exercise", "Meditation", "Balance fitness with mindfulness"),
@@ -110,7 +110,7 @@ class HabitRecommendationService {
             ("Learning", "Practice", "Apply what you learn"),
             ("Planning", "Execution", "Balance planning with action")
         ]
-        
+
         for (category1, category2, reason) in pairs {
             if existingCategories.contains(category1) && !existingCategories.contains(category2) {
                 suggestions.append(MLHabitSuggestion(
@@ -121,12 +121,12 @@ class HabitRecommendationService {
                 ))
             }
         }
-        
+
         return suggestions
     }
-    
+
     // MARK: - Collaborative Filtering
-    
+
     private func suggestCollaborativeHabits(_ history: [HabitCompletion]) -> [MLHabitSuggestion] {
         // Simulated collaborative filtering
         // In production, would query backend for similar user patterns
@@ -136,9 +136,9 @@ class HabitRecommendationService {
             "Journal": 0.72,
             "Stretch": 0.69
         ]
-        
+
         let existingHabits = Set(history.map { $0.habitName })
-        
+
         return popularHabits.compactMap { name, confidence in
             if !existingHabits.contains(name) {
                 return MLHabitSuggestion(
@@ -151,9 +151,9 @@ class HabitRecommendationService {
             return nil
         }
     }
-    
+
     // MARK: - Helpers
-    
+
     private func formatHour(_ hour: Int) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
@@ -186,7 +186,7 @@ struct TimePatternAnalysis {
 struct CategoryPatternAnalysis {
     let topCategories: [String]
     let successRates: [String: Double]
-    
+
     func confidenceFor(_ category: String) -> Double {
         successRates[category] ?? 0.5
     }

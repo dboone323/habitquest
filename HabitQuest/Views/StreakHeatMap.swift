@@ -5,12 +5,12 @@ struct StreakHeatMap: View {
     let completions: [Date]
     let columns = 7 // Days of week
     let weeksToShow = 12
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("Habit Streaks")
                 .font(.headline)
-            
+
             // Day labels
             HStack(spacing: 4) {
                 ForEach(["S", "M", "T", "W", "T", "F", "S"], id: \.self) { day in
@@ -20,15 +20,15 @@ struct StreakHeatMap: View {
                         .foregroundColor(.secondary)
                 }
             }
-            
-//Grid
+
+// Grid
             VStack(spacing: 4) {
                 ForEach(0..<weeksToShow, id: \.self) { week in
                     HStack(spacing: 4) {
                         ForEach(0..<columns, id: \.self) { day in
                             let date = dateFor(week: week, day: day)
                             let intensity = getIntensity(for: date)
-                            
+
                             RoundedRectangle(cornerRadius: 2)
                                 .fill(colorFor(intensity: intensity))
                                 .frame(width: 20, height: 20)
@@ -36,13 +36,13 @@ struct StreakHeatMap: View {
                     }
                 }
             }
-            
+
             // Legend
             HStack {
                 Text("Less")
                     .font(.caption2)
                     .foregroundColor(.secondary)
-                
+
                 HStack(spacing: 2) {
                     ForEach([0.0, 0.25, 0.5, 0.75, 1.0], id: \.self) { intensity in
                         RoundedRectangle(cornerRadius: 2)
@@ -50,7 +50,7 @@ struct StreakHeatMap: View {
                             .frame(width: 12, height: 12)
                     }
                 }
-                
+
                 Text("More")
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -59,24 +59,24 @@ struct StreakHeatMap: View {
         }
         .padding()
     }
-    
+
     private func dateFor(week: Int, day: Int) -> Date {
         let calendar = Calendar.current
         let today = Date()
         let daysAgo = (weeksToShow - week - 1) * 7 + (columns - day - 1)
         return calendar.date(byAdding: .day, value: -daysAgo, to: today) ?? today
     }
-    
+
     private func getIntensity(for date: Date) -> Double {
         let calendar = Calendar.current
         let count = completions.filter {
             calendar.isDate($0, inSameDayAs: date)
         }.count
-        
+
         // Intensity based on completion count (0-4+)
         return min(1.0, Double(count) / 4.0)
     }
-    
+
     private func colorFor(intensity: Double) -> Color {
         if intensity == 0 {
             return Color.gray.opacity(0.1)

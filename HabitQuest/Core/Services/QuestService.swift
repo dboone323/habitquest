@@ -25,7 +25,7 @@ enum QuestRequirement {
 
 class QuestService {
     static let shared = QuestService()
-    
+
     func generateDailyQuests() -> [Quest] {
         return [
             Quest(

@@ -18,6 +18,7 @@ public class ProfileViewModel: ObservableObject {
     private var modelContext: ModelContext?
     private let logger = Logger(category: .uiCategory)
     private var analyticsService: AnalyticsService?
+    private let gamificationService = GamificationService()
 
     /// Set the model context and load profile data
     /// <#Description#>
@@ -83,7 +84,7 @@ public class ProfileViewModel: ObservableObject {
     private func updateProfileData(from profile: PlayerProfile) {
         self.level = profile.level
         self.currentXP = profile.currentXP
-        self.xpForNextLevel = GameRules.calculateXPForNextLevel(forLevel: profile.level)
+        self.xpForNextLevel = self.gamificationService.calculateXPForNextLevel(forLevel: profile.level)
         self.xpProgress = profile.xpProgress
         self.longestStreak = profile.longestStreak
     }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OnboardingView: View {
     @Binding var hasCompletedOnboarding: Bool
-    
+
     var body: some View {
         TabView {
             OnboardingPage(
@@ -18,26 +18,26 @@ struct OnboardingView: View {
                 imageName: "star.fill",
                 color: .blue
             )
-            
+
             OnboardingPage(
                 title: "Track Progress",
                 description: "Keep streaks alive and earn XP.",
                 imageName: "chart.bar.fill",
                 color: .green
             )
-            
+
             OnboardingPage(
                 title: "Level Up",
                 description: "Complete quests to unlock rewards.",
                 imageName: "arrow.up.circle.fill",
                 color: .purple
             )
-            
+
             VStack {
                 Text("Ready to begin?")
                     .font(.title)
                     .bold()
-                
+
                 Button("Start Quest") {
                     hasCompletedOnboarding = true
                 }
@@ -54,17 +54,17 @@ struct OnboardingPage: View {
     let description: String
     let imageName: String
     let color: Color
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: imageName)
                 .font(.system(size: 80))
                 .foregroundColor(color)
-            
+
             Text(title)
                 .font(.largeTitle)
                 .bold()
-            
+
             Text(description)
                 .multilineTextAlignment(.center)
                 .padding()

@@ -1,13 +1,12 @@
 import Foundation
 
-/// Contains all game logic and progression calculations
-/// Pure functions that handle XP calculation, level progression, and habit completion rewards
-enum GameRules {
+struct GamificationService {
+
     /// Calculate the total XP required to reach a specific level
     /// Uses an exponential curve: 100 * (1.5 ^ (level - 1))
     /// - Parameter level: The target level
     /// - Returns: Total XP needed to reach that level
-    nonisolated static func calculateXPForLevel(_ level: Int) -> Int {
+    nonisolated func calculateXPForLevel(_ level: Int) -> Int {
         guard level > 0 else { return 0 }
         return Int(100 * pow(1.5, Double(level - 1)))
     }
@@ -15,10 +14,8 @@ enum GameRules {
     /// Calculate XP needed for the next level from current level
     /// - Parameter level: Current level
     /// - Returns: XP needed to reach the next level
-    nonisolated static func calculateXPForNextLevel(forLevel level: Int) -> Int {
-        self.calculateXPForLevel(
-            level + 1
-        )
+    nonisolated func calculateXPForNextLevel(forLevel level: Int) -> Int {
+        self.calculateXPForLevel(level + 1)
     }
 
     /// Process habit completion and update player profile accordingly
@@ -27,8 +24,7 @@ enum GameRules {
     ///   - habit: The habit that was completed
     ///   - profile: The player's profile to update
     /// - Returns: Tuple indicating if level up occurred and new level
-    @discardableResult
-    static func processHabitCompletion(habit: Habit, profile: PlayerProfile) -> (leveledUp: Bool, newLevel: Int) {
+    func processHabitCompletion(habit: Habit, profile: PlayerProfile) -> (leveledUp: Bool, newLevel: Int) {
         // Award XP from the habit
         profile.currentXP += habit.xpValue
 
@@ -59,7 +55,7 @@ enum GameRules {
 
     /// Update the streak for a specific habit based on completion history
     /// - Parameter habit: The habit to update streak for
-    private static func updateHabitStreak(habit: Habit) {
+    private func updateHabitStreak(habit: Habit) {
         guard !habit.logs.isEmpty else {
             habit.streak = 1
             return
@@ -118,7 +114,7 @@ enum GameRules {
     /// Check if a habit is due today based on its frequency and last completion
     /// - Parameter habit: The habit to check
     /// - Returns: True if the habit should be completed today
-    static func isHabitDueToday(_ habit: Habit) -> Bool {
+    func isHabitDueToday(_ habit: Habit) -> Bool {
         guard !habit.logs.isEmpty else {
             return true // New habit is always due
         }
@@ -148,8 +144,7 @@ enum GameRules {
     ///   - xp: Amount of XP to award
     ///   - profile: Player profile to update
     /// - Returns: Tuple indicating if level up occurred and new level
-    @discardableResult
-    static func processXPGain(
+    func processXPGain(
         experiencePoints: Int,
         for profile: PlayerProfile
     ) -> (leveledUp: Bool, newLevel: Int) {
