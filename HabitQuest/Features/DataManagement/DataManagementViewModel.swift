@@ -53,7 +53,8 @@ public class DataManagementViewModel: ObservableObject {
 
         self.isExporting = true
 
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 let jsonData = try DataExportService.exportUserData(from: modelContext)
 
@@ -122,7 +123,8 @@ public class DataManagementViewModel: ObservableObject {
 
             self.isImporting = true
 
-            Task {
+            Task { [weak self] in
+                guard let self else { return }
                 do {
                     let data = try Data(contentsOf: url)
 
@@ -168,7 +170,8 @@ public class DataManagementViewModel: ObservableObject {
     func clearAllData() {
         guard let modelContext else { return }
 
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 // Delete all data using the service
                 try await self.clearAllDataFromService(modelContext)
