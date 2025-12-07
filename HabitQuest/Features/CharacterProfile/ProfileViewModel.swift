@@ -50,8 +50,9 @@ public class ProfileViewModel: ObservableObject {
 
     /// Load analytics data
     private func loadAnalytics() {
-        Task {
-            let newAnalytics = await analyticsService?.getAnalytics()
+        Task { [weak self] in
+            guard let self else { return }
+            let newAnalytics = await self.analyticsService?.getAnalytics()
             await MainActor.run {
                 self.analytics = newAnalytics ?? HabitAnalytics.empty
             }
