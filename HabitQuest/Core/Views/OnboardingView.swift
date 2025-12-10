@@ -43,14 +43,9 @@ struct OnboardingView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .padding()
-                .accessibilityLabel("Start Quest")
-                .accessibilityHint("Begin your HabitQuest journey")
             }
-            .accessibilityElement(children: .contain)
-            .accessibilityLabel("Welcome screen. Ready to begin?")
         }
         .tabViewStyle(.page)
-        .accessibilityLabel("Onboarding")
     }
 }
 
@@ -65,7 +60,6 @@ struct OnboardingPage: View {
             Image(systemName: imageName)
                 .font(.system(size: 80))
                 .foregroundColor(color)
-                .accessibilityHidden(true)
 
             Text(title)
                 .font(.largeTitle)
@@ -75,7 +69,5 @@ struct OnboardingPage: View {
                 .multilineTextAlignment(.center)
                 .padding()
         }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(title). \(description)")
     }
 }
