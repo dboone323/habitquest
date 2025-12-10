@@ -3,17 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		085A260D4B2E91702910ACD4 /* StatsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515B55179D34CE95D6A25151 /* StatsSection.swift */; };
-		53195E59A0212A273D6B62F6 /* GamificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C6C999167CD19ABFB28CD7 /* GamificationService.swift */; };
-		86E6F4596CA0DE6E9490C70A /* AdvancedAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6C28FA5E4439ADBAD41F38 /* AdvancedAnalyticsView.swift */; };
-		B1B70AEF37972AA30A092E3C /* AchievementsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533E2DE07CB21F046D33A86F /* AchievementsSection.swift */; };
-		C8B5EF7EF65AC3508AA2395D /* CharacterAvatarSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6BD194DE3596C1AC90C8FE /* CharacterAvatarSection.swift */; };
-		CEBA84FF24B838F843039B10 /* AnalyticsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A51B73430837C07BE7A635E /* AnalyticsTabView.swift */; };
-		E3830D54B0F43AECD6484751 /* ProgressSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF66A44129506F6B4748AB3 /* ProgressSection.swift */; };
 		F3BF4D755EF9DF4F3F48C5CD /* GamificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F86AF5DECE85241D7AE3A85 /* GamificationServiceTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,38 +28,25 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1D6BD194DE3596C1AC90C8FE /* CharacterAvatarSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CharacterAvatarSection.swift; path = HabitQuest/Features/CharacterProfile/Components/CharacterAvatarSection.swift; sourceTree = "<group>"; };
-		4B6C28FA5E4439ADBAD41F38 /* AdvancedAnalyticsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AdvancedAnalyticsView.swift; path = HabitQuest/Features/CharacterProfile/Components/AdvancedAnalyticsView.swift; sourceTree = "<group>"; };
-		4DF66A44129506F6B4748AB3 /* ProgressSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProgressSection.swift; path = HabitQuest/Features/CharacterProfile/Components/ProgressSection.swift; sourceTree = "<group>"; };
-		515B55179D34CE95D6A25151 /* StatsSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StatsSection.swift; path = HabitQuest/Features/CharacterProfile/Components/StatsSection.swift; sourceTree = "<group>"; };
-		533E2DE07CB21F046D33A86F /* AchievementsSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AchievementsSection.swift; path = HabitQuest/Features/CharacterProfile/Components/AchievementsSection.swift; sourceTree = "<group>"; };
-		5A51B73430837C07BE7A635E /* AnalyticsTabView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AnalyticsTabView.swift; path = HabitQuest/Features/CharacterProfile/Components/AnalyticsTabView.swift; sourceTree = "<group>"; };
 		68581EB82E0F1EA600E5AADA /* HabitQuest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HabitQuest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68581EC72E0F1EA800E5AADA /* HabitQuestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HabitQuestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		68581ED12E0F1EA800E5AADA /* HabitQuestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HabitQuestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		73C6C999167CD19ABFB28CD7 /* GamificationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GamificationService.swift; path = HabitQuest/Core/Services/GamificationService.swift; sourceTree = "<group>"; };
 		7F86AF5DECE85241D7AE3A85 /* GamificationServiceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GamificationServiceTests.swift; path = HabitQuestTests/GamificationServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		68581EBA2E0F1EA600E5AADA /* HabitQuest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = HabitQuest;
 			sourceTree = "<group>";
 		};
 		68581ECA2E0F1EA800E5AADA /* HabitQuestTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = HabitQuestTests;
 			sourceTree = "<group>";
 		};
 		68581ED42E0F1EA800E5AADA /* HabitQuestUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = HabitQuestUITests;
 			sourceTree = "<group>";
 		};
@@ -104,13 +84,6 @@
 				68581ECA2E0F1EA800E5AADA /* HabitQuestTests */,
 				68581ED42E0F1EA800E5AADA /* HabitQuestUITests */,
 				68581EB92E0F1EA600E5AADA /* Products */,
-				73C6C999167CD19ABFB28CD7 /* GamificationService.swift */,
-				1D6BD194DE3596C1AC90C8FE /* CharacterAvatarSection.swift */,
-				4DF66A44129506F6B4748AB3 /* ProgressSection.swift */,
-				515B55179D34CE95D6A25151 /* StatsSection.swift */,
-				533E2DE07CB21F046D33A86F /* AchievementsSection.swift */,
-				5A51B73430837C07BE7A635E /* AnalyticsTabView.swift */,
-				4B6C28FA5E4439ADBAD41F38 /* AdvancedAnalyticsView.swift */,
 				7F86AF5DECE85241D7AE3A85 /* GamificationServiceTests.swift */,
 			);
 			sourceTree = "<group>";
@@ -266,13 +239,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53195E59A0212A273D6B62F6 /* GamificationService.swift in Sources */,
-				C8B5EF7EF65AC3508AA2395D /* CharacterAvatarSection.swift in Sources */,
-				E3830D54B0F43AECD6484751 /* ProgressSection.swift in Sources */,
-				085A260D4B2E91702910ACD4 /* StatsSection.swift in Sources */,
-				B1B70AEF37972AA30A092E3C /* AchievementsSection.swift in Sources */,
-				CEBA84FF24B838F843039B10 /* AnalyticsTabView.swift in Sources */,
-				86E6F4596CA0DE6E9490C70A /* AdvancedAnalyticsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,7 +419,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -489,7 +455,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -625,10 +591,6 @@
 		E629EA2CB70C495DB4625EC9 /* XCRemoteSwiftPackageReference "shared-kit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dboone323/shared-kit.git";
-			requirement = {
-				kind = exact;
-				productVersion = 1.0.0;
-			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 	};

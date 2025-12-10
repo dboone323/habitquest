@@ -88,7 +88,6 @@ private struct EmptyStateView: View {
             Image(systemName: "star.circle")
                 .font(.system(size: 60))
                 .foregroundColor(.secondary)
-                .accessibilityHidden(true)
 
             Text("No Quests Today!")
                 .font(.title2)
@@ -100,8 +99,6 @@ private struct EmptyStateView: View {
                 .multilineTextAlignment(.center)
         }
         .padding()
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("No quests today. Add your first habit to start your adventure.")
     }
 }
 
@@ -182,12 +179,8 @@ private struct QuestRowView: View {
                     .font(.title2)
                     .foregroundColor(.green)
             }
-            .accessibilityLabel("Complete \(habit.name)")
-            .accessibilityHint("Marks this quest as completed and earns \(habit.xpValue) XP")
         }
         .padding(.vertical, 4)
-        .accessibilityElement(children: .contain)
-        .accessibilityLabel("Quest: \(habit.name), \(habit.xpValue) XP, streak \(habit.streak) days")
     }
 }
 
