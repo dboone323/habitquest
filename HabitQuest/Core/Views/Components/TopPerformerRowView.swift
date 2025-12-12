@@ -21,7 +21,7 @@ public struct TopPerformerRow: View {
         .scaleEffect(self.isPressed ? 0.98 : 1.0)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: self.isPressed)
         .onTapGesture {
-            self.hapticFeedback(.light)
+            self.hapticFeedback()
             self.showDetails.toggle()
         }
         .onLongPressGesture(
@@ -98,8 +98,10 @@ public struct TopPerformerRow: View {
             )
     }
 
-    private func hapticFeedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
-        let generator = UIImpactFeedbackGenerator(style: style)
+    private func hapticFeedback() {
+        #if canImport(UIKit)
+        let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred()
+        #endif
     }
 }

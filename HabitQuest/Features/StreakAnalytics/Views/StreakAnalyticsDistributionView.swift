@@ -14,7 +14,11 @@ public struct StreakAnalyticsDistributionView: View {
                 .frame(height: 200)
         }
         .padding()
+        #if os(iOS)
         .background(Color(.systemBackground))
+        #else
+        .background(Color(nsColor: .windowBackgroundColor))
+        #endif
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 8)
     }

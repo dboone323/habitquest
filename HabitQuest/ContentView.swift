@@ -76,7 +76,9 @@ public struct ContentView: View {
                     }
                 }
             }
+            #if os(iOS)
             .navigationBarHidden(true)
+            #endif
             .overlay(alignment: .bottomTrailing) {
                 // Floating Action Button
                 Button(action: {
@@ -297,7 +299,11 @@ struct HabitCardView: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
+                #if os(iOS)
                 .fill(Color(.secondarySystemBackground))
+                #else
+                .fill(Color(nsColor: .controlBackgroundColor))
+                #endif
                 .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
         )
         .padding(.horizontal)
@@ -385,7 +391,11 @@ struct HabitWidgetView: View {
             Spacer()
         }
         .padding()
+        #if os(iOS)
         .background(Color(UIColor.systemBackground))
+        #else
+        .background(Color(nsColor: .windowBackgroundColor))
+        #endif
     }
 }
 

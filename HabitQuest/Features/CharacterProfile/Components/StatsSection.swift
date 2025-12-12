@@ -35,7 +35,11 @@ public struct StatsSection: View {
             }
         }
         .padding()
+        #if os(iOS)
         .background(Color(.systemGray6))
+        #else
+        .background(Color(nsColor: .windowBackgroundColor))
+        #endif
         .cornerRadius(16)
     }
 }
@@ -68,7 +72,11 @@ public struct StatCard: View {
                 .multilineTextAlignment(.center)
         }
         .padding()
-        .background(Color(.systemBackground))
+            #if os(iOS)
+            .background(Color(.systemBackground))
+            #else
+            .background(Color(nsColor: .windowBackgroundColor))
+            #endif
         .cornerRadius(12)
     }
 }

@@ -45,7 +45,9 @@ struct OnboardingView: View {
                 .padding()
             }
         }
+        #if os(iOS)
         .tabViewStyle(.page)
+        #endif
     }
 }
 
