@@ -101,7 +101,9 @@ public struct AnalyticsTestView: View {
                 .padding(.horizontal)
             }
             .navigationTitle("Analytics Tests")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.large)
+            #endif
         }
     }
 

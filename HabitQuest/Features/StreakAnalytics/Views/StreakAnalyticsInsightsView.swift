@@ -13,7 +13,11 @@ public struct StreakAnalyticsInsightsView: View {
             ConsistencyInsightView(insights: self.insights)
         }
         .padding()
+        #if os(iOS)
         .background(Color(.systemBackground))
+        #else
+        .background(Color(nsColor: .windowBackgroundColor))
+        #endif
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 8)
     }

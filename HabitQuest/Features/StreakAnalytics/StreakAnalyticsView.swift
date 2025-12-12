@@ -33,9 +33,11 @@ public struct StreakAnalyticsView: View {
                 .padding()
             }
             .navigationTitle("Streak Analytics")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.large)
+            #endif
             .toolbar {
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .primaryAction) {
                     if viewModel.analyticsData != nil {
                         Menu {
                             Button("Export Data", systemImage: "square.and.arrow.up") {

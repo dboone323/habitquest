@@ -1,6 +1,9 @@
 import Foundation
 import Social
 
+#if canImport(UIKit)
+import UIKit
+
 /// Social sharing manager for HabitQuest
 class ShareManager {
     static let shared = ShareManager()
@@ -30,8 +33,6 @@ class ShareManager {
 
         share(text: text, image: image, completion: completion)
     }
-
-    // MARK: - Share Milestone
 
     // MARK: - Share Milestone
 
@@ -161,3 +162,25 @@ class ShareManager {
         """
     }
 }
+#else
+// Stub for macOS/non-UIKit
+class ShareManager {
+    static let shared = ShareManager()
+    private init() {}
+
+    func shareAchievement(_ achievement: Achievement, completion: @escaping (Bool) -> Void) {
+        print("Sharing not supported on this platform")
+        completion(false)
+    }
+
+    func shareStreak(_ streak: Int, habit: String, completion: @escaping (Bool) -> Void) {
+        print("Sharing not supported on this platform")
+        completion(false)
+    }
+    
+    func shareMilestone(_ milestone: StreakMilestone, completion: @escaping (Bool) -> Void) {
+        print("Sharing not supported on this platform")
+        completion(false)
+    }
+}
+#endif

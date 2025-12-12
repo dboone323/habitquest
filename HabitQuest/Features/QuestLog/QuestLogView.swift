@@ -22,21 +22,12 @@ public struct QuestLogView: View {
             }
             .navigationTitle("Quest Log")
             .toolbar(content: {
-                #if os(iOS)
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Filter") {
-                            viewModel.showingAddQuest = true
-                        }
-                        .accessibilityLabel("Filter Button")
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Filter") {
+                        viewModel.showingAddQuest = true
                     }
-                #else
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Filter") {
-                            viewModel.showingFilterOptions = true
-                        }
-                        .accessibilityLabel("Filter Button")
-                    }
-                #endif
+                    .accessibilityLabel("Filter Button")
+                }
             })
             .sheet(isPresented: $viewModel.showingAddQuest) {
                 AddEditQuestView(
@@ -249,16 +240,18 @@ private struct AddEditQuestView: View {
                 }
             }
             .navigationTitle(isEditing ? "Edit Quest" : "New Quest")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
                     .accessibilityLabel("Cancel")
                 }
 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .confirmationAction) {
                     Button(isEditing ? "Save" : "Add") {
                         saveQuest()
                     }

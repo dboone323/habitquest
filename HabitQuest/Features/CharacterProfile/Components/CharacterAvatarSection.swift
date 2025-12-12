@@ -57,7 +57,11 @@ public struct CharacterAvatarSection: View {
             .padding(.horizontal)
         }
         .padding()
+        #if os(iOS)
         .background(Color(.systemGray6))
+        #else
+        .background(Color(nsColor: .windowBackgroundColor))
+        #endif
         .cornerRadius(16)
     }
 }

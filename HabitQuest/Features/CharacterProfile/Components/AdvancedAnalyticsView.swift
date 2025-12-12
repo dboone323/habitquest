@@ -21,11 +21,19 @@ public struct AdvancedAnalyticsView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .padding()
+                        #if os(iOS)
                         .background(Color(.systemGray6))
+                        #else
+                        .background(Color(nsColor: .windowBackgroundColor))
+                        #endif
                         .cornerRadius(12)
                     }
                     .padding()
+                    #if os(iOS)
                     .background(Color(.systemGray6))
+                    #else
+                    .background(Color(nsColor: .windowBackgroundColor))
+                    #endif
                     .cornerRadius(16)
 
                     // Detailed Analytics Components
@@ -36,9 +44,11 @@ public struct AdvancedAnalyticsView: View {
                 .padding()
             }
             .navigationTitle("Advanced Analytics")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.large)
+            #endif
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
                         self.dismiss()
                     }
@@ -82,7 +92,11 @@ public struct AnalyticsInsightsCard: View {
             }
         }
         .padding()
+        #if os(iOS)
         .background(Color(.systemGray6))
+        #else
+        .background(Color(nsColor: .windowBackgroundColor))
+        #endif
         .cornerRadius(16)
     }
 }
@@ -152,7 +166,11 @@ public struct PredictiveAnalyticsCard: View {
             }
         }
         .padding()
+        #if os(iOS)
         .background(Color(.systemGray6))
+        #else
+        .background(Color(nsColor: .windowBackgroundColor))
+        #endif
         .cornerRadius(16)
     }
 }
@@ -227,7 +245,11 @@ public struct BehavioralPatternsCard: View {
             }
         }
         .padding()
+        #if os(iOS)
         .background(Color(.systemGray6))
+        #else
+        .background(Color(nsColor: .windowBackgroundColor))
+        #endif
         .cornerRadius(16)
     }
 }

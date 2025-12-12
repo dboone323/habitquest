@@ -14,9 +14,11 @@ public struct HabitDetailSheet: View {
                 Spacer()
             }
             .navigationTitle(self.habit.name)
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { self.dismiss() }
                         .accessibilityLabel("Done")
                 }
@@ -80,7 +82,9 @@ public struct AnalyticsExportView: View {
                 .padding()
             }
             .navigationTitle("Export Details")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
         }
     }
 
