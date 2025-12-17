@@ -69,3 +69,7 @@ target/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Python caches
+**/__pycache__/
+*.pyc
