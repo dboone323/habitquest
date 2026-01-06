@@ -4,6 +4,7 @@ Auto-generated on 2025-12-05
 """
 
 import pytest
+
 # from HabitQuest.automation.src.automation_engine import *  # Uncomment after fixing imports
 
 
@@ -15,6 +16,7 @@ class TestAutomationScript:
         # DONE: Implement test
         pass
 
+
 class TestAutomationEngine:
     """Tests for AutomationEngine class."""
 
@@ -23,10 +25,12 @@ class TestAutomationEngine:
         # DONE: Implement test
         pass
 
+
 def test_get_engine():
     """Test get_engine function."""
     # DONE: Implement test
     pass
+
 
 def test_main():
     """Test main function."""

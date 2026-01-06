@@ -2,19 +2,31 @@ import Foundation
 import SwiftData
 @preconcurrency import UserNotifications
 
+/// Protocol abstraction for UNUserNotificationCenter to enable testing
+protocol NotificationCenterProtocol: Sendable {
+    func add(_ request: UNNotificationRequest) async throws
+    func removePendingNotificationRequests(withIdentifiers identifiers: [String])
+    func removeAllPendingNotificationRequests()
+}
+
+// Conformance for the real UNUserNotificationCenter
+extension UNUserNotificationCenter: NotificationCenterProtocol {}
+
 /// Service responsible for scheduling notifications at optimal times
 @Observable @MainActor
 final class NotificationSchedulerService {
     private let modelContext: ModelContext
     private let analyticsEngine: AdvancedAnalyticsEngine
+    private let notificationCenter: NotificationCenterProtocol
 
-    private var notificationCenter: UNUserNotificationCenter {
-        UNUserNotificationCenter.current()
-    }
-
-    init(modelContext: ModelContext, analyticsEngine: AdvancedAnalyticsEngine) {
+    init(
+        modelContext: ModelContext,
+        analyticsEngine: AdvancedAnalyticsEngine,
+        notificationCenter: NotificationCenterProtocol = UNUserNotificationCenter.current()
+    ) {
         self.modelContext = modelContext
         self.analyticsEngine = analyticsEngine
+        self.notificationCenter = notificationCenter
     }
 
     /// Schedule AI-optimized notifications for all habits

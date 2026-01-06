@@ -4,6 +4,7 @@ Auto-generated on 2025-12-05
 """
 
 import pytest
+
 # from HabitQuest.automation.src.performance_optimizer import *  # Uncomment after fixing imports
 
 
@@ -15,6 +16,7 @@ class TestPerformanceMetrics:
         # DONE: Implement test
         pass
 
+
 class TestPerformanceOptimizer:
     """Tests for PerformanceOptimizer class."""
 
@@ -23,10 +25,12 @@ class TestPerformanceOptimizer:
         # DONE: Implement test
         pass
 
+
 def test_get_optimizer():
     """Test get_optimizer function."""
     # DONE: Implement test
     pass
+
 
 def test_main():
     """Test main function."""
