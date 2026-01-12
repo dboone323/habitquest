@@ -3,7 +3,6 @@ Tests for jwt_auth
 Auto-generated on 2025-12-05
 """
 
-import pytest
 
 # from HabitQuest.automation.src.jwt_auth import *  # Uncomment after fixing imports
 

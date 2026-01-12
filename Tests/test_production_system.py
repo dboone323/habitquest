@@ -3,7 +3,6 @@ Tests for production_system
 Auto-generated on 2025-12-05
 """
 
-import pytest
 
 # from HabitQuest.automation.src.production_system import *  # Uncomment after fixing imports
 

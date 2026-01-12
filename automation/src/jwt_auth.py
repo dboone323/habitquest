@@ -5,8 +5,7 @@ Working JWT Auth for Phase 3 Testing
 
 import hashlib
 import os
-from datetime import datetime, timedelta, timezone
-from typing import Dict, List, Optional
+from datetime import UTC, datetime, timedelta
 
 import jwt
 
@@ -36,7 +35,7 @@ class JWTAuthManager:
     def _hash_password(self, password: str) -> str:
         return hashlib.sha256(password.encode()).hexdigest()
 
-    def authenticate_user(self, username: str, password: str) -> Optional[Dict]:
+    def authenticate_user(self, username: str, password: str) -> dict | None:
         user = self.users.get(username)
         if user and user["password_hash"] == self._hash_password(password):
             return {
@@ -46,17 +45,17 @@ class JWTAuthManager:
             }
         return None
 
-    def generate_token(self, username: str, role: str, permissions: List[str]) -> str:
+    def generate_token(self, username: str, role: str, permissions: list[str]) -> str:
         payload = {
             "username": username,
             "role": role,
             "permissions": permissions,
-            "exp": datetime.now(timezone.utc) + self.token_expiry,
-            "iat": datetime.now(timezone.utc),
+            "exp": datetime.now(UTC) + self.token_expiry,
+            "iat": datetime.now(UTC),
         }
         return jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
 
-    def verify_token(self, token: str) -> Optional[Dict]:
+    def verify_token(self, token: str) -> dict | None:
         try:
             payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
             return payload
@@ -65,7 +64,7 @@ class JWTAuthManager:
         except jwt.InvalidTokenError:
             return None
 
-    def login(self, username: str, password: str) -> Optional[str]:
+    def login(self, username: str, password: str) -> str | None:
         user = self.authenticate_user(username, password)
         if user:
             return self.generate_token(

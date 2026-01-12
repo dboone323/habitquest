@@ -3,7 +3,6 @@ Tests for ai_workflow_recovery
 Auto-generated on 2025-12-05
 """
 
-import pytest
 
 # from HabitQuest.Tools.ProjectScripts.Automation.ai_workflow_recovery import *  # Uncomment after fixing imports
 
