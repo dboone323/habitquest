@@ -10,7 +10,6 @@ import logging
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
-from typing import Dict
 
 # Import Phase 3 components
 from .automation_engine import get_engine
@@ -126,7 +125,7 @@ class ProductionSystem:
 
         return all_healthy
 
-    async def process_request(self, request_data: Dict) -> Dict:
+    async def process_request(self, request_data: dict) -> dict:
         """Process production request"""
         start_time = time.time()
         self.metrics.total_requests += 1
@@ -164,7 +163,7 @@ class ProductionSystem:
 
         return result
 
-    def get_status(self) -> Dict:
+    def get_status(self) -> dict:
         """Get production system status"""
         self.metrics.timestamp = time.time()
         self.metrics.uptime = time.time() - self.start_time

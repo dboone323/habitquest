@@ -3,7 +3,6 @@ Tests for automation_engine
 Auto-generated on 2025-12-05
 """
 
-import pytest
 
 # from HabitQuest.automation.src.automation_engine import *  # Uncomment after fixing imports
 

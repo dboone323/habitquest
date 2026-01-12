@@ -5,7 +5,6 @@ Working Performance Optimizer for Phase 3 Testing
 
 import time
 from dataclasses import dataclass
-from typing import Dict, List, Optional
 
 import psutil
 
@@ -20,8 +19,8 @@ class PerformanceMetrics:
 
 class PerformanceOptimizer:
     def __init__(self):
-        self.metrics_history: List[PerformanceMetrics] = []
-        self.cache: Dict = {}
+        self.metrics_history: list[PerformanceMetrics] = []
+        self.cache: dict = {}
         self.optimization_enabled = True
 
     def collect_metrics(self) -> PerformanceMetrics:
@@ -45,7 +44,7 @@ class PerformanceOptimizer:
 
         return metrics
 
-    def get_performance_summary(self) -> Dict:
+    def get_performance_summary(self) -> dict:
         """Get performance summary"""
         if not self.metrics_history:
             return {"status": "no_data"}
@@ -73,7 +72,7 @@ class PerformanceOptimizer:
         """Simple cache optimization"""
         self.cache[key] = {"value": value, "timestamp": time.time(), "ttl": ttl}
 
-    def get_cached(self, key: str) -> Optional[any]:
+    def get_cached(self, key: str) -> any | None:
         """Get cached value if valid"""
         if key in self.cache:
             item = self.cache[key]
@@ -97,7 +96,7 @@ class PerformanceOptimizer:
 
         return len(expired_keys)
 
-    def get_optimization_suggestions(self) -> List[str]:
+    def get_optimization_suggestions(self) -> list[str]:
         """Get optimization suggestions based on current metrics"""
         suggestions = []
 

@@ -3,7 +3,6 @@
 Workflow Quality Check - Basic Version
 """
 import sys
-import os
 
 
 def main():

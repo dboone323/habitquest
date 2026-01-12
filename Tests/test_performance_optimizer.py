@@ -3,7 +3,6 @@ Tests for performance_optimizer
 Auto-generated on 2025-12-05
 """
 
-import pytest
 
 # from HabitQuest.automation.src.performance_optimizer import *  # Uncomment after fixing imports
 
