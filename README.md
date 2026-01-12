@@ -1,32 +1,45 @@
-# HabitQuest
+# HabitQuest ⚔️
 
-Habit tracker that is gamified
+A gamified habit tracker that turns your daily routines into an RPG adventure.
 
-# Trigger workflows Thu Aug 14 16:13:24 CDT 2025
+## Overview
 
-## Local Agent CI
+HabitQuest combines productivity with game mechanics to help you build and maintain positive habits. Earn XP, level up your character, and unlock rewards by completing your daily goals.
 
-This repository is wired to run local, agent‑assisted validation with Ollama.
+## Features
 
-- Cloud first: set `OLLAMA_CLOUD_URL` to use a cloud endpoint.
-- Local fallback: if no cloud is set, scripts start `ollama serve` automatically.
+- **Gamification**: Earn XP and Gold for completing habits.
+- **Character Progression**: Level up your avatar and equip new gear.
+- **Habit Tracking**: Flexible scheduling for daily, weekly, or custom habits.
+- **Streaks**: Visual indicators to keep you motivated.
+- **Widgets**: Home screen widgets for quick access.
 
-Quick start:
+## Architecture
 
-```bash
-# Optional: install prerequisites
-# brew install ollama swiftlint swiftformat
-# ollama pull llama3.1:8b qwen2.5-coder:7b mistral:7b
+- **UI**: SwiftUI
+- **Game Logic**: Custom gamification engine
+- **Storage**: SwiftData
 
-# Prefer cloud (if available)
-export OLLAMA_CLOUD_URL=https://your-cloud-endpoint
-make validate
+## Getting Started
 
-# Or run locally
-unset OLLAMA_CLOUD_URL
-make validate
-```
+### Prerequisites
 
-Scripts:
-- `.ci/agent_validate.sh`: sets AI env and runs validation
-- `.ci/run_validation.sh`: performs lint/format, tests, and best‑effort remediation via Tools/Automation
+- Xcode 15.0+
+- iOS 17.0+
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/dboone323/habitquest.git
+   ```
+2. Open `HabitQuest.xcodeproj` in Xcode.
+3. Build and run.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contributing guidelines.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
