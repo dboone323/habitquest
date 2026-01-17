@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Tests for workflow_quality_check
 Auto-generated on 2025-12-05
