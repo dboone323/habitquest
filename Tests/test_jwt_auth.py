@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Tests for jwt_auth
 Auto-generated on 2025-12-05
