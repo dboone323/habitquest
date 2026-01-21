@@ -22,19 +22,19 @@ public struct AdvancedAnalyticsView: View {
                         .foregroundColor(.secondary)
                         .padding()
                         #if os(iOS)
-                        .background(Color(.systemGray6))
+                            .background(Color(.systemGray6))
                         #else
-                        .background(Color(nsColor: .windowBackgroundColor))
+                            .background(Color(nsColor: .windowBackgroundColor))
                         #endif
-                        .cornerRadius(12)
+                            .cornerRadius(12)
                     }
                     .padding()
                     #if os(iOS)
-                    .background(Color(.systemGray6))
+                        .background(Color(.systemGray6))
                     #else
-                    .background(Color(nsColor: .windowBackgroundColor))
+                        .background(Color(nsColor: .windowBackgroundColor))
                     #endif
-                    .cornerRadius(16)
+                        .cornerRadius(16)
 
                     // Detailed Analytics Components
                     AnalyticsInsightsCard()
@@ -45,16 +45,16 @@ public struct AdvancedAnalyticsView: View {
             }
             .navigationTitle("Advanced Analytics")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.large)
+                .navigationBarTitleDisplayMode(.large)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        self.dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") {
+                            dismiss()
+                        }
+                        .accessibilityLabel("Button")
                     }
-                    .accessibilityLabel("Button")
                 }
-            }
         }
     }
 }
@@ -93,11 +93,11 @@ public struct AnalyticsInsightsCard: View {
         }
         .padding()
         #if os(iOS)
-        .background(Color(.systemGray6))
+            .background(Color(.systemGray6))
         #else
-        .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color(nsColor: .windowBackgroundColor))
         #endif
-        .cornerRadius(16)
+            .cornerRadius(16)
     }
 }
 
@@ -116,17 +116,17 @@ public struct InsightRow: View {
 
     public var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            Image(systemName: self.icon)
+            Image(systemName: icon)
                 .font(.title3)
-                .foregroundColor(self.color)
+                .foregroundColor(color)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(self.title)
+                Text(title)
                     .font(.subheadline)
                     .fontWeight(.medium)
 
-                Text(self.insight)
+                Text(insight)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -167,11 +167,11 @@ public struct PredictiveAnalyticsCard: View {
         }
         .padding()
         #if os(iOS)
-        .background(Color(.systemGray6))
+            .background(Color(.systemGray6))
         #else
-        .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color(nsColor: .windowBackgroundColor))
         #endif
-        .cornerRadius(16)
+            .cornerRadius(16)
     }
 }
 
@@ -189,18 +189,18 @@ public struct PredictionRow: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text(self.title)
+                Text(title)
                     .font(.subheadline)
                     .fontWeight(.medium)
                 Spacer()
-                Text("\(Int(self.probability * 100))%")
+                Text("\(Int(probability * 100))%")
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundColor(self.color)
+                    .foregroundColor(color)
             }
 
-            ProgressView(value: self.probability)
-                .progressViewStyle(LinearProgressViewStyle(tint: self.color))
+            ProgressView(value: probability)
+                .progressViewStyle(LinearProgressViewStyle(tint: color))
                 .scaleEffect(x: 1, y: 1.2)
         }
     }
@@ -246,11 +246,11 @@ public struct BehavioralPatternsCard: View {
         }
         .padding()
         #if os(iOS)
-        .background(Color(.systemGray6))
+            .background(Color(.systemGray6))
         #else
-        .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color(nsColor: .windowBackgroundColor))
         #endif
-        .cornerRadius(16)
+            .cornerRadius(16)
     }
 }
 
@@ -269,17 +269,17 @@ public struct PatternRow: View {
 
     public var body: some View {
         HStack {
-            Image(systemName: self.icon)
+            Image(systemName: icon)
                 .font(.title3)
-                .foregroundColor(self.color)
+                .foregroundColor(color)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(self.title)
+                Text(title)
                     .font(.subheadline)
                     .fontWeight(.medium)
 
-                Text(self.value)
+                Text(value)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

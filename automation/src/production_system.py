@@ -78,7 +78,7 @@ class ProductionSystem:
         # Health check
         health_ok = await self._health_check()
         if not health_ok:
-            raise Exception("Health check failed")
+            raise Exception("Health check failed")  # pylint: disable=broad-exception-raised
 
         self.is_running = True
         logger.info("✅ Production system deployed successfully")
@@ -125,7 +125,7 @@ class ProductionSystem:
 
         return all_healthy
 
-    async def process_request(self, request_data: dict) -> dict:
+    async def process_request(self, _request_data: dict) -> dict:
         """Process production request"""
         start_time = time.time()
         self.metrics.total_requests += 1
@@ -144,7 +144,7 @@ class ProductionSystem:
 
             self.metrics.successful_requests += 1
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             self.metrics.failed_requests += 1
             result = {
                 "success": False,
@@ -240,7 +240,7 @@ async def main():
         print(f"   Uptime: {status['metrics']['uptime']:.1f} seconds")
 
         # Save status report
-        with open("phase4_production_status.json", "w") as f:
+        with open("phase4_production_status.json", "w", encoding="utf-8") as f:
             json.dump(status, f, indent=2)
 
         print("\n📄 Status report: phase4_production_status.json")

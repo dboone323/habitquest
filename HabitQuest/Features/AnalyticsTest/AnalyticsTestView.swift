@@ -102,7 +102,7 @@ public struct AnalyticsTestView: View {
             }
             .navigationTitle("Analytics Tests")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.large)
+                .navigationBarTitleDisplayMode(.large)
             #endif
         }
     }

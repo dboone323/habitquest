@@ -37,17 +37,17 @@ public final class HabitLog {
         notes: String? = nil,
         mood: MoodRating? = nil
     ) {
-        self.id = UUID()
+        id = UUID()
         self.habit = habit
         self.completionDate = completionDate
         self.isCompleted = isCompleted
         self.notes = notes
-        self.xpEarned =
+        xpEarned =
             isCompleted
                 ? habit.xpValue * habit.difficulty.xpMultiplier
                 : 0
         self.mood = mood
-        self.completionTime = isCompleted ? Date() : nil
+        completionTime = isCompleted ? Date() : nil
     }
 }
 

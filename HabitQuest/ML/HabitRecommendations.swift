@@ -1,9 +1,8 @@
-import Foundation
 import CoreML
+import Foundation
 
 /// ML-based habit suggestion engine
 class HabitRecommendationService {
-
     // MARK: - Pattern Analysis
 
     func suggestHabits(basedOn completionHistory: [HabitCompletion]) -> [MLHabitSuggestion] {
@@ -89,7 +88,7 @@ class HabitRecommendationService {
         }
 
         successRates.sort { $0.rate > $1.rate }
-        let topCategories = successRates.prefix(3).map { $0.category }
+        let topCategories = successRates.prefix(3).map(\.category)
 
         return CategoryPatternAnalysis(
             topCategories: Array(topCategories),
@@ -99,23 +98,29 @@ class HabitRecommendationService {
 
     // MARK: - Complementary Habits
 
+    private struct ComplementaryPair {
+        let sourceCategory: String
+        let targetCategory: String
+        let reason: String
+    }
+
     private func suggestComplementaryHabits(_ history: [HabitCompletion]) -> [MLHabitSuggestion] {
-        let existingCategories = Set(history.map { $0.habitCategory })
+        let existingCategories = Set(history.map(\.habitCategory))
         var suggestions: [MLHabitSuggestion] = []
 
         // Complementary pairs
-        let pairs: [(String, String, String)] = [
-            ("Exercise", "Meditation", "Balance fitness with mindfulness"),
-            ("Reading", "Writing", "Complement input with output"),
-            ("Learning", "Practice", "Apply what you learn"),
-            ("Planning", "Execution", "Balance planning with action")
+        let pairs: [ComplementaryPair] = [
+            ComplementaryPair(sourceCategory: "Exercise", targetCategory: "Meditation", reason: "Balance fitness with mindfulness"),
+            ComplementaryPair(sourceCategory: "Reading", targetCategory: "Writing", reason: "Complement input with output"),
+            ComplementaryPair(sourceCategory: "Learning", targetCategory: "Practice", reason: "Apply what you learn"),
+            ComplementaryPair(sourceCategory: "Planning", targetCategory: "Execution", reason: "Balance planning with action")
         ]
 
-        for (category1, category2, reason) in pairs {
-            if existingCategories.contains(category1) && !existingCategories.contains(category2) {
+        for pair in pairs {
+            if existingCategories.contains(pair.sourceCategory), !existingCategories.contains(pair.targetCategory) {
                 suggestions.append(MLHabitSuggestion(
-                    title: category2,
-                    description: reason,
+                    title: pair.targetCategory,
+                    description: pair.reason,
                     confidence: 0.7,
                     reason: .complementary
                 ))
@@ -137,7 +142,7 @@ class HabitRecommendationService {
             "Stretch": 0.69
         ]
 
-        let existingHabits = Set(history.map { $0.habitName })
+        let existingHabits = Set(history.map(\.habitName))
 
         return popularHabits.compactMap { name, confidence in
             if !existingHabits.contains(name) {

@@ -9,13 +9,13 @@ public struct ConsistencyInsightView: View {
 
     public var body: some View {
         LazyVStack(spacing: 12) {
-            ForEach(self.insights, id: \.title) { insight in
+            ForEach(insights, id: \.title) { insight in
                 InsightCard(
                     insight: insight,
-                    isExpanded: self.expandedInsight == insight.title
+                    isExpanded: expandedInsight == insight.title
                 ) {
                     withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                        self.expandedInsight = self.expandedInsight == insight.title ? nil : insight.title
+                        expandedInsight = expandedInsight == insight.title ? nil : insight.title
                     }
                 }
             }
@@ -30,10 +30,10 @@ public struct InsightCard: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            self.cardHeader
+            cardHeader
 
-            if self.isExpanded {
-                self.expandedContent
+            if isExpanded {
+                expandedContent
                     .transition(
                         .asymmetric(
                             insertion: .move(edge: .top).combined(with: .opacity),
@@ -43,36 +43,36 @@ public struct InsightCard: View {
             }
         }
         .padding(16)
-        .background(self.cardBackground)
+        .background(cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .onTapGesture(perform: self.onTap)
+        .onTapGesture(perform: onTap)
     }
 
     private var cardHeader: some View {
         HStack(spacing: 12) {
-            Image(systemName: self.insight.type.icon)
+            Image(systemName: insight.type.icon)
                 .font(.title3)
-                .foregroundColor(self.insight.type.color)
-                .symbolEffect(.bounce, value: self.isExpanded)
+                .foregroundColor(insight.type.color)
+                .symbolEffect(.bounce, value: isExpanded)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(self.insight.title)
+                Text(insight.title)
                     .font(.subheadline)
                     .fontWeight(.semibold)
 
-                Text(self.insight.description)
+                Text(insight.description)
                     .font(.caption)
                     .foregroundColor(.secondary)
-                    .lineLimit(self.isExpanded ? nil : 2)
+                    .lineLimit(isExpanded ? nil : 2)
             }
 
             Spacer()
 
-            Image(systemName: self.isExpanded ? "chevron.up" : "chevron.down")
+            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                 .font(.caption)
                 .foregroundColor(.secondary)
-                .rotationEffect(.degrees(self.isExpanded ? 180 : 0))
-                .animation(.spring(response: 0.4), value: self.isExpanded)
+                .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                .animation(.spring(response: 0.4), value: isExpanded)
         }
     }
 
@@ -89,10 +89,10 @@ public struct InsightCard: View {
 
     private var cardBackground: some View {
         RoundedRectangle(cornerRadius: 12)
-            .fill(self.insight.type.color.opacity(0.05))
+            .fill(insight.type.color.opacity(0.05))
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(self.insight.type.color.opacity(0.2), lineWidth: 1)
+                    .stroke(insight.type.color.opacity(0.2), lineWidth: 1)
             )
     }
 }

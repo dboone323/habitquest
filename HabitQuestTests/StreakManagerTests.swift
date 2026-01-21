@@ -3,7 +3,6 @@ import XCTest
 
 @MainActor
 final class StreakManagerTests: XCTestCase {
-
     var streakManager: StreakManager!
 
     override func setUp() {
@@ -55,7 +54,7 @@ final class StreakManagerTests: XCTestCase {
 
     func testCalculateStreak_LongestStreak() {
         var completions: [Date] = []
-        for i in 0..<30 {
+        for i in 0 ..< 30 {
             let date = Calendar.current.date(byAdding: .day, value: -i, to: Date())!
             completions.append(date)
         }
@@ -87,7 +86,7 @@ final class StreakManagerTests: XCTestCase {
 
     func testMilestoneDetection_7Days() {
         var completions: [Date] = []
-        for i in 0..<7 {
+        for i in 0 ..< 7 {
             completions.append(Calendar.current.date(byAdding: .day, value: -i, to: Date())!)
         }
 
@@ -119,7 +118,7 @@ final class StreakManagerTests: XCTestCase {
 
     func testStreakStatistics() {
         var completions: [Date] = []
-        for i in 0..<15 {
+        for i in 0 ..< 15 {
             completions.append(Calendar.current.date(byAdding: .day, value: -i, to: Date())!)
         }
 

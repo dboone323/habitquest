@@ -14,7 +14,7 @@ struct AchievementsSection: View {
                     .font(.headline)
                     .fontWeight(.semibold)
                 Spacer()
-                if self.achievements.count > 3 {
+                if achievements.count > 3 {
                     Button("View All") {
                         // Navigate to achievements view
                     }
@@ -24,14 +24,14 @@ struct AchievementsSection: View {
                 }
             }
 
-            if self.achievements.isEmpty {
+            if achievements.isEmpty {
                 Text("No achievements yet. Keep building habits!")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .padding(.vertical)
             } else {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
-                    ForEach(self.achievements.prefix(6)) { achievement in
+                    ForEach(achievements.prefix(6)) { achievement in
                         AchievementBadge(achievement: achievement)
                     }
                 }
@@ -50,20 +50,20 @@ struct AchievementBadge: View {
         self.achievement = achievement
     }
 
-    public var body: some View {
+    var body: some View {
         VStack(spacing: 4) {
-            Image(systemName: self.achievement.iconName)
+            Image(systemName: achievement.iconName)
                 .font(.title2)
-                .foregroundColor(self.achievement.isUnlocked ? .yellow : .gray)
+                .foregroundColor(achievement.isUnlocked ? .yellow : .gray)
 
-            Text(self.achievement.name)
+            Text(achievement.name)
                 .font(.caption2)
                 .fontWeight(.medium)
                 .multilineTextAlignment(.center)
-                .foregroundColor(self.achievement.isUnlocked ? .primary : .secondary)
+                .foregroundColor(achievement.isUnlocked ? .primary : .secondary)
         }
         .padding(8)
-        .background(self.achievement.isUnlocked ? Color.yellow.opacity(0.1) : Color.gray.opacity(0.1))
+        .background(achievement.isUnlocked ? Color.yellow.opacity(0.1) : Color.gray.opacity(0.1))
         .cornerRadius(8)
     }
 }

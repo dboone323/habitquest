@@ -1,9 +1,7 @@
-
-import Foundation
 import Combine
+import Foundation
 
 import SwiftData
-
 
 // Enhancement #82: Gamification Rewards
 // Using Core/Models/Achievement.swift
@@ -34,7 +32,7 @@ class GamificationManager: ObservableObject {
             unlock(name: "On Fire")
         }
     }
-    
+
     private func unlock(name: String) {
         if let index = achievements.firstIndex(where: { $0.name == name }), !achievements[index].isUnlocked {
             achievements[index].unlockedDate = Date()

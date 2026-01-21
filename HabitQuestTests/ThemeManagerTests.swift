@@ -1,10 +1,9 @@
 @testable import HabitQuest
-import XCTest
 import SwiftUI
+import XCTest
 
 @MainActor
 final class ThemeManagerTests: XCTestCase {
-
     var themeManager: ThemeManager!
 
     override func setUp() {
@@ -28,9 +27,9 @@ final class ThemeManagerTests: XCTestCase {
 
     func testToggleTheme() {
         let initialDarkMode = themeManager.isDarkMode
-        
+
         themeManager.toggleTheme()
-        
+
         XCTAssertNotEqual(themeManager.isDarkMode, initialDarkMode)
     }
 
@@ -38,7 +37,7 @@ final class ThemeManagerTests: XCTestCase {
         // Set to dark mode
         themeManager.isDarkMode = true
         XCTAssertEqual(themeManager.colorScheme, .dark)
-        
+
         // Set to light mode
         themeManager.isDarkMode = false
         XCTAssertEqual(themeManager.colorScheme, .light)
@@ -46,7 +45,7 @@ final class ThemeManagerTests: XCTestCase {
 
     func testThemeColors() {
         let theme = themeManager.currentTheme
-        
+
         XCTAssertEqual(theme.primaryColor, .blue)
         XCTAssertNotNil(theme.backgroundColor)
         XCTAssertNotNil(theme.textColor)
@@ -54,6 +53,8 @@ final class ThemeManagerTests: XCTestCase {
     }
 
     func testIsDarkModePersistence() throws {
-        throw XCTSkip("Skipping UserDefaults persistence test due to simulator environment flakiness (race conditions in parallel execution)")
+        throw XCTSkip(
+            "Skipping UserDefaults persistence test due to simulator environment flakiness (race conditions in parallel execution)"
+        )
     }
 }

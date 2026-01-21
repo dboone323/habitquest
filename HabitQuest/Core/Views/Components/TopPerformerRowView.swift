@@ -10,43 +10,43 @@ public struct TopPerformerRow: View {
 
     public var body: some View {
         HStack(spacing: 16) {
-            self.performerInfo
+            performerInfo
             Spacer()
-            self.streakVisualization
+            streakVisualization
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
-        .background(self.rowBackground)
+        .background(rowBackground)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .scaleEffect(self.isPressed ? 0.98 : 1.0)
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: self.isPressed)
+        .scaleEffect(isPressed ? 0.98 : 1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isPressed)
         .onTapGesture {
-            self.hapticFeedback()
-            self.showDetails.toggle()
+            hapticFeedback()
+            showDetails.toggle()
         }
         .onLongPressGesture(
             minimumDuration: 0,
             maximumDistance: .infinity,
             pressing: { pressing in
-                self.isPressed = pressing
+                isPressed = pressing
             },
             perform: {}
         )
-        .sheet(isPresented: self.$showDetails) {
-            HabitDetailSheet(habit: self.performer.habit)
+        .sheet(isPresented: $showDetails) {
+            HabitDetailSheet(habit: performer.habit)
         }
     }
 
     private var performerInfo: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(self.performer.habit.name)
+            Text(performer.habit.name)
                 .font(.subheadline)
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
 
             HStack(spacing: 8) {
-                self.streakBadge
-                self.consistencyIndicator
+                streakBadge
+                consistencyIndicator
             }
         }
     }
@@ -57,7 +57,7 @@ public struct TopPerformerRow: View {
                 .font(.caption2)
                 .foregroundColor(.orange)
 
-            Text("\(self.performer.currentStreak)")
+            Text("\(performer.currentStreak)")
                 .font(.caption)
                 .fontWeight(.medium)
                 .foregroundColor(.orange)
@@ -69,21 +69,21 @@ public struct TopPerformerRow: View {
     }
 
     private var consistencyIndicator: some View {
-        Text("\(Int(self.performer.consistency * 100))% consistent")
+        Text("\(Int(performer.consistency * 100))% consistent")
             .font(.caption2)
             .foregroundColor(.secondary)
     }
 
     private var streakVisualization: some View {
         StreakVisualizationView(
-            habit: self.performer.habit,
+            habit: performer.habit,
             analytics: StreakAnalytics(
-                currentStreak: self.performer.currentStreak,
-                longestStreak: self.performer.longestStreak,
-                currentMilestone: StreakMilestone.milestone(for: self.performer.currentStreak),
-                nextMilestone: StreakMilestone.nextMilestone(for: self.performer.currentStreak),
+                currentStreak: performer.currentStreak,
+                longestStreak: performer.longestStreak,
+                currentMilestone: StreakMilestone.milestone(for: performer.currentStreak),
+                nextMilestone: StreakMilestone.nextMilestone(for: performer.currentStreak),
                 progressToNextMilestone: 0.5,
-                streakPercentile: self.performer.consistency
+                streakPercentile: performer.consistency
             ),
             displayMode: .compact
         )
@@ -100,8 +100,8 @@ public struct TopPerformerRow: View {
 
     private func hapticFeedback() {
         #if canImport(UIKit)
-        let generator = UIImpactFeedbackGenerator(style: .light)
-        generator.impactOccurred()
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
         #endif
     }
 }

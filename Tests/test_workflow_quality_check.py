@@ -3,9 +3,7 @@
 Tests for workflow_quality_check
 Auto-generated on 2025-12-05
 """
-
-
-# from HabitQuest.workflow_quality_check import *  # Uncomment after fixing imports
+import pytest
 
 
 class TestWorkflowQualityChecker:
@@ -13,11 +11,9 @@ class TestWorkflowQualityChecker:
 
     def test_initialization(self):
         """Test WorkflowQualityChecker can be initialized."""
-        # DONE: Implement test
-        pass
+        pytest.skip("Test not yet implemented")
 
 
 def test_main():
     """Test main function."""
-    # DONE: Implement test
-    pass
+    pytest.skip("Test not yet implemented")

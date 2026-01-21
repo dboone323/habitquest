@@ -3,21 +3,20 @@
 // HabitQuestTests
 //
 
-import XCTest
 import CoreLocation
 @testable import HabitQuest
+import XCTest
 
 final class LocationRemindersTests: XCTestCase {
-    
     var sut: LocationReminderManager!
-    
+
     override func setUp() {
         super.setUp()
         sut = LocationReminderManager.shared
     }
-    
+
     // MARK: - Reminder Creation Tests
-    
+
     func testCreateReminder() {
         let reminder = LocationReminder(
             habitId: UUID(),
@@ -26,12 +25,12 @@ final class LocationRemindersTests: XCTestCase {
             longitude: -122.4194,
             locationName: "Gym"
         )
-        
+
         XCTAssertEqual(reminder.habitName, "Exercise")
         XCTAssertEqual(reminder.locationName, "Gym")
         XCTAssertTrue(reminder.isEnabled)
     }
-    
+
     func testReminderDefaults() {
         let reminder = LocationReminder(
             habitId: UUID(),
@@ -40,14 +39,14 @@ final class LocationRemindersTests: XCTestCase {
             longitude: 0,
             locationName: "Test Location"
         )
-        
+
         XCTAssertTrue(reminder.triggerOnEntry)
         XCTAssertFalse(reminder.triggerOnExit)
         XCTAssertEqual(reminder.radius, 100)
     }
-    
+
     // MARK: - Coordinate Tests
-    
+
     func testCoordinateConversion() {
         let reminder = LocationReminder(
             habitId: UUID(),
@@ -56,14 +55,14 @@ final class LocationRemindersTests: XCTestCase {
             longitude: -74.0060,
             locationName: "NYC"
         )
-        
+
         let coordinate = reminder.coordinate
         XCTAssertEqual(coordinate.latitude, 40.7128, accuracy: 0.0001)
         XCTAssertEqual(coordinate.longitude, -74.0060, accuracy: 0.0001)
     }
-    
+
     // MARK: - Region Tests
-    
+
     func testRegionCreation() {
         let reminder = LocationReminder(
             habitId: UUID(),
@@ -73,23 +72,23 @@ final class LocationRemindersTests: XCTestCase {
             radius: 150,
             locationName: "SF"
         )
-        
+
         let region = reminder.region
         XCTAssertEqual(region.radius, 150)
         XCTAssertTrue(region.notifyOnEntry)
         XCTAssertFalse(region.notifyOnExit)
     }
-    
+
     // MARK: - Manager Tests
-    
+
     func testManagerSharedInstance() {
         XCTAssertNotNil(LocationReminderManager.shared)
     }
-    
+
     func testRemindersArrayInitiallyEmpty() {
         XCTAssertTrue(true, "Initial reminders array test")
     }
-    
+
     func testAuthorizationStatus() {
         XCTAssertTrue(true, "Authorization status test")
     }

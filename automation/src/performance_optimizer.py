@@ -11,6 +11,8 @@ import psutil
 
 @dataclass
 class PerformanceMetrics:
+    """Container for system performance metric snapshots."""
+
     cpu_percent: float
     memory_percent: float
     disk_usage: float
@@ -18,6 +20,8 @@ class PerformanceMetrics:
 
 
 class PerformanceOptimizer:
+    """System performance monitoring and optimization utility."""
+
     def __init__(self):
         self.metrics_history: list[PerformanceMetrics] = []
         self.cache: dict = {}
@@ -145,13 +149,15 @@ _optimizer = None
 
 
 def get_optimizer():
-    global _optimizer
+    """Get or create the singleton PerformanceOptimizer instance."""
+    global _optimizer  # pylint: disable=global-statement
     if _optimizer is None:
         _optimizer = PerformanceOptimizer()
     return _optimizer
 
 
 def main():
+    """Demonstrate performance optimizer functionality."""
     optimizer = get_optimizer()
 
     print("Collecting performance metrics...")

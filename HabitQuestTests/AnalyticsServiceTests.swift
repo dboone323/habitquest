@@ -67,12 +67,29 @@ final class AnalyticsServiceTests: XCTestCase {
 
     func testHabitAnalyticsInitialization() {
         // Given
-        let overallStats = OverallStats(totalHabits: 5, activeHabits: 3, totalCompletions: 100, completionRate: 0.75, totalXPEarned: 500, averageStreak: 7)
-        let streakData = AnalyticsStreakData(currentStreaks: [3, 5, 7], longestStreak: 10, averageStreak: 5, activeStreaks: 3)
+        let overallStats = OverallStats(
+            totalHabits: 5,
+            activeHabits: 3,
+            totalCompletions: 100,
+            completionRate: 0.75,
+            totalXPEarned: 500,
+            averageStreak: 7
+        )
+        let streakData = AnalyticsStreakData(
+            currentStreaks: [3, 5, 7],
+            longestStreak: 10,
+            averageStreak: 5,
+            activeStreaks: 3
+        )
         let categoryBreakdown: [CategoryStats] = []
         let moodCorrelation = MoodCorrelation(moodStats: [], strongestCorrelation: .neutral)
         let timePatterns = TimePatterns(peakHours: 9, hourlyDistribution: [:], weekdayPatterns: [:])
-        let weeklyProgress = WeeklyProgress(completedHabits: 20, totalOpportunities: 30, xpEarned: 200, dailyBreakdown: [:])
+        let weeklyProgress = WeeklyProgress(
+            completedHabits: 20,
+            totalOpportunities: 30,
+            xpEarned: 200,
+            dailyBreakdown: [:]
+        )
         let monthlyTrends: [MonthlyTrend] = []
         let habitPerformance: [HabitPerformance] = []
 
@@ -547,8 +564,22 @@ final class AnalyticsServiceTests: XCTestCase {
 
     func testHabitPerformanceProperties() {
         // Given - Test different trends
-        let improving = HabitPerformance(habitId: UUID(), habitName: "Reading", completionRate: 0.9, currentStreak: 15, xpEarned: 750, trend: .improving)
-        let declining = HabitPerformance(habitId: UUID(), habitName: "Meditation", completionRate: 0.5, currentStreak: 2, xpEarned: 100, trend: .declining)
+        let improving = HabitPerformance(
+            habitId: UUID(),
+            habitName: "Reading",
+            completionRate: 0.9,
+            currentStreak: 15,
+            xpEarned: 750,
+            trend: .improving
+        )
+        let declining = HabitPerformance(
+            habitId: UUID(),
+            habitName: "Meditation",
+            completionRate: 0.5,
+            currentStreak: 2,
+            xpEarned: 100,
+            trend: .declining
+        )
 
         // Then
         XCTAssertEqual(improving.trend, .improving)
@@ -654,8 +685,20 @@ final class AnalyticsServiceTests: XCTestCase {
 
     func testCategoryInsightProperties() {
         // Given - Test different categories
-        let healthInsight = CategoryInsight(category: .health, totalHabits: 5, completionRate: 0.9, averageStreak: 12, totalXPEarned: 1200)
-        let mindfulnessInsight = CategoryInsight(category: .mindfulness, totalHabits: 3, completionRate: 0.75, averageStreak: 8, totalXPEarned: 600)
+        let healthInsight = CategoryInsight(
+            category: .health,
+            totalHabits: 5,
+            completionRate: 0.9,
+            averageStreak: 12,
+            totalXPEarned: 1200
+        )
+        let mindfulnessInsight = CategoryInsight(
+            category: .mindfulness,
+            totalHabits: 3,
+            completionRate: 0.75,
+            averageStreak: 8,
+            totalXPEarned: 600
+        )
 
         // Then
         XCTAssertEqual(healthInsight.category, .health)
@@ -707,8 +750,20 @@ final class AnalyticsServiceTests: XCTestCase {
 
     func testProductivityMetricsProperties() {
         // Given - Test different time periods
-        let weekMetrics = ProductivityMetrics(period: .week, completionRate: 0.85, streakCount: 3, xpEarned: 350, missedOpportunities: 5)
-        let yearMetrics = ProductivityMetrics(period: .year, completionRate: 0.72, streakCount: 25, xpEarned: 18000, missedOpportunities: 120)
+        let weekMetrics = ProductivityMetrics(
+            period: .week,
+            completionRate: 0.85,
+            streakCount: 3,
+            xpEarned: 350,
+            missedOpportunities: 5
+        )
+        let yearMetrics = ProductivityMetrics(
+            period: .year,
+            completionRate: 0.72,
+            streakCount: 25,
+            xpEarned: 18000,
+            missedOpportunities: 120
+        )
 
         // Then
         XCTAssertEqual(weekMetrics.period.dayCount, 7)

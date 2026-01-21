@@ -20,7 +20,7 @@ class CategoryManager {
     }
 
     func getAllCategories() -> [CategoryInfo] {
-        return HabitCategory.allCases.map { category in
+        HabitCategory.allCases.map { category in
             CategoryInfo(
                 id: category.rawValue,
                 name: category.rawValue.capitalized,
@@ -32,19 +32,19 @@ class CategoryManager {
     }
 
     func getCategory(by id: String) -> HabitCategory? {
-        return HabitCategory(rawValue: id)
+        HabitCategory(rawValue: id)
     }
 
     func getSuggestedTags(for category: HabitCategory) -> [String] {
         switch category {
-        case .health: return ["hydration", "nutrition", "sleep", "medication"]
-        case .fitness: return ["cardio", "strength", "flexibility", "sports"]
-        case .learning: return ["reading", "coding", "language", "course"]
-        case .productivity: return ["work", "focus", "planning", "organization"]
-        case .social: return ["family", "friends", "networking", "community"]
-        case .creativity: return ["writing", "art", "music", "craft"]
-        case .mindfulness: return ["meditation", "journaling", "gratitude", "breathing"]
-        case .other: return ["misc", "personal", "household"]
+        case .health: ["hydration", "nutrition", "sleep", "medication"]
+        case .fitness: ["cardio", "strength", "flexibility", "sports"]
+        case .learning: ["reading", "coding", "language", "course"]
+        case .productivity: ["work", "focus", "planning", "organization"]
+        case .social: ["family", "friends", "networking", "community"]
+        case .creativity: ["writing", "art", "music", "craft"]
+        case .mindfulness: ["meditation", "journaling", "gratitude", "breathing"]
+        case .other: ["misc", "personal", "household"]
         }
     }
 }

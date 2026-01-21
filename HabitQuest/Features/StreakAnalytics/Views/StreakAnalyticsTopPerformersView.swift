@@ -10,17 +10,17 @@ public struct StreakAnalyticsTopPerformersView: View {
                 .font(.title3)
                 .fontWeight(.semibold)
 
-            ForEach(self.topPerformers.prefix(5), id: \.habit.id) { performer in
+            ForEach(topPerformers.prefix(5), id: \.habit.id) { performer in
                 TopPerformerRow(performer: performer)
             }
         }
         .padding()
         #if os(iOS)
-        .background(Color(.systemBackground))
+            .background(Color(.systemBackground))
         #else
-        .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color(nsColor: .windowBackgroundColor))
         #endif
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 8)
+            .cornerRadius(16)
+            .shadow(color: .black.opacity(0.05), radius: 8)
     }
 }

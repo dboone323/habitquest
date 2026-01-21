@@ -26,14 +26,14 @@ final class AnalyticsAggregatorService {
         let logs = await fetchAllLogs()
 
         return await HabitAnalytics(
-            overallStats: self.calculateOverallStats(habits: habits, logs: logs),
-            streakAnalytics: self.calculateStreakAnalytics(habits: habits),
-            categoryBreakdown: self.categoryInsightsService.calculateCategoryBreakdown(habits: habits),
-            moodCorrelation: self.calculateMoodCorrelation(logs: logs),
-            timePatterns: self.calculateTimePatterns(logs: logs),
-            weeklyProgress: self.trendAnalysisService.calculateWeeklyProgress(logs: logs),
-            monthlyTrends: self.trendAnalysisService.calculateMonthlyTrends(logs: logs),
-            habitPerformance: self.calculateHabitPerformance(habits: habits)
+            overallStats: calculateOverallStats(habits: habits, logs: logs),
+            streakAnalytics: calculateStreakAnalytics(habits: habits),
+            categoryBreakdown: categoryInsightsService.calculateCategoryBreakdown(habits: habits),
+            moodCorrelation: calculateMoodCorrelation(logs: logs),
+            timePatterns: calculateTimePatterns(logs: logs),
+            weeklyProgress: trendAnalysisService.calculateWeeklyProgress(logs: logs),
+            monthlyTrends: trendAnalysisService.calculateMonthlyTrends(logs: logs),
+            habitPerformance: calculateHabitPerformance(habits: habits)
         )
     }
 
@@ -41,12 +41,12 @@ final class AnalyticsAggregatorService {
 
     private func fetchAllHabits() async -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
-        return (try? self.modelContext.fetch(descriptor)) ?? []
+        return (try? modelContext.fetch(descriptor)) ?? []
     }
 
     private func fetchAllLogs() async -> [HabitLog] {
         let descriptor = FetchDescriptor<HabitLog>()
-        return (try? self.modelContext.fetch(descriptor)) ?? []
+        return (try? modelContext.fetch(descriptor)) ?? []
     }
 
     private func calculateOverallStats(habits: [Habit], logs: [HabitLog]) -> OverallStats {
@@ -101,7 +101,7 @@ final class AnalyticsAggregatorService {
         return TimePatterns(
             peakHours: hourGroups.max { $0.value.count < $1.value.count }?.key ?? 12,
             hourlyDistribution: hourGroups.mapValues { $0.count },
-            weekdayPatterns: self.calculateWeekdayPatterns(logs: logs)
+            weekdayPatterns: calculateWeekdayPatterns(logs: logs)
         )
     }
 

@@ -27,7 +27,7 @@ class QuestService {
     static let shared = QuestService()
 
     func generateDailyQuests() -> [Quest] {
-        return [
+        [
             Quest(
                 title: "Daily Grinder",
                 description: "Complete 3 habits today",

@@ -18,15 +18,15 @@ public struct StreakVisualizationView: View {
     }
 
     public var body: some View {
-        switch self.displayMode {
+        switch displayMode {
         case .compact:
-            self.compactView
+            compactView
         case .detailed:
-            self.detailedView
+            detailedView
         case .heatMap:
-            self.heatMapView
+            heatMapView
         case .milestone:
-            self.milestoneView
+            milestoneView
         }
     }
 
@@ -34,24 +34,24 @@ public struct StreakVisualizationView: View {
 
     private var compactView: some View {
         HStack(spacing: 4) {
-            self.flameIcon
+            flameIcon
 
-            Text("\(self.analytics.currentStreak)")
+            Text("\(analytics.currentStreak)")
                 .font(.caption)
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
-        .background(self.streakColor.opacity(0.1))
+        .background(streakColor.opacity(0.1))
         .cornerRadius(12)
-        .scaleEffect(self.flameAnimation ? 1.1 : 1.0)
+        .scaleEffect(flameAnimation ? 1.1 : 1.0)
         .animation(
-            .easeInOut(duration: 0.6).repeatForever(autoreverses: true), value: self.flameAnimation
+            .easeInOut(duration: 0.6).repeatForever(autoreverses: true), value: flameAnimation
         )
         .onAppear {
-            if self.analytics.currentStreak > 0 {
-                self.flameAnimation = true
+            if analytics.currentStreak > 0 {
+                flameAnimation = true
             }
         }
     }
@@ -62,10 +62,10 @@ public struct StreakVisualizationView: View {
         VStack(alignment: .leading, spacing: 12) {
             // Header with current streak
             HStack {
-                self.flameIcon
+                flameIcon
 
                 VStack(alignment: .leading) {
-                    Text(self.analytics.streakDescription)
+                    Text(analytics.streakDescription)
                         .font(.headline)
                         .fontWeight(.bold)
 
@@ -79,12 +79,12 @@ public struct StreakVisualizationView: View {
                 Spacer()
 
                 // Longest streak badge
-                if self.analytics.longestStreak > self.analytics.currentStreak {
+                if analytics.longestStreak > analytics.currentStreak {
                     VStack {
                         Text("Best")
                             .font(.caption2)
                             .foregroundColor(.secondary)
-                        Text("\(self.analytics.longestStreak)")
+                        Text("\(analytics.longestStreak)")
                             .font(.caption)
                             .fontWeight(.bold)
                     }
@@ -105,19 +105,19 @@ public struct StreakVisualizationView: View {
 
                         Spacer()
 
-                        Text("\(nextMilestone.streakCount - self.analytics.currentStreak) days to go")
+                        Text("\(nextMilestone.streakCount - analytics.currentStreak) days to go")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
 
-                    ProgressView(value: self.analytics.progressToNextMilestone)
-                        .progressViewStyle(LinearProgressViewStyle(tint: self.streakColor))
+                    ProgressView(value: analytics.progressToNextMilestone)
+                        .progressViewStyle(LinearProgressViewStyle(tint: streakColor))
                         .scaleEffect(y: 0.8)
                 }
             }
 
             // Motivational message
-            Text(self.analytics.motivationalMessage)
+            Text(analytics.motivationalMessage)
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .italic()
@@ -163,14 +163,14 @@ public struct StreakVisualizationView: View {
                 VStack(spacing: 4) {
                     Text(milestone.emoji)
                         .font(.largeTitle)
-                        .scaleEffect(self.flameAnimation ? 1.2 : 1.0)
+                        .scaleEffect(flameAnimation ? 1.2 : 1.0)
 
                     Text(milestone.title)
                         .font(.headline)
                         .fontWeight(.bold)
                         .multilineTextAlignment(.center)
 
-                    Text("\(self.analytics.currentStreak) days")
+                    Text("\(analytics.currentStreak) days")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -190,11 +190,11 @@ public struct StreakVisualizationView: View {
                             .font(.title3)
                     }
 
-                    ProgressView(value: self.analytics.progressToNextMilestone)
-                        .progressViewStyle(LinearProgressViewStyle(tint: self.streakColor))
+                    ProgressView(value: analytics.progressToNextMilestone)
+                        .progressViewStyle(LinearProgressViewStyle(tint: streakColor))
 
                     Text(
-                        "\(nextMilestone.streakCount - self.analytics.currentStreak) days to \(nextMilestone.title)"
+                        "\(nextMilestone.streakCount - analytics.currentStreak) days to \(nextMilestone.title)"
                     )
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -207,15 +207,15 @@ public struct StreakVisualizationView: View {
                 .fill(Color.secondary.opacity(0.05))
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(self.streakColor.opacity(0.3), lineWidth: 1)
+                        .stroke(streakColor.opacity(0.3), lineWidth: 1)
                 )
         )
         .animation(
-            .easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: self.flameAnimation
+            .easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: flameAnimation
         )
         .onAppear {
-            if self.analytics.currentStreak > 0 {
-                self.flameAnimation = true
+            if analytics.currentStreak > 0 {
+                flameAnimation = true
             }
         }
     }
@@ -224,15 +224,15 @@ public struct StreakVisualizationView: View {
 
     private var flameIcon: some View {
         Image(systemName: "flame.fill")
-            .font(.system(size: self.flameSize))
-            .foregroundColor(self.streakColor)
-            .shadow(color: self.streakColor.opacity(0.3), radius: 2)
+            .font(.system(size: flameSize))
+            .foregroundColor(streakColor)
+            .shadow(color: streakColor.opacity(0.3), radius: 2)
     }
 
     // MARK: - Computed Properties
 
     private var streakColor: Color {
-        switch self.analytics.currentStreak {
+        switch analytics.currentStreak {
         case 0:
             .gray
         case 1 ... 6:
@@ -247,7 +247,7 @@ public struct StreakVisualizationView: View {
     }
 
     private var flameSize: CGFloat {
-        switch self.displayMode {
+        switch displayMode {
         case .compact:
             12
         case .detailed:
@@ -277,15 +277,15 @@ public struct StreakCelebrationView: View {
             Color.black.opacity(0.3)
                 .ignoresSafeArea()
                 .onTapGesture {
-                    self.dismissCelebration()
+                    dismissCelebration()
                 }
 
             VStack(spacing: 20) {
                 // Milestone emoji with animation
-                Text(self.milestone.emoji)
+                Text(milestone.emoji)
                     .font(.system(size: 80))
-                    .scaleEffect(self.scaleAnimation ? 1.2 : 1.0)
-                    .rotationEffect(.degrees(self.animationPhase * 360))
+                    .scaleEffect(scaleAnimation ? 1.2 : 1.0)
+                    .rotationEffect(.degrees(animationPhase * 360))
 
                 // Achievement text
                 VStack(spacing: 8) {
@@ -294,12 +294,12 @@ public struct StreakCelebrationView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.white)
 
-                    Text(self.milestone.title)
+                    Text(milestone.title)
                         .font(.title2)
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
 
-                    Text(self.milestone.description)
+                    Text(milestone.description)
                         .font(.body)
                         .foregroundColor(.white.opacity(0.8))
                         .multilineTextAlignment(.center)
@@ -308,7 +308,7 @@ public struct StreakCelebrationView: View {
 
                 // Dismiss button
                 Button("Continue") {
-                    self.dismissCelebration()
+                    dismissCelebration()
                 }
                 .accessibilityLabel("Button")
                 .padding(.horizontal, 30)
@@ -332,23 +332,23 @@ public struct StreakCelebrationView: View {
             .padding()
         }
         .onAppear {
-            self.startCelebrationAnimation()
+            startCelebrationAnimation()
         }
     }
 
     private func startCelebrationAnimation() {
         withAnimation(.linear(duration: 2.0).repeatForever(autoreverses: false)) {
-            self.animationPhase = 1.0
+            animationPhase = 1.0
         }
 
         withAnimation(.easeInOut(duration: 0.6).repeatForever(autoreverses: true)) {
-            self.scaleAnimation = true
+            scaleAnimation = true
         }
     }
 
     private func dismissCelebration() {
         withAnimation(.easeInOut(duration: 0.3)) {
-            self.isPresented = false
+            isPresented = false
         }
     }
 }
@@ -364,32 +364,32 @@ public struct HeatMapDay: View {
 
     public var body: some View {
         Rectangle()
-            .fill(Color.green.opacity(max(0.1, self.intensity)))
+            .fill(Color.green.opacity(max(0.1, intensity)))
             .frame(width: 12, height: 12)
             .cornerRadius(2)
             .overlay(
                 RoundedRectangle(cornerRadius: 2)
-                    .stroke(self.isToday ? Color.blue : Color.clear, lineWidth: 1)
+                    .stroke(isToday ? Color.blue : Color.clear, lineWidth: 1)
             )
-            .scaleEffect(self.showTooltip ? 1.2 : 1.0)
+            .scaleEffect(showTooltip ? 1.2 : 1.0)
             .onTapGesture {
                 withAnimation(.spring(duration: 0.3)) {
-                    self.showTooltip.toggle()
+                    showTooltip.toggle()
                 }
             }
             .overlay(
-                self.tooltipView
-                    .opacity(self.showTooltip ? 1 : 0)
+                tooltipView
+                    .opacity(showTooltip ? 1 : 0)
                     .offset(y: -30)
             )
     }
 
     private var tooltipView: some View {
         VStack(spacing: 2) {
-            Text(DateFormatter.dayMonth.string(from: self.date))
+            Text(DateFormatter.dayMonth.string(from: date))
                 .font(.caption2)
                 .fontWeight(.medium)
-            Text("\(Int(self.intensity * 100))%")
+            Text("\(Int(intensity * 100))%")
                 .font(.caption2)
                 .foregroundColor(.secondary)
         }

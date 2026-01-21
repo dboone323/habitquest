@@ -14,20 +14,20 @@ final class PredictionService {
     /// Predict streak continuation probability using behavioral patterns
     func predictStreakSuccess(for habit: Habit, days _: Int = 7) async -> StreakPrediction {
         let patterns = await analyzeHabitPatterns(habit)
-        let timeFactors = self.analyzeTimeFactors(habit)
-        let streakMomentum = self.calculateStreakMomentum(habit)
+        let timeFactors = analyzeTimeFactors(habit)
+        let streakMomentum = calculateStreakMomentum(habit)
 
-        let baseProbability = self.calculateBaseProbability(patterns: patterns)
-        let timeAdjustment = self.calculateTimeAdjustment(timeFactors)
-        let momentumBonus = self.calculateMomentumBonus(streakMomentum)
+        let baseProbability = calculateBaseProbability(patterns: patterns)
+        let timeAdjustment = calculateTimeAdjustment(timeFactors)
+        let momentumBonus = calculateMomentumBonus(streakMomentum)
 
         let finalProbability = min(95.0, max(5.0, baseProbability + timeAdjustment + momentumBonus))
 
         return StreakPrediction(
             nextMilestone: habit.streak < 7 ? "7 days" : "\(((habit.streak / 7) + 1) * 7) days",
             probability: finalProbability,
-            trend: self.determineTrend(patterns: patterns),
-            recommendedAction: self.generateSmartRecommendation(
+            trend: determineTrend(patterns: patterns),
+            recommendedAction: generateSmartRecommendation(
                 habit: habit,
                 patterns: patterns,
                 probability: finalProbability
@@ -41,14 +41,14 @@ final class PredictionService {
             log.isCompleted ? Calendar.current.dateComponents([.hour], from: log.completionDate).hour : nil
         }
 
-        let optimalHour = self.findOptimalHour(from: completionTimes)
-        let successRate = self.calculateHourlySuccessRate(habit: habit, hour: optimalHour)
+        let optimalHour = findOptimalHour(from: completionTimes)
+        let successRate = calculateHourlySuccessRate(habit: habit, hour: optimalHour)
 
         return SchedulingRecommendation(
             optimalTime: optimalHour,
             successRateAtTime: successRate,
-            reasoning: self.generateSchedulingReasoning(hour: optimalHour, successRate: successRate),
-            alternativeTimes: self.findAlternativeHours(from: completionTimes)
+            reasoning: generateSchedulingReasoning(hour: optimalHour, successRate: successRate),
+            alternativeTimes: findAlternativeHours(from: completionTimes)
         )
     }
 
@@ -57,16 +57,16 @@ final class PredictionService {
     private func analyzeHabitPatterns(_ habit: Habit) async -> HabitPatterns {
         let recentLogs = habit.logs.suffix(30).sorted { $0.completionDate < $1.completionDate }
 
-        let consistency = self.calculateConsistency(from: ArraySlice(recentLogs))
-        let momentum = self.calculateMomentum(from: ArraySlice(recentLogs))
-        let volatility = self.calculateVolatility(from: ArraySlice(recentLogs))
+        let consistency = calculateConsistency(from: ArraySlice(recentLogs))
+        let momentum = calculateMomentum(from: ArraySlice(recentLogs))
+        let volatility = calculateVolatility(from: ArraySlice(recentLogs))
 
         return HabitPatterns(
             consistency: consistency,
             momentum: momentum,
             volatility: volatility,
-            weekdayPreference: self.analyzeWeekdayPreference(recentLogs),
-            timePreference: self.analyzeTimePreference(recentLogs)
+            weekdayPreference: analyzeWeekdayPreference(recentLogs),
+            timePreference: analyzeTimePreference(recentLogs)
         )
     }
 
@@ -77,14 +77,14 @@ final class PredictionService {
         let currentHour = calendar.component(.hour, from: now)
         let dayOfWeek = calendar.component(.weekday, from: now)
 
-        let hourSuccessRate = self.calculateSuccessRateForHour(habit: habit, hour: currentHour)
-        let daySuccessRate = self.calculateSuccessRateForWeekday(habit: habit, weekday: dayOfWeek)
+        let hourSuccessRate = calculateSuccessRateForHour(habit: habit, hour: currentHour)
+        let daySuccessRate = calculateSuccessRateForWeekday(habit: habit, weekday: dayOfWeek)
 
         return TimeFactors(
             currentHourSuccessRate: hourSuccessRate,
             currentDaySuccessRate: daySuccessRate,
-            timesSinceLastCompletion: self.calculateTimeSinceLastCompletion(habit),
-            optimalTimeWindow: self.findOptimalTimeWindow(habit)
+            timesSinceLastCompletion: calculateTimeSinceLastCompletion(habit),
+            optimalTimeWindow: findOptimalTimeWindow(habit)
         )
     }
 
@@ -92,8 +92,8 @@ final class PredictionService {
         let recentCompletions = habit.logs.suffix(7).filter(\.isCompleted)
         let momentum = Double(recentCompletions.count) / 7.0
 
-        let longestRecentStreak = self.calculateLongestRecentStreak(habit)
-        let streakAcceleration = self.calculateStreakAcceleration(habit)
+        let longestRecentStreak = calculateLongestRecentStreak(habit)
+        let streakAcceleration = calculateStreakAcceleration(habit)
 
         return StreakMomentum(
             weeklyMomentum: momentum,
@@ -169,8 +169,8 @@ final class PredictionService {
         let firstHalf = logs.prefix(logs.count / 2)
         let secondHalf = logs.suffix(logs.count / 2)
 
-        let firstConsistency = self.calculateConsistency(from: firstHalf)
-        let secondConsistency = self.calculateConsistency(from: secondHalf)
+        let firstConsistency = calculateConsistency(from: firstHalf)
+        let secondConsistency = calculateConsistency(from: secondHalf)
 
         return secondConsistency > firstConsistency ?
             min(1.0, secondConsistency + 0.1) : secondConsistency
@@ -261,7 +261,7 @@ final class PredictionService {
             log.isCompleted ? Calendar.current.component(.hour, from: log.completionDate) : nil
         }
 
-        let optimalHour = self.findOptimalHour(from: completionHours)
+        let optimalHour = findOptimalHour(from: completionHours)
         return (optimalHour - 1) ... (optimalHour + 1)
     }
 

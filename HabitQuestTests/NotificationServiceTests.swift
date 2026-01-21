@@ -1,10 +1,9 @@
 @testable import HabitQuest
-import XCTest
 import UserNotifications
+import XCTest
 
 @MainActor
 final class NotificationServiceTests: XCTestCase {
-
     // MARK: - Permission Tests
 
     func testRequestNotificationPermission() async {

@@ -11,6 +11,8 @@ import jwt
 
 
 class JWTAuthManager:
+    """Manager for JWT-based authentication and token handling."""
+
     def __init__(self, secret_key: str = None):
         # Prefer the environment variable for secrets. Do not provide a default secret.
         # For local testing, set JWT_SECRET in your environment or pass it explicitly.
@@ -36,6 +38,7 @@ class JWTAuthManager:
         return hashlib.sha256(password.encode()).hexdigest()
 
     def authenticate_user(self, username: str, password: str) -> dict | None:
+        """Authenticate a user by username and password."""
         user = self.users.get(username)
         if user and user["password_hash"] == self._hash_password(password):
             return {
@@ -46,6 +49,7 @@ class JWTAuthManager:
         return None
 
     def generate_token(self, username: str, role: str, permissions: list[str]) -> str:
+        """Generate a JWT token for the given user."""
         payload = {
             "username": username,
             "role": role,
@@ -56,6 +60,7 @@ class JWTAuthManager:
         return jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
 
     def verify_token(self, token: str) -> dict | None:
+        """Verify and decode a JWT token."""
         try:
             payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
             return payload
@@ -65,6 +70,7 @@ class JWTAuthManager:
             return None
 
     def login(self, username: str, password: str) -> str | None:
+        """Authenticate user and return a JWT token if successful."""
         user = self.authenticate_user(username, password)
         if user:
             return self.generate_token(
@@ -73,6 +79,7 @@ class JWTAuthManager:
         return None
 
     def get_status(self):
+        """Return the current status of the auth manager."""
         return {
             "total_users": len(self.users),
             "algorithm": self.algorithm,
@@ -85,13 +92,15 @@ _auth_manager = None
 
 
 def get_auth_manager():
-    global _auth_manager
+    """Get or create the global auth manager instance."""
+    global _auth_manager  # pylint: disable=global-statement
     if _auth_manager is None:
         _auth_manager = JWTAuthManager()
     return _auth_manager
 
 
 def main():
+    """Demonstrate JWT auth functionality."""
     auth = get_auth_manager()
 
     # Test login

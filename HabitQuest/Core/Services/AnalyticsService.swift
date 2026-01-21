@@ -13,14 +13,14 @@ final class AnalyticsService {
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
-        self.trendAnalysisService = TrendAnalysisService(modelContext: modelContext)
-        self.categoryInsightsService = CategoryInsightsService(modelContext: modelContext)
-        self.productivityMetricsService = ProductivityMetricsService(modelContext: modelContext)
-        self.aggregatorService = AnalyticsAggregatorService(
+        trendAnalysisService = TrendAnalysisService(modelContext: modelContext)
+        categoryInsightsService = CategoryInsightsService(modelContext: modelContext)
+        productivityMetricsService = ProductivityMetricsService(modelContext: modelContext)
+        aggregatorService = AnalyticsAggregatorService(
             modelContext: modelContext,
-            trendAnalysisService: self.trendAnalysisService,
-            categoryInsightsService: self.categoryInsightsService,
-            productivityMetricsService: self.productivityMetricsService
+            trendAnalysisService: trendAnalysisService,
+            categoryInsightsService: categoryInsightsService,
+            productivityMetricsService: productivityMetricsService
         )
     }
 
@@ -28,49 +28,49 @@ final class AnalyticsService {
 
     /// Get comprehensive analytics data
     func getAnalytics() async -> HabitAnalytics {
-        await self.aggregatorService.getAnalytics()
+        await aggregatorService.getAnalytics()
     }
 
     // MARK: - Specific Analytics Queries
 
     /// Get habit trends for specific habit
     func getHabitTrends(for habitId: UUID, days: Int = 30) async -> HabitTrendData {
-        await self.trendAnalysisService.getHabitTrends(for: habitId, days: days)
+        await trendAnalysisService.getHabitTrends(for: habitId, days: days)
     }
 
     /// Get insights for all habit categories
     func getCategoryInsights() async -> [CategoryInsight] {
-        await self.categoryInsightsService.getCategoryInsights()
+        await categoryInsightsService.getCategoryInsights()
     }
 
     /// Get productivity metrics for a time period
     func getProductivityMetrics(for period: TimePeriod) async -> ProductivityMetrics {
-        await self.productivityMetricsService.getProductivityMetrics(for: period)
+        await productivityMetricsService.getProductivityMetrics(for: period)
     }
 
     /// Get detailed category performance
     func getCategoryPerformance(category: HabitCategory) async -> CategoryPerformance {
-        await self.categoryInsightsService.getCategoryPerformance(category: category)
+        await categoryInsightsService.getCategoryPerformance(category: category)
     }
 
     /// Get category distribution
     func getCategoryDistribution() async -> [HabitCategory: Int] {
-        await self.categoryInsightsService.getCategoryDistribution()
+        await categoryInsightsService.getCategoryDistribution()
     }
 
     /// Calculate productivity score
     func calculateProductivityScore() async -> ProductivityScore {
-        await self.productivityMetricsService.calculateProductivityScore()
+        await productivityMetricsService.calculateProductivityScore()
     }
 
     /// Get productivity insights
     func getProductivityInsights() async -> ProductivityInsights {
-        await self.productivityMetricsService.getProductivityInsights()
+        await productivityMetricsService.getProductivityInsights()
     }
 
     /// Calculate productivity trends
     func calculateProductivityTrends(days: Int = 30) async -> ProductivityTrends {
-        await self.productivityMetricsService.calculateProductivityTrends(days: days)
+        await productivityMetricsService.calculateProductivityTrends(days: days)
     }
 }
 

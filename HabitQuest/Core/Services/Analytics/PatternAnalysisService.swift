@@ -13,16 +13,16 @@ final class PatternAnalysisService {
     func analyzeHabitPatterns(_ habit: Habit) -> HabitPatterns {
         let recentLogs = habit.logs.suffix(30).sorted { $0.completionDate < $1.completionDate }
 
-        let consistency = self.calculateConsistency(from: ArraySlice(recentLogs))
-        let momentum = self.calculateMomentum(from: ArraySlice(recentLogs))
-        let volatility = self.calculateVolatility(from: ArraySlice(recentLogs))
+        let consistency = calculateConsistency(from: ArraySlice(recentLogs))
+        let momentum = calculateMomentum(from: ArraySlice(recentLogs))
+        let volatility = calculateVolatility(from: ArraySlice(recentLogs))
 
         return HabitPatterns(
             consistency: consistency,
             momentum: momentum,
             volatility: volatility,
-            weekdayPreference: self.analyzeWeekdayPreference(recentLogs),
-            timePreference: self.analyzeTimePreference(recentLogs)
+            weekdayPreference: analyzeWeekdayPreference(recentLogs),
+            timePreference: analyzeTimePreference(recentLogs)
         )
     }
 
@@ -34,14 +34,14 @@ final class PatternAnalysisService {
         let currentHour = calendar.component(.hour, from: now)
         let dayOfWeek = calendar.component(.weekday, from: now)
 
-        let hourSuccessRate = self.calculateSuccessRateForHour(habit: habit, hour: currentHour)
-        let daySuccessRate = self.calculateSuccessRateForWeekday(habit: habit, weekday: dayOfWeek)
+        let hourSuccessRate = calculateSuccessRateForHour(habit: habit, hour: currentHour)
+        let daySuccessRate = calculateSuccessRateForWeekday(habit: habit, weekday: dayOfWeek)
 
         return TimeFactors(
             currentHourSuccessRate: hourSuccessRate,
             currentDaySuccessRate: daySuccessRate,
-            timesSinceLastCompletion: self.calculateTimeSinceLastCompletion(habit),
-            optimalTimeWindow: self.findOptimalTimeWindow(habit)
+            timesSinceLastCompletion: calculateTimeSinceLastCompletion(habit),
+            optimalTimeWindow: findOptimalTimeWindow(habit)
         )
     }
 
@@ -50,8 +50,8 @@ final class PatternAnalysisService {
         let recentCompletions = habit.logs.suffix(7).filter(\.isCompleted)
         let momentum = Double(recentCompletions.count) / 7.0
 
-        let longestRecentStreak = self.calculateLongestRecentStreak(habit)
-        let streakAcceleration = self.calculateStreakAcceleration(habit)
+        let longestRecentStreak = calculateLongestRecentStreak(habit)
+        let streakAcceleration = calculateStreakAcceleration(habit)
 
         return StreakMomentum(
             weeklyMomentum: momentum,
@@ -90,19 +90,19 @@ final class PatternAnalysisService {
         var factors: [String] = []
 
         // Analyze weekend patterns
-        let weekendBreaks = self.analyzeWeekendBreakPattern(habit)
+        let weekendBreaks = analyzeWeekendBreakPattern(habit)
         if weekendBreaks > 0.3 {
             factors.append("Weekend disruption")
         }
 
         // Analyze time gaps
-        let averageGap = self.calculateAverageCompletionGap(habit)
+        let averageGap = calculateAverageCompletionGap(habit)
         if averageGap > 2.0 {
             factors.append("Inconsistent timing")
         }
 
         // Analyze recent failures
-        let recentFailureRate = self.calculateRecentFailureRate(habit)
+        let recentFailureRate = calculateRecentFailureRate(habit)
         if recentFailureRate > 0.4 {
             factors.append("Recent setbacks")
         }
@@ -129,8 +129,8 @@ final class PatternAnalysisService {
         let firstHalf = logs.prefix(logs.count / 2)
         let secondHalf = logs.suffix(logs.count / 2)
 
-        let firstConsistency = self.calculateConsistency(from: firstHalf)
-        let secondConsistency = self.calculateConsistency(from: secondHalf)
+        let firstConsistency = calculateConsistency(from: firstHalf)
+        let secondConsistency = calculateConsistency(from: secondHalf)
 
         return secondConsistency > firstConsistency ?
             min(1.0, secondConsistency + 0.1) : secondConsistency

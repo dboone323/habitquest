@@ -3,9 +3,7 @@
 Tests for jwt_auth
 Auto-generated on 2025-12-05
 """
-
-
-# from HabitQuest.automation.src.jwt_auth import *  # Uncomment after fixing imports
+import pytest
 
 
 class TestJWTAuthManager:
@@ -13,17 +11,14 @@ class TestJWTAuthManager:
 
     def test_initialization(self):
         """Test JWTAuthManager can be initialized."""
-        # DONE: Implement test
-        pass
+        pytest.skip("Test not yet implemented")
 
 
 def test_get_auth_manager():
     """Test get_auth_manager function."""
-    # DONE: Implement test
-    pass
+    pytest.skip("Test not yet implemented")
 
 
 def test_main():
     """Test main function."""
-    # DONE: Implement test
-    pass
+    pytest.skip("Test not yet implemented")

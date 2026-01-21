@@ -54,14 +54,14 @@ public final class Habit {
         category: HabitCategory = .health,
         difficulty: HabitDifficulty = .easy
     ) {
-        self.id = UUID()
+        id = UUID()
         self.name = name
         self.habitDescription = habitDescription
         self.frequency = frequency
-        self.creationDate = Date()
+        creationDate = Date()
         self.xpValue = xpValue
-        self.streak = 0
-        self.isActive = true
+        streak = 0
+        isActive = true
         self.category = category
         self.difficulty = difficulty
     }
@@ -85,7 +85,7 @@ public final class Habit {
                 to: Date()
             ) ?? Date()
 
-        let recentLogs = self.logs.filter { $0.completionDate >= thirtyDaysAgo }
+        let recentLogs = logs.filter { $0.completionDate >= thirtyDaysAgo }
 
         guard !recentLogs.isEmpty else { return 0.0 }
 

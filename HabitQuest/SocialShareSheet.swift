@@ -1,37 +1,36 @@
-
 import SwiftUI
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 
-// Enhancement #83: Social Sharing
-struct SocialShareSheet: UIViewControllerRepresentable {
-    var items: [Any]
+    // Enhancement #83: Social Sharing
+    struct SocialShareSheet: UIViewControllerRepresentable {
+        var items: [Any]
 
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        return controller
+        func makeUIViewController(context _: Context) -> UIActivityViewController {
+            let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+            return controller
+        }
+
+        func updateUIViewController(_: UIActivityViewController, context _: Context) {
+            // No update needed
+        }
     }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
-        // No update needed
-    }
-}
 #else
-// Fallback for macOS (AppKit) or other platforms
-struct SocialShareSheet: View {
-    var items: [Any]
-    var body: some View {
-        Text("Sharing not supported on this platform")
-            .padding()
+    // Fallback for macOS (AppKit) or other platforms
+    struct SocialShareSheet: View {
+        var items: [Any]
+        var body: some View {
+            Text("Sharing not supported on this platform")
+                .padding()
+        }
     }
-}
 #endif
 
 // Usage Example View
 struct ShareProgressView: View {
     @State private var showShareSheet = false
-    
+
     var body: some View {
         Button("Share Progress") {
             showShareSheet = true

@@ -10,36 +10,36 @@ public struct ProfileView: View {
                 VStack(spacing: 20) {
                     // Character Avatar Section
                     CharacterAvatarSection(
-                        level: self.viewModel.level,
-                        currentXP: self.viewModel.currentXP,
-                        xpToNextLevel: self.viewModel.xpForNextLevel,
+                        level: viewModel.level,
+                        currentXP: viewModel.currentXP,
+                        xpToNextLevel: viewModel.xpForNextLevel,
                         avatarImageName: "person.circle.fill"
                     )
 
                     // Progress Section
                     ProgressSection(
-                        currentXP: self.viewModel.currentXP,
-                        xpToNextLevel: self.viewModel.xpForNextLevel,
-                        totalXP: self.viewModel.currentXP
+                        currentXP: viewModel.currentXP,
+                        xpToNextLevel: viewModel.xpForNextLevel,
+                        totalXP: viewModel.currentXP
                     )
 
                     // Stats Section
                     StatsSection(
-                        totalHabits: self.viewModel.totalHabits,
+                        totalHabits: viewModel.totalHabits,
                         activeStreaks: 0,
-                        completedToday: self.viewModel.completedToday,
-                        longestStreak: self.viewModel.longestStreak,
+                        completedToday: viewModel.completedToday,
+                        longestStreak: viewModel.longestStreak,
                         perfectDays: 0,
                         weeklyCompletion: 0.0
                     )
 
                     // Achievements Section
-                    AchievementsSection(achievements: self.viewModel.achievements)
+                    AchievementsSection(achievements: viewModel.achievements)
 
                     // Advanced Analytics Button
                     Button(
                         action: {
-                            self.showingAdvancedAnalytics = true
+                            showingAdvancedAnalytics = true
                         },
                         label: {
                             HStack {
@@ -61,7 +61,7 @@ public struct ProfileView: View {
                 .padding()
             }
             .navigationTitle("Profile")
-            .sheet(isPresented: self.$showingAdvancedAnalytics) {
+            .sheet(isPresented: $showingAdvancedAnalytics) {
                 AdvancedAnalyticsView()
             }
         }

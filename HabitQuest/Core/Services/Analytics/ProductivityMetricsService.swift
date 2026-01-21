@@ -21,7 +21,7 @@ final class ProductivityMetricsService {
         return ProductivityMetrics(
             period: period,
             completionRate: Double(completedLogs.count) / Double(max(totalPossibleCompletions, 1)),
-            streakCount: self.calculateActiveStreaks(habits: habits),
+            streakCount: calculateActiveStreaks(habits: habits),
             xpEarned: completedLogs.reduce(0) { $0 + $1.xpEarned },
             missedOpportunities: totalPossibleCompletions - completedLogs.count
         )
@@ -33,16 +33,16 @@ final class ProductivityMetricsService {
         let logs = await fetchAllLogs()
 
         // Calculate completion consistency
-        let completionRate = self.calculateOverallCompletionRate(logs: logs)
+        let completionRate = calculateOverallCompletionRate(logs: logs)
 
         // Calculate streak health
-        let streakHealth = self.calculateStreakHealth(habits: habits)
+        let streakHealth = calculateStreakHealth(habits: habits)
 
         // Calculate habit diversity score
-        let diversityScore = self.calculateHabitDiversityScore(habits: habits)
+        let diversityScore = calculateHabitDiversityScore(habits: habits)
 
         // Calculate momentum score
-        let momentumScore = self.calculateMomentumScore(logs: logs)
+        let momentumScore = calculateMomentumScore(logs: logs)
 
         // Overall productivity score (weighted average)
         let overallScore = (completionRate * 0.4) + (streakHealth * 0.3) + (diversityScore * 0.15) +
@@ -54,7 +54,7 @@ final class ProductivityMetricsService {
             streakHealth: streakHealth,
             diversityScore: diversityScore,
             momentumScore: momentumScore,
-            recommendations: self.generateProductivityRecommendations(
+            recommendations: generateProductivityRecommendations(
                 completionRate: completionRate,
                 streakHealth: streakHealth,
                 diversityScore: diversityScore,
@@ -70,7 +70,7 @@ final class ProductivityMetricsService {
         let recentLogs = await fetchRecentLogs(days: 7)
 
         let weeklyCompletionRate = Double(recentLogs.filter(\.isCompleted).count) / Double(max(recentLogs.count, 1))
-        let activeStreaks = self.calculateActiveStreaks(habits: habits)
+        let activeStreaks = calculateActiveStreaks(habits: habits)
         let totalXPThisWeek = recentLogs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned }
 
         return await ProductivityInsights(
@@ -78,9 +78,9 @@ final class ProductivityMetricsService {
             weeklyCompletionRate: weeklyCompletionRate,
             activeStreaks: activeStreaks,
             xpEarnedThisWeek: totalXPThisWeek,
-            topPerformingCategories: self.getTopPerformingCategories(),
-            improvementAreas: self.identifyImprovementAreas(score: score),
-            nextMilestones: self.calculateNextMilestones(habits: habits)
+            topPerformingCategories: getTopPerformingCategories(),
+            improvementAreas: identifyImprovementAreas(score: score),
+            nextMilestones: calculateNextMilestones(habits: habits)
         )
     }
 
@@ -124,7 +124,7 @@ final class ProductivityMetricsService {
             trend: trend,
             averageScore: scores.reduce(0, +) / Double(max(scores.count, 1)),
             bestDay: scores.max() ?? 0,
-            consistencyScore: self.calculateConsistencyScore(scores: scores)
+            consistencyScore: calculateConsistencyScore(scores: scores)
         )
     }
 
@@ -132,12 +132,12 @@ final class ProductivityMetricsService {
 
     private func fetchAllHabits() async -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
-        return (try? self.modelContext.fetch(descriptor)) ?? []
+        return (try? modelContext.fetch(descriptor)) ?? []
     }
 
     private func fetchAllLogs() async -> [HabitLog] {
         let descriptor = FetchDescriptor<HabitLog>()
-        return (try? self.modelContext.fetch(descriptor)) ?? []
+        return (try? modelContext.fetch(descriptor)) ?? []
     }
 
     private func fetchRecentLogs(days: Int) async -> [HabitLog] {

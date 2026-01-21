@@ -22,9 +22,9 @@ final class TrendAnalysisService {
 
         return HabitTrendData(
             habitId: habitId,
-            completionRates: self.calculateDailyCompletionRates(logs: recentLogs, days: days),
-            streaks: self.calculateDailyStreaks(logs: recentLogs),
-            xpEarned: self.calculateDailyXP(logs: recentLogs, days: days)
+            completionRates: calculateDailyCompletionRates(logs: recentLogs, days: days),
+            streaks: calculateDailyStreaks(logs: recentLogs),
+            xpEarned: calculateDailyXP(logs: recentLogs, days: days)
         )
     }
 
@@ -38,7 +38,7 @@ final class TrendAnalysisService {
             completedHabits: completedThisWeek,
             totalOpportunities: weekLogs.count,
             xpEarned: weekLogs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned },
-            dailyBreakdown: self.calculateDailyBreakdown(logs: weekLogs)
+            dailyBreakdown: calculateDailyBreakdown(logs: weekLogs)
         )
     }
 
@@ -79,7 +79,7 @@ final class TrendAnalysisService {
 
     private func fetchHabit(id: UUID) async -> Habit? {
         let descriptor = FetchDescriptor<Habit>()
-        let habits = try? self.modelContext.fetch(descriptor)
+        let habits = try? modelContext.fetch(descriptor)
         return habits?.first { $0.id == id }
     }
 

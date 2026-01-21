@@ -56,18 +56,18 @@ public struct ErrorHandler: Sendable {
         line: Int = #line
     ) {
         // Log the error
-        self.logger.error("Error occurred: \(error.localizedDescription)", file: file, function: function, line: line)
+        logger.error("Error occurred: \(error.localizedDescription)", file: file, function: function, line: line)
 
         // Additional logging for HabitQuestError
         if let habitError = error as? HabitQuestError {
-            self.logger.error("HabitQuest Error Type: \(habitError)", file: file, function: function, line: line)
+            logger.error("HabitQuest Error Type: \(habitError)", file: file, function: function, line: line)
         }
 
         // Handle user notification if needed
         if showToUser {
             // In a real app, this would trigger a user notification
             // For now, we'll just log it
-            self.logger.info("User should be notified of error: \(error.localizedDescription)")
+            logger.info("User should be notified of error: \(error.localizedDescription)")
         }
     }
 

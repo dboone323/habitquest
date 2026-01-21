@@ -9,20 +9,20 @@ public struct HabitDetailSheet: View {
     public var body: some View {
         NavigationView {
             VStack {
-                Text("Habit details for \(self.habit.name)")
+                Text("Habit details for \(habit.name)")
                     .font(.title2)
                 Spacer()
             }
-            .navigationTitle(self.habit.name)
+            .navigationTitle(habit.name)
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { self.dismiss() }
-                        .accessibilityLabel("Done")
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") { dismiss() }
+                            .accessibilityLabel("Done")
+                    }
                 }
-            }
         }
     }
 }
@@ -39,17 +39,17 @@ public struct AnalyticsExportView: View {
                         .fontWeight(.semibold)
 
                     if let data = analyticsData {
-                        self.exportDetailView(
+                        exportDetailView(
                             title: "Total Active Streaks", value: "\(data.totalActiveStreaks)"
                         )
-                        self.exportDetailView(
+                        exportDetailView(
                             title: "Longest Overall Streak", value: "\(data.longestOverallStreak)"
                         )
-                        self.exportDetailView(
+                        exportDetailView(
                             title: "Average Consistency",
                             value: "\(Int(data.averageConsistency * 100))%"
                         )
-                        self.exportDetailView(
+                        exportDetailView(
                             title: "Milestones Achieved", value: "\(data.milestonesAchieved)"
                         )
 
@@ -59,7 +59,7 @@ public struct AnalyticsExportView: View {
                             .font(.headline)
 
                         ForEach(data.streakDistribution, id: \.range) { item in
-                            self.exportDetailView(title: item.range, value: "\(item.count)")
+                            exportDetailView(title: item.range, value: "\(item.count)")
                         }
 
                         Divider()
@@ -68,7 +68,7 @@ public struct AnalyticsExportView: View {
                             .font(.headline)
 
                         ForEach(data.topPerformingHabits.prefix(5), id: \.habit.id) { performer in
-                            self.exportDetailView(
+                            exportDetailView(
                                 title: performer.habit.name,
                                 value: "\(performer.currentStreak) days"
                             )
@@ -83,7 +83,7 @@ public struct AnalyticsExportView: View {
             }
             .navigationTitle("Export Details")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
         }
     }

@@ -47,7 +47,7 @@ final class Achievement {
             guard let encoded = try? JSONEncoder().encode(newValue) else {
                 return
             }
-            self.requirementData = encoded
+            requirementData = encoded
         }
     }
 
@@ -69,32 +69,32 @@ final class Achievement {
         isHidden: Bool = false,
         requirement: AchievementRequirement
     ) {
-        self.id = UUID()
+        id = UUID()
         self.name = name
-        self.achievementDescription = description
+        achievementDescription = description
         self.iconName = iconName
         self.category = category
         self.xpReward = xpReward
         self.isHidden = isHidden
-        self.unlockedDate = nil
-        self.progress = 0.0
+        unlockedDate = nil
+        progress = 0.0
 
         // Encode the requirement
         guard let encoded = try? JSONEncoder().encode(requirement) else {
-            self.requirementData = Data()
+            requirementData = Data()
             return
         }
-        self.requirementData = encoded
+        requirementData = encoded
     }
 
     /// Check if this achievement is unlocked
     var isUnlocked: Bool {
-        self.unlockedDate != nil
+        unlockedDate != nil
     }
 
     /// Get progress as a percentage string
     var progressPercentage: String {
-        String(format: "%.0f%%", self.progress * 100)
+        String(format: "%.0f%%", progress * 100)
     }
 }
 

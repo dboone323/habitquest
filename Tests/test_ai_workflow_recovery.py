@@ -3,9 +3,7 @@
 Tests for ai_workflow_recovery
 Auto-generated on 2025-12-05
 """
-
-
-# from HabitQuest.Tools.ProjectScripts.Automation.ai_workflow_recovery import *  # Uncomment after fixing imports
+import pytest
 
 
 class TestWorkflowFailure:
@@ -13,8 +11,7 @@ class TestWorkflowFailure:
 
     def test_initialization(self):
         """Test WorkflowFailure can be initialized."""
-        # DONE: Implement test
-        pass
+        pytest.skip("Test not yet implemented")
 
 
 class TestAILearningPattern:
@@ -22,8 +19,7 @@ class TestAILearningPattern:
 
     def test_initialization(self):
         """Test AILearningPattern can be initialized."""
-        # DONE: Implement test
-        pass
+        pytest.skip("Test not yet implemented")
 
 
 class TestAIWorkflowRecovery:
@@ -31,11 +27,9 @@ class TestAIWorkflowRecovery:
 
     def test_initialization(self):
         """Test AIWorkflowRecovery can be initialized."""
-        # DONE: Implement test
-        pass
+        pytest.skip("Test not yet implemented")
 
 
 def test_main():
     """Test main function."""
-    # DONE: Implement test
-    pass
+    pytest.skip("Test not yet implemented")
