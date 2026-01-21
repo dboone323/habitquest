@@ -5,56 +5,55 @@
 // Step 29: Particle effects for habit streak milestones.
 //
 
-import SwiftUI
 import SpriteKit
+import SwiftUI
 
 /// SpriteKit scene for particle effects.
 class ParticleScene: SKScene {
-    
-    override func didMove(to view: SKView) {
+    override func didMove(to _: SKView) {
         backgroundColor = .clear
         scaleMode = .resizeFill
     }
-    
+
     /// Spawns confetti particles for celebration.
     func emitConfetti(at position: CGPoint) {
         guard let emitter = createConfettiEmitter() else { return }
         emitter.position = position
         emitter.zPosition = 1
         addChild(emitter)
-        
+
         // Remove after animation
         let wait = SKAction.wait(forDuration: 3)
         let remove = SKAction.removeFromParent()
         emitter.run(SKAction.sequence([wait, remove]))
     }
-    
+
     /// Spawns fire particles for streak celebrations.
     func emitFlame(at position: CGPoint) {
         guard let emitter = createFlameEmitter() else { return }
         emitter.position = position
         emitter.zPosition = 1
         addChild(emitter)
-        
+
         let wait = SKAction.wait(forDuration: 2)
         let remove = SKAction.removeFromParent()
         emitter.run(SKAction.sequence([wait, remove]))
     }
-    
+
     /// Spawns star burst for achievements.
     func emitStarBurst(at position: CGPoint) {
         guard let emitter = createStarEmitter() else { return }
         emitter.position = position
         emitter.zPosition = 1
         addChild(emitter)
-        
+
         let wait = SKAction.wait(forDuration: 2)
         let remove = SKAction.removeFromParent()
         emitter.run(SKAction.sequence([wait, remove]))
     }
-    
+
     // MARK: - Emitter Creation
-    
+
     private func createConfettiEmitter() -> SKEmitterNode? {
         let emitter = SKEmitterNode()
         emitter.particleLifetime = 3
@@ -75,7 +74,7 @@ class ParticleScene: SKScene {
         emitter.particleAlphaSpeed = -0.3
         return emitter
     }
-    
+
     private func createFlameEmitter() -> SKEmitterNode? {
         let emitter = SKEmitterNode()
         emitter.particleLifetime = 1
@@ -95,7 +94,7 @@ class ParticleScene: SKScene {
         emitter.particleScaleSpeed = -0.3
         return emitter
     }
-    
+
     private func createStarEmitter() -> SKEmitterNode? {
         let emitter = SKEmitterNode()
         emitter.particleLifetime = 1.5
@@ -114,7 +113,7 @@ class ParticleScene: SKScene {
         emitter.particleScaleSpeed = -0.3
         return emitter
     }
-    
+
     private func colorSequence() -> SKKeyframeSequence {
         let colors: [SKColor] = [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemBlue, .systemPurple]
         let times: [NSNumber] = [0, 0.2, 0.4, 0.6, 0.8, 1.0]
@@ -126,15 +125,15 @@ class ParticleScene: SKScene {
 struct ParticleEffectView: View {
     let effectType: EffectType
     let trigger: Bool
-    
+
     enum EffectType {
         case confetti
         case flame
         case stars
     }
-    
+
     @State private var scene = ParticleScene()
-    
+
     var body: some View {
         SpriteView(scene: scene, options: [.allowsTransparency])
             .onChange(of: trigger) { _, newValue in

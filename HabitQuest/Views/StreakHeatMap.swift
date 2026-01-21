@@ -21,11 +21,11 @@ struct StreakHeatMap: View {
                 }
             }
 
-// Grid
+            // Grid
             VStack(spacing: 4) {
-                ForEach(0..<weeksToShow, id: \.self) { week in
+                ForEach(0 ..< weeksToShow, id: \.self) { week in
                     HStack(spacing: 4) {
-                        ForEach(0..<columns, id: \.self) { day in
+                        ForEach(0 ..< columns, id: \.self) { day in
                             let date = dateFor(week: week, day: day)
                             let intensity = getIntensity(for: date)
 
@@ -69,9 +69,9 @@ struct StreakHeatMap: View {
 
     private func getIntensity(for date: Date) -> Double {
         let calendar = Calendar.current
-        let count = completions.filter {
+        let count = completions.count(where: {
             calendar.isDate($0, inSameDayAs: date)
-        }.count
+        })
 
         // Intensity based on completion count (0-4+)
         return min(1.0, Double(count) / 4.0)
@@ -79,15 +79,15 @@ struct StreakHeatMap: View {
 
     private func colorFor(intensity: Double) -> Color {
         if intensity == 0 {
-            return Color.gray.opacity(0.1)
+            Color.gray.opacity(0.1)
         } else if intensity < 0.25 {
-            return Color.green.opacity(0.3)
+            Color.green.opacity(0.3)
         } else if intensity < 0.5 {
-            return Color.green.opacity(0.5)
+            Color.green.opacity(0.5)
         } else if intensity < 0.75 {
-            return Color.green.opacity(0.7)
+            Color.green.opacity(0.7)
         } else {
-            return Color.green
+            Color.green
         }
     }
 }

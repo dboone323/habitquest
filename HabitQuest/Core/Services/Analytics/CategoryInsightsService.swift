@@ -80,7 +80,7 @@ final class CategoryInsightsService {
             averageStreak: averageStreak,
             totalXP: totalXP,
             trend: trend,
-            topPerformingHabits: self.getTopPerformingHabits(in: habits)
+            topPerformingHabits: getTopPerformingHabits(in: habits)
         )
     }
 
@@ -94,7 +94,7 @@ final class CategoryInsightsService {
 
     private func fetchAllHabits() async -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
-        return (try? self.modelContext.fetch(descriptor)) ?? []
+        return (try? modelContext.fetch(descriptor)) ?? []
     }
 
     private func fetchHabits(for category: HabitCategory) async -> [Habit] {

@@ -11,7 +11,7 @@ public struct AnalyticsTabView: View {
                 .font(.headline)
                 .fontWeight(.semibold)
 
-            Picker("Analytics Tab", selection: self.$selectedTab) {
+            Picker("Analytics Tab", selection: $selectedTab) {
                 Text("Trends").tag(0)
                 Text("Patterns").tag(1)
                 Text("Insights").tag(2)
@@ -19,7 +19,7 @@ public struct AnalyticsTabView: View {
             .pickerStyle(SegmentedPickerStyle())
 
             Group {
-                switch self.selectedTab {
+                switch selectedTab {
                 case 0:
                     TrendsView()
                 case 1:
@@ -34,11 +34,11 @@ public struct AnalyticsTabView: View {
         }
         .padding()
         #if os(iOS)
-        .background(Color(.systemGray6))
+            .background(Color(.systemGray6))
         #else
-        .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color(nsColor: .windowBackgroundColor))
         #endif
-        .cornerRadius(16)
+            .cornerRadius(16)
     }
 }
 
@@ -84,11 +84,11 @@ public struct TrendsView: View {
         }
         .padding()
         #if os(iOS)
-        .background(Color(.systemBackground))
+            .background(Color(.systemBackground))
         #else
-        .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color(nsColor: .windowBackgroundColor))
         #endif
-        .cornerRadius(12)
+            .cornerRadius(12)
     }
 }
 
@@ -134,11 +134,11 @@ public struct PatternsView: View {
         }
         .padding()
         #if os(iOS)
-        .background(Color(.systemBackground))
+            .background(Color(.systemBackground))
         #else
-        .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color(nsColor: .windowBackgroundColor))
         #endif
-        .cornerRadius(12)
+            .cornerRadius(12)
     }
 }
 
@@ -175,10 +175,10 @@ public struct InsightsView: View {
         }
         .padding()
         #if os(iOS)
-        .background(Color(.systemBackground))
+            .background(Color(.systemBackground))
         #else
-        .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color(nsColor: .windowBackgroundColor))
         #endif
-        .cornerRadius(12)
+            .cornerRadius(12)
     }
 }

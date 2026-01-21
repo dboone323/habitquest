@@ -48,35 +48,35 @@ public struct AnalyticsCard: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            self.headerSection
-            self.valueSection
-            self.subtitleSection
+            headerSection
+            valueSection
+            subtitleSection
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(self.cardBackground)
+        .background(cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: self.color.opacity(0.1), radius: 8, x: 0, y: 4)
-        .scaleEffect(self.animateValue ? 1.02 : 1.0)
-        .animation(.spring(response: 0.6, dampingFraction: 0.8), value: self.animateValue)
+        .shadow(color: color.opacity(0.1), radius: 8, x: 0, y: 4)
+        .scaleEffect(animateValue ? 1.02 : 1.0)
+        .animation(.spring(response: 0.6, dampingFraction: 0.8), value: animateValue)
         .onAppear {
             withAnimation(.easeInOut(duration: 0.8).delay(0.2)) {
-                self.showTrend = true
+                showTrend = true
             }
             withAnimation(.spring(response: 0.6).delay(0.1)) {
-                self.animateValue = true
+                animateValue = true
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(self.title): \(self.value), \(self.subtitle)")
+        .accessibilityLabel("\(title): \(value), \(subtitle)")
     }
 
     private var headerSection: some View {
         HStack {
-            Image(systemName: self.icon)
+            Image(systemName: icon)
                 .font(.title2)
-                .foregroundStyle(self.color.gradient)
-                .symbolEffect(.bounce, value: self.animateValue)
+                .foregroundStyle(color.gradient)
+                .symbolEffect(.bounce, value: animateValue)
 
             Spacer()
 
@@ -101,20 +101,20 @@ public struct AnalyticsCard: View {
     }
 
     private var valueSection: some View {
-        Text(self.value)
+        Text(value)
             .font(.system(size: 28, weight: .bold, design: .rounded))
-            .foregroundStyle(self.color.gradient)
+            .foregroundStyle(color.gradient)
             .contentTransition(.numericText(countsDown: false))
     }
 
     private var subtitleSection: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(self.title)
+            Text(title)
                 .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundColor(.primary)
 
-            Text(self.subtitle)
+            Text(subtitle)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -125,7 +125,7 @@ public struct AnalyticsCard: View {
             .fill(.regularMaterial)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(self.color.opacity(0.2), lineWidth: 1)
+                    .stroke(color.opacity(0.2), lineWidth: 1)
             )
     }
 }

@@ -18,7 +18,8 @@ class BackupService {
 
         // In a real app, we would query all models and serialize them to JSON
         // For prototype, we create a dummy backup file
-        let dummyData = "{\"backup_date\": \"\(Date())\"}".data(using: .utf8)!
+        let backupContent = "{\"backup_date\": \"\(Date())\"}"
+        let dummyData = Data(backupContent.utf8)
         try dummyData.write(to: backupURL)
 
         return backupURL

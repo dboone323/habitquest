@@ -10,23 +10,23 @@ final class ProfileViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         do {
-            self.modelContainer = try ModelContainer(
+            modelContainer = try ModelContainer(
                 for: Habit.self,
                 HabitLog.self,
                 PlayerProfile.self,
                 Achievement.self,
                 configurations: ModelConfiguration(isStoredInMemoryOnly: true)
             )
-            self.modelContext = ModelContext(self.modelContainer)
+            modelContext = ModelContext(modelContainer)
         } catch {
             XCTFail("Failed to create model container: \(error)")
         }
     }
 
     override func tearDown() {
-        self.modelContainer = nil
-        self.modelContext = nil
-        self.viewModel = nil
+        modelContainer = nil
+        modelContext = nil
+        viewModel = nil
         super.tearDown()
     }
 
@@ -35,24 +35,24 @@ final class ProfileViewModelTests: XCTestCase {
     @MainActor
     func testProfileViewModelInitialization() {
         // Test basic initialization
-        self.viewModel = ProfileViewModel()
-        XCTAssertEqual(self.viewModel.level, 1)
-        XCTAssertEqual(self.viewModel.currentXP, 0)
-        XCTAssertEqual(self.viewModel.xpForNextLevel, 100)
-        XCTAssertEqual(self.viewModel.xpProgress, 0.0)
-        XCTAssertEqual(self.viewModel.longestStreak, 0)
-        XCTAssertEqual(self.viewModel.totalHabits, 0)
-        XCTAssertEqual(self.viewModel.completedToday, 0)
-        XCTAssertTrue(self.viewModel.achievements.isEmpty)
+        viewModel = ProfileViewModel()
+        XCTAssertEqual(viewModel.level, 1)
+        XCTAssertEqual(viewModel.currentXP, 0)
+        XCTAssertEqual(viewModel.xpForNextLevel, 100)
+        XCTAssertEqual(viewModel.xpProgress, 0.0)
+        XCTAssertEqual(viewModel.longestStreak, 0)
+        XCTAssertEqual(viewModel.totalHabits, 0)
+        XCTAssertEqual(viewModel.completedToday, 0)
+        XCTAssertTrue(viewModel.achievements.isEmpty)
     }
 
     @MainActor
     func testSetModelContextCreatesDefaultProfile() {
         // When setting model context with no existing profile
-        self.viewModel = ProfileViewModel()
+        viewModel = ProfileViewModel()
 
         // Just check that setModelContext doesn't throw
-        XCTAssertNoThrow(self.viewModel.setModelContext(self.modelContext))
+        XCTAssertNoThrow(viewModel.setModelContext(modelContext))
 
         // And profile should exist in database
         let fetchDescriptor = FetchDescriptor<PlayerProfile>()
@@ -74,51 +74,51 @@ final class ProfileViewModelTests: XCTestCase {
     @MainActor
     func testLoadStatisticsWithHabits() {
         // Given some habits in the database
-        self.viewModel = ProfileViewModel()
+        viewModel = ProfileViewModel()
         let habit1 = Habit(name: "Test Habit 1", habitDescription: "Description 1", frequency: .daily)
         let habit2 = Habit(name: "Test Habit 2", habitDescription: "Description 2", frequency: .daily)
-        self.modelContext.insert(habit1)
-        self.modelContext.insert(habit2)
+        modelContext.insert(habit1)
+        modelContext.insert(habit2)
 
         // When loading statistics
-        self.viewModel.setModelContext(self.modelContext)
+        viewModel.setModelContext(modelContext)
 
         // Then statistics should be updated
-        XCTAssertEqual(self.viewModel.totalHabits, 2)
+        XCTAssertEqual(viewModel.totalHabits, 2)
     }
 
     @MainActor
     func testLoadStatisticsWithCompletedHabitsToday() {
         // Given a habit with today's completion
-        self.viewModel = ProfileViewModel()
+        viewModel = ProfileViewModel()
         let habit = Habit(name: "Daily Habit", habitDescription: "Complete daily", frequency: .daily)
         let todayLog = HabitLog(habit: habit, completionDate: Date())
         habit.logs.append(todayLog)
-        self.modelContext.insert(habit)
+        modelContext.insert(habit)
 
         // When loading statistics
-        self.viewModel.setModelContext(self.modelContext)
+        viewModel.setModelContext(modelContext)
 
         // Then completed today should be 1
-        XCTAssertEqual(self.viewModel.completedToday, 1)
-        XCTAssertEqual(self.viewModel.totalHabits, 1)
+        XCTAssertEqual(viewModel.completedToday, 1)
+        XCTAssertEqual(viewModel.totalHabits, 1)
     }
 
     @MainActor
     func testLoadAchievementsCreatesDefaults() {
         // When setting model context
-        self.viewModel = ProfileViewModel()
-        self.viewModel.setModelContext(self.modelContext)
+        viewModel = ProfileViewModel()
+        viewModel.setModelContext(modelContext)
 
         // Then default achievements should be created
-        XCTAssertFalse(self.viewModel.achievements.isEmpty)
+        XCTAssertFalse(viewModel.achievements.isEmpty)
 
         // And they should exist in database
         let fetchDescriptor = FetchDescriptor<Achievement>()
         do {
             let achievements = try modelContext.fetch(fetchDescriptor)
             XCTAssertFalse(achievements.isEmpty)
-            XCTAssertEqual(achievements.count, self.viewModel.achievements.count)
+            XCTAssertEqual(achievements.count, viewModel.achievements.count)
         } catch {
             XCTFail("Failed to fetch achievements: \(error)")
         }
@@ -127,16 +127,16 @@ final class ProfileViewModelTests: XCTestCase {
     @MainActor
     func testRefreshProfileReloadsData() {
         // Given initial setup
-        self.viewModel = ProfileViewModel()
-        self.viewModel.setModelContext(self.modelContext)
-        let initialTotalHabits = self.viewModel.totalHabits
+        viewModel = ProfileViewModel()
+        viewModel.setModelContext(modelContext)
+        let initialTotalHabits = viewModel.totalHabits
 
         // When adding a new habit and refreshing
         let newHabit = Habit(name: "New Habit", habitDescription: "New habit", frequency: .daily)
-        self.modelContext.insert(newHabit)
-        self.viewModel.refreshProfile()
+        modelContext.insert(newHabit)
+        viewModel.refreshProfile()
 
         // Then data should be refreshed
-        XCTAssertEqual(self.viewModel.totalHabits, initialTotalHabits + 1)
+        XCTAssertEqual(viewModel.totalHabits, initialTotalHabits + 1)
     }
 }

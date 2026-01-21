@@ -3,9 +3,7 @@
 Tests for performance_optimizer
 Auto-generated on 2025-12-05
 """
-
-
-# from HabitQuest.automation.src.performance_optimizer import *  # Uncomment after fixing imports
+import pytest
 
 
 class TestPerformanceMetrics:
@@ -13,8 +11,7 @@ class TestPerformanceMetrics:
 
     def test_initialization(self):
         """Test PerformanceMetrics can be initialized."""
-        # DONE: Implement test
-        pass
+        pytest.skip("Test not yet implemented")
 
 
 class TestPerformanceOptimizer:
@@ -22,17 +19,14 @@ class TestPerformanceOptimizer:
 
     def test_initialization(self):
         """Test PerformanceOptimizer can be initialized."""
-        # DONE: Implement test
-        pass
+        pytest.skip("Test not yet implemented")
 
 
 def test_get_optimizer():
     """Test get_optimizer function."""
-    # DONE: Implement test
-    pass
+    pytest.skip("Test not yet implemented")
 
 
 def test_main():
     """Test main function."""
-    # DONE: Implement test
-    pass
+    pytest.skip("Test not yet implemented")

@@ -216,31 +216,31 @@ private struct AddQuestView: View {
             }
             .navigationTitle("New Quest")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            dismiss()
+                        }
+                        .accessibilityLabel("Cancel")
                     }
-                    .accessibilityLabel("Cancel")
-                }
 
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Add") {
-                        let habit = Habit(
-                            name: name,
-                            habitDescription: description,
-                            frequency: frequency,
-                            xpValue: xpValue
-                        )
-                        onAdd(habit)
-                        dismiss()
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Add") {
+                            let habit = Habit(
+                                name: name,
+                                habitDescription: description,
+                                frequency: frequency,
+                                xpValue: xpValue
+                            )
+                            onAdd(habit)
+                            dismiss()
+                        }
+                        .accessibilityLabel("Add")
+                        .disabled(name.isEmpty)
                     }
-                    .accessibilityLabel("Add")
-                    .disabled(name.isEmpty)
                 }
-            }
         }
     }
 }

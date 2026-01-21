@@ -12,7 +12,7 @@ class LevelingSystem {
 
     func xpForNextLevel(currentLevel: Int) -> Int {
         // Quadratic curve: 100 * level^2
-        return 100 * (currentLevel * currentLevel)
+        100 * (currentLevel * currentLevel)
     }
 
     func checkLevelUp(profile: inout PlayerProfile) -> Bool {

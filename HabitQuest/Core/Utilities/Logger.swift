@@ -44,7 +44,7 @@ struct Logger {
     /// Initialize logger for specific category
     init(category: Category = .general) {
         self.category = category
-        self.osLog = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "HabitQuest", category: category.rawValue)
+        osLog = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "HabitQuest", category: category.rawValue)
     }
 
     /// Log a message at the specified level
@@ -73,7 +73,7 @@ struct Logger {
     /// <#Description#>
     /// - Returns: <#description#>
     func debug(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        self.log(.debug, message, file: file, function: function, line: line)
+        log(.debug, message, file: file, function: function, line: line)
     }
 
     /// <#Description#>
@@ -83,7 +83,7 @@ struct Logger {
     /// <#Description#>
     /// - Returns: <#description#>
     func info(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        self.log(.info, message, file: file, function: function, line: line)
+        log(.info, message, file: file, function: function, line: line)
     }
 
     /// <#Description#>
@@ -93,7 +93,7 @@ struct Logger {
     /// <#Description#>
     /// - Returns: <#description#>
     func warning(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        self.log(.warning, message, file: file, function: function, line: line)
+        log(.warning, message, file: file, function: function, line: line)
     }
 
     /// <#Description#>
@@ -103,7 +103,7 @@ struct Logger {
     /// <#Description#>
     /// - Returns: <#description#>
     func error(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        self.log(.error, message, file: file, function: function, line: line)
+        log(.error, message, file: file, function: function, line: line)
     }
 
     /// <#Description#>
@@ -113,6 +113,6 @@ struct Logger {
     /// <#Description#>
     /// - Returns: <#description#>
     func critical(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        self.log(.critical, message, file: file, function: function, line: line)
+        log(.critical, message, file: file, function: function, line: line)
     }
 }

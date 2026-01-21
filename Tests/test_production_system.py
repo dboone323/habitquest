@@ -3,9 +3,7 @@
 Tests for production_system
 Auto-generated on 2025-12-05
 """
-
-
-# from HabitQuest.automation.src.production_system import *  # Uncomment after fixing imports
+import pytest
 
 
 class TestProductionConfig:
@@ -13,8 +11,7 @@ class TestProductionConfig:
 
     def test_initialization(self):
         """Test ProductionConfig can be initialized."""
-        # DONE: Implement test
-        pass
+        pytest.skip("Test not yet implemented")
 
 
 class TestProductionMetrics:
@@ -22,8 +19,7 @@ class TestProductionMetrics:
 
     def test_initialization(self):
         """Test ProductionMetrics can be initialized."""
-        # DONE: Implement test
-        pass
+        pytest.skip("Test not yet implemented")
 
 
 class TestProductionSystem:
@@ -31,11 +27,9 @@ class TestProductionSystem:
 
     def test_initialization(self):
         """Test ProductionSystem can be initialized."""
-        # DONE: Implement test
-        pass
+        pytest.skip("Test not yet implemented")
 
 
 def test_create_production_system():
     """Test create_production_system function."""
-    # DONE: Implement test
-    pass
+    pytest.skip("Test not yet implemented")

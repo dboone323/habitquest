@@ -12,7 +12,7 @@ class DataPrivacyManager {
 
     func exportUserData() -> String {
         // Collect all user data for export
-        return "User Data Export"
+        "User Data Export"
     }
 
     func deleteAllUserData() {

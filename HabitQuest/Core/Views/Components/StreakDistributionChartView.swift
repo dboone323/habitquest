@@ -9,12 +9,12 @@ public struct StreakDistributionChartView: View {
 
     public var body: some View {
         VStack(spacing: 16) {
-            self.chartTitle
-            self.chartBars
+            chartTitle
+            chartBars
         }
         .onAppear {
             withAnimation(.easeInOut(duration: 1.2).delay(0.3)) {
-                self.animateChart = true
+                animateChart = true
             }
         }
     }
@@ -35,10 +35,10 @@ public struct StreakDistributionChartView: View {
 
     private var chartBars: some View {
         HStack(alignment: .bottom, spacing: 12) {
-            ForEach(Array(self.data.enumerated()), id: \.element.range) { index, item in
+            ForEach(Array(data.enumerated()), id: \.element.range) { index, item in
                 VStack(spacing: 8) {
-                    self.barColumn(for: item, index: index)
-                    self.barLabel(for: item)
+                    barColumn(for: item, index: index)
+                    barLabel(for: item)
                 }
             }
         }
@@ -46,15 +46,15 @@ public struct StreakDistributionChartView: View {
     }
 
     private func barColumn(for item: StreakDistributionData, index: Int) -> some View {
-        let maxCount = self.data.map(\.count).max() ?? 1
+        let maxCount = data.map(\.count).max() ?? 1
         let normalizedHeight = max(0.1, Double(item.count) / Double(maxCount))
-        let barHeight = self.animateChart ? normalizedHeight * 120 : 0
+        let barHeight = animateChart ? normalizedHeight * 120 : 0
 
         return VStack {
             Spacer()
 
             RoundedRectangle(cornerRadius: 6)
-                .fill(self.barGradient(for: index))
+                .fill(barGradient(for: index))
                 .frame(height: barHeight)
                 .overlay(
                     Text("\(item.count)")
@@ -65,7 +65,7 @@ public struct StreakDistributionChartView: View {
                 )
                 .animation(
                     .spring(response: 0.8, dampingFraction: 0.8).delay(Double(index) * 0.1),
-                    value: self.animateChart
+                    value: animateChart
                 )
         }
     }

@@ -17,7 +17,7 @@ public struct LocationReminder: Codable, Identifiable {
     public var habitName: String
     public var latitude: Double
     public var longitude: Double
-    public var radius: Double  // meters
+    public var radius: Double // meters
     public var locationName: String
     public var triggerOnEntry: Bool
     public var triggerOnExit: Bool
@@ -65,7 +65,6 @@ public struct LocationReminder: Codable, Identifiable {
 
 /// Manager for location-based habit reminders.
 public final class LocationReminderManager: NSObject, ObservableObject {
-
     public static let shared = LocationReminderManager()
 
     @Published public var reminders: [LocationReminder] = []
@@ -83,7 +82,7 @@ public final class LocationReminderManager: NSObject, ObservableObject {
     private let userDefaults = UserDefaults.standard
     private let remindersKey = "locationReminders"
 
-    private override init() {
+    override private init() {
         super.init()
         loadReminders()
         authorizationStatus = locationManager.authorizationStatus
@@ -167,8 +166,8 @@ public final class LocationReminderManager: NSObject, ObservableObject {
             isEntry ? "Time for \(reminder.habitName)!" : "Leaving \(reminder.locationName)"
         content.body =
             isEntry
-            ? "You've arrived at \(reminder.locationName). Don't forget your habit!"
-            : "Did you complete \(reminder.habitName) before leaving?"
+                ? "You've arrived at \(reminder.locationName). Don't forget your habit!"
+                : "Did you complete \(reminder.habitName) before leaving?"
         content.sound = .default
         content.categoryIdentifier = "HABIT_LOCATION"
         content.userInfo = ["habitId": reminder.habitId.uuidString]
@@ -176,11 +175,11 @@ public final class LocationReminderManager: NSObject, ObservableObject {
         let request = UNNotificationRequest(
             identifier: "location_\(reminder.id.uuidString)_\(isEntry ? "entry" : "exit")",
             content: content,
-            trigger: nil  // Immediate
+            trigger: nil // Immediate
         )
 
         UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
+            if let error {
                 print("[LocationReminder] Notification error: \(error)")
             }
         }
@@ -196,8 +195,7 @@ public final class LocationReminderManager: NSObject, ObservableObject {
 
     private func loadReminders() {
         if let data = userDefaults.data(forKey: remindersKey),
-            let loaded = try? JSONDecoder().decode([LocationReminder].self, from: data)
-        {
+           let loaded = try? JSONDecoder().decode([LocationReminder].self, from: data) {
             reminders = loaded
         }
     }
@@ -206,7 +204,6 @@ public final class LocationReminderManager: NSObject, ObservableObject {
 // MARK: - CLLocationManagerDelegate
 
 extension LocationReminderManager: CLLocationManagerDelegate {
-
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         authorizationStatus = manager.authorizationStatus
 
@@ -215,14 +212,14 @@ extension LocationReminderManager: CLLocationManagerDelegate {
         }
     }
 
-    public func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+    public func locationManager(_: CLLocationManager, didEnterRegion region: CLRegion) {
         guard let reminder = reminders.first(where: { $0.id.uuidString == region.identifier })
         else { return }
         print("[LocationReminder] Entered: \(reminder.locationName)")
         sendNotification(for: reminder, isEntry: true)
     }
 
-    public func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+    public func locationManager(_: CLLocationManager, didExitRegion region: CLRegion) {
         guard let reminder = reminders.first(where: { $0.id.uuidString == region.identifier })
         else { return }
         print("[LocationReminder] Exited: \(reminder.locationName)")
@@ -230,7 +227,7 @@ extension LocationReminderManager: CLLocationManagerDelegate {
     }
 
     public func locationManager(
-        _ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error
+        _: CLLocationManager, monitoringDidFailFor _: CLRegion?, withError error: Error
     ) {
         print("[LocationReminder] Monitoring failed: \(error.localizedDescription)")
     }

@@ -15,18 +15,18 @@ struct AchievementCelebrationView: View {
     @State private var scale: CGFloat = 0.5
     @State private var opacity: Double = 0
     @State private var rotation: Double = -30
-    
+
     var body: some View {
         ZStack {
             // Background blur
             Color.black.opacity(0.4)
                 .ignoresSafeArea()
-            
+
             // Confetti particles
             if showConfetti {
                 ConfettiView()
             }
-            
+
             // Achievement card
             VStack(spacing: 20) {
                 // Icon with animation
@@ -42,7 +42,7 @@ struct AchievementCelebrationView: View {
                         )
                         .frame(width: 160, height: 160)
                         .blur(radius: 10)
-                    
+
                     Image(systemName: achievementIcon)
                         .font(.system(size: 80))
                         .foregroundStyle(
@@ -56,16 +56,16 @@ struct AchievementCelebrationView: View {
                 }
                 .scaleEffect(scale)
                 .rotationEffect(.degrees(rotation))
-                
+
                 Text("Achievement Unlocked!")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
-                
+
                 Text(achievementName)
                     .font(.headline)
                     .foregroundColor(.white.opacity(0.9))
-                
+
                 // Sparkle ring
                 Circle()
                     .strokeBorder(
@@ -94,7 +94,7 @@ struct AchievementCelebrationView: View {
                 opacity = 1.0
                 rotation = 0
             }
-            
+
             withAnimation(.easeOut(duration: 0.3).delay(0.3)) {
                 showConfetti = true
             }
@@ -105,19 +105,19 @@ struct AchievementCelebrationView: View {
 /// Simple confetti particle view.
 struct ConfettiView: View {
     let colors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple, .pink]
-    
+
     var body: some View {
         GeometryReader { geo in
-            ForEach(0..<50, id: \.self) { i in
+            ForEach(0 ..< 50, id: \.self) { i in
                 ConfettiParticle(
                     color: colors[i % colors.count],
-                    size: CGFloat.random(in: 5...12),
+                    size: CGFloat.random(in: 5 ... 12),
                     startPosition: CGPoint(
-                        x: CGFloat.random(in: 0...geo.size.width),
+                        x: CGFloat.random(in: 0 ... geo.size.width),
                         y: -20
                     ),
                     endPosition: CGPoint(
-                        x: CGFloat.random(in: 0...geo.size.width),
+                        x: CGFloat.random(in: 0 ... geo.size.width),
                         y: geo.size.height + 20
                     ),
                     delay: Double(i) * 0.02
@@ -135,11 +135,11 @@ struct ConfettiParticle: View {
     let startPosition: CGPoint
     let endPosition: CGPoint
     let delay: Double
-    
+
     @State private var position: CGPoint = .zero
     @State private var rotation: Double = 0
     @State private var opacity: Double = 1
-    
+
     var body: some View {
         Rectangle()
             .fill(color)
@@ -149,10 +149,10 @@ struct ConfettiParticle: View {
             .opacity(opacity)
             .onAppear {
                 position = startPosition
-                
+
                 withAnimation(.linear(duration: 2).delay(delay)) {
                     position = endPosition
-                    rotation = Double.random(in: 360...720)
+                    rotation = Double.random(in: 360 ... 720)
                     opacity = 0
                 }
             }
@@ -164,7 +164,7 @@ struct StreakMilestoneView: View {
     let streakCount: Int
     @State private var flameScale: CGFloat = 0.5
     @State private var numberScale: CGFloat = 0
-    
+
     var body: some View {
         VStack(spacing: 8) {
             ZStack {
@@ -174,7 +174,7 @@ struct StreakMilestoneView: View {
                     .foregroundColor(.orange)
                     .blur(radius: 15)
                     .scaleEffect(flameScale * 1.2)
-                
+
                 // Main flame
                 Image(systemName: "flame.fill")
                     .font(.system(size: 60))
@@ -187,12 +187,12 @@ struct StreakMilestoneView: View {
                     )
                     .scaleEffect(flameScale)
             }
-            
+
             Text("\(streakCount)")
                 .font(.system(size: 36, weight: .bold, design: .rounded))
                 .foregroundColor(.orange)
                 .scaleEffect(numberScale)
-            
+
             Text("Day Streak!")
                 .font(.headline)
                 .foregroundColor(.secondary)

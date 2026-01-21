@@ -21,7 +21,7 @@ class HabitTemplateService {
     static let shared = HabitTemplateService()
 
     func getTemplates() -> [HabitTemplate] {
-        return [
+        [
             HabitTemplate(
                 name: "Drink Water",
                 description: "Drink 8 glasses of water daily",
@@ -66,6 +66,6 @@ class HabitTemplateService {
     }
 
     func getTemplates(for category: HabitCategory) -> [HabitTemplate] {
-        return getTemplates().filter { $0.category == category }
+        getTemplates().filter { $0.category == category }
     }
 }

@@ -1,11 +1,11 @@
-
 import UserNotifications
+
 // import UIKit - Not needed for pure logic
 
 // Enhancement #81: Push Notifications
 class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     static let shared = NotificationManager()
-    
+
     override init() {
         super.init()
         UNUserNotificationCenter.current().delegate = self
@@ -15,7 +15,7 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if granted {
                 print("Notification permission granted")
-            } else if let error = error {
+            } else if let error {
                 print("Notification permission error: \(error)")
             }
         }

@@ -2,7 +2,6 @@
 import XCTest
 
 final class GamificationServiceTests: XCTestCase {
-
     var service: GamificationService!
 
     override func setUp() {

@@ -23,12 +23,12 @@ public struct ProgressSection: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     Spacer()
-                    Text("\(self.currentXP) / \(self.xpToNextLevel)")
+                    Text("\(currentXP) / \(xpToNextLevel)")
                         .font(.subheadline)
                         .fontWeight(.medium)
                 }
 
-                ProgressView(value: Double(self.currentXP), total: Double(self.xpToNextLevel))
+                ProgressView(value: Double(currentXP), total: Double(xpToNextLevel))
                     .progressViewStyle(LinearProgressViewStyle(tint: .blue))
 
                 HStack {
@@ -36,7 +36,7 @@ public struct ProgressSection: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     Spacer()
-                    Text("\(self.totalXP)")
+                    Text("\(totalXP)")
                         .font(.subheadline)
                         .fontWeight(.medium)
                 }
@@ -44,10 +44,10 @@ public struct ProgressSection: View {
         }
         .padding()
         #if os(iOS)
-        .background(Color(.systemGray6))
+            .background(Color(.systemGray6))
         #else
-        .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color(nsColor: .windowBackgroundColor))
         #endif
-        .cornerRadius(16)
+            .cornerRadius(16)
     }
 }

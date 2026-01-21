@@ -12,9 +12,9 @@ final class BehavioralInsightsService {
     /// Analyze comprehensive behavioral patterns and correlations
     func analyzeBehavioralPatterns(for habit: Habit) async -> BehavioralInsights {
         let moodCorrelation = await calculateMoodCorrelation(habit)
-        let dayOfWeekPattern = self.analyzeDayOfWeekPattern(habit)
-        let streakBreakFactors = self.analyzeStreakBreakFactors(habit)
-        let motivationTriggers = self.identifyMotivationTriggers(habit)
+        let dayOfWeekPattern = analyzeDayOfWeekPattern(habit)
+        let streakBreakFactors = analyzeStreakBreakFactors(habit)
+        let motivationTriggers = identifyMotivationTriggers(habit)
 
         return BehavioralInsights(
             moodCorrelation: moodCorrelation,
@@ -22,7 +22,7 @@ final class BehavioralInsightsService {
             weakestDays: dayOfWeekPattern.weakest,
             streakBreakFactors: streakBreakFactors,
             motivationTriggers: motivationTriggers,
-            personalityInsights: self.generatePersonalityInsights(habit)
+            personalityInsights: generatePersonalityInsights(habit)
         )
     }
 
@@ -67,25 +67,25 @@ final class BehavioralInsightsService {
         var factors: [String] = []
 
         // Analyze weekend patterns
-        let weekendBreaks = self.analyzeWeekendBreakPattern(habit)
+        let weekendBreaks = analyzeWeekendBreakPattern(habit)
         if weekendBreaks > 0.3 {
             factors.append("Weekend disruption")
         }
 
         // Analyze time gaps
-        let averageGap = self.calculateAverageCompletionGap(habit)
+        let averageGap = calculateAverageCompletionGap(habit)
         if averageGap > 2.0 {
             factors.append("Inconsistent timing")
         }
 
         // Analyze recent failures
-        let recentFailureRate = self.calculateRecentFailureRate(habit)
+        let recentFailureRate = calculateRecentFailureRate(habit)
         if recentFailureRate > 0.4 {
             factors.append("Recent setbacks")
         }
 
         // Analyze stress indicators
-        let stressIndicators = self.analyzeStressIndicators(habit)
+        let stressIndicators = analyzeStressIndicators(habit)
         factors.append(contentsOf: stressIndicators)
 
         // Default factors if none detected
@@ -101,22 +101,22 @@ final class BehavioralInsightsService {
         var triggers: [String] = []
 
         // Analyze morning routine patterns
-        if self.analyzeMorningRoutinePattern(habit) > 0.7 {
+        if analyzeMorningRoutinePattern(habit) > 0.7 {
             triggers.append("Morning routine")
         }
 
         // Analyze social accountability
-        if self.analyzeSocialPatterns(habit) > 0.6 {
+        if analyzeSocialPatterns(habit) > 0.6 {
             triggers.append("Social accountability")
         }
 
         // Analyze progress tracking motivation
-        if self.analyzeProgressTrackingMotivation(habit) > 0.5 {
+        if analyzeProgressTrackingMotivation(habit) > 0.5 {
             triggers.append("Progress tracking")
         }
 
         // Analyze reward system effectiveness
-        if self.analyzeRewardSystemEffectiveness(habit) > 0.6 {
+        if analyzeRewardSystemEffectiveness(habit) > 0.6 {
             triggers.append("Reward system")
         }
 
@@ -133,7 +133,7 @@ final class BehavioralInsightsService {
         var insights: [String] = []
 
         // Analyze consistency patterns
-        let consistency = self.calculateConsistencyScore(habit)
+        let consistency = calculateConsistencyScore(habit)
         if consistency > 0.8 {
             insights.append("Highly disciplined and consistent")
         } else if consistency > 0.6 {
@@ -143,7 +143,7 @@ final class BehavioralInsightsService {
         }
 
         // Analyze adaptability
-        let adaptability = self.calculateAdaptabilityScore(habit)
+        let adaptability = calculateAdaptabilityScore(habit)
         if adaptability > 0.7 {
             insights.append("Highly adaptable to changing circumstances")
         } else if adaptability > 0.4 {
@@ -153,7 +153,7 @@ final class BehavioralInsightsService {
         }
 
         // Analyze time preferences
-        let timePreference = self.analyzeTimePreference(habit)
+        let timePreference = analyzeTimePreference(habit)
         if timePreference.hour < 10 {
             insights.append("Early riser who thrives in the morning")
         } else if timePreference.hour < 15 {
@@ -163,7 +163,7 @@ final class BehavioralInsightsService {
         }
 
         // Analyze streak patterns
-        let streakPatterns = self.analyzeStreakPatterns(habit)
+        let streakPatterns = analyzeStreakPatterns(habit)
         if streakPatterns.longestStreak > 30 {
             insights.append("Capable of maintaining long-term commitments")
         } else if streakPatterns.averageStreak > 7 {
@@ -229,13 +229,13 @@ final class BehavioralInsightsService {
         var indicators: [String] = []
 
         // Analyze completion gaps during work weeks
-        let workWeekGaps = self.analyzeWorkWeekGaps(habit)
+        let workWeekGaps = analyzeWorkWeekGaps(habit)
         if workWeekGaps > 3.0 {
             indicators.append("Work stress")
         }
 
         // Analyze sudden drop-offs
-        if self.analyzeSuddenDropOffs(habit) > 0.5 {
+        if analyzeSuddenDropOffs(habit) > 0.5 {
             indicators.append("Overwhelm or burnout")
         }
 
@@ -258,14 +258,14 @@ final class BehavioralInsightsService {
     private func analyzeSocialPatterns(_ habit: Habit) -> Double {
         // This would analyze social sharing/check-in patterns
         // For now, return a placeholder based on consistency
-        let consistency = self.calculateConsistencyScore(habit)
+        let consistency = calculateConsistencyScore(habit)
         return min(1.0, consistency + 0.1)
     }
 
     private func analyzeProgressTrackingMotivation(_ habit: Habit) -> Double {
         // Analyze if completions increase after viewing progress
         // This is a simplified analysis based on streak patterns
-        let streakConsistency = self.calculateStreakConsistency(habit)
+        let streakConsistency = calculateStreakConsistency(habit)
         return streakConsistency
     }
 
@@ -293,7 +293,7 @@ final class BehavioralInsightsService {
 
     private func calculateAdaptabilityScore(_ habit: Habit) -> Double {
         // Analyze how well the habit maintains consistency despite schedule changes
-        let monthlySegments = self.segmentLogsByMonth(habit.logs)
+        let monthlySegments = segmentLogsByMonth(habit.logs)
 
         guard monthlySegments.count >= 2 else { return 0.5 }
 
@@ -349,7 +349,7 @@ final class BehavioralInsightsService {
 
     private func calculateStreakConsistency(_ habit: Habit) -> Double {
         // Analyze how consistent streak maintenance is
-        let streaks = self.calculateIndividualStreaks(habit)
+        let streaks = calculateIndividualStreaks(habit)
         guard !streaks.isEmpty else { return 0.0 }
 
         let meanStreak = Double(streaks.reduce(0, +)) / Double(streaks.count)

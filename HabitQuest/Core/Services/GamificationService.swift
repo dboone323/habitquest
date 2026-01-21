@@ -1,7 +1,6 @@
 import Foundation
 
 struct GamificationService {
-
     /// Calculate the total XP required to reach a specific level
     /// Uses an exponential curve: 100 * (1.5 ^ (level - 1))
     /// - Parameter level: The target level
@@ -15,7 +14,7 @@ struct GamificationService {
     /// - Parameter level: Current level
     /// - Returns: XP needed to reach the next level
     nonisolated func calculateXPForNextLevel(forLevel level: Int) -> Int {
-        self.calculateXPForLevel(level + 1)
+        calculateXPForLevel(level + 1)
     }
 
     /// Process habit completion and update player profile accordingly
@@ -32,18 +31,18 @@ struct GamificationService {
         var leveledUp = false
         var newLevel = profile.level
 
-        while profile.currentXP >= self.calculateXPForLevel(newLevel + 1) {
+        while profile.currentXP >= calculateXPForLevel(newLevel + 1) {
             newLevel += 1
             leveledUp = true
         }
 
         if leveledUp {
             profile.level = newLevel
-            profile.xpForNextLevel = self.calculateXPForNextLevel(forLevel: newLevel)
+            profile.xpForNextLevel = calculateXPForNextLevel(forLevel: newLevel)
         }
 
         // Update habit streak
-        self.updateHabitStreak(habit: habit)
+        updateHabitStreak(habit: habit)
 
         // Update longest streak if necessary
         if habit.streak > profile.longestStreak {
@@ -154,7 +153,7 @@ struct GamificationService {
         var leveledUp = false
         var newLevel = profile.level
 
-        while profile.currentXP >= self.calculateXPForLevel(
+        while profile.currentXP >= calculateXPForLevel(
             newLevel + 1
         ) {
             newLevel += 1
@@ -163,7 +162,7 @@ struct GamificationService {
 
         if leveledUp {
             profile.level = newLevel
-            profile.xpForNextLevel = self.calculateXPForNextLevel(forLevel: newLevel)
+            profile.xpForNextLevel = calculateXPForNextLevel(forLevel: newLevel)
         }
 
         return (leveledUp: leveledUp, newLevel: newLevel)

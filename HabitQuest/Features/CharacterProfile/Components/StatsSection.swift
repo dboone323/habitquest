@@ -8,7 +8,14 @@ public struct StatsSection: View {
     let perfectDays: Int
     let weeklyCompletion: Double
 
-    public init(totalHabits: Int, activeStreaks: Int, completedToday: Int, longestStreak: Int, perfectDays: Int, weeklyCompletion: Double) {
+    public init(
+        totalHabits: Int,
+        activeStreaks: Int,
+        completedToday: Int,
+        longestStreak: Int,
+        perfectDays: Int,
+        weeklyCompletion: Double
+    ) {
         self.totalHabits = totalHabits
         self.activeStreaks = activeStreaks
         self.completedToday = completedToday
@@ -24,23 +31,23 @@ public struct StatsSection: View {
                 .fontWeight(.semibold)
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 12) {
-                StatCard(title: "Total Habits", value: "\(self.totalHabits)", icon: "list.bullet")
-                StatCard(title: "Active Streaks", value: "\(self.activeStreaks)", icon: "flame")
+                StatCard(title: "Total Habits", value: "\(totalHabits)", icon: "list.bullet")
+                StatCard(title: "Active Streaks", value: "\(activeStreaks)", icon: "flame")
                 StatCard(
-                    title: "Completed Today", value: "\(self.completedToday)", icon: "checkmark.circle"
+                    title: "Completed Today", value: "\(completedToday)", icon: "checkmark.circle"
                 )
-                StatCard(title: "Longest Streak", value: "\(self.longestStreak)", icon: "star")
-                StatCard(title: "Perfect Days", value: "\(self.perfectDays)", icon: "crown")
-                StatCard(title: "Weekly Rate", value: "\(Int(self.weeklyCompletion))%", icon: "percent")
+                StatCard(title: "Longest Streak", value: "\(longestStreak)", icon: "star")
+                StatCard(title: "Perfect Days", value: "\(perfectDays)", icon: "crown")
+                StatCard(title: "Weekly Rate", value: "\(Int(weeklyCompletion))%", icon: "percent")
             }
         }
         .padding()
         #if os(iOS)
-        .background(Color(.systemGray6))
+            .background(Color(.systemGray6))
         #else
-        .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color(nsColor: .windowBackgroundColor))
         #endif
-        .cornerRadius(16)
+            .cornerRadius(16)
     }
 }
 
@@ -57,26 +64,26 @@ public struct StatCard: View {
 
     public var body: some View {
         VStack(spacing: 8) {
-            Image(systemName: self.icon)
+            Image(systemName: icon)
                 .font(.title2)
                 .foregroundColor(.blue)
 
-            Text(self.value)
+            Text(value)
                 .font(.title3)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
 
-            Text(self.title)
+            Text(title)
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
         }
         .padding()
-            #if os(iOS)
+        #if os(iOS)
             .background(Color(.systemBackground))
-            #else
+        #else
             .background(Color(nsColor: .windowBackgroundColor))
-            #endif
-        .cornerRadius(12)
+        #endif
+            .cornerRadius(12)
     }
 }

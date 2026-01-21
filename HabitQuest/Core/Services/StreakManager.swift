@@ -3,7 +3,6 @@ import Foundation
 /// Logic-only manager for streak calculations
 /// Separated from StreakService to allow unit testing without SwiftData dependencies
 class StreakManager {
-
     // MARK: - Streak Calculation
 
     func calculateStreak(completions: [Date]) -> Int {
@@ -15,7 +14,8 @@ class StreakManager {
         var currentDate = today
 
         // Check if the most recent completion was today or yesterday
-        // If the last completion was before yesterday, the streak is already 0 (unless we want to count up to the last completion, but usually streak implies "current active streak")
+        // If the last completion was before yesterday, the streak is already 0 (unless we want to count up to the last
+        // completion, but usually streak implies "current active streak")
         // The tests imply "current streak".
 
         // However, if the user hasn't completed it today yet, the streak from yesterday should still count?
@@ -29,7 +29,8 @@ class StreakManager {
         // 1. Normalize all dates to start of day.
         // 2. Iterate backwards from today.
         // 3. If date exists in completions, increment streak.
-        // 4. If date is today and missing, continue to yesterday (streak doesn't break yet, but doesn't increment? Or maybe it just starts checking from most recent?)
+        // 4. If date is today and missing, continue to yesterday (streak doesn't break yet, but doesn't increment? Or
+        // maybe it just starts checking from most recent?)
 
         // Actually, a standard streak calculation:
         // Find the most recent completion.
@@ -44,7 +45,7 @@ class StreakManager {
         // Check if streak is active (completed today or yesterday)
         let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
 
-        if !normalizedCompletions.contains(today) && !normalizedCompletions.contains(yesterday) {
+        if !normalizedCompletions.contains(today), !normalizedCompletions.contains(yesterday) {
             return 0
         }
 
@@ -68,7 +69,7 @@ class StreakManager {
 
     func checkMilestone(streak: Int) -> StreakMilestone? {
         // Check for exact milestone match
-        return StreakMilestone.predefinedMilestones.first { $0.streakCount == streak }
+        StreakMilestone.predefinedMilestones.first { $0.streakCount == streak }
     }
 
     // MARK: - Statistics

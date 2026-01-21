@@ -28,8 +28,8 @@ public class TodaysQuestsViewModel: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func setModelContext(_ context: ModelContext) {
-        self.modelContext = context
-        self.loadTodaysHabits()
+        modelContext = context
+        loadTodaysHabits()
     }
 
     /// Load habits that are due today based on their frequency
@@ -40,7 +40,7 @@ public class TodaysQuestsViewModel: ObservableObject {
 
         do {
             let allHabits = try context.fetch(request)
-            self.todaysHabits = allHabits.filter { habit in
+            todaysHabits = allHabits.filter { habit in
                 self.isDueToday(habit)
             }
         } catch {
@@ -69,15 +69,15 @@ public class TodaysQuestsViewModel: ObservableObject {
         context.insert(newLog)
 
         // Award XP to the player
-        let earnedExperiencePoints = self.calculateXP(for: habit)
-        self.awardXP(earnedExperiencePoints)
+        let earnedExperiencePoints = calculateXP(for: habit)
+        awardXP(earnedExperiencePoints)
 
         // Show completion message
-        self.completionMessage = "Quest completed! +\(earnedExperiencePoints) XP"
-        self.showingCompletionAlert = true
+        completionMessage = "Quest completed! +\(earnedExperiencePoints) XP"
+        showingCompletionAlert = true
 
         // Refresh today's habits
-        self.loadTodaysHabits()
+        loadTodaysHabits()
 
         // Save context
         do {
@@ -129,7 +129,7 @@ public class TodaysQuestsViewModel: ObservableObject {
 
         do {
             try context.save()
-            self.loadTodaysHabits()
+            loadTodaysHabits()
         } catch {
             print("Error adding habit: \(error)")
         }

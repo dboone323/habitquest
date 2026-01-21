@@ -27,13 +27,13 @@ public struct CharacterAvatarSection: View {
                     )
                     .frame(width: 120, height: 120)
 
-                Image(systemName: self.avatarImageName)
+                Image(systemName: avatarImageName)
                     .font(.system(size: 40))
                     .foregroundColor(.white)
             }
 
             // Level Badge
-            Text("Level \(self.level)")
+            Text("Level \(level)")
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
@@ -45,12 +45,12 @@ public struct CharacterAvatarSection: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Spacer()
-                    Text("\(self.currentXP) / \(self.xpToNextLevel)")
+                    Text("\(currentXP) / \(xpToNextLevel)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
 
-                ProgressView(value: Double(self.currentXP), total: Double(self.xpToNextLevel))
+                ProgressView(value: Double(currentXP), total: Double(xpToNextLevel))
                     .progressViewStyle(LinearProgressViewStyle(tint: .blue))
                     .scaleEffect(x: 1, y: 1.5)
             }
@@ -58,10 +58,10 @@ public struct CharacterAvatarSection: View {
         }
         .padding()
         #if os(iOS)
-        .background(Color(.systemGray6))
+            .background(Color(.systemGray6))
         #else
-        .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color(nsColor: .windowBackgroundColor))
         #endif
-        .cornerRadius(16)
+            .cornerRadius(16)
     }
 }

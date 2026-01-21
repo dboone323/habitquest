@@ -22,19 +22,19 @@ final class PlayerProfile {
 
     /// Initialize a new player profile with default starting values
     init() {
-        self.level = 1
-        self.currentXP = 0
-        self.xpForNextLevel = 100
-        self.longestStreak = 0
-        self.creationDate = Date()
+        level = 1
+        currentXP = 0
+        xpForNextLevel = 100
+        longestStreak = 0
+        creationDate = Date()
     }
 
     /// Calculate progress toward next level as a percentage (0.0 to 1.0)
     var xpProgress: Float {
         let gamificationService = GamificationService()
-        let previousLevelXP = self.level > 1 ? gamificationService.calculateXPForLevel(self.level - 1) : 0
-        let currentLevelXP = gamificationService.calculateXPForLevel(self.level)
-        let progressInCurrentLevel = self.currentXP - previousLevelXP
+        let previousLevelXP = level > 1 ? gamificationService.calculateXPForLevel(level - 1) : 0
+        let currentLevelXP = gamificationService.calculateXPForLevel(level)
+        let progressInCurrentLevel = currentXP - previousLevelXP
         let xpNeededForCurrentLevel = currentLevelXP - previousLevelXP
 
         return xpNeededForCurrentLevel > 0 ? Float(progressInCurrentLevel) / Float(xpNeededForCurrentLevel) : 0.0

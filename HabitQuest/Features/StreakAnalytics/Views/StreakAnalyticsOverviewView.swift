@@ -11,7 +11,7 @@ public struct StreakAnalyticsOverviewView: View {
         ) {
             AnalyticsCard(
                 title: "Total Streaks",
-                value: "\(self.data.totalActiveStreaks)",
+                value: "\(data.totalActiveStreaks)",
                 subtitle: "Active habits",
                 color: .blue,
                 icon: "flame.fill"
@@ -19,7 +19,7 @@ public struct StreakAnalyticsOverviewView: View {
 
             AnalyticsCard(
                 title: "Longest Streak",
-                value: "\(self.data.longestOverallStreak)",
+                value: "\(data.longestOverallStreak)",
                 subtitle: "Days",
                 color: .orange,
                 icon: "trophy.fill"
@@ -27,15 +27,15 @@ public struct StreakAnalyticsOverviewView: View {
 
             AnalyticsCard(
                 title: "Avg Consistency",
-                value: "\(Int(self.data.averageConsistency * 100))%",
-                subtitle: self.timeframe.title.lowercased(),
+                value: "\(Int(data.averageConsistency * 100))%",
+                subtitle: timeframe.title.lowercased(),
                 color: .green,
                 icon: "target"
             )
 
             AnalyticsCard(
                 title: "Milestones Hit",
-                value: "\(self.data.milestonesAchieved)",
+                value: "\(data.milestonesAchieved)",
                 subtitle: "This period",
                 color: .purple,
                 icon: "star.fill"

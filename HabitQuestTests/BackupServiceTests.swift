@@ -1,5 +1,5 @@
-import XCTest
 @testable import HabitQuest
+import XCTest
 
 @MainActor
 final class BackupServiceTests: XCTestCase {
@@ -24,12 +24,12 @@ final class BackupServiceTests: XCTestCase {
         // When
         let url = try backupService.createBackup()
         createdBackupURL = url
-        
+
         // Then
         XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
         XCTAssertTrue(url.lastPathComponent.hasPrefix("HabitQuest_Backup_"))
         XCTAssertTrue(url.pathExtension == "json")
-        
+
         // Verify Content
         let data = try Data(contentsOf: url)
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
@@ -40,7 +40,7 @@ final class BackupServiceTests: XCTestCase {
         // Given
         let url = try backupService.createBackup()
         createdBackupURL = url
-        
+
         // When
         // In the prototype, this just prints, so we ensure it doesn't throw
         XCTAssertNoThrow(try backupService.restoreBackup(from: url))

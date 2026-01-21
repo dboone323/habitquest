@@ -83,7 +83,7 @@ public struct ContentView: View {
                 // Floating Action Button
                 Button(action: {
                     addItem() // Will open sheet later
-                }) {
+                }, label: {
                     Image(systemName: "plus")
                         .font(.title.weight(.semibold))
                         .foregroundColor(.white)
@@ -91,20 +91,20 @@ public struct ContentView: View {
                         .background(Color.blue)
                         .clipShape(Circle())
                         .shadow(radius: 4, y: 3)
-                }
+                })
                 .padding()
             }
         }
         .onAppear {
-             initializeGamification()
+            initializeGamification()
         }
         .alert("Level Up!", isPresented: $showLevelUpAlert) {
-            Button("Awesome!", role: .cancel) { }
+            Button("Awesome!", role: .cancel) {}
         } message: {
             Text("Congratulations! You've reached Level \(newLevel). Keep up the great work!")
         }
         .alert("Achievement Unlocked!", isPresented: $showAchievementAlert) {
-            Button("Nice!", role: .cancel) { }
+            Button("Nice!", role: .cancel) {}
         } message: {
             Text("You've unlocked: '\(unlockedAchievementName)'")
         }
@@ -128,7 +128,7 @@ public struct ContentView: View {
     private func addItem() {
         withAnimation {
             let newHabit = Habit(
-                name: "New Quest \(Int.random(in: 1...100))",
+                name: "New Quest \(Int.random(in: 1 ... 100))",
                 habitDescription: "Daily task",
                 frequency: .daily,
                 category: HabitCategory.allCases.randomElement() ?? .health
@@ -163,8 +163,8 @@ public struct ContentView: View {
             if let profile = playerProfile {
                 let result = gamificationService.processHabitCompletion(habit: habit, profile: profile)
                 if result.leveledUp {
-                    self.newLevel = result.newLevel
-                    self.showLevelUpAlert = true
+                    newLevel = result.newLevel
+                    showLevelUpAlert = true
                 }
 
                 // Update Achievements
@@ -176,8 +176,8 @@ public struct ContentView: View {
                 )
 
                 if let first = unlocked.first {
-                    self.unlockedAchievementName = first.name
-                    self.showAchievementAlert = true
+                    unlockedAchievementName = first.name
+                    showAchievementAlert = true
                 }
             }
         }
@@ -217,14 +217,14 @@ struct HabitListEmptyStateView: View {
 extension HabitCategory {
     var viewColor: Color {
         switch self {
-        case .health: return .red
-        case .fitness: return .orange
-        case .learning: return .blue
-        case .productivity: return .green
-        case .social: return .purple
-        case .creativity: return .yellow
-        case .mindfulness: return .indigo
-        case .other: return .gray
+        case .health: .red
+        case .fitness: .orange
+        case .learning: .blue
+        case .productivity: .green
+        case .social: .purple
+        case .creativity: .yellow
+        case .mindfulness: .indigo
+        case .other: .gray
         }
     }
 }
@@ -279,7 +279,7 @@ struct HabitCardView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     isAnimating = false
                 }
-            }) {
+            }, label: {
                 ZStack {
                     Circle()
                         .stroke(Color.gray.opacity(0.3), lineWidth: 3)
@@ -292,18 +292,18 @@ struct HabitCardView: View {
                             .transition(.scale)
                     }
                 }
-            }
+            })
             .scaleEffect(isAnimating ? 1.2 : 1.0)
             .buttonStyle(PlainButtonStyle())
         }
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                #if os(iOS)
+            #if os(iOS)
                 .fill(Color(.secondarySystemBackground))
-                #else
+            #else
                 .fill(Color(nsColor: .controlBackgroundColor))
-                #endif
+            #endif
                 .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
         )
         .padding(.horizontal)
@@ -392,9 +392,9 @@ struct HabitWidgetView: View {
         }
         .padding()
         #if os(iOS)
-        .background(Color(UIColor.systemBackground))
+            .background(Color(UIColor.systemBackground))
         #else
-        .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color(nsColor: .windowBackgroundColor))
         #endif
     }
 }

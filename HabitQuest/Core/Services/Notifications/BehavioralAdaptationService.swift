@@ -16,7 +16,7 @@ final class BehavioralAdaptationService {
         guard let habit else { return }
 
         // Log interaction for machine learning
-        await self.logNotificationInteraction(
+        await logNotificationInteraction(
             habit: habit,
             interaction: interactionType,
             timestamp: Date()
@@ -25,13 +25,13 @@ final class BehavioralAdaptationService {
         // Adjust future notifications based on response
         switch interactionType {
         case .dismissed:
-            await self.adjustNotificationTiming(for: habit, direction: .later)
+            await adjustNotificationTiming(for: habit, direction: .later)
         case .completed:
-            await self.reinforceCurrentTiming(for: habit)
+            await reinforceCurrentTiming(for: habit)
         case .ignored:
-            await self.adjustNotificationTiming(for: habit, direction: .earlier)
+            await adjustNotificationTiming(for: habit, direction: .earlier)
         case .snoozed:
-            await self.adjustNotificationFrequency(for: habit, factor: 0.8) // Reduce frequency
+            await adjustNotificationFrequency(for: habit, factor: 0.8) // Reduce frequency
         }
     }
 
@@ -44,10 +44,10 @@ final class BehavioralAdaptationService {
 
             if recentSuccess > 0.8 {
                 // Reduce frequency for well-established habits
-                await self.adjustNotificationFrequency(for: habit, factor: 0.7)
+                await adjustNotificationFrequency(for: habit, factor: 0.7)
             } else if recentSuccess < 0.3 {
                 // Increase support for struggling habits
-                await self.adjustNotificationFrequency(for: habit, factor: 1.3)
+                await adjustNotificationFrequency(for: habit, factor: 1.3)
             }
         }
     }
@@ -67,10 +67,10 @@ final class BehavioralAdaptationService {
         let interactions = await fetchNotificationInteractions(for: habit)
 
         // Analyze response patterns
-        let successRateByTime = self.calculateSuccessRateByTime(interactions: interactions)
-        let bestResponseTime = self.findBestResponseTime(from: successRateByTime)
-        let preferredInteraction = self.determinePreferredInteraction(interactions: interactions)
-        let optimalFrequency = self.determineOptimalFrequency(habit: habit, interactions: interactions)
+        let successRateByTime = calculateSuccessRateByTime(interactions: interactions)
+        let bestResponseTime = findBestResponseTime(from: successRateByTime)
+        let preferredInteraction = determinePreferredInteraction(interactions: interactions)
+        let optimalFrequency = determineOptimalFrequency(habit: habit, interactions: interactions)
 
         return UserResponseAnalysis(
             bestResponseTime: bestResponseTime,
@@ -95,10 +95,10 @@ final class BehavioralAdaptationService {
         let interactions = await fetchNotificationInteractions(for: habit)
         let recentInteractions = interactions.filter { $0.timestamp > Date().addingTimeInterval(-7 * 24 * 3600) }
 
-        let engagementScore = self.calculateEngagementScore(interactions: recentInteractions)
-        let responsivenessPattern = self.determineResponsivenessPattern(interactions: recentInteractions)
-        let optimalWindow = self.findOptimalEngagementWindow(interactions: recentInteractions)
-        let fatigueIndicators = self.detectFatigueIndicators(interactions: recentInteractions)
+        let engagementScore = calculateEngagementScore(interactions: recentInteractions)
+        let responsivenessPattern = determineResponsivenessPattern(interactions: recentInteractions)
+        let optimalWindow = findOptimalEngagementWindow(interactions: recentInteractions)
+        let fatigueIndicators = detectFatigueIndicators(interactions: recentInteractions)
 
         return NotificationBehavioralInsights(
             engagementScore: engagementScore,
@@ -112,13 +112,13 @@ final class BehavioralAdaptationService {
 
     private func fetchActiveHabits() async -> [Habit] {
         let descriptor = FetchDescriptor<Habit>()
-        let allHabits = (try? self.modelContext.fetch(descriptor)) ?? []
+        let allHabits = (try? modelContext.fetch(descriptor)) ?? []
         return allHabits.filter(\.isActive)
     }
 
     private func fetchHabit(id: UUID) async -> Habit? {
         let descriptor = FetchDescriptor<Habit>()
-        let allHabits = (try? self.modelContext.fetch(descriptor)) ?? []
+        let allHabits = (try? modelContext.fetch(descriptor)) ?? []
         return allHabits.first { $0.id == id }
     }
 

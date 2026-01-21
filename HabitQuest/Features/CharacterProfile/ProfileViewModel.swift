@@ -26,11 +26,11 @@ public class ProfileViewModel: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func setModelContext(_ context: ModelContext) {
-        self.modelContext = context
+        modelContext = context
         // self.analyticsService = AnalyticsService(modelContext: context) // Temporarily commented out
-        self.loadProfile()
-        self.loadStatistics()
-        self.loadAchievements()
+        loadProfile()
+        loadStatistics()
+        loadAchievements()
         // self.loadAnalytics() // Temporarily commented out for testing
     }
 
@@ -42,17 +42,17 @@ public class ProfileViewModel: ObservableObject {
     /// <#Description#>
     /// - Returns: <#description#>
     func refreshProfile() {
-        self.loadProfile()
-        self.loadStatistics()
-        self.updateAchievements()
-        self.loadAnalytics()
+        loadProfile()
+        loadStatistics()
+        updateAchievements()
+        loadAnalytics()
     }
 
     /// Load analytics data
     private func loadAnalytics() {
         Task { [weak self] in
             guard let self else { return }
-            let newAnalytics = await self.analyticsService?.getAnalytics()
+            let newAnalytics = await analyticsService?.getAnalytics()
             await MainActor.run {
                 self.analytics = newAnalytics ?? HabitAnalytics.empty
             }
@@ -68,26 +68,25 @@ public class ProfileViewModel: ObservableObject {
             let profiles = try modelContext.fetch(fetchDescriptor)
 
             if let profile = profiles.first {
-                self.updateProfileData(from: profile)
-                self.logger.info("Loaded player profile - Level: \(profile.level), XP: \(profile.currentXP)")
+                updateProfileData(from: profile)
+                logger.info("Loaded player profile - Level: \(profile.level), XP: \(profile.currentXP)")
             } else {
                 // Create default profile if none exists
-                self.createDefaultProfile()
+                createDefaultProfile()
             }
-
         } catch {
-            self.logger.error("Failed to load player profile: \(error.localizedDescription)")
+            logger.error("Failed to load player profile: \(error.localizedDescription)")
             ErrorHandler.handle(error, showToUser: true)
         }
     }
 
     /// Update published properties from PlayerProfile model
     private func updateProfileData(from profile: PlayerProfile) {
-        self.level = profile.level
-        self.currentXP = profile.currentXP
-        self.xpForNextLevel = self.gamificationService.calculateXPForNextLevel(forLevel: profile.level)
-        self.xpProgress = profile.xpProgress
-        self.longestStreak = profile.longestStreak
+        level = profile.level
+        currentXP = profile.currentXP
+        xpForNextLevel = gamificationService.calculateXPForNextLevel(forLevel: profile.level)
+        xpProgress = profile.xpProgress
+        longestStreak = profile.longestStreak
     }
 
     /// Create a default player profile
@@ -99,11 +98,10 @@ public class ProfileViewModel: ObservableObject {
             modelContext.insert(newProfile)
             try modelContext.save()
 
-            self.updateProfileData(from: newProfile)
-            self.logger.info("Created new player profile")
-
+            updateProfileData(from: newProfile)
+            logger.info("Created new player profile")
         } catch {
-            self.logger.error("Failed to create player profile: \(error.localizedDescription)")
+            logger.error("Failed to create player profile: \(error.localizedDescription)")
             ErrorHandler.handle(error, showToUser: true)
         }
     }
@@ -116,13 +114,13 @@ public class ProfileViewModel: ObservableObject {
             // Load all habits
             let habitFetchDescriptor = FetchDescriptor<Habit>()
             let allHabits = try modelContext.fetch(habitFetchDescriptor)
-            self.totalHabits = allHabits.count
+            totalHabits = allHabits.count
 
             // Calculate completed today
             let calendar = Calendar.current
             let today = Date()
 
-            self.completedToday = allHabits.reduce(0) { count, habit in
+            completedToday = allHabits.reduce(0) { count, habit in
                 let logs = habit.logs // Remove optional binding since logs is not optional
                 let todayCompletions = logs.filter { log in
                     calendar.isDate(log.completionDate, inSameDayAs: today)
@@ -130,11 +128,10 @@ public class ProfileViewModel: ObservableObject {
                 return count + (todayCompletions.isEmpty ? 0 : 1)
             }
 
-            self.logger
-                .info("Loaded statistics - Total habits: \(self.totalHabits), Completed today: \(self.completedToday)")
-
+            logger
+                .info("Loaded statistics - Total habits: \(totalHabits), Completed today: \(completedToday)")
         } catch {
-            self.logger.error("Failed to load statistics: \(error.localizedDescription)")
+            logger.error("Failed to load statistics: \(error.localizedDescription)")
             ErrorHandler.handle(error, showToUser: true)
         }
     }
@@ -154,15 +151,14 @@ public class ProfileViewModel: ObservableObject {
                     modelContext.insert(achievement)
                 }
                 try modelContext.save()
-                self.achievements = defaultAchievements
-                self.logger.info("Created \(defaultAchievements.count) default achievements")
+                achievements = defaultAchievements
+                logger.info("Created \(defaultAchievements.count) default achievements")
             } else {
-                self.achievements = existingAchievements
-                self.logger.info("Loaded \(existingAchievements.count) existing achievements")
+                achievements = existingAchievements
+                logger.info("Loaded \(existingAchievements.count) existing achievements")
             }
-
         } catch {
-            self.logger.error("Failed to load achievements: \(error.localizedDescription)")
+            logger.error("Failed to load achievements: \(error.localizedDescription)")
             ErrorHandler.handle(error, showToUser: true)
         }
     }
@@ -185,7 +181,7 @@ public class ProfileViewModel: ObservableObject {
 
             // Update achievement progress
             let newlyUnlocked = AchievementService.updateAchievementProgress(
-                achievements: self.achievements,
+                achievements: achievements,
                 player: profile,
                 habits: habits,
                 recentLogs: logs
@@ -193,14 +189,13 @@ public class ProfileViewModel: ObservableObject {
 
             if !newlyUnlocked.isEmpty {
                 try modelContext.save()
-                self.logger.info("Updated achievements, \(newlyUnlocked.count) newly unlocked")
+                logger.info("Updated achievements, \(newlyUnlocked.count) newly unlocked")
 
                 // Update profile data after potential XP gains
-                self.updateProfileData(from: profile)
+                updateProfileData(from: profile)
             }
-
         } catch {
-            self.logger.error("Failed to update achievements: \(error.localizedDescription)")
+            logger.error("Failed to update achievements: \(error.localizedDescription)")
             ErrorHandler.handle(error, showToUser: true)
         }
     }

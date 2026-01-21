@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 // Enhancement #85: Accessibility Audit & Helpers
@@ -8,7 +7,7 @@ struct AccessibleHabitRow: View {
     let habitName: String
     let isCompleted: Bool
     let action: () -> Void
-    
+
     var body: some View {
         HStack {
             Text(habitName)
