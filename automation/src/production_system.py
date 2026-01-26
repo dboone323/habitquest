@@ -144,11 +144,12 @@ class ProductionSystem:
 
             self.metrics.successful_requests += 1
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             self.metrics.failed_requests += 1
+            logger.exception("Error processing request")
             result = {
                 "success": False,
-                "error": str(e),
+                "error": "request_processing_failed",
                 "request_id": f"req_{self.metrics.total_requests}",
             }
 
@@ -211,8 +212,8 @@ def create_production_system() -> ProductionSystem:
 
 async def main():
     """Demo production system"""
-    print("🚀 Phase 4 Production System Demo")
-    print("=" * 50)
+    logger.info("🚀 Phase 4 Production System Demo")
+    logger.info("=" * 50)
 
     # Create production system
     prod_system = create_production_system()
