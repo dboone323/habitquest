@@ -4,6 +4,7 @@ Working Performance Optimizer for Phase 3 Testing
 """
 
 import time
+from typing import Any
 from dataclasses import dataclass
 
 import psutil
@@ -76,7 +77,7 @@ class PerformanceOptimizer:
         """Simple cache optimization"""
         self.cache[key] = {"value": value, "timestamp": time.time(), "ttl": ttl}
 
-    def get_cached(self, key: str) -> any | None:
+    def get_cached(self, key: str) -> Any | None:
         """Get cached value if valid"""
         if key in self.cache:
             item = self.cache[key]
