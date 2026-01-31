@@ -23,6 +23,7 @@ class AutomationScript:
 
 class AutomationEngine:
     """Engine for discovering and managing automation scripts."""
+
     def __init__(self):
         self.scripts: dict[str, AutomationScript] = {}
         self.workspace_path = Path(os.getcwd())
@@ -75,9 +76,9 @@ def get_engine():
 def main():
     """Main entry point to demonstrate engine functionality."""
     engine = get_engine()
-    print(f"Working! Found {len(engine.scripts)} scripts")
+    logger.info("Working! Found %s scripts", len(engine.scripts))
     status = engine.get_status()
-    print("Status:", json.dumps(status, indent=2))
+    logger.info("Status: %s", json.dumps(status, indent=2))
 
 
 if __name__ == "__main__":

@@ -9,6 +9,10 @@ from datetime import UTC, datetime, timedelta
 
 import jwt
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class JWTAuthManager:
     """Manager for JWT-based authentication and token handling."""
@@ -132,18 +136,18 @@ def main():
     # Test login
     token = auth.login("admin", "admin")
     if token:
-        print("Login successful! Token generated")
+        logger.info("Login successful! Token generated")
 
         # Test verification
         payload = auth.verify_token(token)
         if payload:
-            print(f"Token valid for user: {payload['username']}")
+            logger.info("Token valid for user: %s", payload.get("username"))
         else:
-            print("Token verification failed")
+            logger.warning("Token verification failed")
     else:
-        print("Login failed")
+        logger.warning("Login failed")
 
-    print("Auth status:", auth.get_status())
+    logger.info("Auth status: %s", auth.get_status())
 
 
 if __name__ == "__main__":
