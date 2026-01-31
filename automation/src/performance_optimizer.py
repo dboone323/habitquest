@@ -9,6 +9,10 @@ from dataclasses import dataclass
 
 import psutil
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 @dataclass
 class PerformanceMetrics:
@@ -161,22 +165,25 @@ def main():
     """Demonstrate performance optimizer functionality."""
     optimizer = get_optimizer()
 
-    print("Collecting performance metrics...")
+    logger.info("Collecting performance metrics...")
     metrics = optimizer.collect_metrics()
-    print(
-        f"Current metrics: CPU {metrics.cpu_percent}%, Memory {metrics.memory_percent}%, Disk {metrics.disk_usage}%"
+    logger.info(
+        "Current metrics: CPU %s%%, Memory %s%%, Disk %s%%",
+        metrics.cpu_percent,
+        metrics.memory_percent,
+        metrics.disk_usage,
     )
 
     # Test cache
     optimizer.optimize_cache("test_key", "test_value", 60)
     cached_value = optimizer.get_cached("test_key")
-    print(f"Cache test: {cached_value}")
+    logger.info("Cache test: %s", cached_value)
 
     # Get suggestions
     suggestions = optimizer.get_optimization_suggestions()
-    print(f"Optimization suggestions: {suggestions}")
+    logger.info("Optimization suggestions: %s", suggestions)
 
-    print("Optimizer status:", optimizer.get_status())
+    logger.info("Optimizer status: %s", optimizer.get_status())
 
 
 if __name__ == "__main__":

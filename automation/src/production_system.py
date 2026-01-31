@@ -78,7 +78,9 @@ class ProductionSystem:
         # Health check
         health_ok = await self._health_check()
         if not health_ok:
-            raise Exception("Health check failed")  # pylint: disable=broad-exception-raised
+            raise Exception(
+                "Health check failed"
+            )  # pylint: disable=broad-exception-raised
 
         self.is_running = True
         logger.info("✅ Production system deployed successfully")
@@ -221,30 +223,38 @@ async def main():
     try:
         # Deploy system
         deployment_result = await prod_system.deploy()
-        print(f"✅ Deployment: {deployment_result['status']}")
+        logger.info("✅ Deployment: %s", deployment_result.get("status"))
 
         # Process some requests
-        print("\n📡 Processing test requests...")
+        logger.info("\n📡 Processing test requests...")
         for i in range(5):
             request_data = {"test": f"request_{i}"}
             result = await prod_system.process_request(request_data)
             status = "✅" if result["success"] else "❌"
-            print(f"   {status} Request {i+1}: {result.get('request_id', 'N/A')}")
+            logger.info(
+                "   %s Request %s: %s", status, i + 1, result.get("request_id", "N/A")
+            )
 
         # Show status
         status = prod_system.get_status()
-        print("\n📊 Production Status:")
-        print(f"   Running: {status['running']}")
-        print(f"   Total Requests: {status['metrics']['total_requests']}")
-        print(f"   Success Rate: {status['success_rate']}%")
-        print(f"   Active Services: {status['metrics']['active_services']}")
-        print(f"   Uptime: {status['metrics']['uptime']:.1f} seconds")
+        logger.info("\n📊 Production Status:")
+        logger.info("   Running: %s", status.get("running"))
+        logger.info(
+            "   Total Requests: %s", status.get("metrics", {}).get("total_requests")
+        )
+        logger.info("   Success Rate: %s%%", status.get("success_rate"))
+        logger.info(
+            "   Active Services: %s", status.get("metrics", {}).get("active_services")
+        )
+        logger.info(
+            "   Uptime: %.1f seconds", status.get("metrics", {}).get("uptime", 0.0)
+        )
 
         # Save status report
         with open("phase4_production_status.json", "w", encoding="utf-8") as f:
             json.dump(status, f, indent=2)
 
-        print("\n📄 Status report: phase4_production_status.json")
+        logger.info("\n📄 Status report: phase4_production_status.json")
 
     finally:
         await prod_system.shutdown()
