@@ -6,7 +6,7 @@ Auto-generated on 2025-12-05
 import sys
 import os
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock
 
 # Ensure root is in path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -16,11 +16,11 @@ if root_dir not in sys.path:
 
 try:
     from HabitQuest.automation.src.production_system import (
-        ProductionSystem, 
-        ProductionConfig, 
-        ProductionMetrics, 
-        create_production_system, 
-        main
+        ProductionSystem,
+        ProductionConfig,
+        ProductionMetrics,
+        create_production_system,
+        main,
     )
 except ImportError:
     # Fallback/Debug
@@ -28,12 +28,12 @@ except ImportError:
     sys.path.append(os.path.abspath(os.path.join(current_dir, "../automation/src")))
     # This might still fail with relative import error in source, unless we mock parent
     from production_system import (
-        ProductionSystem, 
-        ProductionConfig, 
-        ProductionMetrics, 
-        create_production_system, 
-        main
+        ProductionSystem,
+        ProductionConfig,
+        ProductionMetrics,
+        create_production_system,
     )
+
 
 class TestProductionConfig:
     """Tests for ProductionConfig class."""
@@ -51,6 +51,7 @@ class TestProductionMetrics:
     def test_initialization(self):
         """Test ProductionMetrics can be initialized."""
         import time
+
         metrics = ProductionMetrics(
             timestamp=time.time(),
             total_requests=0,
@@ -58,7 +59,7 @@ class TestProductionMetrics:
             failed_requests=0,
             avg_response_time=0.0,
             active_services=0,
-            uptime=0.0
+            uptime=0.0,
         )
         assert metrics.total_requests == 0
 
@@ -73,7 +74,7 @@ class TestProductionSystem:
         system = ProductionSystem(config)
         assert system.config.environment == "test"
         assert not system.is_running
-        
+
     @pytest.mark.asyncio
     async def test_health_check(self):
         config = ProductionConfig(environment="production")
@@ -82,7 +83,7 @@ class TestProductionSystem:
         system.automation_engine = MagicMock()
         system.auth_manager = MagicMock()
         system.performance_optimizer = MagicMock()
-        
+
         healthy = await system._health_check()
         assert healthy is True
 

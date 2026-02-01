@@ -5,13 +5,11 @@ Improved tests that exercise analysis and fix application logic.
 """
 import os
 import subprocess
-from pathlib import Path
-import json
-import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock
 
 # Ensure the module can be imported from its locations
 import sys
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 repo_root = os.path.abspath(os.path.join(current_dir, "../.."))
 if repo_root not in sys.path:
@@ -20,7 +18,6 @@ if repo_root not in sys.path:
 from scripts.ai_workflow_recovery import (
     AIWorkflowRecovery,
     WorkflowFailure,
-    AILearningPattern,
 )
 
 
@@ -34,7 +31,7 @@ def test_extract_error_message_simple():
 def test_analyze_workflow_failure_matches_pattern():
     # Pattern matching should return a WorkflowFailure with suggested_fix
     recovery = AIWorkflowRecovery(repo_path=".")
-    log = "File \"./script.py\", line 1\nSyntaxError: EOL while scanning string literal"
+    log = 'File "./script.py", line 1\nSyntaxError: EOL while scanning string literal'
     failure = recovery.analyze_workflow_failure(log)
     assert failure is not None
     assert isinstance(failure, WorkflowFailure)
@@ -70,7 +67,7 @@ def test_fix_python_syntax_adds_quote(tmp_path):
     # Create a file with unclosed quote on line 2
     repo = tmp_path
     file_path = repo / "buggy.py"
-    file_path.write_text("print(\"hello\")\nprint(\"unclosed)\n")
+    file_path.write_text('print("hello")\nprint("unclosed)\n')
 
     recovery = AIWorkflowRecovery(repo_path=str(repo))
 
@@ -172,7 +169,9 @@ def test_autonomous_recovery_loop_stops_when_unanalyzable(monkeypatch, tmp_path)
     recovery = AIWorkflowRecovery(repo_path=str(repo))
 
     # run_quality_check returns False and output that cannot be analyzed
-    monkeypatch.setattr(recovery, "run_quality_check", lambda: (False, "Some unknown error text"))
+    monkeypatch.setattr(
+        recovery, "run_quality_check", lambda: (False, "Some unknown error text")
+    )
 
     result = recovery.autonomous_recovery_loop()
     assert result is False
@@ -183,18 +182,27 @@ def test_main_dry_run_reports_suggested_fix(monkeypatch, capsys, tmp_path):
 
     # Create a simple script to produce an error
     file = repo / "a.py"
-    file.write_text("print(\"oops)\n")
+    file.write_text('print("oops)\n')
 
     recovery = AIWorkflowRecovery(repo_path=str(repo))
 
     # Simulate run_quality_check returning failed output with syntax error
-    monkeypatch.setattr(recovery, "run_quality_check", lambda: (False, "SyntaxError: EOL while scanning string literal"))
-    monkeypatch.setattr('scripts.ai_workflow_recovery.AIWorkflowRecovery', lambda *a, **k: recovery)
+    monkeypatch.setattr(
+        recovery,
+        "run_quality_check",
+        lambda: (False, "SyntaxError: EOL while scanning string literal"),
+    )
+    monkeypatch.setattr(
+        "scripts.ai_workflow_recovery.AIWorkflowRecovery", lambda *a, **k: recovery
+    )
 
     # Call main with dry-run
-    monkeypatch.setattr(sys, 'argv', ['ai_workflow_recovery.py', '--repo-path', str(repo), '--dry-run'])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_workflow_recovery.py", "--repo-path", str(repo), "--dry-run"]
+    )
     # Run main - it should not raise
     import scripts.ai_workflow_recovery as mod
+
     mod.main()
 
     captured = capsys.readouterr()
