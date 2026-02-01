@@ -6,7 +6,7 @@ Auto-generated on 2025-12-05
 import sys
 import os
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 # Ensure root is in path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -16,34 +16,38 @@ if root_dir not in sys.path:
 
 try:
     from HabitQuest.automation.src.performance_optimizer import (
-        PerformanceOptimizer, 
-        PerformanceMetrics, 
-        get_optimizer, 
-        main
+        PerformanceOptimizer,
+        PerformanceMetrics,
+        get_optimizer,
+        main,
     )
 except ImportError:
     # Fallback/Debug
     print("Could not import absolute package, trying relative workaround...")
     sys.path.append(os.path.abspath(os.path.join(current_dir, "../automation/src")))
     from performance_optimizer import (
-        PerformanceOptimizer, 
-        PerformanceMetrics, 
-        get_optimizer, 
-        main
+        PerformanceOptimizer,
+        PerformanceMetrics,
+        get_optimizer,
+        main,
     )
+
 
 @pytest.fixture(autouse=True)
 def reset_optimizer():
     try:
         import HabitQuest.automation.src.performance_optimizer as po
+
         po._optimizer = None
         yield
         po._optimizer = None
     except ImportError:
         import performance_optimizer as po
+
         po._optimizer = None
         yield
         po._optimizer = None
+
 
 class TestPerformanceMetrics:
     """Tests for PerformanceMetrics class."""
@@ -51,11 +55,12 @@ class TestPerformanceMetrics:
     def test_initialization(self):
         """Test PerformanceMetrics can be initialized."""
         import time
+
         metrics = PerformanceMetrics(
             cpu_percent=10.0,
             memory_percent=20.0,
             disk_usage=30.0,
-            timestamp=time.time()
+            timestamp=time.time(),
         )
         assert metrics.cpu_percent == 10.0
 
@@ -91,5 +96,5 @@ def test_get_optimizer():
 def test_main():
     """Test main function."""
     # Mock psutil to strictly avoid system calls if needed, but here simple run is fine
-    with patch('builtins.print'):
+    with patch("builtins.print"):
         main()

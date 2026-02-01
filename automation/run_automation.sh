@@ -3,6 +3,7 @@
 
 set -e
 
+# shellcheck disable=SC2034
 PROJECT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 AUTOMATION_DIR="${PROJECT_PATH}/Tools/Automation"
 

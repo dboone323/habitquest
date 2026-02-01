@@ -6,7 +6,7 @@ Auto-generated on 2025-12-05
 import sys
 import os
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 # Add source to path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -21,19 +21,24 @@ except ImportError:
     sys.path.append(os.path.abspath(os.path.join(current_dir, "../../automation/src")))
     from automation_engine import AutomationEngine, AutomationScript, get_engine, main
 
+
 @pytest.fixture(autouse=True)
 def reset_engine():
     import automation_engine
+
     automation_engine._engine = None
     yield
     automation_engine._engine = None
+
 
 class TestAutomationScript:
     """Tests for AutomationScript class."""
 
     def test_initialization(self):
         """Test AutomationScript can be initialized."""
-        script = AutomationScript(name="test_script", path="/tmp/test.sh", category="test")
+        script = AutomationScript(
+            name="test_script", path="/tmp/test.sh", category="test"
+        )
         assert script.name == "test_script"
         assert script.category == "test"
 
@@ -46,7 +51,7 @@ class TestAutomationEngine:
         engine = AutomationEngine()
         assert isinstance(engine.scripts, dict)
         # Should discover scripts in current workspace, count might be > 0
-        
+
     def test_get_status(self):
         engine = AutomationEngine()
         status = engine.get_status()
@@ -63,5 +68,5 @@ def test_get_engine():
 
 def test_main():
     """Test main function."""
-    with patch('builtins.print'):
+    with patch("builtins.print"):
         main()

@@ -3,6 +3,7 @@
 
 set -euo pipefail
 
+# shellcheck disable=SC2034
 PROJECT_PATH="$1"
 cd "$PROJECT_PATH" || exit
 
