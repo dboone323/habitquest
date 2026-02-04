@@ -52,17 +52,17 @@ HabitQuest/
 ### Code Organization
 
 1. **Implement Clean Architecture**:
-   - Separate domain, data, and presentation layers
-   - Use protocols for dependency inversion
-   - Create distinct modules for each feature
+    - Separate domain, data, and presentation layers
+    - Use protocols for dependency inversion
+    - Create distinct modules for each feature
 
 2. **Dependency Management**:
-   - Replace `Dependencies.swift` with a proper DI container
-   - Consider using Swinject or factory patterns
+    - Replace `Dependencies.swift` with a proper DI container
+    - Consider using Swinject or factory patterns
 
 3. **Naming Consistency**:
-   - Fix "TestsTests" naming issues
-   - Establish clear naming conventions
+    - Fix "TestsTests" naming issues
+    - Establish clear naming conventions
 
 ## 3. AI Integration Opportunities
 

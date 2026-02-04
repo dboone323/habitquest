@@ -2,12 +2,26 @@
   "version": "0.2",
   "language": "en",
   "words": [
-    "QuantumWorkspace", "SwiftUI", "Xcode", "CloudKit", "SpriteKit",
-    "SwiftPM", "SPM", "CI", "CD", "macOS", "iOS"
+    "QuantumWorkspace",
+    "SwiftUI",
+    "Xcode",
+    "CloudKit",
+    "SpriteKit",
+    "SwiftPM",
+    "SPM",
+    "CI",
+    "CD",
+    "macOS",
+    "iOS"
   ],
   "ignorePaths": [
-    "**/.git/**", "**/.build/**", "**/DerivedData/**",
-    "node_modules/**", "Pods/**", "Carthage/**",
-    "**/*.xcarchive/**", "**/*.xcresult/**"
+    "**/.git/**",
+    "**/.build/**",
+    "**/DerivedData/**",
+    "node_modules/**",
+    "Pods/**",
+    "Carthage/**",
+    "**/*.xcarchive/**",
+    "**/*.xcresult/**"
   ]
 }

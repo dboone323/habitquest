@@ -77,9 +77,9 @@ Branch & commits
 
 - Branch: `auto-fix/habitquest-triage` (pushed to origin)
 - Recent commits on this branch:
-  - ed8dd1ab: HabitQuest: pin upload-artifact to v4 in ai-self-healing workflow
-  - 39c6002b: HabitQuest: fix github-script JS block in ai-enhanced-cicd.yml
-  - 5097b55: HabitQuest: remove deprecated duplicate ai-self-healing workflow (consolidation)
+    - ed8dd1ab: HabitQuest: pin upload-artifact to v4 in ai-self-healing workflow
+    - 39c6002b: HabitQuest: fix github-script JS block in ai-enhanced-cicd.yml
+    - 5097b55: HabitQuest: remove deprecated duplicate ai-self-healing workflow (consolidation)
 
 Open PR
 

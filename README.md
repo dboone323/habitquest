@@ -30,9 +30,9 @@ HabitQuest combines productivity with game mechanics to help you build and maint
 ### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/dboone323/habitquest.git
-   ```
+    ```bash
+    git clone https://github.com/dboone323/habitquest.git
+    ```
 2. Open `HabitQuest.xcodeproj` in Xcode.
 3. Build and run.
 

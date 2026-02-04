@@ -1527,19 +1527,19 @@ final class DependencyScopeTests: XCTestCase {
 ## Action Plan
 
 1. **Immediate Actions**:
-   - Remove empty `setUp()` and `tearDown()` methods
-   - Replace `testExample()` with meaningful tests
-   - Add `final` keyword to class declaration
+    - Remove empty `setUp()` and `tearDown()` methods
+    - Replace `testExample()` with meaningful tests
+    - Add `final` keyword to class declaration
 
 2. **Short-term Improvements**:
-   - Implement basic dependency registration and resolution tests
-   - Add tests for different dependency scopes
-   - Include error case testing
+    - Implement basic dependency registration and resolution tests
+    - Add tests for different dependency scopes
+    - Include error case testing
 
 3. **Long-term Enhancements**:
-   - Add performance tests for dependency resolution
-   - Implement security-related dependency tests
-   - Create comprehensive test documentation
+    - Add performance tests for dependency resolution
+    - Implement security-related dependency tests
+    - Create comprehensive test documentation
 
 4. **Suggested Test Structure**:
 
@@ -1698,26 +1698,26 @@ func testTrackEvent_NetworkFailure_ImplementsRetryLogic() {
 ## Actionable Recommendations
 
 1. **Immediate Actions:**
-   - Remove empty `setUp()` and `tearDown()` methods or add meaningful content
-   - Replace `testExample` with actual test cases for AnalyticsAggregatorService
-   - Implement proper test naming conventions
+    - Remove empty `setUp()` and `tearDown()` methods or add meaningful content
+    - Replace `testExample` with actual test cases for AnalyticsAggregatorService
+    - Implement proper test naming conventions
 
 2. **Short-term Priorities:**
-   - Create mock objects for dependencies
-   - Add tests for core functionality (data aggregation, event tracking)
-   - Add error handling test cases
+    - Create mock objects for dependencies
+    - Add tests for core functionality (data aggregation, event tracking)
+    - Add error handling test cases
 
 3. **Medium-term Enhancements:**
-   - Implement performance tests for large data aggregation
-   - Add integration tests with real dependencies
-   - Create test data factories for complex scenarios
+    - Implement performance tests for large data aggregation
+    - Add integration tests with real dependencies
+    - Create test data factories for complex scenarios
 
 4. **Test Coverage Priorities:**
-   - Data aggregation algorithms
-   - Network connectivity handling
-   - Error recovery mechanisms
-   - Privacy and data sanitization
-   - Performance under load
+    - Data aggregation algorithms
+    - Network connectivity handling
+    - Error recovery mechanisms
+    - Privacy and data sanitization
+    - Performance under load
 
 **Sample Improved Test Structure:**
 
@@ -2558,10 +2558,10 @@ func testTimezoneAwareStreakCalculation() {
 1. **Rename class** to `StreakAnalyticsViewTests`
 2. **Remove or implement** meaningful setUp/tearDown methods
 3. **Replace placeholder test** with specific test cases:
-   - Current streak calculation
-   - Longest streak calculation
-   - Broken streak detection
-   - Edge cases (empty data, single day, etc.)
+    - Current streak calculation
+    - Longest streak calculation
+    - Broken streak detection
+    - Edge cases (empty data, single day, etc.)
 4. **Add performance tests** for analytics computations
 5. **Implement mock objects** for dependency injection testing
 6. **Add documentation** explaining each test's purpose
