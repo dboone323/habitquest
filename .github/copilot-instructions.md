@@ -13,20 +13,25 @@
 ## Project-Specific Patterns
 
 ### Key Features
+
 - [Add main features here]
 
 ### Data Models
+
 - [List main SwiftData models]
 
 ### ViewModels
+
 - [List key ViewModels]
 
 ### Special Considerations
+
 - [Any project-specific patterns or requirements]
 
 ## Common Tasks
 
 ### Adding a New Feature
+
 1. Create feature folder in `Shared/Features/`
 2. Implement ViewModel with @MainActor @Observable
 3. Create View with SwiftUI
@@ -35,11 +40,13 @@
 6. Update documentation
 
 ### Running Tests
+
 ```bash
 ./dev.sh test
 ```
 
 ### Building
+
 ```bash
 ./dev.sh build
 ```

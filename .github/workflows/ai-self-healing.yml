@@ -2,16 +2,16 @@ name: AI Self-Healing Workflow
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   ai-recovery:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: AI Workflow Recovery
-      run: |
-        echo "AI self-healing workflow placeholder"
-        echo "This would run the actual AI recovery system"
+      - uses: actions/checkout@v3
+      - name: AI Workflow Recovery
+        run: |
+          echo "AI self-healing workflow placeholder"
+          echo "This would run the actual AI recovery system"

@@ -87,8 +87,8 @@ snyk test
 - name: Security Scan
   uses: github/super-linter@v5
   env:
-    DEFAULT_BRANCH: main
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      DEFAULT_BRANCH: main
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## 📞 Emergency Contacts

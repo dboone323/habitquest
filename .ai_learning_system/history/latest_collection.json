@@ -3599,9 +3599,7 @@
       "Complex workflow: .github/workflows/ci-cd-backup.yml",
       "Local actions in: .github/workflows/ai-enhanced-cicd.yml"
     ],
-    "learning_opportunities": [
-      "High success rate - system learning effectively"
-    ]
+    "learning_opportunities": ["High success rate - system learning effectively"]
   },
   "metadata": {
     "collection_scope": "comprehensive",

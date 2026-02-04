@@ -1,12 +1,12 @@
 # Quality Gates Configuration
 quality_gates:
   code_coverage:
-    minimum: 85  # Hard requirement - CI blocks below this
-    target: 90   # Ideal target
+    minimum: 85 # Hard requirement - CI blocks below this
+    target: 90 # Ideal target
     aspirational: 100
     block_ci: true
-    incremental_requirement: 90  # New code must have 90%+
-    regression_threshold: 2  # Alert on coverage drops >2%
+    incremental_requirement: 90 # New code must have 90%+
+    regression_threshold: 2 # Alert on coverage drops >2%
 
   test_performance:
     max_duration_seconds: 30
@@ -16,10 +16,10 @@ quality_gates:
 
   build_performance:
     max_duration_seconds: 120
-    per_project_max: 180  # 50% buffer
+    per_project_max: 180 # 50% buffer
     total_sequential_max: 600
-    pr_parallel_max: 600  # 10 minutes
-    release_sequential_max: 900  # 15 minutes
+    pr_parallel_max: 600 # 10 minutes
+    release_sequential_max: 900 # 15 minutes
 
   code_quality:
     max_warnings: 5
@@ -34,37 +34,37 @@ quality_gates:
     max_cognitive_complexity: 15
 
   test_reliability:
-    flaky_test_threshold: 3  # Auto-skip after 3 failures in 5 runs
-    critical_failure_threshold: 5  # Block CI after 5 consecutive failures
+    flaky_test_threshold: 3 # Auto-skip after 3 failures in 5 runs
+    critical_failure_threshold: 5 # Block CI after 5 consecutive failures
     max_retry_attempts: 3
-    retry_backoff_seconds: [1, 2, 4]  # Exponential backoff
-    flaky_skip_max_days: 7  # Maximum days a test can be skipped
+    retry_backoff_seconds: [1, 2, 4] # Exponential backoff
+    flaky_skip_max_days: 7 # Maximum days a test can be skipped
 
   ci_strategy:
-    pr_validation: "parallel"  # Fast feedback for pull requests
-    release_builds: "sequential"  # Stable, comprehensive validation
-    
+    pr_validation: "parallel" # Fast feedback for pull requests
+    release_builds: "sequential" # Stable, comprehensive validation
+
   performance_regression:
-    alert_threshold_percent: 10  # Alert on >10% slowdown
+    alert_threshold_percent: 10 # Alert on >10% slowdown
     auto_block: true
 
 project_specific:
   CodingReviewer:
-    test_coverage_minimum: 85  # Updated to workspace standard
+    test_coverage_minimum: 85 # Updated to workspace standard
     max_file_uploads: 1000
 
   HabitQuest:
-    test_coverage_minimum: 85  # Updated to workspace standard
+    test_coverage_minimum: 85 # Updated to workspace standard
     performance_target_ms: 100
 
   MomentumFinance:
     test_coverage_minimum: 85
     data_integrity_checks: true
-  
+
   PlannerApp:
     test_coverage_minimum: 85
     cloudkit_integration_tests: true
-  
+
   AvoidObstaclesGame:
     test_coverage_minimum: 85
     game_logic_tests_required: true
@@ -76,7 +76,7 @@ critical_components:
     coverage_minimum: 100
     block_ci: true
     description: "Agent scripts must have full test coverage"
-  
+
   workflows:
     paths:
       - "Tools/Automation/local_ci_orchestrator.sh"
@@ -86,7 +86,7 @@ critical_components:
     coverage_minimum: 100
     block_ci: true
     description: "CI/CD workflows must have full test coverage"
-  
+
   ai_components:
     paths:
       - "**/AI*.swift"
@@ -103,7 +103,7 @@ critical_components:
 coverage_enforcement:
   fail_on_coverage_decrease: true
   minimum_new_code_coverage: 90
-  allow_coverage_decrease_percent: 0  # No decrease allowed
+  allow_coverage_decrease_percent: 0 # No decrease allowed
   coverage_trend_monitoring: true
   generate_coverage_badge: true
   coverage_report_formats:
