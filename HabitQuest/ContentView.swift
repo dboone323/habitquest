@@ -48,12 +48,12 @@ public struct ContentView: View {
                     if let profile = playerProfile {
                         HeaderView(profile: profile)
                     } else {
-                        HeaderView(profile: PlayerProfile())  // Fallback
+                        HeaderView(profile: PlayerProfile()) // Fallback
                     }
 
                     if habits.isEmpty {
                         HabitListEmptyStateView {
-                            addItem()  // For testing, adds a dummy habit
+                            addItem() // For testing, adds a dummy habit
                         }
                     } else {
                         ScrollView {
@@ -77,13 +77,13 @@ public struct ContentView: View {
                 }
             }
             #if os(iOS)
-                .navigationBarHidden(true)
+            .navigationBarHidden(true)
             #endif
             .overlay(alignment: .bottomTrailing) {
                 // Floating Action Button
                 Button(
                     action: {
-                        addItem()  // Will open sheet later
+                        addItem() // Will open sheet later
                     },
                     label: {
                         Image(systemName: "plus")
@@ -167,7 +167,8 @@ public struct ContentView: View {
             // Gamification Logic
             if let profile = playerProfile {
                 let result = gamificationService.processHabitCompletion(
-                    habit: habit, profile: profile)
+                    habit: habit, profile: profile
+                )
                 if result.leveledUp {
                     newLevel = result.newLevel
                     showLevelUpAlert = true
@@ -299,11 +300,11 @@ struct HabitCardView: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                #if os(iOS)
-                    .fill(Color(.secondarySystemBackground))
-                #else
-                    .fill(Color(nsColor: .controlBackgroundColor))
-                #endif
+            #if os(iOS)
+                .fill(Color(.secondarySystemBackground))
+            #else
+                .fill(Color(nsColor: .controlBackgroundColor))
+            #endif
                 .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
         )
         .padding(.horizontal)
@@ -393,7 +394,7 @@ struct HabitWidgetView: View {
 #Preview("Widget") {
     HabitWidgetView(habits: [
         Habit(name: "Read", habitDescription: "", frequency: .daily, category: .learning),
-        Habit(name: "Run", habitDescription: "", frequency: .daily, category: .fitness)
+        Habit(name: "Run", habitDescription: "", frequency: .daily, category: .fitness),
     ])
     .frame(width: 170, height: 170)
     .cornerRadius(20)

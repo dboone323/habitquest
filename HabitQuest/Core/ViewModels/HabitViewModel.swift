@@ -28,9 +28,9 @@ public class HabitViewModel: BaseViewModel {
         case loadHabits
         /// Create a new habit with the given parameters.
         case createHabit(
-                name: String, description: String, frequency: HabitFrequency, category: HabitCategory,
-                difficulty: HabitDifficulty
-             )
+            name: String, description: String, frequency: HabitFrequency, category: HabitCategory,
+            difficulty: HabitDifficulty
+        )
         /// Mark a habit as completed for today.
         case completeHabit(Habit)
         /// Delete a habit (soft delete).
@@ -71,18 +71,18 @@ public class HabitViewModel: BaseViewModel {
         switch action {
         case .loadHabits:
             loadHabits()
-        case .createHabit(let name, let description, let frequency, let category, let difficulty):
+        case let .createHabit(name, description, frequency, category, difficulty):
             createHabit(
                 name: name, description: description, frequency: frequency, category: category,
                 difficulty: difficulty
             )
-        case .completeHabit(let habit):
+        case let .completeHabit(habit):
             completeHabit(habit)
-        case .deleteHabit(let habit):
+        case let .deleteHabit(habit):
             deleteHabit(habit)
-        case .setSearchText(let text):
+        case let .setSearchText(text):
             state.searchText = text
-        case .setCategory(let category):
+        case let .setCategory(category):
             state.selectedCategory = category
         }
     }

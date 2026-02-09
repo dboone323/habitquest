@@ -1,44 +1,94 @@
-# SwiftLint configuration (habitquest)
+# Unified SwiftLint Configuration
+# Version: 0.54+
+# Swift: 6.0
+# Updated: February 9, 2026
+#
+# This is the standard configuration for all projects in the tools-automation workspace.
+# Apply this to all projects: cp UNIFIED_SWIFTLINT_TEMPLATE project-name/.swiftlint.yml
 
+# Disabled Rules
+# These rules are disabled because they're either too strict or not applicable
 disabled_rules:
-  - todo
-  - function_body_length
-  - type_body_length
-  - file_length
-  - cyclomatic_complexity
-  - force_cast
-  - force_try
-  - inclusive_language
-  - function_parameter_count
-  - shorthand_operator
+  - todo                          # Allow TODO comments for tracking
+  - function_body_length          # Using cyclomatic_complexity instead
+  - type_body_length              # Monitored via code review
+  - file_length                   # Project-specific needs
 
+# Opt-in Rules
+# These rules provide additional value and should be enforced
 opt_in_rules:
   - array_init
   - closure_end_indentation
   - explicit_init
+  - sorted_imports
+  - vertical_whitespace_closing_braces
+  - vertical_whitespace_opening_braces
+  - trailing_whitespace
+  - inclusive_language
   - modifier_order
   - redundant_nil_coalescing
 
+# Code Complexity
+cyclomatic_complexity:
+  warning: 10
+  error: 20
+  ignores_case_statements: true
+
+# Force Unwrapping
+force_cast: warning
+force_try: warning
+force_unwrapping: warning
+
+# Line Length
+# Reasonable limits to prevent extremely long lines
+line_length:
+  warning: 120
+  error: 150
+  ignores_urls: true
+  ignores_function_declarations: false
+  ignores_comments: true
+
+# Identifier Naming
+# Allow short variable names (i, x, id) but enforce longer identifiers for clarity
+identifier_name:
+  min_length:
+    warning: 2                   # Variables should be at least 2 chars
+    error: 1                     # But single-char is allowed if needed
+  max_length:
+    warning: 40
+    error: 50
+  excluded:
+    - i
+    - j
+    - id
+    - x
+    - y
+    - z
+    - a
+    - b
+    - r
+    - g
+    - t
+    - l
+    - n
+
+# File Inclusions and Exclusions
 included:
   - .
 
 excluded:
-  - "**/.build"
-  - "**/DerivedData"
-  - "**/.swiftpm"
-  - "**/Pods"
-  - "**/Carthage"
-  - "**/node_modules"
-  - "**/*.generated.swift"
-  - "Tools/Automation"
-  - "**/Automation/**"
-  - "**/automation/**"
-  - "**/Generated/**"
+  - '**/.build'
+  - '**/DerivedData'
+  - '**/.swiftpm'
+  - '**/Pods'
+  - '**/Carthage'
+  - '**/node_modules'
+  - '**/*.generated.swift'
+  - 'Tools/Automation'
+  - '**/Automation/**'
+  - '**/automation/**'
+  - '**/Generated/**'
+  - '**/Tests/**'
 
-identifier_name:
-  min_length: { warning: 1, error: 1 }
-  validates_start_with_lowercase: true
-  excluded: [i, j, id, x, y, z, a, b, r, g, t, l, n]
-
-line_length: { warning: 200, error: 240 }
+# Reporter
 reporter: xcode

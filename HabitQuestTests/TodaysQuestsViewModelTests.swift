@@ -1,5 +1,5 @@
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class TodaysQuestsViewModelTests: XCTestCase {
     // MARK: - classTodaysQuestsViewModel:ObservableObject{ Tests

@@ -1,5 +1,5 @@
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 @MainActor
 final class AnalyticsServiceTests: XCTestCase {
@@ -304,7 +304,7 @@ final class AnalyticsServiceTests: XCTestCase {
         // Given
         let moodStats = [
             MoodStats(mood: .excellent, completionRate: 0.9, averageXP: 100),
-            MoodStats(mood: .good, completionRate: 0.8, averageXP: 80)
+            MoodStats(mood: .good, completionRate: 0.8, averageXP: 80),
         ]
         let strongestCorrelation = MoodRating.excellent
 
@@ -335,7 +335,7 @@ final class AnalyticsServiceTests: XCTestCase {
             MoodStats(mood: .bad, completionRate: 0.5, averageXP: 50),
             MoodStats(mood: .neutral, completionRate: 0.7, averageXP: 70),
             MoodStats(mood: .good, completionRate: 0.85, averageXP: 85),
-            MoodStats(mood: .excellent, completionRate: 0.95, averageXP: 95)
+            MoodStats(mood: .excellent, completionRate: 0.95, averageXP: 95),
         ]
         let correlation = MoodCorrelation(moodStats: allMoods, strongestCorrelation: .excellent)
 
@@ -474,7 +474,7 @@ final class AnalyticsServiceTests: XCTestCase {
         // Given - Test with full week breakdown
         let fullWeek = [
             "Monday": 5, "Tuesday": 4, "Wednesday": 6,
-            "Thursday": 5, "Friday": 3, "Saturday": 2, "Sunday": 4
+            "Thursday": 5, "Friday": 3, "Saturday": 2, "Sunday": 4,
         ]
         let progress = WeeklyProgress(
             completedHabits: 29,

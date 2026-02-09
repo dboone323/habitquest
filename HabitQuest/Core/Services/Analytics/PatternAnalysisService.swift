@@ -132,8 +132,9 @@ final class PatternAnalysisService {
         let firstConsistency = calculateConsistency(from: firstHalf)
         let secondConsistency = calculateConsistency(from: secondHalf)
 
-        return secondConsistency > firstConsistency ?
-            min(1.0, secondConsistency + 0.1) : secondConsistency
+        return secondConsistency > firstConsistency
+            ? min(1.0, secondConsistency + 0.1)
+            : secondConsistency
     }
 
     private func calculateVolatility(from logs: ArraySlice<HabitLog>) -> Double {

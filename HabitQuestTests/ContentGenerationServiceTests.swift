@@ -5,8 +5,8 @@
 //  Comprehensive test suite for ContentGenerationService
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class ContentGenerationServiceTests: XCTestCase {
     // MARK: - Initialization Tests

@@ -1,6 +1,6 @@
-@testable import HabitQuest
 import SwiftData
 import XCTest
+@testable import HabitQuest
 
 // Mock Notification Center
 final class MockNotificationCenter: NotificationCenterProtocol, @unchecked Sendable {
@@ -96,7 +96,7 @@ final class NotificationSchedulerServiceTests: XCTestCase {
         let request = try XCTUnwrap(mockCenter.addedRequests.first)
         // High streak title pattern
         XCTAssertTrue(request.content.title.contains("Keep the 21-day streak alive") || request.content.title
-                        .contains("days strong"))
+            .contains("days strong"))
     }
 
     func testCancelNotifications() async {

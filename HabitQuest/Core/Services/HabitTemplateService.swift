@@ -61,7 +61,7 @@ class HabitTemplateService {
                 frequency: .weekly,
                 difficulty: .easy,
                 xpValue: 25
-            )
+            ),
         ]
     }
 

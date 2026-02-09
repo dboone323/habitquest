@@ -5,8 +5,8 @@
 //  Comprehensive test suite for CategoryInsightsService
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class CategoryInsightsServiceTests: XCTestCase {
     // MARK: - Initialization Tests

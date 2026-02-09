@@ -1,5 +1,5 @@
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 @MainActor
 final class AchievementServiceTests: XCTestCase {
@@ -60,21 +60,21 @@ final class AchievementServiceTests: XCTestCase {
 
         // Test achievement requirement types
         let weekWarrior = achievements.first { $0.name == "Week Warrior" }
-        if case .streakDays(let days) = weekWarrior?.requirement {
+        if case let .streakDays(days) = weekWarrior?.requirement {
             XCTAssertEqual(days, 7)
         } else {
             XCTFail("Expected streakDays requirement")
         }
 
         let gettingStarted = achievements.first { $0.name == "Getting Started" }
-        if case .totalCompletions(let count) = gettingStarted?.requirement {
+        if case let .totalCompletions(count) = gettingStarted?.requirement {
             XCTAssertEqual(count, 10)
         } else {
             XCTFail("Expected totalCompletions requirement")
         }
 
         let levelUp = achievements.first { $0.name == "Level Up!" }
-        if case .reachLevel(let level) = levelUp?.requirement {
+        if case let .reachLevel(level) = levelUp?.requirement {
             XCTAssertEqual(level, 5)
         } else {
             XCTFail("Expected reachLevel requirement")

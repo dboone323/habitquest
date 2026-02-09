@@ -1,8 +1,8 @@
 import Combine
+import os
 import OSLog
 import SwiftData
 import SwiftUI
-import os
 
 /// ViewModel for DataManagementView handling export/import operations
 @MainActor
@@ -99,12 +99,12 @@ public class DataManagementViewModel: ObservableObject {
     /// - Returns: <#description#>
     func handleExportResult(_ result: Result<URL, Error>) {
         switch result {
-        case .success(let url):
+        case let .success(url):
             logger.info("Data exported successfully to: \(url.path)")
             showingExportSuccess = true
             updateLastBackupDate()
 
-        case .failure(let error):
+        case let .failure(error):
             logger.error("Export failed: \(error.localizedDescription)")
             handleError(error)
         }
@@ -119,7 +119,7 @@ public class DataManagementViewModel: ObservableObject {
     /// - Returns: <#description#>
     func handleImportResult(_ result: Result<[URL], Error>) {
         switch result {
-        case .success(let urls):
+        case let .success(urls):
             guard let url = urls.first else { return }
 
             isImporting = true
@@ -142,7 +142,7 @@ public class DataManagementViewModel: ObservableObject {
                     await MainActor.run {
                         self.isImporting = false
                         self.showingImportSuccess = true
-                        self.loadDataStatistics()  // Refresh stats after import
+                        self.loadDataStatistics() // Refresh stats after import
                     }
 
                     logger.info("Data imported successfully from: \(url.path)")
@@ -154,7 +154,7 @@ public class DataManagementViewModel: ObservableObject {
                 }
             }
 
-        case .failure(let error):
+        case let .failure(error):
             logger.error("Import selection failed: \(error.localizedDescription)")
             handleError(error)
         }
@@ -177,7 +177,7 @@ public class DataManagementViewModel: ObservableObject {
                 try await clearAllDataFromService(modelContext)
 
                 await MainActor.run {
-                    self.loadDataStatistics()  // Refresh stats
+                    self.loadDataStatistics() // Refresh stats
                     self.lastBackupDate = "Never"
                 }
 

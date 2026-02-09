@@ -5,8 +5,8 @@
 //  Comprehensive test suite for ContextAwarenessService
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class ContextAwarenessServiceTests: XCTestCase {
     // MARK: - Initialization Tests

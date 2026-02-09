@@ -5,8 +5,8 @@
 //  Comprehensive test suite for HabitSuggestionService
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class HabitSuggestionServiceTests: XCTestCase {
     // MARK: - Initialization Tests

@@ -196,7 +196,7 @@
 			mainGroup = 68581EAF2E0F1EA600E5AADA;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				E629EA2CB70C495DB4625EC9 /* XCRemoteSwiftPackageReference "shared-kit" */,
+				E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../Shared-Kit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 68581EB92E0F1EA600E5AADA /* Products */;
@@ -278,6 +278,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BASE_CONFIGURATION_FILE = Config/Debug.xcconfig;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -342,6 +343,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BASE_CONFIGURATION_FILE = Config/Release.xcconfig;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -399,6 +401,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_CONFIGURATION_FILE = Config/Debug.xcconfig;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3N5528D82R;
@@ -435,6 +438,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_CONFIGURATION_FILE = Config/Release.xcconfig;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3N5528D82R;
@@ -469,6 +473,7 @@
 		68581EDF2E0F1EA800E5AADA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BASE_CONFIGURATION_FILE = Config/Debug.xcconfig;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -490,6 +495,7 @@
 		68581EE02E0F1EA800E5AADA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BASE_CONFIGURATION_FILE = Config/Release.xcconfig;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -511,6 +517,7 @@
 		68581EE22E0F1EA800E5AADA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BASE_CONFIGURATION_FILE = Config/Debug.xcconfig;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3N5528D82R;
@@ -530,6 +537,7 @@
 		68581EE32E0F1EA800E5AADA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BASE_CONFIGURATION_FILE = Config/Release.xcconfig;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3N5528D82R;
@@ -587,12 +595,12 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "Shared" */ = {
+/* Begin XCLocalSwiftPackageReference section */
+		E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../Shared-Kit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../Shared-Kit";
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 	};
 	rootObject = 68581EB02E0F1EA600E5AADA /* Project object */;
 }

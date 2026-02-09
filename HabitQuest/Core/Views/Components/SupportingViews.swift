@@ -15,14 +15,14 @@ public struct HabitDetailSheet: View {
             }
             .navigationTitle(habit.name)
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
-                        .accessibilityLabel("Done")
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") { dismiss() }
+                            .accessibilityLabel("Done")
+                    }
                 }
-            }
         }
     }
 }
@@ -83,7 +83,7 @@ public struct AnalyticsExportView: View {
             }
             .navigationTitle("Export Details")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
         }
     }

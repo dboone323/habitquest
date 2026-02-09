@@ -5,8 +5,8 @@
 //  Comprehensive test suite for TopPerformerRowView
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class TopPerformerRowViewTests: XCTestCase {
     // MARK: - Initialization Tests

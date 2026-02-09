@@ -166,8 +166,8 @@ public final class LocationReminderManager: NSObject, ObservableObject {
             isEntry ? "Time for \(reminder.habitName)!" : "Leaving \(reminder.locationName)"
         content.body =
             isEntry
-            ? "You've arrived at \(reminder.locationName). Don't forget your habit!"
-            : "Did you complete \(reminder.habitName) before leaving?"
+                ? "You've arrived at \(reminder.locationName). Don't forget your habit!"
+                : "Did you complete \(reminder.habitName) before leaving?"
         content.sound = .default
         content.categoryIdentifier = "HABIT_LOCATION"
         content.userInfo = ["habitId": reminder.habitId.uuidString]
@@ -195,7 +195,8 @@ public final class LocationReminderManager: NSObject, ObservableObject {
 
     private func loadReminders() {
         if let data = userDefaults.data(forKey: remindersKey),
-           let loaded = try? JSONDecoder().decode([LocationReminder].self, from: data) {
+           let loaded = try? JSONDecoder().decode([LocationReminder].self, from: data)
+        {
             reminders = loaded
         }
     }

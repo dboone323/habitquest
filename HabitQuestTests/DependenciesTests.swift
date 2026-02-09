@@ -5,8 +5,8 @@
 //  Comprehensive test suite for Dependencies
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class DependenciesTests: XCTestCase {
     // MARK: - Initialization Tests

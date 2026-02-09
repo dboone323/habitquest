@@ -5,8 +5,8 @@
 //  Comprehensive test suite for StreakAnalyticsData
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class StreakAnalyticsDataTests: XCTestCase {
     // MARK: - Initialization Tests

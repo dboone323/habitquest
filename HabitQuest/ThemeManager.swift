@@ -31,9 +31,9 @@ struct Theme {
 
     var backgroundColor: Color {
         #if os(iOS)
-        return isDarkMode ? Color(.systemBackground) : Color(.systemBackground)
+            return isDarkMode ? Color(.systemBackground) : Color(.systemBackground)
         #else
-        return Color(nsColor: .windowBackgroundColor)
+            return Color(nsColor: .windowBackgroundColor)
         #endif
     }
 

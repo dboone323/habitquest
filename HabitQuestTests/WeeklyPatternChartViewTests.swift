@@ -5,8 +5,8 @@
 //  Comprehensive test suite for WeeklyPatternChartView
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class WeeklyPatternChartViewTests: XCTestCase {
     // MARK: - Initialization Tests

@@ -1,5 +1,5 @@
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class HabitQuestAppTests: XCTestCase {
     var app: HabitQuestApp!
@@ -30,7 +30,7 @@ final class HabitQuestAppTests: XCTestCase {
             Habit.self,
             HabitLog.self,
             PlayerProfile.self,
-            Achievement.self
+            Achievement.self,
         ])
 
         let fallbackConfig = ModelConfiguration(schema: originalSchema, isStoredInMemoryOnly: true)

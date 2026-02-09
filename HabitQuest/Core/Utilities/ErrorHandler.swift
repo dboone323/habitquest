@@ -16,13 +16,13 @@ public struct ErrorHandler: Sendable {
 
         nonisolated var errorDescription: String? {
             switch self {
-            case .dataModelError(let message):
+            case let .dataModelError(message):
                 "Data Error: \(message)"
-            case .gameLogicError(let message):
+            case let .gameLogicError(message):
                 "Game Logic Error: \(message)"
-            case .validationError(let message):
+            case let .validationError(message):
                 "Validation Error: \(message)"
-            case .networkError(let message):
+            case let .networkError(message):
                 "Network Error: \(message)"
             case .unknownError:
                 "An unexpected error occurred"

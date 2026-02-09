@@ -1,5 +1,5 @@
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 @MainActor
 final class StreakManagerTests: XCTestCase {
