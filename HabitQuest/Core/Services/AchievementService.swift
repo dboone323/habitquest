@@ -6,7 +6,6 @@ enum AchievementService {
     private static let logger = Logger(category: .gameLogic)
 
     // Initialize default achievements for new users
-    // swiftlint:disable function_body_length
     static func createDefaultAchievements() -> [Achievement] {
         [
             // Streak Achievements
@@ -144,12 +143,6 @@ enum AchievementService {
     }
 
     /// Check and update achievement progress based on current player state
-    /// - Parameters:
-    ///   - achievements: All achievements to check
-    ///   - player: Current player profile
-    ///   - habits: All user habits
-    ///   - recentLogs: Recent habit completion logs
-    /// - Returns: List of newly unlocked achievements
     static func updateAchievementProgress(
         achievements: [Achievement],
         player: PlayerProfile,
@@ -160,7 +153,9 @@ enum AchievementService {
 
         for achievement in achievements where !achievement.isUnlocked {
             let previousProgress = achievement.progress
-            let newProgress = calculateProgress(for: achievement, player: player, habits: habits, logs: recentLogs)
+            let newProgress = calculateProgress(
+                for: achievement, player: player, habits: habits, logs: recentLogs
+            )
 
             achievement.progress = newProgress
 
@@ -199,7 +194,6 @@ enum AchievementService {
 
         case .habitVariety(let targetCount):
             let activeHabits = habits.filter { habit in
-                // Consider a habit active if it has been completed in the last 7 days
                 let logs = habit.logs
                 let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
                 return logs.contains { $0.completionDate >= weekAgo }
@@ -222,17 +216,18 @@ enum AchievementService {
         achievement.unlockedDate = Date()
         achievement.progress = 1.0
 
-        // Award XP bonus
         let gamificationService = GamificationService()
         let levelUpResult = gamificationService.processXPGain(
             experiencePoints: achievement.xpReward,
             for: player
         )
 
-        logger.info("Achievement '\(achievement.name)' unlocked! Awarded \(achievement.xpReward) XP")
+        logger.info(
+            "Achievement '\(achievement.name)' unlocked! Awarded \(achievement.xpReward) XP")
 
         if levelUpResult.leveledUp {
-            logger.info("Level up occurred from achievement XP! New level: \(levelUpResult.newLevel)")
+            logger.info(
+                "Level up occurred from achievement XP! New level: \(levelUpResult.newLevel)")
         }
     }
 
@@ -241,18 +236,17 @@ enum AchievementService {
         let calendar = Calendar.current
         let now = Date()
 
-        // Check last 7 days
         var consecutivePerfectDays = 0
         var maxConsecutiveDays = 0
 
-        for dayOffset in 0 ..< 7 {
-            guard let checkDate = calendar.date(byAdding: .day, value: -dayOffset, to: now) else { continue }
+        for dayOffset in 0..<7 {
+            guard let checkDate = calendar.date(byAdding: .day, value: -dayOffset, to: now) else {
+                continue
+            }
 
             let dayLogs = logs.filter { calendar.isDate($0.completionDate, inSameDayAs: checkDate) }
             let uniqueHabitsCompletedThatDay = Set(dayLogs.compactMap { $0.habit?.id })
-
-            // Check if all active habits were completed that day
-            let activeHabitsCount = habits.count // Simplified - could be more sophisticated
+            let activeHabitsCount = habits.count
 
             if uniqueHabitsCompletedThatDay.count >= activeHabitsCount, activeHabitsCount > 0 {
                 consecutivePerfectDays += 1
@@ -274,14 +268,14 @@ enum AchievementService {
     ) -> Float {
         let calendar = Calendar.current
         let now = Date()
-
         var qualifyingDays = 0
 
-        for dayOffset in 0 ..< targetDays {
-            guard let checkDate = calendar.date(byAdding: .day, value: -dayOffset, to: now) else { continue }
+        for dayOffset in 0..<targetDays {
+            guard let checkDate = calendar.date(byAdding: .day, value: -dayOffset, to: now) else {
+                continue
+            }
 
             let dayLogs = logs.filter { calendar.isDate($0.completionDate, inSameDayAs: checkDate) }
-
             let qualifiesForDay = dayLogs.contains { log in
                 let hour = calendar.component(.hour, from: log.completionDate)
                 if let beforeHour {
@@ -304,15 +298,13 @@ enum AchievementService {
     private static func calculateWeekendWarriorProgress(logs: [HabitLog]) -> Float {
         let calendar = Calendar.current
         let now = Date()
-
         var weekendsWithCompletions = 0
 
-        // Check last 4 weeks
-        for weekOffset in 0 ..< 4 {
-            guard let weekStart = calendar.date(byAdding: .weekOfYear, value: -weekOffset, to: now) else { continue }
+        for weekOffset in 0..<4 {
+            guard let weekStart = calendar.date(byAdding: .weekOfYear, value: -weekOffset, to: now)
+            else { continue }
 
-            // Check Saturday and Sunday of that week
-            let weekendDays = [7, 1] // Saturday = 7, Sunday = 1 in Calendar
+            let weekendDays = [7, 1]
             var hasWeekendCompletion = false
 
             for weekday in weekendDays {
@@ -321,7 +313,9 @@ enum AchievementService {
                     matching: DateComponents(weekday: weekday),
                     matchingPolicy: .nextTime
                 ) {
-                    let hasCompletions = logs.contains { calendar.isDate($0.completionDate, inSameDayAs: weekendDate) }
+                    let hasCompletions = logs.contains {
+                        calendar.isDate($0.completionDate, inSameDayAs: weekendDate)
+                    }
                     if hasCompletions {
                         hasWeekendCompletion = true
                         break
@@ -337,5 +331,3 @@ enum AchievementService {
         return min(Float(weekendsWithCompletions) / 4.0, 1.0)
     }
 }
-
-// swiftlint:enable function_body_length

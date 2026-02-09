@@ -9,7 +9,6 @@
 import XCTest
 
 final class WeeklyPatternChartViewTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

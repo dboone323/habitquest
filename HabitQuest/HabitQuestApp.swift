@@ -72,7 +72,7 @@ public struct HabitQuestApp: App {
                         #if os(iOS)
                         // iOS doesn't allow programmatic termination
                         #else
-                            NSApplication.shared.terminate(nil)
+                        NSApplication.shared.terminate(nil)
                         #endif
                     }
                 }

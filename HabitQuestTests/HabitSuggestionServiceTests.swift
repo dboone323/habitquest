@@ -9,7 +9,6 @@
 import XCTest
 
 final class HabitSuggestionServiceTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

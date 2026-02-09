@@ -43,19 +43,19 @@ final class ContentViewTests: XCTestCase {
     /*
      @MainActor
      func testContentViewWithHabits() {
-         let habit = Habit(
-             name: "Test Habit",
-             habitDescription: "Test",
-             frequency: .daily,
-             category: .health
-         )
-         self.modelContext.insert(habit)
+     let habit = Habit(
+     name: "Test Habit",
+     habitDescription: "Test",
+     frequency: .daily,
+     category: .health
+     )
+     self.modelContext.insert(habit)
 
-         let contentView = ContentView()
-             .modelContainer(self.modelContainer)
-             .environmentObject(ThemeManager())
+     let contentView = ContentView()
+     .modelContainer(self.modelContainer)
+     .environmentObject(ThemeManager())
 
-         XCTAssertNotNil(contentView)
+     XCTAssertNotNil(contentView)
      }
      */
 

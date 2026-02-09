@@ -173,16 +173,16 @@ struct HabitWidgetEntryView: View {
 /*
  @main
  struct HabitQuestWidget: Widget {
-     let kind: String = "HabitQuestWidget"
+ let kind: String = "HabitQuestWidget"
 
-     var body: some WidgetConfiguration {
-         StaticConfiguration(kind: kind, provider: HabitWidgetProvider()) { entry in
-             HabitWidgetEntryView(entry: entry)
-         }
-         .configurationDisplayName("Habit Tracker")
-         .description("Track your daily habits from the home screen.")
-         .supportedFamilies([.systemSmall, .systemMedium])
-     }
+ var body: some WidgetConfiguration {
+ StaticConfiguration(kind: kind, provider: HabitWidgetProvider()) { entry in
+ HabitWidgetEntryView(entry: entry)
+ }
+ .configurationDisplayName("Habit Tracker")
+ .description("Track your daily habits from the home screen.")
+ .supportedFamilies([.systemSmall, .systemMedium])
+ }
  }
  */
 

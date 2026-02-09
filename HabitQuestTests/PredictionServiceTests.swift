@@ -9,7 +9,6 @@
 import XCTest
 
 final class PredictionServiceTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

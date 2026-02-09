@@ -9,7 +9,6 @@
 import XCTest
 
 final class CategoryInsightsServiceTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

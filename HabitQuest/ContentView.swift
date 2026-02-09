@@ -48,12 +48,12 @@ public struct ContentView: View {
                     if let profile = playerProfile {
                         HeaderView(profile: profile)
                     } else {
-                        HeaderView(profile: PlayerProfile()) // Fallback
+                        HeaderView(profile: PlayerProfile())  // Fallback
                     }
 
                     if habits.isEmpty {
                         HabitListEmptyStateView {
-                            addItem() // For testing, adds a dummy habit
+                            addItem()  // For testing, adds a dummy habit
                         }
                     } else {
                         ScrollView {
@@ -77,21 +77,24 @@ public struct ContentView: View {
                 }
             }
             #if os(iOS)
-            .navigationBarHidden(true)
+                .navigationBarHidden(true)
             #endif
             .overlay(alignment: .bottomTrailing) {
                 // Floating Action Button
-                Button(action: {
-                    addItem() // Will open sheet later
-                }, label: {
-                    Image(systemName: "plus")
-                        .font(.title.weight(.semibold))
-                        .foregroundColor(.white)
-                        .frame(width: 60, height: 60)
-                        .background(Color.blue)
-                        .clipShape(Circle())
-                        .shadow(radius: 4, y: 3)
-                })
+                Button(
+                    action: {
+                        addItem()  // Will open sheet later
+                    },
+                    label: {
+                        Image(systemName: "plus")
+                            .font(.title.weight(.semibold))
+                            .foregroundColor(.white)
+                            .frame(width: 60, height: 60)
+                            .background(Color.blue)
+                            .clipShape(Circle())
+                            .shadow(radius: 4, y: 3)
+                    }
+                )
                 .padding()
             }
         }
@@ -148,7 +151,9 @@ public struct ContentView: View {
         let today = Date()
         let calendar = Calendar.current
 
-        if let existingLog = habit.logs.first(where: { calendar.isDate($0.completionDate, inSameDayAs: today) }) {
+        if let existingLog = habit.logs.first(where: {
+            calendar.isDate($0.completionDate, inSameDayAs: today)
+        }) {
             // Already completed, toggle off (delete log)
             modelContext.delete(existingLog)
             if habit.streak > 0 { habit.streak -= 1 }
@@ -161,7 +166,8 @@ public struct ContentView: View {
 
             // Gamification Logic
             if let profile = playerProfile {
-                let result = gamificationService.processHabitCompletion(habit: habit, profile: profile)
+                let result = gamificationService.processHabitCompletion(
+                    habit: habit, profile: profile)
                 if result.leveledUp {
                     newLevel = result.newLevel
                     showLevelUpAlert = true
@@ -180,6 +186,23 @@ public struct ContentView: View {
                     showAchievementAlert = true
                 }
             }
+        }
+    }
+}
+
+// MARK: - Extensions
+
+extension HabitCategory {
+    var viewColor: Color {
+        switch self {
+        case .health: .red
+        case .fitness: .orange
+        case .learning: .blue
+        case .productivity: .green
+        case .social: .purple
+        case .creativity: .yellow
+        case .mindfulness: .indigo
+        case .other: .gray
         }
     }
 }
@@ -212,45 +235,22 @@ struct HabitListEmptyStateView: View {
     }
 }
 
-// MARK: - Extensions
-
-extension HabitCategory {
-    var viewColor: Color {
-        switch self {
-        case .health: .red
-        case .fitness: .orange
-        case .learning: .blue
-        case .productivity: .green
-        case .social: .purple
-        case .creativity: .yellow
-        case .mindfulness: .indigo
-        case .other: .gray
-        }
-    }
-}
-
-// MARK: - HabitCardView
-
 struct HabitCardView: View {
     @Bindable var habit: Habit
     var onToggle: () -> Void
 
-    // Animation state
     @State private var isAnimating = false
 
     var body: some View {
         HStack(spacing: 16) {
-            // Category Icon
             ZStack {
                 Circle()
                     .fill(habit.category.viewColor.opacity(0.2))
                     .frame(width: 50, height: 50)
-
                 Text(habit.category.emoji)
                     .font(.system(size: 24))
             }
 
-            // Text Content
             VStack(alignment: .leading, spacing: 4) {
                 Text(habit.name)
                     .font(.headline)
@@ -269,48 +269,46 @@ struct HabitCardView: View {
 
             Spacer()
 
-            // Completion Button
-            Button(action: {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                    isAnimating = true
-                    onToggle()
-                }
-                // Reset animation state
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    isAnimating = false
-                }
-            }, label: {
-                ZStack {
-                    Circle()
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 3)
-                        .frame(width: 44, height: 44)
-
-                    if habit.isCompletedToday {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: 44))
-                            .foregroundColor(.green)
-                            .transition(.scale)
+            Button(
+                action: {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                        isAnimating = true
+                        onToggle()
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        isAnimating = false
+                    }
+                },
+                label: {
+                    ZStack {
+                        Circle()
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 3)
+                            .frame(width: 44, height: 44)
+                        if habit.isCompletedToday {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 44))
+                                .foregroundColor(.green)
+                                .transition(.scale)
+                        }
                     }
                 }
-            })
+            )
             .scaleEffect(isAnimating ? 1.2 : 1.0)
             .buttonStyle(PlainButtonStyle())
         }
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-            #if os(iOS)
-                .fill(Color(.secondarySystemBackground))
-            #else
-                .fill(Color(nsColor: .controlBackgroundColor))
-            #endif
+                #if os(iOS)
+                    .fill(Color(.secondarySystemBackground))
+                #else
+                    .fill(Color(nsColor: .controlBackgroundColor))
+                #endif
                 .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
         )
         .padding(.horizontal)
     }
 }
-
-// MARK: - HeaderView
 
 struct HeaderView: View {
     @EnvironmentObject var themeManager: ThemeManager
@@ -322,39 +320,26 @@ struct HeaderView: View {
                 Image(systemName: "sparkles")
                     .foregroundColor(themeManager.currentTheme.primaryColor)
                     .font(.title2)
-
                 VStack(alignment: .leading) {
                     Text("HabitQuest")
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundColor(themeManager.currentTheme.textColor)
-
                     Text("Your Journey Awaits")
                         .font(.caption)
                         .foregroundColor(themeManager.currentTheme.secondaryTextColor)
                 }
-
                 Spacer()
             }
             .padding()
-
             LevelProgressView(level: profile.level, xpProgress: profile.xpProgress)
                 .padding(.horizontal)
                 .padding(.bottom, 8)
-
             Divider()
         }
         .background(themeManager.currentTheme.backgroundColor)
     }
 }
-
-#Preview {
-    ContentView()
-        .modelContainer(for: Habit.self, inMemory: true)
-        .environmentObject(ThemeManager())
-}
-
-// MARK: - Widget Support (Verification)
 
 struct HabitWidgetView: View {
     let habits: [Habit]
@@ -397,6 +382,12 @@ struct HabitWidgetView: View {
             .background(Color(nsColor: .windowBackgroundColor))
         #endif
     }
+}
+
+#Preview {
+    ContentView()
+        .modelContainer(for: Habit.self, inMemory: true)
+        .environmentObject(ThemeManager())
 }
 
 #Preview("Widget") {

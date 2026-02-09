@@ -34,11 +34,11 @@ public struct AnalyticsTabView: View {
         }
         .padding()
         #if os(iOS)
-            .background(Color(.systemGray6))
+        .background(Color(.systemGray6))
         #else
-            .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color(nsColor: .windowBackgroundColor))
         #endif
-            .cornerRadius(16)
+        .cornerRadius(16)
     }
 }
 
@@ -84,11 +84,11 @@ public struct TrendsView: View {
         }
         .padding()
         #if os(iOS)
-            .background(Color(.systemBackground))
+        .background(Color(.systemBackground))
         #else
-            .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color(nsColor: .windowBackgroundColor))
         #endif
-            .cornerRadius(12)
+        .cornerRadius(12)
     }
 }
 
@@ -134,11 +134,11 @@ public struct PatternsView: View {
         }
         .padding()
         #if os(iOS)
-            .background(Color(.systemBackground))
+        .background(Color(.systemBackground))
         #else
-            .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color(nsColor: .windowBackgroundColor))
         #endif
-            .cornerRadius(12)
+        .cornerRadius(12)
     }
 }
 
@@ -175,10 +175,10 @@ public struct InsightsView: View {
         }
         .padding()
         #if os(iOS)
-            .background(Color(.systemBackground))
+        .background(Color(.systemBackground))
         #else
-            .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color(nsColor: .windowBackgroundColor))
         #endif
-            .cornerRadius(12)
+        .cornerRadius(12)
     }
 }

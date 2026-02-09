@@ -9,7 +9,6 @@
 import XCTest
 
 final class StreakAnalyticsTopPerformersViewTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

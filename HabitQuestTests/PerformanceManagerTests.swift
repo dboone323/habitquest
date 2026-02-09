@@ -9,7 +9,6 @@
 import XCTest
 
 final class PerformanceManagerTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

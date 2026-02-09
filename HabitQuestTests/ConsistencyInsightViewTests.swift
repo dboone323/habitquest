@@ -9,7 +9,6 @@
 import XCTest
 
 final class ConsistencyInsightViewTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

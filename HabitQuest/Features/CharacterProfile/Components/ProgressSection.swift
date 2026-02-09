@@ -44,10 +44,10 @@ public struct ProgressSection: View {
         }
         .padding()
         #if os(iOS)
-            .background(Color(.systemGray6))
+        .background(Color(.systemGray6))
         #else
-            .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color(nsColor: .windowBackgroundColor))
         #endif
-            .cornerRadius(16)
+        .cornerRadius(16)
     }
 }

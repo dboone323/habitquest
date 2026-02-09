@@ -9,7 +9,6 @@
 import XCTest
 
 final class TopPerformerRowViewTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

@@ -1,7 +1,8 @@
 import Foundation
-import os
 import OSLog
+import SharedKit
 import SwiftData
+import os
 
 /// Structure for exported data
 struct ExportedData: @preconcurrency Codable, @unchecked Sendable {
@@ -45,7 +46,7 @@ struct ExportedData: @preconcurrency Codable, @unchecked Sendable {
         let isHidden: Bool
         let unlockedDate: Date?
         let progress: Float
-        let requirement: String // JSON string of requirement
+        let requirement: String  // JSON string of requirement
     }
 }
 
@@ -129,7 +130,8 @@ public struct DataExportService: Sendable {
 
         let exportData = ExportedData(
             exportDate: Date(),
-            appVersion: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0",
+            appVersion: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+                ?? "1.0",
             playerProfile: exportedProfile,
             habits: exportedHabits,
             habitLogs: exportedLogs,
@@ -137,9 +139,12 @@ public struct DataExportService: Sendable {
         )
 
         let jsonData = try JSONEncoder().encode(exportData)
-        logger.info("Data export completed. Size: \(jsonData.count) bytes")
 
-        return jsonData
+        // Encrypt the exported data for security
+        let encryptedData = try await CryptoManager.shared.encrypt(jsonData)
+
+        logger.info("Data export completed. Encrypted size: \(encryptedData.count) bytes")
+        return encryptedData
     }
 
     /// Import user data from JSON
@@ -148,11 +153,21 @@ public struct DataExportService: Sendable {
     ///   - modelContext: SwiftData context to import into
     ///   - replaceExisting: Whether to replace existing data or merge
     @MainActor
-    static func importUserData(from data: Data, into modelContext: ModelContext, replaceExisting: Bool = false) throws {
+    static func importUserData(
+        from data: Data, into modelContext: ModelContext, replaceExisting: Bool = false
+    ) async throws {
         logger.info("Starting data import...")
 
+        // Decrypt the data before decoding
+        let jsonData: Data
+        do {
+            jsonData = try await CryptoManager.shared.decrypt(data)
+        } catch {
+            throw DataExportError.decryptionFailed(error)
+        }
+
         let decoder = JSONDecoder()
-        let importData = try decoder.decode(ExportedData.self, from: data)
+        let importData = try decoder.decode(ExportedData.self, from: jsonData)
 
         // Validate import data
         try validateImportData(importData)
@@ -201,10 +216,11 @@ public struct DataExportService: Sendable {
         // Import achievements
         for exportedAchievement in importData.achievements {
             // Decode requirement
-            var requirement: AchievementRequirement = .streakDays(1) // Default
+            var requirement: AchievementRequirement = .streakDays(1)  // Default
             if let requirementData = Data(base64Encoded: exportedAchievement.requirement) {
-                requirement = (try? JSONDecoder().decode(AchievementRequirement.self, from: requirementData)) ??
-                    .streakDays(1)
+                requirement =
+                    (try? JSONDecoder().decode(AchievementRequirement.self, from: requirementData))
+                    ?? .streakDays(1)
             }
 
             let achievement = Achievement(
@@ -285,6 +301,8 @@ public enum DataExportError: LocalizedError, @unchecked Sendable {
     case importFailed(String)
     case encodingFailed(Error)
     case decodingFailed(Error)
+    case encryptionFailed(Error)
+    case decryptionFailed(Error)
 
     nonisolated public var errorDescription: String? {
         switch self {
@@ -298,6 +316,10 @@ public enum DataExportError: LocalizedError, @unchecked Sendable {
             "Failed to encode data: \(error.localizedDescription)"
         case .decodingFailed(let error):
             "Failed to decode data: \(error.localizedDescription)"
+        case .encryptionFailed(let error):
+            "Failed to encrypt backup data: \(error.localizedDescription)"
+        case .decryptionFailed(let error):
+            "Failed to decrypt backup data. The backup may be corrupted or use an incompatible key."
         }
     }
 }

@@ -9,7 +9,6 @@
 import XCTest
 
 final class PlayerProfileTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

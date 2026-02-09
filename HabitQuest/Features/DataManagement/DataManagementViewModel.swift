@@ -1,6 +1,8 @@
 import Combine
+import OSLog
 import SwiftData
 import SwiftUI
+import os
 
 /// ViewModel for DataManagementView handling export/import operations
 @MainActor
@@ -56,7 +58,7 @@ public class DataManagementViewModel: ObservableObject {
         Task { [weak self] in
             guard let self else { return }
             do {
-                let jsonData = try DataExportService.exportUserData(from: modelContext)
+                let jsonData = try await DataExportService.exportUserData(from: modelContext)
 
                 await MainActor.run {
                     self.exportDocument = HabitQuestBackupDocument(data: jsonData)
@@ -131,7 +133,7 @@ public class DataManagementViewModel: ObservableObject {
                         throw DataExportError.importFailed("Model context not available")
                     }
 
-                    try DataExportService.importUserData(
+                    try await DataExportService.importUserData(
                         from: data,
                         into: modelContext,
                         replaceExisting: true
@@ -140,7 +142,7 @@ public class DataManagementViewModel: ObservableObject {
                     await MainActor.run {
                         self.isImporting = false
                         self.showingImportSuccess = true
-                        self.loadDataStatistics() // Refresh stats after import
+                        self.loadDataStatistics()  // Refresh stats after import
                     }
 
                     logger.info("Data imported successfully from: \(url.path)")
@@ -175,7 +177,7 @@ public class DataManagementViewModel: ObservableObject {
                 try await clearAllDataFromService(modelContext)
 
                 await MainActor.run {
-                    self.loadDataStatistics() // Refresh stats
+                    self.loadDataStatistics()  // Refresh stats
                     self.lastBackupDate = "Never"
                 }
 
@@ -213,7 +215,8 @@ public class DataManagementViewModel: ObservableObject {
             let profiles = try modelContext.fetch(profileDescriptor)
             currentLevel = profiles.first?.level ?? 1
 
-            logger.info("Loaded data statistics: \(totalHabits) habits, \(totalCompletions) completions")
+            logger.info(
+                "Loaded data statistics: \(totalHabits) habits, \(totalCompletions) completions")
         } catch {
             logger.error("Failed to load data statistics: \(error.localizedDescription)")
             handleError(error)

@@ -9,7 +9,6 @@
 import XCTest
 
 final class ProductivityMetricsServiceTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

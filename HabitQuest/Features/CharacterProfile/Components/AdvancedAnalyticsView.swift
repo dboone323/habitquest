@@ -22,19 +22,19 @@ public struct AdvancedAnalyticsView: View {
                         .foregroundColor(.secondary)
                         .padding()
                         #if os(iOS)
-                            .background(Color(.systemGray6))
+                        .background(Color(.systemGray6))
                         #else
-                            .background(Color(nsColor: .windowBackgroundColor))
+                        .background(Color(nsColor: .windowBackgroundColor))
                         #endif
-                            .cornerRadius(12)
+                        .cornerRadius(12)
                     }
                     .padding()
                     #if os(iOS)
-                        .background(Color(.systemGray6))
+                    .background(Color(.systemGray6))
                     #else
-                        .background(Color(nsColor: .windowBackgroundColor))
+                    .background(Color(nsColor: .windowBackgroundColor))
                     #endif
-                        .cornerRadius(16)
+                    .cornerRadius(16)
 
                     // Detailed Analytics Components
                     AnalyticsInsightsCard()
@@ -45,16 +45,16 @@ public struct AdvancedAnalyticsView: View {
             }
             .navigationTitle("Advanced Analytics")
             #if os(iOS)
-                .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.large)
             #endif
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Done") {
-                            dismiss()
-                        }
-                        .accessibilityLabel("Button")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        dismiss()
                     }
+                    .accessibilityLabel("Button")
                 }
+            }
         }
     }
 }
@@ -72,7 +72,7 @@ public struct AnalyticsInsightsCard: View {
                     icon: "brain",
                     title: "Optimal Scheduling",
                     insight:
-                    "Your success rate is 34% higher when habits are scheduled before 10 AM",
+                        "Your success rate is 34% higher when habits are scheduled before 10 AM",
                     color: .blue
                 )
 
@@ -93,11 +93,11 @@ public struct AnalyticsInsightsCard: View {
         }
         .padding()
         #if os(iOS)
-            .background(Color(.systemGray6))
+        .background(Color(.systemGray6))
         #else
-            .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color(nsColor: .windowBackgroundColor))
         #endif
-            .cornerRadius(16)
+        .cornerRadius(16)
     }
 }
 
@@ -167,11 +167,11 @@ public struct PredictiveAnalyticsCard: View {
         }
         .padding()
         #if os(iOS)
-            .background(Color(.systemGray6))
+        .background(Color(.systemGray6))
         #else
-            .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color(nsColor: .windowBackgroundColor))
         #endif
-            .cornerRadius(16)
+        .cornerRadius(16)
     }
 }
 
@@ -246,11 +246,11 @@ public struct BehavioralPatternsCard: View {
         }
         .padding()
         #if os(iOS)
-            .background(Color(.systemGray6))
+        .background(Color(.systemGray6))
         #else
-            .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color(nsColor: .windowBackgroundColor))
         #endif
-            .cornerRadius(16)
+        .cornerRadius(16)
     }
 }
 

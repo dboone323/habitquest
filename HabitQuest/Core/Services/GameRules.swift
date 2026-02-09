@@ -16,7 +16,7 @@ enum GameRules {
     /// - Parameter level: Current level
     /// - Returns: XP needed to reach the next level
     nonisolated static func calculateXPForNextLevel(forLevel level: Int) -> Int {
-        self.calculateXPForLevel(
+        calculateXPForLevel(
             level + 1
         )
     }
@@ -36,18 +36,18 @@ enum GameRules {
         var leveledUp = false
         var newLevel = profile.level
 
-        while profile.currentXP >= self.calculateXPForLevel(newLevel + 1) {
+        while profile.currentXP >= calculateXPForLevel(newLevel + 1) {
             newLevel += 1
             leveledUp = true
         }
 
         if leveledUp {
             profile.level = newLevel
-            profile.xpForNextLevel = self.calculateXPForNextLevel(forLevel: newLevel)
+            profile.xpForNextLevel = calculateXPForNextLevel(forLevel: newLevel)
         }
 
         // Update habit streak
-        self.updateHabitStreak(habit: habit)
+        updateHabitStreak(habit: habit)
 
         // Update longest streak if necessary
         if habit.streak > profile.longestStreak {
@@ -159,7 +159,7 @@ enum GameRules {
         var leveledUp = false
         var newLevel = profile.level
 
-        while profile.currentXP >= self.calculateXPForLevel(
+        while profile.currentXP >= calculateXPForLevel(
             newLevel + 1
         ) {
             newLevel += 1
@@ -168,7 +168,7 @@ enum GameRules {
 
         if leveledUp {
             profile.level = newLevel
-            profile.xpForNextLevel = self.calculateXPForNextLevel(forLevel: newLevel)
+            profile.xpForNextLevel = calculateXPForNextLevel(forLevel: newLevel)
         }
 
         return (leveledUp: leveledUp, newLevel: newLevel)
