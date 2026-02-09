@@ -9,7 +9,6 @@
 import XCTest
 
 final class ContentGenerationServiceTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

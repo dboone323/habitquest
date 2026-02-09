@@ -241,24 +241,24 @@ private struct AddEditQuestView: View {
             }
             .navigationTitle(isEditing ? "Edit Quest" : "New Quest")
             #if os(iOS)
-                .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
             #endif
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
-                            dismiss()
-                        }
-                        .accessibilityLabel("Cancel")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
                     }
-
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button(isEditing ? "Save" : "Add") {
-                            saveQuest()
-                        }
-                        .accessibilityLabel(isEditing ? "Save" : "Add")
-                        .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                    }
+                    .accessibilityLabel("Cancel")
                 }
+
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(isEditing ? "Save" : "Add") {
+                        saveQuest()
+                    }
+                    .accessibilityLabel(isEditing ? "Save" : "Add")
+                    .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                }
+            }
         }
     }
 

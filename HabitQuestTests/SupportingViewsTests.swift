@@ -9,7 +9,6 @@
 import XCTest
 
 final class SupportingViewsTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

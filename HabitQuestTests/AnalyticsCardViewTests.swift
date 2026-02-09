@@ -9,7 +9,6 @@
 import XCTest
 
 final class AnalyticsCardViewTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

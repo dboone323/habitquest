@@ -173,7 +173,7 @@ final class BehavioralAdaptationService {
     }
 
     private func determinePreferredInteraction(interactions _: [NotificationInteractionData])
-        -> NotificationInteraction {
+    -> NotificationInteraction {
         // Analyze which interaction type is most common
         .completed // Default assumption
     }
@@ -192,7 +192,7 @@ final class BehavioralAdaptationService {
     }
 
     private func determineResponsivenessPattern(interactions _: [NotificationInteractionData])
-        -> ResponsivenessPattern {
+    -> ResponsivenessPattern {
         // Determine if user is highly responsive, moderately, or low
         .moderate
     }

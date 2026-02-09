@@ -100,8 +100,8 @@ public struct TopPerformerRow: View {
 
     private func hapticFeedback() {
         #if canImport(UIKit)
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred()
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred()
         #endif
     }
 }

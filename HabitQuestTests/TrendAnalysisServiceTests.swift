@@ -9,7 +9,6 @@
 import XCTest
 
 final class TrendAnalysisServiceTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

@@ -9,7 +9,6 @@
 import XCTest
 
 final class ContextAwarenessServiceTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

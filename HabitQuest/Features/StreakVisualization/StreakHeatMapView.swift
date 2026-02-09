@@ -152,11 +152,11 @@ public struct StreakHeatMapView: View {
         }
         .padding()
         #if os(iOS)
-            .background(Color(.systemGray6))
+        .background(Color(.systemGray6))
         #else
-            .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color(nsColor: .windowBackgroundColor))
         #endif
-            .cornerRadius(12)
+        .cornerRadius(12)
     }
 
     // MARK: - Computed Properties
@@ -253,9 +253,9 @@ public struct StreakHeatMapView: View {
         switch intensity {
         case 0:
             #if os(iOS)
-                Color(.systemGray5)
+            Color(.systemGray5)
             #else
-                Color.gray.opacity(0.3)
+            Color.gray.opacity(0.3)
             #endif
         case 0.01 ..< 0.3:
             Color.green.opacity(0.3)
@@ -283,8 +283,8 @@ public struct StreakHeatMapView: View {
 
     private func hapticFeedback() {
         #if canImport(UIKit)
-            let impact = UIImpactFeedbackGenerator(style: .light)
-            impact.impactOccurred()
+        let impact = UIImpactFeedbackGenerator(style: .light)
+        impact.impactOccurred()
         #endif
     }
 }
@@ -322,11 +322,11 @@ public struct MetricCard: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
         #if os(iOS)
-            .background(Color(.systemBackground))
+        .background(Color(.systemBackground))
         #else
-            .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color(nsColor: .windowBackgroundColor))
         #endif
-            .cornerRadius(8)
+        .cornerRadius(8)
     }
 }
 

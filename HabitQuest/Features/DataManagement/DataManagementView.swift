@@ -6,11 +6,12 @@ import UniformTypeIdentifiers
 /// Allows users to backup their progress and restore from backups
 public struct DataManagementView: View {
     @Environment(\.modelContext) private var modelContext
+    @StateObject private var viewModel = DataManagementViewModel()
 
     public var body: some View {
         NavigationView {
             List {
-                Section("Backup Your Progress") {
+                Section(header: Text("Backup Your Progress")) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Export your habits, achievements, and progress")
                             .font(.subheadline)
@@ -18,18 +19,23 @@ public struct DataManagementView: View {
 
                         Button(
                             action: {
-                                // viewModel.exportData() // Assuming viewModel would be introduced
+                                viewModel.exportData()
                             },
                             label: {
+                                if viewModel.isExporting {
+                                    ProgressView()
+                                        .padding(.trailing, 8)
+                                }
                                 Label("Export Data", systemImage: "square.and.arrow.up")
                             }
                         )
-                        .accessibilityLabel("Button")
+                        .disabled(viewModel.isExporting)
+                        .accessibilityLabel("Export Data Button")
                     }
                     .padding(.vertical, 4)
                 }
 
-                Section("Restore from Backup") {
+                Section(header: Text("Restore from Backup")) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Import data from a previous backup")
                             .font(.subheadline)
@@ -37,34 +43,83 @@ public struct DataManagementView: View {
 
                         Button(
                             action: {
-                                // isImporting = true // Assuming isImporting would be introduced
+                                viewModel.importData()
                             },
                             label: {
+                                if viewModel.isImporting {
+                                    ProgressView()
+                                        .padding(.trailing, 8)
+                                }
                                 Label("Import Data", systemImage: "square.and.arrow.down")
                             }
                         )
-                        .accessibilityLabel("Button")
+                        .disabled(viewModel.isImporting)
+                        .accessibilityLabel("Import Data Button")
                     }
                     .padding(.vertical, 4)
                 }
 
-                Section("Data Information") {
-                    DataInfoRow(title: "Total Habits", value: "0")
-                    DataInfoRow(title: "Total Completions", value: "0")
-                    DataInfoRow(title: "Achievements Unlocked", value: "0")
-                    DataInfoRow(title: "Current Level", value: "1")
-                    DataInfoRow(title: "Last Backup", value: "Never")
+                Section(header: Text("Data Information")) {
+                    DataInfoRow(title: "Total Habits", value: "\(viewModel.totalHabits)")
+                    DataInfoRow(title: "Total Completions", value: "\(viewModel.totalCompletions)")
+                    DataInfoRow(
+                        title: "Achievements Unlocked", value: "\(viewModel.unlockedAchievements)")
+                    DataInfoRow(title: "Current Level", value: "\(viewModel.currentLevel)")
+                    DataInfoRow(title: "Last Backup", value: viewModel.lastBackupDate)
                 }
 
-                Section("Advanced") {
+                Section(header: Text("Advanced")) {
                     Button("Clear All Data") {
-                        // Clear data action
+                        viewModel.showingClearDataAlert = true
                     }
-                    .accessibilityLabel("Button")
+                    .accessibilityLabel("Clear All Data Button")
                     .foregroundColor(.red)
                 }
             }
             .navigationTitle("Data Management")
+            .onAppear {
+                viewModel.setModelContext(modelContext)
+            }
+            .fileExporter(
+                isPresented: $viewModel.showingFileExporter,
+                document: viewModel.exportDocument,
+                contentType: .json,
+                defaultFilename: viewModel.exportFilename
+            ) { result in
+                viewModel.handleExportResult(result)
+            }
+            .fileImporter(
+                isPresented: $viewModel.showingFileImporter,
+                allowedContentTypes: [.json],
+                allowsMultipleSelection: false
+            ) { result in
+                viewModel.handleImportResult(result)
+            }
+            .alert("Export Successful", isPresented: $viewModel.showingExportSuccess) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Your data has been securely encrypted and exported.")
+            }
+            .alert("Import Successful", isPresented: $viewModel.showingImportSuccess) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Your data has been restored and verified.")
+            }
+            .alert("Clear Data", isPresented: $viewModel.showingClearDataAlert) {
+                Button("Clear All", role: .destructive) {
+                    viewModel.clearAllData()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text(
+                    "Are you sure you want to delete all habits and progress? This action cannot be undone."
+                )
+            }
+            .alert("Error", isPresented: $viewModel.showingError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(viewModel.errorMessage)
+            }
         }
     }
 }

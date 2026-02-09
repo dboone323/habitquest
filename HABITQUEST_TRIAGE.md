@@ -1,5 +1,8 @@
 # HabitQuest - Triaged SwiftLint Remediation (priority list)
 
+> [!IMPORTANT]
+> This file is for historical triage tracking. For the overall project roadmap and current next steps, see [HABITQUEST_PLAN.md](./HABITQUEST_PLAN.md).
+
 Date: 2025-08-25
 
 Summary:

@@ -110,10 +110,22 @@ class HabitRecommendationService {
 
         // Complementary pairs
         let pairs: [ComplementaryPair] = [
-            ComplementaryPair(sourceCategory: "Exercise", targetCategory: "Meditation", reason: "Balance fitness with mindfulness"),
-            ComplementaryPair(sourceCategory: "Reading", targetCategory: "Writing", reason: "Complement input with output"),
+            ComplementaryPair(
+                sourceCategory: "Exercise",
+                targetCategory: "Meditation",
+                reason: "Balance fitness with mindfulness"
+            ),
+            ComplementaryPair(
+                sourceCategory: "Reading",
+                targetCategory: "Writing",
+                reason: "Complement input with output"
+            ),
             ComplementaryPair(sourceCategory: "Learning", targetCategory: "Practice", reason: "Apply what you learn"),
-            ComplementaryPair(sourceCategory: "Planning", targetCategory: "Execution", reason: "Balance planning with action")
+            ComplementaryPair(
+                sourceCategory: "Planning",
+                targetCategory: "Execution",
+                reason: "Balance planning with action"
+            )
         ]
 
         for pair in pairs {

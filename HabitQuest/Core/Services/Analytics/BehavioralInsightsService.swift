@@ -40,7 +40,9 @@ final class BehavioralInsightsService {
     /// Analyze day-of-week completion patterns
     func analyzeDayOfWeekPattern(_ habit: Habit) -> (strongest: [String], weakest: [String]) {
         let calendar = Calendar.current
-        let weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        let weekdayNames = [
+            "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+        ]
 
         var weekdaySuccessRates: [Int: Double] = [:]
 
@@ -186,7 +188,8 @@ final class BehavioralInsightsService {
 
         guard !weekendLogs.isEmpty else { return 0.0 }
 
-        let weekendCompletionRate = Double(weekendLogs.filter(\.isCompleted).count) / Double(weekendLogs.count)
+        let weekendCompletionRate =
+            Double(weekendLogs.filter(\.isCompleted).count) / Double(weekendLogs.count)
 
         let weekdayLogs = habit.logs.filter { log in
             let weekday = calendar.component(.weekday, from: log.completionDate)
@@ -195,21 +198,25 @@ final class BehavioralInsightsService {
 
         guard !weekdayLogs.isEmpty else { return 0.0 }
 
-        let weekdayCompletionRate = Double(weekdayLogs.filter(\.isCompleted).count) / Double(weekdayLogs.count)
+        let weekdayCompletionRate =
+            Double(weekdayLogs.filter(\.isCompleted).count) / Double(weekdayLogs.count)
 
         return max(0, weekdayCompletionRate - weekendCompletionRate)
     }
 
     private func calculateAverageCompletionGap(_ habit: Habit) -> Double {
-        let completedLogs = habit.logs.filter(\.isCompleted).sorted { $0.completionDate < $1.completionDate }
+        let completedLogs = habit.logs.filter(\.isCompleted).sorted {
+            $0.completionDate < $1.completionDate
+        }
 
         guard completedLogs.count >= 2 else { return 0.0 }
 
         var totalGap: TimeInterval = 0
         var gapCount = 0
 
-        for i in 1 ..< completedLogs.count {
-            let gap = completedLogs[i].completionDate.timeIntervalSince(completedLogs[i - 1].completionDate)
+        for logIndex in 1 ..< completedLogs.count {
+            let gap = completedLogs[logIndex].completionDate.timeIntervalSince(
+                completedLogs[logIndex - 1].completionDate)
             totalGap += gap
             gapCount += 1
         }
@@ -249,8 +256,10 @@ final class BehavioralInsightsService {
 
         guard !morningLogs.isEmpty else { return 0.0 }
 
-        let morningCompletionRate = Double(morningLogs.filter(\.isCompleted).count) / Double(morningLogs.count)
-        let overallCompletionRate = Double(habit.logs.filter(\.isCompleted).count) / Double(habit.logs.count)
+        let morningCompletionRate =
+            Double(morningLogs.filter(\.isCompleted).count) / Double(morningLogs.count)
+        let overallCompletionRate =
+            Double(habit.logs.filter(\.isCompleted).count) / Double(habit.logs.count)
 
         return morningCompletionRate / max(overallCompletionRate, 0.1)
     }
@@ -307,7 +316,9 @@ final class BehavioralInsightsService {
 
         // Calculate variance in consistency (lower variance = higher adaptability)
         let mean = consistencyScores.reduce(0, +) / Double(consistencyScores.count)
-        let variance = consistencyScores.map { pow($0 - mean, 2) }.reduce(0, +) / Double(consistencyScores.count)
+        let variance =
+            consistencyScores.map { pow($0 - mean, 2) }.reduce(0, +)
+            / Double(consistencyScores.count)
 
         return max(0, 1.0 - variance) // Lower variance = higher adaptability
     }
@@ -322,14 +333,19 @@ final class BehavioralInsightsService {
         // Find the most frequent completion hour
         let hourCounts = Dictionary(grouping: completionHours, by: { $0 }).mapValues { $0.count }
         let mostCommonHour = hourCounts.max(by: { $0.value < $1.value })?.key ?? 9
-        let hourFrequency = Double(completionHours.count(where: { $0 == mostCommonHour })) /
-            Double(completionHours.count)
+        let hourFrequency =
+            Double(completionHours.count(where: { $0 == mostCommonHour }))
+            / Double(completionHours.count)
 
         return (mostCommonHour, hourFrequency)
     }
 
-    private func analyzeStreakPatterns(_ habit: Habit) -> (longestStreak: Int, averageStreak: Double) {
-        let completedLogs = habit.logs.filter(\.isCompleted).sorted { $0.completionDate < $1.completionDate }
+    private func analyzeStreakPatterns(_ habit: Habit) -> (
+        longestStreak: Int, averageStreak: Double
+    ) {
+        let completedLogs = habit.logs.filter(\.isCompleted).sorted {
+            $0.completionDate < $1.completionDate
+        }
 
         var currentStreak = 0
         var longestStreak = 0
@@ -341,8 +357,10 @@ final class BehavioralInsightsService {
         }
 
         // Calculate average streak from streak history
-        let averageStreak = allStreaks
-            .isEmpty ? Double(habit.streak) : Double(allStreaks.reduce(0, +)) / Double(allStreaks.count)
+        let averageStreak =
+            allStreaks
+            .isEmpty
+            ? Double(habit.streak) : Double(allStreaks.reduce(0, +)) / Double(allStreaks.count)
 
         return (longestStreak, averageStreak)
     }
@@ -353,7 +371,8 @@ final class BehavioralInsightsService {
         guard !streaks.isEmpty else { return 0.0 }
 
         let meanStreak = Double(streaks.reduce(0, +)) / Double(streaks.count)
-        let variance = streaks.map { pow(Double($0) - meanStreak, 2) }.reduce(0, +) / Double(streaks.count)
+        let variance =
+            streaks.map { pow(Double($0) - meanStreak, 2) }.reduce(0, +) / Double(streaks.count)
 
         return max(
             0,
@@ -383,8 +402,9 @@ final class BehavioralInsightsService {
         var totalGap: TimeInterval = 0
         var gapCount = 0
 
-        for i in 1 ..< sortedLogs.count {
-            let gap = sortedLogs[i].completionDate.timeIntervalSince(sortedLogs[i - 1].completionDate)
+        for logIndex in 1 ..< sortedLogs.count {
+            let gap = sortedLogs[logIndex].completionDate.timeIntervalSince(
+                sortedLogs[logIndex - 1].completionDate)
             totalGap += gap
             gapCount += 1
         }
@@ -401,7 +421,8 @@ final class BehavioralInsightsService {
         let secondHalf = recentLogs.suffix(7)
 
         let firstHalfRate = Double(firstHalf.filter(\.isCompleted).count) / Double(firstHalf.count)
-        let secondHalfRate = Double(secondHalf.filter(\.isCompleted).count) / Double(secondHalf.count)
+        let secondHalfRate =
+            Double(secondHalf.filter(\.isCompleted).count) / Double(secondHalf.count)
 
         return max(0, firstHalfRate - secondHalfRate)
     }

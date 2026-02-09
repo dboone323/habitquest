@@ -9,7 +9,6 @@
 import XCTest
 
 final class StreakDistributionChartViewTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

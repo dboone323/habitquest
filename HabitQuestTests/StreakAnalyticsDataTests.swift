@@ -9,7 +9,6 @@
 import XCTest
 
 final class StreakAnalyticsDataTests: XCTestCase {
-
     // MARK: - Initialization Tests
 
     func testInitialization() {

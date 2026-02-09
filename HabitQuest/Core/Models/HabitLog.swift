@@ -44,8 +44,8 @@ public final class HabitLog {
         self.notes = notes
         xpEarned =
             isCompleted
-                ? habit.xpValue * habit.difficulty.xpMultiplier
-                : 0
+            ? habit.xpValue * habit.difficulty.xpMultiplier
+            : 0
         self.mood = mood
         completionTime = isCompleted ? Date() : nil
     }

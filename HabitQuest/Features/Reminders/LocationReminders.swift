@@ -166,8 +166,8 @@ public final class LocationReminderManager: NSObject, ObservableObject {
             isEntry ? "Time for \(reminder.habitName)!" : "Leaving \(reminder.locationName)"
         content.body =
             isEntry
-                ? "You've arrived at \(reminder.locationName). Don't forget your habit!"
-                : "Did you complete \(reminder.habitName) before leaving?"
+            ? "You've arrived at \(reminder.locationName). Don't forget your habit!"
+            : "Did you complete \(reminder.habitName) before leaving?"
         content.sound = .default
         content.categoryIdentifier = "HABIT_LOCATION"
         content.userInfo = ["habitId": reminder.habitId.uuidString]
