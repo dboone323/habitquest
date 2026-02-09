@@ -5,8 +5,8 @@
 //  Comprehensive test suite for ProductivityMetricsService
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class ProductivityMetricsServiceTests: XCTestCase {
     // MARK: - Initialization Tests

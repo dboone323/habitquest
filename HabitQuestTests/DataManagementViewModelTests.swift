@@ -1,6 +1,6 @@
-@testable import HabitQuest
 import SwiftData
 import XCTest
+@testable import HabitQuest
 
 @MainActor
 final class DataManagementViewModelTests: XCTestCase {
@@ -31,7 +31,8 @@ final class DataManagementViewModelTests: XCTestCase {
 
     // MARK: - Initialization Tests
 
-    @MainActor func testDataManagementViewModelInitialization() {
+    @MainActor
+    func testDataManagementViewModelInitialization() {
         // Test basic initialization
         self.viewModel = DataManagementViewModel()
         guard let viewModel else {
@@ -59,7 +60,8 @@ final class DataManagementViewModelTests: XCTestCase {
 
     // MARK: - Model Context Setup Tests
 
-    @MainActor func testSetModelContextLoadsStatistics() {
+    @MainActor
+    func testSetModelContextLoadsStatistics() {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // Given some data in the model context
@@ -94,7 +96,8 @@ final class DataManagementViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.currentLevel, 5)
     }
 
-    @MainActor func testSetModelContextWithEmptyData() {
+    @MainActor
+    func testSetModelContextWithEmptyData() {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // When setting model context with no data
@@ -109,7 +112,8 @@ final class DataManagementViewModelTests: XCTestCase {
 
     // MARK: - Export Tests
 
-    @MainActor func testExportFilenameGeneration() {
+    @MainActor
+    func testExportFilenameGeneration() {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // Test that filename is generated correctly
@@ -120,7 +124,8 @@ final class DataManagementViewModelTests: XCTestCase {
         XCTAssertTrue(filename.hasSuffix(".json"))
     }
 
-    @MainActor func testExportDataSuccess() async throws {
+    @MainActor
+    func testExportDataSuccess() async throws {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // Given data in the model context
@@ -143,7 +148,8 @@ final class DataManagementViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.showingFileExporter)
     }
 
-    @MainActor func testExportDataWithoutModelContext() {
+    @MainActor
+    func testExportDataWithoutModelContext() {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // When exporting without model context
@@ -155,7 +161,8 @@ final class DataManagementViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.showingFileExporter)
     }
 
-    @MainActor func testHandleExportResultSuccess() {
+    @MainActor
+    func testHandleExportResultSuccess() {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // Given
@@ -169,7 +176,8 @@ final class DataManagementViewModelTests: XCTestCase {
         XCTAssertNotEqual(viewModel.lastBackupDate, "Never")
     }
 
-    @MainActor func testHandleExportResultFailure() {
+    @MainActor
+    func testHandleExportResultFailure() {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // Given
@@ -185,7 +193,8 @@ final class DataManagementViewModelTests: XCTestCase {
 
     // MARK: - Import Tests
 
-    @MainActor func testImportDataShowsFileImporter() {
+    @MainActor
+    func testImportDataShowsFileImporter() {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // When calling import data
@@ -195,7 +204,8 @@ final class DataManagementViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.showingFileImporter)
     }
 
-    @MainActor func testHandleImportResultSuccess() async throws {
+    @MainActor
+    func testHandleImportResultSuccess() async throws {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // Given a temporary file with valid export data
@@ -226,7 +236,8 @@ final class DataManagementViewModelTests: XCTestCase {
         try? FileManager.default.removeItem(at: tempURL)
     }
 
-    @MainActor func testHandleImportResultFailure() {
+    @MainActor
+    func testHandleImportResultFailure() {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // Given
@@ -242,7 +253,8 @@ final class DataManagementViewModelTests: XCTestCase {
 
     // MARK: - Clear Data Tests
 
-    @MainActor func testClearAllDataSuccess() async throws {
+    @MainActor
+    func testClearAllDataSuccess() async throws {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // Given data in the model context
@@ -286,7 +298,8 @@ final class DataManagementViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.lastBackupDate, "Never")
     }
 
-    @MainActor func testClearAllDataWithoutModelContext() {
+    @MainActor
+    func testClearAllDataWithoutModelContext() {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // When clearing data without model context
@@ -298,7 +311,8 @@ final class DataManagementViewModelTests: XCTestCase {
 
     // MARK: - Property Tests
 
-    @MainActor func testPublishedProperties() {
+    @MainActor
+    func testPublishedProperties() {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // Test that all published properties can be set
@@ -336,7 +350,8 @@ final class DataManagementViewModelTests: XCTestCase {
 
     // MARK: - Statistics Loading Tests
 
-    @MainActor func testLoadDataStatisticsWithMultipleAchievements() {
+    @MainActor
+    func testLoadDataStatisticsWithMultipleAchievements() {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // Given multiple achievements, some unlocked
@@ -384,7 +399,8 @@ final class DataManagementViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.unlockedAchievements, 2)
     }
 
-    @MainActor func testLoadDataStatisticsWithMultipleHabitsAndLogs() {
+    @MainActor
+    func testLoadDataStatisticsWithMultipleHabitsAndLogs() {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // Given multiple habits and logs

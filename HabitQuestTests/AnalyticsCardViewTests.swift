@@ -5,8 +5,8 @@
 //  Comprehensive test suite for AnalyticsCardView
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class AnalyticsCardViewTests: XCTestCase {
     // MARK: - Initialization Tests

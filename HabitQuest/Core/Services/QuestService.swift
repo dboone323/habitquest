@@ -45,7 +45,7 @@ class QuestService {
                 description: "Complete 1 health habit",
                 rewardXP: 25,
                 requirement: .completeCategory(category: .health, count: 1)
-            )
+            ),
         ]
     }
 }

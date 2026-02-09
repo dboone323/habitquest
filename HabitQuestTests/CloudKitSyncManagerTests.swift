@@ -3,8 +3,8 @@
 // HabitQuestTests
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class CloudKitSyncManagerTests: XCTestCase {
     var sut: CloudKitSyncManager!

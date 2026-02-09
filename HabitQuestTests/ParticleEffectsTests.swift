@@ -3,8 +3,8 @@
 // HabitQuestTests
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class ParticleEffectsTests: XCTestCase {
     // MARK: - Effect Creation Tests

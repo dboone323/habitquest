@@ -144,13 +144,13 @@ final class PredictionService {
         probability: Double
     ) -> String {
         switch (patterns.momentum, probability) {
-        case (let momentumValue, let probabilityValue) where momentumValue > 0.8 && probabilityValue > 80:
+        case let (momentumValue, probabilityValue) where momentumValue > 0.8 && probabilityValue > 80:
             "🚀 Exceptional momentum! Consider expanding this habit or adding a complementary one."
-        case (let momentumValue, let probabilityValue) where momentumValue > 0.6 && probabilityValue > 70:
+        case let (momentumValue, probabilityValue) where momentumValue > 0.6 && probabilityValue > 70:
             "💪 Strong pattern! Focus on maintaining consistency during weekends."
-        case (let momentumValue, let probabilityValue) where momentumValue < 0.4 && probabilityValue < 50:
+        case let (momentumValue, probabilityValue) where momentumValue < 0.4 && probabilityValue < 50:
             "🎯 Try habit stacking: attach this to an established routine."
-        case (_, let probabilityValue) where probabilityValue < 30:
+        case let (_, probabilityValue) where probabilityValue < 30:
             "🔄 Consider reducing frequency or simplifying the habit to rebuild momentum."
         default:
             "📈 Small wins lead to big changes. Focus on consistency over perfection."
@@ -172,8 +172,9 @@ final class PredictionService {
         let firstConsistency = calculateConsistency(from: firstHalf)
         let secondConsistency = calculateConsistency(from: secondHalf)
 
-        return secondConsistency > firstConsistency ?
-            min(1.0, secondConsistency + 0.1) : secondConsistency
+        return secondConsistency > firstConsistency
+            ? min(1.0, secondConsistency + 0.1)
+            : secondConsistency
     }
 
     private func calculateVolatility(from logs: ArraySlice<HabitLog>) -> Double {

@@ -5,8 +5,8 @@
 //  Comprehensive test suite for PerformanceManager
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class PerformanceManagerTests: XCTestCase {
     // MARK: - Initialization Tests

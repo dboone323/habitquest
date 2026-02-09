@@ -125,7 +125,7 @@ class HabitRecommendationService {
                 sourceCategory: "Planning",
                 targetCategory: "Execution",
                 reason: "Balance planning with action"
-            )
+            ),
         ]
 
         for pair in pairs {
@@ -151,7 +151,7 @@ class HabitRecommendationService {
             "Drink Water": 0.85,
             "Morning Walk": 0.78,
             "Journal": 0.72,
-            "Stretch": 0.69
+            "Stretch": 0.69,
         ]
 
         let existingHabits = Set(history.map(\.habitName))

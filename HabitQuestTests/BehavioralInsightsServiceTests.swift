@@ -5,8 +5,8 @@
 //  Comprehensive test suite for BehavioralInsightsService
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class BehavioralInsightsServiceTests: XCTestCase {
     // MARK: - Initialization Tests

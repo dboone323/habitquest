@@ -1,6 +1,6 @@
-@testable import HabitQuest
 import SwiftUI
 import XCTest
+@testable import HabitQuest
 
 @MainActor
 final class ThemeManagerTests: XCTestCase {

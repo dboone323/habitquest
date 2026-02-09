@@ -5,8 +5,8 @@
 // Step 9: UI automation tests for habit completion flow.
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class HabitCompletionUITests: XCTestCase {
     // MARK: - Habit Toggle Tests

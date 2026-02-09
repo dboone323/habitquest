@@ -138,7 +138,7 @@ enum AchievementService {
                 category: .special,
                 xpReward: 300,
                 requirement: .weekendWarrior
-            )
+            ),
         ]
     }
 
@@ -178,21 +178,21 @@ enum AchievementService {
         logs: [HabitLog]
     ) -> Float {
         switch achievement.requirement {
-        case .streakDays(let targetDays):
+        case let .streakDays(targetDays):
             let maxStreak = habits.map(\.streak).max() ?? 0
             return min(Float(maxStreak) / Float(targetDays), 1.0)
 
-        case .totalCompletions(let targetCount):
+        case let .totalCompletions(targetCount):
             let totalCompletions = logs.count
             return min(Float(totalCompletions) / Float(targetCount), 1.0)
 
-        case .reachLevel(let targetLevel):
+        case let .reachLevel(targetLevel):
             return min(Float(player.level) / Float(targetLevel), 1.0)
 
         case .perfectWeek:
             return calculatePerfectWeekProgress(habits: habits, logs: logs)
 
-        case .habitVariety(let targetCount):
+        case let .habitVariety(targetCount):
             let activeHabits = habits.filter { habit in
                 let logs = habit.logs
                 let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()

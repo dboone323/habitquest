@@ -21,7 +21,7 @@ class GamificationManager: ObservableObject {
             iconName: "flame.fill",
             category: .streak,
             requirement: .streakDays(7)
-        )
+        ),
     ]
 
     func checkAchievements(habitsCompleted: Int, currentStreak: Int) {

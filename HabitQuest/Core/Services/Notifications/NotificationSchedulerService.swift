@@ -115,7 +115,7 @@ final class NotificationSchedulerService {
             "habitId": habit.id.uuidString,
             "optimalTime": scheduling.optimalTime,
             "successProbability": prediction.probability,
-            "schedulingVersion": "smart_v2"
+            "schedulingVersion": "smart_v2",
         ]
 
         return content
@@ -125,13 +125,13 @@ final class NotificationSchedulerService {
         let streak = habit.streak
 
         switch (streak, prediction.probability) {
-        case (let streakCount, let probabilityValue) where streakCount >= 21 && probabilityValue > 80:
+        case let (streakCount, probabilityValue) where streakCount >= 21 && probabilityValue > 80:
             return "🔥 Keep the \(streakCount)-day streak alive!"
-        case (let streakCount, let probabilityValue) where streakCount >= 7 && probabilityValue > 70:
+        case let (streakCount, probabilityValue) where streakCount >= 7 && probabilityValue > 70:
             return "💪 \(streakCount) days strong - don't break it now!"
-        case (let streakCount, _) where streakCount >= 3:
+        case let (streakCount, _) where streakCount >= 3:
             return "⭐ \(streakCount)-day streak in progress"
-        case (_, let probabilityValue) where probabilityValue < 40:
+        case let (_, probabilityValue) where probabilityValue < 40:
             return "🎯 Small step, big impact"
         default:
             return "✨ Time for \(habit.name)"

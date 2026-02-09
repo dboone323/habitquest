@@ -1,6 +1,6 @@
-@testable import HabitQuest
 import UserNotifications
 import XCTest
+@testable import HabitQuest
 
 @MainActor
 final class NotificationServiceTests: XCTestCase {
@@ -28,7 +28,7 @@ final class NotificationServiceTests: XCTestCase {
     func testScheduleMultipleReminders() async {
         let habits = [
             Habit(name: "Morning Exercise", habitDescription: "Exercise", frequency: .daily),
-            Habit(name: "Evening Meditation", habitDescription: "Meditate", frequency: .daily)
+            Habit(name: "Evening Meditation", habitDescription: "Meditate", frequency: .daily),
         ]
 
         await NotificationService.scheduleHabitReminders(for: habits)

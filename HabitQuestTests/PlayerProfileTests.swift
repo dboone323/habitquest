@@ -5,8 +5,8 @@
 //  Comprehensive test suite for PlayerProfile
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class PlayerProfileTests: XCTestCase {
     // MARK: - Initialization Tests

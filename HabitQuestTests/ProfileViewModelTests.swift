@@ -1,6 +1,6 @@
-@testable import HabitQuest
 import SwiftData
 import XCTest
+@testable import HabitQuest
 
 final class ProfileViewModelTests: XCTestCase {
     var modelContainer: ModelContainer!

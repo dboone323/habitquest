@@ -5,8 +5,8 @@
 //  Comprehensive test suite for StreakAnalyticsWeeklyView
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class StreakAnalyticsWeeklyViewTests: XCTestCase {
     // MARK: - Initialization Tests

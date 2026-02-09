@@ -5,8 +5,8 @@
 //  Comprehensive test suite for StreakAnalyticsDistributionView
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class StreakAnalyticsDistributionViewTests: XCTestCase {
     // MARK: - Initialization Tests

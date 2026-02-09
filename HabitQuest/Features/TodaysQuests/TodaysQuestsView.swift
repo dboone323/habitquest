@@ -25,19 +25,19 @@ public struct TodaysQuestsView: View {
             .navigationTitle("Today's Quests")
             .toolbar {
                 #if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Add Quest") {
-                        viewModel.showingAddQuest = true
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Add Quest") {
+                            viewModel.showingAddQuest = true
+                        }
+                        .accessibilityLabel("Add Quest")
                     }
-                    .accessibilityLabel("Add Quest")
-                }
                 #else
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Add Quest") {
-                        viewModel.showingAddQuest = true
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Add Quest") {
+                            viewModel.showingAddQuest = true
+                        }
+                        .accessibilityLabel("Add Quest")
                     }
-                    .accessibilityLabel("Add Quest")
-                }
                 #endif
             }
             .sheet(isPresented: $viewModel.showingAddQuest) {
@@ -216,31 +216,31 @@ private struct AddQuestView: View {
             }
             .navigationTitle("New Quest")
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            dismiss()
+                        }
+                        .accessibilityLabel("Cancel")
                     }
-                    .accessibilityLabel("Cancel")
-                }
 
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Add") {
-                        let habit = Habit(
-                            name: name,
-                            habitDescription: description,
-                            frequency: frequency,
-                            xpValue: xpValue
-                        )
-                        onAdd(habit)
-                        dismiss()
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Add") {
+                            let habit = Habit(
+                                name: name,
+                                habitDescription: description,
+                                frequency: frequency,
+                                xpValue: xpValue
+                            )
+                            onAdd(habit)
+                            dismiss()
+                        }
+                        .accessibilityLabel("Add")
+                        .disabled(name.isEmpty)
                     }
-                    .accessibilityLabel("Add")
-                    .disabled(name.isEmpty)
                 }
-            }
         }
     }
 }

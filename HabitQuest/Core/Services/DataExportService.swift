@@ -1,8 +1,8 @@
 import Foundation
+import os
 import OSLog
 import SharedKit
 import SwiftData
-import os
 
 /// Structure for exported data
 struct ExportedData: @preconcurrency Codable, @unchecked Sendable {
@@ -46,7 +46,7 @@ struct ExportedData: @preconcurrency Codable, @unchecked Sendable {
         let isHidden: Bool
         let unlockedDate: Date?
         let progress: Float
-        let requirement: String  // JSON string of requirement
+        let requirement: String // JSON string of requirement
     }
 }
 
@@ -216,7 +216,7 @@ public struct DataExportService: Sendable {
         // Import achievements
         for exportedAchievement in importData.achievements {
             // Decode requirement
-            var requirement: AchievementRequirement = .streakDays(1)  // Default
+            var requirement: AchievementRequirement = .streakDays(1) // Default
             if let requirementData = Data(base64Encoded: exportedAchievement.requirement) {
                 requirement =
                     (try? JSONDecoder().decode(AchievementRequirement.self, from: requirementData))
@@ -304,21 +304,21 @@ public enum DataExportError: LocalizedError, @unchecked Sendable {
     case encryptionFailed(Error)
     case decryptionFailed(Error)
 
-    nonisolated public var errorDescription: String? {
+    public nonisolated var errorDescription: String? {
         switch self {
         case .noProfileFound:
             "No player profile found to export"
-        case .noDataToExport(let message):
+        case let .noDataToExport(message):
             "No data to export: \(message)"
-        case .importFailed(let message):
+        case let .importFailed(message):
             "Import failed: \(message)"
-        case .encodingFailed(let error):
+        case let .encodingFailed(error):
             "Failed to encode data: \(error.localizedDescription)"
-        case .decodingFailed(let error):
+        case let .decodingFailed(error):
             "Failed to decode data: \(error.localizedDescription)"
-        case .encryptionFailed(let error):
+        case let .encryptionFailed(error):
             "Failed to encrypt backup data: \(error.localizedDescription)"
-        case .decryptionFailed(let error):
+        case let .decryptionFailed(error):
             "Failed to decrypt backup data. The backup may be corrupted or use an incompatible key."
         }
     }

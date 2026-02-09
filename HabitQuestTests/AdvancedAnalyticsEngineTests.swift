@@ -5,8 +5,8 @@
 //  Comprehensive test suite for AdvancedAnalyticsEngine
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class AdvancedAnalyticsEngineTests: XCTestCase {
     // MARK: - Initialization Tests

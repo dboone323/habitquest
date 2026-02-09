@@ -5,8 +5,8 @@
 //  Comprehensive test suite for PredictionService
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class PredictionServiceTests: XCTestCase {
     // MARK: - Initialization Tests

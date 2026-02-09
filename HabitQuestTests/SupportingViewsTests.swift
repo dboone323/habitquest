@@ -5,8 +5,8 @@
 //  Comprehensive test suite for SupportingViews
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class SupportingViewsTests: XCTestCase {
     // MARK: - Initialization Tests

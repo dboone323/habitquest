@@ -1,7 +1,7 @@
-@testable import HabitQuest
 import SwiftData
 import SwiftUI
 import XCTest
+@testable import HabitQuest
 
 final class ContentViewTests: XCTestCase {
     var modelContainer: ModelContainer!

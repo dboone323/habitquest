@@ -3,9 +3,9 @@
 // HabitQuestTests
 //
 
-@testable import HabitQuest
 import SwiftData
 import XCTest
+@testable import HabitQuest
 
 @MainActor
 final class HabitViewModelTests: XCTestCase {

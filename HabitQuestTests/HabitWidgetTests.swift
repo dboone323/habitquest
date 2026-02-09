@@ -5,9 +5,9 @@
 // Snapshot and unit tests for HabitWidget views.
 //
 
-@testable import HabitQuest
 import SwiftUI
 import XCTest
+@testable import HabitQuest
 
 final class HabitWidgetTests: XCTestCase {
     // MARK: - Entry Tests
@@ -16,7 +16,7 @@ final class HabitWidgetTests: XCTestCase {
         let entry = HabitWidgetEntry(
             date: Date(),
             habits: [
-                HabitWidgetItem(id: UUID(), name: "Exercise", emoji: "🏃", isCompleted: false, streak: 5)
+                HabitWidgetItem(id: UUID(), name: "Exercise", emoji: "🏃", isCompleted: false, streak: 5),
             ]
         )
 
@@ -63,7 +63,7 @@ final class HabitWidgetTests: XCTestCase {
             habits: [
                 HabitWidgetItem(id: UUID(), name: "Exercise", emoji: "🏃", isCompleted: false, streak: 5),
                 HabitWidgetItem(id: UUID(), name: "Read", emoji: "📚", isCompleted: true, streak: 12),
-                HabitWidgetItem(id: UUID(), name: "Meditate", emoji: "🧘", isCompleted: false, streak: 3)
+                HabitWidgetItem(id: UUID(), name: "Meditate", emoji: "🧘", isCompleted: false, streak: 3),
             ]
         )
 
@@ -78,7 +78,7 @@ final class HabitWidgetTests: XCTestCase {
             date: Date(),
             habits: [
                 HabitWidgetItem(id: UUID(), name: "Exercise", emoji: "🏃", isCompleted: false, streak: 5),
-                HabitWidgetItem(id: UUID(), name: "Read", emoji: "📚", isCompleted: true, streak: 12)
+                HabitWidgetItem(id: UUID(), name: "Read", emoji: "📚", isCompleted: true, streak: 12),
             ]
         )
 
@@ -93,7 +93,7 @@ final class HabitWidgetTests: XCTestCase {
         let habits = [
             HabitWidgetItem(id: UUID(), name: "Exercise", emoji: "🏃", isCompleted: true, streak: 5),
             HabitWidgetItem(id: UUID(), name: "Read", emoji: "📚", isCompleted: true, streak: 12),
-            HabitWidgetItem(id: UUID(), name: "Meditate", emoji: "🧘", isCompleted: false, streak: 3)
+            HabitWidgetItem(id: UUID(), name: "Meditate", emoji: "🧘", isCompleted: false, streak: 3),
         ]
 
         let completedCount = habits.count(where: { $0.isCompleted })

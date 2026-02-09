@@ -41,7 +41,7 @@ final class BehavioralInsightsService {
     func analyzeDayOfWeekPattern(_ habit: Habit) -> (strongest: [String], weakest: [String]) {
         let calendar = Calendar.current
         let weekdayNames = [
-            "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+            "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
         ]
 
         var weekdaySuccessRates: [Int: Double] = [:]
@@ -359,8 +359,9 @@ final class BehavioralInsightsService {
         // Calculate average streak from streak history
         let averageStreak =
             allStreaks
-            .isEmpty
-            ? Double(habit.streak) : Double(allStreaks.reduce(0, +)) / Double(allStreaks.count)
+                .isEmpty
+                ? Double(habit.streak)
+                : Double(allStreaks.reduce(0, +)) / Double(allStreaks.count)
 
         return (longestStreak, averageStreak)
     }

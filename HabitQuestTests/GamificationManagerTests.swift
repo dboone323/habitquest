@@ -5,8 +5,8 @@
 // Tests for gamification and achievement management
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class GamificationManagerTests: XCTestCase {
     var manager: GamificationManager!

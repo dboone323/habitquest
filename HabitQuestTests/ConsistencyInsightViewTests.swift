@@ -5,8 +5,8 @@
 //  Comprehensive test suite for ConsistencyInsightView
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class ConsistencyInsightViewTests: XCTestCase {
     // MARK: - Initialization Tests

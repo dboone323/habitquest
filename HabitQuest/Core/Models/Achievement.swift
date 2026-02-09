@@ -140,15 +140,15 @@ public enum AchievementRequirement: @preconcurrency Codable, @unchecked Sendable
 
     var description: String {
         switch self {
-        case .streakDays(let days):
+        case let .streakDays(days):
             "Maintain a \(days)-day streak"
-        case .totalCompletions(let count):
+        case let .totalCompletions(count):
             "Complete \(count) habits total"
-        case .reachLevel(let level):
+        case let .reachLevel(level):
             "Reach level \(level)"
         case .perfectWeek:
             "Complete all habits for 7 consecutive days"
-        case .habitVariety(let count):
+        case let .habitVariety(count):
             "Have \(count) different active habits"
         case .earlyBird:
             "Complete habits before 9 AM for 7 days"

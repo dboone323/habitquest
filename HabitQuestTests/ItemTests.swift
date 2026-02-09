@@ -5,8 +5,8 @@
 //  Comprehensive test suite for Item
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class ItemTests: XCTestCase {
     // MARK: - Initialization Tests

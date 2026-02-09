@@ -5,8 +5,8 @@
 //  Comprehensive test suite for TrendAnalysisService
 //
 
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class TrendAnalysisServiceTests: XCTestCase {
     // MARK: - Initialization Tests

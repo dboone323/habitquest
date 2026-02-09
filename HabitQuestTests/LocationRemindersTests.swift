@@ -4,8 +4,8 @@
 //
 
 import CoreLocation
-@testable import HabitQuest
 import XCTest
+@testable import HabitQuest
 
 final class LocationRemindersTests: XCTestCase {
     var sut: LocationReminderManager!
