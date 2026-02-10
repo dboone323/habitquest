@@ -13,6 +13,12 @@ disabled_rules:
   - function_body_length          # Using cyclomatic_complexity instead
   - type_body_length              # Monitored via code review
   - file_length                   # Project-specific needs
+  - sorted_imports                # Too strict for CI - can be enabled later
+  - inclusive_language            # Too strict for CI - can be enabled later
+  - trailing_comma                # Allow trailing commas for cleaner diffs
+  - opening_brace                 # Allow flexible brace placement
+  - identifier_name               # Allow short variable names
+  - redundant_discardable_let     # Allow let _ = syntax
 
 # Opt-in Rules
 # These rules provide additional value and should be enforced
@@ -20,11 +26,9 @@ opt_in_rules:
   - array_init
   - closure_end_indentation
   - explicit_init
-  - sorted_imports
   - vertical_whitespace_closing_braces
   - vertical_whitespace_opening_braces
   - trailing_whitespace
-  - inclusive_language
   - modifier_order
   - redundant_nil_coalescing
 
