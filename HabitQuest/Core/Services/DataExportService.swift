@@ -1,7 +1,6 @@
 import Foundation
 import os
 import OSLog
-import SharedKit
 import SwiftData
 
 /// Structure for exported data
@@ -140,11 +139,11 @@ public struct DataExportService: Sendable {
 
         let jsonData = try JSONEncoder().encode(exportData)
 
-        // Encrypt the exported data for security
-        let encryptedData = try await CryptoManager.shared.encrypt(jsonData)
+        // TODO: Add encryption when CryptoManager is available
+        // let encryptedData = try await CryptoManager.shared.encrypt(jsonData)
 
-        logger.info("Data export completed. Encrypted size: \(encryptedData.count) bytes")
-        return encryptedData
+        logger.info("Data export completed. Size: \(jsonData.count) bytes")
+        return jsonData
     }
 
     /// Import user data from JSON
@@ -158,13 +157,13 @@ public struct DataExportService: Sendable {
     ) async throws {
         logger.info("Starting data import...")
 
-        // Decrypt the data before decoding
-        let jsonData: Data
-        do {
-            jsonData = try await CryptoManager.shared.decrypt(data)
-        } catch {
-            throw DataExportError.decryptionFailed(error)
-        }
+        // TODO: Add decryption when CryptoManager is available
+        let jsonData = data
+        // do {
+        //     jsonData = try await CryptoManager.shared.decrypt(data)
+        // } catch {
+        //     throw DataExportError.decryptionFailed(error)
+        // }
 
         let decoder = JSONDecoder()
         let importData = try decoder.decode(ExportedData.self, from: jsonData)
