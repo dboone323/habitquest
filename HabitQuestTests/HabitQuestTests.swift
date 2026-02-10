@@ -10,7 +10,6 @@ import Testing
 import Foundation
 
 struct HabitQuestTests {
-
     @Test func testAppInitialization() async throws {
         // Test that the app can be initialized without crashing
         // This is a basic smoke test
@@ -25,7 +24,7 @@ struct HabitQuestTests {
             frequency: .daily,
             xpValue: 10
         )
-        
+
         #expect(habit.name == "Test Habit")
         #expect(habit.habitDescription == "A test habit")
         #expect(habit.frequency == .daily)
@@ -36,7 +35,7 @@ struct HabitQuestTests {
     @Test func testPlayerProfileCreation() async throws {
         // Test that we can create a player profile
         let profile = PlayerProfile()
-        
+
         #expect(profile.level == 1)
         #expect(profile.currentXP == 0)
         #expect(profile.xpForNextLevel > 0)
@@ -45,7 +44,7 @@ struct HabitQuestTests {
     @Test func testMemoryManagement() async throws {
         // Test basic memory management
         var habits: [Habit] = []
-        
+
         for i in 0..<50 {
             let habit = Habit(
                 name: "Habit \(i)",
@@ -55,11 +54,11 @@ struct HabitQuestTests {
             )
             habits.append(habit)
         }
-        
+
         #expect(habits.count == 50)
         #expect(habits[0].name == "Habit 0")
         #expect(habits[49].name == "Habit 49")
-        
+
         // Clear array
         habits.removeAll()
         #expect(habits.isEmpty)
@@ -68,7 +67,7 @@ struct HabitQuestTests {
     @Test func testConcurrentOperations() async throws {
         // Test that the app can handle concurrent operations
         let iterations = 25
-        
+
         await withTaskGroup(of: Void.self) { group in
             for i in 0..<iterations {
                 group.addTask {
@@ -83,7 +82,7 @@ struct HabitQuestTests {
                 }
             }
         }
-        
+
         // If we get here without crashing, the test passes
         #expect(true, "Concurrent operations completed successfully")
     }
