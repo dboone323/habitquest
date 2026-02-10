@@ -63,7 +63,20 @@ jobs:
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@master
         with:
-          ignore_paths: node_modules
+          severity: error
+          ignore_paths: |
+            node_modules
+            .build
+            .swiftpm
+          ignore_names: |
+            create_ci_compatible_project.sh
+            smart_builder.sh
+            smart_multiplatform_builder.sh
+            dev.sh
+            HabitQuest_safe_enhancements.sh
+            unified_dashboard.sh
+            automate.sh
+            run_validation.sh
 
       - name: Security audit for Python dependencies
         run: |

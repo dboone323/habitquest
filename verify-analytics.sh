@@ -31,14 +31,14 @@ check_file() {
 
 	if [[ -f "${file}" ]]; then
 		if [[ -s "${file}" ]]; then
-			echo -e "${GREEN}�${ $descripti}on${NC}"
+			echo -e "${GREEN}✅ ${description}${NC}"
 			((PASSED++))
 		else
-			echo -e "${YELLOW}⚠�${�  $descrip}tion (empty file)${NC}"
+			echo -e "${YELLOW}⚠️ ${description} (empty file)${NC}"
 			((WARNINGS++))
 		fi
 	else
-		echo -e "${RED}�${ $descripti}on (missing)${NC}"
+		echo -e "${RED}❌ ${description} (missing)${NC}"
 		((FAILED++))
 	fi
 }
@@ -49,10 +49,10 @@ check_directory() {
 	local description="$2"
 
 	if [[ -d "${dir}" ]]; then
-		echo -e "${GREEN}�${ $descripti}on${NC}"
+		echo -e "${GREEN}✅ ${description}${NC}"
 		((PASSED++))
 	else
-		echo -e "${RED}�${ $descripti}on (missing)${NC}"
+		echo -e "${RED}❌ ${description} (missing)${NC}"
 		((FAILED++))
 	fi
 }
@@ -208,7 +208,7 @@ ANALYTICS_FEATURES=(
 )
 
 for feature in "${ANALYTICS_FEATURES[@]}"; do
-	echo -e "${GREEN}�${ $featu}re${NC}"
+	echo -e "${GREEN}✅ ${feature}${NC}"
 	((PASSED++))
 done
 
