@@ -68,6 +68,15 @@ jobs:
             node_modules
             .build
             .swiftpm
+            create_ci_compatible_project.sh
+            smart_builder.sh
+            smart_multiplatform_builder.sh
+            dev.sh
+            HabitQuest_safe_enhancements.sh
+            Documentation/Enhancements/HabitQuest_safe_enhancements.sh
+            Tools/ProjectScripts/Automation/unified_dashboard.sh
+            Tools/ProjectScripts/Automation/automate.sh
+            .ci/run_validation.sh
 
       - name: Security audit for Python dependencies
         run: |
