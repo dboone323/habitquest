@@ -83,7 +83,7 @@ struct AchievementCelebrationView: View {
             .padding(40)
             .background(
                 RoundedRectangle(cornerRadius: 24)
-                    .fill(Color(.systemBackground).opacity(0.95))
+                    .fill(Color.white.opacity(0.95))
                     .shadow(radius: 20)
             )
             .opacity(opacity)
