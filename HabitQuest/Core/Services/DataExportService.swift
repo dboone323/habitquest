@@ -303,7 +303,7 @@ public enum DataExportError: LocalizedError, @unchecked Sendable {
     case encryptionFailed(Error)
     case decryptionFailed(Error)
 
-    public nonisolated var errorDescription: String? {
+    nonisolated public var errorDescription: String? {
         switch self {
         case .noProfileFound:
             "No player profile found to export"
