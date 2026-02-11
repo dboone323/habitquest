@@ -56,8 +56,8 @@ final class AnalyticsAggregatorServiceTests: XCTestCase {
 
         // Simulate logs for Habit 1 (3 completions)
         let today = Date()
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
-        let dayBefore = Calendar.current.date(byAdding: .day, value: -2, to: today)!
+        let yesterday = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -1, to: today))
+        let dayBefore = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -2, to: today))
 
         let log1 = HabitLog(habit: habit1, completionDate: today, isCompleted: true)
         let log2 = HabitLog(habit: habit1, completionDate: yesterday, isCompleted: true)

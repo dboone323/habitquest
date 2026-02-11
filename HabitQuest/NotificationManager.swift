@@ -2,7 +2,7 @@ import UserNotifications
 
 // import UIKit - Not needed for pure logic
 
-// Enhancement #81: Push Notifications
+/// Enhancement #81: Push Notifications
 class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     static let shared = NotificationManager()
 

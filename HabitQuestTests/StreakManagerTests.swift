@@ -31,10 +31,10 @@ final class StreakManagerTests: XCTestCase {
         XCTAssertEqual(streak, 1)
     }
 
-    func testCalculateStreak_ConsecutiveDays() {
+    func testCalculateStreak_ConsecutiveDays() throws {
         let today = Date()
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
-        let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: today)!
+        let yesterday = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -1, to: today))
+        let twoDaysAgo = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -2, to: today))
 
         let completions = [today, yesterday, twoDaysAgo]
         let streak = streakManager.calculateStreak(completions: completions)
@@ -42,9 +42,9 @@ final class StreakManagerTests: XCTestCase {
         XCTAssertEqual(streak, 3)
     }
 
-    func testCalculateStreak_BrokenStreak() {
+    func testCalculateStreak_BrokenStreak() throws {
         let today = Date()
-        let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: today)!
+        let threeDaysAgo = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -3, to: today))
 
         let completions = [today, threeDaysAgo]
         let streak = streakManager.calculateStreak(completions: completions)
@@ -52,10 +52,10 @@ final class StreakManagerTests: XCTestCase {
         XCTAssertEqual(streak, 1, "Streak should reset after gap")
     }
 
-    func testCalculateStreak_LongestStreak() {
+    func testCalculateStreak_LongestStreak() throws {
         var completions: [Date] = []
-        for i in 0 ..< 30 {
-            let date = Calendar.current.date(byAdding: .day, value: -i, to: Date())!
+        for i in 0..<30 {
+            let date = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -i, to: Date()))
             completions.append(date)
         }
 
@@ -65,9 +65,9 @@ final class StreakManagerTests: XCTestCase {
 
     // MARK: - Streak Reset Tests
 
-    func testStreakReset_MissedDay() {
+    func testStreakReset_MissedDay() throws {
         let today = Date()
-        let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: today)!
+        let twoDaysAgo = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -2, to: today))
 
         let completions = [twoDaysAgo]
         let streak = streakManager.calculateStreak(completions: completions)
@@ -84,10 +84,10 @@ final class StreakManagerTests: XCTestCase {
 
     // MARK: - Milestone Detection Tests
 
-    func testMilestoneDetection_7Days() {
+    func testMilestoneDetection_7Days() throws {
         var completions: [Date] = []
-        for i in 0 ..< 7 {
-            completions.append(Calendar.current.date(byAdding: .day, value: -i, to: Date())!)
+        for i in 0..<7 {
+            try completions.append(XCTUnwrap(Calendar.current.date(byAdding: .day, value: -i, to: Date())))
         }
 
         let milestone = streakManager.checkMilestone(streak: 7)
@@ -116,10 +116,10 @@ final class StreakManagerTests: XCTestCase {
 
     // MARK: - Streak Statistics Tests
 
-    func testStreakStatistics() {
+    func testStreakStatistics() throws {
         var completions: [Date] = []
-        for i in 0 ..< 15 {
-            completions.append(Calendar.current.date(byAdding: .day, value: -i, to: Date())!)
+        for i in 0..<15 {
+            try completions.append(XCTUnwrap(Calendar.current.date(byAdding: .day, value: -i, to: Date())))
         }
 
         let stats = streakManager.getStatistics(completions: completions)

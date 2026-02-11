@@ -1,7 +1,7 @@
 import Combine
 import SwiftUI
 
-// Enhancement #84: Dark Mode Manager
+/// Enhancement #84: Dark Mode Manager
 class ThemeManager: ObservableObject {
     @Published var isDarkMode: Bool {
         didSet {
@@ -50,7 +50,7 @@ struct Theme {
     }
 }
 
-// Modifier for easy application
+/// Modifier for easy application
 struct ThemeModifier: ViewModifier {
     @EnvironmentObject var themeManager: ThemeManager
 

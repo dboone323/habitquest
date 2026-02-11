@@ -214,12 +214,12 @@ class StreakService {
     /// Calculate what percentile a streak is in (for motivation)
     private func calculateStreakPercentile(_ streak: Int) -> Double {
         switch streak {
-        case 0 ... 2: 0.1
-        case 3 ... 6: 0.25
-        case 7 ... 13: 0.5
-        case 14 ... 29: 0.75
-        case 30 ... 99: 0.9
-        case 100 ... 364: 0.95
+        case 0...2: 0.1
+        case 3...6: 0.25
+        case 7...13: 0.5
+        case 14...29: 0.75
+        case 30...99: 0.9
+        case 100...364: 0.95
         default: 0.99
         }
     }

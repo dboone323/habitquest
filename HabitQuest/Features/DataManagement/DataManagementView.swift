@@ -154,7 +154,9 @@ private struct DataInfoRow: View {
 
 /// Document type for file export
 public struct HabitQuestBackupDocument: FileDocument {
-    nonisolated public static var readableContentTypes: [UTType] { [.json] }
+    public nonisolated static var readableContentTypes: [UTType] {
+        [.json]
+    }
 
     var data: Data
 
@@ -162,7 +164,7 @@ public struct HabitQuestBackupDocument: FileDocument {
         self.data = data
     }
 
-    nonisolated public init(configuration: ReadConfiguration) throws {
+    public nonisolated init(configuration: ReadConfiguration) throws {
         guard let data = configuration.file.regularFileContents else {
             throw CocoaError(.fileReadCorruptFile)
         }
@@ -175,7 +177,7 @@ public struct HabitQuestBackupDocument: FileDocument {
     /// - Returns: <#description#>
     /// <#Description#>
     /// - Returns: <#description#>
-    nonisolated public func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
+    public nonisolated func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
         FileWrapper(regularFileWithContents: data)
     }
 }

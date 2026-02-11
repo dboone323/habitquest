@@ -66,7 +66,7 @@ struct GamificationService {
         var currentStreak = 1 // Start with 1 for today's completion
 
         // Check consecutive days/weeks based on habit frequency
-        for index in 1 ..< sortedLogs.count {
+        for index in 1..<sortedLogs.count {
             let currentLog = sortedLogs[index - 1]
             let previousLog = sortedLogs[index]
 

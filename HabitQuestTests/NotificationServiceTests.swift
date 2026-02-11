@@ -47,13 +47,13 @@ final class NotificationServiceTests: XCTestCase {
 
     // MARK: - Clear Tests
 
-    func testClearAllNotifications() async {
+    func testClearAllNotifications() {
         NotificationService.cancelAllNotifications()
         XCTAssertTrue(true)
     }
 }
 
-// Mock Habit for testing
+/// Mock Habit for testing
 struct MockHabit: Identifiable {
     let id = UUID()
     var name: String

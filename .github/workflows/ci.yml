@@ -249,20 +249,26 @@ jobs:
           p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
           p12-password: ${{ secrets.CERTIFICATES_PASSWORD }}
 
-      - name: 📄 Setup Provisioning Profiles
+      - name: 📄 Setup Provisioning Profile (secure)
+        env:
+          PROVISIONING_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
         run: |
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          echo "${{ secrets.PROVISIONING_PROFILE }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/${{ secrets.PROVISIONING_PROFILE_NAME }}.mobileprovision
+          echo "$PROVISIONING_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/"$PROVISIONING_PROFILE_NAME".mobileprovision
 
       - name: 🏗️ Archive App
+        env:
+          CODE_SIGN_IDENTITY: ${{ secrets.CODE_SIGN_IDENTITY }}
+          PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE_UUID }}
         run: |
           xcodebuild archive \
             -scheme HabitQuest \
             -configuration Release \
             -archivePath build/HabitQuest.xcarchive \
             -destination 'generic/platform=iOS' \
-            CODE_SIGN_IDENTITY="${{ secrets.CODE_SIGN_IDENTITY }}" \
-            PROVISIONING_PROFILE="${{ secrets.PROVISIONING_PROFILE_UUID }}"
+            CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY" \
+            PROVISIONING_PROFILE="$PROVISIONING_PROFILE"
 
       - name: 📦 Export IPA
         run: |

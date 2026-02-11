@@ -201,7 +201,7 @@ private struct AddQuestView: View {
                     TextField("Quest Name", text: $name).accessibilityLabel("Text Field")
                     TextField("Description", text: $description, axis: .vertical)
                         .accessibilityLabel("Text Field")
-                        .lineLimit(3 ... 6)
+                        .lineLimit(3...6)
                 }
 
                 Section("Settings") {
@@ -211,7 +211,7 @@ private struct AddQuestView: View {
                         }
                     }
 
-                    Stepper("XP Value: \(xpValue)", value: $xpValue, in: 5 ... 50, step: 5)
+                    Stepper("XP Value: \(xpValue)", value: $xpValue, in: 5...50, step: 5)
                 }
             }
             .navigationTitle("New Quest")
@@ -251,10 +251,10 @@ private struct AddQuestView: View {
 private func streakColor(for streak: Int) -> Color {
     switch streak {
     case 0: .gray
-    case 1 ... 6: .orange
-    case 7 ... 29: .red
-    case 30 ... 99: .purple
-    case 100 ... 364: .blue
+    case 1...6: .orange
+    case 7...29: .red
+    case 30...99: .purple
+    case 100...364: .blue
     default: .yellow
     }
 }

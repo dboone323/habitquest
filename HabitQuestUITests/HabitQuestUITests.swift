@@ -6,7 +6,7 @@ final class HabitQuestUITests: XCTestCase {
     }
 
     @MainActor
-    func testScreenshot() throws {
+    func testScreenshot() {
         let app = XCUIApplication()
         app.launch()
 

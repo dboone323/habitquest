@@ -108,16 +108,16 @@ struct ConfettiView: View {
 
     var body: some View {
         GeometryReader { geo in
-            ForEach(0 ..< 50, id: \.self) { i in
+            ForEach(0..<50, id: \.self) { i in
                 ConfettiParticle(
                     color: colors[i % colors.count],
-                    size: CGFloat.random(in: 5 ... 12),
+                    size: CGFloat.random(in: 5...12),
                     startPosition: CGPoint(
-                        x: CGFloat.random(in: 0 ... geo.size.width),
+                        x: CGFloat.random(in: 0...geo.size.width),
                         y: -20
                     ),
                     endPosition: CGPoint(
-                        x: CGFloat.random(in: 0 ... geo.size.width),
+                        x: CGFloat.random(in: 0...geo.size.width),
                         y: geo.size.height + 20
                     ),
                     delay: Double(i) * 0.02
@@ -152,7 +152,7 @@ struct ConfettiParticle: View {
 
                 withAnimation(.linear(duration: 2).delay(delay)) {
                     position = endPosition
-                    rotation = Double.random(in: 360 ... 720)
+                    rotation = Double.random(in: 360...720)
                     opacity = 0
                 }
             }

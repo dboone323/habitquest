@@ -106,7 +106,7 @@ public struct StreakHeatMapView: View {
                 .foregroundColor(.secondary)
 
             HStack(spacing: 2) {
-                ForEach(0 ..< 5) { intensity in
+                ForEach(0..<5) { intensity in
                     Rectangle()
                         .fill(intensityColor(for: Double(intensity)))
                         .frame(width: 10, height: 10)
@@ -257,11 +257,11 @@ public struct StreakHeatMapView: View {
             #else
                 Color.gray.opacity(0.3)
             #endif
-        case 0.01 ..< 0.3:
+        case 0.01..<0.3:
             Color.green.opacity(0.3)
-        case 0.3 ..< 0.6:
+        case 0.3..<0.6:
             Color.green.opacity(0.6)
-        case 0.6 ..< 0.8:
+        case 0.6..<0.8:
             Color.green.opacity(0.8)
         default:
             Color.green
