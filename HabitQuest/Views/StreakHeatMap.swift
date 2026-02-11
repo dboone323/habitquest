@@ -23,9 +23,9 @@ struct StreakHeatMap: View {
 
             // Grid
             VStack(spacing: 4) {
-                ForEach(0 ..< weeksToShow, id: \.self) { week in
+                ForEach(0..<weeksToShow, id: \.self) { week in
                     HStack(spacing: 4) {
-                        ForEach(0 ..< columns, id: \.self) { day in
+                        ForEach(0..<columns, id: \.self) { day in
                             let date = dateFor(week: week, day: day)
                             let intensity = getIntensity(for: date)
 

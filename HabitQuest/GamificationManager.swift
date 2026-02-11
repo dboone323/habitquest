@@ -1,6 +1,5 @@
 import Combine
 import Foundation
-
 import SwiftData
 
 // Enhancement #82: Gamification Rewards

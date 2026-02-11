@@ -201,7 +201,7 @@ private struct AddEditQuestView: View {
                     TextField("Quest Name", text: $name).accessibilityLabel("Text Field")
                     TextField("Description", text: $description, axis: .vertical)
                         .accessibilityLabel("Text Field")
-                        .lineLimit(3 ... 6)
+                        .lineLimit(3...6)
                 }
 
                 Section("Quest Settings") {
@@ -211,7 +211,7 @@ private struct AddEditQuestView: View {
                         }
                     }
 
-                    Stepper("XP Reward: \(xpValue)", value: $xpValue, in: 5 ... 100, step: 5)
+                    Stepper("XP Reward: \(xpValue)", value: $xpValue, in: 5...100, step: 5)
                 }
 
                 if isEditing, let habit {

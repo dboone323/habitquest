@@ -3,10 +3,10 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-/// Main ViewModel for managing habits using the MVVM pattern in HabitQuest.
-/// Provides separation of concerns, testable business logic, and enhanced state management.
+// Main ViewModel for managing habits using the MVVM pattern in HabitQuest.
+// Provides separation of concerns, testable business logic, and enhanced state management.
 
-/// MVVM ViewModel for managing habits with enhanced features and AI-Enhanced Architecture Implementation.
+// MVVM ViewModel for managing habits with enhanced features and AI-Enhanced Architecture Implementation.
 
 /// ViewModel for managing habit data, user actions, and state in HabitQuest.
 @MainActor

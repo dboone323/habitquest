@@ -245,7 +245,7 @@ final class ContextAwarenessService {
 
         // Check for optimal time (this would be more sophisticated in real implementation)
         let currentHour = Calendar.current.component(.hour, from: Date())
-        if (9 ... 11).contains(currentHour) {
+        if (9...11).contains(currentHour) {
             return .optimalTime
         }
 

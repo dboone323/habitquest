@@ -78,7 +78,7 @@ final class AnalyticsTypesTests: XCTestCase {
         let currentHourSuccessRate = 0.78
         let currentDaySuccessRate = 0.82
         let timesSinceLastCompletion: TimeInterval = 86400 // 1 day
-        let optimalTimeWindow: ClosedRange<Int> = 8 ... 10
+        let optimalTimeWindow: ClosedRange<Int> = 8...10
 
         // When
         let timeFactors = TimeFactors(
@@ -101,7 +101,7 @@ final class AnalyticsTypesTests: XCTestCase {
             currentHourSuccessRate: 0.65,
             currentDaySuccessRate: 0.70,
             timesSinceLastCompletion: 43200, // 12 hours
-            optimalTimeWindow: 14 ... 16
+            optimalTimeWindow: 14...16
         )
 
         // Then - Test that all properties are accessible and within valid ranges
@@ -120,7 +120,7 @@ final class AnalyticsTypesTests: XCTestCase {
             currentHourSuccessRate: 1.0,
             currentDaySuccessRate: 0.0,
             timesSinceLastCompletion: 0,
-            optimalTimeWindow: 0 ... 23
+            optimalTimeWindow: 0...23
         )
 
         // Then - Verify edge case values are handled correctly
