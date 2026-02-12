@@ -24,6 +24,10 @@ struct TopPerformer {
 struct StreakDistributionData {
     let range: String
     let count: Int
+
+    var isEmpty: Bool {
+        count == 0
+    }
 }
 
 struct ConsistencyInsight {

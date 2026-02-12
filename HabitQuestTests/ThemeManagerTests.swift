@@ -54,7 +54,7 @@ final class ThemeManagerTests: XCTestCase {
 
     func testIsDarkModePersistence() throws {
         throw XCTSkip(
-            "Skipping UserDefaults persistence test due to simulator environment flakiness (race conditions in parallel execution)"
+            "Skipping UserDefaults persistence test - simulator flakiness with race conditions"
         )
     }
 }

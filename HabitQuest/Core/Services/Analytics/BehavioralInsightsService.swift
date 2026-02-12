@@ -349,9 +349,9 @@ final class BehavioralInsightsService {
 
         var currentStreak = 0
         var longestStreak = 0
-        var allStreaks: [Int] = []
+        let allStreaks: [Int] = []
 
-        for log in completedLogs {
+        for _ in completedLogs {
             currentStreak += 1
             longestStreak = max(longestStreak, currentStreak)
         }
@@ -433,7 +433,7 @@ final class BehavioralInsightsService {
         var streaks: [Int] = []
         var currentStreak = 0
 
-        for log in habit.logs.sorted { $0.completionDate < $1.completionDate } {
+        for log in habit.logs.sorted(by: { $0.completionDate < $1.completionDate }) {
             if log.isCompleted {
                 currentStreak += 1
             } else {

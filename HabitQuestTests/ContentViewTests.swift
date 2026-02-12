@@ -36,7 +36,7 @@ final class ContentViewTests: XCTestCase {
     @MainActor
     func testContentViewInitialization() throws {
         throw XCTSkip(
-            "Skipping ContentView initialization test - SwiftData @Query in View init causes runtime issues in test environment"
+            "Skipping ContentView init test - SwiftData @Query causes runtime issues in test env"
         )
     }
 
