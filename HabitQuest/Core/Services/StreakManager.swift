@@ -10,9 +10,6 @@ class StreakManager {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
 
-        var streak = 0
-        var currentDate = today
-
         // Check if the most recent completion was today or yesterday
         // If the last completion was before yesterday, the streak is already 0 (unless we want to count up to the last
         // completion, but usually streak implies "current active streak")

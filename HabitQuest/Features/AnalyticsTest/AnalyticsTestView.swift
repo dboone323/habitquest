@@ -6,10 +6,21 @@ import SwiftUI
 struct TestResults {
     private(set) var tests: [TestResult] = []
 
-    var passedCount: Int { tests.filter(\.passed).count }
-    var failedCount: Int { tests.count(where: { !$0.passed }) }
-    var totalCount: Int { tests.count }
-    var allPassed: Bool { failedCount == 0 }
+    var passedCount: Int {
+        tests.filter(\.passed).count
+    }
+
+    var failedCount: Int {
+        tests.count(where: { !$0.passed })
+    }
+
+    var totalCount: Int {
+        tests.count
+    }
+
+    var allPassed: Bool {
+        failedCount == 0
+    }
 
     mutating func addResult(name: String, passed: Bool, error: String? = nil, note: String? = nil) {
         tests.append(TestResult(name: name, passed: passed, error: error, note: note))
@@ -215,7 +226,7 @@ public struct AnalyticsTestView: View {
 
         // Pre-calculate completion patterns to avoid nested loops
         let completionPatterns: [CompletionPattern] = sampleHabits.flatMap { habit in
-            (0 ..< 7).map { dayOffset in
+            (0..<7).map { dayOffset in
                 let shouldComplete = (dayOffset % 2 == 0) || (habit.category == .mindfulness && dayOffset < 3)
                 return CompletionPattern(habit: habit, dayOffset: dayOffset, shouldComplete: shouldComplete)
             }

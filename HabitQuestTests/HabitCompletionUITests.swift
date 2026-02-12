@@ -55,8 +55,8 @@ final class HabitCompletionUITests: XCTestCase {
 
     // MARK: - Daily Reset Tests
 
-    func testHabitsResetAtMidnight() {
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+    func testHabitsResetAtMidnight() throws {
+        let yesterday = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -1, to: Date()))
         let today = Date()
 
         let isNewDay = !Calendar.current.isDate(yesterday, inSameDayAs: today)

@@ -87,7 +87,7 @@ final class TrendAnalysisService {
         var rates: [Double] = []
         let calendar = Calendar.current
 
-        for day in 0 ..< days {
+        for day in 0..<days {
             guard let date = calendar.date(byAdding: .day, value: -day, to: Date()) else { continue }
             let dayLogs = logs.filter { calendar.isDate($0.completionDate, inSameDayAs: date) }
             let completionRate = Double(dayLogs.filter(\.isCompleted).count) / Double(max(dayLogs.count, 1))
@@ -122,7 +122,7 @@ final class TrendAnalysisService {
         var xpData: [Int] = []
         let calendar = Calendar.current
 
-        for day in 0 ..< days {
+        for day in 0..<days {
             guard let date = calendar.date(byAdding: .day, value: -day, to: Date()) else { continue }
             let dayLogs = logs.filter { calendar.isDate($0.completionDate, inSameDayAs: date) }
             let dailyXP = dayLogs.filter(\.isCompleted).reduce(0) { $0 + $1.xpEarned }

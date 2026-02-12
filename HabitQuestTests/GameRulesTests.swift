@@ -6,19 +6,19 @@ final class GameRulesTests: XCTestCase {
 
     func testGameRulesInitialization() {
         // Test basic initialization
-        /// - TODO: Implement initialization test for enumGameRules{
+        // - TODO: Implement initialization test for enumGameRules{
         XCTAssertTrue(true, "Placeholder test for enumGameRules{")
     }
 
     func testGameRulesProperties() {
         // Test property access and validation
-        /// - TODO: Implement property tests for enumGameRules{
+        // - TODO: Implement property tests for enumGameRules{
         XCTAssertTrue(true, "Placeholder test for enumGameRules{ properties")
     }
 
     func testGameRulesMethods() {
         // Test method functionality
-        /// - TODO: Implement method tests for enumGameRules{
+        // - TODO: Implement method tests for enumGameRules{
         XCTAssertTrue(true, "Placeholder test for enumGameRules{ methods")
     }
 }

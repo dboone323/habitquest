@@ -164,7 +164,7 @@ import Social
         }
     }
 #else
-    // Stub for macOS/non-UIKit
+    /// Stub for macOS/non-UIKit
     class ShareManager {
         static let shared = ShareManager()
         private init() {}

@@ -3,13 +3,12 @@ import SwiftUI
 #if canImport(UIKit)
     import UIKit
 
-    // Enhancement #83: Social Sharing
+    /// Enhancement #83: Social Sharing
     struct SocialShareSheet: UIViewControllerRepresentable {
         var items: [Any]
 
         func makeUIViewController(context _: Context) -> UIActivityViewController {
-            let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
-            return controller
+            UIActivityViewController(activityItems: items, applicationActivities: nil)
         }
 
         func updateUIViewController(_: UIActivityViewController, context _: Context) {
@@ -17,7 +16,7 @@ import SwiftUI
         }
     }
 #else
-    // Fallback for macOS (AppKit) or other platforms
+    /// Fallback for macOS (AppKit) or other platforms
     struct SocialShareSheet: View {
         var items: [Any]
         var body: some View {
@@ -27,7 +26,7 @@ import SwiftUI
     }
 #endif
 
-// Usage Example View
+/// Usage Example View
 struct ShareProgressView: View {
     @State private var showShareSheet = false
 

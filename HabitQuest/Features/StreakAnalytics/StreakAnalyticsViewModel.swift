@@ -139,11 +139,11 @@ final class StreakAnalyticsViewModel: ObservableObject {
     {
         let streaks = analytics.map(\.currentStreak)
         let ranges = [
-            (0 ... 2, "Getting Started"),
-            (3 ... 6, "Building"),
-            (7 ... 29, "Strong"),
-            (30 ... 99, "Impressive"),
-            (100 ... Int.max, "Legendary"),
+            (0...2, "Getting Started"),
+            (3...6, "Building"),
+            (7...29, "Strong"),
+            (30...99, "Impressive"),
+            (100...Int.max, "Legendary"),
         ]
 
         return ranges.map { range, label in
@@ -188,7 +188,7 @@ final class StreakAnalyticsViewModel: ObservableObject {
         // Simplified weekly pattern generation
         let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         return daysOfWeek.map { day in
-            WeeklyPattern(day: day, completionRate: Double.random(in: 0.3 ... 0.9)) // Placeholder
+            WeeklyPattern(day: day, completionRate: Double.random(in: 0.3...0.9)) // Placeholder
         }
     }
 }

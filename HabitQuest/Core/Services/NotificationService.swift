@@ -14,7 +14,9 @@ enum NotificationService {
         case levelUp = "level_up"
         case achievementUnlocked = "achievement_unlocked"
 
-        var identifier: String { rawValue }
+        var identifier: String {
+            rawValue
+        }
 
         var title: String {
             switch self {

@@ -1,5 +1,4 @@
 import XCTest
-
 @testable import HabitQuest
 
 final class AchievementTests: XCTestCase {

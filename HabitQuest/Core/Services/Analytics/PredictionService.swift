@@ -263,7 +263,7 @@ final class PredictionService {
         }
 
         let optimalHour = findOptimalHour(from: completionHours)
-        return (optimalHour - 1) ... (optimalHour + 1)
+        return (optimalHour - 1)...(optimalHour + 1)
     }
 
     private func calculateLongestRecentStreak(_ habit: Habit) -> Int {

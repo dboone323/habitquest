@@ -3,10 +3,6 @@ import SwiftUI
 struct AchievementsSection: View {
     let achievements: [Achievement]
 
-    init(achievements: [Achievement]) {
-        self.achievements = achievements
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -45,10 +41,6 @@ struct AchievementsSection: View {
 
 struct AchievementBadge: View {
     let achievement: Achievement
-
-    init(achievement: Achievement) {
-        self.achievement = achievement
-    }
 
     var body: some View {
         VStack(spacing: 4) {

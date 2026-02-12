@@ -48,12 +48,12 @@ final class HabitQuestAppTests: XCTestCase {
         }
     }
 
-    func testDatabaseErrorHandling() {
+    func testDatabaseErrorHandling() throws {
         // Arrange
         app.showDatabaseError = true
 
         // Act
-        let view = app.body as! WindowGroup.View
+        let view = try XCTUnwrap(app.body as? WindowGroup.View)
 
         // Assert
         XCTAssertTrue(view.contains(where: { $0 is VStack }), "View should contain a VStack")

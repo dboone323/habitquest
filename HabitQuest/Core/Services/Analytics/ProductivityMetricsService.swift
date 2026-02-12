@@ -89,7 +89,7 @@ final class ProductivityMetricsService {
         var dailyScores: [Date: Double] = [:]
         let calendar = Calendar.current
 
-        for dayOffset in 0 ..< days {
+        for dayOffset in 0..<days {
             guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
             let dayLogs = await fetchLogs(for: date)
 

@@ -1,6 +1,6 @@
 import Foundation
 
-// Supporting types for analytics extracted to reduce AdvancedAnalyticsEngine file size
+/// Supporting types for analytics extracted to reduce AdvancedAnalyticsEngine file size
 struct HabitPatterns: Sendable {
     let consistency: Double
     let momentum: Double
