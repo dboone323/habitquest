@@ -1,28 +1,305 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main, develop]
+    tags: ['v*']
   pull_request:
-    branches: [ main ]
+    branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'testflight'
+        type: choice
+        options:
+          - testflight
+          - appstore
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_15.4.app/Contents/Developer
 
 jobs:
-  build:
-    runs-on: macos-latest
+  # 1. Code Quality & Linting
+  quality-checks:
+    name: 🔍 Code Quality
+    runs-on: macos-26-xlarge
+    timeout-minutes: 15
+
     steps:
-      - name: Checkout
+      - name: 📥 Checkout Code
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          fetch-depth: 0
 
-      - name: Xcode version
-        run: xcodebuild -version
+      - name: 🔧 Setup Swift
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '6.0'
 
-      - name: Resolve Swift Packages
+      - name: 📦 Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: 🎨 SwiftFormat Check
         run: |
-          set -eo pipefail
-          xcodebuild -resolvePackageDependencies -project HabitQuest.xcodeproj
+          if command -v swiftformat >/dev/null 2>&1; then
+            swiftformat . --config .swiftformat --lint --verbose
+          else
+            echo "⚠️ SwiftFormat check skipped (not installed)"
+          fi
 
-      - name: List schemes
+      - name: 🔍 SwiftLint
         run: |
-          xcodebuild -list -project HabitQuest.xcodeproj
+          if command -v swiftlint >/dev/null 2>&1; then
+            swiftlint --strict --reporter github-actions-logging
+          else
+            echo "⚠️ SwiftLint check skipped (not installed)"
+          fi
+
+      - name: 📏 Check Line Length
+        run: |
+          MAX_LENGTH=200
+          VIOLATIONS=$(find . -name "*.swift" -not -path "./.build/*" -not -path "./DerivedData/*" -exec awk 'length > '$MAX_LENGTH' {print FILENAME":"NR":"$0}' {} \;)
+          if [ -n "$VIOLATIONS" ]; then
+            echo "❌ Lines exceed $MAX_LENGTH characters:"
+            echo "$VIOLATIONS"
+            # Warn only for now
+            # exit 1 
+          else
+            echo "✅ All lines within $MAX_LENGTH characters"
+          fi
+
+  # 2. Security Scanning
+  security-scan:
+    name: 🔒 Security Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🛡️ Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          ignore-unfixed: true
+
+      - name: 📤 Upload Trivy Results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: 🔍 Check for Secrets (TruffleHog)
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.before }}
+          head: ${{ github.sha }}
+          extra_args: --debug --only-verified
+
+      - name: 🧠 CodeQL Analysis
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python # Only python supported by CodeQL without build. Swift requires build mode but is Mac-only.
+
+      - name: 🕵️ Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+      - name: 🐚 Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          severity: error
+          ignore_paths: |
+             node_modules
+             .build
+             .swiftpm
+          ignore_names: |
+            create_ci_compatible_project.sh
+            smart_builder.sh
+            smart_multiplatform_builder.sh
+            dev.sh
+            HabitQuest_safe_enhancements.sh
+            unified_dashboard.sh
+            automate.sh
+            run_validation.sh
+
+  # 3. Build & Test
+  build-and-test:
+    name: 🏗️ Build & Test
+    runs-on: macos-26-xlarge
+    timeout-minutes: 45
+    needs: quality-checks
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - destination: "platform=iOS Simulator,name=iPhone 15,OS=17.5"
+            name: iOS
+            scheme: HabitQuest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Swift
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '6.0'
+
+      - name: 📦 Cache DerivedData
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-deriveddata-${{ hashFiles('**/*.swift', '**/*.xcodeproj') }}
+          restore-keys: |
+            ${{ runner.os }}-deriveddata-
+
+      - name: 🏗️ Build (${{ matrix.name }})
+        run: |
+          echo "🔨 Building ${{ matrix.name }}..."
+          xcodebuild build \
+            -scheme ${{ matrix.scheme }} \
+            -destination '${{ matrix.destination }}' \
+            -configuration Debug \
+            -enableCodeCoverage YES \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            SWIFT_TREAT_WARNINGS_AS_ERRORS=YES
+
+      - name: 🧪 Run Tests (${{ matrix.name }})
+        run: |
+          echo "🧪 Running tests on ${{ matrix.name }}..."
+          xcodebuild test \
+            -scheme ${{ matrix.scheme }} \
+            -destination '${{ matrix.destination }}' \
+            -configuration Debug \
+            -enableCodeCoverage YES \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            -resultBundlePath TestResults.xcresult
+
+      - name: 📊 Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.name }}
+          path: TestResults.xcresult
+          retention-days: 30
+
+      - name: 📈 Generate Coverage Report
+        run: |
+          echo "📊 Generating code coverage report..."
+          xcrun xccov view --report --json TestResults.xcresult > coverage.json || true
+
+      - name: 📤 Upload Coverage
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.json
+          flags: ios
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+  # 4. Deployment (Conditional)
+  deploy:
+    name: 🚀 Deploy
+    runs-on: macos-26-xlarge
+    timeout-minutes: 45
+    needs: [build-and-test, security-scan]
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔧 Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.2'
+
+      - name: 💎 Setup Ruby & Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - run: gem install fastlane
+
+      - name: 🔐 Import Certificates
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
+          p12-password: ${{ secrets.CERTIFICATES_PASSWORD }}
+
+      - name: 📄 Setup Provisioning Profile (secure)
+        env:
+          PROVISIONING_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
+        run: |
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "$PROVISIONING_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/"$PROVISIONING_PROFILE_NAME".mobileprovision
+
+      - name: 🏗️ Archive App
+        env:
+          CODE_SIGN_IDENTITY: ${{ secrets.CODE_SIGN_IDENTITY }}
+          PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE_UUID }}
+        run: |
+          xcodebuild archive \
+            -scheme HabitQuest \
+            -configuration Release \
+            -archivePath build/HabitQuest.xcarchive \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY" \
+            PROVISIONING_PROFILE="$PROVISIONING_PROFILE"
+
+      - name: 📦 Export IPA
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath build/HabitQuest.xcarchive \
+            -exportOptionsPlist ExportOptions.plist \
+            -exportPath build
+
+      - name: 📤 Upload to TestFlight
+        uses: apple-actions/upload-testflight-build@v1
+        with:
+          app-path: build/HabitQuest.ipa
+          issuer-id: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          api-key-id: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          api-private-key: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+
+  # 5. Quality Gate
+  quality-gate:
+    name: ✅ Quality Gate
+    runs-on: ubuntu-latest
+    needs: [quality-checks, build-and-test, security-scan]
+    if: always()
+    steps:
+      - name: 📊 Evaluate
+        run: |
+          if [ "${{ needs.quality-checks.result }}" = "success" ] && \
+             [ "${{ needs.build-and-test.result }}" = "success" ] && \
+             [ "${{ needs.security-scan.result }}" = "success" ]; then
+            echo "✅ All checks passed!"
+            exit 0
+          else
+            echo "❌ Workflow failed."
+            exit 1
+          fi

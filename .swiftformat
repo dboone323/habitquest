@@ -1,27 +1,25 @@
 # Unified SwiftFormat Configuration
-# Version: 0.53+
+# Version: 0.59.1
 # Swift: 6.0
-# Updated: February 9, 2026
-#
-# This is the standard configuration for all projects in the tools-automation workspace.
-# Apply this to all projects: cp UNIFIED_SWIFTFORMAT_TEMPLATE project-name/.swiftformat
+# Updated: February 11, 2026
 
 # Swift version
 --swiftversion 6.0
 
 # Indentation and Tabs
 --indent 4
---tabwidth 4
 --indentcase false
+--tabwidth 4
+--smarttabs enabled
 
 # Line Breaks
 --linebreaks lf
 
 # Spacing and Wrapping
 --maxwidth 120
---wraparguments preserve
---wrapparameters preserve
---wrapcollections preserve
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
 --closingparen balanced
 --wrapternary before-operators
 
@@ -29,6 +27,8 @@
 --commas always
 
 # Operators
+--nospaceoperators ..<,...
+--ranges spaced
 --operatorfunc spaced
 
 # Semicolons
@@ -74,8 +74,9 @@
 # Organize Types
 --organizetypes actor,class,enum,struct
 
-# Enabled Rules
+# EXPLICIT RULES (Exhaustive list to ensure local/CI parity)
 --enable isEmpty
+--enable indent
 --enable hoistPatternLet
 --enable wrapMultilineStatementBraces
 --enable blankLinesBetweenScopes
@@ -86,14 +87,23 @@
 --enable void
 --enable trailingCommas
 --enable strongifiedSelf
+--enable redundantReturn
+--enable redundantType
+--enable spaceAroundOperators
+--enable redundantProperty
+--enable redundantThrows
+--enable blankLinesBetweenImports
+--enable noForceUnwrapInTests
+--enable wrap
+--enable wrapFunctionBodies
+--enable trailingSpace
 
 # Disabled Rules
 --disable andOperator
 --disable blankLinesAtStartOfScope
 --disable blankLinesAtEndOfScope
 --disable redundantSelf
---disable wrapEnumCases
---disable spaceAroundOperators
+--disable docComments
 
 # Exclusions
---exclude .build,Package.swift,node_modules,.swiftpm
+--exclude .build,Package.swift,node_modules,.swiftpm,Tools

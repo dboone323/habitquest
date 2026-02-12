@@ -2,7 +2,7 @@ import SwiftData
 import XCTest
 @testable import HabitQuest
 
-// Mock Notification Center
+/// Mock Notification Center
 final class MockNotificationCenter: NotificationCenterProtocol, @unchecked Sendable {
     var addedRequests: [UNNotificationRequest] = []
     var removedIdentifiers: [String] = []
@@ -81,7 +81,7 @@ final class NotificationSchedulerServiceTests: XCTestCase {
         let today = Date()
 
         // Add logs to support high probability prediction (consistency)
-        for i in 0 ..< 21 {
+        for i in 0..<21 {
             if let date = Calendar.current.date(byAdding: .day, value: -i, to: today) {
                 let log = HabitLog(habit: habit, completionDate: date, isCompleted: true)
                 habit.logs.append(log)

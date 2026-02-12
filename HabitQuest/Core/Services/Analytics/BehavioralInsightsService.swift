@@ -46,7 +46,7 @@ final class BehavioralInsightsService {
 
         var weekdaySuccessRates: [Int: Double] = [:]
 
-        for weekday in 1 ... 7 {
+        for weekday in 1...7 {
             let logsOnWeekday = habit.logs.filter { log in
                 calendar.component(.weekday, from: log.completionDate) == weekday
             }
@@ -214,9 +214,10 @@ final class BehavioralInsightsService {
         var totalGap: TimeInterval = 0
         var gapCount = 0
 
-        for logIndex in 1 ..< completedLogs.count {
+        for logIndex in 1..<completedLogs.count {
             let gap = completedLogs[logIndex].completionDate.timeIntervalSince(
-                completedLogs[logIndex - 1].completionDate)
+                completedLogs[logIndex - 1].completionDate
+            )
             totalGap += gap
             gapCount += 1
         }
@@ -274,8 +275,7 @@ final class BehavioralInsightsService {
     private func analyzeProgressTrackingMotivation(_ habit: Habit) -> Double {
         // Analyze if completions increase after viewing progress
         // This is a simplified analysis based on streak patterns
-        let streakConsistency = calculateStreakConsistency(habit)
-        return streakConsistency
+        calculateStreakConsistency(habit)
     }
 
     private func analyzeRewardSystemEffectiveness(_ habit: Habit) -> Double {
@@ -318,7 +318,7 @@ final class BehavioralInsightsService {
         let mean = consistencyScores.reduce(0, +) / Double(consistencyScores.count)
         let variance =
             consistencyScores.map { pow($0 - mean, 2) }.reduce(0, +)
-            / Double(consistencyScores.count)
+                / Double(consistencyScores.count)
 
         return max(0, 1.0 - variance) // Lower variance = higher adaptability
     }
@@ -335,7 +335,7 @@ final class BehavioralInsightsService {
         let mostCommonHour = hourCounts.max(by: { $0.value < $1.value })?.key ?? 9
         let hourFrequency =
             Double(completionHours.count(where: { $0 == mostCommonHour }))
-            / Double(completionHours.count)
+                / Double(completionHours.count)
 
         return (mostCommonHour, hourFrequency)
     }
@@ -349,9 +349,9 @@ final class BehavioralInsightsService {
 
         var currentStreak = 0
         var longestStreak = 0
-        var allStreaks: [Int] = []
+        let allStreaks: [Int] = []
 
-        for log in completedLogs {
+        for _ in completedLogs {
             currentStreak += 1
             longestStreak = max(longestStreak, currentStreak)
         }
@@ -403,9 +403,10 @@ final class BehavioralInsightsService {
         var totalGap: TimeInterval = 0
         var gapCount = 0
 
-        for logIndex in 1 ..< sortedLogs.count {
+        for logIndex in 1..<sortedLogs.count {
             let gap = sortedLogs[logIndex].completionDate.timeIntervalSince(
-                sortedLogs[logIndex - 1].completionDate)
+                sortedLogs[logIndex - 1].completionDate
+            )
             totalGap += gap
             gapCount += 1
         }
@@ -432,7 +433,7 @@ final class BehavioralInsightsService {
         var streaks: [Int] = []
         var currentStreak = 0
 
-        for log in habit.logs.sorted { $0.completionDate < $1.completionDate } {
+        for log in habit.logs.sorted(by: { $0.completionDate < $1.completionDate }) {
             if log.isCompleted {
                 currentStreak += 1
             } else {

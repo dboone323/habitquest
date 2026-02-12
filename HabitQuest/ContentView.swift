@@ -14,7 +14,7 @@ public struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var themeManager: ThemeManager
 
-    // Query Habits instead of Items
+    /// Query Habits instead of Items
     @Query(sort: \Habit.creationDate, order: .reverse) private var habits: [Habit]
 
     // Gamification Queries
@@ -22,7 +22,9 @@ public struct ContentView: View {
     @Query private var achievements: [Achievement]
     @Query(sort: \HabitLog.completionDate, order: .reverse) private var logs: [HabitLog]
 
-    private var playerProfile: PlayerProfile? { profiles.first }
+    private var playerProfile: PlayerProfile? {
+        profiles.first
+    }
 
     @State private var showAddSheet = false
 
@@ -131,7 +133,7 @@ public struct ContentView: View {
     private func addItem() {
         withAnimation {
             let newHabit = Habit(
-                name: "New Quest \(Int.random(in: 1 ... 100))",
+                name: "New Quest \(Int.random(in: 1...100))",
                 habitDescription: "Daily task",
                 frequency: .daily,
                 category: HabitCategory.allCases.randomElement() ?? .health

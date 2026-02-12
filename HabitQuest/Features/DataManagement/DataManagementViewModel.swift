@@ -58,7 +58,7 @@ public class DataManagementViewModel: ObservableObject {
         Task { [weak self] in
             guard let self else { return }
             do {
-                let jsonData = try await DataExportService.exportUserData(from: modelContext)
+                let jsonData = try DataExportService.exportUserData(from: modelContext)
 
                 await MainActor.run {
                     self.exportDocument = HabitQuestBackupDocument(data: jsonData)
@@ -216,7 +216,8 @@ public class DataManagementViewModel: ObservableObject {
             currentLevel = profiles.first?.level ?? 1
 
             logger.info(
-                "Loaded data statistics: \(totalHabits) habits, \(totalCompletions) completions")
+                "Loaded data statistics: \(totalHabits) habits, \(totalCompletions) completions"
+            )
         } catch {
             logger.error("Failed to load data statistics: \(error.localizedDescription)")
             handleError(error)

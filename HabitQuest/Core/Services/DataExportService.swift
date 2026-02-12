@@ -219,7 +219,7 @@ public struct DataExportService: Sendable {
             if let requirementData = Data(base64Encoded: exportedAchievement.requirement) {
                 requirement =
                     (try? JSONDecoder().decode(AchievementRequirement.self, from: requirementData))
-                    ?? .streakDays(1)
+                        ?? .streakDays(1)
             }
 
             let achievement = Achievement(
@@ -317,7 +317,7 @@ public enum DataExportError: LocalizedError, @unchecked Sendable {
             "Failed to decode data: \(error.localizedDescription)"
         case let .encryptionFailed(error):
             "Failed to encrypt backup data: \(error.localizedDescription)"
-        case let .decryptionFailed(error):
+        case .decryptionFailed:
             "Failed to decrypt backup data. The backup may be corrupted or use an incompatible key."
         }
     }

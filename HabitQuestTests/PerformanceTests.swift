@@ -28,8 +28,8 @@ class PerformanceTests: XCTestCase {
             for i in 0..<200 {
                 gamificationManager.awardXP(i * 10)
                 gamificationManager.checkLevelUp()
-                let _ = gamificationManager.getCurrentLevel()
-                let _ = gamificationManager.getXPProgress()
+                _ = gamificationManager.getCurrentLevel()
+                _ = gamificationManager.getXPProgress()
             }
         }
     }
@@ -40,8 +40,8 @@ class PerformanceTests: XCTestCase {
         measure {
             for i in 0..<300 {
                 streakManager.recordHabitCompletion(habitId: "habit_\(i)")
-                let _ = streakManager.getCurrentStreak(for: "habit_\(i)")
-                let _ = streakManager.getLongestStreak(for: "habit_\(i)")
+                _ = streakManager.getCurrentStreak(for: "habit_\(i)")
+                _ = streakManager.getLongestStreak(for: "habit_\(i)")
             }
         }
     }
@@ -52,8 +52,8 @@ class PerformanceTests: XCTestCase {
         measure {
             for i in 0..<100 {
                 achievementService.checkAchievements(for: createMockUserStats(daysActive: i))
-                let _ = achievementService.getUnlockedAchievements()
-                let _ = achievementService.getAchievementProgress()
+                _ = achievementService.getUnlockedAchievements()
+                _ = achievementService.getAchievementProgress()
             }
         }
     }
@@ -71,7 +71,7 @@ class PerformanceTests: XCTestCase {
                     timestamp: Date()
                 )
                 analyticsService.trackEvent(event)
-                let _ = analyticsService.getHabitCompletionRate()
+                _ = analyticsService.getHabitCompletionRate()
             }
         }
     }
@@ -81,9 +81,9 @@ class PerformanceTests: XCTestCase {
 
         measure {
             for _ in 0..<50 {
-                let _ = analyticsEngine.analyzeHabitPatterns()
-                let _ = analyticsEngine.predictHabitAdherence()
-                let _ = analyticsEngine.generateInsights()
+                _ = analyticsEngine.analyzeHabitPatterns()
+                _ = analyticsEngine.predictHabitAdherence()
+                _ = analyticsEngine.generateInsights()
             }
         }
     }
@@ -97,7 +97,7 @@ class PerformanceTests: XCTestCase {
             for i in 0..<30 {
                 let habit = createMockHabit(id: "habit_\(i)")
                 syncManager.syncHabit(habit)
-                let _ = syncManager.getSyncStatus()
+                _ = syncManager.getSyncStatus()
             }
         }
     }
@@ -107,9 +107,9 @@ class PerformanceTests: XCTestCase {
 
         measure {
             for _ in 0..<10 {
-                let _ = exportService.exportHabitsData()
-                let _ = exportService.exportAnalyticsData()
-                let _ = exportService.generateReport()
+                _ = exportService.exportHabitsData()
+                _ = exportService.exportAnalyticsData()
+                _ = exportService.generateReport()
             }
         }
     }
@@ -122,7 +122,7 @@ class PerformanceTests: XCTestCase {
         measure {
             for i in 0..<100 {
                 notificationService.scheduleHabitReminder(for: createMockHabit(id: "habit_\(i)"))
-                let _ = notificationService.getPendingNotifications()
+                _ = notificationService.getPendingNotifications()
             }
         }
     }
@@ -132,9 +132,9 @@ class PerformanceTests: XCTestCase {
 
         measure {
             for _ in 0..<50 {
-                let _ = smartNotifications.analyzeUserBehavior()
-                let _ = smartNotifications.generateSmartReminders()
-                let _ = smartNotifications.optimizeNotificationTiming()
+                _ = smartNotifications.analyzeUserBehavior()
+                _ = smartNotifications.generateSmartReminders()
+                _ = smartNotifications.optimizeNotificationTiming()
             }
         }
     }
@@ -148,8 +148,8 @@ class PerformanceTests: XCTestCase {
             for i in 0..<100 {
                 let quest = createMockQuest(id: "quest_\(i)")
                 questService.updateQuestProgress(quest)
-                let _ = questService.getActiveQuests()
-                let _ = questService.getCompletedQuests()
+                _ = questService.getActiveQuests()
+                _ = questService.getCompletedQuests()
             }
         }
     }
@@ -161,8 +161,8 @@ class PerformanceTests: XCTestCase {
 
         measure {
             for _ in 0..<30 {
-                let _ = predictor.predictHabitSuccess(habitId: "test_habit", userHistory: [])
-                let _ = predictor.generatePersonalizedRecommendations()
+                _ = predictor.predictHabitSuccess(habitId: "test_habit", userHistory: [])
+                _ = predictor.generatePersonalizedRecommendations()
             }
         }
     }
@@ -243,7 +243,7 @@ class PerformanceTests: XCTestCase {
         measure {
             for i in 0..<100 {
                 gamificationManager.awardXP(i * 2)
-                let _ = performanceMonitor.getMetrics()
+                _ = performanceMonitor.getMetrics()
             }
         }
 
@@ -256,7 +256,7 @@ class PerformanceTests: XCTestCase {
 class PerformanceMonitor {
     private var startTime: Date?
     private var operationCount = 0
-    private var metrics: PerformanceMetrics = PerformanceMetrics()
+    private var metrics: PerformanceMetrics = .init()
 
     func startMonitoring() {
         startTime = Date()
@@ -271,7 +271,7 @@ class PerformanceMonitor {
     func getMetrics() -> PerformanceMetrics {
         operationCount += 1
 
-        if let startTime = startTime {
+        if let startTime {
             let elapsed = Date().timeIntervalSince(startTime)
             metrics.operationsPerSecond = Double(operationCount) / elapsed
         }
@@ -297,7 +297,7 @@ struct PerformanceMetrics {
 // MARK: - Mock Data Creation
 
 private func createMockHabit(id: String) -> Habit {
-    return Habit(
+    Habit(
         id: id,
         title: "Test Habit",
         description: "A test habit for performance testing",
@@ -310,7 +310,7 @@ private func createMockHabit(id: String) -> Habit {
 }
 
 private func createMockAchievement(id: String) -> Achievement {
-    return Achievement(
+    Achievement(
         id: id,
         title: "Test Achievement",
         description: "A test achievement",
@@ -323,7 +323,7 @@ private func createMockAchievement(id: String) -> Achievement {
 }
 
 private func createMockQuest(id: String) -> Quest {
-    return Quest(
+    Quest(
         id: id,
         title: "Test Quest",
         description: "A test quest",
@@ -337,7 +337,7 @@ private func createMockQuest(id: String) -> Quest {
 }
 
 private func createMockUserStats(daysActive: Int) -> UserStats {
-    return UserStats(
+    UserStats(
         totalHabits: 10,
         completedHabits: daysActive,
         currentStreaks: daysActive,
@@ -358,15 +358,15 @@ extension GamificationManager {
     }
 
     func checkLevelUp() -> Bool {
-        return false
+        false
     }
 
     func getCurrentLevel() -> Int {
-        return 1
+        1
     }
 
     func getXPProgress() -> Double {
-        return 0.5
+        0.5
     }
 }
 
@@ -378,11 +378,11 @@ extension StreakManager {
     }
 
     func getCurrentStreak(for habitId: String) -> Int {
-        return 5
+        5
     }
 
     func getLongestStreak(for habitId: String) -> Int {
-        return 10
+        10
     }
 }
 
@@ -394,11 +394,11 @@ extension AchievementService {
     }
 
     func getUnlockedAchievements() -> [Achievement] {
-        return []
+        []
     }
 
     func getAchievementProgress() -> [String: Double] {
-        return [:]
+        [:]
     }
 }
 
@@ -410,7 +410,7 @@ extension AnalyticsService {
     }
 
     func getHabitCompletionRate() -> Double {
-        return 0.75
+        0.75
     }
 }
 
@@ -418,15 +418,15 @@ extension AdvancedAnalyticsEngine {
     static let shared = AdvancedAnalyticsEngine()
 
     func analyzeHabitPatterns() -> [HabitPattern] {
-        return []
+        []
     }
 
     func predictHabitAdherence() -> [Prediction] {
-        return []
+        []
     }
 
     func generateInsights() -> [Insight] {
-        return []
+        []
     }
 }
 
@@ -438,7 +438,7 @@ extension CloudKitSyncManager {
     }
 
     func getSyncStatus() -> SyncStatus {
-        return .synced
+        .synced
     }
 }
 
@@ -446,15 +446,15 @@ extension DataExportService {
     static let shared = DataExportService()
 
     func exportHabitsData() -> Data {
-        return Data()
+        Data()
     }
 
     func exportAnalyticsData() -> Data {
-        return Data()
+        Data()
     }
 
     func generateReport() -> String {
-        return "Test Report"
+        "Test Report"
     }
 }
 
@@ -466,7 +466,7 @@ extension NotificationService {
     }
 
     func getPendingNotifications() -> [UNNotificationRequest] {
-        return []
+        []
     }
 }
 
@@ -474,15 +474,15 @@ extension SmartNotificationService {
     static let shared = SmartNotificationService()
 
     func analyzeUserBehavior() -> UserBehavior {
-        return UserBehavior()
+        UserBehavior()
     }
 
     func generateSmartReminders() -> [SmartReminder] {
-        return []
+        []
     }
 
     func optimizeNotificationTiming() -> [Date] {
-        return []
+        []
     }
 }
 
@@ -494,11 +494,11 @@ extension QuestService {
     }
 
     func getActiveQuests() -> [Quest] {
-        return []
+        []
     }
 
     func getCompletedQuests() -> [Quest] {
-        return []
+        []
     }
 }
 
@@ -506,11 +506,11 @@ extension MLPredictor {
     static let shared = MLPredictor()
 
     func predictHabitSuccess(habitId: String, userHistory: [HabitCompletion]) -> Double {
-        return 0.8
+        0.8
     }
 
     func generatePersonalizedRecommendations() -> [Recommendation] {
-        return []
+        []
     }
 }
 

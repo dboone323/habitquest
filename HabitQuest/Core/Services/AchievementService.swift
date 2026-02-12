@@ -5,7 +5,7 @@ import SwiftData
 enum AchievementService {
     private static let logger = Logger(category: .gameLogic)
 
-    // Initialize default achievements for new users
+    /// Initialize default achievements for new users
     static func createDefaultAchievements() -> [Achievement] {
         [
             // Streak Achievements
@@ -223,11 +223,13 @@ enum AchievementService {
         )
 
         logger.info(
-            "Achievement '\(achievement.name)' unlocked! Awarded \(achievement.xpReward) XP")
+            "Achievement '\(achievement.name)' unlocked! Awarded \(achievement.xpReward) XP"
+        )
 
         if levelUpResult.leveledUp {
             logger.info(
-                "Level up occurred from achievement XP! New level: \(levelUpResult.newLevel)")
+                "Level up occurred from achievement XP! New level: \(levelUpResult.newLevel)"
+            )
         }
     }
 

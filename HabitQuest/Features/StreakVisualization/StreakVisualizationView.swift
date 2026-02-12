@@ -140,10 +140,10 @@ public struct StreakVisualizationView: View {
             LazyVGrid(
                 columns: Array(repeating: GridItem(.flexible(), spacing: 2), count: 7), spacing: 2
             ) {
-                ForEach(0 ..< 30, id: \.self) { day in
+                ForEach(0..<30, id: \.self) { day in
                     HeatMapDay(
                         date: Date().addingTimeInterval(-Double(day) * 86400),
-                        intensity: Double.random(in: 0 ... 1),
+                        intensity: Double.random(in: 0...1),
                         isToday: day == 0
                     )
                 }
@@ -235,11 +235,11 @@ public struct StreakVisualizationView: View {
         switch analytics.currentStreak {
         case 0:
             .gray
-        case 1 ... 6:
+        case 1...6:
             .orange
-        case 7 ... 29:
+        case 7...29:
             .red
-        case 30 ... 99:
+        case 30...99:
             .purple
         default:
             .blue

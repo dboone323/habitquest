@@ -5,18 +5,20 @@
 //  Created by GitHub Copilot on 2026-02-10.
 //
 
+import Foundation
 import Testing
 @testable import HabitQuest
-import Foundation
 
 struct HabitQuestTests {
-    @Test func testAppInitialization() async throws {
+    @Test
+    func appInitialization() {
         // Test that the app can be initialized without crashing
         // This is a basic smoke test
         #expect(true, "App should initialize successfully")
     }
 
-    @Test func testHabitModelCreation() async throws {
+    @Test
+    func habitModelCreation() {
         // Test that we can create a basic habit
         let habit = Habit(
             name: "Test Habit",
@@ -32,7 +34,8 @@ struct HabitQuestTests {
         #expect(habit.streak == 0)
     }
 
-    @Test func testPlayerProfileCreation() async throws {
+    @Test
+    func playerProfileCreation() {
         // Test that we can create a player profile
         let profile = PlayerProfile()
 
@@ -41,7 +44,8 @@ struct HabitQuestTests {
         #expect(profile.xpForNextLevel > 0)
     }
 
-    @Test func testMemoryManagement() async throws {
+    @Test
+    func memoryManagement() {
         // Test basic memory management
         var habits: [Habit] = []
 
@@ -64,7 +68,8 @@ struct HabitQuestTests {
         #expect(habits.isEmpty)
     }
 
-    @Test func testConcurrentOperations() async throws {
+    @Test
+    func concurrentOperations() async {
         // Test that the app can handle concurrent operations
         let iterations = 25
 

@@ -111,13 +111,13 @@ final class ContentGenerationService {
 
     private func generateTimeContext(hour: Int) -> String {
         switch hour {
-        case 6 ... 9:
+        case 6...9:
             "Perfect morning energy!"
-        case 10 ... 12:
+        case 10...12:
             "Mid-morning focus time."
-        case 13 ... 17:
+        case 13...17:
             "Afternoon momentum boost."
-        case 18 ... 21:
+        case 18...21:
             "Evening wind-down ritual."
         default:
             "Your optimal time."
@@ -126,13 +126,13 @@ final class ContentGenerationService {
 
     private func selectMotivationalMessage(prediction: StreakPrediction) -> String {
         switch prediction.probability {
-        case 80 ... 100:
+        case 80...100:
             "You're crushing it!"
-        case 60 ... 79:
+        case 60...79:
             "Great momentum building."
-        case 40 ... 59:
+        case 40...59:
             "Consistency is key."
-        case 20 ... 39:
+        case 20...39:
             "Every small step counts."
         default:
             "Fresh start, new opportunity."

@@ -67,7 +67,7 @@ final class PatternAnalysisService {
 
         var weekdaySuccessRates: [Int: Double] = [:]
 
-        for weekday in 1 ... 7 {
+        for weekday in 1...7 {
             let logsOnWeekday = habit.logs.filter { log in
                 calendar.component(.weekday, from: log.completionDate) == weekday
             }
@@ -206,12 +206,12 @@ final class PatternAnalysisService {
             log.isCompleted ? Calendar.current.component(.hour, from: log.completionDate) : nil
         }
 
-        guard !completionHours.isEmpty else { return 9 ... 11 } // Default morning window
+        guard !completionHours.isEmpty else { return 9...11 } // Default morning window
 
         // Find the most frequent completion hour
         let hourCounts = Dictionary(grouping: completionHours, by: { $0 }).mapValues { $0.count }
         let optimalHour = hourCounts.max(by: { $0.value < $1.value })?.key ?? 9
-        return (optimalHour - 1) ... (optimalHour + 1)
+        return (optimalHour - 1)...(optimalHour + 1)
     }
 
     private func calculateLongestRecentStreak(_ habit: Habit) -> Int {
@@ -275,7 +275,7 @@ final class PatternAnalysisService {
         var totalGap: TimeInterval = 0
         var gapCount = 0
 
-        for i in 1 ..< completedLogs.count {
+        for i in 1..<completedLogs.count {
             let gap = completedLogs[i].completionDate.timeIntervalSince(completedLogs[i - 1].completionDate)
             totalGap += gap
             gapCount += 1
