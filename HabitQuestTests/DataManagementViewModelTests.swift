@@ -2,7 +2,6 @@ import SwiftData
 import XCTest
 @testable import HabitQuest
 
-@MainActor
 final class DataManagementViewModelTests: XCTestCase {
     var modelContainer: ModelContainer!
     var modelContext: ModelContext!

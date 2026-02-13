@@ -1,25 +1,38 @@
-import Combine
 import Foundation
-import SwiftData
 
 // Enhancement #82: Gamification Rewards
-// Using Core/Models/Achievement.swift
+// Uses an in-memory representation for runtime safety in non-persistent flows.
 
-class GamificationManager: ObservableObject {
-    @Published var achievements: [Achievement] = [
-        Achievement(
+struct GamificationAchievement: Equatable {
+    let name: String
+    let achievementDescription: String
+    let iconName: String
+    let category: AchievementCategory
+    var unlockedDate: Date?
+    var progress: Float
+
+    var isUnlocked: Bool {
+        unlockedDate != nil
+    }
+}
+
+class GamificationManager {
+    var achievements: [GamificationAchievement] = [
+        GamificationAchievement(
             name: "First Step",
-            description: "Complete your first habit",
+            achievementDescription: "Complete your first habit",
             iconName: "flag.fill",
             category: .completion,
-            requirement: .totalCompletions(1)
+            unlockedDate: nil,
+            progress: 0
         ),
-        Achievement(
+        GamificationAchievement(
             name: "On Fire",
-            description: "7-day streak",
+            achievementDescription: "7-day streak",
             iconName: "flame.fill",
             category: .streak,
-            requirement: .streakDays(7)
+            unlockedDate: nil,
+            progress: 0
         ),
     ]
 
@@ -36,8 +49,6 @@ class GamificationManager: ObservableObject {
         if let index = achievements.firstIndex(where: { $0.name == name }), !achievements[index].isUnlocked {
             achievements[index].unlockedDate = Date()
             achievements[index].progress = 1.0
-            // Trigger haptic or visual feedback here
-            print("Unlocked: \(achievements[index].name)")
         }
     }
 }

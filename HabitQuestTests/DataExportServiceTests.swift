@@ -15,7 +15,7 @@ final class DataExportServiceTests: XCTestCase {
     }
 
     @MainActor
-    func testExportImportRoundTrip() throws {
+    func testExportImportRoundTrip() async throws {
         // Arrange: create source in-memory store with sample data
         let sourceContainer = try makeInMemoryContainer()
         let sourceContext = ModelContext(sourceContainer)
@@ -61,7 +61,11 @@ final class DataExportServiceTests: XCTestCase {
 
         let destContainer = try makeInMemoryContainer()
         let destContext = ModelContext(destContainer)
-        try DataExportService.importUserData(from: exported, into: destContext, replaceExisting: true)
+        try await DataExportService.importUserData(
+            from: exported,
+            into: destContext,
+            replaceExisting: true
+        )
 
         // Assert: verify basic counts and fields
         let habitCount = try destContext.fetch(FetchDescriptor<Habit>()).count

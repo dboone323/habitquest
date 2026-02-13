@@ -47,6 +47,10 @@ public struct HabitQuestApp: App {
                 AppMainView()
                     .modelContainer(container)
                     .environmentObject(themeManager)
+                    .appAccessibilityDefaults()
+                    .onAppear {
+                        HabitQuestLifecycleCoordinator.configureOnLaunch()
+                    }
             } else {
                 // Show error view when database initialization fails
                 VStack(spacing: 20) {

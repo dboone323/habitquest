@@ -1,0 +1,3 @@
+app_identifier(ENV.fetch("BUNDLE_IDENTIFIER", "com.DanielStevens.HabitQuest"))
+apple_id(ENV.fetch("APPLE_ID", ""))
+team_id(ENV.fetch("DEVELOPMENT_TEAM", "3N5528D82R"))

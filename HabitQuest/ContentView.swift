@@ -1,6 +1,10 @@
 import SwiftData
 import SwiftUI
 
+#if os(iOS)
+import UIKit
+#endif
+
 //
 //  ContentView.swift
 //  HabitQuest - Enhanced Architecture
@@ -139,6 +143,7 @@ public struct ContentView: View {
                 category: HabitCategory.allCases.randomElement() ?? .health
             )
             modelContext.insert(newHabit)
+            triggerHapticFeedback()
         }
     }
 
@@ -190,6 +195,16 @@ public struct ContentView: View {
                 }
             }
         }
+
+        triggerHapticFeedback()
+    }
+
+    private func triggerHapticFeedback() {
+        #if os(iOS)
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
 }
 
