@@ -1,0 +1,7 @@
+#include "Debug.xcconfig"
+
+// Test configuration baseline
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = TESTING $(inherited)
+ENABLE_TESTABILITY = YES
+GCC_PREPROCESSOR_DEFINITIONS = TESTING=1 $(inherited)
+ONLY_ACTIVE_ARCH = YES

@@ -8,6 +8,7 @@
 import XCTest
 @testable import HabitQuest
 
+@MainActor
 final class GamificationManagerTests: XCTestCase {
     var manager: GamificationManager!
 
@@ -24,13 +25,13 @@ final class GamificationManagerTests: XCTestCase {
     func testFirstStepAchievementExists() {
         let firstStep = manager.achievements.first { $0.name == "First Step" }
         XCTAssertNotNil(firstStep)
-        XCTAssertEqual(firstStep?.description, "Complete your first habit")
+        XCTAssertEqual(firstStep?.achievementDescription, "Complete your first habit")
     }
 
     func testOnFireAchievementExists() {
         let onFire = manager.achievements.first { $0.name == "On Fire" }
         XCTAssertNotNil(onFire)
-        XCTAssertEqual(onFire?.description, "7-day streak")
+        XCTAssertEqual(onFire?.achievementDescription, "7-day streak")
     }
 
     func testInitialAchievementsNotUnlocked() {

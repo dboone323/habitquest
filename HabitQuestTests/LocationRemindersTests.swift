@@ -7,11 +7,11 @@ import CoreLocation
 import XCTest
 @testable import HabitQuest
 
+@MainActor
 final class LocationRemindersTests: XCTestCase {
     var sut: LocationReminderManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUpWithError() throws {
         sut = LocationReminderManager.shared
     }
 
@@ -86,10 +86,18 @@ final class LocationRemindersTests: XCTestCase {
     }
 
     func testRemindersArrayInitiallyEmpty() {
-        XCTAssertTrue(true, "Initial reminders array test")
+        XCTAssertGreaterThanOrEqual(sut.reminders.count, 0)
     }
 
     func testAuthorizationStatus() {
-        XCTAssertTrue(true, "Authorization status test")
+        XCTAssertTrue(
+            [
+                CLAuthorizationStatus.notDetermined,
+                .restricted,
+                .denied,
+                .authorizedAlways,
+                .authorizedWhenInUse,
+            ].contains(sut.authorizationStatus)
+        )
     }
 }

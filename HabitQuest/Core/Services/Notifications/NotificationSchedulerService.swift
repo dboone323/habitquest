@@ -124,11 +124,21 @@ final class NotificationSchedulerService {
     private func generatePersonalizedTitle(for habit: Habit, prediction: StreakPrediction) -> String {
         let streak = habit.streak
 
+        // Always prioritize explicit streak reinforcement when a streak already exists.
+        if streak >= 21 {
+            return "🔥 Keep the \(streak)-day streak alive!"
+        }
+
+        if streak >= 7 {
+            return "💪 \(streak) days strong - don't break it now!"
+        }
+
+        // For brand new habits, use a direct personalized title before risk-based messaging.
+        if habit.logs.isEmpty {
+            return "✨ Time for \(habit.name)"
+        }
+
         switch (streak, prediction.probability) {
-        case let (streakCount, probabilityValue) where streakCount >= 21 && probabilityValue > 80:
-            return "🔥 Keep the \(streakCount)-day streak alive!"
-        case let (streakCount, probabilityValue) where streakCount >= 7 && probabilityValue > 70:
-            return "💪 \(streakCount) days strong - don't break it now!"
         case let (streakCount, _) where streakCount >= 3:
             return "⭐ \(streakCount)-day streak in progress"
         case let (_, probabilityValue) where probabilityValue < 40:

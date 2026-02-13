@@ -1,0 +1,5 @@
+"app.title" = "Aplicación";
+"settings.title" = "Configuración";
+"notifications.enable" = "Activar notificaciones";
+"accessibility.voiceover" = "Compatibilidad con VoiceOver";
+"security.biometric" = "Autenticación biométrica";

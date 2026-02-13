@@ -1,0 +1,58 @@
+{
+  "configurations" : [
+    {
+      "id" : "1D8A3BE6-6D89-4B6D-9F34-6E0E38E58D11",
+      "name" : "Default Configuration",
+      "options" : {
+
+      }
+    },
+    {
+      "id" : "F674B6F9-13B4-4B01-ADBE-4B90D1E8D620",
+      "name" : "Performance",
+      "options" : {
+        "targetForVariableExpansion" : {
+          "containerPath" : "container:HabitQuest.xcodeproj",
+          "identifier" : "68581EB72E0F1EA600E5AADA",
+          "name" : "HabitQuest"
+        }
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "gatherCoverageData" : true,
+      "targets" : [
+        {
+          "containerPath" : "container:HabitQuest.xcodeproj",
+          "identifier" : "68581EB72E0F1EA600E5AADA",
+          "name" : "HabitQuest"
+        }
+      ]
+    },
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:HabitQuest.xcodeproj",
+      "identifier" : "68581EB72E0F1EA600E5AADA",
+      "name" : "HabitQuest"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:HabitQuest.xcodeproj",
+        "identifier" : "68581EC62E0F1EA800E5AADA",
+        "name" : "HabitQuestTests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:HabitQuest.xcodeproj",
+        "identifier" : "68581ED02E0F1EA800E5AADA",
+        "name" : "HabitQuestUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

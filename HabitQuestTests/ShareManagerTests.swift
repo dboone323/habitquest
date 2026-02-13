@@ -8,6 +8,7 @@
 import XCTest
 @testable import HabitQuest
 
+@MainActor
 final class ShareManagerTests: XCTestCase {
     var manager: ShareManager!
 
@@ -66,7 +67,8 @@ final class ShareManagerTests: XCTestCase {
             streakCount: 30,
             title: "30-Day Warrior",
             description: "Completed 30 days!",
-            badge: "🏆"
+            emoji: "🏆",
+            celebrationLevel: .advanced
         )
 
         let expectation = expectation(description: "Share milestone completion")

@@ -75,7 +75,11 @@ public final class LocationReminderManager: NSObject, ObservableObject {
         let manager = CLLocationManager()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.allowsBackgroundLocationUpdates = true
+
+        // Only enable background location updates when the host app declares location background mode.
+        let backgroundModes = Bundle.main.object(forInfoDictionaryKey: "UIBackgroundModes") as? [String]
+        manager.allowsBackgroundLocationUpdates = backgroundModes?.contains("location") == true
+
         return manager
     }()
 

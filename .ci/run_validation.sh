@@ -36,10 +36,19 @@ else
 		proj=$(ls -1 *.xcodeproj 2>/dev/null | head -n1)
 		if [ -n "$proj" ]; then
 			scheme=${proj%.xcodeproj}
+			testplan_file="${scheme}.xctestplan"
 			if command -v xcpretty >/dev/null 2>&1; then
-				xcodebuild -scheme "$scheme" -destination 'platform=macOS' build | xcpretty || xcodebuild -scheme "$scheme" -destination 'platform=macOS' build || true
+				if [ -f "$testplan_file" ]; then
+					xcodebuild -project "$proj" -scheme "$scheme" -testPlan "$scheme" -xcconfig Config/Test.xcconfig -destination 'platform=iOS Simulator,name=iPhone 17' test | xcpretty || xcodebuild -project "$proj" -scheme "$scheme" -testPlan "$scheme" -xcconfig Config/Test.xcconfig -destination 'platform=iOS Simulator,name=iPhone 17' test || true
+				else
+					xcodebuild -project "$proj" -scheme "$scheme" -destination 'platform=macOS' build | xcpretty || xcodebuild -project "$proj" -scheme "$scheme" -destination 'platform=macOS' build || true
+				fi
 			else
-				xcodebuild -scheme "$scheme" -destination 'platform=macOS' build || true
+				if [ -f "$testplan_file" ]; then
+					xcodebuild -project "$proj" -scheme "$scheme" -testPlan "$scheme" -xcconfig Config/Test.xcconfig -destination 'platform=iOS Simulator,name=iPhone 17' test || true
+				else
+					xcodebuild -project "$proj" -scheme "$scheme" -destination 'platform=macOS' build || true
+				fi
 			fi
 		else
 			echo "No Package.swift or .xcodeproj found"

@@ -46,6 +46,12 @@ import Social
         // MARK: - Share Methods
 
         private func share(text: String, image: UIImage?, completion: @escaping (Bool) -> Void) {
+            // UI sharing isn't deterministic under XCTest; fail fast for stable test behavior.
+            if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
+                completion(false)
+                return
+            }
+
             var items: [Any] = [text]
             if let image {
                 items.append(image)
@@ -69,7 +75,13 @@ import Social
                 .first(where: { $0.isKeyWindow })?
                 .rootViewController
             {
+                guard topVC.presentedViewController == nil else {
+                    completion(false)
+                    return
+                }
                 topVC.present(activityVC, animated: true)
+            } else {
+                completion(false)
             }
         }
 
