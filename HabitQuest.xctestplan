@@ -1,35 +1,15 @@
 {
   "configurations" : [
     {
-      "id" : "1D8A3BE6-6D89-4B6D-9F34-6E0E38E58D11",
-      "name" : "Default Configuration",
+      "id" : "32463E05-D964-45BD-9AC8-236087BDB268",
+      "name" : "Test Scheme Action",
       "options" : {
 
-      }
-    },
-    {
-      "id" : "F674B6F9-13B4-4B01-ADBE-4B90D1E8D620",
-      "name" : "Performance",
-      "options" : {
-        "targetForVariableExpansion" : {
-          "containerPath" : "container:HabitQuest.xcodeproj",
-          "identifier" : "68581EB72E0F1EA600E5AADA",
-          "name" : "HabitQuest"
-        }
       }
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : {
-      "gatherCoverageData" : true,
-      "targets" : [
-        {
-          "containerPath" : "container:HabitQuest.xcodeproj",
-          "identifier" : "68581EB72E0F1EA600E5AADA",
-          "name" : "HabitQuest"
-        }
-      ]
-    },
+    "performanceAntipatternCheckerEnabled" : true,
     "targetForVariableExpansion" : {
       "containerPath" : "container:HabitQuest.xcodeproj",
       "identifier" : "68581EB72E0F1EA600E5AADA",
@@ -46,7 +26,7 @@
       }
     },
     {
-      "parallelizable" : false,
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:HabitQuest.xcodeproj",
         "identifier" : "68581ED02E0F1EA800E5AADA",
