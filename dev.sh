@@ -51,7 +51,7 @@ log_error() {
 detect_project_type() {
 	if [[ -f "Package.swift" ]]; then
 		echo "swift"
-	elif [[ -f "*.xcodeproj" ]] || [[ -f "*.xcworkspace" ]]; then
+	elif ls *.xcodeproj >/dev/null 2>&1 || ls *.xcworkspace >/dev/null 2>&1; then
 		echo "xcode"
 	elif [[ -f "package.json" ]]; then
 		echo "node"
@@ -73,10 +73,20 @@ cmd_build() {
 		swift build
 		;;
 	"xcode")
-		if [[ -f "*.xcworkspace" ]]; then
-			xcodebuild -workspace *.xcworkspace -scheme "${PROJECT_NAME}" build
+		if command -v xcbuild >/dev/null 2>&1; then
+			log_info "Using xcbuild for building"
+			if [[ -f "*.xcworkspace" ]]; then
+				xcbuild build --workspace *.xcworkspace --scheme "${PROJECT_NAME}" --configuration Debug
+			else
+				xcbuild build --project *.xcodeproj --scheme "${PROJECT_NAME}" --configuration Debug
+			fi
 		else
-			xcodebuild -project *.xcodeproj -scheme "${PROJECT_NAME}" build
+			log_info "Using xcodebuild for building"
+			if [[ -f "*.xcworkspace" ]]; then
+				xcodebuild -workspace *.xcworkspace -scheme "${PROJECT_NAME}" build
+			else
+				xcodebuild -project *.xcodeproj -scheme "${PROJECT_NAME}" build
+			fi
 		fi
 		;;
 	"node")
@@ -102,10 +112,23 @@ cmd_test() {
 		swift test
 		;;
 	"xcode")
-		if [[ -f "*.xcworkspace" ]]; then
-			xcodebuild test -workspace *.xcworkspace -scheme "${PROJECT_NAME}" -destination 'platform=macOS'
+		if command -v xctest >/dev/null 2>&1; then
+			log_info "Using xctest for testing"
+			# Find the test bundle
+			TEST_BUNDLE=$(find ~/Library/Developer/Xcode/DerivedData -name "*Tests.xctest" -type d 2>/dev/null | head -1)
+			if [ -n "$TEST_BUNDLE" ]; then
+				xctest -XCTest All "$TEST_BUNDLE"
+			else
+				log_error "Test bundle not found. Run build first."
+				exit 1
+			fi
 		else
-			xcodebuild test -project *.xcodeproj -scheme "${PROJECT_NAME}" -destination 'platform=macOS'
+			log_info "Using xcodebuild for testing"
+			if [[ -f "*.xcworkspace" ]]; then
+				xcodebuild test -workspace *.xcworkspace -scheme "${PROJECT_NAME}" -destination 'platform=macOS'
+			else
+				xcodebuild test -project *.xcodeproj -scheme "${PROJECT_NAME}" -destination 'platform=macOS'
+			fi
 		fi
 		;;
 	"node")
