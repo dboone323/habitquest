@@ -2,7 +2,7 @@ import Foundation
 
 /// Logic-only manager for streak calculations
 /// Separated from StreakService to allow unit testing without SwiftData dependencies
-class StreakManager {
+struct StreakManager {
     // MARK: - Streak Calculation
 
     func calculateStreak(completions: [Date]) -> Int {

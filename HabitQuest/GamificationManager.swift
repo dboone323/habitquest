@@ -16,7 +16,7 @@ struct GamificationAchievement: Equatable {
     }
 }
 
-class GamificationManager {
+struct GamificationManager {
     var achievements: [GamificationAchievement] = [
         GamificationAchievement(
             name: "First Step",
@@ -36,7 +36,7 @@ class GamificationManager {
         ),
     ]
 
-    func checkAchievements(habitsCompleted: Int, currentStreak: Int) {
+    mutating func checkAchievements(habitsCompleted: Int, currentStreak: Int) {
         if habitsCompleted >= 1 {
             unlock(name: "First Step")
         }
@@ -45,7 +45,7 @@ class GamificationManager {
         }
     }
 
-    private func unlock(name: String) {
+    mutating private func unlock(name: String) {
         if let index = achievements.firstIndex(where: { $0.name == name }), !achievements[index].isUnlocked {
             achievements[index].unlockedDate = Date()
             achievements[index].progress = 1.0
