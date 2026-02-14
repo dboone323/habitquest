@@ -9,7 +9,7 @@ import XCTest
 @MainActor
 final class PerformanceTests: XCTestCase {
     func testGamificationManagerPerformance() {
-        let manager = GamificationManager()
+        var manager = GamificationManager()
         let start = CFAbsoluteTimeGetCurrent()
         let iterations = 500
 
@@ -33,7 +33,7 @@ final class PerformanceTests: XCTestCase {
     }
 
     func testStreakManagerPerformance() {
-        let manager = StreakManager()
+        var manager = StreakManager()
         let calendar = Calendar.current
         let baseDate = Date()
         let completions = (0..<365).compactMap { offset in
