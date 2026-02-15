@@ -5,7 +5,7 @@ on:
     branches: [main, develop, 'fix/*']
     tags: ['v*']
   pull_request:
-    branches: [main, develop]
+    branches: [main, develop, 'phase3-advanced-automation']
   workflow_dispatch:
     inputs:
       environment:
