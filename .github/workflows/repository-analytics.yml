@@ -1,0 +1,56 @@
+name: Repository Analytics & Monitoring
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      report_period:
+        description: 'Report period (daily/weekly/monthly)'
+        required: false
+        default: 'daily'
+        type: choice
+        options:
+          - daily
+          - weekly
+          - monthly
+
+jobs:
+  analytics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PyGithub pandas matplotlib requests
+
+      - name: Generate Repository Analytics
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPORT_PERIOD: ${{ inputs.report_period || 'daily' }}
+        run: python .github/scripts/repository-analytics.py
+
+      - name: Upload Analytics Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: analytics-report
+          path: analytics-report.json
+
+      - name: Create Analytics Issue
+        if: github.event_name == 'schedule'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create or update analytics issue
+          python .github/scripts/create-analytics-issue.py
