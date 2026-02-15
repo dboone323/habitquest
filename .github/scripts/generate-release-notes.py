@@ -5,6 +5,7 @@ Generates comprehensive release notes from PRs and commits
 """
 
 import os
+import re
 import requests
 from datetime import datetime, timedelta
 
@@ -17,13 +18,26 @@ def generate_release_notes():
         print("GitHub token or repository not configured")
         return
 
-    # Get recent PRs
+    # Validate repository name format
+    if not re.match(r'^[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+$', repo):
+        print(f"Invalid repository name format: {repo}")
+        return
+
+    # Get recent PRs with timeout and validation
     url = f"https://api.github.com/repos/{repo}/pulls"
-    headers = {'Authorization': f'token {token}'}
+    headers = {
+        'Authorization': f'token {token}',
+        'User-Agent': 'Release-Notes-Generator/1.0'
+    }
     params = {'state': 'closed', 'sort': 'updated', 'direction': 'desc', 'per_page': 20}
 
-    response = requests.get(url, headers=headers, params=params)
-    prs = response.json()
+    try:
+        response = requests.get(url, headers=headers, params=params, timeout=30, allow_redirects=False)
+        response.raise_for_status()
+        prs = response.json()
+    except requests.RequestException as e:
+        print(f"Error fetching PRs: {e}")
+        return
 
     notes = f"# 🚀 Release Notes - {datetime.now().strftime('%Y-%m-%d')}\n\n"
 
@@ -32,18 +46,33 @@ def generate_release_notes():
     other = []
 
     for pr in prs:
-        if not pr.get('merged_at'):
+        if not isinstance(pr, dict) or not pr.get('merged_at'):
             continue
 
-        title = pr['title']
-        number = pr['number']
-        labels = [label['name'] for label in pr.get('labels', [])]
+        title = pr.get('title', '')
+        if not isinstance(title, str) or len(title) > 200:  # Reasonable title limit
+            continue
+
+        number = pr.get('number', '')
+        if not isinstance(number, int):
+            continue
+
+        labels = pr.get('labels', [])
+        if not isinstance(labels, list):
+            continue
+
+        label_names = []
+        for label in labels:
+            if isinstance(label, dict) and 'name' in label:
+                label_name = label['name']
+                if isinstance(label_name, str):
+                    label_names.append(label_name)
 
         line = f"- {title} (#{number})"
 
-        if 'enhancement' in labels or 'feature' in labels:
+        if any(label in ['enhancement', 'feature'] for label in label_names):
             features.append(line)
-        elif 'bug' in labels or 'fix' in labels:
+        elif any(label in ['bug', 'fix'] for label in label_names):
             fixes.append(line)
         else:
             other.append(line)
@@ -65,4 +94,8 @@ def generate_release_notes():
     print(notes)
 
 if __name__ == "__main__":
-    generate_release_notes()
+    try:
+        generate_release_notes()
+    except Exception as e:
+        print(f"Error generating release notes: {e}")
+        exit(1)
