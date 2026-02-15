@@ -1,0 +1,35 @@
+name: 📊 Performance Monitoring & Optimization
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+
+jobs:
+  performance-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pytest pytest-benchmark
+
+      - name: Run performance benchmarks
+        run: |
+          python -m pytest --benchmark-only --benchmark-json=benchmark.json
+
+      - name: Analyze performance trends
+        run: |
+          python .github/scripts/performance-analyzer.py
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmark.json

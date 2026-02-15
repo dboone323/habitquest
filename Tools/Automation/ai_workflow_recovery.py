@@ -3,7 +3,7 @@
 AI Workflow Recovery System - Basic Version
 """
 import sys
-
+import os
 
 def main():
     print("AI Workflow Recovery System - Basic Version")
@@ -14,7 +14,6 @@ def main():
         return 0
 
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())
