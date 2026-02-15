@@ -1,0 +1,32 @@
+name: 📦 Automated Dependency Management
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly on Monday
+  workflow_dispatch:
+
+jobs:
+  update-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Update Python dependencies
+        run: |
+          pip install pip-tools
+          pip-compile --upgrade requirements.in
+          pip-compile --upgrade requirements-dev.in
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "🤖 Automated dependency updates"
+          title: "🤖 Weekly Dependency Updates"
+          body: "Automated dependency updates for improved security and performance."
+          branch: automated/dependency-updates
