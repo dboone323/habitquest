@@ -1,0 +1,70 @@
+{
+  "name": "Repository Governance Ruleset",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "include": [
+        "refs/heads/main",
+        "refs/heads/develop",
+        "refs/heads/release/**"
+      ],
+      "exclude": []
+    }
+  },
+  "rules": [
+    {
+      "type": "deletion"
+    },
+    {
+      "type": "non_fast_forward"
+    },
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "required_status_checks": [
+          {
+            "context": "CI/CD Pipeline",
+            "integration_id": 0
+          },
+          {
+            "context": "Security Scan",
+            "integration_id": 0
+          },
+          {
+            "context": "Code Quality",
+            "integration_id": 0
+          },
+          {
+            "context": "🤖 Copilot Code Review & Enhancement",
+            "integration_id": 0
+          }
+        ],
+        "strict_required_status_checks_policy": true
+      }
+    },
+    {
+      "type": "required_pull_request_reviews",
+      "parameters": {
+        "required_approving_review_count": 1,
+        "dismiss_stale_reviews_on_push": true,
+        "require_code_owner_reviews": true,
+        "dismissal_restrictions": {}
+      }
+    },
+    {
+      "type": "required_code_scanning",
+      "parameters": {
+        "code_scanning_tools": [
+          {
+            "tool": "CodeQL",
+            "alerts_threshold": "errors"
+          }
+        ]
+      }
+    },
+    {
+      "type": "required_commit_signing"
+    }
+  ]
+}

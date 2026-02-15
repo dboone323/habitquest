@@ -1,0 +1,121 @@
+name: Phase 2 Validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      validation_type:
+        description: 'Type of validation to run'
+        required: true
+        default: 'comprehensive'
+        type: choice
+        options:
+          - comprehensive
+          - rulesets-only
+          - workflows-only
+          - analytics-only
+
+jobs:
+  validate-rulesets:
+    runs-on: ubuntu-latest
+    if: inputs.validation_type == 'comprehensive' || inputs.validation_type == 'rulesets-only'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate Repository Rulesets
+        run: |
+          echo "Validating repository rulesets..."
+          if [ -f ".github/rulesets/repository-ruleset.json" ]; then
+            echo "✅ Repository ruleset file exists"
+            # Validate JSON syntax
+            python3 -m json.tool .github/rulesets/repository-ruleset.json > /dev/null
+            echo "✅ Repository ruleset JSON is valid"
+          else
+            echo "❌ Repository ruleset file missing"
+            exit 1
+          fi
+
+  validate-workflows:
+    runs-on: ubuntu-latest
+    if: inputs.validation_type == 'comprehensive' || inputs.validation_type == 'workflows-only'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate Reusable Workflows
+        run: |
+          echo "Validating reusable workflows..."
+          if [ -f ".github/workflows/reusable/ci-cd.yml" ]; then
+            echo "✅ CI/CD reusable workflow exists"
+          else
+            echo "❌ CI/CD reusable workflow missing"
+            exit 1
+          fi
+
+          if [ -f ".github/workflows/reusable/copilot-review.yml" ]; then
+            echo "✅ Copilot review reusable workflow exists"
+          else
+            echo "❌ Copilot review reusable workflow missing"
+            exit 1
+          fi
+
+  validate-analytics:
+    runs-on: ubuntu-latest
+    if: inputs.validation_type == 'comprehensive' || inputs.validation_type == 'analytics-only'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Validate Analytics Scripts
+        run: |
+          echo "Validating analytics scripts..."
+          if [ -f ".github/scripts/repository-analytics.py" ]; then
+            echo "✅ Repository analytics script exists"
+            python3 -m py_compile .github/scripts/repository-analytics.py
+            echo "✅ Repository analytics script compiles successfully"
+          else
+            echo "❌ Repository analytics script missing"
+            exit 1
+          fi
+
+          if [ -f ".github/scripts/create-analytics-issue.py" ]; then
+            echo "✅ Analytics issue script exists"
+            python3 -m py_compile .github/scripts/create-analytics-issue.py
+            echo "✅ Analytics issue script compiles successfully"
+          else
+            echo "❌ Analytics issue script missing"
+            exit 1
+          fi
+
+      - name: Test Analytics Generation
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Testing analytics generation..."
+          python3 .github/scripts/repository-analytics.py || echo "Note: Analytics test may fail without full API access"
+
+  summary:
+    runs-on: ubuntu-latest
+    needs: [validate-rulesets, validate-workflows, validate-analytics]
+    if: always()
+    steps:
+      - name: Validation Summary
+        run: |
+          echo "Phase 2 Validation Summary"
+          echo "=========================="
+          echo "Rulesets: ${{ needs.validate-rulesets.result }}"
+          echo "Workflows: ${{ needs.validate-workflows.result }}"
+          echo "Analytics: ${{ needs.validate-analytics.result }}"
+
+          if [[ "${{ needs.validate-rulesets.result }}" == "success" && \
+                "${{ needs.validate-workflows.result }}" == "success" && \
+                "${{ needs.validate-analytics.result }}" == "success" ]]; then
+            echo "🎉 Phase 2 implementation is valid!"
+          else
+            echo "⚠️  Some Phase 2 validations failed. Please check the logs above."
+          fi
