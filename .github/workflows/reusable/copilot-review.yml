@@ -1,0 +1,47 @@
+name: Reusable Copilot Code Review
+
+on:
+  workflow_call:
+    inputs:
+      pr_number:
+        required: true
+        type: string
+      review_type:
+        required: false
+        type: string
+        default: 'comprehensive'
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+      OPENAI_API_KEY:
+        required: false
+      ANTHROPIC_API_KEY:
+        required: false
+
+jobs:
+  copilot-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests PyGithub
+
+      - name: Run Copilot Code Review
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+          REVIEW_TYPE: ${{ inputs.review_type }}
+        run: python .github/scripts/copilot-review.py
