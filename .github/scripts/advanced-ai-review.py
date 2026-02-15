@@ -7,6 +7,7 @@ Provides intelligent code analysis, suggestions, and automation
 import os
 import sys
 import json
+import re
 import requests
 from typing import Dict, List, Optional
 
@@ -18,22 +19,70 @@ class AdvancedAIReviewer:
         self.repo = os.getenv('GITHUB_REPOSITORY')
         self.pr_number = os.getenv('GITHUB_EVENT_NUMBER')
 
+        # Validate required environment variables
+        if not self.github_token:
+            raise ValueError("GITHUB_TOKEN environment variable is required")
+        if not self.repo:
+            raise ValueError("GITHUB_REPOSITORY environment variable is required")
+        if not self.pr_number:
+            raise ValueError("GITHUB_EVENT_NUMBER environment variable is required")
+
+        # Validate and sanitize inputs
+        self._validate_repo_name(self.repo)
+        self._validate_pr_number(self.pr_number)
+
+    def _validate_repo_name(self, repo: str):
+        """Validate GitHub repository name format"""
+        if not re.match(r'^[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+$', repo):
+            raise ValueError(f"Invalid repository name format: {repo}")
+
+    def _validate_pr_number(self, pr_number: str):
+        """Validate PR number is numeric"""
+        if not pr_number.isdigit():
+            raise ValueError(f"Invalid PR number: {pr_number}")
+
     def get_pr_details(self) -> Dict:
-        """Get pull request details"""
+        """Get pull request details with timeout and validation"""
         url = f"https://api.github.com/repos/{self.repo}/pulls/{self.pr_number}"
-        headers = {'Authorization': f'token {self.github_token}'}
-        response = requests.get(url, headers=headers)
-        return response.json()
+        headers = {
+            'Authorization': f'token {self.github_token}',
+            'User-Agent': 'Advanced-AI-Reviewer/1.0'
+        }
+
+        try:
+            response = requests.get(url, headers=headers, timeout=30, allow_redirects=False)
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            print(f"Error fetching PR details: {e}")
+            return {}
 
     def get_pr_files(self) -> List[Dict]:
-        """Get files changed in PR"""
+        """Get files changed in PR with timeout and validation"""
         url = f"https://api.github.com/repos/{self.repo}/pulls/{self.pr_number}/files"
-        headers = {'Authorization': f'token {self.github_token}'}
-        response = requests.get(url, headers=headers)
-        return response.json()
+        headers = {
+            'Authorization': f'token {self.github_token}',
+            'User-Agent': 'Advanced-AI-Reviewer/1.0'
+        }
+
+        try:
+            response = requests.get(url, headers=headers, timeout=30, allow_redirects=False)
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            print(f"Error fetching PR files: {e}")
+            return []
 
     def analyze_code_with_ai(self, code: str, filename: str) -> Dict:
-        """Analyze code using AI models"""
+        """Analyze code using AI models with input validation"""
+        # Sanitize inputs
+        if not isinstance(code, str) or not isinstance(filename, str):
+            return {'issues': ['Invalid input types'], 'suggestions': [], 'score': 0}
+
+        # Limit code analysis to reasonable size
+        if len(code) > 10000:
+            code = code[:10000] + "...[truncated]"
+
         analysis = {
             'issues': [],
             'suggestions': [],
@@ -53,24 +102,41 @@ class AdvancedAIReviewer:
         return analysis
 
     def post_review_comment(self, comment: str):
-        """Post review comment on PR"""
+        """Post review comment on PR with validation"""
+        if not isinstance(comment, str) or len(comment) > 65536:  # GitHub comment limit
+            print("Invalid comment content or too long")
+            return
+
         url = f"https://api.github.com/repos/{self.repo}/pulls/{self.pr_number}/reviews"
         headers = {
             'Authorization': f'token {self.github_token}',
-            'Accept': 'application/vnd.github.v3+json'
+            'Accept': 'application/vnd.github.v3+json',
+            'User-Agent': 'Advanced-AI-Reviewer/1.0'
         }
         data = {
             'body': comment,
             'event': 'COMMENT'
         }
-        requests.post(url, headers=headers, json=data)
+
+        try:
+            response = requests.post(url, headers=headers, json=data, timeout=30, allow_redirects=False)
+            response.raise_for_status()
+        except requests.RequestException as e:
+            print(f"Error posting review comment: {e}")
 
     def run_review(self):
         """Main review process"""
         print("🤖 Starting Advanced AI Code Review...")
 
         pr_details = self.get_pr_details()
+        if not pr_details:
+            print("Failed to get PR details")
+            return
+
         pr_files = self.get_pr_files()
+        if not pr_files:
+            print("No files to review")
+            return
 
         total_score = 0
         total_files = len(pr_files)
@@ -80,8 +146,13 @@ class AdvancedAIReviewer:
         review_body = "## 🤖 Advanced AI Code Review\n\n"
 
         for file in pr_files[:5]:  # Limit to first 5 files for demo
-            filename = file['filename']
+            filename = file.get('filename', '')
+            if not filename or not isinstance(filename, str):
+                continue
+
             patch = file.get('patch', '')
+            if not isinstance(patch, str):
+                continue
 
             if len(patch) > 1000:  # Skip very large patches
                 continue
@@ -119,5 +190,9 @@ class AdvancedAIReviewer:
         print("✅ AI Review completed and posted!")
 
 if __name__ == "__main__":
-    reviewer = AdvancedAIReviewer()
-    reviewer.run_review()
+    try:
+        reviewer = AdvancedAIReviewer()
+        reviewer.run_review()
+    except Exception as e:
+        print(f"Error running AI review: {e}")
+        exit(1)
