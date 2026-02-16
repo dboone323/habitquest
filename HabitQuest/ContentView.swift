@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 #if os(iOS)
-import UIKit
+    import UIKit
 #endif
 
 //
@@ -201,9 +201,9 @@ public struct ContentView: View {
 
     private func triggerHapticFeedback() {
         #if os(iOS)
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.prepare()
-        generator.impactOccurred()
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.prepare()
+            generator.impactOccurred()
         #endif
     }
 }

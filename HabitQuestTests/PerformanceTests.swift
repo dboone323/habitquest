@@ -66,7 +66,7 @@ final class PerformanceTests: XCTestCase {
 
     func testExportFilenameGenerationPerformance() {
         measure {
-            for _ in 0..<2_000 {
+            for _ in 0..<2000 {
                 _ = DataExportService.generateExportFilename()
             }
         }
