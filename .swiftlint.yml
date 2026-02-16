@@ -19,7 +19,6 @@ disabled_rules:
   - opening_brace # Allow flexible brace placement
   - identifier_name # Allow short variable names
   - redundant_discardable_let # Allow let _ = syntax
-  - modifier_order # Disabled for Swift 6.0 compatibility
 
 # Opt-in Rules
 # These rules provide additional value and should be enforced
@@ -30,7 +29,25 @@ opt_in_rules:
   - vertical_whitespace_closing_braces
   - vertical_whitespace_opening_braces
   - trailing_whitespace
+  - modifier_order
   - redundant_nil_coalescing
+
+# Modifier Order (match SwiftFormat)
+modifier_order:
+  preferred_modifier_order:
+    [
+      acl,
+      isolation,
+      setterACL,
+      dynamic,
+      mutators,
+      lazy,
+      final,
+      required,
+      convenience,
+      typeMethods,
+      owned,
+    ]
 
 # Code Complexity
 cyclomatic_complexity:
