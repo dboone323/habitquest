@@ -18,13 +18,13 @@ on:
           - appstore
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_15.4.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
 
 jobs:
   # 1. Code Quality & Linting
   quality-checks:
     name: 🔍 Code Quality
-    runs-on: macos-26-xlarge
+    runs-on: macos-latest
     timeout-minutes: 15
 
     steps:
@@ -36,7 +36,7 @@ jobs:
       - name: 🔧 Setup Swift
         uses: swift-actions/setup-swift@v2
         with:
-          swift-version: '6.0'
+          swift-version: '5.10'
 
       - name: 📦 Cache Dependencies
         uses: actions/cache@v4
@@ -144,7 +144,7 @@ jobs:
   # 3. Build & Test
   build-and-test:
     name: 🏗️ Build & Test
-    runs-on: macos-26-xlarge
+    runs-on: macos-latest
     timeout-minutes: 45
     needs: quality-checks
     strategy:
@@ -162,7 +162,7 @@ jobs:
       - name: 🔧 Setup Swift
         uses: swift-actions/setup-swift@v2
         with:
-          swift-version: '6.0'
+          swift-version: '5.10'
 
       - name: 📦 Cache DerivedData
         uses: actions/cache@v4
@@ -220,7 +220,7 @@ jobs:
   # 4. Deployment (Conditional)
   deploy:
     name: 🚀 Deploy
-    runs-on: macos-26-xlarge
+    runs-on: macos-latest
     timeout-minutes: 45
     needs: [build-and-test, security-scan]
     if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
