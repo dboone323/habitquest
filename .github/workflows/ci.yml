@@ -3,19 +3,25 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [main, develop]
-    tags: ['v*']
+    tags: ["v*"]
+    paths-ignore: ["**.md", "docs/**"]
   pull_request:
     branches: [main, develop]
+    paths-ignore: ["**.md", "docs/**"]
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deployment environment'
+        description: "Deployment environment"
         required: true
-        default: 'testflight'
+        default: "testflight"
         type: choice
         options:
           - testflight
           - appstore
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
@@ -36,7 +42,7 @@ jobs:
       - name: 🔧 Setup Swift
         uses: swift-actions/setup-swift@v2
         with:
-          swift-version: '5.10'
+          swift-version: "5.10"
 
       - name: 📦 Cache Dependencies
         uses: actions/cache@v4
@@ -95,17 +101,17 @@ jobs:
       - name: 🛡️ Run Trivy Vulnerability Scanner
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-results.sarif"
           ignore-unfixed: true
 
       - name: 📤 Upload Trivy Results
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
 
       - name: 🔍 Check for Secrets (TruffleHog)
         uses: trufflesecurity/trufflehog@main
@@ -128,9 +134,9 @@ jobs:
         with:
           severity: error
           ignore_paths: |
-             node_modules
-             .build
-             .swiftpm
+            node_modules
+            .build
+            .swiftpm
           ignore_names: |
             create_ci_compatible_project.sh
             smart_builder.sh
@@ -162,7 +168,7 @@ jobs:
       - name: 🔧 Setup Swift
         uses: swift-actions/setup-swift@v2
         with:
-          swift-version: '5.10'
+          swift-version: "5.10"
 
       - name: 📦 Cache DerivedData
         uses: actions/cache@v4
@@ -234,12 +240,12 @@ jobs:
       - name: 🔧 Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.2'
+          xcode-version: "15.2"
 
       - name: 💎 Setup Ruby & Fastlane
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'
+          ruby-version: "3.2"
           bundler-cache: true
       - run: gem install fastlane
 
