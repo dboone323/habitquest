@@ -10,7 +10,7 @@ jobs:
   ai-recovery:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: AI Workflow Recovery
       run: |
         echo "AI self-healing workflow placeholder"

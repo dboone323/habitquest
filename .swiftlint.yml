@@ -1,27 +1,19 @@
 # Unified SwiftLint Configuration
-# Version: 0.54+
-# Swift: 6.0
-# Updated: February 9, 2026
-#
-# This is the standard configuration for all projects in the tools-automation workspace.
-# Apply this to all projects: cp UNIFIED_SWIFTLINT_TEMPLATE project-name/.swiftlint.yml
+# Source: shared-kit/.swiftlint.yml
+# Version: 1.0.0
 
-# Disabled Rules
-# These rules are disabled because they're either too strict or not applicable
 disabled_rules:
-  - todo # Allow TODO comments for tracking
-  - function_body_length # Using cyclomatic_complexity instead
-  - type_body_length # Monitored via code review
-  - file_length # Project-specific needs
-  - sorted_imports # Too strict for CI - can be enabled later
-  - inclusive_language # Too strict for CI - can be enabled later
-  - trailing_comma # Allow trailing commas for cleaner diffs
-  - opening_brace # Allow flexible brace placement
-  - identifier_name # Allow short variable names
-  - redundant_discardable_let # Allow let _ = syntax
+  - todo
+  - function_body_length
+  - type_body_length
+  - file_length
+  - sorted_imports
+  - inclusive_language
+  - trailing_comma
+  - opening_brace
+  - identifier_name
+  - redundant_discardable_let
 
-# Opt-in Rules
-# These rules provide additional value and should be enforced
 opt_in_rules:
   - array_init
   - closure_end_indentation
@@ -32,7 +24,6 @@ opt_in_rules:
   - modifier_order
   - redundant_nil_coalescing
 
-# Modifier Order (match SwiftFormat)
 modifier_order:
   preferred_modifier_order:
     [
@@ -49,19 +40,15 @@ modifier_order:
       owned,
     ]
 
-# Code Complexity
 cyclomatic_complexity:
   warning: 10
   error: 20
   ignores_case_statements: true
 
-# Force Unwrapping
 force_cast: warning
 force_try: warning
 force_unwrapping: warning
 
-# Line Length
-# Reasonable limits to prevent extremely long lines
 line_length:
   warning: 120
   error: 150
@@ -69,12 +56,10 @@ line_length:
   ignores_function_declarations: false
   ignores_comments: true
 
-# Identifier Naming
-# Allow short variable names (i, x, id) but enforce longer identifiers for clarity
 identifier_name:
   min_length:
-    warning: 2 # Variables should be at least 2 chars
-    error: 1 # But single-char is allowed if needed
+    warning: 2
+    error: 1
   max_length:
     warning: 40
     error: 50
@@ -93,7 +78,6 @@ identifier_name:
     - l
     - n
 
-# File Inclusions and Exclusions
 included:
   - .
 
@@ -105,11 +89,9 @@ excluded:
   - "**/Carthage"
   - "**/node_modules"
   - "**/*.generated.swift"
-  - "Tools/Automation"
-  - "**/Automation/**"
-  - "**/automation/**"
   - "**/Generated/**"
   - "**/Tests/**"
+  - "fastlane"
+  - "docs"
 
-# Reporter
 reporter: xcode

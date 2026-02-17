@@ -20,7 +20,6 @@ class CertificatePinningDelegate: NSObject, URLSessionDelegate {
         _ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
         completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
-
         // If we don't have a pinned cert, we can't pin.
         // In a strict app, you might want to cancel here.
         if pinnedCertificateData.isEmpty {

@@ -67,5 +67,4 @@ final class CloudKitSyncManagerTests: XCTestCase {
         XCTAssertEqual(CloudKitSyncManager.SyncStatus.error.colorName, "red")
         XCTAssertEqual(CloudKitSyncManager.SyncStatus.offline.colorName, "orange")
     }
-
 }

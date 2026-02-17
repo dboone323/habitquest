@@ -1,31 +1,28 @@
-# HabitQuest ⚔️
+# habitquest
 
-A gamified habit tracker that turns your daily routines into an RPG adventure.
+![CI Status](https://github.com/dboone323/habitquest/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Swift](https://img.shields.io/badge/swift-6.0-orange.svg)
+![Platform](https://img.shields.io/badge/platform-iOS-lightgrey.svg)
 
-## Overview
+**Gamified habit tracker using SpriteKit for visual rewards.**
 
-HabitQuest combines productivity with game mechanics to help you build and maintain positive habits. Earn XP, level up your character, and unlock rewards by completing your daily goals.
+This repository is part of the **Momentum Ecosystem**, a suite of integrated iOS applications and developer tools.
 
 ## Features
 
-- **Gamification**: Earn XP and Gold for completing habits.
-- **Character Progression**: Level up your avatar and equip new gear.
-- **Habit Tracking**: Flexible scheduling for daily, weekly, or custom habits.
-- **Streaks**: Visual indicators to keep you motivated.
-- **Widgets**: Home screen widgets for quick access.
-
-## Architecture
-
-- **UI**: SwiftUI
-- **Game Logic**: Custom gamification engine
-- **Storage**: SwiftData
+- **Built with Swift 6 & SwiftUI**
+- **Architecture**: MVVM + Coordinator pattern
+- **Code Quality**: Enforced via SwiftLint & SwiftFormat
+- **CI/CD**: Automated via GitHub Actions
 
 ## Getting Started
 
 ### Prerequisites
 
-- Xcode 15.0+
-- iOS 17.0+
+- Xcode 15+
+- iOS 17+
+- [Tools Automation](https://github.com/dboone323/tools-automation) scripts (optional but recommended)
 
 ### Installation
 
@@ -33,17 +30,22 @@ HabitQuest combines productivity with game mechanics to help you build and maint
     ```bash
     git clone https://github.com/dboone323/habitquest.git
     ```
-2. Open `HabitQuest.xcodeproj` in Xcode.
-3. Build and run.
+2. Open the project in Xcode:
+    ```bash
+    open HabitQuest.xcodeproj
+    ```
+
+## Documentation
+
+For high-level architecture and AI agent context, see [AI_CONTEXT.md](docs/AI_CONTEXT.md).
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contributing guidelines.
+1. Create a feature branch (`feature/my-feature`)
+2. Commit changes
+3. Push to GitHub
+4. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-CI test trigger - Sat Feb 14 18:50:10 CST 2026
-
-CI test trigger - Sat Feb 14 18:50:15 CST 2026
+MIT License. See [LICENSE](LICENSE) for details.
