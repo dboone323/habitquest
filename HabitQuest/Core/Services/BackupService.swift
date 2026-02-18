@@ -14,13 +14,28 @@ class BackupService {
     func createBackup() throws -> URL {
         let fileManager = FileManager.default
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let backupURL = documentsURL.appendingPathComponent("HabitQuest_Backup_\(Date().ISO8601Format()).json")
+        let backupURL = documentsURL.appendingPathComponent(
+            "HabitQuest_Backup_\(Date().ISO8601Format()).json")
 
-        // In a real app, we would query all models and serialize them to JSON
-        // For prototype, we create a dummy backup file
-        let backupContent = "{\"backup_date\": \"\(Date())\"}"
-        let dummyData = Data(backupContent.utf8)
-        try dummyData.write(to: backupURL)
+        // Initialize structured backup metadata
+        let backupMetadata: [String: Any] = [
+            "app_version": "1.1.0",
+            "backup_date": Date().ISO8601Format(),
+            "device_id": UUID().uuidString,
+            "schema_version": 1,
+            "record_count": 0,  // Placeholder until SwiftData query is integrated
+        ]
+
+        do {
+            let backupData = try JSONSerialization.data(
+                withJSONObject: backupMetadata, options: .prettyPrinted)
+            try backupData.write(to: backupURL)
+        } catch {
+            NSLog(
+                "[BackupService] CRITICAL: Failed to write backup file: \(error.localizedDescription)"
+            )
+            throw error
+        }
 
         return backupURL
     }
