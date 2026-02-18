@@ -13,12 +13,8 @@ class StreakService {
     // MARK: - Streak Calculations
 
     /// Calculate current streak for a habit
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// - Parameter habit: The habit to analyze
+    /// - Returns: Number of consecutive days completed up to today
     func calculateCurrentStreak(for habit: Habit) async -> Int {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
@@ -36,9 +32,10 @@ class StreakService {
 
             if logDate == currentDate {
                 streak += 1
-                currentDate = calendar.date(byAdding: .day, value: -1, to: currentDate) ?? currentDate
+                currentDate =
+                    calendar.date(byAdding: .day, value: -1, to: currentDate) ?? currentDate
             } else if logDate < currentDate {
-                break // Gap found, streak is broken
+                break  // Gap found, streak is broken
             }
         }
 
@@ -46,12 +43,8 @@ class StreakService {
     }
 
     /// Calculate longest streak for a habit
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// - Parameter habit: The habit to analyze
+    /// - Returns: The historically longest streak for this habit
     func calculateLongestStreak(for habit: Habit) async -> Int {
         let calendar = Calendar.current
 
@@ -68,7 +61,8 @@ class StreakService {
             let logDate = calendar.startOfDay(for: log.completionDate)
 
             if let prevDate = previousDate {
-                let daysBetween = calendar.dateComponents([.day], from: prevDate, to: logDate).day ?? 0
+                let daysBetween =
+                    calendar.dateComponents([.day], from: prevDate, to: logDate).day ?? 0
 
                 if daysBetween == 1 {
                     currentStreak += 1
@@ -87,12 +81,10 @@ class StreakService {
     }
 
     /// Get streak data for visualization
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// - Parameters:
+    ///   - habit: The habit to analyze
+    ///   - days: Number of days of history to retrieve
+    /// - Returns: Array of day-by-day streak status
     func getStreakData(for habit: Habit, days: Int = 30) async -> [StreakDayData] {
         let calendar = Calendar.current
         let today = Date()
@@ -109,11 +101,12 @@ class StreakService {
             let dayStart = calendar.startOfDay(for: currentDate)
             let isCompleted = completedDates.contains(dayStart)
 
-            streakData.append(StreakDayData(
-                date: currentDate,
-                isCompleted: isCompleted,
-                intensity: isCompleted ? 1.0 : 0.0
-            ))
+            streakData.append(
+                StreakDayData(
+                    date: currentDate,
+                    isCompleted: isCompleted,
+                    intensity: isCompleted ? 1.0 : 0.0
+                ))
 
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate
         }
@@ -124,12 +117,10 @@ class StreakService {
     // MARK: - Milestone Detection
 
     /// Check if completing a habit today would achieve a new milestone
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// - Parameters:
+    ///   - habit: The habit to check
+    ///   - previousStreak: The streak count before today's completion
+    /// - Returns: A milestone if one was achieved, nil otherwise
     func checkForNewMilestone(habit: Habit, previousStreak: Int) async -> StreakMilestone? {
         let newStreak = await calculateCurrentStreak(for: habit)
 
@@ -141,40 +132,28 @@ class StreakService {
     }
 
     /// Get current milestone for a habit
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// - Parameter habit: The habit to check
+    /// - Returns: The highest milestone currently achieved
     func getCurrentMilestone(for habit: Habit) async -> StreakMilestone? {
         let currentStreak = await calculateCurrentStreak(for: habit)
         return StreakMilestone.milestone(for: currentStreak)
     }
 
     /// Get next milestone to achieve
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// - Parameter habit: The habit to check
+    /// - Returns: The next milestone in the progression
     func getNextMilestone(for habit: Habit) async -> StreakMilestone? {
         let currentStreak = await calculateCurrentStreak(for: habit)
         return StreakMilestone.nextMilestone(for: currentStreak)
     }
 
     /// Get progress towards next milestone (0.0 to 1.0)
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// - Parameter habit: The habit to check
+    /// - Returns: Progress percentage towards the next milestone
     func getProgressToNextMilestone(for habit: Habit) async -> Double {
         let currentStreak = await calculateCurrentStreak(for: habit)
         guard let nextMilestone = StreakMilestone.nextMilestone(for: currentStreak) else {
-            return 1.0 // Already at max milestone
+            return 1.0  // Already at max milestone
         }
 
         let previousMilestone = StreakMilestone.milestone(for: currentStreak)
@@ -188,12 +167,8 @@ class StreakService {
     // MARK: - Streak Analytics
 
     /// Get comprehensive streak analytics for a habit
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// - Parameter habit: The habit to analyze
+    /// - Returns: A structured analytics object
     func getStreakAnalytics(for habit: Habit) async -> StreakAnalytics {
         let currentStreak = await calculateCurrentStreak(for: habit)
         let longestStreak = await calculateLongestStreak(for: habit)
@@ -232,7 +207,7 @@ public struct StreakDayData: Identifiable {
     public let id = UUID()
     let date: Date
     let isCompleted: Bool
-    let intensity: Double // 0.0 to 1.0 for heat map intensity
+    let intensity: Double  // 0.0 to 1.0 for heat map intensity
 }
 
 /// Comprehensive streak analytics for a habit
