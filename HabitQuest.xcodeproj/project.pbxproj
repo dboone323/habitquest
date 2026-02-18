@@ -53,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68581EB02E0F1EA600E5AA02 /* SharedKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +72,10 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXBuildFile section */
+		68581EB02E0F1EA600E5AA02 /* SharedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 68581EB02E0F1EA600E5AA01 /* SharedKit */; };
+/* End PBXBuildFile section */
 
 /* Begin PBXGroup section */
 		68581EAF2E0F1EA600E5AADA = {
@@ -108,6 +113,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			packageProductDependencies = (
+				68581EB02E0F1EA600E5AA01 /* SharedKit */,
 			);
 			fileSystemSynchronizedGroups = (
 				68581EBA2E0F1EA600E5AADA /* HabitQuest */,
@@ -194,7 +202,7 @@
 			mainGroup = 68581EAF2E0F1EA600E5AADA;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../Shared-Kit" */,
+				E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../shared-kit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 68581EB92E0F1EA600E5AADA /* Products */;
@@ -603,11 +611,19 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../Shared-Kit" */ = {
+		E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../shared-kit" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = "../Shared-Kit";
+			relativePath = "../shared-kit";
 		};
 /* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		68581EB02E0F1EA600E5AA01 /* SharedKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../shared-kit" */;
+			productName = SharedKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 68581EB02E0F1EA600E5AADA /* Project object */;
 }
