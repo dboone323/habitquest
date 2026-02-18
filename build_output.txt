@@ -1,0 +1,454 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project HabitQuest.xcodeproj -scheme HabitQuest -configuration Debug -destination platform=macOS CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build -showBuildTimingSummary
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+    CODE_SIGNING_REQUIRED = NO
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  shared-kit: /Users/danielstevens/github-projects/shared-kit @ local
+  swift-atomics: https://github.com/apple/swift-atomics.git @ 1.3.0
+  swift-system: https://github.com/apple/swift-system.git @ 1.6.4
+  swift-collections: https://github.com/apple/swift-collections.git @ 1.3.0
+  swift-nio: https://github.com/apple/swift-nio.git @ 2.94.1
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'HabitQuest' in project 'HabitQuest' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 13ec4d9db6ca2dee4909d29465be78cb
+Build description path: /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/XCBuildData/13ec4d9db6ca2dee4909d29465be78cb.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.2-25C58-e8867d0c40613ffc63e0238af232dc5000fa09913b459cbbc988d1f6730289ae.sdkstatcache
+    cd /Users/danielstevens/github-projects/habitquest/HabitQuest.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -o /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.2-25C58-e8867d0c40613ffc63e0238af232dc5000fa09913b459cbbc988d1f6730289ae.sdkstatcache
+
+ProcessInfoPlistFile /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Products/Debug/HabitQuest.app/Contents/Info.plist /Users/danielstevens/github-projects/habitquest/Config/AppInfo.plist (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    builtin-infoPlistUtility /Users/danielstevens/github-projects/habitquest/Config/AppInfo.plist -producttype com.apple.product-type.application -genpkginfo /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Products/Debug/HabitQuest.app/Contents/PkgInfo -expandbuildsettings -platform macosx -additionalcontentfile /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/assetcatalog_generated_info.plist -o /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Products/Debug/HabitQuest.app/Contents/Info.plist
+removing entry for "LSRequiresIPhoneOS" - not supported on macOS
+removing value "fetch" for "UIBackgroundModes" - not supported on macOS
+removing value "remote-notification" for "UIBackgroundModes" - not supported on macOS
+
+SwiftDriver HabitQuest normal arm64 com.apple.xcode.tools.swift.compiler (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name HabitQuest -Onone -enforce-exclusivity\=checked @/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-upcoming-feature MemberImportVisibility -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target arm64-apple-macos26.2 -g -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Products/Debug -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Products/Debug -emit-localized-strings -emit-localized-strings-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.2-25C58-e8867d0c40613ffc63e0238af232dc5000fa09913b459cbbc988d1f6730289ae.sdkstatcache -output-file-map /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest_const_extract_protocols.json -Xcc -iquote -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/HabitQuest-generated-files.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/HabitQuest-own-target-headers.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/HabitQuest-all-target-headers.hmap -Xcc -iquote -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/HabitQuest-project-headers.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Products/Debug/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/DerivedSources-normal/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/DerivedSources/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest-Swift.h -working-directory /Users/danielstevens/github-projects/habitquest -experimental-emit-module-separately -disable-cmo
+
+SwiftCompile normal arm64 Compiling\ PatternAnalysisService.swift,\ PredictionService.swift,\ ProductivityMetricsService.swift,\ TrendAnalysisService.swift,\ BehavioralAdaptationService.swift,\ ContentGenerationService.swift,\ ContextAwarenessService.swift,\ NotificationSchedulerService.swift,\ AchievementService.swift,\ AdvancedAnalyticsEngine.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/PatternAnalysisService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/PredictionService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/ProductivityMetricsService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/TrendAnalysisService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Notifications/BehavioralAdaptationService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Notifications/ContentGenerationService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Notifications/ContextAwarenessService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Notifications/NotificationSchedulerService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/AchievementService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/AdvancedAnalyticsEngine.swift (in target 'HabitQuest' from project 'HabitQuest')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/PatternAnalysisService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/PredictionService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/ProductivityMetricsService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/TrendAnalysisService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Notifications/BehavioralAdaptationService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Notifications/ContentGenerationService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Notifications/ContextAwarenessService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Notifications/NotificationSchedulerService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/AchievementService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/AdvancedAnalyticsEngine.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 Compiling\ AnalyticsService.swift,\ AnalyticsTypes.swift,\ BackupService.swift,\ CategoryManager.swift,\ CloudKitSyncManager.swift,\ DataExportService.swift,\ DataMigrationService.swift,\ DataPrivacyManager.swift,\ GameRules.swift,\ GamificationService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/AnalyticsService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/AnalyticsTypes.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/BackupService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/CategoryManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/CloudKitSyncManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/DataExportService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/DataMigrationService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/DataPrivacyManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/GameRules.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/GamificationService.swift (in target 'HabitQuest' from project 'HabitQuest')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/AnalyticsService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/AnalyticsTypes.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/BackupService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/CategoryManager.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/CloudKitSyncManager.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/DataExportService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/DataMigrationService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/DataPrivacyManager.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/GameRules.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/GamificationService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 Compiling\ AppMainView.swift,\ Achievement.swift,\ Habit.swift,\ HabitLog.swift,\ PlayerProfile.swift,\ StreakMilestone.swift,\ AnalyticsAggregatorService.swift,\ BehavioralInsightsService.swift,\ CategoryInsightsService.swift,\ HabitSuggestionService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Application/AppMainView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/Achievement.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/Habit.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/HabitLog.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/PlayerProfile.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/StreakMilestone.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/AnalyticsAggregatorService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/BehavioralInsightsService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/CategoryInsightsService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/HabitSuggestionService.swift (in target 'HabitQuest' from project 'HabitQuest')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Application/AppMainView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/Achievement.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/Habit.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/HabitLog.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/PlayerProfile.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/StreakMilestone.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/AnalyticsAggregatorService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/BehavioralInsightsService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/CategoryInsightsService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/HabitSuggestionService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 Compiling\ OnboardingView.swift,\ SharedAnalyticsComponents.swift,\ AchievementAnimations.swift,\ AnalyticsTestView.swift,\ AchievementsSection.swift,\ AdvancedAnalyticsView.swift,\ AnalyticsTabView.swift,\ CharacterAvatarSection.swift,\ ProgressSection.swift,\ StatsSection.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/OnboardingView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/SharedAnalyticsComponents.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/Achievements/AchievementAnimations.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/AnalyticsTest/AnalyticsTestView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/AchievementsSection.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/AdvancedAnalyticsView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/AnalyticsTabView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/CharacterAvatarSection.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/ProgressSection.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/StatsSection.swift (in target 'HabitQuest' from project 'HabitQuest')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/OnboardingView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/SharedAnalyticsComponents.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/Achievements/AchievementAnimations.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/AnalyticsTest/AnalyticsTestView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/AchievementsSection.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/AdvancedAnalyticsView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/AnalyticsTabView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/CharacterAvatarSection.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/ProgressSection.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/StatsSection.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 Compiling\ Logger.swift,\ SharedArchitecture.swift,\ HabitViewModel.swift,\ AnalyticsCardView.swift,\ ConsistencyInsightView.swift,\ LevelProgressView.swift,\ StreakDistributionChartView.swift,\ SupportingViews.swift,\ TopPerformerRowView.swift,\ WeeklyPatternChartView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Utilities/Logger.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Utilities/SharedArchitecture.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/ViewModels/HabitViewModel.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/AnalyticsCardView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/ConsistencyInsightView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/LevelProgressView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/StreakDistributionChartView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/SupportingViews.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/TopPerformerRowView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/WeeklyPatternChartView.swift (in target 'HabitQuest' from project 'HabitQuest')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Utilities/Logger.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Utilities/SharedArchitecture.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/ViewModels/HabitViewModel.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/AnalyticsCardView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/ConsistencyInsightView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/LevelProgressView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/StreakDistributionChartView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/SupportingViews.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/TopPerformerRowView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/WeeklyPatternChartView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 Compiling\ HabitTemplateService.swift,\ LevelingSystem.swift,\ NetworkSecurityPolicy.swift,\ NotificationService.swift,\ QuestService.swift,\ SmartNotificationService.swift,\ StreakManager.swift,\ StreakService.swift,\ XPService.swift,\ ErrorHandler.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/HabitTemplateService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/LevelingSystem.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/NetworkSecurityPolicy.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/NotificationService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/QuestService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/SmartNotificationService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/StreakManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/StreakService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/XPService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Utilities/ErrorHandler.swift (in target 'HabitQuest' from project 'HabitQuest')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/HabitTemplateService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/LevelingSystem.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/NetworkSecurityPolicy.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/NotificationService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/QuestService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/SmartNotificationService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/StreakManager.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/StreakService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/XPService.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Utilities/ErrorHandler.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 Compiling\ StreakAnalyticsOverviewView.swift,\ StreakAnalyticsTopPerformersView.swift,\ StreakAnalyticsWeeklyView.swift,\ StreakAnalyticsData.swift,\ StreakAnalyticsView.swift,\ StreakAnalyticsViewModel.swift,\ StreakHeatMapView.swift,\ StreakVisualizationView.swift,\ TodaysQuestsView.swift,\ TodaysQuestsViewModel.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsOverviewView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsTopPerformersView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsWeeklyView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/StreakAnalyticsData.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/StreakAnalyticsView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/StreakAnalyticsViewModel.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakVisualization/StreakHeatMapView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakVisualization/StreakVisualizationView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/TodaysQuests/TodaysQuestsView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/TodaysQuests/TodaysQuestsViewModel.swift (in target 'HabitQuest' from project 'HabitQuest')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsOverviewView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsTopPerformersView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsWeeklyView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/StreakAnalyticsData.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/StreakAnalyticsView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/StreakAnalyticsViewModel.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakVisualization/StreakHeatMapView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakVisualization/StreakVisualizationView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/TodaysQuests/TodaysQuestsView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/TodaysQuests/TodaysQuestsViewModel.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 Compiling\ ProfileView.swift,\ ProfileViewModel.swift,\ DataManagementView.swift,\ DataManagementViewModel.swift,\ ParticleEffects.swift,\ QuestLogView.swift,\ QuestLogViewModel.swift,\ LocationReminders.swift,\ StreakAnalyticsDistributionView.swift,\ StreakAnalyticsInsightsView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/ProfileView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/ProfileViewModel.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/DataManagement/DataManagementView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/DataManagement/DataManagementViewModel.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/Effects/ParticleEffects.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/QuestLog/QuestLogView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/QuestLog/QuestLogViewModel.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/Reminders/LocationReminders.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsDistributionView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsInsightsView.swift (in target 'HabitQuest' from project 'HabitQuest')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/ProfileView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/ProfileViewModel.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/DataManagement/DataManagementView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/DataManagement/DataManagementViewModel.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/Effects/ParticleEffects.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/QuestLog/QuestLogView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/QuestLog/QuestLogViewModel.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/Reminders/LocationReminders.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsDistributionView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsInsightsView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ HabitQuest (in target 'HabitQuest' from project 'HabitQuest')
+Failed frontend command:
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -emit-module -experimental-skip-non-inlinable-function-bodies-without-types /Users/danielstevens/github-projects/habitquest/HabitQuest/Application/AppMainView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/Achievement.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/Habit.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/HabitLog.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/PlayerProfile.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Models/StreakMilestone.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/AnalyticsAggregatorService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/BehavioralInsightsService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/CategoryInsightsService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/HabitSuggestionService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/PatternAnalysisService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/PredictionService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/ProductivityMetricsService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Analytics/TrendAnalysisService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Notifications/BehavioralAdaptationService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Notifications/ContentGenerationService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Notifications/ContextAwarenessService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/Notifications/NotificationSchedulerService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/AchievementService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/AdvancedAnalyticsEngine.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/AnalyticsService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/AnalyticsTypes.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/BackupService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/CategoryManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/CloudKitSyncManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/DataExportService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/DataMigrationService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/DataPrivacyManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/GameRules.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/GamificationService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/HabitTemplateService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/LevelingSystem.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/NetworkSecurityPolicy.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/NotificationService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/QuestService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/SmartNotificationService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/StreakManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/StreakService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Services/XPService.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Utilities/ErrorHandler.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Utilities/Logger.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Utilities/SharedArchitecture.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/ViewModels/HabitViewModel.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/AnalyticsCardView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/ConsistencyInsightView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/LevelProgressView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/StreakDistributionChartView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/SupportingViews.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/TopPerformerRowView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/Components/WeeklyPatternChartView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/OnboardingView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Core/Views/SharedAnalyticsComponents.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/Achievements/AchievementAnimations.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/AnalyticsTest/AnalyticsTestView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/AchievementsSection.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/AdvancedAnalyticsView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/AnalyticsTabView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/CharacterAvatarSection.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/ProgressSection.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/Components/StatsSection.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/ProfileView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/CharacterProfile/ProfileViewModel.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/DataManagement/DataManagementView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/DataManagement/DataManagementViewModel.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/Effects/ParticleEffects.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/QuestLog/QuestLogView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/QuestLog/QuestLogViewModel.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/Reminders/LocationReminders.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsDistributionView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsInsightsView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsOverviewView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsTopPerformersView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/Views/StreakAnalyticsWeeklyView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/StreakAnalyticsData.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/StreakAnalyticsView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakAnalytics/StreakAnalyticsViewModel.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakVisualization/StreakHeatMapView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/StreakVisualization/StreakVisualizationView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/TodaysQuests/TodaysQuestsView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/TodaysQuests/TodaysQuestsViewModel.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/Widget/HabitWidget.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/ML/HabitRecommendations.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Security/CertificatePinningDelegate.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Social/ShareManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Views/StreakHeatMap.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/AccessibilityHelpers.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/AppIntents.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/AppLifecycleCoordinator.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/ContentView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/GamificationManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/HabitQuestApp.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/HabitQuestBridging.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Item.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/KeychainManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/NotificationManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/SocialShareSheet.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/ThemeManager.swift /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/DerivedSources/GeneratedAssetSymbols.swift -target arm64-apple-macos26.2 -module-can-import-version AppIntents 300.2.3.1 300.2.3 -module-can-import-version AppKit 2685.30.107 2685.30.107 -module-can-import-version DeveloperToolsSupport 23.0.4 23.0.4 -module-can-import-version SwiftUI 7.2.5.1 7.2.5 -disable-cross-import-overlay-search -swift-module-cross-import AppIntents /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppIntents.framework/Modules/AppIntents.swiftcrossimport/AppKit.swiftoverlay -swift-module-cross-import AppIntents /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppIntents.framework/Modules/AppIntents.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import AppIntents /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppIntents.framework/Modules/AppIntents.swiftcrossimport/UIKit.swiftoverlay -swift-module-cross-import AppIntents /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/System/Library/Frameworks/AppIntents.framework/Modules/AppIntents.swiftcrossimport/AppKit.swiftoverlay -swift-module-cross-import AppIntents /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/System/Library/Frameworks/AppIntents.framework/Modules/AppIntents.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import AppIntents /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/System/Library/Frameworks/AppIntents.framework/Modules/AppIntents.swiftcrossimport/UIKit.swiftoverlay -swift-module-cross-import SpriteKit /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/SpriteKit.framework/Modules/SpriteKit.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import SwiftData /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/System/Library/Frameworks/SwiftData.framework/Modules/SwiftData.swiftcrossimport/CoreData.swiftoverlay -swift-module-cross-import SwiftData /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/System/Library/Frameworks/SwiftData.framework/Modules/SwiftData.swiftcrossimport/SwiftUI.swiftoverlay -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/swift/host/plugins/libAppIntentsMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin/swift-plugin-server\#AppIntentsMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/swift/host/plugins/libFoundationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin/swift-plugin-server\#FoundationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/swift/host/plugins/libObservationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin/swift-plugin-server\#ObservationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/swift/host/plugins/libPreviewsMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin/swift-plugin-server\#PreviewsMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/swift/host/plugins/libSwiftDataMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin/swift-plugin-server\#SwiftDataMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/swift/host/plugins/libSwiftMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin/swift-plugin-server\#SwiftMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/swift/host/plugins/libSwiftUIMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin/swift-plugin-server\#SwiftUIMacros -disable-implicit-swift-modules -Xcc -fno-implicit-modules -Xcc -fno-implicit-module-maps -explicit-swift-module-map-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest-dependencies-1.json -Xllvm -aarch64-use-tbi -enable-objc-interop -stack-check -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -I /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Products/Debug -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Products/Debug -no-color-diagnostics -Xcc -fno-color-diagnostics -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=5 -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -profile-generate -profile-coverage-mapping -swift-version 6 -enforce-exclusivity\=checked -Onone -D DEBUG -serialize-debugging-options -const-gather-protocols-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest_const_extract_protocols.json -enable-upcoming-feature MemberImportVisibility -enable-experimental-feature DebugDescriptionMacro -default-isolation\=MainActor -empty-abi-descriptor -validate-clang-modules-once -clang-build-session-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /Users/danielstevens/github-projects/habitquest -enable-anonymous-context-mangled-names -file-compilation-dir /Users/danielstevens/github-projects/habitquest -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -Xcc -ivfsstatcache -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.2-25C58-e8867d0c40613ffc63e0238af232dc5000fa09913b459cbbc988d1f6730289ae.sdkstatcache -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/HabitQuest-generated-files.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/HabitQuest-own-target-headers.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/HabitQuest-all-target-headers.hmap -Xcc -iquote -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/HabitQuest-project-headers.hmap -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Products/Debug/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/DerivedSources-normal/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/DerivedSources/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/DerivedSources -Xcc -DDEBUG\=1 -no-auto-bridging-header-chaining -module-name HabitQuest -frontend-parseable-output -disable-clang-spi -target-sdk-version 26.2 -target-sdk-name macosx26.2 -clang-target arm64-apple-macos26.2 -in-process-plugin-server-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -emit-module-doc-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest.swiftdoc -emit-module-source-info-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest.swiftsourceinfo -emit-objc-header-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest-Swift.h -serialize-diagnostics-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest-primary-emit-module.dia -emit-dependencies-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest-primary-emit-module.d -o /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest.swiftmodule -emit-abi-descriptor-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/Objects-normal/arm64/HabitQuest.abi.json
+
+EmitSwiftModule normal arm64 (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+/Users/danielstevens/github-projects/habitquest/HabitQuest/Security/CertificatePinningDelegate.swift:4:7: error: non-final class 'CertificatePinningDelegate' cannot conform to 'Sendable'; use '@unchecked Sendable'
+class CertificatePinningDelegate: NSObject, URLSessionDelegate {
+      ^
+
+SwiftCompile normal arm64 Compiling\ HabitWidget.swift,\ HabitRecommendations.swift,\ CertificatePinningDelegate.swift,\ ShareManager.swift,\ StreakHeatMap.swift,\ AccessibilityHelpers.swift,\ AppIntents.swift,\ AppLifecycleCoordinator.swift,\ ContentView.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/Widget/HabitWidget.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/ML/HabitRecommendations.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Security/CertificatePinningDelegate.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Social/ShareManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Views/StreakHeatMap.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/AccessibilityHelpers.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/AppIntents.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/AppLifecycleCoordinator.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/ContentView.swift (in target 'HabitQuest' from project 'HabitQuest')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Features/Widget/HabitWidget.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/ML/HabitRecommendations.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Security/CertificatePinningDelegate.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Social/ShareManager.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/Views/StreakHeatMap.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/AccessibilityHelpers.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/AppIntents.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/AppLifecycleCoordinator.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/habitquest/HabitQuest/ContentView.swift (in target 'HabitQuest' from project 'HabitQuest')
+    cd /Users/danielstevens/github-projects/habitquest
+    
+
+SwiftCompile normal arm64 Compiling\ GamificationManager.swift,\ HabitQuestApp.swift,\ HabitQuestBridging.swift,\ Item.swift,\ KeychainManager.swift,\ NotificationManager.swift,\ SocialShareSheet.swift,\ ThemeManager.swift,\ GeneratedAssetSymbols.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/GamificationManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/HabitQuestApp.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/HabitQuestBridging.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/Item.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/KeychainManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/NotificationManager.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/SocialShareSheet.swift /Users/danielstevens/github-projects/habitquest/HabitQuest/ThemeManager.swift /Users/danielstevens/Library/Developer/Xcode/DerivedData/HabitQuest-bypztfilninjtagcgyhunayyyfmo/Build/Intermediates.noindex/HabitQuest.build/Debug/HabitQuest.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'HabitQuest' from project 'HabitQuest')
+
+Build Timing Summary
+
+SwiftDriver (1 task) | 0.525 seconds
+
+ProcessInfoPlistFile (1 task) | 0.006 seconds
+

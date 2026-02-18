@@ -1,12 +1,12 @@
 import Foundation
 
 /// Certificate pinning delegate for URLSession
-class CertificatePinningDelegate: NSObject, URLSessionDelegate {
+final class CertificatePinningDelegate: NSObject, URLSessionDelegate, @unchecked Sendable {
     // Replace with your actual certificate data (DER format)
     private let pinnedCertificateData: Data = {
         // Load from bundle or hardcode for demo
         guard let certURL = Bundle.main.url(forResource: "server", withExtension: "cer"),
-              let data = try? Data(contentsOf: certURL)
+            let data = try? Data(contentsOf: certURL)
         else {
             print(
                 "Warning: Pinned certificate 'server.cer' not found in bundle. Pinning disabled/failed."
@@ -35,15 +35,15 @@ class CertificatePinningDelegate: NSObject, URLSessionDelegate {
         let policy = SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)
         SecTrustSetPolicies(serverTrust, policy)
 
-        var secresult = SecTrustResultType.invalid
-        let status = SecTrustEvaluate(serverTrust, &secresult)
-
-        guard status == errSecSuccess else {
+        var error: CFError?
+        guard SecTrustEvaluateWithError(serverTrust, &error) else {
             completionHandler(.cancelAuthenticationChallenge, nil)
             return
         }
 
-        guard let serverCert = SecTrustGetCertificateAtIndex(serverTrust, 0) else {
+        guard let certificates = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate],
+            let serverCert = certificates.first
+        else {
             completionHandler(.cancelAuthenticationChallenge, nil)
             return
         }

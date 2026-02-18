@@ -2,4 +2,10 @@
 // Project-specific overrides below
 
 // Suppress legacy strict-concurrency warnings until actor isolation migration is complete.
-SWIFT_WARN_CONCURRENCY = NO
+// REMOVED: SWIFT_WARN_CONCURRENCY = NO
+SWIFT_STRICT_CONCURRENCY = complete
+
+// 2026 Platform Standards
+COMPILATION_CACHING_ENABLE = YES
+EXPERIMENTAL_SWIFT_EXPLICIT_MODULE_BUILDS = YES
+OTHER_SWIFT_FLAGS = $(inherited) -Xfrontend -debug-time-function-bodies -show-build-timing-summary
