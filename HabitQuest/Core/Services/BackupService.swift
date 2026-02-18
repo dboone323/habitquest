@@ -15,7 +15,8 @@ class BackupService {
         let fileManager = FileManager.default
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let backupURL = documentsURL.appendingPathComponent(
-            "HabitQuest_Backup_\(Date().ISO8601Format()).json")
+            "HabitQuest_Backup_\(Date().ISO8601Format()).json"
+        )
 
         // Initialize structured backup metadata
         let backupMetadata: [String: Any] = [
@@ -23,12 +24,13 @@ class BackupService {
             "backup_date": Date().ISO8601Format(),
             "device_id": UUID().uuidString,
             "schema_version": 1,
-            "record_count": 0,  // Placeholder until SwiftData query is integrated
+            "record_count": 0, // Placeholder until SwiftData query is integrated
         ]
 
         do {
             let backupData = try JSONSerialization.data(
-                withJSONObject: backupMetadata, options: .prettyPrinted)
+                withJSONObject: backupMetadata, options: .prettyPrinted
+            )
             try backupData.write(to: backupURL)
         } catch {
             NSLog(

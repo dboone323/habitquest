@@ -6,7 +6,7 @@ final class CertificatePinningDelegate: NSObject, URLSessionDelegate, @unchecked
     private let pinnedCertificateData: Data = {
         // Load from bundle or hardcode for demo
         guard let certURL = Bundle.main.url(forResource: "server", withExtension: "cer"),
-            let data = try? Data(contentsOf: certURL)
+              let data = try? Data(contentsOf: certURL)
         else {
             print(
                 "Warning: Pinned certificate 'server.cer' not found in bundle. Pinning disabled/failed."
@@ -42,7 +42,7 @@ final class CertificatePinningDelegate: NSObject, URLSessionDelegate, @unchecked
         }
 
         guard let certificates = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate],
-            let serverCert = certificates.first
+              let serverCert = certificates.first
         else {
             completionHandler(.cancelAuthenticationChallenge, nil)
             return

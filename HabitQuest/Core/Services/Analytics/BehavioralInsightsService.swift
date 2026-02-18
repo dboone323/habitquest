@@ -197,7 +197,7 @@ final class BehavioralInsightsService {
         let calendar = Calendar.current
         let weekendLogs = habit.logs.filter { log in
             let weekday = calendar.component(.weekday, from: log.completionDate)
-            return weekday == 1 || weekday == 7  // Sunday or Saturday
+            return weekday == 1 || weekday == 7 // Sunday or Saturday
         }
 
         guard !weekendLogs.isEmpty else { return 0.0 }
@@ -207,7 +207,7 @@ final class BehavioralInsightsService {
 
         let weekdayLogs = habit.logs.filter { log in
             let weekday = calendar.component(.weekday, from: log.completionDate)
-            return weekday >= 2 && weekday <= 6  // Monday to Friday
+            return weekday >= 2 && weekday <= 6 // Monday to Friday
         }
 
         guard !weekdayLogs.isEmpty else { return 0.0 }
@@ -236,7 +236,7 @@ final class BehavioralInsightsService {
             gapCount += 1
         }
 
-        return totalGap / Double(gapCount) / (24 * 60 * 60)  // Convert to days
+        return totalGap / Double(gapCount) / (24 * 60 * 60) // Convert to days
     }
 
     private func calculateRecentFailureRate(_ habit: Habit) -> Double {
@@ -332,9 +332,9 @@ final class BehavioralInsightsService {
         let mean = consistencyScores.reduce(0, +) / Double(consistencyScores.count)
         let variance =
             consistencyScores.map { pow($0 - mean, 2) }.reduce(0, +)
-            / Double(consistencyScores.count)
+                / Double(consistencyScores.count)
 
-        return max(0, 1.0 - variance)  // Lower variance = higher adaptability
+        return max(0, 1.0 - variance) // Lower variance = higher adaptability
     }
 
     private func analyzeTimePreference(_ habit: Habit) -> (hour: Int, reliability: Double) {
@@ -349,7 +349,7 @@ final class BehavioralInsightsService {
         let mostCommonHour = hourCounts.max(by: { $0.value < $1.value })?.key ?? 9
         let hourFrequency =
             Double(completionHours.count(where: { $0 == mostCommonHour }))
-            / Double(completionHours.count)
+                / Double(completionHours.count)
 
         return (mostCommonHour, hourFrequency)
     }
@@ -374,8 +374,8 @@ final class BehavioralInsightsService {
         let averageStreak =
             allStreaks
                 .isEmpty
-            ? Double(habit.streak)
-            : Double(allStreaks.reduce(0, +)) / Double(allStreaks.count)
+                ? Double(habit.streak)
+                : Double(allStreaks.reduce(0, +)) / Double(allStreaks.count)
 
         return (longestStreak, averageStreak)
     }
@@ -392,7 +392,7 @@ final class BehavioralInsightsService {
         return max(
             0,
             1.0 - (variance / (meanStreak * meanStreak))
-        )  // Lower variance relative to mean = higher consistency
+        ) // Lower variance relative to mean = higher consistency
     }
 
     private func segmentLogsByMonth(_ logs: [HabitLog]) -> [[HabitLog]] {
@@ -408,7 +408,7 @@ final class BehavioralInsightsService {
         let calendar = Calendar.current
         let workWeekLogs = habit.logs.filter { log in
             let weekday = calendar.component(.weekday, from: log.completionDate)
-            return weekday >= 2 && weekday <= 6  // Monday to Friday
+            return weekday >= 2 && weekday <= 6 // Monday to Friday
         }
 
         guard workWeekLogs.count >= 2 else { return 0.0 }
@@ -425,7 +425,7 @@ final class BehavioralInsightsService {
             gapCount += 1
         }
 
-        return totalGap / Double(gapCount) / (24 * 60 * 60)  // Convert to days
+        return totalGap / Double(gapCount) / (24 * 60 * 60) // Convert to days
     }
 
     private func analyzeSuddenDropOffs(_ habit: Habit) -> Double {
