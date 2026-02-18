@@ -35,7 +35,7 @@ class StreakService {
                 currentDate =
                     calendar.date(byAdding: .day, value: -1, to: currentDate) ?? currentDate
             } else if logDate < currentDate {
-                break  // Gap found, streak is broken
+                break // Gap found, streak is broken
             }
         }
 
@@ -106,7 +106,8 @@ class StreakService {
                     date: currentDate,
                     isCompleted: isCompleted,
                     intensity: isCompleted ? 1.0 : 0.0
-                ))
+                )
+            )
 
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate
         }
@@ -153,7 +154,7 @@ class StreakService {
     func getProgressToNextMilestone(for habit: Habit) async -> Double {
         let currentStreak = await calculateCurrentStreak(for: habit)
         guard let nextMilestone = StreakMilestone.nextMilestone(for: currentStreak) else {
-            return 1.0  // Already at max milestone
+            return 1.0 // Already at max milestone
         }
 
         let previousMilestone = StreakMilestone.milestone(for: currentStreak)
@@ -207,7 +208,7 @@ public struct StreakDayData: Identifiable {
     public let id = UUID()
     let date: Date
     let isCompleted: Bool
-    let intensity: Double  // 0.0 to 1.0 for heat map intensity
+    let intensity: Double // 0.0 to 1.0 for heat map intensity
 }
 
 /// Comprehensive streak analytics for a habit

@@ -6,7 +6,6 @@
 //
 
 import XCTest
-
 @testable import HabitQuest
 
 final class BehavioralAdaptationServiceTests: XCTestCase {
