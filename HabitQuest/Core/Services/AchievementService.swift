@@ -3,7 +3,7 @@ import SwiftData
 
 /// Handles progress tracking, achievement unlocking, and reward distribution
 enum AchievementService {
-    private static let logger = Logger(category: .gameLogic)
+    private static let logger = HabitQuestLogger(category: .gameLogic)
 
     /// Initialize default achievements for new users
     static func createDefaultAchievements() -> [Achievement] {

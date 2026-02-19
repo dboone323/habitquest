@@ -5,7 +5,7 @@ import SwiftData
 /// Service for managing push notifications and habit reminders
 /// Handles notification scheduling, permission requests, and reminder management
 enum NotificationService {
-    private static let logger = Logger(category: .general)
+    private static let logger = HabitQuestLogger(category: .general)
 
     /// Notification categories for different types of reminders
     enum NotificationCategory: String, CaseIterable {

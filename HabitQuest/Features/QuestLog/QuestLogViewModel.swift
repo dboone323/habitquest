@@ -10,7 +10,7 @@ public class QuestLogViewModel: ObservableObject {
     @Published var editingHabit: Habit?
 
     private var modelContext: ModelContext?
-    private let logger = Logger(category: .uiCategory)
+    private let logger = HabitQuestLogger(category: .uiCategory)
 
     /// Set the model context and load all habits
     /// <#Description#>

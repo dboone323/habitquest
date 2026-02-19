@@ -29,7 +29,7 @@ public class DataManagementViewModel: ObservableObject {
     }
 
     private var modelContext: ModelContext?
-    private let logger = Logger(category: .dataModel)
+    private let logger = HabitQuestLogger(category: .dataModel)
 
     /// Set the model context and load data statistics
     /// <#Description#>
@@ -58,7 +58,7 @@ public class DataManagementViewModel: ObservableObject {
         Task { [weak self] in
             guard let self else { return }
             do {
-                let jsonData = try DataExportService.exportUserData(from: modelContext)
+                let jsonData = try await DataExportService.exportUserData(from: modelContext)
 
                 await MainActor.run {
                     self.exportDocument = HabitQuestBackupDocument(data: jsonData)

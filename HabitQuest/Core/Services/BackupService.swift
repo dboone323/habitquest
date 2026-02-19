@@ -10,6 +10,7 @@ import SwiftData
 
 class BackupService {
     static let shared = BackupService()
+    private static let logger = HabitQuestLogger(category: .dataModel)
 
     func createBackup() throws -> URL {
         let fileManager = FileManager.default
@@ -33,8 +34,8 @@ class BackupService {
             )
             try backupData.write(to: backupURL)
         } catch {
-            NSLog(
-                "[BackupService] CRITICAL: Failed to write backup file: \(error.localizedDescription)"
+            Self.logger.critical(
+                "CRITICAL: Failed to write backup file: \(error.localizedDescription)"
             )
             throw error
         }
@@ -44,6 +45,6 @@ class BackupService {
 
     func restoreBackup(from url: URL) throws {
         // Implementation would involve parsing JSON and re-inserting into SwiftData
-        print("Restoring from \(url.path)")
+        Self.logger.info("Restoring from \(url.path)")
     }
 }
