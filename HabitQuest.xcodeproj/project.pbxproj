@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		68581EB02E0F1EA600E5AA02 /* SharedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 68581EB02E0F1EA600E5AA01 /* SharedKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		68581EC82E0F1EA800E5AADA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -28,21 +32,28 @@
 		68581EC72E0F1EA800E5AADA /* HabitQuestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HabitQuestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		68581ED12E0F1EA800E5AADA /* HabitQuestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HabitQuestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		68660D292F40D2CA00FD1416 /* HabitQuest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = HabitQuest.xctestplan; sourceTree = "<group>"; };
+		E097F354E6B81CB4179A60E2 /* shared-kit */ = {isa = PBXFileReference; includeInIndex = 1; name = "shared-kit"; path = "../shared-kit"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		68581EBA2E0F1EA600E5AADA /* HabitQuest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = HabitQuest;
 			sourceTree = "<group>";
 		};
 		68581ECA2E0F1EA800E5AADA /* HabitQuestTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = HabitQuestTests;
 			sourceTree = "<group>";
 		};
 		68581ED42E0F1EA800E5AADA /* HabitQuestUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = HabitQuestUITests;
 			sourceTree = "<group>";
 		};
@@ -73,10 +84,6 @@
 		};
 /* End PBXFrameworksBuildPhase section */
 
-/* Begin PBXBuildFile section */
-		68581EB02E0F1EA600E5AA02 /* SharedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 68581EB02E0F1EA600E5AA01 /* SharedKit */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXGroup section */
 		68581EAF2E0F1EA600E5AADA = {
 			isa = PBXGroup;
@@ -86,6 +93,7 @@
 				68581ECA2E0F1EA800E5AADA /* HabitQuestTests */,
 				68581ED42E0F1EA800E5AADA /* HabitQuestUITests */,
 				68581EB92E0F1EA600E5AADA /* Products */,
+				E097F354E6B81CB4179A60E2 /* shared-kit */,
 			);
 			sourceTree = "<group>";
 		};
@@ -114,13 +122,13 @@
 			);
 			dependencies = (
 			);
-			packageProductDependencies = (
-				68581EB02E0F1EA600E5AA01 /* SharedKit */,
-			);
 			fileSystemSynchronizedGroups = (
 				68581EBA2E0F1EA600E5AADA /* HabitQuest */,
 			);
 			name = HabitQuest;
+			packageProductDependencies = (
+				68581EB02E0F1EA600E5AA01 /* SharedKit */,
+			);
 			productName = HabitQuest;
 			productReference = 68581EB82E0F1EA600E5AADA /* HabitQuest.app */;
 			productType = "com.apple.product-type.application";
@@ -202,7 +210,7 @@
 			mainGroup = 68581EAF2E0F1EA600E5AADA;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../shared-kit" */,
+				E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "shared-kit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 68581EB92E0F1EA600E5AADA /* Products */;
@@ -333,7 +341,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -394,7 +402,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -423,7 +431,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -440,7 +448,7 @@
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
+				SWIFT_VERSION = 6.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -463,7 +471,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -480,7 +488,7 @@
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
+				SWIFT_VERSION = 6.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -494,14 +502,14 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3N5528D82R;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.DanielStevens.HabitQuestTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
+				SWIFT_VERSION = 6.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HabitQuest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HabitQuest";
 			};
@@ -516,14 +524,14 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3N5528D82R;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.DanielStevens.HabitQuestTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
+				SWIFT_VERSION = 6.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HabitQuest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HabitQuest";
 			};
@@ -543,7 +551,7 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
+				SWIFT_VERSION = 6.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = HabitQuest;
 			};
@@ -563,7 +571,7 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
+				SWIFT_VERSION = 6.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = HabitQuest;
 			};
@@ -611,7 +619,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../shared-kit" */ = {
+		E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "shared-kit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../shared-kit";
 		};
@@ -620,7 +628,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		68581EB02E0F1EA600E5AA01 /* SharedKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../shared-kit" */;
+			package = E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "shared-kit" */;
 			productName = SharedKit;
 		};
 /* End XCSwiftPackageProductDependency section */

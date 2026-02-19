@@ -16,7 +16,7 @@ public class ProfileViewModel: ObservableObject {
     @Published var analytics: HabitAnalytics = .empty
 
     private var modelContext: ModelContext?
-    private let logger = Logger(category: .uiCategory)
+    private let logger = HabitQuestLogger(category: .uiCategory)
     private var analyticsService: AnalyticsService?
     private let gamificationService = GamificationService()
 

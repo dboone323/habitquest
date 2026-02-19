@@ -1,11 +1,10 @@
 import Foundation
 import os
 
-/// Centralized logging utility for the HabitQuest app
-/// Provides structured logging with different levels and categories
-struct Logger {
+/// Unique logging utility for the HabitQuest app to avoid shadowing SharedKit.Logger
+public struct HabitQuestLogger {
     /// Log categories for different parts of the application
-    enum Category: String {
+    public enum Category: String {
         case general = "HabitQuest.General"
         case dataModel = "HabitQuest.DataModel"
         case gameLogic = "HabitQuest.GameLogic"
@@ -14,7 +13,7 @@ struct Logger {
     }
 
     /// Log levels for different severity
-    enum Level {
+    public enum Level {
         case debug, info, warning, error, critical
 
         var osLogType: OSLogType {
@@ -42,19 +41,18 @@ struct Logger {
     private let category: Category
 
     /// Initialize logger for specific category
-    init(category: Category = .general) {
+    public init(category: Category = .general) {
         self.category = category
-        osLog = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "HabitQuest", category: category.rawValue)
+        osLog = OSLog(
+            subsystem: Bundle.main.bundleIdentifier ?? "HabitQuest", category: category.rawValue
+        )
     }
 
     /// Log a message at the specified level
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func log(_ level: Level, _ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+    public func log(
+        _ level: Level, _ message: String, file: String = #file, function: String = #function,
+        line: Int = #line
+    ) {
         let fileName = URL(fileURLWithPath: file).lastPathComponent
         let logMessage = "\(level.prefix) [\(fileName):\(line)] \(function) - \(message)"
 
@@ -65,54 +63,33 @@ struct Logger {
         os_log("%{public}@", log: self.osLog, type: level.osLogType, logMessage)
     }
 
-    /// Convenience methods for different log levels
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func debug(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+    public func debug(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
         log(.debug, message, file: file, function: function, line: line)
     }
 
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func info(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+    public func info(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
         log(.info, message, file: file, function: function, line: line)
     }
 
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func warning(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+    public func warning(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
         log(.warning, message, file: file, function: function, line: line)
     }
 
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func error(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+    public func error(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
         log(.error, message, file: file, function: function, line: line)
     }
 
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func critical(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+    public func critical(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
         log(.critical, message, file: file, function: function, line: line)
     }
 }

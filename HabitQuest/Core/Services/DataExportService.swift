@@ -52,13 +52,13 @@ struct ExportedData: @preconcurrency Codable, @unchecked Sendable {
 /// Service for exporting and importing HabitQuest user data
 /// Handles backup, restore, and data portability features
 public struct DataExportService: Sendable {
-    private static let logger = Logger(category: Logger.Category.dataModel)
+    private static let logger = HabitQuestLogger(category: .dataModel)
 
     /// Export all user data to JSON
     /// - Parameter modelContext: SwiftData model context
     /// - Returns: JSON data ready for sharing/backup
     @MainActor
-    static func exportUserData(from modelContext: ModelContext) throws -> Data {
+    static func exportUserData(from modelContext: ModelContext) async throws -> Data {
         logger.info("Starting data export...")
 
         // Fetch player profile
@@ -138,12 +138,10 @@ public struct DataExportService: Sendable {
         )
 
         let jsonData = try JSONEncoder().encode(exportData)
+        let encryptedData = try await CryptoManager.shared.encrypt(jsonData)
 
-        // TODO: Add encryption when CryptoManager is available
-        // let encryptedData = try await CryptoManager.shared.encrypt(jsonData)
-
-        logger.info("Data export completed. Size: \(jsonData.count) bytes")
-        return jsonData
+        logger.info("Data export completed. Size: \(encryptedData.count) bytes")
+        return encryptedData
     }
 
     /// Import user data from JSON
@@ -157,13 +155,7 @@ public struct DataExportService: Sendable {
     ) async throws {
         logger.info("Starting data import...")
 
-        // TODO: Add decryption when CryptoManager is available
-        let jsonData = data
-        // do {
-        //     jsonData = try await CryptoManager.shared.decrypt(data)
-        // } catch {
-        //     throw DataExportError.decryptionFailed(error)
-        // }
+        let jsonData = try await CryptoManager.shared.decrypt(data)
 
         let decoder = JSONDecoder()
         let importData = try decoder.decode(ExportedData.self, from: jsonData)

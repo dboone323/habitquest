@@ -45,7 +45,7 @@ public struct ErrorHandler: Sendable {
         }
     }
 
-    private static let logger = Logger(category: .general)
+    private static let logger = HabitQuestLogger(category: .general)
 
     /// Handle an error with logging and optional user notification
     static func handle(
