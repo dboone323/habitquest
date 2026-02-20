@@ -197,6 +197,7 @@ jobs:
       - name: 🧪 Run Tests (${{ matrix.name }})
         run: |
           echo "🧪 Running tests on ${{ matrix.name }}..."
+          rm -rf TestResults.xcresult
           xcodebuild test \
             -scheme ${{ matrix.scheme }} \
             -destination '${{ matrix.destination }}' \
