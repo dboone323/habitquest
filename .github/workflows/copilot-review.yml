@@ -33,7 +33,6 @@ jobs:
           pip install requests
           # Install AI libraries if API keys are available
             pip install openai anthropic
-          fi
 
       - name: Run Copilot Code Review
         env:
