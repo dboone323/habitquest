@@ -1,4 +1,4 @@
-name: 🤖 Copilot Code Review & Enhancement
+name: 🤖 AI Code Review & Autofix
 
 on:
   pull_request:
