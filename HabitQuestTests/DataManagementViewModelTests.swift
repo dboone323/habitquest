@@ -213,7 +213,7 @@ final class DataManagementViewModelTests: XCTestCase {
         modelContext.insert(habit)
         modelContext.insert(profile)
 
-        let exportData = try DataExportService.exportUserData(from: modelContext)
+        let exportData = try await DataExportService.exportUserData(from: modelContext)
 
         // Create temporary file
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("test_import.json")
