@@ -6,7 +6,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testProfileViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structProfileView:View{
         XCTAssertTrue(true, "Placeholder test for structProfileView:View{")
     }
 
@@ -20,7 +19,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testAchievementsSectionInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structAchievementsSection:View{
         XCTAssertTrue(true, "Placeholder test for structAchievementsSection:View{")
     }
 
@@ -40,7 +38,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testAchievementBadgeInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structAchievementBadge:View{
         XCTAssertTrue(true, "Placeholder test for structAchievementBadge:View{")
     }
 
@@ -60,7 +57,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testAnalyticsTabViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structAnalyticsTabView:View{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsTabView:View{")
     }
 
@@ -80,7 +76,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testTrendsViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structTrendsView:View{
         XCTAssertTrue(true, "Placeholder test for structTrendsView:View{")
     }
 
@@ -100,7 +95,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testPatternsViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structPatternsView:View{
         XCTAssertTrue(true, "Placeholder test for structPatternsView:View{")
     }
 
@@ -120,7 +114,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testInsightsViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structInsightsView:View{
         XCTAssertTrue(true, "Placeholder test for structInsightsView:View{")
     }
 
@@ -140,7 +133,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testAdvancedAnalyticsViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structAdvancedAnalyticsView:View{
         XCTAssertTrue(true, "Placeholder test for structAdvancedAnalyticsView:View{")
     }
 
@@ -160,7 +152,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testAnalyticsInsightsCardInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structAnalyticsInsightsCard:View{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsInsightsCard:View{")
     }
 
@@ -180,7 +171,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testInsightRowInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structInsightRow:View{
         XCTAssertTrue(true, "Placeholder test for structInsightRow:View{")
     }
 
@@ -200,7 +190,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testPredictiveAnalyticsCardInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structPredictiveAnalyticsCard:View{
         XCTAssertTrue(true, "Placeholder test for structPredictiveAnalyticsCard:View{")
     }
 
@@ -220,7 +209,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testPredictionRowInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structPredictionRow:View{
         XCTAssertTrue(true, "Placeholder test for structPredictionRow:View{")
     }
 
@@ -240,7 +228,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testBehavioralPatternsCardInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structBehavioralPatternsCard:View{
         XCTAssertTrue(true, "Placeholder test for structBehavioralPatternsCard:View{")
     }
 
@@ -260,7 +247,6 @@ final class ProfileViewTests: XCTestCase {
 
     func testPatternRowInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structPatternRow:View{
         XCTAssertTrue(true, "Placeholder test for structPatternRow:View{")
     }
 

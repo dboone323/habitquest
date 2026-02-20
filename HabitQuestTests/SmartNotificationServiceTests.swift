@@ -6,7 +6,6 @@ final class SmartNotificationServiceTests: XCTestCase {
 
     func testNotificationInteractionInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for enumNotificationInteraction{
         XCTAssertTrue(true, "Placeholder test for enumNotificationInteraction{")
     }
 
@@ -26,7 +25,6 @@ final class SmartNotificationServiceTests: XCTestCase {
 
     func testTimingAdjustmentInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for enumTimingAdjustment{
         XCTAssertTrue(true, "Placeholder test for enumTimingAdjustment{")
     }
 

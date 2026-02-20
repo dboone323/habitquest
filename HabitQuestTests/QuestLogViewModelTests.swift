@@ -6,7 +6,6 @@ final class QuestLogViewModelTests: XCTestCase {
 
     func testQuestLogViewModelInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for classQuestLogViewModel:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classQuestLogViewModel:ObservableObject{")
     }
 

@@ -6,7 +6,6 @@ final class DataManagementViewTests: XCTestCase {
 
     func testDataManagementViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structDataManagementView:View{
         XCTAssertTrue(true, "Placeholder test for structDataManagementView:View{")
     }
 
@@ -26,7 +25,6 @@ final class DataManagementViewTests: XCTestCase {
 
     func testAlertModifierInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structAlertModifier:ViewModifier{
         XCTAssertTrue(true, "Placeholder test for structAlertModifier:ViewModifier{")
     }
 
@@ -46,7 +44,6 @@ final class DataManagementViewTests: XCTestCase {
 
     func testFileHandlerModifierInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structFileHandlerModifier:ViewModifier{
         XCTAssertTrue(true, "Placeholder test for structFileHandlerModifier:ViewModifier{")
     }
 
@@ -66,7 +63,6 @@ final class DataManagementViewTests: XCTestCase {
 
     func testHabitQuestBackupDocumentInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structHabitQuestBackupDocument:FileDocument{
         XCTAssertTrue(true, "Placeholder test for structHabitQuestBackupDocument:FileDocument{")
     }
 

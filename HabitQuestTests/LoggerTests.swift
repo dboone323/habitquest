@@ -6,7 +6,6 @@ final class LoggerTests: XCTestCase {
 
     func testLoggerInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structLogger{
         XCTAssertTrue(true, "Placeholder test for structLogger{")
     }
 

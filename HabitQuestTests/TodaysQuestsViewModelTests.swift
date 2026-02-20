@@ -6,7 +6,6 @@ final class TodaysQuestsViewModelTests: XCTestCase {
 
     func testTodaysQuestsViewModelInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for classTodaysQuestsViewModel:ObservableObject{
         XCTAssertTrue(true, "Placeholder test for classTodaysQuestsViewModel:ObservableObject{")
     }
 

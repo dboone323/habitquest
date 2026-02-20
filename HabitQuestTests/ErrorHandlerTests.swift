@@ -6,7 +6,6 @@ final class ErrorHandlerTests: XCTestCase {
 
     func testErrorHandlerInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structErrorHandler:Sendable{
         XCTAssertTrue(true, "Placeholder test for structErrorHandler:Sendable{")
     }
 

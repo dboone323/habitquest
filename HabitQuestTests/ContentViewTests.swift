@@ -34,10 +34,13 @@ final class ContentViewTests: XCTestCase {
     // MARK: - ContentView Tests
 
     @MainActor
-    func testContentViewInitialization() throws {
-        throw XCTSkip(
-            "Skipping ContentView init test - SwiftData @Query causes runtime issues in test env"
-        )
+    func testContentViewInitialization() {
+        // Instantiate the view with injected dependencies to verify it doesn't crash on init
+        let view = ContentView()
+            .modelContainer(modelContainer)
+            .environment(\.modelContext, modelContext)
+
+        XCTAssertNotNil(view)
     }
 
     /*

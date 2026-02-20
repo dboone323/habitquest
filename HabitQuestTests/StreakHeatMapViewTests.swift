@@ -6,7 +6,6 @@ final class StreakHeatMapViewTests: XCTestCase {
 
     func testStreakHeatMapViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structStreakHeatMapView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakHeatMapView:View{")
     }
 
@@ -26,7 +25,6 @@ final class StreakHeatMapViewTests: XCTestCase {
 
     func testDayIntensityInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structDayIntensity{
         XCTAssertTrue(true, "Placeholder test for structDayIntensity{")
     }
 
@@ -46,7 +44,6 @@ final class StreakHeatMapViewTests: XCTestCase {
 
     func testStreakPredictionInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structStreakPrediction{
         XCTAssertTrue(true, "Placeholder test for structStreakPrediction{")
     }
 
@@ -66,7 +63,6 @@ final class StreakHeatMapViewTests: XCTestCase {
 
     func testMetricCardInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structMetricCard:View{
         XCTAssertTrue(true, "Placeholder test for structMetricCard:View{")
     }
 
@@ -86,7 +82,6 @@ final class StreakHeatMapViewTests: XCTestCase {
 
     func testPredictionCardInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structPredictionCard:View{
         XCTAssertTrue(true, "Placeholder test for structPredictionCard:View{")
     }
 

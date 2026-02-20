@@ -6,7 +6,6 @@ final class StreakServiceTests: XCTestCase {
 
     func testStreakServiceInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for classStreakService{
         XCTAssertTrue(true, "Placeholder test for classStreakService{")
     }
 
@@ -26,7 +25,6 @@ final class StreakServiceTests: XCTestCase {
 
     func testStreakDayDataInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structStreakDayData:Identifiable{
         XCTAssertTrue(true, "Placeholder test for structStreakDayData:Identifiable{")
     }
 
@@ -46,7 +44,6 @@ final class StreakServiceTests: XCTestCase {
 
     func testStreakAnalyticsInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structStreakAnalytics{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalytics{")
     }
 

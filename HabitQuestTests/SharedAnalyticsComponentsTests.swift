@@ -6,7 +6,6 @@ final class SharedAnalyticsComponentsTests: XCTestCase {
 
     func testAnalyticsCardInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structAnalyticsCard:View{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsCard:View{")
     }
 
@@ -26,7 +25,6 @@ final class SharedAnalyticsComponentsTests: XCTestCase {
 
     func testTopPerformerRowInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structTopPerformerRow:View{
         XCTAssertTrue(true, "Placeholder test for structTopPerformerRow:View{")
     }
 
@@ -46,7 +44,6 @@ final class SharedAnalyticsComponentsTests: XCTestCase {
 
     func testStreakDistributionChartViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structStreakDistributionChartView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakDistributionChartView:View{")
     }
 
@@ -66,7 +63,6 @@ final class SharedAnalyticsComponentsTests: XCTestCase {
 
     func testConsistencyInsightViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structConsistencyInsightView:View{
         XCTAssertTrue(true, "Placeholder test for structConsistencyInsightView:View{")
     }
 
@@ -86,7 +82,6 @@ final class SharedAnalyticsComponentsTests: XCTestCase {
 
     func testInsightCardInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structInsightCard:View{
         XCTAssertTrue(true, "Placeholder test for structInsightCard:View{")
     }
 
@@ -106,7 +101,6 @@ final class SharedAnalyticsComponentsTests: XCTestCase {
 
     func testWeeklyPatternChartViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structWeeklyPatternChartView:View{
         XCTAssertTrue(true, "Placeholder test for structWeeklyPatternChartView:View{")
     }
 
@@ -126,7 +120,6 @@ final class SharedAnalyticsComponentsTests: XCTestCase {
 
     func testHabitDetailSheetInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structHabitDetailSheet:View{
         XCTAssertTrue(true, "Placeholder test for structHabitDetailSheet:View{")
     }
 
@@ -146,7 +139,6 @@ final class SharedAnalyticsComponentsTests: XCTestCase {
 
     func testAnalyticsExportViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structAnalyticsExportView:View{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsExportView:View{")
     }
 

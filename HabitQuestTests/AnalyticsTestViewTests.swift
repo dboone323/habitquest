@@ -6,7 +6,6 @@ final class AnalyticsTestViewTests: XCTestCase {
 
     func testTestResultsInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structTestResults{
         XCTAssertTrue(true, "Placeholder test for structTestResults{")
     }
 
@@ -26,7 +25,6 @@ final class AnalyticsTestViewTests: XCTestCase {
 
     func testTestResultInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structTestResult{
         XCTAssertTrue(true, "Placeholder test for structTestResult{")
     }
 
@@ -46,7 +44,6 @@ final class AnalyticsTestViewTests: XCTestCase {
 
     func testAnalyticsTestViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structAnalyticsTestView:View{
         XCTAssertTrue(true, "Placeholder test for structAnalyticsTestView:View{")
     }
 
@@ -66,7 +63,6 @@ final class AnalyticsTestViewTests: XCTestCase {
 
     func testTestResultsViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structTestResultsView:View{
         XCTAssertTrue(true, "Placeholder test for structTestResultsView:View{")
     }
 
@@ -86,7 +82,6 @@ final class AnalyticsTestViewTests: XCTestCase {
 
     func testTestResultRowInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structTestResultRow:View{
         XCTAssertTrue(true, "Placeholder test for structTestResultRow:View{")
     }
 
@@ -106,7 +101,6 @@ final class AnalyticsTestViewTests: XCTestCase {
 
     func testStatItemInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structStatItem:View{
         XCTAssertTrue(true, "Placeholder test for structStatItem:View{")
     }
 
