@@ -168,6 +168,13 @@ jobs:
         with:
           swift-version: "5.10"
 
+      - name: 📦 Prepare shared-kit dependency
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/dboone323/shared-kit.git" "$RUNNER_TEMP/shared-kit"
+          ln -sfn "$RUNNER_TEMP/shared-kit" "$GITHUB_WORKSPACE/../shared-kit"
+
       - name: 📦 Cache DerivedData
         uses: actions/cache@v4
         with:
@@ -234,6 +241,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: 📦 Prepare shared-kit dependency
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/dboone323/shared-kit.git" "$RUNNER_TEMP/shared-kit"
+          ln -sfn "$RUNNER_TEMP/shared-kit" "$GITHUB_WORKSPACE/../shared-kit"
 
       - name: 🔧 Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
