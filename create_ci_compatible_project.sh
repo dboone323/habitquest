@@ -9,7 +9,7 @@ echo "🔧 Converting Xcode project to be compatible with older Xcode versions..
 PROJECT_FILE="HabitQuest.xcodeproj/project.pbxproj"
 
 if [[ ! -f "${PROJECT_FILE}" ]]; then
-	echo "❌ Project file not found${ $PROJECT_FI}LE"
+	echo "❌ Project file not found: ${PROJECT_FILE}"
 	exit 1
 fi
 
