@@ -167,7 +167,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/dboone323/shared-kit.git" "$RUNNER_TEMP/shared-kit"
+          SHARED_KIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/dboone323/shared-kit.git"
+          SHARED_KIT_REF="${GITHUB_HEAD_REF:-main}"
+          if ! git clone --depth 1 --branch "$SHARED_KIT_REF" "$SHARED_KIT_REPO" "$RUNNER_TEMP/shared-kit"; then
+            echo "Falling back to default branch for shared-kit"
+            rm -rf "$RUNNER_TEMP/shared-kit"
+            git clone --depth 1 "$SHARED_KIT_REPO" "$RUNNER_TEMP/shared-kit"
+          fi
           ln -sfn "$RUNNER_TEMP/shared-kit" "$GITHUB_WORKSPACE/../shared-kit"
 
       - name: 📦 Cache DerivedData
@@ -239,7 +245,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/dboone323/shared-kit.git" "$RUNNER_TEMP/shared-kit"
+          SHARED_KIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/dboone323/shared-kit.git"
+          SHARED_KIT_REF="${GITHUB_HEAD_REF:-main}"
+          if ! git clone --depth 1 --branch "$SHARED_KIT_REF" "$SHARED_KIT_REPO" "$RUNNER_TEMP/shared-kit"; then
+            echo "Falling back to default branch for shared-kit"
+            rm -rf "$RUNNER_TEMP/shared-kit"
+            git clone --depth 1 "$SHARED_KIT_REPO" "$RUNNER_TEMP/shared-kit"
+          fi
           ln -sfn "$RUNNER_TEMP/shared-kit" "$GITHUB_WORKSPACE/../shared-kit"
 
       - name: 🔧 Setup Xcode
