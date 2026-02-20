@@ -52,9 +52,16 @@ final class ThemeManagerTests: XCTestCase {
         XCTAssertNotNil(theme.secondaryTextColor)
     }
 
-    func testIsDarkModePersistence() throws {
-        throw XCTSkip(
-            "Skipping UserDefaults persistence test - simulator flakiness with race conditions"
-        )
+    func testIsDarkModePersistence() {
+        // Since ThemeManager uses @AppStorage, we can test defaults behavior
+        let initialDefaultsMode = UserDefaults.standard.bool(forKey: "isDarkMode")
+
+        themeManager.isDarkMode.toggle()
+
+        // Assert it changed
+        XCTAssertNotEqual(UserDefaults.standard.bool(forKey: "isDarkMode"), initialDefaultsMode)
+
+        // Reset state
+        themeManager.isDarkMode = initialDefaultsMode
     }
 }

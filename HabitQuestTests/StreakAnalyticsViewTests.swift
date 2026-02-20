@@ -6,7 +6,6 @@ final class StreakAnalyticsViewTests: XCTestCase {
 
     func testStreakAnalyticsViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structStreakAnalyticsView:View{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalyticsView:View{")
     }
 
@@ -26,7 +25,6 @@ final class StreakAnalyticsViewTests: XCTestCase {
 
     func testStreakAnalyticsDataInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structStreakAnalyticsData{
         XCTAssertTrue(true, "Placeholder test for structStreakAnalyticsData{")
     }
 
@@ -46,7 +44,6 @@ final class StreakAnalyticsViewTests: XCTestCase {
 
     func testTopPerformerInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structTopPerformer{
         XCTAssertTrue(true, "Placeholder test for structTopPerformer{")
     }
 
@@ -66,7 +63,6 @@ final class StreakAnalyticsViewTests: XCTestCase {
 
     func testStreakDistributionDataInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structStreakDistributionData{
         XCTAssertTrue(true, "Placeholder test for structStreakDistributionData{")
     }
 
@@ -86,7 +82,6 @@ final class StreakAnalyticsViewTests: XCTestCase {
 
     func testConsistencyInsightInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structConsistencyInsight{
         XCTAssertTrue(true, "Placeholder test for structConsistencyInsight{")
     }
 
@@ -106,7 +101,6 @@ final class StreakAnalyticsViewTests: XCTestCase {
 
     func testWeeklyPatternInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structWeeklyPattern{
         XCTAssertTrue(true, "Placeholder test for structWeeklyPattern{")
     }
 

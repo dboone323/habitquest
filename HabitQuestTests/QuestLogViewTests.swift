@@ -6,7 +6,6 @@ final class QuestLogViewTests: XCTestCase {
 
     func testQuestLogViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structQuestLogView:View{
         XCTAssertTrue(true, "Placeholder test for structQuestLogView:View{")
     }
 

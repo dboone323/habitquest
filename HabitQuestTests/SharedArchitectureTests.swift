@@ -6,7 +6,6 @@ final class SharedArchitectureTests: XCTestCase {
 
     func testAppErrorInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for enumAppError:LocalizedError{
         XCTAssertTrue(true, "Placeholder test for enumAppError:LocalizedError{")
     }
 

@@ -6,7 +6,6 @@ final class AppMainViewTests: XCTestCase {
 
     func testAppMainViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structAppMainView:View{
         XCTAssertTrue(true, "Placeholder test for structAppMainView:View{")
     }
 

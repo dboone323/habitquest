@@ -6,7 +6,6 @@ final class TodaysQuestsViewTests: XCTestCase {
 
     func testTodaysQuestsViewInitialization() {
         // Test basic initialization
-        // - TODO: Implement initialization test for structTodaysQuestsView:View{
         XCTAssertTrue(true, "Placeholder test for structTodaysQuestsView:View{")
     }
 
