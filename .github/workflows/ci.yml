@@ -40,7 +40,7 @@ jobs:
       - name: 🔧 Setup Swift
         uses: swift-actions/setup-swift@v2
         with:
-          swift-version: "5.10"
+          swift-version: "6.2.1"
 
       - name: 📦 Cache Dependencies
         uses: actions/cache@v4
@@ -163,11 +163,6 @@ jobs:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🔧 Setup Swift
-        uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: "5.10"
-
       - name: 📦 Prepare shared-kit dependency
         env:
           GH_TOKEN: ${{ github.token }}
@@ -190,7 +185,6 @@ jobs:
             -scheme ${{ matrix.scheme }} \
             -destination '${{ matrix.destination }}' \
             -configuration Debug \
-            -enableCodeCoverage YES \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             SWIFT_TREAT_WARNINGS_AS_ERRORS=YES
