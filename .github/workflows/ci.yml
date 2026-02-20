@@ -148,14 +148,14 @@ jobs:
   # 3. Build & Test
   build-and-test:
     name: 🏗️ Build & Test
-    runs-on: macos-latest
+    runs-on: macos-26
     timeout-minutes: 45
     needs: quality-checks
     strategy:
       fail-fast: false
       matrix:
         include:
-          - destination: "platform=iOS Simulator,name=iPhone 15,OS=17.5"
+          - destination: "platform=iOS Simulator,name=iPhone 17,OS=26.0"
             name: iOS
             scheme: HabitQuest
 
