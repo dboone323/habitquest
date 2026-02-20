@@ -57,7 +57,7 @@ final class DataExportServiceTests: XCTestCase {
         try sourceContext.save()
 
         // Act: export from source and import into destination in-memory store
-        let exported = try DataExportService.exportUserData(from: sourceContext)
+        let exported = try await DataExportService.exportUserData(from: sourceContext)
 
         let destContainer = try makeInMemoryContainer()
         let destContext = ModelContext(destContainer)
