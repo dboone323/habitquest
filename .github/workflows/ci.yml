@@ -155,7 +155,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - destination: "platform=iOS Simulator,name=iPhone 17,OS=26.0"
+          - destination: "platform=iOS Simulator,name=iPhone 17,OS=latest"
             name: iOS
             scheme: HabitQuest
 
