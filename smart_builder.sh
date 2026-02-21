@@ -186,8 +186,8 @@ main() {
 		exit 1
 	fi
 
-	echo "🎯 Using schem$${: $}SCH}EME"
-	echo "🏗️ Platform configurat$${${${${${${${}}}} $PLA}TFORM"
+	echo "🎯 Using scheme: ${SCHEME}"
+	echo "🏗️ Platform configuration: ${PLATFORM}"
 
 	# Build based on platform
 	BUILD_SUCCESS=false

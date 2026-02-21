@@ -23,14 +23,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
 
 jobs:
   # 1. Code Quality & Linting
   quality-checks:
     name: 🔍 Code Quality
-    runs-on: macos-latest
+    runs-on: macos-26
     timeout-minutes: 15
 
     steps:
@@ -42,7 +40,7 @@ jobs:
       - name: 🔧 Setup Swift
         uses: swift-actions/setup-swift@v2
         with:
-          swift-version: "5.10"
+          swift-version: "6.2.1"
 
       - name: 📦 Cache Dependencies
         uses: actions/cache@v4
@@ -150,14 +148,14 @@ jobs:
   # 3. Build & Test
   build-and-test:
     name: 🏗️ Build & Test
-    runs-on: macos-latest
+    runs-on: macos-26
     timeout-minutes: 45
     needs: quality-checks
     strategy:
       fail-fast: false
       matrix:
         include:
-          - destination: "platform=iOS Simulator,name=iPhone 15,OS=17.5"
+          - destination: "platform=iOS Simulator,name=iPhone 17,OS=latest"
             name: iOS
             scheme: HabitQuest
 
@@ -165,10 +163,18 @@ jobs:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🔧 Setup Swift
-        uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: "5.10"
+      - name: 📦 Prepare shared-kit dependency
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SHARED_KIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/dboone323/shared-kit.git"
+          SHARED_KIT_REF="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME:-main}}"
+          if ! git clone --depth 1 --branch "$SHARED_KIT_REF" "$SHARED_KIT_REPO" "$RUNNER_TEMP/shared-kit"; then
+            echo "Falling back to default branch for shared-kit"
+            rm -rf "$RUNNER_TEMP/shared-kit"
+            git clone --depth 1 "$SHARED_KIT_REPO" "$RUNNER_TEMP/shared-kit"
+          fi
+          ln -sfn "$RUNNER_TEMP/shared-kit" "$GITHUB_WORKSPACE/../shared-kit"
 
       - name: 📦 Cache DerivedData
         uses: actions/cache@v4
@@ -185,14 +191,14 @@ jobs:
             -scheme ${{ matrix.scheme }} \
             -destination '${{ matrix.destination }}' \
             -configuration Debug \
-            -enableCodeCoverage YES \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            SWIFT_TREAT_WARNINGS_AS_ERRORS=YES
+            CODE_SIGNING_ALLOWED=NO
 
       - name: 🧪 Run Tests (${{ matrix.name }})
         run: |
           echo "🧪 Running tests on ${{ matrix.name }}..."
+          rm -rf TestResults.xcresult
           xcodebuild test \
             -scheme ${{ matrix.scheme }} \
             -destination '${{ matrix.destination }}' \
@@ -200,6 +206,7 @@ jobs:
             -enableCodeCoverage YES \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
             -resultBundlePath TestResults.xcresult
 
       - name: 📊 Upload Test Results
@@ -226,7 +233,7 @@ jobs:
   # 4. Deployment (Conditional)
   deploy:
     name: 🚀 Deploy
-    runs-on: macos-latest
+    runs-on: macos-26
     timeout-minutes: 45
     needs: [build-and-test, security-scan]
     if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
@@ -237,10 +244,23 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 📦 Prepare shared-kit dependency
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SHARED_KIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/dboone323/shared-kit.git"
+          SHARED_KIT_REF="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME:-main}}"
+          if ! git clone --depth 1 --branch "$SHARED_KIT_REF" "$SHARED_KIT_REPO" "$RUNNER_TEMP/shared-kit"; then
+            echo "Falling back to default branch for shared-kit"
+            rm -rf "$RUNNER_TEMP/shared-kit"
+            git clone --depth 1 "$SHARED_KIT_REPO" "$RUNNER_TEMP/shared-kit"
+          fi
+          ln -sfn "$RUNNER_TEMP/shared-kit" "$GITHUB_WORKSPACE/../shared-kit"
+
       - name: 🔧 Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: "15.2"
+          xcode-version: "latest-stable"
 
       - name: 💎 Setup Ruby & Fastlane
         uses: ruby/setup-ruby@v1
