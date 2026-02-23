@@ -39,7 +39,14 @@ class JWTAuthManager:
         }
 
     def _hash_password(self, password: str) -> str:
-        return hashlib.sha256(password.encode()).hexdigest()
+        # Use PBKDF2-HMAC with 600,000 iterations as recommended by OWASP
+        salt = b"habitquest_test_salt" # In production, use a unique salt per user
+        return hashlib.pbkdf2_hmac(
+            "sha256", 
+            password.encode(), 
+            salt, 
+            600000
+        ).hex()
 
     def authenticate_user(self, username: str, password: str) -> dict | None:
         """Authenticate a user by username and password."""
