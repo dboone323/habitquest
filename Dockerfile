@@ -1,5 +1,5 @@
 # Build Stage
-FROM swift:6.0 as builder
+FROM swift:6.2 as builder
 
 WORKDIR /app
 COPY . .
@@ -11,7 +11,7 @@ RUN swift build -c release
 # Output is in .build/release/
 
 # Run Stage (Slim)
-FROM swift:6.0-slim
+FROM swift:6.2-slim
 
 WORKDIR /app
 
