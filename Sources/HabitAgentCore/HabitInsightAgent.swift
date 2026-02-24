@@ -20,12 +20,12 @@ public struct HabitInsightAgent: BaseAgent {
     /// - `"peak_hour"`: `Int` – hour of day (0–23) where most completions occur
     /// - `"active_categories"`: `[String]` – list of habit categories currently tracked
     public func execute(context: [String: Sendable]) async throws -> AgentResult {
-        let streakDays      = context["streak_days"] as? Int ?? 0
-        let completionRate  = context["completion_rate"] as? Double ?? 0.0
-        let peakHour        = context["peak_hour"] as? Int ?? 9
+        let streakDays = context["streak_days"] as? Int ?? 0
+        let completionRate = context["completion_rate"] as? Double ?? 0.0
+        let peakHour = context["peak_hour"] as? Int ?? 9
         let activeCategories = context["active_categories"] as? [String] ?? []
 
-        let recommendation  = buildRecommendation(
+        let recommendation = buildRecommendation(
             streak: streakDays,
             rate: completionRate,
             peakHour: peakHour,
@@ -77,10 +77,10 @@ public struct HabitInsightAgent: BaseAgent {
 
     private func peakHourLabel(_ hour: Int) -> String {
         switch hour {
-        case 5..<12:  return "morning"
-        case 12..<17: return "afternoon"
-        case 17..<21: return "evening"
-        default:      return "night"
+        case 5..<12: "morning"
+        case 12..<17: "afternoon"
+        case 17..<21: "evening"
+        default: "night"
         }
     }
 
