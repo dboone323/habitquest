@@ -1,0 +1,205 @@
+name: Split Platform Release
+
+on:
+  push:
+    branches: [main, develop]
+    tags: ["v*"]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      release_channel:
+        description: Release channel
+        required: true
+        default: candidate
+        type: choice
+        options:
+          - candidate
+          - production
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  linux_docker_build:
+    name: Linux Docker Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Linux image
+        env:
+          IMAGE_TAG: ghcr.io/${{ github.repository }}:${{ github.sha }}
+        run: |
+          set -euo pipefail
+          docker buildx build \
+            --file Dockerfile \
+            --pull \
+            --load \
+            --sbom=true \
+            --provenance=true \
+            --tag "${IMAGE_TAG}" \
+            .
+          docker image inspect "${IMAGE_TAG}" > linux-image-metadata.json
+
+      - name: Validate compose (if present)
+        run: |
+          set -euo pipefail
+          if [ -f docker-compose.yml ]; then
+            docker compose -f docker-compose.yml config > /tmp/compose.out
+            tail -n 40 /tmp/compose.out || true
+          else
+            echo "docker-compose.yml not present, skipping compose validation"
+          fi
+
+      - name: Upload Linux build metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build-metadata
+          path: linux-image-metadata.json
+          retention-days: 14
+
+  apple_app_ci:
+    name: Apple App Build/Test
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare shared-kit dependency
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          SHARED_KIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/dboone323/shared-kit.git"
+          SHARED_KIT_REF="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME:-main}}"
+          if ! git clone --depth 1 --branch "${SHARED_KIT_REF}" "${SHARED_KIT_REPO}" "${RUNNER_TEMP}/shared-kit"; then
+            echo "Branch ${SHARED_KIT_REF} not found in shared-kit, falling back to default branch"
+            rm -rf "${RUNNER_TEMP}/shared-kit"
+            git clone --depth 1 "${SHARED_KIT_REPO}" "${RUNNER_TEMP}/shared-kit"
+          fi
+          ln -sfn "${RUNNER_TEMP}/shared-kit" "${GITHUB_WORKSPACE}/../shared-kit"
+          ln -sfn "${RUNNER_TEMP}/shared-kit" "${GITHUB_WORKSPACE}/../Shared-Kit"
+
+      - name: Resolve destination
+        id: destination
+        run: |
+          set -euo pipefail
+          requested="platform=iOS Simulator,name=iPhone 17,OS=latest"
+          if [[ "${requested}" != platform=iOS\ Simulator* ]]; then
+            echo "destination=${requested}" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          available_names="$(xcrun simctl list devices available --json | python3 -c 'import json, sys; data = json.load(sys.stdin); names = sorted({d.get("name", "") for devices in data.get("devices", {}).values() for d in devices if d.get("isAvailable") and d.get("name", "").startswith("iPhone")}); print("\n".join(n for n in names if n))')"
+          requested_name="$(echo "${requested}" | sed -n 's/.*name=\([^,]*\).*/\1/p')"
+
+          resolved=''
+          for candidate in "${requested_name}" "iPhone 17" "iPhone 17 Pro" "iPhone 16e" "iPhone 16"; do
+            if [[ -n "${candidate}" ]] && echo "${available_names}" | grep -Fxq "${candidate}"; then
+              resolved="platform=iOS Simulator,name=${candidate},OS=latest"
+              break
+            fi
+          done
+
+          if [[ -z "${resolved}" ]]; then
+            fallback_name="$(echo "${available_names}" | head -n 1)"
+            if [[ -n "${fallback_name}" ]]; then
+              resolved="platform=iOS Simulator,name=${fallback_name},OS=latest"
+              echo "::warning::Requested simulator unavailable, using fallback: ${fallback_name}"
+            else
+              resolved="${requested}"
+              echo "::warning::No iPhone simulators detected, using requested destination"
+            fi
+          fi
+
+          echo "destination=${resolved}" >> "${GITHUB_OUTPUT}"
+
+      - name: Build for testing
+        run: |
+          set -euo pipefail
+          xcodebuild build-for-testing \
+            -scheme HabitQuest \
+            -destination "${{ steps.destination.outputs.destination }}" \
+            -configuration Debug \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Run tests
+        run: |
+          set -euo pipefail
+          rm -rf TestResults.xcresult
+          xcodebuild test-without-building \
+            -scheme HabitQuest \
+            -destination "${{ steps.destination.outputs.destination }}" \
+            -configuration Debug \
+            -enableCodeCoverage YES \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            -resultBundlePath TestResults.xcresult
+
+      - name: Upload Apple test result bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: apple-test-results
+          path: TestResults.xcresult
+          retention-days: 14
+
+  unified_release_gate:
+    name: Unified Release Gate
+    runs-on: ubuntu-latest
+    needs: [linux_docker_build, apple_app_ci]
+    if: always()
+    steps:
+      - name: Evaluate gate
+        run: |
+          set -euo pipefail
+          echo "linux_docker_build=${{ needs.linux_docker_build.result }}"
+          echo "apple_app_ci=${{ needs.apple_app_ci.result }}"
+          if [ "${{ needs.linux_docker_build.result }}" != "success" ] || [ "${{ needs.apple_app_ci.result }}" != "success" ]; then
+            echo "Unified gate failed"
+            exit 1
+          fi
+          echo "Unified gate passed"
+
+  release_manifest:
+    name: Release Manifest
+    runs-on: ubuntu-latest
+    needs: [unified_release_gate]
+    if: needs.unified_release_gate.result == 'success' && (startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
+    steps:
+      - name: Generate manifest
+        run: |
+          set -euo pipefail
+          cat > release-manifest.json <<JSON
+          {
+            "repository": "${{ github.repository }}",
+            "sha": "${{ github.sha }}",
+            "ref": "${{ github.ref }}",
+            "run_id": "${{ github.run_id }}",
+            "linux_docker_build": "${{ needs.linux_docker_build.result }}",
+            "apple_app_ci": "${{ needs.apple_app_ci.result }}",
+            "generated_at_utc": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          JSON
+          cat release-manifest.json
+
+      - name: Upload release manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-manifest
+          path: release-manifest.json
+          retention-days: 30
