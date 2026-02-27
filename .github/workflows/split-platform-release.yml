@@ -140,11 +140,15 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf TestResults.xcresult
+          export NSUnbufferedIO=YES
           xcodebuild test-without-building \
             -scheme HabitQuest \
             -destination "${{ steps.destination.outputs.destination }}" \
             -configuration Debug \
             -enableCodeCoverage YES \
+            -parallel-testing-enabled NO \
+            -maximum-parallel-testing-workers 1 \
+            -maximum-concurrent-test-simulator-destinations 1 \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
