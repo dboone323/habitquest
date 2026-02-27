@@ -218,21 +218,27 @@ final class DataManagementViewModelTests: XCTestCase {
         // Create temporary file
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("test_import.json")
         try exportData.write(to: tempURL)
+        defer { try? FileManager.default.removeItem(at: tempURL) }
 
         viewModel.setModelContext(modelContext)
 
         // When handling successful import result
         viewModel.handleImportResult(.success([tempURL]))
 
-        // Wait for async operation to complete
-        try await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+        // Wait for async operation to complete (CI runners can be slower than local machines)
+        let timeoutNanoseconds: UInt64 = 5_000_000_000
+        let pollIntervalNanoseconds: UInt64 = 100_000_000
+        var elapsedNanoseconds: UInt64 = 0
+        while elapsedNanoseconds < timeoutNanoseconds
+            && (viewModel.isImporting || !viewModel.showingImportSuccess)
+        {
+            try await Task.sleep(nanoseconds: pollIntervalNanoseconds)
+            elapsedNanoseconds += pollIntervalNanoseconds
+        }
 
         // Then import should succeed
-        XCTAssertFalse(viewModel.isImporting)
-        XCTAssertTrue(viewModel.showingImportSuccess)
-
-        // Clean up
-        try? FileManager.default.removeItem(at: tempURL)
+        XCTAssertFalse(viewModel.isImporting, "Import did not finish within timeout")
+        XCTAssertTrue(viewModel.showingImportSuccess, "Import success state was not set")
     }
 
     @MainActor
