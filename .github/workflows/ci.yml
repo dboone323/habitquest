@@ -308,7 +308,7 @@ jobs:
             -exportPath build
 
       - name: 📤 Upload to TestFlight
-        uses: apple-actions/upload-testflight-build@v1
+        uses: apple-actions/upload-testflight-build@v4
         with:
           app-path: build/HabitQuest.ipa
           issuer-id: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
