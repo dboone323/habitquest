@@ -84,12 +84,35 @@ jobs:
           set -euo pipefail
           SHARED_KIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/dboone323/shared-kit.git"
           SHARED_KIT_REF="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME:-main}}"
-          if ! git clone --depth 1 --branch "${SHARED_KIT_REF}" "${SHARED_KIT_REPO}" "${RUNNER_TEMP}/shared-kit"; then
-            echo "Branch ${SHARED_KIT_REF} not found in shared-kit, falling back to default branch"
+          candidates=("${SHARED_KIT_REF}" "main")
+          rm -rf "${RUNNER_TEMP}/shared-kit"
+          toolchain="$(xcrun swift --version | sed -nE 's/.*version ([0-9]+\.[0-9]+).*/\1/p' | head -n 1)"
+          toolchain_major="${toolchain%%.*}"
+          toolchain_minor="${toolchain#*.}"
+          selected=""
+          for candidate in "${candidates[@]}"; do
+            if git clone --depth 1 --branch "${candidate}" "${SHARED_KIT_REPO}" "${RUNNER_TEMP}/shared-kit"; then
+              required="$(sed -nE 's#// swift-tools-version: *([0-9]+\.[0-9]+).*#\1#p' "${RUNNER_TEMP}/shared-kit/Package.swift" | head -n 1)"
+              required_major="${required%%.*}"
+              required_minor="${required#*.}"
+              if [ -n "${required}" ] && { [ "${required_major}" -gt "${toolchain_major}" ] || { [ "${required_major}" -eq "${toolchain_major}" ] && [ "${required_minor}" -gt "${toolchain_minor}" ]; }; }; then
+                echo "Skipping shared-kit branch ${candidate}: requires Swift ${required}, runner has ${toolchain}"
+                rm -rf "${RUNNER_TEMP}/shared-kit"
+                continue
+              fi
+              selected="${candidate}"
+              break
+            fi
             rm -rf "${RUNNER_TEMP}/shared-kit"
-            git clone --depth 1 "${SHARED_KIT_REPO}" "${RUNNER_TEMP}/shared-kit"
+          done
+          if [ -z "${selected}" ]; then
+            echo "::error::Unable to clone shared-kit using candidate branches: ${candidates[*]}"
+            exit 1
           fi
+          echo "Using shared-kit branch: ${selected}"
           ln -sfn "${RUNNER_TEMP}/shared-kit" "${GITHUB_WORKSPACE}/../shared-kit"
+          ln -sfn "${RUNNER_TEMP}/shared-kit" "${GITHUB_WORKSPACE}/../Shared-Kit"
+
           ln -sfn "${RUNNER_TEMP}/shared-kit" "${GITHUB_WORKSPACE}/../Shared-Kit"
 
       - name: Resolve destination
