@@ -85,7 +85,7 @@
 --enable sortImports
 --enable unusedArguments
 --enable void
---enable trailingCommas
+--disable trailingCommas
 --enable strongifiedSelf
 --enable redundantReturn
 --enable redundantType
