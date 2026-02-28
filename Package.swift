@@ -42,6 +42,7 @@ let package = Package(
             name: "HabitAudit",
             dependencies: ["HabitAgentCore"],
             path: "Tools",
+            exclude: ["ProjectScripts", "Automation"],
             sources: ["HabitAudit.swift"]
         ),
     ]
