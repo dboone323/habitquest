@@ -45,5 +45,10 @@ let package = Package(
             exclude: ["ProjectScripts", "Automation"],
             sources: ["HabitAudit.swift"]
         ),
+        .testTarget(
+            name: "HabitAgentCoreTests",
+            dependencies: ["HabitAgentCore"],
+            path: "Tests/HabitAgentCoreTests"
+        ),
     ]
 )
