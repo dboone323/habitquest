@@ -1,6 +1,7 @@
 import XCTest
+
 final class DummyTest: XCTestCase {
-    func testExample() throws {
+    func testExample() {
         XCTAssertTrue(true)
     }
 }
