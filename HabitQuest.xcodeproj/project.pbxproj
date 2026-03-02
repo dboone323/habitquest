@@ -32,28 +32,22 @@
 		68581EC72E0F1EA800E5AADA /* HabitQuestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HabitQuestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		68581ED12E0F1EA800E5AADA /* HabitQuestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HabitQuestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		68660D292F40D2CA00FD1416 /* HabitQuest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = HabitQuest.xctestplan; sourceTree = "<group>"; };
-		E097F354E6B81CB4179A60E2 /* shared-kit */ = {isa = PBXFileReference; includeInIndex = 1; name = "shared-kit"; path = "../shared-kit"; sourceTree = "<group>"; };
+		E097F354E6B81CB4179A60E2 /* shared-kit */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper; name = "shared-kit"; path = "../shared-kit"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		68581EBA2E0F1EA600E5AADA /* HabitQuest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = HabitQuest;
 			sourceTree = "<group>";
 		};
 		68581ECA2E0F1EA800E5AADA /* HabitQuestTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = HabitQuestTests;
 			sourceTree = "<group>";
 		};
 		68581ED42E0F1EA800E5AADA /* HabitQuestUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = HabitQuestUITests;
 			sourceTree = "<group>";
 		};
@@ -210,7 +204,7 @@
 			mainGroup = 68581EAF2E0F1EA600E5AADA;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "shared-kit" */,
+				E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../shared-kit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 68581EB92E0F1EA600E5AADA /* Products */;
@@ -431,11 +425,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.DanielStevens.HabitQuest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -471,11 +466,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.DanielStevens.HabitQuest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -619,7 +615,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "shared-kit" */ = {
+		E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../shared-kit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../shared-kit";
 		};
@@ -628,7 +624,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		68581EB02E0F1EA600E5AA01 /* SharedKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "shared-kit" */;
+			package = E629EA2CB70C495DB4625EC9 /* XCLocalSwiftPackageReference "../shared-kit" */;
 			productName = SharedKit;
 		};
 /* End XCSwiftPackageProductDependency section */
