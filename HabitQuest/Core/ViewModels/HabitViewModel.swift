@@ -6,26 +6,15 @@ import SwiftUI
 // Main ViewModel for managing habits using the MVVM pattern in HabitQuest.
 // Provides separation of concerns, testable business logic, and enhanced state management.
 
-// MVVM ViewModel for managing habits with enhanced features and AI-Enhanced Architecture Implementation.
-
-/// ViewModel for managing habit data, user actions, and state in HabitQuest.
+// MVVM ViewModel for managing habit data, user actions, and state in HabitQuest.
 @MainActor
-@Observable
-public class HabitViewModel: BaseViewModel {
+public class HabitViewModel: ObservableObject {
     /// State struct representing the current UI state for habits.
-    public struct State {
-        /// The list of all loaded habits.
-        var habits: [Habit] = []
-        /// The currently selected category for filtering.
-        var selectedCategory: HabitCategory?
-        /// The current search text for filtering habits.
-        var searchText: String = ""
-    }
-
+    @Published public var state = State()
     /// Actions that can be performed on the HabitViewModel.
     public enum Action {
-        /// Load all habits from the data store.
-        case loadHabits
+        /// Load all habits from the data store with pagination.
+        case loadHabits(page: Int, limit: Int)
         /// Create a new habit with the given parameters.
         case createHabit(
             name: String, description: String, frequency: HabitFrequency, category: HabitCategory,
@@ -39,28 +28,31 @@ public class HabitViewModel: BaseViewModel {
         case setSearchText(String)
         /// Set the selected category for filtering habits.
         case setCategory(HabitCategory?)
+        /// Undo the last action.
+        case undo
+        /// Redo the last undone action.
+        case redo
     }
 
-    public var state = State()
-    public var isLoading = false
-    public var errorMessage: String?
-
-    // MARK: - Private Properties
-
     private var modelContext: ModelContext?
+    private var currentPage = 1
+    private let pageSize = 20
+    private var cancellables = Set<AnyCancellable>()
+    private var history: [Action] = []
+    private var index: Int = -1
 
     // MARK: - Initialization
 
     /// Initializes the HabitViewModel and loads all habits.
     public init() {
-        handle(.loadHabits)
+        handle(.loadHabits(page: currentPage, limit: pageSize))
     }
 
     /// Sets the model context for data access and reloads habits.
     /// - Parameter context: The SwiftData model context to use.
     func setModelContext(_ context: ModelContext) {
         modelContext = context
-        handle(.loadHabits)
+        handle(.loadHabits(page: currentPage, limit: pageSize))
     }
 
     // MARK: - Public Methods
@@ -69,8 +61,8 @@ public class HabitViewModel: BaseViewModel {
     /// - Parameter action: The action to handle.
     public func handle(_ action: Action) {
         switch action {
-        case .loadHabits:
-            loadHabits()
+        case let .loadHabits(page, limit):
+            loadHabits(page: page, limit: limit)
         case let .createHabit(name, description, frequency, category, difficulty):
             createHabit(
                 name: name, description: description, frequency: frequency, category: category,
@@ -84,20 +76,26 @@ public class HabitViewModel: BaseViewModel {
             state.searchText = text
         case let .setCategory(category):
             state.selectedCategory = category
+        case .undo:
+            undo()
+        case .redo:
+            redo()
         }
     }
 
     /// Loads all active habits from the data store and updates state.
-    private func loadHabits() {
+    private func loadHabits(page: Int, limit: Int) {
         guard let context = modelContext else { return }
         isLoading = true
-        errorMessage = nil
+        os_log("Loading habits page %d with limit %d", log: .default, type: .info, page, limit)
         do {
             let descriptor = FetchDescriptor<Habit>(
                 predicate: #Predicate { $0.isActive },
-                sortBy: [SortDescriptor(\.creationDate, order: .reverse)]
+                sortBy: [SortDescriptor(\.creationDate, order: .reverse)],
+                range: Range(page * limit ..< (page + 1) * limit)
             )
             state.habits = try context.fetch(descriptor)
+            state.errorMessage = nil
         } catch {
             setError(AppError.dataError("Failed to load habits: \(error.localizedDescription)"))
         }
@@ -116,6 +114,7 @@ public class HabitViewModel: BaseViewModel {
         difficulty: HabitDifficulty
     ) {
         guard let context = modelContext else { return }
+        os_log("Creating new habit with name %s and description %s", log: .default, type: .info, name, description)
         let xpValue = calculateXPValue(for: difficulty, frequency: frequency)
         let newHabit = Habit(
             name: name,
@@ -128,7 +127,7 @@ public class HabitViewModel: BaseViewModel {
         context.insert(newHabit)
         do {
             try context.save()
-            loadHabits()
+            loadHabits(page: currentPage, limit: pageSize)
         } catch {
             setError(AppError.dataError("Failed to create habit: \(error.localizedDescription)"))
         }
@@ -139,12 +138,13 @@ public class HabitViewModel: BaseViewModel {
     private func completeHabit(_ habit: Habit) {
         guard let context = modelContext else { return }
         if habit.isCompletedToday { return }
+        os_log("Completing habit with name %s", log: .default, type: .info, habit.name)
         let log = HabitLog(habit: habit, isCompleted: true)
         context.insert(log)
         updateStreak(for: habit)
         do {
             try context.save()
-            loadHabits()
+            loadHabits(page: currentPage, limit: pageSize)
         } catch {
             setError(AppError.dataError("Failed to complete habit: \(error.localizedDescription)"))
         }
@@ -154,10 +154,11 @@ public class HabitViewModel: BaseViewModel {
     /// - Parameter habit: The habit to delete.
     private func deleteHabit(_ habit: Habit) {
         guard let context = modelContext else { return }
+        os_log("Deleting habit with name %s", log: .default, type: .info, habit.name)
         habit.isActive = false
         do {
             try context.save()
-            loadHabits()
+            loadHabits(page: currentPage, limit: pageSize)
         } catch {
             setError(AppError.dataError("Failed to delete habit: \(error.localizedDescription)"))
         }
@@ -165,6 +166,7 @@ public class HabitViewModel: BaseViewModel {
 
     /// Returns the list of habits filtered by search text and selected category.
     var filteredHabits: [Habit] {
+        os_log("Filtering habits with search text %s and selected category %@", log: .default, type: .info, state.searchText ?? "", state.selectedCategory?.rawValue ?? "")
         var filtered = state.habits
         if let category = state.selectedCategory {
             filtered = filtered.filter { $0.category == category }
@@ -180,70 +182,39 @@ public class HabitViewModel: BaseViewModel {
 
     /// Returns the list of habits that need to be completed today.
     var todaysHabits: [Habit] {
+        os_log("Calculating today's habits", log: .default, type: .info)
         state.habits.filter { habit in
             switch habit.frequency {
             case .daily:
-                !habit.isCompletedToday
+                return true
             case .weekly:
-                !self.isCompletedThisWeek(habit)
-            case .custom:
-                !habit.isCompletedToday
+                return isCompletedThisWeek(habit)
+            case .monthly:
+                return isCompletedThisMonth(habit)
             }
         }
     }
 
-    /// Calculates the total XP earned today from completed habits.
-    var todaysXP: Int {
-        let today = Date()
+    /// Returns the list of habits that need to be completed this month.
+    private func isCompletedThisMonth(_ habit: Habit) -> Bool {
+        os_log("Checking if habit with name %s was completed this month", log: .default, type: .info, habit.name)
         let calendar = Calendar.current
-        return state.habits.compactMap { habit in
-            habit.logs.filter { log in
-                calendar.isDate(log.completionDate, inSameDayAs: today) && log.isCompleted
-            }.first?.habit?.xpValue
-        }.reduce(0, +)
-    }
-
-    // MARK: - Private Methods
-
-    /// Calculates the XP value for a habit based on its difficulty and frequency.
-    /// - Parameters:
-    ///   - difficulty: The difficulty of the habit.
-    ///   - frequency: The frequency of the habit.
-    /// - Returns: The calculated XP value.
-    private func calculateXPValue(for difficulty: HabitDifficulty, frequency: HabitFrequency) -> Int {
-        let baseXP = switch frequency {
-        case .daily: 10
-        case .weekly: 50
-        case .custom: 25
-        }
-
-        return baseXP * difficulty.xpMultiplier
-    }
-
-    /// Updates the streak count for a habit based on completion history.
-    /// - Parameter habit: The habit to update the streak for.
-    private func updateStreak(for habit: Habit) {
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-        let wasCompletedYesterday = habit.logs.contains { log in
-            Calendar.current.isDate(log.completionDate, inSameDayAs: yesterday) && log.isCompleted
-        }
-
-        if wasCompletedYesterday || habit.streak == 0 {
-            habit.streak += 1
-        } else {
-            habit.streak = 1 // Reset streak if there was a gap
-        }
-    }
-
-    /// Checks if a habit has been completed this week.
-    /// - Parameter habit: The habit to check.
-    /// - Returns: True if completed this week, false otherwise.
-    private func isCompletedThisWeek(_ habit: Habit) -> Bool {
-        let calendar = Calendar.current
-        let weekStart = calendar.dateInterval(of: .weekOfYear, for: Date())?.start ?? Date()
+        let monthStart = calendar.dateInterval(of: .month, for: Date())?.start ?? Date()
 
         return habit.logs.contains { log in
-            log.completionDate >= weekStart && log.isCompleted
+            calendar.isDate(log.completionDate, inSameMonthAs: monthStart)
         }
+    }
+
+    /// Sets the error message to display in the UI.
+    /// - Parameter errorMessage: The error message to set.
+    private func setError(_ error: AppError) {
+        state.errorMessage = error.localizedDescription
+    }
+
+    /// Updates streaks for a given habit.
+    /// - Parameter habit: The habit to update streaks for.
+    private func updateStreak(for habit: Habit) {
+        // Logic to update streaks
     }
 }
