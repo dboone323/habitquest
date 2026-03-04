@@ -208,13 +208,56 @@ public class HabitViewModel: ObservableObject {
 
     /// Sets the error message to display in the UI.
     /// - Parameter errorMessage: The error message to set.
-    private func setError(_ error: AppError) {
-        state.errorMessage = error.localizedDescription
+    private func setError(_ errorMessage: String) {
+        os_log("Setting error message: %s", log: .default, type: .error, errorMessage)
+        state.errorMessage = errorMessage
     }
 
-    /// Updates streaks for a given habit.
-    /// - Parameter habit: The habit to update streaks for.
-    private func updateStreak(for habit: Habit) {
-        // Logic to update streaks
+    /// Undo the last action.
+    private func undo() {
+        guard index >= 0 && index < history.count - 1 else { return }
+        let action = history[index + 1]
+        os_log("Undoing action: %s", log: .default, type: .info, String(describing: action))
+        switch action {
+        case .createHabit(let name, let description, let frequency, let category, let difficulty):
+            deleteHabit(Habit(name: name, habitDescription: description, frequency: frequency, category: category, difficulty: difficulty))
+        case .completeHabit(let habit):
+            habit.isCompletedToday = false
+        case .deleteHabit(let habit):
+            createHabit(
+                name: habit.name,
+                description: habit.habitDescription,
+                frequency: habit.frequency,
+                category: habit.category,
+                difficulty: habit.difficulty
+            )
+        default:
+            break
+        }
+        index += 1
+    }
+
+    /// Redo the last undone action.
+    private func redo() {
+        guard index >= 0 && index < history.count - 1 else { return }
+        let action = history[index + 1]
+        os_log("Redoing action: %s", log: .default, type: .info, String(describing: action))
+        switch action {
+        case .createHabit(let name, let description, let frequency, let category, let difficulty):
+            createHabit(
+                name: name,
+                description: description,
+                frequency: frequency,
+                category: category,
+                difficulty: difficulty
+            )
+        case .completeHabit(let habit):
+            completeHabit(habit)
+        case .deleteHabit(let habit):
+            deleteHabit(habit)
+        default:
+            break
+        }
+        index += 1
     }
 }
