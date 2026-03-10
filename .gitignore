@@ -75,3 +75,15 @@ target/
 # Python caches
 **/__pycache__/
 *.pyc
+
+# Swift build artifacts
+*.d
+*.dia
+*.swiftdeps
+*.swiftmodule
+*.swiftsourceinfo
+*.pcm
+*.o
+*.dSYM
+.build/
+DerivedData/
