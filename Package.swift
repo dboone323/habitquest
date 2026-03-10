@@ -13,8 +13,8 @@ private let sharedKitDependency: Package.Dependency = FileManager.default.fileEx
 let package = Package(
     name: "HabitQuest",
     platforms: [
-        .iOS(.v18),
-        .macOS(.v15),
+        .iOS("26.0"),
+        .macOS("26.0"),
     ],
     products: [
         .executable(
