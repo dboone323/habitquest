@@ -149,14 +149,14 @@ enum NotificationService {
 
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
             triggers.append(trigger)
-            
+
         case .monthly:
             // Schedule for the 1st of every month at 9 AM
             var dateComponents = DateComponents()
             dateComponents.day = 1
             dateComponents.hour = 9
             dateComponents.minute = 0
-            
+
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
             triggers.append(trigger)
         }

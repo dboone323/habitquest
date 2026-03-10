@@ -18,6 +18,7 @@ public class HabitViewModel: ObservableObject {
 
         public init() {}
     }
+
     /// State struct representing the current UI state for habits.
     @Published public var state = State()
     /// Actions that can be performed on the HabitViewModel.
@@ -62,13 +63,11 @@ public class HabitViewModel: ObservableObject {
 
     private func calculateXPValue(for difficulty: HabitDifficulty, frequency: HabitFrequency) -> Int {
         // Simple XP calculation
-        let multiplier: Int
         switch difficulty {
-        case .easy: multiplier = 10
-        case .medium: multiplier = 25
-        case .hard: multiplier = 50
+        case .easy: 10
+        case .medium: 25
+        case .hard: 50
         }
-        return multiplier
     }
 
     private func isCompletedThisWeek(_ habit: Habit) -> Bool {
@@ -227,13 +226,13 @@ public class HabitViewModel: ObservableObject {
         return state.habits.filter { habit in
             switch habit.frequency {
             case .daily:
-                return true
+                true
             case .weekly:
-                return isCompletedThisWeek(habit)
+                isCompletedThisWeek(habit)
             case .monthly:
-                return isCompletedThisMonth(habit)
+                isCompletedThisMonth(habit)
             case .custom:
-                return false
+                false
             }
         }
     }
