@@ -98,6 +98,14 @@ struct GamificationService {
                 )
                 let daysBetween = dayComponents.day ?? 0
                 isConsecutive = daysBetween == 1
+            case .monthly:
+                let monthComponents = calendar.dateComponents(
+                    [.month],
+                    from: previousLog.completionDate,
+                    to: currentLog.completionDate
+                )
+                let monthsBetween = monthComponents.month ?? 0
+                isConsecutive = monthsBetween == 1
             }
 
             if isConsecutive {
@@ -135,6 +143,9 @@ struct GamificationService {
         case .custom:
             // For custom frequency, default to daily behavior
             return !calendar.isDate(lastCompletion, inSameDayAs: today)
+        case .monthly:
+            let monthsBetween = calendar.dateComponents([.month], from: lastCompletion, to: today).month ?? 0
+            return monthsBetween >= 1
         }
     }
 

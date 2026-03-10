@@ -98,6 +98,7 @@ public final class Habit {
 public enum HabitFrequency: String, CaseIterable, Codable {
     case daily
     case weekly
+    case monthly
     case custom
 
     /// Display name for the frequency

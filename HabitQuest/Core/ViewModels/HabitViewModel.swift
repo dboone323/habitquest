@@ -1,5 +1,5 @@
 import Combine
-import Foundation
+import OSLog
 import SwiftData
 import SwiftUI
 
@@ -9,6 +9,15 @@ import SwiftUI
 // MVVM ViewModel for managing habit data, user actions, and state in HabitQuest.
 @MainActor
 public class HabitViewModel: ObservableObject {
+    public struct State: Sendable {
+        public var habits: [Habit] = []
+        public var searchText: String = ""
+        public var selectedCategory: HabitCategory?
+        public var errorMessage: String?
+        public var isLoading: Bool = false
+
+        public init() {}
+    }
     /// State struct representing the current UI state for habits.
     @Published public var state = State()
     /// Actions that can be performed on the HabitViewModel.
@@ -40,6 +49,33 @@ public class HabitViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var history: [Action] = []
     private var index: Int = -1
+
+    @Published public var isLoading: Bool = false
+
+    private func undo() {
+        // Implement undo logic or remove case
+    }
+
+    private func redo() {
+        // Implement redo logic or remove case
+    }
+
+    private func calculateXPValue(for difficulty: HabitDifficulty, frequency: HabitFrequency) -> Int {
+        // Simple XP calculation
+        let multiplier: Int
+        switch difficulty {
+        case .easy: multiplier = 10
+        case .medium: multiplier = 25
+        case .hard: multiplier = 50
+        }
+        return multiplier
+    }
+
+    private func isCompletedThisWeek(_ habit: Habit) -> Bool {
+        let calendar = Calendar.current
+        let weekStart = calendar.dateInterval(of: .weekOfYear, for: Date())?.start ?? Date()
+        return habit.logs.contains { $0.completionDate >= weekStart }
+    }
 
     // MARK: - Initialization
 
@@ -87,12 +123,11 @@ public class HabitViewModel: ObservableObject {
     private func loadHabits(page: Int, limit: Int) {
         guard let context = modelContext else { return }
         isLoading = true
-        os_log("Loading habits page %d with limit %d", log: .default, type: .info, page, limit)
+        Logger().info("Loading habits page \(page) with limit \(limit)")
         do {
             let descriptor = FetchDescriptor<Habit>(
                 predicate: #Predicate { $0.isActive },
-                sortBy: [SortDescriptor(\.creationDate, order: .reverse)],
-                range: Range(page * limit ..< (page + 1) * limit)
+                sortBy: [SortDescriptor(\.creationDate, order: .reverse)]
             )
             state.habits = try context.fetch(descriptor)
             state.errorMessage = nil
@@ -166,7 +201,13 @@ public class HabitViewModel: ObservableObject {
 
     /// Returns the list of habits filtered by search text and selected category.
     var filteredHabits: [Habit] {
-        os_log("Filtering habits with search text %s and selected category %@", log: .default, type: .info, state.searchText ?? "", state.selectedCategory?.rawValue ?? "")
+        os_log(
+            "Filtering habits with search text %s and selected category %@",
+            log: .default,
+            type: .info,
+            state.searchText ?? "",
+            state.selectedCategory?.rawValue ?? ""
+        )
         var filtered = state.habits
         if let category = state.selectedCategory {
             filtered = filtered.filter { $0.category == category }
@@ -183,7 +224,7 @@ public class HabitViewModel: ObservableObject {
     /// Returns the list of habits that need to be completed today.
     var todaysHabits: [Habit] {
         os_log("Calculating today's habits", log: .default, type: .info)
-        state.habits.filter { habit in
+        return state.habits.filter { habit in
             switch habit.frequency {
             case .daily:
                 return true
@@ -191,6 +232,8 @@ public class HabitViewModel: ObservableObject {
                 return isCompletedThisWeek(habit)
             case .monthly:
                 return isCompletedThisMonth(habit)
+            case .custom:
+                return false
             }
         }
     }
@@ -202,7 +245,7 @@ public class HabitViewModel: ObservableObject {
         let monthStart = calendar.dateInterval(of: .month, for: Date())?.start ?? Date()
 
         return habit.logs.contains { log in
-            calendar.isDate(log.completionDate, inSameMonthAs: monthStart)
+            calendar.isDate(log.completionDate, equalTo: monthStart, toGranularity: .month)
         }
     }
 

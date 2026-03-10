@@ -211,6 +211,10 @@ final class NotificationSchedulerService {
         case .weekly:
             dateComponents.weekday = findOptimalWeekday(for: habit)
             return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        case .monthly:
+            // For monthly, schedule for the 1st day of the month by default
+            dateComponents.day = 1
+            return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         case .custom:
             return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         }

@@ -19,7 +19,7 @@ public struct HabitInsightAgent: BaseAgent {
     /// - `"completion_rate"`: `Double` – 0.0–1.0 completion ratio over last 30 days
     /// - `"peak_hour"`: `Int` – hour of day (0–23) where most completions occur
     /// - `"active_categories"`: `[String]` – list of habit categories currently tracked
-    public func execute(context: [String: Sendable]) async throws -> AgentResult {
+    public func execute(context: [String: any Sendable]) async throws -> AgentResult {
         let streakDays = context["streak_days"] as? Int ?? 0
         let completionRate = context["completion_rate"] as? Double ?? 0.0
         let peakHour = context["peak_hour"] as? Int ?? 9
