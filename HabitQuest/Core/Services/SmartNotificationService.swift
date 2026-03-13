@@ -23,7 +23,8 @@ final class SmartNotificationService {
         contentService = ContentGenerationService()
         schedulerService = NotificationSchedulerService(
             modelContext: modelContext,
-            analyticsEngine: analyticsEngine
+            analyticsEngine: analyticsEngine,
+            contentGenerationService: contentService
         )
         adaptationService = BehavioralAdaptationService(modelContext: modelContext)
         contextService = ContextAwarenessService(
