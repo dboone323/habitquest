@@ -18,15 +18,18 @@ final class NotificationSchedulerService {
     private let modelContext: ModelContext
     private let analyticsEngine: AdvancedAnalyticsEngine
     private let notificationCenter: NotificationCenterProtocol
+    private let contentGenerationService: ContentGenerationService
 
     init(
         modelContext: ModelContext,
         analyticsEngine: AdvancedAnalyticsEngine,
-        notificationCenter: NotificationCenterProtocol = UNUserNotificationCenter.current()
+        notificationCenter: NotificationCenterProtocol = UNUserNotificationCenter.current(),
+        contentGenerationService: ContentGenerationService = ContentGenerationService()
     ) {
         self.modelContext = modelContext
         self.analyticsEngine = analyticsEngine
         self.notificationCenter = notificationCenter
+        self.contentGenerationService = contentGenerationService
     }
 
     /// Schedule AI-optimized notifications for all habits
@@ -43,7 +46,7 @@ final class NotificationSchedulerService {
         let scheduling = await analyticsEngine.generateOptimalScheduling(for: habit)
         let prediction = await analyticsEngine.predictStreakSuccess(for: habit)
 
-        let content = generateSmartContent(
+        let content = await contentGenerationService.generateSmartContent(
             for: habit,
             scheduling: scheduling,
             prediction: prediction
@@ -80,114 +83,6 @@ final class NotificationSchedulerService {
     }
 
     // MARK: - Private Methods
-
-    private func generateSmartContent(
-        for habit: Habit,
-        scheduling: SchedulingRecommendation,
-        prediction: StreakPrediction
-    ) -> UNMutableNotificationContent {
-        let content = UNMutableNotificationContent()
-
-        // Personalized title based on streak status
-        content.title = generatePersonalizedTitle(for: habit, prediction: prediction)
-
-        // Context-aware body message
-        content.body = generateContextualMessage(
-            for: habit,
-            scheduling: scheduling,
-            prediction: prediction
-        )
-
-        // Dynamic notification priority
-        content.interruptionLevel = determineInterruptionLevel(
-            habit: habit,
-            successRate: scheduling.successRateAtTime
-        )
-
-        // Custom sound based on habit category
-        content.sound = selectOptimalSound(for: habit.category)
-
-        // Rich actions for quick interaction
-        content.categoryIdentifier = "HABIT_REMINDER"
-
-        // Add custom data for analytics
-        content.userInfo = [
-            "habitId": habit.id.uuidString,
-            "optimalTime": scheduling.optimalTime,
-            "successProbability": prediction.probability,
-            "schedulingVersion": "smart_v2",
-        ]
-
-        return content
-    }
-
-    private func generatePersonalizedTitle(for habit: Habit, prediction: StreakPrediction) -> String {
-        let streak = habit.streak
-
-        // Always prioritize explicit streak reinforcement when a streak already exists.
-        if streak >= 21 {
-            return "🔥 Keep the \(streak)-day streak alive!"
-        }
-
-        if streak >= 7 {
-            return "💪 \(streak) days strong - don't break it now!"
-        }
-
-        // For brand new habits, use a direct personalized title before risk-based messaging.
-        if habit.logs.isEmpty {
-            return "✨ Time for \(habit.name)"
-        }
-
-        switch (streak, prediction.probability) {
-        case let (streakCount, _) where streakCount >= 3:
-            return "⭐ \(streakCount)-day streak in progress"
-        case let (_, probabilityValue) where probabilityValue < 40:
-            return "🎯 Small step, big impact"
-        default:
-            return "✨ Time for \(habit.name)"
-        }
-    }
-
-    private func generateContextualMessage(
-        for _: Habit,
-        scheduling: SchedulingRecommendation,
-        prediction: StreakPrediction
-    ) -> String {
-        let timeContext = generateTimeContext(hour: scheduling.optimalTime)
-        let motivationalMessage = selectMotivationalMessage(prediction: prediction)
-
-        return "\(timeContext) \(motivationalMessage) \(prediction.recommendedAction)"
-    }
-
-    private func generateTimeContext(hour: Int) -> String {
-        switch hour {
-        case 6...9:
-            "Perfect morning energy!"
-        case 10...12:
-            "Mid-morning focus time."
-        case 13...17:
-            "Afternoon momentum boost."
-        case 18...21:
-            "Evening wind-down ritual."
-        default:
-            "Your optimal time."
-        }
-    }
-
-    private func selectMotivationalMessage(prediction: StreakPrediction) -> String {
-        switch prediction.probability {
-        case 80...100:
-            "You're crushing it!"
-        case 60...79:
-            "Great momentum building."
-        case 40...59:
-            "Consistency is key."
-        case 20...39:
-            "Every small step counts."
-        default:
-            "Fresh start, new opportunity."
-        }
-    }
 
     private func createOptimalTrigger(
         for habit: Habit,

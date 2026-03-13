@@ -1,26 +1,37 @@
 import Foundation
+import SharedKit
 @preconcurrency import UserNotifications
 
 /// Service responsible for generating intelligent notification content
 @Observable @MainActor
 final class ContentGenerationService {
+    private let ollamaClient: OllamaClient
+
+    init(ollamaClient: OllamaClient = OllamaClient()) {
+        self.ollamaClient = ollamaClient
+    }
+
     /// Generate smart notification content based on habit data and predictions
     func generateSmartContent(
         for habit: Habit,
         scheduling: SchedulingRecommendation,
         prediction: StreakPrediction
-    ) -> UNMutableNotificationContent {
+    ) async -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
 
-        // Personalized title based on streak status
-        content.title = generatePersonalizedTitle(for: habit, prediction: prediction)
-
-        // Context-aware body message
-        content.body = generateContextualMessage(
-            for: habit,
-            scheduling: scheduling,
-            prediction: prediction
-        )
+        // Attempt to generate AI title and body
+        if let aiContent = await generateAIContent(for: habit, prediction: prediction) {
+            content.title = aiContent.title
+            content.body = aiContent.body
+        } else {
+            // Fallback to heuristic-based content
+            content.title = generatePersonalizedTitle(for: habit, prediction: prediction)
+            content.body = generateContextualMessage(
+                for: habit,
+                scheduling: scheduling,
+                prediction: prediction
+            )
+        }
 
         // Dynamic notification priority
         content.interruptionLevel = determineInterruptionLevel(
@@ -39,17 +50,62 @@ final class ContentGenerationService {
             "habitId": habit.id.uuidString,
             "optimalTime": scheduling.optimalTime,
             "successProbability": prediction.probability,
-            "schedulingVersion": "smart_v2",
+            "schedulingVersion": "smart_v2_ai",
         ]
 
         return content
     }
 
+    private func generateAIContent(
+        for habit: Habit,
+        prediction: StreakPrediction
+    ) async -> (title: String, body: String)? {
+        let prompt = """
+        User habit: \(habit.name)
+        Description: \(habit.habitDescription)
+        Current streak: \(habit.streak) days
+        Success probability: \(Int(prediction.probability * 100))%
+
+        Generate a highly personalized, motivating notification for this habit.
+        Return JSON with "title" and "body".
+        Keep it short and encouraging. Include an emoji.
+        """
+
+        do {
+            let response = try await ollamaClient.generate(
+                model: nil,
+                prompt: prompt,
+                temperature: 0.8,
+                maxTokens: 300,
+                useCache: true
+            )
+
+            guard let data = response.data(using: .utf8),
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: String],
+                  let title = json["title"],
+                  let body = json["body"]
+            else {
+                return nil
+            }
+
+            return (title: title, body: body)
+        } catch {
+            return nil
+        }
+    }
+
     /// Generate milestone notification content
-    func generateMilestoneContent(for habit: Habit, milestone: StreakMilestone) -> UNMutableNotificationContent {
+    func generateMilestoneContent(for habit: Habit, milestone: StreakMilestone) async -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
-        content.title = "🎯 Milestone Approaching!"
-        content.body = "You're \(milestone.streakCount - habit.streak) days away from \(milestone.title)!"
+
+        if let aiContent = await generateAIMilestoneContent(for: habit, milestone: milestone) {
+            content.title = aiContent.title
+            content.body = aiContent.body
+        } else {
+            content.title = "🎯 Milestone Approaching!"
+            content.body = "You're \(milestone.streakCount - habit.streak) days away from \(milestone.title)!"
+        }
+
         content.sound = selectOptimalSound(for: habit.category)
         content.categoryIdentifier = "MILESTONE_REMINDER"
 
@@ -63,10 +119,17 @@ final class ContentGenerationService {
     }
 
     /// Generate recovery notification content
-    func generateRecoveryContent(for habit: Habit) -> UNMutableNotificationContent {
+    func generateRecoveryContent(for habit: Habit) async -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
-        content.title = "🌱 Fresh Start"
-        content.body = "Yesterday is gone, today is a new opportunity to build \(habit.name) back up!"
+
+        if let aiContent = await generateAIRecoveryContent(for: habit) {
+            content.title = aiContent.title
+            content.body = aiContent.body
+        } else {
+            content.title = "🌱 Fresh Start"
+            content.body = "Yesterday is gone, today is a new opportunity to build \(habit.name) back up!"
+        }
+
         content.sound = selectOptimalSound(for: habit.category)
         content.interruptionLevel = .passive
         content.categoryIdentifier = "RECOVERY_REMINDER"
@@ -77,6 +140,41 @@ final class ContentGenerationService {
         ]
 
         return content
+    }
+
+    private func generateAIMilestoneContent(
+        for habit: Habit,
+        milestone: StreakMilestone
+    ) async -> (title: String, body: String)? {
+        let prompt = "User is close to a milestone for '\(habit.name)': '\(milestone.title)' at \(milestone.streakCount) days. Current streak is \(habit.streak). Generate a short, exciting title and body for a notification in JSON."
+        return await performAICall(prompt: prompt)
+    }
+
+    private func generateAIRecoveryContent(for habit: Habit) async -> (title: String, body: String)? {
+        let prompt = "User broke their streak for '\(habit.name)'. Generate a gentle, encouraging 'fresh start' notification title and body in JSON."
+        return await performAICall(prompt: prompt)
+    }
+
+    private func performAICall(prompt: String) async -> (title: String, body: String)? {
+        do {
+            let response = try await ollamaClient.generate(
+                model: nil,
+                prompt: prompt,
+                temperature: 0.7,
+                maxTokens: 200,
+                useCache: true
+            )
+            guard let data = response.data(using: .utf8),
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: String],
+                  let title = json["title"],
+                  let body = json["body"]
+            else {
+                return nil
+            }
+            return (title, body)
+        } catch {
+            return nil
+        }
     }
 
     // MARK: - Private Methods

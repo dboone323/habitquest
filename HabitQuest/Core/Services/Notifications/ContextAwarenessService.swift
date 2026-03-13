@@ -22,7 +22,7 @@ final class ContextAwarenessService {
         // Get the next milestone for this habit's current streak
         guard let nextMilestone = StreakMilestone.nextMilestone(for: habit.streak) else { return }
 
-        let content = contentGenerationService.generateMilestoneContent(for: habit, milestone: nextMilestone)
+        let content = await contentGenerationService.generateMilestoneContent(for: habit, milestone: nextMilestone)
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3600, repeats: false)
 
@@ -41,7 +41,7 @@ final class ContextAwarenessService {
 
     /// Send recovery notifications for broken streaks
     func scheduleRecoveryNotification(for habit: Habit) async {
-        let content = contentGenerationService.generateRecoveryContent(for: habit)
+        let content = await contentGenerationService.generateRecoveryContent(for: habit)
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 86400, repeats: false) // 24 hours
 
