@@ -24,9 +24,9 @@ final class ContentGenerationService {
             content.title = aiContent.title
             content.body = aiContent.body
         } else {
-            // Fallback to heuristic-based content
-            content.title = generatePersonalizedTitle(for: habit, prediction: prediction)
-            content.body = generateContextualMessage(
+            // Fallback to heuristic-based content (now also AI-backed)
+            content.title = await generatePersonalizedTitle(for: habit, prediction: prediction)
+            content.body = await generateContextualMessage(
                 for: habit,
                 scheduling: scheduling,
                 prediction: prediction
@@ -56,6 +56,7 @@ final class ContentGenerationService {
         return content
     }
 
+    @MainActor
     private func generateAIContent(
         for habit: Habit,
         prediction: StreakPrediction
@@ -71,27 +72,7 @@ final class ContentGenerationService {
         Keep it short and encouraging. Include an emoji.
         """
 
-        do {
-            let response = try await ollamaClient.generate(
-                model: nil,
-                prompt: prompt,
-                temperature: 0.8,
-                maxTokens: 300,
-                useCache: true
-            )
-
-            guard let data = response.data(using: .utf8),
-                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: String],
-                  let title = json["title"],
-                  let body = json["body"]
-            else {
-                return nil
-            }
-
-            return (title: title, body: body)
-        } catch {
-            return nil
-        }
+        return await performAICall(prompt: prompt)
     }
 
     /// Generate milestone notification content
@@ -164,7 +145,14 @@ final class ContentGenerationService {
                 maxTokens: 200,
                 useCache: true
             )
-            guard let data = response.data(using: .utf8),
+            // Robust JSON extraction
+            let cleanedResponse = if let range = response.range(of: "\\{.*\\}", options: .regularExpression) {
+                String(response[range])
+            } else {
+                response
+            }
+
+            guard let data = cleanedResponse.data(using: .utf8),
                   let json = try? JSONSerialization.jsonObject(with: data) as? [String: String],
                   let title = json["title"],
                   let body = json["body"]
@@ -179,62 +167,24 @@ final class ContentGenerationService {
 
     // MARK: - Private Methods
 
-    private func generatePersonalizedTitle(for habit: Habit, prediction: StreakPrediction) -> String {
-        let streak = habit.streak
-
-        switch (streak, prediction.probability) {
-        case let (streakCount, probabilityValue) where streakCount >= 21 && probabilityValue > 80:
-            return "🔥 Keep the \(streakCount)-day streak alive!"
-        case let (streakCount, probabilityValue) where streakCount >= 7 && probabilityValue > 70:
-            return "💪 \(streakCount) days strong - don't break it now!"
-        case let (streakCount, _) where streakCount >= 3:
-            return "⭐ \(streakCount)-day streak in progress"
-        case let (_, probabilityValue) where probabilityValue < 40:
-            return "🎯 Small step, big impact"
-        default:
-            return "✨ Time for \(habit.name)"
+    private func generatePersonalizedTitle(for habit: Habit, prediction: StreakPrediction) async -> String {
+        let prompt = "Generate a very short, personalized notification title for \(habit.name) with \(habit.streak) day streak and success probability \(Int(prediction.probability * 100))%. Include an emoji."
+        if let content = await performAICall(prompt: prompt) {
+            return content.title
         }
+        return "✨ Time for \(habit.name)"
     }
 
     private func generateContextualMessage(
-        for _: Habit,
+        for habit: Habit,
         scheduling: SchedulingRecommendation,
         prediction: StreakPrediction
-    ) -> String {
-        let timeContext = generateTimeContext(hour: scheduling.optimalTime)
-        let motivationalMessage = selectMotivationalMessage(prediction: prediction)
-
-        return "\(timeContext) \(motivationalMessage) \(prediction.recommendedAction)"
-    }
-
-    private func generateTimeContext(hour: Int) -> String {
-        switch hour {
-        case 6...9:
-            "Perfect morning energy!"
-        case 10...12:
-            "Mid-morning focus time."
-        case 13...17:
-            "Afternoon momentum boost."
-        case 18...21:
-            "Evening wind-down ritual."
-        default:
-            "Your optimal time."
+    ) async -> String {
+        let prompt = "Generate a short, motivational reminder for \(habit.name) at \(scheduling.optimalTime):00. Success probability is \(Int(prediction.probability * 100))%. Recommended action: \(prediction.recommendedAction)."
+        if let content = await performAICall(prompt: prompt) {
+            return content.body
         }
-    }
-
-    private func selectMotivationalMessage(prediction: StreakPrediction) -> String {
-        switch prediction.probability {
-        case 80...100:
-            "You're crushing it!"
-        case 60...79:
-            "Great momentum building."
-        case 40...59:
-            "Consistency is key."
-        case 20...39:
-            "Every small step counts."
-        default:
-            "Fresh start, new opportunity."
-        }
+        return "You've got this! \(prediction.recommendedAction)"
     }
 
     private func determineInterruptionLevel(habit: Habit, successRate: Double) -> UNNotificationInterruptionLevel {
