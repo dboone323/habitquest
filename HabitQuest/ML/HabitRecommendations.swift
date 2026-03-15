@@ -1,5 +1,6 @@
 import CoreML
 import Foundation
+import SharedKit
 
 /// ML-based habit suggestion engine
 class HabitRecommendationService {
@@ -30,13 +31,7 @@ class HabitRecommendationService {
             ))
         }
 
-        // Complementary habits
-        let complementary = suggestComplementaryHabits(completionHistory)
-        suggestions.append(contentsOf: complementary)
-
-        // Popular habits among similar users (collaborative filtering)
-        let collaborative = suggestCollaborativeHabits(completionHistory)
-        suggestions.append(contentsOf: collaborative)
+        // Complementary and Collaborative are now handled via suggestHabitsAsync for high-fidelity reasoning
 
         return suggestions.sorted { $0.confidence > $1.confidence }
     }
@@ -98,74 +93,81 @@ class HabitRecommendationService {
 
     // MARK: - Complementary Habits
 
-    private struct ComplementaryPair {
-        let sourceCategory: String
-        let targetCategory: String
-        let reason: String
-    }
-
     private func suggestComplementaryHabits(_ history: [HabitCompletion]) -> [MLHabitSuggestion] {
-        let existingCategories = Set(history.map(\.habitCategory))
-        var suggestions: [MLHabitSuggestion] = []
+        let existingHabits = history.map(\.habitName).joined(separator: ", ")
+        let prompt = "Based on these existing habits: \(existingHabits), suggest 2 complementary habits that would provide a balanced routine. Return JSON list of {title, description, confidence, reason: 'complementary'}."
 
-        // Complementary pairs
-        let pairs: [ComplementaryPair] = [
-            ComplementaryPair(
-                sourceCategory: "Exercise",
-                targetCategory: "Meditation",
-                reason: "Balance fitness with mindfulness"
-            ),
-            ComplementaryPair(
-                sourceCategory: "Reading",
-                targetCategory: "Writing",
-                reason: "Complement input with output"
-            ),
-            ComplementaryPair(sourceCategory: "Learning", targetCategory: "Practice", reason: "Apply what you learn"),
-            ComplementaryPair(
-                sourceCategory: "Planning",
-                targetCategory: "Execution",
-                reason: "Balance planning with action"
-            ),
-        ]
-
-        for pair in pairs {
-            if existingCategories.contains(pair.sourceCategory), !existingCategories.contains(pair.targetCategory) {
-                suggestions.append(MLHabitSuggestion(
-                    title: pair.targetCategory,
-                    description: pair.reason,
-                    confidence: 0.7,
-                    reason: .complementary
-                ))
-            }
-        }
-
-        return suggestions
+        // This is a synchronous-style call in the current architecture,
+        // ideally should be async but we'll maintain the signature for now
+        // and return cached/fallback if needed, or note this for async refactor.
+        // For now, removing the hardcoded list to force actual integration.
+        return [] // Placeholder for async refactor
     }
 
-    // MARK: - Collaborative Filtering
+    // MARK: - AI-Enhanced Recommendations (New Async Method)
 
-    private func suggestCollaborativeHabits(_ history: [HabitCompletion]) -> [MLHabitSuggestion] {
-        // Simulated collaborative filtering
-        // In production, would query backend for similar user patterns
-        let popularHabits = [
-            "Drink Water": 0.85,
-            "Morning Walk": 0.78,
-            "Journal": 0.72,
-            "Stretch": 0.69,
-        ]
+    func suggestHabitsAsync(
+        basedOn completionHistory: [HabitCompletion],
+        ollamaClient: OllamaClient
+    ) async -> [MLHabitSuggestion] {
+        let existingHabits = completionHistory.map(\.habitName).joined(separator: ", ")
 
-        let existingHabits = Set(history.map(\.habitName))
+        // Dynamic trend analysis via SharedKit
+        let points = completionHistory.map { PredictiveAnalyticsEngine.TimeSeriesPoint(
+            timestamp: $0.date,
+            value: $0.completed
+                ? 1.0
+                : 0.0
+        ) }
+        let trendInfo = await PredictiveAnalyticsEngine.shared.analyze(points)
 
-        return popularHabits.compactMap { name, confidence in
-            if !existingHabits.contains(name) {
-                return MLHabitSuggestion(
-                    title: name,
-                    description: "Popular among similar users",
-                    confidence: confidence,
-                    reason: .collaborative
-                )
+        let prompt = """
+        Analyze these completed habits: \(existingHabits).
+        Ecosystem Trend Context: \(trendInfo.message) (Probability: \(trendInfo.probability))
+
+        Suggest 3 new habits:
+        1. One complementary habit.
+        2. One habit based on their success patterns.
+        3. One trending habit similar users enjoy.
+
+        Return JSON list of objects with {title, description, confidence, reason (one of: 'timePattern', 'categorySuccess', 'complementary', 'collaborative')}.
+        """
+
+        do {
+            let response = try await ollamaClient.generate(model: nil, prompt: prompt)
+            let cleanedResponse = if let range = response.range(of: "\\[.*?\\]", options: .regularExpression) {
+                String(response[range])
+            } else {
+                response
             }
-            return nil
+
+            guard let data = cleanedResponse.data(using: .utf8),
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]]
+            else {
+                return []
+            }
+
+            return json.compactMap { dict in
+                guard let title = dict["title"] as? String,
+                      let description = dict["description"] as? String,
+                      let confidence = dict["confidence"] as? Double,
+                      let reasonStr = dict["reason"] as? String
+                else {
+                    return nil
+                }
+
+                let reason: SuggestionReason = switch reasonStr {
+                case "timePattern": .timePattern
+                case "categorySuccess": .categorySuccess
+                case "complementary": .complementary
+                case "collaborative": .collaborative
+                default: .collaborative
+                }
+
+                return MLHabitSuggestion(title: title, description: description, confidence: confidence, reason: reason)
+            }
+        } catch {
+            return []
         }
     }
 
