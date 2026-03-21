@@ -1,4 +1,10 @@
 #!/bin/bash
+
+if [[ "${FLEET_INTERNAL}" != "1" ]]; then
+  echo "❌ Error: Independent execution disabled. Please use 'python3 control/run_all.py' from the workspace root."
+  exit 1
+fi
+
 # Quantum Automation Runner for HabitQuest
 
 set -e

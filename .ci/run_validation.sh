@@ -10,6 +10,12 @@ export OLLAMA_ENDPOINT="${OLLAMA_CLOUD_URL:-http://127.0.0.1:11434}"
 export CR_USE_AI=1
 # shellcheck disable=SC2034
 export CR_USE_OLLAMA=1
+DERIVED_DATA_PATH="${REPO_ROOT}/.build/DerivedData"
+mkdir -p "${DERIVED_DATA_PATH}"
+
+xcodebuild() {
+	command xcodebuild -derivedDataPath "${DERIVED_DATA_PATH}" "$@"
+}
 
 if [[ -z "${OLLAMA_CLOUD_URL}" ]]; then
 	if command -v ollama >/dev/null 2>&1; then

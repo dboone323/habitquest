@@ -1,5 +1,7 @@
 SHELL := /bin/zsh
 .PHONY: validate lint format test
+DERIVED_DATA_PATH ?= .build/DerivedData
+OUTPUT_DIR ?= ../outputs/HabitQuest
 
 validate:
 	@.ci/agent_validate.sh
@@ -16,4 +18,6 @@ test:
 		-scheme HabitQuest \
 		-testPlan HabitQuest \
 		-xcconfig Config/Test.xcconfig \
-		-destination 'platform=iOS Simulator,name=iPhone 17' || true
+		-derivedDataPath $(DERIVED_DATA_PATH) \
+		-destination 'platform=iOS Simulator,name=iPhone 17' \
+		-resultBundlePath $(OUTPUT_DIR)/TestResults_iOS.xcresult || true

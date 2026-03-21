@@ -1,87 +1,117 @@
 #!/bin/bash
-# Smart Multi-Platform CI Builder
-# Detects project capabilities and builds for appropriate platforms
+# Deterministic multi-platform builder with centralized build/test outputs.
 
-set -e
+set -euo pipefail
 
-PROJECT_FILE="project.pbxproj"
-if [[ -f "*.xcodeproj/project.pbxproj" ]]; then
-	PROJECT_FILE="$(ls *.xcodeproj/project.pbxproj | head -1)"
-fi
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE_ROOT="$(cd "${PROJECT_DIR}/.." && pwd)"
+PROJECT_FILE="$(cd "${PROJECT_DIR}" && ls -1 *.xcodeproj 2>/dev/null | head -n1)"
 
-echo "🔍 Analyzing project capabilities..."
-
-# Check if project supports macOS
-SUPPORTS_MACOS=false
-if grep -q "MACOSX_DEPLOYMENT_TARGET\|macosx\|macOS" "${PROJECT_FILE}" 2>/dev/null; then
-	SUPPORTS_MACOS=true
-	echo "✅ Project supports macOS"
-else
-	echo "📱 Project is iOS-only"
-fi
-
-# Check if project supports iOS
-SUPPORTS_IOS=false
-if grep -q "IPHONEOS_DEPLOYMENT_TARGET\|iphoneos\|iOS" "${PROJECT_FILE}" 2>/dev/null; then
-	SUPPORTS_IOS=true
-	echo "✅ Project supports iOS"
-fi
-
-echo "🏗️ Starting multi-platform build..."
-
-BUILD_SUCCESS=false
-
-# Strategy 1: iOS Simulator (most compatible)
-if [[ "${SUPPORTS_IOS}" = true ]]; then
-	echo "📱 Attempting iOS Simulator build..."
-	set +e
-	# Prefer iPhone 16 on CI and locally where available
-	if [[ -n "${CI}" ]] || [[ -n "${GITHUB_ACTIONS}" ]]; then
-		xcodebuild -scheme "$1" -destination "platform=iOS Simulator,name=iPhone 16" CODE_SIGNING_ALLOWED="${CODE_SIGNING_ALLOWED:-NO}" CODE_SIGNING_REQUIRED="${CODE_SIGNING_REQUIRED:-NO}" build
-	else
-		xcodebuild -scheme "$1" -destination "platform=iOS Simulator,name=iPhone 16" build
-	fi
-	if [[ $? -eq 0 ]]; then
-		echo "✅ iOS Simulator build successful!"
-		BUILD_SUCCESS=true
-		exit 0
-	else
-		echo "⚠️ iOS Simulator build failed, trying next strategy..."
-	fi
-	set -e
-fi
-
-# Strategy 2: macOS (if supported)
-if [[ "${SUPPORTS_MACOS}" = true ]]; then
-	echo "🖥️ Attempting macOS build..."
-	set +e
-	xcodebuild -scheme "$1" -destination "platform=macOS" build
-	if [[ $? -eq 0 ]]; then
-		echo "✅ macOS build successful!"
-		BUILD_SUCCESS=true
-		exit 0
-	else
-		echo "⚠️ macOS build failed, trying next strategy..."
-	fi
-	set -e
-fi
-
-# Strategy 3: Generic iOS Simulator
-if [[ "${SUPPORTS_IOS}" = true ]]; then
-	echo "📱 Attempting generic iOS Simulator build..."
-	set +e
-	xcodebuild -scheme "$1" -destination "generic/platform=iOS Simulator" build
-	if [[ $? -eq 0 ]]; then
-		echo "✅ Generic iOS Simulator build successful!"
-		BUILD_SUCCESS=true
-		exit 0
-	else
-		echo "⚠️ Generic iOS Simulator build failed"
-	fi
-	set -e
-fi
-
-if [[ "${BUILD_SUCCESS}" = false ]]; then
-	echo "❌ All build strategies failed"
+if [[ -z "${PROJECT_FILE}" ]]; then
+	echo "No .xcodeproj found in ${PROJECT_DIR}"
 	exit 1
 fi
+
+PROJECT_NAME="${PROJECT_FILE%.xcodeproj}"
+SCHEME_ARG="${1:-}"
+ACTION_ARG="${2:-build}"
+
+if [[ "${SCHEME_ARG}" == "build" || "${SCHEME_ARG}" == "test" ]]; then
+	ACTION_ARG="${SCHEME_ARG}"
+	SCHEME_ARG=""
+fi
+
+SCHEME="${SCHEME_ARG}"
+if [[ -z "${SCHEME}" ]]; then
+	SCHEME="$(xcodebuild -list -project "${PROJECT_FILE}" 2>/dev/null | awk '/Schemes:/{flag=1;next} flag && NF {gsub(/^[[:space:]]+/, "", $0); print; exit}')"
+fi
+
+if [[ -z "${SCHEME}" ]]; then
+	echo "Unable to resolve a build scheme for ${PROJECT_FILE}"
+	exit 1
+fi
+
+DERIVED_DATA_PATH="${PROJECT_DIR}/.build/DerivedData"
+RESULT_ROOT="${WORKSPACE_ROOT}/outputs/${PROJECT_NAME}"
+mkdir -p "${DERIVED_DATA_PATH}" "${RESULT_ROOT}"
+
+PBXPROJ_PATH="${PROJECT_DIR}/${PROJECT_FILE}/project.pbxproj"
+SUPPORTS_IOS=false
+SUPPORTS_MACOS=false
+if grep -Eq "IPHONEOS_DEPLOYMENT_TARGET|iphoneos|iOS" "${PBXPROJ_PATH}" 2>/dev/null; then
+	SUPPORTS_IOS=true
+fi
+if grep -Eq "MACOSX_DEPLOYMENT_TARGET|macosx|macOS" "${PBXPROJ_PATH}" 2>/dev/null; then
+	SUPPORTS_MACOS=true
+fi
+
+if [[ "${SUPPORTS_IOS}" == false && "${SUPPORTS_MACOS}" == false ]]; then
+	SUPPORTS_IOS=true
+fi
+
+run_xcodebuild() {
+	local destination="$1"
+	local action="$2"
+	local result_name
+	result_name="$(echo "${destination}" | tr -c '[:alnum:]' '_')"
+
+	local cmd=(
+		xcodebuild
+		-project "${PROJECT_FILE}"
+		-scheme "${SCHEME}"
+		-destination "${destination}"
+		-derivedDataPath "${DERIVED_DATA_PATH}"
+		-configuration Debug
+	)
+
+	if [[ -n "${CI:-}" || -n "${GITHUB_ACTIONS:-}" ]]; then
+		cmd+=(CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="")
+	fi
+
+	if [[ "${action}" == "test" ]]; then
+		cmd+=(-resultBundlePath "${RESULT_ROOT}/${result_name}.xcresult" test)
+	else
+		cmd+=(build)
+	fi
+
+	echo "Running ${action} for destination: ${destination}"
+	"${cmd[@]}"
+}
+
+try_targets() {
+	local action="$1"
+	shift
+	local destinations=("$@")
+	local dest
+	for dest in "${destinations[@]}"; do
+		if run_xcodebuild "${dest}" "${action}"; then
+			echo "Success: ${action} ${SCHEME} on ${dest}"
+			return 0
+		fi
+		echo "Failed: ${action} ${SCHEME} on ${dest}"
+	done
+	return 1
+}
+
+declare -a targets=()
+if [[ "${SUPPORTS_IOS}" == true ]]; then
+	targets+=("platform=iOS Simulator,name=iPhone 17" "generic/platform=iOS Simulator")
+fi
+if [[ "${SUPPORTS_MACOS}" == true ]]; then
+	targets+=("platform=macOS")
+fi
+
+if [[ ${#targets[@]} -eq 0 ]]; then
+	echo "No valid build destinations detected."
+	exit 1
+fi
+
+if try_targets "${ACTION_ARG}" "${targets[@]}"; then
+	echo "Completed ${ACTION_ARG} for ${SCHEME}"
+	echo "DerivedData: ${DERIVED_DATA_PATH}"
+	echo "Outputs: ${RESULT_ROOT}"
+	exit 0
+fi
+
+echo "All ${ACTION_ARG} strategies failed for ${SCHEME}"
+exit 1
