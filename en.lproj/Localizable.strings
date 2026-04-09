@@ -1,0 +1,68 @@
+/* HabitQuest - Main App Strings */
+
+/* Navigation & Titles */
+"habitquest.title" = "HabitQuest";
+"task_manager.title" = "Task Manager";
+
+/* Sync & Cloud */
+"sync_with_icloud" = "Sync With iCloud";
+"enable_icloud_sync" = "Enable iCloud Sync";
+"maybe_later" = "Maybe Later";
+"icloud_merge_prompt" = "Do you want to merge existing iCloud data with this device, or start fresh?";
+"syncing" = "Syncing...";
+"last_synced" = "Last synced %@ ago";
+"not_synced" = "Not synced";
+"sync_now" = "Sync Now";
+
+/* Platform Features */
+"todays_focus" = "Today's Focus";
+"active_goals" = "Active Goals";
+"working_on" = "Working on:";
+
+/* Menu Bar & Touch Bar */
+"quick_add_task" = "Quick Add Task";
+"quick_add_goal" = "Quick Add Goal";
+"show_dashboard" = "Show Dashboard";
+"quit_planner_app" = "Quit PlannerApp";
+"add_task" = "Add Task";
+"add_goal" = "Add Goal";
+
+/* Goals */
+"target_date_prefix" = "Target: ";
+"completed" = "Completed";
+"overdue" = "Overdue";
+"progress_update_sheet_title" = "Progress Update Sheet - Coming Soon";
+"no_goals_set" = "No goals set yet. Tap '+' to add one!";
+"goals_title" = "Goals";
+
+/* Tasks */
+"no_tasks_yet" = "No tasks yet!";
+"no_completed_tasks" = "No completed tasks.";
+"to_do" = "To Do";
+
+/* Progress */
+"progress_percentage" = "%d%%";
+
+/* Navigation */
+"dashboard" = "Dashboard";
+"tasks" = "Tasks";
+"goals" = "Goals";
+"calendar" = "Calendar";
+"journal" = "Journal";
+"settings" = "Settings";
+"planner_app" = "PlannerApp";
+"quick_actions" = "Quick Actions";
+"add_task" = "Add Task";
+"add_goal" = "Add Goal";
+"add_event" = "Add Event";
+"search" = "Search";
+"add_item" = "Add Item";
+"export_data" = "Export Data";
+"import_data" = "Import Data";
+"preferences" = "Preferences";
+"more" = "More";
+"filter" = "Filter";
+"sort" = "Sort";
+"keyboard_shortcuts" = "Keyboard Shortcuts";
+"new_item" = "New Item";
+"refresh" = "Refresh";

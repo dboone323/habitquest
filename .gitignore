@@ -1,0 +1,47 @@
+# Build Artifacts
+.build/
+DerivedData/
+*.xcresult
+*.moved-aside
+*.xcuserstate
+.swiftpm/
+
+# Dependency managers
+.conan/
+Packages/
+Package.resolved
+.resolved
+
+# IDE - Xcode
+.DS_Store
+*.swp
+*.lock
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+
+# IDE - VS Code
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.class
+venv/
+.env
+
+# Mobile (iOS/Android)
+*.ipa
+*.app
+*.dSYM.zip
+*.dSYM
+
+# System
+.DS_Store
+Thumbs.db
+
+# Swift Build Residue (Root Level)
+*.d
+*.dia
+*.swiftdeps
+*.swiftmodule

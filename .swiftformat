@@ -1,0 +1,109 @@
+# Unified SwiftFormat Configuration
+# Version: 0.59.1
+# Swift: 6.0
+# Updated: February 11, 2026
+
+# Swift version
+--swiftversion 6.0
+
+# Indentation and Tabs
+--indent 4
+--indentcase false
+--tabwidth 4
+--smarttabs enabled
+
+# Line Breaks
+--linebreaks lf
+
+# Spacing and Wrapping
+--maxwidth 120
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
+--closingparen balanced
+--wrapternary before-operators
+
+# Commas
+--commas always
+
+# Operators
+--nospaceoperators ..<,...
+--ranges spaced
+--operatorfunc spaced
+
+# Semicolons
+--semicolons never
+
+# Self Reference
+--self insert
+
+# Imports
+--importgrouping testable-bottom
+
+# Numbers Grouping
+--decimalgrouping 3,6
+--binarygrouping 4,8
+--hexgrouping 4,8
+--octalgrouping 4,8
+--fractiongrouping enabled
+--exponentgrouping enabled
+
+# Hex and Exponent
+--hexliteralcase uppercase
+--exponentcase lowercase
+
+# Else Positioning
+--elseposition same-line
+
+# Braces
+--allman false
+
+# Pattern Let
+--patternlet hoist
+
+# Unused Arguments
+--stripunusedargs closure-only
+
+# Function and Type Attributes
+--funcattributes prev-line
+--typeattributes prev-line
+
+# Whitespace
+--trimwhitespace always
+
+# Organize Types
+--organizetypes actor,class,enum,struct
+
+# EXPLICIT RULES (Exhaustive list to ensure local/CI parity)
+--enable isEmpty
+--enable indent
+--enable hoistPatternLet
+--enable wrapMultilineStatementBraces
+--enable blankLinesBetweenScopes
+--enable consecutiveSpaces
+--enable duplicateImports
+--enable sortImports
+--enable unusedArguments
+--enable void
+--disable trailingCommas
+--enable strongifiedSelf
+--enable redundantReturn
+--enable redundantType
+--enable spaceAroundOperators
+--enable redundantProperty
+--enable redundantThrows
+--enable blankLinesBetweenImports
+--enable noForceUnwrapInTests
+--enable wrap
+--enable wrapFunctionBodies
+--enable trailingSpace
+
+# Disabled Rules
+--disable andOperator
+--disable blankLinesAtStartOfScope
+--disable blankLinesAtEndOfScope
+--disable redundantSelf
+--disable docComments
+
+# Exclusions
+--exclude .build,Package.swift,node_modules,.swiftpm,Tools

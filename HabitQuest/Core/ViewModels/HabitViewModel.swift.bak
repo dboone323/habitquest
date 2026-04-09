@@ -1,0 +1,264 @@
+import Combine
+import Foundation
+import HabitQuestCore
+import SwiftData
+import SwiftUI
+
+// Main ViewModel for managing habits using the MVVM pattern in HabitQuest.
+// Provides separation of concerns, testable business logic, and enhanced state management.
+
+// MVVM ViewModel for managing habit data, user actions, and state in HabitQuest.
+@MainActor
+public class HabitViewModel: ObservableObject {
+    /// State struct representing the current UI state for habits.
+    @Published public var state = State()
+    /// Actions that can be performed on the HabitViewModel.
+    public enum Action {
+        /// Load all habits from the data store with pagination.
+        case loadHabits(page: Int, limit: Int)
+        /// Create a new habit with the given parameters.
+        case createHabit(
+            name: String, description: String, frequency: HabitFrequency, category: HabitCategory,
+            difficulty: HabitDifficulty
+        )
+        /// Mark a habit as completed for today.
+        case completeHabit(Habit)
+        /// Delete a habit (soft delete).
+        case deleteHabit(Habit)
+        /// Set the search text for filtering habits.
+        case setSearchText(String)
+        /// Set the selected category for filtering habits.
+        case setCategory(HabitCategory?)
+        /// Undo the last action.
+        case undo
+        /// Redo the last undone action.
+        case redo
+    }
+
+    private var modelContext: ModelContext?
+    private var currentPage = 1
+    private let pageSize = 20
+    private var cancellables = Set<AnyCancellable>()
+    private var history: [Action] = []
+    private var index: Int = -1
+
+    // MARK: - Initialization
+
+    /// Initializes the HabitViewModel and loads all habits.
+    public init() {
+        handle(.loadHabits(page: currentPage, limit: pageSize))
+    }
+
+    /// Sets the model context for data access and reloads habits.
+    /// - Parameter context: The SwiftData model context to use.
+    func setModelContext(_ context: ModelContext) {
+        modelContext = context
+        handle(.loadHabits(page: currentPage, limit: pageSize))
+    }
+
+    // MARK: - Public Methods
+
+    /// Handles actions dispatched to the ViewModel, updating state as needed.
+    /// - Parameter action: The action to handle.
+    public func handle(_ action: Action) {
+        switch action {
+        case let .loadHabits(page, limit):
+            loadHabits(page: page, limit: limit)
+        case let .createHabit(name, description, frequency, category, difficulty):
+            createHabit(
+                name: name, description: description, frequency: frequency, category: category,
+                difficulty: difficulty
+            )
+        case let .completeHabit(habit):
+            completeHabit(habit)
+        case let .deleteHabit(habit):
+            deleteHabit(habit)
+        case let .setSearchText(text):
+            state.searchText = text
+        case let .setCategory(category):
+            state.selectedCategory = category
+        case .undo:
+            undo()
+        case .redo:
+            redo()
+        }
+    }
+
+    /// Loads all active habits from the data store and updates state.
+    private func loadHabits(page: Int, limit: Int) {
+        guard let context = modelContext else { return }
+        isLoading = true
+        os_log("Loading habits page %d with limit %d", log: .default, type: .info, page, limit)
+        do {
+            let descriptor = FetchDescriptor<Habit>(
+                predicate: #Predicate { $0.isActive },
+                sortBy: [SortDescriptor(\.creationDate, order: .reverse)],
+                range: Range(page * limit ..< (page + 1) * limit)
+            )
+            state.habits = try context.fetch(descriptor)
+            state.errorMessage = nil
+        } catch {
+            setError(AppError.dataError("Failed to load habits: \(error.localizedDescription)"))
+        }
+        isLoading = false
+    }
+
+    /// Creates a new habit and saves it to the data store.
+    /// - Parameters:
+    ///   - name: The name of the habit.
+    ///   - description: The description of the habit.
+    ///   - frequency: The frequency of the habit.
+    ///   - category: The category of the habit.
+    ///   - difficulty: The difficulty level of the habit.
+    private func createHabit(
+        name: String, description: String, frequency: HabitFrequency, category: HabitCategory,
+        difficulty: HabitDifficulty
+    ) {
+        guard let context = modelContext else { return }
+        os_log("Creating new habit with name %s and description %s", log: .default, type: .info, name, description)
+        let xpValue = calculateXPValue(for: difficulty, frequency: frequency)
+        let newHabit = Habit(
+            name: name,
+            habitDescription: description,
+            frequency: frequency,
+            xpValue: xpValue,
+            category: category,
+            difficulty: difficulty
+        )
+        context.insert(newHabit)
+        do {
+            try context.save()
+            loadHabits(page: currentPage, limit: pageSize)
+        } catch {
+            setError(AppError.dataError("Failed to create habit: \(error.localizedDescription)"))
+        }
+    }
+
+    /// Marks a habit as completed for today and updates streaks.
+    /// - Parameter habit: The habit to mark as completed.
+    private func completeHabit(_ habit: Habit) {
+        guard let context = modelContext else { return }
+        if habit.isCompletedToday { return }
+        os_log("Completing habit with name %s", log: .default, type: .info, habit.name)
+        let log = HabitLog(habit: habit, isCompleted: true)
+        context.insert(log)
+        updateStreak(for: habit)
+        do {
+            try context.save()
+            loadHabits(page: currentPage, limit: pageSize)
+        } catch {
+            setError(AppError.dataError("Failed to complete habit: \(error.localizedDescription)"))
+        }
+    }
+
+    /// Soft deletes a habit (marks as inactive).
+    /// - Parameter habit: The habit to delete.
+    private func deleteHabit(_ habit: Habit) {
+        guard let context = modelContext else { return }
+        os_log("Deleting habit with name %s", log: .default, type: .info, habit.name)
+        habit.isActive = false
+        do {
+            try context.save()
+            loadHabits(page: currentPage, limit: pageSize)
+        } catch {
+            setError(AppError.dataError("Failed to delete habit: \(error.localizedDescription)"))
+        }
+    }
+
+    /// Returns the list of habits filtered by search text and selected category.
+    var filteredHabits: [Habit] {
+        os_log("Filtering habits with search text %s and selected category %@", log: .default, type: .info, state.searchText ?? "", state.selectedCategory?.rawValue ?? "")
+        var filtered = state.habits
+        if let category = state.selectedCategory {
+            filtered = filtered.filter { $0.category == category }
+        }
+        if !state.searchText.isEmpty {
+            filtered = filtered.filter { habit in
+                habit.name.localizedCaseInsensitiveContains(self.state.searchText)
+                    || habit.habitDescription.localizedCaseInsensitiveContains(self.state.searchText)
+            }
+        }
+        return filtered
+    }
+
+    /// Returns the list of habits that need to be completed today.
+    var todaysHabits: [Habit] {
+        os_log("Calculating today's habits", log: .default, type: .info)
+        state.habits.filter { habit in
+            switch habit.frequency {
+            case .daily:
+                return true
+            case .weekly:
+                return isCompletedThisWeek(habit)
+            case .monthly:
+                return isCompletedThisMonth(habit)
+            }
+        }
+    }
+
+    /// Returns the list of habits that need to be completed this month.
+    private func isCompletedThisMonth(_ habit: Habit) -> Bool {
+        os_log("Checking if habit with name %s was completed this month", log: .default, type: .info, habit.name)
+        let calendar = Calendar.current
+        let monthStart = calendar.dateInterval(of: .month, for: Date())?.start ?? Date()
+
+        return habit.logs.contains { log in
+            calendar.isDate(log.completionDate, inSameMonthAs: monthStart)
+        }
+    }
+
+    /// Sets the error message to display in the UI.
+    /// - Parameter errorMessage: The error message to set.
+    private func setError(_ errorMessage: String) {
+        os_log("Setting error message: %s", log: .default, type: .error, errorMessage)
+        state.errorMessage = errorMessage
+    }
+
+    /// Undo the last action.
+    private func undo() {
+        guard index >= 0 && index < history.count - 1 else { return }
+        let action = history[index + 1]
+        os_log("Undoing action: %s", log: .default, type: .info, String(describing: action))
+        switch action {
+        case .createHabit(let name, let description, let frequency, let category, let difficulty):
+            deleteHabit(Habit(name: name, habitDescription: description, frequency: frequency, category: category, difficulty: difficulty))
+        case .completeHabit(let habit):
+            habit.isCompletedToday = false
+        case .deleteHabit(let habit):
+            createHabit(
+                name: habit.name,
+                description: habit.habitDescription,
+                frequency: habit.frequency,
+                category: habit.category,
+                difficulty: habit.difficulty
+            )
+        default:
+            break
+        }
+        index += 1
+    }
+
+    /// Redo the last undone action.
+    private func redo() {
+        guard index >= 0 && index < history.count - 1 else { return }
+        let action = history[index + 1]
+        os_log("Redoing action: %s", log: .default, type: .info, String(describing: action))
+        switch action {
+        case .createHabit(let name, let description, let frequency, let category, let difficulty):
+            createHabit(
+                name: name,
+                description: description,
+                frequency: frequency,
+                category: category,
+                difficulty: difficulty
+            )
+        case .completeHabit(let habit):
+            completeHabit(habit)
+        case .deleteHabit(let habit):
+            deleteHabit(habit)
+        default:
+            break
+        }
+        index += 1
+    }
+}

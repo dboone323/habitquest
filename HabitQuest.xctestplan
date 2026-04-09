@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "32463E05-D964-45BD-9AC8-236087BDB268",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:HabitQuest.xcodeproj",
+      "identifier" : "68581EB72E0F1EA600E5AADA",
+      "name" : "HabitQuest"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:HabitQuest.xcodeproj",
+        "identifier" : "68581EC62E0F1EA800E5AADA",
+        "name" : "HabitQuestTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:HabitQuest.xcodeproj",
+        "identifier" : "68581ED02E0F1EA800E5AADA",
+        "name" : "HabitQuestUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

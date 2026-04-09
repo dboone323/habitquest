@@ -1,0 +1,17 @@
+LICENSE
+README.md
+pyproject.toml
+src/main.py
+src/habitquest.egg-info/PKG-INFO
+src/habitquest.egg-info/SOURCES.txt
+src/habitquest.egg-info/dependency_links.txt
+src/habitquest.egg-info/requires.txt
+src/habitquest.egg-info/top_level.txt
+tests/test___init__.py
+tests/test_ai_workflow_recovery.py
+tests/test_ai_workflow_recovery_integration.py
+tests/test_automation_engine.py
+tests/test_jwt_auth.py
+tests/test_performance_optimizer.py
+tests/test_production_system.py
+tests/test_workflow_quality_check.py

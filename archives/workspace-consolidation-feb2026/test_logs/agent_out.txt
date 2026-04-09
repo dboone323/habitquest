@@ -1,0 +1,77 @@
+warning: 'habitquest': found 22 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/quantum_enhancer.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/unified_dashboard.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/universal_workflow_manager.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/enhanced_workflow.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/git_workflow.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/workflow_dashboard.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/ai_workflow_recovery.py
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/project_config.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/NEXT_STEPS.md
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/process_todos.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/completion_summary.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/simple_autofix.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/adaptive_learning_system.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/ai_enhancement_simple.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/ai_test_generator.py
+    /Users/danielstevens/github-projects/habitquest/Tools/Automation/ai_workflow_recovery.py
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/ai_learning_validator.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/automate.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/intelligent_autofix.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/ai_enhancement_system.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/master_automation.sh
+    /Users/danielstevens/github-projects/habitquest/Tools/ProjectScripts/Automation/mcp_workflow.sh
+warning: 'shared-kit': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Integration/CROSS_PROJECT_INTEGRATION_GUIDE.md
+[0/1] Planning build
+Building for debugging...
+[0/32] Copying PrivacyInfo.xcprivacy
+[0/32] Write sources
+[0/32] Write HabitAudit-entitlement.plist
+[0/32] Write sources
+[16/32] Compiling CNIOWindows shim.c
+[16/32] Compiling CNIOOpenBSD shim.c
+[18/32] Compiling CNIOWindows WSAStartup.c
+[18/32] Write sources
+[20/32] Compiling CNIOWASI CNIOWASI.c
+[21/32] Compiling CNIOLinux shim.c
+[22/32] Compiling _AtomicsShims.c
+[23/32] Compiling CNIOLinux liburing_shims.c
+[23/32] Compiling CNIOPosix event_loop_id.c
+[25/32] Compiling CNIODarwin shim.c
+[26/32] Write swift-version--58304C5D6DBC2206.txt
+[27/60] Compiling c-nioatomics.c
+[29/60] Compiling SharedKitCore AnyCodable.swift
+[30/60] Compiling SharedKitCore CommonTypes.swift
+[31/60] Compiling SharedKitCore KeychainManager.swift
+[31/63] Compiling c-atomics.c
+[33/128] Compiling NIOCore IPProtocol.swift
+[34/128] Compiling NIOCore IntegerBitPacking.swift
+[35/128] Compiling NIOCore IntegerTypes.swift
+[36/128] Compiling NIOCore NIOAsyncSequenceProducerStrategies.swift
+[37/128] Compiling NIOCore IO.swift
+[38/128] Compiling NIOCore IOData.swift
+[39/128] Compiling NIOCore Interfaces.swift
+[40/128] Compiling NIOCore Linux.swift
+[41/128] Compiling NIOCore ConvenienceOptionSupport.swift
+[42/128] Compiling NIOCore MarkedCircularBuffer.swift
+[43/128] Compiling NIOCore MulticastChannel.swift
+[44/128] Compiling NIOCore NIOAny.swift
+[45/128] Compiling NIOCore NIOCloseOnErrorHandler.swift
+[46/128] Compiling NIOCore NIOCoreSendableMetatype.swift
+[47/128] Compiling NIOCore NIODecodedAsyncSequence.swift
+[48/128] Compiling NIOCore NIOLoopBound.swift
+[49/128] Compiling NIOCore NIOPooledRecvBufferAllocator.swift
+[50/128] Compiling NIOCore NIOScheduledCallback.swift
+[51/128] Compiling NIOCore NIOSendable.swift
+[52/128] Compiling NIOCore NIOSplitLinesMessageDecoder.swift
+[53/128] Compiling NIOCore NIOTransportAccessibleChannelCore.swift
+[54/128] Compiling NIOCore RecvByteBufferAllocator.swift
+[55/128] Compiling NIOCore SingleStepByteToMessageDecoder.swift
+[56/135] Compiling NIOCore AddressedEnvelope.swift
+[57/135] Compiling NIOCore AsyncAwaitSupport.swift
+[58/135] Compiling NIOCore AsyncChannel.swift
+[59/135] Compiling NIOCore AsyncChannelHandler.swift
+[60/135] Compiling NIOCore AsyncChannelInboundStream.swift
+[61/135] Compiling NIOCore AsyncChannelOutboundWriter.swift
+[62/135] Compiling NIOCore NIOAsyncSequenceProducer.swift

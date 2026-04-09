@@ -1,0 +1,4 @@
+#include "Base.xcconfig"
+// Release-specific overrides
+SWIFT_OPTIMIZATION_LEVEL = -Owholemodule
+ENABLE_TESTABILITY = NO
