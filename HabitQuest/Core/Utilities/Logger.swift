@@ -1,0 +1,95 @@
+import Foundation
+import os
+
+/// Unique logging utility for the HabitQuest app to avoid shadowing SharedKit.Logger
+public struct HabitQuestLogger {
+    /// Log categories for different parts of the application
+    public enum Category: String {
+        case general = "HabitQuest.General"
+        case dataModel = "HabitQuest.DataModel"
+        case gameLogic = "HabitQuest.GameLogic"
+        case uiCategory = "HabitQuest.UI"
+        case networking = "HabitQuest.Networking"
+    }
+
+    /// Log levels for different severity
+    public enum Level {
+        case debug, info, warning, error, critical
+
+        var osLogType: OSLogType {
+            switch self {
+            case .debug: .debug
+            case .info: .info
+            case .warning: .default
+            case .error: .error
+            case .critical: .fault
+            }
+        }
+
+        var prefix: String {
+            switch self {
+            case .debug: "🔍"
+            case .info: "ℹ️"
+            case .warning: "⚠️"
+            case .error: "❌"
+            case .critical: "🚨"
+            }
+        }
+    }
+
+    private let osLog: OSLog
+    private let category: Category
+
+    /// Initialize logger for specific category
+    public init(category: Category = .general) {
+        self.category = category
+        osLog = OSLog(
+            subsystem: Bundle.main.bundleIdentifier ?? "HabitQuest", category: category.rawValue
+        )
+    }
+
+    /// Log a message at the specified level
+    public func log(
+        _ level: Level, _ message: String, file: String = #file, function: String = #function,
+        line: Int = #line
+    ) {
+        let fileName = URL(fileURLWithPath: file).lastPathComponent
+        let logMessage = "\(level.prefix) [\(fileName):\(line)] \(function) - \(message)"
+
+        #if DEBUG
+            print(logMessage)
+        #endif
+
+        os_log("%{public}@", log: self.osLog, type: level.osLogType, logMessage)
+    }
+
+    public func debug(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
+        log(.debug, message, file: file, function: function, line: line)
+    }
+
+    public func info(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
+        log(.info, message, file: file, function: function, line: line)
+    }
+
+    public func warning(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
+        log(.warning, message, file: file, function: function, line: line)
+    }
+
+    public func error(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
+        log(.error, message, file: file, function: function, line: line)
+    }
+
+    public func critical(
+        _ message: String, file: String = #file, function: String = #function, line: Int = #line
+    ) {
+        log(.critical, message, file: file, function: function, line: line)
+    }
+}
