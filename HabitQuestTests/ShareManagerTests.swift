@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 //
 // ShareManagerTests.swift
 // HabitQuestTests
@@ -24,11 +28,11 @@ final class ShareManagerTests: XCTestCase {
         XCTAssertTrue(instance1 === instance2)
     }
 
-    // MARK: - Share Achievement Tests
+    // MARK: - Share HabitQuestCore.Achievement Tests
 
     func testShareAchievementCallsCompletion() {
-        let achievement = Achievement(
-            name: "Test Achievement",
+        let achievement = HabitQuestCore.Achievement(
+            name: "Test HabitQuestCore.Achievement",
             description: "Test description",
             iconName: "star",
             category: .completion,
@@ -83,7 +87,7 @@ final class ShareManagerTests: XCTestCase {
     // MARK: - API Smoke Tests
 
     func testShareAchievementDoesNotCrash() {
-        let achievement = Achievement(
+        let achievement = HabitQuestCore.Achievement(
             name: "Test",
             description: "Test",
             iconName: "star",

@@ -20,6 +20,12 @@ public final class HabitDataService: Sendable {
         self.modelContext = modelContext
     }
 
+    /// Fetches all habits from the database.
+    public func fetchAllHabits() throws -> [Habit] {
+        let descriptor = FetchDescriptor<Habit>(sortBy: [SortDescriptor(\.name)])
+        return try modelContext.fetch(descriptor)
+    }
+
     // MARK: - Habit Templates
 
     /// Provides a standardized set of habit presets.

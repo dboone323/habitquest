@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 //
 //  AnalyticsCardViewTests.swift
 //  HabitQuestTests

@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import Foundation
 import SwiftData
 
@@ -158,7 +160,7 @@ class StreakService {
         }
 
         let previousMilestone = StreakMilestone.milestone(for: currentStreak)
-        let startCount = previousMilestone?.streakCount ?? 0
+        let startCount = previousMilestone.streakCount
         let targetCount = nextMilestone.streakCount
 
         let progress = Double(currentStreak - startCount) / Double(targetCount - startCount)

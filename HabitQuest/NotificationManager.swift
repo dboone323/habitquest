@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import UserNotifications
 
 // import UIKit - Not needed for pure logic

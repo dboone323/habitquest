@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 // HabitQuest Bridging File
 // This file provides access to all necessary types for compilation
 

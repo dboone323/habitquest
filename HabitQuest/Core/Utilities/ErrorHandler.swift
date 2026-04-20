@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import Foundation
 import os
 import OSLog

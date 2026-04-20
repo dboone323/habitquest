@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 import XCTest
 @testable import HabitQuest
 
@@ -72,16 +76,16 @@ final class StreakMilestoneTests: XCTestCase {
         // Test milestone(for:) - get current milestone
         let milestone5 = StreakMilestone.milestone(for: 5)
         XCTAssertNotNil(milestone5)
-        XCTAssertEqual(milestone5?.streakCount, 3) // Should return "Getting Started" (3 days)
+        XCTAssertEqual(milestone5.streakCount, 3) // Should return "Getting Started" (3 days)
 
         let milestone7 = StreakMilestone.milestone(for: 7)
-        XCTAssertEqual(milestone7?.streakCount, 7) // Exactly at 7 day milestone
+        XCTAssertEqual(milestone7.streakCount, 7) // Exactly at 7 day milestone
 
         let milestone50 = StreakMilestone.milestone(for: 50)
-        XCTAssertEqual(milestone50?.streakCount, 50) // Exactly at 50 day milestone
+        XCTAssertEqual(milestone50.streakCount, 50) // Exactly at 50 day milestone
 
         let milestone200 = StreakMilestone.milestone(for: 200)
-        XCTAssertEqual(milestone200?.streakCount, 100) // Should return century (100 days)
+        XCTAssertEqual(milestone200.streakCount, 100) // Should return century (100 days)
 
         // Test nextMilestone(for:) - get next milestone to achieve
         let next1 = StreakMilestone.nextMilestone(for: 1)

@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 import SwiftData
 import SwiftUI
 import XCTest

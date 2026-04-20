@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import Foundation
 import SwiftData
 
@@ -96,20 +98,20 @@ enum AchievementService {
                 requirement: .reachLevel(25)
             ),
 
-            // Consistency Achievements
+            // General Achievements
             Achievement(
                 name: "Perfect Week",
-                description: "Complete all habits for 7 consecutive days",
-                iconName: "calendar.circle.fill",
-                category: .consistency,
-                xpReward: 300,
+                description: "Complete all your habits for 7 consecutive days.",
+                iconName: "calendar.badge.checkmark",
+                category: .general,
+                xpReward: 100,
                 requirement: .perfectWeek
             ),
             Achievement(
-                name: "Variety Seeker",
-                description: "Maintain 5 different active habits",
-                iconName: "grid.circle.fill",
-                category: .consistency,
+                name: "Diverse Interests",
+                description: "Complete 5 different categories of habits.",
+                iconName: "square.grid.2x2",
+                category: .general,
                 xpReward: 150,
                 requirement: .habitVariety(5)
             ),

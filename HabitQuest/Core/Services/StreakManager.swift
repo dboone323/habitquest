@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import Foundation
 
 /// Logic-only manager for streak calculations

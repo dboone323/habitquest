@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 import SwiftData
 import SwiftUI
 import XCTest
@@ -16,7 +20,7 @@ final class ContentViewTests: XCTestCase {
                 for: Habit.self,
                 HabitLog.self,
                 PlayerProfile.self,
-                Achievement.self,
+                HabitQuestCore.Achievement.self,
                 configurations: config
             )
             modelContext = ModelContext(modelContainer)

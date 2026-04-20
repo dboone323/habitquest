@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 import XCTest
 @testable import HabitQuest
 
@@ -317,8 +321,8 @@ final class AnalyticsTypesTests: XCTestCase {
         // Given
         let name = "Morning Meditation"
         let description = "Start your day with 10 minutes of mindfulness"
-        let category = HabitCategory.mindfulness
-        let difficulty = HabitDifficulty.easy
+        let category = HabitQuestCore.HabitCategory.mindfulness
+        let difficulty = HabitQuestCore.HabitDifficulty.easy
         let reasoning = "Morning routines build strong foundations"
         let expectedSuccess = 0.85
 

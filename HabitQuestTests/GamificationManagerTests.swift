@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 //
 // GamificationManagerTests.swift
 // HabitQuestTests
@@ -40,7 +44,7 @@ final class GamificationManagerTests: XCTestCase {
         }
     }
 
-    // MARK: - Achievement Unlock Tests
+    // MARK: - HabitQuestCore.Achievement Unlock Tests
 
     func testCheckAchievementsUnlocksFirstStep() {
         // Given: No completions
@@ -94,7 +98,7 @@ final class GamificationManagerTests: XCTestCase {
         XCTAssertNotNil(firstStep?.unlockedDate)
     }
 
-    // MARK: - Achievement Category Tests
+    // MARK: - HabitQuestCore.Achievement Category Tests
 
     func testFirstStepIsCompletionCategory() {
         let firstStep = manager.achievements.first { $0.name == "First Step" }

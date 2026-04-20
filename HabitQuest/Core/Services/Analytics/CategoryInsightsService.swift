@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import SwiftData
 import SwiftUI
 
@@ -43,7 +45,7 @@ final class CategoryInsightsService {
     }
 
     /// Get detailed category performance metrics
-    func getCategoryPerformance(category: HabitCategory) async -> CategoryPerformance {
+    func getCategoryPerformance(category: HabitQuestCore.HabitCategory) async -> CategoryPerformance {
         let habits = await fetchHabits(for: category)
         let allLogs = habits.flatMap(\.logs)
         let completedLogs = allLogs.filter(\.isCompleted)
@@ -85,7 +87,7 @@ final class CategoryInsightsService {
     }
 
     /// Get category distribution across all habits
-    func getCategoryDistribution() async -> [HabitCategory: Int] {
+    func getCategoryDistribution() async -> [HabitQuestCore.HabitCategory: Int] {
         let habits = await fetchAllHabits()
         return Dictionary(grouping: habits, by: \.category).mapValues { $0.count }
     }
@@ -97,7 +99,7 @@ final class CategoryInsightsService {
         return (try? modelContext.fetch(descriptor)) ?? []
     }
 
-    private func fetchHabits(for category: HabitCategory) async -> [Habit] {
+    private func fetchHabits(for category: HabitQuestCore.HabitCategory) async -> [Habit] {
         let habits = await fetchAllHabits()
         return habits.filter { $0.category == category }
     }
@@ -124,7 +126,7 @@ final class CategoryInsightsService {
 // MARK: - Supporting Types
 
 struct CategoryPerformance {
-    let category: HabitCategory
+    let category: HabitQuestCore.HabitCategory
     let habitCount: Int
     let completionRate: Double
     let averageStreak: Int

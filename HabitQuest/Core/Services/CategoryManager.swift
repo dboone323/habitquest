@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 //
 // CategoryManager.swift
 // HabitQuest
@@ -20,22 +22,22 @@ class CategoryManager {
     }
 
     func getAllCategories() -> [CategoryInfo] {
-        HabitCategory.allCases.map { category in
+        HabitQuestCore.HabitCategory.allCases.map { category in
             CategoryInfo(
                 id: category.rawValue,
                 name: category.rawValue.capitalized,
                 icon: category.emoji,
-                color: Color(category.color),
+                color: category.color,
                 description: "Habits related to \(category.rawValue)"
             )
         }
     }
 
-    func getCategory(by id: String) -> HabitCategory? {
-        HabitCategory(rawValue: id)
+    func getCategory(by id: String) -> HabitQuestCore.HabitCategory? {
+        HabitQuestCore.HabitCategory(rawValue: id)
     }
 
-    func getSuggestedTags(for category: HabitCategory) -> [String] {
+    func getSuggestedTags(for category: HabitQuestCore.HabitCategory) -> [String] {
         switch category {
         case .health: ["hydration", "nutrition", "sleep", "medication"]
         case .fitness: ["cardio", "strength", "flexibility", "sports"]

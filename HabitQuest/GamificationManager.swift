@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import Foundation
 
 // Enhancement #82: Gamification Rewards

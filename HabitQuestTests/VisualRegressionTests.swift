@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 import Foundation
 import XCTest
 @testable import HabitQuest

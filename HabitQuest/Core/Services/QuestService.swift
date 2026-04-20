@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 //
 // QuestService.swift
 // HabitQuest
@@ -20,7 +22,7 @@ struct Quest: Identifiable {
 enum QuestRequirement {
     case completeHabits(count: Int)
     case maintainStreak(days: Int)
-    case completeCategory(category: HabitCategory, count: Int)
+    case completeCategory(category: HabitQuestCore.HabitCategory, count: Int)
 }
 
 class QuestService {

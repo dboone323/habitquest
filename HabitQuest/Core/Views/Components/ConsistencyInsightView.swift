@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import SwiftUI
 
 // MARK: - Consistency Insight View

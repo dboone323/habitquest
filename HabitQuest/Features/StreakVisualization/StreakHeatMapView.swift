@@ -384,7 +384,7 @@ public struct PredictionCard: View {
             habitDescription: "Daily workout",
             frequency: HabitFrequency.daily,
             xpValue: 10,
-            category: HabitCategory.fitness,
+            category: HabitQuestCore.HabitCategory.fitness,
             difficulty: HabitDifficulty.medium
         )
 

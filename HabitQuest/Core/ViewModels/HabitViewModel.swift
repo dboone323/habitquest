@@ -12,7 +12,7 @@ public class HabitViewModel: ObservableObject {
     public struct State: Sendable {
         public var habits: [Habit] = []
         public var searchText: String = ""
-        public var selectedCategory: HabitCategory?
+        public var selectedCategory: HabitQuestCore.HabitCategory?
         public var errorMessage: String?
         public var isLoading: Bool = false
 
@@ -27,7 +27,7 @@ public class HabitViewModel: ObservableObject {
         case loadHabits(page: Int, limit: Int)
         /// Create a new habit with the given parameters.
         case createHabit(
-            name: String, description: String, frequency: HabitFrequency, category: HabitCategory,
+            name: String, description: String, frequency: HabitFrequency, category: HabitQuestCore.HabitCategory,
             difficulty: HabitDifficulty
         )
         /// Mark a habit as completed for today.
@@ -37,7 +37,7 @@ public class HabitViewModel: ObservableObject {
         /// Set the search text for filtering habits.
         case setSearchText(String)
         /// Set the selected category for filtering habits.
-        case setCategory(HabitCategory?)
+        case setCategory(HabitQuestCore.HabitCategory?)
         /// Undo the last action.
         case undo
         /// Redo the last undone action.
@@ -129,7 +129,7 @@ public class HabitViewModel: ObservableObject {
 
     /// Creates a new habit and saves it to the data store.
     private func createHabit(
-        name: String, description: String, frequency: HabitFrequency, category: HabitCategory,
+        name: String, description: String, frequency: HabitFrequency, category: HabitQuestCore.HabitCategory,
         difficulty: HabitDifficulty
     ) {
         guard let context = modelContext else { return }

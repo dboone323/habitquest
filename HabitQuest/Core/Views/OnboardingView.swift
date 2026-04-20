@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 //
 // OnboardingView.swift
 // HabitQuest

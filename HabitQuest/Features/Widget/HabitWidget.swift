@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 //
 // HabitWidget.swift
 // HabitQuest

@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import Foundation
 import SwiftData
 @preconcurrency import UserNotifications
@@ -126,7 +128,7 @@ final class NotificationSchedulerService {
         }
     }
 
-    private func selectOptimalSound(for category: HabitCategory) -> UNNotificationSound {
+    private func selectOptimalSound(for category: HabitQuestCore.HabitCategory) -> UNNotificationSound {
         switch category {
         case .health, .fitness:
             UNNotificationSound(named: UNNotificationSoundName("energetic_chime.wav"))

@@ -141,7 +141,7 @@ public struct ContentView: View {
                 name: "New Quest \(Int.random(in: 1...100))",
                 habitDescription: "Daily task",
                 frequency: .daily,
-                category: HabitCategory.allCases.randomElement() ?? .health
+                category: HabitQuestCore.HabitCategory.allCases.randomElement() ?? .health
             )
             modelContext.insert(newHabit)
             triggerHapticFeedback()
@@ -209,22 +209,6 @@ public struct ContentView: View {
     }
 }
 
-// MARK: - Extensions
-
-extension HabitCategory {
-    var viewColor: Color {
-        switch self {
-        case .health: .red
-        case .fitness: .orange
-        case .learning: .blue
-        case .productivity: .green
-        case .social: .purple
-        case .creativity: .yellow
-        case .mindfulness: .indigo
-        case .other: .gray
-        }
-    }
-}
 
 // MARK: - Subviews
 
@@ -264,7 +248,7 @@ struct HabitCardView: View {
         HStack(spacing: 16) {
             ZStack {
                 Circle()
-                    .fill(habit.category.viewColor.opacity(0.2))
+                    .fill(habit.category.color.opacity(0.2))
                     .frame(width: 50, height: 50)
                 Text(habit.category.emoji)
                     .font(.system(size: 24))
@@ -378,7 +362,7 @@ struct HabitWidgetView: View {
                 ForEach(habits.prefix(4)) { habit in
                     HStack {
                         Circle()
-                            .fill(habit.category.viewColor.opacity(0.3))
+                            .fill(habit.category.color.opacity(0.3))
                             .frame(width: 8, height: 8)
                         Text(habit.name)
                             .font(.caption2)

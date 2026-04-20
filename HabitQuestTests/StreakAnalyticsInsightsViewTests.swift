@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 //
 //  StreakAnalyticsInsightsViewTests.swift
 //  HabitQuestTests

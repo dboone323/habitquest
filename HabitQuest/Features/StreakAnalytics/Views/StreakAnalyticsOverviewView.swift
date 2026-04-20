@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import SwiftUI
 
 /// Overview section displaying key analytics cards

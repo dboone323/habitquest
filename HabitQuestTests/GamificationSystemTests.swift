@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 //
 // GamificationSystemTests.swift
 // HabitQuestTests
@@ -44,7 +48,7 @@ final class GamificationSystemTests: XCTestCase {
         XCTAssertTrue(true, "Level up detection test")
     }
 
-    // MARK: - Achievement Tests
+    // MARK: - HabitQuestCore.Achievement Tests
 
     func testFirstHabitAchievement() {
         XCTAssertTrue(true, "First habit achievement test")

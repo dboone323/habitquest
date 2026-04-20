@@ -17,7 +17,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@v10
+      - uses: actions/stale@28ca1036281a5e38b8194cd9db12844fe96916f3  # v10
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           stale-issue-message: 'This issue is stale because it has been open 30 days with no activity.'
@@ -26,7 +26,15 @@ jobs:
 
   automerge:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dboone323' && contains(github.event.pull_request.labels.*.name, 'github-actions')
+    if: |
+      github.event_name == 'pull_request' && (
+        (github.event.pull_request.user.login == 'dboone323' && contains(github.event.pull_request.labels.*.name, 'github-actions')) ||
+        (github.event.pull_request.user.login == 'dependabot[bot]' && (
+          contains(github.event.pull_request.labels.*.name, 'dependencies') ||
+          contains(github.event.pull_request.labels.*.name, 'python') ||
+          contains(github.event.pull_request.labels.*.name, 'github-actions')
+        ))
+      )
     permissions:
       contents: write
       pull-requests: write

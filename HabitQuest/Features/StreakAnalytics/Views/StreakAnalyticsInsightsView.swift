@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import SwiftUI
 
 /// Consistency insights section

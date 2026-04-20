@@ -1,5 +1,134 @@
 import Foundation
+import SwiftUI
 import SwiftData
+
+// MARK: - Health Models
+
+/// User baseline data and health goals
+@Model
+public final class HealthProfile {
+    public var id: UUID
+    public var name: String
+    public var dateOfBirth: Date
+    public var gender: String
+    public var heightInMeters: Double
+    public var targetWeightInKg: Double
+    public var dailyStepGoal: Int
+    public var dailyCalorieGoal: Int
+    
+    public init(
+        id: UUID = UUID(),
+        name: String = "User",
+        dateOfBirth: Date = Date(),
+        gender: String = "Prefer not to say",
+        heightInMeters: Double = 1.75,
+        targetWeightInKg: Double = 80.0,
+        dailyStepGoal: Int = 10000,
+        dailyCalorieGoal: Int = 2500
+    ) {
+        self.id = id
+        self.name = name
+        self.dateOfBirth = dateOfBirth
+        self.gender = gender
+        self.heightInMeters = heightInMeters
+        self.targetWeightInKg = targetWeightInKg
+        self.dailyStepGoal = dailyStepGoal
+        self.dailyCalorieGoal = dailyCalorieGoal
+    }
+}
+
+/// Snapshot entries for physiological metrics
+@Model
+public final class HealthVitals {
+    public var id: UUID
+    public var timestamp: Date
+    public var type: VitalType
+    public var value: Double
+    public var unit: String
+    
+    public init(
+        id: UUID = UUID(),
+        timestamp: Date = Date(),
+        type: VitalType = .heartRate,
+        value: Double = 0.0,
+        unit: String = "bpm"
+    ) {
+        self.id = id
+        self.timestamp = timestamp
+        self.type = type
+        self.value = value
+        self.unit = unit
+    }
+}
+
+public enum VitalType: String, Codable, Sendable {
+    case heartRate = "heart_rate"
+    case bloodPressureSystolic = "bp_systolic"
+    case bloodPressureDiastolic = "bp_diastolic"
+    case bloodSugar = "blood_sugar"
+    case bodyTemperature = "temperature"
+    case oxygenSaturation = "sp_o2"
+}
+
+/// Logged physical activities and daily movement
+@Model
+public final class HealthActivity {
+    public var id: UUID
+    public var timestamp: Date
+    public var activityType: String
+    public var durationInMinutes: Double
+    public var caloriesBurned: Int
+    public var stepsTaken: Int
+    public var distanceInMeters: Double
+    
+    public init(
+        id: UUID = UUID(),
+        timestamp: Date = Date(),
+        activityType: String = "General",
+        durationInMinutes: Double = 0.0,
+        caloriesBurned: Int = 0,
+        stepsTaken: Int = 0,
+        distanceInMeters: Double = 0.0
+    ) {
+        self.id = id
+        self.timestamp = timestamp
+        self.activityType = activityType
+        self.durationInMinutes = durationInMinutes
+        self.caloriesBurned = caloriesBurned
+        self.stepsTaken = stepsTaken
+        self.distanceInMeters = distanceInMeters
+    }
+}
+
+/// Nutrition tracking and caloric intake
+@Model
+public final class HealthNutrition {
+    public var id: UUID
+    public var timestamp: Date
+    public var mealType: String
+    public var calories: Int
+    public var proteinInGrams: Double
+    public var carbsInGrams: Double
+    public var fatInGrams: Double
+    
+    public init(
+        id: UUID = UUID(),
+        timestamp: Date = Date(),
+        mealType: String = "Snack",
+        calories: Int = 0,
+        proteinInGrams: Double = 0.0,
+        carbsInGrams: Double = 0.0,
+        fatInGrams: Double = 0.0
+    ) {
+        self.id = id
+        self.timestamp = timestamp
+        self.mealType = mealType
+        self.calories = calories
+        self.proteinInGrams = proteinInGrams
+        self.carbsInGrams = carbsInGrams
+        self.fatInGrams = fatInGrams
+    }
+}
 
 // MARK: - Habit Models
 
@@ -126,6 +255,15 @@ public final class PlayerProfile {
     /// When this profile was created.
     public var creationDate: Date
 
+    /// Normalized progress towards the next level (0.0 - 1.0).
+    public var xpProgress: Float {
+        let currentThreshold = Double(Int(100 * pow(1.5, Double(level - 1))))
+        let nextThreshold = Double(xpForNextLevel)
+        let progressRange = nextThreshold - currentThreshold
+        guard progressRange > 0 else { return 0.0 }
+        return Float((Double(currentXP) - currentThreshold) / progressRange)
+    }
+
     public init() {
         level = 1
         currentXP = 0
@@ -214,16 +352,16 @@ public enum HabitCategory: String, CaseIterable, Codable, Sendable {
         }
     }
 
-    public var color: String {
+    public var color: Color {
         switch self {
-        case .health: "red"
-        case .fitness: "orange"
-        case .learning: "blue"
-        case .productivity: "green"
-        case .social: "purple"
-        case .creativity: "yellow"
-        case .mindfulness: "indigo"
-        case .other: "gray"
+        case .health: .red
+        case .fitness: .orange
+        case .learning: .blue
+        case .productivity: .green
+        case .social: .purple
+        case .creativity: .yellow
+        case .mindfulness: .indigo
+        case .other: .gray
         }
     }
 }
@@ -253,20 +391,47 @@ public enum MoodRating: String, CaseIterable, Codable, Sendable {
 }
 
 public enum AchievementCategory: String, CaseIterable, Codable, Sendable {
-    case streak, completion, level, consistency, special
+    case general, streak, completion, level, consistency, special, hidden
+    
+    public var color: Color {
+        switch self {
+        case .general: return .blue
+        case .streak: return .orange
+        case .completion: return .green
+        case .level: return .indigo
+        case .consistency: return .teal
+        case .special: return .purple
+        case .hidden: return .gray
+        }
+    }
     public var displayName: String {
         switch self {
-        case .streak: "Streak Master"
-        case .completion: "Quest Completion"
-        case .level: "Level Progression"
-        case .consistency: "Consistency"
-        case .special: "Special Events"
+        case .streak: return "Streak Master"
+        case .completion: return "Quest Completion"
+        case .level: return "Level Progression"
+        case .consistency: return "Consistency"
+        case .general: return "General"
+        case .special: return "Special Events"
+        case .hidden: return "Hidden"
         }
     }
 }
 
 public enum AchievementRequirement: Codable, Sendable {
     case streakDays(Int), totalCompletions(Int), reachLevel(Int), perfectWeek, habitVariety(Int), earlyBird, nightOwl, weekendWarrior
+    
+    public var description: String {
+        switch self {
+        case .streakDays(let count): return "Maintain a \(count) day streak"
+        case .totalCompletions(let count): return "Complete habits \(count) times"
+        case .reachLevel(let level): return "Reach level \(level)"
+        case .perfectWeek: return "Complete all habits for 7 consecutive days"
+        case .habitVariety(let count): return "Complete \(count) different types of habits"
+        case .earlyBird: return "Complete a habit before 8 AM"
+        case .nightOwl: return "Complete a habit after 10 PM"
+        case .weekendWarrior: return "Complete habits on both Saturday and Sunday"
+        }
+    }
 }
 
 public struct StreakMilestone: Identifiable, Sendable, Comparable {
@@ -288,6 +453,42 @@ public struct StreakMilestone: Identifiable, Sendable, Comparable {
 
     public enum CelebrationLevel: Int, CaseIterable, Codable, Sendable {
         case basic = 1, intermediate = 2, advanced = 3, epic = 4, legendary = 5
+        
+        public var particleCount: Int {
+            rawValue * 20
+        }
+        
+        public var animationIntensity: Double {
+            Double(rawValue) * 0.3
+        }
+    }
+
+    public static func milestone(for count: Int) -> StreakMilestone {
+        let all = allMilestones.sorted(by: { $0.streakCount > $1.streakCount })
+        return all.first(where: { count >= $0.streakCount }) ?? allMilestones[0]
+    }
+
+    public static var predefinedMilestones: [StreakMilestone] { allMilestones }
+
+    public static func isNewMilestone(streakCount: Int, previousCount: Int) -> Bool {
+        let current = milestone(for: streakCount)
+        let previous = milestone(for: previousCount)
+        return current.streakCount > previous.streakCount
+    }
+
+    public static func nextMilestone(for count: Int) -> StreakMilestone? {
+        let all = allMilestones.sorted(by: { $0.streakCount < $1.streakCount })
+        return all.first(where: { $0.streakCount > count })
+    }
+
+    public static var allMilestones: [StreakMilestone] {
+        [
+            StreakMilestone(streakCount: 3, title: "Getting Started", description: "3 day streak", emoji: "🔥", celebrationLevel: .basic),
+            StreakMilestone(streakCount: 7, title: "Week One", description: "7 day streak", emoji: "📈", celebrationLevel: .basic),
+            StreakMilestone(streakCount: 14, title: "Consistent", description: "14 day streak", emoji: "🚀", celebrationLevel: .intermediate),
+            StreakMilestone(streakCount: 30, title: "Monthly Master", description: "30 day streak", emoji: "🏆", celebrationLevel: .advanced),
+            StreakMilestone(streakCount: 100, title: "Legendary", description: "100 day streak", emoji: "👑", celebrationLevel: .legendary)
+        ]
     }
 
     public static func < (lhs: StreakMilestone, rhs: StreakMilestone) -> Bool {
@@ -315,6 +516,21 @@ public struct HabitSuggestion: Codable, Sendable, Identifiable {
         self.difficulty = difficulty
         self.reasoning = reasoning
         self.expectedSuccess = expectedSuccess
+    }
+}
+
+/// Structured behavioral profile of a user based on their habit history.
+public struct UserProfile {
+    public let existingHabits: [Habit]
+    public let averageConsistency: Double
+    public let peakProductivityHour: Int
+    public let preferredCategories: [HabitCategory]
+
+    public init(existingHabits: [Habit], averageConsistency: Double, peakProductivityHour: Int, preferredCategories: [HabitCategory]) {
+        self.existingHabits = existingHabits
+        self.averageConsistency = averageConsistency
+        self.peakProductivityHour = peakProductivityHour
+        self.preferredCategories = preferredCategories
     }
 }
 

@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 import SwiftData
 import XCTest
 @testable import HabitQuest
@@ -14,7 +18,7 @@ final class ProfileViewModelTests: XCTestCase {
                 for: Habit.self,
                 HabitLog.self,
                 PlayerProfile.self,
-                Achievement.self,
+                HabitQuestCore.Achievement.self,
                 configurations: ModelConfiguration(isStoredInMemoryOnly: true)
             )
             modelContext = ModelContext(modelContainer)
@@ -114,7 +118,7 @@ final class ProfileViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.achievements.isEmpty)
 
         // And they should exist in database
-        let fetchDescriptor = FetchDescriptor<Achievement>()
+        let fetchDescriptor = FetchDescriptor<HabitQuestCore.Achievement>()
         do {
             let achievements = try modelContext.fetch(fetchDescriptor)
             XCTAssertFalse(achievements.isEmpty)
