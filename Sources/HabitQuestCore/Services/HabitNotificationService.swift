@@ -97,8 +97,8 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
 
     private func scheduleUrgentReminder(for habit: Habit) async throws {
         let content = UNMutableNotificationContent()
-        content.title = "⚠️ Streak Alert!"
-        content.body = "Your \(habit.streak)-day streak for '\(habit.name)' is at risk! Complete it now to keep the fire burning!"
+        content.title = "🔥 Keep the \(habit.streak)-day streak alive!"
+        content.body = "Your streak for '\(habit.name)' is at risk! Complete it now to keep the fire burning!"
         content.sound = .default
         content.interruptionLevel = .timeSensitive
         

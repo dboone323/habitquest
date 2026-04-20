@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import SwiftData
 import SwiftUI
 
@@ -171,7 +173,7 @@ final class ProductivityMetricsService {
 
     private func calculateHabitDiversityScore(habits: [Habit]) -> Double {
         let categories = Set(habits.map(\.category))
-        let totalCategories = HabitCategory.allCases.count
+        let totalCategories = HabitQuestCore.HabitCategory.allCases.count
 
         // Score based on category diversity
         return Double(categories.count) / Double(totalCategories)
@@ -226,7 +228,7 @@ final class ProductivityMetricsService {
         return recommendations
     }
 
-    private func getTopPerformingCategories() async -> [HabitCategory] {
+    private func getTopPerformingCategories() async -> [HabitQuestCore.HabitCategory] {
         let habits = await fetchAllHabits()
         let categoryPerformance = Dictionary(grouping: habits, by: \.category).mapValues { categoryHabits in
             let allLogs = categoryHabits.flatMap(\.logs)
@@ -312,7 +314,7 @@ struct ProductivityInsights {
     let weeklyCompletionRate: Double
     let activeStreaks: Int
     let xpEarnedThisWeek: Int
-    let topPerformingCategories: [HabitCategory]
+    let topPerformingCategories: [HabitQuestCore.HabitCategory]
     let improvementAreas: [ProductivityArea]
     let nextMilestones: [ProductivityMilestone]
 }

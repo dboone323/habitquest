@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import SwiftUI
 
 /// Main app view containing the primary TabView navigation

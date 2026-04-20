@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import SwiftData
 import SwiftUI
 
@@ -49,12 +51,12 @@ final class AnalyticsService {
     }
 
     /// Get detailed category performance
-    func getCategoryPerformance(category: HabitCategory) async -> CategoryPerformance {
+    func getCategoryPerformance(category: HabitQuestCore.HabitCategory) async -> CategoryPerformance {
         await categoryInsightsService.getCategoryPerformance(category: category)
     }
 
     /// Get category distribution
-    func getCategoryDistribution() async -> [HabitCategory: Int] {
+    func getCategoryDistribution() async -> [HabitQuestCore.HabitCategory: Int] {
         await categoryInsightsService.getCategoryDistribution()
     }
 
@@ -168,7 +170,7 @@ struct AnalyticsStreakData {
 }
 
 struct CategoryStats {
-    let category: HabitCategory
+    let category: HabitQuestCore.HabitCategory
     let habitCount: Int
     let completionRate: Double
     let totalXP: Int
@@ -222,7 +224,7 @@ struct HabitTrendData {
 }
 
 struct CategoryInsight {
-    let category: HabitCategory
+    let category: HabitQuestCore.HabitCategory
     let totalHabits: Int
     let completionRate: Double
     let averageStreak: Int

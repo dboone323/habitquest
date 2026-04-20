@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 //
 //  TopPerformerRowViewTests.swift
 //  HabitQuestTests

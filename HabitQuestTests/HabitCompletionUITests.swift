@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 //
 // HabitCompletionUITests.swift
 // HabitQuestTests

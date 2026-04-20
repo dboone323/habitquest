@@ -31,10 +31,10 @@ jobs:
     timeout-minutes: 25
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v4
 
       - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@4b4f7b6ac1abe7f25130b2a700c1d5a5b0aa1612  # v3
 
 
       - name: Fetch centralized Dockerfile
@@ -74,7 +74,7 @@ jobs:
           fi
 
       - name: Upload Linux build metadata
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@26f896ddd1d8c61f77205b476476ceaf674e0ee8  # v4
         with:
           name: linux-build-metadata
           path: linux-image-metadata.json
@@ -86,7 +86,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v4
 
       - name: Prepare shared-kit dependency
         env:
@@ -191,7 +191,7 @@ jobs:
 
       - name: Upload Apple test result bundle
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@26f896ddd1d8c61f77205b476476ceaf674e0ee8  # v4
         with:
           name: apple-test-results
           path: TestResults.xcresult
@@ -237,7 +237,7 @@ jobs:
           cat release-manifest.json
 
       - name: Upload release manifest
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@26f896ddd1d8c61f77205b476476ceaf674e0ee8  # v4
         with:
           name: release-manifest
           path: release-manifest.json

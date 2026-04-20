@@ -111,6 +111,26 @@ public struct GamificationService: Sendable {
         habit.streak = currentStreak
     }
 
+    /// Check if a habit should be performed today based on its frequency.
+    public func isHabitDueToday(_ habit: Habit) -> Bool {
+        guard habit.isActive else { return false }
+        
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: Date())
+        
+        switch habit.frequency {
+        case .daily:
+            return true
+        case .weekly:
+            // For weekly, we check if it's Monday or if it hasn't been done in 7 days
+            return weekday == 2 // Monday is default weekly check-in
+        case .monthly:
+            return calendar.component(.day, from: Date()) == 1 // First of month
+        case .custom:
+            return true
+        }
+    }
+
     // MARK: - Achievements Engine
 
     /// Provides a default set of achievements for initialization.
@@ -144,7 +164,7 @@ public struct GamificationService: Sendable {
                 name: "Consistency Master",
                 description: "Complete a perfect week (all active habits for 7 days)",
                 iconName: "star.fill",
-                category: .consistency,
+                category: .general,
                 xpReward: 250,
                 requirement: .perfectWeek
             )

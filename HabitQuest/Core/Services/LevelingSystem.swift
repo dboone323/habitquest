@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 //
 // LevelingSystem.swift
 // HabitQuest

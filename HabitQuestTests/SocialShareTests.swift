@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 //
 // SocialShareTests.swift
 // HabitQuestTests
@@ -34,7 +38,7 @@ final class SocialShareTests: XCTestCase {
         XCTAssertTrue(baseURL.contains("facebook"))
     }
 
-    // MARK: - Achievement Sharing Tests
+    // MARK: - HabitQuestCore.Achievement Sharing Tests
 
     func testShareAchievement() {
         XCTAssertTrue(true, "Share achievement test")

@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import CoreML
 import Foundation
 import SharedKit

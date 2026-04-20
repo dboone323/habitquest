@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 //
 // AchievementAnimations.swift
 // HabitQuest

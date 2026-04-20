@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 import SwiftData
 import XCTest
 @testable import HabitQuest
@@ -8,7 +12,7 @@ final class DataExportServiceTests: XCTestCase {
             Habit.self,
             HabitLog.self,
             PlayerProfile.self,
-            Achievement.self,
+            HabitQuestCore.Achievement.self,
         ])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [config])
@@ -40,8 +44,8 @@ final class DataExportServiceTests: XCTestCase {
         sourceContext.insert(log)
         habit.logs.append(log)
 
-        // Achievement
-        let achievement = Achievement(
+        // HabitQuestCore.Achievement
+        let achievement = HabitQuestCore.Achievement(
             name: "First Steps",
             description: "Complete 1 habit",
             iconName: "star",
@@ -70,7 +74,7 @@ final class DataExportServiceTests: XCTestCase {
         // Assert: verify basic counts and fields
         let habitCount = try destContext.fetch(FetchDescriptor<Habit>()).count
         let logCount = try destContext.fetch(FetchDescriptor<HabitLog>()).count
-        let achCount = try destContext.fetch(FetchDescriptor<Achievement>()).count
+        let achCount = try destContext.fetch(FetchDescriptor<HabitQuestCore.Achievement>()).count
         let profiles = try destContext.fetch(FetchDescriptor<PlayerProfile>())
 
         XCTAssertEqual(habitCount, 1)

@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 import SwiftData
 import XCTest
 @testable import HabitQuest
@@ -11,7 +15,7 @@ final class DataManagementViewModelTests: XCTestCase {
         super.setUp()
         do {
             modelContainer = try ModelContainer(
-                for: Habit.self, HabitLog.self, Achievement.self, PlayerProfile.self,
+                for: Habit.self, HabitLog.self, HabitQuestCore.Achievement.self, PlayerProfile.self,
                 configurations: ModelConfiguration(isStoredInMemoryOnly: true)
             )
             modelContext = ModelContext(modelContainer)
@@ -66,8 +70,8 @@ final class DataManagementViewModelTests: XCTestCase {
         // Given some data in the model context
         let habit = Habit(name: "Test Habit", habitDescription: "Test", frequency: .daily, xpValue: 10)
         let log = HabitLog(habit: habit, completionDate: Date())
-        let achievement = Achievement(
-            name: "Test Achievement",
+        let achievement = HabitQuestCore.Achievement(
+            name: "Test HabitQuestCore.Achievement",
             description: "Test",
             iconName: "star",
             category: .streak,
@@ -265,8 +269,8 @@ final class DataManagementViewModelTests: XCTestCase {
         // Given data in the model context
         let habit = Habit(name: "Test Habit", habitDescription: "Test", frequency: .daily, xpValue: 10)
         let log = HabitLog(habit: habit, completionDate: Date())
-        let achievement = Achievement(
-            name: "Test Achievement",
+        let achievement = HabitQuestCore.Achievement(
+            name: "Test HabitQuestCore.Achievement",
             description: "Test",
             iconName: "star",
             category: .streak,
@@ -360,8 +364,8 @@ final class DataManagementViewModelTests: XCTestCase {
         // Initialize viewModel
         viewModel = DataManagementViewModel()
         // Given multiple achievements, some unlocked
-        let achievement1 = Achievement(
-            name: "Achievement 1",
+        let achievement1 = HabitQuestCore.Achievement(
+            name: "HabitQuestCore.Achievement 1",
             description: "Test",
             iconName: "star",
             category: .streak,
@@ -371,8 +375,8 @@ final class DataManagementViewModelTests: XCTestCase {
         )
         achievement1.unlockedDate = Date()
 
-        let achievement2 = Achievement(
-            name: "Achievement 2",
+        let achievement2 = HabitQuestCore.Achievement(
+            name: "HabitQuestCore.Achievement 2",
             description: "Test",
             iconName: "star",
             category: .streak,
@@ -382,8 +386,8 @@ final class DataManagementViewModelTests: XCTestCase {
         )
         achievement2.unlockedDate = nil
 
-        let achievement3 = Achievement(
-            name: "Achievement 3",
+        let achievement3 = HabitQuestCore.Achievement(
+            name: "HabitQuestCore.Achievement 3",
             description: "Test",
             iconName: "star",
             category: .streak,

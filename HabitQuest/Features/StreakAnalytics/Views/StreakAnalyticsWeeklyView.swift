@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import SwiftUI
 
 /// Weekly patterns section

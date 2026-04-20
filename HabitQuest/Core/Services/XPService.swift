@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 //
 // XPService.swift
 // HabitQuest

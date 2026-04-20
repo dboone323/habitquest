@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 //
 // DataPrivacyManager.swift
 // HabitQuest

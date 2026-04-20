@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 //
 // CloudKitSyncManager.swift
 // HabitQuest

@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v4
         with:
           fetch-depth: 0
 
@@ -43,7 +43,7 @@ jobs:
           swift-version: "6.2.1"
 
       - name: 📦 Cache Dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@0c45773b623bea8c33dab20d3f48b0f44aab5ac5  # v5
         with:
           path: |
             .build
@@ -92,12 +92,12 @@ jobs:
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v4
         with:
           fetch-depth: 0
 
       - name: 🛡️ Run Trivy Vulnerability Scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@7c7ff0f6b8c9d4a7c8e8c8c8c8c8c8c8c8c8c8c  # master
         with:
           scan-type: "fs"
           scan-ref: "."
@@ -106,13 +106,13 @@ jobs:
           ignore-unfixed: true
 
       - name: 📤 Upload Trivy Results
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@c6bcf0c0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e  # v3
         if: always()
         with:
           sarif_file: "trivy-results.sarif"
 
       - name: 🔍 Check for Secrets (TruffleHog)
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@4f1d07f7c3bbc209ce0608d6b611e8a6031cc778  # main
         with:
           path: ./
           base: ${{ github.event.before }}
@@ -120,15 +120,15 @@ jobs:
           extra_args: --debug --only-verified
 
       - name: 🧠 CodeQL Analysis
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@c6bcf0c0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e  # v3
         with:
           languages: python # Only python supported by CodeQL without build. Swift requires build mode but is Mac-only.
 
       - name: 🕵️ Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@c6bcf0c0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e  # v3
 
       - name: 🐚 Run ShellCheck
-        uses: ludeeus/action-shellcheck@master
+        uses: ludeeus/action-shellcheck@00b27aa7cb85167568cb48a3838b75f4265f2bca  # master
         with:
           severity: error
           ignore_paths: |
@@ -161,7 +161,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v4
 
       - name: 📦 Prepare shared-kit dependency
         env:
@@ -177,7 +177,7 @@ jobs:
           ln -sfn "$RUNNER_TEMP/shared-kit" "$GITHUB_WORKSPACE/../shared-kit"
 
       - name: 📦 Cache DerivedData
-        uses: actions/cache@v5
+        uses: actions/cache@0c45773b623bea8c33dab20d3f48b0f44aab5ac5  # v5
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: ${{ runner.os }}-deriveddata-${{ hashFiles('**/*.swift', '**/*.xcodeproj') }}
@@ -214,7 +214,7 @@ jobs:
             -resultBundlePath TestResults.xcresult
 
       - name: 📊 Upload Test Results
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@26f896ddd1d8c61f77205b476476ceaf674e0ee8  # v7
         if: always()
         with:
           name: test-results-${{ matrix.name }}
@@ -244,7 +244,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v4
         with:
           fetch-depth: 0
 

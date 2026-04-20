@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 //
 // ParticleEffects.swift
 // HabitQuest

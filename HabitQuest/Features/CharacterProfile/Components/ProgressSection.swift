@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import SwiftUI
 
 public struct ProgressSection: View {

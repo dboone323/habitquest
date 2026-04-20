@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import Foundation
 
 /// Supporting types for analytics extracted to reduce AdvancedAnalyticsEngine file size
@@ -38,11 +40,4 @@ struct BehavioralInsights: Sendable {
     let personalityInsights: [String]
 }
 
-struct HabitSuggestion: Sendable {
-    let name: String
-    let description: String
-    let category: HabitCategory
-    let difficulty: HabitDifficulty
-    let reasoning: String
-    let expectedSuccess: Double
-}
+

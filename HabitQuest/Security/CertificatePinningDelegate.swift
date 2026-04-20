@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import Foundation
 
 /// Certificate pinning delegate for URLSession

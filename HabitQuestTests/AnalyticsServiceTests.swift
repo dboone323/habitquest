@@ -1,3 +1,7 @@
+import SharedKit
+
+import HabitQuestCore
+
 import XCTest
 @testable import HabitQuest
 
@@ -258,7 +262,7 @@ final class AnalyticsServiceTests: XCTestCase {
 
     func testCategoryStatsInitialization() {
         // Given
-        let category = HabitCategory.health
+        let category = HabitQuestCore.HabitCategory.health
         let habitCount = 5
         let completionRate = 0.80
         let totalXP = 400
@@ -306,7 +310,7 @@ final class AnalyticsServiceTests: XCTestCase {
             MoodStats(mood: .excellent, completionRate: 0.9, averageXP: 100),
             MoodStats(mood: .good, completionRate: 0.8, averageXP: 80),
         ]
-        let strongestCorrelation = MoodRating.excellent
+        let strongestCorrelation = HabitQuestCore.MoodRating.excellent
 
         // When
         let correlation = MoodCorrelation(
@@ -347,7 +351,7 @@ final class AnalyticsServiceTests: XCTestCase {
 
     func testMoodStatsInitialization() {
         // Given
-        let mood = MoodRating.excellent
+        let mood = HabitQuestCore.MoodRating.excellent
         let completionRate = 0.92
         let averageXP = 150
 
@@ -660,7 +664,7 @@ final class AnalyticsServiceTests: XCTestCase {
 
     func testCategoryInsightInitialization() {
         // Given
-        let category = HabitCategory.productivity
+        let category = HabitQuestCore.HabitCategory.productivity
         let totalHabits = 8
         let completionRate = 0.82
         let averageStreak = 9

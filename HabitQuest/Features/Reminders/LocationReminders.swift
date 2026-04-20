@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 //
 // LocationReminders.swift
 // HabitQuest

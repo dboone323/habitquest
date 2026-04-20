@@ -6,7 +6,7 @@ import Foundation
 import PackageDescription
 
 private let localSharedKitPath = "../shared-kit"
-private let sharedKitDependency: Package.Dependency = FileManager.default.fileExists(atPath: localSharedKitPath)
+private let sharedKitDependency: Package.Dependency = true
     ? .package(path: localSharedKitPath)
     : .package(url: "https://github.com/dboone323/shared-kit.git", branch: "main")
 

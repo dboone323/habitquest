@@ -1,10 +1,14 @@
+import SharedKit
+
+import HabitQuestCore
+
 import SwiftUI
 import XCTest
 @testable import HabitQuest
 
 @MainActor
 final class ThemeManagerTests: XCTestCase {
-    var themeManager: ThemeManager!
+    var themeManager: HabitQuestCore.ThemeManager!
 
     override func setUp() {
         super.setUp()
@@ -36,11 +40,11 @@ final class ThemeManagerTests: XCTestCase {
     func testColorScheme() {
         // Set to dark mode
         themeManager.isDarkMode = true
-        XCTAssertEqual(themeManager.colorScheme, .dark)
+        XCTAssertEqual(themeManager.colorScheme, ColorScheme.dark)
 
         // Set to light mode
         themeManager.isDarkMode = false
-        XCTAssertEqual(themeManager.colorScheme, .light)
+        XCTAssertEqual(themeManager.colorScheme, ColorScheme.light)
     }
 
     func testThemeColors() {

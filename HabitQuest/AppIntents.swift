@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 #if canImport(AppIntents)
     import AppIntents
 

@@ -1,3 +1,5 @@
+import HabitQuestCore
+
 import Foundation
 import SharedKit
 @preconcurrency import UserNotifications
@@ -198,7 +200,7 @@ final class ContentGenerationService {
         }
     }
 
-    private func selectOptimalSound(for category: HabitCategory) -> UNNotificationSound {
+    private func selectOptimalSound(for category: HabitQuestCore.HabitCategory) -> UNNotificationSound {
         switch category {
         case .health, .fitness:
             UNNotificationSound(named: UNNotificationSoundName("energetic_chime.wav"))

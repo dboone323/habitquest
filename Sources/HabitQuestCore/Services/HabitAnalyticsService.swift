@@ -42,6 +42,23 @@ public final class HabitAnalyticsService: Sendable {
         return hourCounts.max(by: { $0.value < $1.value })?.key
     }
 
+    /// Analyzes a set of habits and their history to create a user behavior profile.
+    public func analyzeUserProfile(habits: [Habit]) -> UserProfile {
+        let consistency = calculateOverallConsistency(habits: habits)
+        // For simplicity, we assume yesterday's/today's logs for peak hour if not provided
+        let allLogs = habits.flatMap { $0.logs }
+        let peakHour = calculatePeakDisciplineHour(logs: allLogs) ?? 9
+        
+        let preferredCategories = Array(Set(habits.map(\.category)))
+        
+        return UserProfile(
+            existingHabits: habits,
+            averageConsistency: consistency,
+            peakProductivityHour: peakHour,
+            preferredCategories: preferredCategories
+        )
+    }
+
     // MARK: - Habit Insights & Trends
 
     /// Generates high-level behavioral insights based on habit completion patterns.
