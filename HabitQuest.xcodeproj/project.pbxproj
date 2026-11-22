@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		687B1BD730B39E2300C50F5F /* HabitQuestCore in Frameworks */ = {isa = PBXBuildFile; productRef = 68F000022DC05EB700092697 /* HabitQuestCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				68F000032DC05EB700092697 /* HabitQuestCore in Frameworks */,
+				687B1BD730B39E2300C50F5F /* HabitQuestCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,7 +615,7 @@
 /* Begin XCLocalSwiftPackageReference section */
 		68F000012DC05EB700092697 /* XCLocalSwiftPackageReference "." */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ".";
+			relativePath = .;
 		};
 /* End XCLocalSwiftPackageReference section */
 

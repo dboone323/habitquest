@@ -8,20 +8,35 @@ import SwiftData
 @MainActor
 public class TodaysQuestsViewModel: ObservableObject {
     @Published var todaysHabits: [Habit] = []
+    @Published var suggestions: [HabitSuggestion] = []
     @Published var showingAddQuest = false
     @Published var showingCompletionAlert = false
     @Published var completionMessage = ""
 
     private var modelContext: ModelContext?
     private let gamificationService = GamificationService()
+    private var suggestionService: HabitSuggestionService?
 
     /// Set the model context for data operations
     public func setModelContext(_ context: ModelContext) {
         modelContext = context
+        suggestionService = HabitSuggestionService(modelContext: context)
         loadTodaysHabits()
+        loadSuggestions()
     }
 
-    /// Load habits that are due today based on their AI-optimized frequency
+    /// Load suggestions from the recommendation engine
+    public func loadSuggestions() {
+        guard let suggestionService else { return }
+        Task { [weak self] in
+            let items = await suggestionService.generateHabitSuggestions()
+            await MainActor.run {
+                self?.suggestions = items
+            }
+        }
+    }
+
+    /// Load habits that are due today based on their scheduled frequency
     private func loadTodaysHabits() {
         guard let context = modelContext else { return }
 
@@ -31,6 +46,10 @@ public class TodaysQuestsViewModel: ObservableObject {
 
         do {
             let allHabits = try context.fetch(descriptor)
+
+            // Auto-fill health habits if authorized
+            HealthKitService.shared.autoFillHabits(allHabits, in: context)
+
             todaysHabits = allHabits.filter { habit in
                 gamificationService.isHabitDueToday(habit)
             }
@@ -50,20 +69,40 @@ public class TodaysQuestsViewModel: ObservableObject {
         // Fetch player profile to update stats
         let profileDescriptor = FetchDescriptor<PlayerProfile>()
         let earnedXP: Int
-        
+
         if let profile = (try? context.fetch(profileDescriptor))?.first {
             let result = gamificationService.processHabitCompletion(habit: habit, profile: profile)
             earnedXP = habit.xpValue * habit.difficulty.xpMultiplier
-            
+
+            // F2: Wire achievements
+            let achievements = (try? context.fetch(FetchDescriptor<Achievement>())) ?? []
+            let allHabits = (try? context.fetch(FetchDescriptor<Habit>())) ?? []
+            let recentLogs = (try? context.fetch(FetchDescriptor<HabitLog>())) ?? []
+            let newlyUnlocked = AchievementService.updateAchievementProgress(
+                achievements: achievements,
+                player: profile,
+                habits: allHabits,
+                recentLogs: recentLogs
+            )
+
             if result.leveledUp {
                 completionMessage = "LEVEL UP! Reached Level \(result.newLevel)! +\(earnedXP) XP"
             } else {
                 completionMessage = "Quest completed! +\(earnedXP) XP"
             }
+
+            if !newlyUnlocked.isEmpty {
+                completionMessage += " 🏆 Unlocked \(newlyUnlocked.count) achievement(s)!"
+            }
         } else {
             // Fallback if no profile exists
             earnedXP = habit.xpValue * habit.difficulty.xpMultiplier
             completionMessage = "Quest completed! +\(earnedXP) XP"
+        }
+
+        // F1: Wire reminders
+        Task {
+            await HabitNotificationService.shared.scheduleSmartReminders(for: habit)
         }
 
         showingCompletionAlert = true
@@ -85,9 +124,15 @@ public class TodaysQuestsViewModel: ObservableObject {
 
         context.insert(habit)
 
+        // F1: Wire reminders
+        Task {
+            await HabitNotificationService.shared.scheduleSmartReminders(for: habit)
+        }
+
         do {
             try context.save()
             loadTodaysHabits()
+            loadSuggestions()
         } catch {
             print("Error adding habit: \(error)")
         }

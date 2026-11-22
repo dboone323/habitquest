@@ -13,18 +13,18 @@ public class ProfileViewModel: ObservableObject {
     @Published var longestStreak: Int = 0
     @Published var totalHabits: Int = 0
     @Published var completedToday: Int = 0
+    @Published var activeStreaks: Int = 0
+    @Published var perfectDays: Int = 0
+    @Published var weeklyCompletion: Double = 0.0
     @Published var achievements: [Achievement] = []
-    @Published var analytics: HabitAnalytics = .empty
 
     private var modelContext: ModelContext?
     private let logger = HabitQuestLogger(category: .uiCategory)
-    private var analyticsService: AnalyticsService?
     private let gamificationService = GamificationService()
 
     /// Set the model context and load profile data
     func setModelContext(_ context: ModelContext) {
         modelContext = context
-        // self.analyticsService = AnalyticsService(modelContext: context) 
         loadProfile()
         loadStatistics()
         loadAchievements()
@@ -35,18 +35,6 @@ public class ProfileViewModel: ObservableObject {
         loadProfile()
         loadStatistics()
         updateAchievements()
-        loadAnalytics()
-    }
-
-    /// Load analytics data
-    private func loadAnalytics() {
-        Task { [weak self] in
-            guard let self else { return }
-            let newAnalytics = await analyticsService?.getAnalytics()
-            await MainActor.run {
-                self.analytics = newAnalytics ?? HabitAnalytics.empty
-            }
-        }
     }
 
     /// Load player profile data from SwiftData
@@ -121,6 +109,31 @@ public class ProfileViewModel: ObservableObject {
                 }
                 return count + (todayCompletions.isEmpty ? 0 : 1)
             }
+
+            activeStreaks = allHabits.filter { $0.streak > 0 }.count
+
+            let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: today) ?? today
+            let allLogs = allHabits.flatMap { $0.logs }
+            let weekLogs = allLogs.filter { $0.completionDate >= sevenDaysAgo && $0.completionDate <= today && $0.isCompleted }
+            let expectedWeekCompletions = totalHabits * 7
+            weeklyCompletion = expectedWeekCompletions > 0 ? min(100.0, (Double(weekLogs.count) / Double(expectedWeekCompletions)) * 100.0) : 0.0
+
+            var perfectDayCount = 0
+            if totalHabits > 0 {
+                for dayOffset in 0..<30 {
+                    if let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) {
+                        let completedOnDate = allHabits.filter { habit in
+                            habit.logs.contains { log in
+                                log.isCompleted && calendar.isDate(log.completionDate, inSameDayAs: date)
+                            }
+                        }.count
+                        if completedOnDate == totalHabits {
+                            perfectDayCount += 1
+                        }
+                    }
+                }
+            }
+            perfectDays = perfectDayCount
 
             logger.info("Loaded statistics - Total habits: \(totalHabits), Completed today: \(completedToday)")
         } catch {
