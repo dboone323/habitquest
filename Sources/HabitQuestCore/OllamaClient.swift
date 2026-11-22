@@ -3,8 +3,7 @@
 // HabitQuestCore
 //
 // Minimal client for a locally running Ollama API (default http://localhost:11434).
-// OllamaClient was previously supplied by the removed SharedKit package; this
-// is a small local replacement so HabitQuest builds standalone (issue #51).
+// OllamaClient is a small local replacement so HabitQuest builds standalone (issue #51).
 //
 import Foundation
 
