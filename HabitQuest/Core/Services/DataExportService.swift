@@ -23,6 +23,14 @@ struct DataExportService {
         let service = HabitDataService(modelContext: context)
         try service.importData(data)
     }
+
+    @MainActor
+    static func deleteAllData(from context: ModelContext) throws {
+        try context.delete(model: HabitLog.self)
+        try context.delete(model: Habit.self)
+        try context.delete(model: PlayerProfile.self)
+        try context.save()
+    }
 }
 
 enum DataExportError: LocalizedError {
