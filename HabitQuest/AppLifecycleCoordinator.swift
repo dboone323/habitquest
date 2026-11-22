@@ -19,7 +19,6 @@ enum HabitQuestLifecycleCoordinator {
         ])
 
         DataMigrationService.runIfNeeded()
-        _ = NetworkSecurityPolicy.makeSecureSession()
 
         if AppSecurePreferenceStore.bool(forKey: "hq.biometric_enabled") == nil {
             _ = AppSecurePreferenceStore.set(false, forKey: "hq.biometric_enabled")
@@ -29,7 +28,6 @@ enum HabitQuestLifecycleCoordinator {
             Task {
                 _ = await requestNotificationAuthorizationIfNeeded()
             }
-            UIApplication.shared.registerForRemoteNotifications()
         #endif
     }
 
