@@ -1,5 +1,4 @@
 # Unified SwiftLint Configuration
-# Source: shared-kit/.swiftlint.yml
 # Version: 1.0.0
 
 disabled_rules:

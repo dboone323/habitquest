@@ -14,6 +14,6 @@ Core Objectives:
 2. Dynamic Gamification: Adjust quest difficulty and rewards based on progress.
 
 ## Universal AI Agent Rules
-- Adhere to the `BaseAgent` interface from `SharedKit`.
+- Adhere to the `BaseAgent` interface defined in `Sources/HabitQuestCore/BaseAgent.swift`.
 - Pattern all results using the "Result Object" pattern (`AgentResult`).
 - Ensure all AI-suggested code that is high-risk properly implements `requiresApproval` for Human-In-The-Loop gating.
