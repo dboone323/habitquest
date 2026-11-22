@@ -15,15 +15,11 @@ let package = Package(
         .library(
             name: "HabitQuestCore",
             targets: ["HabitQuestCore"]
-        ),
-        .executable(
-            name: "HabitAudit",
-            targets: ["HabitAudit"]
         )
     ],
     dependencies: [],
     targets: [
-        // Core library – contains HabitInsightAgent and consolidated models
+        // Core library
         .target(
             name: "HabitQuestCore",
             dependencies: [],
@@ -31,14 +27,6 @@ let package = Package(
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
-        ),
-        // Audit executable
-        .executableTarget(
-            name: "HabitAudit",
-            dependencies: ["HabitQuestCore"],
-            path: "Tools",
-            exclude: ["ProjectScripts", "Automation"],
-            sources: ["HabitAudit.swift"]
         ),
         .testTarget(
             name: "HabitQuestCoreTests",
