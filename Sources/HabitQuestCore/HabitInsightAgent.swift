@@ -1,10 +1,9 @@
 import Foundation
-import SharedKit
 
 /// A `BaseAgent`-compliant behavioral insight agent for HabitQuest.
 ///
 /// `HabitInsightAgent` wraps the analytics logic from `HabitSuggestionService` and
-/// `BehavioralInsightsService` into the standardized `SharedKit` protocol, enabling
+/// `BehavioralInsightsService` into the standardized `BaseAgent` protocol, enabling
 /// HITL approval flows for any gamification reward changes.
 public struct HabitInsightAgent: BaseAgent {
     public let id = "habit_insight_agent_001"
