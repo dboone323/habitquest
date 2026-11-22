@@ -1,11 +1,12 @@
 import HabitQuestCore
 
-//
+////
 // HabitWidget.swift
 // HabitQuest
-//
+////
 // Interactive widget for checking off habits from the home screen.
 // Provides quick access to daily habit completion without opening the app.
+//
 //
 
 import SwiftUI
@@ -44,7 +45,7 @@ struct HabitWidgetProvider: TimelineProvider {
         completion(entry)
     }
 
-    func getTimeline(in _: Context, completion: @escaping (Timeline<HabitWidgetEntry>) -> Void) {
+    func getTimeline(in context: Context, completion: @escaping (Timeline<HabitWidgetEntry>) -> Void) {
         // In production, fetch actual habits from shared container
         let habits = loadHabitsFromSharedContainer()
 
@@ -138,7 +139,7 @@ struct HabitWidgetMediumView: View {
                                 Text("🔥\(habit.streak)")
                                     .font(.caption2)
                                     .foregroundColor(.orange)
-                            }
+                        }
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
@@ -171,22 +172,19 @@ struct HabitWidgetEntryView: View {
 }
 
 // Widget configuration for HabitQuest.
-// Note: This would be in a separate Widget Extension target
-/*
- @main
- struct HabitQuestWidget: Widget {
- let kind: String = "HabitQuestWidget"
+// Note: When deployed to a dedicated WidgetExtension target, annotate with @main.
+struct HabitQuestWidget: Widget {
+    let kind: String = "HabitQuestWidget"
 
- var body: some WidgetConfiguration {
- StaticConfiguration(kind: kind, provider: HabitWidgetProvider()) { entry in
- HabitWidgetEntryView(entry: entry)
- }
- .configurationDisplayName("Habit Tracker")
- .description("Track your daily habits from the home screen.")
- .supportedFamilies([.systemSmall, .systemMedium])
- }
- }
- */
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: HabitWidgetProvider()) { entry in
+            HabitWidgetEntryView(entry: entry)
+        }
+        .configurationDisplayName("Habit Tracker")
+        .description("Track your daily habits from the home screen.")
+        .supportedFamilies([.systemSmall, .systemMedium])
+    }
+}
 
 // MARK: - Preview
 

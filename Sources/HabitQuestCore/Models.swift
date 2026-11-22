@@ -455,11 +455,23 @@ public struct StreakMilestone: Identifiable, Sendable, Comparable {
         case basic = 1, intermediate = 2, advanced = 3, epic = 4, legendary = 5
         
         public var particleCount: Int {
-            rawValue * 20
+            switch self {
+            case .basic: 10
+            case .intermediate: 25
+            case .advanced: 50
+            case .epic: 75
+            case .legendary: 100
+            }
         }
         
         public var animationIntensity: Double {
-            Double(rawValue) * 0.3
+            switch self {
+            case .basic: 0.5
+            case .intermediate: 0.75
+            case .advanced: 1.0
+            case .epic: 1.25
+            case .legendary: 1.5
+            }
         }
     }
 
@@ -471,9 +483,10 @@ public struct StreakMilestone: Identifiable, Sendable, Comparable {
     public static var predefinedMilestones: [StreakMilestone] { allMilestones }
 
     public static func isNewMilestone(streakCount: Int, previousCount: Int) -> Bool {
-        let current = milestone(for: streakCount)
-        let previous = milestone(for: previousCount)
-        return current.streakCount > previous.streakCount
+        let all = allMilestones.sorted(by: { $0.streakCount > $1.streakCount })
+        let currentStreakCount = all.first(where: { streakCount >= $0.streakCount })?.streakCount ?? 0
+        let prevStreakCount = all.first(where: { previousCount >= $0.streakCount })?.streakCount ?? 0
+        return currentStreakCount > prevStreakCount
     }
 
     public static func nextMilestone(for count: Int) -> StreakMilestone? {
@@ -484,10 +497,12 @@ public struct StreakMilestone: Identifiable, Sendable, Comparable {
     public static var allMilestones: [StreakMilestone] {
         [
             StreakMilestone(streakCount: 3, title: "Getting Started", description: "3 day streak", emoji: "🔥", celebrationLevel: .basic),
-            StreakMilestone(streakCount: 7, title: "Week One", description: "7 day streak", emoji: "📈", celebrationLevel: .basic),
+            StreakMilestone(streakCount: 7, title: "One Week Warrior", description: "7 day streak", emoji: "📈", celebrationLevel: .intermediate),
             StreakMilestone(streakCount: 14, title: "Consistent", description: "14 day streak", emoji: "🚀", celebrationLevel: .intermediate),
             StreakMilestone(streakCount: 30, title: "Monthly Master", description: "30 day streak", emoji: "🏆", celebrationLevel: .advanced),
-            StreakMilestone(streakCount: 100, title: "Legendary", description: "100 day streak", emoji: "👑", celebrationLevel: .legendary)
+            StreakMilestone(streakCount: 50, title: "Half Century", description: "50 day streak", emoji: "⚡️", celebrationLevel: .advanced),
+            StreakMilestone(streakCount: 100, title: "Century Club", description: "100 day streak", emoji: "👑", celebrationLevel: .epic),
+            StreakMilestone(streakCount: 365, title: "Year of Dedication", description: "365 day streak", emoji: "🌟", celebrationLevel: .legendary)
         ]
     }
 
