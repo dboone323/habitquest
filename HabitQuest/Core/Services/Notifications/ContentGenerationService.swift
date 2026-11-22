@@ -1,7 +1,6 @@
 import HabitQuestCore
 
 import Foundation
-import SharedKit
 @preconcurrency import UserNotifications
 
 /// Service responsible for generating intelligent notification content

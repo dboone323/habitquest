@@ -5,16 +5,11 @@
 import Foundation
 import PackageDescription
 
-private let localSharedKitPath = "../shared-kit"
-private let sharedKitDependency: Package.Dependency = true
-    ? .package(path: localSharedKitPath)
-    : .package(url: "https://github.com/dboone323/shared-kit.git", branch: "main")
-
 let package = Package(
     name: "HabitQuest",
     platforms: [
-        .iOS("26.0"),
-        .macOS("26.0"),
+        .iOS("27.0"),
+        .macOS("27.0"),
     ],
     products: [
         .library(
@@ -26,16 +21,12 @@ let package = Package(
             targets: ["HabitAudit"]
         )
     ],
-    dependencies: [
-        sharedKitDependency,
-    ],
+    dependencies: [],
     targets: [
         // Core library – contains HabitInsightAgent and consolidated models
         .target(
             name: "HabitQuestCore",
-            dependencies: [
-                .product(name: "SharedKit", package: "shared-kit"),
-            ],
+            dependencies: [],
             path: "Sources/HabitQuestCore",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")

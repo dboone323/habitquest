@@ -5,7 +5,6 @@
 
 import Foundation
 import SwiftData
-import SharedKit
 import OSLog
 
 private let logger = Logger(subsystem: "com.habitquest.core", category: "HabitAnalyticsService")

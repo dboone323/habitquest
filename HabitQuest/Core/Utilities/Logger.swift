@@ -3,7 +3,7 @@ import HabitQuestCore
 import Foundation
 import os
 
-/// Unique logging utility for the HabitQuest app to avoid shadowing SharedKit.Logger
+/// Unique logging utility for the HabitQuest app
 public struct HabitQuestLogger {
     /// Log categories for different parts of the application
     public enum Category: String {

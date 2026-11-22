@@ -2,7 +2,6 @@ import HabitQuestCore
 
 import CoreML
 import Foundation
-import SharedKit
 
 /// ML-based habit suggestion engine
 class HabitRecommendationService {
@@ -114,18 +113,8 @@ class HabitRecommendationService {
     ) async -> [MLHabitSuggestion] {
         let existingHabits = completionHistory.map(\.habitName).joined(separator: ", ")
 
-        // Dynamic trend analysis via SharedKit
-        let points = completionHistory.map { PredictiveAnalyticsEngine.TimeSeriesPoint(
-            timestamp: $0.date,
-            value: $0.completed
-                ? 1.0
-                : 0.0
-        ) }
-        let trendInfo = await PredictiveAnalyticsEngine.shared.analyze(points)
-
         let prompt = """
         Analyze these completed habits: \(existingHabits).
-        Ecosystem Trend Context: \(trendInfo.message) (Probability: \(trendInfo.probability))
 
         Suggest 3 new habits:
         1. One complementary habit.
