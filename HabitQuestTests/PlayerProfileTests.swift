@@ -1,56 +1,54 @@
-
 import HabitQuestCore
-
-//
-//  PlayerProfileTests.swift
-//  HabitQuestTests
-//
-//  Comprehensive test suite for PlayerProfile
-//
-
+import SwiftData
 import XCTest
 @testable import HabitQuest
 
 final class PlayerProfileTests: XCTestCase {
-    // MARK: - Initialization Tests
+    // MARK: - Initialization & Default Property Tests
 
-    func testInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Initialization test placeholder")
+    func testDefaultInitialization() {
+        let profile = PlayerProfile()
+
+        XCTAssertEqual(profile.level, 1)
+        XCTAssertEqual(profile.currentXP, 0)
+        XCTAssertEqual(profile.xpForNextLevel, 100)
+        XCTAssertEqual(profile.longestStreak, 0)
+        XCTAssertEqual(profile.streakFreezes, 0)
+        XCTAssertNotNil(profile.creationDate)
+        XCTAssertEqual(profile.xpProgress, 0.0)
     }
 
-    // MARK: - Property Tests
+    func testCustomPropertyUpdates() {
+        let profile = PlayerProfile()
+        profile.level = 5
+        profile.currentXP = 600
+        profile.xpForNextLevel = 750
+        profile.longestStreak = 14
+        profile.streakFreezes = 3
 
-    func testProperties() {
-        // Test property access and validation
-        XCTAssertTrue(true, "Property test placeholder")
+        XCTAssertEqual(profile.level, 5)
+        XCTAssertEqual(profile.currentXP, 600)
+        XCTAssertEqual(profile.xpForNextLevel, 750)
+        XCTAssertEqual(profile.longestStreak, 14)
+        XCTAssertEqual(profile.streakFreezes, 3)
     }
 
-    // MARK: - Method Tests
+    func testXPProgressCalculation() {
+        let profile = PlayerProfile()
+        profile.level = 1
+        profile.currentXP = 50
+        profile.xpForNextLevel = 100
 
-    func testPublicMethods() {
-        // Test public method functionality
-        XCTAssertTrue(true, "Method test placeholder")
-    }
+        // At level 1, currentThreshold = 100 * 1.5^0 = 100, nextThreshold = 100, range <= 0 -> 0.0
+        XCTAssertEqual(profile.xpProgress, 0.0)
 
-    // MARK: - Edge Case Tests
-
-    func testEdgeCases() {
-        // Test edge cases and boundary conditions
-        XCTAssertTrue(true, "Edge case test placeholder")
-    }
-
-    // MARK: - Error Handling Tests
-
-    func testErrorHandling() {
-        // Test error handling and validation
-        XCTAssertTrue(true, "Error handling test placeholder")
-    }
-
-    // MARK: - Integration Tests
-
-    func testIntegration() {
-        // Test integration with other components
-        XCTAssertTrue(true, "Integration test placeholder")
+        // At level 2
+        profile.level = 2
+        profile.xpForNextLevel = 225
+        profile.currentXP = 180
+        // currentThreshold = 100 * 1.5^1 = 150
+        // nextThreshold = 225, range = 75
+        // (180 - 150) / 75 = 30 / 75 = 0.4
+        XCTAssertEqual(profile.xpProgress, 0.4, accuracy: 0.001)
     }
 }

@@ -209,14 +209,30 @@ public final class HabitDataService: Sendable {
         let currentXP: Int
         let xpForNextLevel: Int
         let longestStreak: Int
+        let streakFreezes: Int
         let creationDate: Date
+
+        enum CodingKeys: String, CodingKey {
+            case level, currentXP, xpForNextLevel, longestStreak, streakFreezes, creationDate
+        }
 
         init(from profile: PlayerProfile) {
             self.level = profile.level
             self.currentXP = profile.currentXP
             self.xpForNextLevel = profile.xpForNextLevel
             self.longestStreak = profile.longestStreak
+            self.streakFreezes = profile.streakFreezes
             self.creationDate = profile.creationDate
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            level = try container.decode(Int.self, forKey: .level)
+            currentXP = try container.decode(Int.self, forKey: .currentXP)
+            xpForNextLevel = try container.decode(Int.self, forKey: .xpForNextLevel)
+            longestStreak = try container.decode(Int.self, forKey: .longestStreak)
+            streakFreezes = try container.decodeIfPresent(Int.self, forKey: .streakFreezes) ?? 0
+            creationDate = try container.decode(Date.self, forKey: .creationDate)
         }
 
         func toModel() -> PlayerProfile {
@@ -225,6 +241,7 @@ public final class HabitDataService: Sendable {
             model.currentXP = currentXP
             model.xpForNextLevel = xpForNextLevel
             model.longestStreak = longestStreak
+            model.streakFreezes = streakFreezes
             model.creationDate = creationDate
             return model
         }

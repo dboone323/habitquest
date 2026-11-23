@@ -111,7 +111,7 @@ public class TodaysQuestsViewModel: ObservableObject {
             await HabitNotificationService.shared.scheduleSmartReminders(for: habit)
         }
 
-        showingCompletionAlert = true
+        showingCompletionAlert = false
 
         // Refresh today's habits
         loadTodaysHabits()
@@ -144,7 +144,8 @@ public class TodaysQuestsViewModel: ObservableObject {
 
         // Fetch player profile to revert XP and level
         let profileDescriptor = FetchDescriptor<PlayerProfile>()
-        if let profile = (try? context.fetch(profileDescriptor))?.first {
+        let fetchedProfile = (try? context.fetch(profileDescriptor))?.first
+        if let profile = fetchedProfile {
             profile.currentXP = max(0, profile.currentXP - xpToRevert)
 
             // Recalculate level based on reverted XP
@@ -161,7 +162,7 @@ public class TodaysQuestsViewModel: ObservableObject {
         if remainingCompletedLogs.isEmpty {
             habit.streak = 0
         } else {
-            gamificationService.updateHabitStreak(habit: habit)
+            gamificationService.updateHabitStreak(habit: habit, profile: fetchedProfile)
         }
 
         showingCompletionAlert = false

@@ -32,7 +32,7 @@ final class HabitQuestUITests: XCTestCase {
 
         // If no habit is present, add one
         let addQuestButton = app.buttons["Add Quest"]
-        if addQuestButton.waitForExistence(timeout: 2) {
+        if addQuestButton.waitForExistence(timeout: 2) && !app.buttons["Mark complete"].exists && !app.buttons["Mark incomplete"].exists {
             addQuestButton.tap()
 
             let nameField = app.textFields.firstMatch
@@ -47,26 +47,31 @@ final class HabitQuestUITests: XCTestCase {
             }
         }
 
+        // Ensure habit is uncompleted to begin
+        if app.buttons["Mark incomplete"].firstMatch.waitForExistence(timeout: 2) {
+            app.buttons["Mark incomplete"].firstMatch.tap()
+            RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+        }
+
         // 1. Today tab with an uncompleted habit showing an empty circle
         let markCompleteButton = app.buttons["Mark complete"].firstMatch
         _ = markCompleteButton.waitForExistence(timeout: 5)
         RunLoop.current.run(until: Date().addingTimeInterval(1))
-        saveScreenshot(name: "01-today-uncompleted-circle.png")
+        saveScreenshot(name: "01-today-uncompleted-circle.png", directoryName: "issue68-66-live-check-2026-11-23")
 
         // 2. Same habit after completing — filled green checkmark
         if markCompleteButton.exists {
             markCompleteButton.tap()
 
-            let awesomeButton = app.alerts.buttons.firstMatch
-            if awesomeButton.waitForExistence(timeout: 3) {
-                awesomeButton.tap()
+            if app.alerts.firstMatch.waitForExistence(timeout: 1) {
+                app.alerts.buttons.firstMatch.tap()
             }
         }
 
         let markIncompleteButton = app.buttons["Mark incomplete"].firstMatch
         _ = markIncompleteButton.waitForExistence(timeout: 3)
         RunLoop.current.run(until: Date().addingTimeInterval(1))
-        saveScreenshot(name: "02-today-completed-checkmark.png")
+        saveScreenshot(name: "02-today-completed-checkmark.png", directoryName: "issue68-66-live-check-2026-11-23")
 
         // 3. Tap again — back to empty circle, no duplicate log, XP reverted
         if markIncompleteButton.exists {
@@ -74,14 +79,13 @@ final class HabitQuestUITests: XCTestCase {
         }
         _ = app.buttons["Mark complete"].firstMatch.waitForExistence(timeout: 3)
         RunLoop.current.run(until: Date().addingTimeInterval(1))
-        saveScreenshot(name: "03-today-toggled-off-circle.png")
+        saveScreenshot(name: "03-today-toggled-off-circle.png", directoryName: "issue68-66-live-check-2026-11-23")
 
         // Complete again so Analytics has habit completion data
         if app.buttons["Mark complete"].firstMatch.exists {
             app.buttons["Mark complete"].firstMatch.tap()
-            let alertButton = app.alerts.buttons.firstMatch
-            if alertButton.waitForExistence(timeout: 3) {
-                alertButton.tap()
+            if app.alerts.firstMatch.waitForExistence(timeout: 1) {
+                app.alerts.buttons.firstMatch.tap()
             }
         }
 
@@ -94,7 +98,7 @@ final class HabitQuestUITests: XCTestCase {
         // Wait for analytics data to render
         _ = app.staticTexts["Streak Distribution"].waitForExistence(timeout: 5)
         RunLoop.current.run(until: Date().addingTimeInterval(1))
-        saveScreenshot(name: "04-analytics-tab-with-data.png")
+        saveScreenshot(name: "04-analytics-tab-with-data.png", directoryName: "issue68-66-live-check-2026-11-23")
 
         // 5. Tap Refresh — data refreshes, no error
         let directRefresh = app.buttons["Refresh"]
@@ -111,17 +115,165 @@ final class HabitQuestUITests: XCTestCase {
             }
         }
         RunLoop.current.run(until: Date().addingTimeInterval(1))
-        saveScreenshot(name: "05-analytics-refreshed.png")
+        saveScreenshot(name: "05-analytics-refreshed.png", directoryName: "issue68-66-live-check-2026-11-23")
     }
 
-    private func saveScreenshot(name: String) {
+    @MainActor
+    func testLiveCheckIssue76() {
+        let app = XCUIApplication()
+        app.launch()
+        dismissSystemPermissionAlertsIfPresent(in: app)
+
+        let targetDir = "issue76-live-check-2026-11-23"
+
+        let todayTab = app.tabBars.buttons["Today"]
+        if todayTab.waitForExistence(timeout: 3) {
+            todayTab.tap()
+        }
+
+        // Ensure at least one habit exists
+        let addQuestButton = app.buttons["Add Quest"]
+        if addQuestButton.waitForExistence(timeout: 2) && !app.buttons["Mark complete"].exists && !app.buttons["Mark incomplete"].exists {
+            addQuestButton.tap()
+
+            let nameField = app.textFields.firstMatch
+            if nameField.waitForExistence(timeout: 2) {
+                nameField.tap()
+                nameField.typeText("Morning Meditation")
+            }
+
+            let addButton = app.buttons["Add"]
+            if addButton.waitForExistence(timeout: 2) {
+                addButton.tap()
+            }
+        }
+
+        // Ensure habit is uncompleted to begin Flow 1
+        if app.buttons["Mark incomplete"].firstMatch.waitForExistence(timeout: 2) {
+            app.buttons["Mark incomplete"].firstMatch.tap()
+            RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+        }
+
+        // Flow 1: Complete a habit — particle burst + XP popover visible, NO modal alert
+        let markCompleteBtn = app.buttons["Mark complete"].firstMatch
+        XCTAssertTrue(markCompleteBtn.waitForExistence(timeout: 5), "Mark complete button must exist")
+
+        markCompleteBtn.tap()
+
+        // Verify NO modal alert is presented
+        XCTAssertFalse(app.alerts["Quest Completed!"].exists, "No modal alert should be presented on completion")
+
+        // Wait a fraction of a second for popover animation
+        RunLoop.current.run(until: Date().addingTimeInterval(0.3))
+        saveScreenshot(name: "01-completion-celebration-no-alert.png", directoryName: targetDir)
+
+        // Flow 2: Profile -> "View All" — gallery opens with real achievements, tap one — detail shows description, XP reward, unlock date/progress
+        let profileTab = app.tabBars.buttons["Profile"]
+        XCTAssertTrue(profileTab.waitForExistence(timeout: 5))
+        profileTab.tap()
+
+        // Wait for profile view to render
+        RunLoop.current.run(until: Date().addingTimeInterval(1))
+
+        // Find "View All" button in Achievements section
+        let viewAllButton = app.buttons["ViewAllAchievementsButton"]
+        if !viewAllButton.exists {
+            app.swipeUp()
+        }
+        XCTAssertTrue(viewAllButton.waitForExistence(timeout: 5), "View All button must exist in Profile")
+        viewAllButton.tap()
+
+        // Verify Achievement Gallery opens
+        let galleryNavBar = app.navigationBars["Achievement Gallery"]
+        XCTAssertTrue(galleryNavBar.waitForExistence(timeout: 5), "Achievement Gallery should open")
+        RunLoop.current.run(until: Date().addingTimeInterval(1))
+        saveScreenshot(name: "02-achievement-gallery-open.png", directoryName: targetDir)
+
+        // Tap the first achievement card to inspect details
+        let firstCard = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'AchievementCard_'")).firstMatch
+        if firstCard.waitForExistence(timeout: 3) {
+            firstCard.tap()
+
+            // Verify Detail Sheet opens
+            let detailNavBar = app.navigationBars["Achievement Detail"]
+            _ = detailNavBar.waitForExistence(timeout: 3)
+            RunLoop.current.run(until: Date().addingTimeInterval(1))
+            saveScreenshot(name: "02b-achievement-detail-sheet.png", directoryName: targetDir)
+
+            // Dismiss detail sheet
+            let closeButton = app.buttons["Close"]
+            if closeButton.waitForExistence(timeout: 3) {
+                closeButton.tap()
+            }
+            RunLoop.current.run(until: Date().addingTimeInterval(1))
+        }
+
+        // Dismiss gallery
+        let doneButton = app.buttons["Done"]
+        if doneButton.waitForExistence(timeout: 3) {
+            doneButton.tap()
+        }
+        RunLoop.current.run(until: Date().addingTimeInterval(1))
+
+        // Flow 3: Settings — streak forgiveness threshold visible and changeable
+        let settingsTab = app.tabBars.buttons["Settings"]
+        XCTAssertTrue(settingsTab.waitForExistence(timeout: 5))
+        settingsTab.tap()
+
+        RunLoop.current.run(until: Date().addingTimeInterval(1))
+        if !app.staticTexts["Streak Forgiveness & Gamification"].exists {
+            app.swipeUp()
+        }
+        RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+        saveScreenshot(name: "03-settings-streak-forgiveness-default.png", directoryName: targetDir)
+
+        // Find the Stepper for streak forgiveness threshold and change it
+        var stepper = app.steppers["Streak forgiveness threshold"]
+        if !stepper.exists {
+            stepper = app.steppers.firstMatch
+        }
+        if !stepper.isHittable {
+            app.swipeUp()
+        }
+        if stepper.waitForExistence(timeout: 3) {
+            let incrementBtn = stepper.buttons.element(boundBy: 1)
+            if incrementBtn.exists {
+                incrementBtn.tap()
+            }
+            RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+            saveScreenshot(name: "03b-settings-streak-forgiveness-changed.png", directoryName: targetDir)
+            let decrementBtn = stepper.buttons.element(boundBy: 0)
+            if decrementBtn.exists {
+                decrementBtn.tap()
+            }
+        }
+
+        // Flow 4: Today tab after toggling off — no celebration fires, XP reverts
+        todayTab.tap()
+        RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+
+        let markIncompleteBtn = app.buttons["Mark incomplete"].firstMatch
+        if markIncompleteBtn.waitForExistence(timeout: 3) {
+            markIncompleteBtn.tap()
+        }
+
+        // Verify un-complete does not show celebration popover or modal alert
+        RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+        XCTAssertFalse(app.alerts.firstMatch.exists, "No alert should appear when un-completing")
+        XCTAssertFalse(app.otherElements["CelebrationPopover"].exists, "No celebration popover should appear when un-completing")
+
+        saveScreenshot(name: "04-today-toggled-off-no-celebration.png", directoryName: targetDir)
+    }
+
+    private func saveScreenshot(name: String, directoryName: String = "issue68-66-live-check-2026-11-23") {
         let screenshot = XCUIScreen.main.screenshot()
         let attachment = XCTAttachment(screenshot: screenshot)
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
 
-        let targetDir = "/Users/danielstevens/Developer/HabitQuest/runs/issue68-66-live-check-2026-11-23"
+        let targetDir = "/Users/danielstevens/Developer/HabitQuest/runs/\(directoryName)"
+        try? FileManager.default.createDirectory(atPath: targetDir, withIntermediateDirectories: true)
         let fileURL = URL(fileURLWithPath: targetDir).appendingPathComponent(name)
         try? screenshot.pngRepresentation.write(to: fileURL)
     }

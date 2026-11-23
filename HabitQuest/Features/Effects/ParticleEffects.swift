@@ -137,21 +137,42 @@ struct ParticleEffectView: View {
     @State private var scene = ParticleScene()
 
     var body: some View {
-        SpriteView(scene: scene, options: [.allowsTransparency])
-            .onChange(of: trigger) { _, newValue in
-                if newValue {
-                    let center = CGPoint(x: scene.size.width / 2, y: scene.size.height / 2)
-                    switch effectType {
-                    case .confetti:
-                        scene.emitConfetti(at: center)
-                    case .flame:
-                        scene.emitFlame(at: center)
-                    case .stars:
-                        scene.emitStarBurst(at: center)
+        Group {
+            if trigger {
+                SpriteView(scene: scene, options: [.allowsTransparency])
+                    .onAppear {
+                        let center = CGPoint(
+                            x: scene.size.width > 0 ? scene.size.width / 2 : 200,
+                            y: scene.size.height > 0 ? scene.size.height / 2 : 350
+                        )
+                        switch effectType {
+                        case .confetti:
+                            scene.emitConfetti(at: center)
+                        case .flame:
+                            scene.emitFlame(at: center)
+                        case .stars:
+                            scene.emitStarBurst(at: center)
+                        }
                     }
-                }
+                    .onChange(of: trigger) { _, newValue in
+                        if newValue {
+                            let center = CGPoint(
+                                x: scene.size.width > 0 ? scene.size.width / 2 : 200,
+                                y: scene.size.height > 0 ? scene.size.height / 2 : 350
+                            )
+                            switch effectType {
+                            case .confetti:
+                                scene.emitConfetti(at: center)
+                            case .flame:
+                                scene.emitFlame(at: center)
+                            case .stars:
+                                scene.emitStarBurst(at: center)
+                            }
+                        }
+                    }
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
             }
-            .ignoresSafeArea()
-            .allowsHitTesting(false)
+        }
     }
 }

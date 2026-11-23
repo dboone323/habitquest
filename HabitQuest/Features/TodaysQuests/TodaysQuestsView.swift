@@ -1,6 +1,10 @@
 import HabitQuestCore
 import SwiftData
 import SwiftUI
+#if os(iOS)
+import AudioToolbox
+import UIKit
+#endif
 
 /// View displaying all habits that are due today
 /// Users can see their daily/weekly quests and mark them as complete
@@ -9,6 +13,9 @@ public struct TodaysQuestsView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var habitAnalytics: [UUID: StreakAnalytics] = [:]
     @State private var streakService: StreakService?
+    @State private var celebrationTrigger = false
+    @State private var celebrationXP = 0
+    @State private var celebrationTitle = ""
 
     public var body: some View {
         NavigationView {
@@ -21,7 +28,11 @@ public struct TodaysQuestsView: View {
                         habitAnalytics: habitAnalytics,
                         isHabitCompleted: viewModel.isHabitCompletedToday,
                         onComplete: { habit in
+                            let wasCompleted = viewModel.isHabitCompletedToday(habit)
                             viewModel.toggleHabitCompletion(habit)
+                            if !wasCompleted {
+                                triggerCelebration(for: habit)
+                            }
                             Task {
                                 await loadHabitAnalytics()
                             }
@@ -52,18 +63,80 @@ public struct TodaysQuestsView: View {
                     viewModel.addNewHabit(habit)
                 }
             }
-            .alert("Quest Completed!", isPresented: $viewModel.showingCompletionAlert) {
-                Button("Awesome!") {}
-                    .accessibilityLabel("Awesome")
-            } message: {
-                Text(viewModel.completionMessage)
+            .overlay(alignment: .top) {
+                if celebrationTrigger {
+                    VStack(spacing: 6) {
+                        HStack(spacing: 8) {
+                            Image(systemName: "sparkles")
+                                .foregroundColor(.yellow)
+                                .font(.title3)
+                            Text("+\(celebrationXP) XP")
+                                .font(.headline.bold())
+                                .foregroundColor(.white)
+                            Image(systemName: "flame.fill")
+                                .foregroundColor(.orange)
+                                .font(.title3)
+                        }
+                        Text("\(celebrationTitle) Completed!")
+                            .font(.caption.weight(.semibold))
+                            .foregroundColor(.white.opacity(0.95))
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(
+                        Capsule()
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color.blue, Color.purple],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .shadow(color: Color.purple.opacity(0.4), radius: 10, y: 5)
+                    )
+                    .padding(.top, 16)
+                    .transition(.asymmetric(
+                        insertion: .scale(scale: 0.85).combined(with: .opacity).combined(with: .move(edge: .top)),
+                        removal: .opacity.combined(with: .scale(scale: 0.9))
+                    ))
+                    .allowsHitTesting(false)
+                    .accessibilityIdentifier("CelebrationPopover")
+                }
             }
+            .overlay {
+                if celebrationTrigger {
+                    ParticleEffectView(effectType: .confetti, trigger: celebrationTrigger)
+                        .allowsHitTesting(false)
+                }
+            }
+            .animation(.spring(response: 0.35, dampingFraction: 0.7), value: celebrationTrigger)
             .onAppear {
                 viewModel.setModelContext(modelContext)
                 setupStreakService()
             }
             .task {
                 await loadHabitAnalytics()
+            }
+        }
+    }
+
+    private func triggerCelebration(for habit: Habit) {
+        celebrationXP = habit.xpValue * habit.difficulty.xpMultiplier
+        celebrationTitle = habit.name
+
+        #if os(iOS)
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.prepare()
+            generator.impactOccurred()
+            AudioServicesPlaySystemSound(1057)
+        #endif
+
+        celebrationTrigger = true
+
+        Task {
+            try? await Task.sleep(nanoseconds: 2_500_000_000)
+            await MainActor.run {
+                celebrationTrigger = false
             }
         }
     }

@@ -1,267 +1,135 @@
-
 import HabitQuestCore
-
+import SwiftData
+import SwiftUI
 import XCTest
 @testable import HabitQuest
 
 final class ProfileViewTests: XCTestCase {
-    // MARK: - structProfileView:View{ Tests
+    private var container: ModelContainer!
+    private var modelContext: ModelContext!
 
+    @MainActor
+    override func setUp() async throws {
+        try await super.setUp()
+        container = try ModelContainer(
+            for: Habit.self, HabitLog.self, HabitQuestCore.Achievement.self, PlayerProfile.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        modelContext = ModelContext(container)
+    }
+
+    @MainActor
+    override func tearDown() async throws {
+        container = nil
+        modelContext = nil
+        try await super.tearDown()
+    }
+
+    // MARK: - ProfileView Tests
+
+    @MainActor
     func testProfileViewInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structProfileView:View{")
+        let view = ProfileView()
+        XCTAssertNotNil(view.body)
     }
 
-    func testStatCardMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structStatCard:View{
-        XCTAssertTrue(true, "Placeholder test for structStatCard:View{ methods")
+    // MARK: - AchievementsSection Tests
+
+    @MainActor
+    func testAchievementsSectionEmptyState() {
+        let section = AchievementsSection(achievements: [])
+        XCTAssertNotNil(section.body)
     }
 
-    // MARK: - structAchievementsSection:View{ Tests
+    @MainActor
+    func testAchievementsSectionWithAchievements() {
+        let achievements = AchievementService.createDefaultAchievements()
+        var viewAllTapped = false
+        var selectedAchievement: Achievement? = nil
 
-    func testAchievementsSectionInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structAchievementsSection:View{")
+        let section = AchievementsSection(
+            achievements: achievements,
+            onViewAll: {
+                viewAllTapped = true
+            },
+            onSelectAchievement: { achievement in
+                selectedAchievement = achievement
+            }
+        )
+
+        XCTAssertNotNil(section.body)
+        section.onViewAll()
+        XCTAssertTrue(viewAllTapped, "Tapping View All invokes onViewAll closure")
+
+        let first = achievements[0]
+        section.onSelectAchievement(first)
+        XCTAssertEqual(selectedAchievement?.name, first.name, "Tapping badge invokes onSelectAchievement closure")
     }
 
-    func testAchievementsSectionProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structAchievementsSection:View{
-        XCTAssertTrue(true, "Placeholder test for structAchievementsSection:View{ properties")
+    @MainActor
+    func testAchievementBadgeRendering() {
+        let achievement = Achievement(
+            name: "Week Warrior",
+            description: "Maintain a 7-day streak",
+            iconName: "flame.fill",
+            category: .streak,
+            xpReward: 100,
+            requirement: .streakDays(7)
+        )
+
+        let badge = AchievementBadge(achievement: achievement)
+        XCTAssertNotNil(badge.body)
+        XCTAssertFalse(achievement.isUnlocked)
+
+        achievement.unlockedDate = Date()
+        XCTAssertTrue(achievement.isUnlocked)
+        let unlockedBadge = AchievementBadge(achievement: achievement)
+        XCTAssertNotNil(unlockedBadge.body)
     }
 
-    func testAchievementsSectionMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structAchievementsSection:View{
-        XCTAssertTrue(true, "Placeholder test for structAchievementsSection:View{ methods")
+    // MARK: - AchievementGalleryView Tests (Issue #76)
+
+    @MainActor
+    func testAchievementGalleryViewInitialization() {
+        let achievements = AchievementService.createDefaultAchievements()
+        let gallery = AchievementGalleryView(achievements: achievements)
+        XCTAssertNotNil(gallery.body)
     }
 
-    // MARK: - structAchievementBadge:View{ Tests
+    @MainActor
+    func testAchievementGalleryCardInteraction() {
+        let achievement = Achievement(
+            name: "Legend",
+            description: "Maintain a 100-day streak",
+            iconName: "crown.fill",
+            category: .streak,
+            xpReward: 1000,
+            requirement: .streakDays(100)
+        )
 
-    func testAchievementBadgeInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structAchievementBadge:View{")
+        var cardTapped = false
+        let card = AchievementGalleryCard(achievement: achievement) {
+            cardTapped = true
+        }
+
+        XCTAssertNotNil(card.body)
+        card.onTap()
+        XCTAssertTrue(cardTapped, "Tapping gallery card invokes onTap handler")
     }
 
-    func testAchievementBadgeProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structAchievementBadge:View{
-        XCTAssertTrue(true, "Placeholder test for structAchievementBadge:View{ properties")
-    }
+    @MainActor
+    func testAchievementDetailSheetRendering() {
+        let achievement = Achievement(
+            name: "Master Adventurer",
+            description: "Reach level 25",
+            iconName: "diamond.fill",
+            category: .level,
+            xpReward: 1000,
+            requirement: .reachLevel(25)
+        )
+        achievement.progress = 0.4
 
-    func testAchievementBadgeMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structAchievementBadge:View{
-        XCTAssertTrue(true, "Placeholder test for structAchievementBadge:View{ methods")
-    }
-
-    // MARK: - structAnalyticsTabView:View{ Tests
-
-    func testAnalyticsTabViewInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structAnalyticsTabView:View{")
-    }
-
-    func testAnalyticsTabViewProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structAnalyticsTabView:View{
-        XCTAssertTrue(true, "Placeholder test for structAnalyticsTabView:View{ properties")
-    }
-
-    func testAnalyticsTabViewMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structAnalyticsTabView:View{
-        XCTAssertTrue(true, "Placeholder test for structAnalyticsTabView:View{ methods")
-    }
-
-    // MARK: - structTrendsView:View{ Tests
-
-    func testTrendsViewInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structTrendsView:View{")
-    }
-
-    func testTrendsViewProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structTrendsView:View{
-        XCTAssertTrue(true, "Placeholder test for structTrendsView:View{ properties")
-    }
-
-    func testTrendsViewMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structTrendsView:View{
-        XCTAssertTrue(true, "Placeholder test for structTrendsView:View{ methods")
-    }
-
-    // MARK: - structPatternsView:View{ Tests
-
-    func testPatternsViewInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structPatternsView:View{")
-    }
-
-    func testPatternsViewProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structPatternsView:View{
-        XCTAssertTrue(true, "Placeholder test for structPatternsView:View{ properties")
-    }
-
-    func testPatternsViewMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structPatternsView:View{
-        XCTAssertTrue(true, "Placeholder test for structPatternsView:View{ methods")
-    }
-
-    // MARK: - structInsightsView:View{ Tests
-
-    func testInsightsViewInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structInsightsView:View{")
-    }
-
-    func testInsightsViewProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structInsightsView:View{
-        XCTAssertTrue(true, "Placeholder test for structInsightsView:View{ properties")
-    }
-
-    func testInsightsViewMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structInsightsView:View{
-        XCTAssertTrue(true, "Placeholder test for structInsightsView:View{ methods")
-    }
-
-    // MARK: - structAdvancedAnalyticsView:View{ Tests
-
-    func testAdvancedAnalyticsViewInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structAdvancedAnalyticsView:View{")
-    }
-
-    func testAdvancedAnalyticsViewProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structAdvancedAnalyticsView:View{
-        XCTAssertTrue(true, "Placeholder test for structAdvancedAnalyticsView:View{ properties")
-    }
-
-    func testAdvancedAnalyticsViewMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structAdvancedAnalyticsView:View{
-        XCTAssertTrue(true, "Placeholder test for structAdvancedAnalyticsView:View{ methods")
-    }
-
-    // MARK: - structAnalyticsInsightsCard:View{ Tests
-
-    func testAnalyticsInsightsCardInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structAnalyticsInsightsCard:View{")
-    }
-
-    func testAnalyticsInsightsCardProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structAnalyticsInsightsCard:View{
-        XCTAssertTrue(true, "Placeholder test for structAnalyticsInsightsCard:View{ properties")
-    }
-
-    func testAnalyticsInsightsCardMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structAnalyticsInsightsCard:View{
-        XCTAssertTrue(true, "Placeholder test for structAnalyticsInsightsCard:View{ methods")
-    }
-
-    // MARK: - structInsightRow:View{ Tests
-
-    func testInsightRowInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structInsightRow:View{")
-    }
-
-    func testInsightRowProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structInsightRow:View{
-        XCTAssertTrue(true, "Placeholder test for structInsightRow:View{ properties")
-    }
-
-    func testInsightRowMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structInsightRow:View{
-        XCTAssertTrue(true, "Placeholder test for structInsightRow:View{ methods")
-    }
-
-    // MARK: - structPredictiveAnalyticsCard:View{ Tests
-
-    func testPredictiveAnalyticsCardInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structPredictiveAnalyticsCard:View{")
-    }
-
-    func testPredictiveAnalyticsCardProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structPredictiveAnalyticsCard:View{
-        XCTAssertTrue(true, "Placeholder test for structPredictiveAnalyticsCard:View{ properties")
-    }
-
-    func testPredictiveAnalyticsCardMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structPredictiveAnalyticsCard:View{
-        XCTAssertTrue(true, "Placeholder test for structPredictiveAnalyticsCard:View{ methods")
-    }
-
-    // MARK: - structPredictionRow:View{ Tests
-
-    func testPredictionRowInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structPredictionRow:View{")
-    }
-
-    func testPredictionRowProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structPredictionRow:View{
-        XCTAssertTrue(true, "Placeholder test for structPredictionRow:View{ properties")
-    }
-
-    func testPredictionRowMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structPredictionRow:View{
-        XCTAssertTrue(true, "Placeholder test for structPredictionRow:View{ methods")
-    }
-
-    // MARK: - structBehavioralPatternsCard:View{ Tests
-
-    func testBehavioralPatternsCardInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structBehavioralPatternsCard:View{")
-    }
-
-    func testBehavioralPatternsCardProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structBehavioralPatternsCard:View{
-        XCTAssertTrue(true, "Placeholder test for structBehavioralPatternsCard:View{ properties")
-    }
-
-    func testBehavioralPatternsCardMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structBehavioralPatternsCard:View{
-        XCTAssertTrue(true, "Placeholder test for structBehavioralPatternsCard:View{ methods")
-    }
-
-    // MARK: - structPatternRow:View{ Tests
-
-    func testPatternRowInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structPatternRow:View{")
-    }
-
-    func testPatternRowProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structPatternRow:View{
-        XCTAssertTrue(true, "Placeholder test for structPatternRow:View{ properties")
-    }
-
-    func testPatternRowMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structPatternRow:View{
-        XCTAssertTrue(true, "Placeholder test for structPatternRow:View{ methods")
+        let sheet = AchievementDetailSheet(achievement: achievement)
+        XCTAssertNotNil(sheet.body)
     }
 }

@@ -23,6 +23,12 @@ public class DataManagementViewModel: ObservableObject {
     @Published var unlockedAchievements = 0
     @Published var currentLevel = 1
     @Published var lastBackupDate = "Never"
+    @Published var forgivenessThreshold: Int = StreakForgivenessConfig.threshold {
+        didSet {
+            StreakForgivenessConfig.threshold = forgivenessThreshold
+        }
+    }
+    @Published var streakFreezes: Int = 0
 
     var exportDocument: HabitQuestBackupDocument?
     var exportFilename: String {
@@ -179,6 +185,8 @@ public class DataManagementViewModel: ObservableObject {
             let profileDescriptor = FetchDescriptor<PlayerProfile>()
             let profiles = try modelContext.fetch(profileDescriptor)
             currentLevel = profiles.first?.level ?? 1
+            streakFreezes = profiles.first?.streakFreezes ?? 0
+            forgivenessThreshold = StreakForgivenessConfig.threshold
 
             logger.info(
                 "Loaded data statistics: \(totalHabits) habits, \(totalCompletions) completions"

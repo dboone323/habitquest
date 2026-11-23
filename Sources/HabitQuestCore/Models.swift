@@ -252,6 +252,8 @@ public final class PlayerProfile {
     public var xpForNextLevel: Int
     /// Highest consecutive streak achieved across all habits.
     public var longestStreak: Int
+    /// Streak freezes currently in player inventory.
+    public var streakFreezes: Int
     /// When this profile was created.
     public var creationDate: Date
 
@@ -269,7 +271,24 @@ public final class PlayerProfile {
         currentXP = 0
         xpForNextLevel = 100
         longestStreak = 0
+        streakFreezes = 0
         creationDate = Date()
+    }
+}
+
+/// Configuration for streak forgiveness and grace period
+public enum StreakForgivenessConfig {
+    public static let defaultThreshold: Int = 5
+    public static let thresholdKey = "streakForgivenessThreshold"
+
+    public static var threshold: Int {
+        get {
+            let val = UserDefaults.standard.integer(forKey: thresholdKey)
+            return val > 0 ? val : defaultThreshold
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: thresholdKey)
+        }
     }
 }
 
