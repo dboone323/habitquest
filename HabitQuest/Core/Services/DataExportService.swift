@@ -29,6 +29,7 @@ struct DataExportService {
         try context.delete(model: HabitLog.self)
         try context.delete(model: Habit.self)
         try context.delete(model: PlayerProfile.self)
+        try context.delete(model: Achievement.self)
         try context.save()
     }
 }
