@@ -51,6 +51,7 @@ public struct HabitQuestApp: App {
                     .appAccessibilityDefaults()
                     .onAppear {
                         HabitQuestLifecycleCoordinator.configureOnLaunch()
+                        ensureDefaultPlayerProfile(in: container.mainContext)
                     }
             } else {
                 // Show error view when database initialization fails
@@ -84,6 +85,21 @@ public struct HabitQuestApp: App {
                 .padding()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+        }
+    }
+
+    @MainActor
+    private func ensureDefaultPlayerProfile(in context: ModelContext) {
+        do {
+            let descriptor = FetchDescriptor<PlayerProfile>()
+            let existing = try context.fetch(descriptor)
+            if existing.isEmpty {
+                let profile = PlayerProfile()
+                context.insert(profile)
+                try context.save()
+            }
+        } catch {
+            print("❌ Failed to ensure default player profile: \(error)")
         }
     }
 }

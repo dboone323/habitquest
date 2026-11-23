@@ -1,8 +1,9 @@
 import HabitQuestCore
-
+import SwiftData
 import SwiftUI
 
 public struct ProfileView: View {
+    @Environment(\.modelContext) private var modelContext
     @StateObject private var viewModel = ProfileViewModel()
 
     public var body: some View {
@@ -40,6 +41,10 @@ public struct ProfileView: View {
                 .padding()
             }
             .navigationTitle("Profile")
+            .onAppear {
+                viewModel.setModelContext(modelContext)
+                viewModel.refreshProfile()
+            }
         }
     }
 }
