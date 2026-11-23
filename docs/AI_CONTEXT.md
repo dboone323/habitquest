@@ -11,7 +11,6 @@ This repository is part of the **Momentum Ecosystem**, a suite of iOS applicatio
 - **planner-app**: Task management (Swift/SwiftUI/CoreData).
 - **avoid-obstacles-game**: SpriteKit game (Swift).
 - **coding-reviewer**: iOS code review tool (Swift).
-- **shared-kit**: Shared UI components and utilities (Swift Package).
 - **tools-automation**: DevOps, CI/CD, and AI Agents (Python/Bash).
 
 ## Technology Stack

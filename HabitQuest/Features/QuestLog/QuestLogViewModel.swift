@@ -67,6 +67,11 @@ public class QuestLogViewModel: ObservableObject {
             modelContext.insert(habit)
             try modelContext.save()
 
+            // F1: Wire reminders
+            Task {
+                await HabitNotificationService.shared.scheduleSmartReminders(for: habit)
+            }
+
             loadAllHabits()
             logger.info("Added new habit: \(habit.name)")
         } catch {

@@ -42,7 +42,7 @@ public struct TodaysQuestsView: View {
                 #endif
             }
             .sheet(isPresented: $viewModel.showingAddQuest) {
-                AddQuestView { habit in
+                AddQuestView(suggestions: viewModel.suggestions) { habit in
                     viewModel.addNewHabit(habit)
                 }
             }
@@ -187,6 +187,7 @@ private struct QuestRowView: View {
 
 /// Simple add quest view (placeholder implementation)
 private struct AddQuestView: View {
+    let suggestions: [HabitSuggestion]
     let onAdd: (Habit) -> Void
     @Environment(\.dismiss) private var dismiss
 
@@ -198,6 +199,26 @@ private struct AddQuestView: View {
     var body: some View {
         NavigationView {
             Form {
+                if !suggestions.isEmpty {
+                    Section("Suggestions") {
+                        ForEach(suggestions, id: \.id) { suggestion in
+                            Button {
+                                name = suggestion.name
+                                description = suggestion.description
+                            } label: {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(suggestion.name)
+                                        .font(.subheadline)
+                                        .foregroundColor(.primary)
+                                    Text(suggestion.reasoning)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                    }
+                }
+
                 Section("Quest Details") {
                     TextField("Quest Name", text: $name).accessibilityLabel("Text Field")
                     TextField("Description", text: $description, axis: .vertical)

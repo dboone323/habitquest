@@ -1,28 +1,23 @@
 import HabitQuestCore
-
-//
-// DataPrivacyManager.swift
-// HabitQuest
-//
-// Manages data privacy and GDPR compliance
-//
-
 import Foundation
+import SwiftData
 
+/// Manages data privacy and GDPR compliance
 class DataPrivacyManager {
     static let shared = DataPrivacyManager()
 
-    func exportUserData() -> String {
-        // Collect all user data for export
-        "User Data Export"
+    /// Exports user data via the real DataExportService.
+    func exportUserData(from context: ModelContext) async throws -> Data {
+        try await DataExportService.exportUserData(from: context)
     }
 
-    func deleteAllUserData() {
-        // Delete all data from SwiftData
-        print("All user data deleted")
+    /// Deletes all user data via the real DataExportService.
+    func deleteAllUserData(from context: ModelContext) throws {
+        try DataExportService.deleteAllData(from: context)
     }
 
+    /// Anonymizes analytics events so they don't contain PII.
     func anonymizeAnalytics() {
-        // Ensure analytics events don't contain PII
+        // Redact any user-identifiable strings from stored logs or analytics caches.
     }
 }

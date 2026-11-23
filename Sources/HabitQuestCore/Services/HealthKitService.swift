@@ -1,6 +1,7 @@
 import Combine
 import Foundation
 import HealthKit
+import SwiftData
 
 /// Centralized service for HealthKit synchronization and data management
 @MainActor
@@ -10,14 +11,13 @@ public class HealthKitService: ObservableObject {
 
     @Published public var isAuthorized = false
     @Published public var stepCount: Int = 0
-    @Published public var activeEnergyBurned: Double = 0.0
-    @Published public var exerciseMinutes: Int = 0
+    @Published public var sleepHours: Double = 0.0
 
     private init() {
         checkAuthorizationStatus()
     }
 
-    /// Request authorization to read and write health data
+    /// Request authorization to read health data (movement + sleep only)
     public func requestAuthorization() async throws {
         guard HKHealthStore.isHealthDataAvailable() else {
             throw HealthKitError.healthDataNotAvailable
@@ -25,21 +25,10 @@ public class HealthKitService: ObservableObject {
 
         let readTypes: Set<HKObjectType> = [
             HKObjectType.quantityType(forIdentifier: .stepCount)!,
-            HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!,
-            HKObjectType.quantityType(forIdentifier: .appleExerciseTime)!,
-            HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!,
-            HKObjectType.quantityType(forIdentifier: .heartRate)!,
-            HKObjectType.quantityType(forIdentifier: .bodyMass)!,
-            HKObjectType.quantityType(forIdentifier: .height)!
+            HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!
         ]
 
-        let writeTypes: Set<HKSampleType> = [
-            HKObjectType.quantityType(forIdentifier: .bodyMass)!,
-            HKObjectType.quantityType(forIdentifier: .height)!,
-            HKObjectType.workoutType()
-        ]
-
-        try await healthStore.requestAuthorization(toShare: writeTypes, read: readTypes)
+        try await healthStore.requestAuthorization(toShare: [], read: readTypes)
         checkAuthorizationStatus()
     }
 
@@ -47,17 +36,19 @@ public class HealthKitService: ObservableObject {
         guard HKHealthStore.isHealthDataAvailable() else { return }
 
         let stepType = HKObjectType.quantityType(forIdentifier: .stepCount)!
-        let status = healthStore.authorizationStatus(for: stepType)
+        let sleepType = HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!
+        let stepStatus = healthStore.authorizationStatus(for: stepType)
+        let sleepStatus = healthStore.authorizationStatus(for: sleepType)
 
         Task { @MainActor in
-            isAuthorized = (status == .sharingAuthorized)
+            isAuthorized = (stepStatus == .sharingAuthorized) && (sleepStatus == .sharingAuthorized)
             if isAuthorized {
                 await fetchTodayStats()
             }
         }
     }
 
-    /// Fetch today's health statistics from HealthKit
+    /// Fetch today's health statistics from HealthKit (movement + sleep only)
     public func fetchTodayStats() async {
         guard isAuthorized else { return }
 
@@ -72,25 +63,39 @@ public class HealthKitService: ObservableObject {
             // Fetch step count
             if let stepType = HKObjectType.quantityType(forIdentifier: .stepCount) {
                 let stepSamples = try await queryQuantitySamples(type: stepType, predicate: predicate)
-                let totalSteps = stepSamples.reduce(0) { $0 + $1.quantity.doubleValue(for: HKUnit.count()) }
+                let totalSteps = stepSamples.reduce(0.0) { $0 + $1.quantity.doubleValue(for: HKUnit.count()) }
                 await MainActor.run { stepCount = Int(totalSteps) }
             }
 
-            // Fetch active energy
-            if let energyType = HKObjectType.quantityType(forIdentifier: .activeEnergyBurned) {
-                let energySamples = try await queryQuantitySamples(type: energyType, predicate: predicate)
-                let totalEnergy = energySamples.reduce(0) { $0 + $1.quantity.doubleValue(for: HKUnit.kilocalorie()) }
-                await MainActor.run { activeEnergyBurned = totalEnergy }
-            }
-
-            // Fetch exercise minutes
-            if let exerciseType = HKObjectType.quantityType(forIdentifier: .appleExerciseTime) {
-                let exerciseSamples = try await queryQuantitySamples(type: exerciseType, predicate: predicate)
-                let totalMinutes = exerciseSamples.reduce(0) { $0 + $1.quantity.doubleValue(for: HKUnit.minute()) }
-                await MainActor.run { exerciseMinutes = Int(totalMinutes) }
+            // Fetch sleep hours
+            if let sleepType = HKObjectType.categoryType(forIdentifier: .sleepAnalysis) {
+                let sleepSamples = try await querySleepSamples(type: sleepType, predicate: predicate)
+                let totalSleepHours = sleepSamples.reduce(0.0) { $0 + ($1.endDate.timeIntervalSince($1.startDate) / 3600.0) }
+                await MainActor.run { sleepHours = totalSleepHours }
             }
         } catch {
             print("Error fetching health data: \(error)")
+        }
+    }
+
+    /// Automatically logs completion for movement/sleep habits if health thresholds are met.
+    public func autoFillHabits(_ habits: [Habit], in context: ModelContext) {
+        let calendar = Calendar.current
+        let today = Date()
+        for habit in habits {
+            if habit.name.localizedCaseInsensitiveContains("step") && stepCount >= 10000 {
+                let alreadyLogged = habit.logs.contains { calendar.isDate($0.completionDate, inSameDayAs: today) }
+                if !alreadyLogged {
+                    let log = HabitLog(habit: habit, completionDate: today, notes: "Auto-logged from HealthKit (\(stepCount) steps)")
+                    context.insert(log)
+                }
+            } else if habit.name.localizedCaseInsensitiveContains("sleep") && sleepHours >= 7.0 {
+                let alreadyLogged = habit.logs.contains { calendar.isDate($0.completionDate, inSameDayAs: today) }
+                if !alreadyLogged {
+                    let log = HabitLog(habit: habit, completionDate: today, notes: "Auto-logged from HealthKit (\(String(format: "%.1f", sleepHours)) hours)")
+                    context.insert(log)
+                }
+            }
         }
     }
 
@@ -114,28 +119,24 @@ public class HealthKitService: ObservableObject {
         }
     }
 
-    /// Log a workout to HealthKit
-    public func logWorkout(
-        type: HKWorkoutActivityType,
-        startDate: Date,
-        endDate: Date,
-        energyBurned: Double? = nil
-    ) async throws {
-        guard isAuthorized else { throw HealthKitError.notAuthorized }
-
-        let workout = HKWorkout(
-            activityType: type,
-            start: startDate,
-            end: endDate,
-            duration: endDate.timeIntervalSince(startDate),
-            totalEnergyBurned: energyBurned != nil
-                ? HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: energyBurned!)
-                : nil,
-            totalDistance: nil,
-            metadata: nil
-        )
-
-        try await healthStore.save(workout)
+    private func querySleepSamples(type: HKCategoryType, predicate: NSPredicate) async throws -> [HKCategorySample] {
+        try await withCheckedThrowingContinuation { continuation in
+            let query = HKSampleQuery(
+                sampleType: type,
+                predicate: predicate,
+                limit: HKObjectQueryNoLimit,
+                sortDescriptors: nil
+            ) { _, samples, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else if let categorySamples = samples as? [HKCategorySample] {
+                    continuation.resume(returning: categorySamples)
+                } else {
+                    continuation.resume(returning: [])
+                }
+            }
+            healthStore.execute(query)
+        }
     }
 }
 
