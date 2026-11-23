@@ -19,7 +19,13 @@ public struct TodaysQuestsView: View {
                     QuestListView(
                         habits: viewModel.todaysHabits,
                         habitAnalytics: habitAnalytics,
-                        onComplete: viewModel.completeHabit
+                        isHabitCompleted: viewModel.isHabitCompletedToday,
+                        onComplete: { habit in
+                            viewModel.toggleHabitCompletion(habit)
+                            Task {
+                                await loadHabitAnalytics()
+                            }
+                        }
                     )
                 }
             }
@@ -107,6 +113,7 @@ private struct EmptyStateView: View {
 private struct QuestListView: View {
     let habits: [Habit]
     let habitAnalytics: [UUID: StreakAnalytics]
+    let isHabitCompleted: (Habit) -> Bool
     let onComplete: (Habit) -> Void
 
     var body: some View {
@@ -114,6 +121,7 @@ private struct QuestListView: View {
             QuestRowView(
                 habit: habit,
                 analytics: habitAnalytics[habit.id],
+                isCompleted: isHabitCompleted(habit),
                 onComplete: onComplete
             )
         }
@@ -124,6 +132,7 @@ private struct QuestListView: View {
 private struct QuestRowView: View {
     let habit: Habit
     let analytics: StreakAnalytics?
+    let isCompleted: Bool
     let onComplete: (Habit) -> Void
 
     var body: some View {
@@ -176,10 +185,11 @@ private struct QuestRowView: View {
             Button {
                 onComplete(habit)
             } label: {
-                Image(systemName: "checkmark.circle.fill")
+                Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
                     .font(.title2)
-                    .foregroundColor(.green)
+                    .foregroundColor(isCompleted ? .green : .secondary)
             }
+            .accessibilityLabel(isCompleted ? "Mark incomplete" : "Mark complete")
         }
         .padding(.vertical, 4)
     }

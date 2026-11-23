@@ -19,6 +19,112 @@ final class HabitQuestUITests: XCTestCase {
 
         XCTAssertNotNil(screenshot)
     }
+
+    @MainActor
+    func testLiveCheckIssue68And66() {
+        let app = XCUIApplication()
+        app.launch()
+
+        let todayTab = app.tabBars.buttons["Today"]
+        if todayTab.waitForExistence(timeout: 3) {
+            todayTab.tap()
+        }
+
+        // If no habit is present, add one
+        let addQuestButton = app.buttons["Add Quest"]
+        if addQuestButton.waitForExistence(timeout: 2) {
+            addQuestButton.tap()
+
+            let nameField = app.textFields.firstMatch
+            if nameField.waitForExistence(timeout: 2) {
+                nameField.tap()
+                nameField.typeText("Daily Meditation")
+            }
+
+            let addButton = app.buttons["Add"]
+            if addButton.waitForExistence(timeout: 2) {
+                addButton.tap()
+            }
+        }
+
+        // 1. Today tab with an uncompleted habit showing an empty circle
+        let markCompleteButton = app.buttons["Mark complete"].firstMatch
+        _ = markCompleteButton.waitForExistence(timeout: 5)
+        RunLoop.current.run(until: Date().addingTimeInterval(1))
+        saveScreenshot(name: "01-today-uncompleted-circle.png")
+
+        // 2. Same habit after completing — filled green checkmark
+        if markCompleteButton.exists {
+            markCompleteButton.tap()
+
+            let awesomeButton = app.alerts.buttons.firstMatch
+            if awesomeButton.waitForExistence(timeout: 3) {
+                awesomeButton.tap()
+            }
+        }
+
+        let markIncompleteButton = app.buttons["Mark incomplete"].firstMatch
+        _ = markIncompleteButton.waitForExistence(timeout: 3)
+        RunLoop.current.run(until: Date().addingTimeInterval(1))
+        saveScreenshot(name: "02-today-completed-checkmark.png")
+
+        // 3. Tap again — back to empty circle, no duplicate log, XP reverted
+        if markIncompleteButton.exists {
+            markIncompleteButton.tap()
+        }
+        _ = app.buttons["Mark complete"].firstMatch.waitForExistence(timeout: 3)
+        RunLoop.current.run(until: Date().addingTimeInterval(1))
+        saveScreenshot(name: "03-today-toggled-off-circle.png")
+
+        // Complete again so Analytics has habit completion data
+        if app.buttons["Mark complete"].firstMatch.exists {
+            app.buttons["Mark complete"].firstMatch.tap()
+            let alertButton = app.alerts.buttons.firstMatch
+            if alertButton.waitForExistence(timeout: 3) {
+                alertButton.tap()
+            }
+        }
+
+        // 4. Analytics tab open with habits present — real streak data renders
+        let analyticsTab = app.tabBars.buttons["Analytics"]
+        if analyticsTab.waitForExistence(timeout: 3) {
+            analyticsTab.tap()
+        }
+
+        // Wait for analytics data to render
+        _ = app.staticTexts["Streak Distribution"].waitForExistence(timeout: 5)
+        RunLoop.current.run(until: Date().addingTimeInterval(1))
+        saveScreenshot(name: "04-analytics-tab-with-data.png")
+
+        // 5. Tap Refresh — data refreshes, no error
+        let directRefresh = app.buttons["Refresh"]
+        if directRefresh.exists {
+            directRefresh.tap()
+        } else {
+            let menuButton = app.buttons["ellipsis.circle"]
+            if menuButton.waitForExistence(timeout: 2) {
+                menuButton.tap()
+                let menuRefresh = app.buttons["Refresh"]
+                if menuRefresh.waitForExistence(timeout: 2) {
+                    menuRefresh.tap()
+                }
+            }
+        }
+        RunLoop.current.run(until: Date().addingTimeInterval(1))
+        saveScreenshot(name: "05-analytics-refreshed.png")
+    }
+
+    private func saveScreenshot(name: String) {
+        let screenshot = XCUIScreen.main.screenshot()
+        let attachment = XCTAttachment(screenshot: screenshot)
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
+
+        let targetDir = "/Users/danielstevens/Developer/HabitQuest/runs/issue68-66-live-check-2026-11-23"
+        let fileURL = URL(fileURLWithPath: targetDir).appendingPathComponent(name)
+        try? screenshot.pngRepresentation.write(to: fileURL)
+    }
 }
 
 extension XCTestCase {
