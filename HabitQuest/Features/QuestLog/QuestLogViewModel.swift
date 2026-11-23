@@ -13,25 +13,13 @@ public class QuestLogViewModel: ObservableObject {
     private var modelContext: ModelContext?
     private let logger = HabitQuestLogger(category: .uiCategory)
 
-    /// Set the model context and load all habits
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Sets the model context and loads all habits.
     func setModelContext(_ context: ModelContext) {
         modelContext = context
         loadAllHabits()
     }
 
-    /// Load all habits from SwiftData
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Loads all habits from SwiftData.
     func loadAllHabits() {
         guard let modelContext else { return }
 
@@ -47,13 +35,7 @@ public class QuestLogViewModel: ObservableObject {
         }
     }
 
-    /// Add a new habit to the system
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Adds a new habit and schedules notifications for it.
     func addHabit(_ habit: Habit) {
         guard let modelContext else { return }
 
@@ -80,13 +62,7 @@ public class QuestLogViewModel: ObservableObject {
         }
     }
 
-    /// Update an existing habit
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Updates an existing habit and saves changes.
     func updateHabit(_ habit: Habit) {
         guard let modelContext else { return }
 
@@ -107,13 +83,7 @@ public class QuestLogViewModel: ObservableObject {
         }
     }
 
-    /// Delete a habit and all its associated logs
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Deletes a habit and all its associated data.
     func deleteHabit(_ habit: Habit) {
         guard let modelContext else { return }
 
@@ -129,13 +99,7 @@ public class QuestLogViewModel: ObservableObject {
         }
     }
 
-    /// Set a habit for editing
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Sets a habit for editing.
     func editHabit(_ habit: Habit) {
         editingHabit = habit
     }

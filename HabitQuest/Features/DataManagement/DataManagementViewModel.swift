@@ -32,25 +32,13 @@ public class DataManagementViewModel: ObservableObject {
     private var modelContext: ModelContext?
     private let logger = HabitQuestLogger(category: .dataModel)
 
-    /// Set the model context and load data statistics
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Sets the model context and loads data statistics.
     func setModelContext(_ context: ModelContext) {
         modelContext = context
         loadDataStatistics()
     }
 
-    /// Export user data to JSON file
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Prepares and triggers export of user data to a JSON file.
     func exportData() {
         guard let modelContext else { return }
 
@@ -80,24 +68,12 @@ public class DataManagementViewModel: ObservableObject {
         }
     }
 
-    /// Import user data from JSON file
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Displays the file importer for user data restoration.
     func importData() {
         showingFileImporter = true
     }
 
-    /// Handle the result of file export
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Handles the result of a file export operation.
     func handleExportResult(_ result: Result<URL, Error>) {
         switch result {
         case let .success(url):
@@ -111,13 +87,7 @@ public class DataManagementViewModel: ObservableObject {
         }
     }
 
-    /// Handle the result of file import
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Handles the result of a file import operation.
     func handleImportResult(_ result: Result<[URL], Error>) {
         switch result {
         case let .success(urls):
@@ -161,13 +131,7 @@ public class DataManagementViewModel: ObservableObject {
         }
     }
 
-    /// Clear all user data
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Clears all user data from storage.
     func clearAllData() {
         guard let modelContext else { return }
 
