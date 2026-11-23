@@ -167,15 +167,15 @@ final class HabitQuestUITests: XCTestCase {
         let celebrationPopover = app.descendants(matching: .any)["CelebrationPopover"]
         XCTAssertTrue(celebrationPopover.waitForExistence(timeout: 5), "Celebration popover must exist after completing")
 
+        // Wait ~1 second for popover animation to settle and capture screenshot before auto-dismiss
+        RunLoop.current.run(until: Date().addingTimeInterval(1.0))
+        saveScreenshot(name: "01-completion-celebration-no-alert.png", directoryName: targetDir)
+
         // Issue #83 Done Criteria: Check if achievement extra message is displayed in popover
         let celebrationExtra = app.descendants(matching: .any)["CelebrationExtraMessage"]
         if celebrationExtra.waitForExistence(timeout: 2) {
             XCTAssertTrue(celebrationExtra.exists, "Celebration extra message (level up / achievement) is displayed")
         }
-
-        // Wait ~1 second for popover animation to settle
-        RunLoop.current.run(until: Date().addingTimeInterval(1.0))
-        saveScreenshot(name: "01-completion-celebration-no-alert.png", directoryName: targetDir)
 
         // Flow 2: Profile -> "View All" — gallery opens with real achievements, tap one — detail shows description, XP reward, unlock date/progress
         let profileTab = app.tabBars.buttons["Profile"]
