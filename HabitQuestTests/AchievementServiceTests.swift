@@ -28,8 +28,8 @@ final class AchievementServiceTests: XCTestCase {
         let levelAchievements = achievements.filter { $0.category == .level }
         XCTAssertEqual(levelAchievements.count, 3)
 
-        let consistencyAchievements = achievements.filter { $0.category == .consistency }
-        XCTAssertEqual(consistencyAchievements.count, 2)
+        let generalAchievements = achievements.filter { $0.category == .general }
+        XCTAssertEqual(generalAchievements.count, 2)
 
         let specialAchievements = achievements.filter { $0.category == .special }
         XCTAssertEqual(specialAchievements.count, 3)
@@ -89,8 +89,8 @@ final class AchievementServiceTests: XCTestCase {
         XCTAssertEqual(AchievementCategory.level.displayName, "Level Progression")
 
         // Test AchievementRequirement descriptions
-        XCTAssertEqual(AchievementRequirement.streakDays(7).description, "Maintain a 7-day streak")
-        XCTAssertEqual(AchievementRequirement.totalCompletions(100).description, "Complete 100 habits total")
+        XCTAssertEqual(AchievementRequirement.streakDays(7).description, "Maintain a 7 day streak")
+        XCTAssertEqual(AchievementRequirement.totalCompletions(100).description, "Complete habits 100 times")
         XCTAssertEqual(AchievementRequirement.perfectWeek.description, "Complete all habits for 7 consecutive days")
     }
 
