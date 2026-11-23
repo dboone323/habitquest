@@ -92,14 +92,16 @@ public struct GamificationService: Sendable {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
 
-        // Collect unique completion days sorted descending
+        // Collect unique completion days sorted descending and map day to its most recent log
         var completedDays: [Date] = []
         var seenDays = Set<Date>()
+        var logsByDay: [Date: HabitLog] = [:]
         for log in sortedLogs {
             let day = calendar.startOfDay(for: log.completionDate)
             if !seenDays.contains(day) {
                 seenDays.insert(day)
                 completedDays.append(day)
+                logsByDay[day] = log
             }
         }
 
@@ -153,12 +155,19 @@ public struct GamificationService: Sendable {
                 currentStreak += 1
                 previousDay = day
             } else {
-                let freezesUsed = min(availableFreezes, missedDays)
-                availableFreezes -= freezesUsed
-                let effectiveMissed = missedDays - freezesUsed
+                let logForPrevious = logsByDay[previousDay]
+                let alreadyConsumed = logForPrevious?.freezesConsumed ?? 0
+                let missedAfterPersisted = max(0, missedDays - alreadyConsumed)
+
+                let newlyNeededFreezes = min(availableFreezes, missedAfterPersisted)
+                availableFreezes -= newlyNeededFreezes
+                let effectiveMissed = missedAfterPersisted - newlyNeededFreezes
 
                 if effectiveMissed <= forgivenessThreshold {
-                    totalFreezesConsumed += freezesUsed
+                    if newlyNeededFreezes > 0 {
+                        totalFreezesConsumed += newlyNeededFreezes
+                        logForPrevious?.freezesConsumed = alreadyConsumed + newlyNeededFreezes
+                    }
                     currentStreak += 1
                     previousDay = day
                 } else {

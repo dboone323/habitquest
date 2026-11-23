@@ -217,6 +217,8 @@ public final class HabitLog {
     public var mood: MoodRating?
     /// The exact time the habit was completed (if completed).
     public var completionTime: Date?
+    /// Number of streak freezes consumed to bridge the gap leading into this completion.
+    public var freezesConsumed: Int
 
     /// The associated habit for this log entry.
     public var habit: Habit?
@@ -226,7 +228,8 @@ public final class HabitLog {
         completionDate: Date = Date(),
         isCompleted: Bool = true,
         notes: String? = nil,
-        mood: MoodRating? = nil
+        mood: MoodRating? = nil,
+        freezesConsumed: Int = 0
     ) {
         id = UUID()
         self.habit = habit
@@ -236,6 +239,7 @@ public final class HabitLog {
         xpEarned = isCompleted ? habit.xpValue * habit.difficulty.xpMultiplier : 0
         self.mood = mood
         completionTime = isCompleted ? Date() : nil
+        self.freezesConsumed = freezesConsumed
     }
 }
 

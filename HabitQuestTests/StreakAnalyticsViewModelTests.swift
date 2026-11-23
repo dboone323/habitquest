@@ -108,4 +108,42 @@ final class StreakAnalyticsViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.isLoading)
         XCTAssertNil(viewModel.errorMessage)
     }
+
+    // MARK: - Issue #86: Shared Freeze Inventory Allocation Test
+
+    @MainActor
+    func testAnalyticsDoesNotDoubleCountSingleFreezeAcrossTwoHabits() async throws {
+        let (context, viewModel) = try createSUT()
+        let profile = PlayerProfile()
+        profile.streakFreezes = 1
+        context.insert(profile)
+
+        let habit1 = Habit(name: "Morning Run", habitDescription: "5km", frequency: .daily, xpValue: 20)
+        let habit2 = Habit(name: "Read Book", habitDescription: "Read 20 pages", frequency: .daily, xpValue: 15)
+        context.insert(habit1)
+        context.insert(habit2)
+
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        // Both habits completed 9, 8, 7 days ago (gap of 6 missed days to today)
+        // Default threshold is 5 days, so each habit needs 1 freeze to survive.
+        for daysAgo in [9, 8, 7] {
+            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            context.insert(HabitLog(habit: habit1, completionDate: logDate, isCompleted: true))
+            context.insert(HabitLog(habit: habit2, completionDate: logDate, isCompleted: true))
+        }
+        try context.save()
+
+        viewModel.setupService(modelContext: context)
+        await viewModel.loadAnalytics()
+
+        guard let data = viewModel.analyticsData else {
+            XCTFail("analyticsData should not be nil")
+            return
+        }
+
+        // With only 1 freeze total in player inventory, at most ONE habit may be reported as protected (active streak)
+        XCTAssertEqual(data.totalActiveStreaks, 1, "Only one habit should be freeze-protected with 1 available freeze")
+        XCTAssertEqual(data.topPerformingHabits.count, 1, "Only the freeze-protected habit should appear in top performers")
+    }
 }

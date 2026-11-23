@@ -13,11 +13,15 @@ public struct AchievementGalleryView: View {
         _selectedAchievement = State(initialValue: selectedAchievement)
     }
 
+    public var visibleAchievements: [Achievement] {
+        achievements.filter { !$0.isHidden || $0.isUnlocked }
+    }
+
     private var filteredAchievements: [Achievement] {
         if let selectedCategory {
-            return achievements.filter { $0.category == selectedCategory }
+            return visibleAchievements.filter { $0.category == selectedCategory }
         }
-        return achievements
+        return visibleAchievements
     }
 
     private var unlockedCount: Int {
@@ -75,7 +79,7 @@ public struct AchievementGalleryView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Your Progress")
                         .font(.headline)
-                    Text("\(unlockedCount) of \(achievements.count) Unlocked")
+                    Text("\(unlockedCount) of \(visibleAchievements.count) Unlocked")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -94,7 +98,7 @@ public struct AchievementGalleryView: View {
                 }
             }
 
-            ProgressView(value: Double(unlockedCount), total: Double(max(1, achievements.count)))
+            ProgressView(value: Double(unlockedCount), total: Double(max(1, visibleAchievements.count)))
                 .tint(.yellow)
         }
         .padding()

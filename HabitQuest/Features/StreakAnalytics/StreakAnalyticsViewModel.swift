@@ -109,9 +109,22 @@ final class StreakAnalyticsViewModel: ObservableObject {
     {
         var streakAnalytics: [StreakAnalytics] = []
         var topPerformers: [TopPerformer] = []
+        var remainingFreezes = profile?.streakFreezes ?? 0
 
         for habit in habits {
-            let analytics = await service.getStreakAnalytics(for: habit, profile: profile)
+            let habitProfile: PlayerProfile?
+            if let profile {
+                let temp = PlayerProfile()
+                temp.level = profile.level
+                temp.currentXP = profile.currentXP
+                temp.streakFreezes = remainingFreezes
+                habitProfile = temp
+            } else {
+                habitProfile = nil
+            }
+
+            let analytics = await service.getStreakAnalytics(for: habit, profile: habitProfile)
+            remainingFreezes = max(0, remainingFreezes - analytics.freezesUsedFromInventory)
             streakAnalytics.append(analytics)
 
             if analytics.currentStreak > 0 {

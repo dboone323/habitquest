@@ -161,7 +161,7 @@ public struct TodaysQuestsView: View {
         celebrationTrigger = true
 
         Task {
-            try? await Task.sleep(nanoseconds: 2_500_000_000)
+            try? await Task.sleep(nanoseconds: 3_500_000_000)
             await MainActor.run {
                 celebrationTrigger = false
             }

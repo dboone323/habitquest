@@ -25,6 +25,15 @@ class StreakService {
         profile: PlayerProfile? = nil,
         forgivenessThreshold: Int = StreakForgivenessConfig.threshold
     ) async -> Int {
+        await calculateCurrentStreakWithUsage(for: habit, profile: profile, forgivenessThreshold: forgivenessThreshold).streak
+    }
+
+    /// Calculate current streak and track how many freezes from inventory were used
+    func calculateCurrentStreakWithUsage(
+        for habit: Habit,
+        profile: PlayerProfile? = nil,
+        forgivenessThreshold: Int = StreakForgivenessConfig.threshold
+    ) async -> (streak: Int, freezesUsedFromInventory: Int) {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
 
@@ -32,20 +41,22 @@ class StreakService {
             .filter(\.isCompleted)
             .sorted { $0.completionDate > $1.completionDate }
 
-        guard !completedLogs.isEmpty else { return 0 }
+        guard !completedLogs.isEmpty else { return (0, 0) }
 
-        // Deduplicate to unique calendar days sorted descending
+        // Deduplicate to unique calendar days sorted descending and map day to its most recent log
         var completedDays: [Date] = []
         var seenDays = Set<Date>()
+        var logsByDay: [Date: HabitLog] = [:]
         for log in completedLogs {
             let day = calendar.startOfDay(for: log.completionDate)
             if !seenDays.contains(day) {
                 seenDays.insert(day)
                 completedDays.append(day)
+                logsByDay[day] = log
             }
         }
 
-        guard let mostRecentDay = completedDays.first else { return 0 }
+        guard let mostRecentDay = completedDays.first else { return (0, 0) }
 
         // Check gap from most recent completion to today
         let daysSinceLast = calendar.dateComponents([.day], from: mostRecentDay, to: today).day ?? 0
@@ -66,9 +77,10 @@ class StreakService {
         let effectiveMissedSinceLast = missedDaysSinceLast - freezesUsedForRecent
 
         if effectiveMissedSinceLast > forgivenessThreshold {
-            return 0 // Gap exceeds forgiveness threshold and available freezes; streak broken
+            return (0, 0) // Gap exceeds forgiveness threshold and available freezes; streak broken
         }
 
+        var freezesUsedFromInventory = freezesUsedForRecent
         var streak = 1
         var previousDay = mostRecentDay
 
@@ -90,11 +102,16 @@ class StreakService {
                 streak += 1
                 previousDay = day
             } else {
-                let freezesUsed = min(availableFreezes, missedDays)
+                let logForPrevious = logsByDay[previousDay]
+                let alreadyConsumed = logForPrevious?.freezesConsumed ?? 0
+                let missedAfterPersisted = max(0, missedDays - alreadyConsumed)
+
+                let freezesUsed = min(availableFreezes, missedAfterPersisted)
                 availableFreezes -= freezesUsed
-                let effectiveMissed = missedDays - freezesUsed
+                let effectiveMissed = missedAfterPersisted - freezesUsed
 
                 if effectiveMissed <= forgivenessThreshold {
+                    freezesUsedFromInventory += freezesUsed
                     streak += 1
                     previousDay = day
                 } else {
@@ -103,7 +120,7 @@ class StreakService {
             }
         }
 
-        return streak
+        return (streak, freezesUsedFromInventory)
     }
 
     /// Calculate longest streak for a habit with forgiving threshold
@@ -268,7 +285,7 @@ class StreakService {
     ///   - profile: Optional player profile with streak freeze inventory
     /// - Returns: A structured analytics object
     func getStreakAnalytics(for habit: Habit, profile: PlayerProfile? = nil) async -> StreakAnalytics {
-        let currentStreak = await calculateCurrentStreak(for: habit, profile: profile)
+        let (currentStreak, freezesUsed) = await calculateCurrentStreakWithUsage(for: habit, profile: profile)
         let longestStreak = await calculateLongestStreak(for: habit)
         let currentMilestone = await getCurrentMilestone(for: habit, profile: profile)
         let nextMilestone = await getNextMilestone(for: habit, profile: profile)
@@ -280,7 +297,8 @@ class StreakService {
             currentMilestone: currentMilestone,
             nextMilestone: nextMilestone,
             progressToNextMilestone: progressToNext,
-            streakPercentile: calculateStreakPercentile(currentStreak)
+            streakPercentile: calculateStreakPercentile(currentStreak),
+            freezesUsedFromInventory: freezesUsed
         )
     }
 
@@ -316,6 +334,7 @@ struct StreakAnalytics {
     let nextMilestone: StreakMilestone?
     let progressToNextMilestone: Double
     let streakPercentile: Double
+    var freezesUsedFromInventory: Int = 0
 
     /// Formatted streak description
     var streakDescription: String {

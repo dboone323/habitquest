@@ -455,4 +455,45 @@ final class StreakServiceTests: XCTestCase {
         let noFreezeMilestone = await sut.checkForNewMilestone(habit: habit, previousStreak: 6)
         XCTAssertNil(noFreezeMilestone, "Without freeze, streak breaks to 1 so no milestone transition is achieved")
     }
+
+    // MARK: - Issue #85: Freeze-Spent Streak Preserved on Recalculation
+
+    @MainActor
+    func testFreezeSpentStreakSurvivesSubsequentRecalculationAndAnalytics() async throws {
+        let sut = StreakService(modelContext: modelContext)
+        let gamification = GamificationService()
+        let profile = PlayerProfile()
+        profile.streakFreezes = 1
+        modelContext.insert(profile)
+
+        let habit = Habit(name: "Evening Writing", habitDescription: "500 words", frequency: .daily, xpValue: 20)
+        modelContext.insert(habit)
+
+        let today = calendar.startOfDay(for: Date())
+        // Completed 9, 8, 7 days ago (streak 3)
+        for daysAgo in [9, 8, 7] {
+            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
+            modelContext.insert(log)
+        }
+        // Complete today: 6 missed days between 7 days ago and today
+        let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
+        modelContext.insert(todayLog)
+        try modelContext.save()
+
+        // Write path: bridges gap using 1 freeze -> habit.streak = 4, profile.streakFreezes = 0
+        gamification.processHabitCompletion(habit: habit, profile: profile)
+        try modelContext.save()
+
+        XCTAssertEqual(habit.streak, 4, "Streak should survive 6 missed days bridged by 1 freeze")
+        XCTAssertEqual(profile.streakFreezes, 0, "Streak freeze must be consumed")
+
+        // Read path / recalculation: getStreakAnalytics must STILL report currentStreak 4, not evaporate to 1
+        let analytics = await sut.getStreakAnalytics(for: habit, profile: profile)
+        XCTAssertEqual(analytics.currentStreak, 4, "Recalculation via getStreakAnalytics must preserve freeze-spent streak (4), not evaporate to 1")
+
+        // Direct recalculation via calculateCurrentStreak must also report 4
+        let recalculated = await sut.calculateCurrentStreak(for: habit, profile: profile)
+        XCTAssertEqual(recalculated, 4, "calculateCurrentStreak must preserve freeze-spent streak (4)")
+    }
 }

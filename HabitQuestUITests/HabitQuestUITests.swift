@@ -160,12 +160,12 @@ final class HabitQuestUITests: XCTestCase {
 
         markCompleteBtn.tap()
 
-        // Verify NO modal alert is presented
-        XCTAssertFalse(app.alerts["Quest Completed!"].exists, "No modal alert should be presented on completion")
-
         // Issue #84 Done Criteria: Celebration popover must exist after completing
         let celebrationPopover = app.descendants(matching: .any)["CelebrationPopover"]
         XCTAssertTrue(celebrationPopover.waitForExistence(timeout: 5), "Celebration popover must exist after completing")
+
+        // Verify NO modal alert is presented
+        XCTAssertFalse(app.alerts["Quest Completed!"].exists, "No modal alert should be presented on completion")
 
         // Wait ~1 second for popover animation to settle and capture screenshot before auto-dismiss
         RunLoop.current.run(until: Date().addingTimeInterval(1.0))

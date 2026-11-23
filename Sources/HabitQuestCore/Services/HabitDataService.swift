@@ -290,6 +290,7 @@ public final class HabitDataService: Sendable {
         let xpEarned: Int
         let mood: MoodRating?
         let completionTime: Date?
+        let freezesConsumed: Int?
         let habitId: UUID?
 
         init(from model: HabitLog) {
@@ -300,12 +301,20 @@ public final class HabitDataService: Sendable {
             self.xpEarned = model.xpEarned
             self.mood = model.mood
             self.completionTime = model.completionTime
+            self.freezesConsumed = model.freezesConsumed
             self.habitId = model.habit?.id
         }
 
         func toModel(allHabits: [Habit]) -> HabitLog? {
             guard let habit = (allHabits.first { $0.id == habitId }) else { return nil }
-            let model = HabitLog(habit: habit, completionDate: completionDate, isCompleted: isCompleted, notes: notes, mood: mood)
+            let model = HabitLog(
+                habit: habit,
+                completionDate: completionDate,
+                isCompleted: isCompleted,
+                notes: notes,
+                mood: mood,
+                freezesConsumed: freezesConsumed ?? 0
+            )
             model.id = id
             model.xpEarned = xpEarned
             model.completionTime = completionTime

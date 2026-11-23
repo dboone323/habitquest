@@ -132,4 +132,30 @@ final class ProfileViewTests: XCTestCase {
         let sheet = AchievementDetailSheet(achievement: achievement)
         XCTAssertNotNil(sheet.body)
     }
+
+    // MARK: - Issue #87: Secret Hidden Achievements Excluded from Gallery
+
+    @MainActor
+    func testHiddenLockedAchievementsExcludedFromGallery() {
+        let achievements = AchievementService.createDefaultAchievements()
+        let hiddenLocked = achievements.filter { $0.isHidden && !$0.isUnlocked }
+        XCTAssertFalse(hiddenLocked.isEmpty, "Default achievements must include secret hidden achievements (Legend, Master Adventurer)")
+
+        let gallery = AchievementGalleryView(achievements: achievements)
+        for hidden in hiddenLocked {
+            XCTAssertFalse(
+                gallery.visibleAchievements.contains { $0.id == hidden.id },
+                "Locked hidden achievement '\(hidden.name)' must not appear in gallery"
+            )
+        }
+
+        // Once unlocked, the secret achievement appears normally
+        let secret = hiddenLocked.first!
+        secret.unlockedDate = Date()
+        let galleryAfterUnlock = AchievementGalleryView(achievements: achievements)
+        XCTAssertTrue(
+            galleryAfterUnlock.visibleAchievements.contains { $0.id == secret.id },
+            "Unlocked secret achievement '\(secret.name)' must appear in gallery"
+        )
+    }
 }
