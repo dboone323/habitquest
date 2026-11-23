@@ -122,6 +122,7 @@ public struct GamificationService: Sendable {
             return
         }
 
+        var totalFreezesConsumed = freezesUsedForRecent
         var currentStreak = 1
         var previousDay = mostRecentDay
 
@@ -136,16 +137,13 @@ public struct GamificationService: Sendable {
                     previousDay = day
                 } else {
                     let freezesUsed = min(availableFreezes, missedDays)
-                    availableFreezes -= freezesUsed
                     let effectiveMissed = missedDays - freezesUsed
 
                     if effectiveMissed <= forgivenessThreshold {
+                        availableFreezes -= freezesUsed
+                        totalFreezesConsumed += freezesUsed
                         currentStreak += 1
                         previousDay = day
-                        // If freezes were used to bridge to today's completion, deduct from profile
-                        if let profile, freezesUsed > 0, previousDay == mostRecentDay, daysSinceLast == 0 {
-                            profile.streakFreezes = max(0, profile.streakFreezes - freezesUsed)
-                        }
                     } else {
                         break
                     }
@@ -172,6 +170,11 @@ public struct GamificationService: Sendable {
         }
 
         habit.streak = currentStreak
+
+        if let profile, totalFreezesConsumed > 0 {
+            profile.streakFreezes = max(0, profile.streakFreezes - totalFreezesConsumed)
+            try? (profile.modelContext ?? habit.modelContext)?.save()
+        }
     }
 
     /// Check if a habit should be performed today based on its frequency.

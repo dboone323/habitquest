@@ -163,8 +163,8 @@ final class HabitQuestUITests: XCTestCase {
         // Verify NO modal alert is presented
         XCTAssertFalse(app.alerts["Quest Completed!"].exists, "No modal alert should be presented on completion")
 
-        // Wait a fraction of a second for popover animation
-        RunLoop.current.run(until: Date().addingTimeInterval(0.3))
+        // Wait ~1 second for popover animation to settle
+        RunLoop.current.run(until: Date().addingTimeInterval(1.0))
         saveScreenshot(name: "01-completion-celebration-no-alert.png", directoryName: targetDir)
 
         // Flow 2: Profile -> "View All" — gallery opens with real achievements, tap one — detail shows description, XP reward, unlock date/progress

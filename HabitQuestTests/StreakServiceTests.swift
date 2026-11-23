@@ -209,4 +209,81 @@ final class StreakServiceTests: XCTestCase {
         XCTAssertNotNil(milestone)
         XCTAssertEqual(milestone?.streakCount, 7)
     }
+
+    // MARK: - Streak Freeze Consumption Tests (Issue #76 Round 2)
+
+    @MainActor
+    func testStreakFreezeConsumedOnBridgedGap() throws {
+        let gamification = GamificationService()
+        let profile = PlayerProfile()
+        profile.streakFreezes = 1
+        modelContext.insert(profile)
+
+        let habit = Habit(name: "Morning Run", habitDescription: "5km", frequency: .daily, xpValue: 20)
+        modelContext.insert(habit)
+
+        let today = calendar.startOfDay(for: Date())
+        // Completed 9, 8, 7 days ago (3 consecutive days)
+        for daysAgo in [9, 8, 7] {
+            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
+            modelContext.insert(log)
+        }
+        // Complete today: 6 missed days between 7 days ago and today
+        let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
+        modelContext.insert(todayLog)
+        try modelContext.save()
+
+        gamification.processHabitCompletion(habit: habit, profile: profile)
+        try modelContext.save()
+
+        // 6 missed days bridged by 1 freeze + 5-day threshold -> streak survives (4)
+        XCTAssertEqual(habit.streak, 4, "Streak should survive 6 missed days bridged by 1 freeze")
+        // But freeze MUST be consumed and deducted from inventory
+        XCTAssertEqual(profile.streakFreezes, 0, "Streak freeze must be consumed after bridging gap")
+    }
+
+    @MainActor
+    func testStreakResetsWhenFreezeAlreadySpent() throws {
+        let gamification = GamificationService()
+        let profile = PlayerProfile()
+        profile.streakFreezes = 1
+        modelContext.insert(profile)
+
+        let habit1 = Habit(name: "Morning Run", habitDescription: "5km", frequency: .daily, xpValue: 20)
+        modelContext.insert(habit1)
+
+        let today = calendar.startOfDay(for: Date())
+        // Habit 1: Completed 9, 8, 7 days ago, complete today -> bridges 6 missed days and consumes the 1 freeze
+        for daysAgo in [9, 8, 7] {
+            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let log = HabitLog(habit: habit1, completionDate: logDate, isCompleted: true)
+            modelContext.insert(log)
+        }
+        let todayLog1 = HabitLog(habit: habit1, completionDate: today, isCompleted: true)
+        modelContext.insert(todayLog1)
+        try modelContext.save()
+
+        gamification.processHabitCompletion(habit: habit1, profile: profile)
+        try modelContext.save()
+
+        XCTAssertEqual(habit1.streak, 4)
+        XCTAssertEqual(profile.streakFreezes, 0, "Freeze should be spent")
+
+        // Habit 2: With the freeze spent (streakFreezes == 0), the same 6-day gap a second time must NOT survive
+        let habit2 = Habit(name: "Meditation", habitDescription: "10 mins", frequency: .daily, xpValue: 15)
+        modelContext.insert(habit2)
+        for daysAgo in [9, 8, 7] {
+            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let log = HabitLog(habit: habit2, completionDate: logDate, isCompleted: true)
+            modelContext.insert(log)
+        }
+        try modelContext.save()
+
+        gamification.updateHabitStreak(habit: habit2, profile: profile)
+        try modelContext.save()
+
+        // 6 missed days exceeds 5-day threshold with 0 freezes -> streak resets to 0
+        XCTAssertEqual(habit2.streak, 0, "With freeze spent, a 6-day gap must NOT survive (streak resets to 0)")
+    }
 }
