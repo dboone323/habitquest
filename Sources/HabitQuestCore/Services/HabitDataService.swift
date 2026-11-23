@@ -89,10 +89,14 @@ public final class HabitDataService: Sendable {
         let logsDescriptor = FetchDescriptor<HabitLog>()
         let logs = try modelContext.fetch(logsDescriptor)
 
+        let achievementsDescriptor = FetchDescriptor<Achievement>()
+        let achievements = try modelContext.fetch(achievementsDescriptor)
+
         let exportPayload = ExportPayload(
             profile: profile,
             habits: habits,
             logs: logs,
+            achievements: achievements,
             exportDate: Date()
         )
 
@@ -122,9 +126,13 @@ public final class HabitDataService: Sendable {
                     modelContext.insert(log)
                 }
             }
+
+            for achievementDTO in payload.achievements {
+                modelContext.insert(achievementDTO.toModel())
+            }
             
             try modelContext.save()
-            logger.info("Successfully imported \(payload.habits.count) habits.")
+            logger.info("Successfully imported \(payload.habits.count) habits and \(payload.achievements.count) achievements.")
         } catch {
             logger.error("Data import failed: \(error.localizedDescription)")
             throw DataError.importFailed(error.localizedDescription)
@@ -136,6 +144,7 @@ public final class HabitDataService: Sendable {
         try modelContext.delete(model: PlayerProfile.self)
         try modelContext.delete(model: Habit.self)
         try modelContext.delete(model: HabitLog.self)
+        try modelContext.delete(model: Achievement.self)
         try modelContext.save()
     }
 
@@ -157,13 +166,41 @@ public final class HabitDataService: Sendable {
         let profile: PlayerProfileDTO
         let habits: [HabitDTO]
         let logs: [HabitLogDTO]
+        let achievements: [AchievementDTO]
         let exportDate: Date
 
-        init(profile: PlayerProfile, habits: [Habit], logs: [HabitLog], exportDate: Date) {
+        enum CodingKeys: String, CodingKey {
+            case profile
+            case habits
+            case logs
+            case achievements
+            case exportDate
+        }
+
+        init(profile: PlayerProfile, habits: [Habit], logs: [HabitLog], achievements: [Achievement], exportDate: Date) {
             self.profile = PlayerProfileDTO(from: profile)
             self.habits = habits.map { HabitDTO(from: $0) }
             self.logs = logs.map { HabitLogDTO(from: $0) }
+            self.achievements = achievements.map { AchievementDTO(from: $0) }
             self.exportDate = exportDate
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            profile = try container.decode(PlayerProfileDTO.self, forKey: .profile)
+            habits = try container.decode([HabitDTO].self, forKey: .habits)
+            logs = try container.decode([HabitLogDTO].self, forKey: .logs)
+            achievements = try container.decodeIfPresent([AchievementDTO].self, forKey: .achievements) ?? []
+            exportDate = try container.decode(Date.self, forKey: .exportDate)
+        }
+
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(profile, forKey: .profile)
+            try container.encode(habits, forKey: .habits)
+            try container.encode(logs, forKey: .logs)
+            try container.encode(achievements, forKey: .achievements)
+            try container.encode(exportDate, forKey: .exportDate)
         }
     }
 
@@ -255,6 +292,48 @@ public final class HabitDataService: Sendable {
             model.id = id
             model.xpEarned = xpEarned
             model.completionTime = completionTime
+            return model
+        }
+    }
+
+    private struct AchievementDTO: Codable {
+        let id: UUID
+        let name: String
+        let achievementDescription: String
+        let iconName: String
+        let category: AchievementCategory
+        let xpReward: Int
+        let isHidden: Bool
+        let unlockedDate: Date?
+        let progress: Float
+        let requirement: AchievementRequirement
+
+        init(from model: Achievement) {
+            self.id = model.id
+            self.name = model.name
+            self.achievementDescription = model.achievementDescription
+            self.iconName = model.iconName
+            self.category = model.category
+            self.xpReward = model.xpReward
+            self.isHidden = model.isHidden
+            self.unlockedDate = model.unlockedDate
+            self.progress = model.progress
+            self.requirement = model.requirement
+        }
+
+        func toModel() -> Achievement {
+            let model = Achievement(
+                name: name,
+                description: achievementDescription,
+                iconName: iconName,
+                category: category,
+                xpReward: xpReward,
+                isHidden: isHidden,
+                requirement: requirement
+            )
+            model.id = id
+            model.unlockedDate = unlockedDate
+            model.progress = progress
             return model
         }
     }
