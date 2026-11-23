@@ -72,12 +72,13 @@ public struct GamificationService: Sendable {
 
     /// Update the streak for a specific habit based on completion history.
     public func updateHabitStreak(habit: Habit) {
-        guard !habit.logs.isEmpty else {
-            habit.streak = 1
+        let completedLogs = habit.logs.filter(\.isCompleted)
+        guard !completedLogs.isEmpty else {
+            habit.streak = 0
             return
         }
 
-        let sortedLogs = habit.logs.sorted { $0.completionDate > $1.completionDate }
+        let sortedLogs = completedLogs.sorted { $0.completionDate > $1.completionDate }
         let calendar = Calendar.current
         var currentStreak = 1
 

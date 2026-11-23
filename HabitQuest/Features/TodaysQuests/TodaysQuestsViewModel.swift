@@ -58,8 +58,14 @@ public class TodaysQuestsViewModel: ObservableObject {
         }
     }
 
-    /// Complete a habit and award XP
+    /// Check if a habit has been completed today
+    public func isHabitCompletedToday(_ habit: Habit) -> Bool {
+        habit.logs.contains { Calendar.current.isDateInToday($0.completionDate) && $0.isCompleted }
+    }
+
+    /// Complete a habit and award XP (does nothing if already completed today)
     public func completeHabit(_ habit: Habit) {
+        guard !isHabitCompletedToday(habit) else { return }
         guard let context = modelContext else { return }
 
         // Create a new log entry for this completion
@@ -115,6 +121,68 @@ public class TodaysQuestsViewModel: ObservableObject {
             try context.save()
         } catch {
             print("Error saving completion: \(error)")
+        }
+    }
+
+    /// Uncomplete a habit for today and revert streak and XP awarded
+    public func uncompleteHabit(_ habit: Habit) {
+        guard let context = modelContext else { return }
+
+        let todaysLogs = habit.logs.filter {
+            Calendar.current.isDateInToday($0.completionDate) && $0.isCompleted
+        }
+        guard !todaysLogs.isEmpty else { return }
+
+        var xpToRevert = 0
+        for log in todaysLogs {
+            xpToRevert += log.xpEarned > 0 ? log.xpEarned : (habit.xpValue * habit.difficulty.xpMultiplier)
+            context.delete(log)
+        }
+        habit.logs.removeAll {
+            Calendar.current.isDateInToday($0.completionDate) && $0.isCompleted
+        }
+
+        // Fetch player profile to revert XP and level
+        let profileDescriptor = FetchDescriptor<PlayerProfile>()
+        if let profile = (try? context.fetch(profileDescriptor))?.first {
+            profile.currentXP = max(0, profile.currentXP - xpToRevert)
+
+            // Recalculate level based on reverted XP
+            var level = 1
+            while profile.currentXP >= gamificationService.calculateXPForLevel(level + 1) {
+                level += 1
+            }
+            profile.level = level
+            profile.xpForNextLevel = gamificationService.calculateXPForNextLevel(forLevel: level)
+        }
+
+        // Revert habit streak
+        let remainingCompletedLogs = habit.logs.filter(\.isCompleted)
+        if remainingCompletedLogs.isEmpty {
+            habit.streak = 0
+        } else {
+            gamificationService.updateHabitStreak(habit: habit)
+        }
+
+        showingCompletionAlert = false
+
+        // Refresh today's habits
+        loadTodaysHabits()
+
+        // Save context
+        do {
+            try context.save()
+        } catch {
+            print("Error saving uncompletion: \(error)")
+        }
+    }
+
+    /// Toggle habit completion status for today
+    public func toggleHabitCompletion(_ habit: Habit) {
+        if isHabitCompletedToday(habit) {
+            uncompleteHabit(habit)
+        } else {
+            completeHabit(habit)
         }
     }
 

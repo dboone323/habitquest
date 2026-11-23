@@ -70,6 +70,13 @@ public struct StreakAnalyticsView: View {
                         }
                     }
                 }
+            .onAppear {
+                viewModel.setupService(modelContext: modelContext)
+            }
+            .task {
+                viewModel.setupService(modelContext: modelContext)
+                await viewModel.loadAnalytics()
+            }
         }
     }
 

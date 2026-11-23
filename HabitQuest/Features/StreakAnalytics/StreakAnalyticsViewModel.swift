@@ -6,8 +6,6 @@ import SwiftUI
 /// ViewModel for StreakAnalyticsView handling business logic and data management
 @MainActor
 final class StreakAnalyticsViewModel: ObservableObject {
-    let objectWillChange = ObservableObjectPublisher()
-
     @Published var showingExportSheet = false
     @Published var isLoading = false
     @Published var errorMessage: String?
@@ -67,6 +65,11 @@ final class StreakAnalyticsViewModel: ObservableObject {
             // Get all habits
             let habitDescriptor = FetchDescriptor<Habit>()
             let habits = try modelContext.fetch(habitDescriptor)
+
+            guard !habits.isEmpty else {
+                analyticsData = nil
+                return
+            }
 
             let analytics = await generateAnalyticsData(habits: habits, service: service)
             analyticsData = analytics
