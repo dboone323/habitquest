@@ -286,4 +286,173 @@ final class StreakServiceTests: XCTestCase {
         // 6 missed days exceeds 5-day threshold with 0 freezes -> streak resets to 0
         XCTAssertEqual(habit2.streak, 0, "With freeze spent, a 6-day gap must NOT survive (streak resets to 0)")
     }
+
+    // MARK: - Round 3 Reproduction Tests: Issue #80 & Issue #82
+
+    @MainActor
+    func testStreakAnalyticsWithFreezeBridgedGapReportsStreakAlive() async throws {
+        let sut = StreakService(modelContext: modelContext)
+        let profile = PlayerProfile()
+        profile.streakFreezes = 1
+        modelContext.insert(profile)
+
+        let habit = Habit(name: "Reading", habitDescription: "Read 20 pages", frequency: .daily, xpValue: 15)
+        modelContext.insert(habit)
+
+        let today = calendar.startOfDay(for: Date())
+        // Completed 9, 8, 7 days ago (streak of 3, gap of 6 missed days to today)
+        for daysAgo in [9, 8, 7] {
+            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
+            modelContext.insert(log)
+        }
+        try modelContext.save()
+
+        // When passing profile with 1 freeze, 6-day gap is bridged -> streak alive (3)
+        let analyticsWithFreeze = await sut.getStreakAnalytics(for: habit, profile: profile)
+        XCTAssertEqual(analyticsWithFreeze.currentStreak, 3, "Analytics with 1 freeze should report 6-day gap bridged as alive streak")
+
+        // Without profile (0 freezes available), 6-day gap exceeds default 5-day threshold -> streak is 0 (broken)
+        let analyticsWithoutFreeze = await sut.getStreakAnalytics(for: habit)
+        XCTAssertEqual(analyticsWithoutFreeze.currentStreak, 0, "Analytics without freezes should report streak broken (0)")
+    }
+
+    @MainActor
+    func testWeeklyHabitStreakForgivenessJudgedInDays() async throws {
+        let sut = StreakService(modelContext: modelContext)
+        let habit = Habit(name: "Weekly Review", habitDescription: "Review goals", frequency: .weekly, xpValue: 30)
+        modelContext.insert(habit)
+
+        let today = calendar.startOfDay(for: Date())
+        // Normal 1-week cadence: completed 7 days ago and today
+        let log7DaysAgo = HabitLog(habit: habit, completionDate: calendar.date(byAdding: .day, value: -7, to: today)!, isCompleted: true)
+        let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
+        modelContext.insert(log7DaysAgo)
+        modelContext.insert(todayLog)
+        try modelContext.save()
+
+        let normalStreak = await sut.calculateCurrentStreak(for: habit)
+        XCTAssertEqual(normalStreak, 2, "Weekly habit on normal 7-day cadence must survive with streak 2")
+        let longestNormal = await sut.calculateLongestStreak(for: habit)
+        XCTAssertEqual(longestNormal, 2, "calculateLongestStreak must survive 7-day cadence for weekly habit")
+    }
+
+    @MainActor
+    func testWeeklyHabitMissingTwoWeeksResetsWithFiveDayThreshold() async throws {
+        let sut = StreakService(modelContext: modelContext)
+        let habit = Habit(name: "Weekly Review", habitDescription: "Review goals", frequency: .weekly, xpValue: 30)
+        modelContext.insert(habit)
+
+        let today = calendar.startOfDay(for: Date())
+        // Missing 2 weeks (21 days between completions -> 14 missed days)
+        let log21DaysAgo = HabitLog(habit: habit, completionDate: calendar.date(byAdding: .day, value: -21, to: today)!, isCompleted: true)
+        let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
+        modelContext.insert(log21DaysAgo)
+        modelContext.insert(todayLog)
+        try modelContext.save()
+
+        let streak = await sut.calculateCurrentStreak(for: habit, forgivenessThreshold: 5)
+        XCTAssertEqual(streak, 1, "Weekly habit missing 2 weeks exceeds 5-day threshold and resets streak")
+    }
+
+    @MainActor
+    func testWeeklyHabitMissingOneWeekSurvivesWithFreezes() async throws {
+        let gamification = GamificationService()
+        let profile = PlayerProfile()
+        profile.streakFreezes = 2
+        modelContext.insert(profile)
+
+        let habit = Habit(name: "Weekly Review", habitDescription: "Review goals", frequency: .weekly, xpValue: 30)
+        modelContext.insert(habit)
+
+        let today = calendar.startOfDay(for: Date())
+        // Missing 1 week: completed 14 days ago and today (7 missed days beyond expected 7-day cadence)
+        let log14DaysAgo = HabitLog(habit: habit, completionDate: calendar.date(byAdding: .day, value: -14, to: today)!, isCompleted: true)
+        let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
+        modelContext.insert(log14DaysAgo)
+        modelContext.insert(todayLog)
+        try modelContext.save()
+
+        gamification.updateHabitStreak(habit: habit, profile: profile, forgivenessThreshold: 5)
+        try modelContext.save()
+
+        // 7 missed days - 2 freezes = 5 effective missed days <= 5 threshold -> streak survives (2)
+        XCTAssertEqual(habit.streak, 2, "Weekly habit missing 1 week survives with 2 freezes bridging the gap")
+        XCTAssertEqual(profile.streakFreezes, 0, "2 freezes should be consumed")
+    }
+
+    @MainActor
+    func testMonthlyHabitStreakForgivenessJudgedInDays() async throws {
+        let sut = StreakService(modelContext: modelContext)
+        let habit = Habit(name: "Monthly Audit", habitDescription: "Audit finances", frequency: .monthly, xpValue: 50)
+        modelContext.insert(habit)
+
+        let today = calendar.startOfDay(for: Date())
+        let oneMonthAgo = calendar.date(byAdding: .month, value: -1, to: today)!
+        let logMonthAgo = HabitLog(habit: habit, completionDate: oneMonthAgo, isCompleted: true)
+        let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
+        modelContext.insert(logMonthAgo)
+        modelContext.insert(todayLog)
+        try modelContext.save()
+
+        let normalStreak = await sut.calculateCurrentStreak(for: habit)
+        XCTAssertEqual(normalStreak, 2, "Monthly habit on normal 1-month cadence must survive with streak 2")
+        let longestNormal = await sut.calculateLongestStreak(for: habit)
+        XCTAssertEqual(longestNormal, 2, "calculateLongestStreak must survive 1-month cadence for monthly habit")
+    }
+
+    @MainActor
+    func testMonthlyHabitMissingTwoMonthsResetsWithFiveDayThreshold() async throws {
+        let sut = StreakService(modelContext: modelContext)
+        let habit = Habit(name: "Monthly Audit", habitDescription: "Audit finances", frequency: .monthly, xpValue: 50)
+        modelContext.insert(habit)
+
+        let today = calendar.startOfDay(for: Date())
+        let twoMonthsAgo = calendar.date(byAdding: .month, value: -2, to: today)!
+        let logTwoMonthsAgo = HabitLog(habit: habit, completionDate: twoMonthsAgo, isCompleted: true)
+        let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
+        modelContext.insert(logTwoMonthsAgo)
+        modelContext.insert(todayLog)
+        try modelContext.save()
+
+        let streak = await sut.calculateCurrentStreak(for: habit, forgivenessThreshold: 5)
+        XCTAssertEqual(streak, 1, "Monthly habit missing 2 months exceeds 5-day threshold and resets streak")
+    }
+
+    @MainActor
+    func testMilestoneHelpersThreadProfileWithFreezes() async throws {
+        let sut = StreakService(modelContext: modelContext)
+        let profile = PlayerProfile()
+        profile.streakFreezes = 1
+        modelContext.insert(profile)
+
+        let habit = Habit(name: "Daily Meditation", habitDescription: "Mindfulness", frequency: .daily, xpValue: 20)
+        modelContext.insert(habit)
+
+        let today = calendar.startOfDay(for: Date())
+        // 6 completions ending 7 days ago (streak of 6)
+        for daysAgo in 7...12 {
+            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
+            modelContext.insert(log)
+        }
+        // Completed today -> bridges 6 missed days with 1 freeze + 5 threshold -> streak becomes 7 (Milestone!)
+        let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
+        modelContext.insert(todayLog)
+        try modelContext.save()
+
+        // With profile, current milestone detects 7-day milestone
+        let currentMilestone = await sut.getCurrentMilestone(for: habit, profile: profile)
+        XCTAssertNotNil(currentMilestone)
+        XCTAssertEqual(currentMilestone?.streakCount, 7)
+
+        // checkForNewMilestone detects transition to 7
+        let newMilestone = await sut.checkForNewMilestone(habit: habit, previousStreak: 6, profile: profile)
+        XCTAssertNotNil(newMilestone)
+        XCTAssertEqual(newMilestone?.streakCount, 7)
+
+        // Without profile (0 freezes), 6 missed days breaks streak to 1 -> no 7-day milestone reached
+        let noFreezeMilestone = await sut.checkForNewMilestone(habit: habit, previousStreak: 6)
+        XCTAssertNil(noFreezeMilestone, "Without freeze, streak breaks to 1 so no milestone transition is achieved")
+    }
 }

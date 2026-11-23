@@ -110,7 +110,16 @@ public struct GamificationService: Sendable {
 
         // Check gap from most recent completion to today
         let daysSinceLast = calendar.dateComponents([.day], from: mostRecentDay, to: today).day ?? 0
-        let missedDaysSinceLast = max(0, daysSinceLast - 1)
+        let missedDaysSinceLast: Int
+        switch habit.frequency {
+        case .daily, .custom:
+            missedDaysSinceLast = max(0, daysSinceLast - 1)
+        case .weekly:
+            missedDaysSinceLast = max(0, daysSinceLast - 7)
+        case .monthly:
+            let expectedDate = calendar.date(byAdding: .month, value: 1, to: mostRecentDay) ?? mostRecentDay
+            missedDaysSinceLast = max(0, calendar.dateComponents([.day], from: expectedDate, to: today).day ?? 0)
+        }
 
         var availableFreezes = profile?.streakFreezes ?? 0
         let freezesUsedForRecent = min(availableFreezes, missedDaysSinceLast)
@@ -127,40 +136,29 @@ public struct GamificationService: Sendable {
         var previousDay = mostRecentDay
 
         for day in completedDays.dropFirst() {
-            let daysBetween = calendar.dateComponents([.day], from: day, to: previousDay).day ?? 1
-            let missedDays = max(0, daysBetween - 1)
-
+            let missedDays: Int
             switch habit.frequency {
             case .daily, .custom:
-                if missedDays == 0 {
-                    currentStreak += 1
-                    previousDay = day
-                } else {
-                    let freezesUsed = min(availableFreezes, missedDays)
-                    let effectiveMissed = missedDays - freezesUsed
-
-                    if effectiveMissed <= forgivenessThreshold {
-                        availableFreezes -= freezesUsed
-                        totalFreezesConsumed += freezesUsed
-                        currentStreak += 1
-                        previousDay = day
-                    } else {
-                        break
-                    }
-                }
+                let daysBetween = calendar.dateComponents([.day], from: day, to: previousDay).day ?? 1
+                missedDays = max(0, daysBetween - 1)
             case .weekly:
-                let weekComponents = calendar.dateComponents([.weekOfYear], from: day, to: previousDay)
-                let missedWeeks = max(0, (weekComponents.weekOfYear ?? 1) - 1)
-                if missedWeeks <= forgivenessThreshold {
-                    currentStreak += 1
-                    previousDay = day
-                } else {
-                    break
-                }
+                let daysBetween = calendar.dateComponents([.day], from: day, to: previousDay).day ?? 7
+                missedDays = max(0, daysBetween - 7)
             case .monthly:
-                let monthComponents = calendar.dateComponents([.month], from: day, to: previousDay)
-                let missedMonths = max(0, (monthComponents.month ?? 1) - 1)
-                if missedMonths <= forgivenessThreshold {
+                let expectedDate = calendar.date(byAdding: .month, value: 1, to: day) ?? day
+                missedDays = max(0, calendar.dateComponents([.day], from: expectedDate, to: previousDay).day ?? 0)
+            }
+
+            if missedDays == 0 {
+                currentStreak += 1
+                previousDay = day
+            } else {
+                let freezesUsed = min(availableFreezes, missedDays)
+                availableFreezes -= freezesUsed
+                let effectiveMissed = missedDays - freezesUsed
+
+                if effectiveMissed <= forgivenessThreshold {
+                    totalFreezesConsumed += freezesUsed
                     currentStreak += 1
                     previousDay = day
                 } else {

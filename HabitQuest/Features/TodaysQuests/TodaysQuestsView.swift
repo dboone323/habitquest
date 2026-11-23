@@ -16,6 +16,7 @@ public struct TodaysQuestsView: View {
     @State private var celebrationTrigger = false
     @State private var celebrationXP = 0
     @State private var celebrationTitle = ""
+    @State private var celebrationExtraMessage: String? = nil
 
     public var body: some View {
         NavigationView {
@@ -63,50 +64,59 @@ public struct TodaysQuestsView: View {
                     viewModel.addNewHabit(habit)
                 }
             }
-            .overlay(alignment: .top) {
-                if celebrationTrigger {
-                    VStack(spacing: 6) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "sparkles")
-                                .foregroundColor(.yellow)
-                                .font(.title3)
-                            Text("+\(celebrationXP) XP")
-                                .font(.headline.bold())
-                                .foregroundColor(.white)
-                            Image(systemName: "flame.fill")
-                                .foregroundColor(.orange)
-                                .font(.title3)
-                        }
-                        Text("\(celebrationTitle) Completed!")
-                            .font(.caption.weight(.semibold))
-                            .foregroundColor(.white.opacity(0.95))
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 12)
-                    .background(
-                        Capsule()
-                            .fill(
-                                LinearGradient(
-                                    colors: [Color.blue, Color.purple],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                            .shadow(color: Color.purple.opacity(0.4), radius: 10, y: 5)
-                    )
-                    .padding(.top, 16)
-                    .transition(.asymmetric(
-                        insertion: .scale(scale: 0.85).combined(with: .opacity).combined(with: .move(edge: .top)),
-                        removal: .opacity.combined(with: .scale(scale: 0.9))
-                    ))
-                    .allowsHitTesting(false)
-                    .accessibilityIdentifier("CelebrationPopover")
-                }
-            }
             .overlay {
                 if celebrationTrigger {
-                    ParticleEffectView(effectType: .confetti, trigger: celebrationTrigger)
-                        .allowsHitTesting(false)
+                    ZStack(alignment: .top) {
+                        ParticleEffectView(effectType: .confetti, trigger: celebrationTrigger)
+                            .allowsHitTesting(false)
+                            .zIndex(1)
+
+                        VStack(spacing: 6) {
+                            HStack(spacing: 8) {
+                                Image(systemName: "sparkles")
+                                    .foregroundColor(.yellow)
+                                    .font(.title3)
+                                Text("+\(celebrationXP) XP")
+                                    .font(.headline.bold())
+                                    .foregroundColor(.white)
+                                Image(systemName: "flame.fill")
+                                    .foregroundColor(.orange)
+                                    .font(.title3)
+                            }
+                            Text("\(celebrationTitle) Completed!")
+                                .font(.caption.weight(.semibold))
+                                .foregroundColor(.white.opacity(0.95))
+
+                            if let extra = celebrationExtraMessage, !extra.isEmpty {
+                                Text(extra)
+                                    .font(.caption2.weight(.bold))
+                                    .foregroundColor(.yellow)
+                                    .multilineTextAlignment(.center)
+                                    .accessibilityIdentifier("CelebrationExtraMessage")
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 12)
+                        .background(
+                            Capsule()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [Color.blue, Color.purple],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .shadow(color: Color.purple.opacity(0.4), radius: 10, y: 5)
+                        )
+                        .padding(.top, 16)
+                        .zIndex(2)
+                        .transition(.asymmetric(
+                            insertion: .scale(scale: 0.85).combined(with: .opacity).combined(with: .move(edge: .top)),
+                            removal: .opacity.combined(with: .scale(scale: 0.9))
+                        ))
+                        .accessibilityIdentifier("CelebrationPopover")
+                    }
+                    .allowsHitTesting(false)
                 }
             }
             .animation(.spring(response: 0.35, dampingFraction: 0.7), value: celebrationTrigger)
@@ -123,6 +133,23 @@ public struct TodaysQuestsView: View {
     private func triggerCelebration(for habit: Habit) {
         celebrationXP = habit.xpValue * habit.difficulty.xpMultiplier
         celebrationTitle = habit.name
+
+        // Issue #83: Surface level-up and achievement message in the popover if present
+        let msg = viewModel.completionMessage
+        if msg.contains("LEVEL UP!") || msg.contains("🏆") {
+            var extraParts: [String] = []
+            if let levelUpRange = msg.range(of: "LEVEL UP![^!]+!", options: .regularExpression) {
+                extraParts.append(String(msg[levelUpRange]))
+            } else if msg.contains("LEVEL UP!") {
+                extraParts.append("LEVEL UP!")
+            }
+            if let trophyRange = msg.range(of: "🏆[^\n]+", options: .regularExpression) {
+                extraParts.append(String(msg[trophyRange]).trimmingCharacters(in: .whitespaces))
+            }
+            celebrationExtraMessage = extraParts.isEmpty ? msg : extraParts.joined(separator: " • ")
+        } else {
+            celebrationExtraMessage = nil
+        }
 
         #if os(iOS)
             let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -148,10 +175,13 @@ public struct TodaysQuestsView: View {
     private func loadHabitAnalytics() async {
         guard let streakService else { return }
 
+        let profileDescriptor = FetchDescriptor<PlayerProfile>()
+        let profile = try? modelContext.fetch(profileDescriptor).first
+
         var analytics: [UUID: StreakAnalytics] = [:]
 
         for habit in viewModel.todaysHabits {
-            let habitAnalytics = await streakService.getStreakAnalytics(for: habit)
+            let habitAnalytics = await streakService.getStreakAnalytics(for: habit, profile: profile)
             analytics[habit.id] = habitAnalytics
         }
 

@@ -49,7 +49,16 @@ class StreakService {
 
         // Check gap from most recent completion to today
         let daysSinceLast = calendar.dateComponents([.day], from: mostRecentDay, to: today).day ?? 0
-        let missedDaysSinceLast = max(0, daysSinceLast - 1)
+        let missedDaysSinceLast: Int
+        switch habit.frequency {
+        case .daily, .custom:
+            missedDaysSinceLast = max(0, daysSinceLast - 1)
+        case .weekly:
+            missedDaysSinceLast = max(0, daysSinceLast - 7)
+        case .monthly:
+            let expectedDate = calendar.date(byAdding: .month, value: 1, to: mostRecentDay) ?? mostRecentDay
+            missedDaysSinceLast = max(0, calendar.dateComponents([.day], from: expectedDate, to: today).day ?? 0)
+        }
 
         var availableFreezes = profile?.streakFreezes ?? 0
         let freezesUsedForRecent = min(availableFreezes, missedDaysSinceLast)
@@ -64,8 +73,18 @@ class StreakService {
         var previousDay = mostRecentDay
 
         for day in completedDays.dropFirst() {
-            let daysBetween = calendar.dateComponents([.day], from: day, to: previousDay).day ?? 1
-            let missedDays = max(0, daysBetween - 1)
+            let missedDays: Int
+            switch habit.frequency {
+            case .daily, .custom:
+                let daysBetween = calendar.dateComponents([.day], from: day, to: previousDay).day ?? 1
+                missedDays = max(0, daysBetween - 1)
+            case .weekly:
+                let daysBetween = calendar.dateComponents([.day], from: day, to: previousDay).day ?? 7
+                missedDays = max(0, daysBetween - 7)
+            case .monthly:
+                let expectedDate = calendar.date(byAdding: .month, value: 1, to: day) ?? day
+                missedDays = max(0, calendar.dateComponents([.day], from: expectedDate, to: previousDay).day ?? 0)
+            }
 
             if missedDays == 0 {
                 streak += 1
@@ -120,8 +139,18 @@ class StreakService {
 
         for logDate in completedDays {
             if let prevDate = previousDate {
-                let daysBetween = calendar.dateComponents([.day], from: prevDate, to: logDate).day ?? 0
-                let missedDays = max(0, daysBetween - 1)
+                let missedDays: Int
+                switch habit.frequency {
+                case .daily, .custom:
+                    let daysBetween = calendar.dateComponents([.day], from: prevDate, to: logDate).day ?? 0
+                    missedDays = max(0, daysBetween - 1)
+                case .weekly:
+                    let daysBetween = calendar.dateComponents([.day], from: prevDate, to: logDate).day ?? 0
+                    missedDays = max(0, daysBetween - 7)
+                case .monthly:
+                    let expectedDate = calendar.date(byAdding: .month, value: 1, to: prevDate) ?? prevDate
+                    missedDays = max(0, calendar.dateComponents([.day], from: expectedDate, to: logDate).day ?? 0)
+                }
 
                 if missedDays <= forgivenessThreshold {
                     currentStreak += 1
@@ -180,9 +209,10 @@ class StreakService {
     /// - Parameters:
     ///   - habit: The habit to check
     ///   - previousStreak: The streak count before today's completion
+    ///   - profile: Optional player profile with streak freeze inventory
     /// - Returns: A milestone if one was achieved, nil otherwise
-    func checkForNewMilestone(habit: Habit, previousStreak: Int) async -> StreakMilestone? {
-        let newStreak = await calculateCurrentStreak(for: habit)
+    func checkForNewMilestone(habit: Habit, previousStreak: Int, profile: PlayerProfile? = nil) async -> StreakMilestone? {
+        let newStreak = await calculateCurrentStreak(for: habit, profile: profile)
 
         if StreakMilestone.isNewMilestone(streakCount: newStreak, previousCount: previousStreak) {
             return StreakMilestone.milestone(for: newStreak)
@@ -192,26 +222,32 @@ class StreakService {
     }
 
     /// Get current milestone for a habit
-    /// - Parameter habit: The habit to check
+    /// - Parameters:
+    ///   - habit: The habit to check
+    ///   - profile: Optional player profile with streak freeze inventory
     /// - Returns: The highest milestone currently achieved
-    func getCurrentMilestone(for habit: Habit) async -> StreakMilestone? {
-        let currentStreak = await calculateCurrentStreak(for: habit)
+    func getCurrentMilestone(for habit: Habit, profile: PlayerProfile? = nil) async -> StreakMilestone? {
+        let currentStreak = await calculateCurrentStreak(for: habit, profile: profile)
         return StreakMilestone.milestone(for: currentStreak)
     }
 
     /// Get next milestone to achieve
-    /// - Parameter habit: The habit to check
+    /// - Parameters:
+    ///   - habit: The habit to check
+    ///   - profile: Optional player profile with streak freeze inventory
     /// - Returns: The next milestone in the progression
-    func getNextMilestone(for habit: Habit) async -> StreakMilestone? {
-        let currentStreak = await calculateCurrentStreak(for: habit)
+    func getNextMilestone(for habit: Habit, profile: PlayerProfile? = nil) async -> StreakMilestone? {
+        let currentStreak = await calculateCurrentStreak(for: habit, profile: profile)
         return StreakMilestone.nextMilestone(for: currentStreak)
     }
 
     /// Get progress towards next milestone (0.0 to 1.0)
-    /// - Parameter habit: The habit to check
+    /// - Parameters:
+    ///   - habit: The habit to check
+    ///   - profile: Optional player profile with streak freeze inventory
     /// - Returns: Progress percentage towards the next milestone
-    func getProgressToNextMilestone(for habit: Habit) async -> Double {
-        let currentStreak = await calculateCurrentStreak(for: habit)
+    func getProgressToNextMilestone(for habit: Habit, profile: PlayerProfile? = nil) async -> Double {
+        let currentStreak = await calculateCurrentStreak(for: habit, profile: profile)
         guard let nextMilestone = StreakMilestone.nextMilestone(for: currentStreak) else {
             return 1.0 // Already at max milestone
         }
@@ -227,14 +263,16 @@ class StreakService {
     // MARK: - Streak Analytics
 
     /// Get comprehensive streak analytics for a habit
-    /// - Parameter habit: The habit to analyze
+    /// - Parameters:
+    ///   - habit: The habit to analyze
+    ///   - profile: Optional player profile with streak freeze inventory
     /// - Returns: A structured analytics object
-    func getStreakAnalytics(for habit: Habit) async -> StreakAnalytics {
-        let currentStreak = await calculateCurrentStreak(for: habit)
+    func getStreakAnalytics(for habit: Habit, profile: PlayerProfile? = nil) async -> StreakAnalytics {
+        let currentStreak = await calculateCurrentStreak(for: habit, profile: profile)
         let longestStreak = await calculateLongestStreak(for: habit)
-        let currentMilestone = await getCurrentMilestone(for: habit)
-        let nextMilestone = await getNextMilestone(for: habit)
-        let progressToNext = await getProgressToNextMilestone(for: habit)
+        let currentMilestone = await getCurrentMilestone(for: habit, profile: profile)
+        let nextMilestone = await getNextMilestone(for: habit, profile: profile)
+        let progressToNext = await getProgressToNextMilestone(for: habit, profile: profile)
 
         return StreakAnalytics(
             currentStreak: currentStreak,

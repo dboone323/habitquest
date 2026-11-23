@@ -66,12 +66,15 @@ final class StreakAnalyticsViewModel: ObservableObject {
             let habitDescriptor = FetchDescriptor<Habit>()
             let habits = try modelContext.fetch(habitDescriptor)
 
+            let profileDescriptor = FetchDescriptor<PlayerProfile>()
+            let profile = try? modelContext.fetch(profileDescriptor).first
+
             guard !habits.isEmpty else {
                 analyticsData = nil
                 return
             }
 
-            let analytics = await generateAnalyticsData(habits: habits, service: service)
+            let analytics = await generateAnalyticsData(habits: habits, profile: profile, service: service)
             analyticsData = analytics
         } catch {
             errorMessage = "Failed to load analytics: \(error.localizedDescription)"
@@ -101,14 +104,14 @@ final class StreakAnalyticsViewModel: ObservableObject {
         }
     }
 
-    private func generateAnalyticsData(habits: [Habit], service: StreakService) async
+    private func generateAnalyticsData(habits: [Habit], profile: PlayerProfile?, service: StreakService) async
         -> StreakAnalyticsData
     {
         var streakAnalytics: [StreakAnalytics] = []
         var topPerformers: [TopPerformer] = []
 
         for habit in habits {
-            let analytics = await service.getStreakAnalytics(for: habit)
+            let analytics = await service.getStreakAnalytics(for: habit, profile: profile)
             streakAnalytics.append(analytics)
 
             if analytics.currentStreak > 0 {

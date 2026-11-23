@@ -173,4 +173,54 @@ final class TodaysQuestsViewModelTests: XCTestCase {
         XCTAssertEqual(profile.level, 1)
         XCTAssertEqual(profile.currentXP, 140)
     }
+
+    // MARK: - Round 3 Reproduction Tests: Issue #81
+
+    @MainActor
+    func testUndoingLevelUpCompletionDeductsAwardedStreakFreeze() throws {
+        let (context, viewModel) = try createSUT()
+        let profile = PlayerProfile()
+        profile.currentXP = 140
+        profile.level = 1
+        profile.xpForNextLevel = 150
+        profile.streakFreezes = 0
+        context.insert(profile)
+
+        let habit = Habit(name: "Workout", habitDescription: "Gym", frequency: .daily, xpValue: 20, difficulty: .medium) // 20 * 2 = 40 XP
+        context.insert(habit)
+        try context.save()
+
+        // Complete -> 140 + 40 = 180 XP -> Level 2, +1 streak freeze awarded
+        viewModel.toggleHabitCompletion(habit)
+        XCTAssertEqual(profile.level, 2)
+        XCTAssertEqual(profile.streakFreezes, 1, "Leveling up should award 1 streak freeze")
+
+        // Toggle off (uncomplete) -> Reverts to Level 1 -> Awarded freeze must be deducted!
+        viewModel.toggleHabitCompletion(habit)
+        XCTAssertEqual(profile.level, 1)
+        XCTAssertEqual(profile.streakFreezes, 0, "Undoing level-up completion must deduct awarded streak freeze")
+    }
+
+    @MainActor
+    func testUndoingNonLevelUpCompletionPreservesStreakFreezes() throws {
+        let (context, viewModel) = try createSUT()
+        let profile = PlayerProfile()
+        profile.currentXP = 10
+        profile.level = 1
+        profile.xpForNextLevel = 150
+        profile.streakFreezes = 2
+        context.insert(profile)
+
+        let habit = Habit(name: "Hydrate", habitDescription: "Water", frequency: .daily, xpValue: 10, difficulty: .easy)
+        context.insert(habit)
+        try context.save()
+
+        viewModel.toggleHabitCompletion(habit)
+        XCTAssertEqual(profile.level, 1)
+        XCTAssertEqual(profile.streakFreezes, 2)
+
+        viewModel.toggleHabitCompletion(habit)
+        XCTAssertEqual(profile.level, 1)
+        XCTAssertEqual(profile.streakFreezes, 2, "Undoing completion without level-up must not change streak freezes")
+    }
 }

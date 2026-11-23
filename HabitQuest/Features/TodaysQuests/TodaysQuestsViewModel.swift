@@ -146,6 +146,7 @@ public class TodaysQuestsViewModel: ObservableObject {
         let profileDescriptor = FetchDescriptor<PlayerProfile>()
         let fetchedProfile = (try? context.fetch(profileDescriptor))?.first
         if let profile = fetchedProfile {
+            let oldLevel = profile.level
             profile.currentXP = max(0, profile.currentXP - xpToRevert)
 
             // Recalculate level based on reverted XP
@@ -155,6 +156,11 @@ public class TodaysQuestsViewModel: ObservableObject {
             }
             profile.level = level
             profile.xpForNextLevel = gamificationService.calculateXPForNextLevel(forLevel: level)
+
+            let levelsLost = max(0, oldLevel - level)
+            if levelsLost > 0 {
+                profile.streakFreezes = max(0, profile.streakFreezes - levelsLost)
+            }
         }
 
         // Revert habit streak

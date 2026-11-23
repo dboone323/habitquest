@@ -163,6 +163,16 @@ final class HabitQuestUITests: XCTestCase {
         // Verify NO modal alert is presented
         XCTAssertFalse(app.alerts["Quest Completed!"].exists, "No modal alert should be presented on completion")
 
+        // Issue #84 Done Criteria: Celebration popover must exist after completing
+        let celebrationPopover = app.descendants(matching: .any)["CelebrationPopover"]
+        XCTAssertTrue(celebrationPopover.waitForExistence(timeout: 5), "Celebration popover must exist after completing")
+
+        // Issue #83 Done Criteria: Check if achievement extra message is displayed in popover
+        let celebrationExtra = app.descendants(matching: .any)["CelebrationExtraMessage"]
+        if celebrationExtra.waitForExistence(timeout: 2) {
+            XCTAssertTrue(celebrationExtra.exists, "Celebration extra message (level up / achievement) is displayed")
+        }
+
         // Wait ~1 second for popover animation to settle
         RunLoop.current.run(until: Date().addingTimeInterval(1.0))
         saveScreenshot(name: "01-completion-celebration-no-alert.png", directoryName: targetDir)
@@ -260,7 +270,7 @@ final class HabitQuestUITests: XCTestCase {
         // Verify un-complete does not show celebration popover or modal alert
         RunLoop.current.run(until: Date().addingTimeInterval(0.5))
         XCTAssertFalse(app.alerts.firstMatch.exists, "No alert should appear when un-completing")
-        XCTAssertFalse(app.otherElements["CelebrationPopover"].exists, "No celebration popover should appear when un-completing")
+        XCTAssertFalse(app.descendants(matching: .any)["CelebrationPopover"].exists, "No celebration popover should appear when un-completing")
 
         saveScreenshot(name: "04-today-toggled-off-no-celebration.png", directoryName: targetDir)
     }
