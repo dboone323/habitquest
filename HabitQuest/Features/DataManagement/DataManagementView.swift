@@ -172,12 +172,7 @@ public struct HabitQuestBackupDocument: FileDocument {
         self.data = data
     }
 
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Returns a file wrapper representation of the JSON data.
     public nonisolated func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
         FileWrapper(regularFileWithContents: data)
     }
