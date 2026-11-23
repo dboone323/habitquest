@@ -14,6 +14,8 @@ final class StreakAnalyticsViewModel: ObservableObject {
     @Published var analyticsData: StreakAnalyticsData?
     @Published var selectedTimeframe: Timeframe = .month
 
+    private let logger = HabitQuestLogger(category: .uiCategory)
+
     enum Timeframe: String, CaseIterable, Equatable {
         case week = "7D"
         case month = "30D"
@@ -78,14 +80,22 @@ final class StreakAnalyticsViewModel: ObservableObject {
     }
 
     func exportAnalytics() async {
-        // Export logic here - placeholder for future implementation
-        print("Exporting analytics data...")
+        guard let modelContext else { return }
+        do {
+            let data = try await DataExportService.exportUserData(from: modelContext)
+            let filename = DataExportService.generateExportFilename()
+            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+            try data.write(to: tempURL)
+            logger.info("Exported analytics data to \(tempURL.path)")
+        } catch {
+            logger.error("Failed to export analytics: \(error.localizedDescription)")
+        }
     }
 
     func shareAnalyticsReport() {
-        // Sharing logic here
-        // For now, just a placeholder action
-        print("Sharing analytics report...")
+        if let top = analyticsData?.topPerformingHabits.first {
+            ShareManager.shared.shareStreak(top.currentStreak, habit: top.habit.name) { _ in }
+        }
     }
 
     private func generateAnalyticsData(habits: [Habit], service: StreakService) async
@@ -183,13 +193,35 @@ final class StreakAnalyticsViewModel: ObservableObject {
         return insights
     }
 
-    private func generateWeeklyPatterns(habits _: [Habit], service _: StreakService) async
+    private func generateWeeklyPatterns(habits: [Habit], service: StreakService) async
         -> [WeeklyPattern]
     {
-        // Simplified weekly pattern generation
-        let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        return daysOfWeek.map { day in
-            WeeklyPattern(day: day, completionRate: Double.random(in: 0.3...0.9)) // Placeholder
+        let calendar = Calendar.current
+        let dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        let weekdayMapping: [String: Int] = [
+            "Sun": 1, "Mon": 2, "Tue": 3, "Wed": 4, "Thu": 5, "Fri": 6, "Sat": 7
+        ]
+
+        var weekdayCompletions: [Int: Int] = [:]
+        var weekdayTotals: [Int: Int] = [:]
+
+        for habit in habits {
+            let streakData = await service.getStreakData(for: habit, days: 28)
+            for day in streakData {
+                let weekday = calendar.component(.weekday, from: day.date)
+                weekdayTotals[weekday, default: 0] += 1
+                if day.isCompleted {
+                    weekdayCompletions[weekday, default: 0] += 1
+                }
+            }
+        }
+
+        return dayNames.map { day in
+            let weekdayNumber = weekdayMapping[day] ?? 1
+            let total = weekdayTotals[weekdayNumber] ?? 0
+            let completed = weekdayCompletions[weekdayNumber] ?? 0
+            let rate = total > 0 ? Double(completed) / Double(total) : 0.0
+            return WeeklyPattern(day: day, completionRate: rate)
         }
     }
 }
