@@ -8,9 +8,17 @@ public struct AchievementGalleryView: View {
     @State private var selectedCategory: AchievementCategory? = nil
     @Environment(\.dismiss) private var dismiss
 
+    public let preselectedAchievement: Achievement?
+
     public init(achievements: [Achievement], selectedAchievement: Achievement? = nil) {
         self.achievements = achievements
-        _selectedAchievement = State(initialValue: selectedAchievement)
+        if let selectedAchievement, !selectedAchievement.isHidden || selectedAchievement.isUnlocked {
+            self.preselectedAchievement = selectedAchievement
+            _selectedAchievement = State(initialValue: selectedAchievement)
+        } else {
+            self.preselectedAchievement = nil
+            _selectedAchievement = State(initialValue: nil)
+        }
     }
 
     public var visibleAchievements: [Achievement] {
@@ -66,7 +74,9 @@ public struct AchievementGalleryView: View {
                 }
             }
             .sheet(item: $selectedAchievement) { achievement in
-                AchievementDetailSheet(achievement: achievement)
+                if !achievement.isHidden || achievement.isUnlocked {
+                    AchievementDetailSheet(achievement: achievement)
+                }
             }
         }
     }

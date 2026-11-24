@@ -134,7 +134,8 @@ public struct GamificationService: Sendable {
             return
         }
 
-        var totalFreezesConsumed = freezesUsedForRecent
+        // Only freezes persisted onto historical logs (completedDays.dropFirst) are permanently deducted from profile
+        var totalFreezesConsumed = 0
         var currentStreak = 1
         var previousDay = mostRecentDay
 

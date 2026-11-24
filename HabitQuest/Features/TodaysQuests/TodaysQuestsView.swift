@@ -179,16 +179,44 @@ public struct TodaysQuestsView: View {
         let profileDescriptor = FetchDescriptor<PlayerProfile>()
         let profile = try? modelContext.fetch(profileDescriptor).first
 
-        var analytics: [UUID: StreakAnalytics] = [:]
-
-        for habit in viewModel.todaysHabits {
-            let habitAnalytics = await streakService.getStreakAnalytics(for: habit, profile: profile)
-            analytics[habit.id] = habitAnalytics
-        }
+        let analytics = await Self.computeHabitAnalytics(
+            for: viewModel.todaysHabits,
+            profile: profile,
+            service: streakService
+        )
 
         await MainActor.run {
             habitAnalytics = analytics
         }
+    }
+
+    /// Compute streak analytics for today's habits with sequential freeze allocation across habits
+    static func computeHabitAnalytics(
+        for habits: [Habit],
+        profile: PlayerProfile?,
+        service: StreakService
+    ) async -> [UUID: StreakAnalytics] {
+        var analytics: [UUID: StreakAnalytics] = [:]
+        var remainingFreezes = profile?.streakFreezes ?? 0
+
+        for habit in habits {
+            let habitProfile: PlayerProfile?
+            if let profile {
+                let temp = PlayerProfile()
+                temp.level = profile.level
+                temp.currentXP = profile.currentXP
+                temp.streakFreezes = remainingFreezes
+                habitProfile = temp
+            } else {
+                habitProfile = nil
+            }
+
+            let habitAnalytics = await service.getStreakAnalytics(for: habit, profile: habitProfile)
+            remainingFreezes = max(0, remainingFreezes - habitAnalytics.freezesUsedFromInventory)
+            analytics[habit.id] = habitAnalytics
+        }
+
+        return analytics
     }
 }
 

@@ -45,6 +45,7 @@ public struct ProfileView: View {
                             showingAchievementGallery = true
                         },
                         onSelectAchievement: { achievement in
+                            guard !achievement.isHidden || achievement.isUnlocked else { return }
                             selectedAchievement = achievement
                             showingAchievementGallery = true
                         }

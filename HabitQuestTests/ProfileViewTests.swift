@@ -158,4 +158,37 @@ final class ProfileViewTests: XCTestCase {
             "Unlocked secret achievement '\(secret.name)' must appear in gallery"
         )
     }
+
+    // MARK: - Issue #94: Locked Hidden Achievements Not Exposed in Preview or Preselected Gallery Detail
+
+    @MainActor
+    func testLockedHiddenAchievementsNotExposedInProfilePreviewOrPreselectedGallery() {
+        let achievements = AchievementService.createDefaultAchievements()
+        // Default achievements seed Legend (isHidden: true) 4th and Master Adventurer (isHidden: true) 10th
+        let legend = achievements.first { $0.name == "Legend" }
+        XCTAssertNotNil(legend)
+        guard let legend else { return }
+        XCTAssertTrue(legend.isHidden, "Legend must be hidden")
+        XCTAssertFalse(legend.isUnlocked, "Legend must be locked initially")
+
+        // 1. Profile Preview must not include locked hidden achievements
+        let section = AchievementsSection(achievements: achievements)
+        XCTAssertFalse(
+            section.previewAchievements.contains { $0.id == legend.id },
+            "Locked hidden achievement 'Legend' must not appear in profile preview achievements"
+        )
+        for previewAchievement in section.previewAchievements {
+            XCTAssertFalse(
+                previewAchievement.isHidden && !previewAchievement.isUnlocked,
+                "Preview badge '\(previewAchievement.name)' must not be hidden and locked"
+            )
+        }
+
+        // 2. AchievementGalleryView initialized with a locked hidden achievement must not preselect it
+        let gallery = AchievementGalleryView(achievements: achievements, selectedAchievement: legend)
+        XCTAssertNil(
+            gallery.preselectedAchievement,
+            "Gallery initialized with locked hidden achievement must clear preselected achievement to prevent presenting detail sheet"
+        )
+    }
 }

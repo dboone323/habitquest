@@ -17,6 +17,10 @@ public struct AchievementsSection: View {
         self.onSelectAchievement = onSelectAchievement
     }
 
+    public var previewAchievements: [Achievement] {
+        Array(achievements.filter { !$0.isHidden || $0.isUnlocked }.prefix(6))
+    }
+
     public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -42,7 +46,7 @@ public struct AchievementsSection: View {
                     .padding(.vertical)
             } else {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
-                    ForEach(achievements.prefix(6)) { achievement in
+                    ForEach(previewAchievements) { achievement in
                         AchievementBadge(achievement: achievement)
                             .onTapGesture {
                                 onSelectAchievement(achievement)

@@ -134,8 +134,10 @@ public class TodaysQuestsViewModel: ObservableObject {
         guard !todaysLogs.isEmpty else { return }
 
         var xpToRevert = 0
+        var freezesToRefund = 0
         for log in todaysLogs {
             xpToRevert += log.xpEarned > 0 ? log.xpEarned : (habit.xpValue * habit.difficulty.xpMultiplier)
+            freezesToRefund += log.freezesConsumed
             context.delete(log)
         }
         habit.logs.removeAll {
@@ -146,6 +148,9 @@ public class TodaysQuestsViewModel: ObservableObject {
         let profileDescriptor = FetchDescriptor<PlayerProfile>()
         let fetchedProfile = (try? context.fetch(profileDescriptor))?.first
         if let profile = fetchedProfile {
+            if freezesToRefund > 0 {
+                profile.streakFreezes += freezesToRefund
+            }
             let oldLevel = profile.level
             profile.currentXP = max(0, profile.currentXP - xpToRevert)
 

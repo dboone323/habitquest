@@ -223,4 +223,48 @@ final class TodaysQuestsViewModelTests: XCTestCase {
         XCTAssertEqual(profile.level, 1)
         XCTAssertEqual(profile.streakFreezes, 2, "Undoing completion without level-up must not change streak freezes")
     }
+
+    // MARK: - Issue #93: Un-completing Today Preserves Freeze-Protected Streak
+
+    @MainActor
+    func testUncompletingTodayDoesNotEvaporateFreezeProtectedStreak() async throws {
+        let (context, viewModel) = try createSUT()
+        let profile = PlayerProfile()
+        profile.streakFreezes = 1
+        context.insert(profile)
+
+        let habit = Habit(name: "Workout", habitDescription: "Gym session", frequency: .daily, xpValue: 25)
+        context.insert(habit)
+
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        // Completed 7 days ago (gap of 6 missed days to today, needing 1 freeze beyond default 5-day threshold)
+        let log7DaysAgo = calendar.date(byAdding: .day, value: -7, to: today)!
+        let oldLog = HabitLog(habit: habit, completionDate: log7DaysAgo, isCompleted: true)
+        context.insert(oldLog)
+        try context.save()
+
+        // Complete habit today: bridges 6-day gap using the 1 freeze
+        viewModel.completeHabit(habit)
+        try context.save()
+
+        XCTAssertEqual(habit.streak, 2, "Completing today across 6-day gap with 1 freeze results in streak 2")
+        XCTAssertEqual(profile.streakFreezes, 0, "Freeze was consumed for completion")
+
+        // Uncomplete habit today (undo completion)
+        viewModel.uncompleteHabit(habit)
+        try context.save()
+
+        // Habit streak and profile inventory after uncompleting
+        XCTAssertEqual(habit.streak, 1, "Streak should revert to 1 after uncompleting today")
+        XCTAssertEqual(profile.streakFreezes, 1, "Uncompleting completion that consumed freeze must refund the freeze")
+
+        // Subsequent read path via StreakService must NOT evaporate the streak to 0
+        let streakService = StreakService(modelContext: context)
+        let analytics = await streakService.getStreakAnalytics(for: habit, profile: profile)
+        XCTAssertEqual(analytics.currentStreak, 1, "Subsequent analytics read must preserve freeze-protected streak after uncompleting today")
+
+        let currentStreak = await streakService.calculateCurrentStreak(for: habit, profile: profile)
+        XCTAssertEqual(currentStreak, 1, "Subsequent calculateCurrentStreak read must preserve freeze-protected streak after uncompleting today")
+    }
 }
