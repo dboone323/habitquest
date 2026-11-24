@@ -72,7 +72,8 @@ class StreakService {
         }
 
         var availableFreezes = profile?.streakFreezes ?? 0
-        let freezesUsedForRecent = min(availableFreezes, missedDaysSinceLast)
+        let neededForRecent = max(0, missedDaysSinceLast - forgivenessThreshold)
+        let freezesUsedForRecent = min(availableFreezes, neededForRecent)
         availableFreezes -= freezesUsedForRecent
         let effectiveMissedSinceLast = missedDaysSinceLast - freezesUsedForRecent
 
@@ -106,7 +107,8 @@ class StreakService {
                 let alreadyConsumed = logForPrevious?.freezesConsumed ?? 0
                 let missedAfterPersisted = max(0, missedDays - alreadyConsumed)
 
-                let freezesUsed = min(availableFreezes, missedAfterPersisted)
+                let neededFreezes = max(0, missedAfterPersisted - forgivenessThreshold)
+                let freezesUsed = min(availableFreezes, neededFreezes)
                 availableFreezes -= freezesUsed
                 let effectiveMissed = missedAfterPersisted - freezesUsed
 
@@ -126,10 +128,12 @@ class StreakService {
     /// Calculate longest streak for a habit with forgiving threshold
     /// - Parameters:
     ///   - habit: The habit to analyze
+    ///   - profile: Optional player profile with streak freeze inventory
     ///   - forgivenessThreshold: Days allowed to be missed before streak resets
     /// - Returns: The historically longest streak for this habit
     func calculateLongestStreak(
         for habit: Habit,
+        profile: PlayerProfile? = nil,
         forgivenessThreshold: Int = StreakForgivenessConfig.threshold
     ) async -> Int {
         let calendar = Calendar.current
@@ -140,11 +144,13 @@ class StreakService {
 
         var completedDays: [Date] = []
         var seenDays = Set<Date>()
+        var logsByDay: [Date: HabitLog] = [:]
         for log in completedLogs {
             let day = calendar.startOfDay(for: log.completionDate)
             if !seenDays.contains(day) {
                 seenDays.insert(day)
                 completedDays.append(day)
+                logsByDay[day] = log
             }
         }
 
@@ -169,7 +175,11 @@ class StreakService {
                     missedDays = max(0, calendar.dateComponents([.day], from: expectedDate, to: logDate).day ?? 0)
                 }
 
-                if missedDays <= forgivenessThreshold {
+                let logForDate = logsByDay[logDate]
+                let freezesConsumed = logForDate?.freezesConsumed ?? 0
+                let effectiveMissed = max(0, missedDays - freezesConsumed)
+
+                if effectiveMissed <= forgivenessThreshold {
                     currentStreak += 1
                 } else {
                     longestStreak = max(longestStreak, currentStreak)
@@ -286,7 +296,7 @@ class StreakService {
     /// - Returns: A structured analytics object
     func getStreakAnalytics(for habit: Habit, profile: PlayerProfile? = nil) async -> StreakAnalytics {
         let (currentStreak, freezesUsed) = await calculateCurrentStreakWithUsage(for: habit, profile: profile)
-        let longestStreak = await calculateLongestStreak(for: habit)
+        let longestStreak = max(currentStreak, await calculateLongestStreak(for: habit, profile: profile))
         let currentMilestone = await getCurrentMilestone(for: habit, profile: profile)
         let nextMilestone = await getNextMilestone(for: habit, profile: profile)
         let progressToNext = await getProgressToNextMilestone(for: habit, profile: profile)

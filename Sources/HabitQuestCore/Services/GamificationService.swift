@@ -124,7 +124,8 @@ public struct GamificationService: Sendable {
         }
 
         var availableFreezes = profile?.streakFreezes ?? 0
-        let freezesUsedForRecent = min(availableFreezes, missedDaysSinceLast)
+        let neededForRecent = max(0, missedDaysSinceLast - forgivenessThreshold)
+        let freezesUsedForRecent = min(availableFreezes, neededForRecent)
         availableFreezes -= freezesUsedForRecent
         let effectiveMissedSinceLast = missedDaysSinceLast - freezesUsedForRecent
 
@@ -159,7 +160,8 @@ public struct GamificationService: Sendable {
                 let alreadyConsumed = logForPrevious?.freezesConsumed ?? 0
                 let missedAfterPersisted = max(0, missedDays - alreadyConsumed)
 
-                let newlyNeededFreezes = min(availableFreezes, missedAfterPersisted)
+                let neededFreezes = max(0, missedAfterPersisted - forgivenessThreshold)
+                let newlyNeededFreezes = min(availableFreezes, neededFreezes)
                 availableFreezes -= newlyNeededFreezes
                 let effectiveMissed = missedAfterPersisted - newlyNeededFreezes
 

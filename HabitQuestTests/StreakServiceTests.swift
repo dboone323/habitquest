@@ -496,4 +496,96 @@ final class StreakServiceTests: XCTestCase {
         let recalculated = await sut.calculateCurrentStreak(for: habit, profile: profile)
         XCTAssertEqual(recalculated, 4, "calculateCurrentStreak must preserve freeze-spent streak (4)")
     }
+
+    // MARK: - Issue #88: Longest Streak Accounts for Freeze-Bridged Gaps
+
+    @MainActor
+    func testLongestStreakAccountsForFreezeBridgedGaps() async throws {
+        let gamification = GamificationService()
+        let sut = StreakService(modelContext: modelContext)
+        let profile = PlayerProfile()
+        profile.streakFreezes = 1
+        modelContext.insert(profile)
+
+        let habit = Habit(name: "Morning Run", habitDescription: "5km", frequency: .daily, xpValue: 20)
+        modelContext.insert(habit)
+
+        let today = calendar.startOfDay(for: Date())
+        // Completed 9, 8, 7 days ago (3 consecutive days)
+        for daysAgo in [9, 8, 7] {
+            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
+            modelContext.insert(log)
+        }
+        // Complete today: 6 missed days between 7 days ago and today
+        let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
+        modelContext.insert(todayLog)
+        try modelContext.save()
+
+        gamification.processHabitCompletion(habit: habit, profile: profile)
+        try modelContext.save()
+
+        XCTAssertEqual(habit.streak, 4, "Current streak should be 4 with 1 freeze bridging 6-day gap")
+        let longestStreak = await sut.calculateLongestStreak(for: habit)
+        XCTAssertEqual(longestStreak, 4, "Longest streak must account for freeze-bridged gaps and equal 4")
+
+        let analytics = await sut.getStreakAnalytics(for: habit, profile: profile)
+        XCTAssertEqual(analytics.currentStreak, 4)
+        XCTAssertEqual(analytics.longestStreak, 4, "StreakAnalytics longestStreak must match currentStreak of 4")
+    }
+
+    // MARK: - Issue #91: Freezes Spent Only Beyond Grace Threshold
+
+    @MainActor
+    func testFreezeNotSpentOnMissedDaysWithinForgivenessThreshold() throws {
+        let gamification = GamificationService()
+        let profile = PlayerProfile()
+        profile.streakFreezes = 1
+        modelContext.insert(profile)
+
+        let habit = Habit(name: "Daily Coding", habitDescription: "1 commit", frequency: .daily, xpValue: 20)
+        modelContext.insert(habit)
+
+        let today = calendar.startOfDay(for: Date())
+        // Completed 2 days ago (1 missed day: yesterday)
+        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: today)!
+        let prevLog = HabitLog(habit: habit, completionDate: twoDaysAgo, isCompleted: true)
+        modelContext.insert(prevLog)
+
+        // Complete today (gap of 1 missed day, within default 5-day threshold)
+        let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
+        modelContext.insert(todayLog)
+        try modelContext.save()
+
+        gamification.processHabitCompletion(habit: habit, profile: profile)
+        try modelContext.save()
+
+        // Streak survives because 1 missed day <= 5 grace threshold
+        XCTAssertEqual(habit.streak, 2, "Streak should survive 1 missed day inside 5-day grace threshold")
+        // Freeze must NOT be spent because gap is inside grace threshold!
+        XCTAssertEqual(profile.streakFreezes, 1, "Freeze in inventory must remain unspent for gap inside grace threshold")
+        XCTAssertEqual(todayLog.freezesConsumed, 0, "Log should record 0 freezes consumed for in-threshold gap")
+    }
+
+    @MainActor
+    func testReadPathDoesNotSpendFreezeOnRecentGapInsideThreshold() async throws {
+        let sut = StreakService(modelContext: modelContext)
+        let profile = PlayerProfile()
+        profile.streakFreezes = 1
+        modelContext.insert(profile)
+
+        let habit = Habit(name: "Daily Reading", habitDescription: "1 chapter", frequency: .daily, xpValue: 15)
+        modelContext.insert(habit)
+
+        let today = calendar.startOfDay(for: Date())
+        // Completed 2 days ago: recent gap to today is 1 missed day
+        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: today)!
+        let log = HabitLog(habit: habit, completionDate: twoDaysAgo, isCompleted: true)
+        modelContext.insert(log)
+        try modelContext.save()
+
+        let (streak, freezesUsed) = await sut.calculateCurrentStreakWithUsage(for: habit, profile: profile)
+        XCTAssertEqual(streak, 1, "Streak should survive 1 missed day inside grace threshold")
+        XCTAssertEqual(freezesUsed, 0, "Read path must not consume freeze from inventory for gap inside grace threshold")
+    }
 }

@@ -14,6 +14,7 @@ public struct TodaysQuestsView: View {
     @State private var habitAnalytics: [UUID: StreakAnalytics] = [:]
     @State private var streakService: StreakService?
     @State private var celebrationTrigger = false
+    @State private var celebrationDismissTask: Task<Void, Never>?
     @State private var celebrationXP = 0
     @State private var celebrationTitle = ""
     @State private var celebrationExtraMessage: String? = nil
@@ -158,13 +159,13 @@ public struct TodaysQuestsView: View {
             AudioServicesPlaySystemSound(1057)
         #endif
 
+        celebrationDismissTask?.cancel()
         celebrationTrigger = true
 
-        Task {
+        celebrationDismissTask = Task { @MainActor in
             try? await Task.sleep(nanoseconds: 3_500_000_000)
-            await MainActor.run {
-                celebrationTrigger = false
-            }
+            guard !Task.isCancelled else { return }
+            celebrationTrigger = false
         }
     }
 

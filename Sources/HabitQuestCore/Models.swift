@@ -218,7 +218,7 @@ public final class HabitLog {
     /// The exact time the habit was completed (if completed).
     public var completionTime: Date?
     /// Number of streak freezes consumed to bridge the gap leading into this completion.
-    public var freezesConsumed: Int
+    public var freezesConsumed: Int = 0
 
     /// The associated habit for this log entry.
     public var habit: Habit?
@@ -257,7 +257,7 @@ public final class PlayerProfile {
     /// Highest consecutive streak achieved across all habits.
     public var longestStreak: Int
     /// Streak freezes currently in player inventory.
-    public var streakFreezes: Int
+    public var streakFreezes: Int = 0
     /// When this profile was created.
     public var creationDate: Date
 

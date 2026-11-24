@@ -275,6 +275,80 @@ final class HabitQuestUITests: XCTestCase {
         saveScreenshot(name: "04-today-toggled-off-no-celebration.png", directoryName: targetDir)
     }
 
+    // MARK: - Issue #90: Celebration Timer Reset on Second Completion
+
+    @MainActor
+    func testCelebrationTimerResetOnSecondCompletion() {
+        let app = XCUIApplication()
+        app.launch()
+        dismissSystemPermissionAlertsIfPresent(in: app)
+
+        let todayTab = app.tabBars.buttons["Today"]
+        if todayTab.waitForExistence(timeout: 3) {
+            todayTab.tap()
+        }
+
+        // Reset any completed habits to uncompleted
+        let markIncompleteButtons = app.buttons.matching(NSPredicate(format: "label == 'Mark incomplete'"))
+        for _ in 0..<markIncompleteButtons.count {
+            if markIncompleteButtons.firstMatch.exists {
+                markIncompleteButtons.firstMatch.tap()
+                RunLoop.current.run(until: Date().addingTimeInterval(0.3))
+            }
+        }
+
+        // Ensure at least two habits exist
+        var completeButtons = app.buttons.matching(NSPredicate(format: "label == 'Mark complete'"))
+        while completeButtons.count < 2 {
+            let addQuestButton = app.buttons["Add Quest"]
+            if addQuestButton.waitForExistence(timeout: 2) {
+                addQuestButton.tap()
+                let nameField = app.textFields.firstMatch
+                if nameField.waitForExistence(timeout: 2) {
+                    nameField.tap()
+                    nameField.typeText("Quest \(UUID().uuidString.prefix(4))")
+                }
+                let addButton = app.buttons["Add"]
+                if addButton.waitForExistence(timeout: 2) {
+                    addButton.tap()
+                    RunLoop.current.run(until: Date().addingTimeInterval(1.0))
+                }
+            } else {
+                break
+            }
+            completeButtons = app.buttons.matching(NSPredicate(format: "label == 'Mark complete'"))
+        }
+
+        XCTAssertGreaterThanOrEqual(completeButtons.count, 2, "At least two quests must be available to complete")
+
+        // 1. Complete first habit
+        completeButtons.firstMatch.tap()
+
+        let celebrationPopover = app.descendants(matching: .any)["CelebrationPopover"]
+        XCTAssertTrue(celebrationPopover.waitForExistence(timeout: 3), "Celebration popover should appear on first completion")
+
+        // 2. Wait 1.0s (within 3.5s celebration window)
+        RunLoop.current.run(until: Date().addingTimeInterval(1.0))
+        XCTAssertTrue(celebrationPopover.exists, "Popover should still be visible at 1.0s after appearance")
+
+        // 3. Complete second habit while first celebration is active (at ~1.5s)
+        let remainingCompleteBtn = app.buttons.matching(NSPredicate(format: "label == 'Mark complete'")).firstMatch
+        XCTAssertTrue(remainingCompleteBtn.waitForExistence(timeout: 2), "Second uncompleted habit must exist")
+        remainingCompleteBtn.tap()
+
+        // 4. Wait 2.3s. Total elapsed since first completion is ~4.0s (past the original 3.5s window).
+        // Elapsed since second completion is only ~2.3s (well within the renewed 3.5s window).
+        RunLoop.current.run(until: Date().addingTimeInterval(2.3))
+
+        // Without the fix, the first task dismissed the popover at 3.5s.
+        // With the fix, the popover remains visible for the renewed 3.5s interval.
+        XCTAssertTrue(celebrationPopover.exists, "Celebration popover must remain visible for full interval after second completion")
+
+        // 5. Wait another 2.0s. Total elapsed since second completion: ~4.3s (past renewed 3.5s).
+        RunLoop.current.run(until: Date().addingTimeInterval(2.0))
+        XCTAssertFalse(celebrationPopover.exists, "Celebration popover must auto-dismiss after renewed interval expires")
+    }
+
     private func saveScreenshot(name: String, directoryName: String = "issue68-66-live-check-2026-11-23") {
         let screenshot = XCUIScreen.main.screenshot()
         let attachment = XCTAttachment(screenshot: screenshot)
