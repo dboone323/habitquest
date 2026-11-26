@@ -18,25 +18,14 @@ public struct HabitQuestApp: App {
     public init() {}
 
     var sharedModelContainer: ModelContainer? = {
-        let schema = Schema([
-            Habit.self,
-            HabitLog.self,
-            PlayerProfile.self,
-            Achievement.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try SharedModelContainer.createContainer(inMemoryOnly: false)
         } catch {
             print("❌ Failed to create ModelContainer: \(error)")
-            // Create a fallback in-memory container for testing
-            let fallbackConfig = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
             do {
-                return try ModelContainer(for: schema, configurations: [fallbackConfig])
+                return try SharedModelContainer.createContainer(inMemoryOnly: true)
             } catch {
                 print("❌ Failed to create fallback ModelContainer: \(error)")
-                // Return nil to trigger error UI
                 return nil
             }
         }

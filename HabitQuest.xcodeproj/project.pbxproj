@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		687B1BD730B39E2300C50F5F /* HabitQuestCore in Frameworks */ = {isa = PBXBuildFile; productRef = 68F000022DC05EB700092697 /* HabitQuestCore */; };
+		68A000012F50000100000001 /* HabitQuestCore in Frameworks */ = {isa = PBXBuildFile; productRef = 68F000022DC05EB700092697 /* HabitQuestCore */; };
+		68A000022F50000100000001 /* HabitWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A000042F50000100000001 /* HabitWidget.swift */; };
+		68A000032F50000100000001 /* HabitQuestWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 68A000052F50000100000001 /* HabitQuestWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,13 +28,36 @@
 			remoteGlobalIDString = 68581EB72E0F1EA600E5AADA;
 			remoteInfo = HabitQuest;
 		};
+		68A000062F50000100000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 68581EB02E0F1EA600E5AADA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 68A000102F50000100000001;
+			remoteInfo = HabitQuestWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		68A000072F50000100000001 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				68A000032F50000100000001 /* HabitQuestWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		68581EB82E0F1EA600E5AADA /* HabitQuest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HabitQuest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68581EC72E0F1EA800E5AADA /* HabitQuestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HabitQuestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		68581ED12E0F1EA800E5AADA /* HabitQuestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HabitQuestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		68660D292F40D2CA00FD1416 /* HabitQuest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = HabitQuest.xctestplan; sourceTree = "<group>"; };
+		68A000042F50000100000001 /* HabitWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitQuest/Features/Widget/HabitWidget.swift; sourceTree = "<group>"; };
+		68A000052F50000100000001 /* HabitQuestWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HabitQuestWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -48,6 +74,11 @@
 		68581ED42E0F1EA800E5AADA /* HabitQuestUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = HabitQuestUITests;
+			sourceTree = "<group>";
+		};
+		68A000082F50000100000001 /* HabitQuestWidgetExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = HabitQuestWidgetExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +106,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		68A0000B2F50000100000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68A000012F50000100000001 /* HabitQuestCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -85,6 +124,7 @@
 				68581EBA2E0F1EA600E5AADA /* HabitQuest */,
 				68581ECA2E0F1EA800E5AADA /* HabitQuestTests */,
 				68581ED42E0F1EA800E5AADA /* HabitQuestUITests */,
+				68A000082F50000100000001 /* HabitQuestWidgetExtension */,
 				68581EB92E0F1EA600E5AADA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -95,6 +135,7 @@
 				68581EB82E0F1EA600E5AADA /* HabitQuest.app */,
 				68581EC72E0F1EA800E5AADA /* HabitQuestTests.xctest */,
 				68581ED12E0F1EA800E5AADA /* HabitQuestUITests.xctest */,
+				68A000052F50000100000001 /* HabitQuestWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -109,10 +150,12 @@
 				68581EB42E0F1EA600E5AADA /* Sources */,
 				68581EB52E0F1EA600E5AADA /* Frameworks */,
 				68581EB62E0F1EA600E5AADA /* Resources */,
+				68A000072F50000100000001 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				68A0000F2F50000100000001 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				68581EBA2E0F1EA600E5AADA /* HabitQuest */,
@@ -167,6 +210,29 @@
 			productReference = 68581ED12E0F1EA800E5AADA /* HabitQuestUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		68A000102F50000100000001 /* HabitQuestWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 68A000112F50000100000001 /* Build configuration list for PBXNativeTarget "HabitQuestWidgetExtension" */;
+			buildPhases = (
+				68A0000C2F50000100000001 /* Sources */,
+				68A0000B2F50000100000001 /* Frameworks */,
+				68A0000D2F50000100000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				68A000082F50000100000001 /* HabitQuestWidgetExtension */,
+			);
+			name = HabitQuestWidgetExtension;
+			packageProductDependencies = (
+				68F000022DC05EB700092697 /* HabitQuestCore */,
+			);
+			productName = HabitQuestWidgetExtension;
+			productReference = 68A000052F50000100000001 /* HabitQuestWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -187,6 +253,9 @@
 					68581ED02E0F1EA800E5AADA = {
 						CreatedOnToolsVersion = 26.0;
 						TestTargetID = 68581EB72E0F1EA600E5AADA;
+					};
+					68A000102F50000100000001 = {
+						CreatedOnToolsVersion = 26.0;
 					};
 				};
 			};
@@ -212,6 +281,7 @@
 				68581EB72E0F1EA600E5AADA /* HabitQuest */,
 				68581EC62E0F1EA800E5AADA /* HabitQuestTests */,
 				68581ED02E0F1EA800E5AADA /* HabitQuestUITests */,
+				68A000102F50000100000001 /* HabitQuestWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -232,6 +302,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		68581ECF2E0F1EA800E5AADA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		68A0000D2F50000100000001 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -262,6 +339,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		68A0000C2F50000100000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68A000022F50000100000001 /* HabitWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -274,6 +359,11 @@
 			isa = PBXTargetDependency;
 			target = 68581EB72E0F1EA600E5AADA /* HabitQuest */;
 			targetProxy = 68581ED22E0F1EA800E5AADA /* PBXContainerItemProxy */;
+		};
+		68A0000F2F50000100000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 68A000102F50000100000001 /* HabitQuestWidgetExtension */;
+			targetProxy = 68A000062F50000100000001 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -571,6 +661,62 @@
 			};
 			name = Release;
 		};
+		68A000122F50000100000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = HabitQuestWidgetExtension/HabitQuestWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3N5528D82R;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Config/WidgetInfo.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HabitQuestWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.DanielStevens.HabitQuest.HabitQuestWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		68A000132F50000100000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = HabitQuestWidgetExtension/HabitQuestWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3N5528D82R;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Config/WidgetInfo.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HabitQuestWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.DanielStevens.HabitQuest.HabitQuestWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -606,6 +752,15 @@
 			buildConfigurations = (
 				68581EE22E0F1EA800E5AADA /* Debug */,
 				68581EE32E0F1EA800E5AADA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		68A000112F50000100000001 /* Build configuration list for PBXNativeTarget "HabitQuestWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				68A000122F50000100000001 /* Debug */,
+				68A000132F50000100000001 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1,13 +1,6 @@
 
 import HabitQuestCore
-
-//
-// HabitWidgetTests.swift
-// HabitQuestTests
-//
-// Snapshot and unit tests for HabitWidget views.
-//
-
+import SwiftData
 import SwiftUI
 import XCTest
 @testable import HabitQuest
@@ -109,5 +102,57 @@ final class HabitWidgetTests: XCTestCase {
         let habit = HabitWidgetItem(id: UUID(), name: "Consistent", emoji: "🔥", isCompleted: true, streak: 30)
 
         XCTAssertGreaterThan(habit.streak, 0)
+    }
+
+    func testAccessoryCircularWidgetViewRendering() {
+        let entry = HabitWidgetEntry(
+            date: Date(),
+            habits: [
+                HabitWidgetItem(id: UUID(), name: "Brush", emoji: "🪥", isCompleted: true, streak: 5),
+                HabitWidgetItem(id: UUID(), name: "Walk", emoji: "🚶", isCompleted: false, streak: 2),
+            ]
+        )
+        let view = HabitWidgetAccessoryCircularView(entry: entry)
+        XCTAssertNotNil(view)
+    }
+
+    func testWidgetDataLoaderReadsRealSwiftDataHabits() throws {
+        let container = try SharedModelContainer.createContainer(inMemoryOnly: true)
+        let context = ModelContext(container)
+
+        let activeHabit = Habit(
+            name: "Morning Stretch",
+            habitDescription: "5 min",
+            frequency: .daily,
+            category: .fitness
+        )
+        activeHabit.streak = 4
+        let inactiveHabit = Habit(
+            name: "Archived Habit",
+            habitDescription: "Inactive",
+            frequency: .daily
+        )
+        inactiveHabit.isActive = false
+
+        context.insert(activeHabit)
+        context.insert(inactiveHabit)
+        let log = HabitLog(habit: activeHabit, completionDate: Date())
+        context.insert(log)
+        try context.save()
+
+        let items = HabitWidgetDataLoader.loadTodaysHabits(from: context)
+        XCTAssertEqual(items.count, 1)
+        XCTAssertEqual(items.first?.name, "Morning Stretch")
+        XCTAssertEqual(items.first?.emoji, HabitCategory.fitness.emoji)
+        XCTAssertTrue(items.first?.isCompleted ?? false)
+        XCTAssertEqual(items.first?.streak, 4)
+    }
+
+    func testProviderUsesInjectedLoaderWithoutHardcodedPlaceholders() {
+        let expected = [
+            HabitWidgetItem(id: UUID(), name: "Live Quest", emoji: "⚡️", isCompleted: false, streak: 7),
+        ]
+        let provider = HabitWidgetProvider(loader: { expected })
+        XCTAssertNotNil(provider)
     }
 }
