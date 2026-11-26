@@ -159,6 +159,12 @@ public final class Habit {
     public var healthMetric: HealthMetricType?
     /// Optional target threshold for the linked Apple Health metric.
     public var targetValue: Double?
+    /// Optional scheduled weekdays (1 = Sunday ... 7 = Saturday) for weekly/custom habits.
+    public var scheduledDays: [Int]?
+    /// Optional repeating interval in days (e.g., every 2 days) for custom habits.
+    public var customIntervalDays: Int?
+    /// Optional daily reminder time (hour/minute used for local calendar notifications).
+    public var reminderTime: Date?
 
     /// The logs associated with this habit.
     @Relationship(deleteRule: .cascade, inverse: \HabitLog.habit)
@@ -172,7 +178,10 @@ public final class Habit {
         category: HabitCategory = .health,
         difficulty: HabitDifficulty = .easy,
         healthMetric: HealthMetricType? = nil,
-        targetValue: Double? = nil
+        targetValue: Double? = nil,
+        scheduledDays: [Int]? = nil,
+        customIntervalDays: Int? = nil,
+        reminderTime: Date? = nil
     ) {
         id = UUID()
         self.name = name
@@ -186,6 +195,9 @@ public final class Habit {
         self.difficulty = difficulty
         self.healthMetric = healthMetric
         self.targetValue = targetValue
+        self.scheduledDays = scheduledDays
+        self.customIntervalDays = customIntervalDays
+        self.reminderTime = reminderTime
     }
 
     /// Check if habit was completed today

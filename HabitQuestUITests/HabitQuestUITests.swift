@@ -461,11 +461,56 @@ final class HabitQuestUITests: XCTestCase {
         XCTAssertTrue(addQuestButton.waitForExistence(timeout: 5), "Add Quest button must exist")
         addQuestButton.tap()
 
+        app.swipeUp()
         let syncToggle = app.switches["Sync with Apple Health"]
         XCTAssertTrue(syncToggle.waitForExistence(timeout: 5), "Sync with Apple Health toggle must exist in Add Quest sheet")
-        syncToggle.tap()
+        syncToggle.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        app.swipeUp()
 
-        XCTAssertTrue(app.buttons["Health Metric"].waitForExistence(timeout: 3) || app.staticTexts["Health Metric"].waitForExistence(timeout: 3), "Health Metric picker must appear when enabled")
+        let healthMetricButton = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Health Metric'")).firstMatch
+        let dailyTargetText = app.staticTexts["Daily Target (steps)"]
+        XCTAssertTrue(
+            healthMetricButton.waitForExistence(timeout: 3) || dailyTargetText.waitForExistence(timeout: 3),
+            "Health Metric picker must appear when enabled"
+        )
+
+        let cancelButton = app.buttons["Cancel"]
+        if cancelButton.waitForExistence(timeout: 2) {
+            cancelButton.tap()
+        }
+    }
+
+    @MainActor
+    func testIssue74SchedulingAndReminderUI() {
+        let app = XCUIApplication()
+        app.launch()
+        dismissSystemPermissionAlertsIfPresent(in: app)
+
+        let todayTab = app.tabBars.buttons["Today"]
+        XCTAssertTrue(todayTab.waitForExistence(timeout: 5), "Today tab must exist")
+        todayTab.tap()
+
+        let addQuestButton = app.buttons["Add Quest"]
+        XCTAssertTrue(addQuestButton.waitForExistence(timeout: 5), "Add Quest button must exist")
+        addQuestButton.tap()
+
+        // Switch Frequency to custom to reveal weekday picker
+        let frequencyPicker = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Frequency'")).firstMatch
+        XCTAssertTrue(frequencyPicker.waitForExistence(timeout: 3), "Frequency picker must exist")
+        frequencyPicker.tap()
+        let customOption = app.buttons["custom"]
+        XCTAssertTrue(customOption.waitForExistence(timeout: 3), "custom frequency option must exist")
+        customOption.tap()
+
+        XCTAssertTrue(app.buttons["Weekday 2"].waitForExistence(timeout: 3), "Weekday 2 (Monday) button must appear for custom frequency")
+        app.buttons["Weekday 2"].tap()
+
+        app.swipeUp()
+        let reminderToggle = app.switches["Daily Reminder"]
+        XCTAssertTrue(reminderToggle.waitForExistence(timeout: 3), "Daily Reminder toggle must exist")
+        reminderToggle.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        app.swipeUp()
+        XCTAssertTrue(app.staticTexts["Reminder Time"].waitForExistence(timeout: 3) || app.datePickers.firstMatch.waitForExistence(timeout: 3), "Reminder Time picker must appear when enabled")
 
         let cancelButton = app.buttons["Cancel"]
         if cancelButton.waitForExistence(timeout: 2) {

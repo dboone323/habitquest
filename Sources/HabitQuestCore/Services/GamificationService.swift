@@ -187,22 +187,32 @@ public struct GamificationService: Sendable {
         }
     }
 
-    /// Check if a habit should be performed today based on its frequency.
-    public func isHabitDueToday(_ habit: Habit) -> Bool {
+    /// Check if a habit should be performed on the given date based on its frequency and schedule.
+    public func isHabitDueToday(_ habit: Habit, on date: Date = Date(), calendar: Calendar = .current) -> Bool {
         guard habit.isActive else { return false }
-        
-        let calendar = Calendar.current
-        let weekday = calendar.component(.weekday, from: Date())
-        
+
+        let weekday = calendar.component(.weekday, from: date)
+
         switch habit.frequency {
         case .daily:
             return true
         case .weekly:
-            // For weekly, we check if it's Monday or if it hasn't been done in 7 days
+            if let scheduledDays = habit.scheduledDays, !scheduledDays.isEmpty {
+                return scheduledDays.contains(weekday)
+            }
             return weekday == 2 // Monday is default weekly check-in
         case .monthly:
-            return calendar.component(.day, from: Date()) == 1 // First of month
+            return calendar.component(.day, from: date) == 1 // First of month
         case .custom:
+            if let scheduledDays = habit.scheduledDays, !scheduledDays.isEmpty {
+                return scheduledDays.contains(weekday)
+            }
+            if let interval = habit.customIntervalDays, interval > 1 {
+                let startDay = calendar.startOfDay(for: habit.creationDate)
+                let targetDay = calendar.startOfDay(for: date)
+                let daysBetween = calendar.dateComponents([.day], from: startDay, to: targetDay).day ?? 0
+                return daysBetween >= 0 && daysBetween % interval == 0
+            }
             return true
         }
     }

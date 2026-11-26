@@ -337,6 +337,10 @@ private struct AddQuestView: View {
     @State private var description = ""
     @State private var frequency = HabitFrequency.daily
     @State private var xpValue = 10
+    @State private var scheduledDays: Set<Int> = []
+    @State private var customIntervalDays = 2
+    @State private var hasReminderTime = false
+    @State private var reminderTime = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date()) ?? Date()
     @State private var syncWithHealth = false
     @State private var healthMetric = HealthMetricType.steps
     @State private var targetValue = HealthMetricType.steps.defaultTarget
@@ -378,7 +382,24 @@ private struct AddQuestView: View {
                         }
                     }
 
+                    if frequency == .custom || frequency == .weekly {
+                        WeekdaySchedulePicker(selectedDays: $scheduledDays)
+                    }
+
+                    if frequency == .custom && scheduledDays.isEmpty {
+                        Stepper("Every \(customIntervalDays) days", value: $customIntervalDays, in: 2...30)
+                    }
+
                     Stepper("XP Value: \(xpValue)", value: $xpValue, in: 5...50, step: 5)
+                }
+
+                Section("Reminder") {
+                    Toggle("Daily Reminder", isOn: $hasReminderTime)
+                        .accessibilityLabel("Daily Reminder")
+
+                    if hasReminderTime {
+                        DatePicker("Reminder Time", selection: $reminderTime, displayedComponents: .hourAndMinute)
+                    }
                 }
 
                 Section("Apple Health Auto-Fill") {
@@ -426,7 +447,10 @@ private struct AddQuestView: View {
                                 frequency: frequency,
                                 xpValue: xpValue,
                                 healthMetric: syncWithHealth ? healthMetric : nil,
-                                targetValue: syncWithHealth ? targetValue : nil
+                                targetValue: syncWithHealth ? targetValue : nil,
+                                scheduledDays: (frequency == .custom || frequency == .weekly) && !scheduledDays.isEmpty ? scheduledDays.sorted() : nil,
+                                customIntervalDays: frequency == .custom && scheduledDays.isEmpty ? customIntervalDays : nil,
+                                reminderTime: hasReminderTime ? reminderTime : nil
                             )
                             onAdd(habit)
                             dismiss()

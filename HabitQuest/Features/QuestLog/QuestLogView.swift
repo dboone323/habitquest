@@ -180,6 +180,10 @@ private struct AddEditQuestView: View {
     @State private var description: String
     @State private var frequency: HabitFrequency
     @State private var xpValue: Int
+    @State private var scheduledDays: Set<Int>
+    @State private var customIntervalDays: Int
+    @State private var hasReminderTime: Bool
+    @State private var reminderTime: Date
     @State private var syncWithHealth: Bool
     @State private var healthMetric: HealthMetricType
     @State private var targetValue: Double
@@ -192,6 +196,14 @@ private struct AddEditQuestView: View {
         _description = State(initialValue: habit?.habitDescription ?? "")
         _frequency = State(initialValue: habit?.frequency ?? .daily)
         _xpValue = State(initialValue: habit?.xpValue ?? 10)
+        _scheduledDays = State(initialValue: Set(habit?.scheduledDays ?? []))
+        _customIntervalDays = State(initialValue: habit?.customIntervalDays ?? 2)
+        _hasReminderTime = State(initialValue: habit?.reminderTime != nil)
+        _reminderTime = State(
+            initialValue: habit?.reminderTime
+                ?? Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date())
+                ?? Date()
+        )
         _syncWithHealth = State(initialValue: habit?.healthMetric != nil)
         let metric = habit?.healthMetric ?? .steps
         _healthMetric = State(initialValue: metric)
@@ -219,7 +231,24 @@ private struct AddEditQuestView: View {
                         }
                     }
 
+                    if frequency == .custom || frequency == .weekly {
+                        WeekdaySchedulePicker(selectedDays: $scheduledDays)
+                    }
+
+                    if frequency == .custom && scheduledDays.isEmpty {
+                        Stepper("Every \(customIntervalDays) days", value: $customIntervalDays, in: 2...30)
+                    }
+
                     Stepper("XP Reward: \(xpValue)", value: $xpValue, in: 5...100, step: 5)
+                }
+
+                Section("Reminder") {
+                    Toggle("Daily Reminder", isOn: $hasReminderTime)
+                        .accessibilityLabel("Daily Reminder")
+
+                    if hasReminderTime {
+                        DatePicker("Reminder Time", selection: $reminderTime, displayedComponents: .hourAndMinute)
+                    }
                 }
 
                 Section("Apple Health Auto-Fill") {
@@ -296,6 +325,12 @@ private struct AddEditQuestView: View {
     }
 
     private func saveQuest() {
+        let resolvedDays: [Int]? = (frequency == .custom || frequency == .weekly) && !scheduledDays.isEmpty
+            ? scheduledDays.sorted()
+            : nil
+        let resolvedInterval: Int? = frequency == .custom && scheduledDays.isEmpty ? customIntervalDays : nil
+        let resolvedReminder: Date? = hasReminderTime ? reminderTime : nil
+
         if let existingHabit = habit {
             // Update existing habit
             existingHabit.name = name
@@ -304,6 +339,9 @@ private struct AddEditQuestView: View {
             existingHabit.xpValue = xpValue
             existingHabit.healthMetric = syncWithHealth ? healthMetric : nil
             existingHabit.targetValue = syncWithHealth ? targetValue : nil
+            existingHabit.scheduledDays = resolvedDays
+            existingHabit.customIntervalDays = resolvedInterval
+            existingHabit.reminderTime = resolvedReminder
             onSave(existingHabit)
         } else {
             // Create new habit
@@ -313,7 +351,10 @@ private struct AddEditQuestView: View {
                 frequency: frequency,
                 xpValue: xpValue,
                 healthMetric: syncWithHealth ? healthMetric : nil,
-                targetValue: syncWithHealth ? targetValue : nil
+                targetValue: syncWithHealth ? targetValue : nil,
+                scheduledDays: resolvedDays,
+                customIntervalDays: resolvedInterval,
+                reminderTime: resolvedReminder
             )
             onSave(newHabit)
         }
