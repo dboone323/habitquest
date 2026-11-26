@@ -76,29 +76,71 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
         await scheduleCalendarReminders(for: habit)
     }
 
-    /// Computes calendar trigger date components for a habit's configured reminder time and scheduled days.
+    /// Computes calendar trigger date components for a habit's configured reminder time, frequency, and schedule.
     public func notificationTriggerDateComponents(for habit: Habit, calendar: Calendar = .current) -> [DateComponents] {
         guard let reminderTime = habit.reminderTime else { return [] }
         let timeComponents = calendar.dateComponents([.hour, .minute], from: reminderTime)
         guard let hour = timeComponents.hour, let minute = timeComponents.minute else { return [] }
 
-        if let scheduledDays = habit.scheduledDays?.sorted(), !scheduledDays.isEmpty {
-            return scheduledDays.filter { (1...7).contains($0) }.map { weekday in
-                var components = DateComponents()
-                components.hour = hour
-                components.minute = minute
-                components.weekday = weekday
-                return components
+        if let scheduledDays = habit.scheduledDays, !scheduledDays.isEmpty {
+            let uniqueWeekdays = Set(scheduledDays.filter { (1...7).contains($0) }).sorted()
+            if !uniqueWeekdays.isEmpty {
+                return uniqueWeekdays.map { weekday in
+                    var components = DateComponents()
+                    components.hour = hour
+                    components.minute = minute
+                    components.weekday = weekday
+                    return components
+                }
             }
         }
 
-        var dailyComponents = DateComponents()
-        dailyComponents.hour = hour
-        dailyComponents.minute = minute
-        return [dailyComponents]
+        switch habit.frequency {
+        case .daily:
+            var dailyComponents = DateComponents()
+            dailyComponents.hour = hour
+            dailyComponents.minute = minute
+            return [dailyComponents]
+
+        case .weekly:
+            var weeklyComponents = DateComponents()
+            weeklyComponents.hour = hour
+            weeklyComponents.minute = minute
+            weeklyComponents.weekday = 2 // Monday default weekly check-in
+            return [weeklyComponents]
+
+        case .monthly:
+            var monthlyComponents = DateComponents()
+            monthlyComponents.hour = hour
+            monthlyComponents.minute = minute
+            monthlyComponents.day = 1 // First of month
+            return [monthlyComponents]
+
+        case .custom:
+            if let interval = habit.customIntervalDays, interval > 1 {
+                let startDay = calendar.startOfDay(for: habit.creationDate)
+                let weekdays = stride(from: 0, to: 7, by: interval).compactMap { offset -> Int? in
+                    guard let date = calendar.date(byAdding: .day, value: offset, to: startDay) else { return nil }
+                    return calendar.component(.weekday, from: date)
+                }
+                let uniqueWeekdays = Set(weekdays).sorted()
+                return uniqueWeekdays.map { weekday in
+                    var components = DateComponents()
+                    components.hour = hour
+                    components.minute = minute
+                    components.weekday = weekday
+                    return components
+                }
+            }
+
+            var dailyComponents = DateComponents()
+            dailyComponents.hour = hour
+            dailyComponents.minute = minute
+            return [dailyComponents]
+        }
     }
 
-    /// Schedules repeating local calendar notifications matching the habit's reminder time and scheduled days.
+    /// Schedules repeating local calendar notifications matching the habit's reminder time and schedule.
     public func scheduleCalendarReminders(for habit: Habit) async {
         cancelNotifications(for: habit.id)
         let triggerComponents = notificationTriggerDateComponents(for: habit)
@@ -111,7 +153,13 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
             content.sound = .default
 
             let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-            let suffix = components.weekday.map { "\($0)" } ?? "daily"
+            let suffix: String = if let weekday = components.weekday {
+                "\(weekday)"
+            } else if components.day != nil {
+                "monthly"
+            } else {
+                "daily"
+            }
             let identifier = "scheduled_\(habit.id.uuidString)_\(suffix)"
             let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
             try? await notificationCenter.add(request)

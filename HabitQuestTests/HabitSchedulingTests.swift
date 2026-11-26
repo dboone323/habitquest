@@ -95,4 +95,60 @@ final class HabitSchedulingTests: XCTestCase {
         XCTAssertEqual(triggers[0].hour, 21)
         XCTAssertEqual(triggers[0].minute, 15)
     }
+
+    @MainActor
+    func testNotificationTriggerDateComponentsForCustomInterval() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        // 2026-11-23 is Monday (weekday = 2)
+        let monday = calendar.date(from: DateComponents(year: 2026, month: 11, day: 23))!
+        let reminder = calendar.date(from: DateComponents(year: 2026, month: 11, day: 23, hour: 9, minute: 45))!
+
+        let habit = Habit(
+            name: "Every 3 Days",
+            habitDescription: "Interval",
+            frequency: .custom,
+            customIntervalDays: 3,
+            reminderTime: reminder
+        )
+        habit.creationDate = monday
+
+        let triggers = HabitNotificationService.shared.notificationTriggerDateComponents(for: habit, calendar: calendar)
+        // Monday (2) + 0d = Mon (2), +3d = Thu (5), +6d = Sun (1) -> sorted [1, 2, 5]
+        XCTAssertEqual(triggers.map(\.weekday), [1, 2, 5])
+        XCTAssertTrue(triggers.allSatisfy { $0.hour == 9 && $0.minute == 45 })
+    }
+
+    @MainActor
+    func testNotificationTriggerDateComponentsForMonthlyAndDefaultWeekly() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        let reminder = calendar.date(from: DateComponents(year: 2026, month: 11, day: 26, hour: 10, minute: 0))!
+
+        let monthlyHabit = Habit(
+            name: "Monthly Review",
+            habitDescription: "First of month",
+            frequency: .monthly,
+            reminderTime: reminder
+        )
+        let monthlyTriggers = HabitNotificationService.shared.notificationTriggerDateComponents(for: monthlyHabit, calendar: calendar)
+        XCTAssertEqual(monthlyTriggers.count, 1)
+        XCTAssertEqual(monthlyTriggers[0].day, 1)
+        XCTAssertNil(monthlyTriggers[0].weekday)
+        XCTAssertEqual(monthlyTriggers[0].hour, 10)
+        XCTAssertEqual(monthlyTriggers[0].minute, 0)
+
+        let weeklyHabit = Habit(
+            name: "Weekly Sync",
+            habitDescription: "Default Monday",
+            frequency: .weekly,
+            reminderTime: reminder
+        )
+        let weeklyTriggers = HabitNotificationService.shared.notificationTriggerDateComponents(for: weeklyHabit, calendar: calendar)
+        XCTAssertEqual(weeklyTriggers.count, 1)
+        XCTAssertEqual(weeklyTriggers[0].weekday, 2)
+        XCTAssertNil(weeklyTriggers[0].day)
+        XCTAssertEqual(weeklyTriggers[0].hour, 10)
+        XCTAssertEqual(weeklyTriggers[0].minute, 0)
+    }
 }
