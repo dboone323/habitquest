@@ -12,6 +12,7 @@ public class QuestLogViewModel: ObservableObject {
 
     private var modelContext: ModelContext?
     private let logger = HabitQuestLogger(category: .uiCategory)
+    private(set) var lastReminderTask: Task<Void, Never>?
 
     /// Sets the model context and loads all habits.
     func setModelContext(_ context: ModelContext) {
@@ -62,7 +63,7 @@ public class QuestLogViewModel: ObservableObject {
         }
     }
 
-    /// Updates an existing habit and saves changes.
+    /// Updates an existing habit, saves changes, and reschedules or cancels its notifications.
     func updateHabit(_ habit: Habit) {
         guard let modelContext else { return }
 
@@ -74,6 +75,10 @@ public class QuestLogViewModel: ObservableObject {
             }
 
             try modelContext.save()
+
+            lastReminderTask = Task {
+                await HabitNotificationService.shared.rescheduleReminders(for: habit)
+            }
 
             loadAllHabits()
             logger.info("Updated habit: \(habit.name)")
@@ -88,8 +93,10 @@ public class QuestLogViewModel: ObservableObject {
         guard let modelContext else { return }
 
         do {
+            let habitId = habit.id
             modelContext.delete(habit)
             try modelContext.save()
+            HabitNotificationService.shared.cancelNotifications(for: habitId)
 
             loadAllHabits()
             logger.info("Deleted habit: \(habit.name)")

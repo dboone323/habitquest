@@ -64,8 +64,16 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
             identifiers.append("scheduled_\(habitId.uuidString)_\(weekday)")
         }
         identifiers.append("scheduled_\(habitId.uuidString)_daily")
+        identifiers.append("scheduled_\(habitId.uuidString)_monthly")
         notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers)
         logger.info("Cancelled notifications for habit: \(habitId.uuidString)")
+    }
+
+    /// Cancels existing pending notifications for a habit and reschedules calendar reminders if enabled.
+    public func rescheduleReminders(for habit: Habit) async {
+        cancelNotifications(for: habit.id)
+        guard habit.reminderTime != nil else { return }
+        await scheduleCalendarReminders(for: habit)
     }
 
     /// Computes calendar trigger date components for a habit's configured reminder time and scheduled days.
