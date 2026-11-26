@@ -437,6 +437,42 @@ final class HabitQuestUITests: XCTestCase {
         XCTAssertTrue(systemOption.isSelected, "System option must become selected when tapped")
     }
 
+    @MainActor
+    func testIssue73HealthSettingsAndAddQuestToggle() {
+        let app = XCUIApplication()
+        app.launch()
+        dismissSystemPermissionAlertsIfPresent(in: app)
+
+        // 1. Settings -> Apple Health section
+        let settingsTab = app.tabBars.buttons["Settings"]
+        XCTAssertTrue(settingsTab.waitForExistence(timeout: 5), "Settings tab must exist")
+        settingsTab.tap()
+
+        XCTAssertTrue(app.staticTexts["Apple Health"].waitForExistence(timeout: 5), "Apple Health section must appear in Settings")
+        let connectButton = app.buttons["Connect Apple Health"]
+        XCTAssertTrue(connectButton.waitForExistence(timeout: 3), "Connect Apple Health button must exist")
+
+        // 2. Today -> Add Quest -> Sync with Apple Health toggle
+        let todayTab = app.tabBars.buttons["Today"]
+        XCTAssertTrue(todayTab.waitForExistence(timeout: 5), "Today tab must exist")
+        todayTab.tap()
+
+        let addQuestButton = app.buttons["Add Quest"]
+        XCTAssertTrue(addQuestButton.waitForExistence(timeout: 5), "Add Quest button must exist")
+        addQuestButton.tap()
+
+        let syncToggle = app.switches["Sync with Apple Health"]
+        XCTAssertTrue(syncToggle.waitForExistence(timeout: 5), "Sync with Apple Health toggle must exist in Add Quest sheet")
+        syncToggle.tap()
+
+        XCTAssertTrue(app.buttons["Health Metric"].waitForExistence(timeout: 3) || app.staticTexts["Health Metric"].waitForExistence(timeout: 3), "Health Metric picker must appear when enabled")
+
+        let cancelButton = app.buttons["Cancel"]
+        if cancelButton.waitForExistence(timeout: 2) {
+            cancelButton.tap()
+        }
+    }
+
     private func saveScreenshot(name: String, directoryName: String = "issue68-66-live-check-2026-11-23") {
         let screenshot = XCUIScreen.main.screenshot()
         let attachment = XCTAttachment(screenshot: screenshot)

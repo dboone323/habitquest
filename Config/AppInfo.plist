@@ -24,6 +24,8 @@
 	<true/>
 	<key>NSFaceIDUsageDescription</key>
 	<string>HabitQuest uses Face ID or Touch ID to protect your habit data.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>HabitQuest reads your movement and sleep data from Apple Health to automatically complete linked habits.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

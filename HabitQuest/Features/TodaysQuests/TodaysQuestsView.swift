@@ -337,6 +337,9 @@ private struct AddQuestView: View {
     @State private var description = ""
     @State private var frequency = HabitFrequency.daily
     @State private var xpValue = 10
+    @State private var syncWithHealth = false
+    @State private var healthMetric = HealthMetricType.steps
+    @State private var targetValue = HealthMetricType.steps.defaultTarget
 
     var body: some View {
         NavigationView {
@@ -377,6 +380,31 @@ private struct AddQuestView: View {
 
                     Stepper("XP Value: \(xpValue)", value: $xpValue, in: 5...50, step: 5)
                 }
+
+                Section("Apple Health Auto-Fill") {
+                    Toggle("Sync with Apple Health", isOn: $syncWithHealth)
+                        .accessibilityLabel("Sync with Apple Health")
+
+                    if syncWithHealth {
+                        Picker("Health Metric", selection: $healthMetric) {
+                            ForEach(HealthMetricType.allCases) { metric in
+                                Text(metric.displayName).tag(metric)
+                            }
+                        }
+                        .onChange(of: healthMetric) { _, newMetric in
+                            targetValue = newMetric.defaultTarget
+                        }
+
+                        HStack {
+                            Text("Daily Target (\(healthMetric.unitLabel))")
+                            Spacer()
+                            TextField("Target", value: $targetValue, format: .number)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                                .frame(width: 90)
+                        }
+                    }
+                }
             }
             .navigationTitle("New Quest")
             #if os(iOS)
@@ -396,7 +424,9 @@ private struct AddQuestView: View {
                                 name: name,
                                 habitDescription: description,
                                 frequency: frequency,
-                                xpValue: xpValue
+                                xpValue: xpValue,
+                                healthMetric: syncWithHealth ? healthMetric : nil,
+                                targetValue: syncWithHealth ? targetValue : nil
                             )
                             onAdd(habit)
                             dismiss()

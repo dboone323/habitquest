@@ -9,6 +9,8 @@ public struct DataManagementView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var themeManager: ThemeManager
     @StateObject private var viewModel = DataManagementViewModel()
+    @ObservedObject private var healthKitService = HealthKitService.shared
+    @State private var isRequestingHealthAuth = false
 
     public var body: some View {
         NavigationView {
@@ -21,6 +23,49 @@ public struct DataManagementView: View {
                     }
                     .pickerStyle(.segmented)
                     .accessibilityLabel("Appearance Theme Picker")
+                }
+
+                Section(header: Text("Apple Health")) {
+                    HStack {
+                        Label("Movement & Sleep Sync", systemImage: "heart.text.square")
+                        Spacer()
+                        Text(healthKitService.isHealthDataAvailable ? (healthKitService.isAuthorized ? "Connected" : "Not Connected") : "Unavailable")
+                            .foregroundColor(.secondary)
+                    }
+
+                    Button {
+                        isRequestingHealthAuth = true
+                        Task {
+                            do {
+                                try await healthKitService.requestAuthorization()
+                            } catch {
+                                viewModel.errorMessage = error.localizedDescription
+                                viewModel.showingError = true
+                            }
+                            isRequestingHealthAuth = false
+                        }
+                    } label: {
+                        if isRequestingHealthAuth {
+                            ProgressView()
+                                .padding(.trailing, 8)
+                        }
+                        Label(
+                            healthKitService.isAuthorized ? "Refresh Apple Health Data" : "Connect Apple Health",
+                            systemImage: "figure.walk"
+                        )
+                    }
+                    .disabled(isRequestingHealthAuth)
+                    .accessibilityLabel("Connect Apple Health")
+
+                    if let statusMessage = healthKitService.statusMessage {
+                        Text(statusMessage)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text("Reads steps, active energy, and sleep hours locally to auto-complete linked habits.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
 
                 Section(header: Text("Backup Your Progress")) {

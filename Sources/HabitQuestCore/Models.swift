@@ -155,6 +155,10 @@ public final class Habit {
     public var category: HabitCategory
     /// The difficulty level of the habit.
     public var difficulty: HabitDifficulty
+    /// Optional Apple Health metric linked to this habit for auto-completion.
+    public var healthMetric: HealthMetricType?
+    /// Optional target threshold for the linked Apple Health metric.
+    public var targetValue: Double?
 
     /// The logs associated with this habit.
     @Relationship(deleteRule: .cascade, inverse: \HabitLog.habit)
@@ -166,7 +170,9 @@ public final class Habit {
         frequency: HabitFrequency,
         xpValue: Int = 10,
         category: HabitCategory = .health,
-        difficulty: HabitDifficulty = .easy
+        difficulty: HabitDifficulty = .easy,
+        healthMetric: HealthMetricType? = nil,
+        targetValue: Double? = nil
     ) {
         id = UUID()
         self.name = name
@@ -178,6 +184,8 @@ public final class Habit {
         isActive = true
         self.category = category
         self.difficulty = difficulty
+        self.healthMetric = healthMetric
+        self.targetValue = targetValue
     }
 
     /// Check if habit was completed today
@@ -357,6 +365,50 @@ public final class Achievement {
 public enum HabitFrequency: String, CaseIterable, Codable, Sendable {
     case daily, weekly, monthly, custom
     public var displayName: String { rawValue }
+}
+
+/// Supported Apple Health metrics for movement and sleep habit auto-fill.
+public enum HealthMetricType: String, CaseIterable, Codable, Sendable, Identifiable {
+    case steps
+    case activeEnergy
+    case sleepHours
+
+    public var id: String { rawValue }
+
+    public var displayName: String {
+        switch self {
+        case .steps: "Steps"
+        case .activeEnergy: "Active Energy"
+        case .sleepHours: "Sleep Hours"
+        }
+    }
+
+    public var unitLabel: String {
+        switch self {
+        case .steps: "steps"
+        case .activeEnergy: "kcal"
+        case .sleepHours: "hours"
+        }
+    }
+
+    public var defaultTarget: Double {
+        switch self {
+        case .steps: 10000
+        case .activeEnergy: 400
+        case .sleepHours: 7.5
+        }
+    }
+
+    public func formatValue(_ value: Double) -> String {
+        switch self {
+        case .steps:
+            "\(Int(value)) \(unitLabel)"
+        case .activeEnergy:
+            "\(Int(value)) \(unitLabel)"
+        case .sleepHours:
+            String(format: "%.1f %@", value, unitLabel)
+        }
+    }
 }
 
 public enum HabitCategory: String, CaseIterable, Codable, Sendable {

@@ -180,6 +180,9 @@ private struct AddEditQuestView: View {
     @State private var description: String
     @State private var frequency: HabitFrequency
     @State private var xpValue: Int
+    @State private var syncWithHealth: Bool
+    @State private var healthMetric: HealthMetricType
+    @State private var targetValue: Double
 
     init(habit: Habit?, onSave: @escaping (Habit) -> Void) {
         self.habit = habit
@@ -189,6 +192,10 @@ private struct AddEditQuestView: View {
         _description = State(initialValue: habit?.habitDescription ?? "")
         _frequency = State(initialValue: habit?.frequency ?? .daily)
         _xpValue = State(initialValue: habit?.xpValue ?? 10)
+        _syncWithHealth = State(initialValue: habit?.healthMetric != nil)
+        let metric = habit?.healthMetric ?? .steps
+        _healthMetric = State(initialValue: metric)
+        _targetValue = State(initialValue: habit?.targetValue ?? metric.defaultTarget)
     }
 
     var isEditing: Bool {
@@ -213,6 +220,31 @@ private struct AddEditQuestView: View {
                     }
 
                     Stepper("XP Reward: \(xpValue)", value: $xpValue, in: 5...100, step: 5)
+                }
+
+                Section("Apple Health Auto-Fill") {
+                    Toggle("Sync with Apple Health", isOn: $syncWithHealth)
+                        .accessibilityLabel("Sync with Apple Health")
+
+                    if syncWithHealth {
+                        Picker("Health Metric", selection: $healthMetric) {
+                            ForEach(HealthMetricType.allCases) { metric in
+                                Text(metric.displayName).tag(metric)
+                            }
+                        }
+                        .onChange(of: healthMetric) { _, newMetric in
+                            targetValue = newMetric.defaultTarget
+                        }
+
+                        HStack {
+                            Text("Daily Target (\(healthMetric.unitLabel))")
+                            Spacer()
+                            TextField("Target", value: $targetValue, format: .number)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                                .frame(width: 90)
+                        }
+                    }
                 }
 
                 if isEditing, let habit {
@@ -270,6 +302,8 @@ private struct AddEditQuestView: View {
             existingHabit.habitDescription = description
             existingHabit.frequency = frequency
             existingHabit.xpValue = xpValue
+            existingHabit.healthMetric = syncWithHealth ? healthMetric : nil
+            existingHabit.targetValue = syncWithHealth ? targetValue : nil
             onSave(existingHabit)
         } else {
             // Create new habit
@@ -277,7 +311,9 @@ private struct AddEditQuestView: View {
                 name: name,
                 habitDescription: description,
                 frequency: frequency,
-                xpValue: xpValue
+                xpValue: xpValue,
+                healthMetric: syncWithHealth ? healthMetric : nil,
+                targetValue: syncWithHealth ? targetValue : nil
             )
             onSave(newHabit)
         }
