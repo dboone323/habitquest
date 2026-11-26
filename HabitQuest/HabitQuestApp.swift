@@ -48,6 +48,7 @@ public struct HabitQuestApp: App {
                 AppMainView()
                     .modelContainer(container)
                     .environmentObject(themeManager)
+                    .preferredColorScheme(themeManager.isSystem ? nil : themeManager.colorScheme)
                     .appAccessibilityDefaults()
                     .onAppear {
                         HabitQuestLifecycleCoordinator.configureOnLaunch()

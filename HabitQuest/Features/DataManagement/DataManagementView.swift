@@ -7,11 +7,22 @@ import UniformTypeIdentifiers
 /// Allows users to backup their progress and restore from backups
 public struct DataManagementView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var themeManager: ThemeManager
     @StateObject private var viewModel = DataManagementViewModel()
 
     public var body: some View {
         NavigationView {
             List {
+                Section(header: Text("Appearance")) {
+                    Picker("Theme", selection: $themeManager.appearanceMode) {
+                        ForEach(ThemeAppearanceMode.allCases) { mode in
+                            Text(mode.displayName).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .accessibilityLabel("Appearance Theme Picker")
+                }
+
                 Section(header: Text("Backup Your Progress")) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Export your habits, achievements, and progress")
@@ -198,4 +209,5 @@ public struct HabitQuestBackupDocument: FileDocument {
 
 #Preview {
     DataManagementView()
+        .environmentObject(ThemeManager())
 }

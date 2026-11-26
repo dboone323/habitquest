@@ -53,6 +53,7 @@ public struct ProfileView: View {
                 }
                 .padding()
             }
+            .contentMargins(.bottom, 60, for: .scrollContent)
             .navigationTitle("Profile")
             .sheet(isPresented: $showingAchievementGallery) {
                 AchievementGalleryView(

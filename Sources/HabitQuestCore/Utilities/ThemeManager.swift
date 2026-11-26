@@ -6,24 +6,79 @@
 import Combine
 import SwiftUI
 
-/// Observable manager for persistent theme settings (Dark/Light mode).
+/// Appearance mode options for the app theme.
+public enum ThemeAppearanceMode: String, CaseIterable, Sendable, Identifiable {
+    case system
+    case light
+    case dark
+
+    public var id: String { rawValue }
+
+    public var displayName: String {
+        switch self {
+        case .system: "System"
+        case .light: "Light"
+        case .dark: "Dark"
+        }
+    }
+}
+
+/// Observable manager for persistent theme settings (System/Light/Dark mode).
 @MainActor
 public final class ThemeManager: ObservableObject, Sendable {
     public static let shared = ThemeManager()
-    
+
+    private static let isDarkModeKey = "isDarkMode"
+    private static let appearanceModeKey = "themeAppearanceMode"
+
     @Published public var isDarkMode: Bool {
         didSet {
-            UserDefaults.standard.set(isDarkMode, forKey: "isDarkMode")
+            UserDefaults.standard.set(isDarkMode, forKey: Self.isDarkModeKey)
+            let expectedMode: ThemeAppearanceMode = isDarkMode ? .dark : .light
+            if appearanceMode != expectedMode {
+                appearanceMode = expectedMode
+            }
+        }
+    }
+
+    @Published public var appearanceMode: ThemeAppearanceMode {
+        didSet {
+            UserDefaults.standard.set(appearanceMode.rawValue, forKey: Self.appearanceModeKey)
+            switch appearanceMode {
+            case .light:
+                if isDarkMode { isDarkMode = false }
+            case .dark:
+                if !isDarkMode { isDarkMode = true }
+            case .system:
+                break
+            }
         }
     }
 
     public init() {
-        self.isDarkMode = UserDefaults.standard.object(forKey: "isDarkMode") as? Bool ?? true
+        let savedDarkMode = UserDefaults.standard.object(forKey: Self.isDarkModeKey) as? Bool ?? true
+        self.isDarkMode = savedDarkMode
+        if let rawMode = UserDefaults.standard.string(forKey: Self.appearanceModeKey),
+           let mode = ThemeAppearanceMode(rawValue: rawMode) {
+            self.appearanceMode = mode
+        } else {
+            self.appearanceMode = .system
+        }
+    }
+
+    /// Whether the theme follows the system appearance.
+    public var isSystem: Bool {
+        appearanceMode == .system
     }
 
     /// Computes the SwiftUI color scheme based on the current mode.
     public var colorScheme: ColorScheme {
         isDarkMode ? .dark : .light
+    }
+
+    /// Preferred color scheme to apply at the app root (`nil` when following system).
+    public var preferredColorScheme: ColorScheme? {
+        isSystem ? nil : colorScheme
     }
 
     /// Toggles between dark and light modes.

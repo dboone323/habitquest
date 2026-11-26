@@ -24,10 +24,10 @@ public struct QuestLogView: View {
             .navigationTitle("Quest Log")
             .toolbar(content: {
                 ToolbarItem(placement: .primaryAction) {
-                    Button("Filter") {
+                    Button("Add Quest", systemImage: "plus") {
                         viewModel.showingAddQuest = true
                     }
-                    .accessibilityLabel("Filter Button")
+                    .accessibilityLabel("Add Quest")
                 }
             })
             .sheet(isPresented: $viewModel.showingAddQuest) {
