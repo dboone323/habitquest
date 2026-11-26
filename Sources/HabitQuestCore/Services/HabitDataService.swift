@@ -258,6 +258,11 @@ public final class HabitDataService: Sendable {
         let isActive: Bool
         let category: HabitCategory
         let difficulty: HabitDifficulty
+        let healthMetric: HealthMetricType?
+        let targetValue: Double?
+        let scheduledDays: [Int]?
+        let customIntervalDays: Int?
+        let reminderTime: Date?
 
         init(from model: Habit) {
             self.id = model.id
@@ -270,10 +275,27 @@ public final class HabitDataService: Sendable {
             self.isActive = model.isActive
             self.category = model.category
             self.difficulty = model.difficulty
+            self.healthMetric = model.healthMetric
+            self.targetValue = model.targetValue
+            self.scheduledDays = model.scheduledDays
+            self.customIntervalDays = model.customIntervalDays
+            self.reminderTime = model.reminderTime
         }
 
         func toModel() -> Habit {
-            let model = Habit(name: name, habitDescription: habitDescription, frequency: frequency, xpValue: xpValue, category: category, difficulty: difficulty)
+            let model = Habit(
+                name: name,
+                habitDescription: habitDescription,
+                frequency: frequency,
+                xpValue: xpValue,
+                category: category,
+                difficulty: difficulty,
+                healthMetric: healthMetric,
+                targetValue: targetValue,
+                scheduledDays: scheduledDays,
+                customIntervalDays: customIntervalDays,
+                reminderTime: reminderTime
+            )
             model.id = id
             model.creationDate = creationDate
             model.streak = streak
