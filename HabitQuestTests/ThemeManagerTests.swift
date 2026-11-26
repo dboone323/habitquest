@@ -67,4 +67,48 @@ final class ThemeManagerTests: XCTestCase {
         // Reset state
         themeManager.isDarkMode = initialDefaultsMode
     }
+
+    // MARK: - Issue #72: Appearance Mode & Preferred Color Scheme Tests
+
+    func testAppearanceModeSystemLightDarkAndPersistence() {
+        let defaults = UserDefaults.standard
+        let originalMode = defaults.object(forKey: "themeAppearanceMode")
+        let originalDark = defaults.object(forKey: "isDarkMode")
+        defer {
+            if let originalMode {
+                defaults.set(originalMode, forKey: "themeAppearanceMode")
+            } else {
+                defaults.removeObject(forKey: "themeAppearanceMode")
+            }
+            if let originalDark {
+                defaults.set(originalDark, forKey: "isDarkMode")
+            } else {
+                defaults.removeObject(forKey: "isDarkMode")
+            }
+        }
+
+        themeManager.appearanceMode = .system
+        XCTAssertTrue(themeManager.isSystem)
+        XCTAssertNil(themeManager.preferredColorScheme)
+
+        themeManager.appearanceMode = .light
+        XCTAssertFalse(themeManager.isSystem)
+        XCTAssertFalse(themeManager.isDarkMode)
+        XCTAssertEqual(themeManager.colorScheme, .light)
+        XCTAssertEqual(themeManager.preferredColorScheme, .light)
+
+        let reloadedLight = ThemeManager()
+        XCTAssertEqual(reloadedLight.appearanceMode, .light)
+        XCTAssertEqual(reloadedLight.preferredColorScheme, .light)
+
+        themeManager.appearanceMode = .dark
+        XCTAssertFalse(themeManager.isSystem)
+        XCTAssertTrue(themeManager.isDarkMode)
+        XCTAssertEqual(themeManager.colorScheme, .dark)
+        XCTAssertEqual(themeManager.preferredColorScheme, .dark)
+
+        let reloadedDark = ThemeManager()
+        XCTAssertEqual(reloadedDark.appearanceMode, .dark)
+        XCTAssertEqual(reloadedDark.preferredColorScheme, .dark)
+    }
 }

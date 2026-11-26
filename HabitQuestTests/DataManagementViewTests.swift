@@ -27,8 +27,11 @@ final class DataManagementViewTests: XCTestCase {
 
     @MainActor
     func testDataManagementViewInitialization() {
-        let view = DataManagementView()
-        XCTAssertNotNil(view.body)
+        let themeManager = ThemeManager()
+        let controller = UIHostingController(
+            rootView: DataManagementView().environmentObject(themeManager)
+        )
+        XCTAssertNotNil(controller.view)
     }
 
     @MainActor

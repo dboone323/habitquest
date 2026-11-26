@@ -349,6 +349,94 @@ final class HabitQuestUITests: XCTestCase {
         XCTAssertFalse(celebrationPopover.exists, "Celebration popover must auto-dismiss after renewed interval expires")
     }
 
+    // MARK: - Issue #67: Quest Log Add Quest Button
+
+    @MainActor
+    func testIssue67QuestLogAddQuestButtonOpensNewQuestSheet() {
+        let app = XCUIApplication()
+        app.launch()
+        dismissSystemPermissionAlertsIfPresent(in: app)
+
+        let logTab = app.tabBars.buttons["Log"]
+        XCTAssertTrue(logTab.waitForExistence(timeout: 5), "Log tab must exist")
+        logTab.tap()
+
+        XCTAssertFalse(app.buttons["Filter"].exists, "Misleading Filter button must not exist")
+        XCTAssertFalse(app.buttons["Filter Button"].exists, "Misleading Filter Button must not exist")
+
+        let addQuestButton = app.buttons["Add Quest"]
+        XCTAssertTrue(addQuestButton.waitForExistence(timeout: 3), "Add Quest toolbar button must exist on Log tab")
+        addQuestButton.tap()
+
+        let newQuestNavBar = app.navigationBars["New Quest"]
+        XCTAssertTrue(newQuestNavBar.waitForExistence(timeout: 3), "Tapping Add Quest must open New Quest sheet")
+
+        let cancelButton = app.buttons["Cancel"]
+        if cancelButton.waitForExistence(timeout: 2) {
+            cancelButton.tap()
+        }
+    }
+
+    // MARK: - Issue #69: ProfileView Cards Not Clipped by Tab Bar
+
+    @MainActor
+    func testIssue69ProfileViewCardsNotClippedByTabBar() {
+        let app = XCUIApplication()
+        app.launch()
+        dismissSystemPermissionAlertsIfPresent(in: app)
+
+        let profileTab = app.tabBars.buttons["Profile"]
+        XCTAssertTrue(profileTab.waitForExistence(timeout: 5), "Profile tab must exist")
+        profileTab.tap()
+
+        let tabBar = app.tabBars.firstMatch
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 3), "Tab bar must exist")
+
+        let viewAllButton = app.buttons["ViewAllAchievementsButton"]
+        if !viewAllButton.exists || !viewAllButton.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(viewAllButton.waitForExistence(timeout: 5), "View All achievements button must exist")
+        XCTAssertLessThanOrEqual(
+            viewAllButton.frame.maxY,
+            tabBar.frame.minY,
+            "Bottom Profile content must scroll cleanly above the tab bar without clipping"
+        )
+    }
+
+    // MARK: - Issue #72: Settings Appearance Picker
+
+    @MainActor
+    func testIssue72SettingsAppearancePickerChangesTheme() {
+        let app = XCUIApplication()
+        app.launch()
+        dismissSystemPermissionAlertsIfPresent(in: app)
+
+        let settingsTab = app.tabBars.buttons["Settings"]
+        XCTAssertTrue(settingsTab.waitForExistence(timeout: 5), "Settings tab must exist")
+        settingsTab.tap()
+
+        let appearanceHeader = app.staticTexts["Appearance"]
+        XCTAssertTrue(appearanceHeader.waitForExistence(timeout: 5), "Appearance section must exist in Settings")
+
+        let lightOption = app.buttons["Light"]
+        let darkOption = app.buttons["Dark"]
+        let systemOption = app.buttons["System"]
+
+        XCTAssertTrue(lightOption.waitForExistence(timeout: 3), "Light theme option must exist")
+        XCTAssertTrue(darkOption.exists, "Dark theme option must exist")
+        XCTAssertTrue(systemOption.exists, "System theme option must exist")
+
+        lightOption.tap()
+        XCTAssertTrue(lightOption.isSelected, "Light option must become selected when tapped")
+
+        darkOption.tap()
+        XCTAssertTrue(darkOption.isSelected, "Dark option must become selected when tapped")
+
+        systemOption.tap()
+        XCTAssertTrue(systemOption.isSelected, "System option must become selected when tapped")
+    }
+
     private func saveScreenshot(name: String, directoryName: String = "issue68-66-live-check-2026-11-23") {
         let screenshot = XCUIScreen.main.screenshot()
         let attachment = XCTAttachment(screenshot: screenshot)
