@@ -263,3 +263,45 @@ public enum HabitWidgetDataLoader {
         return loadTodaysHabits(from: ModelContext(container))
     }
 }
+
+/// Interactive widget completion handler that writes completions to SwiftData and awards XP/streaks.
+@MainActor
+public enum HabitWidgetCompletionHandler {
+    /// Marks the habit with `habitID` as completed for today if it is active and not yet completed.
+    @discardableResult
+    public static func completeHabit(
+        id habitID: UUID,
+        in context: ModelContext,
+        on date: Date = Date()
+    ) throws -> Bool {
+        let descriptor = FetchDescriptor<Habit>(predicate: #Predicate { $0.id == habitID })
+        guard let habit = try context.fetch(descriptor).first, habit.isActive else {
+            return false
+        }
+        guard !habit.isCompletedToday else {
+            return false
+        }
+
+        let log = HabitLog(habit: habit, completionDate: date)
+        context.insert(log)
+
+        let gamificationService = GamificationService()
+        if let profile = try context.fetch(FetchDescriptor<PlayerProfile>()).first {
+            _ = gamificationService.processHabitCompletion(habit: habit, profile: profile)
+        } else {
+            gamificationService.updateHabitStreak(habit: habit, profile: nil)
+        }
+
+        try context.save()
+        return true
+    }
+
+    /// Marks the habit with `habitID` as completed in the shared App Group ModelContainer.
+    @discardableResult
+    public static func completeHabitInSharedContainer(id habitID: UUID) -> Bool {
+        guard let container = try? SharedModelContainer.createContainer() else {
+            return false
+        }
+        return (try? completeHabit(id: habitID, in: ModelContext(container))) ?? false
+    }
+}

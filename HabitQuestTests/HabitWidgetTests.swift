@@ -155,4 +155,41 @@ final class HabitWidgetTests: XCTestCase {
         let provider = HabitWidgetProvider(loader: { expected })
         XCTAssertNotNil(provider)
     }
+
+    func testWidgetCompletionHandlerCompletesHabitAndAwardsXP() throws {
+        let container = try SharedModelContainer.createContainer(inMemoryOnly: true)
+        let context = ModelContext(container)
+
+        let profile = PlayerProfile()
+        context.insert(profile)
+
+        let habit = Habit(
+            name: "Hydrate",
+            habitDescription: "Drink water",
+            frequency: .daily,
+            xpValue: 15,
+            difficulty: .medium
+        )
+        context.insert(habit)
+        try context.save()
+
+        let didComplete = try HabitWidgetCompletionHandler.completeHabit(id: habit.id, in: context)
+        XCTAssertTrue(didComplete)
+        XCTAssertTrue(habit.isCompletedToday)
+        XCTAssertEqual(habit.logs.count, 1)
+        XCTAssertEqual(habit.streak, 1)
+        XCTAssertEqual(profile.currentXP, 30)
+
+        // Idempotent when already completed today
+        let didCompleteAgain = try HabitWidgetCompletionHandler.completeHabit(id: habit.id, in: context)
+        XCTAssertFalse(didCompleteAgain)
+        XCTAssertEqual(habit.logs.count, 1)
+        XCTAssertEqual(profile.currentXP, 30)
+    }
+
+    func testCompleteWidgetHabitIntentInitializesWithHabitID() {
+        let id = UUID()
+        let intent = CompleteWidgetHabitIntent(habitID: id)
+        XCTAssertEqual(intent.habitID, id.uuidString)
+    }
 }

@@ -1,7 +1,34 @@
+import AppIntents
 import HabitQuestCore
 import SwiftData
 import SwiftUI
 import WidgetKit
+
+/// App Intent for completing a habit directly from a Home Screen or Lock Screen widget.
+public struct CompleteWidgetHabitIntent: AppIntent {
+    public static let title: LocalizedStringResource = "Complete Habit"
+    public static let description = IntentDescription("Marks a habit as completed for today.")
+
+    @Parameter(title: "Habit ID")
+    public var habitID: String
+
+    public init() {
+        habitID = ""
+    }
+
+    public init(habitID: UUID) {
+        self.habitID = habitID.uuidString
+    }
+
+    @MainActor
+    public func perform() async throws -> some IntentResult {
+        if let uuid = UUID(uuidString: habitID) {
+            _ = HabitWidgetCompletionHandler.completeHabitInSharedContainer(id: uuid)
+            WidgetCenter.shared.reloadAllTimelines()
+        }
+        return .result()
+    }
+}
 
 /// Entry for the habit widget timeline.
 public struct HabitWidgetEntry: TimelineEntry {
@@ -14,7 +41,7 @@ public struct HabitWidgetEntry: TimelineEntry {
     }
 }
 
-/// Provider for the habit widget timeline (read-only view of on-device SwiftData habits).
+/// Provider for the habit widget timeline backed by the shared App Group SwiftData container.
 public struct HabitWidgetProvider: TimelineProvider, Sendable {
     private let loader: @MainActor @Sendable () -> [HabitWidgetItem]
 
@@ -58,7 +85,7 @@ public struct HabitWidgetProvider: TimelineProvider, Sendable {
     }
 }
 
-/// Small widget view showing today's habits (read-only).
+/// Small widget view showing today's habits with interactive completion buttons.
 public struct HabitWidgetSmallView: View {
     public let entry: HabitWidgetEntry
 
@@ -86,20 +113,24 @@ public struct HabitWidgetSmallView: View {
                 Spacer()
             } else {
                 ForEach(entry.habits.prefix(3)) { habit in
-                    HStack(spacing: 6) {
-                        Text(habit.emoji)
-                            .font(.caption)
+                    Button(intent: CompleteWidgetHabitIntent(habitID: habit.id)) {
+                        HStack(spacing: 6) {
+                            Text(habit.emoji)
+                                .font(.caption)
 
-                        Text(habit.name)
-                            .font(.caption2)
-                            .lineLimit(1)
+                            Text(habit.name)
+                                .font(.caption2)
+                                .lineLimit(1)
 
-                        Spacer()
+                            Spacer()
 
-                        Image(systemName: habit.isCompleted ? "checkmark.circle.fill" : "circle")
-                            .foregroundColor(habit.isCompleted ? .green : .gray)
-                            .font(.caption)
+                            Image(systemName: habit.isCompleted ? "checkmark.circle.fill" : "circle")
+                                .foregroundColor(habit.isCompleted ? .green : .gray)
+                                .font(.caption)
+                        }
                     }
+                    .buttonStyle(.plain)
+                    .disabled(habit.isCompleted)
                 }
                 Spacer(minLength: 0)
             }
@@ -108,7 +139,7 @@ public struct HabitWidgetSmallView: View {
     }
 }
 
-/// Medium widget view showing up to 4 habits and streaks (read-only).
+/// Medium widget view showing up to 4 habits and streaks with interactive completion buttons.
 public struct HabitWidgetMediumView: View {
     public let entry: HabitWidgetEntry
 
@@ -138,28 +169,32 @@ public struct HabitWidgetMediumView: View {
             } else {
                 HStack(spacing: 10) {
                     ForEach(entry.habits.prefix(4)) { habit in
-                        VStack(spacing: 4) {
-                            Text(habit.emoji)
-                                .font(.title2)
+                        Button(intent: CompleteWidgetHabitIntent(habitID: habit.id)) {
+                            VStack(spacing: 4) {
+                                Text(habit.emoji)
+                                    .font(.title2)
 
-                            Text(habit.name)
-                                .font(.caption2)
-                                .lineLimit(1)
-
-                            Image(systemName: habit.isCompleted ? "checkmark.circle.fill" : "circle")
-                                .foregroundColor(habit.isCompleted ? .green : .gray)
-                                .font(.caption)
-
-                            if habit.streak > 0 {
-                                Text("🔥\(habit.streak)")
+                                Text(habit.name)
                                     .font(.caption2)
-                                    .foregroundColor(.orange)
+                                    .lineLimit(1)
+
+                                Image(systemName: habit.isCompleted ? "checkmark.circle.fill" : "circle")
+                                    .foregroundColor(habit.isCompleted ? .green : .gray)
+                                    .font(.caption)
+
+                                if habit.streak > 0 {
+                                    Text("🔥\(habit.streak)")
+                                        .font(.caption2)
+                                        .foregroundColor(.orange)
+                                }
                             }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 8)
+                            .background(Color.secondary.opacity(0.15))
+                            .cornerRadius(8)
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                        .background(Color.secondary.opacity(0.15))
-                        .cornerRadius(8)
+                        .buttonStyle(.plain)
+                        .disabled(habit.isCompleted)
                     }
                 }
             }
@@ -168,7 +203,7 @@ public struct HabitWidgetMediumView: View {
     }
 }
 
-/// Lock Screen circular widget view showing today's completion progress.
+/// Lock Screen circular widget view showing today's completion progress and completing the next pending habit on tap.
 public struct HabitWidgetAccessoryCircularView: View {
     public let entry: HabitWidgetEntry
 
@@ -184,7 +219,7 @@ public struct HabitWidgetAccessoryCircularView: View {
         entry.habits.count
     }
 
-    public var body: some View {
+    private var gaugeView: some View {
         Gauge(
             value: totalCount > 0 ? Double(completedCount) : 0,
             in: 0...Double(max(totalCount, 1))
@@ -195,6 +230,17 @@ public struct HabitWidgetAccessoryCircularView: View {
                 .font(.caption2.weight(.semibold))
         }
         .gaugeStyle(.accessoryCircular)
+    }
+
+    public var body: some View {
+        if let nextPending = entry.habits.first(where: { !$0.isCompleted }) {
+            Button(intent: CompleteWidgetHabitIntent(habitID: nextPending.id)) {
+                gaugeView
+            }
+            .buttonStyle(.plain)
+        } else {
+            gaugeView
+        }
     }
 }
 
