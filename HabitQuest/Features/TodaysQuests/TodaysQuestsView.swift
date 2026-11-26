@@ -333,17 +333,7 @@ private struct AddQuestView: View {
     let onAdd: (Habit) -> Void
     @Environment(\.dismiss) private var dismiss
 
-    @State private var name = ""
-    @State private var description = ""
-    @State private var frequency = HabitFrequency.daily
-    @State private var xpValue = 10
-    @State private var scheduledDays: Set<Int> = []
-    @State private var customIntervalDays = 2
-    @State private var hasReminderTime = false
-    @State private var reminderTime = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date()) ?? Date()
-    @State private var syncWithHealth = false
-    @State private var healthMetric = HealthMetricType.steps
-    @State private var targetValue = HealthMetricType.steps.defaultTarget
+    @State private var draft = QuestFormDraft()
 
     var body: some View {
         NavigationView {
@@ -352,8 +342,8 @@ private struct AddQuestView: View {
                     Section("Suggestions") {
                         ForEach(suggestions, id: \.id) { suggestion in
                             Button {
-                                name = suggestion.name
-                                description = suggestion.description
+                                draft.name = suggestion.name
+                                draft.description = suggestion.description
                             } label: {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(suggestion.name)
@@ -368,64 +358,12 @@ private struct AddQuestView: View {
                     }
                 }
 
-                Section("Quest Details") {
-                    TextField("Quest Name", text: $name).accessibilityLabel("Text Field")
-                    TextField("Description", text: $description, axis: .vertical)
-                        .accessibilityLabel("Text Field")
-                        .lineLimit(3...6)
-                }
-
-                Section("Settings") {
-                    Picker("Frequency", selection: $frequency) {
-                        ForEach(HabitFrequency.allCases, id: \.self) { freq in
-                            Text(freq.displayName).tag(freq)
-                        }
-                    }
-
-                    if frequency == .custom || frequency == .weekly {
-                        WeekdaySchedulePicker(selectedDays: $scheduledDays)
-                    }
-
-                    if frequency == .custom && scheduledDays.isEmpty {
-                        Stepper("Every \(customIntervalDays) days", value: $customIntervalDays, in: 2...30)
-                    }
-
-                    Stepper("XP Value: \(xpValue)", value: $xpValue, in: 5...50, step: 5)
-                }
-
-                Section("Reminder") {
-                    Toggle("Daily Reminder", isOn: $hasReminderTime)
-                        .accessibilityLabel("Daily Reminder")
-
-                    if hasReminderTime {
-                        DatePicker("Reminder Time", selection: $reminderTime, displayedComponents: .hourAndMinute)
-                    }
-                }
-
-                Section("Apple Health Auto-Fill") {
-                    Toggle("Sync with Apple Health", isOn: $syncWithHealth)
-                        .accessibilityLabel("Sync with Apple Health")
-
-                    if syncWithHealth {
-                        Picker("Health Metric", selection: $healthMetric) {
-                            ForEach(HealthMetricType.allCases) { metric in
-                                Text(metric.displayName).tag(metric)
-                            }
-                        }
-                        .onChange(of: healthMetric) { _, newMetric in
-                            targetValue = newMetric.defaultTarget
-                        }
-
-                        HStack {
-                            Text("Daily Target (\(healthMetric.unitLabel))")
-                            Spacer()
-                            TextField("Target", value: $targetValue, format: .number)
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.trailing)
-                                .frame(width: 90)
-                        }
-                    }
-                }
+                QuestFormSections(
+                    draft: $draft,
+                    settingsTitle: "Settings",
+                    xpLabelPrefix: "XP Value",
+                    maxXP: 50
+                )
             }
             .navigationTitle("New Quest")
             #if os(iOS)
@@ -441,22 +379,11 @@ private struct AddQuestView: View {
 
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Add") {
-                            let habit = Habit(
-                                name: name,
-                                habitDescription: description,
-                                frequency: frequency,
-                                xpValue: xpValue,
-                                healthMetric: syncWithHealth ? healthMetric : nil,
-                                targetValue: syncWithHealth ? targetValue : nil,
-                                scheduledDays: (frequency == .custom || frequency == .weekly) && !scheduledDays.isEmpty ? scheduledDays.sorted() : nil,
-                                customIntervalDays: frequency == .custom && scheduledDays.isEmpty ? customIntervalDays : nil,
-                                reminderTime: hasReminderTime ? reminderTime : nil
-                            )
-                            onAdd(habit)
+                            onAdd(draft.makeHabit())
                             dismiss()
                         }
                         .accessibilityLabel("Add")
-                        .disabled(name.isEmpty)
+                        .disabled(draft.name.isEmpty)
                     }
                 }
         }

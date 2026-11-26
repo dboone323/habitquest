@@ -176,38 +176,12 @@ private struct AddEditQuestView: View {
     let onSave: (Habit) -> Void
     @Environment(\.dismiss) private var dismiss
 
-    @State private var name: String
-    @State private var description: String
-    @State private var frequency: HabitFrequency
-    @State private var xpValue: Int
-    @State private var scheduledDays: Set<Int>
-    @State private var customIntervalDays: Int
-    @State private var hasReminderTime: Bool
-    @State private var reminderTime: Date
-    @State private var syncWithHealth: Bool
-    @State private var healthMetric: HealthMetricType
-    @State private var targetValue: Double
+    @State private var draft: QuestFormDraft
 
     init(habit: Habit?, onSave: @escaping (Habit) -> Void) {
         self.habit = habit
         self.onSave = onSave
-
-        _name = State(initialValue: habit?.name ?? "")
-        _description = State(initialValue: habit?.habitDescription ?? "")
-        _frequency = State(initialValue: habit?.frequency ?? .daily)
-        _xpValue = State(initialValue: habit?.xpValue ?? 10)
-        _scheduledDays = State(initialValue: Set(habit?.scheduledDays ?? []))
-        _customIntervalDays = State(initialValue: habit?.customIntervalDays ?? 2)
-        _hasReminderTime = State(initialValue: habit?.reminderTime != nil)
-        _reminderTime = State(
-            initialValue: habit?.reminderTime
-                ?? Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date())
-                ?? Date()
-        )
-        _syncWithHealth = State(initialValue: habit?.healthMetric != nil)
-        let metric = habit?.healthMetric ?? .steps
-        _healthMetric = State(initialValue: metric)
-        _targetValue = State(initialValue: habit?.targetValue ?? metric.defaultTarget)
+        _draft = State(initialValue: QuestFormDraft(habit: habit))
     }
 
     var isEditing: Bool {
@@ -217,64 +191,12 @@ private struct AddEditQuestView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section("Quest Details") {
-                    TextField("Quest Name", text: $name).accessibilityLabel("Text Field")
-                    TextField("Description", text: $description, axis: .vertical)
-                        .accessibilityLabel("Text Field")
-                        .lineLimit(3...6)
-                }
-
-                Section("Quest Settings") {
-                    Picker("Frequency", selection: $frequency) {
-                        ForEach(HabitFrequency.allCases, id: \.self) { freq in
-                            Text(freq.displayName).tag(freq)
-                        }
-                    }
-
-                    if frequency == .custom || frequency == .weekly {
-                        WeekdaySchedulePicker(selectedDays: $scheduledDays)
-                    }
-
-                    if frequency == .custom && scheduledDays.isEmpty {
-                        Stepper("Every \(customIntervalDays) days", value: $customIntervalDays, in: 2...30)
-                    }
-
-                    Stepper("XP Reward: \(xpValue)", value: $xpValue, in: 5...100, step: 5)
-                }
-
-                Section("Reminder") {
-                    Toggle("Daily Reminder", isOn: $hasReminderTime)
-                        .accessibilityLabel("Daily Reminder")
-
-                    if hasReminderTime {
-                        DatePicker("Reminder Time", selection: $reminderTime, displayedComponents: .hourAndMinute)
-                    }
-                }
-
-                Section("Apple Health Auto-Fill") {
-                    Toggle("Sync with Apple Health", isOn: $syncWithHealth)
-                        .accessibilityLabel("Sync with Apple Health")
-
-                    if syncWithHealth {
-                        Picker("Health Metric", selection: $healthMetric) {
-                            ForEach(HealthMetricType.allCases) { metric in
-                                Text(metric.displayName).tag(metric)
-                            }
-                        }
-                        .onChange(of: healthMetric) { _, newMetric in
-                            targetValue = newMetric.defaultTarget
-                        }
-
-                        HStack {
-                            Text("Daily Target (\(healthMetric.unitLabel))")
-                            Spacer()
-                            TextField("Target", value: $targetValue, format: .number)
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.trailing)
-                                .frame(width: 90)
-                        }
-                    }
-                }
+                QuestFormSections(
+                    draft: $draft,
+                    settingsTitle: "Quest Settings",
+                    xpLabelPrefix: "XP Reward",
+                    maxXP: 100
+                )
 
                 if isEditing, let habit {
                     Section("Quest Stats") {
@@ -318,45 +240,18 @@ private struct AddEditQuestView: View {
                             saveQuest()
                         }
                         .accessibilityLabel(isEditing ? "Save" : "Add")
-                        .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        .disabled(draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     }
                 }
         }
     }
 
     private func saveQuest() {
-        let resolvedDays: [Int]? = (frequency == .custom || frequency == .weekly) && !scheduledDays.isEmpty
-            ? scheduledDays.sorted()
-            : nil
-        let resolvedInterval: Int? = frequency == .custom && scheduledDays.isEmpty ? customIntervalDays : nil
-        let resolvedReminder: Date? = hasReminderTime ? reminderTime : nil
-
         if let existingHabit = habit {
-            // Update existing habit
-            existingHabit.name = name
-            existingHabit.habitDescription = description
-            existingHabit.frequency = frequency
-            existingHabit.xpValue = xpValue
-            existingHabit.healthMetric = syncWithHealth ? healthMetric : nil
-            existingHabit.targetValue = syncWithHealth ? targetValue : nil
-            existingHabit.scheduledDays = resolvedDays
-            existingHabit.customIntervalDays = resolvedInterval
-            existingHabit.reminderTime = resolvedReminder
+            draft.apply(to: existingHabit)
             onSave(existingHabit)
         } else {
-            // Create new habit
-            let newHabit = Habit(
-                name: name,
-                habitDescription: description,
-                frequency: frequency,
-                xpValue: xpValue,
-                healthMetric: syncWithHealth ? healthMetric : nil,
-                targetValue: syncWithHealth ? targetValue : nil,
-                scheduledDays: resolvedDays,
-                customIntervalDays: resolvedInterval,
-                reminderTime: resolvedReminder
-            )
-            onSave(newHabit)
+            onSave(draft.makeHabit())
         }
 
         dismiss()
