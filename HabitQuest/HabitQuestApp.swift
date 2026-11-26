@@ -17,19 +17,23 @@ public struct HabitQuestApp: App {
 
     public init() {}
 
-    var sharedModelContainer: ModelContainer? = {
+    private let containerResult: SharedModelContainer.ContainerResult? = {
         do {
-            return try SharedModelContainer.createContainer(inMemoryOnly: false)
+            return try SharedModelContainer.createContainerWithMigrationStatus(inMemoryOnly: false)
         } catch {
             print("❌ Failed to create ModelContainer: \(error)")
             do {
-                return try SharedModelContainer.createContainer(inMemoryOnly: true)
+                return try SharedModelContainer.createContainerWithMigrationStatus(inMemoryOnly: true)
             } catch {
                 print("❌ Failed to create fallback ModelContainer: \(error)")
                 return nil
             }
         }
     }()
+
+    var sharedModelContainer: ModelContainer? {
+        containerResult?.container
+    }
 
     public var body: some Scene {
         WindowGroup {
@@ -42,6 +46,17 @@ public struct HabitQuestApp: App {
                     .onAppear {
                         HabitQuestLifecycleCoordinator.configureOnLaunch()
                         ensureDefaultPlayerProfile(in: container.mainContext)
+                        if let migrationError = containerResult?.migrationError {
+                            databaseError = migrationError
+                            showDatabaseError = true
+                        }
+                    }
+                    .alert("Storage Migration Issue", isPresented: $showDatabaseError) {
+                        Button("OK", role: .cancel) {}
+                    } message: {
+                        Text(
+                            "Could not migrate your data to shared widget storage (\(databaseError?.localizedDescription ?? "Unknown error")). Your existing local data is still active and safe."
+                        )
                     }
             } else {
                 // Show error view when database initialization fails
