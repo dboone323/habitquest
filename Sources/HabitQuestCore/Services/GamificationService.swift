@@ -42,9 +42,11 @@ public struct GamificationService: Sendable {
         }
 
         if leveledUp {
+            let levelsGained = newLevel - profile.level
+            profile.streakFreezes += levelsGained
             profile.level = newLevel
             profile.xpForNextLevel = calculateXPForNextLevel(forLevel: newLevel)
-            logger.info("Level up! New level: \(newLevel)")
+            logger.info("Level up! New level: \(newLevel). Awarded \(levelsGained) streak freeze(s). Total: \(profile.streakFreezes)")
         }
 
         return (leveledUp: leveledUp, newLevel: newLevel)
@@ -54,13 +56,17 @@ public struct GamificationService: Sendable {
 
     /// Process habit completion and update player profile and habit stats.
     @discardableResult
-    public func processHabitCompletion(habit: Habit, profile: PlayerProfile) -> (leveledUp: Bool, newLevel: Int) {
+    public func processHabitCompletion(
+        habit: Habit,
+        profile: PlayerProfile,
+        forgivenessThreshold: Int = StreakForgivenessConfig.threshold
+    ) -> (leveledUp: Bool, newLevel: Int) {
         // Award XP from the habit completion
         let xpEarned = habit.xpValue * habit.difficulty.xpMultiplier
         let levelResult = processXPGain(experiencePoints: xpEarned, for: profile)
 
-        // Update habit streak
-        updateHabitStreak(habit: habit)
+        // Update habit streak with forgiveness threshold and freeze inventory
+        updateHabitStreak(habit: habit, profile: profile, forgivenessThreshold: forgivenessThreshold)
 
         // Update longest streak in profile
         if habit.streak > profile.longestStreak {
@@ -70,8 +76,12 @@ public struct GamificationService: Sendable {
         return levelResult
     }
 
-    /// Update the streak for a specific habit based on completion history.
-    public func updateHabitStreak(habit: Habit) {
+    /// Update the streak for a specific habit based on completion history, forgiveness threshold, and streak freezes.
+    public func updateHabitStreak(
+        habit: Habit,
+        profile: PlayerProfile? = nil,
+        forgivenessThreshold: Int = StreakForgivenessConfig.threshold
+    ) {
         let completedLogs = habit.logs.filter(\.isCompleted)
         guard !completedLogs.isEmpty else {
             habit.streak = 0
@@ -80,36 +90,101 @@ public struct GamificationService: Sendable {
 
         let sortedLogs = completedLogs.sorted { $0.completionDate > $1.completionDate }
         let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+
+        // Collect unique completion days sorted descending and map day to its most recent log
+        var completedDays: [Date] = []
+        var seenDays = Set<Date>()
+        var logsByDay: [Date: HabitLog] = [:]
+        for log in sortedLogs {
+            let day = calendar.startOfDay(for: log.completionDate)
+            if !seenDays.contains(day) {
+                seenDays.insert(day)
+                completedDays.append(day)
+                logsByDay[day] = log
+            }
+        }
+
+        guard let mostRecentDay = completedDays.first else {
+            habit.streak = 0
+            return
+        }
+
+        // Check gap from most recent completion to today
+        let daysSinceLast = calendar.dateComponents([.day], from: mostRecentDay, to: today).day ?? 0
+        let missedDaysSinceLast: Int
+        switch habit.frequency {
+        case .daily, .custom:
+            missedDaysSinceLast = max(0, daysSinceLast - 1)
+        case .weekly:
+            missedDaysSinceLast = max(0, daysSinceLast - 7)
+        case .monthly:
+            let expectedDate = calendar.date(byAdding: .month, value: 1, to: mostRecentDay) ?? mostRecentDay
+            missedDaysSinceLast = max(0, calendar.dateComponents([.day], from: expectedDate, to: today).day ?? 0)
+        }
+
+        var availableFreezes = profile?.streakFreezes ?? 0
+        let neededForRecent = max(0, missedDaysSinceLast - forgivenessThreshold)
+        let freezesUsedForRecent = min(availableFreezes, neededForRecent)
+        availableFreezes -= freezesUsedForRecent
+        let effectiveMissedSinceLast = missedDaysSinceLast - freezesUsedForRecent
+
+        if effectiveMissedSinceLast > forgivenessThreshold {
+            habit.streak = 0
+            return
+        }
+
+        // Only freezes persisted onto historical logs (completedDays.dropFirst) are permanently deducted from profile
+        var totalFreezesConsumed = 0
         var currentStreak = 1
+        var previousDay = mostRecentDay
 
-        for index in 1..<sortedLogs.count {
-            let currentLog = sortedLogs[index - 1]
-            let previousLog = sortedLogs[index]
-            let isConsecutive: Bool
-
+        for day in completedDays.dropFirst() {
+            let missedDays: Int
             switch habit.frequency {
-            case .daily:
-                let dayComponents = calendar.dateComponents([.day], from: previousLog.completionDate, to: currentLog.completionDate)
-                isConsecutive = (dayComponents.day ?? 0) == 1
+            case .daily, .custom:
+                let daysBetween = calendar.dateComponents([.day], from: day, to: previousDay).day ?? 1
+                missedDays = max(0, daysBetween - 1)
             case .weekly:
-                let weekComponents = calendar.dateComponents([.weekOfYear], from: previousLog.completionDate, to: currentLog.completionDate)
-                isConsecutive = (weekComponents.weekOfYear ?? 0) == 1
+                let daysBetween = calendar.dateComponents([.day], from: day, to: previousDay).day ?? 7
+                missedDays = max(0, daysBetween - 7)
             case .monthly:
-                let monthComponents = calendar.dateComponents([.month], from: previousLog.completionDate, to: currentLog.completionDate)
-                isConsecutive = (monthComponents.month ?? 0) == 1
-            case .custom:
-                let dayComponents = calendar.dateComponents([.day], from: previousLog.completionDate, to: currentLog.completionDate)
-                isConsecutive = (dayComponents.day ?? 0) == 1
+                let expectedDate = calendar.date(byAdding: .month, value: 1, to: day) ?? day
+                missedDays = max(0, calendar.dateComponents([.day], from: expectedDate, to: previousDay).day ?? 0)
             }
 
-            if isConsecutive {
+            if missedDays == 0 {
                 currentStreak += 1
+                previousDay = day
             } else {
-                break
+                let logForPrevious = logsByDay[previousDay]
+                let alreadyConsumed = logForPrevious?.freezesConsumed ?? 0
+                let missedAfterPersisted = max(0, missedDays - alreadyConsumed)
+
+                let neededFreezes = max(0, missedAfterPersisted - forgivenessThreshold)
+                let newlyNeededFreezes = min(availableFreezes, neededFreezes)
+                availableFreezes -= newlyNeededFreezes
+                let effectiveMissed = missedAfterPersisted - newlyNeededFreezes
+
+                if effectiveMissed <= forgivenessThreshold {
+                    if newlyNeededFreezes > 0 {
+                        totalFreezesConsumed += newlyNeededFreezes
+                        logForPrevious?.freezesConsumed = alreadyConsumed + newlyNeededFreezes
+                    }
+                    currentStreak += 1
+                    previousDay = day
+                } else {
+                    break
+                }
             }
         }
 
         habit.streak = currentStreak
+
+        if let profile, totalFreezesConsumed > 0 {
+            profile.streakFreezes = max(0, profile.streakFreezes - totalFreezesConsumed)
+            try? (profile.modelContext ?? habit.modelContext)?.save()
+        }
     }
 
     /// Check if a habit should be performed today based on its frequency.

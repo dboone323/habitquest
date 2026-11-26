@@ -1,83 +1,54 @@
-
 import HabitQuestCore
-
+import SwiftData
+import SwiftUI
 import XCTest
 @testable import HabitQuest
 
 final class DataManagementViewTests: XCTestCase {
-    // MARK: - structDataManagementView:View{ Tests
+    private var container: ModelContainer!
+    private var modelContext: ModelContext!
 
+    @MainActor
+    override func setUp() async throws {
+        try await super.setUp()
+        container = try ModelContainer(
+            for: Habit.self, HabitLog.self, HabitQuestCore.Achievement.self, PlayerProfile.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        modelContext = ModelContext(container)
+    }
+
+    @MainActor
+    override func tearDown() async throws {
+        container = nil
+        modelContext = nil
+        try await super.tearDown()
+    }
+
+    @MainActor
     func testDataManagementViewInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structDataManagementView:View{")
+        let view = DataManagementView()
+        XCTAssertNotNil(view.body)
     }
 
-    func testDataManagementViewProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structDataManagementView:View{
-        XCTAssertTrue(true, "Placeholder test for structDataManagementView:View{ properties")
-    }
+    @MainActor
+    func testStreakForgivenessSectionLoadsValues() {
+        let profile = PlayerProfile()
+        profile.streakFreezes = 4
+        modelContext.insert(profile)
+        try? modelContext.save()
 
-    func testDataManagementViewMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structDataManagementView:View{
-        XCTAssertTrue(true, "Placeholder test for structDataManagementView:View{ methods")
-    }
+        let viewModel = DataManagementViewModel()
+        viewModel.setModelContext(modelContext)
 
-    // MARK: - structAlertModifier:ViewModifier{ Tests
+        XCTAssertEqual(viewModel.streakFreezes, 4)
+        XCTAssertEqual(viewModel.forgivenessThreshold, StreakForgivenessConfig.defaultThreshold)
 
-    func testAlertModifierInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structAlertModifier:ViewModifier{")
-    }
+        // Modify threshold
+        viewModel.forgivenessThreshold = 8
+        XCTAssertEqual(StreakForgivenessConfig.threshold, 8)
 
-    func testAlertModifierProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structAlertModifier:ViewModifier{
-        XCTAssertTrue(true, "Placeholder test for structAlertModifier:ViewModifier{ properties")
-    }
-
-    func testAlertModifierMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structAlertModifier:ViewModifier{
-        XCTAssertTrue(true, "Placeholder test for structAlertModifier:ViewModifier{ methods")
-    }
-
-    // MARK: - structFileHandlerModifier:ViewModifier{ Tests
-
-    func testFileHandlerModifierInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structFileHandlerModifier:ViewModifier{")
-    }
-
-    func testFileHandlerModifierProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structFileHandlerModifier:ViewModifier{
-        XCTAssertTrue(true, "Placeholder test for structFileHandlerModifier:ViewModifier{ properties")
-    }
-
-    func testFileHandlerModifierMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structFileHandlerModifier:ViewModifier{
-        XCTAssertTrue(true, "Placeholder test for structFileHandlerModifier:ViewModifier{ methods")
-    }
-
-    // MARK: - structHabitQuestBackupDocument:FileDocument{ Tests
-
-    func testHabitQuestBackupDocumentInitialization() {
-        // Test basic initialization
-        XCTAssertTrue(true, "Placeholder test for structHabitQuestBackupDocument:FileDocument{")
-    }
-
-    func testHabitQuestBackupDocumentProperties() {
-        // Test property access and validation
-        // - TODO: Implement property tests for structHabitQuestBackupDocument:FileDocument{
-        XCTAssertTrue(true, "Placeholder test for structHabitQuestBackupDocument:FileDocument{ properties")
-    }
-
-    func testHabitQuestBackupDocumentMethods() {
-        // Test method functionality
-        // - TODO: Implement method tests for structHabitQuestBackupDocument:FileDocument{
-        XCTAssertTrue(true, "Placeholder test for structHabitQuestBackupDocument:FileDocument{ methods")
+        // Reset
+        StreakForgivenessConfig.threshold = StreakForgivenessConfig.defaultThreshold
     }
 }

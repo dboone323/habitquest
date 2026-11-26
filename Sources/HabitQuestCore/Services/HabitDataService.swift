@@ -209,14 +209,30 @@ public final class HabitDataService: Sendable {
         let currentXP: Int
         let xpForNextLevel: Int
         let longestStreak: Int
+        let streakFreezes: Int
         let creationDate: Date
+
+        enum CodingKeys: String, CodingKey {
+            case level, currentXP, xpForNextLevel, longestStreak, streakFreezes, creationDate
+        }
 
         init(from profile: PlayerProfile) {
             self.level = profile.level
             self.currentXP = profile.currentXP
             self.xpForNextLevel = profile.xpForNextLevel
             self.longestStreak = profile.longestStreak
+            self.streakFreezes = profile.streakFreezes
             self.creationDate = profile.creationDate
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            level = try container.decode(Int.self, forKey: .level)
+            currentXP = try container.decode(Int.self, forKey: .currentXP)
+            xpForNextLevel = try container.decode(Int.self, forKey: .xpForNextLevel)
+            longestStreak = try container.decode(Int.self, forKey: .longestStreak)
+            streakFreezes = try container.decodeIfPresent(Int.self, forKey: .streakFreezes) ?? 0
+            creationDate = try container.decode(Date.self, forKey: .creationDate)
         }
 
         func toModel() -> PlayerProfile {
@@ -225,6 +241,7 @@ public final class HabitDataService: Sendable {
             model.currentXP = currentXP
             model.xpForNextLevel = xpForNextLevel
             model.longestStreak = longestStreak
+            model.streakFreezes = streakFreezes
             model.creationDate = creationDate
             return model
         }
@@ -273,6 +290,7 @@ public final class HabitDataService: Sendable {
         let xpEarned: Int
         let mood: MoodRating?
         let completionTime: Date?
+        let freezesConsumed: Int?
         let habitId: UUID?
 
         init(from model: HabitLog) {
@@ -283,12 +301,20 @@ public final class HabitDataService: Sendable {
             self.xpEarned = model.xpEarned
             self.mood = model.mood
             self.completionTime = model.completionTime
+            self.freezesConsumed = model.freezesConsumed
             self.habitId = model.habit?.id
         }
 
         func toModel(allHabits: [Habit]) -> HabitLog? {
             guard let habit = (allHabits.first { $0.id == habitId }) else { return nil }
-            let model = HabitLog(habit: habit, completionDate: completionDate, isCompleted: isCompleted, notes: notes, mood: mood)
+            let model = HabitLog(
+                habit: habit,
+                completionDate: completionDate,
+                isCompleted: isCompleted,
+                notes: notes,
+                mood: mood,
+                freezesConsumed: freezesConsumed ?? 0
+            )
             model.id = id
             model.xpEarned = xpEarned
             model.completionTime = completionTime

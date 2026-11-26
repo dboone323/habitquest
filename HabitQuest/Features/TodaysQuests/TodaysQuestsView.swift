@@ -1,6 +1,10 @@
 import HabitQuestCore
 import SwiftData
 import SwiftUI
+#if os(iOS)
+import AudioToolbox
+import UIKit
+#endif
 
 /// View displaying all habits that are due today
 /// Users can see their daily/weekly quests and mark them as complete
@@ -9,6 +13,11 @@ public struct TodaysQuestsView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var habitAnalytics: [UUID: StreakAnalytics] = [:]
     @State private var streakService: StreakService?
+    @State private var celebrationTrigger = false
+    @State private var celebrationDismissTask: Task<Void, Never>?
+    @State private var celebrationXP = 0
+    @State private var celebrationTitle = ""
+    @State private var celebrationExtraMessage: String? = nil
 
     public var body: some View {
         NavigationView {
@@ -21,7 +30,11 @@ public struct TodaysQuestsView: View {
                         habitAnalytics: habitAnalytics,
                         isHabitCompleted: viewModel.isHabitCompletedToday,
                         onComplete: { habit in
+                            let wasCompleted = viewModel.isHabitCompletedToday(habit)
                             viewModel.toggleHabitCompletion(habit)
+                            if !wasCompleted {
+                                triggerCelebration(for: habit)
+                            }
                             Task {
                                 await loadHabitAnalytics()
                             }
@@ -52,12 +65,62 @@ public struct TodaysQuestsView: View {
                     viewModel.addNewHabit(habit)
                 }
             }
-            .alert("Quest Completed!", isPresented: $viewModel.showingCompletionAlert) {
-                Button("Awesome!") {}
-                    .accessibilityLabel("Awesome")
-            } message: {
-                Text(viewModel.completionMessage)
+            .overlay {
+                if celebrationTrigger {
+                    ZStack(alignment: .top) {
+                        ParticleEffectView(effectType: .confetti, trigger: celebrationTrigger)
+                            .allowsHitTesting(false)
+                            .zIndex(1)
+
+                        VStack(spacing: 6) {
+                            HStack(spacing: 8) {
+                                Image(systemName: "sparkles")
+                                    .foregroundColor(.yellow)
+                                    .font(.title3)
+                                Text("+\(celebrationXP) XP")
+                                    .font(.headline.bold())
+                                    .foregroundColor(.white)
+                                Image(systemName: "flame.fill")
+                                    .foregroundColor(.orange)
+                                    .font(.title3)
+                            }
+                            Text("\(celebrationTitle) Completed!")
+                                .font(.caption.weight(.semibold))
+                                .foregroundColor(.white.opacity(0.95))
+
+                            if let extra = celebrationExtraMessage, !extra.isEmpty {
+                                Text(extra)
+                                    .font(.caption2.weight(.bold))
+                                    .foregroundColor(.yellow)
+                                    .multilineTextAlignment(.center)
+                                    .accessibilityIdentifier("CelebrationExtraMessage")
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 12)
+                        .background(
+                            Capsule()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [Color.blue, Color.purple],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .shadow(color: Color.purple.opacity(0.4), radius: 10, y: 5)
+                        )
+                        .padding(.top, 16)
+                        .zIndex(2)
+                        .transition(.asymmetric(
+                            insertion: .scale(scale: 0.85).combined(with: .opacity).combined(with: .move(edge: .top)),
+                            removal: .opacity.combined(with: .scale(scale: 0.9))
+                        ))
+                        .accessibilityIdentifier("CelebrationPopover")
+                    }
+                    .allowsHitTesting(false)
+                }
             }
+            .animation(.spring(response: 0.35, dampingFraction: 0.7), value: celebrationTrigger)
             .onAppear {
                 viewModel.setModelContext(modelContext)
                 setupStreakService()
@@ -68,6 +131,44 @@ public struct TodaysQuestsView: View {
         }
     }
 
+    private func triggerCelebration(for habit: Habit) {
+        celebrationXP = habit.xpValue * habit.difficulty.xpMultiplier
+        celebrationTitle = habit.name
+
+        // Issue #83: Surface level-up and achievement message in the popover if present
+        let msg = viewModel.completionMessage
+        if msg.contains("LEVEL UP!") || msg.contains("🏆") {
+            var extraParts: [String] = []
+            if let levelUpRange = msg.range(of: "LEVEL UP![^!]+!", options: .regularExpression) {
+                extraParts.append(String(msg[levelUpRange]))
+            } else if msg.contains("LEVEL UP!") {
+                extraParts.append("LEVEL UP!")
+            }
+            if let trophyRange = msg.range(of: "🏆[^\n]+", options: .regularExpression) {
+                extraParts.append(String(msg[trophyRange]).trimmingCharacters(in: .whitespaces))
+            }
+            celebrationExtraMessage = extraParts.isEmpty ? msg : extraParts.joined(separator: " • ")
+        } else {
+            celebrationExtraMessage = nil
+        }
+
+        #if os(iOS)
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.prepare()
+            generator.impactOccurred()
+            AudioServicesPlaySystemSound(1057)
+        #endif
+
+        celebrationDismissTask?.cancel()
+        celebrationTrigger = true
+
+        celebrationDismissTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 3_500_000_000)
+            guard !Task.isCancelled else { return }
+            celebrationTrigger = false
+        }
+    }
+
     private func setupStreakService() {
         streakService = StreakService(modelContext: modelContext)
     }
@@ -75,16 +176,47 @@ public struct TodaysQuestsView: View {
     private func loadHabitAnalytics() async {
         guard let streakService else { return }
 
-        var analytics: [UUID: StreakAnalytics] = [:]
+        let profileDescriptor = FetchDescriptor<PlayerProfile>()
+        let profile = try? modelContext.fetch(profileDescriptor).first
 
-        for habit in viewModel.todaysHabits {
-            let habitAnalytics = await streakService.getStreakAnalytics(for: habit)
-            analytics[habit.id] = habitAnalytics
-        }
+        let analytics = await Self.computeHabitAnalytics(
+            for: viewModel.todaysHabits,
+            profile: profile,
+            service: streakService
+        )
 
         await MainActor.run {
             habitAnalytics = analytics
         }
+    }
+
+    /// Compute streak analytics for today's habits with sequential freeze allocation across habits
+    static func computeHabitAnalytics(
+        for habits: [Habit],
+        profile: PlayerProfile?,
+        service: StreakService
+    ) async -> [UUID: StreakAnalytics] {
+        var analytics: [UUID: StreakAnalytics] = [:]
+        var remainingFreezes = profile?.streakFreezes ?? 0
+
+        for habit in habits {
+            let habitProfile: PlayerProfile?
+            if let profile {
+                let temp = PlayerProfile()
+                temp.level = profile.level
+                temp.currentXP = profile.currentXP
+                temp.streakFreezes = remainingFreezes
+                habitProfile = temp
+            } else {
+                habitProfile = nil
+            }
+
+            let habitAnalytics = await service.getStreakAnalytics(for: habit, profile: habitProfile)
+            remainingFreezes = max(0, remainingFreezes - habitAnalytics.freezesUsedFromInventory)
+            analytics[habit.id] = habitAnalytics
+        }
+
+        return analytics
     }
 }
 

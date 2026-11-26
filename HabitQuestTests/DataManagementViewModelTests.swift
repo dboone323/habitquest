@@ -57,6 +57,8 @@ final class DataManagementViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.unlockedAchievements, 0)
         XCTAssertEqual(viewModel.currentLevel, 1)
         XCTAssertEqual(viewModel.lastBackupDate, "Never")
+        XCTAssertEqual(viewModel.forgivenessThreshold, StreakForgivenessConfig.defaultThreshold)
+        XCTAssertEqual(viewModel.streakFreezes, 0)
         XCTAssertNil(viewModel.exportDocument)
     }
 

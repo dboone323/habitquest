@@ -2,21 +2,38 @@ import HabitQuestCore
 
 import SwiftUI
 
-struct AchievementsSection: View {
-    let achievements: [Achievement]
+public struct AchievementsSection: View {
+    public let achievements: [Achievement]
+    public var onViewAll: () -> Void = {}
+    public var onSelectAchievement: (Achievement) -> Void = { _ in }
 
-    var body: some View {
+    public init(
+        achievements: [Achievement],
+        onViewAll: @escaping () -> Void = {},
+        onSelectAchievement: @escaping (Achievement) -> Void = { _ in }
+    ) {
+        self.achievements = achievements
+        self.onViewAll = onViewAll
+        self.onSelectAchievement = onSelectAchievement
+    }
+
+    public var previewAchievements: [Achievement] {
+        Array(achievements.filter { !$0.isHidden || $0.isUnlocked }.prefix(6))
+    }
+
+    public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("Recent Achievements")
                     .font(.headline)
                     .fontWeight(.semibold)
                 Spacer()
-                if achievements.count > 3 {
+                if !achievements.isEmpty {
                     Button("View All") {
-                        // Navigate to achievements view
+                        onViewAll()
                     }
-                    .accessibilityLabel("Button")
+                    .accessibilityLabel("View All")
+                    .accessibilityIdentifier("ViewAllAchievementsButton")
                     .font(.caption)
                     .foregroundColor(.blue)
                 }
@@ -29,8 +46,11 @@ struct AchievementsSection: View {
                     .padding(.vertical)
             } else {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
-                    ForEach(achievements.prefix(6)) { achievement in
+                    ForEach(previewAchievements) { achievement in
                         AchievementBadge(achievement: achievement)
+                            .onTapGesture {
+                                onSelectAchievement(achievement)
+                            }
                     }
                 }
             }
@@ -41,10 +61,14 @@ struct AchievementsSection: View {
     }
 }
 
-struct AchievementBadge: View {
-    let achievement: Achievement
+public struct AchievementBadge: View {
+    public let achievement: Achievement
 
-    var body: some View {
+    public init(achievement: Achievement) {
+        self.achievement = achievement
+    }
+
+    public var body: some View {
         VStack(spacing: 4) {
             Image(systemName: achievement.iconName)
                 .font(.title2)
@@ -59,5 +83,7 @@ struct AchievementBadge: View {
         .padding(8)
         .background(achievement.isUnlocked ? Color.yellow.opacity(0.1) : Color.gray.opacity(0.1))
         .cornerRadius(8)
+        .accessibilityIdentifier("AchievementBadge_\(achievement.name)")
+        .accessibilityLabel("\(achievement.name), \(achievement.isUnlocked ? "Unlocked" : "Locked")")
     }
 }

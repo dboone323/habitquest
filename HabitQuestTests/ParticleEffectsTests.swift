@@ -1,50 +1,87 @@
-
 import HabitQuestCore
-
-//
-// ParticleEffectsTests.swift
-// HabitQuestTests
-//
-
+import SpriteKit
+import SwiftUI
 import XCTest
 @testable import HabitQuest
 
 final class ParticleEffectsTests: XCTestCase {
-    // MARK: - Effect Creation Tests
+    // MARK: - Scene and Emitter Tests
 
-    func testConfettiEffectCreation() {
-        XCTAssertTrue(true, "Confetti effect creation test")
+    @MainActor
+    func testParticleSceneInitialization() {
+        let scene = ParticleScene()
+        XCTAssertEqual(scene.children.count, 0)
+        let view = SKView()
+        scene.didMove(to: view)
+        XCTAssertEqual(scene.backgroundColor.cgColor.alpha, 0.0)
     }
 
-    func testSparkleEffectCreation() {
-        XCTAssertTrue(true, "Sparkle effect creation test")
+    @MainActor
+    func testConfettiEmitterCreationAndEmission() {
+        let scene = ParticleScene(size: CGSize(width: 400, height: 800))
+        let center = CGPoint(x: 200, y: 400)
+
+        scene.emitConfetti(at: center)
+
+        XCTAssertEqual(scene.children.count, 1)
+        guard let emitter = scene.children.first as? SKEmitterNode else {
+            XCTFail("Expected SKEmitterNode child")
+            return
+        }
+
+        XCTAssertEqual(emitter.position, center)
+        XCTAssertEqual(emitter.numParticlesToEmit, 200)
+        XCTAssertEqual(emitter.particleLifetime, 3)
+        XCTAssertEqual(emitter.particleBirthRate, 100)
+        XCTAssertEqual(emitter.particleSpeed, 200)
+        XCTAssertNotNil(emitter.particleColorSequence)
     }
 
-    func testFireworksEffectCreation() {
-        XCTAssertTrue(true, "Fireworks effect creation test")
+    @MainActor
+    func testFlameEmitterCreationAndEmission() {
+        let scene = ParticleScene(size: CGSize(width: 400, height: 800))
+        let center = CGPoint(x: 200, y: 400)
+
+        scene.emitFlame(at: center)
+
+        XCTAssertEqual(scene.children.count, 1)
+        guard let emitter = scene.children.first as? SKEmitterNode else {
+            XCTFail("Expected SKEmitterNode child")
+            return
+        }
+
+        XCTAssertEqual(emitter.position, center)
+        XCTAssertEqual(emitter.numParticlesToEmit, 100)
+        XCTAssertEqual(emitter.particleLifetime, 1)
+        XCTAssertEqual(emitter.particleBirthRate, 50)
+        XCTAssertEqual(emitter.particleColor, .orange)
     }
 
-    // MARK: - Configuration Tests
+    @MainActor
+    func testStarBurstEmitterCreationAndEmission() {
+        let scene = ParticleScene(size: CGSize(width: 400, height: 800))
+        let center = CGPoint(x: 200, y: 400)
 
-    func testParticleCount() {
-        XCTAssertTrue(true, "Particle count test")
+        scene.emitStarBurst(at: center)
+
+        XCTAssertEqual(scene.children.count, 1)
+        guard let emitter = scene.children.first as? SKEmitterNode else {
+            XCTFail("Expected SKEmitterNode child")
+            return
+        }
+
+        XCTAssertEqual(emitter.position, center)
+        XCTAssertEqual(emitter.numParticlesToEmit, 50)
+        XCTAssertEqual(emitter.particleLifetime, 1.5)
+        XCTAssertEqual(emitter.particleColor, .yellow)
     }
 
-    func testParticleLifetime() {
-        XCTAssertTrue(true, "Particle lifetime test")
-    }
+    @MainActor
+    func testParticleEffectViewInstantiates() {
+        let view = ParticleEffectView(effectType: .confetti, trigger: false)
+        XCTAssertNotNil(view.body)
 
-    func testEmissionRate() {
-        XCTAssertTrue(true, "Emission rate test")
-    }
-
-    // MARK: - Performance Tests
-
-    func testEffectPerformance() {
-        XCTAssertTrue(true, "Effect performance test")
-    }
-
-    func testMemoryManagement() {
-        XCTAssertTrue(true, "Memory management test")
+        let triggeredView = ParticleEffectView(effectType: .confetti, trigger: true)
+        XCTAssertNotNil(triggeredView.body)
     }
 }

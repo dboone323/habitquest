@@ -217,6 +217,8 @@ public final class HabitLog {
     public var mood: MoodRating?
     /// The exact time the habit was completed (if completed).
     public var completionTime: Date?
+    /// Number of streak freezes consumed to bridge the gap leading into this completion.
+    public var freezesConsumed: Int = 0
 
     /// The associated habit for this log entry.
     public var habit: Habit?
@@ -226,7 +228,8 @@ public final class HabitLog {
         completionDate: Date = Date(),
         isCompleted: Bool = true,
         notes: String? = nil,
-        mood: MoodRating? = nil
+        mood: MoodRating? = nil,
+        freezesConsumed: Int = 0
     ) {
         id = UUID()
         self.habit = habit
@@ -236,6 +239,7 @@ public final class HabitLog {
         xpEarned = isCompleted ? habit.xpValue * habit.difficulty.xpMultiplier : 0
         self.mood = mood
         completionTime = isCompleted ? Date() : nil
+        self.freezesConsumed = freezesConsumed
     }
 }
 
@@ -252,6 +256,8 @@ public final class PlayerProfile {
     public var xpForNextLevel: Int
     /// Highest consecutive streak achieved across all habits.
     public var longestStreak: Int
+    /// Streak freezes currently in player inventory.
+    public var streakFreezes: Int = 0
     /// When this profile was created.
     public var creationDate: Date
 
@@ -269,7 +275,24 @@ public final class PlayerProfile {
         currentXP = 0
         xpForNextLevel = 100
         longestStreak = 0
+        streakFreezes = 0
         creationDate = Date()
+    }
+}
+
+/// Configuration for streak forgiveness and grace period
+public enum StreakForgivenessConfig {
+    public static let defaultThreshold: Int = 5
+    public static let thresholdKey = "streakForgivenessThreshold"
+
+    public static var threshold: Int {
+        get {
+            let val = UserDefaults.standard.integer(forKey: thresholdKey)
+            return val > 0 ? val : defaultThreshold
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: thresholdKey)
+        }
     }
 }
 

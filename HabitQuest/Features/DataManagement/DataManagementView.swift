@@ -70,6 +70,24 @@ public struct DataManagementView: View {
                     DataInfoRow(title: "Last Backup", value: viewModel.lastBackupDate)
                 }
 
+                Section(header: Text("Streak Forgiveness & Gamification")) {
+                    Stepper("Grace Period: \(viewModel.forgivenessThreshold) days", value: $viewModel.forgivenessThreshold, in: 1...14)
+                        .accessibilityLabel("Streak forgiveness threshold")
+                    Text("Missed days will not reset your streak unless you miss more than \(viewModel.forgivenessThreshold) days.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    HStack {
+                        Label("Streak Freezes", systemImage: "snowflake")
+                        Spacer()
+                        Text("\(viewModel.streakFreezes) available")
+                            .foregroundColor(.secondary)
+                    }
+                    Text("Earned upon each level-up. Automatically protects your streak.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
                 Section(header: Text("Advanced")) {
                     Button("Clear All Data") {
                         viewModel.showingClearDataAlert = true

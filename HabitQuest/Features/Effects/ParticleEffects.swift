@@ -12,9 +12,16 @@ import SwiftUI
 
 /// SpriteKit scene for particle effects.
 class ParticleScene: SKScene {
-    override func didMove(to _: SKView) {
+    override func didMove(to view: SKView) {
+        view.allowsTransparency = true
+        view.backgroundColor = .clear
         backgroundColor = .clear
         scaleMode = .resizeFill
+        if view.bounds.size.width > 0 {
+            size = view.bounds.size
+        } else {
+            size = CGSize(width: 400, height: 850)
+        }
     }
 
     /// Spawns confetti particles for celebration.
@@ -56,8 +63,23 @@ class ParticleScene: SKScene {
 
     // MARK: - Emitter Creation
 
+    #if os(iOS)
+    private static let confettiTexture: SKTexture = {
+        let size = CGSize(width: 10, height: 10)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let image = renderer.image { ctx in
+            UIColor.white.setFill()
+            ctx.cgContext.fill(CGRect(origin: .zero, size: size))
+        }
+        return SKTexture(image: image)
+    }()
+    #endif
+
     private func createConfettiEmitter() -> SKEmitterNode? {
         let emitter = SKEmitterNode()
+        #if os(iOS)
+        emitter.particleTexture = Self.confettiTexture
+        #endif
         emitter.particleLifetime = 3
         emitter.particleBirthRate = 100
         emitter.numParticlesToEmit = 200
@@ -66,6 +88,7 @@ class ParticleScene: SKScene {
         emitter.yAcceleration = -200
         emitter.emissionAngle = .pi / 2
         emitter.emissionAngleRange = .pi / 4
+        emitter.particlePositionRange = CGVector(dx: 250, dy: 30)
         emitter.particleSize = CGSize(width: 8, height: 8)
         emitter.particleColor = .systemYellow
         emitter.particleColorBlendFactor = 1
@@ -134,24 +157,48 @@ struct ParticleEffectView: View {
         case stars
     }
 
-    @State private var scene = ParticleScene()
+    @State private var scene = ParticleScene(size: CGSize(width: 400, height: 850))
 
     var body: some View {
-        SpriteView(scene: scene, options: [.allowsTransparency])
-            .onChange(of: trigger) { _, newValue in
-                if newValue {
-                    let center = CGPoint(x: scene.size.width / 2, y: scene.size.height / 2)
-                    switch effectType {
-                    case .confetti:
-                        scene.emitConfetti(at: center)
-                    case .flame:
-                        scene.emitFlame(at: center)
-                    case .stars:
-                        scene.emitStarBurst(at: center)
-                    }
+        Group {
+            if trigger {
+                GeometryReader { geometry in
+                    SpriteView(scene: scene, options: [.allowsTransparency])
+                        .onAppear {
+                            let sceneSize = geometry.size.width > 0 ? geometry.size : CGSize(width: 400, height: 850)
+                            scene.size = sceneSize
+                            let center = CGPoint(
+                                x: sceneSize.width / 2,
+                                y: sceneSize.height * 0.55
+                            )
+                            emit(at: center)
+                        }
+                        .onChange(of: trigger) { _, newValue in
+                            if newValue {
+                                let sceneSize = geometry.size.width > 0 ? geometry.size : CGSize(width: 400, height: 850)
+                                scene.size = sceneSize
+                                let center = CGPoint(
+                                    x: sceneSize.width / 2,
+                                    y: sceneSize.height * 0.55
+                                )
+                                emit(at: center)
+                            }
+                        }
+                        .ignoresSafeArea()
+                        .allowsHitTesting(false)
                 }
             }
-            .ignoresSafeArea()
-            .allowsHitTesting(false)
+        }
+    }
+
+    private func emit(at position: CGPoint) {
+        switch effectType {
+        case .confetti:
+            scene.emitConfetti(at: position)
+        case .flame:
+            scene.emitFlame(at: position)
+        case .stars:
+            scene.emitStarBurst(at: position)
+        }
     }
 }

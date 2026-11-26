@@ -5,6 +5,8 @@ import SwiftUI
 public struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject private var viewModel = ProfileViewModel()
+    @State private var showingAchievementGallery = false
+    @State private var selectedAchievement: Achievement?
 
     public var body: some View {
         NavigationView {
@@ -36,11 +38,28 @@ public struct ProfileView: View {
                     )
 
                     // Achievements Section
-                    AchievementsSection(achievements: viewModel.achievements)
+                    AchievementsSection(
+                        achievements: viewModel.achievements,
+                        onViewAll: {
+                            selectedAchievement = nil
+                            showingAchievementGallery = true
+                        },
+                        onSelectAchievement: { achievement in
+                            guard !achievement.isHidden || achievement.isUnlocked else { return }
+                            selectedAchievement = achievement
+                            showingAchievementGallery = true
+                        }
+                    )
                 }
                 .padding()
             }
             .navigationTitle("Profile")
+            .sheet(isPresented: $showingAchievementGallery) {
+                AchievementGalleryView(
+                    achievements: viewModel.achievements,
+                    selectedAchievement: selectedAchievement
+                )
+            }
             .onAppear {
                 viewModel.setModelContext(modelContext)
                 viewModel.refreshProfile()
