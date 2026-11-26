@@ -151,4 +151,72 @@ final class HabitSchedulingTests: XCTestCase {
         XCTAssertEqual(weeklyTriggers[0].hour, 10)
         XCTAssertEqual(weeklyTriggers[0].minute, 0)
     }
+
+    @MainActor
+    func testCustomIntervalSevenDaysPreservesStreakWithoutConsumingFreezes() throws {
+        let service = GamificationService()
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        // 3 scheduled occurrences: 16 days ago, 9 days ago, 2 days ago (every 7 days).
+        // Next occurrence isn't due until 5 days from today, so 0 scheduled occurrences were missed.
+        let creationDate = calendar.date(byAdding: .day, value: -16, to: today)!
+        let secondDate = calendar.date(byAdding: .day, value: -9, to: today)!
+        let thirdDate = calendar.date(byAdding: .day, value: -2, to: today)!
+
+        let habit = Habit(
+            name: "Weekly Deep Clean",
+            habitDescription: "Every 7 days",
+            frequency: .custom,
+            customIntervalDays: 7
+        )
+        habit.creationDate = creationDate
+
+        let profile = PlayerProfile()
+        profile.streakFreezes = 3
+
+        let log1 = HabitLog(habit: habit, completionDate: creationDate)
+        let log2 = HabitLog(habit: habit, completionDate: secondDate)
+        let log3 = HabitLog(habit: habit, completionDate: thirdDate)
+        habit.logs = [log1, log2, log3]
+
+        service.updateHabitStreak(habit: habit, profile: profile, forgivenessThreshold: 5)
+
+        XCTAssertEqual(habit.streak, 3)
+        XCTAssertEqual(profile.streakFreezes, 3)
+        XCTAssertEqual(log1.freezesConsumed, 0)
+        XCTAssertEqual(log2.freezesConsumed, 0)
+        XCTAssertEqual(log3.freezesConsumed, 0)
+    }
+
+    @MainActor
+    func testCustomScheduledWeekdaysPreservesStreakWithoutConsumingFreezes() throws {
+        let service = GamificationService()
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let todayWeekday = calendar.component(.weekday, from: today)
+        // Pick a single weekday matching 14 days ago / 7 days ago / today (same weekday)
+        let fourteenDaysAgo = calendar.date(byAdding: .day, value: -14, to: today)!
+        let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: today)!
+
+        let habit = Habit(
+            name: "Specific Weekday Habit",
+            habitDescription: "Once a week on same weekday",
+            frequency: .custom,
+            scheduledDays: [todayWeekday]
+        )
+        habit.creationDate = fourteenDaysAgo
+
+        let profile = PlayerProfile()
+        profile.streakFreezes = 2
+
+        let log1 = HabitLog(habit: habit, completionDate: fourteenDaysAgo)
+        let log2 = HabitLog(habit: habit, completionDate: sevenDaysAgo)
+        let log3 = HabitLog(habit: habit, completionDate: today)
+        habit.logs = [log1, log2, log3]
+
+        service.updateHabitStreak(habit: habit, profile: profile, forgivenessThreshold: 5)
+
+        XCTAssertEqual(habit.streak, 3)
+        XCTAssertEqual(profile.streakFreezes, 2)
+    }
 }
