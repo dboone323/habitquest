@@ -437,6 +437,87 @@ final class HabitQuestUITests: XCTestCase {
         XCTAssertTrue(systemOption.isSelected, "System option must become selected when tapped")
     }
 
+    @MainActor
+    func testIssue73HealthSettingsAndAddQuestToggle() {
+        let app = XCUIApplication()
+        app.launch()
+        dismissSystemPermissionAlertsIfPresent(in: app)
+
+        // 1. Settings -> Apple Health section
+        let settingsTab = app.tabBars.buttons["Settings"]
+        XCTAssertTrue(settingsTab.waitForExistence(timeout: 5), "Settings tab must exist")
+        settingsTab.tap()
+
+        XCTAssertTrue(app.staticTexts["Apple Health"].waitForExistence(timeout: 5), "Apple Health section must appear in Settings")
+        let connectButton = app.buttons["Connect Apple Health"]
+        XCTAssertTrue(connectButton.waitForExistence(timeout: 3), "Connect Apple Health button must exist")
+
+        // 2. Today -> Add Quest -> Sync with Apple Health toggle
+        let todayTab = app.tabBars.buttons["Today"]
+        XCTAssertTrue(todayTab.waitForExistence(timeout: 5), "Today tab must exist")
+        todayTab.tap()
+
+        let addQuestButton = app.buttons["Add Quest"]
+        XCTAssertTrue(addQuestButton.waitForExistence(timeout: 5), "Add Quest button must exist")
+        addQuestButton.tap()
+
+        app.swipeUp()
+        let syncToggle = app.switches["Sync with Apple Health"]
+        XCTAssertTrue(syncToggle.waitForExistence(timeout: 5), "Sync with Apple Health toggle must exist in Add Quest sheet")
+        syncToggle.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        app.swipeUp()
+
+        let healthMetricButton = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Health Metric'")).firstMatch
+        let dailyTargetText = app.staticTexts["Daily Target (steps)"]
+        XCTAssertTrue(
+            healthMetricButton.waitForExistence(timeout: 3) || dailyTargetText.waitForExistence(timeout: 3),
+            "Health Metric picker must appear when enabled"
+        )
+
+        let cancelButton = app.buttons["Cancel"]
+        if cancelButton.waitForExistence(timeout: 2) {
+            cancelButton.tap()
+        }
+    }
+
+    @MainActor
+    func testIssue74SchedulingAndReminderUI() {
+        let app = XCUIApplication()
+        app.launch()
+        dismissSystemPermissionAlertsIfPresent(in: app)
+
+        let todayTab = app.tabBars.buttons["Today"]
+        XCTAssertTrue(todayTab.waitForExistence(timeout: 5), "Today tab must exist")
+        todayTab.tap()
+
+        let addQuestButton = app.buttons["Add Quest"]
+        XCTAssertTrue(addQuestButton.waitForExistence(timeout: 5), "Add Quest button must exist")
+        addQuestButton.tap()
+
+        // Switch Frequency to custom to reveal weekday picker
+        let frequencyPicker = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Frequency'")).firstMatch
+        XCTAssertTrue(frequencyPicker.waitForExistence(timeout: 3), "Frequency picker must exist")
+        frequencyPicker.tap()
+        let customOption = app.buttons["custom"]
+        XCTAssertTrue(customOption.waitForExistence(timeout: 3), "custom frequency option must exist")
+        customOption.tap()
+
+        XCTAssertTrue(app.buttons["Weekday 2"].waitForExistence(timeout: 3), "Weekday 2 (Monday) button must appear for custom frequency")
+        app.buttons["Weekday 2"].tap()
+
+        app.swipeUp()
+        let reminderToggle = app.switches["Daily Reminder"]
+        XCTAssertTrue(reminderToggle.waitForExistence(timeout: 3), "Daily Reminder toggle must exist")
+        reminderToggle.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        app.swipeUp()
+        XCTAssertTrue(app.staticTexts["Reminder Time"].waitForExistence(timeout: 3) || app.datePickers.firstMatch.waitForExistence(timeout: 3), "Reminder Time picker must appear when enabled")
+
+        let cancelButton = app.buttons["Cancel"]
+        if cancelButton.waitForExistence(timeout: 2) {
+            cancelButton.tap()
+        }
+    }
+
     private func saveScreenshot(name: String, directoryName: String = "issue68-66-live-check-2026-11-23") {
         let screenshot = XCUIScreen.main.screenshot()
         let attachment = XCTAttachment(screenshot: screenshot)

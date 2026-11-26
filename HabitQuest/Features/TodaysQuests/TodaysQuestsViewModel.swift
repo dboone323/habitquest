@@ -2,6 +2,9 @@ import Combine
 import Foundation
 import HabitQuestCore
 import SwiftData
+#if canImport(WidgetKit)
+    import WidgetKit
+#endif
 
 /// ViewModel managing today's quest display and completion logic
 /// Handles filtering habits due today and managing completion flow
@@ -119,6 +122,9 @@ public class TodaysQuestsViewModel: ObservableObject {
         // Save context
         do {
             try context.save()
+            #if canImport(WidgetKit)
+                WidgetCenter.shared.reloadAllTimelines()
+            #endif
         } catch {
             print("Error saving completion: \(error)")
         }
@@ -184,6 +190,9 @@ public class TodaysQuestsViewModel: ObservableObject {
         // Save context
         do {
             try context.save()
+            #if canImport(WidgetKit)
+                WidgetCenter.shared.reloadAllTimelines()
+            #endif
         } catch {
             print("Error saving uncompletion: \(error)")
         }
@@ -213,6 +222,9 @@ public class TodaysQuestsViewModel: ObservableObject {
             try context.save()
             loadTodaysHabits()
             loadSuggestions()
+            #if canImport(WidgetKit)
+                WidgetCenter.shared.reloadAllTimelines()
+            #endif
         } catch {
             print("Error adding habit: \(error)")
         }

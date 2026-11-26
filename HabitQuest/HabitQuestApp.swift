@@ -17,30 +17,23 @@ public struct HabitQuestApp: App {
 
     public init() {}
 
-    var sharedModelContainer: ModelContainer? = {
-        let schema = Schema([
-            Habit.self,
-            HabitLog.self,
-            PlayerProfile.self,
-            Achievement.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+    private let containerResult: SharedModelContainer.ContainerResult? = {
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try SharedModelContainer.createContainerWithMigrationStatus(inMemoryOnly: false)
         } catch {
             print("❌ Failed to create ModelContainer: \(error)")
-            // Create a fallback in-memory container for testing
-            let fallbackConfig = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
             do {
-                return try ModelContainer(for: schema, configurations: [fallbackConfig])
+                return try SharedModelContainer.createContainerWithMigrationStatus(inMemoryOnly: true)
             } catch {
                 print("❌ Failed to create fallback ModelContainer: \(error)")
-                // Return nil to trigger error UI
                 return nil
             }
         }
     }()
+
+    var sharedModelContainer: ModelContainer? {
+        containerResult?.container
+    }
 
     public var body: some Scene {
         WindowGroup {
@@ -53,6 +46,17 @@ public struct HabitQuestApp: App {
                     .onAppear {
                         HabitQuestLifecycleCoordinator.configureOnLaunch()
                         ensureDefaultPlayerProfile(in: container.mainContext)
+                        if let migrationError = containerResult?.migrationError {
+                            databaseError = migrationError
+                            showDatabaseError = true
+                        }
+                    }
+                    .alert("Storage Migration Issue", isPresented: $showDatabaseError) {
+                        Button("OK", role: .cancel) {}
+                    } message: {
+                        Text(
+                            "Could not migrate your data to shared widget storage (\(databaseError?.localizedDescription ?? "Unknown error")). Your existing local data is still active and safe."
+                        )
                     }
             } else {
                 // Show error view when database initialization fails

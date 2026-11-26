@@ -155,6 +155,16 @@ public final class Habit {
     public var category: HabitCategory
     /// The difficulty level of the habit.
     public var difficulty: HabitDifficulty
+    /// Optional Apple Health metric linked to this habit for auto-completion.
+    public var healthMetric: HealthMetricType?
+    /// Optional target threshold for the linked Apple Health metric.
+    public var targetValue: Double?
+    /// Optional scheduled weekdays (1 = Sunday ... 7 = Saturday) for weekly/custom habits.
+    public var scheduledDays: [Int]?
+    /// Optional repeating interval in days (e.g., every 2 days) for custom habits.
+    public var customIntervalDays: Int?
+    /// Optional daily reminder time (hour/minute used for local calendar notifications).
+    public var reminderTime: Date?
 
     /// The logs associated with this habit.
     @Relationship(deleteRule: .cascade, inverse: \HabitLog.habit)
@@ -166,7 +176,12 @@ public final class Habit {
         frequency: HabitFrequency,
         xpValue: Int = 10,
         category: HabitCategory = .health,
-        difficulty: HabitDifficulty = .easy
+        difficulty: HabitDifficulty = .easy,
+        healthMetric: HealthMetricType? = nil,
+        targetValue: Double? = nil,
+        scheduledDays: [Int]? = nil,
+        customIntervalDays: Int? = nil,
+        reminderTime: Date? = nil
     ) {
         id = UUID()
         self.name = name
@@ -178,6 +193,11 @@ public final class Habit {
         isActive = true
         self.category = category
         self.difficulty = difficulty
+        self.healthMetric = healthMetric
+        self.targetValue = targetValue
+        self.scheduledDays = scheduledDays
+        self.customIntervalDays = customIntervalDays
+        self.reminderTime = reminderTime
     }
 
     /// Check if habit was completed today
@@ -357,6 +377,50 @@ public final class Achievement {
 public enum HabitFrequency: String, CaseIterable, Codable, Sendable {
     case daily, weekly, monthly, custom
     public var displayName: String { rawValue }
+}
+
+/// Supported Apple Health metrics for movement and sleep habit auto-fill.
+public enum HealthMetricType: String, CaseIterable, Codable, Sendable, Identifiable {
+    case steps
+    case activeEnergy
+    case sleepHours
+
+    public var id: String { rawValue }
+
+    public var displayName: String {
+        switch self {
+        case .steps: "Steps"
+        case .activeEnergy: "Active Energy"
+        case .sleepHours: "Sleep Hours"
+        }
+    }
+
+    public var unitLabel: String {
+        switch self {
+        case .steps: "steps"
+        case .activeEnergy: "kcal"
+        case .sleepHours: "hours"
+        }
+    }
+
+    public var defaultTarget: Double {
+        switch self {
+        case .steps: 10000
+        case .activeEnergy: 400
+        case .sleepHours: 7.5
+        }
+    }
+
+    public func formatValue(_ value: Double) -> String {
+        switch self {
+        case .steps:
+            "\(Int(value)) \(unitLabel)"
+        case .activeEnergy:
+            "\(Int(value)) \(unitLabel)"
+        case .sleepHours:
+            String(format: "%.1f %@", value, unitLabel)
+        }
+    }
 }
 
 public enum HabitCategory: String, CaseIterable, Codable, Sendable {

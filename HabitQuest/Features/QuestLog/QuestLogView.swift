@@ -176,19 +176,12 @@ private struct AddEditQuestView: View {
     let onSave: (Habit) -> Void
     @Environment(\.dismiss) private var dismiss
 
-    @State private var name: String
-    @State private var description: String
-    @State private var frequency: HabitFrequency
-    @State private var xpValue: Int
+    @State private var draft: QuestFormDraft
 
     init(habit: Habit?, onSave: @escaping (Habit) -> Void) {
         self.habit = habit
         self.onSave = onSave
-
-        _name = State(initialValue: habit?.name ?? "")
-        _description = State(initialValue: habit?.habitDescription ?? "")
-        _frequency = State(initialValue: habit?.frequency ?? .daily)
-        _xpValue = State(initialValue: habit?.xpValue ?? 10)
+        _draft = State(initialValue: QuestFormDraft(habit: habit))
     }
 
     var isEditing: Bool {
@@ -198,22 +191,12 @@ private struct AddEditQuestView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section("Quest Details") {
-                    TextField("Quest Name", text: $name).accessibilityLabel("Text Field")
-                    TextField("Description", text: $description, axis: .vertical)
-                        .accessibilityLabel("Text Field")
-                        .lineLimit(3...6)
-                }
-
-                Section("Quest Settings") {
-                    Picker("Frequency", selection: $frequency) {
-                        ForEach(HabitFrequency.allCases, id: \.self) { freq in
-                            Text(freq.displayName).tag(freq)
-                        }
-                    }
-
-                    Stepper("XP Reward: \(xpValue)", value: $xpValue, in: 5...100, step: 5)
-                }
+                QuestFormSections(
+                    draft: $draft,
+                    settingsTitle: "Quest Settings",
+                    xpLabelPrefix: "XP Reward",
+                    maxXP: 100
+                )
 
                 if isEditing, let habit {
                     Section("Quest Stats") {
@@ -257,7 +240,7 @@ private struct AddEditQuestView: View {
                             saveQuest()
                         }
                         .accessibilityLabel(isEditing ? "Save" : "Add")
-                        .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        .disabled(draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     }
                 }
         }
@@ -265,21 +248,10 @@ private struct AddEditQuestView: View {
 
     private func saveQuest() {
         if let existingHabit = habit {
-            // Update existing habit
-            existingHabit.name = name
-            existingHabit.habitDescription = description
-            existingHabit.frequency = frequency
-            existingHabit.xpValue = xpValue
+            draft.apply(to: existingHabit)
             onSave(existingHabit)
         } else {
-            // Create new habit
-            let newHabit = Habit(
-                name: name,
-                habitDescription: description,
-                frequency: frequency,
-                xpValue: xpValue
-            )
-            onSave(newHabit)
+            onSave(draft.makeHabit())
         }
 
         dismiss()

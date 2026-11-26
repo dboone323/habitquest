@@ -333,10 +333,7 @@ private struct AddQuestView: View {
     let onAdd: (Habit) -> Void
     @Environment(\.dismiss) private var dismiss
 
-    @State private var name = ""
-    @State private var description = ""
-    @State private var frequency = HabitFrequency.daily
-    @State private var xpValue = 10
+    @State private var draft = QuestFormDraft()
 
     var body: some View {
         NavigationView {
@@ -345,8 +342,8 @@ private struct AddQuestView: View {
                     Section("Suggestions") {
                         ForEach(suggestions, id: \.id) { suggestion in
                             Button {
-                                name = suggestion.name
-                                description = suggestion.description
+                                draft.name = suggestion.name
+                                draft.description = suggestion.description
                             } label: {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(suggestion.name)
@@ -361,22 +358,12 @@ private struct AddQuestView: View {
                     }
                 }
 
-                Section("Quest Details") {
-                    TextField("Quest Name", text: $name).accessibilityLabel("Text Field")
-                    TextField("Description", text: $description, axis: .vertical)
-                        .accessibilityLabel("Text Field")
-                        .lineLimit(3...6)
-                }
-
-                Section("Settings") {
-                    Picker("Frequency", selection: $frequency) {
-                        ForEach(HabitFrequency.allCases, id: \.self) { freq in
-                            Text(freq.displayName).tag(freq)
-                        }
-                    }
-
-                    Stepper("XP Value: \(xpValue)", value: $xpValue, in: 5...50, step: 5)
-                }
+                QuestFormSections(
+                    draft: $draft,
+                    settingsTitle: "Settings",
+                    xpLabelPrefix: "XP Value",
+                    maxXP: 50
+                )
             }
             .navigationTitle("New Quest")
             #if os(iOS)
@@ -392,17 +379,11 @@ private struct AddQuestView: View {
 
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Add") {
-                            let habit = Habit(
-                                name: name,
-                                habitDescription: description,
-                                frequency: frequency,
-                                xpValue: xpValue
-                            )
-                            onAdd(habit)
+                            onAdd(draft.makeHabit())
                             dismiss()
                         }
                         .accessibilityLabel("Add")
-                        .disabled(name.isEmpty)
+                        .disabled(draft.name.isEmpty)
                     }
                 }
         }

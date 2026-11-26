@@ -54,14 +54,127 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
 
     /// Cancels all pending notifications for a specific habit.
     public func cancelNotifications(for habitId: UUID) {
-        notificationCenter.removePendingNotificationRequests(withIdentifiers: [habitId.uuidString])
+        var identifiers = [
+            habitId.uuidString,
+            "urgent_\(habitId.uuidString)",
+            "milestone_\(habitId.uuidString)",
+            "nudge_\(habitId.uuidString)",
+        ]
+        for weekday in 1...7 {
+            identifiers.append("scheduled_\(habitId.uuidString)_\(weekday)")
+        }
+        identifiers.append("scheduled_\(habitId.uuidString)_daily")
+        identifiers.append("scheduled_\(habitId.uuidString)_monthly")
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers)
         logger.info("Cancelled notifications for habit: \(habitId.uuidString)")
+    }
+
+    /// Cancels existing pending notifications for a habit and reschedules calendar reminders if enabled.
+    public func rescheduleReminders(for habit: Habit) async {
+        cancelNotifications(for: habit.id)
+        guard habit.reminderTime != nil else { return }
+        await scheduleCalendarReminders(for: habit)
+    }
+
+    /// Computes calendar trigger date components for a habit's configured reminder time, frequency, and schedule.
+    public func notificationTriggerDateComponents(for habit: Habit, calendar: Calendar = .current) -> [DateComponents] {
+        guard let reminderTime = habit.reminderTime else { return [] }
+        let timeComponents = calendar.dateComponents([.hour, .minute], from: reminderTime)
+        guard let hour = timeComponents.hour, let minute = timeComponents.minute else { return [] }
+
+        if let scheduledDays = habit.scheduledDays, !scheduledDays.isEmpty {
+            let uniqueWeekdays = Set(scheduledDays.filter { (1...7).contains($0) }).sorted()
+            if !uniqueWeekdays.isEmpty {
+                return uniqueWeekdays.map { weekday in
+                    var components = DateComponents()
+                    components.hour = hour
+                    components.minute = minute
+                    components.weekday = weekday
+                    return components
+                }
+            }
+        }
+
+        switch habit.frequency {
+        case .daily:
+            var dailyComponents = DateComponents()
+            dailyComponents.hour = hour
+            dailyComponents.minute = minute
+            return [dailyComponents]
+
+        case .weekly:
+            var weeklyComponents = DateComponents()
+            weeklyComponents.hour = hour
+            weeklyComponents.minute = minute
+            weeklyComponents.weekday = 2 // Monday default weekly check-in
+            return [weeklyComponents]
+
+        case .monthly:
+            var monthlyComponents = DateComponents()
+            monthlyComponents.hour = hour
+            monthlyComponents.minute = minute
+            monthlyComponents.day = 1 // First of month
+            return [monthlyComponents]
+
+        case .custom:
+            if let interval = habit.customIntervalDays, interval > 1 {
+                let startDay = calendar.startOfDay(for: habit.creationDate)
+                let weekdays = stride(from: 0, to: 7, by: interval).compactMap { offset -> Int? in
+                    guard let date = calendar.date(byAdding: .day, value: offset, to: startDay) else { return nil }
+                    return calendar.component(.weekday, from: date)
+                }
+                let uniqueWeekdays = Set(weekdays).sorted()
+                return uniqueWeekdays.map { weekday in
+                    var components = DateComponents()
+                    components.hour = hour
+                    components.minute = minute
+                    components.weekday = weekday
+                    return components
+                }
+            }
+
+            var dailyComponents = DateComponents()
+            dailyComponents.hour = hour
+            dailyComponents.minute = minute
+            return [dailyComponents]
+        }
+    }
+
+    /// Schedules repeating local calendar notifications matching the habit's reminder time and schedule.
+    public func scheduleCalendarReminders(for habit: Habit) async {
+        cancelNotifications(for: habit.id)
+        let triggerComponents = notificationTriggerDateComponents(for: habit)
+        guard !triggerComponents.isEmpty else { return }
+
+        for components in triggerComponents {
+            let content = UNMutableNotificationContent()
+            content.title = "Quest Reminder"
+            content.body = "Time for your habit: \(habit.name)"
+            content.sound = .default
+
+            let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+            let suffix: String = if let weekday = components.weekday {
+                "\(weekday)"
+            } else if components.day != nil {
+                "monthly"
+            } else {
+                "daily"
+            }
+            let identifier = "scheduled_\(habit.id.uuidString)_\(suffix)"
+            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+            try? await notificationCenter.add(request)
+        }
     }
 
     // MARK: - Smart Contextual Reminders
 
     /// Analyzes habit context and schedules appropriate "Smart" reminders.
     public func scheduleSmartReminders(for habit: Habit) async {
+        if habit.reminderTime != nil {
+            await scheduleCalendarReminders(for: habit)
+            return
+        }
+
         let context = analyzeHabitContext(habit: habit)
         
         switch context {

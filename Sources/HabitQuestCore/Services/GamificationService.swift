@@ -111,17 +111,12 @@ public struct GamificationService: Sendable {
         }
 
         // Check gap from most recent completion to today
-        let daysSinceLast = calendar.dateComponents([.day], from: mostRecentDay, to: today).day ?? 0
-        let missedDaysSinceLast: Int
-        switch habit.frequency {
-        case .daily, .custom:
-            missedDaysSinceLast = max(0, daysSinceLast - 1)
-        case .weekly:
-            missedDaysSinceLast = max(0, daysSinceLast - 7)
-        case .monthly:
-            let expectedDate = calendar.date(byAdding: .month, value: 1, to: mostRecentDay) ?? mostRecentDay
-            missedDaysSinceLast = max(0, calendar.dateComponents([.day], from: expectedDate, to: today).day ?? 0)
-        }
+        let missedDaysSinceLast = missedOccurrences(
+            for: habit,
+            from: mostRecentDay,
+            to: today,
+            calendar: calendar
+        )
 
         var availableFreezes = profile?.streakFreezes ?? 0
         let neededForRecent = max(0, missedDaysSinceLast - forgivenessThreshold)
@@ -140,18 +135,12 @@ public struct GamificationService: Sendable {
         var previousDay = mostRecentDay
 
         for day in completedDays.dropFirst() {
-            let missedDays: Int
-            switch habit.frequency {
-            case .daily, .custom:
-                let daysBetween = calendar.dateComponents([.day], from: day, to: previousDay).day ?? 1
-                missedDays = max(0, daysBetween - 1)
-            case .weekly:
-                let daysBetween = calendar.dateComponents([.day], from: day, to: previousDay).day ?? 7
-                missedDays = max(0, daysBetween - 7)
-            case .monthly:
-                let expectedDate = calendar.date(byAdding: .month, value: 1, to: day) ?? day
-                missedDays = max(0, calendar.dateComponents([.day], from: expectedDate, to: previousDay).day ?? 0)
-            }
+            let missedDays = missedOccurrences(
+                for: habit,
+                from: day,
+                to: previousDay,
+                calendar: calendar
+            )
 
             if missedDays == 0 {
                 currentStreak += 1
@@ -187,24 +176,83 @@ public struct GamificationService: Sendable {
         }
     }
 
-    /// Check if a habit should be performed today based on its frequency.
-    public func isHabitDueToday(_ habit: Habit) -> Bool {
+    /// Check if a habit should be performed on the given date based on its frequency and schedule.
+    public func isHabitDueToday(_ habit: Habit, on date: Date = Date(), calendar: Calendar = .current) -> Bool {
         guard habit.isActive else { return false }
-        
-        let calendar = Calendar.current
-        let weekday = calendar.component(.weekday, from: Date())
-        
+        return isScheduledOccurrence(habit, on: date, calendar: calendar)
+    }
+
+    private func isScheduledOccurrence(_ habit: Habit, on date: Date, calendar: Calendar) -> Bool {
+        let weekday = calendar.component(.weekday, from: date)
+
         switch habit.frequency {
         case .daily:
             return true
         case .weekly:
-            // For weekly, we check if it's Monday or if it hasn't been done in 7 days
+            if let scheduledDays = habit.scheduledDays, !scheduledDays.isEmpty {
+                return scheduledDays.contains(weekday)
+            }
             return weekday == 2 // Monday is default weekly check-in
         case .monthly:
-            return calendar.component(.day, from: Date()) == 1 // First of month
+            return calendar.component(.day, from: date) == 1 // First of month
         case .custom:
+            if let scheduledDays = habit.scheduledDays, !scheduledDays.isEmpty {
+                return scheduledDays.contains(weekday)
+            }
+            if let interval = habit.customIntervalDays, interval > 1 {
+                let startDay = calendar.startOfDay(for: habit.creationDate)
+                let targetDay = calendar.startOfDay(for: date)
+                let daysBetween = calendar.dateComponents([.day], from: startDay, to: targetDay).day ?? 0
+                return daysBetween >= 0 && daysBetween % interval == 0
+            }
             return true
         }
+    }
+
+    private func missedOccurrences(
+        for habit: Habit,
+        from startDay: Date,
+        to endDay: Date,
+        calendar: Calendar
+    ) -> Int {
+        let daysBetween = calendar.dateComponents([.day], from: startDay, to: endDay).day ?? 0
+        guard daysBetween > 1 else { return 0 }
+
+        switch habit.frequency {
+        case .daily:
+            return daysBetween - 1
+        case .weekly:
+            if let scheduledDays = habit.scheduledDays, !scheduledDays.isEmpty {
+                return countScheduledDays(for: habit, strictlyBetween: startDay, andDaysOffset: daysBetween, calendar: calendar)
+            }
+            return max(0, daysBetween - 7)
+        case .monthly:
+            let expectedDate = calendar.date(byAdding: .month, value: 1, to: startDay) ?? startDay
+            return max(0, calendar.dateComponents([.day], from: expectedDate, to: endDay).day ?? 0)
+        case .custom:
+            let hasCustomSchedule = !(habit.scheduledDays?.isEmpty ?? true) || (habit.customIntervalDays ?? 1) > 1
+            if hasCustomSchedule {
+                return countScheduledDays(for: habit, strictlyBetween: startDay, andDaysOffset: daysBetween, calendar: calendar)
+            }
+            return daysBetween - 1
+        }
+    }
+
+    private func countScheduledDays(
+        for habit: Habit,
+        strictlyBetween startDay: Date,
+        andDaysOffset daysBetween: Int,
+        calendar: Calendar
+    ) -> Int {
+        guard daysBetween > 1 else { return 0 }
+        var missed = 0
+        for offset in 1..<daysBetween {
+            guard let candidate = calendar.date(byAdding: .day, value: offset, to: startDay) else { continue }
+            if isScheduledOccurrence(habit, on: candidate, calendar: calendar) {
+                missed += 1
+            }
+        }
+        return missed
     }
 
     // MARK: - Achievements Engine
