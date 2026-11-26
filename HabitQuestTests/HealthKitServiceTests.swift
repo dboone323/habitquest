@@ -121,4 +121,57 @@ final class HealthKitServiceTests: XCTestCase {
         XCTAssertFalse(stepsHabit.isCompletedToday)
         XCTAssertTrue(stepsHabit.logs.isEmpty)
     }
+
+    @MainActor
+    func testAutoFillSkipsHabitsNotDueTodayEvenWhenThresholdMet() throws {
+        let profile = PlayerProfile()
+        modelContext.insert(profile)
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        // 2026-11-23 is Monday (weekday = 2)
+        let monday = calendar.date(from: DateComponents(year: 2026, month: 11, day: 23))!
+        let tuesday = calendar.date(byAdding: .day, value: 1, to: monday)!
+
+        // Scheduled only on Wednesday (weekday = 4) and Friday (weekday = 6)
+        let weekdayHabit = Habit(
+            name: "MWF Run",
+            habitDescription: "Wed/Fri only",
+            frequency: .custom,
+            xpValue: 30,
+            healthMetric: .steps,
+            targetValue: 5000,
+            scheduledDays: [4, 6]
+        )
+
+        // Scheduled every 3 days starting on Monday -> not due on Tuesday
+        let intervalHabit = Habit(
+            name: "Interval Steps",
+            habitDescription: "Every 3 days",
+            frequency: .custom,
+            xpValue: 25,
+            healthMetric: .steps,
+            targetValue: 5000,
+            customIntervalDays: 3
+        )
+        intervalHabit.creationDate = monday
+
+        modelContext.insert(weekdayHabit)
+        modelContext.insert(intervalHabit)
+        try modelContext.save()
+
+        let snapshot = HealthMetricsSnapshot(steps: 12000)
+        let completedCount = HealthKitService.shared.autoFillHabits(
+            [weekdayHabit, intervalHabit],
+            in: modelContext,
+            snapshot: snapshot,
+            on: tuesday,
+            calendar: calendar
+        )
+
+        XCTAssertEqual(completedCount, 0)
+        XCTAssertTrue(weekdayHabit.logs.isEmpty)
+        XCTAssertTrue(intervalHabit.logs.isEmpty)
+        XCTAssertEqual(profile.currentXP, 0)
+    }
 }

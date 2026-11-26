@@ -141,7 +141,9 @@ public class HealthKitService: ObservableObject {
     public func autoFillHabits(
         _ habits: [Habit],
         in context: ModelContext,
-        snapshot: HealthMetricsSnapshot? = nil
+        snapshot: HealthMetricsSnapshot? = nil,
+        on date: Date = Date(),
+        calendar: Calendar = .current
     ) -> Int {
         let metrics: HealthMetricsSnapshot
         if let snapshot {
@@ -152,12 +154,12 @@ public class HealthKitService: ObservableObject {
             return 0
         }
 
-        let today = Date()
         let gamificationService = GamificationService()
         let profile = (try? context.fetch(FetchDescriptor<PlayerProfile>()))?.first
         var completedCount = 0
 
         for habit in habits where habit.isActive {
+            guard gamificationService.isHabitDueToday(habit, on: date, calendar: calendar) else { continue }
             guard let metric = habit.healthMetric else { continue }
             guard !habit.isCompletedToday else { continue }
 
@@ -167,7 +169,7 @@ public class HealthKitService: ObservableObject {
 
             let log = HabitLog(
                 habit: habit,
-                completionDate: today,
+                completionDate: date,
                 notes: "Auto-logged from Apple Health (\(metric.formatValue(measuredValue)))"
             )
             context.insert(log)
