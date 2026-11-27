@@ -4,8 +4,8 @@
 //
 
 import Foundation
-import UserNotifications
 import OSLog
+import UserNotifications
 
 private let logger = Logger(subsystem: "com.habitquest.core", category: "HabitNotificationService")
 
@@ -14,10 +14,10 @@ private let logger = Logger(subsystem: "com.habitquest.core", category: "HabitNo
 @MainActor
 public final class HabitNotificationService: NSObject, UNUserNotificationCenterDelegate, Sendable {
     public static let shared = HabitNotificationService()
-    
+
     private let notificationCenter = UNUserNotificationCenter.current()
 
-    private override init() {
+    override private init() {
         super.init()
         notificationCenter.delegate = self
     }
@@ -38,7 +38,12 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
     // MARK: - Basic Scheduling
 
     /// Schedules a simple one-off notification.
-    public func scheduleNotification(title: String, body: String, after timeInterval: TimeInterval, identifier: String = UUID().uuidString) async throws {
+    public func scheduleNotification(
+        title: String,
+        body: String,
+        after timeInterval: TimeInterval,
+        identifier: String = UUID().uuidString
+    ) async throws {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
@@ -153,7 +158,7 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
             content.sound = .default
 
             let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-            let suffix: String = if let weekday = components.weekday {
+            let suffix = if let weekday = components.weekday {
                 "\(weekday)"
             } else if components.day != nil {
                 "monthly"
@@ -176,7 +181,7 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
         }
 
         let context = analyzeHabitContext(habit: habit)
-        
+
         switch context {
         case .streakAtRisk:
             try? await scheduleUrgentReminder(for: habit)
@@ -191,7 +196,9 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
 
     private func analyzeHabitContext(habit: Habit) -> HabitContext {
         let recentLogs = habit.logs.suffix(7)
-        let completionRate = recentLogs.isEmpty ? 1.0 : Double(recentLogs.filter(\.isCompleted).count) / Double(recentLogs.count)
+        let completionRate = recentLogs.isEmpty
+            ? 1.0
+            : Double(recentLogs.filter(\.isCompleted).count) / Double(recentLogs.count)
 
         if habit.streak > 0 && completionRate < 0.3 {
             return .streakAtRisk
@@ -214,9 +221,13 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
         content.body = "Your streak for '\(habit.name)' is at risk! Complete it now to keep the fire burning!"
         content.sound = .default
         content.interruptionLevel = .timeSensitive
-        
+
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1800, repeats: false) // 30 mins
-        let request = UNNotificationRequest(identifier: "urgent_\(habit.id.uuidString)", content: content, trigger: trigger)
+        let request = UNNotificationRequest(
+            identifier: "urgent_\(habit.id.uuidString)",
+            content: content,
+            trigger: trigger
+        )
         try await notificationCenter.add(request)
     }
 
@@ -225,9 +236,13 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
         content.title = "⭐️ Milestone Ahead!"
         content.body = "You're just one day away from a major milestone for '\(habit.name)'. You've got this!"
         content.sound = .default
-        
+
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3600, repeats: false)
-        let request = UNNotificationRequest(identifier: "milestone_\(habit.id.uuidString)", content: content, trigger: trigger)
+        let request = UNNotificationRequest(
+            identifier: "milestone_\(habit.id.uuidString)",
+            content: content,
+            trigger: trigger
+        )
         try await notificationCenter.add(request)
     }
 
@@ -236,9 +251,13 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
         content.title = "💪 Re-engage!"
         content.body = "Remember why you started '\(habit.name)'. Taking one small step today can restore your momentum."
         content.sound = .default
-        
+
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 7200, repeats: false)
-        let request = UNNotificationRequest(identifier: "nudge_\(habit.id.uuidString)", content: content, trigger: trigger)
+        let request = UNNotificationRequest(
+            identifier: "nudge_\(habit.id.uuidString)",
+            content: content,
+            trigger: trigger
+        )
         try await notificationCenter.add(request)
     }
 
@@ -247,7 +266,7 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
         content.title = "Quest Reminder"
         content.body = "Time to work on your habit: \(habit.name)."
         content.sound = .default
-        
+
         // Example: Schedule for tomorrow same time if not completed
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 86400, repeats: false)
         let request = UNNotificationRequest(identifier: habit.id.uuidString, content: content, trigger: trigger)
@@ -256,7 +275,7 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
 
     // MARK: - UNUserNotificationCenterDelegate
 
-    nonisolated public func userNotificationCenter(
+    public nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
@@ -264,4 +283,3 @@ public final class HabitNotificationService: NSObject, UNUserNotificationCenterD
         completionHandler([.banner, .list, .sound])
     }
 }
-

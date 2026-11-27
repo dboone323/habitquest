@@ -10,6 +10,7 @@ import XCTest
 @testable import HabitQuest
 
 final class AchievementAnimationsTests: XCTestCase {
+
     // MARK: - Animation Tests
 
     func testBadgeRevealAnimation() {

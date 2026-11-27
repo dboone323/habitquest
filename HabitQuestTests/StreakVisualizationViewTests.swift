@@ -1,12 +1,12 @@
 
 import HabitQuestCore
-
 import SwiftUI
 import XCTest
 @testable import HabitQuest
 
 @MainActor
 final class StreakVisualizationViewTests: XCTestCase {
+
     // MARK: - structStreakVisualizationView:View{ Tests
 
     func testStreakVisualizationViewInitialization() {

@@ -8,8 +8,8 @@
 //
 
 import Foundation
-import SwiftData
 import OSLog
+import SwiftData
 
 private let logger = Logger(subsystem: "com.habitquest.core", category: "HabitAnalyticsService")
 
@@ -30,7 +30,7 @@ public final class HabitAnalyticsService: Sendable {
 
     /// Identifies the "Peak Discipline Hour" - the hour of day with the highest completion frequency.
     public func calculatePeakDisciplineHour(logs: [HabitLog]) -> Int? {
-        let completedLogs = logs.filter { $0.isCompleted }
+        let completedLogs = logs.filter(\.isCompleted)
         guard !completedLogs.isEmpty else { return nil }
 
         let hourCounts = completedLogs.reduce(into: [Int: Int]()) { counts, log in

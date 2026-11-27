@@ -64,21 +64,21 @@ class ParticleScene: SKScene {
     // MARK: - Emitter Creation
 
     #if os(iOS)
-    private static let confettiTexture: SKTexture = {
-        let size = CGSize(width: 10, height: 10)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        let image = renderer.image { ctx in
-            UIColor.white.setFill()
-            ctx.cgContext.fill(CGRect(origin: .zero, size: size))
-        }
-        return SKTexture(image: image)
-    }()
+        private static let confettiTexture: SKTexture = {
+            let size = CGSize(width: 10, height: 10)
+            let renderer = UIGraphicsImageRenderer(size: size)
+            let image = renderer.image { ctx in
+                UIColor.white.setFill()
+                ctx.cgContext.fill(CGRect(origin: .zero, size: size))
+            }
+            return SKTexture(image: image)
+        }()
     #endif
 
     private func createConfettiEmitter() -> SKEmitterNode? {
         let emitter = SKEmitterNode()
         #if os(iOS)
-        emitter.particleTexture = Self.confettiTexture
+            emitter.particleTexture = Self.confettiTexture
         #endif
         emitter.particleLifetime = 3
         emitter.particleBirthRate = 100
@@ -160,12 +160,23 @@ struct ParticleEffectView: View {
     @State private var scene = ParticleScene(size: CGSize(width: 400, height: 850))
 
     var body: some View {
-        Group {
-            if trigger {
-                GeometryReader { geometry in
-                    SpriteView(scene: scene, options: [.allowsTransparency])
-                        .onAppear {
-                            let sceneSize = geometry.size.width > 0 ? geometry.size : CGSize(width: 400, height: 850)
+        if trigger {
+            GeometryReader { geometry in
+                SpriteView(scene: scene, options: [.allowsTransparency])
+                    .onAppear {
+                        let sceneSize = geometry.size.width > 0 ? geometry.size : CGSize(width: 400, height: 850)
+                        scene.size = sceneSize
+                        let center = CGPoint(
+                            x: sceneSize.width / 2,
+                            y: sceneSize.height * 0.55
+                        )
+                        emit(at: center)
+                    }
+                    .onChange(of: trigger) { _, newValue in
+                        if newValue {
+                            let sceneSize = geometry.size.width > 0
+                                ? geometry.size
+                                : CGSize(width: 400, height: 850)
                             scene.size = sceneSize
                             let center = CGPoint(
                                 x: sceneSize.width / 2,
@@ -173,20 +184,9 @@ struct ParticleEffectView: View {
                             )
                             emit(at: center)
                         }
-                        .onChange(of: trigger) { _, newValue in
-                            if newValue {
-                                let sceneSize = geometry.size.width > 0 ? geometry.size : CGSize(width: 400, height: 850)
-                                scene.size = sceneSize
-                                let center = CGPoint(
-                                    x: sceneSize.width / 2,
-                                    y: sceneSize.height * 0.55
-                                )
-                                emit(at: center)
-                            }
-                        }
-                        .ignoresSafeArea()
-                        .allowsHitTesting(false)
-                }
+                    }
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
             }
         }
     }

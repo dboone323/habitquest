@@ -1,6 +1,5 @@
-import HabitQuestCore
-
 import Foundation
+import HabitQuestCore
 import os
 
 /// Unique logging utility for the HabitQuest app

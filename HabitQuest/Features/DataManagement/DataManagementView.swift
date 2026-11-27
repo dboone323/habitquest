@@ -29,7 +29,9 @@ public struct DataManagementView: View {
                     HStack {
                         Label("Movement & Sleep Sync", systemImage: "heart.text.square")
                         Spacer()
-                        Text(healthKitService.isHealthDataAvailable ? (healthKitService.isAuthorized ? "Connected" : "Not Connected") : "Unavailable")
+                        Text(healthKitService.isHealthDataAvailable
+                            ? (healthKitService.isAuthorized ? "Connected" : "Not Connected")
+                            : "Unavailable")
                             .foregroundColor(.secondary)
                     }
 
@@ -127,11 +129,17 @@ public struct DataManagementView: View {
                 }
 
                 Section(header: Text("Streak Forgiveness & Gamification")) {
-                    Stepper("Grace Period: \(viewModel.forgivenessThreshold) days", value: $viewModel.forgivenessThreshold, in: 1...14)
-                        .accessibilityLabel("Streak forgiveness threshold")
-                    Text("Missed days will not reset your streak unless you miss more than \(viewModel.forgivenessThreshold) days.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    Stepper(
+                        "Grace Period: \(viewModel.forgivenessThreshold) days",
+                        value: $viewModel.forgivenessThreshold,
+                        in: 1...14
+                    )
+                    .accessibilityLabel("Streak forgiveness threshold")
+                    Text(
+                        "Missed days will not reset your streak unless you miss more than \(viewModel.forgivenessThreshold) days."
+                    )
+                    .font(.caption)
+                    .foregroundColor(.secondary)
 
                     HStack {
                         Label("Streak Freezes", systemImage: "snowflake")

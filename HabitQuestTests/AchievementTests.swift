@@ -4,6 +4,7 @@ import XCTest
 @testable import HabitQuest
 
 final class AchievementTests: XCTestCase {
+
     // MARK: - enumAchievementCategory Tests
 
     func testAchievementCategoryInitialization() {

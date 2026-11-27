@@ -1,5 +1,4 @@
 import HabitQuestCore
-
 import SwiftUI
 
 /// Streak distribution chart section

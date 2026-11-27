@@ -1,5 +1,4 @@
 import HabitQuestCore
-
 import SwiftUI
 
 // Enhancement #85: Accessibility Audit & Helpers

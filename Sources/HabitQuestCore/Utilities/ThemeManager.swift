@@ -12,7 +12,9 @@ public enum ThemeAppearanceMode: String, CaseIterable, Sendable, Identifiable {
     case light
     case dark
 
-    public var id: String { rawValue }
+    public var id: String {
+        rawValue
+    }
 
     public var displayName: String {
         switch self {
@@ -46,9 +48,13 @@ public final class ThemeManager: ObservableObject, Sendable {
             UserDefaults.standard.set(appearanceMode.rawValue, forKey: Self.appearanceModeKey)
             switch appearanceMode {
             case .light:
-                if isDarkMode { isDarkMode = false }
+                if isDarkMode {
+                    isDarkMode = false
+                }
             case .dark:
-                if !isDarkMode { isDarkMode = true }
+                if !isDarkMode {
+                    isDarkMode = true
+                }
             case .system:
                 break
             }
@@ -59,7 +65,8 @@ public final class ThemeManager: ObservableObject, Sendable {
         let savedDarkMode = UserDefaults.standard.object(forKey: Self.isDarkModeKey) as? Bool ?? true
         self.isDarkMode = savedDarkMode
         if let rawMode = UserDefaults.standard.string(forKey: Self.appearanceModeKey),
-           let mode = ThemeAppearanceMode(rawValue: rawMode) {
+           let mode = ThemeAppearanceMode(rawValue: rawMode)
+        {
             self.appearanceMode = mode
         } else {
             self.appearanceMode = .system

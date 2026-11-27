@@ -2,8 +2,8 @@ import HabitQuestCore
 import SwiftData
 import SwiftUI
 #if os(iOS)
-import AudioToolbox
-import UIKit
+    import AudioToolbox
+    import UIKit
 #endif
 
 /// View displaying all habits that are due today

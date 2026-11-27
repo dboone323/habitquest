@@ -1,6 +1,5 @@
-import HabitQuestCore
-
 import Foundation
+import HabitQuestCore
 
 enum DataMigrationService {
     private static let migrationBuildKey = "habitquest.last_migrated_build"

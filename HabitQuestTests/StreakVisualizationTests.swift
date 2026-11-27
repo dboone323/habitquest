@@ -10,6 +10,7 @@ import XCTest
 @testable import HabitQuest
 
 final class StreakVisualizationTests: XCTestCase {
+
     // MARK: - Calendar View Tests
 
     func testCalendarHeatmap() {

@@ -6,14 +6,14 @@ final class HabitSchedulingTests: XCTestCase {
     func testCustomScheduledDaysDueToday() throws {
         let service = GamificationService()
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        calendar.timeZone = try XCTUnwrap(TimeZone(secondsFromGMT: 0))
 
         // 2026-11-23 is Monday (weekday = 2)
-        let monday = calendar.date(from: DateComponents(year: 2026, month: 11, day: 23))!
-        let tuesday = calendar.date(byAdding: .day, value: 1, to: monday)!
-        let wednesday = calendar.date(byAdding: .day, value: 2, to: monday)!
-        let friday = calendar.date(byAdding: .day, value: 4, to: monday)!
-        let saturday = calendar.date(byAdding: .day, value: 5, to: monday)!
+        let monday = try XCTUnwrap(calendar.date(from: DateComponents(year: 2026, month: 11, day: 23)))
+        let tuesday = try XCTUnwrap(calendar.date(byAdding: .day, value: 1, to: monday))
+        let wednesday = try XCTUnwrap(calendar.date(byAdding: .day, value: 2, to: monday))
+        let friday = try XCTUnwrap(calendar.date(byAdding: .day, value: 4, to: monday))
+        let saturday = try XCTUnwrap(calendar.date(byAdding: .day, value: 5, to: monday))
 
         let habit = Habit(
             name: "Gym Workout",
@@ -33,7 +33,7 @@ final class HabitSchedulingTests: XCTestCase {
     func testCustomIntervalDaysDueToday() throws {
         let service = GamificationService()
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        calendar.timeZone = try XCTUnwrap(TimeZone(secondsFromGMT: 0))
 
         let habit = Habit(
             name: "Water Plants",
@@ -42,9 +42,9 @@ final class HabitSchedulingTests: XCTestCase {
             customIntervalDays: 3
         )
         let startDay = calendar.startOfDay(for: habit.creationDate)
-        let day1 = calendar.date(byAdding: .day, value: 1, to: startDay)!
-        let day2 = calendar.date(byAdding: .day, value: 2, to: startDay)!
-        let day3 = calendar.date(byAdding: .day, value: 3, to: startDay)!
+        let day1 = try XCTUnwrap(calendar.date(byAdding: .day, value: 1, to: startDay))
+        let day2 = try XCTUnwrap(calendar.date(byAdding: .day, value: 2, to: startDay))
+        let day3 = try XCTUnwrap(calendar.date(byAdding: .day, value: 3, to: startDay))
 
         XCTAssertTrue(service.isHabitDueToday(habit, on: startDay, calendar: calendar))
         XCTAssertFalse(service.isHabitDueToday(habit, on: day1, calendar: calendar))
@@ -55,8 +55,14 @@ final class HabitSchedulingTests: XCTestCase {
     @MainActor
     func testNotificationTriggerDateComponentsWithScheduledDaysAndTime() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
-        let reminder = calendar.date(from: DateComponents(year: 2026, month: 11, day: 26, hour: 8, minute: 30))!
+        calendar.timeZone = try XCTUnwrap(TimeZone(secondsFromGMT: 0))
+        let reminder = try XCTUnwrap(calendar.date(from: DateComponents(
+            year: 2026,
+            month: 11,
+            day: 26,
+            hour: 8,
+            minute: 30
+        )))
 
         let habit = Habit(
             name: "Morning Run",
@@ -79,8 +85,14 @@ final class HabitSchedulingTests: XCTestCase {
     @MainActor
     func testNotificationTriggerDateComponentsDailyFallback() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
-        let reminder = calendar.date(from: DateComponents(year: 2026, month: 11, day: 26, hour: 21, minute: 15))!
+        calendar.timeZone = try XCTUnwrap(TimeZone(secondsFromGMT: 0))
+        let reminder = try XCTUnwrap(calendar.date(from: DateComponents(
+            year: 2026,
+            month: 11,
+            day: 26,
+            hour: 21,
+            minute: 15
+        )))
 
         let habit = Habit(
             name: "Evening Journal",
@@ -99,10 +111,16 @@ final class HabitSchedulingTests: XCTestCase {
     @MainActor
     func testNotificationTriggerDateComponentsForCustomInterval() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        calendar.timeZone = try XCTUnwrap(TimeZone(secondsFromGMT: 0))
         // 2026-11-23 is Monday (weekday = 2)
-        let monday = calendar.date(from: DateComponents(year: 2026, month: 11, day: 23))!
-        let reminder = calendar.date(from: DateComponents(year: 2026, month: 11, day: 23, hour: 9, minute: 45))!
+        let monday = try XCTUnwrap(calendar.date(from: DateComponents(year: 2026, month: 11, day: 23)))
+        let reminder = try XCTUnwrap(calendar.date(from: DateComponents(
+            year: 2026,
+            month: 11,
+            day: 23,
+            hour: 9,
+            minute: 45
+        )))
 
         let habit = Habit(
             name: "Every 3 Days",
@@ -122,8 +140,14 @@ final class HabitSchedulingTests: XCTestCase {
     @MainActor
     func testNotificationTriggerDateComponentsForMonthlyAndDefaultWeekly() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
-        let reminder = calendar.date(from: DateComponents(year: 2026, month: 11, day: 26, hour: 10, minute: 0))!
+        calendar.timeZone = try XCTUnwrap(TimeZone(secondsFromGMT: 0))
+        let reminder = try XCTUnwrap(calendar.date(from: DateComponents(
+            year: 2026,
+            month: 11,
+            day: 26,
+            hour: 10,
+            minute: 0
+        )))
 
         let monthlyHabit = Habit(
             name: "Monthly Review",
@@ -131,7 +155,10 @@ final class HabitSchedulingTests: XCTestCase {
             frequency: .monthly,
             reminderTime: reminder
         )
-        let monthlyTriggers = HabitNotificationService.shared.notificationTriggerDateComponents(for: monthlyHabit, calendar: calendar)
+        let monthlyTriggers = HabitNotificationService.shared.notificationTriggerDateComponents(
+            for: monthlyHabit,
+            calendar: calendar
+        )
         XCTAssertEqual(monthlyTriggers.count, 1)
         XCTAssertEqual(monthlyTriggers[0].day, 1)
         XCTAssertNil(monthlyTriggers[0].weekday)
@@ -144,7 +171,10 @@ final class HabitSchedulingTests: XCTestCase {
             frequency: .weekly,
             reminderTime: reminder
         )
-        let weeklyTriggers = HabitNotificationService.shared.notificationTriggerDateComponents(for: weeklyHabit, calendar: calendar)
+        let weeklyTriggers = HabitNotificationService.shared.notificationTriggerDateComponents(
+            for: weeklyHabit,
+            calendar: calendar
+        )
         XCTAssertEqual(weeklyTriggers.count, 1)
         XCTAssertEqual(weeklyTriggers[0].weekday, 2)
         XCTAssertNil(weeklyTriggers[0].day)
@@ -159,9 +189,9 @@ final class HabitSchedulingTests: XCTestCase {
         let today = calendar.startOfDay(for: Date())
         // 3 scheduled occurrences: 16 days ago, 9 days ago, 2 days ago (every 7 days).
         // Next occurrence isn't due until 5 days from today, so 0 scheduled occurrences were missed.
-        let creationDate = calendar.date(byAdding: .day, value: -16, to: today)!
-        let secondDate = calendar.date(byAdding: .day, value: -9, to: today)!
-        let thirdDate = calendar.date(byAdding: .day, value: -2, to: today)!
+        let creationDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -16, to: today))
+        let secondDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -9, to: today))
+        let thirdDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -2, to: today))
 
         let habit = Habit(
             name: "Weekly Deep Clean",
@@ -195,8 +225,8 @@ final class HabitSchedulingTests: XCTestCase {
         let today = calendar.startOfDay(for: Date())
         let todayWeekday = calendar.component(.weekday, from: today)
         // Pick a single weekday matching 14 days ago / 7 days ago / today (same weekday)
-        let fourteenDaysAgo = calendar.date(byAdding: .day, value: -14, to: today)!
-        let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: today)!
+        let fourteenDaysAgo = try XCTUnwrap(calendar.date(byAdding: .day, value: -14, to: today))
+        let sevenDaysAgo = try XCTUnwrap(calendar.date(byAdding: .day, value: -7, to: today))
 
         let habit = Habit(
             name: "Specific Weekday Habit",

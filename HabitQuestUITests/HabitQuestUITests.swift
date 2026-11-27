@@ -32,7 +32,9 @@ final class HabitQuestUITests: XCTestCase {
 
         // If no habit is present, add one
         let addQuestButton = app.buttons["Add Quest"]
-        if addQuestButton.waitForExistence(timeout: 2) && !app.buttons["Mark complete"].exists && !app.buttons["Mark incomplete"].exists {
+        if addQuestButton.waitForExistence(timeout: 2) && !app.buttons["Mark complete"].exists && !app
+            .buttons["Mark incomplete"].exists
+        {
             addQuestButton.tap()
 
             let nameField = app.textFields.firstMatch
@@ -133,7 +135,9 @@ final class HabitQuestUITests: XCTestCase {
 
         // Ensure at least one habit exists
         let addQuestButton = app.buttons["Add Quest"]
-        if addQuestButton.waitForExistence(timeout: 2) && !app.buttons["Mark complete"].exists && !app.buttons["Mark incomplete"].exists {
+        if addQuestButton.waitForExistence(timeout: 2) && !app.buttons["Mark complete"].exists && !app
+            .buttons["Mark incomplete"].exists
+        {
             addQuestButton.tap()
 
             let nameField = app.textFields.firstMatch
@@ -162,7 +166,10 @@ final class HabitQuestUITests: XCTestCase {
 
         // Issue #84 Done Criteria: Celebration popover must exist after completing
         let celebrationPopover = app.descendants(matching: .any)["CelebrationPopover"]
-        XCTAssertTrue(celebrationPopover.waitForExistence(timeout: 5), "Celebration popover must exist after completing")
+        XCTAssertTrue(
+            celebrationPopover.waitForExistence(timeout: 5),
+            "Celebration popover must exist after completing"
+        )
 
         // Verify NO modal alert is presented
         XCTAssertFalse(app.alerts["Quest Completed!"].exists, "No modal alert should be presented on completion")
@@ -177,7 +184,8 @@ final class HabitQuestUITests: XCTestCase {
             XCTAssertTrue(celebrationExtra.exists, "Celebration extra message (level up / achievement) is displayed")
         }
 
-        // Flow 2: Profile -> "View All" — gallery opens with real achievements, tap one — detail shows description, XP reward, unlock date/progress
+        // Flow 2: Profile -> "View All" — gallery opens with real achievements, tap one — detail shows description, XP
+        // reward, unlock date/progress
         let profileTab = app.tabBars.buttons["Profile"]
         XCTAssertTrue(profileTab.waitForExistence(timeout: 5))
         profileTab.tap()
@@ -270,7 +278,10 @@ final class HabitQuestUITests: XCTestCase {
         // Verify un-complete does not show celebration popover or modal alert
         RunLoop.current.run(until: Date().addingTimeInterval(0.5))
         XCTAssertFalse(app.alerts.firstMatch.exists, "No alert should appear when un-completing")
-        XCTAssertFalse(app.descendants(matching: .any)["CelebrationPopover"].exists, "No celebration popover should appear when un-completing")
+        XCTAssertFalse(
+            app.descendants(matching: .any)["CelebrationPopover"].exists,
+            "No celebration popover should appear when un-completing"
+        )
 
         saveScreenshot(name: "04-today-toggled-off-no-celebration.png", directoryName: targetDir)
     }
@@ -325,7 +336,10 @@ final class HabitQuestUITests: XCTestCase {
         completeButtons.firstMatch.tap()
 
         let celebrationPopover = app.descendants(matching: .any)["CelebrationPopover"]
-        XCTAssertTrue(celebrationPopover.waitForExistence(timeout: 3), "Celebration popover should appear on first completion")
+        XCTAssertTrue(
+            celebrationPopover.waitForExistence(timeout: 3),
+            "Celebration popover should appear on first completion"
+        )
 
         // 2. Wait 1.0s (within 3.5s celebration window)
         RunLoop.current.run(until: Date().addingTimeInterval(1.0))
@@ -342,11 +356,17 @@ final class HabitQuestUITests: XCTestCase {
 
         // Without the fix, the first task dismissed the popover at 3.5s.
         // With the fix, the popover remains visible for the renewed 3.5s interval.
-        XCTAssertTrue(celebrationPopover.exists, "Celebration popover must remain visible for full interval after second completion")
+        XCTAssertTrue(
+            celebrationPopover.exists,
+            "Celebration popover must remain visible for full interval after second completion"
+        )
 
         // 5. Wait another 2.0s. Total elapsed since second completion: ~4.3s (past renewed 3.5s).
         RunLoop.current.run(until: Date().addingTimeInterval(2.0))
-        XCTAssertFalse(celebrationPopover.exists, "Celebration popover must auto-dismiss after renewed interval expires")
+        XCTAssertFalse(
+            celebrationPopover.exists,
+            "Celebration popover must auto-dismiss after renewed interval expires"
+        )
     }
 
     // MARK: - Issue #67: Quest Log Add Quest Button
@@ -448,7 +468,10 @@ final class HabitQuestUITests: XCTestCase {
         XCTAssertTrue(settingsTab.waitForExistence(timeout: 5), "Settings tab must exist")
         settingsTab.tap()
 
-        XCTAssertTrue(app.staticTexts["Apple Health"].waitForExistence(timeout: 5), "Apple Health section must appear in Settings")
+        XCTAssertTrue(
+            app.staticTexts["Apple Health"].waitForExistence(timeout: 5),
+            "Apple Health section must appear in Settings"
+        )
         let connectButton = app.buttons["Connect Apple Health"]
         XCTAssertTrue(connectButton.waitForExistence(timeout: 3), "Connect Apple Health button must exist")
 
@@ -463,11 +486,15 @@ final class HabitQuestUITests: XCTestCase {
 
         app.swipeUp()
         let syncToggle = app.switches["Sync with Apple Health"]
-        XCTAssertTrue(syncToggle.waitForExistence(timeout: 5), "Sync with Apple Health toggle must exist in Add Quest sheet")
+        XCTAssertTrue(
+            syncToggle.waitForExistence(timeout: 5),
+            "Sync with Apple Health toggle must exist in Add Quest sheet"
+        )
         syncToggle.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
         app.swipeUp()
 
-        let healthMetricButton = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Health Metric'")).firstMatch
+        let healthMetricButton = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Health Metric'"))
+            .firstMatch
         let dailyTargetText = app.staticTexts["Daily Target (steps)"]
         XCTAssertTrue(
             healthMetricButton.waitForExistence(timeout: 3) || dailyTargetText.waitForExistence(timeout: 3),
@@ -502,7 +529,10 @@ final class HabitQuestUITests: XCTestCase {
         XCTAssertTrue(customOption.waitForExistence(timeout: 3), "custom frequency option must exist")
         customOption.tap()
 
-        XCTAssertTrue(app.buttons["Weekday 2"].waitForExistence(timeout: 3), "Weekday 2 (Monday) button must appear for custom frequency")
+        XCTAssertTrue(
+            app.buttons["Weekday 2"].waitForExistence(timeout: 3),
+            "Weekday 2 (Monday) button must appear for custom frequency"
+        )
         app.buttons["Weekday 2"].tap()
 
         app.swipeUp()
@@ -510,7 +540,11 @@ final class HabitQuestUITests: XCTestCase {
         XCTAssertTrue(reminderToggle.waitForExistence(timeout: 3), "Daily Reminder toggle must exist")
         reminderToggle.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
         app.swipeUp()
-        XCTAssertTrue(app.staticTexts["Reminder Time"].waitForExistence(timeout: 3) || app.datePickers.firstMatch.waitForExistence(timeout: 3), "Reminder Time picker must appear when enabled")
+        XCTAssertTrue(
+            app.staticTexts["Reminder Time"].waitForExistence(timeout: 3) || app.datePickers.firstMatch
+                .waitForExistence(timeout: 3),
+            "Reminder Time picker must appear when enabled"
+        )
 
         let cancelButton = app.buttons["Cancel"]
         if cancelButton.waitForExistence(timeout: 2) {

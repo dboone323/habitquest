@@ -1,5 +1,4 @@
 import HabitQuestCore
-
 import SwiftUI
 
 /// Heat map visualization for habit streaks

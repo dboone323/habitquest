@@ -7,12 +7,13 @@ validate:
 	@.ci/agent_validate.sh
 
 lint:
-	@swiftlint --strict || true
+	@swiftlint --strict
 
 format:
-	@swiftformat . --config .swiftformat || true
+	@swiftformat . --config .swiftformat
 
 test:
+	@mkdir -p $(OUTPUT_DIR) && rm -rf $(OUTPUT_DIR)/TestResults_iOS.xcresult
 	xcodebuild test \
 		-project HabitQuest.xcodeproj \
 		-scheme HabitQuest \
@@ -20,4 +21,4 @@ test:
 		-xcconfig Config/Test.xcconfig \
 		-derivedDataPath $(DERIVED_DATA_PATH) \
 		-destination 'platform=iOS Simulator,name=iPhone 17' \
-		-resultBundlePath $(OUTPUT_DIR)/TestResults_iOS.xcresult || true
+		-resultBundlePath $(OUTPUT_DIR)/TestResults_iOS.xcresult

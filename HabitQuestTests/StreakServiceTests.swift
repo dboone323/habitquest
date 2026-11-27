@@ -40,7 +40,7 @@ final class StreakServiceTests: XCTestCase {
         // Completed 5, 4, 3 days ago (3 consecutive days)
         // Missed 2 days ago, 1 day ago, and today (3 missed days before today: daysSinceLast = 3)
         for daysAgo in [5, 4, 3] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
@@ -61,7 +61,7 @@ final class StreakServiceTests: XCTestCase {
         // Completed 9, 8, 7 days ago (3 consecutive days)
         // Missed 6, 5, 4, 3, 2, 1 days ago (6 missed days: daysSinceLast = 7, missedDays = 6)
         for daysAgo in [9, 8, 7] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
@@ -88,14 +88,18 @@ final class StreakServiceTests: XCTestCase {
         // With 1 streak freeze covering 1 missed day, remaining missed days = 5.
         // 5 is within the 5-day threshold, so the streak survives!
         for daysAgo in [9, 8, 7] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
         try modelContext.save()
 
         let currentStreak = await sut.calculateCurrentStreak(for: habit, profile: profile)
-        XCTAssertEqual(currentStreak, 3, "Streak freeze covers a missed day without consuming the threshold, allowing streak to survive")
+        XCTAssertEqual(
+            currentStreak,
+            3,
+            "Streak freeze covers a missed day without consuming the threshold, allowing streak to survive"
+        )
     }
 
     @MainActor
@@ -105,9 +109,10 @@ final class StreakServiceTests: XCTestCase {
         modelContext.insert(habit)
 
         let today = calendar.startOfDay(for: Date())
-        // Completed 5, 4, 3 days ago (missed 2 days ago, yesterday, today -> 2 missed days before today: daysSinceLast = 3, missed = 2)
+        // Completed 5, 4, 3 days ago (missed 2 days ago, yesterday, today -> 2 missed days before today: daysSinceLast
+        // = 3, missed = 2)
         for daysAgo in [5, 4, 3] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
@@ -122,7 +127,11 @@ final class StreakServiceTests: XCTestCase {
         XCTAssertEqual(StreakForgivenessConfig.threshold, 1)
 
         let streakWithLowerThreshold = await sut.calculateCurrentStreak(for: habit)
-        XCTAssertEqual(streakWithLowerThreshold, 0, "Lowering threshold to 1 in Settings should cause 2 missed days to reset streak")
+        XCTAssertEqual(
+            streakWithLowerThreshold,
+            0,
+            "Lowering threshold to 1 in Settings should cause 2 missed days to reset streak"
+        )
 
         // Change threshold to 10 days
         StreakForgivenessConfig.threshold = 10
@@ -132,18 +141,22 @@ final class StreakServiceTests: XCTestCase {
         let habit2 = Habit(name: "Pushups", habitDescription: "20 reps", frequency: .daily, xpValue: 10)
         modelContext.insert(habit2)
         for daysAgo in [9, 8, 7] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit2, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
         try modelContext.save()
 
         let streakWithHigherThreshold = await sut.calculateCurrentStreak(for: habit2)
-        XCTAssertEqual(streakWithHigherThreshold, 3, "Higher threshold in Settings preserves streak through 6 missed days")
+        XCTAssertEqual(
+            streakWithHigherThreshold,
+            3,
+            "Higher threshold in Settings preserves streak through 6 missed days"
+        )
     }
 
     @MainActor
-    func testStreakFreezeEarnedOnLevelUp() throws {
+    func testStreakFreezeEarnedOnLevelUp() {
         let gamification = GamificationService()
         let profile = PlayerProfile()
         profile.level = 1
@@ -174,7 +187,7 @@ final class StreakServiceTests: XCTestCase {
         // Gap of 8 missed days -> reset
         // Third run: 2 days ago (1 day)
         for daysAgo in [12, 11, 10, 7, 6, 5, 4] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
@@ -193,7 +206,7 @@ final class StreakServiceTests: XCTestCase {
         let today = calendar.startOfDay(for: Date())
         // 7 days consecutive completed ending today
         for daysAgo in 0..<7 {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
@@ -225,7 +238,7 @@ final class StreakServiceTests: XCTestCase {
         let today = calendar.startOfDay(for: Date())
         // Completed 9, 8, 7 days ago (3 consecutive days)
         for daysAgo in [9, 8, 7] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
@@ -256,7 +269,7 @@ final class StreakServiceTests: XCTestCase {
         let today = calendar.startOfDay(for: Date())
         // Habit 1: Completed 9, 8, 7 days ago, complete today -> bridges 6 missed days and consumes the 1 freeze
         for daysAgo in [9, 8, 7] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit1, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
@@ -274,7 +287,7 @@ final class StreakServiceTests: XCTestCase {
         let habit2 = Habit(name: "Meditation", habitDescription: "10 mins", frequency: .daily, xpValue: 15)
         modelContext.insert(habit2)
         for daysAgo in [9, 8, 7] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit2, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
@@ -302,7 +315,7 @@ final class StreakServiceTests: XCTestCase {
         let today = calendar.startOfDay(for: Date())
         // Completed 9, 8, 7 days ago (streak of 3, gap of 6 missed days to today)
         for daysAgo in [9, 8, 7] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
@@ -310,11 +323,19 @@ final class StreakServiceTests: XCTestCase {
 
         // When passing profile with 1 freeze, 6-day gap is bridged -> streak alive (3)
         let analyticsWithFreeze = await sut.getStreakAnalytics(for: habit, profile: profile)
-        XCTAssertEqual(analyticsWithFreeze.currentStreak, 3, "Analytics with 1 freeze should report 6-day gap bridged as alive streak")
+        XCTAssertEqual(
+            analyticsWithFreeze.currentStreak,
+            3,
+            "Analytics with 1 freeze should report 6-day gap bridged as alive streak"
+        )
 
         // Without profile (0 freezes available), 6-day gap exceeds default 5-day threshold -> streak is 0 (broken)
         let analyticsWithoutFreeze = await sut.getStreakAnalytics(for: habit)
-        XCTAssertEqual(analyticsWithoutFreeze.currentStreak, 0, "Analytics without freezes should report streak broken (0)")
+        XCTAssertEqual(
+            analyticsWithoutFreeze.currentStreak,
+            0,
+            "Analytics without freezes should report streak broken (0)"
+        )
     }
 
     @MainActor
@@ -325,7 +346,11 @@ final class StreakServiceTests: XCTestCase {
 
         let today = calendar.startOfDay(for: Date())
         // Normal 1-week cadence: completed 7 days ago and today
-        let log7DaysAgo = HabitLog(habit: habit, completionDate: calendar.date(byAdding: .day, value: -7, to: today)!, isCompleted: true)
+        let log7DaysAgo = try HabitLog(
+            habit: habit,
+            completionDate: XCTUnwrap(calendar.date(byAdding: .day, value: -7, to: today)),
+            isCompleted: true
+        )
         let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
         modelContext.insert(log7DaysAgo)
         modelContext.insert(todayLog)
@@ -345,7 +370,11 @@ final class StreakServiceTests: XCTestCase {
 
         let today = calendar.startOfDay(for: Date())
         // Missing 2 weeks (21 days between completions -> 14 missed days)
-        let log21DaysAgo = HabitLog(habit: habit, completionDate: calendar.date(byAdding: .day, value: -21, to: today)!, isCompleted: true)
+        let log21DaysAgo = try HabitLog(
+            habit: habit,
+            completionDate: XCTUnwrap(calendar.date(byAdding: .day, value: -21, to: today)),
+            isCompleted: true
+        )
         let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
         modelContext.insert(log21DaysAgo)
         modelContext.insert(todayLog)
@@ -356,7 +385,7 @@ final class StreakServiceTests: XCTestCase {
     }
 
     @MainActor
-    func testWeeklyHabitMissingOneWeekSurvivesWithFreezes() async throws {
+    func testWeeklyHabitMissingOneWeekSurvivesWithFreezes() throws {
         let gamification = GamificationService()
         let profile = PlayerProfile()
         profile.streakFreezes = 2
@@ -367,7 +396,11 @@ final class StreakServiceTests: XCTestCase {
 
         let today = calendar.startOfDay(for: Date())
         // Missing 1 week: completed 14 days ago and today (7 missed days beyond expected 7-day cadence)
-        let log14DaysAgo = HabitLog(habit: habit, completionDate: calendar.date(byAdding: .day, value: -14, to: today)!, isCompleted: true)
+        let log14DaysAgo = try HabitLog(
+            habit: habit,
+            completionDate: XCTUnwrap(calendar.date(byAdding: .day, value: -14, to: today)),
+            isCompleted: true
+        )
         let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
         modelContext.insert(log14DaysAgo)
         modelContext.insert(todayLog)
@@ -388,7 +421,7 @@ final class StreakServiceTests: XCTestCase {
         modelContext.insert(habit)
 
         let today = calendar.startOfDay(for: Date())
-        let oneMonthAgo = calendar.date(byAdding: .month, value: -1, to: today)!
+        let oneMonthAgo = try XCTUnwrap(calendar.date(byAdding: .month, value: -1, to: today))
         let logMonthAgo = HabitLog(habit: habit, completionDate: oneMonthAgo, isCompleted: true)
         let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
         modelContext.insert(logMonthAgo)
@@ -408,7 +441,7 @@ final class StreakServiceTests: XCTestCase {
         modelContext.insert(habit)
 
         let today = calendar.startOfDay(for: Date())
-        let twoMonthsAgo = calendar.date(byAdding: .month, value: -2, to: today)!
+        let twoMonthsAgo = try XCTUnwrap(calendar.date(byAdding: .month, value: -2, to: today))
         let logTwoMonthsAgo = HabitLog(habit: habit, completionDate: twoMonthsAgo, isCompleted: true)
         let todayLog = HabitLog(habit: habit, completionDate: today, isCompleted: true)
         modelContext.insert(logTwoMonthsAgo)
@@ -432,7 +465,7 @@ final class StreakServiceTests: XCTestCase {
         let today = calendar.startOfDay(for: Date())
         // 6 completions ending 7 days ago (streak of 6)
         for daysAgo in 7...12 {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
@@ -472,7 +505,7 @@ final class StreakServiceTests: XCTestCase {
         let today = calendar.startOfDay(for: Date())
         // Completed 9, 8, 7 days ago (streak 3)
         for daysAgo in [9, 8, 7] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
@@ -490,7 +523,11 @@ final class StreakServiceTests: XCTestCase {
 
         // Read path / recalculation: getStreakAnalytics must STILL report currentStreak 4, not evaporate to 1
         let analytics = await sut.getStreakAnalytics(for: habit, profile: profile)
-        XCTAssertEqual(analytics.currentStreak, 4, "Recalculation via getStreakAnalytics must preserve freeze-spent streak (4), not evaporate to 1")
+        XCTAssertEqual(
+            analytics.currentStreak,
+            4,
+            "Recalculation via getStreakAnalytics must preserve freeze-spent streak (4), not evaporate to 1"
+        )
 
         // Direct recalculation via calculateCurrentStreak must also report 4
         let recalculated = await sut.calculateCurrentStreak(for: habit, profile: profile)
@@ -513,7 +550,7 @@ final class StreakServiceTests: XCTestCase {
         let today = calendar.startOfDay(for: Date())
         // Completed 9, 8, 7 days ago (3 consecutive days)
         for daysAgo in [9, 8, 7] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             let log = HabitLog(habit: habit, completionDate: logDate, isCompleted: true)
             modelContext.insert(log)
         }
@@ -548,7 +585,7 @@ final class StreakServiceTests: XCTestCase {
 
         let today = calendar.startOfDay(for: Date())
         // Completed 2 days ago (1 missed day: yesterday)
-        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: today)!
+        let twoDaysAgo = try XCTUnwrap(calendar.date(byAdding: .day, value: -2, to: today))
         let prevLog = HabitLog(habit: habit, completionDate: twoDaysAgo, isCompleted: true)
         modelContext.insert(prevLog)
 
@@ -563,7 +600,11 @@ final class StreakServiceTests: XCTestCase {
         // Streak survives because 1 missed day <= 5 grace threshold
         XCTAssertEqual(habit.streak, 2, "Streak should survive 1 missed day inside 5-day grace threshold")
         // Freeze must NOT be spent because gap is inside grace threshold!
-        XCTAssertEqual(profile.streakFreezes, 1, "Freeze in inventory must remain unspent for gap inside grace threshold")
+        XCTAssertEqual(
+            profile.streakFreezes,
+            1,
+            "Freeze in inventory must remain unspent for gap inside grace threshold"
+        )
         XCTAssertEqual(todayLog.freezesConsumed, 0, "Log should record 0 freezes consumed for in-threshold gap")
     }
 
@@ -579,13 +620,17 @@ final class StreakServiceTests: XCTestCase {
 
         let today = calendar.startOfDay(for: Date())
         // Completed 2 days ago: recent gap to today is 1 missed day
-        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: today)!
+        let twoDaysAgo = try XCTUnwrap(calendar.date(byAdding: .day, value: -2, to: today))
         let log = HabitLog(habit: habit, completionDate: twoDaysAgo, isCompleted: true)
         modelContext.insert(log)
         try modelContext.save()
 
         let (streak, freezesUsed) = await sut.calculateCurrentStreakWithUsage(for: habit, profile: profile)
         XCTAssertEqual(streak, 1, "Streak should survive 1 missed day inside grace threshold")
-        XCTAssertEqual(freezesUsed, 0, "Read path must not consume freeze from inventory for gap inside grace threshold")
+        XCTAssertEqual(
+            freezesUsed,
+            0,
+            "Read path must not consume freeze from inventory for gap inside grace threshold"
+        )
     }
 }

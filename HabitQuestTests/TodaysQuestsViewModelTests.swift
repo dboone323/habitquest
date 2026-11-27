@@ -50,7 +50,13 @@ final class TodaysQuestsViewModelTests: XCTestCase {
         let (context, viewModel) = try createSUT()
         let profile = PlayerProfile()
         context.insert(profile)
-        let habit = Habit(name: "Read Book", habitDescription: "Read 10 pages", frequency: .daily, xpValue: 15, difficulty: .easy)
+        let habit = Habit(
+            name: "Read Book",
+            habitDescription: "Read 10 pages",
+            frequency: .daily,
+            xpValue: 15,
+            difficulty: .easy
+        )
         context.insert(habit)
         try context.save()
 
@@ -73,7 +79,13 @@ final class TodaysQuestsViewModelTests: XCTestCase {
         let (context, viewModel) = try createSUT()
         let profile = PlayerProfile()
         context.insert(profile)
-        let habit = Habit(name: "Meditate", habitDescription: "10 mins mindfulness", frequency: .daily, xpValue: 25, difficulty: .medium)
+        let habit = Habit(
+            name: "Meditate",
+            habitDescription: "10 mins mindfulness",
+            frequency: .daily,
+            xpValue: 25,
+            difficulty: .medium
+        )
         context.insert(habit)
         try context.save()
 
@@ -100,7 +112,13 @@ final class TodaysQuestsViewModelTests: XCTestCase {
         let (context, viewModel) = try createSUT()
         let profile = PlayerProfile()
         context.insert(profile)
-        let habit = Habit(name: "Drink Water", habitDescription: "2L water", frequency: .daily, xpValue: 10, difficulty: .easy)
+        let habit = Habit(
+            name: "Drink Water",
+            habitDescription: "2L water",
+            frequency: .daily,
+            xpValue: 10,
+            difficulty: .easy
+        )
         context.insert(habit)
         try context.save()
 
@@ -159,7 +177,13 @@ final class TodaysQuestsViewModelTests: XCTestCase {
         profile.xpForNextLevel = 150
         context.insert(profile)
 
-        let habit = Habit(name: "Coding", habitDescription: "Build app", frequency: .daily, xpValue: 20, difficulty: .medium) // 20 * 2 = 40 XP
+        let habit = Habit(
+            name: "Coding",
+            habitDescription: "Build app",
+            frequency: .daily,
+            xpValue: 20,
+            difficulty: .medium
+        ) // 20 * 2 = 40 XP
         context.insert(habit)
         try context.save()
 
@@ -186,7 +210,13 @@ final class TodaysQuestsViewModelTests: XCTestCase {
         profile.streakFreezes = 0
         context.insert(profile)
 
-        let habit = Habit(name: "Workout", habitDescription: "Gym", frequency: .daily, xpValue: 20, difficulty: .medium) // 20 * 2 = 40 XP
+        let habit = Habit(
+            name: "Workout",
+            habitDescription: "Gym",
+            frequency: .daily,
+            xpValue: 20,
+            difficulty: .medium
+        ) // 20 * 2 = 40 XP
         context.insert(habit)
         try context.save()
 
@@ -239,7 +269,7 @@ final class TodaysQuestsViewModelTests: XCTestCase {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         // Completed 7 days ago (gap of 6 missed days to today, needing 1 freeze beyond default 5-day threshold)
-        let log7DaysAgo = calendar.date(byAdding: .day, value: -7, to: today)!
+        let log7DaysAgo = try XCTUnwrap(calendar.date(byAdding: .day, value: -7, to: today))
         let oldLog = HabitLog(habit: habit, completionDate: log7DaysAgo, isCompleted: true)
         context.insert(oldLog)
         try context.save()
@@ -262,9 +292,17 @@ final class TodaysQuestsViewModelTests: XCTestCase {
         // Subsequent read path via StreakService must NOT evaporate the streak to 0
         let streakService = StreakService(modelContext: context)
         let analytics = await streakService.getStreakAnalytics(for: habit, profile: profile)
-        XCTAssertEqual(analytics.currentStreak, 1, "Subsequent analytics read must preserve freeze-protected streak after uncompleting today")
+        XCTAssertEqual(
+            analytics.currentStreak,
+            1,
+            "Subsequent analytics read must preserve freeze-protected streak after uncompleting today"
+        )
 
         let currentStreak = await streakService.calculateCurrentStreak(for: habit, profile: profile)
-        XCTAssertEqual(currentStreak, 1, "Subsequent calculateCurrentStreak read must preserve freeze-protected streak after uncompleting today")
+        XCTAssertEqual(
+            currentStreak,
+            1,
+            "Subsequent calculateCurrentStreak read must preserve freeze-protected streak after uncompleting today"
+        )
     }
 }

@@ -1,10 +1,10 @@
 
 import HabitQuestCore
-
 import XCTest
 @testable import HabitQuest
 
 final class StreakAnalyticsViewTests: XCTestCase {
+
     // MARK: - structStreakAnalyticsView:View{ Tests
 
     func testStreakAnalyticsViewInitialization() {

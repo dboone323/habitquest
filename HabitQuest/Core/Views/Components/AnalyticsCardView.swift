@@ -1,5 +1,4 @@
 import HabitQuestCore
-
 import SwiftUI
 
 // MARK: - Analytics Card View

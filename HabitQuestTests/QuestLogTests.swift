@@ -10,6 +10,7 @@ import XCTest
 @testable import HabitQuest
 
 final class QuestLogTests: XCTestCase {
+
     // MARK: - Quest Creation Tests
 
     func testQuestCreation() {

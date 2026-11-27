@@ -144,7 +144,11 @@ final class SharedModelContainerMigrationTests: XCTestCase {
             let legacyConfig = ModelConfiguration(schema: SharedModelContainer.schema, url: legacyURL)
             let legacyContainer = try ModelContainer(for: SharedModelContainer.schema, configurations: [legacyConfig])
             let legacyContext = ModelContext(legacyContainer)
-            legacyContext.insert(Habit(name: "Preserved Habit", habitDescription: "Must not be lost", frequency: .daily))
+            legacyContext.insert(Habit(
+                name: "Preserved Habit",
+                habitDescription: "Must not be lost",
+                frequency: .daily
+            ))
             try legacyContext.save()
         }
 

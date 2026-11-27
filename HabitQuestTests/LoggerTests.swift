@@ -1,10 +1,10 @@
 
 import HabitQuestCore
-
 import XCTest
 @testable import HabitQuest
 
 final class LoggerTests: XCTestCase {
+
     // MARK: - structLogger{ Tests
 
     func testLoggerInitialization() {

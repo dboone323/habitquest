@@ -10,6 +10,7 @@ import XCTest
 @testable import HabitQuest
 
 final class OnboardingViewTests: XCTestCase {
+
     // MARK: - View Initialization Tests
 
     func testOnboardingViewInit() {

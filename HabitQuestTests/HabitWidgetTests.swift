@@ -7,6 +7,7 @@ import XCTest
 
 @MainActor
 final class HabitWidgetTests: XCTestCase {
+
     // MARK: - Entry Tests
 
     func testHabitWidgetEntryInitialization() {
