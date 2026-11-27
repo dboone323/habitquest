@@ -1,5 +1,5 @@
-import HabitQuestCore
 import Foundation
+import HabitQuestCore
 import SwiftData
 
 /// Manages data privacy and GDPR compliance

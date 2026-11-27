@@ -59,7 +59,11 @@ final class HabitDataServiceBackupTests: XCTestCase {
         XCTAssertEqual(restored.targetValue, 450)
         XCTAssertEqual(restored.scheduledDays, [2, 4, 6])
         XCTAssertEqual(restored.customIntervalDays, 3)
-        XCTAssertEqual(restored.reminderTime?.timeIntervalSince1970 ?? 0, reminderDate.timeIntervalSince1970, accuracy: 1.0)
+        XCTAssertEqual(
+            restored.reminderTime?.timeIntervalSince1970 ?? 0,
+            reminderDate.timeIntervalSince1970,
+            accuracy: 1.0
+        )
     }
 
     func testImportLegacyBackupWithoutNewHabitFieldsSucceedsWithNilDefaults() throws {

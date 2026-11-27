@@ -1,10 +1,10 @@
 
 import HabitQuestCore
-
 import XCTest
 @testable import HabitQuest
 
 final class AppMainViewTests: XCTestCase {
+
     // MARK: - structAppMainView:View{ Tests
 
     func testAppMainViewInitialization() {

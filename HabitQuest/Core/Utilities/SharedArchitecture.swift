@@ -1,6 +1,5 @@
-import HabitQuestCore
-
 import Foundation
+import HabitQuestCore
 import SwiftUI
 
 // MARK: - Shared View Model Protocol

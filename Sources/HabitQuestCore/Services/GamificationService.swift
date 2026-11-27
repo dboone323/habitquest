@@ -46,7 +46,10 @@ public struct GamificationService: Sendable {
             profile.streakFreezes += levelsGained
             profile.level = newLevel
             profile.xpForNextLevel = calculateXPForNextLevel(forLevel: newLevel)
-            logger.info("Level up! New level: \(newLevel). Awarded \(levelsGained) streak freeze(s). Total: \(profile.streakFreezes)")
+            logger
+                .info(
+                    "Level up! New level: \(newLevel). Awarded \(levelsGained) streak freeze(s). Total: \(profile.streakFreezes)"
+                )
         }
 
         return (leveledUp: leveledUp, newLevel: newLevel)
@@ -223,7 +226,12 @@ public struct GamificationService: Sendable {
             return daysBetween - 1
         case .weekly:
             if let scheduledDays = habit.scheduledDays, !scheduledDays.isEmpty {
-                return countScheduledDays(for: habit, strictlyBetween: startDay, andDaysOffset: daysBetween, calendar: calendar)
+                return countScheduledDays(
+                    for: habit,
+                    strictlyBetween: startDay,
+                    andDaysOffset: daysBetween,
+                    calendar: calendar
+                )
             }
             return max(0, daysBetween - 7)
         case .monthly:
@@ -232,7 +240,12 @@ public struct GamificationService: Sendable {
         case .custom:
             let hasCustomSchedule = !(habit.scheduledDays?.isEmpty ?? true) || (habit.customIntervalDays ?? 1) > 1
             if hasCustomSchedule {
-                return countScheduledDays(for: habit, strictlyBetween: startDay, andDaysOffset: daysBetween, calendar: calendar)
+                return countScheduledDays(
+                    for: habit,
+                    strictlyBetween: startDay,
+                    andDaysOffset: daysBetween,
+                    calendar: calendar
+                )
             }
             return daysBetween - 1
         }
@@ -391,7 +404,12 @@ public struct GamificationService: Sendable {
         return min(Float(maxConsecutiveDays) / 7.0, 1.0)
     }
 
-    private func calculateTimeBasedProgress(logs: [HabitLog], beforeHour: Int? = nil, afterHour: Int? = nil, targetDays: Int) -> Float {
+    private func calculateTimeBasedProgress(
+        logs: [HabitLog],
+        beforeHour: Int? = nil,
+        afterHour: Int? = nil,
+        targetDays: Int
+    ) -> Float {
         let calendar = Calendar.current
         let now = Date()
         var qualifyingDays = 0
@@ -401,11 +419,17 @@ public struct GamificationService: Sendable {
             let dayLogs = logs.filter { calendar.isDate($0.completionDate, inSameDayAs: checkDate) }
             let qualifies = dayLogs.contains { log in
                 let hour = calendar.component(.hour, from: log.completionDate)
-                if let beforeHour { return hour < beforeHour }
-                if let afterHour { return hour >= afterHour }
+                if let beforeHour {
+                    return hour < beforeHour
+                }
+                if let afterHour {
+                    return hour >= afterHour
+                }
                 return false
             }
-            if qualifies { qualifyingDays += 1 }
+            if qualifies {
+                qualifyingDays += 1
+            }
         }
         return min(Float(qualifyingDays) / Float(targetDays), 1.0)
     }
@@ -423,7 +447,9 @@ public struct GamificationService: Sendable {
                 let weekMatch = calendar.isDate(log.completionDate, equalTo: start, toGranularity: .weekOfYear)
                 return weekMatch && weekendDays.contains(wd)
             }
-            if hasCompletion { weekendsWithCompletions += 1 }
+            if hasCompletion {
+                weekendsWithCompletions += 1
+            }
         }
         return min(Float(weekendsWithCompletions) / 4.0, 1.0)
     }

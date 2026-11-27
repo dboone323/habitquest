@@ -1,7 +1,7 @@
 import Combine
+import HabitQuestCore
 import os
 import OSLog
-import HabitQuestCore
 import SwiftData
 import SwiftUI
 
@@ -28,6 +28,7 @@ public class DataManagementViewModel: ObservableObject {
             StreakForgivenessConfig.threshold = forgivenessThreshold
         }
     }
+
     @Published var streakFreezes: Int = 0
 
     var exportDocument: HabitQuestBackupDocument?

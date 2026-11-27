@@ -1,6 +1,5 @@
-import HabitQuestCore
-
 import Foundation
+import HabitQuestCore
 import Social
 
 #if canImport(UIKit)

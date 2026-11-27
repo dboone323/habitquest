@@ -6,8 +6,8 @@
 import CloudKit
 import Combine
 import Foundation
-import SwiftData
 import OSLog
+import SwiftData
 
 private let logger = Logger(subsystem: "com.habitquest.core", category: "HabitSyncService")
 
@@ -38,7 +38,7 @@ public final class HabitSyncService: ObservableObject, Sendable {
         case synced = "Synced"
         case error = "Sync Error"
         case offline = "Offline"
-        
+
         public var symbolName: String {
             switch self {
             case .idle: "icloud"
@@ -82,7 +82,7 @@ public final class HabitSyncService: ObservableObject, Sendable {
 
         // SwiftData handles the actual mirroring; we provide the status lifecycle.
         try? await Task.sleep(nanoseconds: 300_000_000)
-        
+
         lastSyncDate = Date()
         syncStatus = .synced
         errorMessage = nil

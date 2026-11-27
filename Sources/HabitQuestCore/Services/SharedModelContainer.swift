@@ -63,7 +63,8 @@ public enum SharedModelContainer {
         ).container
     }
 
-    /// Creates the shared ModelContainer and reports any non-fatal migration error when falling back to the local store.
+    /// Creates the shared ModelContainer and reports any non-fatal migration error when falling back to the local
+    /// store.
     public static func createContainerWithMigrationStatus(
         inMemoryOnly: Bool = false,
         legacyStoreURL: URL? = nil,
@@ -77,7 +78,7 @@ public enum SharedModelContainer {
             return ContainerResult(container: container)
         }
 
-        let legacyConfig: ModelConfiguration = if let legacyStoreURL {
+        let legacyConfig = if let legacyStoreURL {
             ModelConfiguration(schema: schema, url: legacyStoreURL)
         } else {
             ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
@@ -85,7 +86,9 @@ public enum SharedModelContainer {
 
         let resolvedGroupConfig: ModelConfiguration? = if let groupStoreURL {
             ModelConfiguration(schema: schema, url: groupStoreURL)
-        } else if FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: HabitQuestAppGroup.identifier) != nil {
+        } else if FileManager.default
+            .containerURL(forSecurityApplicationGroupIdentifier: HabitQuestAppGroup.identifier) != nil
+        {
             ModelConfiguration(
                 schema: schema,
                 isStoredInMemoryOnly: false,
@@ -127,7 +130,10 @@ public enum SharedModelContainer {
         }
     }
 
-    private static func copyStoreRecords(from sourceContainer: ModelContainer, to destinationContainer: ModelContainer) throws {
+    private static func copyStoreRecords(
+        from sourceContainer: ModelContainer,
+        to destinationContainer: ModelContainer
+    ) throws {
         let sourceContext = ModelContext(sourceContainer)
         let destinationContext = ModelContext(destinationContainer)
 

@@ -1,6 +1,6 @@
 import Foundation
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 // MARK: - Health Models
 
@@ -15,7 +15,7 @@ public final class HealthProfile {
     public var targetWeightInKg: Double
     public var dailyStepGoal: Int
     public var dailyCalorieGoal: Int
-    
+
     public init(
         id: UUID = UUID(),
         name: String = "User",
@@ -45,7 +45,7 @@ public final class HealthVitals {
     public var type: VitalType
     public var value: Double
     public var unit: String
-    
+
     public init(
         id: UUID = UUID(),
         timestamp: Date = Date(),
@@ -80,7 +80,7 @@ public final class HealthActivity {
     public var caloriesBurned: Int
     public var stepsTaken: Int
     public var distanceInMeters: Double
-    
+
     public init(
         id: UUID = UUID(),
         timestamp: Date = Date(),
@@ -110,7 +110,7 @@ public final class HealthNutrition {
     public var proteinInGrams: Double
     public var carbsInGrams: Double
     public var fatInGrams: Double
-    
+
     public init(
         id: UUID = UUID(),
         timestamp: Date = Date(),
@@ -215,7 +215,7 @@ public final class Habit {
         let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
         let recentLogs = logs.filter { $0.completionDate >= thirtyDaysAgo }
         guard !recentLogs.isEmpty else { return 0.0 }
-        let completedCount = recentLogs.filter { $0.isCompleted }.count
+        let completedCount = recentLogs.filter(\.isCompleted).count
         return Double(completedCount) / Double(recentLogs.count)
     }
 }
@@ -368,15 +368,22 @@ public final class Achievement {
         requirementData = encoded
     }
 
-    public var isUnlocked: Bool { unlockedDate != nil }
-    public var progressPercentage: String { String(format: "%.0f%%", progress * 100) }
+    public var isUnlocked: Bool {
+        unlockedDate != nil
+    }
+
+    public var progressPercentage: String {
+        String(format: "%.0f%%", progress * 100)
+    }
 }
 
 // MARK: - Supporting Types
 
 public enum HabitFrequency: String, CaseIterable, Codable, Sendable {
     case daily, weekly, monthly, custom
-    public var displayName: String { rawValue }
+    public var displayName: String {
+        rawValue
+    }
 }
 
 /// Supported Apple Health metrics for movement and sleep habit auto-fill.
@@ -385,7 +392,9 @@ public enum HealthMetricType: String, CaseIterable, Codable, Sendable, Identifia
     case activeEnergy
     case sleepHours
 
-    public var id: String { rawValue }
+    public var id: String {
+        rawValue
+    }
 
     public var displayName: String {
         switch self {
@@ -479,44 +488,46 @@ public enum MoodRating: String, CaseIterable, Codable, Sendable {
 
 public enum AchievementCategory: String, CaseIterable, Codable, Sendable {
     case general, streak, completion, level, consistency, special, hidden
-    
+
     public var color: Color {
         switch self {
-        case .general: return .blue
-        case .streak: return .orange
-        case .completion: return .green
-        case .level: return .indigo
-        case .consistency: return .teal
-        case .special: return .purple
-        case .hidden: return .gray
+        case .general: .blue
+        case .streak: .orange
+        case .completion: .green
+        case .level: .indigo
+        case .consistency: .teal
+        case .special: .purple
+        case .hidden: .gray
         }
     }
+
     public var displayName: String {
         switch self {
-        case .streak: return "Streak Master"
-        case .completion: return "Quest Completion"
-        case .level: return "Level Progression"
-        case .consistency: return "Consistency"
-        case .general: return "General"
-        case .special: return "Special Events"
-        case .hidden: return "Hidden"
+        case .streak: "Streak Master"
+        case .completion: "Quest Completion"
+        case .level: "Level Progression"
+        case .consistency: "Consistency"
+        case .general: "General"
+        case .special: "Special Events"
+        case .hidden: "Hidden"
         }
     }
 }
 
 public enum AchievementRequirement: Codable, Sendable {
-    case streakDays(Int), totalCompletions(Int), reachLevel(Int), perfectWeek, habitVariety(Int), earlyBird, nightOwl, weekendWarrior
-    
+    case streakDays(Int), totalCompletions(Int), reachLevel(Int), perfectWeek, habitVariety(Int), earlyBird, nightOwl,
+         weekendWarrior
+
     public var description: String {
         switch self {
-        case .streakDays(let count): return "Maintain a \(count) day streak"
-        case .totalCompletions(let count): return "Complete habits \(count) times"
-        case .reachLevel(let level): return "Reach level \(level)"
-        case .perfectWeek: return "Complete all habits for 7 consecutive days"
-        case .habitVariety(let count): return "Complete \(count) different types of habits"
-        case .earlyBird: return "Complete a habit before 8 AM"
-        case .nightOwl: return "Complete a habit after 10 PM"
-        case .weekendWarrior: return "Complete habits on both Saturday and Sunday"
+        case let .streakDays(count): "Maintain a \(count) day streak"
+        case let .totalCompletions(count): "Complete habits \(count) times"
+        case let .reachLevel(level): "Reach level \(level)"
+        case .perfectWeek: "Complete all habits for 7 consecutive days"
+        case let .habitVariety(count): "Complete \(count) different types of habits"
+        case .earlyBird: "Complete a habit before 8 AM"
+        case .nightOwl: "Complete a habit after 10 PM"
+        case .weekendWarrior: "Complete habits on both Saturday and Sunday"
         }
     }
 }
@@ -529,7 +540,13 @@ public struct StreakMilestone: Identifiable, Sendable, Comparable {
     public let emoji: String
     public let celebrationLevel: CelebrationLevel
 
-    public init(streakCount: Int, title: String, description: String, emoji: String, celebrationLevel: CelebrationLevel) {
+    public init(
+        streakCount: Int,
+        title: String,
+        description: String,
+        emoji: String,
+        celebrationLevel: CelebrationLevel
+    ) {
         id = UUID()
         self.streakCount = streakCount
         self.title = title
@@ -540,7 +557,7 @@ public struct StreakMilestone: Identifiable, Sendable, Comparable {
 
     public enum CelebrationLevel: Int, CaseIterable, Codable, Sendable {
         case basic = 1, intermediate = 2, advanced = 3, epic = 4, legendary = 5
-        
+
         public var particleCount: Int {
             switch self {
             case .basic: 10
@@ -550,7 +567,7 @@ public struct StreakMilestone: Identifiable, Sendable, Comparable {
             case .legendary: 100
             }
         }
-        
+
         public var animationIntensity: Double {
             switch self {
             case .basic: 0.5
@@ -567,7 +584,9 @@ public struct StreakMilestone: Identifiable, Sendable, Comparable {
         return all.first(where: { count >= $0.streakCount }) ?? allMilestones[0]
     }
 
-    public static var predefinedMilestones: [StreakMilestone] { allMilestones }
+    public static var predefinedMilestones: [StreakMilestone] {
+        allMilestones
+    }
 
     public static func isNewMilestone(streakCount: Int, previousCount: Int) -> Bool {
         let all = allMilestones.sorted(by: { $0.streakCount > $1.streakCount })
@@ -583,13 +602,55 @@ public struct StreakMilestone: Identifiable, Sendable, Comparable {
 
     public static var allMilestones: [StreakMilestone] {
         [
-            StreakMilestone(streakCount: 3, title: "Getting Started", description: "3 day streak", emoji: "🔥", celebrationLevel: .basic),
-            StreakMilestone(streakCount: 7, title: "One Week Warrior", description: "7 day streak", emoji: "📈", celebrationLevel: .intermediate),
-            StreakMilestone(streakCount: 14, title: "Consistent", description: "14 day streak", emoji: "🚀", celebrationLevel: .intermediate),
-            StreakMilestone(streakCount: 30, title: "Monthly Master", description: "30 day streak", emoji: "🏆", celebrationLevel: .advanced),
-            StreakMilestone(streakCount: 50, title: "Half Century", description: "50 day streak", emoji: "⚡️", celebrationLevel: .advanced),
-            StreakMilestone(streakCount: 100, title: "Century Club", description: "100 day streak", emoji: "👑", celebrationLevel: .epic),
-            StreakMilestone(streakCount: 365, title: "Year of Dedication", description: "365 day streak", emoji: "🌟", celebrationLevel: .legendary)
+            StreakMilestone(
+                streakCount: 3,
+                title: "Getting Started",
+                description: "3 day streak",
+                emoji: "🔥",
+                celebrationLevel: .basic
+            ),
+            StreakMilestone(
+                streakCount: 7,
+                title: "One Week Warrior",
+                description: "7 day streak",
+                emoji: "📈",
+                celebrationLevel: .intermediate
+            ),
+            StreakMilestone(
+                streakCount: 14,
+                title: "Consistent",
+                description: "14 day streak",
+                emoji: "🚀",
+                celebrationLevel: .intermediate
+            ),
+            StreakMilestone(
+                streakCount: 30,
+                title: "Monthly Master",
+                description: "30 day streak",
+                emoji: "🏆",
+                celebrationLevel: .advanced
+            ),
+            StreakMilestone(
+                streakCount: 50,
+                title: "Half Century",
+                description: "50 day streak",
+                emoji: "⚡️",
+                celebrationLevel: .advanced
+            ),
+            StreakMilestone(
+                streakCount: 100,
+                title: "Century Club",
+                description: "100 day streak",
+                emoji: "👑",
+                celebrationLevel: .epic
+            ),
+            StreakMilestone(
+                streakCount: 365,
+                title: "Year of Dedication",
+                description: "365 day streak",
+                emoji: "🌟",
+                celebrationLevel: .legendary
+            )
         ]
     }
 
@@ -610,7 +671,14 @@ public struct HabitSuggestion: Codable, Sendable, Identifiable {
     public let reasoning: String
     public let expectedSuccess: Double
 
-    public init(name: String, description: String, category: HabitCategory, difficulty: HabitDifficulty, reasoning: String, expectedSuccess: Double) {
+    public init(
+        name: String,
+        description: String,
+        category: HabitCategory,
+        difficulty: HabitDifficulty,
+        reasoning: String,
+        expectedSuccess: Double
+    ) {
         self.id = UUID()
         self.name = name
         self.description = description
@@ -628,7 +696,12 @@ public struct UserProfile {
     public let peakProductivityHour: Int
     public let preferredCategories: [HabitCategory]
 
-    public init(existingHabits: [Habit], averageConsistency: Double, peakProductivityHour: Int, preferredCategories: [HabitCategory]) {
+    public init(
+        existingHabits: [Habit],
+        averageConsistency: Double,
+        peakProductivityHour: Int,
+        preferredCategories: [HabitCategory]
+    ) {
         self.existingHabits = existingHabits
         self.averageConsistency = averageConsistency
         self.peakProductivityHour = peakProductivityHour
@@ -677,7 +750,7 @@ public enum RiskLevel: String, Sendable, Codable {
 public struct ContextualInsights: Sendable {
     public let currentContext: HabitContext
     public let riskLevel: RiskLevel
-    
+
     public init(currentContext: HabitContext, riskLevel: RiskLevel) {
         self.currentContext = currentContext
         self.riskLevel = riskLevel
@@ -696,7 +769,14 @@ public struct HabitTemplate: Identifiable, Sendable, Codable {
     public let difficulty: HabitDifficulty
     public let xpValue: Int
 
-    public init(name: String, description: String, category: HabitCategory, frequency: HabitFrequency, difficulty: HabitDifficulty, xpValue: Int) {
+    public init(
+        name: String,
+        description: String,
+        category: HabitCategory,
+        frequency: HabitFrequency,
+        difficulty: HabitDifficulty,
+        xpValue: Int
+    ) {
         self.id = UUID()
         self.name = name
         self.habitDescription = description
@@ -706,6 +786,3 @@ public struct HabitTemplate: Identifiable, Sendable, Codable {
         self.xpValue = xpValue
     }
 }
-
-
-

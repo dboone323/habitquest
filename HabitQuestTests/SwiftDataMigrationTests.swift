@@ -7,7 +7,7 @@ import XCTest
 
 @MainActor
 final class SwiftDataMigrationTests: XCTestCase {
-    nonisolated(unsafe) private var tempDirectory: URL!
+    private nonisolated(unsafe) var tempDirectory: URL!
 
     override func setUp() {
         super.setUp()
@@ -313,11 +313,19 @@ final class SwiftDataMigrationTests: XCTestCase {
         XCTAssertEqual(profiles.count, 1, "Existing PlayerProfile row must survive migration")
         XCTAssertEqual(profiles.first?.level, 5, "Existing profile level must be preserved")
         XCTAssertEqual(profiles.first?.longestStreak, 12, "Existing profile longestStreak must be preserved")
-        XCTAssertEqual(profiles.first?.streakFreezes, 0, "Migrated profile must receive sensible default 0 for streakFreezes")
+        XCTAssertEqual(
+            profiles.first?.streakFreezes,
+            0,
+            "Migrated profile must receive sensible default 0 for streakFreezes"
+        )
 
         let logs = try context.fetch(FetchDescriptor<HabitLog>())
         XCTAssertEqual(logs.count, 1, "Existing HabitLog row must survive migration")
-        XCTAssertEqual(logs.first?.freezesConsumed, 0, "Migrated habit log must receive sensible default 0 for freezesConsumed")
+        XCTAssertEqual(
+            logs.first?.freezesConsumed,
+            0,
+            "Migrated habit log must receive sensible default 0 for freezesConsumed"
+        )
 
         let habits = try context.fetch(FetchDescriptor<Habit>())
         XCTAssertEqual(habits.count, 1, "Existing Habit row must survive migration")

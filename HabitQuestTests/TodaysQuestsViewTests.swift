@@ -35,7 +35,7 @@ final class TodaysQuestsViewTests: XCTestCase {
         // Both habits completed 9, 8, 7 days ago (gap of 6 missed days to today)
         // Default threshold is 5 days, so each habit needs 1 freeze to survive.
         for daysAgo in [9, 8, 7] {
-            let logDate = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let logDate = try XCTUnwrap(calendar.date(byAdding: .day, value: -daysAgo, to: today))
             modelContext.insert(HabitLog(habit: habit1, completionDate: logDate, isCompleted: true))
             modelContext.insert(HabitLog(habit: habit2, completionDate: logDate, isCompleted: true))
         }
@@ -47,8 +47,13 @@ final class TodaysQuestsViewTests: XCTestCase {
             service: service
         )
 
-        // With only 1 freeze total in player profile inventory, at most ONE habit may be reported as protected (alive streak)
+        // With only 1 freeze total in player profile inventory, at most ONE habit may be reported as protected (alive
+        // streak)
         let protectedHabits = analytics.values.filter { $0.currentStreak > 0 }
-        XCTAssertEqual(protectedHabits.count, 1, "Only one habit should be freeze-protected across Today tab's habit analytics with 1 freeze")
+        XCTAssertEqual(
+            protectedHabits.count,
+            1,
+            "Only one habit should be freeze-protected across Today tab's habit analytics with 1 freeze"
+        )
     }
 }

@@ -55,7 +55,9 @@ public struct HabitQuestApp: App {
                         Button("OK", role: .cancel) {}
                     } message: {
                         Text(
-                            "Could not migrate your data to shared widget storage (\(databaseError?.localizedDescription ?? "Unknown error")). Your existing local data is still active and safe."
+                            "Could not migrate your data to shared widget storage ("
+                                + (databaseError?.localizedDescription ?? "Unknown error")
+                                + "). Your existing local data is still active and safe."
                         )
                     }
             } else {

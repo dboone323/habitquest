@@ -128,10 +128,10 @@ final class HealthKitServiceTests: XCTestCase {
         modelContext.insert(profile)
 
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        calendar.timeZone = try XCTUnwrap(TimeZone(secondsFromGMT: 0))
         // 2026-11-23 is Monday (weekday = 2)
-        let monday = calendar.date(from: DateComponents(year: 2026, month: 11, day: 23))!
-        let tuesday = calendar.date(byAdding: .day, value: 1, to: monday)!
+        let monday = try XCTUnwrap(calendar.date(from: DateComponents(year: 2026, month: 11, day: 23)))
+        let tuesday = try XCTUnwrap(calendar.date(byAdding: .day, value: 1, to: monday))
 
         // Scheduled only on Wednesday (weekday = 4) and Friday (weekday = 6)
         let weekdayHabit = Habit(

@@ -1,5 +1,4 @@
 import HabitQuestCore
-
 import SwiftUI
 
 public struct CharacterAvatarSection: View {

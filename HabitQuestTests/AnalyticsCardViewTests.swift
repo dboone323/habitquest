@@ -12,6 +12,7 @@ import XCTest
 @testable import HabitQuest
 
 final class AnalyticsCardViewTests: XCTestCase {
+
     // MARK: - Initialization Tests
 
     func testInitialization() {

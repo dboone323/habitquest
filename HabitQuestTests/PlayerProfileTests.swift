@@ -4,6 +4,7 @@ import XCTest
 @testable import HabitQuest
 
 final class PlayerProfileTests: XCTestCase {
+
     // MARK: - Initialization & Default Property Tests
 
     func testDefaultInitialization() {

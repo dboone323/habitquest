@@ -1,6 +1,6 @@
 import Foundation
-import SwiftData
 import HabitQuestCore
+import SwiftData
 
 /// Service responsible for generating personalized habit suggestions.
 /// Wired up to work with trimmed analytics (no Ollama dependency).
@@ -18,12 +18,14 @@ final class HabitSuggestionService {
     /// Generate personalized habit suggestions using behavioral analysis.
     func generateHabitSuggestions() async -> [HabitQuestCore.HabitSuggestion] {
         guard let existingHabits = try? dataService.fetchAllHabits() else { return [] }
-        let allLogs = existingHabits.flatMap { $0.logs }
+        let allLogs = existingHabits.flatMap(\.logs)
         return await analyticsService.generateHabitSuggestions(habits: existingHabits, logs: allLogs)
     }
 
     /// Generate suggestions based on category coverage.
-    func generateCategoryBasedSuggestions(profile: HabitQuestCore.UserProfile) async -> [HabitQuestCore.HabitSuggestion] {
+    func generateCategoryBasedSuggestions(profile: HabitQuestCore
+        .UserProfile) async -> [HabitQuestCore.HabitSuggestion]
+    {
         guard let existingHabits = try? dataService.fetchAllHabits() else { return [] }
         return await analyticsService.generateHabitSuggestions(habits: existingHabits, logs: [])
     }

@@ -5,6 +5,7 @@ import XCTest
 @testable import HabitQuest
 
 final class ParticleEffectsTests: XCTestCase {
+
     // MARK: - Scene and Emitter Tests
 
     @MainActor

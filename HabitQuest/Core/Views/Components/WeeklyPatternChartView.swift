@@ -1,5 +1,4 @@
 import HabitQuestCore
-
 import SwiftUI
 
 // MARK: - Weekly Pattern Chart View

@@ -10,6 +10,7 @@ import XCTest
 @testable import HabitQuest
 
 final class AccessibilityHelpersTests: XCTestCase {
+
     // MARK: - VoiceOver Tests
 
     func testVoiceOverAnnouncement() {

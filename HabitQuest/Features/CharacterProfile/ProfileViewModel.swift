@@ -62,14 +62,14 @@ public class ProfileViewModel: ObservableObject {
         level = profile.level
         currentXP = profile.currentXP
         xpForNextLevel = gamificationService.calculateXPForNextLevel(forLevel: profile.level)
-        
+
         // Manual progress calculation since we moved it from @Model to avoid service dependency in core model
         let previousLevelXP = profile.level > 1 ? gamificationService.calculateXPForLevel(profile.level - 1) : 0
         let currentLevelXP = gamificationService.calculateXPForLevel(profile.level)
         let progressInCurrentLevel = profile.currentXP - previousLevelXP
         let xpNeededForCurrentLevel = currentLevelXP - previousLevelXP
         xpProgress = xpNeededForCurrentLevel > 0 ? Float(progressInCurrentLevel) / Float(xpNeededForCurrentLevel) : 0.0
-        
+
         longestStreak = profile.longestStreak
     }
 
@@ -103,7 +103,7 @@ public class ProfileViewModel: ObservableObject {
             let today = Date()
 
             completedToday = allHabits.reduce(0) { count, habit in
-                let logs = habit.logs 
+                let logs = habit.logs
                 let todayCompletions = logs.filter { log in
                     calendar.isDate(log.completionDate, inSameDayAs: today)
                 }
@@ -113,10 +113,13 @@ public class ProfileViewModel: ObservableObject {
             activeStreaks = allHabits.filter { $0.streak > 0 }.count
 
             let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: today) ?? today
-            let allLogs = allHabits.flatMap { $0.logs }
-            let weekLogs = allLogs.filter { $0.completionDate >= sevenDaysAgo && $0.completionDate <= today && $0.isCompleted }
+            let allLogs = allHabits.flatMap(\.logs)
+            let weekLogs = allLogs
+                .filter { $0.completionDate >= sevenDaysAgo && $0.completionDate <= today && $0.isCompleted }
             let expectedWeekCompletions = totalHabits * 7
-            weeklyCompletion = expectedWeekCompletions > 0 ? min(100.0, (Double(weekLogs.count) / Double(expectedWeekCompletions)) * 100.0) : 0.0
+            weeklyCompletion = expectedWeekCompletions > 0
+                ? min(100.0, (Double(weekLogs.count) / Double(expectedWeekCompletions)) * 100.0)
+                : 0.0
 
             var perfectDayCount = 0
             if totalHabits > 0 {

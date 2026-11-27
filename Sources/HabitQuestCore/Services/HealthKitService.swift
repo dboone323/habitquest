@@ -91,7 +91,8 @@ public class HealthKitService: ObservableObject {
 
         // Note: HealthKit hides read-only authorization status by design (.notDetermined or .sharingDenied)
         // when no write permission is requested, so we treat non-denied as ready to query safely.
-        let anyAuthorized = stepStatus != .sharingDenied || energyStatus != .sharingDenied || sleepStatus != .sharingDenied
+        let anyAuthorized = stepStatus != .sharingDenied || energyStatus != .sharingDenied || sleepStatus !=
+            .sharingDenied
         Task { @MainActor in
             isAuthorized = anyAuthorized
             if isAuthorized {
@@ -126,7 +127,8 @@ public class HealthKitService: ObservableObject {
 
             if let sleepType = HKObjectType.categoryType(forIdentifier: .sleepAnalysis) {
                 let sleepSamples = try await querySleepSamples(type: sleepType, predicate: predicate)
-                let totalSleepHours = sleepSamples.reduce(0.0) { $0 + ($1.endDate.timeIntervalSince($1.startDate) / 3600.0) }
+                let totalSleepHours = sleepSamples
+                    .reduce(0.0) { $0 + ($1.endDate.timeIntervalSince($1.startDate) / 3600.0) }
                 sleepHours = totalSleepHours
             }
             statusMessage = nil

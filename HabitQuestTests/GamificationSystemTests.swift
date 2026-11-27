@@ -10,6 +10,7 @@ import XCTest
 @testable import HabitQuest
 
 final class GamificationSystemTests: XCTestCase {
+
     // MARK: - XP Calculation Tests
 
     func testXPForHabitCompletion() {

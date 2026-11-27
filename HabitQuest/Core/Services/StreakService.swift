@@ -1,6 +1,5 @@
-import HabitQuestCore
-
 import Foundation
+import HabitQuestCore
 import SwiftData
 
 /// Service for handling streak calculations, milestone detection, and streak analytics
@@ -25,7 +24,8 @@ class StreakService {
         profile: PlayerProfile? = nil,
         forgivenessThreshold: Int = StreakForgivenessConfig.threshold
     ) async -> Int {
-        await calculateCurrentStreakWithUsage(for: habit, profile: profile, forgivenessThreshold: forgivenessThreshold).streak
+        await calculateCurrentStreakWithUsage(for: habit, profile: profile, forgivenessThreshold: forgivenessThreshold)
+            .streak
     }
 
     /// Calculate current streak and track how many freezes from inventory were used
@@ -238,7 +238,11 @@ class StreakService {
     ///   - previousStreak: The streak count before today's completion
     ///   - profile: Optional player profile with streak freeze inventory
     /// - Returns: A milestone if one was achieved, nil otherwise
-    func checkForNewMilestone(habit: Habit, previousStreak: Int, profile: PlayerProfile? = nil) async -> StreakMilestone? {
+    func checkForNewMilestone(
+        habit: Habit,
+        previousStreak: Int,
+        profile: PlayerProfile? = nil
+    ) async -> StreakMilestone? {
         let newStreak = await calculateCurrentStreak(for: habit, profile: profile)
 
         if StreakMilestone.isNewMilestone(streakCount: newStreak, previousCount: previousStreak) {
@@ -296,7 +300,7 @@ class StreakService {
     /// - Returns: A structured analytics object
     func getStreakAnalytics(for habit: Habit, profile: PlayerProfile? = nil) async -> StreakAnalytics {
         let (currentStreak, freezesUsed) = await calculateCurrentStreakWithUsage(for: habit, profile: profile)
-        let longestStreak = max(currentStreak, await calculateLongestStreak(for: habit, profile: profile))
+        let longestStreak = await max(currentStreak, calculateLongestStreak(for: habit, profile: profile))
         let currentMilestone = await getCurrentMilestone(for: habit, profile: profile)
         let nextMilestone = await getNextMilestone(for: habit, profile: profile)
         let progressToNext = await getProgressToNextMilestone(for: habit, profile: profile)

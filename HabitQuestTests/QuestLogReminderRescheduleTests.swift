@@ -32,7 +32,13 @@ final class QuestLogReminderRescheduleTests: XCTestCase {
 
     func testUpdateHabitReschedulesAndDisablesPendingNotifications() async throws {
         let calendar = Calendar.current
-        let initialTime = calendar.date(from: DateComponents(year: 2026, month: 11, day: 26, hour: 8, minute: 0))!
+        let initialTime = try XCTUnwrap(calendar.date(from: DateComponents(
+            year: 2026,
+            month: 11,
+            day: 26,
+            hour: 8,
+            minute: 0
+        )))
         let habit = Habit(
             name: "Stretch",
             habitDescription: "Morning mobility",
@@ -54,7 +60,13 @@ final class QuestLogReminderRescheduleTests: XCTestCase {
         XCTAssertEqual(Set(initialPending.map(\.identifier)), ["\(prefix)2", "\(prefix)4"])
 
         // Edit reminder time and scheduled days via QuestLogViewModel.updateHabit
-        let updatedTime = calendar.date(from: DateComponents(year: 2026, month: 11, day: 26, hour: 19, minute: 30))!
+        let updatedTime = try XCTUnwrap(calendar.date(from: DateComponents(
+            year: 2026,
+            month: 11,
+            day: 26,
+            hour: 19,
+            minute: 30
+        )))
         habit.scheduledDays = [3, 5, 7]
         habit.reminderTime = updatedTime
 

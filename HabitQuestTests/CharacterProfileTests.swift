@@ -10,6 +10,7 @@ import XCTest
 @testable import HabitQuest
 
 final class CharacterProfileTests: XCTestCase {
+
     // MARK: - Profile Data Tests
 
     func testProfileCreation() {

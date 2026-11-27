@@ -1,10 +1,10 @@
 
 import HabitQuestCore
-
 import XCTest
 @testable import HabitQuest
 
 final class StreakHeatMapViewTests: XCTestCase {
+
     // MARK: - structStreakHeatMapView:View{ Tests
 
     func testStreakHeatMapViewInitialization() {

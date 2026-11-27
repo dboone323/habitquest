@@ -65,19 +65,19 @@ public struct AchievementGalleryView: View {
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") {
+                            dismiss()
+                        }
+                        .accessibilityLabel("Done")
                     }
-                    .accessibilityLabel("Done")
                 }
-            }
-            .sheet(item: $selectedAchievement) { achievement in
-                if !achievement.isHidden || achievement.isUnlocked {
-                    AchievementDetailSheet(achievement: achievement)
+                .sheet(item: $selectedAchievement) { achievement in
+                    if !achievement.isHidden || achievement.isUnlocked {
+                        AchievementDetailSheet(achievement: achievement)
+                    }
                 }
-            }
         }
     }
 
@@ -365,14 +365,14 @@ public struct AchievementDetailSheet: View {
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Close") {
-                        dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Close") {
+                            dismiss()
+                        }
+                        .accessibilityLabel("Close")
                     }
-                    .accessibilityLabel("Close")
                 }
-            }
         }
     }
 }

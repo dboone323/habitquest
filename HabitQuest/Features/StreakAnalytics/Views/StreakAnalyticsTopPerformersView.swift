@@ -1,5 +1,4 @@
 import HabitQuestCore
-
 import SwiftUI
 
 /// Top performers section

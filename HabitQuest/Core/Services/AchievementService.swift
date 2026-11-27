@@ -1,6 +1,5 @@
-import HabitQuestCore
-
 import Foundation
+import HabitQuestCore
 import SwiftData
 
 /// Handles progress tracking, achievement unlocking, and reward distribution

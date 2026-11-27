@@ -12,6 +12,7 @@ import XCTest
 @testable import HabitQuest
 
 final class HabitCompletionUITests: XCTestCase {
+
     // MARK: - Habit Toggle Tests
 
     func testHabitToggleUpdatesCompletion() {

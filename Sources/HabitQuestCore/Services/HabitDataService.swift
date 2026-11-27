@@ -4,8 +4,8 @@
 //
 
 import Foundation
-import SwiftData
 import OSLog
+import SwiftData
 
 private let logger = Logger(subsystem: "com.habitquest.core", category: "HabitDataService")
 
@@ -85,7 +85,7 @@ public final class HabitDataService: Sendable {
 
         let habitsDescriptor = FetchDescriptor<Habit>()
         let habits = try modelContext.fetch(habitsDescriptor)
-        
+
         let logsDescriptor = FetchDescriptor<HabitLog>()
         let logs = try modelContext.fetch(logsDescriptor)
 
@@ -109,18 +109,18 @@ public final class HabitDataService: Sendable {
     public func importData(_ data: Data) throws {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        
+
         do {
             let payload = try decoder.decode(ExportPayload.self, from: data)
             try clearCurrentData()
-            
+
             modelContext.insert(payload.profile.toModel())
-            
+
             let habits = payload.habits.map { $0.toModel() }
             for habit in habits {
                 modelContext.insert(habit)
             }
-            
+
             for logDTO in payload.logs {
                 if let log = logDTO.toModel(allHabits: habits) {
                     modelContext.insert(log)
@@ -130,15 +130,17 @@ public final class HabitDataService: Sendable {
             for achievementDTO in payload.achievements {
                 modelContext.insert(achievementDTO.toModel())
             }
-            
+
             try modelContext.save()
-            logger.info("Successfully imported \(payload.habits.count) habits and \(payload.achievements.count) achievements.")
+            logger
+                .info(
+                    "Successfully imported \(payload.habits.count) habits and \(payload.achievements.count) achievements."
+                )
         } catch {
             logger.error("Data import failed: \(error.localizedDescription)")
             throw DataError.importFailed(error.localizedDescription)
         }
     }
-
 
     private func clearCurrentData() throws {
         try modelContext.delete(model: PlayerProfile.self)
@@ -153,11 +155,11 @@ public final class HabitDataService: Sendable {
     public enum DataError: LocalizedError {
         case noProfileFound
         case importFailed(String)
-        
+
         public var errorDescription: String? {
             switch self {
             case .noProfileFound: "No player profile found."
-            case .importFailed(let msg): "Import failed: \(msg)"
+            case let .importFailed(msg): "Import failed: \(msg)"
             }
         }
     }
@@ -386,4 +388,3 @@ public final class HabitDataService: Sendable {
         }
     }
 }
-

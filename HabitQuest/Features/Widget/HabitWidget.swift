@@ -79,7 +79,8 @@ public struct HabitWidgetProvider: TimelineProvider, Sendable {
         Task { @MainActor in
             let habits = loadHabits()
             let entry = HabitWidgetEntry(date: Date(), habits: habits)
-            let nextUpdate = Calendar.current.date(byAdding: .minute, value: 30, to: Date()) ?? Date().addingTimeInterval(1800)
+            let nextUpdate = Calendar.current.date(byAdding: .minute, value: 30, to: Date()) ?? Date()
+                .addingTimeInterval(1800)
             sendCompletion(Timeline(entries: [entry], policy: .after(nextUpdate)))
         }
     }
