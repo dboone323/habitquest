@@ -14,7 +14,7 @@ Per-tool shim files point here; if a shim and this file disagree, this file wins
   streak freezes, built around coming back.
 - Streak rule: missed days do NOT reset the streak unless over 5 days missed
   (user-adjustable threshold).
-- Local repo: /Users/danielstevens/Developer/HabitQuest ·
+- Local repo: /Users/danielstevens/AI-Workspace/repos/HabitQuest ·
   GitHub: dboone323/HabitQuest (public).
 - Signing: Personal Team. The provisioning profile expires Nov 30 — Xcode
   regenerates it on the next device build while the phone is connected.

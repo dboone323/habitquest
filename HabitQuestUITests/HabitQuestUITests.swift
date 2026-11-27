@@ -525,7 +525,7 @@ final class HabitQuestUITests: XCTestCase {
         attachment.lifetime = .keepAlways
         add(attachment)
 
-        let targetDir = "/Users/danielstevens/Developer/HabitQuest/runs/\(directoryName)"
+        let targetDir = "/Users/danielstevens/AI-Workspace/repos/HabitQuest/runs/\(directoryName)"
         try? FileManager.default.createDirectory(atPath: targetDir, withIntermediateDirectories: true)
         let fileURL = URL(fileURLWithPath: targetDir).appendingPathComponent(name)
         try? screenshot.pngRepresentation.write(to: fileURL)
